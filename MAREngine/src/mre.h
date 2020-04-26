@@ -14,6 +14,9 @@
 
 // --- Include C++ STL libraries --- //
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
 
 namespace mre {
 
