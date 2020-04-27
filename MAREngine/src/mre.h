@@ -17,7 +17,3 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
-namespace mre {
-
-}
