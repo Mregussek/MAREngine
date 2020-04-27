@@ -4,6 +4,30 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 
+void frameBuffer_SizeCallback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow* window) {
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
+	if (r > 1.0f) rc = -0.5f;
+	else if (r < 0.0f) rc = 0.05f;
+
+	if (g > 1.0f) gc = -0.5f;
+	else if (g < 0.0f) gc = 0.05f;
+
+	//if (b > 1.0f) bc = -0.5f;
+	//else if (b < 0.0f) bc = 0.05f;
+
+	r += rc;
+	g += gc;
+	//b += bc;
+}
+
 int main(int argc, char** argv) {
 	const char* name = "MAREngine";
 	const int width{ 640 };
@@ -15,27 +39,27 @@ int main(int argc, char** argv) {
 	float g = 0.6f;
 	float b = 0.8f;
 	float a = 1.0f;
-	float change = 0.05f;
+	float rChange = 0.05f;
+	float gChange = 0.05f;
+	float bChange = 0.05f;
 
 	// init glfw
 	if(!glfwInit()) return -1;
 
 	// some init setup for opengl (DONT WORK WITH CORE_PROFILE)
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// create window
 	GLFWwindow* window{ glfwCreateWindow(width, height, name, nullptr, nullptr) };
-
 	if (!window) {
 		glfwTerminate();
 		return -1;
 	}
-
 	glfwMakeContextCurrent(window); // important!!!
-	
+	glfwSetFramebufferSizeCallback(window, frameBuffer_SizeCallback); // we want to call frameBuffer_SizeCallback on every window resize by registering it
 	glfwSwapInterval(1);
 
 	// init glew (needs window and opengl context)
@@ -57,17 +81,16 @@ int main(int argc, char** argv) {
 
 	unsigned int indices[] = {
 		0, 1, 2, // first triangle
-		2, 3, 0 // second triangle
+		1, 2, 3 // second triangle
 	};
 
 	VertexArray va;
 	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
-
 	VertexBufferLayout layout;
+	IndexBuffer ib(indices, 6);
+
 	layout.push<float>(2);
 	va.addBuffer(vb, layout);
-
-	IndexBuffer ib(indices, 6);
 
 	auto source = Shader::parseShader(shadersPath);
 	unsigned int shader = Shader::createShader(source._vertexSource, source._fragmentSource);
@@ -83,12 +106,14 @@ int main(int argc, char** argv) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	// main loop
-	while (!glfwWindowShouldClose(window)) {
-		// clear
+	while (!glfwWindowShouldClose(window)) { // main loop - render loop
+		// check for ESC press
+		processInput(window);
+
+		// --- Rendering
+
 		glClear(GL_COLOR_BUFFER_BIT); 
 
-		// draw
 		glUseProgram(shader);
 		glUniform4f(location, r, g, b, a);
 
@@ -97,17 +122,11 @@ int main(int argc, char** argv) {
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		if (r > 1.0f) change = -0.5f;
-		else if (r < 0.0f) change = 0.05f;
+		rgbColorsChange(r, g, b, rChange, gChange, bChange);
 
-		r += change;
-		g -= change;
-
-		// end draw
-		glfwSwapBuffers(window);
-
-		// update input
+		// --- Update input (poll IO events(keys pressed/ released, mouse moved etc.))
 		glfwPollEvents();
+		glfwSwapBuffers(window);
 	}
 
 	glDeleteProgram(shader);
