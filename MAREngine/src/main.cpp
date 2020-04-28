@@ -1,5 +1,5 @@
 #include "VertexBuffer.h"
-#include "IndexBuffer.h"
+#include "ElementBuffer.h"
 #include "Shader.h"
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
@@ -28,7 +28,7 @@ void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& 
 	//b += bc;
 }
 
-int main(int argc, char** argv) {
+int chernoCourse() {
 	const char* name = "MAREngine";
 	const int width{ 640 };
 	const int height{ 480 };
@@ -65,7 +65,6 @@ int main(int argc, char** argv) {
 	// init glew (needs window and opengl context)
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		std::cout << argv[0] << " failed!" << std::endl;
 		glfwTerminate();
 		return -1;
 	}
@@ -84,17 +83,17 @@ int main(int argc, char** argv) {
 		1, 2, 3 // second triangle
 	};
 
-	VertexArray va;
-	VertexBuffer vb(positions, 4 * 2 * sizeof(float));
-	VertexBufferLayout layout;
-	IndexBuffer ib(indices, 6);
+	VertexBuffer vb(sizeof(positions), positions);
+	ElementBuffer ib(indices, 6);
 
+	VertexBufferLayout layout;
 	layout.push<float>(2);
+
+	VertexArray va;
 	va.addBuffer(vb, layout);
 
 	auto source = Shader::parseShader(shadersPath);
-	unsigned int shader = Shader::createShader(source._vertexSource, source._fragmentSource);
-	glUseProgram(shader);
+	auto shader = Shader::createShader(source._vertexSource, source._fragmentSource);
 
 	int location = glGetUniformLocation(shader, "u_Color");
 	assert(location != -1);
@@ -111,7 +110,6 @@ int main(int argc, char** argv) {
 		processInput(window);
 
 		// --- Rendering
-
 		glClear(GL_COLOR_BUFFER_BIT); 
 
 		glUseProgram(shader);
@@ -135,4 +133,8 @@ int main(int argc, char** argv) {
 	glfwTerminate();
 
 	return 0;
+}
+
+int main() {
+	return chernoCourse();
 }

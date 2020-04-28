@@ -5,10 +5,10 @@
 #include "mre.h"
 
 class VertexBuffer {
-	unsigned int _RendererId;
+	unsigned int _rendererId;
 
 public:
-	VertexBuffer(const void* data, unsigned int size);
+	VertexBuffer(unsigned int size, const void* data);
 	~VertexBuffer();
 
 	void bind() const;

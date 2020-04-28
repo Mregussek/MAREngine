@@ -9,7 +9,7 @@
 class VertexArray {
 	unsigned int _rendererId;
 public:
-	VertexArray();
+	VertexArray(size_t how_many = 1);
 	~VertexArray();
 
 	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);

@@ -1,7 +1,7 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray() {
-	glGenVertexArrays(1, &_rendererId);
+VertexArray::VertexArray(size_t how_many) {
+	glGenVertexArrays(how_many, &_rendererId);
 }
 
 VertexArray::~VertexArray() {
@@ -9,18 +9,19 @@ VertexArray::~VertexArray() {
 }
 
 void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) {
-	bind();
-	vb.bind();
 	const auto& elements = layout.getElements();
 	unsigned int offset = 0;
-	for (unsigned int i = 0; i < elements.size(); i++) {
-		const auto& elem = elements[i];
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(i, elem._count, elem._type, elem._normalized, 
-			layout.getStride(), (const void*) offset);
-		offset += elem._count * VertexBufferElement::getSizeOfType(elem._type);
-	}
+	
+	bind();
+	vb.bind();
 
+	for (unsigned int i = 0; i < elements.size(); i++) {
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(i, 
+			elements[i]._count, elements[i]._type, elements[i]._normalized,
+			layout.getStride(), (const void*) offset);
+		offset += elements[i]._count * VertexBufferElement::getSizeOfType(elements[i]._type);
+	}
 }
 
 void VertexArray::bind() const {

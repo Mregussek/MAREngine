@@ -11,14 +11,13 @@ struct VertexBufferElement {
 
 	static unsigned int getSizeOfType(unsigned int type) {
 		switch (type) {
-		case GL_FLOAT: 
-		case GL_UNSIGNED_INT:
-			return 4;
-		case GL_UNSIGNED_BYTE: 
-			return 1;
+		case GL_FLOAT: return sizeof(GL_FLOAT);
+		case GL_UNSIGNED_INT: return sizeof(GL_UNSIGNED_INT);
+		case GL_UNSIGNED_BYTE: return sizeof(GL_UNSIGNED_BYTE);
+		default:
+			assert(false);
+			return 0;
 		}
-		assert(false);
-		return 0;
 	}
 };
 
@@ -27,7 +26,7 @@ class VertexBufferLayout {
 	unsigned int _stride;
 
 public:
-	VertexBufferLayout() :_stride(0) {}
+	VertexBufferLayout() : _stride(0) {}
 
 	const std::vector<VertexBufferElement>& getElements() const { return _elements; }
 	unsigned int getStride() const { return _stride; }
