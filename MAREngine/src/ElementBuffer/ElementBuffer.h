@@ -2,7 +2,7 @@
 #ifndef ELEMENTBUFFER_H
 #define ELEMENTBUFFER_H
 
-#include "mre.h"
+#include "../mre.h"
 
 class ElementBuffer {
 	unsigned int _RendererId;

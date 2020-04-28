@@ -2,7 +2,7 @@
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H
 
-#include "mre.h"
+#include "../mre.h"
 
 class VertexBuffer {
 	unsigned int _rendererId;

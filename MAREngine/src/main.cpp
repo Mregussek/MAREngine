@@ -1,10 +1,9 @@
-#include "VertexBuffer.h"
-#include "ElementBuffer.h"
-#include "Shader.h"
-#include "VertexArray.h"
-#include "VertexBufferLayout.h"
-#include "Renderer.h"
-#include "Debug.h"
+#include "VertexBuffer/VertexBuffer.h"
+#include "VertexBuffer/VertexBufferLayout.h"
+#include "ElementBuffer/ElementBuffer.h"
+#include "Shader/Shader.h"
+#include "VertexArray/VertexArray.h"
+#include "Renderer/Renderer.h"
 
 void frameBuffer_SizeCallback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);

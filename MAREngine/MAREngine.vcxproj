@@ -147,22 +147,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Debug.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\ElementBuffer.h" />
+    <ClInclude Include="src\Shader\Shader.h" />
+    <ClInclude Include="src\ElementBuffer\ElementBuffer.h" />
     <ClInclude Include="src\mre.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
-    <ClInclude Include="src\VertexArray.h" />
-    <ClInclude Include="src\VertexBufferLayout.h" />
+    <ClInclude Include="src\Renderer\Renderer.h" />
+    <ClInclude Include="src\VertexBuffer\VertexBuffer.h" />
+    <ClInclude Include="src\VertexArray\VertexArray.h" />
+    <ClInclude Include="src\VertexBuffer\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\ElementBuffer.cpp" />
+    <ClCompile Include="src\Shader\Shader.cpp" />
+    <ClCompile Include="src\ElementBuffer\ElementBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\VertexBuffer\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexArray\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\basic.shader" />

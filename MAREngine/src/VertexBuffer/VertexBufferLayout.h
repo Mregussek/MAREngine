@@ -2,7 +2,7 @@
 #ifndef VERTEXBUFFERLAYOUT_H
 #define VERTEXBUFFERLAYOUT_H
 
-#include "mre.h"
+#include "../mre.h"
 
 struct VertexBufferElement {
 	unsigned int _type;

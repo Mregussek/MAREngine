@@ -2,7 +2,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "mre.h"
+#include "../mre.h"
 
 class Shader {
 	struct ShaderProgramSource {

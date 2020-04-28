@@ -2,9 +2,9 @@
 #ifndef VERTEXARRAY_H
 #define VERTEXARRAY_H
 
-#include "mre.h"
-#include "VertexBuffer.h"
-#include "VertexBufferLayout.h"
+#include "../mre.h"
+#include "../VertexBuffer/VertexBuffer.h"
+#include "../VertexBuffer/VertexBufferLayout.h"
 
 class VertexArray {
 	unsigned int _rendererId;
