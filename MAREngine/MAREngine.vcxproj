@@ -87,7 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +154,8 @@
     <ClInclude Include="src\VertexBuffer\VertexBuffer.h" />
     <ClInclude Include="src\VertexArray\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer\VertexBufferLayout.h" />
+    <ClInclude Include="src\Window\serialPort.h" />
+    <ClInclude Include="src\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
@@ -163,6 +165,7 @@
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\VertexBuffer\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray\VertexArray.cpp" />
+    <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\basic.shader" />

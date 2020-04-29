@@ -4,15 +4,8 @@
 #include "Shader/Shader.h"
 #include "VertexArray/VertexArray.h"
 #include "Renderer/Renderer.h"
-
-void frameBuffer_SizeCallback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
-
-void processInput(GLFWwindow* window) {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
+#include "Window/Window.h"
+#include "Window/serialPort.h"
 
 void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
 	if (r > 1.0f) rc = -0.5f;
@@ -21,21 +14,18 @@ void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& 
 	if (g > 1.0f) gc = -0.5f;
 	else if (g < 0.0f) gc = 0.05f;
 
-	//if (b > 1.0f) bc = -0.5f;
-	//else if (b < 0.0f) bc = 0.05f;
-
 	r += rc;
 	g += gc;
-	//b += bc;
 }
 
 int chernoCourse() {
-	const char* name = "MAREngine";
-	const int width{ 640 };
-	const int height{ 480 };
+	char name[] = "MAREngine";
+	int width{ 640 };
+	int height{ 480 };
 	int frameBufferWidth{ 0 };
 	int frameBufferHeight{ 0 };
 	const std::string shadersPath = "resources/shaders/basic.shader";
+	char portName[] = "\\\\.\\COM7";
 	float r = 0.2f;
 	float g = 0.6f;
 	float b = 0.8f;
@@ -44,33 +34,7 @@ int chernoCourse() {
 	float gChange = 0.05f;
 	float bChange = 0.05f;
 
-	// init glfw
-	if(!glfwInit()) return -1;
-
-	// some init setup for opengl
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-	// create window
-	GLFWwindow* window{ glfwCreateWindow(width, height, name, nullptr, nullptr) };
-	if (!window) {
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window); // important!!!
-	glfwSetFramebufferSizeCallback(window, frameBuffer_SizeCallback); // we want to call frameBuffer_SizeCallback on every window resize by registering it
-	glfwSwapInterval(1);
-
-	// init glew (needs window and opengl context)
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK) {
-		glfwTerminate();
-		return -1;
-	}
-
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	Window window(height, width, name);
 
 	float positions[] = { 
 			-0.7f,  -0.5f,  // 0
@@ -125,10 +89,13 @@ int chernoCourse() {
 	eb.unbind();
 
 	Renderer renderer(sizeof(indices) / sizeof(indices[0]));
+	//SerialPortMonitor spm(portName);
+	//spm.start();
 
-	while (!glfwWindowShouldClose(window)) { // main loop - render loop
-		// check for ESC press
-		processInput(window);
+	while (!glfwWindowShouldClose(window.getWindow())) {
+		//std::cout << spm.receiveFromSerialPort() << std::endl;
+
+		window.processInput();
 
 		// --- Rendering
 		renderer.clear();
@@ -139,13 +106,8 @@ int chernoCourse() {
 
 		rgbColorsChange(r, g, b, rChange, gChange, bChange);
 
-		// --- Update input (poll IO events(keys pressed/ released, mouse moved etc.))
-		glfwPollEvents();
-		glfwSwapBuffers(window);
+		window.updateInput();
 	}
-
-	// end of program
-	glfwTerminate();
 
 	return 0;
 }

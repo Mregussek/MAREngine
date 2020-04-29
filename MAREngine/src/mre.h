@@ -14,8 +14,11 @@
 #include <gtc/type_ptr.hpp>
 
 // --- Include C++ STL libraries --- //
+#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <thread>
+#include <memory>
