@@ -21,7 +21,6 @@
 #pragma warning( disable : 6262) 
 #pragma warning( disable : 6308) 
 #pragma warning( disable : 4005) 
-#pragma warning( disable : 8027) 
 
 #include "../stb_image/stb_image.h"
 #include "SerialPort/SerialPort.h"

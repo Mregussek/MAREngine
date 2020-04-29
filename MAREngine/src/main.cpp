@@ -12,6 +12,8 @@
 #include "Window/Window.h"
 #include "Window/SerialPortMonitor.h"
 
+#include "Debug.h"
+
 
 void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
 	if (r > 1.0f) rc = -0.5f;
@@ -31,18 +33,19 @@ int chernoCourse() {
 	int frameBufferWidth{ 0 };
 	int frameBufferHeight{ 0 };
 	const std::string shadersPath = "resources/shaders/basic.shader";
-	const std::string texturePath = "resources/textures/mateuszrzeczyca.png";
+	const std::string texturePath = "resources/textures/wall.jpg";
 	char portName[] = "\\\\.\\COM7";
 	float r = 0.2f;
 	float g = 0.6f;
 	float b = 0.8f;
-	float a = 1.0f;
+	float a = 0.0f;
 	float rChange = 0.05f;
 	float gChange = 0.05f;
 	float bChange = 0.05f;
 
 	Window window(height, width, name);
 
+	/*
 	float positions[] = { 
 			// x    // y   // z
 			-0.7f,  -0.5f,  0.0f, // vertex 0
@@ -77,23 +80,44 @@ int chernoCourse() {
 		8, 9, 11, // Center first
 		8, 10, 11 // Center second
 	};
+	*/
+
+	float positions[] = {
+		-0.5f, -0.5f, 0.0f, 0.0f,
+		 0.5f, -0.5f, 1.0f, 0.0f,
+		 0.5f,  0.5f, 1.0f, 1.0f,
+		-0.5f,  0.5f, 0.0f, 1.0f
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3 ,0
+	};
+
+
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	VertexBuffer vb(sizeof(positions), positions);
 	ElementBuffer eb(indices, sizeof(indices) / sizeof(indices[0]));
 
 	VertexBufferLayout layout;
-	layout.push<float>(3);
+	//layout.push<float>(3);
+	layout.push<float>(2);
+	layout.push<float>(2);
 
 	VertexArray va;
 	va.addBuffer(vb, layout);
-	
-	Shader shader(shadersPath);
-	shader.bind();
-	shader.setUniform4f("u_Color", r, g, b, a);
 
 	Texture texture(texturePath);
 	texture.bind();
 
+	Shader shader(shadersPath);
+	shader.bind();
+	shader.setUniform4f("u_Color", r, g, b, a);
+	shader.setUniform1i("u_Texture", 0);
+
+	//texture.unbind();
 	va.unbind();
 	shader.unbind();
 	vb.unbind();

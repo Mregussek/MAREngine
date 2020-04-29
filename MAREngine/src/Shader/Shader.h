@@ -2,7 +2,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "../mre.h"
+#include "../mar.h"
 
 class Shader {
 	struct ShaderProgramSource {
@@ -22,6 +22,7 @@ public:
 	void bind() const;
 	void unbind() const;
 
+	void setUniform1i(const std::string& name, int value);
 	void setUniform4f(const std::string& name, float red, float green, float blue, float alpha);
 
 private:

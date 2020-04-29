@@ -2,7 +2,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "../mre.h"
+#include "../mar.h"
 
 class Texture {
 	unsigned int _rendererId;

@@ -2,7 +2,7 @@
 #ifndef VERTEXARRAY_H
 #define VERTEXARRAY_H
 
-#include "../mre.h"
+#include "../mar.h"
 #include "../VertexBuffer/VertexBuffer.h"
 #include "../VertexBuffer/VertexBufferLayout.h"
 

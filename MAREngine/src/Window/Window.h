@@ -2,7 +2,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "../mre.h"
+#include "../mar.h"
 #include "SerialPortMonitor.h"
 
 class Window {

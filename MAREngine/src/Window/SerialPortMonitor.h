@@ -2,7 +2,7 @@
 #ifndef SERIALPORT_H
 #define SERIALPORT_H
 
-#include "../mre.h"
+#include "../mar.h"
 
 class SerialPortMonitor {
     char* _port;

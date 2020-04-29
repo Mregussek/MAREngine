@@ -2,7 +2,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "../mre.h"
+#include "../mar.h"
 #include "../Shader/Shader.h"
 #include "../ElementBuffer/ElementBuffer.h"
 #include "../VertexArray/VertexArray.h"
