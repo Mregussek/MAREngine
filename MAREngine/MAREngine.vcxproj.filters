@@ -42,7 +42,7 @@
     <ClInclude Include="src\Window\Window.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window\serialPort.h">
+    <ClInclude Include="src\Window\SerialPortMonitor.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

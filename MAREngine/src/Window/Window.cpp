@@ -1,7 +1,7 @@
 
 #include "Window.h"
 
-Window::Window(const int& H, const int& W, char* wN) 
+Window::Window(const int& H, const int& W, char* wN)
 	: _height(H),
 	_width(W),
 	_windowName(wN)

@@ -5,7 +5,7 @@
 #include "VertexArray/VertexArray.h"
 #include "Renderer/Renderer.h"
 #include "Window/Window.h"
-#include "Window/serialPort.h"
+#include "Window/SerialPortMonitor.h"
 
 void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
 	if (r > 1.0f) rc = -0.5f;
@@ -94,10 +94,6 @@ int chernoCourse() {
 	//spm.start();
 
 	while (!glfwWindowShouldClose(window.getWindow())) {
-		//std::cout << "x: " << spm.getX() << std::endl;
-		//std::cout << "y: " << spm.getY() << std::endl;
-		//std::cout << "z: " << spm.getZ() << std::endl;
-
 		window.processInput();
 
 		// --- Rendering

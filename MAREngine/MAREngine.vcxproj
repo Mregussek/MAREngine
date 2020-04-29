@@ -156,7 +156,7 @@
     <ClInclude Include="src\VertexBuffer\VertexBuffer.h" />
     <ClInclude Include="src\VertexArray\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer\VertexBufferLayout.h" />
-    <ClInclude Include="src\Window\serialPort.h" />
+    <ClInclude Include="src\Window\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
