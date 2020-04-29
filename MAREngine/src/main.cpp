@@ -89,11 +89,14 @@ int chernoCourse() {
 	eb.unbind();
 
 	Renderer renderer(sizeof(indices) / sizeof(indices[0]));
+
 	//SerialPortMonitor spm(portName);
 	//spm.start();
 
 	while (!glfwWindowShouldClose(window.getWindow())) {
-		//std::cout << spm.receiveFromSerialPort() << std::endl;
+		//std::cout << "x: " << spm.getX() << std::endl;
+		//std::cout << "y: " << spm.getY() << std::endl;
+		//std::cout << "z: " << spm.getZ() << std::endl;
 
 		window.processInput();
 
