@@ -8,6 +8,8 @@
 
 class VertexArray {
 	unsigned int _rendererId;
+	size_t _howMany;
+
 public:
 	VertexArray(size_t how_many = 1);
 	~VertexArray();

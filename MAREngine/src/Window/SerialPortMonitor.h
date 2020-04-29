@@ -2,13 +2,6 @@
 #ifndef SERIALPORT_H
 #define SERIALPORT_H
 
-// make sure that no warnings will be displayed   
-// (only about not initialized member of SerialPort!!!)
-#pragma warning( push )
-#pragma warning( disable : 26495) 
-#include "SerialPortMonitor/SerialPort.h"
-#pragma warning (pop)
-
 #include "../mre.h"
 
 class SerialPortMonitor {
@@ -22,33 +15,47 @@ class SerialPortMonitor {
     float _x;
     float _y;
     float _z;
+    int _connectTries;
 
 public:
-    SerialPortMonitor(char* portName) 
+    SerialPortMonitor(char* portName, int tries = 10) 
         : _port(portName),
         _x(0.0f),
         _y(0.0f),
-        _z(0.0f)
+        _z(0.0f),
+        _connectTries(tries)
     {
         _arduino = new SerialPort(_port);
     }
 
     ~SerialPortMonitor() { 
         delete _arduino; 
+
+        if (_thread.joinable()) _thread.join();
     }
 
     void start() {
+        int checkTries{ 0 };
         std::cout << "Searching for device on " << _port << " in progress";
+        
         while (!_arduino->isConnected()) {
             Sleep(100);
             std::cout << ".";
+            delete _arduino;
             _arduino = new SerialPort(_port);
+
+            if (_connectTries < ++checkTries) {
+                std::cout << "Cannot connect to SP, playing without SerialPort\n";
+                return;
+            }
         }
 
         if (_arduino->isConnected()) std::cout << "\nConnection established!\n"; \
 
         _thread = std::thread([this] {
             while (_arduino->isConnected()) receive();
+
+            restart();
         });
     }
 
@@ -69,6 +76,8 @@ public:
         std::lock_guard<std::mutex> lg(_io_mutex);
         return _z;
     }
+
+    const bool& isConnected() const { return _arduino->isConnected(); }
 
 private:
     void receive() {
@@ -97,6 +106,11 @@ private:
 
             _z = std::stof(_recvData.substr(begin + 1, end));
         }
+    }
+
+    void restart() {
+        if (_thread.joinable()) _thread.join();
+        start();
     }
 };
 

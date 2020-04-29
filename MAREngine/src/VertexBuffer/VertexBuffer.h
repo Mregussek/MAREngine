@@ -6,9 +6,10 @@
 
 class VertexBuffer {
 	unsigned int _rendererId;
+	size_t _howMany;
 
 public:
-	VertexBuffer(unsigned int size, const void* data);
+	VertexBuffer(unsigned int size, const void* data, size_t how_many = 1);
 	~VertexBuffer();
 
 	void bind() const;

@@ -1,11 +1,17 @@
+
+// Vertices
 #include "VertexBuffer/VertexBuffer.h"
 #include "VertexBuffer/VertexBufferLayout.h"
 #include "ElementBuffer/ElementBuffer.h"
-#include "Shader/Shader.h"
 #include "VertexArray/VertexArray.h"
+// Rendering
+#include "Shader/Shader.h"
 #include "Renderer/Renderer.h"
+#include "Texture/Texture.h"
+// Window && Input
 #include "Window/Window.h"
 #include "Window/SerialPortMonitor.h"
+
 
 void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
 	if (r > 1.0f) rc = -0.5f;
@@ -25,6 +31,7 @@ int chernoCourse() {
 	int frameBufferWidth{ 0 };
 	int frameBufferHeight{ 0 };
 	const std::string shadersPath = "resources/shaders/basic.shader";
+	const std::string texturePath = "resources/textures/mateuszrzeczyca.png";
 	char portName[] = "\\\\.\\COM7";
 	float r = 0.2f;
 	float g = 0.6f;
@@ -37,20 +44,21 @@ int chernoCourse() {
 	Window window(height, width, name);
 
 	float positions[] = { 
-			-0.7f,  -0.5f,  // 0
-			-0.35f, -0.5f,  // 1
-			-0.2f,   0.5f,  // 2
-			-0.55f,  0.5f,  // 3
+			// x    // y   // z
+			-0.7f,  -0.5f,  0.0f, // vertex 0
+			-0.35f, -0.5f,  0.0f, // vertex 1
+			-0.2f,   0.5f,  0.0f, // vertex 2
+			-0.55f,  0.5f,  0.0f, // vertex 3
 
-			 0.7f,  -0.5f,  // 4
-			 0.35f, -0.5f,  // 5
-			 0.2f,   0.5f,  // 6
-			 0.55f,  0.5f,  // 7
+			 0.7f,  -0.5f,  0.0f, // vertex 4
+			 0.35f, -0.5f,  0.0f, // vertex 5
+			 0.2f,   0.5f,  0.0f, // vertex 6
+			 0.55f,  0.5f,  0.0f, // vertex 7
 
-			-0.01f,  0.25f, // 8
-			 0.01f,  0.25f, // 9
-			-0.01f, -0.15f, // 10
-			 0.01f, -0.15f  // 11
+			-0.01f,  0.25f, 0.0f, // vertex 8
+			 0.01f,  0.25f, 0.0f, // vertex 9
+			-0.01f, -0.15f, 0.0f, // vertex 10
+			 0.01f, -0.15f, 0.0f  // vertex 11
 	};
 
 	unsigned int indices[] = {
@@ -74,7 +82,7 @@ int chernoCourse() {
 	ElementBuffer eb(indices, sizeof(indices) / sizeof(indices[0]));
 
 	VertexBufferLayout layout;
-	layout.push<float>(2);
+	layout.push<float>(3);
 
 	VertexArray va;
 	va.addBuffer(vb, layout);
@@ -82,6 +90,9 @@ int chernoCourse() {
 	Shader shader(shadersPath);
 	shader.bind();
 	shader.setUniform4f("u_Color", r, g, b, a);
+
+	Texture texture(texturePath);
+	texture.bind();
 
 	va.unbind();
 	shader.unbind();
@@ -94,6 +105,7 @@ int chernoCourse() {
 	//spm.start();
 
 	while (!glfwWindowShouldClose(window.getWindow())) {
+		//window.processInput(spm);
 		window.processInput();
 
 		// --- Rendering

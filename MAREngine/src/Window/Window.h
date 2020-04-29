@@ -20,10 +20,13 @@ public:
 			glfwSetWindowShouldClose(_window, true);
 	}
 
-	void processInput(const SerialPortMonitor& spm) {
-		std::cout << "x: " << spm.getX() << std::endl;
-		std::cout << "y: " << spm.getY() << std::endl;
-		std::cout << "z: " << spm.getZ() << std::endl;
+	void processInput(SerialPortMonitor& spm) {
+		if (spm.isConnected()) {
+			std::cout << "x: " << spm.getX() << std::endl;
+			std::cout << "y: " << spm.getY() << std::endl;
+			std::cout << "z: " << spm.getZ() << std::endl;
+		}
+		else processInput();
 
 		if (glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(_window, true);

@@ -24,7 +24,7 @@ void Shader::setUniform4f(const std::string& name, float red, float green, float
 	glUniform4f(getUniformLocation(name), red, green, blue, alpha);
 }
 
-unsigned int Shader::getUniformLocation(const std::string& name) {
+int Shader::getUniformLocation(const std::string& name) {
 	if (_uniformLocationCache.find(name) != _uniformLocationCache.end())
 		return _uniformLocationCache[name];
 

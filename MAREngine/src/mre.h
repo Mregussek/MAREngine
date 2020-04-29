@@ -13,13 +13,26 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
+// --- Include other third-party libraries --- //
+#pragma warning( push )
+#pragma warning( disable : 26495) 
+#pragma warning( disable : 6385) 
+#pragma warning( disable : 6011) 
+#pragma warning( disable : 6262) 
+#pragma warning( disable : 6308) 
+#pragma warning( disable : 4005) 
+#pragma warning( disable : 8027) 
+
+#include "../stb_image/stb_image.h"
+#include "SerialPort/SerialPort.h"
+
+#pragma warning (pop)
+
 // --- Include C++ STL libraries --- //
-//#include <stdio.h>
 #include <iostream>
-#include <fstream> // for reading shaders
+#include <fstream> 
 #include <vector>
 #include <string>
-#include <unordered_map> // for uniform location cache
-#include <atomic>
-#include <thread> // for serial port running parallel with engine
-#include <mutex> // for safe reading coords from serial port
+#include <unordered_map>
+#include <thread>
+#include <mutex>

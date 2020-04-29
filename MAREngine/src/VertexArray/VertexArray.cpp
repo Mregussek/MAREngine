@@ -1,11 +1,13 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray(size_t how_many) {
+VertexArray::VertexArray(size_t how_many)
+	: _howMany(how_many)
+{
 	glGenVertexArrays(how_many, &_rendererId);
 }
 
 VertexArray::~VertexArray() {
-	glDeleteVertexArrays(1, &_rendererId);
+	glDeleteVertexArrays(_howMany, &_rendererId);
 }
 
 void VertexArray::addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) {

@@ -11,5 +11,6 @@ void Renderer::draw(const VertexArray& va, const ElementBuffer& eb, const Shader
 }
 
 void Renderer::clear() const {
+	glClearColor(0.65f, 0.65f, 0.65f, 1.0f); // light gray
 	glClear(GL_COLOR_BUFFER_BIT);
 }
