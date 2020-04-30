@@ -3,9 +3,9 @@
 //#define LEARNING_PURPOSES
 
 #ifdef LEARNING_PURPOSES
-#include "../tests/learn_textures.h"
+#include "tests/learn_textures.h"
 #else
-#include "Application.h"
+#include "src/Application.h"
 #endif
 
 int main() {

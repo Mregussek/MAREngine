@@ -12,12 +12,7 @@ class Renderer {
 	size_t _numberOfIndices;
 
 public:
-	Renderer(const size_t& numberPositions, const size_t& numberIndices) 
-		: _numberOfPositions(numberPositions),
-		_numberOfIndices(numberIndices)
-	{
-		glEnable(GL_DEPTH_TEST);
-	}
+	Renderer(const size_t& numberPositions, const size_t& numberIndices);
 
 	void draw() const;
 

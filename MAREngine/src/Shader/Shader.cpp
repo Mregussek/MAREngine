@@ -20,8 +20,9 @@ void Shader::unbind() const {
 	glUseProgram(0);
 }
 
-void Shader::setUniform4fv(const std::string& name, glm::mat4& matrix4x4) {
-	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix4x4));
+void Shader::setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) {
+	int howManyMatrixProvide = 1;
+	glUniformMatrix4fv(getUniformLocation(name), howManyMatrixProvide, GL_FALSE, glm::value_ptr(matrix4x4));
 }
 
 void Shader::setUniform1i(const std::string& name, int value) {
@@ -104,13 +105,15 @@ unsigned int Shader::createShader() {
 	int result;
 	glGetProgramiv(shaderProgramId, GL_LINK_STATUS, &result);
 	if (result == GL_FALSE) {
-		int length;
-		glGetShaderiv(shaderProgramId, GL_INFO_LOG_LENGTH, &length);
-		char* message = new char[length * sizeof(char)];
+		//int length;
+		//glGetShaderiv(shaderProgramId, GL_INFO_LOG_LENGTH, &length);
+		//char* message = new char[length * sizeof(char)];
+		int length = 100;
+		char message[100];
 		glGetProgramInfoLog(shaderProgramId, length, &length, message);
 		std::cout << "Failed to link shaders: "
 			<< message << std::endl;
-		delete[] message;
+		//delete[] message;
 		return 0;
 	}
 

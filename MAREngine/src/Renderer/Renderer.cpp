@@ -1,10 +1,17 @@
 
 #include "Renderer.h"
 
+Renderer::Renderer(const size_t& numberPositions, const size_t& numberIndices)
+	: _numberOfPositions(numberPositions),
+	_numberOfIndices(numberIndices)
+{
+	glEnable(GL_DEPTH_TEST);
+}
+
 void Renderer::draw() const {
 
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-	//glDrawElements(GL_TRIANGLES, _numberOfIndices, GL_UNSIGNED_INT, nullptr);
+	//glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDrawElements(GL_TRIANGLES, _numberOfIndices, GL_UNSIGNED_INT, nullptr);
 }
 
 void Renderer::clear() const {

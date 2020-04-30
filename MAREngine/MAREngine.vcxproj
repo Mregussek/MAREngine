@@ -169,7 +169,7 @@
     <ClCompile Include="stb_image\stb_image.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\ElementBuffer\ElementBuffer.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\VertexBuffer\VertexBuffer.cpp" />
     <ClCompile Include="src\VertexArray\VertexArray.cpp" />
