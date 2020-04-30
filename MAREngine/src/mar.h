@@ -38,3 +38,16 @@
 #include <unordered_map>
 #include <thread>
 #include <mutex>
+
+namespace mar {
+	class Camera;
+	class Window;
+	class SerialPortMonitor;
+	class VertexBuffer;
+	class VertexArray;
+	class VertexBufferLayout;
+	class Texture;
+	class Shader;
+	class Renderer;
+	class ElementBuffer;
+}

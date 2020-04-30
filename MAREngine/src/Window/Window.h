@@ -6,6 +6,7 @@
 #include "../Camera/Camera.h"
 
 namespace mar {
+
 	class Window {
 		GLFWwindow* _window;
 		int _height;
@@ -27,6 +28,6 @@ namespace mar {
 
 		GLFWwindow* getWindow() const { return _window; }
 	};
-}
+} // end mar namespace
 
 #endif // !WINDOW_H

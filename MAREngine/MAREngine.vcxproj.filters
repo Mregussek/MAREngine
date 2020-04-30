@@ -107,6 +107,9 @@
     <ClCompile Include="src\Camera\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\basic.shader" />

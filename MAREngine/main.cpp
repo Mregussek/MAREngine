@@ -12,6 +12,7 @@ int main() {
 #ifdef LEARNING_PURPOSES
 	return learn();
 #else
-	return run();
+	mar::Application app;
+	return app.run();
 #endif
 }

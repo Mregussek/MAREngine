@@ -1,23 +1,25 @@
 #include "ElementBuffer.h"
 
-ElementBuffer::ElementBuffer(const unsigned int* data, unsigned int count, size_t how_many)
-: _count(count)
-{
-	assert(sizeof(unsigned int) == sizeof(GLuint));
-	
-	glGenBuffers(how_many, &_RendererId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count, data, GL_STATIC_DRAW);
-}
+namespace mar {
+	ElementBuffer::ElementBuffer(const unsigned int* data, unsigned int count, size_t how_many)
+		: _count(count)
+	{
+		assert(sizeof(unsigned int) == sizeof(GLuint));
 
-ElementBuffer::~ElementBuffer() {
-	glDeleteBuffers(1, &_RendererId);
-}
+		glGenBuffers(how_many, &_RendererId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count, data, GL_STATIC_DRAW);
+	}
 
-void ElementBuffer::bind() const {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
-}
+	ElementBuffer::~ElementBuffer() {
+		glDeleteBuffers(1, &_RendererId);
+	}
 
-void ElementBuffer::unbind() const {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	void ElementBuffer::bind() const {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
+	}
+
+	void ElementBuffer::unbind() const {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
 }

@@ -167,6 +167,7 @@
     <ClInclude Include="tests\shader_s.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="stb_image\stb_image.cpp" />

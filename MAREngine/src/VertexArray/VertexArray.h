@@ -6,18 +6,20 @@
 #include "../VertexBuffer/VertexBuffer.h"
 #include "../VertexBuffer/VertexBufferLayout.h"
 
-class VertexArray {
-	unsigned int _rendererId;
-	size_t _howMany;
+namespace mar {
+	class VertexArray {
+		unsigned int _rendererId;
+		size_t _howMany;
 
-public:
-	VertexArray(size_t how_many = 1);
-	~VertexArray();
+	public:
+		VertexArray(size_t how_many = 1);
+		~VertexArray();
 
-	void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+		void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
 
-	void bind() const;
-	void unbind() const;
-};
+		void bind() const;
+		void unbind() const;
+	};
+}
 
 #endif // VERTEXARRAY_H
