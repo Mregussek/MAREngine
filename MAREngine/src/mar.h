@@ -2,7 +2,7 @@
 #define GLEW_STATIC
 
 // Decide wheter you want import GLEW or GLAD (comment to use GLAD)
-//#define IMPORT_GLEW
+#define IMPORT_GLEW
 
 // --- Include OpenGL Libs --- //
 #ifdef IMPORT_GLEW
@@ -13,10 +13,6 @@
 
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
-#include <vec2.hpp>
-#include <vec3.hpp>
-#include <vec4.hpp>
-#include <mat4x4.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 

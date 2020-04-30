@@ -8,11 +8,18 @@
 #include "../VertexArray/VertexArray.h"
 
 class Renderer {
+	size_t _numberOfPositions;
 	size_t _numberOfIndices;
-public:
-	Renderer(const size_t& number) : _numberOfIndices(number) {}
 
-	void draw(const VertexArray& va, const ElementBuffer& eb, const Shader& shader) const;
+public:
+	Renderer(const size_t& numberPositions, const size_t& numberIndices) 
+		: _numberOfPositions(numberPositions),
+		_numberOfIndices(numberIndices)
+	{
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	void draw() const;
 
 	void clear() const;
 };

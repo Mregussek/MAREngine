@@ -33,8 +33,8 @@ public:
 	}
 
 	void swapBuffers() {
-		glfwPollEvents();
 		glfwSwapBuffers(_window);
+		glfwPollEvents();
 	}
 
 	GLFWwindow* getWindow() const { return _window; }

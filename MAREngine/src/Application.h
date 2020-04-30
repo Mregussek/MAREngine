@@ -78,68 +78,113 @@ int run() {
 	};
 	*/
 
-	
 	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3 ,0
 	};
-	
+
+	Renderer renderer(sizeof(positions) / sizeof(positions[0]), sizeof(indices) / sizeof(indices[0]));
+	Shader shader(shadersPath);
+
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	VertexArray va;
 
 	VertexBuffer vb(sizeof(positions), positions);
-	ElementBuffer eb(indices, sizeof(indices));
+	//ElementBuffer eb(indices, sizeof(indices));
 
 	VertexBufferLayout layout;
-	//layout.push<float>(3);
+	layout.push<float>(3);
 	layout.push<float>(2);
-	layout.push<float>(2);
-
 	va.addBuffer(vb, layout);
 
 	Texture texture(texturePath);
 	texture.bind();
 
-	Shader shader(shadersPath);
 	shader.bind();
-	shader.setUniform4f("u_Color", r, g, b, a);
 	shader.setUniform1i("u_Texture", 0);
 
-	//texture.unbind();
 	va.unbind();
 	shader.unbind();
 	vb.unbind();
-	eb.unbind();
-
-	Renderer renderer(sizeof(indices) / sizeof(indices[0]));
 
 	//SerialPortMonitor spm(portName);
 	//spm.start();
 
 	while (!glfwWindowShouldClose(window.getWindow())) {
+		// --- Processing Input --- //
 		//window.processInput(spm);
 		window.processInput();
 
-		// --- Rendering
+		// --- Rendering --- //
 		renderer.clear();
+		texture.bind();
+		shader.bind();
+
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+
+		shader.setUniform4fv("u_Model", model);
+		shader.setUniform4fv("u_Projection", projection);
+		shader.setUniform4fv("u_View", view);
 
 		shader.setUniform4f("u_Color", r, g, b, a);
 
-		texture.bind();
-
-		renderer.draw(va, eb, shader);
+		va.bind();
+		renderer.draw();
 
 		rgbColorsChange(r, g, b, rChange, gChange, bChange);
 
+		// --- Polling events, updating IO actions --- //
 		window.swapBuffers();
 	}
 
