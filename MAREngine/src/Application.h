@@ -31,8 +31,8 @@ int run() {
 	const std::string shadersPath = "resources/shaders/basic.shader";
 	const std::string texturePath = "resources/textures/mr.jpg";
 	char portName[] = "\\\\.\\COM7";
-	float r = 0.2f;
-	float g = 0.6f;
+	float r = 0.8f;
+	float g = 0.8f;
 	float b = 0.8f;
 	float a = 0.0f;
 	float rChange = 0.05f;
@@ -41,7 +41,135 @@ int run() {
 
 	Window window(height, width, name);
 
-	/*
+	float vertices[] = {
+		// Vertex Pos (x, y, z) // Texture Coords
+		-0.5f, -0.5f, -0.5f,	0.0f, 0.0f, // first rectangle
+		 0.5f, -0.5f, -0.5f,	1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,	0.0f, 0.0f, // second
+		 0.5f, -0.5f,  0.5f,	1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,	1.0f, 0.0f, // third
+		-0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,	1.0f, 0.0f, // fourth
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,	0.0f, 1.0f, // fifth
+		 0.5f, -0.5f, -0.5f,	1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,	1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,	0.0f, 1.0f, // sixth
+		 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f, 1.0f
+	};
+
+	std::vector<glm::vec3> cubePositions = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
+	Renderer renderer(sizeof(vertices) / sizeof(vertices[0]));
+	Shader shader(shadersPath);
+
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	VertexArray va;
+
+	VertexBuffer vb(sizeof(vertices), vertices);
+
+	VertexBufferLayout layout;
+	layout.push<float>(3);
+	layout.push<float>(2);
+	va.addBuffer(vb, layout);
+
+	glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+	glm::mat4 mvp = proj * view * model;
+
+	Texture texture(texturePath);
+	texture.bind();
+
+	shader.bind();
+	shader.setUniform1i("u_Texture", 0);
+	shader.setUniformMat4f("u_MVP", mvp);
+
+	va.unbind();
+	shader.unbind();
+	vb.unbind();
+
+	//SerialPortMonitor spm(portName);
+	//spm.start();
+
+	while (!glfwWindowShouldClose(window.getWindow())) {
+		// --- Processing Input --- //
+		//window.processInput(spm);
+		window.processInput();
+
+		// --- Rendering --- //
+		renderer.clear();
+		texture.bind();
+		shader.bind();
+
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+		
+		va.bind();
+		float differentAngle = 0.0f;
+		for (auto const& cube : cubePositions) {
+			glm::mat4 position = glm::translate(glm::mat4(1.0f), cube);
+			float angle = (float)glfwGetTime() * (differentAngle += 10.0f);
+			model = glm::rotate(position, glm::radians(angle), glm::vec3(1.0f, 1.0f, 1.0f));
+			glm::mat4 mvp = proj * view * model;
+			shader.setUniform4f("u_Color", r, g, b, a);
+			shader.setUniformMat4f("u_MVP", mvp);
+			
+			renderer.draw();
+		}
+
+		rgbColorsChange(r, g, b, rChange, gChange, bChange);
+
+		// --- Polling events, updating IO actions --- //
+		window.swapBuffers();
+	}
+
+	return 0;
+}
+
+/*
+	For M letter positions and indices!!!
 	float positions[] = {
 			// x    // y   // z
 			-0.7f,  -0.5f,  0.0f, // vertex 0
@@ -77,85 +205,3 @@ int run() {
 		8, 10, 11 // Center second
 	};
 	*/
-
-	float positions[] = {
-		// Vertices (x, y)  // Texture Coords
-		-0.5f, -0.5f,		0.0f, 0.0f,
-		 0.5f, -0.5f,		1.0f, 0.0f,
-		 0.5f,  0.5f,		1.0f, 1.0f,
-		-0.5f,  0.5f,		0.0f, 1.0f
-	};
-	 
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3 ,0
-	};
-
-	Renderer renderer(sizeof(positions) / sizeof(positions[0]), sizeof(indices) / sizeof(indices[0]));
-	Shader shader(shadersPath);
-
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	VertexArray va;
-
-	VertexBuffer vb(sizeof(positions), positions);
-	ElementBuffer eb(indices, sizeof(indices));
-
-	VertexBufferLayout layout;
-	layout.push<float>(2);
-	layout.push<float>(2);
-	va.addBuffer(vb, layout);
-
-	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 0.0f));
-	glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-	glm::mat4 mvp = proj * view * model * rotate;
-
-	Texture texture(texturePath);
-	texture.bind();
-
-	shader.bind();
-	shader.setUniform1i("u_Texture", 0);
-	shader.setUniformMat4f("u_MVP", mvp);
-
-	va.unbind();
-	shader.unbind();
-	vb.unbind();
-	eb.unbind();
-
-	//SerialPortMonitor spm(portName);
-	//spm.start();
-
-	while (!glfwWindowShouldClose(window.getWindow())) {
-		// --- Processing Input --- //
-		//window.processInput(spm);
-		window.processInput();
-
-		// --- Rendering --- //
-		renderer.clear();
-		texture.bind();
-		shader.bind();
-
-		glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-1.0f, 0.0f, 0.0f));
-		glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.8f, 0.0f));
-		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
-		glm::mat4 mvp = proj * view * model * rotate;
-
-		shader.setUniform4f("u_Color", r, g, b, a);
-		shader.setUniformMat4f("u_MVP", mvp);
-
-		va.bind();
-		eb.bind();
-		renderer.draw();
-
-		rgbColorsChange(r, g, b, rChange, gChange, bChange);
-
-		// --- Polling events, updating IO actions --- //
-		window.swapBuffers();
-	}
-
-	return 0;
-}

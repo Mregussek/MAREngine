@@ -25,7 +25,6 @@ Window::Window(const int& H, const int& W, char* wN)
 
 	glfwMakeContextCurrent(_window);
 	glfwSetFramebufferSizeCallback(_window, Window::frameBuffer_SizeCallback);
-	glfwSwapInterval(1);
 
 #ifdef IMPORT_GLEW
 	glewExperimental = GL_TRUE;
