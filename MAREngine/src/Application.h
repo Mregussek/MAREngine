@@ -12,7 +12,6 @@
 #include "Window/Window.h"
 #include "Devices/SerialPortMonitor.h"
 
-void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -24,11 +23,7 @@ float lastX = (float)width / 2.0f;
 float lastY = (float)height / 2.0f;
 bool firstMouse = true;
 
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
-
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-//Camera camera(height, width);
 
 void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
 	if (r > 1.0f) rc = -0.5f;
@@ -140,10 +135,7 @@ int run() {
 	while (!glfwWindowShouldClose(window.getWindow())) {
 		// --- Processing Input --- //
 		//window.processInput(window.getWindow(), spm);
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-		processInput(window.getWindow());
+		camera.processInput(window.getWindow());
 
 		// --- Rendering --- //
 		renderer.clear();
@@ -176,21 +168,6 @@ int run() {
 	}
 
 	return 0;
-}
-
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.processKeyboard(CameraMovement::FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.processKeyboard(CameraMovement::BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.processKeyboard(CameraMovement::LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.processKeyboard(CameraMovement::RIGHT, deltaTime);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
