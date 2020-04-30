@@ -3,42 +3,30 @@
 #define WINDOW_H
 
 #include "../mar.h"
-#include "SerialPortMonitor.h"
+#include "../Camera/Camera.h"
 
-class Window {
-	GLFWwindow* _window;
-	int _height;
-	int _width;
-	char* _windowName;
+namespace mar {
+	class Window {
+		GLFWwindow* _window;
+		int _height;
+		int _width;
+		char* _windowName;
 
-public:
-	Window(const int& H, const int& W, char* wN);
-	~Window() { glfwTerminate(); }
+	public:
+		Window(const int& H, const int& W, char* wN);
+		~Window() { glfwTerminate(); }
 
-	void processInput() {
-		if (glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(_window, true);
-	}
-
-	void processInput(SerialPortMonitor& spm) {
-		if (spm.isConnected()) {
-			std::cout << "x: " << spm.getX() << std::endl;
-			std::cout << "y: " << spm.getY() << std::endl;
-			std::cout << "z: " << spm.getZ() << std::endl;
+		static void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
+			glViewport(0, 0, width, height);
 		}
-		else processInput();
 
-		if (glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(_window, true);
-	}
+		void swapBuffers() {
+			glfwSwapBuffers(_window);
+			glfwPollEvents();
+		}
 
-	void swapBuffers() {
-		glfwSwapBuffers(_window);
-		glfwPollEvents();
-	}
-
-	GLFWwindow* getWindow() const { return _window; }
-	static void frameBuffer_SizeCallback(GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); }
-};
+		GLFWwindow* getWindow() const { return _window; }
+	};
+}
 
 #endif // !WINDOW_H

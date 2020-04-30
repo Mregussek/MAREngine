@@ -1,7 +1,7 @@
 
 #include "Window.h"
 
-Window::Window(const int& H, const int& W, char* wN)
+mar::Window::Window(const int& H, const int& W, char* wN)
 	: _height(H),
 	_width(W),
 	_windowName(wN)
@@ -24,7 +24,6 @@ Window::Window(const int& H, const int& W, char* wN)
 	}
 
 	glfwMakeContextCurrent(_window);
-	glfwSetFramebufferSizeCallback(_window, Window::frameBuffer_SizeCallback);
 
 #ifdef IMPORT_GLEW
 	glewExperimental = GL_TRUE;
@@ -34,8 +33,7 @@ Window::Window(const int& H, const int& W, char* wN)
 		exit(0);
 	}
 #else
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		exit(0);
 	}

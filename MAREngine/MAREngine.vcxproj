@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera\Camera.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="stb_image\stb_image.h" />
     <ClInclude Include="src\Debug.h" />
@@ -158,13 +159,15 @@
     <ClInclude Include="src\VertexBuffer\VertexBuffer.h" />
     <ClInclude Include="src\VertexArray\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer\VertexBufferLayout.h" />
-    <ClInclude Include="src\Window\SerialPortMonitor.h" />
+    <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Texture\Texture.h" />
-    <ClInclude Include="tests\learn_textures.h" />
+    <ClInclude Include="tests\Camera.h" />
+    <ClInclude Include="tests\learn.h" />
     <ClInclude Include="tests\shader_s.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera\Camera.cpp" />
     <ClCompile Include="glad\glad.c" />
     <ClCompile Include="stb_image\stb_image.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />

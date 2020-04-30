@@ -77,7 +77,7 @@ public:
         return _z;
     }
 
-    const bool& isConnected() const { return _arduino->isConnected(); }
+    const bool isConnected() const { return _arduino->isConnected(); }
 
 private:
     void receive() {

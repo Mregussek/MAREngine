@@ -3,14 +3,14 @@
 //#define LEARNING_PURPOSES
 
 #ifdef LEARNING_PURPOSES
-#include "tests/learn_textures.h"
+#include "tests/learn.h"
 #else
 #include "src/Application.h"
 #endif
 
 int main() {
 #ifdef LEARNING_PURPOSES
-	return learn_textures();
+	return learn();
 #else
 	return run();
 #endif

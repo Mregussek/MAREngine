@@ -7,9 +7,28 @@
 #include "Shader/Shader.h"
 #include "Renderer/Renderer.h"
 #include "Texture/Texture.h"
+#include "Camera/Camera.h"
 // Window && Input
 #include "Window/Window.h"
-#include "Window/SerialPortMonitor.h"
+#include "Devices/SerialPortMonitor.h"
+
+void processInput(GLFWwindow* window);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+int width{ 800 };
+int height{ 600 };
+
+float lastX = (float)width / 2.0f;
+float lastY = (float)height / 2.0f;
+bool firstMouse = true;
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+//Camera camera(height, width);
 
 void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
 	if (r > 1.0f) rc = -0.5f;
@@ -24,8 +43,6 @@ void rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& 
 
 int run() {
 	char name[] = "MAREngine";
-	int width{ 640 };
-	int height{ 480 };
 	int frameBufferWidth{ 0 };
 	int frameBufferHeight{ 0 };
 	const std::string shadersPath = "resources/shaders/basic.shader";
@@ -39,7 +56,12 @@ int run() {
 	float gChange = 0.05f;
 	float bChange = 0.05f;
 
-	Window window(height, width, name);
+	mar::Window window(height, width, name);
+
+	glfwSetInputMode(window.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetFramebufferSizeCallback(window.getWindow(), framebuffer_size_callback);
+	glfwSetCursorPosCallback(window.getWindow(), mouse_callback);
+	glfwSetScrollCallback(window.getWindow(), scroll_callback);
 
 	float vertices[] = {
 		// Vertex Pos (x, y, z) // Texture Coords
@@ -87,23 +109,11 @@ int run() {
 	};
 
 	std::vector<glm::vec3> cubePositions = {
-		glm::vec3(0.0f,  0.0f,  0.0f),
-		glm::vec3(2.0f,  5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f,  3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f,  2.0f, -2.5f),
-		glm::vec3(1.5f,  0.2f, -1.5f),
-		glm::vec3(-1.3f,  1.0f, -1.5f)
+		glm::vec3(0.0f,  0.0f,  0.0f)
 	};
 
 	Renderer renderer(sizeof(vertices) / sizeof(vertices[0]));
 	Shader shader(shadersPath);
-
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	VertexArray va;
 
@@ -114,17 +124,11 @@ int run() {
 	layout.push<float>(2);
 	va.addBuffer(vb, layout);
 
-	glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-	glm::mat4 mvp = proj * view * model;
-
 	Texture texture(texturePath);
 	texture.bind();
 
 	shader.bind();
 	shader.setUniform1i("u_Texture", 0);
-	shader.setUniformMat4f("u_MVP", mvp);
 
 	va.unbind();
 	shader.unbind();
@@ -135,24 +139,30 @@ int run() {
 
 	while (!glfwWindowShouldClose(window.getWindow())) {
 		// --- Processing Input --- //
-		//window.processInput(spm);
-		window.processInput();
+		//window.processInput(window.getWindow(), spm);
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		processInput(window.getWindow());
 
 		// --- Rendering --- //
 		renderer.clear();
 		texture.bind();
 		shader.bind();
 
-		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-		glm::mat4 proj = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
-		
+		glm::mat4 cameraProjection = glm::perspective(glm::radians(camera.getZoom()), (float)width / (float)height, 0.1f, 100.0f);
+		glm::mat4 cameraView = camera.GetViewMatrix();
+
 		va.bind();
 		float differentAngle = 0.0f;
-		for (auto const& cube : cubePositions) {
-			glm::mat4 position = glm::translate(glm::mat4(1.0f), cube);
-			float angle = (float)glfwGetTime() * (differentAngle += 10.0f);
-			model = glm::rotate(position, glm::radians(angle), glm::vec3(1.0f, 1.0f, 1.0f));
-			glm::mat4 mvp = proj * view * model;
+
+		for (auto const& cubePosition : cubePositions) {
+			glm::mat4 cube = glm::translate(glm::mat4(1.0f), cubePosition);
+			float angle = 20.0f * (differentAngle++);
+			glm::mat4 rotationCubeModel = glm::rotate(cube, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			
+			glm::mat4 mvp = cameraProjection * rotationCubeModel * cameraView;
+
 			shader.setUniform4f("u_Color", r, g, b, a);
 			shader.setUniformMat4f("u_MVP", mvp);
 			
@@ -168,8 +178,46 @@ int run() {
 	return 0;
 }
 
-/*
-	For M letter positions and indices!!!
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera.processKeyboard(CameraMovement::FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera.processKeyboard(CameraMovement::BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera.processKeyboard(CameraMovement::LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera.processKeyboard(CameraMovement::RIGHT, deltaTime);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	if (firstMouse) {
+		lastX = (float)xpos;
+		lastY = (float)ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = (float)xpos - lastX;
+	float yoffset = lastY - (float)ypos;
+
+	lastX = (float)xpos;
+	lastY = (float)ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	camera.ProcessMouseScroll((float)yoffset);
+}
+
+/* ----------------------- For M letter positions and indices!!!
 	float positions[] = {
 			// x    // y   // z
 			-0.7f,  -0.5f,  0.0f, // vertex 0
@@ -204,4 +252,4 @@ int run() {
 		8, 9, 11, // Center first
 		8, 10, 11 // Center second
 	};
-	*/
+*/
