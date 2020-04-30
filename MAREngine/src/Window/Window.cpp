@@ -27,10 +27,18 @@ Window::Window(const int& H, const int& W, char* wN)
 	glfwSetFramebufferSizeCallback(_window, Window::frameBuffer_SizeCallback);
 	glfwSwapInterval(1);
 
+#ifdef IMPORT_GLEW
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
 		glfwTerminate();
 		std::cout << "glewInit() failure" << std::endl;
 		exit(0);
 	}
+#else
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		exit(0);
+	}
+#endif
 }

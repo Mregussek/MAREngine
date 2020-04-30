@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Application.h" />
     <ClInclude Include="stb_image\stb_image.h" />
     <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\Shader\Shader.h" />
@@ -160,6 +161,8 @@
     <ClInclude Include="src\Window\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Texture\Texture.h" />
+    <ClInclude Include="tests\learn_textures.h" />
+    <ClInclude Include="tests\shader_s.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad\glad.c" />
@@ -175,6 +178,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\basic.shader" />
+    <None Include="tests\fragmentshader.shader" />
+    <None Include="tests\vertexshader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\mateuszrzeczyca.png" />

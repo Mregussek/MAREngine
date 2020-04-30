@@ -32,7 +32,7 @@ public:
 			glfwSetWindowShouldClose(_window, true);
 	}
 
-	void updateInput() {
+	void swapBuffers() {
 		glfwPollEvents();
 		glfwSwapBuffers(_window);
 	}

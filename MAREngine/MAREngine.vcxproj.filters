@@ -54,6 +54,15 @@
     <ClInclude Include="src\mar.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="tests\shader_s.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\learn_textures.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Application.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -92,6 +101,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\basic.shader" />
+    <None Include="tests\vertexshader.shader" />
+    <None Include="tests\fragmentshader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\mateuszrzeczyca.png">

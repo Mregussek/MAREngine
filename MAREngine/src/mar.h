@@ -1,9 +1,16 @@
 // --- Import GLEW lib statically --- //
 #define GLEW_STATIC
 
+// Decide wheter you want import GLEW or GLAD (comment to use GLAD)
+//#define IMPORT_GLEW
+
 // --- Include OpenGL Libs --- //
-#include <GL/glew.h>
-//#include <glad/glad.h> // we don't need glad because we have glew
+#ifdef IMPORT_GLEW
+#include <GL/glew.h> 
+#else
+#include <glad/glad.h>
+#endif
+
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
 #include <vec2.hpp>

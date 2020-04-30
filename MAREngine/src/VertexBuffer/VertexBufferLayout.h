@@ -39,19 +39,19 @@ public:
 	template<>
 	void push<float>(unsigned int count) {
 		_elements.push_back( {GL_FLOAT, count, GL_FALSE} );
-		_stride += count * VertexBufferElement::getSizeOfType(GL_FLOAT);
+		_stride += count * sizeof(GL_FLOAT); //VertexBufferElement::getSizeOfType(GL_FLOAT);
 	}
 
 	template<>
 	void push<unsigned int>(unsigned int count) {
 		_elements.push_back( {GL_UNSIGNED_INT, count,  GL_FALSE} );
-		_stride += count * VertexBufferElement::getSizeOfType(GL_UNSIGNED_INT);
+		_stride += count * sizeof(GL_UNSIGNED_INT); //VertexBufferElement::getSizeOfType(GL_UNSIGNED_INT);
 	}
 
 	template<>
 	void push<char>(unsigned int count) {
 		_elements.push_back( {GL_UNSIGNED_BYTE, count, GL_TRUE} );
-		_stride += count * VertexBufferElement::getSizeOfType(GL_UNSIGNED_BYTE);
+		_stride += count * sizeof(GL_UNSIGNED_BYTE); //VertexBufferElement::getSizeOfType(GL_UNSIGNED_BYTE);
 	}
 };
 

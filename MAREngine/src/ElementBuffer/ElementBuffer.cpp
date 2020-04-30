@@ -7,7 +7,7 @@ ElementBuffer::ElementBuffer(const unsigned int* data, unsigned int count, size_
 	
 	glGenBuffers(how_many, &_RendererId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count, data, GL_STATIC_DRAW);
 }
 
 ElementBuffer::~ElementBuffer() {
