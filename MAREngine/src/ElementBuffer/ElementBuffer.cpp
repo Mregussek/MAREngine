@@ -1,14 +1,14 @@
 #include "ElementBuffer.h"
 
 namespace mar {
-	ElementBuffer::ElementBuffer(const unsigned int* data, unsigned int count, size_t how_many)
-		: _count(count)
+	ElementBuffer::ElementBuffer(unsigned int sizeOfData, const unsigned int* data, size_t how_many)
+		: _numberOfIndices(sizeOfData / sizeof(decltype(sizeOfData)))
 	{
 		assert(sizeof(unsigned int) == sizeof(GLuint));
 
 		glGenBuffers(how_many, &_RendererId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count, data, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeOfData, data, GL_STATIC_DRAW);
 	}
 
 	ElementBuffer::~ElementBuffer() {

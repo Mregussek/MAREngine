@@ -28,9 +28,13 @@ namespace mar {
         const float SPEED = 2.5f;
         const float SENSITIVITY = 0.1f;
         const float ZOOM = 45.0f;
+        const glm::vec3 CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
     } CameraSettings;
 
     class Camera {
+        // --- Window Attributes
+        int _width;
+        int _height;
         // --- Camera Attributes
         glm::vec3 _position;
         glm::vec3 _front;
@@ -54,13 +58,13 @@ namespace mar {
         ObjectRotation _objectRotation;
 
     public:
-        Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
-            float yaw = CameraSettings.YAW, float pitch = CameraSettings.PITCH);
+        Camera(const int& w, const int& h);
 
         const float& getZoom() const { return _zoom; }
-        glm::mat4 getViewMatrix() { return glm::lookAt(_position, _position + _front, _up); }
-        glm::mat4 getRotateMatrixOnPress(const glm::vec3& cubePosition);
-        glm::mat4 getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator);
+        const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
+        const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
+        const glm::mat4 getRotateMatrixOnPress(const glm::vec3& cubePosition) const ;
+        const glm::mat4 getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) const;
 
         void processInput(GLFWwindow* window);
 

@@ -20,53 +20,33 @@ namespace mar {
 
 		mar::Window window(height, width, name);
 		GUI gui(&window, glsl_version);
-		Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+		Camera camera(width, height);
 
 		callbacks::setCallbacks(window.getWindow(), &camera);
-
+		
 		float vertices[] = {
-			// Vertex Pos (x, y, z) // Texture Coords
-			-0.5f, -0.5f, -0.5f,	0.0f, 0.0f, // first rectangle
-			 0.5f, -0.5f, -0.5f,	1.0f, 0.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
-			 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
-			-0.5f,  0.5f, -0.5f,	0.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f,	0.0f, 0.0f,
+			//  front (x, y, z)		// Texture
+			-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
+			 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
+			 1.0f,  1.0f,  1.0f,	1.0f, 1.0f,
+			-1.0f,  1.0f,  1.0f,	0.0f, 1.0f,
+			//  back 
+			-1.0f, -1.0, -1.0f,		0.0f, 0.0f,
+			 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
+			 1.0f,  1.0, -1.0f,		1.0f, 1.0f,
+			-1.0f,  1.0f, -1.0f,	0.0f, 1.0f,
+		};
 
-			-0.5f, -0.5f,  0.5f,	0.0f, 0.0f, // second
-			 0.5f, -0.5f,  0.5f,	1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f, 1.0f,
-			-0.5f,  0.5f,  0.5f,	0.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
-
-			-0.5f,  0.5f,  0.5f,	1.0f, 0.0f, // third
-			-0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
-			-0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
-			-0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
-
-			 0.5f,  0.5f,  0.5f,	1.0f, 0.0f, // fourth
-			 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
-			 0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
-			 0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
-			 0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
-
-			-0.5f, -0.5f, -0.5f,	0.0f, 1.0f, // fifth
-			 0.5f, -0.5f, -0.5f,	1.0f, 1.0f,
-			 0.5f, -0.5f,  0.5f,	1.0f, 0.0f,
-			 0.5f, -0.5f,  0.5f,	1.0f, 0.0f,
-			-0.5f, -0.5f,  0.5f,	0.0f, 0.0f,
-			-0.5f, -0.5f, -0.5f,	0.0f, 1.0f,
-
-			-0.5f,  0.5f, -0.5f,	0.0f, 1.0f, // sixth
-			 0.5f,  0.5f, -0.5f,	1.0f, 1.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
-			 0.5f,  0.5f,  0.5f,	1.0f, 0.0f,
-			-0.5f,  0.5f,  0.5f,	0.0f, 0.0f,
-			-0.5f,  0.5f, -0.5f,	0.0f, 1.0f
+		unsigned int elements[] = {
+			// front	// back
+			0, 1, 2,	7, 6, 5,
+			2, 3, 0,	5, 4, 7,
+			// right	// left
+			1, 5, 6,	4, 0, 3,
+			6, 2, 1,	3, 7, 4,
+			// bottom	// top
+			4, 5, 1,	3, 2, 6,
+			1, 0, 4,	6, 7, 3
 		};
 
 		std::vector<glm::vec3> cubePositions = {
@@ -75,12 +55,12 @@ namespace mar {
 			glm::vec3(-1.5f, -0.5f, -4.5f)
 		};
 
-		Renderer renderer(sizeof(vertices) / sizeof(vertices[0]));
 		Shader shader(shadersPath);
 
 		VertexArray va;
 
 		VertexBuffer vb(sizeof(vertices), vertices);
+		ElementBuffer eb(sizeof(elements), elements);
 		VertexBufferLayout layout;
 		layout.push<float>(3);
 		layout.push<float>(2);
@@ -95,15 +75,15 @@ namespace mar {
 		va.unbind();
 		shader.unbind();
 		vb.unbind();
+		eb.unbind();
+
+		Renderer renderer(vb.getSize(), eb.getIndicesNumber());
 
 		//SerialPortMonitor spm(portName);
 		//spm.start();
 
-		glm::mat4 projection;
-		glm::mat4 view;
 		glm::mat4 model;
 		glm::mat4 transform;
-		glm::vec3 guiTranslation(0.0f, 0.0f, 0.0f);
 
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
@@ -114,13 +94,11 @@ namespace mar {
 			renderer.clear();
 			shader.bind();
 			va.bind();
+			eb.bind();
 
 			shader.setUniform4f("u_Color", r, g, b, a);
-
-			projection = glm::perspective(glm::radians(camera.getZoom()), (float)width / (float)height, 0.1f, 100.0f);
-			shader.setUniformMat4f("u_Projection", projection);
-			view = camera.getViewMatrix();
-			shader.setUniformMat4f("u_View", view);
+			shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
+			shader.setUniformMat4f("u_View", camera.getViewMatrix());
 
 			float differentAngle = 0.0f;
 			for (auto const& cubePosition : cubePositions) {
@@ -129,7 +107,7 @@ namespace mar {
 				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 				shader.setUniformMat4f("u_Model", model);
 
-				//glm::mat4 transform = camera.getRotateMatrixSPM(cubePosition, glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
+				//transform = camera.getRotateMatrixSPM(cubePosition, glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
 				transform = camera.getRotateMatrixOnPress(cubePosition);
 				shader.setUniformMat4f("u_Transform", transform);
 

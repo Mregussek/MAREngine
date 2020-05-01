@@ -2,10 +2,12 @@
 #include "Camera.h"
 
 namespace mar {
-    Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-        : _position(position),
+    Camera::Camera(const int& w, const int& h)
+        : _width(w), 
+        _height(h),
+        _position(CameraSettings.CAMERA_START),
         _front(glm::vec3(0.0f, 0.0f, -1.0f)),
-        _worldUp(up),
+        _worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
         _movementSpeed(CameraSettings.SPEED),
         _mouseSensitivity(CameraSettings.SENSITIVITY),
         _zoom(CameraSettings.ZOOM),
@@ -13,15 +15,15 @@ namespace mar {
         _firstMouse(false),
         _lastX(0.0f),
         _lastY(0.0f),
-        _yaw(yaw),
-        _pitch(pitch),
+        _yaw(CameraSettings.YAW),
+        _pitch(CameraSettings.PITCH),
         _deltaTime(0.0f),
         _lastFrame(0.0f)
     {
         updateCameraVectors();
     }
 
-    glm::mat4 Camera::getRotateMatrixOnPress(const glm::vec3& cubePosition) {
+    const glm::mat4 Camera::getRotateMatrixOnPress(const glm::vec3& cubePosition) const {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
         if (_objectRotation == ObjectRotation::FORWARD)
             return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(-1.0f, 0.0f, 0.0f));
@@ -35,7 +37,7 @@ namespace mar {
             return transform;
     }
 
-    glm::mat4 Camera::getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) {
+    const glm::mat4 Camera::getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) const {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
         return glm::rotate(transform, (float)glfwGetTime(), spmRotator);
     }

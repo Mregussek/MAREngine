@@ -1,12 +1,13 @@
 #include "VertexBuffer.h"
 
 namespace mar {
-	VertexBuffer::VertexBuffer(unsigned int size, const void* data, size_t how_many)
-		: _howMany(how_many)
+	VertexBuffer::VertexBuffer(unsigned int sizeOfData, const float* data, size_t how_many)
+		: _howMany(how_many),
+		_size(sizeOfData / sizeof(float))
 	{
 		glGenBuffers(_howMany, &_rendererId);
 		glBindBuffer(GL_ARRAY_BUFFER, _rendererId);
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeOfData, (const void*)data, GL_STATIC_DRAW);
 	}
 
 	VertexBuffer::~VertexBuffer() {
