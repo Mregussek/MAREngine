@@ -1,3 +1,8 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
+
 #include "Shader.h"
 
 namespace mar {
@@ -32,6 +37,10 @@ namespace mar {
 
 	void Shader::setUniform4f(const std::string& name, float red, float green, float blue, float alpha) {
 		glUniform4f(getUniformLocation(name), red, green, blue, alpha);
+	}
+
+	void Shader::setUniform4fv(const std::string& name, const float* floats4) {
+		glUniform4fv(getUniformLocation(name), 1, floats4);
 	}
 
 	int Shader::getUniformLocation(const std::string& name) {

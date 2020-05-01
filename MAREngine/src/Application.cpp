@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #include "Application.h"
 
@@ -22,7 +26,7 @@ namespace mar {
 		GUI gui(&window, glsl_version);
 		Camera camera(width, height);
 
-		callbacks::setCallbacks(window.getWindow(), &camera);
+		callbacks::setCallbacks(window.getWindow(), &camera); // for mouse usage
 		
 		float vertices[] = {
 			//  front (x, y, z)		// Texture
@@ -49,9 +53,9 @@ namespace mar {
 			1, 0, 4,	6, 7, 3
 		};
 
-		std::vector<glm::vec3> cubePositions = {
+		std::vector<glm::vec3> cubes = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
-			glm::vec3(2.5f, 2.5f, -7.5f),
+			glm::vec3(2.5f, 0.5f, -7.5f),
 			glm::vec3(-1.5f, -0.5f, -4.5f)
 		};
 
@@ -82,9 +86,6 @@ namespace mar {
 		//SerialPortMonitor spm(portName);
 		//spm.start();
 
-		glm::mat4 model;
-		glm::mat4 transform;
-
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
 			camera.processInput(window.getWindow());
@@ -96,27 +97,26 @@ namespace mar {
 			va.bind();
 			eb.bind();
 
-			shader.setUniform4f("u_Color", r, g, b, a);
+			shader.setUniform4fv("u_Color", gui.getColors());
 			shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
 			shader.setUniformMat4f("u_View", camera.getViewMatrix());
-
+			shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
+			
 			float differentAngle = 0.0f;
-			for (auto const& cubePosition : cubePositions) {
-				model = glm::translate(glm::mat4(1.0f), cubePosition);
+			for (auto const& cubePosition : cubes) {
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), cubePosition);
 				float angle = 20.0f * (differentAngle++);
 				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 				shader.setUniformMat4f("u_Model", model);
 
 				//transform = camera.getRotateMatrixSPM(cubePosition, glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
-				transform = camera.getRotateMatrixOnPress(cubePosition);
+				glm::mat4 transform = camera.getRotateMatrixOnPress(cubePosition);
 				shader.setUniformMat4f("u_Transform", transform);
 
-				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
-
+				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix(cubePosition));
+				
 				renderer.draw();
 			}
-
-			rgbColorsChange(r, g, b, rChange, gChange, bChange);
 
 			// --- Polling events, updating IO actions --- //
 			gui.display();
@@ -124,16 +124,5 @@ namespace mar {
 		}
 
 		return 0;
-	}
-
-	void Application::rgbColorsChange(float& r, float& g, float& b, float& rc, float& gc, float& bc) {
-		if (r > 1.0f) rc = -0.5f;
-		else if (r < 0.0f) rc = 0.05f;
-
-		if (g > 1.0f) gc = -0.5f;
-		else if (g < 0.0f) gc = 0.05f;
-
-		r += rc;
-		g += gc;
 	}
 }

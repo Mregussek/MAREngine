@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #ifndef DEBUG_H
 #define DEBUG_H

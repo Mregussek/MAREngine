@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H

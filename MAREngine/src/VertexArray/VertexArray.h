@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #ifndef VERTEXARRAY_H
 #define VERTEXARRAY_H

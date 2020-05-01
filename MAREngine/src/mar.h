@@ -1,3 +1,13 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ * 
+ *	Description:
+ *	This file contains all the include libraries for this engine, so that everything used to create
+ *	something will be here. Also it defines 'mar' namespace with all its classes.
+ */
+
+
 // --- Import GLEW lib statically --- //
 #define GLEW_STATIC
 
@@ -54,4 +64,5 @@ namespace mar {
 	class Shader;
 	class Renderer;
 	class ElementBuffer;
+	// cannot declare here namespace callbacks;
 }

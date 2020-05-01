@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #include "Camera.h"
 
@@ -39,7 +43,7 @@ namespace mar {
 
     const glm::mat4 Camera::getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) const {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
-        return glm::rotate(transform, (float)glfwGetTime(), spmRotator);
+        return glm::rotate(transform, glm::radians(45.0f), spmRotator);
     }
 
     void Camera::processInput(GLFWwindow* window) {

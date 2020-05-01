@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #ifndef SHADER_H
 #define SHADER_H
@@ -26,6 +30,7 @@ namespace mar {
 		void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4);
 		void setUniform1i(const std::string& name, int value);
 		void setUniform4f(const std::string& name, float red, float green, float blue, float alpha);
+		void setUniform4fv(const std::string& name, const float* floats4);
 
 	private:
 		int getUniformLocation(const std::string& name);
