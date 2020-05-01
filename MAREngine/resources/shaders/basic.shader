@@ -10,10 +10,11 @@ uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Projection;
 uniform mat4 u_Transform;
+uniform mat4 u_GUItranslation;
 
 void main() {
 	mat4 t = u_Transform; // make no display error if I don't want to use this uniform
-	mat4 mvp = u_Projection * u_View * u_Model * u_Transform;
+	mat4 mvp = u_Projection * u_View * u_Model * u_Transform * u_GUItranslation;
 	gl_Position = mvp * position;
 	v_TexCoord = texCoord;
 };

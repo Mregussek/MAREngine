@@ -9,8 +9,8 @@ namespace mar {
 
 	class Window {
 		GLFWwindow* _window;
-		int _height;
 		int _width;
+		int _height;
 		char* _windowName;
 
 	public:
@@ -27,7 +27,19 @@ namespace mar {
 		}
 
 		GLFWwindow* getWindow() const { return _window; }
+		const bool shouldClose() const { return !glfwWindowShouldClose(_window); }
 	};
+
+	namespace callbacks {
+		// Inline Variables and Methods, for solving linker problems
+		inline GLFWwindow* window; 
+		inline Camera* camera;
+		inline void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+		inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+		inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+		void setCallbacks(GLFWwindow* wind, Camera* cam);
+	}
+
 } // end mar namespace
 
 #endif // !WINDOW_H

@@ -9,6 +9,10 @@ namespace mar {
         _movementSpeed(CameraSettings.SPEED),
         _mouseSensitivity(CameraSettings.SENSITIVITY),
         _zoom(CameraSettings.ZOOM),
+        _enableMouse(false),
+        _firstMouse(false),
+        _lastX(0.0f),
+        _lastY(0.0f),
         _yaw(yaw),
         _pitch(pitch),
         _deltaTime(0.0f),
@@ -17,7 +21,7 @@ namespace mar {
         updateCameraVectors();
     }
 
-    glm::mat4 Camera::getRotateMatrix(const glm::vec3& cubePosition) {
+    glm::mat4 Camera::getRotateMatrixOnPress(const glm::vec3& cubePosition) {
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
         if (_objectRotation == ObjectRotation::FORWARD)
             return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(-1.0f, 0.0f, 0.0f));
@@ -29,6 +33,11 @@ namespace mar {
             return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
         else
             return transform;
+    }
+
+    glm::mat4 Camera::getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) {
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
+        return glm::rotate(transform, (float)glfwGetTime(), spmRotator);
     }
 
     void Camera::processInput(GLFWwindow* window) {
@@ -60,6 +69,14 @@ namespace mar {
             processKeyboard(ObjectRotation::LEFT);
         else
             processKeyboard(ObjectRotation::NONE);
+
+        // Enable Mouse Usage
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+            if (_enableMouse) _enableMouse = false;
+            else _enableMouse = true;
+
+            _firstMouse = true;
+        }    
     }
 
     void Camera::processKeyboard(CameraMovement&& direction) {
@@ -78,6 +95,24 @@ namespace mar {
         if (rotation == ObjectRotation::NONE) _objectRotation = ObjectRotation::NONE;
     }
 
+    void Camera::mouseCallback(float xpos, float ypos) {
+        if (!_enableMouse) return;
+
+        if (_firstMouse) {
+            _lastX = (float)xpos;
+            _lastY = (float)ypos;
+            _firstMouse = false;
+        }
+
+        float xoffset = (float)xpos - _lastX;
+        float yoffset = _lastY - (float)ypos;
+
+        _lastX = (float)xpos;
+        _lastY = (float)ypos;
+
+        processMouseMovement(xoffset, yoffset);
+    }
+
     void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
         xoffset *= _mouseSensitivity;
         yoffset *= _mouseSensitivity;
@@ -91,6 +126,10 @@ namespace mar {
         }
 
         updateCameraVectors();
+    }
+
+    void Camera::scrollCallback(float ypos) {
+        processMouseScroll(ypos);
     }
 
     void Camera::processMouseScroll(float yoffset) {

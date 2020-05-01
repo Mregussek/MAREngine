@@ -41,6 +41,10 @@ namespace mar {
         float _movementSpeed;
         float _mouseSensitivity;
         float _zoom;
+        bool _enableMouse;
+        bool _firstMouse;
+        float _lastX;
+        float _lastY;
         // --- Maths (Euler Angles)
         float _yaw;
         float _pitch;
@@ -55,15 +59,19 @@ namespace mar {
 
         const float& getZoom() const { return _zoom; }
         glm::mat4 getViewMatrix() { return glm::lookAt(_position, _position + _front, _up); }
-        glm::mat4 getRotateMatrix(const glm::vec3& cubePosition);
+        glm::mat4 getRotateMatrixOnPress(const glm::vec3& cubePosition);
+        glm::mat4 getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator);
 
         void processInput(GLFWwindow* window);
+
+        void mouseCallback(float xpos, float ypos);  
+        void scrollCallback(float ypos);
+
+    private:
         void processKeyboard(CameraMovement&& direction);
         void processKeyboard(ObjectRotation&& direction);
         void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
         void processMouseScroll(float yoffset);
-
-    private:
         void updateCameraVectors();
     };
 }

@@ -25,8 +25,11 @@
 #pragma warning( disable : 6308) 
 #pragma warning( disable : 4005) 
 
-#include "../stb_image/stb_image.h"
+#include "../other/stb_image/stb_image.h"
 #include "SerialPort/SerialPort.h"
+#include "../other/imgui/imgui.h"
+#include "../other/imgui/imgui_impl_glfw.h"
+#include "../other/imgui/imgui_impl_opengl3.h"
 
 #pragma warning (pop)
 
@@ -42,6 +45,7 @@
 namespace mar {
 	class Camera;
 	class Window;
+	class GUI;
 	class SerialPortMonitor;
 	class VertexBuffer;
 	class VertexArray;

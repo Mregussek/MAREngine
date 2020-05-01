@@ -2,25 +2,14 @@
 #include "Application.h"
 
 namespace mar {
-	namespace callbacks {
-		GLFWwindow* window; Camera* camera;
-		int width; int height;
-		float lastX; float lastY;
-		bool firstMouse;
-		void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-		void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-		void setCallbacks(GLFWwindow* wind, Camera* cam, const int& w, const int& h);
-	}
-
 	int Application::run() {
 		char name[] = "MAREngine";
-		int width{ 800 };
-		int height{ 600 };
-		int frameBufferWidth{ 0 };
-		int frameBufferHeight{ 0 };
+		int width{ 1280 };
+		int height{ 720 };
 		const std::string shadersPath = "resources/shaders/basic.shader";
 		const std::string texturePath = "resources/textures/mr.jpg";
 		char portName[] = "\\\\.\\COM7";
+		const char* glsl_version = "#version 460";
 		float r = 0.8f;
 		float g = 0.8f;
 		float b = 0.8f;
@@ -30,9 +19,10 @@ namespace mar {
 		float bChange = 0.05f;
 
 		mar::Window window(height, width, name);
+		GUI gui(&window, glsl_version);
 		Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-		callbacks::setCallbacks(window.getWindow(), &camera, width, height);
+		callbacks::setCallbacks(window.getWindow(), &camera);
 
 		float vertices[] = {
 			// Vertex Pos (x, y, z) // Texture Coords
@@ -89,6 +79,7 @@ namespace mar {
 		Shader shader(shadersPath);
 
 		VertexArray va;
+
 		VertexBuffer vb(sizeof(vertices), vertices);
 		VertexBufferLayout layout;
 		layout.push<float>(3);
@@ -112,11 +103,12 @@ namespace mar {
 		glm::mat4 view;
 		glm::mat4 model;
 		glm::mat4 transform;
+		glm::vec3 guiTranslation(0.0f, 0.0f, 0.0f);
 
-		while (!glfwWindowShouldClose(window.getWindow())) {
+		while (window.shouldClose()) {
 			// --- Processing Input --- //
-			std::cout << "BEGIN\n";
 			camera.processInput(window.getWindow());
+			gui.prepareNewFrame();
 
 			// --- Rendering, binding textures, creating matrix transformations --- //
 			renderer.clear();
@@ -129,19 +121,19 @@ namespace mar {
 			shader.setUniformMat4f("u_Projection", projection);
 			view = camera.getViewMatrix();
 			shader.setUniformMat4f("u_View", view);
-			
-			float differentAngle = 0.0f;
 
+			float differentAngle = 0.0f;
 			for (auto const& cubePosition : cubePositions) {
 				model = glm::translate(glm::mat4(1.0f), cubePosition);
 				float angle = 20.0f * (differentAngle++);
 				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 				shader.setUniformMat4f("u_Model", model);
 
-				//transform = glm::translate(glm::mat4(1.0f), cubePosition);
-				//transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
-				glm::mat4 transform = camera.getRotateMatrix(cubePosition);
+				//glm::mat4 transform = camera.getRotateMatrixSPM(cubePosition, glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
+				transform = camera.getRotateMatrixOnPress(cubePosition);
 				shader.setUniformMat4f("u_Transform", transform);
+
+				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
 
 				renderer.draw();
 			}
@@ -149,8 +141,8 @@ namespace mar {
 			rgbColorsChange(r, g, b, rChange, gChange, bChange);
 
 			// --- Polling events, updating IO actions --- //
+			gui.display();
 			window.swapBuffers();
-			std::cout << "END\n";
 		}
 
 		return 0;
@@ -165,45 +157,5 @@ namespace mar {
 
 		r += rc;
 		g += gc;
-	}
-
-	namespace callbacks {
-		void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-			glViewport(0, 0, width, height);
-		}
-
-		void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-			if (firstMouse) {
-				lastX = (float)xpos;
-				lastY = (float)ypos;
-				firstMouse = false;
-			}
-
-			float xoffset = (float)xpos - lastX;
-			float yoffset = lastY - (float)ypos;
-
-			lastX = (float)xpos;
-			lastY = (float)ypos;
-
-			camera->processMouseMovement(xoffset, yoffset);
-		}
-
-		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-			camera->processMouseScroll((float)yoffset);
-		}
-
-		void setCallbacks(GLFWwindow* wind, Camera* cam, const int& w, const int& h) {
-			window = wind;
-			camera = cam;
-			width = w;
-			height = h;
-			lastX = (float)width / 2.0f;
-			lastY = (float)height / 2.0f;
-			firstMouse = true;
-
-			glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-			glfwSetCursorPosCallback(window, mouse_callback);
-			glfwSetScrollCallback(window, scroll_callback);
-		}
 	}
 }

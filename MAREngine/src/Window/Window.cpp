@@ -25,7 +25,7 @@ namespace mar {
 		}
 
 		glfwMakeContextCurrent(_window);
-		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 #ifdef IMPORT_GLEW
 		glewExperimental = GL_TRUE;
@@ -40,5 +40,28 @@ namespace mar {
 			exit(0);
 		}
 #endif
+	}
+
+	namespace callbacks {
+		inline void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+			glViewport(0, 0, width, height);
+		}
+
+		inline void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+			camera->mouseCallback((float)xpos, (float)ypos);
+		}
+
+		inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+			camera->scrollCallback((float)yoffset);
+		}
+
+		void setCallbacks(GLFWwindow* wind, Camera* cam) {
+			window = wind;
+			camera = cam;
+
+			glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+			glfwSetCursorPosCallback(window, mouse_callback);
+			glfwSetScrollCallback(window, scroll_callback);
+		}
 	}
 }
