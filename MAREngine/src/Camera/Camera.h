@@ -45,12 +45,12 @@ namespace mar {
             float yaw = CameraSettings.YAW, float pitch = CameraSettings.PITCH);
 
         const float& getZoom() const { return _zoom; }
-        glm::mat4 GetViewMatrix() { return glm::lookAt(_position, _position + _front, _up); }
+        glm::mat4 getViewMatrix() { return glm::lookAt(_position, _position + _front, _up); }
 
         void processInput(GLFWwindow* window);
-        void processKeyboard(CameraMovement&& direction, float deltaTime);
-        void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
-        void ProcessMouseScroll(float yoffset);
+        void processKeyboard(CameraMovement&& direction);
+        void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+        void processMouseScroll(float yoffset);
 
     private:
         void updateCameraVectors();

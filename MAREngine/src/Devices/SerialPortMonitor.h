@@ -54,27 +54,28 @@ namespace mar {
             if (_arduino->isConnected()) std::cout << "\nConnection established!\n"; \
 
                 _thread = std::thread([this] {
-                while (_arduino->isConnected()) receive();
-
-                restart();
-                    });
+                    while (_arduino->isConnected()) receive();
+                });
         }
 
         const float& getX() const {
             static std::mutex _io_mutex;
             std::lock_guard<std::mutex> lg(_io_mutex);
+            std::cout << "SPM _x: " << _x << std::endl;
             return _x;
         }
 
         const float& getY() const {
             static std::mutex _io_mutex;
             std::lock_guard<std::mutex> lg(_io_mutex);
+            std::cout << "SPM _y: " << _y << std::endl;
             return _y;
         }
 
         const float& getZ() const {
             static std::mutex _io_mutex;
             std::lock_guard<std::mutex> lg(_io_mutex);
+            std::cout << "SPM _z: " << _z << std::endl;
             return _z;
         }
 
@@ -85,33 +86,33 @@ namespace mar {
             int readResult = _arduino->readSerialPort(_incomingData, MAX_DATA_LENGTH);
             _recvData = _incomingData;
             parseInput();
-            Sleep(125);
+            Sleep(75);
         }
 
         void parseInput() {
-            if (_recvData.find("#x#") != std::string::npos) {
-                auto begin = _recvData.find(" ");
-                auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
+            try {
+                if (_recvData.find("#x#") != std::string::npos) {
+                    auto begin = _recvData.find(" ");
+                    auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
 
-                _x = std::stof(_recvData.substr(begin + 1, end));
+                    _x = std::stof(_recvData.substr(begin + 1, end));
+                }
+                else if (_recvData.find("#y#") != std::string::npos) {
+                    auto begin = _recvData.find(" ");
+                    auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
+
+                    _y = std::stof(_recvData.substr(begin + 1, end));
+                }
+                else if (_recvData.find("#z#") != std::string::npos) {
+                    auto begin = _recvData.find(" ");
+                    auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
+
+                    _z = std::stof(_recvData.substr(begin + 1, end));
+                }
             }
-            else if (_recvData.find("#y#") != std::string::npos) {
-                auto begin = _recvData.find(" ");
-                auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
-
-                _y = std::stof(_recvData.substr(begin + 1, end));
+            catch (std::exception& e) {
+                std::cout << "Found error during parsing serial port: " << e.what() << std::endl;
             }
-            else if (_recvData.find("#z#") != std::string::npos) {
-                auto begin = _recvData.find(" ");
-                auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
-
-                _z = std::stof(_recvData.substr(begin + 1, end));
-            }
-        }
-
-        void restart() {
-            if (_thread.joinable()) _thread.join();
-            start();
         }
     };
 }

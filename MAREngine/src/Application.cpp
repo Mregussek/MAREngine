@@ -81,7 +81,8 @@ namespace mar {
 
 		std::vector<glm::vec3> cubePositions = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
-			glm::vec3(2.5f, 2.5f, -7.5f)
+			glm::vec3(2.5f, 2.5f, -7.5f),
+			glm::vec3(-1.5f, -0.5f, -4.5f)
 		};
 
 		Renderer renderer(sizeof(vertices) / sizeof(vertices[0]));
@@ -106,34 +107,42 @@ namespace mar {
 		shader.unbind();
 		vb.unbind();
 
-		//SerialPortMonitor spm(portName);
-		//spm.start();
+		SerialPortMonitor spm(portName);
+		spm.start();
+
+		glm::mat4 projection;
+		glm::mat4 view;
+		glm::mat4 model;
+		glm::mat4 transform;
 
 		while (!glfwWindowShouldClose(window.getWindow())) {
 			// --- Processing Input --- //
-			//window.processInput(window.getWindow(), spm);
 			camera.processInput(window.getWindow());
+			//camera.processInput(window.getWindow());
 
 			// --- Rendering, binding textures, creating matrix transformations --- //
 			renderer.clear();
-			texture.bind();
 			shader.bind();
-
-			glm::mat4 cameraProjection = glm::perspective(glm::radians(camera.getZoom()), (float)width / (float)height, 0.1f, 100.0f);
-			glm::mat4 cameraView = camera.GetViewMatrix();
-
 			va.bind();
+
+			shader.setUniform4f("u_Color", r, g, b, a);
+
+			projection = glm::perspective(glm::radians(camera.getZoom()), (float)width / (float)height, 0.1f, 100.0f);
+			shader.setUniformMat4f("u_Projection",projection);
+			view = camera.getViewMatrix();
+			shader.setUniformMat4f("u_View", view);
+			
 			float differentAngle = 0.0f;
 
 			for (auto const& cubePosition : cubePositions) {
-				glm::mat4 cube = glm::translate(glm::mat4(1.0f), cubePosition);
+				model = glm::translate(glm::mat4(1.0f), cubePosition);
 				float angle = 20.0f * (differentAngle++);
-				glm::mat4 rotationCubeModel = glm::rotate(cube, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+				shader.setUniformMat4f("u_Model", model);
 
-				glm::mat4 mvp = cameraProjection * rotationCubeModel * cameraView;
-
-				shader.setUniform4f("u_Color", r, g, b, a);
-				shader.setUniformMat4f("u_MVP", mvp);
+				transform = glm::translate(glm::mat4(1.0f), cubePosition);
+				transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(spm.getX(), spm.getY(), spm.getZ()));
+				shader.setUniformMat4f("u_Transform", transform);
 
 				renderer.draw();
 			}
@@ -176,11 +185,11 @@ namespace mar {
 			lastX = (float)xpos;
 			lastY = (float)ypos;
 
-			camera->ProcessMouseMovement(xoffset, yoffset);
+			camera->processMouseMovement(xoffset, yoffset);
 		}
 
 		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-			camera->ProcessMouseScroll((float)yoffset);
+			camera->processMouseScroll(yoffset);
 		}
 
 		void setCallbacks(GLFWwindow* wind, Camera* cam, const int& w, const int& h) {

@@ -26,24 +26,24 @@ namespace mar {
             glfwSetWindowShouldClose(window, true);
 
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            processKeyboard(CameraMovement::FORWARD, _deltaTime);
+            processKeyboard(CameraMovement::FORWARD);
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            processKeyboard(CameraMovement::BACKWARD, _deltaTime);
+            processKeyboard(CameraMovement::BACKWARD);
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            processKeyboard(CameraMovement::LEFT, _deltaTime);
+            processKeyboard(CameraMovement::LEFT);
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            processKeyboard(CameraMovement::RIGHT, _deltaTime);
+            processKeyboard(CameraMovement::RIGHT);
     }
 
-    void Camera::processKeyboard(CameraMovement&& direction, float deltaTime) {
-        float velocity = _movementSpeed * deltaTime;
+    void Camera::processKeyboard(CameraMovement&& direction) {
+        float velocity = _movementSpeed * _deltaTime;
         if (direction == CameraMovement::FORWARD) _position += _front * velocity;
         if (direction == CameraMovement::BACKWARD) _position -= _front * velocity;
         if (direction == CameraMovement::LEFT) _position -= _right * velocity;
         if (direction == CameraMovement::RIGHT) _position += _right * velocity;
     }
 
-    void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
+    void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
         xoffset *= _mouseSensitivity;
         yoffset *= _mouseSensitivity;
 
@@ -58,7 +58,7 @@ namespace mar {
         updateCameraVectors();
     }
 
-    void Camera::ProcessMouseScroll(float yoffset) {
+    void Camera::processMouseScroll(float yoffset) {
         if (_zoom >= 1.0f && _zoom <= 45.0f) _zoom -= yoffset;
         if (_zoom <= 1.0f) _zoom = 1.0f;
         if (_zoom >= 45.0f) _zoom = 45.0f;
