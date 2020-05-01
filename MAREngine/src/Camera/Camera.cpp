@@ -17,6 +17,20 @@ namespace mar {
         updateCameraVectors();
     }
 
+    glm::mat4 Camera::getRotateMatrix(const glm::vec3& cubePosition) {
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
+        if (_objectRotation == ObjectRotation::FORWARD)
+            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(-1.0f, 0.0f, 0.0f));
+        else if (_objectRotation == ObjectRotation::BACKWARD)
+            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+        else if (_objectRotation == ObjectRotation::LEFT)
+            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, -1.0f, 0.0f));
+        else if (_objectRotation == ObjectRotation::RIGHT)
+            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+        else
+            return transform;
+    }
+
     void Camera::processInput(GLFWwindow* window) {
         float currentFrame = (float)glfwGetTime();
         _deltaTime = currentFrame - _lastFrame;
@@ -25,6 +39,7 @@ namespace mar {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
+        // Camera move check
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
             processKeyboard(CameraMovement::FORWARD);
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -33,6 +48,18 @@ namespace mar {
             processKeyboard(CameraMovement::LEFT);
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
             processKeyboard(CameraMovement::RIGHT);
+
+        // Rotation check
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+            processKeyboard(ObjectRotation::FORWARD);
+        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+            processKeyboard(ObjectRotation::BACKWARD);
+        else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            processKeyboard(ObjectRotation::RIGHT);
+        else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+            processKeyboard(ObjectRotation::LEFT);
+        else
+            processKeyboard(ObjectRotation::NONE);
     }
 
     void Camera::processKeyboard(CameraMovement&& direction) {
@@ -41,6 +68,14 @@ namespace mar {
         if (direction == CameraMovement::BACKWARD) _position -= _front * velocity;
         if (direction == CameraMovement::LEFT) _position -= _right * velocity;
         if (direction == CameraMovement::RIGHT) _position += _right * velocity;
+    }
+
+    void Camera::processKeyboard(ObjectRotation&& rotation) {
+        if (rotation == ObjectRotation::FORWARD) _objectRotation = ObjectRotation::FORWARD;
+        if (rotation == ObjectRotation::BACKWARD) _objectRotation = ObjectRotation::BACKWARD;
+        if (rotation == ObjectRotation::LEFT) _objectRotation = ObjectRotation::LEFT;
+        if (rotation == ObjectRotation::RIGHT) _objectRotation = ObjectRotation::RIGHT;
+        if (rotation == ObjectRotation::NONE) _objectRotation = ObjectRotation::NONE;
     }
 
     void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {

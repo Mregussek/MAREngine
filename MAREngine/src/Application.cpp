@@ -89,9 +89,7 @@ namespace mar {
 		Shader shader(shadersPath);
 
 		VertexArray va;
-
 		VertexBuffer vb(sizeof(vertices), vertices);
-
 		VertexBufferLayout layout;
 		layout.push<float>(3);
 		layout.push<float>(2);
@@ -107,8 +105,8 @@ namespace mar {
 		shader.unbind();
 		vb.unbind();
 
-		SerialPortMonitor spm(portName);
-		spm.start();
+		//SerialPortMonitor spm(portName);
+		//spm.start();
 
 		glm::mat4 projection;
 		glm::mat4 view;
@@ -117,8 +115,8 @@ namespace mar {
 
 		while (!glfwWindowShouldClose(window.getWindow())) {
 			// --- Processing Input --- //
+			std::cout << "BEGIN\n";
 			camera.processInput(window.getWindow());
-			//camera.processInput(window.getWindow());
 
 			// --- Rendering, binding textures, creating matrix transformations --- //
 			renderer.clear();
@@ -128,7 +126,7 @@ namespace mar {
 			shader.setUniform4f("u_Color", r, g, b, a);
 
 			projection = glm::perspective(glm::radians(camera.getZoom()), (float)width / (float)height, 0.1f, 100.0f);
-			shader.setUniformMat4f("u_Projection",projection);
+			shader.setUniformMat4f("u_Projection", projection);
 			view = camera.getViewMatrix();
 			shader.setUniformMat4f("u_View", view);
 			
@@ -140,8 +138,9 @@ namespace mar {
 				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 				shader.setUniformMat4f("u_Model", model);
 
-				transform = glm::translate(glm::mat4(1.0f), cubePosition);
-				transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(spm.getX(), spm.getY(), spm.getZ()));
+				//transform = glm::translate(glm::mat4(1.0f), cubePosition);
+				//transform = glm::rotate(transform, glm::radians(45.0f), glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
+				glm::mat4 transform = camera.getRotateMatrix(cubePosition);
 				shader.setUniformMat4f("u_Transform", transform);
 
 				renderer.draw();
@@ -151,6 +150,7 @@ namespace mar {
 
 			// --- Polling events, updating IO actions --- //
 			window.swapBuffers();
+			std::cout << "END\n";
 		}
 
 		return 0;
@@ -189,7 +189,7 @@ namespace mar {
 		}
 
 		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-			camera->processMouseScroll(yoffset);
+			camera->processMouseScroll((float)yoffset);
 		}
 
 		void setCallbacks(GLFWwindow* wind, Camera* cam, const int& w, const int& h) {

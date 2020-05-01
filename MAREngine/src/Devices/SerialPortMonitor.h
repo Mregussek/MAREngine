@@ -13,6 +13,7 @@ namespace mar {
         SerialPort* _arduino;
         std::thread _thread;
         std::mutex _mutex;
+        static const int _sleepTime{25};
         float _x;
         float _y;
         float _z;
@@ -40,7 +41,7 @@ namespace mar {
             std::cout << "Searching for device on " << _port << " in progress";
 
             while (!_arduino->isConnected()) {
-                Sleep(100);
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 std::cout << ".";
                 delete _arduino;
                 _arduino = new SerialPort(_port);
@@ -86,29 +87,29 @@ namespace mar {
             int readResult = _arduino->readSerialPort(_incomingData, MAX_DATA_LENGTH);
             _recvData = _incomingData;
             parseInput();
-            Sleep(75);
+            std::this_thread::sleep_for(std::chrono::milliseconds(_sleepTime));
         }
 
         void parseInput() {
             try {
-                if (_recvData.find("#x#") != std::string::npos) {
-                    auto begin = _recvData.find(" ");
-                    auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
+                auto xFound = _recvData.find("#x#");
+                auto yFound = _recvData.find("#y#");
+                auto zFound = _recvData.find("#z#");
 
-                    _x = std::stof(_recvData.substr(begin + 1, end));
-                }
-                else if (_recvData.find("#y#") != std::string::npos) {
-                    auto begin = _recvData.find(" ");
-                    auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
+                if (xFound == std::string::npos || yFound == std::string::npos || zFound == std::string::npos)
+                    return;
 
-                    _y = std::stof(_recvData.substr(begin + 1, end));
-                }
-                else if (_recvData.find("#z#") != std::string::npos) {
-                    auto begin = _recvData.find(" ");
-                    auto end = _recvData.substr(begin + 1, _recvData.size() - 1).find(" ");
+                auto xBegin = xFound + 3;
+                auto yBegin = yFound + 3;
+                auto zBegin = zFound + 3;
 
-                    _z = std::stof(_recvData.substr(begin + 1, end));
-                }
+                auto xEnd = yFound - 1;
+                auto yEnd = zFound - 1;
+                auto zEnd = std::distance(_recvData.begin(), _recvData.end()) - 2;
+
+                _x = std::stof(_recvData.substr(xBegin, xEnd));
+                _y = std::stof(_recvData.substr(yBegin, yEnd));
+                _z = std::stof(_recvData.substr(zBegin, zEnd));
             }
             catch (std::exception& e) {
                 std::cout << "Found error during parsing serial port: " << e.what() << std::endl;

@@ -13,6 +13,14 @@ namespace mar {
         RIGHT
     };
 
+    enum class ObjectRotation {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT,
+        NONE
+    };
+
     struct {
         // --- Default Values for Camera
         const float YAW = -90.0f;
@@ -39,6 +47,7 @@ namespace mar {
         // --- RealTime Operations
         float _deltaTime;
         float _lastFrame;
+        ObjectRotation _objectRotation;
 
     public:
         Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
@@ -46,9 +55,11 @@ namespace mar {
 
         const float& getZoom() const { return _zoom; }
         glm::mat4 getViewMatrix() { return glm::lookAt(_position, _position + _front, _up); }
+        glm::mat4 getRotateMatrix(const glm::vec3& cubePosition);
 
         void processInput(GLFWwindow* window);
         void processKeyboard(CameraMovement&& direction);
+        void processKeyboard(ObjectRotation&& direction);
         void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
         void processMouseScroll(float yoffset);
 
