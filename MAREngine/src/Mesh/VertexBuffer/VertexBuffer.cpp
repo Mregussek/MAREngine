@@ -28,15 +28,15 @@ namespace mar {
 		delete[] vertices;
 	}
 
-	VertexBuffer::~VertexBuffer() {
-		glDeleteBuffers(_howMany, &_rendererId);
-	}
-
 	void VertexBuffer::bind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, _rendererId);
 	}
 
 	void VertexBuffer::unbind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
+	void VertexBuffer::close() const {
+		glDeleteBuffers(_howMany, &_rendererId);
 	}
 }

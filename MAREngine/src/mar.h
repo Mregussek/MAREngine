@@ -34,6 +34,8 @@
 #pragma warning( disable : 6262) 
 #pragma warning( disable : 6308) 
 #pragma warning( disable : 4005) 
+#pragma warning( disable : 4286) 
+#pragma warning( disable : 4099) 
 
 #include "../other/stb_image/stb_image.h"
 #include "SerialPort/SerialPort.h"
@@ -48,6 +50,7 @@
 #include <fstream> 
 #include <vector>
 #include <string>
+#include <algorithm>
 #include <unordered_map>
 #include <thread>
 #include <mutex>

@@ -28,15 +28,15 @@ namespace mar {
 		delete[] indices;
 	}
 
-	ElementBuffer::~ElementBuffer() {
-		glDeleteBuffers(1, &_RendererId);
-	}
-
 	void ElementBuffer::bind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
 	}
 
 	void ElementBuffer::unbind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
+	void ElementBuffer::close() const {
+		glDeleteBuffers(1, &_RendererId);
 	}
 }
