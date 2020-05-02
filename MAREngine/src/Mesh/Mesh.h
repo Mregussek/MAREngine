@@ -21,28 +21,10 @@ namespace mar {
         VertexBufferLayout lay;
 
     public:
-        Mesh(Cube& shape) 
-            : vao(VertexArray()),
-            vbo(VertexBuffer(shape.getSizeofVertices(), shape.vertices)),
-            ebo(ElementBuffer(shape.getSizeofIndices(), shape.indices)),
-            lay(VertexBufferLayout())
-        {
-            
-            for (auto const& l : shape.layout) lay.push<float>(l);
+        Mesh(Cube* shape);
 
-            vao.addBuffer(vbo, lay);
-        }
-
-        void bind() {
-            vao.bind();
-            ebo.bind();
-        }
-
-        void unbind() {
-            vao.unbind();
-            vbo.unbind();
-            ebo.unbind();
-        }
+        void bind();
+        void unbind();
 
         const unsigned int sizeofVertices() const { return vbo.getSize(); }
         const unsigned int sizeofIndices() const { return ebo.getIndicesNumber(); }

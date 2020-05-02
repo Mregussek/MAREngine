@@ -13,7 +13,7 @@ namespace mar {
 
 		callbacks::setCallbacks(window.getWindow(), &camera); // for mouse usage
 
-		Cube cube;
+		
 		std::vector<glm::vec3> positions = {
 			{0.0f, 0.0f, 0.0f},
 			{3.0f, 0.5f, -7.5f}
@@ -21,7 +21,8 @@ namespace mar {
 
 		Shader shader(shadersPath);
 
-		Mesh mesh(cube);
+		Cube cube;
+		Mesh mesh(&cube);
 
 		Texture texture(texturePath);
 		texture.bind();

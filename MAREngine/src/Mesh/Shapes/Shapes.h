@@ -12,18 +12,16 @@ namespace mar {
 
 	class Shapes {
 	public:
-		float* vertices;
-		float* indices;
+		float* vertices = nullptr;
+		unsigned int* indices = nullptr;
 		std::vector<unsigned int> layout;
 
-		virtual const unsigned int getSizeofVertices() const = 0;
-		virtual const unsigned int getSizeofIndices() const = 0;
+		virtual const unsigned int getSizeofVertices() const { return -1; };
+		virtual const unsigned int getSizeofIndices() const { return -1; };
 	};
 
-	class Cube : Shapes {
+	class Cube : public Shapes {
 	public:
-		Cube() = default;
-
 		float vertices[40] = {
 			//  front (x, y, z)		// Texture
 			-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
