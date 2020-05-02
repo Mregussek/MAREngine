@@ -6,6 +6,13 @@
 #include "Mesh.h"
 
 namespace mar {
+    Mesh::Mesh()
+        : _vao(VertexArray()),
+        lay(VertexBufferLayout()),
+        _pushedOnce(false),
+        _maxValue(0)
+    { }
+
     Mesh::Mesh(Cube& shape)
         : _vao(VertexArray()),
         _vbo(VertexBuffer(shape.verticesVector)),
@@ -15,6 +22,33 @@ namespace mar {
         for (auto const& l : shape.layout) lay.push<float>(l);
 
         _vao.addBuffer(_vbo, lay);
+    }
+
+    Mesh::~Mesh() {
+        _vbo.close();
+        _ebo.close();
+    }
+
+    void Mesh::initialize() {
+        _vbo = VertexBuffer(_vertices);
+        _ebo = ElementBuffer(_indices);
+
+        _vao.addBuffer(_vbo, lay);
+    }
+
+    void Mesh::push(Cube& cube) {
+        _shapes.emplace_back(cube);
+        _vertices.insert(_vertices.end(), cube.verticesVector.begin(), cube.verticesVector.end());
+
+        changeIndicesFormat(cube, _maxValue);
+        _maxValue += cube.getSizeofVertices() / cube.getStride();
+
+        _indices.insert(_indices.end(), cube.indicesVector.begin(), cube.indicesVector.end());
+
+        if (!_pushedOnce) {
+            for (auto const& l : cube.layout) lay.push<float>(l);
+            _pushedOnce = true;
+        }
     }
 
     void Mesh::bind() {
@@ -94,8 +128,8 @@ namespace mar {
                 }
             }
 
-            returnValue.push_back(vertices[j * stride + 3]);
-            returnValue.push_back(vertices[j * stride + 4]);
+            for(int k = 3; k < stride; k++)
+                returnValue.push_back(vertices[j * stride + k]);
         }
     }
 

@@ -13,11 +13,15 @@ namespace mar {
 
 		callbacks::setCallbacks(window.getWindow(), &camera); // for mouse usage
 
-		std::vector<Cube> cubes = { Cube(), Cube(), Cube() };
+		std::vector<Cube> cubes = { 
+			Cube()
+			, Cube()
+			, Cube() 
+		};
 		std::vector<glm::vec3> positions = {
-			{0.0f, 0.0f, 0.0f},
-			{3.0f, 2.0f, -7.5f},
-			{-3.0f, -2.0f, -7.5f}
+			{0.0f, 0.0f, 0.0f}
+			, {3.0f, 2.0f, -7.5f}
+			, {-3.0f, -2.0f, -7.5f}
 		};
 		
 		Mesh mesh;
@@ -28,10 +32,14 @@ namespace mar {
 			Mesh::changeCenterOfObject(cubes[i], positions[i]);
 			mesh.push(cubes[i]);
 		}
+
 		mesh.initialize();
 
-		Texture texture(texturePath);
-		texture.bind();
+		Texture texture1(texturePath1);
+		texture1.bind();
+
+		//Texture texture2(texturePath2);
+		//texture2.bind();
 
 		shader.bind();
 		shader.setUniform1i("u_Texture", 0);

@@ -22,8 +22,8 @@ namespace mar {
 		unsigned int offset = 0;
 
 		for (unsigned int i = 0; i < elements.size(); i++) {
-			glVertexAttribPointer(i,
-				elements[i]._count, elements[i]._type, elements[i]._normalized,
+			glVertexAttribPointer(i, elements[i]._count, 
+				elements[i]._type, elements[i]._normalized,
 				layout.getStride(), (const void*)offset);
 
 			glEnableVertexAttribArray(i);

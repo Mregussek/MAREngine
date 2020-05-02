@@ -155,9 +155,13 @@
     <ClCompile Include="src\Mesh\Mesh.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mesh\Shapes\Cube.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\basic.shader" />
+    <None Include="imgui.ini" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\mateuszrzeczyca.png">
@@ -167,6 +171,9 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="resources\textures\wall.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\mr.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>
