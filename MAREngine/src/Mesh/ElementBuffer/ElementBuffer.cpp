@@ -16,6 +16,18 @@ namespace mar {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeOfData, data, GL_STATIC_DRAW);
 	}
 
+	ElementBuffer::ElementBuffer(const std::vector<unsigned int>& data, size_t how_many)
+		: _numberOfIndices(data.size())
+	{
+		unsigned int* indices = new unsigned int[data.size()];
+		std::copy(data.begin(), data.end(), indices);
+
+		glGenBuffers(how_many, &_RendererId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _RendererId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+		delete[] indices;
+	}
+
 	ElementBuffer::~ElementBuffer() {
 		glDeleteBuffers(1, &_RendererId);
 	}

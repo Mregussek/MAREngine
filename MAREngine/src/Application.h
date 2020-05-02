@@ -9,6 +9,7 @@
 #include "Mesh/ElementBuffer/ElementBuffer.h"
 #include "Mesh/VertexArray/VertexArray.h"
 #include "Mesh/Shapes/Shapes.h"
+#include "Mesh/Shapes/Cube.h"
 // Rendering
 #include "Mesh/Mesh.h"
 #include "Shader/Shader.h"

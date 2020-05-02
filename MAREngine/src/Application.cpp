@@ -13,16 +13,22 @@ namespace mar {
 
 		callbacks::setCallbacks(window.getWindow(), &camera); // for mouse usage
 
-		
 		std::vector<glm::vec3> positions = {
 			{0.0f, 0.0f, 0.0f},
-			{3.0f, 0.5f, -7.5f}
+			{3.0f, 2.0f, -7.5f}
 		};
 
 		Shader shader(shadersPath);
 
-		Cube cube;
-		Mesh mesh(&cube);
+		std::vector<Cube> cubes = { Cube(), Cube() };
+
+		assert(positions.size() == cubes.size());
+		for (unsigned int i = 0; i < cubes.size(); i++) {
+			Mesh::changeCenterOfObject(cubes[i].vertices, cubes[i].getSizeofVertices(), cubes[i].getStride(), positions[i], cubes[i].verticesVector);
+			cubes[i].prescribeCenter(positions[i]);
+		}
+
+		Mesh mesh(cubes[0]); // need only one cube
 
 		Texture texture(texturePath);
 		texture.bind();
@@ -54,12 +60,11 @@ namespace mar {
 				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
 			}
 			
-			for(auto const& position : positions)
-			{
-				glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
+			for(auto const& c : cubes)	{
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), c.getCenter());
 				shader.setUniformMat4f("u_Model", model);
-				shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(position));
-				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix(position));
+				shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(c.getCenter()));
+				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix());
 
 				renderer.draw();
 			}

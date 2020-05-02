@@ -15,6 +15,19 @@ namespace mar {
 		glBufferData(GL_ARRAY_BUFFER, sizeOfData, (const void*)data, GL_STATIC_DRAW);
 	}
 
+	VertexBuffer::VertexBuffer(const std::vector<float>& data, size_t how_many)
+		: _howMany(how_many),
+		_size(data.size())
+	{
+		float* vertices = new float[data.size()];
+		std::copy(data.begin(), data.end(), vertices);
+
+		glGenBuffers(_howMany, &_rendererId);
+		glBindBuffer(GL_ARRAY_BUFFER, _rendererId);
+		glBufferData(GL_ARRAY_BUFFER, _size * sizeof(float), (const void*)vertices, GL_STATIC_DRAW);
+		delete[] vertices;
+	}
+
 	VertexBuffer::~VertexBuffer() {
 		glDeleteBuffers(_howMany, &_rendererId);
 	}

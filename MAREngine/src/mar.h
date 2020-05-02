@@ -57,13 +57,18 @@ namespace mar {
 	class Window;
 	class GUI;
 	class SerialPortMonitor;
+
 	class Mesh;
-	class VertexBuffer;
-	class VertexArray;
-	class VertexBufferLayout;
+		class Shapes;
+			class Cube;
+		class VertexBuffer;
+		class VertexArray;
+		class VertexBufferLayout;
+		class ElementBuffer;
+
 	class Texture;
 	class Shader;
 	class Renderer;
-	class ElementBuffer;
+	
 	// cannot declare here namespace callbacks;
 }

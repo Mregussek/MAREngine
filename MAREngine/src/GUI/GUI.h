@@ -23,8 +23,8 @@ namespace mar {
 		~GUI();
 
 		const glm::mat4 getTranslationMatrix() const { return glm::translate(glm::mat4(1.0f), _translation); }
-		const glm::mat4 getRotationMatrix(const glm::vec3& position) const { 
-			glm::mat4 rotation = glm::translate(glm::mat4(1.0f), position);
+		const glm::mat4 getRotationMatrix() const { 
+			glm::mat4 rotation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 			return glm::rotate(rotation, glm::radians(_angle.x), glm::vec3(1.0f, 0.0f, 0.0f)) 
 				* glm::rotate(rotation, glm::radians(_angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
 				* glm::rotate(rotation, glm::radians(_angle.z), glm::vec3(0.0f, 0.0f, 1.0f));

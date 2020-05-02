@@ -14,7 +14,9 @@ namespace mar {
 		unsigned int _numberOfIndices;
 
 	public:
+		ElementBuffer() = default;
 		ElementBuffer(unsigned int sizeOfData, const unsigned int* data, size_t how_many = 1);
+		ElementBuffer(const std::vector<unsigned int>& data, size_t how_many = 1);
 		~ElementBuffer();
 
 		void bind() const;

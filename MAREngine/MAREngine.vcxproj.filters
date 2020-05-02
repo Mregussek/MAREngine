@@ -90,6 +90,9 @@
     <ClInclude Include="src\Mesh\Mesh.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mesh\Shapes\Cube.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Shader\Shader.cpp">
