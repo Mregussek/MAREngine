@@ -6,7 +6,7 @@
 #ifndef VERTEXBUFFERLAYOUT_H
 #define VERTEXBUFFERLAYOUT_H
 
-#include "../mar.h"
+#include "../../mar.h"
 
 namespace mar {
 	struct VertexBufferElement {

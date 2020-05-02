@@ -4,11 +4,13 @@
  */
 
 // Vertices
-#include "VertexBuffer/VertexBuffer.h"
-#include "VertexBuffer/VertexBufferLayout.h"
-#include "ElementBuffer/ElementBuffer.h"
-#include "VertexArray/VertexArray.h"
+#include "Mesh/VertexBuffer/VertexBuffer.h"
+#include "Mesh/VertexBuffer/VertexBufferLayout.h"
+#include "Mesh/ElementBuffer/ElementBuffer.h"
+#include "Mesh/VertexArray/VertexArray.h"
+#include "Mesh/Shapes/Shapes.h"
 // Rendering
+#include "Mesh/Mesh.h"
 #include "Shader/Shader.h"
 #include "Renderer/Renderer.h"
 #include "Texture/Texture.h"
@@ -21,6 +23,14 @@
 namespace mar {
 
 	class Application {
+		char name[10] = "MAREngine";
+		int width{ 1280 };
+		int height{ 720 };
+		const std::string shadersPath = "resources/shaders/basic.shader";
+		const std::string texturePath = "resources/textures/mr.jpg";
+		char portName[10] = "\\\\.\\COM7";
+		const char* glsl_version = "#version 460";
+
 	public:
 		Application() = default;
 

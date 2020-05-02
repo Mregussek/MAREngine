@@ -6,7 +6,7 @@
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H
 
-#include "../mar.h"
+#include "../../mar.h"
 
 namespace mar {
 	class VertexBuffer {

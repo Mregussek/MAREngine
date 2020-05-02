@@ -6,7 +6,7 @@
 #ifndef ELEMENTBUFFER_H
 #define ELEMENTBUFFER_H
 
-#include "../mar.h"
+#include "../../mar.h"
 
 namespace mar {
 	class ElementBuffer {

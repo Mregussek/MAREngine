@@ -57,6 +57,7 @@ namespace mar {
 	class Window;
 	class GUI;
 	class SerialPortMonitor;
+	class Mesh;
 	class VertexBuffer;
 	class VertexArray;
 	class VertexBufferLayout;

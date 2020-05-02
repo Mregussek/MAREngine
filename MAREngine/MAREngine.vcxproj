@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Mesh\Mesh.h" />
     <ClInclude Include="src\GUI\GUI.h" />
     <ClInclude Include="other\imgui\imconfig.h" />
     <ClInclude Include="other\imgui\imgui.h" />
@@ -161,18 +162,20 @@
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="other\stb_image\stb_image.h" />
     <ClInclude Include="src\Debug.h" />
+    <ClInclude Include="src\Mesh\Shapes\Shapes.h" />
     <ClInclude Include="src\Shader\Shader.h" />
-    <ClInclude Include="src\ElementBuffer\ElementBuffer.h" />
+    <ClInclude Include="src\Mesh\ElementBuffer\ElementBuffer.h" />
     <ClInclude Include="src\mar.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
-    <ClInclude Include="src\VertexBuffer\VertexBuffer.h" />
-    <ClInclude Include="src\VertexArray\VertexArray.h" />
-    <ClInclude Include="src\VertexBuffer\VertexBufferLayout.h" />
+    <ClInclude Include="src\Mesh\VertexBuffer\VertexBuffer.h" />
+    <ClInclude Include="src\Mesh\VertexArray\VertexArray.h" />
+    <ClInclude Include="src\Mesh\VertexBuffer\VertexBufferLayout.h" />
     <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\GUI\GUI.cpp" />
     <ClCompile Include="other\imgui\imgui.cpp" />
     <ClCompile Include="other\imgui\imgui_demo.cpp" />
@@ -185,11 +188,11 @@
     <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Shader\Shader.cpp" />
-    <ClCompile Include="src\ElementBuffer\ElementBuffer.cpp" />
+    <ClCompile Include="src\Mesh\ElementBuffer\ElementBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\VertexBuffer\VertexBuffer.cpp" />
-    <ClCompile Include="src\VertexArray\VertexArray.cpp" />
+    <ClCompile Include="src\Mesh\VertexBuffer\VertexBuffer.cpp" />
+    <ClCompile Include="src\Mesh\VertexArray\VertexArray.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Texture\Texture.cpp" />
   </ItemGroup>

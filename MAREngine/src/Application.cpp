@@ -7,68 +7,21 @@
 
 namespace mar {
 	int Application::run() {
-		char name[] = "MAREngine";
-		int width{ 1280 };
-		int height{ 720 };
-		const std::string shadersPath = "resources/shaders/basic.shader";
-		const std::string texturePath = "resources/textures/mr.jpg";
-		char portName[] = "\\\\.\\COM7";
-		const char* glsl_version = "#version 460";
-		float r = 0.8f;
-		float g = 0.8f;
-		float b = 0.8f;
-		float a = 0.0f;
-		float rChange = 0.05f;
-		float gChange = 0.05f;
-		float bChange = 0.05f;
-
 		mar::Window window(height, width, name);
 		GUI gui(&window, glsl_version);
 		Camera camera(width, height);
 
 		callbacks::setCallbacks(window.getWindow(), &camera); // for mouse usage
-		
-		float vertices[] = {
-			//  front (x, y, z)		// Texture
-			-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,
-			 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,
-			 1.0f,  1.0f,  1.0f,	1.0f, 1.0f,
-			-1.0f,  1.0f,  1.0f,	0.0f, 1.0f,
-			//  back 
-			-1.0f, -1.0, -1.0f,		0.0f, 0.0f,
-			 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,
-			 1.0f,  1.0, -1.0f,		1.0f, 1.0f,
-			-1.0f,  1.0f, -1.0f,	0.0f, 1.0f,
-		};
 
-		unsigned int elements[] = {
-			// front	// back
-			0, 1, 2,	7, 6, 5,
-			2, 3, 0,	5, 4, 7,
-			// right	// left
-			1, 5, 6,	4, 0, 3,
-			6, 2, 1,	3, 7, 4,
-			// bottom	// top
-			4, 5, 1,	3, 2, 6,
-			1, 0, 4,	6, 7, 3
-		};
-
-		std::vector<glm::vec3> cubes = {
-			glm::vec3(0.0f,  0.0f,  0.0f),
-			glm::vec3(2.5f, 0.5f, -7.5f),
-			glm::vec3(-1.5f, -0.5f, -4.5f)
+		Cube cube;
+		std::vector<glm::vec3> positions = {
+			{0.0f, 0.0f, 0.0f},
+			{3.0f, 0.5f, -7.5f}
 		};
 
 		Shader shader(shadersPath);
 
-		VertexArray va;
-
-		VertexBuffer vb(sizeof(vertices), vertices);
-		ElementBuffer eb(sizeof(elements), elements);
-		VertexBufferLayout layout;
-		layout.push<float>(3);
-		layout.push<float>(2);
-		va.addBuffer(vb, layout);
+		Mesh mesh(cube);
 
 		Texture texture(texturePath);
 		texture.bind();
@@ -76,15 +29,10 @@ namespace mar {
 		shader.bind();
 		shader.setUniform1i("u_Texture", 0);
 
-		va.unbind();
 		shader.unbind();
-		vb.unbind();
-		eb.unbind();
+		mesh.unbind();
 
-		Renderer renderer(vb.getSize(), eb.getIndicesNumber());
-
-		//SerialPortMonitor spm(portName);
-		//spm.start();
+		Renderer renderer(mesh.sizeofVertices(), mesh.sizeofIndices());
 
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
@@ -92,29 +40,26 @@ namespace mar {
 			gui.prepareNewFrame();
 
 			// --- Rendering, binding textures, creating matrix transformations --- //
-			renderer.clear();
-			shader.bind();
-			va.bind();
-			eb.bind();
-
-			shader.setUniform4fv("u_Color", gui.getColors());
-			shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
-			shader.setUniformMat4f("u_View", camera.getViewMatrix());
-			shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
+			{ // Prepare for rendering
+				renderer.clear();
+				shader.bind();
+				mesh.bind();
+			}
 			
-			float differentAngle = 0.0f;
-			for (auto const& cubePosition : cubes) {
-				glm::mat4 model = glm::translate(glm::mat4(1.0f), cubePosition);
-				float angle = 20.0f * (differentAngle++);
-				model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			{ // Setup shaders (these, which are the same for all objects)
+				shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
+				shader.setUniformMat4f("u_View", camera.getViewMatrix());
+				shader.setUniform4fv("u_GUIcolor", gui.getColors());
+				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
+			}
+			
+			for(auto const& position : positions)
+			{
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), position);
 				shader.setUniformMat4f("u_Model", model);
+				shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(position));
+				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix(position));
 
-				//transform = camera.getRotateMatrixSPM(cubePosition, glm::vec3(spm.getY(), spm.getX(), spm.getZ()));
-				glm::mat4 transform = camera.getRotateMatrixOnPress(cubePosition);
-				shader.setUniformMat4f("u_Transform", transform);
-
-				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix(cubePosition));
-				
 				renderer.draw();
 			}
 
