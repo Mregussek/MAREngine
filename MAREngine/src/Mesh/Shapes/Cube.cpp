@@ -7,7 +7,6 @@
 
 namespace mar {
 	void Cube::prescribeCenter(const glm::vec3& new_center) {
-		std::copy(verticesVector.begin(), verticesVector.end(), vertices);
 		center = new_center;
 	}
 

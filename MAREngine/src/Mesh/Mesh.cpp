@@ -17,7 +17,9 @@ namespace mar {
         : _vao(VertexArray()),
         _vbo(VertexBuffer(shape.verticesVector)),
         _ebo(ElementBuffer(shape.indicesVector)),
-        lay(VertexBufferLayout())
+        lay(VertexBufferLayout()),
+        _pushedOnce(false),
+        _maxValue(0)
     {
         for (auto const& l : shape.layout) lay.push<float>(l);
 
@@ -36,8 +38,11 @@ namespace mar {
         _vao.addBuffer(_vbo, lay);
     }
 
-    void Mesh::push(Cube& cube) {
+    void Mesh::push(Cube& cube, glm::vec3 position) {
         _shapes.emplace_back(cube);
+
+        changeCenterOfObject(cube, position);
+        extendID(cube, _shapes.size() - 1);
         _vertices.insert(_vertices.end(), cube.verticesVector.begin(), cube.verticesVector.end());
 
         changeIndicesFormat(cube, _maxValue);
@@ -62,75 +67,78 @@ namespace mar {
         _ebo.unbind();
     }
 
+    void Mesh::extendID(Cube& cube, const float& nextID) {
+        unsigned int size = cube.getSizeofVertices();
+        unsigned int stride = cube.getStride();
+
+        for (unsigned int j = 1; j < size / stride; j++) 
+            cube.verticesVector[j * stride - 1] = nextID;
+    }
+
     void Mesh::changeCenterOfObject(Cube& cube, const glm::vec3& center) {
-        changeCenterOfObject(cube.vertices, cube.getSizeofVertices(), cube.getStride(), center, cube.verticesVector);
+        cube.verticesVector = changeCenterOfObject(cube.getSizeofVertices(), cube.getStride(), center, cube.verticesVector);
         cube.prescribeCenter(center);
     }
 
-    void Mesh::changeCenterOfObject(const float* vertices, const unsigned int& size, const unsigned int& stride, 
-                const glm::vec3& center, std::vector<float>& returnValue) {
+    std::vector<float> Mesh::changeCenterOfObject(const unsigned int& size, const unsigned int& stride, 
+                const glm::vec3& center, std::vector<float>& passedValue) {
         int i = 0;
         bool back = false;
-        returnValue.clear();
+        std::vector<float> returnValue(passedValue.size());
 
         for (unsigned int j = 0; j < size / stride; j++) {
             if (!back) {
                 if (i == 0) {
-                    returnValue.push_back(center.x - 1);
-                    returnValue.push_back(center.y - 1);
-                    returnValue.push_back(center.z + 1);
+                    returnValue[j * stride] = center.x - 1;
+                    returnValue[j * stride + 1] = center.y - 1;
+                    returnValue[j * stride + 2] = center.z + 1;
                     i++;
-                }
-                else if (i == 1) {
-                    returnValue.push_back(center.x + 1);
-                    returnValue.push_back(center.y - 1);
-                    returnValue.push_back(center.z + 1);
+                } else if (i == 1) {
+                    returnValue[j * stride] = center.x + 1;
+                    returnValue[j * stride + 1] = center.y - 1;
+                    returnValue[j * stride + 2] = center.z + 1;
                     i++;
-                }
-                else if (i == 2) {
-                    returnValue.push_back(center.x + 1);
-                    returnValue.push_back(center.y + 1);
-                    returnValue.push_back(center.z + 1);
+                } else if (i == 2) {
+                    returnValue[j * stride] = center.x + 1;
+                    returnValue[j * stride + 1] = center.y + 1;
+                    returnValue[j * stride + 2] = center.z + 1;
                     i++;
-                }
-                else {
-                    returnValue.push_back(center.x - 1);
-                    returnValue.push_back(center.y + 1);
-                    returnValue.push_back(center.z + 1);
+                } else {
+                    returnValue[j * stride] = center.x - 1;
+                    returnValue[j * stride + 1] = center.y + 1;
+                    returnValue[j * stride + 2] = center.z + 1;
                     i = 0;
                     back = true;
                 }
-            }
-            else {
+            } else {
                 if (i == 0) {
-                    returnValue.push_back(center.x - 1);
-                    returnValue.push_back(center.y - 1);
-                    returnValue.push_back(center.z - 1);
+                    returnValue[j * stride] = center.x - 1;
+                    returnValue[j * stride + 1] = center.y - 1;
+                    returnValue[j * stride + 2] = center.z - 1;
                     i++;
-                }
-                else if (i == 1) {
-                    returnValue.push_back(center.x + 1);
-                    returnValue.push_back(center.y - 1);
-                    returnValue.push_back(center.z - 1);
+                } else if (i == 1) {
+                    returnValue[j * stride] = center.x + 1;
+                    returnValue[j * stride + 1] = center.y - 1;
+                    returnValue[j * stride + 2] = center.z - 1;
                     i++;
-                }
-                else if (i == 2) {
-                    returnValue.push_back(center.x + 1);
-                    returnValue.push_back(center.y + 1);
-                    returnValue.push_back(center.z - 1);
+                } else if (i == 2) {
+                    returnValue[j * stride] = center.x + 1;
+                    returnValue[j * stride + 1] = center.y + 1;
+                    returnValue[j * stride + 2] = center.z - 1;
                     i++;
-                }
-                else {
-                    returnValue.push_back(center.x - 1);
-                    returnValue.push_back(center.y + 1);
-                    returnValue.push_back(center.z - 1);
+                } else {
+                    returnValue[j * stride] = center.x - 1;
+                    returnValue[j * stride + 1] = center.y + 1;
+                    returnValue[j * stride + 2] = center.z - 1;
                     i = 0;
                 }
             }
 
-            for(int k = 3; k < stride; k++)
-                returnValue.push_back(vertices[j * stride + k]);
+            for (unsigned int k = 3; k < stride; k++) 
+                returnValue[j * stride + k] = passedValue[j * stride + k];   
         }
+
+        return returnValue;
     }
 
     void Mesh::changeIndicesFormat(Cube& cube, unsigned int& max_value) {

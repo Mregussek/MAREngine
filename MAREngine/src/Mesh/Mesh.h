@@ -35,13 +35,15 @@ namespace mar {
         void bind();
         void unbind();
 
-        void push(Cube& cube);
+        void push(Cube& cube, glm::vec3 position);
 
         const unsigned int sizeofVertices() const { return _vbo.getSize(); }
         const unsigned int sizeofIndices() const { return _ebo.getIndicesNumber(); }
 
+        static void extendID(Cube& cube, const float& nextID);
+
         static void changeCenterOfObject(Cube& cube, const glm::vec3& center);
-        static void changeCenterOfObject(const float* vertices, const unsigned int& size, const unsigned int& stride,
+        static std::vector<float> changeCenterOfObject(const unsigned int& size, const unsigned int& stride,
                     const glm::vec3& center, std::vector<float>& returnValue);
 
         static void changeIndicesFormat(Cube& cube, unsigned int& max_value);

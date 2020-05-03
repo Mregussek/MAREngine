@@ -25,19 +25,6 @@ namespace mar {
 
 		glm::vec3 center{ 0.0f, 0.0f, 0.0f };
 
-		float vertices[48] = {
-			//  front (x, y, z)		// Texture		// Texture Index
-			-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,		0.0f,
-			 1.0f, -1.0f,  1.0f,	1.0f, 0.0f,		0.0f,
-			 1.0f,  1.0f,  1.0f,	1.0f, 1.0f,		0.0f,
-			-1.0f,  1.0f,  1.0f,	0.0f, 1.0f,		0.0f,
-			//  back 								
-			-1.0f, -1.0f, -1.0f,	0.0f, 0.0f,		0.0f,
-			 1.0f, -1.0f, -1.0f,	1.0f, 0.0f,		0.0f,
-			 1.0f,  1.0f, -1.0f,	1.0f, 1.0f,		0.0f,
-			-1.0f,  1.0f, -1.0f,	0.0f, 1.0f,		0.0f
-		};
-
 		std::vector<float> verticesVector = {
 			//  front (x, y, z)		// Texture		// Texture Index
 			-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,		0.0f,

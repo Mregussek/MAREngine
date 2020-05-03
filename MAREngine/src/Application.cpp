@@ -28,18 +28,13 @@ namespace mar {
 		Shader shader(shadersPath);
 
 		if (positions.size() < cubes.size()) { std::cerr << "More cubes than positions\n";  exit(0); }
-		for (unsigned int i = 0; i < cubes.size(); i++) {
-			Mesh::changeCenterOfObject(cubes[i], positions[i]);
-			mesh.push(cubes[i]);
-		}
+		for (unsigned int i = 0; i < cubes.size(); i++) 
+			mesh.push(cubes[i], positions[i]);
 
 		mesh.initialize();
 
 		Texture texture1(texturePath1);
 		texture1.bind();
-
-		//Texture texture2(texturePath2);
-		//texture2.bind();
 
 		shader.bind();
 		shader.setUniform1i("u_Texture", 0);
