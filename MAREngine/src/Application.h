@@ -28,8 +28,10 @@ namespace mar {
 		int width{ 1280 };
 		int height{ 720 };
 		const std::string shadersPath = "resources/shaders/basic.shader";
-		const std::string texturePath1 = "resources/textures/mr.jpg";
-		const std::string texturePath2 = "resources/textures/wall.jpg";
+		std::vector<std::string> texturePaths = {
+			"resources/textures/mr.jpg",
+			"resources/textures/wall.jpg"
+		};
 		char portName[10] = "\\\\.\\COM7";
 		const char* glsl_version = "#version 460";
 

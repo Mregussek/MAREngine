@@ -6,18 +6,25 @@
 #include "Texture.h"
 
 namespace mar {
-	Texture::Texture(const std::string& path, size_t how_many)
-		: _rendererId(0),
-		_filePath(path),
-		_localBuffer(nullptr),
+	Texture::Texture()
+		: _localBuffer(nullptr),
 		_width(0),
 		_height(0),
-		_bitPerPixel(0),
-		_howMany(how_many)
+		_bitPerPixel(0)
 	{
 		glEnable(GL_TEXTURE_2D);
-		glGenTextures(_howMany, &_rendererId);
-		glBindTexture(GL_TEXTURE_2D, _rendererId);
+	}
+
+	Texture::~Texture() {
+		for (auto const& id : _id)
+		glDeleteTextures(1, &id);
+	}
+
+	void Texture::loadTexture(const std::string& path) {
+		_id.push_back(_id.size());
+
+		glGenTextures(1, &_id[_id.size() - 1]);
+		glBindTexture(GL_TEXTURE_2D, _id[_id.size() - 1]);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -26,7 +33,7 @@ namespace mar {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		stbi_set_flip_vertically_on_load(true);
-		_localBuffer = stbi_load(_filePath.c_str(), &_width, &_height, &_bitPerPixel, 0);
+		_localBuffer = stbi_load(path.c_str(), &_width, &_height, &_bitPerPixel, 0);
 
 		if (_localBuffer) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _localBuffer);
@@ -38,13 +45,12 @@ namespace mar {
 		std::cout << "Failed to load texture" << std::endl;
 	}
 
-	Texture::~Texture() {
-		glDeleteTextures(_howMany, &_rendererId);
-	}
-
 	void Texture::bind(unsigned int slot) const {
 		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, _rendererId);
+		for(auto const& id : _id)
+			glBindTexture(GL_TEXTURE_2D, id);
+		//for (auto const& id : _id)
+		//	glBindTextureUnit(id, id);
 	}
 
 	void Texture::unbind() const {

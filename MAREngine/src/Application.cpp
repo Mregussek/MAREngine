@@ -33,8 +33,10 @@ namespace mar {
 
 		mesh.initialize();
 
-		Texture texture1(texturePath1);
-		texture1.bind();
+		Texture texture;
+		texture.loadTexture(texturePaths[0]);
+		//texture.loadTexture(texturePath2);
+		texture.bind();
 
 		shader.bind();
 		shader.setUniform1i("u_Texture", 0);
