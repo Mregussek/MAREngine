@@ -64,13 +64,13 @@ namespace mar {
 				shader.bind();
 				mesh.bind();
 			}
-			
+
 			{ // Setup shaders (these, which are the same for all objects)
 				shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
 				shader.setUniformMat4f("u_View", camera.getViewMatrix());
+				//shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(positions[0]));
 				shader.setUniform4fv("u_GUIcolor", gui.getColors());
 				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
-				shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(positions[0]));
 				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix());
 			}
 			

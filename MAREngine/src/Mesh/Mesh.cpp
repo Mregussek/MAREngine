@@ -21,7 +21,7 @@ namespace mar {
     Mesh::Mesh(Cube& shape)
         : _vao(VertexArray()),
         _vbo(VertexBuffer(shape.verticesVector)),
-        _ebo(ElementBuffer(shape.indicesVector)),
+        _ebo(ElementBuffer(shape.indicesVector, shape.indicesVector.size() * sizeof(unsigned int))),
         _lay(VertexBufferLayout()),
         _pushedOnce(false),
         _maxValue(0)
@@ -40,8 +40,8 @@ namespace mar {
     }
 
     void Mesh::initialize() {
-        _vbo = VertexBuffer(1000 * sizeof(Vertex));
-        _ebo = ElementBuffer(_indices);
+        _vbo = VertexBuffer(constants::maxCubeCount);
+        _ebo = ElementBuffer(_indices, constants::maxIndexCount);
 
         _vao.addBufferBatch(_vbo, _lay);
 
@@ -53,7 +53,7 @@ namespace mar {
         _vbo.bind(); // set dynamic vertex buffer
         _vertices.clear(); // we are gonna put here new vertices
 
-        for (int i = 0; i < _shapes.size(); i++) {
+        for (unsigned int i = 0; i < _shapes.size(); i++) {
             changeCenterOfObject(&_shapes[i], newCenters[i]);
             _vertices.insert(_vertices.end(), _shapes[i].verticesVector.begin(), _shapes[i].verticesVector.end());
         }
@@ -61,22 +61,31 @@ namespace mar {
         _vbo.updateDynamically(_vertices); // end _vertices, which are rendered
     }
 
-    void Mesh::push(Cube* cube, glm::vec3& position, 
+    void Mesh::push(Cube* cube, glm::vec3& position,
         std::string& texturePath) {
         // cube - object, which we want to push
         // position - center pos, where we want object to be placed
         // texturePath - path to texture, which we want to use on this object
-        
+
+        if (cube->indicesVector.size() + _indices.size() > constants::maxIndexCount) {
+            std::cout << "Cannot insert more indices!!!\n";
+            return;
+        }
+        else if(cube->verticesVector.size() + _vertices.size() > constants::maxVertexCount) {
+            std::cout << "Cannot insert more vertices!!!\n";
+            return;
+        }
+
         extendID(cube, (float)_shapes.size()); // more objects, more texture indexes
 
         changeCenterOfObject(cube, position); // user sends new center position, we need to change vertices
-        
+
         _vertices.insert(_vertices.end(), cube->verticesVector.begin(), cube->verticesVector.end()); // insert object vertices to mesh vertices (batch rendering)
 
         changeIndicesFormat(cube, _maxValue); // we cannot use the same indices for the another vertices, that's why we increase them
 
         _maxValue += cube->getSizeofVertices() / cube->getStride(); // maximum value of indices
-
+        
         _indices.insert(_indices.end(), cube->indicesVector.begin(), cube->indicesVector.end()); // insert object indices to mesh indices (batch rendering) 
 
         _shapes.emplace_back(*cube); // place new shape at the end of vector

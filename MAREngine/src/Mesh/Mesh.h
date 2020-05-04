@@ -18,7 +18,9 @@
 namespace mar {
 
     namespace constants {
-        const size_t maxCubeCount = 100;
+        const size_t maxCubeCount = 1000;
+        const size_t maxVertexCount = maxCubeCount * 8;
+        const size_t maxIndexCount = maxCubeCount * 12;
     }
 
     class Mesh {

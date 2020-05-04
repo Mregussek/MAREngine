@@ -29,7 +29,7 @@ namespace mar {
 			verticesVector[index] = new_value;
 		}
 
-		float id;
+		float id = 0.0f;
 		glm::vec3 center{ 0.0f, 0.0f, 0.0f };
 
 		std::vector<float> verticesVector = {
