@@ -15,9 +15,15 @@ namespace mar {
 		};
 		std::vector<glm::vec3> positions = {
 			{0.0f, 0.0f, 0.0f}
-			, { 3.0f, 2.0f, -7.5f}
-			, { -3.0f, -2.0f, -7.5f}
-			, { -1.5f, 2.0f, -2.5f}
+			, {3.0f, 2.0f, -7.5f}
+			, {-3.0f, -2.0f, -7.5f}
+			, {-1.5f, 2.0f, -2.5f}
+		};
+		std::vector<glm::vec3> angles = {
+			{0.0f, 0.0f, 0.0f}
+			, {0.0f, 0.0f, 0.0f}
+			, {0.0f, 0.0f, 0.0f}
+			, {0.0f, 0.0f, 0.0f}
 		};
 		std::vector<int> samplers;
 
@@ -34,7 +40,7 @@ namespace mar {
 		for (unsigned int i = 0; i < cubes.size(); i++) {
 			mesh.push(&cubes[i], positions[i], texturePaths[i]);
 			samplers.push_back((int)cubes[i].getID());
-			gui.pushCenter(positions[i]);
+			gui.push(positions[i], {0.0f, 0.0f, 0.0f});
 		}
 			
 		{ // initialize startup positions and textures for objects
@@ -55,7 +61,7 @@ namespace mar {
 			{ // update for every frame
 				camera.processInput(window.getWindow());
 				gui.prepareNewFrame();
-				mesh.onUpdate(gui.getCentersVector());
+				mesh.onUpdate(gui.getCentersVector(), gui.getAnglesVector());
 			}
 			
 			// --- Rendering, binding textures, creating matrix transformations --- //

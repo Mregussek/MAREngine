@@ -49,16 +49,17 @@ namespace mar {
             _texture.bind(_shapes[i].getID(), _texture.getID(i));
     }
 
-    void Mesh::onUpdate(std::vector<glm::vec3> newCenters) {
+    void Mesh::onUpdate(std::vector<glm::vec3> newCenters, std::vector<glm::vec3> newAngles) {
         _vbo.bind(); // set dynamic vertex buffer
         _vertices.clear(); // we are gonna put here new vertices
 
         for (unsigned int i = 0; i < _shapes.size(); i++) {
             changeCenterOfObject(&_shapes[i], newCenters[i]);
+            rotateObject(&_shapes[i], newAngles[i]);
             _vertices.insert(_vertices.end(), _shapes[i].verticesVector.begin(), _shapes[i].verticesVector.end());
         }
         
-        _vbo.updateDynamically(_vertices); // end _vertices, which are rendered
+        _vbo.updateDynamically(_vertices); // now we need only to render
     }
 
     void Mesh::push(Cube* cube, glm::vec3& position,
@@ -120,6 +121,48 @@ namespace mar {
             cube->changeVerticesIndex(j * stride - 1, nextID);
 
         cube->setID(nextID);
+    }
+
+    void Mesh::rotateObject(Cube* cube, const glm::vec3& angle) {
+        cube->verticesVector = rotateObject(cube->getSizeofVertices(), cube->getStride(), angle, cube->getCenter(), cube->verticesVector);
+    }
+
+    std::vector<float> Mesh::rotateObject(const unsigned int& size, const unsigned int& stride,
+        const glm::vec3& angle, const glm::vec3& center, std::vector<float>& passedValue) {
+
+        // prescribe values to vec4 (for multiplying with matrix4x4)
+        glm::vec4 positions[8];
+        for (unsigned int j = 0; j < size / stride; j++) {
+            positions[j].x = passedValue.at(j * stride + 0);
+            positions[j].y = passedValue.at(j * stride + 1);
+            positions[j].z = passedValue.at(j * stride + 2);
+            positions[j].w = 1.0f;
+        }
+
+        // create transform matrix
+        glm::mat4 translate = glm::translate(glm::mat4(1.0f), center);
+        glm::mat4 invTranslate = glm::inverse(translate);
+        glm::mat4 rotationMatrix = 
+              glm::rotate(glm::mat4(1.0f), glm::radians(angle.x), { 1.0f, 0.0f, 0.0f })
+            * glm::rotate(glm::mat4(1.0f), glm::radians(angle.y), { 0.0f, 1.0f, 0.0f })
+            * glm::rotate(glm::mat4(1.0f), glm::radians(angle.z), { 0.0f, 0.0f, 1.0f });
+
+        glm::mat4 transform = translate * rotationMatrix * invTranslate;
+
+        std::vector<float> returnValue(passedValue.size());
+
+        for (unsigned int j = 0; j < size / stride; j++) {
+            glm::vec4 result = positions[j] * transform;
+
+            returnValue[j * stride + 0] = result.x;
+            returnValue[j * stride + 1] = result.y;
+            returnValue[j * stride + 2] = result.z;
+
+            for (unsigned int k = 3; k < stride; k++)
+                returnValue[j * stride + k] = passedValue[j * stride + k];
+        }
+
+        return returnValue;
     }
 
     void Mesh::changeCenterOfObject(Cube* cube, const glm::vec3& center) {

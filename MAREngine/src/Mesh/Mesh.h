@@ -19,8 +19,8 @@ namespace mar {
 
     namespace constants {
         const size_t maxCubeCount = 1000;
-        const size_t maxVertexCount = maxCubeCount * 8;
-        const size_t maxIndexCount = maxCubeCount * 12;
+        const size_t maxVertexCount = maxCubeCount * 16;
+        const size_t maxIndexCount = maxCubeCount * 24;
     }
 
     class Mesh {
@@ -44,7 +44,7 @@ namespace mar {
         ~Mesh();
 
         void initialize();
-        void onUpdate(std::vector<glm::vec3> newCenters);
+        void onUpdate(std::vector<glm::vec3> newCenters, std::vector<glm::vec3> newAngles);
         void bind();
         void unbind();
 
@@ -54,6 +54,10 @@ namespace mar {
         const unsigned int sizeofIndices() const { return _ebo.getIndicesNumber(); }
 
         static void extendID(Cube* cube, const float& nextID);
+
+        static void rotateObject(Cube* cube, const glm::vec3& angle);
+        static std::vector<float> rotateObject(const unsigned int& size, const unsigned int& stride,
+            const glm::vec3& angle, const glm::vec3& center, std::vector<float>& returnValue);
 
         static void changeCenterOfObject(Cube* cube, const glm::vec3& center);
         static std::vector<float> changeCenterOfObject(const unsigned int& size, const unsigned int& stride,

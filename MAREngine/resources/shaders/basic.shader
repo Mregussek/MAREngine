@@ -11,13 +11,19 @@ out float v_TexIndex;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Projection;
-//uniform mat4 u_Transform;
 uniform mat4 u_GUItranslation;
 uniform mat4 u_GUIrotation;
+uniform mat4 u_Transform;
 
 void main() {
-	mat4 mvp = u_Projection * u_View * u_Model * u_GUItranslation * u_GUIrotation;
-	gl_Position = mvp * position;
+	// Calculate all transformations
+	mat4 indexTransformation = u_Transform;
+	mat4 guiTrans = u_GUItranslation * u_GUIrotation;
+	mat4 mvp = u_Projection * u_View * u_Model;
+
+	gl_Position = mvp * guiTrans * position;
+
+	// Pass values to fragment shader
 	v_TexCoord = texCoord;
 	v_TexIndex = texIndex;
 };

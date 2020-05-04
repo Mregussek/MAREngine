@@ -27,8 +27,9 @@ namespace mar {
 		ImGui::DestroyContext();
 	}
 
-	void GUI::pushCenter(const glm::vec3& newCenter) {
+	void GUI::push(const glm::vec3& newCenter, const glm::vec3& newAngle) {
 		_centersOfObjects.push_back(newCenter);
+		_angles.push_back(newAngle);
 	}
 
 	void GUI::prepareNewFrame() {
@@ -49,24 +50,40 @@ namespace mar {
 
 			for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
 				float pos[3];
+				float ang[3];
 
-				// Set current center position to slider
+				// Set current variables to sliders
 				pos[0] = _centersOfObjects[i].x;
 				pos[1] = _centersOfObjects[i].y;
 				pos[2] = _centersOfObjects[i].z;
+				ang[0] = _angles[i].x;
+				ang[1] = _angles[i].y;
+				ang[2] = _angles[i].z;
 
-				// Change center by GUI
-				char DragID[7] = "Cube ";
+				// Prepare index on GUI
 				char int2char[2];
 				sprintf_s(int2char, "%d", i);
+				char shapeIndex[7] = "Cube ";
+				strcat_s(shapeIndex, int2char);
+				ImGui::Text(shapeIndex);
+
+				// Change center by GUI
+				char DragID[10] = "CubePos ";
 				strcat_s(DragID, int2char);
-				ImGui::Text(DragID);
 				ImGui::SliderFloat3(DragID, pos, -10.0f, 10.0f);
 
-				// Set new position to object
+				// Change angle by GUI
+				char RotID[10] = "CubeRot ";
+				strcat_s(RotID, int2char);
+				ImGui::SliderFloat3(RotID, ang, 0.0f, 360.0f);
+
+				// Set new variables to object
 				_centersOfObjects[i].x = pos[0];
 				_centersOfObjects[i].y = pos[1];
 				_centersOfObjects[i].z = pos[2];
+				_angles[i].x = ang[0];
+				_angles[i].y = ang[1];
+				_angles[i].z = ang[2];
 			}
 
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -92,5 +109,9 @@ namespace mar {
 
 	const std::vector<glm::vec3>& GUI::getCentersVector() const {
 		return _centersOfObjects;
+	}
+
+	const std::vector<glm::vec3>& GUI::getAnglesVector() const {
+		return _angles;
 	}
 }
