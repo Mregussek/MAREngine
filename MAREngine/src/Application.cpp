@@ -7,17 +7,11 @@
 
 namespace mar {
 	int Application::run() {
-		mar::Window window(height, width, name);
-		GUI gui(&window, glsl_version);
-		Camera camera(width, height);
-
-		callbacks::setCallbacks(window.getWindow(), &camera); // for mouse usage
-
-		std::vector<Cube> cubes = { 
+		std::vector<Cube> cubes = {
 			Cube()
 			, Cube()
-			, Cube() 
 			, Cube()
+			//, Cube()
 		};
 		std::vector<glm::vec3> positions = {
 			{0.0f, 0.0f, 0.0f}
@@ -26,6 +20,12 @@ namespace mar {
 			, { -1.5f, 2.0f, -2.5f}
 		};
 		std::vector<int> samplers;
+
+		mar::Window window(height, width, name);
+		GUI gui(&window, glsl_version);
+		Camera camera(width, height);
+
+		callbacks::setCallbacks(window.getWindow(), &camera);
 		
 		Mesh mesh;
 		Shader shader(shadersPath);
@@ -37,14 +37,17 @@ namespace mar {
 			gui.pushCenter(positions[i]);
 		}
 			
-		mesh.initializeBatch();
-
-		shader.bind();
-		shader.setUniformSampler2D("u_Texture", samplers);
-
-		shader.unbind();
-		mesh.unbind();
-
+		{ // initialize startup positions and textures for objects
+			mesh.initialize();
+			shader.bind();
+			shader.setUniformSampler2D("u_Texture", samplers);
+		}
+		
+		{ // unbind before starting rendering
+			shader.unbind();
+			mesh.unbind();
+		}
+		
 		Renderer renderer(mesh.sizeofVertices(), mesh.sizeofIndices());
 
 		while (window.shouldClose()) {
@@ -67,23 +70,24 @@ namespace mar {
 				shader.setUniformMat4f("u_View", camera.getViewMatrix());
 				shader.setUniform4fv("u_GUIcolor", gui.getColors());
 				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
-			}
-			
-			{ // Generally there was a loop for rendering every cube seperately
-				glm::mat4 model = glm::translate(glm::mat4(1.0f), positions[0]);
-				shader.setUniformMat4f("u_Model", model);
 				shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(positions[0]));
 				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix());
+			}
+			
+			{ // Set main position for the whole scene
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), positions[0]);
+				shader.setUniformMat4f("u_Model", model);
 			}
 
 			{ // One render call, BATCH RENDEREING FEATURE
 				renderer.draw();
 			}
-			
 
 			// --- Polling events, updating IO actions --- //
-			gui.display();
-			window.swapBuffers();
+			{ // display gui on screen and swap buffers
+				gui.display();
+				window.swapBuffers();
+			}
 		}
 
 		return 0;

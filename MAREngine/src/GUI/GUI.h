@@ -18,7 +18,7 @@ namespace mar {
 		glm::vec3 _angle;
 		float _colors[4];
 		std::vector<glm::vec3> _centersOfObjects;
-		float pos[3];
+		unsigned int _index;
 
 	public:
 		GUI(Window* window, const char* glsl_version);
@@ -31,9 +31,8 @@ namespace mar {
 		const glm::mat4 getTranslationMatrix() const;
 		const glm::mat4 getRotationMatrix() const;
 		const float* getColors() const { return _colors; }
-		const std::vector<glm::vec3>& getCentersVector() const {
-			return _centersOfObjects;
-		}
+		const std::vector<glm::vec3>& getCentersVector() const;
+		
 	};
 }
 

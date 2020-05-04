@@ -16,6 +16,11 @@
 #include "Shapes/Cube.h"
 
 namespace mar {
+
+    namespace constants {
+        const size_t maxCubeCount = 100;
+    }
+
     class Mesh {
         // --- Buffers --- //
         VertexBuffer _vbo;
@@ -37,7 +42,6 @@ namespace mar {
         ~Mesh();
 
         void initialize();
-        void initializeBatch();
         void onUpdate(std::vector<glm::vec3> newCenters);
         void bind();
         void unbind();

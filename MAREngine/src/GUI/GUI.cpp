@@ -10,7 +10,8 @@ namespace mar {
 		: _window(window),
 		_translation(glm::vec3(0.0f, 0.0f, 0.0f)),
 		_angle(glm::vec3(0.0f, 0.0f, 0.0f)),
-		_versionGLSL(glsl_version) 
+		_versionGLSL(glsl_version) ,
+		_index(0)
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
@@ -39,20 +40,28 @@ namespace mar {
 	void GUI::display() {
 		{
 			ImGui::Begin("MAREngine GUI");
+
+			ImGui::Text("Scene");
 			ImGui::SliderFloat3("Translation", &_translation.x, -2.0f, 2.0f);
 			ImGui::SliderFloat3("Rotation", &_angle.x, 0.0f, 360.0f);
 			ImGui::ColorEdit4("color", _colors);
+			ImGui::Text("Objects");
 
-			for (int i = 0; i < _centersOfObjects.size(); i++) {
+			for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
+				float pos[3];
+
 				// Set current center position to slider
 				pos[0] = _centersOfObjects[i].x;
 				pos[1] = _centersOfObjects[i].y;
 				pos[2] = _centersOfObjects[i].z;
 
-				char DragText[20];
-				sprintf(DragText, "Cube Position %d", i);
 				// Change center by GUI
-				ImGui::DragFloat3(DragText, pos, 0.1f);
+				char DragID[7] = "Cube ";
+				char int2char[2];
+				sprintf_s(int2char, "%d", i);
+				strcat_s(DragID, int2char);
+				ImGui::Text(DragID);
+				ImGui::SliderFloat3(DragID, pos, -10.0f, 10.0f);
 
 				// Set new position to object
 				_centersOfObjects[i].x = pos[0];
@@ -62,6 +71,7 @@ namespace mar {
 
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			if (ImGui::Button("Exit")) glfwSetWindowShouldClose(_window->getWindow(), true);
+
 			ImGui::End();
 		}
 
