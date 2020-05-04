@@ -8,7 +8,8 @@
 namespace mar {
 	VertexBuffer::VertexBuffer(unsigned int sizeOfData, const float* data, size_t how_many)
 		: _howMany(how_many),
-		_size(sizeOfData / sizeof(float))
+		_size(sizeOfData / sizeof(float)),
+		_allocatedMemory(sizeOfData)
 	{
 		glGenBuffers(_howMany, &_rendererId);
 		glBindBuffer(GL_ARRAY_BUFFER, _rendererId);
@@ -17,7 +18,8 @@ namespace mar {
 
 	VertexBuffer::VertexBuffer(const std::vector<float>& data, size_t how_many)
 		: _howMany(how_many),
-		_size(data.size())
+		_size(data.size()),
+		_allocatedMemory(_size * sizeof(float))
 	{
 		float* vertices = new float[data.size()];
 		std::copy(data.begin(), data.end(), vertices);
@@ -28,8 +30,25 @@ namespace mar {
 		delete[] vertices;
 	}
 
+	VertexBuffer::VertexBuffer(unsigned int allocationMemory)
+		: _howMany(1),
+		_size(0),
+		_allocatedMemory(allocationMemory)
+	{
+		glGenBuffers(1, &_rendererId);
+		glBindBuffer(GL_ARRAY_BUFFER, _rendererId); // dynamic draw for batch rendering
+		glBufferData(GL_ARRAY_BUFFER, _allocatedMemory, nullptr, GL_DYNAMIC_DRAW); // allocate memory on gpu
+	}
+
 	void VertexBuffer::bind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, _rendererId);
+	}
+
+	void VertexBuffer::updateDynamically(const std::vector<float>& vertices) const {
+		float* vert = new float[vertices.size()];
+		std::copy(vertices.begin(), vertices.end(), vert);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vert);
+		delete[] vert;
 	}
 
 	void VertexBuffer::unbind() const {

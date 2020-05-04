@@ -46,13 +46,16 @@
 #pragma warning (pop)
 
 // --- Include C++ STL libraries --- //
+// I/O events
 #include <iostream>
 #include <fstream> 
-#include <vector>
 #include <string>
-#include <algorithm>
+// data structures
+#include <vector> 
 #include <unordered_map>
-#include <thread>
+#include <algorithm> // std::find, std::copy
+// multithreading
+#include <thread> 
 #include <mutex>
 
 namespace mar {

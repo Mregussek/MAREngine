@@ -36,7 +36,7 @@ namespace mar {
 			samplers.push_back((int)cubes[i].getID());
 		}
 			
-		mesh.initialize();
+		mesh.initializeBatch();
 
 		shader.bind();
 		shader.setUniformSampler2D("u_Texture", samplers);
@@ -48,9 +48,12 @@ namespace mar {
 
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
-			camera.processInput(window.getWindow());
-			gui.prepareNewFrame();
-
+			{ // update for every frame
+				camera.processInput(window.getWindow());
+				gui.prepareNewFrame();
+				mesh.onUpdate();
+			}
+			
 			// --- Rendering, binding textures, creating matrix transformations --- //
 			{ // Prepare for rendering
 				renderer.clear();

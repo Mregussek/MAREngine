@@ -50,6 +50,22 @@ namespace mar {
             _texture.bind(_shapes[i].getID(), _texture.getID(i));
     }
 
+    void Mesh::initializeBatch() {
+        _vbo = VertexBuffer(1000 * sizeof(Vertex));
+        _ebo = ElementBuffer(_indices);
+
+        _vao.addBufferBatch(_vbo, _lay);
+
+        for (unsigned int i = 0; i < _shapes.size(); i++)
+            _texture.bind(_shapes[i].getID(), _texture.getID(i));
+    }
+
+    void Mesh::onUpdate() {
+        // set dynamic vertex buffer
+        _vbo.bind();
+        _vbo.updateDynamically(_vertices);
+    }
+
     void Mesh::push(Cube* cube, glm::vec3& position, std::string& texturePath) {
         // cube - object, which we want to push
         // position - center pos, where we want object to be placed

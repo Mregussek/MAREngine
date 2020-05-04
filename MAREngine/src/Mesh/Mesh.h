@@ -37,6 +37,8 @@ namespace mar {
         ~Mesh();
 
         void initialize();
+        void initializeBatch();
+        void onUpdate();
         void bind();
         void unbind();
 

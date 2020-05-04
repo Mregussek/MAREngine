@@ -12,14 +12,17 @@ namespace mar {
 	class VertexBuffer {
 		unsigned int _rendererId;
 		unsigned int _size;
+		unsigned int _allocatedMemory;
 		size_t _howMany;
 
 	public:
 		VertexBuffer() = default;
 		VertexBuffer(unsigned int sizeOfData, const float* data, size_t how_many = 1);
 		VertexBuffer(const std::vector<float>& data, size_t how_many = 1);
+		VertexBuffer(unsigned int allocationMemory);
 
 		void bind() const;
+		void updateDynamically(const std::vector<float>& vertices) const;
 		void unbind() const;
 		void close() const;
 

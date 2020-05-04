@@ -10,6 +10,12 @@
 
 namespace mar {
 
+	struct Vertex {
+		float position[3];
+		float texCoords[2];
+		float texID;
+	};
+
 	class Shapes {
 	public:
 		glm::vec3 center = {0.0f, 0.0f, 0.0f};
