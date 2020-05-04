@@ -12,9 +12,9 @@
 #include "Mesh/Shapes/Cube.h"
 // Rendering
 #include "Mesh/Mesh.h"
+#include "Mesh/Texture/Texture.h"
 #include "Shader/Shader.h"
 #include "Renderer/Renderer.h"
-#include "Texture/Texture.h"
 #include "Camera/Camera.h"
 // Window && Input
 #include "Window/Window.h"
@@ -29,8 +29,10 @@ namespace mar {
 		int height{ 720 };
 		const std::string shadersPath = "resources/shaders/basic.shader";
 		std::vector<std::string> texturePaths = {
-			"resources/textures/mr.jpg",
-			"resources/textures/wall.jpg"
+			"resources/textures/mr.jpg"
+			, "resources/textures/wall.jpg"
+			, "resources/textures/wall.jpg"
+			, "resources/textures/mr.jpg"
 		};
 		char portName[10] = "\\\\.\\COM7";
 		const char* glsl_version = "#version 460";

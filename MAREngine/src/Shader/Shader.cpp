@@ -26,6 +26,13 @@ namespace mar {
 		glUseProgram(0);
 	}
 
+	void Shader::setUniformSampler2D(const std::string& name, std::vector<int> sampler) {
+		int* s = new int[sampler.size()];
+		std::copy(sampler.begin(), sampler.end(), s);
+		glUniform1iv(getUniformLocation(name), sampler.size(), s);
+		delete[] s;
+	}
+
 	void Shader::setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) {
 		int howManyMatrixProvide = 1;
 		glUniformMatrix4fv(getUniformLocation(name), howManyMatrixProvide, GL_FALSE, glm::value_ptr(matrix4x4));

@@ -21,6 +21,15 @@ namespace mar {
 	}
 
 	void Texture::loadTexture(const std::string& path) {
+		auto pathFound = std::find(_paths.begin(), _paths.end(), path);
+		if (pathFound != _paths.end()) { // if path found we don't want to load texture again
+			auto index = std::distance(_paths.begin(), pathFound);
+			_id.push_back(_id[index]); // push index of that found texture
+			return;
+		}
+
+		// load new texture and push new 
+		_paths.push_back(path);
 		_id.push_back(_id.size());
 
 		glGenTextures(1, &_id[_id.size() - 1]);
@@ -45,12 +54,16 @@ namespace mar {
 		std::cout << "Failed to load texture" << std::endl;
 	}
 
-	void Texture::bind(unsigned int slot) const {
+	/*void Texture::bind(unsigned int slot) const {
 		glActiveTexture(GL_TEXTURE0 + slot);
 		for(auto const& id : _id)
 			glBindTexture(GL_TEXTURE_2D, id);
 		//for (auto const& id : _id)
 		//	glBindTextureUnit(id, id);
+	}*/
+
+	void Texture::bind(float shapeId, unsigned int texID) const {
+		glBindTextureUnit((unsigned int)shapeId, texID);
 	}
 
 	void Texture::unbind() const {

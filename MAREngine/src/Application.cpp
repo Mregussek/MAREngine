@@ -17,29 +17,29 @@ namespace mar {
 			Cube()
 			, Cube()
 			, Cube() 
+			, Cube()
 		};
 		std::vector<glm::vec3> positions = {
 			{0.0f, 0.0f, 0.0f}
-			, {3.0f, 2.0f, -7.5f}
-			, {-3.0f, -2.0f, -7.5f}
+			, { 3.0f, 2.0f, -7.5f}
+			, { -3.0f, -2.0f, -7.5f}
+			, { -1.5f, 2.0f, -2.5f}
 		};
+		std::vector<int> samplers;
 		
 		Mesh mesh;
 		Shader shader(shadersPath);
 
 		if (positions.size() < cubes.size()) { std::cerr << "More cubes than positions\n";  exit(0); }
-		for (unsigned int i = 0; i < cubes.size(); i++) 
-			mesh.push(cubes[i], positions[i]);
-
+		for (unsigned int i = 0; i < cubes.size(); i++) {
+			mesh.push(&cubes[i], positions[i], texturePaths[i]);
+			samplers.push_back((int)cubes[i].getID());
+		}
+			
 		mesh.initialize();
 
-		Texture texture;
-		texture.loadTexture(texturePaths[0]);
-		//texture.loadTexture(texturePath2);
-		texture.bind();
-
 		shader.bind();
-		shader.setUniform1i("u_Texture", 0);
+		shader.setUniformSampler2D("u_Texture", samplers);
 
 		shader.unbind();
 		mesh.unbind();

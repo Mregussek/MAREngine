@@ -31,9 +31,10 @@ in vec2 v_TexCoord;
 in float v_TexIndex;
 
 uniform vec4 u_GUIcolor;
-uniform sampler2D u_Texture;
+uniform sampler2D u_Texture[4];
 
 void main() {
-	vec4 texColor = texture(u_Texture, v_TexCoord);
+	int index = int(v_TexIndex);
+	vec4 texColor = texture(u_Texture[index], v_TexCoord);
 	color = texColor * u_GUIcolor;
 };

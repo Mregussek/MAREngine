@@ -6,52 +6,75 @@
 #include "Mesh.h"
 
 namespace mar {
+
     Mesh::Mesh()
         : _vao(VertexArray()),
-        lay(VertexBufferLayout()),
+        _lay(VertexBufferLayout()),
+        _texture(Texture()),
         _pushedOnce(false),
         _maxValue(0)
-    { }
+    { 
+        // Constructor, if we use batch rendering
+        // we need to push objects to make it proper
+    }
 
     Mesh::Mesh(Cube& shape)
         : _vao(VertexArray()),
         _vbo(VertexBuffer(shape.verticesVector)),
         _ebo(ElementBuffer(shape.indicesVector)),
-        lay(VertexBufferLayout()),
+        _lay(VertexBufferLayout()),
         _pushedOnce(false),
         _maxValue(0)
     {
-        for (auto const& l : shape.layout) lay.push<float>(l);
+        // constructor for infinite draw calls
+        for (auto const& l : shape.layout) 
+            _lay.push<float>(l);
 
-        _vao.addBuffer(_vbo, lay);
+        _vao.addBuffer(_vbo, _lay);
     }
 
     Mesh::~Mesh() {
+        // Close Buffers
         _vbo.close();
         _ebo.close();
     }
 
     void Mesh::initialize() {
+        // setup buffers, for now static rendering
         _vbo = VertexBuffer(_vertices);
         _ebo = ElementBuffer(_indices);
 
-        _vao.addBuffer(_vbo, lay);
+        _vao.addBuffer(_vbo, _lay);
+
+        for (unsigned int i = 0; i < _shapes.size(); i++)
+            _texture.bind(_shapes[i].getID(), _texture.getID(i));
     }
 
-    void Mesh::push(Cube& cube, glm::vec3 position) {
-        _shapes.emplace_back(cube);
+    void Mesh::push(Cube* cube, glm::vec3& position, std::string& texturePath) {
+        // cube - object, which we want to push
+        // position - center pos, where we want object to be placed
+        // texturePath - path to texture, which we want to use on this object
+        
+        extendID(cube, (float)_shapes.size()); // more objects, more texture indexes
 
-        changeCenterOfObject(cube, position);
-        extendID(cube, _shapes.size() - 1);
-        _vertices.insert(_vertices.end(), cube.verticesVector.begin(), cube.verticesVector.end());
+        changeCenterOfObject(cube, position); // user sends new center position, we need to change vertices
+        
+        _vertices.insert(_vertices.end(), cube->verticesVector.begin(), cube->verticesVector.end()); // insert object vertices to mesh vertices (batch rendering)
 
-        changeIndicesFormat(cube, _maxValue);
-        _maxValue += cube.getSizeofVertices() / cube.getStride();
+        changeIndicesFormat(cube, _maxValue); // we cannot use the same indices for the another vertices, that's why we increase them
 
-        _indices.insert(_indices.end(), cube.indicesVector.begin(), cube.indicesVector.end());
+        _maxValue += cube->getSizeofVertices() / cube->getStride(); // maximum value of indices
 
-        if (!_pushedOnce) {
-            for (auto const& l : cube.layout) lay.push<float>(l);
+        _indices.insert(_indices.end(), cube->indicesVector.begin(), cube->indicesVector.end()); // insert object indices to mesh indices (batch rendering) 
+
+        _shapes.emplace_back(*cube); // place new shape at the end of vector
+
+        _texture.loadTexture(texturePath); // load texture for this object
+
+        if (!_pushedOnce) { // push layout, all objects has the same format, so we need to do it once
+            for (auto const& l : cube->layout) 
+                _lay.push<float>(l);
+
             _pushedOnce = true;
         }
     }
@@ -67,17 +90,22 @@ namespace mar {
         _ebo.unbind();
     }
 
-    void Mesh::extendID(Cube& cube, const float& nextID) {
-        unsigned int size = cube.getSizeofVertices();
-        unsigned int stride = cube.getStride();
+    void Mesh::extendID(Cube* cube, const float& nextID) {
+        unsigned int size = cube->getSizeofVertices();
+        unsigned int stride = cube->getStride();
 
-        for (unsigned int j = 1; j < size / stride; j++) 
-            cube.verticesVector[j * stride - 1] = nextID;
+        // extend all vertices, which defines texture id
+        for (unsigned int j = 1; j < size / stride; j++)
+            cube->changeVerticesIndex(j * stride - 1, nextID);
+
+        cube->setID(nextID);
     }
 
-    void Mesh::changeCenterOfObject(Cube& cube, const glm::vec3& center) {
-        cube.verticesVector = changeCenterOfObject(cube.getSizeofVertices(), cube.getStride(), center, cube.verticesVector);
-        cube.prescribeCenter(center);
+    void Mesh::changeCenterOfObject(Cube* cube, const glm::vec3& center) {
+        // change vertices of this specific object
+        cube->verticesVector = changeCenterOfObject(cube->getSizeofVertices(), cube->getStride(), center, cube->verticesVector);
+        // change its center
+        cube->prescribeCenter(center);
     }
 
     std::vector<float> Mesh::changeCenterOfObject(const unsigned int& size, const unsigned int& stride, 
@@ -141,8 +169,8 @@ namespace mar {
         return returnValue;
     }
 
-    void Mesh::changeIndicesFormat(Cube& cube, unsigned int& max_value) {
-        changeIndicesFormat(cube.getSizeofIndices(), max_value, cube.indicesVector);
+    void Mesh::changeIndicesFormat(Cube* cube, unsigned int& max_value) {
+        changeIndicesFormat(cube->getSizeofIndices(), max_value, cube->indicesVector);
     }
 
     void Mesh::changeIndicesFormat(const unsigned int& size, unsigned int& max_value,

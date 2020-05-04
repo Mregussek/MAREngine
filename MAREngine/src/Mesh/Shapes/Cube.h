@@ -17,12 +17,19 @@ namespace mar {
 
 		void prescribeCenter(const glm::vec3& new_center);
 
+		void setID(float newID) override { id = newID; }
+		const float getID() const override;
 		const glm::vec3 getCenter() const override;
 		const unsigned int getStride() const override;
 		const unsigned int getSizeofVertices() const override;
 		const unsigned int getSizeofIndices() const override;
 		const unsigned int getMaxValueOfIndices() const override;
 
+		void changeVerticesIndex(unsigned int index, float new_value) {
+			verticesVector[index] = new_value;
+		}
+
+		float id;
 		glm::vec3 center{ 0.0f, 0.0f, 0.0f };
 
 		std::vector<float> verticesVector = {

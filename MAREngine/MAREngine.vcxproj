@@ -173,7 +173,7 @@
     <ClInclude Include="src\Mesh\VertexBuffer\VertexBufferLayout.h" />
     <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
-    <ClInclude Include="src\Texture\Texture.h" />
+    <ClInclude Include="src\Mesh\Texture\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Mesh\Mesh.cpp" />
@@ -196,7 +196,7 @@
     <ClCompile Include="src\Mesh\VertexBuffer\VertexBuffer.cpp" />
     <ClCompile Include="src\Mesh\VertexArray\VertexArray.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
-    <ClCompile Include="src\Texture\Texture.cpp" />
+    <ClCompile Include="src\Mesh\Texture\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

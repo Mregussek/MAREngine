@@ -27,6 +27,7 @@ namespace mar {
 		void bind() const;
 		void unbind() const;
 
+		void setUniformSampler2D(const std::string& name, std::vector<int> sampler);
 		void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4);
 		void setUniform1i(const std::string& name, int value);
 		void setUniform4f(const std::string& name, float red, float green, float blue, float alpha);

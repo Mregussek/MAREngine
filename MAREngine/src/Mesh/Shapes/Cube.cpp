@@ -10,6 +10,10 @@ namespace mar {
 		center = new_center;
 	}
 
+	const float Cube::getID() const {
+		return id;
+	}
+
 	const glm::vec3 Cube::getCenter() const {
 		return center;
 	}
