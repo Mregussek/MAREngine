@@ -34,6 +34,7 @@ namespace mar {
 		for (unsigned int i = 0; i < cubes.size(); i++) {
 			mesh.push(&cubes[i], positions[i], texturePaths[i]);
 			samplers.push_back((int)cubes[i].getID());
+			gui.pushCenter(positions[i]);
 		}
 			
 		mesh.initializeBatch();
@@ -51,7 +52,7 @@ namespace mar {
 			{ // update for every frame
 				camera.processInput(window.getWindow());
 				gui.prepareNewFrame();
-				mesh.onUpdate();
+				mesh.onUpdate(gui.getCentersVector());
 			}
 			
 			// --- Rendering, binding textures, creating matrix transformations --- //

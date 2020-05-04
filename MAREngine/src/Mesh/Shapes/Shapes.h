@@ -12,8 +12,8 @@ namespace mar {
 
 	struct Vertex {
 		float position[3];
-		float texCoords[2];
-		float texID;
+		float texCoord[2];
+		float texId;
 	};
 
 	class Shapes {

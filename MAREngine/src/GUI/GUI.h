@@ -17,22 +17,23 @@ namespace mar {
 		glm::vec3 _translation;
 		glm::vec3 _angle;
 		float _colors[4];
+		std::vector<glm::vec3> _centersOfObjects;
+		float pos[3];
 
 	public:
 		GUI(Window* window, const char* glsl_version);
 		~GUI();
 
-		const glm::mat4 getTranslationMatrix() const { return glm::translate(glm::mat4(1.0f), _translation); }
-		const glm::mat4 getRotationMatrix() const { 
-			glm::mat4 rotation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-			return glm::rotate(rotation, glm::radians(_angle.x), glm::vec3(1.0f, 0.0f, 0.0f)) 
-				* glm::rotate(rotation, glm::radians(_angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(rotation, glm::radians(_angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
-		}
-		const float* getColors() const { return _colors; }
-
+		void pushCenter(const glm::vec3& newCenter);
 		void prepareNewFrame();
 		void display();
+
+		const glm::mat4 getTranslationMatrix() const;
+		const glm::mat4 getRotationMatrix() const;
+		const float* getColors() const { return _colors; }
+		const std::vector<glm::vec3>& getCentersVector() const {
+			return _centersOfObjects;
+		}
 	};
 }
 

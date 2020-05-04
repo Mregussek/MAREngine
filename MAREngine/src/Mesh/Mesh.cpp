@@ -60,10 +60,16 @@ namespace mar {
             _texture.bind(_shapes[i].getID(), _texture.getID(i));
     }
 
-    void Mesh::onUpdate() {
-        // set dynamic vertex buffer
-        _vbo.bind();
-        _vbo.updateDynamically(_vertices);
+    void Mesh::onUpdate(std::vector<glm::vec3> newCenters) {
+        _vbo.bind(); // set dynamic vertex buffer
+
+        _vertices.clear();
+        for (int i = 0; i < _shapes.size(); i++) {
+            changeCenterOfObject(&_shapes[i], newCenters[i]);
+            _vertices.insert(_vertices.end(), _shapes[i].verticesVector.begin(), _shapes[i].verticesVector.end());
+        }
+        
+        _vbo.updateDynamically(_vertices); // end _vertices, which are rendered
     }
 
     void Mesh::push(Cube* cube, glm::vec3& position, std::string& texturePath) {

@@ -26,6 +26,10 @@ namespace mar {
 		ImGui::DestroyContext();
 	}
 
+	void GUI::pushCenter(const glm::vec3& newCenter) {
+		_centersOfObjects.push_back(newCenter);
+	}
+
 	void GUI::prepareNewFrame() {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -38,6 +42,24 @@ namespace mar {
 			ImGui::SliderFloat3("Translation", &_translation.x, -2.0f, 2.0f);
 			ImGui::SliderFloat3("Rotation", &_angle.x, 0.0f, 360.0f);
 			ImGui::ColorEdit4("color", _colors);
+
+			for (int i = 0; i < _centersOfObjects.size(); i++) {
+				// Set current center position to slider
+				pos[0] = _centersOfObjects[i].x;
+				pos[1] = _centersOfObjects[i].y;
+				pos[2] = _centersOfObjects[i].z;
+
+				char DragText[20];
+				sprintf(DragText, "Cube Position %d", i);
+				// Change center by GUI
+				ImGui::DragFloat3(DragText, pos, 0.1f);
+
+				// Set new position to object
+				_centersOfObjects[i].x = pos[0];
+				_centersOfObjects[i].y = pos[1];
+				_centersOfObjects[i].z = pos[2];
+			}
+
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			if (ImGui::Button("Exit")) glfwSetWindowShouldClose(_window->getWindow(), true);
 			ImGui::End();
@@ -45,5 +67,20 @@ namespace mar {
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	const glm::mat4 GUI::getTranslationMatrix() const { 
+		return glm::translate(glm::mat4(1.0f), _translation);
+	}
+
+	const glm::mat4 GUI::getRotationMatrix() const {
+		glm::mat4 rotation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+		return glm::rotate(rotation, glm::radians(_angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
+			* glm::rotate(rotation, glm::radians(_angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
+			* glm::rotate(rotation, glm::radians(_angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	}
+
+	const std::vector<glm::vec3>& GUI::getCentersVector() const {
+		return _centersOfObjects;
 	}
 }

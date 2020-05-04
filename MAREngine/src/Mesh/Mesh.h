@@ -38,7 +38,7 @@ namespace mar {
 
         void initialize();
         void initializeBatch();
-        void onUpdate();
+        void onUpdate(std::vector<glm::vec3> newCenters);
         void bind();
         void unbind();
 
