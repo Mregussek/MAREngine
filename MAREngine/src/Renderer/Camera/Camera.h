@@ -67,6 +67,7 @@ namespace mar {
         const float& getZoom() const { return _zoom; }
         const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
         const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
+        const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
         const glm::mat4 getRotateMatrixOnPress(const glm::vec3& cubePosition) const ;
         const glm::mat4 getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) const;
 

@@ -6,7 +6,7 @@
 #include "Cube.h"
 
 namespace mar {
-	void Cube::prescribeCenter(const glm::vec3& new_center) {
+	void Cube::setCenter(const glm::vec3& new_center) {
 		center = new_center;
 	}
 
@@ -35,4 +35,14 @@ namespace mar {
 	const unsigned int Cube::getMaxValueOfIndices() const {
 		return *std::max_element(indicesVector.begin(), indicesVector.end()); 
 	}
+
+	
+	void Cube::changeVerticesIndex(unsigned int index, float new_value) {
+		verticesVector[index] = new_value;
+	}
+
+	void Cube::increaseIndice(unsigned int index, unsigned int new_value) {
+		indicesVector[index] += new_value;
+	}
+	
 }

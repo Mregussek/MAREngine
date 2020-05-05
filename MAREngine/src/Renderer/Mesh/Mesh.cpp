@@ -7,19 +7,19 @@
 
 namespace mar {
 
-    void Mesh::extendID(Cube* cube, const float& nextID) {
-        unsigned int size = cube->getSizeofVertices();
-        unsigned int stride = cube->getStride();
+    void Mesh::extendID(std::shared_ptr<Shapes>& shape, const float& nextID) {
+        unsigned int size = shape->getSizeofVertices();
+        unsigned int stride = shape->getStride();
 
         // extend all vertices, which defines texture id
         for (unsigned int j = 1; j < size / stride; j++)
-            cube->changeVerticesIndex(j * stride - 1, nextID);
+            shape->changeVerticesIndex(j * stride - 1, nextID);
 
-        cube->setID(nextID);
+        shape->setID(nextID);
     }
 
-    void Mesh::rotateObject(Cube* cube, const glm::vec3& angle) {
-        cube->verticesVector = rotateObject(cube->getSizeofVertices(), cube->getStride(), angle, cube->getCenter(), cube->verticesVector);
+    void Mesh::rotateObject(std::shared_ptr<Shapes>& shape, const glm::vec3& angle) {
+        shape->verticesVector = rotateObject(shape->getSizeofVertices(), shape->getStride(), angle, shape->getCenter(), shape->verticesVector);
     }
 
     std::vector<float> Mesh::rotateObject(const unsigned int& size, const unsigned int& stride,
@@ -60,16 +60,18 @@ namespace mar {
         return returnValue;
     }
 
-    void Mesh::changeCenterOfObject(Cube* cube, const glm::vec3& center) {
-        cube->verticesVector = changeCenterOfObject(cube->getSizeofVertices(), cube->getStride(), center, cube->verticesVector);
-        cube->prescribeCenter(center);
+    void Mesh::changeCenterOfObject(std::shared_ptr<Shapes>& shape, const glm::vec3& center) {
+        if (center == glm::vec3(0.0f, 0.0f, 0.0f)) return;
+
+        shape->verticesVector = changeCenterOfObject(shape->getSizeofVertices(), shape->getStride(), center, shape->verticesVector);
+        shape->setCenter(center);
     }
 
     std::vector<float> Mesh::changeCenterOfObject(const unsigned int& size, const unsigned int& stride, 
                 const glm::vec3& center, std::vector<float>& passedValue) {
         int i = 0;
         bool back = false;
-        std::vector<float> returnValue(passedValue.size());
+        std::vector<float> returnValue(size);
 
         for (unsigned int j = 0; j < size / stride; j++) {
             if (!back) {
@@ -126,8 +128,8 @@ namespace mar {
         return returnValue;
     }
 
-    void Mesh::changeIndicesFormat(Cube* cube, unsigned int& max_value) {
-        changeIndicesFormat(cube->getSizeofIndices(), max_value, cube->indicesVector);
+    void Mesh::changeIndicesFormat(std::shared_ptr<Shapes>& shape, unsigned int& max_value) {
+        changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->indicesVector);
     }
 
     void Mesh::changeIndicesFormat(const unsigned int& size, unsigned int& max_value,

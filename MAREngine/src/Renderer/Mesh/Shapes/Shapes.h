@@ -16,21 +16,32 @@ namespace mar {
 		float texId;
 	};
 
-	class Shapes {
+	class Shapes : std::enable_shared_from_this<Shapes> {
 	public:
-		glm::vec3 center = {0.0f, 0.0f, 0.0f};
-		float* vertices = nullptr;
-		unsigned int* indices = nullptr;
+		Shapes(float i, glm::vec3 ctr, std::vector<float> vert, std::vector<unsigned int> indi, std::vector<unsigned int> lay)
+			: id(i),
+			center(ctr),
+			verticesVector(vert),
+			indicesVector(indi),
+			layout(lay)
+		{}
+
+		float id;
+		glm::vec3 center;
+		std::vector<float> verticesVector;
+		std::vector<unsigned int> indicesVector;
 		std::vector<unsigned int> layout;
 
-		virtual void setID(float newID) { }
-
-		virtual const float getID() const { return -1; }
-		virtual const glm::vec3 getCenter() const { return {-1.0f, -1.0f, -1.0f}; }
-		virtual const unsigned int getStride() const { return -1; }
-		virtual const unsigned int getMaxValueOfIndices() const { return -1; }
-		virtual const unsigned int getSizeofVertices() const { return -1; };
-		virtual const unsigned int getSizeofIndices() const { return -1; };
+		virtual void setID(float newID) = 0;
+		virtual void setCenter(const glm::vec3& new_center) = 0;
+		virtual const float getID() const = 0;
+		virtual const glm::vec3 getCenter() const = 0;
+		virtual const unsigned int getStride() const = 0;
+		virtual const unsigned int getSizeofVertices() const = 0;
+		virtual const unsigned int getSizeofIndices() const = 0;
+		virtual const unsigned int getMaxValueOfIndices() const = 0;
+		virtual void changeVerticesIndex(unsigned int index, float new_value) = 0;
+		virtual void increaseIndice(unsigned int index, unsigned int new_value) = 0;
 	};
 }
 

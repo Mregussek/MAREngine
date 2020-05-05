@@ -3,6 +3,7 @@
 #define RENDERER_OPENGL_FACTORY_H
 
 #include "RendererFactory.h"
+
 namespace mar {
 
 	class RendererOpenGLFactory : public RendererFactory {
@@ -26,8 +27,7 @@ namespace mar {
 		virtual std::shared_ptr<Texture> createTexture() override {
 			return std::make_shared<Texture>();
 		}
-};
+	};
 }
-
 
 #endif // !RENDERER_OPENGL_FACTORY_H

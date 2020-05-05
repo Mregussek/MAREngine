@@ -27,7 +27,7 @@ namespace mar {
 		std::shared_ptr<Texture> _texture;
 		std::shared_ptr<Mesh> _mesh;
 		// --- Objects
-		std::vector<Cube> _shapes;
+		std::vector<std::shared_ptr<Shapes>> _shapes;
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
 		std::vector<int> _samplers;
@@ -44,18 +44,16 @@ namespace mar {
 
 		void initializeBuffers();
 
-		void pushObject(Cube* cube, glm::vec3& position, std::string& texturePath);
+		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string& texturePath);
 
 		void popObject();
 
 		void bind();
-
 		void unbind();
 
 		void updateFrame(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles);
 		
 		void draw() const;
-
 		void clear();
 
 		const std::vector<int>& getSamplers() const { return _samplers; }

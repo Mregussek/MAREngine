@@ -16,12 +16,11 @@ namespace mar {
 		size_t _howMany;
 
 	public:
-		VertexArray(size_t how_many = 1);
+		VertexArray() = default;
 		~VertexArray();
 
-		void addBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
-		void addBufferBatch(const VertexBuffer& vb, const VertexBufferLayout& layout);
-		void addBufferPointers(const std::shared_ptr<VertexBufferLayout>& layout);
+		void initializeArrayBuffer();
+		void addBuffer(const std::shared_ptr<VertexBufferLayout>& layout);
 
 		void bind() const;
 		void unbind() const;
