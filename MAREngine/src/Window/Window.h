@@ -18,7 +18,7 @@ namespace mar {
 		char* _windowName;
 
 	public:
-		Window(const int& H, const int& W, char* wN);
+		Window(const int& H, const int& W, char* wN, Camera* camera = nullptr);
 		~Window() { glfwTerminate(); }
 
 		static void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
@@ -42,6 +42,7 @@ namespace mar {
 		inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 		inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 		void setCallbacks(GLFWwindow* wind, Camera* cam);
+		void setCallbacks(GLFWwindow* wind);
 	}
 
 } // end mar namespace

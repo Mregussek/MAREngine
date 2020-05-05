@@ -6,7 +6,8 @@
 #include "Window.h"
 
 namespace mar {
-	Window::Window(const int& H, const int& W, char* wN)
+
+	Window::Window(const int& H, const int& W, char* wN, Camera* camera)
 		: _height(H),
 		_width(W),
 		_windowName(wN)
@@ -44,18 +45,27 @@ namespace mar {
 			exit(0);
 		}
 #endif
+	
+		if (camera == nullptr)
+			callbacks::setCallbacks(_window);
+		else
+			callbacks::setCallbacks(_window, camera);
 	}
-
+	
 	namespace callbacks {
 		inline void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 			glViewport(0, 0, width, height);
 		}
 
 		inline void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+			if (camera == nullptr) return;
+
 			camera->mouseCallback((float)xpos, (float)ypos);
 		}
 
 		inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+			if (camera == nullptr) return;
+
 			camera->scrollCallback((float)yoffset);
 		}
 
@@ -66,6 +76,13 @@ namespace mar {
 			glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 			glfwSetCursorPosCallback(window, mouse_callback);
 			glfwSetScrollCallback(window, scroll_callback);
+		}
+
+		void setCallbacks(GLFWwindow* wind) {
+			window = wind;
+			camera = nullptr;
+
+			glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 		}
 	}
 }

@@ -14,14 +14,12 @@ namespace mar {
 		, std::make_tuple<Cube, glm::vec3, glm::vec3>(Cube(), {-1.5f, 2.0f, -2.5f}, {0.0f, 0.0f, 0.0f}, "resources/textures/mr.jpg")
 		};
 
-		mar::Window window(height, width, name);
-		GUI gui(&window, glsl_version);
 		Camera camera(width, height);
+		mar::Window window(height, width, name, &camera);
+		GUI gui(&window, glsl_version);
 
 		Renderer renderer;
 		renderer.initializeRenderer(std::make_shared<RendererOpenGLFactory>());
-
-		callbacks::setCallbacks(window.getWindow(), &camera);
 		
 		Shader shader(shadersPath);
 		
@@ -47,6 +45,7 @@ namespace mar {
 			renderer.unbind();
 		}
 
+		// --- Main Loop --- //
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
 			{ // update for every frame
