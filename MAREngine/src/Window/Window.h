@@ -7,7 +7,7 @@
 #define WINDOW_H
 
 #include "../mar.h"
-#include "../Camera/Camera.h"
+#include "../Renderer/Camera/Camera.h"
 
 namespace mar {
 

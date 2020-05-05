@@ -6,7 +6,7 @@
 #ifndef VERTEXBUFFERLAYOUT_H
 #define VERTEXBUFFERLAYOUT_H
 
-#include "../../mar.h"
+#include "../../../mar.h"
 
 namespace mar {
 	struct VertexBufferElement {
@@ -15,7 +15,7 @@ namespace mar {
 		unsigned char _normalized;
 	};
 
-	class VertexBufferLayout {
+	class VertexBufferLayout : std::enable_shared_from_this<VertexBufferLayout> {
 		std::vector<VertexBufferElement> _elements;
 		unsigned int _stride;
 

@@ -6,7 +6,7 @@
 #include "Texture.h"
 
 namespace mar {
-	Texture::Texture()
+	Texture::Texture(unsigned int slot)
 		: _localBuffer(nullptr),
 		_width(0),
 		_height(0),
@@ -62,7 +62,7 @@ namespace mar {
 		//	glBindTextureUnit(id, id);
 	}*/
 
-	void Texture::bind(float shapeId, unsigned int texID) const {
+	void Texture::bind(const float& shapeId, const unsigned int& texID) const {
 		glBindTextureUnit((unsigned int)shapeId, texID);
 	}
 

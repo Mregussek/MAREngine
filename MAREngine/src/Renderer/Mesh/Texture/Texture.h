@@ -6,10 +6,10 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "../../mar.h"
+#include "../../../mar.h"
 
 namespace mar {
-	class Texture {
+	class Texture : std::enable_shared_from_this<Texture> {
 		std::vector<unsigned int> _id;
 		std::vector<std::string> _paths;
 		unsigned char* _localBuffer;
@@ -18,13 +18,14 @@ namespace mar {
 		int _bitPerPixel;
 
 	public:
-		Texture();
+		Texture() = default;
+		Texture(unsigned int slot);
 		~Texture();
 
 		void loadTexture(const std::string& path);
 
 		//void bind(unsigned int slot) const;
-		void bind(float shapeId, unsigned int texID) const;
+		void bind(const float& shapeId, const unsigned int& texID) const;
 		void unbind() const;
 
 		const unsigned int& getID(int index) const { return _id[index]; }

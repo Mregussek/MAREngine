@@ -6,8 +6,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "../mar.h"
-#include "../Devices/SerialPortMonitor.h"
+#include "../../mar.h"
+#include "../../Devices/SerialPortMonitor.h"
 
 namespace mar {
     enum class CameraMovement {

@@ -4,18 +4,15 @@
  */
 
 // Vertices
-#include "Mesh/VertexBuffer/VertexBuffer.h"
-#include "Mesh/VertexBuffer/VertexBufferLayout.h"
-#include "Mesh/ElementBuffer/ElementBuffer.h"
-#include "Mesh/VertexArray/VertexArray.h"
-#include "Mesh/Shapes/Shapes.h"
-#include "Mesh/Shapes/Cube.h"
+#include "Renderer/Mesh/Shapes/Shapes.h"
+#include "Renderer/Mesh/Shapes/Cube.h"
 // Rendering
-#include "Mesh/Mesh.h"
-#include "Mesh/Texture/Texture.h"
-#include "Shader/Shader.h"
+#include "Renderer/Mesh/Mesh.h"
+#include "Renderer/Shader/Shader.h"
 #include "Renderer/Renderer.h"
-#include "Camera/Camera.h"
+#include "Renderer/Camera/Camera.h"
+#include "Renderer/RendererFactory.h"
+#include "Renderer/RendererOpenGLFactory.h"
 // Window && Input
 #include "Window/Window.h"
 #include "GUI/GUI.h"
@@ -28,12 +25,6 @@ namespace mar {
 		int width{ 1280 };
 		int height{ 720 };
 		const std::string shadersPath = "resources/shaders/basic.shader";
-		std::vector<std::string> texturePaths = {
-			"resources/textures/mr.jpg"
-			, "resources/textures/wall.jpg"
-			, "resources/textures/wall.jpg"
-			, "resources/textures/mr.jpg"
-		};
 		char portName[10] = "\\\\.\\COM7";
 		const char* glsl_version = "#version 460";
 

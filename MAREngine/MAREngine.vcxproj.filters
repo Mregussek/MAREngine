@@ -18,9 +18,6 @@
     <ClInclude Include="src\Debug.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shader\Shader.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer\Renderer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -31,9 +28,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Application.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Camera\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Devices\SerialPortMonitor.h">
@@ -69,35 +63,44 @@
     <ClInclude Include="src\GUI\GUI.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\VertexBuffer\VertexBuffer.h">
+    <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\VertexBuffer\VertexBufferLayout.h">
+    <ClInclude Include="src\Renderer\Mesh\Shapes\Cube.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\VertexArray\VertexArray.h">
+    <ClInclude Include="src\Renderer\Mesh\Shapes\Shapes.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\ElementBuffer\ElementBuffer.h">
+    <ClInclude Include="src\Renderer\Mesh\Texture\Texture.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\Shapes\Shapes.h">
+    <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArray.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\Mesh.h">
+    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\Shapes\Cube.h">
+    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferLayout.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mesh\Texture\Texture.h">
+    <ClInclude Include="src\Renderer\Mesh\Mesh.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RendererFactory.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\RendererOpenGLFactory.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Shader\Shader.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Camera\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Shader\Shader.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer\Renderer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -105,9 +108,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Camera\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Application.cpp">
@@ -140,22 +140,34 @@
     <ClCompile Include="src\GUI\GUI.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh\VertexBuffer\VertexBuffer.cpp">
+    <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh\VertexArray\VertexArray.cpp">
+    <ClCompile Include="src\Renderer\Mesh\Shapes\Cube.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh\ElementBuffer\ElementBuffer.cpp">
+    <ClCompile Include="src\Renderer\Mesh\Texture\Texture.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh\Mesh.cpp">
+    <ClCompile Include="src\Renderer\Mesh\VertexArray\VertexArray.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh\Shapes\Cube.cpp">
+    <ClCompile Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Mesh\Texture\Texture.cpp">
+    <ClCompile Include="src\Renderer\Mesh\Mesh.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RendererFactory.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\RendererOpenGLFactory.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Shader\Shader.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer\Camera\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

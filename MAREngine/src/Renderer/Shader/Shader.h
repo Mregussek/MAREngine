@@ -6,7 +6,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "../mar.h"
+#include "../../mar.h"
 
 namespace mar {
 	class Shader {

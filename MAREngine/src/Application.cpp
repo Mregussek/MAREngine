@@ -7,81 +7,71 @@
 
 namespace mar {
 	int Application::run() {
-		std::vector<Cube> cubes = {
-			Cube()
-			, Cube()
-			, Cube()
-			//, Cube()
+		std::vector<std::tuple<Cube, glm::vec3, glm::vec3, std::string>> shapes = {
+		  std::make_tuple<Cube, glm::vec3, glm::vec3>(Cube(), {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, "resources/textures/mr.jpg")
+		, std::make_tuple<Cube, glm::vec3, glm::vec3>(Cube(), {3.0f, 2.0f, -7.5f}, {0.0f, 0.0f, 0.0f}, "resources/textures/wall.jpg")
+		, std::make_tuple<Cube, glm::vec3, glm::vec3>(Cube(), {-3.0f, -2.0f, -7.5f}, {0.0f, 0.0f, 0.0f}, "resources/textures/wall.jpg")
+		, std::make_tuple<Cube, glm::vec3, glm::vec3>(Cube(), {-1.5f, 2.0f, -2.5f}, {0.0f, 0.0f, 0.0f}, "resources/textures/mr.jpg")
 		};
-		std::vector<glm::vec3> positions = {
-			{0.0f, 0.0f, 0.0f}
-			, {3.0f, 2.0f, -7.5f}
-			, {-3.0f, -2.0f, -7.5f}
-			, {-1.5f, 2.0f, -2.5f}
-		};
-		std::vector<glm::vec3> angles = {
-			{0.0f, 0.0f, 0.0f}
-			, {0.0f, 0.0f, 0.0f}
-			, {0.0f, 0.0f, 0.0f}
-			, {0.0f, 0.0f, 0.0f}
-		};
-		std::vector<int> samplers;
 
 		mar::Window window(height, width, name);
 		GUI gui(&window, glsl_version);
 		Camera camera(width, height);
 
+		Renderer renderer;
+		renderer.initializeRenderer(std::make_shared<RendererOpenGLFactory>());
+
 		callbacks::setCallbacks(window.getWindow(), &camera);
 		
-		Mesh mesh;
 		Shader shader(shadersPath);
+		
+		for (auto const& s : shapes) {
+			Cube shape;
+			glm::vec3 center;
+			glm::vec3 angle;
+			std::string texture;
 
-		if (positions.size() < cubes.size()) { std::cerr << "More cubes than positions\n";  exit(0); }
-		for (unsigned int i = 0; i < cubes.size(); i++) {
-			mesh.push(&cubes[i], positions[i], texturePaths[i]);
-			samplers.push_back((int)cubes[i].getID());
-			gui.push(positions[i], {0.0f, 0.0f, 0.0f});
+			std::tie(shape, center, angle, texture) = s;
+			renderer.pushObject(&shape, center, texture);
+			gui.push(center, { 0.0f, 0.0f, 0.0f });
 		}
 			
 		{ // initialize startup positions and textures for objects
-			mesh.initialize();
+			renderer.initializeBuffers();
 			shader.bind();
-			shader.setUniformSampler2D("u_Texture", samplers);
+			shader.setUniformSampler2D("u_Texture", renderer.getSamplers());
 		}
 		
 		{ // unbind before starting rendering
 			shader.unbind();
-			mesh.unbind();
+			renderer.unbind();
 		}
-		
-		Renderer renderer(mesh.sizeofVertices(), mesh.sizeofIndices());
 
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
 			{ // update for every frame
 				camera.processInput(window.getWindow());
 				gui.prepareNewFrame();
-				mesh.onUpdate(gui.getCentersVector(), gui.getAnglesVector());
+				renderer.updateFrame(gui.getCentersVector(), gui.getAnglesVector());
 			}
 			
 			// --- Rendering, binding textures, creating matrix transformations --- //
 			{ // Prepare for rendering
 				renderer.clear();
 				shader.bind();
-				mesh.bind();
+				renderer.bind();
 			}
 
 			{ // Setup shaders (these, which are the same for all objects)
 				shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
 				shader.setUniformMat4f("u_View", camera.getViewMatrix());
-				//shader.setUniformMat4f("u_Transform", camera.getRotateMatrixOnPress(positions[0]));
 				shader.setUniform4fv("u_GUIcolor", gui.getColors());
 				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
 				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix());
 			}
 			
 			{ // Set main position for the whole scene
-				glm::mat4 model = glm::translate(glm::mat4(1.0f), positions[0]);
+				glm::mat4 model = glm::translate(glm::mat4(1.0f), {0.0f, 0.0f, 0.0f});
 				shader.setUniformMat4f("u_Model", model);
 			}
 

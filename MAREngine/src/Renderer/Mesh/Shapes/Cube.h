@@ -6,7 +6,7 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "../../mar.h"
+#include "../../../mar.h"
 #include "Shapes.h"
 
 namespace mar {
