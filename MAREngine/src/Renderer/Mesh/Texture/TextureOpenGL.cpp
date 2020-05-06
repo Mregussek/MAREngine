@@ -3,24 +3,15 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "Texture.h"
+#include "TextureOpenGL.h"
 
 namespace mar {
-	Texture::Texture(unsigned int slot)
-		: _localBuffer(nullptr),
-		_width(0),
-		_height(0),
-		_bitPerPixel(0)
-	{
-		glEnable(GL_TEXTURE_2D);
-	}
-
-	Texture::~Texture() {
+	TextureOpenGL::~TextureOpenGL() {
 		for (auto const& id : _id)
-		glDeleteTextures(1, &id);
+			glDeleteTextures(1, &id);
 	}
 
-	void Texture::loadTexture(const std::string& path) {
+	void TextureOpenGL::loadTexture(const std::string& path) {
 		auto pathFound = std::find(_paths.begin(), _paths.end(), path);
 		if (pathFound != _paths.end()) { // if path found we don't want to load texture again
 			auto index = std::distance(_paths.begin(), pathFound);
@@ -54,19 +45,11 @@ namespace mar {
 		std::cout << "Failed to load texture" << std::endl;
 	}
 
-	/*void Texture::bind(unsigned int slot) const {
-		glActiveTexture(GL_TEXTURE0 + slot);
-		for(auto const& id : _id)
-			glBindTexture(GL_TEXTURE_2D, id);
-		//for (auto const& id : _id)
-		//	glBindTextureUnit(id, id);
-	}*/
-
-	void Texture::bind(const float& shapeId, const unsigned int& texID) const {
+	void TextureOpenGL::bind(const float& shapeId, const unsigned int& texID) const {
 		glBindTextureUnit((unsigned int)shapeId, texID);
 	}
 
-	void Texture::unbind() const {
+	void TextureOpenGL::unbind() const {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

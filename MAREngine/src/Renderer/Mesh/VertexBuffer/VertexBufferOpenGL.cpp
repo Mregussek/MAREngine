@@ -3,11 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "VertexBuffer.h"
+#include "VertexBufferOpenGL.h"
 
 namespace mar {
 	
-	void VertexBuffer::initializeVertex(unsigned int allocationMemory) {
+	void VertexBufferOpenGL::initializeVertex(unsigned int allocationMemory) {
 		if (!_initialized) {
 			_allocatedMemory = allocationMemory;
 			glGenBuffers(1, &_id);
@@ -20,11 +20,11 @@ namespace mar {
 		}
 	}
 
-	void VertexBuffer::bind() const {
+	void VertexBufferOpenGL::bind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, _id);
 	}
 
-	void VertexBuffer::updateDynamically(const std::vector<float>& vertices) const {
+	void VertexBufferOpenGL::updateDynamically(const std::vector<float>& vertices) const {
 		float* vert = new float[vertices.size()];
 
 		std::copy(vertices.begin(), vertices.end(), vert);
@@ -33,16 +33,16 @@ namespace mar {
 		delete[] vert;
 	}
 
-	void VertexBuffer::unbind() const {
+	void VertexBufferOpenGL::unbind() const {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void VertexBuffer::close() {
+	void VertexBufferOpenGL::close() {
 		glDeleteBuffers(1, &_id);
 		_initialized = false;
 	}
 
-	unsigned int VertexBuffer::getSize() const {
+	unsigned int VertexBufferOpenGL::getSize() const {
 		int size;
 		glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
 		return (unsigned int)size;

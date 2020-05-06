@@ -15,38 +15,20 @@ namespace mar {
 		unsigned char _normalized;
 	};
 
-	class VertexBufferLayout : std::enable_shared_from_this<VertexBufferLayout> {
-		std::vector<VertexBufferElement> _elements;
-		unsigned int _stride;
+	enum class PushBuffer {
+		PUSH_FLOAT,
+		PUSH_UNSIGNED_INT,
+		PUSH_UNSIGNED_BYTE
+	};
 
+	class VertexBufferLayout {
 	public:
-		VertexBufferLayout() : _stride(0) {}
+		VertexBufferLayout() = default;
 
-		const std::vector<VertexBufferElement>& getElements() const { return _elements; }
-		unsigned int getStride() const { return _stride; }
+		virtual const std::vector<VertexBufferElement>& getElements() const { return std::vector<VertexBufferElement>(); }
+		virtual unsigned int getStride() const { return 0; }
 
-		template<typename T>
-		void push(unsigned int count) {
-			static_assert(false);
-		}
-
-		template<>
-		void push<float>(unsigned int count) {
-			_elements.push_back({ GL_FLOAT, count, GL_FALSE });
-			_stride += count * sizeof(GL_FLOAT);
-		}
-
-		template<>
-		void push<unsigned int>(unsigned int count) {
-			_elements.push_back({ GL_UNSIGNED_INT, count,  GL_FALSE });
-			_stride += count * sizeof(GL_UNSIGNED_INT);
-		}
-
-		template<>
-		void push<char>(unsigned int count) {
-			_elements.push_back({ GL_UNSIGNED_BYTE, count, GL_TRUE });
-			_stride += count * sizeof(GL_UNSIGNED_BYTE);
-		}
+		virtual void push(unsigned int count, PushBuffer what) { }
 	};
 }
 

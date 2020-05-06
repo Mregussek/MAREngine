@@ -10,27 +10,17 @@
 
 namespace mar {
 	class Texture : std::enable_shared_from_this<Texture> {
-		std::vector<unsigned int> _id;
-		std::vector<std::string> _paths;
-		unsigned char* _localBuffer;
-		int _width;
-		int _height;
-		int _bitPerPixel;
-
 	public:
-		Texture() = default;
-		Texture(unsigned int slot);
-		~Texture();
+		virtual ~Texture() { }
 
-		void loadTexture(const std::string& path);
+		virtual void loadTexture(const std::string& path) { }
 
-		//void bind(unsigned int slot) const;
-		void bind(const float& shapeId, const unsigned int& texID) const;
-		void unbind() const;
+		virtual void bind(const float& shapeId, const unsigned int& texID) const { }
+		virtual void unbind() const { }
 
-		const unsigned int& getID(int index) const { return _id[index]; }
-		const int& getWidth() const { return _width; }
-		const int& getHeight() const { return _height; }
+		virtual const unsigned int& getID(int index) const { return unsigned int(0); }
+		virtual const int& getWidth() const { return int(-1); }
+		virtual const int& getHeight() const { return int(-1); }
 	};
 }
 

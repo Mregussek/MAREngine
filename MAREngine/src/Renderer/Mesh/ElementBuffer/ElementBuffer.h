@@ -10,21 +10,16 @@
 
 namespace mar {
 	class ElementBuffer : std::enable_shared_from_this<ElementBuffer> {
-		unsigned int _id;
-		unsigned int _allocatedMemory;
-		bool _initialized = false;
-
 	public:
 		ElementBuffer() = default;
 
-		void initializeElement(const std::vector<unsigned int>& data, 
-			const unsigned int allocationMemory);
+		virtual void initializeElement(const std::vector<unsigned int>& data,
+			const unsigned int allocationMemory) { }
 
-		void bind() const;
-		void unbind() const;
-		void close();
+		virtual void bind() const { }
+		virtual void unbind() const { }
+		virtual void close() { }
 	};
 }
 
-
-#endif // ELEMENTBUFFER_H
+#endif // !ELEMENTBUFFER_H

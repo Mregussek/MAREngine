@@ -10,22 +10,15 @@
 
 namespace mar {
 	class VertexBuffer : std::enable_shared_from_this<VertexBuffer> {
-		unsigned int _id;
-		unsigned int _size;
-		unsigned int _allocatedMemory;
-		bool _initialized = false;
-
 	public:
-		VertexBuffer() = default;
+		virtual void initializeVertex(unsigned int allocationMemory) { }
 
-		void initializeVertex(unsigned int allocationMemory);
+		virtual void bind() const { }
+		virtual void updateDynamically(const std::vector<float>& vertices) const { }
+		virtual void unbind() const { }
+		virtual void close() { }
 
-		void bind() const;
-		void updateDynamically(const std::vector<float>& vertices) const;
-		void unbind() const;
-		void close();
-
-		unsigned int getSize() const;
+		virtual unsigned int getSize() const { return 0; }
 	};
 }
 

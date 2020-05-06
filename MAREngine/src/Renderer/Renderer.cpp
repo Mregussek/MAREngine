@@ -72,7 +72,7 @@ namespace mar {
 
 		if (!_pushedOnce) { // push layout, all objects has the same format, so we need to do it once
 			for (size_t i = 0; i < shape->getLayoutSize(); i++)
-				_lay->push<float>(shape->getLayout(i));
+				_lay->push(shape->getLayout(i), PushBuffer::PUSH_FLOAT);
 
 			_pushedOnce = true;
 		}

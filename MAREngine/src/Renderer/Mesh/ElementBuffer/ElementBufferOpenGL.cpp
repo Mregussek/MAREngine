@@ -3,11 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "ElementBuffer.h"
+#include "ElementBufferOpenGL.h"
 
 namespace mar {
 	
-	void ElementBuffer::initializeElement(const std::vector<unsigned int>& data, const unsigned int allocationMemory) {
+	void ElementBufferOpenGL::initializeElement(const std::vector<unsigned int>& data, const unsigned int allocationMemory) {
 		if (!_initialized) {
 			_allocatedMemory = allocationMemory;
 
@@ -26,15 +26,15 @@ namespace mar {
 		}
 	}
 
-	void ElementBuffer::bind() const {
+	void ElementBufferOpenGL::bind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
 	}
 
-	void ElementBuffer::unbind() const {
+	void ElementBufferOpenGL::unbind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	void ElementBuffer::close() {
+	void ElementBufferOpenGL::close() {
 		glDeleteBuffers(1, &_id);
 		_initialized = false;
 	}

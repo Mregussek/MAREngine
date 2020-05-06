@@ -148,6 +148,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
+    <ClInclude Include="src\Renderer\Mesh\Texture\Texture.h" />
+    <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArray.h" />
+    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.h" />
+    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferLayout.h" />
     <ClInclude Include="src\Renderer\RendererOpenGLFactory.h" />
     <ClInclude Include="src\Renderer\RendererFactory.h" />
     <ClInclude Include="src\Renderer\Mesh\Mesh.h" />
@@ -167,15 +172,15 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\Cube.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\Shapes.h" />
     <ClInclude Include="src\Renderer\Shader\Shader.h" />
-    <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
+    <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.h" />
     <ClInclude Include="src\mar.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
-    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.h" />
-    <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArray.h" />
-    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferLayout.h" />
+    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferOpenGL.h" />
+    <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArrayOpenGL.h" />
+    <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferLayoutOpenGL.h" />
     <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
-    <ClInclude Include="src\Renderer\Mesh\Texture\Texture.h" />
+    <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Mesh\Mesh.cpp" />
@@ -191,15 +196,14 @@
     <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\Cube.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\Shapes\Shapes.cpp" />
     <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\VertexArray\VertexArray.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\VertexBuffer\VertexBufferOpenGL.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\VertexArray\VertexArrayOpenGL.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\Texture\Texture.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\Texture\TextureOpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

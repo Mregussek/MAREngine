@@ -3,19 +3,19 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "VertexArray.h"
+#include "VertexArrayOpenGL.h"
 
 namespace mar {
-	VertexArray::~VertexArray() {
+	VertexArrayOpenGL::~VertexArrayOpenGL() {
 		glDeleteVertexArrays(_howMany, &_rendererId);
 	}
 
-	void VertexArray::initializeArrayBuffer() {
+	void VertexArrayOpenGL::initializeArrayBuffer() {
 		glGenVertexArrays(1, &_rendererId);
 		glBindVertexArray(_rendererId);
 	}
 
-	void VertexArray::addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) {
+	void VertexArrayOpenGL::addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) {
 		const auto& elements = layout->getElements();
 		unsigned int offset = 0;
 
@@ -29,11 +29,11 @@ namespace mar {
 		}
 	}
 
-	void VertexArray::bind() const {
+	void VertexArrayOpenGL::bind() const {
 		glBindVertexArray(_rendererId);
 	}
 
-	void VertexArray::unbind() const {
+	void VertexArrayOpenGL::unbind() const {
 		glBindVertexArray(0);
 	}
 }
