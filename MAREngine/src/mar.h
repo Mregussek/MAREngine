@@ -64,18 +64,24 @@ namespace mar {
 	class Window;
 	class GUI;
 	class SerialPortMonitor;
-
-	class Mesh;
-		class Shapes;
-			class Cube;
-		class VertexBuffer;
-		class VertexArray;
-		class VertexBufferLayout;
-		class ElementBuffer;
-
-	class Texture;
-	class Shader;
 	class Renderer;
+		class RendererFactory;
+			class RendererOpenGLFactory;
+		class Mesh;
+			class Shapes;
+				class Cube;
+			class VertexBuffer;
+				class VertexBufferOpenGL;
+			class VertexArray;
+				class VertexArrayOpenGL;
+			class VertexBufferLayout;
+				class VertexBufferLayoutOpenGL;
+			class ElementBuffer;
+				class ElementBufferOpenGL;
+			class Texture;
+				class TextureOpenGL;
+			class Shader;
 	
-	// cannot declare here namespace callbacks;
+	
+	// and ofc callbacks namespace in Window.h
 }

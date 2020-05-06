@@ -69,7 +69,7 @@ namespace mar {
 				shader.setUniformMat4f("u_Model", camera.getModelMatrix());
 			}
 
-			{ // One render call, BATCH RENDEREING FEATURE
+			{ // One render call
 				renderer.draw();
 			}
 

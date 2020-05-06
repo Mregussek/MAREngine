@@ -1,3 +1,7 @@
+/*
+ *	Mateusz Rzeczyca
+ *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ */
 
 #ifndef RENDERER_OPENGL_FACTORY_H
 #define RENDERER_OPENGL_FACTORY_H

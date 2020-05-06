@@ -3,9 +3,6 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-// Vertices
-#include "Renderer/Mesh/Shapes/Shapes.h"
-#include "Renderer/Mesh/Shapes/Cube.h"
 // Rendering
 #include "Renderer/Mesh/Mesh.h"
 #include "Renderer/Shader/Shader.h"
