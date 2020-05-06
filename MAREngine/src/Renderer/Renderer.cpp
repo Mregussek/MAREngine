@@ -43,11 +43,11 @@ namespace mar {
 	}
 
 	void Renderer::pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string& texturePath) {
-		if (shape->indicesVector.size() + _indices.size() > constants::maxIndexCount) {
+		if (shape->getSizeofIndices() + _indices.size() > constants::maxIndexCount) {
 			std::cout << "Cannot insert more indices!!!\n";
 			return;
 		}
-		else if (shape->verticesVector.size() + _vertices.size() > constants::maxVertexCount) {
+		else if (shape->getSizeofVertices() + _vertices.size() > constants::maxVertexCount) {
 			std::cout << "Cannot insert more vertices!!!\n";
 			return;
 		}
@@ -56,13 +56,13 @@ namespace mar {
 
 		Mesh::changeCenterOfObject(shape, position); // user sends new center position, we need to change vertices
 
-		_vertices.insert(_vertices.end(), shape->verticesVector.begin(), shape->verticesVector.end()); // insert object vertices to mesh vertices (batch rendering)
+		_vertices.insert(_vertices.end(), shape->getVerticesBegin(), shape->getVetricesEnd()); // insert object vertices to mesh vertices (batch rendering)
 
 		Mesh::changeIndicesFormat(shape, _maxValue); // we cannot use the same indices for the another vertices, that's why we increase them
 
 		_maxValue += shape->getSizeofVertices() / shape->getStride(); // maximum value of indices
 
-		_indices.insert(_indices.end(), shape->indicesVector.begin(), shape->indicesVector.end()); // insert object indices to mesh indices (batch rendering) 
+		_indices.insert(_indices.end(), shape->getIndicesBegin(), shape->getIndicesEnd()); // insert object indices to mesh indices (batch rendering) 
 
 		_shapes.emplace_back(shape); // place new shape at the end of vector
 
@@ -71,8 +71,8 @@ namespace mar {
 		_samplers.emplace_back(shape->getID()); // prescribe id to this texture
 
 		if (!_pushedOnce) { // push layout, all objects has the same format, so we need to do it once
-			for (auto const& l : shape->layout)
-				_lay->push<float>(l);
+			for (size_t i = 0; i < shape->getLayoutSize(); i++)
+				_lay->push<float>(shape->getLayout(i));
 
 			_pushedOnce = true;
 		}
@@ -100,7 +100,7 @@ namespace mar {
 		for (unsigned int i = 0; i < _shapes.size(); i++) {
 			Mesh::changeCenterOfObject(_shapes[i], newCenters[i]);
 			Mesh::rotateObject(_shapes[i], newAngles[i]);
-			_vertices.insert(_vertices.end(), _shapes[i]->verticesVector.begin(), _shapes[i]->verticesVector.end());
+			_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVetricesEnd());
 		}
 
 		_vbo->updateDynamically(_vertices); // now we need only to render

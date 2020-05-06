@@ -8,10 +8,10 @@
 namespace mar {
 	int Application::run() {
 		std::vector<std::tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3, std::string>> shapes;
-		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/mr.jpg"));
-		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/wall.jpg"));
-		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/wall.jpg"));
-		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), { 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/mr.jpg"));
+		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), { 0.0f,  0.0f,  0.0f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/mr.jpg"));
+		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), { 3.0f,  2.0f, -7.5f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/wall.jpg"));
+		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), {-3.0f, -2.0f, -7.5f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/wall.jpg"));
+		shapes.push_back(std::make_tuple<std::shared_ptr<Shapes>, glm::vec3, glm::vec3>(std::make_shared<Cube>(), {-1.5f,  2.0f, -2.5f }, { 0.0f, 0.0f, 0.0f }, "resources/textures/mr.jpg"));
 
 		Camera camera(width, height);
 		mar::Window window(height, width, name, &camera);

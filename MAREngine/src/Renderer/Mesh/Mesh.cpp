@@ -8,22 +8,28 @@
 namespace mar {
 
     void Mesh::extendID(std::shared_ptr<Shapes>& shape, const float& nextID) {
+        if (nextID == 0.0f) return;
+
         unsigned int size = shape->getSizeofVertices();
         unsigned int stride = shape->getStride();
 
         // extend all vertices, which defines texture id
         for (unsigned int j = 1; j < size / stride; j++)
-            shape->changeVerticesIndex(j * stride - 1, nextID);
+            shape->setVertice(j * stride - 1, nextID);
 
         shape->setID(nextID);
     }
 
     void Mesh::rotateObject(std::shared_ptr<Shapes>& shape, const glm::vec3& angle) {
-        shape->verticesVector = rotateObject(shape->getSizeofVertices(), shape->getStride(), angle, shape->getCenter(), shape->verticesVector);
+        if (angle == shape->getAngle()) return;
+
+        std::vector<float> new_vertices = rotateObject(shape->getSizeofVertices(), shape->getStride(), angle, shape->getCenter(), shape->getVerticesVector());
+        shape->setVerticesVector(new_vertices);
+        shape->setAngle(angle);
     }
 
     std::vector<float> Mesh::rotateObject(const unsigned int& size, const unsigned int& stride,
-        const glm::vec3& angle, const glm::vec3& center, std::vector<float>& passedValue) {
+        const glm::vec3& angle, const glm::vec3& center, const std::vector<float>& passedValue) {
 
         // prescribe values to vec4 (for multiplying with matrix4x4)
         glm::vec4 positions[8];
@@ -61,14 +67,15 @@ namespace mar {
     }
 
     void Mesh::changeCenterOfObject(std::shared_ptr<Shapes>& shape, const glm::vec3& center) {
-        if (center == glm::vec3(0.0f, 0.0f, 0.0f)) return;
+        if (center == shape->getCenter()) return;
 
-        shape->verticesVector = changeCenterOfObject(shape->getSizeofVertices(), shape->getStride(), center, shape->verticesVector);
+        std::vector<float> new_vertices = changeCenterOfObject(shape->getSizeofVertices(), shape->getStride(), center, shape->getVerticesVector());
+        shape->setVerticesVector(new_vertices);
         shape->setCenter(center);
     }
 
     std::vector<float> Mesh::changeCenterOfObject(const unsigned int& size, const unsigned int& stride, 
-                const glm::vec3& center, std::vector<float>& passedValue) {
+                const glm::vec3& center, const std::vector<float>& passedValue) {
         int i = 0;
         bool back = false;
         std::vector<float> returnValue(size);
@@ -129,13 +136,20 @@ namespace mar {
     }
 
     void Mesh::changeIndicesFormat(std::shared_ptr<Shapes>& shape, unsigned int& max_value) {
-        changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->indicesVector);
+        if (max_value == 0) return;
+
+        std::vector<unsigned int> new_indices = changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->getIndicesVector());
+        shape->setIndicesVector(new_indices);
     }
 
-    void Mesh::changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
-                     std::vector<unsigned int>& returnValue) {
+    std::vector<unsigned int> Mesh::changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
+                     const std::vector<unsigned int>& passedValue) {
         
-            for (unsigned int i = 0; i < size; i++)
-                returnValue[i] += max_value;
+        std::vector<unsigned int> returnValue(passedValue.size());
+
+        for (unsigned int i = 0; i < size; i++)
+            returnValue[i] = passedValue[i] + max_value;
+
+        return returnValue;
     }
 }
