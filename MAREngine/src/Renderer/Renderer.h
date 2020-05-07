@@ -27,7 +27,7 @@ namespace mar {
 		std::shared_ptr<Texture> _texture;
 		std::shared_ptr<Mesh> _mesh;
 		// --- Objects
-		std::vector<std::shared_ptr<Shapes>> _shapes;
+		std::vector<Shapes*> _shapes;
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
 		std::vector<int> _samplers;
@@ -44,7 +44,7 @@ namespace mar {
 
 		void initializeBuffers();
 
-		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string& texturePath);
+		void pushObject(Shapes* shape, glm::vec3& position, std::string& texturePath);
 
 		void popObject();
 

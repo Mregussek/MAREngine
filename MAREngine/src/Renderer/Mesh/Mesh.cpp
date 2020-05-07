@@ -7,7 +7,7 @@
 
 namespace mar {
 
-    void Mesh::extendID(std::shared_ptr<Shapes>& shape, const float& nextID) {
+    void Mesh::extendID(Shapes* shape, const float& nextID) {
         if (nextID == 0.0f) return;
 
         unsigned int size = shape->getSizeofVertices();
@@ -20,7 +20,7 @@ namespace mar {
         shape->setID(nextID);
     }
 
-    void Mesh::rotateObject(std::shared_ptr<Shapes>& shape, const glm::vec3& angle) {
+    void Mesh::rotateObject(Shapes* shape, const glm::vec3& angle) {
         if (angle == shape->getAngle()) return;
 
         std::vector<float> new_vertices = rotateObject(shape->getSizeofVertices(), shape->getStride(), angle, shape->getCenter(), shape->getVerticesVector());
@@ -66,7 +66,7 @@ namespace mar {
         return returnValue;
     }
 
-    void Mesh::changeCenterOfObject(std::shared_ptr<Shapes>& shape, const glm::vec3& center) {
+    void Mesh::changeCenterOfObject(Shapes* shape, const glm::vec3& center) {
         if (center == shape->getCenter()) return;
 
         std::vector<float> new_vertices = changeCenterOfObject(shape->getSizeofVertices(), shape->getStride(), center, shape->getVerticesVector());
@@ -135,7 +135,7 @@ namespace mar {
         return returnValue;
     }
 
-    void Mesh::changeIndicesFormat(std::shared_ptr<Shapes>& shape, unsigned int& max_value) {
+    void Mesh::changeIndicesFormat(Shapes* shape, unsigned int& max_value) {
         if (max_value == 0) return;
 
         std::vector<unsigned int> new_indices = changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->getIndicesVector());

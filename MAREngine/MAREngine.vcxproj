@@ -196,6 +196,7 @@
     <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\Cube.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\Shapes\Shapes.cpp" />
     <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
     <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.cpp" />
     <ClCompile Include="main.cpp" />

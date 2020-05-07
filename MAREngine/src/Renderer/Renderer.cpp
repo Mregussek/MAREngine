@@ -42,7 +42,7 @@ namespace mar {
 			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
 	}
 
-	void Renderer::pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string& texturePath) {
+	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string& texturePath) {
 		if (shape->getSizeofIndices() + _indices.size() > constants::maxIndexCount) {
 			std::cout << "Cannot insert more indices!!!\n";
 			return;

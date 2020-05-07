@@ -16,38 +16,64 @@ namespace mar {
 		float texId;
 	};
 
-	class Shapes : std::enable_shared_from_this<Shapes> {
+	class Shapes {
 	public:
-		virtual void setID(float newID) = 0;
-		virtual const float getID() const = 0;
+		Shapes(float new_id, glm::vec3 new_center, glm::vec3 new_angle,
+			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
+			std::vector<unsigned int> new_layout)
+				: id(new_id),
+				center(new_center),
+				angle(new_angle),
+				verticesVector(new_vertices),
+				indicesVector(new_indices),
+				layout(new_layout),
+				_calculatedStride(false),
+				_stride(0)
+		{}
 
-		virtual const glm::vec3 getCenter() const = 0;
-		virtual void setCenter(const glm::vec3& new_center) = 0;
+		virtual void setID(float newID);
+		virtual const float getID() const;
 
-		virtual const glm::vec3 getAngle() const = 0;
-		virtual void setAngle(const glm::vec3& new_angle) = 0;
+		virtual const glm::vec3 getCenter() const;
+		virtual void setCenter(const glm::vec3& new_center);
 
-		virtual const unsigned int getStride() = 0;
-		virtual const unsigned int getSizeofVertices() const = 0;
-		virtual const unsigned int getSizeofIndices() const = 0;
-		virtual const unsigned int getMaxValueOfIndices() const = 0;
+		virtual const glm::vec3 getAngle() const;
+		virtual void setAngle(const glm::vec3& new_angle);
 
-		virtual void setVerticesVector(const std::vector<float>& new_vertices) = 0;
-		virtual const std::vector<float>& getVerticesVector() const = 0;
-		virtual float getVertice(size_t index) const = 0;
-		virtual void setVertice(size_t index, float new_value) = 0;
-		virtual std::vector<float>::const_iterator getVerticesBegin() const = 0;
-		virtual std::vector<float>::const_iterator getVetricesEnd() const = 0;
+		virtual const unsigned int getStride();
+		virtual const unsigned int getSizeofVertices() const;
+		virtual const unsigned int getSizeofIndices() const;
+		virtual const unsigned int getMaxValueOfIndices() const;
 
-		virtual void setIndicesVector(const std::vector<unsigned int>& new_indices) = 0;
-		virtual const std::vector<unsigned int>& getIndicesVector() const = 0;
-		virtual unsigned int getIndice(size_t index) const = 0;
-		virtual void setIndice(size_t index, unsigned int new_value) = 0;
-		virtual std::vector<unsigned int>::const_iterator getIndicesBegin() const = 0;
-		virtual std::vector<unsigned int>::const_iterator getIndicesEnd() const = 0;
+		virtual void setVerticesVector(const std::vector<float>& new_vertices);
+		virtual const std::vector<float>& getVerticesVector() const;
+		virtual float getVertice(size_t index) const;
+		virtual void setVertice(size_t index, float new_value);
+		virtual std::vector<float>::const_iterator getVerticesBegin() const;
+		virtual std::vector<float>::const_iterator getVetricesEnd() const;
 
-		virtual unsigned int getLayout(size_t index) const = 0;
-		virtual unsigned int getLayoutSize() const = 0;
+		virtual void setIndicesVector(const std::vector<unsigned int>& new_indices);
+		virtual const std::vector<unsigned int>& getIndicesVector() const;
+		virtual unsigned int getIndice(size_t index) const;
+		virtual void setIndice(size_t index, unsigned int new_value);
+		virtual std::vector<unsigned int>::const_iterator getIndicesBegin() const;
+		virtual std::vector<unsigned int>::const_iterator getIndicesEnd() const;
+
+		virtual unsigned int getLayout(size_t index) const;
+		virtual unsigned int getLayoutSize() const;
+
+	private:
+		float id;
+		glm::vec3 center;
+		glm::vec3 angle;
+
+		std::vector<float> verticesVector;
+
+		std::vector<unsigned int> indicesVector;
+		std::vector<unsigned int> layout;
+
+		bool _calculatedStride;
+		unsigned int _stride;
 	};
 }
 
