@@ -19,19 +19,12 @@ namespace mar {
 
 	public:
 		Window(const int& H, const int& W, char* wN, Camera* camera = nullptr);
-		~Window() { glfwTerminate(); }
+		~Window();
 
-		static void frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
-			glViewport(0, 0, width, height);
-		}
+		void swapBuffers();
 
-		void swapBuffers() {
-			glfwSwapBuffers(_window);
-			glfwPollEvents();
-		}
-
-		GLFWwindow* getWindow() const { return _window; }
-		const bool shouldClose() const { return !glfwWindowShouldClose(_window); }
+		GLFWwindow* getWindow() const;
+		const bool shouldClose() const;
 	};
 
 	namespace callbacks {

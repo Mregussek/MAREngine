@@ -18,9 +18,6 @@ namespace mar {
 
 			_pushedOnce = false;
 			_maxValue = 0;
-
-			glfwSwapInterval(1);
-			glEnable(GL_DEPTH_TEST);
 		}
 		else {
 			std::cerr << "Renderer is already initialized!\n";
@@ -104,16 +101,17 @@ namespace mar {
 	}
 
 	void Renderer::updateFrame(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {
-		_vbo->bind(); // set dynamic vertex buffer
-		_vertices.clear(); // we are gonna put here new vertices
+		_vbo->bind();
+
+		_translations.clear();
+		_rotations.clear();
 
 		for (unsigned int i = 0; i < _shapes.size(); i++) {
-			Mesh::changeCenterOfObject(_shapes[i], newCenters[i]);
-			Mesh::rotateObject(_shapes[i], newAngles[i]);
-			_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVetricesEnd());
+			_translations.push_back(glm::translate(glm::mat4(1.0f), newCenters[i]));
+			_rotations.push_back(Mesh::getRotationMatrix(newCenters[i], newAngles[i]));
 		}
 
-		_vbo->updateDynamically(_vertices); // now we need only to render
+		_vbo->updateDynamically(_vertices);
 	}
 
 	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {
@@ -126,6 +124,11 @@ namespace mar {
 		_shader->setUniformMat4f("u_Projection", projection);
 		_shader->setUniformMat4f("u_View", view);
 		_shader->setUniformMat4f("u_Model", model);
+	}
+
+	void Renderer::setRenderMatrices() {
+		_shader->setUniformVectorMat4("u_RenderTranslate", _translations);
+		_shader->setUniformVectorMat4("u_RenderRotation", _rotations);
 	}
 
 	void Renderer::draw() const {

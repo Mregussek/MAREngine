@@ -23,11 +23,13 @@ namespace mar {
 
         static void changeCenterOfObject(Shapes* shape, const glm::vec3& center);
         static std::vector<float> changeCenterOfObject(const unsigned int& size, const unsigned int& stride,
-                    const glm::vec3& center, const std::vector<float>& passedValue);
+            const glm::vec3& center, const std::vector<float>& passedValue);
 
         static void changeIndicesFormat(Shapes* shape, unsigned int& max_value);
         static std::vector<unsigned int> changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
                     const std::vector<unsigned int>& passedValue);
+
+        static glm::mat4 getRotationMatrix(const glm::vec3& center, const glm::vec3& angle);
     };
 }
 

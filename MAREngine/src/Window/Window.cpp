@@ -22,6 +22,7 @@ namespace mar {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
+		/// TODO: read about fullscreen mode. One of the nullptr's should not be nullptr
 		_window = glfwCreateWindow(_width, _height, _windowName, nullptr, nullptr);
 		if (!_window) {
 			glfwTerminate();
@@ -29,6 +30,7 @@ namespace mar {
 			exit(0);
 		}
 
+		/// make the associated OpenGL context current
 		glfwMakeContextCurrent(_window);
 		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -50,6 +52,27 @@ namespace mar {
 			callbacks::setCallbacks(_window);
 		else
 			callbacks::setCallbacks(_window, camera);
+
+		/// Vertical synchronization(VSync) is enabled by using glfwSwapInterval(1); 
+		glfwSwapInterval(1); 
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	Window::~Window() { 
+		glfwTerminate(); 
+	}
+
+	void Window::swapBuffers() {
+		glfwSwapBuffers(_window);
+		glfwPollEvents();
+	}
+
+	GLFWwindow* Window::getWindow() const { 
+		return _window; 
+	}
+
+	const bool Window::shouldClose() const { 
+		return !glfwWindowShouldClose(_window); 
 	}
 	
 	namespace callbacks {

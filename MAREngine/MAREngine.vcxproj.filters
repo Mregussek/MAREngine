@@ -117,6 +117,9 @@
     <ClInclude Include="src\Renderer\Shader\Shader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh\Shapes\Pyramid.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Renderer.cpp">
@@ -188,16 +191,16 @@
     <None Include="imgui.ini" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\textures\mateuszrzeczyca.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
-    <Image Include="resources\textures\mr.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
     <Image Include="resources\textures\wall.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="resources\textures\mr.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\red-texture.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\blue-texture.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

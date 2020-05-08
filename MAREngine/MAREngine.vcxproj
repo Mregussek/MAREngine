@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
+    <ClInclude Include="src\Renderer\Mesh\Shapes\Pyramid.h" />
     <ClInclude Include="src\Renderer\Mesh\Texture\Texture.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArray.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.h" />
@@ -211,9 +212,9 @@
     <None Include="resources\shaders\basic.shader" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\textures\mateuszrzeczyca.png" />
+    <Image Include="resources\textures\blue-texture.jpg" />
     <Image Include="resources\textures\mr.jpg" />
-    <Image Include="resources\textures\mr.png" />
+    <Image Include="resources\textures\red-texture.jpg" />
     <Image Include="resources\textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

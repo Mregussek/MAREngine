@@ -10,9 +10,9 @@ namespace mar {
 		// --- STARTUP SHAPES FOR APPLCATION WITH ITS CENTERS, ANGLES AND TEXTURES --- //
 		std::vector<Shapes> shapes = {
 			Cube()
+			, Pyramid()
 			, Cube()
-			, Cube()
-			, Cube()
+			, Pyramid()
 		};
 		std::vector<glm::vec3> centers = {
 			{ 0.0f,  0.0f,  0.0f }
@@ -29,12 +29,12 @@ namespace mar {
 		std::vector<std::string> textures = {
 			"resources/textures/mr.jpg"
 			, "resources/textures/wall.jpg"
-			, "resources/textures/wall.jpg"
-			, "resources/textures/mr.jpg"
+			, "resources/textures/blue-texture.jpg"
+			, "resources/textures/red-texture.jpg"
 		};
 
 		Camera camera(width, height);
-		mar::Window window(height, width, name, &camera);
+		Window window(height, width, name, &camera);
 		GUI gui(&window, glsl_version);
 
 		Renderer renderer;
@@ -66,6 +66,7 @@ namespace mar {
 			{ // Setup shaders (these, which are the same for all objects)
 				renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
 				renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
+				renderer.setRenderMatrices();
 			}
 
 			{ // One render call

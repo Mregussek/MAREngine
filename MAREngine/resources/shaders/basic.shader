@@ -13,15 +13,18 @@ uniform mat4 u_View;
 uniform mat4 u_Projection;
 uniform mat4 u_GUItranslation;
 uniform mat4 u_GUIrotation;
-uniform mat4 u_Transform;
+uniform mat4 u_RenderTranslate[32];
+uniform mat4 u_RenderRotation[32];
 
 void main() {
 	// Calculate all transformations
-	mat4 indexTransformation = u_Transform;
+	int index = int(texIndex);
+	mat4 renderTrans = u_RenderTranslate[index] * u_RenderRotation[index];
+
 	mat4 guiTrans = u_GUItranslation * u_GUIrotation;
 	mat4 mvp = u_Projection * u_View * u_Model;
 
-	gl_Position = mvp * guiTrans * position;
+	gl_Position = mvp * guiTrans * renderTrans * position;
 
 	// Pass values to fragment shader
 	v_TexCoord = texCoord;
@@ -37,7 +40,7 @@ in vec2 v_TexCoord;
 in float v_TexIndex;
 
 uniform vec4 u_GUIcolor;
-uniform sampler2D u_Texture[4];
+uniform sampler2D u_Texture[32];
 
 void main() {
 	int index = int(v_TexIndex);

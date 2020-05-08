@@ -30,6 +30,8 @@ namespace mar {
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
 		std::vector<int> _samplers;
+		std::vector<glm::mat4> _translations;
+		std::vector<glm::mat4> _rotations;
 		// --- Helpers
 		bool _pushedOnce;       
 		unsigned int _maxValue;     
@@ -54,6 +56,7 @@ namespace mar {
 		
 		void setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix);
 		void setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model);
+		void setRenderMatrices();
 
 		void draw() const;
 		void clear();
