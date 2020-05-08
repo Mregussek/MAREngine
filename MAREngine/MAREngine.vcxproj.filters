@@ -120,6 +120,9 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\Pyramid.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh\Shapes\Surface.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Renderer.cpp">
@@ -201,6 +204,9 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="resources\textures\blue-texture.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\grass-texture.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

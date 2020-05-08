@@ -13,15 +13,18 @@ namespace mar {
 			, Pyramid()
 			, Cube()
 			, Pyramid()
+			, Surface()
 		};
 		std::vector<glm::vec3> centers = {
 			{ 0.0f,  0.0f,  0.0f }
-			, { 3.0f,  2.0f, -7.5f }
-			, {-3.0f, -2.0f, -7.5f }
-			, {-1.5f,  2.0f, -2.5f }
+			, { 3.0f,  0.0f, -4.5f }
+			, {-3.0f,  0.0f, -4.5f }
+			, {-1.5f,  0.0f, -2.5f }
+			, { 0.0f,  -0.025f,  0.0f }
 		};
 		std::vector<glm::vec3> angles = {
 			 { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
@@ -31,6 +34,7 @@ namespace mar {
 			, "resources/textures/wall.jpg"
 			, "resources/textures/blue-texture.jpg"
 			, "resources/textures/red-texture.jpg"
+			, "resources/textures/grass-texture.jpg"
 		};
 
 		Camera camera(width, height);
