@@ -172,6 +172,7 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\Cube.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\Shapes.h" />
     <ClInclude Include="src\Renderer\Shader\Shader.h" />
+    <ClInclude Include="src\Renderer\Shader\ShaderOpenGL.h" />
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.h" />
     <ClInclude Include="src\mar.h" />
     <ClInclude Include="src\Renderer\Renderer.h" />
@@ -195,9 +196,8 @@
     <ClCompile Include="src\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\stb_image.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\Shapes\Cube.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\Shapes.cpp" />
-    <ClCompile Include="src\Renderer\Shader\Shader.cpp" />
+    <ClCompile Include="src\Renderer\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />

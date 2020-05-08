@@ -4,8 +4,6 @@
  */
 
 // Rendering
-#include "Renderer/Mesh/Mesh.h"
-#include "Renderer/Shader/Shader.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera/Camera.h"
 #include "Renderer/RendererFactory.h"

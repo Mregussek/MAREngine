@@ -7,11 +7,6 @@
 
 namespace mar {
 
-	Renderer::~Renderer() {
-		_vbo->close();
-		_ebo->close();
-	}
-
 	void Renderer::initializeRenderer(const std::shared_ptr<RendererFactory>& factory) {
 		if (!_initialized) {
 			_vbo = factory->createVertexBuffer();
@@ -19,6 +14,7 @@ namespace mar {
 			_vao = factory->createVertexArray();
 			_ebo = factory->createElementBuffer();
 			_texture = factory->createTexture();
+			_shader = factory->createShader();
 
 			_pushedOnce = false;
 			_maxValue = 0;
@@ -31,7 +27,14 @@ namespace mar {
 		}
 	}
 
-	void Renderer::initializeBuffers() {
+	void Renderer::closeRenderer() {
+		_shader->shutdown();
+		_vbo->close();
+		_ebo->close();
+	}
+	
+	void Renderer::initialize(const std::string& filePath) {
+		_shader->initialize(filePath);
 		_vao->initializeArrayBuffer();
 		_vbo->initializeVertex(constants::maxCubeCount);
 		_ebo->initializeElement(_indices, constants::maxIndexCount);
@@ -40,6 +43,9 @@ namespace mar {
 
 		for (unsigned int i = 0; i < _shapes.size(); i++)
 			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
+
+		_shader->bind();
+		_shader->setUniformSampler2D("u_Texture", getSamplers());
 	}
 
 	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string& texturePath) {
@@ -83,11 +89,13 @@ namespace mar {
 	}
 
 	void Renderer::bind() {
+		_shader->bind();
 		_vao->bind();
 		_ebo->bind();
 	}
 
 	void Renderer::unbind() {
+		_shader->unbind();
 		_vao->unbind();
 		_vbo->unbind();
 		_ebo->unbind();
@@ -104,6 +112,18 @@ namespace mar {
 		}
 
 		_vbo->updateDynamically(_vertices); // now we need only to render
+	}
+
+	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {
+		_shader->setUniform4fv("u_GUIcolor", colors);
+		_shader->setUniformMat4f("u_GUItranslation", translationMatrix);
+		_shader->setUniformMat4f("u_GUIrotation", rotationMatrix);
+	}
+
+	void Renderer::setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model) {
+		_shader->setUniformMat4f("u_Projection", projection);
+		_shader->setUniformMat4f("u_View", view);
+		_shader->setUniformMat4f("u_Model", model);
 	}
 
 	void Renderer::draw() const {

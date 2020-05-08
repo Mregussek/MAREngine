@@ -31,6 +31,10 @@ namespace mar {
 		virtual std::shared_ptr<Texture> createTexture() override {
 			return std::make_shared<TextureOpenGL>();
 		}
+
+		virtual std::shared_ptr<Shader> createShader() override {
+			return std::make_shared<ShaderOpenGL>();
+		}
 	};
 }
 

@@ -8,7 +8,6 @@
 
 #include "../mar.h"
 #include "RendererFactory.h"
-#include "Mesh/Mesh.h"
 
 namespace mar {
 
@@ -25,7 +24,7 @@ namespace mar {
 		std::shared_ptr<VertexArray> _vao;
 		std::shared_ptr<ElementBuffer> _ebo;
 		std::shared_ptr<Texture> _texture;
-		std::shared_ptr<Mesh> _mesh;
+		std::shared_ptr<Shader> _shader;
 		// --- Objects
 		std::vector<Shapes*> _shapes;
 		std::vector<float> _vertices;
@@ -38,11 +37,11 @@ namespace mar {
 
 	public:
 		Renderer() = default;
-		~Renderer();
 
 		void initializeRenderer(const std::shared_ptr<RendererFactory>& factory);
+		void closeRenderer();
 
-		void initializeBuffers();
+		void initialize(const std::string& filePath);
 
 		void pushObject(Shapes* shape, glm::vec3& position, std::string& texturePath);
 
@@ -53,6 +52,9 @@ namespace mar {
 
 		void updateFrame(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles);
 		
+		void setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix);
+		void setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model);
+
 		void draw() const;
 		void clear();
 

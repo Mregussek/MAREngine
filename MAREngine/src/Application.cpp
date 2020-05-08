@@ -7,7 +7,7 @@
 
 namespace mar {
 	int Application::run() {
-
+		// --- STARTUP SHAPES FOR APPLCATION WITH ITS CENTERS, ANGLES AND TEXTURES --- //
 		std::vector<Shapes> shapes = {
 			Cube()
 			, Cube()
@@ -40,24 +40,14 @@ namespace mar {
 		Renderer renderer;
 		renderer.initializeRenderer(std::make_shared<RendererOpenGLFactory>());
 		
-		Shader shader(shadersPath);
-		
 		for (unsigned int i = 0; i < shapes.size(); i++) {
 			renderer.pushObject(&shapes[i], centers[i], textures[i]);
 			gui.push(centers[i], angles[i]);
 		}
 			
-		{ // initialize startup positions and textures for objects
-			renderer.initializeBuffers();
-			shader.bind();
-			shader.setUniformSampler2D("u_Texture", renderer.getSamplers());
-		}
+		renderer.initialize(shadersPath);
+		renderer.unbind();
 		
-		{ // unbind before starting rendering
-			shader.unbind();
-			renderer.unbind();
-		}
-
 		// --- Main Loop --- //
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
@@ -70,17 +60,12 @@ namespace mar {
 			// --- Rendering, binding textures, creating matrix transformations --- //
 			{ // Prepare for rendering
 				renderer.clear();
-				shader.bind();
 				renderer.bind();
 			}
 
 			{ // Setup shaders (these, which are the same for all objects)
-				shader.setUniform4fv("u_GUIcolor", gui.getColors());
-				shader.setUniformMat4f("u_GUItranslation", gui.getTranslationMatrix());
-				shader.setUniformMat4f("u_GUIrotation", gui.getRotationMatrix());
-				shader.setUniformMat4f("u_Projection", camera.getProjectionMatrix());
-				shader.setUniformMat4f("u_View", camera.getViewMatrix());
-				shader.setUniformMat4f("u_Model", camera.getModelMatrix());
+				renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
+				renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
 			}
 
 			{ // One render call
@@ -93,6 +78,8 @@ namespace mar {
 				window.swapBuffers();
 			}
 		}
+
+		renderer.closeRenderer();
 
 		return 0;
 	}

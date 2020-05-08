@@ -9,36 +9,31 @@
 #include "../../mar.h"
 
 namespace mar {
+	struct ShaderProgramSource {
+		std::string _vertexSource;
+		std::string _fragmentSource;
+	};
+
 	class Shader {
-		struct ShaderProgramSource {
-			std::string _vertexSource;
-			std::string _fragmentSource;
-		};
-
-		unsigned int _rendererId;
-		std::string _filePath;
-		std::unordered_map<std::string, int> _uniformLocationCache;
-		ShaderProgramSource _programSource;
-
 	public:
-		Shader(const std::string& filePath);
-		~Shader();
+		virtual void initialize(const std::string& filePath) { }
+		virtual void shutdown() { }
 
-		void bind() const;
-		void unbind() const;
+		virtual void bind() const { }
+		virtual void unbind() const { }
 
-		void setUniformSampler2D(const std::string& name, std::vector<int> sampler);
-		void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4);
-		void setUniform1i(const std::string& name, int value);
-		void setUniform4f(const std::string& name, float red, float green, float blue, float alpha);
-		void setUniform4fv(const std::string& name, const float* floats4);
+		virtual void setUniformSampler2D(const std::string& name, std::vector<int> sampler) { }
+		virtual void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) { }
+		virtual void setUniform1i(const std::string& name, int value) { }
+		virtual void setUniform4f(const std::string& name, float red, float green, float blue, float alpha) { }
+		virtual void setUniform4fv(const std::string& name, const float* floats4) { }
 
 	private:
-		int getUniformLocation(const std::string& name);
+		virtual int getUniformLocation(const std::string& name) { return 0; }
 
-		ShaderProgramSource parseShader();
-		unsigned int compileShader(unsigned int type, const std::string& source);
-		unsigned int createShader();
+		virtual ShaderProgramSource parseShader() { return { "empty", "empty" }; }
+		virtual unsigned int compileShader(unsigned int type, const std::string& source) { return 0; }
+		virtual unsigned int createShader() { return 0; }
 	};
 }
 

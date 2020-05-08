@@ -21,6 +21,10 @@
 #include "Mesh/Texture/Texture.h"
 #include "Mesh/Texture/TextureOpenGL.h"
 
+#include "Shader/Shader.h"
+#include "Shader/ShaderOpenGL.h"
+
+#include "Mesh/Mesh.h"
 #include "Mesh/Shapes/Shapes.h"
 #include "Mesh/Shapes/Cube.h"
 
@@ -38,6 +42,8 @@ namespace mar {
 		virtual std::shared_ptr<VertexArray> createVertexArray() 
 		{ return nullptr; }
 		virtual std::shared_ptr<Texture> createTexture() 
+		{ return nullptr; }
+		virtual std::shared_ptr<Shader> createShader()
 		{ return nullptr; }
 	};
 
