@@ -7,10 +7,13 @@
 #define GUI_H
 
 #include "../mar.h"
+#include "../Renderer/Renderer.h"
 #include "../Window/Window.h"
 
 namespace mar {
+
 	class GUI {
+		// --- Must-have to run GUI
 		Window* _window;
 		const char* _versionGLSL;
 		// --- Attributes for objects
@@ -20,14 +23,27 @@ namespace mar {
 		std::vector<glm::vec3> _centersOfObjects;
 		std::vector<glm::vec3> _angles;
 		unsigned int _index;
+		// --- Run-time GUI attributes
+		Renderer* _renderer;
+		bool _rendererConnected;
+		float _pos[3];
+		float _ang[3];
+		float _inputCenter[3];
+		bool _checkPyramid;
+		bool _checkCube;
+		bool _checkSurface;
 
 	public:
 		GUI(Window* window, const char* glsl_version);
 		~GUI();
 
+		void connectToRenderer(Renderer* renderer);
+
 		void push(const glm::vec3& newCenter, const glm::vec3& newAngle);
 		void prepareNewFrame();
 		void display();
+
+		void displayObjectsGeneralGUI();
 
 		const glm::mat4 getTranslationMatrix() const;
 		const glm::mat4 getRotationMatrix() const;

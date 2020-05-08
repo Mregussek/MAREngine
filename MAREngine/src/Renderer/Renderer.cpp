@@ -47,7 +47,19 @@ namespace mar {
 		_shader->setUniformSampler2D("u_Texture", getSamplers());
 	}
 
-	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string& texturePath) {
+	void Renderer::guiPushPyramid(glm::vec3& position) {
+		pushObject(&Pyramid(), position);
+	}
+
+	void Renderer::guiPushCube(glm::vec3& position) {
+		pushObject(&Cube(), position);
+	}
+
+	void Renderer::guiPushSurface(glm::vec3& position) {
+		pushObject(&Surface(), position);
+	}
+
+	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string texturePath) {
 		if (shape->getSizeofIndices() + _indices.size() > constants::maxIndexCount) {
 			std::cout << "Cannot insert more indices!!!\n";
 			return;

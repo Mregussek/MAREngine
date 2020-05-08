@@ -209,5 +209,8 @@
     <Image Include="resources\textures\grass-texture.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="resources\textures\black-texture.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
 </Project>

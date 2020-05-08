@@ -40,8 +40,8 @@ namespace mar {
 		Camera camera(width, height);
 		Window window(height, width, name, &camera);
 		GUI gui(&window, glsl_version);
-
 		Renderer renderer;
+		gui.connectToRenderer(&renderer);
 		renderer.initializeRenderer(std::make_shared<RendererOpenGLFactory>());
 		
 		for (unsigned int i = 0; i < shapes.size(); i++) {

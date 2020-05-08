@@ -13,8 +13,8 @@ namespace mar {
 
 	namespace constants {
 		const size_t maxCubeCount = 1000;
-		const size_t maxVertexCount = maxCubeCount * 16;
-		const size_t maxIndexCount = maxCubeCount * 24;
+		const size_t maxVertexCount = maxCubeCount * 8;
+		const size_t maxIndexCount = maxCubeCount * 12;
 	}
 
 	class Renderer {
@@ -45,7 +45,11 @@ namespace mar {
 
 		void initialize(const std::string& filePath);
 
-		void pushObject(Shapes* shape, glm::vec3& position, std::string& texturePath);
+		void guiPushPyramid(glm::vec3& position);
+		void guiPushCube(glm::vec3& position);
+		void guiPushSurface(glm::vec3& position);
+
+		void pushObject(Shapes* shape, glm::vec3& position, std::string texturePath = "resources/textures/black-texture.jpg");
 
 		void popObject();
 

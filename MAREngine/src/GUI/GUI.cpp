@@ -10,8 +10,12 @@ namespace mar {
 		: _window(window),
 		_translation(glm::vec3(0.0f, 0.0f, 0.0f)),
 		_angle(glm::vec3(0.0f, 0.0f, 0.0f)),
-		_versionGLSL(glsl_version) ,
-		_index(0)
+		_versionGLSL(glsl_version),
+		_index(0),
+		_rendererConnected(false),
+		_checkPyramid(false),
+		_checkCube(false),
+		_checkSurface(false)
 	{
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
@@ -22,9 +26,15 @@ namespace mar {
 	}
 
 	GUI::~GUI() {
+		_rendererConnected = false;
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
+	}
+
+	void GUI::connectToRenderer(Renderer* renderer) {
+		_renderer = renderer;
+		_rendererConnected = true;
 	}
 
 	void GUI::push(const glm::vec3& newCenter, const glm::vec3& newAngle) {
@@ -39,61 +49,111 @@ namespace mar {
 	}
 
 	void GUI::display() {
-		{
-			ImGui::Begin("MAREngine GUI");
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("General")) {
 
-			ImGui::Text("Scene");
-			ImGui::SliderFloat3("Translation", &_translation.x, -2.0f, 2.0f);
-			ImGui::SliderFloat3("Rotation", &_angle.x, 0.0f, 360.0f);
-			ImGui::ColorEdit4("color", _colors);
-			ImGui::Text("Objects");
+				ImGui::MenuItem("Scene", "");
 
-			for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
-				float pos[3];
-				float ang[3];
+				ImGui::SliderFloat3("Translation", &_translation.x, -10.0f, 10.0f);
+				ImGui::SliderFloat3("Rotation", &_angle.x, -360.0f, 360.0f);
+				ImGui::ColorEdit4("color", _colors);
+				
+				ImGui::Separator();
 
-				// Set current variables to sliders
-				pos[0] = _centersOfObjects[i].x;
-				pos[1] = _centersOfObjects[i].y;
-				pos[2] = _centersOfObjects[i].z;
-				ang[0] = _angles[i].x;
-				ang[1] = _angles[i].y;
-				ang[2] = _angles[i].z;
+				displayObjectsGeneralGUI();
 
-				// Prepare index on GUI
-				char int2char[2];
-				sprintf_s(int2char, "%d", i);
-				char shapeIndex[7] = "Cube ";
-				strcat_s(shapeIndex, int2char);
-				ImGui::Text(shapeIndex);
+				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+				
+				ImGui::Separator();
 
-				// Change center by GUI
-				char DragID[10] = "CubePos ";
-				strcat_s(DragID, int2char);
-				ImGui::SliderFloat3(DragID, pos, -10.0f, 10.0f);
+				if (ImGui::Button("Exit")) 
+					glfwSetWindowShouldClose(_window->getWindow(), true);
 
-				// Change angle by GUI
-				char RotID[10] = "CubeRot ";
-				strcat_s(RotID, int2char);
-				ImGui::SliderFloat3(RotID, ang, 0.0f, 360.0f);
-
-				// Set new variables to object
-				_centersOfObjects[i].x = pos[0];
-				_centersOfObjects[i].y = pos[1];
-				_centersOfObjects[i].z = pos[2];
-				_angles[i].x = ang[0];
-				_angles[i].y = ang[1];
-				_angles[i].z = ang[2];
+				ImGui::EndMenu();
 			}
 
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-			if (ImGui::Button("Exit")) glfwSetWindowShouldClose(_window->getWindow(), true);
+			if (ImGui::BeginMenu("Manage Objects")) {
 
-			ImGui::End();
-		}
+				ImGui::MenuItem("Add Object", "");
+				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
+
+				ImGui::InputFloat3("Input Center", _inputCenter);
+
+				if (ImGui::Button("Select Pyramid")) {
+					if (_rendererConnected) {
+						glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+						_renderer->guiPushPyramid(center);
+						this->push(center, { 0.0f, 0.0f, 0.0f });
+					}
+				}
+
+				if (ImGui::Button("Select Cube")) {
+					if (_rendererConnected) {
+						glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+						_renderer->guiPushCube(center);
+						this->push(center, { 0.0f, 0.0f, 0.0f });
+					}
+				}
+
+				if (ImGui::Button("Select Surface")) {
+					if (_rendererConnected) {
+						glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+						_renderer->guiPushSurface(center);
+						this->push(center, { 0.0f, 0.0f, 0.0f });
+					}
+				}
+
+				ImGui::Separator();
+
+				ImGui::MenuItem("Delete Object", "");
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}			
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void GUI::displayObjectsGeneralGUI() {
+		ImGui::MenuItem("Objects Menu", "");
+
+		for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
+			// Set current variables to sliders
+			_pos[0] = _centersOfObjects[i].x;
+			_pos[1] = _centersOfObjects[i].y;
+			_pos[2] = _centersOfObjects[i].z;
+			_ang[0] = _angles[i].x;
+			_ang[1] = _angles[i].y;
+			_ang[2] = _angles[i].z;
+
+			// Prepare index on GUI
+			char int2char[2];
+			sprintf_s(int2char, "%d", i);
+			char shapeIndex[10] = "Object ";
+			strcat_s(shapeIndex, int2char);
+			ImGui::Text(shapeIndex);
+
+			// Change center by GUI
+			char DragID[10] = "ObjPos ";
+			strcat_s(DragID, int2char);
+			ImGui::SliderFloat3(DragID, _pos, -10.0f, 10.0f);
+
+			// Change angle by GUI
+			char RotID[10] = "ObjRot ";
+			strcat_s(RotID, int2char);
+			ImGui::SliderFloat3(RotID, _ang, 0.0f, 360.0f);
+
+			// Set new variables to object
+			_centersOfObjects[i].x = _pos[0];
+			_centersOfObjects[i].y = _pos[1];
+			_centersOfObjects[i].z = _pos[2];
+			_angles[i].x = _ang[0];
+			_angles[i].y = _ang[1];
+			_angles[i].z = _ang[2];
+		}
 	}
 
 	const glm::mat4 GUI::getTranslationMatrix() const { 

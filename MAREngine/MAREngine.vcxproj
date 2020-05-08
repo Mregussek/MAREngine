@@ -213,6 +213,7 @@
     <None Include="resources\shaders\basic.shader" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\textures\black-texture.jpg" />
     <Image Include="resources\textures\blue-texture.jpg" />
     <Image Include="resources\textures\grass-texture.jpg" />
     <Image Include="resources\textures\mr.jpg" />
