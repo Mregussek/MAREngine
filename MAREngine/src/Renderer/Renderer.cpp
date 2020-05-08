@@ -29,6 +29,8 @@ namespace mar {
 
 	void Renderer::closeRenderer() {
 		_shader->shutdown();
+		_texture->shutdown();
+		_vao->closeArrayBuffer();
 		_vbo->close();
 		_ebo->close();
 	}

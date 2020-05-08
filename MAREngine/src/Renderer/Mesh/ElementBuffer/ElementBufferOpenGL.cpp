@@ -16,7 +16,16 @@ namespace mar {
 
 			glGenBuffers(1, &_id);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocatedMemory, indices, GL_STATIC_DRAW);
+
+			allocateMemoryEBOagain:
+
+			try {
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocatedMemory, indices, GL_DYNAMIC_DRAW);
+			}
+			catch (std::exception& e) {
+				std::cerr << "Cannot allocate memory on GPU with EBO\n";
+				goto allocateMemoryEBOagain;
+			}
 
 			delete[] indices;
 			_initialized = true;

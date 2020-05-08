@@ -18,17 +18,47 @@ namespace mar {
 		int _bitPerPixel;
 
 	public:
+		//! Default constructor. For initialization use loadTexture(path) method.
 		TextureOpenGL() = default;
-		~TextureOpenGL() override;
 
+		//! Delete all existing textures
+		void shutdown() override;
+
+		//! Load 2D texture and prescribe it to available index. If texture is loaded
+		//! it pushed its index again.
+		/*
+			\param path - path to texture, which will be loaded
+		*/
 		void loadTexture(const std::string& path) override;
 
+		//! Bind texture with texID to selected shape with shapeId.
+		/*
+			\param shapeId - id of shape
+			\param texID - id of texture
+		*/
 		void bind(const float& shapeId, const unsigned int& texID) const override;
+		
+		//! Set default texture for each shape
 		void unbind() const override;
 
-		const unsigned int& getID(int index) const override { return _id[index]; }
-		const int& getWidth() const override { return _width; }
-		const int& getHeight() const override { return _height; }
+		//! Get id of texture bounded to shape on specific index
+		/*
+			\param index - index of shape
+			\return _id[index] - id of texture prescribed to shape
+		*/
+		const unsigned int& getID(int index) const override;
+
+		//! Get width of last loaded texture
+		/*
+			\return _width - width of last loaded texture
+		*/
+		const int& getWidth() const override;
+
+		//! Get height of last loaded texture
+		/*
+			\return _height - height of last loaded texture
+		*/
+		const int& getHeight() const override;
 	};
 }
 

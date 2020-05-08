@@ -12,9 +12,10 @@ namespace mar {
 	class VertexArray : std::enable_shared_from_this<VertexArray> {
 	public:
 		VertexArray() = default;
-		virtual ~VertexArray() { }
 
 		virtual void initializeArrayBuffer() { }
+		virtual void closeArrayBuffer() { }
+
 		virtual void addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) { }
 
 		virtual void bind() const { }

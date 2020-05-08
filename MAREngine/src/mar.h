@@ -61,7 +61,7 @@
 
 namespace mar {
 	class Camera;
-	class Window;
+	class Window; 
 	class GUI;
 	class SerialPortMonitor;
 	class Renderer;
@@ -81,7 +81,7 @@ namespace mar {
 			class Texture;
 				class TextureOpenGL;
 			class Shader;
-	
+				class ShaderOpenGL;
 	
 	// and ofc callbacks namespace in Window.h
 }

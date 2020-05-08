@@ -15,16 +15,30 @@ namespace mar {
 		unsigned int _stride;
 
 	public:
+		//! Constructor, which initializes _stride with 0 to
 		VertexBufferLayoutOpenGL() : _stride(0) {}
 
+		//! Returns all elements, which help the data to be formatted properly
+		/*
+			\return _elements - vector of VertexBufferElement
+		*/
 		const std::vector<VertexBufferElement>& getElements() const override { 
 			return _elements; 
 		}
 
+		//! Returns stride of data
+		/*
+			\return _stride - calculated stride for proper data format
+		*/
 		unsigned int getStride() const override { 
 			return _stride; 
 		}
 
+		//! Pushes new element to layout by specifying its type and count
+		/*
+			\param count - value of next Vertex Attribute
+			\param what - specify what value you push (float[PUSH_FLOAT], unsigned int[PUSH_UNSIGNED INT] or char[PUSH_UNSIGNED_BYTE])
+		*/
 		void push(unsigned int count, PushBuffer what) override {
 			if (what == PushBuffer::PUSH_FLOAT) {
 				_elements.push_back({ GL_FLOAT, count, GL_FALSE });

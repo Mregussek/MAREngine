@@ -6,13 +6,13 @@
 #include "VertexArrayOpenGL.h"
 
 namespace mar {
-	VertexArrayOpenGL::~VertexArrayOpenGL() {
-		glDeleteVertexArrays(_howMany, &_rendererId);
-	}
-
 	void VertexArrayOpenGL::initializeArrayBuffer() {
 		glGenVertexArrays(1, &_rendererId);
 		glBindVertexArray(_rendererId);
+	}
+
+	void VertexArrayOpenGL::closeArrayBuffer() {
+		glDeleteVertexArrays(_howMany, &_rendererId);
 	}
 
 	void VertexArrayOpenGL::addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) {
@@ -25,7 +25,7 @@ namespace mar {
 				layout->getStride(), (const void*)offset);
 
 			glEnableVertexAttribArray(i);
-			offset += elements[i]._count * sizeof(elements[i]._type); //VertexBufferElement::getSizeOfType(elements[i]._type);
+			offset += elements[i]._count * sizeof(elements[i]._type);
 		}
 	}
 

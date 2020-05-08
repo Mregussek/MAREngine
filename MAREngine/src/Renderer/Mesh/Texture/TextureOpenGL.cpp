@@ -6,7 +6,7 @@
 #include "TextureOpenGL.h"
 
 namespace mar {
-	TextureOpenGL::~TextureOpenGL() {
+	void TextureOpenGL::shutdown() {
 		for (auto const& id : _id)
 			glDeleteTextures(1, &id);
 	}
@@ -42,7 +42,7 @@ namespace mar {
 			return;
 		}
 
-		std::cout << "Failed to load texture" << std::endl;
+		std::cerr << "Failed to load texture" << std::endl;
 	}
 
 	void TextureOpenGL::bind(const float& shapeId, const unsigned int& texID) const {
@@ -51,5 +51,17 @@ namespace mar {
 
 	void TextureOpenGL::unbind() const {
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	const unsigned int& TextureOpenGL::getID(int index) const {
+		return _id[index];
+	}
+
+	const int& TextureOpenGL::getWidth() const {
+		return _width;
+	}
+
+	const int& TextureOpenGL::getHeight() const {
+		return _height;
 	}
 }

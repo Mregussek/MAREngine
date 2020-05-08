@@ -8,7 +8,6 @@
 
 #include "../../mar.h"
 #include "Shapes/Shapes.h"
-#include "Shapes/Cube.h"
 
 namespace mar {
 

@@ -11,7 +11,7 @@
 namespace mar {
 	class Texture : std::enable_shared_from_this<Texture> {
 	public:
-		virtual ~Texture() { }
+		virtual void shutdown() { }
 
 		virtual void loadTexture(const std::string& path) { }
 
