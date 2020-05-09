@@ -20,6 +20,13 @@ namespace mar {
 		int width{ 1280 };
 		int height{ 720 };
 		const std::string shadersPath = "resources/shaders/basic.shader";
+		const std::string mrTex = "resources/textures/mr.jpg";
+		const std::string yellowTex = "resources/textures/yellow-texture.jpg";
+		const std::string grassTex = "resources/textures/grass-texture.jpg";
+		const std::string wallTex = "resources/textures/wall.jpg";
+		const std::string blueTex = "resources/textures/blue-texture.jpg";
+		const std::string redTex = "resources/textures/red-texture.jpg";
+		const std::string blackTex = "resources/textures/blac-texture.jpg";
 		char portName[10] = "\\\\.\\COM7";
 		const char* glsl_version = "#version 460";
 

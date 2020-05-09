@@ -7,7 +7,7 @@
 
 namespace mar {
 
-	void Renderer::initializeRenderer(const std::shared_ptr<RendererFactory>& factory) {
+	void Renderer::createRenderer(const std::shared_ptr<RendererFactory>& factory) {
 		if (!_initialized) {
 			_vbo = factory->createVertexBuffer();
 			_lay = factory->createVertexBufferLayout();
@@ -18,6 +18,10 @@ namespace mar {
 
 			_pushedOnce = false;
 			_maxValue = 0;
+			_countOfDrawCalls = 0;
+			_countOfIndices = 0;
+			_countOfShapes = 0;
+			_countOfVertices = 0;
 		}
 		else {
 			std::cerr << "Renderer is already initialized!\n";
@@ -35,7 +39,7 @@ namespace mar {
 	void Renderer::initialize(const std::string& filePath) {
 		_shader->initialize(filePath);
 		_vao->initializeArrayBuffer();
-		_vbo->initializeVertex(constants::maxCubeCount);
+		_vbo->initializeVertex(constants::maxVertexCount);
 		_ebo->initializeElement(constants::maxIndexCount);
 
 		_vao->addBuffer(_lay);
@@ -47,39 +51,14 @@ namespace mar {
 		_shader->setUniformSampler2D("u_Texture", getSamplers());
 	}
 
-	void Renderer::guiPushPyramid(glm::vec3& position) {
-		pushObject(&Pyramid(), position);
-	}
-
-	void Renderer::guiPushCube(glm::vec3& position) {
-		pushObject(&Cube(), position);
-	}
-
-	void Renderer::guiPushSurface(glm::vec3& position) {
-		pushObject(&Surface(), position);
-	}
-
 	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string texturePath) {
-		if (shape->getSizeofIndices() + _indices.size() > constants::maxIndexCount) {
-			std::cout << "Cannot insert more indices!!!\n";
-			return;
-		}
-		else if (shape->getSizeofVertices() + _vertices.size() > constants::maxVertexCount) {
-			std::cout << "Cannot insert more vertices!!!\n";
-			return;
-		}
-
 		Mesh::extendID(shape, (float)_shapes.size()); // more objects, more texture indexes
 
 		Mesh::changeCenterOfObject(shape, position); // user sends new center position, we need to change vertices
 
 		Mesh::changeIndicesFormat(shape, _maxValue); // we cannot use the same indices for the another vertices, that's why we increase them
 
-		_vertices.insert(_vertices.end(), shape->getVerticesBegin(), shape->getVerticesEnd()); // insert object vertices to mesh vertices (batch rendering)
-
 		_maxValue += shape->getSizeofVertices() / shape->getStride(); // maximum value of indices
-
-		_indices.insert(_indices.end(), shape->getIndicesBegin(), shape->getIndicesEnd()); // insert object indices to mesh indices (batch rendering) 
 
 		_shapes.emplace_back(shape); // place new shape at the end of vector
 
@@ -102,16 +81,13 @@ namespace mar {
 		_shapes.erase(_shapes.begin() + index);
 		_samplers.erase(_samplers.begin() + index);
 		_texture->removeID(index);
-
-		for (auto& s : _shapes) {
-			_vertices.insert(_vertices.end(), s->getVerticesBegin(), s->getVerticesEnd());
-			_indices.insert(_indices.end(), s->getIndicesBegin(), s->getIndicesEnd());
-		}
 	}
 
 	void Renderer::bind() {
 		_shader->bind();
 		_vao->bind();
+		_vbo->bind();
+		_ebo->bind();
 	}
 
 	void Renderer::unbind() {
@@ -121,44 +97,71 @@ namespace mar {
 		_ebo->unbind();
 	}
 
-	void Renderer::updateFrame(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {
-		_vbo->bind();
-		_ebo->bind();
+	void Renderer::updateFrame() {
+		// Prepare screen for new frame
+		clear();
+		bind();
 
-		_translations.clear();
-		_rotations.clear();
+		// Reset statistics before drawing
+		_countOfDrawCalls = 0;
+		_countOfIndices = 0;
+		_countOfShapes = 0;
+		_countOfVertices = 0;
 
+		// Clear buffer
+		_vertices.clear();
+		_indices.clear();
+
+		///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
+
+		// Main Loop - Batch Rendering
 		for (unsigned int i = 0; i < _shapes.size(); i++) {
-			_translations.push_back(glm::translate(glm::mat4(1.0f), newCenters[i]));
-			_rotations.push_back(Mesh::getRotationMatrix(newCenters[i], newAngles[i]));
+			// If we can, we put new vertices and indices to vector, which will be drawn
+			if (_vertices.size() + _shapes[i]->getSizeofVertices() <= constants::maxVertexCount 
+							&& _indices.size() + _shapes[i]->getSizeofIndices() <= constants::maxIndexCount) { 
+
+				_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVerticesEnd());
+				_indices.insert(_indices.end(), _shapes[i]->getIndicesBegin(), _shapes[i]->getIndicesEnd());
+
+				_countOfVertices += _shapes[i]->getSizeofVertices();
+				_countOfIndices += _shapes[i]->getSizeofIndices();
+				_countOfShapes++;
+			} 
+			else {
+				// If we cannot, we must draw everything and then collect data from the rest
+				_vbo->updateDynamically(_vertices);
+				_ebo->updateDynamically(_indices);
+
+				draw();
+
+				_countOfDrawCalls++;
+
+				_vertices.clear();
+				_indices.clear();
+			}
 		}
 
+		// This is the "one" draw, if can put all data to one vector,
+		// if we cannot it is the last draw call
 		_vbo->updateDynamically(_vertices);
 		_ebo->updateDynamically(_indices);
+		draw();
+		_countOfDrawCalls++;
 	}
 
-	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {
-		_shader->setUniform4fv("u_GUIcolor", colors);
-		_shader->setUniformMat4f("u_GUItranslation", translationMatrix);
-		_shader->setUniformMat4f("u_GUIrotation", rotationMatrix);
-	}
+	void Renderer::draw() {
+		_shader->setUniform4fv("u_GUIcolor", _gui_colors);
+		_shader->setUniformMat4f("u_GUItranslation", _gui_translate);
+		_shader->setUniformMat4f("u_GUIrotation", _gui_rotation);
 
-	void Renderer::setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model) {
-		_shader->setUniformMat4f("u_Projection", projection);
-		_shader->setUniformMat4f("u_View", view);
-		_shader->setUniformMat4f("u_Model", model);
-	}
+		_shader->setUniformMat4f("u_Projection", _camera_projection);
+		_shader->setUniformMat4f("u_View", _camera_view);
+		_shader->setUniformMat4f("u_Model", _camera_model);
 
-	void Renderer::setRenderMatrices() {
 		_shader->setUniformVectorMat4("u_RenderTranslate", _translations);
 		_shader->setUniformVectorMat4("u_RenderRotation", _rotations);
-	}
 
-	void Renderer::draw() const {
-		if (_indices.size() == 0)
-			glDrawArrays(GL_TRIANGLES, 0, _vbo->getSize());
-		else
-			glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void Renderer::clear() {
@@ -166,4 +169,45 @@ namespace mar {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
+	void Renderer::setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {
+		_translations.clear();
+		_rotations.clear();
+
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
+			_translations.push_back(glm::translate(glm::mat4(1.0f), newCenters[i]));
+			_rotations.push_back(Mesh::getRotationMatrix(newCenters[i], newAngles[i]));
+		}
+	}
+
+	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {
+		_gui_colors = colors;
+		_gui_translate = translationMatrix;
+		_gui_rotation = rotationMatrix;
+	}
+
+	void Renderer::setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model) {
+		_camera_projection = projection;
+		_camera_view = view;
+		_camera_model = model;
+	}
+
+	void Renderer::guiPushPyramid(glm::vec3& position) {
+		pushObject(&Pyramid(), position);
+	}
+
+	void Renderer::guiPushCube(glm::vec3& position) {
+		pushObject(&Cube(), position);
+	}
+
+	void Renderer::guiPushSurface(glm::vec3& position) {
+		pushObject(&Surface(), position);
+	}
+
+	const std::vector<int>& Renderer::getSamplers() const { 
+		return _samplers; 
+	}
+
+	const std::vector<unsigned int> Renderer::getStatistics() const {
+		return {_countOfDrawCalls, _countOfShapes, _countOfVertices, _countOfIndices};
+	}
 }

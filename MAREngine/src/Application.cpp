@@ -20,7 +20,7 @@ namespace mar {
 			{ 0.0f,  0.0f,  0.0f }
 			, { 3.0f,  0.0f, -4.5f }
 			, { 0.0f,  -0.025f,  0.0f }
-			, { -6.0f,  -0.025f,  0.0f }
+			, { -4.0f,  -0.025f,  0.0f }
 			, {-3.0f,  0.0f, -4.5f }
 			, {-1.5f,  0.0f, -2.5f }
 		};
@@ -33,12 +33,12 @@ namespace mar {
 			 , { 0.0f, 0.0f, 0.0f }
 		};
 		std::vector<std::string> textures = {
-			"resources/textures/mr.jpg"
-			, "resources/textures/yellow-texture.jpg"
-			, "resources/textures/grass-texture.jpg"
-			, "resources/textures/wall.jpg"
-			, "resources/textures/blue-texture.jpg"
-			, "resources/textures/red-texture.jpg"
+			mrTex
+			, yellowTex
+			, grassTex
+			, wallTex
+			, blueTex
+			, redTex
 		};
 
 		// --- INITIALIZATION PROCESS --- //
@@ -47,7 +47,7 @@ namespace mar {
 		GUI gui(&window, glsl_version);
 		Renderer renderer;
 		gui.connectToRenderer(&renderer);
-		renderer.initializeRenderer(std::make_shared<RendererOpenGLFactory>());
+		renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 		
 		for (unsigned int i = 0; i < shapes.size(); i++) {
 			renderer.pushObject(&shapes[i], centers[i], textures[i]);
@@ -63,23 +63,18 @@ namespace mar {
 			{ // update for every frame
 				camera.processInput(window.getWindow());
 				gui.prepareNewFrame();
-				renderer.updateFrame(gui.getCentersVector(), gui.getAnglesVector());
+			}
+
+			// --- Renderer Setup before drawing
+			{
+				renderer.setGUIvectors(gui.getCentersVector(), gui.getAnglesVector());
+				renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
+				renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
 			}
 			
 			// --- Rendering, binding textures, creating matrix transformations --- //
-			{ // Prepare for rendering
-				renderer.clear();
-				renderer.bind();
-			}
-
-			{ // Setup shaders (these, which are the same for all objects)
-				renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
-				renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
-				renderer.setRenderMatrices();
-			}
-
-			{ // One render call
-				renderer.draw();
+			{
+				renderer.updateFrame();
 			}
 
 			// --- Polling events, updating IO actions --- //

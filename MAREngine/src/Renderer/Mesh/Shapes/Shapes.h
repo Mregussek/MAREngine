@@ -18,10 +18,11 @@ namespace mar {
 
 	class Shapes {
 	public:
-		Shapes(float new_id, glm::vec3 new_center, glm::vec3 new_angle,
+		Shapes(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
 			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
 			std::vector<unsigned int> new_layout)
 				: id(new_id),
+				name(new_name),
 				center(new_center),
 				angle(new_angle),
 				verticesVector(new_vertices),
@@ -64,6 +65,8 @@ namespace mar {
 
 	private:
 		float id;
+		std::string name;
+
 		glm::vec3 center;
 		glm::vec3 angle;
 

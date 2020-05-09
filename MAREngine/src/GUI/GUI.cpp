@@ -79,9 +79,20 @@ namespace mar {
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Exit")) 
+			if (ImGui::BeginMenu("Statistics")) {
+
+				displayStatistics();
+
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Exit")) {
+
 				glfwSetWindowShouldClose(_window->getWindow(), true);
 
+				ImGui::EndMenu();
+			}
+				
 			ImGui::EndMainMenuBar();
 		}			
 
@@ -188,6 +199,39 @@ namespace mar {
 					_angles.erase(_angles.begin() + i);
 				}
 			}
+		}
+	}
+
+	void GUI::displayStatistics() {
+		if (_rendererConnected) {
+			std::vector<unsigned int> stats = _renderer->getStatistics();
+
+			char int2char[5];
+			sprintf_s(int2char, "%d ", stats[0]);
+			char drawCalls[25] = "Draw Calls: ";
+			strcat_s(drawCalls, int2char);
+			ImGui::Text(drawCalls);
+
+			char int2char1[5];
+			sprintf_s(int2char1, "%d ", stats[1]);
+			char drawCalls1[25] = "Shapes Count: ";
+			strcat_s(drawCalls1, int2char1);
+			ImGui::Text(drawCalls1);
+
+			char int2char2[5];
+			sprintf_s(int2char2, "%d ", stats[2]);
+			char drawCalls2[25] = "Vertices: ";
+			strcat_s(drawCalls2, int2char2);
+			ImGui::Text(drawCalls2);
+
+			char int2char3[5];
+			sprintf_s(int2char3, "%d ", stats[3]);
+			char drawCalls3[25] = "Indices: ";
+			strcat_s(drawCalls3, int2char3);
+			ImGui::Text(drawCalls3);
+		}
+		else {
+			ImGui::Text("Renderer is not connected!");
 		}
 	}
 

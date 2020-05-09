@@ -17,18 +17,20 @@ namespace mar {
 			: Shapes(
 				/* ID */
 				0.0f,
+				/* NAME */
+				"Pyramid",
 				/* CENTER */
 				{ 0.0f, 0.0f, 0.0f },
 				/* ANGLE */
 				{ 0.0f, 0.0f, 0.0f },
 				/* VERTICES */
 				{
-					// (x, y, z)			// TextureCoords	// TexIndex
-					-1.0f, -1.0f,  1.0f,	0.0f, 0.0f,			0.0f,
-					 1.0f, -1.0f,  1.0f,	0.0f, 1.0f,			0.0f,
-					 1.0f, -1.0f, -1.0f,	0.0f, 0.0f,			0.0f,
-					-1.0f, -1.0f, -1.0f,	0.0f, 1.0f,			0.0f,
-					 0.0f,  1.0f,  0.0f,	0.5f, 0.5f,			0.0f
+					// (x, y, z)			// LightNormal			// TextureCoords	// TexIndex
+					-1.0f, -1.0f,  1.0f,	0.0f, 0.0f, -1.0f,		0.0f, 0.0f,			0.0f,
+					 1.0f, -1.0f,  1.0f,	0.0f, 0.0f, -1.0f,		0.0f, 1.0f,			0.0f,
+					 1.0f, -1.0f, -1.0f,	0.0f, 0.0f, -1.0f,		0.0f, 0.0f,			0.0f,
+					-1.0f, -1.0f, -1.0f,	0.0f, 0.0f, -1.0f,		0.0f, 1.0f,			0.0f,
+					 0.0f,  1.0f,  0.0f,	0.0f, 0.0f, -1.0f,		0.5f, 0.5f,			0.0f
 				},
 				/* INDICES */
 				{
@@ -38,7 +40,7 @@ namespace mar {
 				},
 				/* LAYOUT */
 				{
-					3, 2, 1
+					3, 3, 2, 1
 				})
 		{ }
 	};

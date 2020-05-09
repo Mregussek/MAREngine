@@ -47,6 +47,7 @@ namespace mar {
 		void eventOnEachObjectSeperately();
 		void addNewObjectToScene();
 		void deleteObjectFromScene();
+		void displayStatistics();
 
 		const glm::mat4 getTranslationMatrix() const;
 		const glm::mat4 getRotationMatrix() const;
