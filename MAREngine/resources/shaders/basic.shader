@@ -78,5 +78,11 @@ void main() {
 	float specularConstant = pow(max(dot(posToView, reflectDirVec), 0.0f), 70);
 	vec4 specularLight = vec4(specularColor * specularConstant, 1.0f);
 
+	// Attenuation
+	float distance = length(u_LightPos - v_Position);
+	float attenuation = 1.0f / (1.0f + 0.005f * pow(distance, 2));
+	diffuseLight *= attenuation;
+	specularLight *= attenuation;
+
 	color = texColor * u_GUIcolor * (ambientLight + diffuseLight + specularLight);
 };
