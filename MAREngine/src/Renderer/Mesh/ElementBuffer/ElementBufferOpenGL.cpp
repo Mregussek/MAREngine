@@ -7,27 +7,12 @@
 
 namespace mar {
 	
-	void ElementBufferOpenGL::initializeElement(const std::vector<unsigned int>& data, const unsigned int allocationMemory) {
+	void ElementBufferOpenGL::initializeElement(const unsigned int allocationMemory) {
 		if (!_initialized) {
 			_allocatedMemory = allocationMemory;
-
-			unsigned int* indices = new unsigned int[data.size()];
-			std::copy(data.begin(), data.end(), indices);
-
 			glGenBuffers(1, &_id);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
-
-			allocateMemoryEBOagain:
-
-			try {
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocatedMemory, indices, GL_DYNAMIC_DRAW);
-			}
-			catch (std::exception& e) {
-				std::cerr << "Cannot allocate memory on GPU with EBO\n";
-				goto allocateMemoryEBOagain;
-			}
-
-			delete[] indices;
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocatedMemory, nullptr, GL_DYNAMIC_DRAW);
 			_initialized = true;
 		}
 		else {
@@ -37,6 +22,15 @@ namespace mar {
 
 	void ElementBufferOpenGL::bind() const {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
+	}
+
+	void ElementBufferOpenGL::updateDynamically(const std::vector<unsigned int>& data) const {
+		unsigned int* indices = new unsigned int[data.size()];
+
+		std::copy(data.begin(), data.end(), indices);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), indices);
+
+		delete[] indices;
 	}
 
 	void ElementBufferOpenGL::unbind() const {

@@ -13,8 +13,8 @@ namespace mar {
 	public:
 		ElementBuffer() = default;
 
-		virtual void initializeElement(const std::vector<unsigned int>& data,
-			const unsigned int allocationMemory) { }
+		virtual void initializeElement(const unsigned int allocationMemory) { }
+		virtual void updateDynamically(const std::vector<unsigned int>& data) const { }
 
 		virtual void bind() const { }
 		virtual void unbind() const { }

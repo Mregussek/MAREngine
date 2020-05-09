@@ -29,6 +29,7 @@
 #include "Mesh/Shapes/Cube.h"
 #include "Mesh/Shapes/Pyramid.h"
 #include "Mesh/Shapes/Surface.h"
+#include "Mesh/Shapes/Wall.h"
 
 namespace mar {
 

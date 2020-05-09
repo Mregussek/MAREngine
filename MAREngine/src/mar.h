@@ -70,6 +70,9 @@ namespace mar {
 		class Mesh;
 			class Shapes;
 				class Cube;
+				class Pyramid;
+				class Surface;
+				class Wall;
 			class VertexBuffer;
 				class VertexBufferOpenGL;
 			class VertexArray;

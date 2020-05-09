@@ -50,8 +50,7 @@ namespace mar {
 		void guiPushSurface(glm::vec3& position);
 
 		void pushObject(Shapes* shape, glm::vec3& position, std::string texturePath = "resources/textures/black-texture.jpg");
-
-		void popObject();
+		void popObject(const unsigned int& index);
 
 		void bind();
 		void unbind();

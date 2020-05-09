@@ -11,16 +11,18 @@ namespace mar {
 		std::vector<Shapes> shapes = {
 			Cube()
 			, Pyramid()
+			, Surface()
+			, Wall()
 			, Cube()
 			, Pyramid()
-			, Surface()
 		};
 		std::vector<glm::vec3> centers = {
 			{ 0.0f,  0.0f,  0.0f }
 			, { 3.0f,  0.0f, -4.5f }
+			, { 0.0f,  -0.025f,  0.0f }
+			, { -6.0f,  -0.025f,  0.0f }
 			, {-3.0f,  0.0f, -4.5f }
 			, {-1.5f,  0.0f, -2.5f }
-			, { 0.0f,  -0.025f,  0.0f }
 		};
 		std::vector<glm::vec3> angles = {
 			 { 0.0f, 0.0f, 0.0f }
@@ -28,15 +30,18 @@ namespace mar {
 			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
 		};
 		std::vector<std::string> textures = {
 			"resources/textures/mr.jpg"
+			, "resources/textures/yellow-texture.jpg"
+			, "resources/textures/grass-texture.jpg"
 			, "resources/textures/wall.jpg"
 			, "resources/textures/blue-texture.jpg"
 			, "resources/textures/red-texture.jpg"
-			, "resources/textures/grass-texture.jpg"
 		};
 
+		// --- INITIALIZATION PROCESS --- //
 		Camera camera(width, height);
 		Window window(height, width, name, &camera);
 		GUI gui(&window, glsl_version);
@@ -52,7 +57,7 @@ namespace mar {
 		renderer.initialize(shadersPath);
 		renderer.unbind();
 		
-		// --- Main Loop --- //
+		// --- MAIN LOOP --- //
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
 			{ // update for every frame

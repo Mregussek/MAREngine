@@ -50,7 +50,7 @@ namespace mar {
 		virtual float getVertice(size_t index) const;
 		virtual void setVertice(size_t index, float new_value);
 		virtual std::vector<float>::const_iterator getVerticesBegin() const;
-		virtual std::vector<float>::const_iterator getVetricesEnd() const;
+		virtual std::vector<float>::const_iterator getVerticesEnd() const;
 
 		virtual void setIndicesVector(const std::vector<unsigned int>& new_indices);
 		virtual const std::vector<unsigned int>& getIndicesVector() const;

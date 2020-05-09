@@ -52,15 +52,11 @@ namespace mar {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("General")) {
 
-				ImGui::MenuItem("Scene", "");
-
-				ImGui::SliderFloat3("Translation", &_translation.x, -10.0f, 10.0f);
-				ImGui::SliderFloat3("Rotation", &_angle.x, -360.0f, 360.0f);
-				ImGui::ColorEdit4("color", _colors);
+				eventOnScene();
 				
 				ImGui::Separator();
 
-				displayObjectsGeneralGUI();
+				eventOnEachObjectSeperately();
 
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 				
@@ -73,42 +69,18 @@ namespace mar {
 			}
 
 			if (ImGui::BeginMenu("Manage Objects")) {
-
-				ImGui::MenuItem("Add Object", "");
-				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
-
-				ImGui::InputFloat3("Input Center", _inputCenter);
-
-				if (ImGui::Button("Select Pyramid")) {
-					if (_rendererConnected) {
-						glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-						_renderer->guiPushPyramid(center);
-						this->push(center, { 0.0f, 0.0f, 0.0f });
-					}
-				}
-
-				if (ImGui::Button("Select Cube")) {
-					if (_rendererConnected) {
-						glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-						_renderer->guiPushCube(center);
-						this->push(center, { 0.0f, 0.0f, 0.0f });
-					}
-				}
-
-				if (ImGui::Button("Select Surface")) {
-					if (_rendererConnected) {
-						glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-						_renderer->guiPushSurface(center);
-						this->push(center, { 0.0f, 0.0f, 0.0f });
-					}
-				}
+				
+				addNewObjectToScene();
 
 				ImGui::Separator();
 
-				ImGui::MenuItem("Delete Object", "");
+				deleteObjectFromScene();
 
 				ImGui::EndMenu();
 			}
+
+			if (ImGui::BeginMenu("Exit")) 
+				glfwSetWindowShouldClose(_window->getWindow(), true);
 
 			ImGui::EndMainMenuBar();
 		}			
@@ -117,7 +89,14 @@ namespace mar {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-	void GUI::displayObjectsGeneralGUI() {
+	void GUI::eventOnScene() {
+		ImGui::Text("Scene");
+		ImGui::SliderFloat3("Translation", &_translation.x, -10.0f, 10.0f);
+		ImGui::SliderFloat3("Rotation", &_angle.x, -360.0f, 360.0f);
+		ImGui::ColorEdit4("color", _colors);
+	}
+
+	void GUI::eventOnEachObjectSeperately() {
 		ImGui::MenuItem("Objects Menu", "");
 
 		for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
@@ -153,6 +132,62 @@ namespace mar {
 			_angles[i].x = _ang[0];
 			_angles[i].y = _ang[1];
 			_angles[i].z = _ang[2];
+		}
+	}
+
+	void GUI::addNewObjectToScene() {
+		ImGui::Text("Add Object");
+		ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
+		ImGui::InputFloat3("Input Center", _inputCenter);
+
+		if (_inputCenter[0] > 10.0f || _inputCenter[0] < -10.0f)
+			return;
+		if (_inputCenter[1] > 10.0f || _inputCenter[1] < -10.0f)
+			return;
+		if (_inputCenter[2] > 10.0f || _inputCenter[2] < -10.0f)
+			return;
+
+		if (ImGui::Button("Select Pyramid")) {
+			if (_rendererConnected) {
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPushPyramid(center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+			}
+		}
+
+		if (ImGui::Button("Select Cube")) {
+			if (_rendererConnected) {
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPushCube(center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+			}
+		}
+
+		if (ImGui::Button("Select Surface")) {
+			if (_rendererConnected) {
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPushSurface(center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+			}
+		}
+	}
+
+	void GUI::deleteObjectFromScene() {
+		ImGui::MenuItem("Delete Object", "");
+
+		for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
+			char int2char[3];
+			sprintf_s(int2char, "%d ", i);
+			char shapeIndex[18] = " Delete Object ";
+			strcat_s(shapeIndex, int2char);
+
+			if (ImGui::Button(shapeIndex)) {
+				if (_rendererConnected) {
+					_renderer->popObject(i);
+					_centersOfObjects.erase(_centersOfObjects.begin() + i);
+					_angles.erase(_angles.begin() + i);
+				}
+			}
 		}
 	}
 

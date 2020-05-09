@@ -123,6 +123,9 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\Surface.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh\Shapes\Wall.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Renderer.cpp">
@@ -210,6 +213,9 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="resources\textures\black-texture.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\yellow-texture.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

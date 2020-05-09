@@ -21,11 +21,15 @@ namespace mar {
 		//! Initializes ElementBufferObject to _id, define data on GPU, reserves memory on GPU, 
 		//! also tells the GPU that user will change resources dynamically. 
 		/*
-			\param data - indices, which will be drawn
 			\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 		*/
-		void initializeElement(const std::vector<unsigned int>& data, 
-			const unsigned int allocationMemory) override;
+		void initializeElement(const unsigned int allocationMemory) override;
+
+		//! Redefines some or all of data stored in EBO.
+		/*
+			\param data - indices, which will be drawn
+		*/
+		void updateDynamically(const std::vector<unsigned int>& data) const override;
 
 		//! Binds class _id member to target, which is EBO
 		void bind() const override;

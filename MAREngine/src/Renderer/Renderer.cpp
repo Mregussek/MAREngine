@@ -36,7 +36,7 @@ namespace mar {
 		_shader->initialize(filePath);
 		_vao->initializeArrayBuffer();
 		_vbo->initializeVertex(constants::maxCubeCount);
-		_ebo->initializeElement(_indices, constants::maxIndexCount);
+		_ebo->initializeElement(constants::maxIndexCount);
 
 		_vao->addBuffer(_lay);
 
@@ -73,9 +73,9 @@ namespace mar {
 
 		Mesh::changeCenterOfObject(shape, position); // user sends new center position, we need to change vertices
 
-		_vertices.insert(_vertices.end(), shape->getVerticesBegin(), shape->getVetricesEnd()); // insert object vertices to mesh vertices (batch rendering)
-
 		Mesh::changeIndicesFormat(shape, _maxValue); // we cannot use the same indices for the another vertices, that's why we increase them
+
+		_vertices.insert(_vertices.end(), shape->getVerticesBegin(), shape->getVerticesEnd()); // insert object vertices to mesh vertices (batch rendering)
 
 		_maxValue += shape->getSizeofVertices() / shape->getStride(); // maximum value of indices
 
@@ -95,14 +95,23 @@ namespace mar {
 		}
 	}
 
-	void Renderer::popObject() {
+	void Renderer::popObject(const unsigned int& index) {
+		_vertices.clear();
+		_indices.clear();
 
+		_shapes.erase(_shapes.begin() + index);
+		_samplers.erase(_samplers.begin() + index);
+		_texture->removeID(index);
+
+		for (auto& s : _shapes) {
+			_vertices.insert(_vertices.end(), s->getVerticesBegin(), s->getVerticesEnd());
+			_indices.insert(_indices.end(), s->getIndicesBegin(), s->getIndicesEnd());
+		}
 	}
 
 	void Renderer::bind() {
 		_shader->bind();
 		_vao->bind();
-		_ebo->bind();
 	}
 
 	void Renderer::unbind() {
@@ -114,6 +123,7 @@ namespace mar {
 
 	void Renderer::updateFrame(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {
 		_vbo->bind();
+		_ebo->bind();
 
 		_translations.clear();
 		_rotations.clear();
@@ -124,6 +134,7 @@ namespace mar {
 		}
 
 		_vbo->updateDynamically(_vertices);
+		_ebo->updateDynamically(_indices);
 	}
 
 	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {

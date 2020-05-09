@@ -48,6 +48,12 @@ namespace mar {
 		*/
 		const unsigned int& getID(int index) const override;
 
+		//! Removes id prescribed to shape with specifed index
+		/*
+			\param index - index of shape
+		*/
+		void removeID(const unsigned int& index) override;
+
 		//! Get width of last loaded texture
 		/*
 			\return _width - width of last loaded texture

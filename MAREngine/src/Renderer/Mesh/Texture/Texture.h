@@ -19,6 +19,8 @@ namespace mar {
 		virtual void unbind() const { }
 
 		virtual const unsigned int& getID(int index) const { return unsigned int(0); }
+		virtual void removeID(const unsigned int& index) { }
+
 		virtual const int& getWidth() const { return int(-1); }
 		virtual const int& getHeight() const { return int(-1); }
 	};

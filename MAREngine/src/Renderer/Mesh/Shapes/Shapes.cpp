@@ -72,7 +72,7 @@ namespace mar {
 		return verticesVector.begin();
 	}
 
-	std::vector<float>::const_iterator Shapes::getVetricesEnd() const {
+	std::vector<float>::const_iterator Shapes::getVerticesEnd() const {
 		return verticesVector.end();
 	}
 
