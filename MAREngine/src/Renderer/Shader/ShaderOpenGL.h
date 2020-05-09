@@ -27,6 +27,7 @@ namespace mar {
 		void setUniformSampler2D(const std::string& name, std::vector<int> sampler) override;
 		void setUniformVectorMat4(const std::string& name, std::vector<glm::mat4> sampler) override;
 		void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) override;
+		void setUniformVector3(const std::string& name, const glm::vec3& vector3) override;
 		void setUniform1i(const std::string& name, int value) override;
 		void setUniform4f(const std::string& name, float red, float green, float blue, float alpha) override;
 		void setUniform4fv(const std::string& name, const float* floats4) override;

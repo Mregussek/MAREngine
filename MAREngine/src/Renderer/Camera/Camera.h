@@ -76,6 +76,8 @@ namespace mar {
         void mouseCallback(float xpos, float ypos);  
         void scrollCallback(float ypos);
 
+        const glm::vec3& getCameraPosition() const;
+
     private:
         void processKeyboard(CameraMovement&& direction);
         void processKeyboard(ObjectRotation&& direction);

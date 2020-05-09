@@ -25,6 +25,7 @@ namespace mar {
 		virtual void setUniformSampler2D(const std::string& name, std::vector<int> sampler) { }
 		virtual void setUniformVectorMat4(const std::string& name, std::vector<glm::mat4> sampler) { }
 		virtual void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) { }
+		virtual void setUniformVector3(const std::string& name, const glm::vec3& vector3) { }
 		virtual void setUniform1i(const std::string& name, int value) { }
 		virtual void setUniform4f(const std::string& name, float red, float green, float blue, float alpha) { }
 		virtual void setUniform4fv(const std::string& name, const float* floats4) { }

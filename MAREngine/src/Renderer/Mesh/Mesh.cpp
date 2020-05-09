@@ -124,4 +124,8 @@ namespace mar {
         glm::mat4 inverse = glm::translate(glm::mat4(1.0f), center);
         return rotation * transform * inverse;
     }
+
+    glm::mat4 Mesh::getRotationMatrix(const glm::vec3& center, const float& angle) {
+        return glm::rotate(glm::mat4(1.0f), angle, center);
+    }
 }

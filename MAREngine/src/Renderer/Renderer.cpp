@@ -150,22 +150,29 @@ namespace mar {
 	}
 
 	void Renderer::draw() {
+		// --- GUI UNIFORMS --- //
 		_shader->setUniform4fv("u_GUIcolor", _gui_colors);
 		_shader->setUniformMat4f("u_GUItranslation", _gui_translate);
 		_shader->setUniformMat4f("u_GUIrotation", _gui_rotation);
 
+		// --- CAMERA UNIFORMS --- //
 		_shader->setUniformMat4f("u_Projection", _camera_projection);
 		_shader->setUniformMat4f("u_View", _camera_view);
 		_shader->setUniformMat4f("u_Model", _camera_model);
 
+		// --- RENDERING UNIFORMS --- //
 		_shader->setUniformVectorMat4("u_RenderTranslate", _translations);
 		_shader->setUniformVectorMat4("u_RenderRotation", _rotations);
+
+		// --- LIGHTS UNIFORMS --- //		
+		_shader->setUniformVector3("u_LightPos", _lightPosition);
+		_shader->setUniformVector3("u_CameraPos", _camera_position);
 
 		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
 	void Renderer::clear() {
-		glClearColor(0.75f, 0.75f, 0.75f, 1.0f); // light gray
+		glClearColor(0.85f, 0.85f, 0.85f, 1.0f); // light gray
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
@@ -189,6 +196,10 @@ namespace mar {
 		_camera_projection = projection;
 		_camera_view = view;
 		_camera_model = model;
+	}
+
+	void Renderer::setCameraVectors(const glm::vec3& position) {
+		_camera_position = position;
 	}
 
 	void Renderer::guiPushPyramid(glm::vec3& position) {

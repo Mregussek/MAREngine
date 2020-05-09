@@ -153,4 +153,8 @@ namespace mar {
         _right = glm::normalize(glm::cross(_front, _worldUp));
         _up = glm::normalize(glm::cross(_right, _front));
     }
+
+    const glm::vec3& Camera::getCameraPosition() const {
+        return _position;
+    }
 }

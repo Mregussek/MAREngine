@@ -32,6 +32,8 @@ namespace mar {
 		std::vector<int> _samplers;
 		std::vector<glm::mat4> _translations;
 		std::vector<glm::mat4> _rotations;
+		// --- Lightning
+		glm::vec3 _lightPosition{ 0.0f, 0.0f, 5.0f };
 		// --- Setup
 		const float* _gui_colors;
 		glm::mat4 _gui_rotation;
@@ -39,6 +41,7 @@ namespace mar {
 		glm::mat4 _camera_model;
 		glm::mat4 _camera_projection;
 		glm::mat4 _camera_view;
+		glm::vec3 _camera_position;
 		// --- Helpers
 		bool _pushedOnce;       
 		unsigned int _maxValue;     
@@ -70,6 +73,7 @@ namespace mar {
 		void setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles);
 		void setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix);
 		void setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model);
+		void setCameraVectors(const glm::vec3& position);
 
 		void guiPushPyramid(glm::vec3& position);
 		void guiPushCube(glm::vec3& position);

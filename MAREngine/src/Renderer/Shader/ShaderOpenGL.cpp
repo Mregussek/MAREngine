@@ -43,6 +43,10 @@ namespace mar {
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix4x4));
 	}
 
+	void ShaderOpenGL::setUniformVector3(const std::string& name, const glm::vec3& vector3) {
+		glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(vector3));
+	}
+
 	void ShaderOpenGL::setUniform1i(const std::string& name, int value) {
 		glUniform1i(getUniformLocation(name), value);
 	}

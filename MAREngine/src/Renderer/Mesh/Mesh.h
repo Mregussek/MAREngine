@@ -30,6 +30,7 @@ namespace mar {
                     const std::vector<unsigned int>& passedValue);
 
         static glm::mat4 getRotationMatrix(const glm::vec3& center, const glm::vec3& angle);
+        static glm::mat4 getRotationMatrix(const glm::vec3& center, const float& angle);
     };
 }
 

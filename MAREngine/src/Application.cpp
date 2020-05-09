@@ -65,14 +65,14 @@ namespace mar {
 				gui.prepareNewFrame();
 			}
 
-			// --- Renderer Setup before drawing
+			// --- Renderer Setup before drawing --- //
 			{
 				renderer.setGUIvectors(gui.getCentersVector(), gui.getAnglesVector());
 				renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
 				renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
+				renderer.setCameraVectors(camera.getCameraPosition());
 			}
-			
-			// --- Rendering, binding textures, creating matrix transformations --- //
+
 			{
 				renderer.updateFrame();
 			}
