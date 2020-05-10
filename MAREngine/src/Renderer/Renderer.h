@@ -15,6 +15,7 @@ namespace mar {
 		const size_t maxCount = 1000; 
 		const size_t maxVertexCount = maxCount * 10 * sizeof(Vertex);
 		const size_t maxIndexCount = maxCount * 5;
+		const size_t maxObjectsInScene = 32;
 	}
 
 	class Renderer {
@@ -32,8 +33,11 @@ namespace mar {
 		std::vector<int> _samplers;
 		std::vector<glm::mat4> _translations;
 		std::vector<glm::mat4> _rotations;
+		// --- Helper object for creating new ones
+		Shapes* _createShape;
+		std::vector<Shapes*> _addedDuringRuntime;
 		// --- Lightning
-		glm::vec3 _lightPosition{ 0.0f, 0.0f, 5.0f };
+		glm::vec3 _lightPosition{ 0.0f, 0.5f, 5.0f };
 		// --- Setup
 		const float* _gui_colors;
 		glm::mat4 _gui_rotation;
@@ -78,6 +82,9 @@ namespace mar {
 		void guiPushPyramid(glm::vec3& position);
 		void guiPushCube(glm::vec3& position);
 		void guiPushSurface(glm::vec3& position);
+		void guiPushWall(glm::vec3& position);
+		
+		const std::string& getObjectName(unsigned int index) { return _shapes[index]->getName(); }
 
 		const std::vector<int>& getSamplers() const;
 		const std::vector<unsigned int> getStatistics() const;

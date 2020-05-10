@@ -120,19 +120,19 @@ namespace mar {
 			_ang[2] = _angles[i].z;
 
 			// Prepare index on GUI
-			char int2char[2];
+			char int2char[3];
 			sprintf_s(int2char, "%d", i);
-			char shapeIndex[10] = "Object ";
+			char shapeIndex[15] = "Object ";
 			strcat_s(shapeIndex, int2char);
 			ImGui::Text(shapeIndex);
 
 			// Change center by GUI
-			char DragID[10] = "ObjPos ";
+			char DragID[15] = "ObjPos ";
 			strcat_s(DragID, int2char);
 			ImGui::SliderFloat3(DragID, _pos, -10.0f, 10.0f);
 
 			// Change angle by GUI
-			char RotID[10] = "ObjRot ";
+			char RotID[15] = "ObjRot ";
 			strcat_s(RotID, int2char);
 			ImGui::SliderFloat3(RotID, _ang, 0.0f, 360.0f);
 
@@ -160,6 +160,9 @@ namespace mar {
 
 		if (ImGui::Button("Select Pyramid")) {
 			if (_rendererConnected) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
+
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
 				_renderer->guiPushPyramid(center);
 				this->push(center, { 0.0f, 0.0f, 0.0f });
@@ -168,6 +171,9 @@ namespace mar {
 
 		if (ImGui::Button("Select Cube")) {
 			if (_rendererConnected) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
+
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
 				_renderer->guiPushCube(center);
 				this->push(center, { 0.0f, 0.0f, 0.0f });
@@ -176,8 +182,22 @@ namespace mar {
 
 		if (ImGui::Button("Select Surface")) {
 			if (_rendererConnected) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
+
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
 				_renderer->guiPushSurface(center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+			}
+		}
+
+		if (ImGui::Button("Select Wall")) {
+			if (_rendererConnected) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
+
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPushWall(center);
 				this->push(center, { 0.0f, 0.0f, 0.0f });
 			}
 		}
@@ -187,9 +207,15 @@ namespace mar {
 		ImGui::MenuItem("Delete Object", "");
 
 		for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
-			char int2char[3];
-			sprintf_s(int2char, "%d ", i);
-			char shapeIndex[18] = " Delete Object ";
+			char int2char[5];
+			sprintf_s(int2char, " %d ", i);
+			char shapeIndex[30] = " Delete ";
+
+			if(_rendererConnected)
+				strcat_s(shapeIndex, _renderer->getObjectName(i).c_str());
+			else
+				strcat_s(shapeIndex, "Object");
+
 			strcat_s(shapeIndex, int2char);
 
 			if (ImGui::Button(shapeIndex)) {
@@ -206,27 +232,27 @@ namespace mar {
 		if (_rendererConnected) {
 			std::vector<unsigned int> stats = _renderer->getStatistics();
 
-			char int2char[5];
+			char int2char[7];
 			sprintf_s(int2char, "%d ", stats[0]);
-			char drawCalls[25] = "Draw Calls: ";
+			char drawCalls[28] = "Draw Calls: ";
 			strcat_s(drawCalls, int2char);
 			ImGui::Text(drawCalls);
 
-			char int2char1[5];
+			char int2char1[7];
 			sprintf_s(int2char1, "%d ", stats[1]);
-			char drawCalls1[25] = "Shapes Count: ";
+			char drawCalls1[28] = "Shapes Count: ";
 			strcat_s(drawCalls1, int2char1);
 			ImGui::Text(drawCalls1);
 
-			char int2char2[5];
+			char int2char2[7];
 			sprintf_s(int2char2, "%d ", stats[2]);
-			char drawCalls2[25] = "Vertices: ";
+			char drawCalls2[28] = "Vertices: ";
 			strcat_s(drawCalls2, int2char2);
 			ImGui::Text(drawCalls2);
 
-			char int2char3[5];
+			char int2char3[7];
 			sprintf_s(int2char3, "%d ", stats[3]);
-			char drawCalls3[25] = "Indices: ";
+			char drawCalls3[28] = "Indices: ";
 			strcat_s(drawCalls3, int2char3);
 			ImGui::Text(drawCalls3);
 		}

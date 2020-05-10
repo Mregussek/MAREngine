@@ -32,6 +32,8 @@ namespace mar {
 				_stride(0)
 		{}
 
+		virtual const std::string& getName() { return name; }
+
 		virtual void setID(float newID);
 		virtual const float getID() const;
 

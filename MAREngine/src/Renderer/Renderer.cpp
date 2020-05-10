@@ -34,6 +34,9 @@ namespace mar {
 		_vao->closeArrayBuffer();
 		_vbo->close();
 		_ebo->close();
+
+		for (unsigned int i = 0; i < _addedDuringRuntime.size(); i++)
+			delete _addedDuringRuntime[i];
 	}
 	
 	void Renderer::initialize(const std::string& filePath) {
@@ -52,6 +55,11 @@ namespace mar {
 	}
 
 	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string texturePath) {
+		if (_shapes.size() == constants::maxObjectsInScene) {
+			std::cout << "Cannot push more objects!\n";
+			return;
+		}
+
 		Mesh::extendID(shape, (float)_shapes.size()); // more objects, more texture indexes
 
 		Mesh::changeCenterOfObject(shape, position); // user sends new center position, we need to change vertices
@@ -74,13 +82,15 @@ namespace mar {
 		}
 	}
 
+	//! TODO: This method works like stack, for proper work we need to delete
+	//! lastly added object to scene
 	void Renderer::popObject(const unsigned int& index) {
-		_vertices.clear();
-		_indices.clear();
-
 		_shapes.erase(_shapes.begin() + index);
 		_samplers.erase(_samplers.begin() + index);
 		_texture->removeID(index);
+
+		_vertices.clear();
+		_indices.clear();
 	}
 
 	void Renderer::bind() {
@@ -97,8 +107,8 @@ namespace mar {
 		_ebo->unbind();
 	}
 
+	//! CHECK TODO! in this method
 	void Renderer::updateFrame() {
-		// Prepare screen for new frame
 		clear();
 		bind();
 
@@ -115,20 +125,18 @@ namespace mar {
 		///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
 
 		// Main Loop - Batch Rendering
-		for (unsigned int i = 0; i < _shapes.size(); i++) {
-			// If we can, we put new vertices and indices to vector, which will be drawn
-			if (_vertices.size() + _shapes[i]->getSizeofVertices() <= constants::maxVertexCount 
-							&& _indices.size() + _shapes[i]->getSizeofIndices() <= constants::maxIndexCount) { 
+		for (auto& s : _shapes) {
+			if (_vertices.size() + s->getSizeofVertices() <= constants::maxVertexCount 
+							&& _indices.size() + s->getSizeofIndices() <= constants::maxIndexCount) { 
 
-				_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVerticesEnd());
-				_indices.insert(_indices.end(), _shapes[i]->getIndicesBegin(), _shapes[i]->getIndicesEnd());
+				_vertices.insert(_vertices.end(), s->getVerticesBegin(), s->getVerticesEnd());
+				_indices.insert(_indices.end(), s->getIndicesBegin(), s->getIndicesEnd());
 
-				_countOfVertices += _shapes[i]->getSizeofVertices();
-				_countOfIndices += _shapes[i]->getSizeofIndices();
+				_countOfVertices += s->getSizeofVertices();
+				_countOfIndices += s->getSizeofIndices();
 				_countOfShapes++;
 			} 
 			else {
-				// If we cannot, we must draw everything and then collect data from the rest
 				_vbo->updateDynamically(_vertices);
 				_ebo->updateDynamically(_indices);
 
@@ -141,12 +149,15 @@ namespace mar {
 			}
 		}
 
-		// This is the "one" draw, if can put all data to one vector,
-		// if we cannot it is the last draw call
 		_vbo->updateDynamically(_vertices);
 		_ebo->updateDynamically(_indices);
 		draw();
 		_countOfDrawCalls++;
+
+		//! TODO: Always binds first added texture to new created elements in scene
+		//! Need to check what's wrong!
+		for (unsigned int i = 0; i < _shapes.size(); i++)
+			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
 	}
 
 	void Renderer::draw() {
@@ -202,16 +213,30 @@ namespace mar {
 		_camera_position = position;
 	}
 
+	//! When scene is clear and we push new element engine crashes
+	//! Definitely need to repair it!!!
 	void Renderer::guiPushPyramid(glm::vec3& position) {
-		pushObject(&Pyramid(), position);
+		_createShape = new Pyramid();
+		pushObject(_createShape, position);
+		_addedDuringRuntime.emplace_back(_createShape);
 	}
 
 	void Renderer::guiPushCube(glm::vec3& position) {
-		pushObject(&Cube(), position);
+		_createShape = new Cube();
+		pushObject(_createShape, position);
+		_addedDuringRuntime.emplace_back(_createShape);
 	}
 
 	void Renderer::guiPushSurface(glm::vec3& position) {
-		pushObject(&Surface(), position);
+		_createShape = new Surface();
+		pushObject(_createShape, position);
+		_addedDuringRuntime.emplace_back(_createShape);
+	}
+	
+	void Renderer::guiPushWall(glm::vec3& position) {
+		_createShape = new Wall();
+		pushObject(_createShape, position);
+		_addedDuringRuntime.emplace_back(_createShape);
 	}
 
 	const std::vector<int>& Renderer::getSamplers() const { 
