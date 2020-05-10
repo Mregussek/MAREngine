@@ -11,6 +11,13 @@
 #include "../VertexBuffer/VertexBufferLayout.h"
 
 namespace mar {
+
+	//! VertexArrayOpenGL
+	/*!
+		VertexArrayOpenGL is a object needed for storing state for supplying vertex data. Should contain
+		format of vertex data, by providing vertex arrays.
+		This is overloaded class of base one - VertexArrayOpenGL, which implements solution to that problem with OpenGL.
+	*/
 	class VertexArrayOpenGL : public VertexArray, std::enable_shared_from_this<VertexArrayOpenGL> {
 		unsigned int _rendererId;
 		size_t _howMany;

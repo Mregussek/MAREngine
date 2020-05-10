@@ -9,6 +9,12 @@
 #include "VertexBuffer.h"
 
 namespace mar {
+
+	//! VertexBufferOpenGL
+	/*!
+		VertexBufferOpenGL is used to store vertices on the GPU memory and as being the source for vertex array data.
+		This is overloaded class of base one - VertexBuffer, which implements solution to that problem with OpenGL.
+	*/
 	class VertexBufferOpenGL : public VertexBuffer, std::enable_shared_from_this<VertexBufferOpenGL> {
 		unsigned int _id;
 		unsigned int _size;
@@ -35,7 +41,7 @@ namespace mar {
 		*/
 		void updateDynamically(const std::vector<float>& vertices) const override;
 		
-		//! Unbind currently used VBO and restore memory usage for that buffer
+		//! Unbinds currently used VBO and restore memory usage for that buffer
 		void unbind() const override;
 		
 		//! Deletes VBO

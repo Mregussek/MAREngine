@@ -25,12 +25,7 @@ namespace mar {
 	}
 
 	void VertexBufferOpenGL::updateDynamically(const std::vector<float>& vertices) const {
-		float* vert = new float[vertices.size()];
-
-		std::copy(vertices.begin(), vertices.end(), vert);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vert);
-
-		delete[] vert;
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vertices.data());
 	}
 
 	void VertexBufferOpenGL::unbind() const {

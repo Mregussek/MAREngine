@@ -10,12 +10,29 @@
 
 namespace mar {
 
+	//! Vertex
+	/*!
+		Vertex is a structure, which holds all the information about format of data.
+		For VBO!
+		Now it is not implemented, but in future (with .obj files loading) there is going
+		to be need for some refactoring.
+	*/
 	struct Vertex {
 		float position[3];
+		float lightNormal[3];
 		float texCoord[2];
 		float texId;
 	};
 
+	//! Shapes
+	/*!
+		Shapes is a base class for the whole types of possible shapes.
+		It defines structure and encapsulation of private data, which
+		cannot be accesed anywhere.
+
+		I think for now there is no need to document every method here,
+		because names of functions says all what they do.
+	*/
 	class Shapes {
 	public:
 		Shapes(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
@@ -32,7 +49,7 @@ namespace mar {
 				_stride(0)
 		{}
 
-		virtual const std::string& getName() { return name; }
+		virtual const std::string& getName();
 
 		virtual void setID(float newID);
 		virtual const float getID() const;
@@ -75,6 +92,7 @@ namespace mar {
 		std::vector<float> verticesVector;
 
 		std::vector<unsigned int> indicesVector;
+
 		std::vector<unsigned int> layout;
 
 		bool _calculatedStride;

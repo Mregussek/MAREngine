@@ -9,8 +9,35 @@
 #include "../../../mar.h"
 #include "Shapes.h"
 
+ /*											(0.0f,  1.0f,  0.0f)[5]
+											  x
+								 			/	\	
+										/    /	\	\		
+									/	  /		  \		\
+								/	    /			\		\
+(-1.0f, -1.0f, -1.0f)[4]  	 x-------/----------------\---------x	(1.0f, -1.0f, -1.0f)[5]
+						    / 	  /						\      /
+						   /   /						  \	  /
+						  /	/							    \/
+						 x----------------------------------x
+ (-1.0f, -1.0f, 1.0f)[0]									(1.0f, -1.0f, 1.0f)[1]
+
+ Legend: (x, y, z)[indice]
+
+ The center of this object is x = y = z = 0.0f;
+ Also the object is not rotated, so in that case angles on three axis are equal to 0.0f;
+ Layout is 3, 2, 1;
+	 first number is 3 because, we have three position coordinates (x, y, z)
+	 second number is 2 cause, there is two texture coordinates (x, y)
+	 third number is 1, figure cannot have more than 2 indexes (not in MAREngine :D)
+ */
+
 namespace mar {
 
+	//! Pyramid
+	/*!
+		Create new Shape with overloaded class.
+	*/
 	class Pyramid : public Shapes {
 	public:
 		Pyramid()

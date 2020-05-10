@@ -9,6 +9,16 @@
 #include "../mar.h"
 
 namespace mar {
+
+    //! SerialPortMonitor
+    /*!
+        SerialPortMonitor is used real-time reading data from Serial Port with specified port name.
+        It looks for x, y, z-axis coordinates from accelerometer. For this we need to send data to serial
+        port in pattern, which this is expecting.
+
+        Pattern: "#x# <x-axis value [float]> #y# <y-axis value [float]> #z# <z-axis value [float]>"
+        Pattern Example: "#x# 2.45 #y# -1.756 #z# 5.123"
+    */
     class SerialPortMonitor {
         char* _port;
         static const int _maxLength{ 255 };
@@ -24,101 +34,59 @@ namespace mar {
         int _connectTries;
 
     public:
-        SerialPortMonitor(char* portName, int tries = 10)
-            : _port(portName),
-            _x(0.0f),
-            _y(0.0f),
-            _z(0.0f),
-            _connectTries(tries)
-        {
-            _arduino = new SerialPort(_port);
-        }
+        //! SerialPortMonitor constructor, it sets variables to its basic values
+        //! and creates instance of arduino. This instance will look for connection on given portName
+        /*
+            \param portName - name of serial port, where device will be connected. Example: "\\\\.\\COM7"
+            \param tries - how many tries SPM must check for connection, if device is not responding (default value is 10).
+        */
+        SerialPortMonitor(char* portName, int tries = 10);
 
-        ~SerialPortMonitor() {
-            delete _arduino;
+        //! SerialPortMonitor destructor. It deletes arduino instance and join thread,
+        ~SerialPortMonitor();
 
-            if (_thread.joinable()) _thread.join();
-        }
+        //! Initialization process for SerialPortMonitor. Looks for connection on given portName/
+        //! If found, it starts a thread, which will read data
+        void start();
 
-        void start() {
-            int checkTries{ 0 };
-            std::cout << "Searching for device on " << _port << " in progress";
+        //! Get x-axis coordinate from accelerometer
+        //! If cannot read default value is returned (0.0)
+        /*
+            \return _x - x-axis coordinate
+        */
+        const float& getX() const;
 
-            while (!_arduino->isConnected()) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                std::cout << ".";
-                delete _arduino;
-                _arduino = new SerialPort(_port);
 
-                if (_connectTries < ++checkTries) {
-                    std::cout << "Cannot connect to SP, playing without SerialPort\n";
-                    return;
-                }
-            }
+        //! Get y-axis coordinate from accelerometer
+        //! If cannot read default value is returned (0.0)
+        /*
+            \return _y - y-axis coordinate
+        */
+        const float& getY() const;
 
-            if (_arduino->isConnected()) std::cout << "\nConnection established!\n"; \
 
-                _thread = std::thread([this] {
-                    while (_arduino->isConnected()) receive();
-                });
-        }
+        //! Get z-axis coordinate from accelerometer
+        //! If cannot read default value is returned (0.0)
+        /*
+            \return _z - z-axis coordinate
+        */
+        const float& getZ() const;
 
-        const float& getX() const {
-            static std::mutex _io_mutex;
-            std::lock_guard<std::mutex> lg(_io_mutex);
-            std::cout << "SPM _x: " << _x << std::endl;
-            return _x;
-        }
-
-        const float& getY() const {
-            static std::mutex _io_mutex;
-            std::lock_guard<std::mutex> lg(_io_mutex);
-            std::cout << "SPM _y: " << _y << std::endl;
-            return _y;
-        }
-
-        const float& getZ() const {
-            static std::mutex _io_mutex;
-            std::lock_guard<std::mutex> lg(_io_mutex);
-            std::cout << "SPM _z: " << _z << std::endl;
-            return _z;
-        }
-
-        const bool isConnected() const { return _arduino->isConnected(); }
+        //! Check if device is still connected to Serial Port on given portName
+        /*
+            \param bool - true if is connected, false otherwise
+        */
+        const bool isConnected() const;
 
     private:
-        void receive() {
-            int readResult = _arduino->readSerialPort(_incomingData, MAX_DATA_LENGTH);
-            _recvData = _incomingData;
-            parseInput();
-            std::this_thread::sleep_for(std::chrono::milliseconds(_sleepTime));
-        }
+        //! Method written for receiving data in a thread. It continously reads
+        //! data from Serial Port from device connected to given portName.
+        void receive();
 
-        void parseInput() {
-            try {
-                auto xFound = _recvData.find("#x#");
-                auto yFound = _recvData.find("#y#");
-                auto zFound = _recvData.find("#z#");
-
-                if (xFound == std::string::npos || yFound == std::string::npos || zFound == std::string::npos)
-                    return;
-
-                auto xBegin = xFound + 3;
-                auto yBegin = yFound + 3;
-                auto zBegin = zFound + 3;
-
-                auto xEnd = yFound - 1;
-                auto yEnd = zFound - 1;
-                auto zEnd = std::distance(_recvData.begin(), _recvData.end()) - 2;
-
-                _x = std::stof(_recvData.substr(xBegin, xEnd));
-                _y = std::stof(_recvData.substr(yBegin, yEnd));
-                _z = std::stof(_recvData.substr(zBegin, zEnd));
-            }
-            catch (std::exception& e) {
-                std::cout << "Found error during parsing serial port: " << e.what() << std::endl;
-            }
-        }
+        //! Method written for parsing input received from Serial Port. It expects
+        //! specific pattern for x, y and z-axis coordinates. If the pattern is found
+        //! it prescribes new values to _x, _y and _z member values.
+        void parseInput();
     };
 }
 

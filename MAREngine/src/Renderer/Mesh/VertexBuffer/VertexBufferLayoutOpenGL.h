@@ -10,12 +10,18 @@
 
 namespace mar {
 
+	//! VertexBufferLayoutOpenGL
+	/*!
+		VertexBufferLayoutOpenGL is used for collecting format of vertices. Main point of this class is for
+		automating creating new objects.
+		This is overloaded class of base one - VertexBufferLayout, which implements solution to that problem with OpenGL.
+	*/
 	class VertexBufferLayoutOpenGL : public VertexBufferLayout, std::enable_shared_from_this<VertexBufferLayoutOpenGL> {
 		std::vector<VertexBufferElement> _elements;
 		unsigned int _stride;
 
 	public:
-		//! Constructor, which initializes _stride with 0 to
+		//! Constructor, which initializes _stride with 0
 		VertexBufferLayoutOpenGL() : _stride(0) {}
 
 		//! Returns all elements, which help the data to be formatted properly

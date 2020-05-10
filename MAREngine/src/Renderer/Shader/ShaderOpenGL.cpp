@@ -26,17 +26,11 @@ namespace mar {
 	}
 
 	void ShaderOpenGL::setUniformSampler2D(const std::string& name, std::vector<int> sampler) {
-		int* s = new int[sampler.size()];
-		std::copy(sampler.begin(), sampler.end(), s);
-		glUniform1iv(getUniformLocation(name), sampler.size(), s);
-		delete[] s;
+		glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data());
 	}
 
 	void ShaderOpenGL::setUniformVectorMat4(const std::string& name, std::vector<glm::mat4> sampler) {
-		glm::mat4* s = new glm::mat4[sampler.size()];
-		std::copy(sampler.begin(), sampler.end(), s);
-		glUniformMatrix4fv(getUniformLocation(name), sampler.size(), GL_FALSE, glm::value_ptr(*s));
-		delete[] s;
+		glUniformMatrix4fv(getUniformLocation(name), sampler.size(), GL_FALSE, glm::value_ptr(*sampler.data()));
 	}
 
 	void ShaderOpenGL::setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) {

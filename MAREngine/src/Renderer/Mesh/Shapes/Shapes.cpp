@@ -6,6 +6,10 @@
 #include "Shapes.h"
 
 namespace mar {
+	const std::string& Shapes::getName() { 
+		return name; 
+	}
+
 	void Shapes::setID(float newID) {
 		id = newID;
 	}

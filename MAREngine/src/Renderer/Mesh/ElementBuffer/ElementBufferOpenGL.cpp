@@ -25,12 +25,7 @@ namespace mar {
 	}
 
 	void ElementBufferOpenGL::updateDynamically(const std::vector<unsigned int>& data) const {
-		unsigned int* indices = new unsigned int[data.size()];
-
-		std::copy(data.begin(), data.end(), indices);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), indices);
-
-		delete[] indices;
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), data.data());
 	}
 
 	void ElementBufferOpenGL::unbind() const {

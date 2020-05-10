@@ -9,16 +9,36 @@
 #include "../../../mar.h"
 
 namespace mar {
+
+	//! VertexArray
+	/*!
+		VertexArray is a object needed for storing state for supplying vertex data. Should contain
+		format of vertex data, by providing vertex arrays.
+		This is just base class for other implementations of VertexArray.
+	*/
 	class VertexArray : std::enable_shared_from_this<VertexArray> {
 	public:
+		//! Default constructor. For initialization use initializeArrayBuffer() method.
 		VertexArray() = default;
 
+		//! Methos should generates and binds VAO. Method must be overloaded!
 		virtual void initializeArrayBuffer() { }
+
+		//! Method should deletes all data associated with VAO. Must be overloaded!
 		virtual void closeArrayBuffer() { }
 
+		//! Method should defines array of generic vertex attribute data and enables it
+		//! Must be overloaded!
+		/*
+			\param layout - specifies, how data should be formatted
+		*/
 		virtual void addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) { }
 
+		//! Method should bind class _id member to target, which is VAO. Must be overloaded!
 		virtual void bind() const { }
+
+		//! Method should unbind currently used VAO, break the existing VAO binding
+		//! Must be overloaded!
 		virtual void unbind() const { }
 	};
 }

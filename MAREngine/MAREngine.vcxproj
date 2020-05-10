@@ -187,6 +187,7 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Mesh.cpp" />
     <ClCompile Include="src\GUI\GUI.cpp" />
     <ClCompile Include="other\imgui\imgui.cpp" />

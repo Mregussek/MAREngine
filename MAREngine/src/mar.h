@@ -59,6 +59,12 @@
 #include <thread> 
 #include <mutex>
 
+//! mar
+/*!
+	mar is a main namespace for MAREngine. Below you can find all classes,
+	which are written for proper work of MAREngine. The most need class is Window,
+	cause it initializes OpenGL stuff. 
+*/
 namespace mar {
 	class Camera;
 	class Window; 

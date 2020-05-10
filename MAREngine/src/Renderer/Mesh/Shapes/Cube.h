@@ -43,6 +43,10 @@ Layout is 3, 2, 1;
 
 namespace mar {
 
+	//! Cube
+	/*!
+		Create new Shape with overloaded class.
+	*/
 	class Cube : public Shapes {
 	public:
 		Cube() 

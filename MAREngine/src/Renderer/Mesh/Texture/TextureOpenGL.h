@@ -9,6 +9,15 @@
 #include "Texture.h"
 
 namespace mar {
+
+	//! TextureOpenGL
+	/*!
+		TextureOpenGL is used to bind textures to renderer objects.
+		This class expects, that every renderer shape is containing unique ID, which
+		will be prescribed to texture ID.
+		This is overloaded class of base one - Texture, which implements 
+		solutions to specified problems using OpenGL.
+	*/
 	class TextureOpenGL : public Texture, std::enable_shared_from_this<TextureOpenGL> {
 		std::vector<unsigned int> _id;
 		std::vector<std::string> _paths;
@@ -25,7 +34,7 @@ namespace mar {
 		void shutdown() override;
 
 		//! Load 2D texture and prescribe it to available index. If texture is loaded
-		//! it pushed its index again.
+		//! it pushes its index again.
 		/*
 			\param path - path to texture, which will be loaded
 		*/
