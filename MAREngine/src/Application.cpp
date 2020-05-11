@@ -8,39 +8,12 @@
 namespace mar {
 	int Application::run() {
 		// --- STARTUP SHAPES FOR APPLCATION WITH ITS CENTERS, ANGLES AND TEXTURES --- //
-		std::vector<Shapes> shapes = {
-			Cube()
-			, Pyramid()
-			, Surface()
-			, Wall()
-			, Cube()
-			, Pyramid()
-		};
-		std::vector<glm::vec3> centers = {
-			{ 0.0f,  0.0f,  0.0f }
-			, { 3.0f,  0.0f, -4.5f }
-			, { 0.0f,  -0.025f,  0.0f }
-			, { -4.0f,  0.0f,  0.0f }
-			, {-3.0f,  0.0f, -4.5f }
-			, {-1.5f,  0.0f, -2.5f }
-		};
-		std::vector<glm::vec3> angles = {
-			 { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-		};
-		std::vector<std::string> textures = {
-			mrTex
-			, yellowTex
-			, grassTex
-			, wallTex
-			, blueTex
-			, redTex
-		};
-
+		Scene scene;
+		std::vector<Shapes> shapes = scene.getShapes();
+		std::vector<glm::vec3> centers = scene.getCenters();
+		std::vector<glm::vec3> angles = scene.getAngles();
+		std::vector<std::string> textures = scene.getTextures();
+		
 		// --- INITIALIZATION PROCESS --- //
 		Camera camera(width, height);
 		Window window(height, width, name, &camera);
@@ -48,16 +21,17 @@ namespace mar {
 		Renderer renderer;
 		gui.connectToRenderer(&renderer);
 		renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
-		
+
+		// --- PREPARE SCENE FOR DISPLAY
 		for (unsigned int i = 0; i < shapes.size(); i++) {
 			renderer.pushObject(&shapes[i], centers[i], textures[i]);
 			gui.push(centers[i], angles[i]);
 		}
 			
-		renderer.initialize(shadersPath);
+		renderer.initialize();
 		renderer.unbind();
 		
-		// --- MAIN LOOP --- //
+		// --- MAIN LOOP (RENDER LOOP) --- //
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
 			{ // update for every frame

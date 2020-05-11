@@ -9,6 +9,14 @@
 #include "Shader.h"
 
 namespace mar {
+	struct {
+#ifndef IMPORTED_FROM_GITHUB 
+		const std::string mainPath{ "resources/shaders/basic.shader" };
+#else
+		const std::string mainPath{ "MAREngine/resources/shaders/basic.shader" };
+#endif
+	} ShaderOpenGLSettings;
+
 	class ShaderOpenGL : public Shader {
 		unsigned int _rendererId;
 		std::string _filePath;
@@ -18,7 +26,7 @@ namespace mar {
 	public:
 		ShaderOpenGL() = default;
 
-		void initialize(const std::string& filePath) override;
+		void initialize() override;
 		void shutdown() override;
 
 		void bind() const;

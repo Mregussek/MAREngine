@@ -16,7 +16,7 @@ namespace mar {
 
 	class Shader {
 	public:
-		virtual void initialize(const std::string& filePath) { }
+		virtual void initialize() { }
 		virtual void shutdown() { }
 
 		virtual void bind() const { }

@@ -39,8 +39,8 @@ namespace mar {
 			delete _addedDuringRuntime[i];
 	}
 	
-	void Renderer::initialize(const std::string& shadersPath) {
-		_shader->initialize(shadersPath);
+	void Renderer::initialize() {
+		_shader->initialize();
 		_vao->initializeArrayBuffer();
 		_vbo->initializeVertex(constants::maxVertexCount);
 		_ebo->initializeElement(constants::maxIndexCount);

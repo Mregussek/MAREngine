@@ -6,8 +6,8 @@
 #include "ShaderOpenGL.h"
 
 namespace mar {
-	void ShaderOpenGL::initialize(const std::string& filePath) {
-		_filePath = filePath;
+	void ShaderOpenGL::initialize() {
+		_filePath = ShaderOpenGLSettings.mainPath;
 		_rendererId = 0;
 		_programSource = parseShader();
 		_rendererId = createShader();

@@ -62,7 +62,7 @@ namespace mar {
 		void createRenderer(const std::shared_ptr<RendererFactory>& factory);
 		void closeRenderer();
 
-		void initialize(const std::string& shadersPath);
+		void initialize();
 
 		void pushObject(Shapes* shape, glm::vec3& position, std::string texturePath = "resources/textures/black-texture.jpg");
 		void popObject(const unsigned int& index);

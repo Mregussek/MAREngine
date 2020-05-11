@@ -11,6 +11,9 @@
 // --- Import GLEW lib statically --- //
 #define GLEW_STATIC
 
+// --- Tell the compiler, if you imported repo from github (comment if yes)
+//#define IMPORTED_FROM_GITHUB
+
 // Decide wheter you want import GLEW or GLAD (comment to use GLAD)
 #define IMPORT_GLEW
 
@@ -74,6 +77,7 @@ namespace mar {
 		class RendererFactory;
 			class RendererOpenGLFactory;
 		class Mesh;
+			class Scene;
 			class Shapes;
 				class Cube;
 				class Pyramid;
