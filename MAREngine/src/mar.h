@@ -11,7 +11,8 @@
 // --- Import GLEW lib statically --- //
 #define GLEW_STATIC
 
-// --- Tell the compiler, if you imported repo from github (comment if yes)
+// --- Tell the compiler, if you imported repo from github
+// --- Leave it in comment, if you have the same setup as MR
 //#define IMPORTED_FROM_GITHUB
 
 // Decide wheter you want import GLEW or GLAD (comment to use GLAD)
@@ -65,7 +66,7 @@
 //! mar
 /*!
 	mar is a main namespace for MAREngine. Below you can find all classes,
-	which are written for proper work of MAREngine. The most need class is Window,
+	which are written for proper work of MAREngine. The most needed class is Window,
 	cause it initializes OpenGL stuff. 
 */
 namespace mar {
