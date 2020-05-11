@@ -18,6 +18,13 @@ namespace mar {
 		const size_t maxObjectsInScene = 32;
 	}
 
+	enum class GUIPushType {
+		CUBE,
+		WALL,
+		SURFACE,
+		PYRAMID
+	};
+
 	class Renderer {
 		// --- Buffers
 		std::shared_ptr<VertexBuffer> _vbo;
@@ -34,8 +41,8 @@ namespace mar {
 		std::vector<glm::mat4> _translations;
 		std::vector<glm::mat4> _rotations;
 		// --- Helper object for creating new ones
-		Shapes* _createShape;
 		std::vector<Shapes*> _addedDuringRuntime;
+		unsigned int _startupSceneSize;
 		// --- Lightning
 		glm::vec3 _lightPosition{ 0.0f, 0.5f, 5.0f };
 		// --- Setup
@@ -79,15 +86,14 @@ namespace mar {
 		void setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model);
 		void setCameraVectors(const glm::vec3& position);
 
-		void guiPushPyramid(glm::vec3& position);
-		void guiPushCube(glm::vec3& position);
-		void guiPushSurface(glm::vec3& position);
-		void guiPushWall(glm::vec3& position);
+		void guiPush(GUIPushType pushType, glm::vec3& position);
 		
 		const std::string& getObjectName(unsigned int index) { return _shapes[index]->getName(); }
 
 		const std::vector<int>& getSamplers() const;
 		const std::vector<unsigned int> getStatistics() const;
+
+		const unsigned int& getSceneStartupSize() const;
 	};
 }
 

@@ -22,6 +22,7 @@ namespace mar {
 			_countOfIndices = 0;
 			_countOfShapes = 0;
 			_countOfVertices = 0;
+			_startupSceneSize = 0;
 		}
 		else {
 			std::cerr << "Renderer is already initialized!\n";
@@ -51,9 +52,17 @@ namespace mar {
 			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
 
 		_shader->bind();
-		_shader->setUniformSampler2D("u_Texture", getSamplers());
+
+		_startupSceneSize = _shapes.size();
 	}
 
+	///! TODO: When you:
+	///! 1. Add new object to scene
+	///! 2. Delete this object from scene
+	///! 3. Just add new object to scene
+	///! Program crashes because next texture id is being increased, and the number is not correct
+	///! That's why we have seg fault. We have to investigate, why after loading scene we have 
+	///! increased value
 	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string texturePath) {
 		if (_shapes.size() == constants::maxObjectsInScene) {
 			std::cout << "Cannot push more objects!\n";
@@ -82,10 +91,11 @@ namespace mar {
 		}
 	}
 
-	//! TODO: This method works like stack, for proper work we need to delete
-	//! lastly added object to scene
 	void Renderer::popObject(const unsigned int& index) {
+		delete _addedDuringRuntime[index - _startupSceneSize];
+
 		_shapes.erase(_shapes.begin() + index);
+
 		_samplers.erase(_samplers.begin() + index);
 		_texture->removeID(index);
 
@@ -107,7 +117,8 @@ namespace mar {
 		_ebo->unbind();
 	}
 
-	//! CHECK TODO! in this method
+	///! CHECK TODO! in this method
+	///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
 	void Renderer::updateFrame() {
 		clear();
 		bind();
@@ -121,8 +132,6 @@ namespace mar {
 		// Clear buffer
 		_vertices.clear();
 		_indices.clear();
-
-		///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
 
 		// Main Loop - Batch Rendering
 		for (auto& s : _shapes) {
@@ -154,8 +163,6 @@ namespace mar {
 		draw();
 		_countOfDrawCalls++;
 
-		//! TODO: Always binds first added texture to new created elements in scene
-		//! Need to check what's wrong!
 		for (unsigned int i = 0; i < _shapes.size(); i++)
 			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
 	}
@@ -179,6 +186,10 @@ namespace mar {
 		_shader->setUniformVector3("u_LightPos", _lightPosition);
 		_shader->setUniformVector3("u_CameraPos", _camera_position);
 
+		// --- TEXTURE UNIFORMS --- //
+		_shader->setUniformSampler2D("u_Texture", getSamplers());
+
+		// --- MAIN DRAW CALL --- // 
 		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
@@ -213,30 +224,17 @@ namespace mar {
 		_camera_position = position;
 	}
 
-	//! When scene is clear and we push new element engine crashes
-	//! Definitely need to repair it!!!
-	void Renderer::guiPushPyramid(glm::vec3& position) {
-		_createShape = new Pyramid();
-		pushObject(_createShape, position);
-		_addedDuringRuntime.emplace_back(_createShape);
-	}
+	void Renderer::guiPush(GUIPushType pushType, glm::vec3& position) {
+		if(pushType == GUIPushType::PYRAMID)
+			_addedDuringRuntime.emplace_back(new Pyramid());
+		else if(pushType == GUIPushType::CUBE)
+			_addedDuringRuntime.emplace_back(new Cube());
+		else if(pushType == GUIPushType::SURFACE)
+			_addedDuringRuntime.emplace_back(new Surface());
+		else if(pushType == GUIPushType::WALL)
+			_addedDuringRuntime.emplace_back(new Wall());
 
-	void Renderer::guiPushCube(glm::vec3& position) {
-		_createShape = new Cube();
-		pushObject(_createShape, position);
-		_addedDuringRuntime.emplace_back(_createShape);
-	}
-
-	void Renderer::guiPushSurface(glm::vec3& position) {
-		_createShape = new Surface();
-		pushObject(_createShape, position);
-		_addedDuringRuntime.emplace_back(_createShape);
-	}
-	
-	void Renderer::guiPushWall(glm::vec3& position) {
-		_createShape = new Wall();
-		pushObject(_createShape, position);
-		_addedDuringRuntime.emplace_back(_createShape);
+		pushObject(_addedDuringRuntime[_addedDuringRuntime.size() - 1], position);
 	}
 
 	const std::vector<int>& Renderer::getSamplers() const { 
@@ -245,5 +243,9 @@ namespace mar {
 
 	const std::vector<unsigned int> Renderer::getStatistics() const {
 		return {_countOfDrawCalls, _countOfShapes, _countOfVertices, _countOfIndices};
+	}
+
+	const unsigned int& Renderer::getSceneStartupSize() const {
+		return _startupSceneSize;
 	}
 }

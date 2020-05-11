@@ -11,6 +11,11 @@
 
 namespace mar {
 
+	enum class SceneType {
+		DEFAULT,
+		EMPTY
+	};
+
 	//! Scene
 	/*!
 		Scene contains everything needed to create basic and default scene
@@ -52,6 +57,15 @@ namespace mar {
 
     public:
 		Scene() = default;
+
+		void initializeScene(SceneType type) {
+			if (type == SceneType::EMPTY) {
+				_shapes.clear();
+				_centers.clear();
+				_angles.clear();
+				_textures.clear();
+			}
+		}
 
 		std::vector<Shapes> getShapes() { return _shapes; }
 

@@ -26,6 +26,7 @@ namespace mar {
 		// --- Run-time GUI attributes
 		Renderer* _renderer;
 		bool _rendererConnected;
+		unsigned int _startupSceneSize;
 		float _pos[3];
 		float _ang[3];
 		float _inputCenter[3];

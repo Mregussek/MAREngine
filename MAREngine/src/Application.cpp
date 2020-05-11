@@ -9,6 +9,8 @@ namespace mar {
 	int Application::run() {
 		// --- STARTUP SHAPES FOR APPLCATION WITH ITS CENTERS, ANGLES AND TEXTURES --- //
 		Scene scene;
+		///! TODO: When scene is starting as empty, we cannot see newly added objects!
+		scene.initializeScene(SceneType::EMPTY);
 		std::vector<Shapes> shapes = scene.getShapes();
 		std::vector<glm::vec3> centers = scene.getCenters();
 		std::vector<glm::vec3> angles = scene.getAngles();
@@ -19,7 +21,6 @@ namespace mar {
 		Window window(height, width, name, &camera);
 		GUI gui(&window, glsl_version);
 		Renderer renderer;
-		gui.connectToRenderer(&renderer);
 		renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 
 		// --- PREPARE SCENE FOR DISPLAY
@@ -29,6 +30,7 @@ namespace mar {
 		}
 			
 		renderer.initialize();
+		gui.connectToRenderer(&renderer);
 		renderer.unbind();
 		
 		// --- MAIN LOOP (RENDER LOOP) --- //
