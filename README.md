@@ -4,7 +4,7 @@ MAREngine is a AR engine for abstracting 3D models in real world. Now the engine
 
 ## Installation
 
-For installation process check the [INSTALL.md](https://github.com/Mregussek/MAREngine/INSTALL.md) file.
+For installation process check the [INSTALL.md](https://github.com/Mregussek/MAREngine/blob/dev/INSTALL.md) file.
 
 ## Contributing
 
