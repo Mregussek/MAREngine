@@ -21,15 +21,13 @@ namespace mar {
 	class TextureOpenGL : public Texture, std::enable_shared_from_this<TextureOpenGL> {
 		std::vector<unsigned int> _id;
 		std::vector<std::string> _paths;
+		unsigned int _idOfNextTexture{0};
 		unsigned char* _localBuffer;
 		int _width;
 		int _height;
 		int _bitPerPixel;
 
 	public:
-		//! Default constructor. For initialization use loadTexture(path) method.
-		TextureOpenGL() = default;
-
 		//! Delete all existing textures
 		void shutdown() override;
 

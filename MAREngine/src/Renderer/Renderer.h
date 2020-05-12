@@ -71,7 +71,7 @@ namespace mar {
 
 		void initialize();
 
-		void pushObject(Shapes* shape, glm::vec3& position, std::string texturePath = "resources/textures/black-texture.jpg");
+		void pushObject(Shapes* shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
 		void popObject(const unsigned int& index);
 
 		void bind();
@@ -88,7 +88,7 @@ namespace mar {
 
 		void guiPush(GUIPushType pushType, glm::vec3& position);
 		
-		const std::string& getObjectName(unsigned int index) { return _shapes[index]->getName(); }
+		const std::string& getObjectName(unsigned int index);
 
 		const std::vector<int>& getSamplers() const;
 		const std::vector<unsigned int> getStatistics() const;

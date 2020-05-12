@@ -63,6 +63,7 @@ namespace mar {
 	///! Program crashes because next texture id is being increased, and the number is not correct
 	///! That's why we have seg fault. We have to investigate, why after loading scene we have 
 	///! increased value
+	///! Also look at TODO at popObject() method. There is associated problem!
 	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string texturePath) {
 		if (_shapes.size() == constants::maxObjectsInScene) {
 			std::cout << "Cannot push more objects!\n";
@@ -91,6 +92,13 @@ namespace mar {
 		}
 	}
 
+	///! TODO: When you:
+	///! 1. Push a few objects to scene (for instance 5)
+	///! 2. Delete object with index 0
+	///! 3. and then again index 0 (This index was one, but because of vector reshape now is 0)
+	///! program crashes, because of memory leak. We cannot use the same memory address for new object
+	///! Maybe we should delete existing vector and copy its whole stuff to new one?
+	///! Or use shapes as shared_ptr's, and with reset() method push new element and delete existing ones?
 	void Renderer::popObject(const unsigned int& index) {
 		delete _addedDuringRuntime[index - _startupSceneSize];
 
@@ -117,8 +125,8 @@ namespace mar {
 		_ebo->unbind();
 	}
 
-	///! CHECK TODO! in this method
 	///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
+	///! We have one draw call, because we have this memory available, but when we need second draw call program crashes!
 	void Renderer::updateFrame() {
 		clear();
 		bind();
@@ -235,6 +243,10 @@ namespace mar {
 			_addedDuringRuntime.emplace_back(new Wall());
 
 		pushObject(_addedDuringRuntime[_addedDuringRuntime.size() - 1], position);
+	}
+
+	const std::string& Renderer::getObjectName(unsigned int index) { 
+		return _shapes[index]->getName(); 
 	}
 
 	const std::vector<int>& Renderer::getSamplers() const { 

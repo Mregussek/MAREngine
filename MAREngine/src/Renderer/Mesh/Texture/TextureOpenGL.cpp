@@ -21,10 +21,11 @@ namespace mar {
 
 		// load new texture and push new 
 		_paths.push_back(path);
-		_id.push_back(_id.size());
+		_id.push_back(_idOfNextTexture);
+		_idOfNextTexture++;
 
-		glGenTextures(1, &_id[_id.size() - 1]);
-		glBindTexture(GL_TEXTURE_2D, _id[_id.size() - 1]);
+		glGenTextures(1, &_id.back());
+		glBindTexture(GL_TEXTURE_2D, _id.back());
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

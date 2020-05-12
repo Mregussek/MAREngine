@@ -70,17 +70,22 @@ namespace mar {
 				ImGui::EndMenu();
 			}
 
+			
 			if (ImGui::BeginMenu("Manage Objects")) {
-				
-				addNewObjectToScene();
+				if (_rendererConnected) {
+					addNewObjectToScene();
 
-				ImGui::Separator();
+					ImGui::Separator();
 
-				deleteObjectFromScene();
+					deleteObjectFromScene();
+
+				}
+				else
+					ImGui::Text("Renderer is not connected!");
 
 				ImGui::EndMenu();
 			}
-
+			
 			if (ImGui::BeginMenu("Statistics")) {
 
 				displayStatistics();
@@ -122,9 +127,15 @@ namespace mar {
 			_ang[2] = _angles[i].z;
 
 			// Prepare index on GUI
-			char int2char[3];
-			sprintf_s(int2char, "%d", i);
-			char shapeIndex[15] = "Object ";
+			char int2char[5];
+			sprintf_s(int2char, " %d", i);
+			
+			char shapeIndex[25] = "";
+			if(_rendererConnected)
+				strcat_s(shapeIndex, _renderer->getObjectName(i).c_str());
+			else
+				strcat_s(shapeIndex, "Object ");
+
 			strcat_s(shapeIndex, int2char);
 			ImGui::Text(shapeIndex);
 
@@ -160,68 +171,60 @@ namespace mar {
 		if (_inputCenter[2] > 10.0f || _inputCenter[2] < -10.0f)
 			return;
 
-		if (_rendererConnected) {
-			if (ImGui::Button("Select Pyramid")) {
-					if (_centersOfObjects.size() == constants::maxObjectsInScene)
-						return;
+		if (ImGui::Button("Select Pyramid")) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
 
-					glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-					_renderer->guiPush(GUIPushType::PYRAMID, center);
-					this->push(center, { 0.0f, 0.0f, 0.0f });
-			}
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPush(GUIPushType::PYRAMID, center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+		}
 		
-			if (ImGui::Button("Select Cube")) {
-					if (_centersOfObjects.size() == constants::maxObjectsInScene)
-						return;
+		if (ImGui::Button("Select Cube")) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
 
-					glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-					_renderer->guiPush(GUIPushType::CUBE, center);
-					this->push(center, { 0.0f, 0.0f, 0.0f });
-				
-			}
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPush(GUIPushType::CUBE, center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+			
+		}
 
-			if (ImGui::Button("Select Surface")) {
-					if (_centersOfObjects.size() == constants::maxObjectsInScene)
-						return;
+		if (ImGui::Button("Select Surface")) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
 
-					glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-					_renderer->guiPush(GUIPushType::SURFACE, center);
-					this->push(center, { 0.0f, 0.0f, 0.0f });
-			}
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPush(GUIPushType::SURFACE, center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+		}
 
-			if (ImGui::Button("Select Wall")) {
-					if (_centersOfObjects.size() == constants::maxObjectsInScene)
-						return;
+		if (ImGui::Button("Select Wall")) {
+				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+					return;
 
-					glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-					_renderer->guiPush(GUIPushType::WALL, center);
-					this->push(center, { 0.0f, 0.0f, 0.0f });
-				
-			}
+				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
+				_renderer->guiPush(GUIPushType::WALL, center);
+				this->push(center, { 0.0f, 0.0f, 0.0f });
+			
 		}
 	}
 
 	void GUI::deleteObjectFromScene() {
-		if (_rendererConnected) {
-			ImGui::MenuItem("Delete Object", "");
+		ImGui::MenuItem("Delete Object", "");
 
-			for (unsigned int i = _startupSceneSize; i < _centersOfObjects.size(); i++) {
-				char int2char[5];
-				sprintf_s(int2char, " %d ", i);
-				char shapeIndex[30] = " Delete ";
+		for (unsigned int i = _startupSceneSize; i < _centersOfObjects.size(); i++) {
+			char int2char[5];
+			sprintf_s(int2char, " %d ", i);
+			char shapeIndex[30] = " Delete ";
 
-				if (_rendererConnected)
-					strcat_s(shapeIndex, _renderer->getObjectName(i).c_str());
-				else
-					strcat_s(shapeIndex, "Object");
+			strcat_s(shapeIndex, _renderer->getObjectName(i).c_str());
+			strcat_s(shapeIndex, int2char);
 
-				strcat_s(shapeIndex, int2char);
-
-				if (ImGui::Button(shapeIndex)) {
-					_renderer->popObject(i);
-					_centersOfObjects.erase(_centersOfObjects.begin() + i);
-					_angles.erase(_angles.begin() + i);
-				}
+			if (ImGui::Button(shapeIndex)) {
+				_renderer->popObject(i);
+				_centersOfObjects.erase(_centersOfObjects.begin() + i);
+				_angles.erase(_angles.begin() + i);
 			}
 		}
 	}
