@@ -7,57 +7,46 @@
 
 namespace mar {
 	int Application::run() {
-		// --- STARTUP SHAPES FOR APPLCATION WITH ITS CENTERS, ANGLES AND TEXTURES --- //
-		Scene scene;
-		///! TODO: When scene is starting as empty, we cannot see newly added objects!
-		scene.initializeScene(SceneType::DEFAULT);
-		std::vector<Shapes> shapes = scene.getShapes();
-		std::vector<glm::vec3> centers = scene.getCenters();
-		std::vector<glm::vec3> angles = scene.getAngles();
-		std::vector<std::string> textures = scene.getTextures();
-		
-		// --- INITIALIZATION PROCESS --- //
+		// --- PREPARE FOR INITIALIZATION PROCESS (CREATE ALL NEEDED OBJECTS) --- //
 		Camera camera(width, height);
 		Window window(height, width, name, &camera);
 		GUI gui(&window, glsl_version);
 		Renderer renderer;
+		Scene scene;
+		
+		// --- INITIALIZATION PROCESS --- //
+		scene.initializeScene(SceneType::SURFACE);
 		renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 
-		// --- PREPARE SCENE FOR DISPLAY --- //
-		for (unsigned int i = 0; i < shapes.size(); i++) {
-			renderer.pushObject(&shapes[i], centers[i], textures[i]);
-			gui.push(centers[i], angles[i]);
+		// --- PUSH SCENE TO RENDERER AND SET GUI --- //
+		for (unsigned int i = 0; i < scene.getShapesNumber(); i++) {
+			renderer.pushObject(&scene.getShape(i), scene.getCenter(i), scene.getTexture(i));
+			gui.push(scene.getCenter(i), scene.getAngle(i));
 		}
 			
+		// --- INITIALIZE RENDERER WITH SCENE AND PREPARE FOR RENDERING --- //
 		renderer.initialize();
-		//gui.connectToRenderer(&renderer);
+		gui.connectToRenderer(&renderer);
 		renderer.unbind();
 		
 		// --- MAIN LOOP (RENDER LOOP) --- //
 		while (window.shouldClose()) {
 			// --- Processing Input --- //
-			{ // update for every frame
-				camera.processInput(window.getWindow());
-				gui.prepareNewFrame();
-			}
+			camera.processInput(window.getWindow());
+			gui.prepareNewFrame();
 
 			// --- Renderer Setup before drawing --- //
-			{
-				renderer.setGUIvectors(gui.getCentersVector(), gui.getAnglesVector());
-				renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
-				renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
-				renderer.setCameraVectors(camera.getCameraPosition());
-			}
+			renderer.setGUIvectors(gui.getCentersVector(), gui.getAnglesVector());
+			renderer.setGUImatrices(gui.getColors(), gui.getTranslationMatrix(), gui.getRotationMatrix());
+			renderer.setCameraMatrices(camera.getProjectionMatrix(), camera.getViewMatrix(), camera.getModelMatrix());
+			renderer.setCameraVectors(camera.getCameraPosition());
 
-			{
-				renderer.updateFrame();
-			}
+			// --- DRAW --- //
+			renderer.updateFrame();
 
 			// --- Polling events, updating IO actions --- //
-			{ // display gui on screen and swap buffers
-				gui.display();
-				window.swapBuffers();
-			}
+			gui.display();
+			window.swapBuffers();
 		}
 
 		renderer.closeRenderer();

@@ -13,6 +13,7 @@ namespace mar {
 
 	enum class SceneType {
 		DEFAULT,
+		SURFACE,
 		EMPTY
 	};
 
@@ -22,58 +23,38 @@ namespace mar {
 		on start of MAREngine.
 	*/
     class Scene {
-        std::vector<Shapes> _shapes = {
-			Cube()
-			, Pyramid()
-			, Surface()
-			, Wall()
-			, Cube()
-			, Pyramid()
-		};
-		std::vector<glm::vec3> _centers = {
-			{ 0.0f,  0.0f,  0.0f }
-			, { 3.0f,  0.0f, -4.5f }
-			, { 0.0f,  -0.025f,  0.0f }
-			, { -4.0f,  0.0f,  0.0f }
-			, {-3.0f,  0.0f, -4.5f }
-			, {-1.5f,  0.0f, -2.5f }
-		};
-		std::vector<glm::vec3> _angles = {
-			 { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-			 , { 0.0f, 0.0f, 0.0f }
-		};
-		std::vector<std::string> _textures = {
-			TexturePaths.mrTex
-			, TexturePaths.yellowTex
-			, TexturePaths.grassTex
-			, TexturePaths.wallTex
-			, TexturePaths.blueTex
-			, TexturePaths.redTex
-		};
+		std::vector<Shapes> _shapes;
+		std::vector<glm::vec3> _centers;
+		std::vector<glm::vec3> _angles;
+		std::vector<std::string> _textures;
 
     public:
 		Scene() = default;
 
-		void initializeScene(SceneType type) {
-			if (type == SceneType::EMPTY) {
-				_shapes.clear();
-				_centers.clear();
-				_angles.clear();
-				_textures.clear();
-			}
+		void initializeScene(SceneType type = SceneType::DEFAULT) {
+			if (type == SceneType::DEFAULT)
+				createDefault();
+			else if (type == SceneType::SURFACE)
+				createSurface();
+			else if (type == SceneType::EMPTY)
+				createEmpty();
 		}
 
+		void createDefault();
+		void createSurface();
+		void createEmpty();
+
 		std::vector<Shapes> getShapes() { return _shapes; }
-
 		std::vector<glm::vec3> getCenters() { return _centers; }
-
 		std::vector<glm::vec3> getAngles() { return _angles; }
-
 		std::vector<std::string> getTextures() { return _textures; }
+
+		const unsigned int getShapesNumber() { return _shapes.size(); }
+
+		Shapes& getShape(unsigned int index) { return _shapes[index]; }
+		glm::vec3& getCenter(unsigned int index) { return _centers[index]; }
+		glm::vec3& getAngle(unsigned int index) { return _angles[index]; }
+		std::string& getTexture(unsigned int index) { return _textures[index]; }
     };
 
 }
