@@ -13,7 +13,7 @@ namespace mar {
 #ifndef IMPORTED_FROM_GITHUB 
 		const std::string mainPath{ "resources/shaders/basic.shader" };
 #else
-		const std::string mainPath{ "../../../MAREngine/resources/shaders/basic.shader" };
+		const std::string mainPath{ "../../../resources/shaders/basic.shader" };
 #endif
 	} ShaderOpenGLSettings;
 

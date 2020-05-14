@@ -209,7 +209,7 @@
     <ClCompile Include="src\Renderer\Scene\Scene.cpp" />
     <ClCompile Include="src\Renderer\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Mesh\VertexBuffer\VertexBufferOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Mesh\VertexArray\VertexArrayOpenGL.cpp" />
@@ -217,7 +217,12 @@
     <ClCompile Include="src\Renderer\Mesh\Texture\TextureOpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitattributes" />
+    <None Include=".gitignore" />
     <None Include="imgui.ini" />
+    <None Include="INSTALL.md" />
+    <None Include="LICENSE.md" />
+    <None Include="README.md" />
     <None Include="resources\shaders\basic.shader" />
   </ItemGroup>
   <ItemGroup>

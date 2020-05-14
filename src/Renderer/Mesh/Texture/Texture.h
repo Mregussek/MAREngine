@@ -20,13 +20,13 @@ namespace mar {
 		const std::string redTex = "resources/textures/red-texture.jpg";
 		const std::string blackTex = "resources/textures/black-texture.jpg";
 #else
-		const std::string mrTex =		"../../../MAREngine/resources/textures/mr.jpg";
-		const std::string yellowTex =	"../../../MAREngine/resources/textures/yellow-texture.jpg";
-		const std::string grassTex =	"../../../MAREngine/resources/textures/grass-texture.jpg";
-		const std::string wallTex =		"../../../MAREngine/resources/textures/wall.jpg";
-		const std::string blueTex =		"../../../MAREngine/resources/textures/blue-texture.jpg";
-		const std::string redTex =		"../../../MAREngine/resources/textures/red-texture.jpg";
-		const std::string blackTex =	"../../../MAREngine/resources/textures/black-texture.jpg";
+		const std::string mrTex =		"../../../resources/textures/mr.jpg";
+		const std::string yellowTex =	"../../../resources/textures/yellow-texture.jpg";
+		const std::string grassTex =	"../../../resources/textures/grass-texture.jpg";
+		const std::string wallTex =		"../../../resources/textures/wall.jpg";
+		const std::string blueTex =		"../../../resources/textures/blue-texture.jpg";
+		const std::string redTex =		"../../../resources/textures/red-texture.jpg";
+		const std::string blackTex =	"../../../resources/textures/black-texture.jpg";
 #endif
 	} TexturePaths;
 

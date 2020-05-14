@@ -15,7 +15,7 @@ namespace mar {
 		Scene scene;
 		
 		// --- INITIALIZATION PROCESS --- //
-		scene.initializeScene(SceneType::DEFAULT);
+		scene.initializeScene(SceneType::SURFACE);
 		renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 
 		// --- PUSH SCENE TO RENDERER AND SET GUI --- //
