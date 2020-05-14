@@ -34,15 +34,17 @@ namespace mar {
 		std::shared_ptr<Texture> _texture;
 		std::shared_ptr<Shader> _shader;
 		// --- Objects
-		std::vector<Shapes*> _shapes;
+		std::shared_ptr<std::vector<std::shared_ptr<Shapes>>> _shapes;
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
 		std::vector<int> _samplers;
 		std::vector<glm::mat4> _translations;
 		std::vector<glm::mat4> _rotations;
 		// --- Helper object for creating new ones
-		std::vector<Shapes*> _addedDuringRuntime;
+		std::shared_ptr<Shapes> _addedDuringRuntime;
 		unsigned int _startupSceneSize;
+		bool _runtime;
+		unsigned int _helperIndex;
 		// --- Lightning
 		glm::vec3 _lightPosition{ 0.0f, 0.5f, 5.0f };
 		// --- Setup
@@ -71,7 +73,7 @@ namespace mar {
 
 		void initialize();
 
-		void pushObject(Shapes* shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
+		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
 		void popObject(const unsigned int& index);
 
 		void bind();

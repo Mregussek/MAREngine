@@ -8,12 +8,12 @@
 namespace mar {
     void Scene::createDefault() {
 		_shapes = {
-			Cube()
-			, Pyramid()
-			, Surface()
-			, Wall()
-			, Cube()
-			, Pyramid()
+			std::make_shared<Cube>()
+			, std::make_shared<Pyramid>()
+			, std::make_shared<Surface>()
+			, std::make_shared<Wall>()
+			, std::make_shared<Cube>()
+			, std::make_shared<Pyramid>()
 		};
 		_centers = {
 			{ 0.0f,  0.0f,  0.0f }
@@ -43,7 +43,7 @@ namespace mar {
 
 	void Scene::createSurface() {
 		_shapes = {
-			Surface()
+			std::make_shared<Surface>()
 		};
 		_centers = {
 			{ 0.0f,  -0.025f,  0.0f }

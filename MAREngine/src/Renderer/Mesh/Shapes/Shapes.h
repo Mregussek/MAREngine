@@ -49,7 +49,19 @@ namespace mar {
 				_stride(0)
 		{}
 
-		virtual const std::string& getName();
+		Shapes(const std::shared_ptr<Shapes>& shape)
+			: id(shape->getID()),
+			name(shape->getName()),
+			center(shape->getCenter()),
+			angle(shape->getAngle()),
+			verticesVector(shape->getVerticesVector()),
+			indicesVector(shape->getIndicesVector()),
+			layout(shape->getLayoutVector()),
+			_calculatedStride(false),
+			_stride(0)
+		{}
+
+		virtual const std::string& getName() const;
 
 		virtual void setID(float newID);
 		virtual const float getID() const;
@@ -79,6 +91,7 @@ namespace mar {
 		virtual std::vector<unsigned int>::const_iterator getIndicesBegin() const;
 		virtual std::vector<unsigned int>::const_iterator getIndicesEnd() const;
 
+		virtual const std::vector<unsigned int>& getLayoutVector() const;
 		virtual unsigned int getLayout(size_t index) const;
 		virtual unsigned int getLayoutSize() const;
 

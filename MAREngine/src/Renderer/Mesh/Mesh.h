@@ -28,7 +28,7 @@ namespace mar {
             \param shape - pointer to shape, which id must be changed
             \param nextID - id value for shape
         */
-        static void extendID(Shapes* shape, const float& nextID);
+        static void extendID(std::shared_ptr<Shapes>& shape, const float& nextID);
 
         //! Method is just easier implementation of shape rotation method. We need to pass only 2 values,
         //! instead of 5. For more information check the method below.
@@ -36,7 +36,7 @@ namespace mar {
             \param shape - pointer to shape, which will be rotated
             \param angle - vec3 contains angles for x, y and z axis.
         */
-        static void rotateObject(Shapes* shape, const glm::vec3& angle);
+        static void rotateObject(std::shared_ptr<Shapes>& shape, const glm::vec3& angle);
 
         //! Method returns new verticesVector for shape after rotation process. It rotates around all axis,
         //! x, y and z. For proper working you have to pass a few arguments.
@@ -57,7 +57,7 @@ namespace mar {
             \param shape - pointer to shape
             \param center - new center point for shape
         */
-        static void changeCenterOfObject(Shapes* shape, const glm::vec3& center);
+        static void changeCenterOfObject(std::shared_ptr<Shapes>& shape, const glm::vec3& center);
 
         //! Method returns new verticesVector for shape after changing center point process. 
         //! For proper working you have to pass a few arguments.
@@ -76,7 +76,7 @@ namespace mar {
             \param shape - pointer to shape
             \param max_value - max value of indices in current indices vector of renderer
         */
-        static void changeIndicesFormat(Shapes* shape, unsigned int& max_value);
+        static void changeIndicesFormat(std::shared_ptr<Shapes>& shape, unsigned int& max_value);
 
         //! If we want batch rendering, we need to change indices values for every shape. Default ones begin with 0.
         //! There is need to change begin value to new, in case of proper work of batch renderer.

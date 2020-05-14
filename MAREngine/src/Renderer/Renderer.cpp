@@ -16,13 +16,16 @@ namespace mar {
 			_texture = factory->createTexture();
 			_shader = factory->createShader();
 
+			_shapes = std::make_shared<std::vector<std::shared_ptr<Shapes>>>();
 			_pushedOnce = false;
+			_runtime = false;
 			_maxValue = 0;
 			_countOfDrawCalls = 0;
 			_countOfIndices = 0;
 			_countOfShapes = 0;
 			_countOfVertices = 0;
 			_startupSceneSize = 0;
+			_helperIndex = 0;
 		}
 		else {
 			std::cerr << "Renderer is already initialized!\n";
@@ -35,9 +38,6 @@ namespace mar {
 		_vao->closeArrayBuffer();
 		_vbo->close();
 		_ebo->close();
-
-		for (unsigned int i = 0; i < _addedDuringRuntime.size(); i++)
-			delete _addedDuringRuntime[i];
 	}
 	
 	void Renderer::initialize() {
@@ -48,12 +48,14 @@ namespace mar {
 
 		_vao->addBuffer(_lay);
 
-		for (unsigned int i = 0; i < _shapes.size(); i++)
-			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
-
+		for (unsigned int i = 0; i < _shapes->size(); i++) {
+			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
+		}
+			
 		_shader->bind();
 
-		_startupSceneSize = _shapes.size();
+		_startupSceneSize = _shapes->size();
+		_runtime = true;
 	}
 
 	///! TODO: When you:
@@ -64,27 +66,27 @@ namespace mar {
 	///! That's why we have seg fault. We have to investigate, why after loading scene we have 
 	///! increased value
 	///! Also look at TODO at popObject() method. There is associated problem!
-	void Renderer::pushObject(Shapes* shape, glm::vec3& position, std::string texturePath) {
-		if (_shapes.size() == constants::maxObjectsInScene) {
+	void Renderer::pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath) {
+		if (_shapes->size() == constants::maxObjectsInScene) {
 			std::cout << "Cannot push more objects!\n";
 			return;
 		}
 
-		Mesh::extendID(shape, (float)_shapes.size()); // more objects, more texture indexes
+		Mesh::extendID(shape, (float)_shapes->size());
 
-		Mesh::changeCenterOfObject(shape, position); // user sends new center position, we need to change vertices
+		Mesh::changeCenterOfObject(shape, position);
 
-		Mesh::changeIndicesFormat(shape, _maxValue); // we cannot use the same indices for the another vertices, that's why we increase them
+		Mesh::changeIndicesFormat(shape, _maxValue);
 
-		_maxValue += shape->getSizeofVertices() / shape->getStride(); // maximum value of indices
+		_maxValue += shape->getSizeofVertices() / shape->getStride();
 
-		_shapes.emplace_back(shape); // place new shape at the end of vector
+		_shapes->emplace_back(shape);
 
-		_texture->loadTexture(texturePath); // load texture for this object
+		_texture->loadTexture(texturePath);
 
-		_samplers.emplace_back(shape->getID()); // prescribe id to this texture
+		_samplers.emplace_back(shape->getID());
 
-		if (!_pushedOnce) { // push layout, all objects has the same format, so we need to do it once
+		if (!_pushedOnce) {
 			for (size_t i = 0; i < shape->getLayoutSize(); i++)
 				_lay->push(shape->getLayout(i), PushBuffer::PUSH_FLOAT);
 
@@ -100,9 +102,9 @@ namespace mar {
 	///! Maybe we should delete existing vector and copy its whole stuff to new one?
 	///! Or use shapes as shared_ptr's, and with reset() method push new element and delete existing ones?
 	void Renderer::popObject(const unsigned int& index) {
-		delete _addedDuringRuntime[index - _startupSceneSize];
-
-		_shapes.erase(_shapes.begin() + index);
+		_shapes->at(index).reset();
+		_shapes->erase(_shapes->begin() + index);
+		_helperIndex--;
 
 		_samplers.erase(_samplers.begin() + index);
 		_texture->removeID(index);
@@ -142,15 +144,15 @@ namespace mar {
 		_indices.clear();
 
 		// Main Loop - Batch Rendering
-		for (auto& s : _shapes) {
-			if (_vertices.size() + s->getSizeofVertices() <= constants::maxVertexCount 
-							&& _indices.size() + s->getSizeofIndices() <= constants::maxIndexCount) { 
+		for (unsigned int i = 0; i < _shapes->size(); i++) {
+			if (_vertices.size() + _shapes->at(i)->getSizeofVertices() <= constants::maxVertexCount 
+							&& _indices.size() + _shapes->at(i)->getSizeofIndices() <= constants::maxIndexCount) {
 
-				_vertices.insert(_vertices.end(), s->getVerticesBegin(), s->getVerticesEnd());
-				_indices.insert(_indices.end(), s->getIndicesBegin(), s->getIndicesEnd());
+				_vertices.insert(_vertices.end(), _shapes->at(i)->getVerticesBegin(), _shapes->at(i)->getVerticesEnd());
+				_indices.insert(_indices.end(), _shapes->at(i)->getIndicesBegin(), _shapes->at(i)->getIndicesEnd());
 
-				_countOfVertices += s->getSizeofVertices();
-				_countOfIndices += s->getSizeofIndices();
+				_countOfVertices += _shapes->at(i)->getSizeofVertices();
+				_countOfIndices += _shapes->at(i)->getSizeofIndices();
 				_countOfShapes++;
 			} 
 			else {
@@ -171,8 +173,10 @@ namespace mar {
 		draw();
 		_countOfDrawCalls++;
 
-		for (unsigned int i = 0; i < _shapes.size(); i++)
-			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
+		for (unsigned int i = 0; i < _shapes->size(); i++) {
+			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
+		}
+			
 	}
 
 	void Renderer::draw() {
@@ -210,7 +214,7 @@ namespace mar {
 		_translations.clear();
 		_rotations.clear();
 
-		for (unsigned int i = 0; i < _shapes.size(); i++) {
+		for (unsigned int i = 0; i < _shapes->size(); i++) {
 			_translations.push_back(glm::translate(glm::mat4(1.0f), newCenters[i]));
 			_rotations.push_back(Mesh::getRotationMatrix(newCenters[i], newAngles[i]));
 		}
@@ -233,20 +237,25 @@ namespace mar {
 	}
 
 	void Renderer::guiPush(GUIPushType pushType, glm::vec3& position) {
-		if(pushType == GUIPushType::PYRAMID)
-			_addedDuringRuntime.emplace_back(new Pyramid());
-		else if(pushType == GUIPushType::CUBE)
-			_addedDuringRuntime.emplace_back(new Cube());
-		else if(pushType == GUIPushType::SURFACE)
-			_addedDuringRuntime.emplace_back(new Surface());
-		else if(pushType == GUIPushType::WALL)
-			_addedDuringRuntime.emplace_back(new Wall());
+		if (pushType == GUIPushType::PYRAMID)
+			//_addedDuringRuntime.emplace_back(std::make_shared<Pyramid>());
+			_addedDuringRuntime = std::make_shared<Pyramid>();
+		else if (pushType == GUIPushType::CUBE)
+			//_addedDuringRuntime.emplace_back(std::make_shared<Cube>());
+			_addedDuringRuntime = std::make_shared<Cube>();
+		else if (pushType == GUIPushType::SURFACE)
+			//_addedDuringRuntime.emplace_back(std::make_shared<Surface>());
+			_addedDuringRuntime = std::make_shared<Surface>();
+		else if (pushType == GUIPushType::WALL)
+			//_addedDuringRuntime.emplace_back(std::make_shared<Wall>());
+			_addedDuringRuntime = std::make_shared<Wall>();
 
-		pushObject(_addedDuringRuntime[_addedDuringRuntime.size() - 1], position);
+		//pushObject(_addedDuringRuntime[_addedDuringRuntime.size() - 1], position);
+		pushObject(_addedDuringRuntime, position);
 	}
 
 	const std::string& Renderer::getObjectName(unsigned int index) { 
-		return _shapes[index]->getName(); 
+		return _shapes->at(index)->getName();
 	}
 
 	const std::vector<int>& Renderer::getSamplers() const { 

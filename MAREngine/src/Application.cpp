@@ -15,12 +15,12 @@ namespace mar {
 		Scene scene;
 		
 		// --- INITIALIZATION PROCESS --- //
-		scene.initializeScene(SceneType::SURFACE);
+		scene.initializeScene(SceneType::DEFAULT);
 		renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 
 		// --- PUSH SCENE TO RENDERER AND SET GUI --- //
 		for (unsigned int i = 0; i < scene.getShapesNumber(); i++) {
-			renderer.pushObject(&scene.getShape(i), scene.getCenter(i), scene.getTexture(i));
+			renderer.pushObject(scene.getShape(i), scene.getCenter(i), scene.getTexture(i));
 			gui.push(scene.getCenter(i), scene.getAngle(i));
 		}
 			

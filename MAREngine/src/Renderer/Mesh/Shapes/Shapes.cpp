@@ -6,7 +6,7 @@
 #include "Shapes.h"
 
 namespace mar {
-	const std::string& Shapes::getName() { 
+	const std::string& Shapes::getName() const { 
 		return name; 
 	}
 
@@ -102,6 +102,10 @@ namespace mar {
 
 	std::vector<unsigned int>::const_iterator Shapes::getIndicesEnd() const {
 		return indicesVector.end();
+	}
+
+	const std::vector<unsigned int>& Shapes::getLayoutVector() const {
+		return layout;
 	}
 
 	unsigned int Shapes::getLayout(size_t index) const {
