@@ -202,7 +202,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\basic.shader" />
     <None Include="imgui.ini" />
     <None Include="INSTALL.md" />
     <None Include="LICENSE.md" />
@@ -212,6 +211,8 @@
     <None Include="cmake\FindGLFW3.cmake" />
     <None Include="cmake\FindGLM.cmake" />
     <None Include="cmake\FindSDL2.cmake" />
+    <None Include="resources\shaders\main.shader" />
+    <None Include="resources\shaders\light.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">

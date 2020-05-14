@@ -226,7 +226,8 @@
     <None Include="INSTALL.md" />
     <None Include="LICENSE.md" />
     <None Include="README.md" />
-    <None Include="resources\shaders\basic.shader" />
+    <None Include="resources\shaders\light.shader" />
+    <None Include="resources\shaders\main.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\black-texture.jpg" />
