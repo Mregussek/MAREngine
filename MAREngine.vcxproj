@@ -219,6 +219,9 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="cmake\FindGLFW3.cmake" />
+    <None Include="cmake\FindGLM.cmake" />
+    <None Include="cmake\FindSDL2.cmake" />
     <None Include="imgui.ini" />
     <None Include="INSTALL.md" />
     <None Include="LICENSE.md" />
@@ -233,6 +236,9 @@
     <Image Include="resources\textures\red-texture.jpg" />
     <Image Include="resources\textures\wall.jpg" />
     <Image Include="resources\textures\yellow-texture.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

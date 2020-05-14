@@ -20,7 +20,6 @@ namespace mar {
 	*/
 	class VertexArrayOpenGL : public VertexArray, std::enable_shared_from_this<VertexArrayOpenGL> {
 		unsigned int _rendererId;
-		size_t _howMany;
 
 	public:
 		//! Default constructor. For initialization use initializeArrayBuffer() method.

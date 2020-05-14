@@ -84,7 +84,7 @@ namespace mar {
 
 		_texture->loadTexture(texturePath);
 
-		_samplers.emplace_back(shape->getID());
+		_samplers.push_back(shape->getID());
 
 		if (!_pushedOnce) {
 			for (size_t i = 0; i < shape->getLayoutSize(); i++)
@@ -238,19 +238,14 @@ namespace mar {
 
 	void Renderer::guiPush(GUIPushType pushType, glm::vec3& position) {
 		if (pushType == GUIPushType::PYRAMID)
-			//_addedDuringRuntime.emplace_back(std::make_shared<Pyramid>());
 			_addedDuringRuntime = std::make_shared<Pyramid>();
 		else if (pushType == GUIPushType::CUBE)
-			//_addedDuringRuntime.emplace_back(std::make_shared<Cube>());
 			_addedDuringRuntime = std::make_shared<Cube>();
 		else if (pushType == GUIPushType::SURFACE)
-			//_addedDuringRuntime.emplace_back(std::make_shared<Surface>());
 			_addedDuringRuntime = std::make_shared<Surface>();
 		else if (pushType == GUIPushType::WALL)
-			//_addedDuringRuntime.emplace_back(std::make_shared<Wall>());
 			_addedDuringRuntime = std::make_shared<Wall>();
 
-		//pushObject(_addedDuringRuntime[_addedDuringRuntime.size() - 1], position);
 		pushObject(_addedDuringRuntime, position);
 	}
 

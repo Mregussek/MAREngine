@@ -12,7 +12,7 @@ namespace mar {
 	}
 
 	void VertexArrayOpenGL::closeArrayBuffer() {
-		glDeleteVertexArrays(_howMany, &_rendererId);
+		glDeleteVertexArrays(1, &_rendererId);
 	}
 
 	void VertexArrayOpenGL::addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) {
