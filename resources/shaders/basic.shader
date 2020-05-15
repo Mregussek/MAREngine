@@ -2,14 +2,16 @@
 #version 460 core
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec3 lightNormal;
-layout(location = 2) in vec2 texCoord;
-layout(location = 3) in float texIndex;
+layout(location = 1) in vec3 basicColors;
+layout(location = 2) in vec3 lightNormal;
+layout(location = 3) in vec2 texCoord;
+layout(location = 4) in float texIndex;
 
 out vec2 v_TexCoord;
 out float v_TexIndex;
 out vec3 v_lightNormal;
 out vec3 v_Position;
+out vec3 v_basicColors;
 
 uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -34,6 +36,7 @@ void main() {
 	v_TexIndex = texIndex;
 	v_lightNormal = mat3(u_Model) * lightNormal;
 	v_Position = vec4(u_Model * position).xyz;
+	v_basicColors = basicColors;
 };
 
 #shader fragment
@@ -45,6 +48,7 @@ in vec2 v_TexCoord;
 in float v_TexIndex;
 in vec3 v_lightNormal;
 in vec3 v_Position;
+in vec3 v_basicColors;
 
 uniform vec4 u_GUISceneColor;
 uniform sampler2D u_Texture[32];
@@ -84,5 +88,6 @@ void main() {
 	diffuseLight *= attenuation;
 	specularLight *= attenuation;
 
-	color = texColor * u_GUISceneColor * (ambientLight + diffuseLight + specularLight);
+	color = texColor * u_GUISceneColor *
+			(ambientLight + diffuseLight + specularLight);
 };

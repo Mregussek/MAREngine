@@ -86,8 +86,6 @@ namespace mar {
 
 		Mesh::extendID(shape, (float)_shapes->size());
 
-		Mesh::changeCenterOfObject(shape, position);
-
 		Mesh::changeIndicesFormat(shape, _maxValue);
 
 		_maxValue += shape->getSizeofVertices() / shape->getStride();

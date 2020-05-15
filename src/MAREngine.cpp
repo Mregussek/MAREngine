@@ -19,7 +19,7 @@ namespace mar {
 		m_gui.loadSceneParameters(&m_scene);
 
 		// --- INITIALIZE RENDERER WITH SCENE AND PREPARE FOR RENDERING --- //
-		m_gui.connectToRenderer(&m_renderer);
+		//m_gui.connectToRenderer(&m_renderer);
 		m_renderer.initialize();
 		m_renderer.unbind();
 	}
