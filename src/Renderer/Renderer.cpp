@@ -14,31 +14,39 @@ namespace mar {
 			_vao = factory->createVertexArray();
 			_ebo = factory->createElementBuffer();
 			_texture = factory->createTexture();
-			_shader = factory->createShader();
+			_mainShader = factory->createShader();
 
 			_shapes = std::make_shared<std::vector<std::shared_ptr<Shapes>>>();
 			_stats = RendererStatistics();
-			_pushedOnce = false;
-			_runtime = false;
+			_pushedLayout = false;
 			_maxValue = 0;
-			_startupSceneSize = 0;
-			_helperIndex = 0;
 		}
 		else {
-			std::cerr << "Renderer is already initialized!\n";
+			std::cerr << "Renderer is already initialized!" << std::endl;
 		}
 	}
 
 	void Renderer::closeRenderer() {
-		_shader->shutdown();
-		_texture->shutdown();
-		_vao->closeArrayBuffer();
-		_vbo->close();
-		_ebo->close();
+		if (_initialized) {
+			_mainShader->shutdown();
+			_texture->shutdown();
+			_vao->closeArrayBuffer();
+			_vbo->close();
+			_ebo->close();
+		}
+		else {
+			std::cerr << "Renderer is not initialized!" << std::endl;
+		}
+		
 	}
 	
 	void Renderer::initialize() {
-		_shader->initialize();
+		// When we will use Engine as a real AR app we won't to see a managable GUI
+		if(_isGUIconnected)
+			_mainShader->initialize(ShaderType::DEFAULT);
+		else
+			_mainShader->initialize(ShaderType::WITHOUT_GUI);
+
 		_vao->initializeArrayBuffer();
 		_vbo->initializeVertex(constants::maxVertexCount);
 		_ebo->initializeElement(constants::maxIndexCount);
@@ -49,10 +57,17 @@ namespace mar {
 			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
 		}
 			
-		_shader->bind();
+		_mainShader->bind();
 
-		_startupSceneSize = _shapes->size();
-		_runtime = true;
+		_initialized = true;
+	}
+
+	void Renderer::loadScene(Scene* scene) {
+		for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
+			pushObject(scene->getShape(i), scene->getCenter(i), scene->getTexture(i));
+			_translations.push_back(glm::translate(glm::mat4(1.0f), scene->getCenter(i)));
+			_rotations.push_back(Mesh::getRotationMatrix(scene->getCenter(i), scene->getAngle(i)));
+		}
 	}
 
 	///! TODO: When you:
@@ -65,7 +80,7 @@ namespace mar {
 	///! Also look at TODO at popObject() method. There is associated problem!
 	void Renderer::pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath) {
 		if (_shapes->size() == constants::maxObjectsInScene) {
-			std::cout << "Cannot push more objects!\n";
+			std::cout << "Cannot push more objects!" << std::endl;
 			return;
 		}
 
@@ -83,11 +98,11 @@ namespace mar {
 
 		_samplers.push_back(shape->getID());
 
-		if (!_pushedOnce) {
+		if (!_pushedLayout) {
 			for (size_t i = 0; i < shape->getLayoutSize(); i++)
 				_lay->push(shape->getLayout(i), PushBuffer::PUSH_FLOAT);
 
-			_pushedOnce = true;
+			_pushedLayout = true;
 		}
 	}
 
@@ -101,7 +116,6 @@ namespace mar {
 	void Renderer::popObject(const unsigned int& index) {
 		_shapes->at(index).reset();
 		_shapes->erase(_shapes->begin() + index);
-		_helperIndex--;
 
 		_samplers.erase(_samplers.begin() + index);
 		_texture->removeID(index);
@@ -111,14 +125,14 @@ namespace mar {
 	}
 
 	void Renderer::bind() {
-		_shader->bind();
+		_mainShader->bind();
 		_vao->bind();
 		_vbo->bind();
 		_ebo->bind();
 	}
 
 	void Renderer::unbind() {
-		_shader->unbind();
+		_mainShader->unbind();
 		_vao->unbind();
 		_vbo->unbind();
 		_ebo->unbind();
@@ -127,7 +141,7 @@ namespace mar {
 	///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
 	///! We have one draw call, because we have this memory available, but when we need second draw call program crashes!
 	void Renderer::updateFrame() {
-		clear();
+		clearScreen();
 		bind();
 
 		// Reset statistics before drawing
@@ -173,41 +187,52 @@ namespace mar {
 		for (unsigned int i = 0; i < _shapes->size(); i++) {
 			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
 		}
-			
 	}
 
 	void Renderer::draw() {
 		// --- GUI UNIFORMS --- //
-		_shader->setUniform4fv("u_GUIcolor", _gui_colors);
-		_shader->setUniformMat4f("u_GUItranslation", _gui_translate);
-		_shader->setUniformMat4f("u_GUIrotation", _gui_rotation);
+		if (_isGUIconnected) {
+			// --- WHOLE SCENE UNIFORMS
+			_mainShader->setUniform4fv("u_GUISceneColor", _gui_colors);
+			_mainShader->setUniformMat4f("u_GUISceneTranslation", _gui_translate);
+			_mainShader->setUniformMat4f("u_GUISceneRotation", _gui_rotation);
 
+			// --- SEPERATE OBJECTS UNIFORMS --- //
+			_mainShader->setUniformVectorMat4("u_GUISeperateTranslate", _translations);
+			_mainShader->setUniformVectorMat4("u_GUISeperateRotation", _rotations);
+		}
+		else {
+			_mainShader->setUniformVectorMat4("u_SeperateTranslate", _translations);
+			_mainShader->setUniformVectorMat4("u_SeperateRotation", _rotations);
+		}
+		
 		// --- CAMERA UNIFORMS --- //
-		_shader->setUniformMat4f("u_Projection", _camera_projection);
-		_shader->setUniformMat4f("u_View", _camera_view);
-		_shader->setUniformMat4f("u_Model", _camera_model);
-
-		// --- RENDERING UNIFORMS --- //
-		_shader->setUniformVectorMat4("u_RenderTranslate", _translations);
-		_shader->setUniformVectorMat4("u_RenderRotation", _rotations);
+		_mainShader->setUniformMat4f("u_Projection", _camera_projection);
+		_mainShader->setUniformMat4f("u_View", _camera_view);
+		_mainShader->setUniformMat4f("u_Model", _camera_model);
 
 		// --- LIGHTS UNIFORMS --- //		
-		_shader->setUniformVector3("u_LightPos", _lightPosition);
-		_shader->setUniformVector3("u_CameraPos", _camera_position);
+		_mainShader->setUniformVector3("u_LightPos", _lightPosition);
+		_mainShader->setUniformVector3("u_CameraPos", _camera_position);
 
 		// --- TEXTURE UNIFORMS --- //
-		_shader->setUniformSampler2D("u_Texture", getSamplers());
+		_mainShader->setUniformSampler2D("u_Texture", getSamplers());
 
 		// --- MAIN DRAW CALL --- // 
 		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	void Renderer::clear() {
+	void Renderer::clearScreen() {
 		glClearColor(0.85f, 0.85f, 0.85f, 1.0f); // light gray
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void Renderer::setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {
+		if (!_isGUIconnected) {
+			std::cerr << "GUI is not connected!" << std::endl;
+			return;
+		}
+		
 		_translations.clear();
 		_rotations.clear();
 
@@ -218,6 +243,11 @@ namespace mar {
 	}
 
 	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {
+		if (!_isGUIconnected) {
+			std::cerr << "GUI is not connected!" << std::endl;
+			return;
+		}
+		
 		_gui_colors = colors;
 		_gui_translate = translationMatrix;
 		_gui_rotation = rotationMatrix;
@@ -256,9 +286,5 @@ namespace mar {
 
 	const RendererStatistics& Renderer::getStatistics() const {
 		return _stats;
-	}
-
-	const unsigned int& Renderer::getSceneStartupSize() const {
-		return _startupSceneSize;
 	}
 }

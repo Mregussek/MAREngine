@@ -227,6 +227,7 @@
     <None Include="LICENSE.md" />
     <None Include="README.md" />
     <None Include="resources\shaders\basic.shader" />
+    <None Include="resources\shaders\basicWithoutGUI.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\black-texture.jpg" />

@@ -19,26 +19,26 @@ namespace mar {
 		// --- Attributes for objects
 		glm::vec3 _translation;
 		glm::vec3 _angle;
-		float _colors[4];
 		std::vector<glm::vec3> _centersOfObjects;
 		std::vector<glm::vec3> _angles;
-		unsigned int _index;
+		// --- Attributes for sliders
+		float _colors[4];
+		float _pos[3];
+		float _ang[3];
+		float _inputCenter[3];
 		// --- Run-time GUI attributes
 		Renderer* _renderer;
 		bool _rendererConnected;
 		unsigned int _startupSceneSize;
-		float _pos[3];
-		float _ang[3];
-		float _inputCenter[3];
-		bool _checkPyramid;
-		bool _checkCube;
-		bool _checkSurface;
+		
 
 	public:
 		GUI();
 
 		void initialize(Window* window, const char* glsl_version);
 		void shutdown();
+
+		void loadSceneParameters(Scene* scene);
 
 		void connectToRenderer(Renderer* renderer);
 

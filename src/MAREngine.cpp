@@ -7,6 +7,7 @@
 
 namespace mar {
 	void MAREngine::initialize() {
+		// --- INITIALIZE MARENGINE MEMBERS --- //
 		m_camera.initialize(MAREngineDefaultSettings.width, MAREngineDefaultSettings.height);
 		m_window.initialize(MAREngineDefaultSettings.height, MAREngineDefaultSettings.width, MAREngineDefaultSettings.name, &m_camera);
 		m_gui.initialize(&m_window, MAREngineDefaultSettings.glsl_version);
@@ -14,14 +15,12 @@ namespace mar {
 		m_renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 
 		// --- PUSH SCENE TO RENDERER AND SET GUI --- //
-		for (unsigned int i = 0; i < m_scene.getShapesNumber(); i++) {
-			m_renderer.pushObject(m_scene.getShape(i), m_scene.getCenter(i), m_scene.getTexture(i));
-			m_gui.push(m_scene.getCenter(i), m_scene.getAngle(i));
-		}
+		m_renderer.loadScene(&m_scene);
+		m_gui.loadSceneParameters(&m_scene);
 
 		// --- INITIALIZE RENDERER WITH SCENE AND PREPARE FOR RENDERING --- //
-		m_renderer.initialize();
 		m_gui.connectToRenderer(&m_renderer);
+		m_renderer.initialize();
 		m_renderer.unbind();
 	}
 
@@ -47,8 +46,8 @@ namespace mar {
 	}
 
 	void MAREngine::shutdown() {
-		m_renderer.closeRenderer();
 		m_gui.shutdown();
+		m_renderer.closeRenderer();
 		m_window.shutdown();
 	}
 }

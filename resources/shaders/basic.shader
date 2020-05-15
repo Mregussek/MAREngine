@@ -14,17 +14,17 @@ out vec3 v_Position;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Projection;
-uniform mat4 u_GUItranslation;
-uniform mat4 u_GUIrotation;
-uniform mat4 u_RenderTranslate[32];
-uniform mat4 u_RenderRotation[32];
+uniform mat4 u_GUISceneTranslation;
+uniform mat4 u_GUISceneRotation;
+uniform mat4 u_GUISeperateTranslate[32];
+uniform mat4 u_GUISeperateRotation[32];
 
 void main() {
 	// Calculate all transformations
 	int index = int(texIndex);
-	mat4 renderTrans = u_RenderTranslate[index] * u_RenderRotation[index];
+	mat4 renderTrans = u_GUISeperateTranslate[index] * u_GUISeperateRotation[index];
 
-	mat4 guiTrans = u_GUItranslation * u_GUIrotation;
+	mat4 guiTrans = u_GUISceneTranslation * u_GUISceneRotation;
 	mat4 mvp = u_Projection * u_View * u_Model;
 
 	gl_Position = mvp * guiTrans * renderTrans * position;
@@ -46,7 +46,7 @@ in float v_TexIndex;
 in vec3 v_lightNormal;
 in vec3 v_Position;
 
-uniform vec4 u_GUIcolor;
+uniform vec4 u_GUISceneColor;
 uniform sampler2D u_Texture[32];
 uniform vec3 u_LightPos;
 uniform vec3 u_CameraPos;
@@ -84,5 +84,5 @@ void main() {
 	diffuseLight *= attenuation;
 	specularLight *= attenuation;
 
-	color = texColor * u_GUIcolor * (ambientLight + diffuseLight + specularLight);
+	color = texColor * u_GUISceneColor * (ambientLight + diffuseLight + specularLight);
 };

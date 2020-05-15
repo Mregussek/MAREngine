@@ -24,6 +24,8 @@
 #include "Shader/Shader.h"
 #include "Shader/ShaderOpenGL.h"
 
+#include "Scene/Scene.h"
+
 #include "Mesh/Mesh.h"
 #include "Mesh/Shapes/Shapes.h"
 #include "Mesh/Shapes/Cube.h"

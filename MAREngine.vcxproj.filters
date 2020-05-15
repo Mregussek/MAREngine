@@ -212,6 +212,7 @@
     <None Include="cmake\FindGLFW3.cmake" />
     <None Include="cmake\FindGLM.cmake" />
     <None Include="cmake\FindSDL2.cmake" />
+    <None Include="resources\shaders\basicWithoutGUI.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">

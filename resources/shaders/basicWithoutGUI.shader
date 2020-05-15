@@ -3,9 +3,8 @@
 
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec3 lightNormal;
-layout(location = 2) in vec3 basicColors;
-layout(location = 3) in vec2 texCoord;
-layout(location = 4) in float texIndex;
+layout(location = 2) in vec2 texCoord;
+layout(location = 3) in float texIndex;
 
 out vec2 v_TexCoord;
 out float v_TexIndex;
@@ -15,13 +14,13 @@ out vec3 v_Position;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Projection;
-uniform mat4 u_RenderTranslate[32];
-uniform mat4 u_RenderRotation[32];
+uniform mat4 u_SeperateTranslate[32];
+uniform mat4 u_SeperateRotation[32];
 
 void main() {
 	// Calculate all transformations
 	int index = int(texIndex);
-	mat4 renderTrans = u_RenderTranslate[index] * u_RenderRotation[index];
+	mat4 renderTrans = u_SeperateTranslate[index] * u_SeperateRotation[index];
 
 	mat4 mvp = u_Projection * u_View * u_Model;
 

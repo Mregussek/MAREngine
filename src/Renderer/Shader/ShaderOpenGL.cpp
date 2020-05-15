@@ -6,8 +6,12 @@
 #include "ShaderOpenGL.h"
 
 namespace mar {
-	void ShaderOpenGL::initialize() {
-		_filePath = ShaderOpenGLSettings.mainPath;
+	void ShaderOpenGL::initialize(ShaderType shadertype) {
+		if(shadertype == ShaderType::DEFAULT)
+			_filePath = ShaderOpenGLSettings.mainPath;
+		else if(shadertype == ShaderType::WITHOUT_GUI)
+			_filePath = ShaderOpenGLSettings.withoutGUIPath;
+
 		_rendererId = 0;
 		_programSource = parseShader();
 		_rendererId = createShader();

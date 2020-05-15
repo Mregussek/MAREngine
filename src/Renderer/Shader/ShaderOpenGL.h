@@ -12,8 +12,10 @@ namespace mar {
 	struct {
 #ifndef IMPORTED_FROM_GITHUB 
 		const std::string mainPath{ "resources/shaders/basic.shader" };
+		const std::string withoutGUIPath{ "resources/shaders/basicWithoutGUI.shader" };
 #else
 		const std::string mainPath{ "../../../resources/shaders/basic.shader" };
+		const std::string withoutGUIPath{ "../../../resources/shaders/basicWithoutGUI.shader" };
 #endif
 	} ShaderOpenGLSettings;
 
@@ -26,7 +28,7 @@ namespace mar {
 	public:
 		ShaderOpenGL() = default;
 
-		void initialize() override;
+		void initialize(ShaderType shadertype) override;
 		void shutdown() override;
 
 		void bind() const;
