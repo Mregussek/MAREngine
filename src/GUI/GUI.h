@@ -35,8 +35,10 @@ namespace mar {
 		bool _checkSurface;
 
 	public:
-		GUI(Window* window, const char* glsl_version);
-		~GUI();
+		GUI();
+
+		void initialize(Window* window, const char* glsl_version);
+		void shutdown();
 
 		void connectToRenderer(Renderer* renderer);
 

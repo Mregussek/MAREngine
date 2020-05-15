@@ -98,4 +98,5 @@ namespace mar {
 				class ShaderOpenGL;
 	
 	// and ofc callbacks namespace in Window.h
+	class MAREngine;
 }

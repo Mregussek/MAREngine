@@ -16,17 +16,28 @@
 
 namespace mar {
 
-	class Application {
+	struct {
 		char name[10] = "MAREngine";
 		int width{ 1280 };
 		int height{ 720 };
 		char portName[10] = "\\\\.\\COM7";
 		const char* glsl_version = "#version 460";
+	} MAREngineDefaultSettings;
+
+	class MAREngine {
+		Camera m_camera;
+		Window m_window;
+		GUI m_gui;
+		Renderer m_renderer;
+		Scene m_scene;
 
 	public:
-		Application() = default;
+		MAREngine() = default;
 
-		// --- MAIN METHOD --- //
-		int run();
+		void initialize();
+
+		void run();
+
+		void shutdown();
 	};
 }

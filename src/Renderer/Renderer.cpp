@@ -17,13 +17,10 @@ namespace mar {
 			_shader = factory->createShader();
 
 			_shapes = std::make_shared<std::vector<std::shared_ptr<Shapes>>>();
+			_stats = RendererStatistics();
 			_pushedOnce = false;
 			_runtime = false;
 			_maxValue = 0;
-			_countOfDrawCalls = 0;
-			_countOfIndices = 0;
-			_countOfShapes = 0;
-			_countOfVertices = 0;
 			_startupSceneSize = 0;
 			_helperIndex = 0;
 		}
@@ -134,10 +131,10 @@ namespace mar {
 		bind();
 
 		// Reset statistics before drawing
-		_countOfDrawCalls = 0;
-		_countOfIndices = 0;
-		_countOfShapes = 0;
-		_countOfVertices = 0;
+		_stats._countOfDrawCalls = 0;
+		_stats._countOfIndices = 0;
+		_stats._countOfShapes = 0;
+		_stats._countOfVertices = 0;
 
 		// Clear buffer
 		_vertices.clear();
@@ -151,9 +148,9 @@ namespace mar {
 				_vertices.insert(_vertices.end(), _shapes->at(i)->getVerticesBegin(), _shapes->at(i)->getVerticesEnd());
 				_indices.insert(_indices.end(), _shapes->at(i)->getIndicesBegin(), _shapes->at(i)->getIndicesEnd());
 
-				_countOfVertices += _shapes->at(i)->getSizeofVertices();
-				_countOfIndices += _shapes->at(i)->getSizeofIndices();
-				_countOfShapes++;
+				_stats._countOfVertices += _shapes->at(i)->getSizeofVertices();
+				_stats._countOfIndices += _shapes->at(i)->getSizeofIndices();
+				_stats._countOfShapes++;
 			} 
 			else {
 				_vbo->updateDynamically(_vertices);
@@ -161,7 +158,7 @@ namespace mar {
 
 				draw();
 
-				_countOfDrawCalls++;
+				_stats._countOfDrawCalls++;
 
 				_vertices.clear();
 				_indices.clear();
@@ -171,7 +168,7 @@ namespace mar {
 		_vbo->updateDynamically(_vertices);
 		_ebo->updateDynamically(_indices);
 		draw();
-		_countOfDrawCalls++;
+		_stats._countOfDrawCalls++;
 
 		for (unsigned int i = 0; i < _shapes->size(); i++) {
 			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
@@ -257,8 +254,8 @@ namespace mar {
 		return _samplers; 
 	}
 
-	const std::vector<unsigned int> Renderer::getStatistics() const {
-		return {_countOfDrawCalls, _countOfShapes, _countOfVertices, _countOfIndices};
+	const RendererStatistics& Renderer::getStatistics() const {
+		return _stats;
 	}
 
 	const unsigned int& Renderer::getSceneStartupSize() const {

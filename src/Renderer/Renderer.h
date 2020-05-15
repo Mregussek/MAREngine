@@ -25,6 +25,20 @@ namespace mar {
 		PYRAMID
 	};
 
+	struct RendererStatistics {
+		unsigned int _countOfDrawCalls;
+		unsigned int _countOfVertices;
+		unsigned int _countOfIndices;
+		unsigned int _countOfShapes;
+
+		RendererStatistics()
+			:_countOfDrawCalls(0),
+			_countOfVertices(0),
+			_countOfIndices(0),
+			_countOfShapes(0)
+		{}
+	};
+
 	class Renderer {
 		// --- Buffers
 		std::shared_ptr<VertexBuffer> _vbo;
@@ -60,10 +74,7 @@ namespace mar {
 		unsigned int _maxValue;     
 		bool _initialized = false;
 		// --- Statistics
-		unsigned int _countOfDrawCalls;
-		unsigned int _countOfVertices;
-		unsigned int _countOfIndices;
-		unsigned int _countOfShapes;
+		RendererStatistics _stats;
 
 	public:
 		Renderer() = default;
@@ -92,8 +103,8 @@ namespace mar {
 		
 		const std::string& getObjectName(unsigned int index);
 
+		const RendererStatistics& getStatistics() const;
 		const std::vector<int>& getSamplers() const;
-		const std::vector<unsigned int> getStatistics() const;
 
 		const unsigned int& getSceneStartupSize() const;
 	};

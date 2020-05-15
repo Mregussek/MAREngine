@@ -18,8 +18,10 @@ namespace mar {
 		char* _windowName;
 
 	public:
-		Window(const int& H, const int& W, char* wN, Camera* camera = nullptr);
-		~Window();
+		Window() = default;
+
+		void initialize(const int& H, const int& W, char* wN, Camera* camera = nullptr);
+		void shutdown();
 
 		void swapBuffers();
 

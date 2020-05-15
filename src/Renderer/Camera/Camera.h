@@ -62,7 +62,9 @@ namespace mar {
         ObjectRotation _objectRotation;
 
     public:
-        Camera(const int& w, const int& h);
+        Camera();
+
+        void initialize(const int& w, const int& h);
 
         const float& getZoom() const { return _zoom; }
         const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
