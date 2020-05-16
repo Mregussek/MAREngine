@@ -55,6 +55,12 @@ namespace mar {
 		*/
 		const unsigned int& getID(int index) const override;
 
+		//! Adds id prescribed to shape
+		/*
+			\param id - new id
+		*/
+		void addID(const unsigned int id) override;
+
 		//! Removes id prescribed to shape with specifed index
 		/*
 			\param index - index of shape

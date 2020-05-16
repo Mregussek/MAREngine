@@ -84,17 +84,34 @@ namespace mar {
 			return;
 		}
 
-		Mesh::extendID(shape, (float)_shapes->size());
+		if (texturePath == "empty") {
+			// We assume, user pushed correct path to texture
+			Mesh::extendID(shape, (float)_shapes->size());
 
-		Mesh::changeIndicesFormat(shape, _maxValue);
+			Mesh::changeIndicesFormat(shape, _maxValue);
 
-		_maxValue += shape->getSizeofVertices() / shape->getStride();
+			_maxValue += shape->getSizeofVertices() / shape->getStride();
 
-		_shapes->emplace_back(shape);
+			_shapes->emplace_back(shape);
 
-		_texture->loadTexture(texturePath);
+			_texture->addID(0);
 
-		_samplers.push_back(shape->getID());
+			_samplers.push_back(shape->getID());
+		}
+		else {
+			// We assume, user pushed correct path to texture
+			Mesh::extendID(shape, (float)_shapes->size());
+
+			Mesh::changeIndicesFormat(shape, _maxValue);
+
+			_maxValue += shape->getSizeofVertices() / shape->getStride();
+
+			_shapes->emplace_back(shape);
+
+			_texture->loadTexture(texturePath);
+
+			_samplers.push_back(shape->getID());
+		}
 
 		if (!_pushedLayout) {
 			for (size_t i = 0; i < shape->getLayoutSize(); i++)

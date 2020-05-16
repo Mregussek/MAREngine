@@ -14,6 +14,7 @@ namespace mar {
 	enum class SceneType {
 		DEFAULT,
 		SURFACE,
+		WITH_COLOURED_ELEMS,
 		EMPTY
 	};
 
@@ -36,12 +37,15 @@ namespace mar {
 				createDefault();
 			else if (type == SceneType::SURFACE)
 				createSurface();
+			else if (type == SceneType::WITH_COLOURED_ELEMS)
+				createWithColouredElements();
 			else if (type == SceneType::EMPTY)
 				createEmpty();
 		}
 
 		void createDefault();
 		void createSurface();
+		void createWithColouredElements();
 		void createEmpty();
 
 		std::vector<std::shared_ptr<Shapes>> getShapes() { return _shapes; }

@@ -41,6 +41,41 @@ namespace mar {
 		};
     }
 
+	void Scene::createWithColouredElements() {
+		_shapes = {
+			std::make_shared<Cube>()
+			, std::make_shared<Pyramid>()
+			, std::make_shared<Surface>()
+			, std::make_shared<Wall>()
+			, std::make_shared<Cube>()
+			, std::make_shared<Pyramid>()
+		};
+		_centers = {
+			{ 0.0f,  0.0f,  0.0f }
+			, { 3.0f,  0.0f, -4.5f }
+			, { 0.0f,  -0.025f,  0.0f }
+			, { -4.0f,  0.0f,  0.0f }
+			, {-3.0f,  0.0f, -4.5f }
+			, {-1.5f,  0.0f, -2.5f }
+		};
+		_angles = {
+			 { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
+		};
+		_textures = {
+			TexturePaths.mrTex
+			, TexturePaths.yellowTex
+			, TexturePaths.grassTex
+			, TexturePaths.wallTex
+			, "empty"
+			, "empty"
+		};
+	}
+
 	void Scene::createSurface() {
 		_shapes = {
 			std::make_shared<Surface>()

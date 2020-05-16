@@ -58,6 +58,10 @@ namespace mar {
 		return _id[index];
 	}
 
+	void TextureOpenGL::addID(const unsigned int id) {
+		_id.push_back(id);
+	}
+
 	void TextureOpenGL::removeID(const unsigned int& index) {
 		_id.erase(_id.begin() + index);
 	}

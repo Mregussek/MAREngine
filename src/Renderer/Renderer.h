@@ -84,7 +84,7 @@ namespace mar {
 
 		void loadScene(Scene* scene);
 
-		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
+		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);;
 
 		void popObject(const unsigned int& index);
 

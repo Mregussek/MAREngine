@@ -24,12 +24,12 @@ uniform mat4 u_GUISeperateRotation[32];
 void main() {
 	// Calculate all transformations
 	int index = int(texIndex);
-	mat4 renderTrans = u_GUISeperateTranslate[index] * u_GUISeperateRotation[index];
+	mat4 GUISeperateMatrix = u_GUISeperateTranslate[index] * u_GUISeperateRotation[index];
+	mat4 GUISceneMatrix = u_GUISceneTranslation * u_GUISceneRotation;
 
-	mat4 guiTrans = u_GUISceneTranslation * u_GUISceneRotation;
-	mat4 mvp = u_Projection * u_View * u_Model;
+	mat4 MVP = u_Projection * u_View * u_Model;
 
-	gl_Position = mvp * guiTrans * renderTrans * position;
+	gl_Position = MVP * GUISceneMatrix * GUISeperateMatrix * position;
 
 	// Pass values to fragment shader
 	v_TexCoord = texCoord;
