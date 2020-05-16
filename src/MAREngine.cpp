@@ -11,7 +11,7 @@ namespace mar {
 		m_camera.initialize(MAREngineDefaultSettings.width, MAREngineDefaultSettings.height);
 		m_window.initialize(MAREngineDefaultSettings.height, MAREngineDefaultSettings.width, MAREngineDefaultSettings.name, &m_camera);
 		m_gui.initialize(&m_window, MAREngineDefaultSettings.glsl_version);
-		m_scene.initializeScene(SceneType::WITH_COLOURED_ELEMS);
+		m_scene.initializeScene(SceneType::DEFAULT);
 		m_renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
 
 		// --- PUSH SCENE TO RENDERER AND SET GUI --- //

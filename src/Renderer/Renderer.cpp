@@ -16,7 +16,7 @@ namespace mar {
 			_texture = factory->createTexture();
 			_mainShader = factory->createShader();
 
-			_shapes = std::make_shared<std::vector<std::shared_ptr<Shapes>>>();
+			_shapes = std::vector<std::shared_ptr<Shape>>();
 			_stats = RendererStatistics();
 			_pushedLayout = false;
 			_maxValue = 0;
@@ -37,7 +37,6 @@ namespace mar {
 		else {
 			std::cerr << "Renderer is not initialized!" << std::endl;
 		}
-		
 	}
 	
 	void Renderer::initialize() {
@@ -53,8 +52,8 @@ namespace mar {
 
 		_vao->addBuffer(_lay);
 
-		for (unsigned int i = 0; i < _shapes->size(); i++) {
-			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
+			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
 		}
 			
 		_mainShader->bind();
@@ -66,7 +65,7 @@ namespace mar {
 		for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
 			pushObject(scene->getShape(i), scene->getCenter(i), scene->getTexture(i));
 			_translations.push_back(glm::translate(glm::mat4(1.0f), scene->getCenter(i)));
-			_rotations.push_back(Mesh::getRotationMatrix(scene->getCenter(i), scene->getAngle(i)));
+			_rotations.push_back(ShapeManipulator::getRotationMatrix(scene->getCenter(i), scene->getAngle(i)));
 		}
 	}
 
@@ -78,39 +77,41 @@ namespace mar {
 	///! That's why we have seg fault. We have to investigate, why after loading scene we have 
 	///! increased value
 	///! Also look at TODO at popObject() method. There is associated problem!
-	void Renderer::pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath) {
-		if (_shapes->size() == constants::maxObjectsInScene) {
+	void Renderer::pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath) {
+		if (_shapes.size() == constants::maxObjectsInScene - 1) {
 			std::cout << "Cannot push more objects!" << std::endl;
 			return;
 		}
 
 		if (texturePath == "empty") {
 			// We assume, user pushed correct path to texture
-			Mesh::extendID(shape, (float)_shapes->size());
 
-			Mesh::changeIndicesFormat(shape, _maxValue);
+			ShapeManipulator::extendID(shape, (float)_shapes.size());
+
+			ShapeManipulator::changeIndicesFormat(shape, _maxValue);
 
 			_maxValue += shape->getSizeofVertices() / shape->getStride();
 
-			_shapes->emplace_back(shape);
+			_shapes.emplace_back(shape);
 
 			_texture->addID(0);
 
-			_samplers.push_back(shape->getID());
+			_samplers.push_back((int)shape->getID());
 		}
 		else {
 			// We assume, user pushed correct path to texture
-			Mesh::extendID(shape, (float)_shapes->size());
 
-			Mesh::changeIndicesFormat(shape, _maxValue);
+			ShapeManipulator::extendID(shape, (float)_shapes.size());
+
+			ShapeManipulator::changeIndicesFormat(shape, _maxValue);
 
 			_maxValue += shape->getSizeofVertices() / shape->getStride();
 
-			_shapes->emplace_back(shape);
+			_shapes.emplace_back(shape);
 
 			_texture->loadTexture(texturePath);
 
-			_samplers.push_back(shape->getID());
+			_samplers.push_back((int)shape->getID());
 		}
 
 		if (!_pushedLayout) {
@@ -129,8 +130,8 @@ namespace mar {
 	///! Maybe we should delete existing vector and copy its whole stuff to new one?
 	///! Or use shapes as shared_ptr's, and with reset() method push new element and delete existing ones?
 	void Renderer::popObject(const unsigned int& index) {
-		_shapes->at(index).reset();
-		_shapes->erase(_shapes->begin() + index);
+		_shapes[index].reset();
+		_shapes.erase(_shapes.begin() + index);
 
 		_samplers.erase(_samplers.begin() + index);
 		_texture->removeID(index);
@@ -170,15 +171,15 @@ namespace mar {
 		_indices.clear();
 
 		// Main Loop - Batch Rendering
-		for (unsigned int i = 0; i < _shapes->size(); i++) {
-			if (_vertices.size() + _shapes->at(i)->getSizeofVertices() <= constants::maxVertexCount 
-							&& _indices.size() + _shapes->at(i)->getSizeofIndices() <= constants::maxIndexCount) {
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
+			if (_vertices.size() + _shapes[i]->getSizeofVertices() <= constants::maxVertexCount
+							&& _indices.size() + _shapes[i]->getSizeofIndices() <= constants::maxIndexCount) {
 
-				_vertices.insert(_vertices.end(), _shapes->at(i)->getVerticesBegin(), _shapes->at(i)->getVerticesEnd());
-				_indices.insert(_indices.end(), _shapes->at(i)->getIndicesBegin(), _shapes->at(i)->getIndicesEnd());
+				_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVerticesEnd());
+				_indices.insert(_indices.end(), _shapes[i]->getIndicesBegin(), _shapes[i]->getIndicesEnd());
 
-				_stats._countOfVertices += _shapes->at(i)->getSizeofVertices();
-				_stats._countOfIndices += _shapes->at(i)->getSizeofIndices();
+				_stats._countOfVertices += _shapes[i]->getSizeofVertices();
+				_stats._countOfIndices += _shapes[i]->getSizeofIndices();
 				_stats._countOfShapes++;
 			} 
 			else {
@@ -199,8 +200,8 @@ namespace mar {
 		draw();
 		_stats._countOfDrawCalls++;
 
-		for (unsigned int i = 0; i < _shapes->size(); i++) {
-			_texture->bind(_shapes->at(i)->getID(), _texture->getID(i));
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
+			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
 		}
 	}
 
@@ -225,10 +226,10 @@ namespace mar {
 		_mainShader->setUniformMat4f("u_Projection", _camera_projection);
 		_mainShader->setUniformMat4f("u_View", _camera_view);
 		_mainShader->setUniformMat4f("u_Model", _camera_model);
+		_mainShader->setUniformVector3("u_CameraPos", _camera_position);
 
 		// --- LIGHTS UNIFORMS --- //		
 		_mainShader->setUniformVector3("u_LightPos", _lightPosition);
-		_mainShader->setUniformVector3("u_CameraPos", _camera_position);
 
 		// --- TEXTURE UNIFORMS --- //
 		_mainShader->setUniformSampler2D("u_Texture", getSamplers());
@@ -251,9 +252,9 @@ namespace mar {
 		_translations.clear();
 		_rotations.clear();
 
-		for (unsigned int i = 0; i < _shapes->size(); i++) {
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
 			_translations.push_back(glm::translate(glm::mat4(1.0f), newCenters[i]));
-			_rotations.push_back(Mesh::getRotationMatrix(newCenters[i], newAngles[i]));
+			_rotations.push_back(ShapeManipulator::getRotationMatrix(newCenters[i], newAngles[i]));
 		}
 	}
 
@@ -292,7 +293,7 @@ namespace mar {
 	}
 
 	const std::string& Renderer::getObjectName(unsigned int index) { 
-		return _shapes->at(index)->getName();
+		return _shapes[index]->getName();
 	}
 
 	const std::vector<int>& Renderer::getSamplers() const { 
@@ -301,5 +302,13 @@ namespace mar {
 
 	const RendererStatistics& Renderer::getStatistics() const {
 		return _stats;
+	}
+
+	void Renderer::connectGUI() {
+		_isGUIconnected = true; 
+	}
+
+	void Renderer::disconnectGUI() { 
+		_isGUIconnected = false; 
 	}
 }

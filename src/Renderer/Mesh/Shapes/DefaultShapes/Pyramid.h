@@ -6,8 +6,8 @@
 #ifndef PYRAMID_H
 #define PYRAMID_H
 
-#include "../../../mar.h"
-#include "Shapes.h"
+#include "../../../../mar.h"
+#include "../Shapes.h"
 
  /*											(0.0f,  1.0f,  0.0f)[5]
 											  x
@@ -38,10 +38,10 @@ namespace mar {
 	/*!
 		Create new Shape with overloaded class.
 	*/
-	class Pyramid : public Shapes {
+	class Pyramid : public Shape {
 	public:
 		Pyramid()
-			: Shapes(
+			: Shape(
 				/* ID */
 				0.0f,
 				/* NAME */
@@ -53,11 +53,11 @@ namespace mar {
 				/* VERTICES */
 				{
 					// (x, y, z)			// BasicColors			// LightNormal			// TextureCoords	// TexIndex
-					-1.0f, -1.0f,  1.0f,	0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,
-					 1.0f, -1.0f,  1.0f,	0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,
-					 1.0f, -1.0f, -1.0f,	0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,
-					-1.0f, -1.0f, -1.0f,	0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,
-					 0.0f,  1.0f,  0.0f,	0.5f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.5f, 0.5f,			0.0f
+					-1.0f, -1.0f,  1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,
+					 1.0f, -1.0f,  1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,
+					 1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,
+					-1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,
+					 0.0f,  1.0f,  0.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.5f, 0.5f,			0.0f
 				},
 				/* INDICES */
 				{

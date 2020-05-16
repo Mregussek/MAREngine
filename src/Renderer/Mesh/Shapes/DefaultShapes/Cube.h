@@ -6,8 +6,8 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "../../../mar.h"
-#include "Shapes.h"
+#include "../../../../mar.h"
+#include "../Shapes.h"
 
 /*		
 			(-1.0f, 1.0f, -1.0f)[7]							(1.0f,  1.0f, -1.0f)[6]
@@ -47,10 +47,10 @@ namespace mar {
 	/*!
 		Create new Shape with overloaded class.
 	*/
-	class Cube : public Shapes {
+	class Cube : public Shape {
 	public:
 		Cube() 
-			: Shapes(
+			: Shape(
 				/* ID */ 
 				0.0f, 
 				/* NAME */
@@ -62,15 +62,15 @@ namespace mar {
 				/* VERTICES */ 
 				{
 					//  front (x, y, z)		// BasicColors			// LightNormal			// Texture		// Texture Index
-					-1.0f, -1.0f,  1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		0.0f, // 0
-					 1.0f, -1.0f,  1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,		0.0f, // 1
-					 1.0f,  1.0f,  1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 1.0f,		0.0f, // 2
-					-1.0f,  1.0f,  1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,		0.0f, // 3
+					-1.0f, -1.0f,  1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		0.0f, // 0
+					 1.0f, -1.0f,  1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,		0.0f, // 1
+					 1.0f,  1.0f,  1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 1.0f,		0.0f, // 2
+					-1.0f,  1.0f,  1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,		0.0f, // 3
 					//  back 										
-					-1.0f, -1.0f, -1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		0.0f, // 4
-					 1.0f, -1.0f, -1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,		0.0f, // 5
-					 1.0f,  1.0f, -1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 1.0f,		0.0f, // 6
-					-1.0f,  1.0f, -1.0f,	0.0f, 0.5f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,		0.0f  // 7
+					-1.0f, -1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		0.0f, // 4
+					 1.0f, -1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,		0.0f, // 5
+					 1.0f,  1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 1.0f,		0.0f, // 6
+					-1.0f,  1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,		0.0f  // 7
 				}, 
 				/* INDICES */ 
 				{

@@ -47,6 +47,9 @@ namespace mar {
 	}
 
 	void TextureOpenGL::bind(const float& shapeId, const unsigned int& texID) const {
+		if (texID == 0.0f) 
+			return;
+
 		glBindTextureUnit((unsigned int)shapeId, texID);
 	}
 

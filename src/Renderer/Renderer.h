@@ -48,14 +48,14 @@ namespace mar {
 		std::shared_ptr<Texture> _texture;
 		std::shared_ptr<Shader> _mainShader;
 		// --- Objects
-		std::shared_ptr<std::vector<std::shared_ptr<Shapes>>> _shapes;
+		std::vector<std::shared_ptr<Shape>> _shapes;
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
 		std::vector<int> _samplers;
 		std::vector<glm::mat4> _translations;
 		std::vector<glm::mat4> _rotations;
 		// --- Helper object for creating new ones
-		std::shared_ptr<Shapes> _addedDuringRuntime;
+		std::shared_ptr<Shape> _addedDuringRuntime;
 		// --- Lightning
 		glm::vec3 _lightPosition{ 0.0f, 0.5f, 5.0f };
 		// --- Setup
@@ -84,7 +84,7 @@ namespace mar {
 
 		void loadScene(Scene* scene);
 
-		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);;
+		void pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
 
 		void popObject(const unsigned int& index);
 
@@ -108,8 +108,8 @@ namespace mar {
 
 		const std::vector<int>& getSamplers() const;
 
-		void connectGUI() { _isGUIconnected = true; }
-		void disconnectGUI() { _isGUIconnected = false; }
+		void connectGUI();
+		void disconnectGUI();
 	};
 }
 

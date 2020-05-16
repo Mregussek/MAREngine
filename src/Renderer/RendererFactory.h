@@ -26,12 +26,12 @@
 
 #include "Scene/Scene.h"
 
-#include "Mesh/Mesh.h"
+#include "Mesh/Shapes/ShapeManipulator.h"
 #include "Mesh/Shapes/Shapes.h"
-#include "Mesh/Shapes/Cube.h"
-#include "Mesh/Shapes/Pyramid.h"
-#include "Mesh/Shapes/Surface.h"
-#include "Mesh/Shapes/Wall.h"
+#include "Mesh/Shapes/DefaultShapes/Cube.h"
+#include "Mesh/Shapes/DefaultShapes/Pyramid.h"
+#include "Mesh/Shapes/DefaultShapes/Surface.h"
+#include "Mesh/Shapes/DefaultShapes/Wall.h"
 
 namespace mar {
 

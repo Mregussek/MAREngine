@@ -58,7 +58,11 @@ uniform vec3 u_CameraPos;
 void main() {
 	// Texture Setup
 	int index = int(v_TexIndex);
-	vec4 texColor = texture(u_Texture[index], v_TexCoord);
+	vec4 texColor;
+	//if (index != 0) 
+		texColor = texture(u_Texture[index], v_TexCoord);
+	//else 
+	//	texColor = vec4(v_basicColors, 1.0f);
 
 	// Ambient Light
 	float ambientStrengh = 0.2f;
