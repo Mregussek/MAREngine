@@ -49,6 +49,8 @@ namespace mar {
 			, std::make_shared<Wall>()
 			, std::make_shared<Cube>()
 			, std::make_shared<Pyramid>()
+			, std::make_shared<Wall>()
+			, std::make_shared<Pyramid>()
 		};
 		_centers = {
 			{ 0.0f,  0.0f,  0.0f }
@@ -57,9 +59,13 @@ namespace mar {
 			, { -4.0f,  0.0f,  0.0f }
 			, {-3.0f,  0.0f, -4.5f }
 			, {-1.5f,  0.0f, -2.5f }
+			, { 6.0f,  0.0f, -0.5f }
+			, { 2.5f,  0.0f,  0.5f }
 		};
 		_angles = {
 			 { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
+			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
 			 , { 0.0f, 0.0f, 0.0f }
@@ -73,6 +79,8 @@ namespace mar {
 			, TexturePaths.wallTex
 			, "empty"
 			, "empty"
+			, "empty"
+			, TexturePaths.blueTex
 		};
 	}
 

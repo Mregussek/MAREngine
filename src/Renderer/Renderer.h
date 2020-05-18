@@ -67,6 +67,8 @@ namespace mar {
 		glm::mat4 _camera_view;
 		glm::vec3 _camera_position;
 		// --- Knowledge about state of Renderer
+		float _nextShapeID;
+		float _nextTextureID;
 		bool _pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
 		unsigned int _maxValue;			// there is need to know max value of indices in order to push more object properly
 		bool _initialized = false;		// check, if renderer is initialized

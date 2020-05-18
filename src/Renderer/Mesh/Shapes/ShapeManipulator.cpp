@@ -7,7 +7,7 @@
 
 namespace mar {
 
-    void ShapeManipulator::extendID(std::shared_ptr<Shape>& shape, const float& nextID) {
+    void ShapeManipulator::extendShapeID(std::shared_ptr<Shape>& shape, const float& nextID) {
         if (nextID == 0.0f) return;
 
         unsigned int size = shape->getSizeofVertices();
@@ -19,6 +19,19 @@ namespace mar {
 
         shape->setID(nextID);
     }
+
+	void ShapeManipulator::extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID) {
+		if (nextID == 0.0f) return;
+
+		unsigned int size = shape->getSizeofVertices();
+		unsigned int stride = shape->getStride();
+
+		// extend all vertices, which defines texture id
+		for (unsigned int j = 1; j < size / stride + 1; j++)
+			shape->setVertice(j * stride - 2, nextID);
+
+		shape->setID(nextID);
+	}
 
     void ShapeManipulator::rotateObject(std::shared_ptr<Shape>& shape, const glm::vec3& angle) {
         if (angle == shape->getAngle()) return;

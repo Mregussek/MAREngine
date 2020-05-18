@@ -22,13 +22,21 @@ namespace mar {
         //! Default constructor. Actually not used
         ShapeManipulator() = default;
 
-        //! Method changes the ID value in verticesVector of any shape. It works everytime, when ID
+        //! Method changes the Shape ID value in verticesVector of any shape. It works everytime, when ID
         //! is on the last position of data. 
         /*!
             \param shape - pointer to shape, which id must be changed
             \param nextID - id value for shape
         */
-        static void extendID(std::shared_ptr<Shape>& shape, const float& nextID);
+        static void extendShapeID(std::shared_ptr<Shape>& shape, const float& nextID);
+
+        //! Method changes the Texture ID value in verticesVector of any shape. It works everytime, when ID
+        //! is on the next to last position of data. 
+        /*!
+            \param shape - pointer to shape, which id must be changed
+            \param nextID - id value for shape
+        */
+        static void extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID);
 
         //! Method is just easier implementation of shape rotation method. We need to pass only 2 values,
         //! instead of 5. For more information check the method below.

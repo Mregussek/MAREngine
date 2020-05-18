@@ -20,6 +20,8 @@ namespace mar {
 			_stats = RendererStatistics();
 			_pushedLayout = false;
 			_maxValue = 0;
+			_nextShapeID = 0.0f;
+			_nextTextureID = 1.0f; // from 1.0f, cause 0.0f is reserved for default color
 		}
 		else {
 			std::cerr << "Renderer is already initialized!" << std::endl;
@@ -52,8 +54,8 @@ namespace mar {
 
 		_vao->addBuffer(_lay);
 
-		for (unsigned int i = 0; i < _shapes.size(); i++) {
-			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
+		for (unsigned int i = 0; i < _samplers.size(); i++) {
+			_texture->bind(_samplers[i], _texture->getID(i));
 		}
 			
 		_mainShader->bind();
@@ -83,36 +85,26 @@ namespace mar {
 			return;
 		}
 
+		ShapeManipulator::extendShapeID(shape, _nextShapeID);
+		_nextShapeID++;
+
+		ShapeManipulator::changeIndicesFormat(shape, _maxValue);
+
+		_maxValue += shape->getSizeofVertices() / shape->getStride();
+
 		if (texturePath == "empty") {
-			// We assume, user pushed correct path to texture
-
-			ShapeManipulator::extendID(shape, (float)_shapes.size());
-
-			ShapeManipulator::changeIndicesFormat(shape, _maxValue);
-
-			_maxValue += shape->getSizeofVertices() / shape->getStride();
-
-			_shapes.emplace_back(shape);
-
-			_texture->addID(0);
-
-			_samplers.push_back((int)shape->getID());
+			ShapeManipulator::extendTextureID(shape, 0.0f);
 		}
 		else {
-			// We assume, user pushed correct path to texture
-
-			ShapeManipulator::extendID(shape, (float)_shapes.size());
-
-			ShapeManipulator::changeIndicesFormat(shape, _maxValue);
-
-			_maxValue += shape->getSizeofVertices() / shape->getStride();
-
-			_shapes.emplace_back(shape);
+			ShapeManipulator::extendTextureID(shape, _nextTextureID);
+			_nextTextureID++;
 
 			_texture->loadTexture(texturePath);
 
 			_samplers.push_back((int)shape->getID());
 		}
+
+		_shapes.emplace_back(shape);
 
 		if (!_pushedLayout) {
 			for (size_t i = 0; i < shape->getLayoutSize(); i++)
@@ -200,8 +192,8 @@ namespace mar {
 		draw();
 		_stats._countOfDrawCalls++;
 
-		for (unsigned int i = 0; i < _shapes.size(); i++) {
-			_texture->bind(_shapes[i]->getID(), _texture->getID(i));
+		for (unsigned int i = 0; i < _samplers.size(); i++) {
+			_texture->bind(_samplers[i], _texture->getID(i));
 		}
 	}
 
