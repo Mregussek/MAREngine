@@ -6,9 +6,9 @@
 #include "Camera.h"
 
 namespace mar {
-    Camera::Camera(const int& w, const int& h)
-        : _width(w), 
-        _height(h),
+    Camera::Camera()
+        : _width(0), 
+        _height(0),
         _position(CameraSettings.CAMERA_START),
         _front(glm::vec3(0.0f, 0.0f, -1.0f)),
         _worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
@@ -23,7 +23,11 @@ namespace mar {
         _pitch(CameraSettings.PITCH),
         _deltaTime(0.0f),
         _lastFrame(0.0f)
-    {
+    { }
+
+    void Camera::initialize(const int& w, const int& h) {
+        _width = w;
+        _height = h;
         updateCameraVectors();
     }
 

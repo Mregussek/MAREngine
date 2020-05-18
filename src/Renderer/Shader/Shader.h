@@ -14,9 +14,15 @@ namespace mar {
 		std::string _fragmentSource;
 	};
 
+	enum class ShaderType {
+		DEFAULT,
+		WITHOUT_GUI,
+		LIGHT
+	};
+
 	class Shader {
 	public:
-		virtual void initialize() { }
+		virtual void initialize(ShaderType shadertype) { }
 		virtual void shutdown() { }
 
 		virtual void bind() const { }

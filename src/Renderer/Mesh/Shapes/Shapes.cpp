@@ -6,35 +6,35 @@
 #include "Shapes.h"
 
 namespace mar {
-	const std::string& Shapes::getName() const { 
+	const std::string& Shape::getName() const { 
 		return name; 
 	}
 
-	void Shapes::setID(float newID) {
+	void Shape::setID(float newID) {
 		id = newID;
 	}
 
-	const float Shapes::getID() const {
+	const float Shape::getID() const {
 		return id;
 	}
 
-	const glm::vec3 Shapes::getCenter() const {
+	const glm::vec3 Shape::getCenter() const {
 		return center;
 	}
 
-	void Shapes::setCenter(const glm::vec3& new_center) {
+	void Shape::setCenter(const glm::vec3& new_center) {
 		center = new_center;
 	}
 
-	const glm::vec3 Shapes::getAngle() const {
+	const glm::vec3 Shape::getAngle() const {
 		return angle;
 	}
 
-	void Shapes::setAngle(const glm::vec3& new_angle) {
+	void Shape::setAngle(const glm::vec3& new_angle) {
 		center = new_angle;
 	}
 
-	const unsigned int Shapes::getStride() {
+	const unsigned int Shape::getStride() {
 		if (!_calculatedStride) {
 			for (auto const& l : layout) _stride += l;
 			_calculatedStride = true;
@@ -44,75 +44,75 @@ namespace mar {
 		return _stride;
 	}
 
-	const unsigned int Shapes::getSizeofVertices() const {
+	const unsigned int Shape::getSizeofVertices() const {
 		return verticesVector.size();
 	}
 
-	const unsigned int Shapes::getSizeofIndices() const {
+	const unsigned int Shape::getSizeofIndices() const {
 		return indicesVector.size();
 	}
 
-	const unsigned int Shapes::getMaxValueOfIndices() const {
+	const unsigned int Shape::getMaxValueOfIndices() const {
 		return *std::max_element(indicesVector.begin(), indicesVector.end());
 	}
 
-	void Shapes::setVerticesVector(const std::vector<float>& new_vertices) {
+	void Shape::setVerticesVector(const std::vector<float>& new_vertices) {
 		verticesVector = new_vertices;
 	}
 
-	const std::vector<float>& Shapes::getVerticesVector() const {
+	const std::vector<float>& Shape::getVerticesVector() const {
 		return verticesVector;
 	}
 
-	float Shapes::getVertice(size_t index) const {
+	float Shape::getVertice(size_t index) const {
 		return verticesVector[index];
 	}
 
-	void Shapes::setVertice(size_t index, float new_value) {
+	void Shape::setVertice(size_t index, float new_value) {
 		verticesVector[index] = new_value;
 	}
 
-	std::vector<float>::const_iterator Shapes::getVerticesBegin() const {
+	std::vector<float>::const_iterator Shape::getVerticesBegin() const {
 		return verticesVector.begin();
 	}
 
-	std::vector<float>::const_iterator Shapes::getVerticesEnd() const {
+	std::vector<float>::const_iterator Shape::getVerticesEnd() const {
 		return verticesVector.end();
 	}
 
-	void Shapes::setIndicesVector(const std::vector<unsigned int>& new_indices) {
+	void Shape::setIndicesVector(const std::vector<unsigned int>& new_indices) {
 		indicesVector = new_indices;
 	}
 
-	const std::vector<unsigned int>& Shapes::getIndicesVector() const {
+	const std::vector<unsigned int>& Shape::getIndicesVector() const {
 		return indicesVector;
 	}
 
-	unsigned int Shapes::getIndice(size_t index) const {
+	unsigned int Shape::getIndice(size_t index) const {
 		return indicesVector[index];
 	}
 
-	void Shapes::setIndice(size_t index, unsigned int new_value) {
+	void Shape::setIndice(size_t index, unsigned int new_value) {
 		indicesVector[index] = new_value;
 	}
 
-	std::vector<unsigned int>::const_iterator Shapes::getIndicesBegin() const {
+	std::vector<unsigned int>::const_iterator Shape::getIndicesBegin() const {
 		return indicesVector.begin();
 	}
 
-	std::vector<unsigned int>::const_iterator Shapes::getIndicesEnd() const {
+	std::vector<unsigned int>::const_iterator Shape::getIndicesEnd() const {
 		return indicesVector.end();
 	}
 
-	const std::vector<unsigned int>& Shapes::getLayoutVector() const {
+	const std::vector<unsigned int>& Shape::getLayoutVector() const {
 		return layout;
 	}
 
-	unsigned int Shapes::getLayout(size_t index) const {
+	unsigned int Shape::getLayout(size_t index) const {
 		return layout[index];
 	}
 
-	unsigned int Shapes::getLayoutSize() const {
+	unsigned int Shape::getLayoutSize() const {
 		return layout.size();
 	}
 }

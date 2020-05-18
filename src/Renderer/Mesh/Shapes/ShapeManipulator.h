@@ -3,11 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MESH_H
-#define MESH_H
+#ifndef SHAPEMANIPULATOR_H
+#define SHAPEMANIPULATOR_H
 
-#include "../../mar.h"
-#include "Shapes/Shapes.h"
+#include "../../../mar.h"
+#include "Shapes.h"
 
 namespace mar {
 
@@ -17,18 +17,26 @@ namespace mar {
         Implementations of rotating object, changing indices for specified format are
         very useful and this is why I have written Mesh class.
     */
-    class Mesh {
+    class ShapeManipulator {
     public:
         //! Default constructor. Actually not used
-        Mesh() = default;
+        ShapeManipulator() = default;
 
-        //! Method changes the ID value in verticesVector of any shape. It works everytime, when ID
+        //! Method changes the Shape ID value in verticesVector of any shape. It works everytime, when ID
         //! is on the last position of data. 
         /*!
             \param shape - pointer to shape, which id must be changed
             \param nextID - id value for shape
         */
-        static void extendID(std::shared_ptr<Shapes>& shape, const float& nextID);
+        static void extendShapeID(std::shared_ptr<Shape>& shape, const float& nextID);
+
+        //! Method changes the Texture ID value in verticesVector of any shape. It works everytime, when ID
+        //! is on the next to last position of data. 
+        /*!
+            \param shape - pointer to shape, which id must be changed
+            \param nextID - id value for shape
+        */
+        static void extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID);
 
         //! Method is just easier implementation of shape rotation method. We need to pass only 2 values,
         //! instead of 5. For more information check the method below.
@@ -36,7 +44,7 @@ namespace mar {
             \param shape - pointer to shape, which will be rotated
             \param angle - vec3 contains angles for x, y and z axis.
         */
-        static void rotateObject(std::shared_ptr<Shapes>& shape, const glm::vec3& angle);
+        static void rotateObject(std::shared_ptr<Shape>& shape, const glm::vec3& angle);
 
         //! Method returns new verticesVector for shape after rotation process. It rotates around all axis,
         //! x, y and z. For proper working you have to pass a few arguments.
@@ -57,7 +65,7 @@ namespace mar {
             \param shape - pointer to shape
             \param center - new center point for shape
         */
-        static void changeCenterOfObject(std::shared_ptr<Shapes>& shape, const glm::vec3& center);
+        static void changeCenterOfObject(std::shared_ptr<Shape>& shape, const glm::vec3& center);
 
         //! Method returns new verticesVector for shape after changing center point process. 
         //! For proper working you have to pass a few arguments.
@@ -76,7 +84,7 @@ namespace mar {
             \param shape - pointer to shape
             \param max_value - max value of indices in current indices vector of renderer
         */
-        static void changeIndicesFormat(std::shared_ptr<Shapes>& shape, unsigned int& max_value);
+        static void changeIndicesFormat(std::shared_ptr<Shape>& shape, unsigned int& max_value);
 
         //! If we want batch rendering, we need to change indices values for every shape. Default ones begin with 0.
         //! There is need to change begin value to new, in case of proper work of batch renderer.
@@ -107,4 +115,4 @@ namespace mar {
     };
 }
 
-#endif // !MESH_H
+#endif // !SHAPEMANIPULATOR_H

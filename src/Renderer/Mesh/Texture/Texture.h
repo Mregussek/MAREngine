@@ -70,7 +70,13 @@ namespace mar {
 		*/
 		virtual const unsigned int& getID(int index) const { return unsigned int(0); }
 
-		//! Method should removes id prescribed to shape with specifed index. Must be overloaded!
+		//! Method should add specifed item to id vector. Must be overloaded!
+		/*
+			\param id - new id
+		*/
+		virtual void addID(const unsigned int id) { }
+
+		//! Method should remove id prescribed to shape with specifed index. Must be overloaded!
 		/*
 			\param index - index of shape
 		*/

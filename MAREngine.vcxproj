@@ -153,16 +153,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
-    <ClInclude Include="src\Renderer\Mesh\Shapes\Pyramid.h" />
-    <ClInclude Include="src\Renderer\Mesh\Shapes\Surface.h" />
-    <ClInclude Include="src\Renderer\Mesh\Shapes\Wall.h" />
+    <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Pyramid.h" />
+    <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Surface.h" />
+    <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Wall.h" />
     <ClInclude Include="src\Renderer\Mesh\Texture\Texture.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArray.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferLayout.h" />
     <ClInclude Include="src\Renderer\RendererOpenGLFactory.h" />
     <ClInclude Include="src\Renderer\RendererFactory.h" />
-    <ClInclude Include="src\Renderer\Mesh\Mesh.h" />
+    <ClInclude Include="src\Renderer\Mesh\Shapes\ShapeManipulator.h" />
     <ClInclude Include="src\GUI\GUI.h" />
     <ClInclude Include="other\imgui\imconfig.h" />
     <ClInclude Include="other\imgui\imgui.h" />
@@ -173,10 +173,10 @@
     <ClInclude Include="other\imgui\imstb_textedit.h" />
     <ClInclude Include="other\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Renderer\Camera\Camera.h" />
-    <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\MAREngine.h" />
     <ClInclude Include="other\stb_image\stb_image.h" />
     <ClInclude Include="src\Debug.h" />
-    <ClInclude Include="src\Renderer\Mesh\Shapes\Cube.h" />
+    <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Cube.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\Shapes.h" />
     <ClInclude Include="src\Renderer\Scene\Scene.h" />
     <ClInclude Include="src\Renderer\Shader\Shader.h" />
@@ -193,7 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
-    <ClCompile Include="src\Renderer\Mesh\Mesh.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\Shapes\ShapeManipulator.cpp" />
     <ClCompile Include="src\GUI\GUI.cpp" />
     <ClCompile Include="other\imgui\imgui.cpp" />
     <ClCompile Include="other\imgui\imgui_demo.cpp" />
@@ -201,7 +201,7 @@
     <ClCompile Include="other\imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="other\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="other\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\MAREngine.cpp" />
     <ClCompile Include="src\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\stb_image.cpp" />
@@ -226,8 +226,8 @@
     <None Include="INSTALL.md" />
     <None Include="LICENSE.md" />
     <None Include="README.md" />
-    <None Include="resources\shaders\light.shader" />
-    <None Include="resources\shaders\main.shader" />
+    <None Include="resources\shaders\basic.shader" />
+    <None Include="resources\shaders\basicWithoutGUI.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\black-texture.jpg" />

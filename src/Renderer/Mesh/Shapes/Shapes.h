@@ -19,6 +19,7 @@ namespace mar {
 	*/
 	struct Vertex {
 		float position[3];
+		float basicColors[3];
 		float lightNormal[3];
 		float texCoord[2];
 		float texId;
@@ -33,9 +34,9 @@ namespace mar {
 		I think for now there is no need to document every method here,
 		because names of functions says all what they do.
 	*/
-	class Shapes {
+	class Shape {
 	public:
-		Shapes(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
+		Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
 			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
 			std::vector<unsigned int> new_layout)
 				: id(new_id),
@@ -49,7 +50,7 @@ namespace mar {
 				_stride(0)
 		{}
 
-		Shapes(const std::shared_ptr<Shapes>& shape)
+		Shape(const std::shared_ptr<Shape>& shape)
 			: id(shape->getID()),
 			name(shape->getName()),
 			center(shape->getCenter()),

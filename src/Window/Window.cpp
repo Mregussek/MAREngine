@@ -7,11 +7,11 @@
 
 namespace mar {
 
-	Window::Window(const int& H, const int& W, char* wN, Camera* camera)
-		: _height(H),
-		_width(W),
-		_windowName(wN)
-	{
+	void Window::initialize(const int& H, const int& W, char* wN, Camera* camera) {
+		_height = H;
+		_width = W;
+		_windowName = wN;
+
 		if (!glfwInit()) {
 			std::cout << "glfw() init failure" << std::endl;
 			exit(0);
@@ -47,19 +47,19 @@ namespace mar {
 			exit(0);
 		}
 #endif
-	
+
 		if (camera == nullptr)
 			callbacks::setCallbacks(_window);
 		else
 			callbacks::setCallbacks(_window, camera);
 
 		/// Vertical synchronization(VSync) is enabled by using glfwSwapInterval(1); 
-		glfwSwapInterval(1); 
+		glfwSwapInterval(1);
 		glEnable(GL_DEPTH_TEST);
 	}
 
-	Window::~Window() { 
-		glfwTerminate(); 
+	void Window::shutdown() {
+		glfwTerminate();
 	}
 
 	void Window::swapBuffers() {

@@ -18,20 +18,17 @@ out vec3 v_basicColors;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Projection;
-uniform mat4 u_GUISceneTranslation;
-uniform mat4 u_GUISceneRotation;
-uniform mat4 u_GUISeperateTranslate[32];
-uniform mat4 u_GUISeperateRotation[32];
+uniform mat4 u_SeperateTranslate[32];
+uniform mat4 u_SeperateRotation[32];
 
 void main() {
 	// Calculate all transformations
 	int index = int(shapeIndex);
-	mat4 GUISeperateMatrix = u_GUISeperateTranslate[index] * u_GUISeperateRotation[index];
-	mat4 GUISceneMatrix = u_GUISceneTranslation * u_GUISceneRotation;
+	mat4 renderTrans = u_SeperateTranslate[index] * u_SeperateRotation[index];
 
-	mat4 MVP = u_Projection * u_View * u_Model;
+	mat4 mvp = u_Projection * u_View * u_Model;
 
-	gl_Position = MVP * GUISceneMatrix * GUISeperateMatrix * position;
+	gl_Position = mvp * renderTrans * position;
 
 	// Pass values to fragment shader
 	v_TexCoord = texCoord;
@@ -54,7 +51,6 @@ in vec3 v_lightNormal;
 in vec3 v_Position;
 in vec3 v_basicColors;
 
-uniform vec4 u_GUISceneColor;
 uniform sampler2D u_Texture[32];
 uniform vec3 u_LightPos;
 uniform vec3 u_CameraPos;
@@ -64,7 +60,7 @@ void main() {
 	int index = int(v_shapeIndex);
 	vec4 texColor;
 
-	if(v_textureIndex != 0.0f)
+	if (v_textureIndex != 0.0f)
 		texColor = texture(u_Texture[index], v_TexCoord);
 	else
 		texColor = vec4(v_basicColors, 1.0f);
@@ -76,7 +72,7 @@ void main() {
 	// Diffuse Light
 	float diffuseStrengh = 0.75f;
 	vec3 diffuseColor = vec3(diffuseStrengh, diffuseStrengh, diffuseStrengh);
-	
+
 	vec3 lightNormalized = normalize(v_lightNormal);
 	vec3 posToLightDirVec = normalize(u_LightPos - v_Position);
 	float diffuse = max(dot(posToLightDirVec, lightNormalized), 0.0f);
@@ -97,6 +93,5 @@ void main() {
 	diffuseLight *= attenuation;
 	specularLight *= attenuation;
 
-	color = texColor * u_GUISceneColor *
-			(ambientLight + diffuseLight + specularLight);
+	color = texColor * (ambientLight + diffuseLight + specularLight);
 };

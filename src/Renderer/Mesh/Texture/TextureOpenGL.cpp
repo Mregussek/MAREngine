@@ -47,6 +47,9 @@ namespace mar {
 	}
 
 	void TextureOpenGL::bind(const float& shapeId, const unsigned int& texID) const {
+		if (texID == 0.0f) 
+			return;
+
 		glBindTextureUnit((unsigned int)shapeId, texID);
 	}
 
@@ -56,6 +59,10 @@ namespace mar {
 
 	const unsigned int& TextureOpenGL::getID(int index) const {
 		return _id[index];
+	}
+
+	void TextureOpenGL::addID(const unsigned int id) {
+		_id.push_back(id);
 	}
 
 	void TextureOpenGL::removeID(const unsigned int& index) {

@@ -25,6 +25,20 @@ namespace mar {
 		PYRAMID
 	};
 
+	struct RendererStatistics {
+		unsigned int _countOfDrawCalls;
+		unsigned int _countOfVertices;
+		unsigned int _countOfIndices;
+		unsigned int _countOfShapes;
+
+		RendererStatistics()
+			:_countOfDrawCalls(0),
+			_countOfVertices(0),
+			_countOfIndices(0),
+			_countOfShapes(0)
+		{}
+	};
+
 	class Renderer {
 		// --- Buffers
 		std::shared_ptr<VertexBuffer> _vbo;
@@ -32,19 +46,16 @@ namespace mar {
 		std::shared_ptr<VertexArray> _vao;
 		std::shared_ptr<ElementBuffer> _ebo;
 		std::shared_ptr<Texture> _texture;
-		std::shared_ptr<Shader> _shader;
+		std::shared_ptr<Shader> _mainShader;
 		// --- Objects
-		std::shared_ptr<std::vector<std::shared_ptr<Shapes>>> _shapes;
+		std::vector<std::shared_ptr<Shape>> _shapes;
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
 		std::vector<int> _samplers;
 		std::vector<glm::mat4> _translations;
 		std::vector<glm::mat4> _rotations;
 		// --- Helper object for creating new ones
-		std::shared_ptr<Shapes> _addedDuringRuntime;
-		unsigned int _startupSceneSize;
-		bool _runtime;
-		unsigned int _helperIndex;
+		std::shared_ptr<Shape> _addedDuringRuntime;
 		// --- Lightning
 		glm::vec3 _lightPosition{ 0.0f, 0.5f, 5.0f };
 		// --- Setup
@@ -55,15 +66,15 @@ namespace mar {
 		glm::mat4 _camera_projection;
 		glm::mat4 _camera_view;
 		glm::vec3 _camera_position;
-		// --- Helpers
-		bool _pushedOnce;       
-		unsigned int _maxValue;     
-		bool _initialized = false;
+		// --- Knowledge about state of Renderer
+		float _nextShapeID;
+		float _nextTextureID;
+		bool _pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
+		unsigned int _maxValue;			// there is need to know max value of indices in order to push more object properly
+		bool _initialized = false;		// check, if renderer is initialized
+		bool _isGUIconnected = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
 		// --- Statistics
-		unsigned int _countOfDrawCalls;
-		unsigned int _countOfVertices;
-		unsigned int _countOfIndices;
-		unsigned int _countOfShapes;
+		RendererStatistics _stats;
 
 	public:
 		Renderer() = default;
@@ -73,7 +84,10 @@ namespace mar {
 
 		void initialize();
 
-		void pushObject(std::shared_ptr<Shapes>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
+		void loadScene(Scene* scene);
+
+		void pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
+
 		void popObject(const unsigned int& index);
 
 		void bind();
@@ -81,7 +95,7 @@ namespace mar {
 
 		void updateFrame(); 
 		void draw();
-		void clear();
+		void clearScreen();
 		
 		void setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles);
 		void setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix);
@@ -92,10 +106,12 @@ namespace mar {
 		
 		const std::string& getObjectName(unsigned int index);
 
-		const std::vector<int>& getSamplers() const;
-		const std::vector<unsigned int> getStatistics() const;
+		const RendererStatistics& getStatistics() const;
 
-		const unsigned int& getSceneStartupSize() const;
+		const std::vector<int>& getSamplers() const;
+
+		void connectGUI();
+		void disconnectGUI();
 	};
 }
 

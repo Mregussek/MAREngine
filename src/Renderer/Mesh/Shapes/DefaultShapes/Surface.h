@@ -6,8 +6,8 @@
 #ifndef SURFACE_H
 #define SURFACE_H
 
-#include "../../../mar.h"
-#include "Shapes.h"
+#include "../../../../mar.h"
+#include "../Shapes.h"
 
  /*
 
@@ -35,10 +35,10 @@ namespace mar {
 	/*!
 		Create new Shape with overloaded class.
 	*/
-	class Surface : public Shapes {
+	class Surface : public Shape {
 	public:
 		Surface()
-			: Shapes(
+			: Shape(
 				/* ID */
 				0.0f,
 				/* NAME */
@@ -49,11 +49,11 @@ namespace mar {
 				{ 0.0f, 0.0f, 0.0f },
 				/* VERTICES */
 				{
-					// (x, y, z)			// LightNormal			// TextureCoords	// TexIndex
-					-15.0f, -1.0f,  15.0f,	0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f, // 0
-					 15.0f, -1.0f,  15.0f,	0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f, // 1
-					 15.0f, -1.0f, -15.0f,	0.0f, 0.0f, 1.0f,		1.0f, 1.0f,			0.0f, // 2
-					-15.0f, -1.0f, -15.0f,	0.0f, 0.0f, 1.0f,		1.0f, 0.0f,			0.0f  // 3
+					// (x, y, z)				// BasicColors		// LightNormal			// TextureCoords	// TexIndex		// ShapeIndex
+					-15.0f, -1.0f,  15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,			0.0f, // 0
+					 15.0f, -1.0f,  15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,			0.0f, // 1
+					 15.0f, -1.0f, -15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		1.0f, 1.0f,			0.0f,			0.0f, // 2
+					-15.0f, -1.0f, -15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		1.0f, 0.0f,			0.0f,			0.0f  // 3
 				},
 				/* INDICES */
 				{
@@ -62,7 +62,7 @@ namespace mar {
 				},
 				/* LAYOUT */
 				{
-					3, 3, 2, 1
+					3, 3, 3, 2, 1, 1
 				})
 		{ }
 	};

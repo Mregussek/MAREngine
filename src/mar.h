@@ -77,9 +77,9 @@ namespace mar {
 	class Renderer;
 		class RendererFactory;
 			class RendererOpenGLFactory;
-		class Mesh;
+		class ShapeManipulator;
 			class Scene;
-			class Shapes;
+			class Shape;
 				class Cube;
 				class Pyramid;
 				class Surface;
@@ -98,4 +98,5 @@ namespace mar {
 				class ShaderOpenGL;
 	
 	// and ofc callbacks namespace in Window.h
+	class MAREngine;
 }

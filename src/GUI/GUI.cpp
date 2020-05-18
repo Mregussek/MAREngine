@@ -6,18 +6,17 @@
 #include "GUI.h"
 
 namespace mar {
-	GUI::GUI(Window* window, const char* glsl_version)
-		: _window(window),
-		_translation(glm::vec3(0.0f, 0.0f, 0.0f)),
+	GUI::GUI()
+		: _translation(glm::vec3(0.0f, 0.0f, 0.0f)),
 		_angle(glm::vec3(0.0f, 0.0f, 0.0f)),
-		_versionGLSL(glsl_version),
-		_index(0),
 		_rendererConnected(false),
-		_checkPyramid(false),
-		_checkCube(false),
-		_checkSurface(false),
 		_startupSceneSize(0)
-	{
+	{}
+
+	void GUI::initialize(Window* window, const char* glsl_version) {
+		_window = window;
+		_versionGLSL = glsl_version;
+
 		ImGui::CreateContext();
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(_window->getWindow(), true);
@@ -26,17 +25,29 @@ namespace mar {
 		for (auto& c : _colors) c = 1.0f;
 	}
 
-	GUI::~GUI() {
-		_rendererConnected = false;
+	void GUI::shutdown() {
+		if (_rendererConnected) {
+			_renderer->disconnectGUI();
+			_rendererConnected = false;
+		}
+		
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
+	void GUI::loadSceneParameters(Scene* scene) {
+		for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
+			push(scene->getCenter(i), scene->getAngle(i));
+		}
+
+		_startupSceneSize = scene->getShapesNumber();
+	}
+
 	void GUI::connectToRenderer(Renderer* renderer) {
 		_renderer = renderer;
+		_renderer->connectGUI();
 		_rendererConnected = true;
-		_startupSceneSize = _renderer->getSceneStartupSize();
 	}
 
 	void GUI::push(const glm::vec3& newCenter, const glm::vec3& newAngle) {
@@ -54,11 +65,17 @@ namespace mar {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("General")) {
 
-				eventOnScene();
+				if (_rendererConnected) {
+					eventOnScene();
+
+					ImGui::Separator();
+
+					eventOnEachObjectSeperately();
+				}
+				else
+					ImGui::Text("Renderer is not connected!");
 				
 				ImGui::Separator();
-
-				eventOnEachObjectSeperately();
 
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 				
@@ -88,7 +105,12 @@ namespace mar {
 			
 			if (ImGui::BeginMenu("Statistics")) {
 
-				displayStatistics();
+				if (_rendererConnected) {
+					displayStatistics();
+				}
+				else {
+					ImGui::Text("Renderer is not connected!");
+				}
 
 				ImGui::EndMenu();
 			}
@@ -230,36 +252,31 @@ namespace mar {
 	}
 
 	void GUI::displayStatistics() {
-		if (_rendererConnected) {
-			std::vector<unsigned int> stats = _renderer->getStatistics();
+		RendererStatistics stats = _renderer->getStatistics();
 
-			char int2char[7];
-			sprintf_s(int2char, "%d ", stats[0]);
-			char drawCalls[28] = "Draw Calls: ";
-			strcat_s(drawCalls, int2char);
-			ImGui::Text(drawCalls);
+		char int2char[7];
+		sprintf_s(int2char, "%d ", stats._countOfDrawCalls);
+		char drawCalls[28] = "Draw Calls: ";
+		strcat_s(drawCalls, int2char);
+		ImGui::Text(drawCalls);
 
-			char int2char1[7];
-			sprintf_s(int2char1, "%d ", stats[1]);
-			char drawCalls1[28] = "Shapes Count: ";
-			strcat_s(drawCalls1, int2char1);
-			ImGui::Text(drawCalls1);
+		char int2char1[7];
+		sprintf_s(int2char1, "%d ", stats._countOfShapes);
+		char drawCalls1[28] = "Shapes Count: ";
+		strcat_s(drawCalls1, int2char1);
+		ImGui::Text(drawCalls1);
 
-			char int2char2[7];
-			sprintf_s(int2char2, "%d ", stats[2]);
-			char drawCalls2[28] = "Vertices: ";
-			strcat_s(drawCalls2, int2char2);
-			ImGui::Text(drawCalls2);
+		char int2char2[7];
+		sprintf_s(int2char2, "%d ", stats._countOfVertices);
+		char drawCalls2[28] = "Vertices: ";
+		strcat_s(drawCalls2, int2char2);
+		ImGui::Text(drawCalls2);
 
-			char int2char3[7];
-			sprintf_s(int2char3, "%d ", stats[3]);
-			char drawCalls3[28] = "Indices: ";
-			strcat_s(drawCalls3, int2char3);
-			ImGui::Text(drawCalls3);
-		}
-		else {
-			ImGui::Text("Renderer is not connected!");
-		}
+		char int2char3[7];
+		sprintf_s(int2char3, "%d ", stats._countOfIndices);
+		char drawCalls3[28] = "Indices: ";
+		strcat_s(drawCalls3, int2char3);
+		ImGui::Text(drawCalls3);
 	}
 
 	const glm::mat4 GUI::getTranslationMatrix() const { 
