@@ -23,6 +23,7 @@ namespace mar {
 		float lightNormal[3];
 		float texCoord[2];
 		float texId;
+		float shapeId;
 	};
 
 	//! Shapes
@@ -60,12 +61,17 @@ namespace mar {
 			layout(shape->getLayoutVector()),
 			_calculatedStride(false),
 			_stride(0)
-		{}
+		{
+			textureId = 0.0f;
+		}
 
 		virtual const std::string& getName() const;
 
 		virtual void setID(float newID);
 		virtual const float getID() const;
+
+		virtual void setTextureID(float newID);
+		virtual const float getTextureID() const;
 
 		virtual const glm::vec3 getCenter() const;
 		virtual void setCenter(const glm::vec3& new_center);
@@ -98,6 +104,7 @@ namespace mar {
 
 	private:
 		float id;
+		float textureId;
 		std::string name;
 
 		glm::vec3 center;

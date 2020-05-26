@@ -18,6 +18,14 @@ namespace mar {
 		return id;
 	}
 
+	void Shape::setTextureID(float newID) {
+		textureId = newID;
+	}
+
+	const float Shape::getTextureID() const {
+		return textureId;
+	}
+
 	const glm::vec3 Shape::getCenter() const {
 		return center;
 	}

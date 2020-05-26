@@ -3,6 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+#ifndef MAR_ENGINE_MAIN_H
+#define MAR_ENGINE_MAIN_H
+
+#include "mar.h"
+
 // Rendering
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera/Camera.h"
@@ -41,3 +46,5 @@ namespace mar {
 		void shutdown();
 	};
 }
+
+#endif // !MAR_ENGINE_MAIN_H

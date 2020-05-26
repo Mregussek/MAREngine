@@ -277,6 +277,12 @@ namespace mar {
 		char drawCalls3[28] = "Indices: ";
 		strcat_s(drawCalls3, int2char3);
 		ImGui::Text(drawCalls3);
+
+		char int2char4[7];
+		sprintf_s(int2char4, "%d ", stats._countOfTriangles);
+		char drawCalls4[28] = "Triangles: ";
+		strcat_s(drawCalls4, int2char4);
+		ImGui::Text(drawCalls4);
 	}
 
 	const glm::mat4 GUI::getTranslationMatrix() const { 

@@ -30,13 +30,23 @@ namespace mar {
 		unsigned int _countOfVertices;
 		unsigned int _countOfIndices;
 		unsigned int _countOfShapes;
+		unsigned int _countOfTriangles;
 
 		RendererStatistics()
 			:_countOfDrawCalls(0),
 			_countOfVertices(0),
 			_countOfIndices(0),
-			_countOfShapes(0)
+			_countOfShapes(0),
+			_countOfTriangles(0)
 		{}
+
+		void resetStatistics() {
+			_countOfDrawCalls = 0;
+			_countOfIndices = 0;
+			_countOfShapes = 0;
+			_countOfVertices = 0;
+			_countOfTriangles = 0;
+		}
 	};
 
 	class Renderer {
@@ -86,8 +96,7 @@ namespace mar {
 
 		void loadScene(Scene* scene);
 
-		void pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath = TexturePaths.blackTex);
-
+		void pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath = "empty");
 		void popObject(const unsigned int& index);
 
 		void bind();
@@ -95,8 +104,10 @@ namespace mar {
 
 		void updateFrame(); 
 		void draw();
+
 		void clearScreen();
-		
+		void clearBuffer();
+
 		void setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles);
 		void setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix);
 		void setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model);

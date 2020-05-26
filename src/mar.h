@@ -7,20 +7,24 @@
  *	something will be here. Also it defines 'mar' namespace with all its classes.
  */
 
+ // --- Tell the compiler, if you imported repository from github
+ // --- Leave it in comment, if you have the same setup as MR
+ //#define IMPORTED_FROM_GITHUB
+
+ // Decide whether you want import GLEW or GLAD (comment to use GLAD)
+#define IMPORT_GLEW
 
 // --- Import GLEW lib statically --- //
 #define GLEW_STATIC
 
-// --- Tell the compiler, if you imported repo from github
-// --- Leave it in comment, if you have the same setup as MR
-//#define IMPORTED_FROM_GITHUB
-
-// Decide wheter you want import GLEW or GLAD (comment to use GLAD)
-#define IMPORT_GLEW
-
 // --- Include OpenGL Libs --- //
 #ifdef IMPORT_GLEW
+
+#pragma warning( push )
+#pragma warning( disable : 4286) 
 #include <GL/glew.h> 
+#pragma warning (pop)
+
 #else
 #include <glad/glad.h>
 #endif
@@ -29,6 +33,9 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
+
+// --- Include MAR third-party libraries --- //
+#include "MARMaths/MARMaths.h"
 
 // --- Include other third-party libraries --- //
 #pragma warning( push )
@@ -59,7 +66,7 @@
 #include <unordered_map>
 #include <tuple>
 #include <algorithm> // std::find, std::copy
-// multithreading
+// multi-threading
 #include <thread> 
 #include <mutex>
 
@@ -74,6 +81,7 @@ namespace mar {
 	class Window; 
 	class GUI;
 	class SerialPortMonitor;
+	class ObjectLoader;
 	class Renderer;
 		class RendererFactory;
 			class RendererOpenGLFactory;

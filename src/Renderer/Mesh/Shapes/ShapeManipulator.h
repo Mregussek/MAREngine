@@ -54,7 +54,7 @@ namespace mar {
             \param angle - vec3 contains angles all axis (angle.x is angle for x axis and so on)
             \param center - point of rotation
             \param passedValue - passed verticesVector, we are gonna use this values for rotation
-            \return returnValue - vector containg new, rotated, verticesVector
+            \return returnValue - vector containing new, rotated, verticesVector
         */
         static std::vector<float> rotateObject(const unsigned int& size, const unsigned int& stride,
             const glm::vec3& angle, const glm::vec3& center, const std::vector<float>& passedValue);
@@ -74,7 +74,7 @@ namespace mar {
             \param stride - stride of verticesVector
             \param center - point of rotation
             \param passedValue - passed verticesVector, we are gonna use this values for changing center
-            \return returnValue - vector containg new, translated, verticesVector
+            \return returnValue - vector containing new, translated, verticesVector
         */
         static std::vector<float> changeCenterOfObject(const unsigned int& size, const unsigned int& stride,
             const glm::vec3& center, const std::vector<float>& passedValue);
@@ -92,16 +92,20 @@ namespace mar {
             \param size - size of indicesVector
             \param max_value - max value of indices in current indices vector of renderer
             \param passedValue - passed indicesVector, its values are gonna be used to calculate new ones
-            \return returnValue - vector containg new, extended, indices
+            \return returnValue - vector containing new, extended, indices
         */
         static std::vector<unsigned int> changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
                     const std::vector<unsigned int>& passedValue);
+
+        static void changeDefaultColor(std::shared_ptr<Shape>& shape, glm::vec3& new_color);
+		static std::vector<float> changeDefaultColor(const unsigned int& size, const unsigned int& stride,
+            glm::vec3& new_color, const std::vector<float>& passedValue);
 
         //! Returns rotation matrix of all axis (x, y, z)
         /*!
             \param center - point of rotation
             \param angle - vec3 contains angles all axis (angle.x is angle for x axis and so on)
-            \return matrix4x4 - structure containg rotation matrix
+            \return matrix4x4 - structure containing rotation matrix
         */
         static glm::mat4 getRotationMatrix(const glm::vec3& center, const glm::vec3& angle);
 
@@ -109,7 +113,7 @@ namespace mar {
         /*!
             \param center - point of rotation
             \param angle - just angle in degrees
-            \return matrix4x4 - structure containg rotation matrix
+            \return matrix4x4 - structure containing rotation matrix
         */
         static glm::mat4 getRotationMatrix(const glm::vec3& center, const float& angle);
     };

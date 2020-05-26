@@ -42,7 +42,7 @@ namespace mar {
 	}
 	
 	void Renderer::initialize() {
-		// When we will use Engine as a real AR app we won't to see a managable GUI
+		// When we will use Engine as a real AR app we won't to see a manageable GUI
 		if(_isGUIconnected)
 			_mainShader->initialize(ShaderType::DEFAULT);
 		else
@@ -54,9 +54,8 @@ namespace mar {
 
 		_vao->addBuffer(_lay);
 
-		for (unsigned int i = 0; i < _samplers.size(); i++) {
-			_texture->bind(_samplers[i], _texture->getID(i));
-		}
+		for (unsigned int i = 0; i < _samplers.size(); i++)
+			_texture->bind((float)_samplers[i], _texture->getID(i));
 			
 		_mainShader->bind();
 
@@ -76,7 +75,7 @@ namespace mar {
 	///! 2. Delete this object from scene
 	///! 3. Just add new object to scene
 	///! Program crashes because next texture id is being increased, and the number is not correct
-	///! That's why we have seg fault. We have to investigate, why after loading scene we have 
+	///! That's why we have segmentation fault. We have to investigate, why after loading scene we have 
 	///! increased value
 	///! Also look at TODO at popObject() method. There is associated problem!
 	void Renderer::pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath) {
@@ -94,6 +93,10 @@ namespace mar {
 
 		if (texturePath == "empty") {
 			ShapeManipulator::extendTextureID(shape, 0.0f);
+
+			_texture->addID(0);
+
+			_samplers.push_back(0);
 		}
 		else {
 			ShapeManipulator::extendTextureID(shape, _nextTextureID);
@@ -101,7 +104,7 @@ namespace mar {
 
 			_texture->loadTexture(texturePath);
 
-			_samplers.push_back((int)shape->getID());
+			_samplers.push_back((int)shape->getTextureID());
 		}
 
 		_shapes.emplace_back(shape);
@@ -122,11 +125,13 @@ namespace mar {
 	///! Maybe we should delete existing vector and copy its whole stuff to new one?
 	///! Or use shapes as shared_ptr's, and with reset() method push new element and delete existing ones?
 	void Renderer::popObject(const unsigned int& index) {
+		if (_shapes[index]->getTextureID() != 0.0f) {
+			_samplers.erase(_samplers.begin() + index);
+			_texture->removeID(index);
+		}
+		
 		_shapes[index].reset();
 		_shapes.erase(_shapes.begin() + index);
-
-		_samplers.erase(_samplers.begin() + index);
-		_texture->removeID(index);
 
 		_vertices.clear();
 		_indices.clear();
@@ -152,15 +157,8 @@ namespace mar {
 		clearScreen();
 		bind();
 
-		// Reset statistics before drawing
-		_stats._countOfDrawCalls = 0;
-		_stats._countOfIndices = 0;
-		_stats._countOfShapes = 0;
-		_stats._countOfVertices = 0;
-
-		// Clear buffer
-		_vertices.clear();
-		_indices.clear();
+		_stats.resetStatistics();
+		clearBuffer();
 
 		// Main Loop - Batch Rendering
 		for (unsigned int i = 0; i < _shapes.size(); i++) {
@@ -182,8 +180,7 @@ namespace mar {
 
 				_stats._countOfDrawCalls++;
 
-				_vertices.clear();
-				_indices.clear();
+				clearBuffer();
 			}
 		}
 
@@ -191,10 +188,10 @@ namespace mar {
 		_ebo->updateDynamically(_indices);
 		draw();
 		_stats._countOfDrawCalls++;
+		_stats._countOfTriangles = _stats._countOfIndices / 3;
 
-		for (unsigned int i = 0; i < _samplers.size(); i++) {
-			_texture->bind(_samplers[i], _texture->getID(i));
-		}
+		for (unsigned int i = 0; i < _samplers.size(); i++) 
+			_texture->bind((float)_samplers[i], _texture->getID(i));
 	}
 
 	void Renderer::draw() {
@@ -233,6 +230,11 @@ namespace mar {
 	void Renderer::clearScreen() {
 		glClearColor(0.85f, 0.85f, 0.85f, 1.0f); // light gray
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	void Renderer::clearBuffer() {
+		_vertices.clear();
+		_indices.clear();
 	}
 
 	void Renderer::setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {

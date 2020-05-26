@@ -21,7 +21,10 @@ namespace mar {
     }
 
 	void ShapeManipulator::extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID) {
-		if (nextID == 0.0f) return;
+        if (nextID == 0.0f) {
+            shape->setTextureID(nextID);
+            return;
+        }
 
 		unsigned int size = shape->getSizeofVertices();
 		unsigned int stride = shape->getStride();
@@ -30,7 +33,7 @@ namespace mar {
 		for (unsigned int j = 1; j < size / stride + 1; j++)
 			shape->setVertice(j * stride - 2, nextID);
 
-		shape->setID(nextID);
+		shape->setTextureID(nextID);
 	}
 
     void ShapeManipulator::rotateObject(std::shared_ptr<Shape>& shape, const glm::vec3& angle) {
@@ -127,6 +130,19 @@ namespace mar {
             returnValue[i] = passedValue[i] + max_value;
 
         return returnValue;
+    }
+
+    void ShapeManipulator::changeDefaultColor(std::shared_ptr<Shape>& shape, glm::vec3& new_color) {
+        std::vector<float> new_vertices = changeDefaultColor(shape->getSizeofVertices(), shape->getStride(), new_color, shape->getVerticesVector());
+
+
+    }
+
+    std::vector<float> ShapeManipulator::changeDefaultColor(const unsigned int& size, const unsigned int& stride,
+        glm::vec3& new_color, const std::vector<float>& passedValue) {
+        // -8, -9, -10
+
+        return std::vector<float>();
     }
 
     glm::mat4 ShapeManipulator::getRotationMatrix(const glm::vec3& center, const glm::vec3& angle) {

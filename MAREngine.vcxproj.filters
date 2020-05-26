@@ -129,6 +129,9 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Wall.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Objects\ObjectLoader.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Renderer.cpp">
@@ -212,6 +215,7 @@
     <None Include="cmake\FindGLM.cmake" />
     <None Include="cmake\FindSDL2.cmake" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />
+    <None Include="resources\shaders\basic.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">
