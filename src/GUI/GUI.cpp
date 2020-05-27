@@ -51,14 +51,21 @@ namespace mar {
 	}
 
 	void GUI::push(const glm::vec3& newCenter, const glm::vec3& newAngle) {
-		_centersOfObjects.push_back(newCenter);
-		_angles.push_back(newAngle);
+		_guiData.centers.push_back(newCenter);
+		_guiData.angles.push_back(newAngle);
 	}
 
 	void GUI::prepareNewFrame() {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+
+		_guiData.translate = getTranslationMatrix();
+		_guiData.rotation = getRotationMatrix();
+		_guiData.colors[0] = _colors[0];
+		_guiData.colors[1] = _colors[1];
+		_guiData.colors[2] = _colors[2];
+		_guiData.colors[3] = _colors[3];
 	}
 
 	void GUI::display() {
@@ -131,7 +138,7 @@ namespace mar {
 
 	void GUI::eventOnScene() {
 		ImGui::Text("Scene");
-		ImGui::SliderFloat3("Translation", &_translation.x, -10.0f, 10.0f);
+		ImGui::SliderFloat3("Translation", &_translation.x, -5.0f, 5.0f);
 		ImGui::SliderFloat3("Rotation", &_angle.x, -360.0f, 360.0f);
 		ImGui::ColorEdit4("color", _colors);
 	}
@@ -139,14 +146,14 @@ namespace mar {
 	void GUI::eventOnEachObjectSeperately() {
 		ImGui::MenuItem("Objects Menu", "");
 
-		for (unsigned int i = 0; i < _centersOfObjects.size(); i++) {
+		for (unsigned int i = 0; i < _guiData.centers.size(); i++) {
 			// Set current variables to sliders
-			_pos[0] = _centersOfObjects[i].x;
-			_pos[1] = _centersOfObjects[i].y;
-			_pos[2] = _centersOfObjects[i].z;
-			_ang[0] = _angles[i].x;
-			_ang[1] = _angles[i].y;
-			_ang[2] = _angles[i].z;
+			_pos[0] = _guiData.centers[i].x;
+			_pos[1] = _guiData.centers[i].y;
+			_pos[2] = _guiData.centers[i].z;
+			_ang[0] = _guiData.angles[i].x;
+			_ang[1] = _guiData.angles[i].y;
+			_ang[2] = _guiData.angles[i].z;
 
 			// Prepare index on GUI
 			char int2char[5];
@@ -164,7 +171,7 @@ namespace mar {
 			// Change center by GUI
 			char DragID[15] = "ObjPos ";
 			strcat_s(DragID, int2char);
-			ImGui::SliderFloat3(DragID, _pos, -10.0f, 10.0f);
+			ImGui::SliderFloat3(DragID, _pos, -5.0f, 5.0f);
 
 			// Change angle by GUI
 			char RotID[15] = "ObjRot ";
@@ -172,12 +179,12 @@ namespace mar {
 			ImGui::SliderFloat3(RotID, _ang, 0.0f, 360.0f);
 
 			// Set new variables to object
-			_centersOfObjects[i].x = _pos[0];
-			_centersOfObjects[i].y = _pos[1];
-			_centersOfObjects[i].z = _pos[2];
-			_angles[i].x = _ang[0];
-			_angles[i].y = _ang[1];
-			_angles[i].z = _ang[2];
+			_guiData.centers[i].x = _pos[0];
+			_guiData.centers[i].y = _pos[1];
+			_guiData.centers[i].z = _pos[2];
+			_guiData.angles[i].x = _ang[0];
+			_guiData.angles[i].y = _ang[1];
+			_guiData.angles[i].z = _ang[2];
 		}
 	}
 
@@ -194,7 +201,7 @@ namespace mar {
 			return;
 
 		if (ImGui::Button("Select Pyramid")) {
-				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+				if (_guiData.centers.size() == constants::maxObjectsInScene)
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
@@ -203,7 +210,7 @@ namespace mar {
 		}
 		
 		if (ImGui::Button("Select Cube")) {
-				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+				if (_guiData.centers.size() == constants::maxObjectsInScene)
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
@@ -213,7 +220,7 @@ namespace mar {
 		}
 
 		if (ImGui::Button("Select Surface")) {
-				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+				if (_guiData.centers.size() == constants::maxObjectsInScene)
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
@@ -222,7 +229,7 @@ namespace mar {
 		}
 
 		if (ImGui::Button("Select Wall")) {
-				if (_centersOfObjects.size() == constants::maxObjectsInScene)
+				if (_guiData.centers.size() == constants::maxObjectsInScene)
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
@@ -235,7 +242,7 @@ namespace mar {
 	void GUI::deleteObjectFromScene() {
 		ImGui::MenuItem("Delete Object", "");
 
-		for (unsigned int i = _startupSceneSize; i < _centersOfObjects.size(); i++) {
+		for (unsigned int i = _startupSceneSize; i < _guiData.centers.size(); i++) {
 			char int2char[5];
 			sprintf_s(int2char, " %d ", i);
 			char shapeIndex[30] = " Delete ";
@@ -245,8 +252,8 @@ namespace mar {
 
 			if (ImGui::Button(shapeIndex)) {
 				_renderer->popObject(i);
-				_centersOfObjects.erase(_centersOfObjects.begin() + i);
-				_angles.erase(_angles.begin() + i);
+				_guiData.centers.erase(_guiData.centers.begin() + i);
+				_guiData.angles.erase(_guiData.angles.begin() + i);
 			}
 		}
 	}
@@ -294,13 +301,5 @@ namespace mar {
 		return glm::rotate(rotation, glm::radians(_angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
 			* glm::rotate(rotation, glm::radians(_angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
 			* glm::rotate(rotation, glm::radians(_angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	}
-
-	const std::vector<glm::vec3>& GUI::getCentersVector() const {
-		return _centersOfObjects;
-	}
-
-	const std::vector<glm::vec3>& GUI::getAnglesVector() const {
-		return _angles;
 	}
 }

@@ -31,25 +31,6 @@ namespace mar {
         updateCameraVectors();
     }
 
-    const glm::mat4 Camera::getRotateMatrixOnPress(const glm::vec3& cubePosition) const {
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
-        if (_objectRotation == ObjectRotation::FORWARD)
-            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(-1.0f, 0.0f, 0.0f));
-        else if (_objectRotation == ObjectRotation::BACKWARD)
-            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
-        else if (_objectRotation == ObjectRotation::LEFT)
-            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, -1.0f, 0.0f));
-        else if (_objectRotation == ObjectRotation::RIGHT)
-            return glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-        else
-            return transform;
-    }
-
-    const glm::mat4 Camera::getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) const {
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), cubePosition);
-        return glm::rotate(transform, glm::radians(45.0f), spmRotator);
-    }
-
     void Camera::processInput(GLFWwindow* window) {
         float currentFrame = (float)glfwGetTime();
         _deltaTime = currentFrame - _lastFrame;
@@ -87,6 +68,14 @@ namespace mar {
 
             _firstMouse = true;
         }    
+    }
+
+    void Camera::updateData() {
+        _cameraData.projection = getProjectionMatrix();
+        _cameraData.model = getModelMatrix();
+        _cameraData.view = getViewMatrix();
+
+        _cameraData.position = getCameraPosition();
     }
 
     void Camera::processKeyboard(CameraMovement&& direction) {

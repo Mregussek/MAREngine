@@ -63,7 +63,7 @@ namespace mar {
 
 		int location = glGetUniformLocation(_rendererId, name.c_str());
 		if (location == -1)
-			std::cout << "Warning: Uniform " << name << " doesnt exist!\n";
+			std::cout << "Warning: Uniform " << name << " does not exist!\n";
 
 		return location;
 	}

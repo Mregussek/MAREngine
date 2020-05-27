@@ -24,6 +24,7 @@ namespace mar {
 		void shutdown();
 
 		void swapBuffers();
+		void clearScreen();
 
 		GLFWwindow* getWindow() const;
 		const bool shouldClose() const;

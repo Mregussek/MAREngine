@@ -28,13 +28,12 @@ namespace mar {
 		while (m_window.shouldClose()) {
 			// --- Processing Input --- //
 			m_camera.processInput(m_window.getWindow());
+			m_camera.updateData();
 			m_gui.prepareNewFrame();
 
 			// --- Renderer Setup before drawing --- //
-			m_renderer.setGUIvectors(m_gui.getCentersVector(), m_gui.getAnglesVector());
-			m_renderer.setGUImatrices(m_gui.getColors(), m_gui.getTranslationMatrix(), m_gui.getRotationMatrix());
-			m_renderer.setCameraMatrices(m_camera.getProjectionMatrix(), m_camera.getViewMatrix(), m_camera.getModelMatrix());
-			m_renderer.setCameraVectors(m_camera.getCameraPosition());
+			m_renderer.updateGUIData(&m_gui.getGUIData());
+			m_renderer.updateCameraData(&m_camera.getCameraData());
 
 			// --- DRAW --- //
 			m_renderer.updateFrame();

@@ -84,6 +84,13 @@ namespace mar {
 			return;
 		}
 
+		if (!_pushedLayout) {
+			for (size_t i = 0; i < shape->getLayoutSize(); i++)
+				_lay->push(shape->getLayout(i), PushBuffer::PUSH_FLOAT);
+
+			_pushedLayout = true;
+		}
+
 		ShapeManipulator::extendShapeID(shape, _nextShapeID);
 		_nextShapeID++;
 
@@ -104,13 +111,6 @@ namespace mar {
 		}
 
 		_shapes.emplace_back(shape);
-
-		if (!_pushedLayout) {
-			for (size_t i = 0; i < shape->getLayoutSize(); i++)
-				_lay->push(shape->getLayout(i), PushBuffer::PUSH_FLOAT);
-
-			_pushedLayout = true;
-		}
 	}
 
 	///! TODO: When you:
@@ -150,7 +150,6 @@ namespace mar {
 	///! TODO: Definitely need to work on this loop, when there is no memory, which we need there is still no draw
 	///! We have one draw call, because we have this memory available, but when we need second draw call program crashes!
 	void Renderer::updateFrame() {
-		clearScreen();
 		bind();
 
 		_stats.resetStatistics();
@@ -192,26 +191,10 @@ namespace mar {
 
 	void Renderer::draw() {
 		// --- GUI UNIFORMS --- //
-		if (_isGUIconnected) {
-			// --- WHOLE SCENE UNIFORMS
-			_mainShader->setUniform4fv("u_GUISceneColor", _gui_colors);
-			_mainShader->setUniformMat4f("u_GUISceneTranslation", _gui_translate);
-			_mainShader->setUniformMat4f("u_GUISceneRotation", _gui_rotation);
-
-			// --- SEPERATE OBJECTS UNIFORMS --- //
-			_mainShader->setUniformVectorMat4("u_GUISeperateTranslate", _translations);
-			_mainShader->setUniformVectorMat4("u_GUISeperateRotation", _rotations);
-		}
-		else {
+		if (!_isGUIconnected) {
 			_mainShader->setUniformVectorMat4("u_SeperateTranslate", _translations);
 			_mainShader->setUniformVectorMat4("u_SeperateRotation", _rotations);
 		}
-		
-		// --- CAMERA UNIFORMS --- //
-		_mainShader->setUniformMat4f("u_Projection", _camera_projection);
-		_mainShader->setUniformMat4f("u_View", _camera_view);
-		_mainShader->setUniformMat4f("u_Model", _camera_model);
-		_mainShader->setUniformVector3("u_CameraPos", _camera_position);
 
 		// --- LIGHTS UNIFORMS --- //		
 		_mainShader->setUniformVector3("u_LightPos", _lightPosition);
@@ -223,50 +206,9 @@ namespace mar {
 		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	void Renderer::clearScreen() {
-		glClearColor(0.85f, 0.85f, 0.85f, 1.0f); // light gray
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-
 	void Renderer::clearBuffer() {
 		_vertices.clear();
 		_indices.clear();
-	}
-
-	void Renderer::setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles) {
-		if (!_isGUIconnected) {
-			std::cerr << "GUI is not connected!" << std::endl;
-			return;
-		}
-		
-		_translations.clear();
-		_rotations.clear();
-
-		for (unsigned int i = 0; i < _shapes.size(); i++) {
-			_translations.push_back(glm::translate(glm::mat4(1.0f), newCenters[i]));
-			_rotations.push_back(ShapeManipulator::getRotationMatrix(newCenters[i], newAngles[i]));
-		}
-	}
-
-	void Renderer::setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix) {
-		if (!_isGUIconnected) {
-			std::cerr << "GUI is not connected!" << std::endl;
-			return;
-		}
-		
-		_gui_colors = colors;
-		_gui_translate = translationMatrix;
-		_gui_rotation = rotationMatrix;
-	}
-
-	void Renderer::setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model) {
-		_camera_projection = projection;
-		_camera_view = view;
-		_camera_model = model;
-	}
-
-	void Renderer::setCameraVectors(const glm::vec3& position) {
-		_camera_position = position;
 	}
 
 	void Renderer::guiPush(GUIPushType pushType, glm::vec3& position) {
@@ -282,23 +224,41 @@ namespace mar {
 		pushObject(_addedDuringRuntime, position);
 	}
 
-	const std::string& Renderer::getObjectName(unsigned int index) { 
-		return _shapes[index]->getName();
-	}
-
-	const std::vector<int>& Renderer::getSamplers() const { 
-		return _samplers; 
-	}
-
-	const RendererStatistics& Renderer::getStatistics() const {
-		return _stats;
-	}
-
 	void Renderer::connectGUI() {
 		_isGUIconnected = true; 
 	}
 
 	void Renderer::disconnectGUI() { 
 		_isGUIconnected = false; 
+	}
+
+	void Renderer::updateGUIData(const GUIData* guidata) {
+		if (!_isGUIconnected) {
+			std::cerr << "GUI is not connected!" << std::endl;
+			return;
+		}
+
+		_translations.clear();
+		_rotations.clear();
+
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
+			_translations.push_back(glm::translate(glm::mat4(1.0f), guidata->centers[i]));
+			_rotations.push_back(ShapeManipulator::getRotationMatrix(guidata->centers[i], guidata->angles[i]));
+		}
+
+		_mainShader->setUniformVectorMat4("u_GUISeperateTranslate", _translations);
+		_mainShader->setUniformVectorMat4("u_GUISeperateRotation", _rotations);
+
+		_mainShader->setUniform4fv("u_GUISceneColor", guidata->colors);
+		_mainShader->setUniformMat4f("u_GUISceneTranslation", guidata->translate);
+		_mainShader->setUniformMat4f("u_GUISceneRotation", guidata->rotation);
+	}
+
+	void Renderer::updateCameraData(const CameraData* cameradata) {
+		_mainShader->setUniformMat4f("u_Projection", cameradata->projection);
+		_mainShader->setUniformMat4f("u_View", cameradata->view);
+		_mainShader->setUniformMat4f("u_Model", cameradata->model);
+
+		_mainShader->setUniformVector3("u_CameraPos", cameradata->position);
 	}
 }

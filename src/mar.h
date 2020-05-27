@@ -74,32 +74,39 @@
 namespace mar {
 	class Camera;
 	class Window; 
-	class GUI;
+
 	class SerialPortMonitor;
 	class ObjectLoader;
+
+	class GUI;
+	struct GUIData;
+
 	class Renderer;
-		class RendererFactory;
-			class RendererOpenGLFactory;
-		class Mesh;
-		class Scene;
-			class Shape;
-			class ShapeManipulator;
-				class Cube;
-				class Pyramid;
-				class Surface;
-				class Wall;
-			class VertexBuffer;
-				class VertexBufferOpenGL;
-			class VertexArray;
-				class VertexArrayOpenGL;
-			class VertexBufferLayout;
-				class VertexBufferLayoutOpenGL;
-			class ElementBuffer;
-				class ElementBufferOpenGL;
-			class Texture;
-				class TextureOpenGL;
-			class Shader;
-				class ShaderOpenGL;
+	class RendererFactory;
+	class RendererOpenGLFactory;
+
+	class Mesh;
+	class Scene;
+
+	class Shape;
+	class ShapeManipulator;
+	class Cube;
+	class Pyramid;
+	class Surface;
+	class Wall;
+
+	class VertexBuffer;
+	class VertexBufferOpenGL;
+	class VertexArray;
+	class VertexArrayOpenGL;
+	class VertexBufferLayout;
+	class VertexBufferLayoutOpenGL;
+	class ElementBuffer;
+	class ElementBufferOpenGL;
+	class Texture;
+	class TextureOpenGL;
+	class Shader;
+	class ShaderOpenGL;
 	
 	// and of course callbacks namespace in Window.h
 	class MAREngine;

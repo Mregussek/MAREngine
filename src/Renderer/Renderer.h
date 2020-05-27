@@ -7,7 +7,10 @@
 #define RENDERER_H
 
 #include "../mar.h"
+#include "../GUI/GUI.h"
+#include "Camera/Camera.h"
 #include "RendererFactory.h"
+#include "Mesh/Mesh.h"
 
 namespace mar {
 
@@ -58,6 +61,7 @@ namespace mar {
 		std::shared_ptr<Texture> _texture;
 		std::shared_ptr<Shader> _mainShader;
 		// --- Objects
+		std::shared_ptr<Mesh> _mesh;
 		std::vector<std::shared_ptr<Shape>> _shapes;
 		std::vector<float> _vertices;
 		std::vector<unsigned int> _indices;
@@ -105,24 +109,19 @@ namespace mar {
 		void updateFrame(); 
 		void draw();
 
-		void clearScreen();
 		void clearBuffer();
-
-		void setGUIvectors(const std::vector<glm::vec3>& newCenters, const std::vector<glm::vec3>& newAngles);
-		void setGUImatrices(const float* colors, const glm::mat4& translationMatrix, const glm::mat4& rotationMatrix);
-		void setCameraMatrices(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& model);
-		void setCameraVectors(const glm::vec3& position);
 
 		void guiPush(GUIPushType pushType, glm::vec3& position);
 		
-		const std::string& getObjectName(unsigned int index);
-
-		const RendererStatistics& getStatistics() const;
-
-		const std::vector<int>& getSamplers() const;
-
 		void connectGUI();
 		void disconnectGUI();
+		void updateGUIData(const GUIData* guidata);
+
+		void updateCameraData(const CameraData* cameradata);
+
+		const std::string& getObjectName(unsigned int index) { return _shapes[index]->getName(); }
+		const RendererStatistics& getStatistics() const { return _stats; }
+		const std::vector<int>& getSamplers() const { return _samplers; }
 	};
 }
 

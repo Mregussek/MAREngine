@@ -12,15 +12,24 @@
 
 namespace mar {
 
+	struct GUIData {
+		float colors[4];
+		glm::mat4 rotation;
+		glm::mat4 translate;
+		std::vector<glm::vec3> centers;
+		std::vector<glm::vec3> angles;
+
+		GUIData() = default;
+	};
+
 	class GUI {
+	private:
 		// --- Must-have to run GUI
 		Window* _window;
 		const char* _versionGLSL;
 		// --- Attributes for objects
 		glm::vec3 _translation;
 		glm::vec3 _angle;
-		std::vector<glm::vec3> _centersOfObjects;
-		std::vector<glm::vec3> _angles;
 		// --- Attributes for sliders
 		float _colors[4];
 		float _pos[3];
@@ -28,10 +37,10 @@ namespace mar {
 		float _inputCenter[3];
 		// --- Run-time GUI attributes
 		Renderer* _renderer;
+		GUIData _guiData;
 		bool _rendererConnected;
 		unsigned int _startupSceneSize;
 		
-
 	public:
 		GUI();
 
@@ -54,10 +63,8 @@ namespace mar {
 
 		const glm::mat4 getTranslationMatrix() const;
 		const glm::mat4 getRotationMatrix() const;
-		const float* getColors() const { return _colors; }
-		const std::vector<glm::vec3>& getCentersVector() const;
-		const std::vector<glm::vec3>& getAnglesVector() const;
 		
+		const GUIData& getGUIData() const { return _guiData; }
 	};
 }
 

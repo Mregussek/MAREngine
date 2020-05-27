@@ -35,6 +35,15 @@ namespace mar {
         const glm::vec3 CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
     } CameraSettings;
 
+    struct CameraData {
+        glm::mat4 projection;
+        glm::mat4 view;
+        glm::mat4 model;
+        glm::vec3 position;
+
+        CameraData() = default;
+    };
+
     class Camera {
         // --- Window Attributes
         int _width;
@@ -60,6 +69,8 @@ namespace mar {
         float _deltaTime;
         float _lastFrame;
         ObjectRotation _objectRotation;
+        // --- Data for renderer
+        CameraData _cameraData;
 
     public:
         Camera();
@@ -70,15 +81,16 @@ namespace mar {
         const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
         const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
         const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
-        const glm::mat4 getRotateMatrixOnPress(const glm::vec3& cubePosition) const;
-        const glm::mat4 getRotateMatrixSPM(const glm::vec3& cubePosition, const glm::vec3& spmRotator) const;
 
         void processInput(GLFWwindow* window);
+        void updateData();
 
         void mouseCallback(float xpos, float ypos);  
         void scrollCallback(float ypos);
 
         const glm::vec3& getCameraPosition() const;
+
+        const CameraData& getCameraData() const { return _cameraData; }
 
     private:
         void processKeyboard(CameraMovement&& direction);
