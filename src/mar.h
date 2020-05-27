@@ -19,12 +19,7 @@
 
 // --- Include OpenGL Libs --- //
 #ifdef IMPORT_GLEW
-
-#pragma warning( push )
-#pragma warning( disable : 4286) 
 #include <GL/glew.h> 
-#pragma warning (pop)
-
 #else
 #include <glad/glad.h>
 #endif
@@ -85,9 +80,10 @@ namespace mar {
 	class Renderer;
 		class RendererFactory;
 			class RendererOpenGLFactory;
-		class ShapeManipulator;
-			class Scene;
+		class Mesh;
+		class Scene;
 			class Shape;
+			class ShapeManipulator;
 				class Cube;
 				class Pyramid;
 				class Surface;
@@ -105,6 +101,6 @@ namespace mar {
 			class Shader;
 				class ShaderOpenGL;
 	
-	// and ofc callbacks namespace in Window.h
+	// and of course callbacks namespace in Window.h
 	class MAREngine;
 }

@@ -93,10 +93,6 @@ namespace mar {
 
 		if (texturePath == "empty") {
 			ShapeManipulator::extendTextureID(shape, 0.0f);
-
-			_texture->addID(0);
-
-			_samplers.push_back(0);
 		}
 		else {
 			ShapeManipulator::extendTextureID(shape, _nextTextureID);

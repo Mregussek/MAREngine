@@ -152,6 +152,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="MAR_3rd_party\MARMaths\MARMaths.h" />
+    <ClInclude Include="MAR_3rd_party\MARMaths\src\maths.h" />
+    <ClInclude Include="MAR_3rd_party\MARMaths\src\maths_functions.h" />
+    <ClInclude Include="MAR_3rd_party\MARMaths\src\mat\mat4.h" />
+    <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec2.h" />
+    <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec3.h" />
+    <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="src\Objects\ObjectLoader.h" />
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Pyramid.h" />
@@ -193,6 +201,11 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MAR_3rd_party\MARMaths\src\mat\mat4.cpp" />
+    <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec2.cpp" />
+    <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec3.cpp" />
+    <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\ShapeManipulator.cpp" />
     <ClCompile Include="src\GUI\GUI.cpp" />
