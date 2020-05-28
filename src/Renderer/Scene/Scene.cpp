@@ -71,12 +71,12 @@ namespace mar {
 		};
 		_textures = {
 			TexturePaths.mrTex
-			, TexturePaths.yellowTex
+			, TexturePaths.blueTex
 			, TexturePaths.grassTex
 			, TexturePaths.wallTex
 			, "empty"
 			, "empty"
-			, "empty"
+			, TexturePaths.blackTex
 		};
 	}
 
