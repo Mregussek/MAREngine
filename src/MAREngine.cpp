@@ -13,15 +13,15 @@ namespace mar {
 		m_gui.initialize(&m_window, MAREngineDefaultSettings.glsl_version);
 		m_scene.initializeScene(SceneType::WITH_COLOURED_ELEMS);
 		m_renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
+		m_mesh.createMesh();
 
 		// --- PUSH SCENE TO RENDERER AND SET GUI --- //
-		m_renderer.loadScene(&m_scene);
+		m_renderer.loadScene(&m_mesh, &m_scene);
 		m_gui.loadSceneParameters(&m_scene);
 
 		// --- INITIALIZE RENDERER WITH SCENE AND PREPARE FOR RENDERING --- //
 		m_gui.connectToRenderer(&m_renderer);
-		m_renderer.initialize();
-		m_renderer.unbind();
+		m_renderer.initialize(&m_mesh);
 	}
 
 	void MAREngine::run() {
@@ -32,11 +32,11 @@ namespace mar {
 			m_gui.prepareNewFrame();
 
 			// --- Renderer Setup before drawing --- //
-			m_renderer.updateGUIData(&m_gui.getGUIData());
+			m_renderer.updateGUIData(&m_mesh, &m_gui.getGUIData());
 			m_renderer.updateCameraData(&m_camera.getCameraData());
 
 			// --- DRAW --- //
-			m_renderer.updateFrame();
+			m_renderer.draw(&m_mesh);
 
 			// --- Polling events, updating IO actions --- //
 			m_gui.display();

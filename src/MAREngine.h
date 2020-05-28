@@ -33,6 +33,7 @@ namespace mar {
 		GUI m_gui;
 		Renderer m_renderer;
 		Scene m_scene;
+		Mesh m_mesh;
 
 	public:
 		MAREngine() = default;

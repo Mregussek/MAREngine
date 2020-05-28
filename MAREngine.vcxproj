@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Renderer\Mesh\Light\Light.h" />
     <ClInclude Include="MAR_3rd_party\MARMaths\MARMaths.h" />
     <ClInclude Include="MAR_3rd_party\MARMaths\src\maths.h" />
     <ClInclude Include="MAR_3rd_party\MARMaths\src\maths_functions.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Renderer\Mesh\Light\Light.cpp" />
     <ClCompile Include="MAR_3rd_party\MARMaths\src\mat\mat4.cpp" />
     <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec2.cpp" />
     <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec3.cpp" />

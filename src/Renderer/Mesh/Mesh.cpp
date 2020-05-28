@@ -7,77 +7,88 @@
 
 namespace mar {
 
-	void Mesh::initialize() {
-		_shapes = std::vector<std::shared_ptr<Shape>>();
-		_pushedLayout = false;
+    void Mesh::createMesh() {
+        _shapes = std::vector<std::shared_ptr<Shape>>();
+        _vertices = std::vector<float>();
+        _indices = std::vector<unsigned int>();
+        _samplers = std::vector<int>();
+        _translations = std::vector<glm::mat4>();
+        _rotations = std::vector<glm::mat4>();
+
+        _light = Light();
+
 		_maxValue = 0;
 		_nextShapeID = 0.0f;
-		_nextTextureID = 1.0f; // from 1.0f, cause 0.0f is reserved for default color
-	}
-
-    void Mesh::createMesh(Scene* scene) {
-		for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
-			pushObject(scene->getShape(i), scene->getCenter(i), scene->getTexture(i));
-			//_translations.push_back(glm::translate(glm::mat4(1.0f), scene->getCenter(i)));
-			//_rotations.push_back(ShapeManipulator::getRotationMatrix(scene->getCenter(i), scene->getAngle(i)));
-		}
     }
 
-	void Mesh::deleteMesh() {
+    void Mesh::pushShape(std::shared_ptr<Shape>& new_shape) {
+		if (_shapes.size() == constants::maxObjectsInScene - 1) {
+			std::cout << "Cannot push more objects!" << std::endl;
+			return;
+		}
 
-	}
-
-	void Mesh::pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath) {
-		ShapeManipulator::extendShapeID(shape, _nextShapeID);
+		ShapeManipulator::extendShapeID(new_shape, _nextShapeID);
 		_nextShapeID++;
 
-		ShapeManipulator::changeIndicesFormat(shape, _maxValue);
+		ShapeManipulator::changeIndicesFormat(new_shape, _maxValue);
 
-		_maxValue += shape->getSizeofVertices() / shape->getStride();
+		_maxValue += new_shape->getSizeofVertices() / new_shape->getStride();
 
-		if (texturePath == "empty") {
-			ShapeManipulator::extendTextureID(shape, 0.0f);
-		}
-		else {
-			ShapeManipulator::extendTextureID(shape, _nextTextureID);
-			_nextTextureID++;
+        if (new_shape->getTextureID() != 0.0f)
+            _samplers.push_back((int)new_shape->getTextureID());
 
-			_texture->loadTexture(texturePath);
+        _shapes.push_back(new_shape);
+    }
 
-			_samplers.push_back((int)shape->getTextureID());
-		}
-
-		_shapes.emplace_back(shape);
-	}
-
-	void Mesh::popObject(const unsigned int& index) {
+    void Mesh::popShape(const unsigned int& index) {
 		if (_shapes[index]->getTextureID() != 0.0f) {
 			_samplers.erase(_samplers.begin() + index);
-			_texture->removeID(index);
 		}
 
 		_shapes[index].reset();
 		_shapes.erase(_shapes.begin() + index);
+    }
 
-		_vertices.clear();
-		_indices.clear();
+    void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
+		_translations.push_back(glm::translate(glm::mat4(1.0f), center));
+		_rotations.push_back(ShapeManipulator::getRotationMatrix(center, angle));
+    }
+
+	void Mesh::popMatrices(const unsigned int& index) {
+		_translations.erase(_translations.begin() + index);
+		_rotations.erase(_rotations.begin() + index);
 	}
 
-	void Mesh::bind() {
-		for (unsigned int i = 0; i < _samplers.size(); i++)
-			_texture->bind((float)_samplers[i], _texture->getID(i));
+    void Mesh::clearBuffers() {
+        _vertices.clear();
+        _indices.clear();
+    }
+
+    void Mesh::clearMatrices() {
+        _translations.clear();
+        _rotations.clear();
+    }
+
+    void Mesh::update() {
+		for (unsigned int i = 0; i < _shapes.size(); i++) {
+
+			unsigned int currentVerticesSize = _vertices.size() + _shapes[i]->getSizeofVertices();
+			unsigned int currentIndicesSize = _indices.size() + _shapes[i]->getSizeofIndices();
+
+			if (currentVerticesSize <= constants::maxVertexCount && currentIndicesSize <= constants::maxIndexCount) {
+				_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVerticesEnd());
+				_indices.insert(_indices.end(), _shapes[i]->getIndicesBegin(), _shapes[i]->getIndicesEnd());
+			}
+		}
+    }
+
+	const std::vector<unsigned int>& Mesh::getLayout() const {
+		if (!_shapes.empty()) return _shapes[0]->getLayoutVector();
+		else return std::vector<unsigned int>();
 	}
 
-	void Mesh::unbind() {
-		for (unsigned int i = 0; i < _samplers.size(); i++)
-			_texture->bind((float)_samplers[i], 0.0f);
-	}
-
-	void Mesh::insertVertices(const std::shared_ptr<Shape>& shape) {
-		_vertices.insert(_vertices.end(), shape->getVerticesBegin(), shape->getVerticesEnd());
-	}
-
-	void Mesh::insertIndices(const std::shared_ptr<Shape>& shape) {
-		_indices.insert(_indices.end(), shape->getIndicesBegin(), shape->getIndicesEnd());
+	const unsigned int& Mesh::getLayoutSize() const {
+		if (!_shapes.empty()) return _shapes[0]->getLayoutSize();
+		else return 0;
 	}
 }

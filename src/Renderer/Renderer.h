@@ -61,30 +61,10 @@ namespace mar {
 		std::shared_ptr<Texture> _texture;
 		std::shared_ptr<Shader> _mainShader;
 		// --- Objects
-		std::shared_ptr<Mesh> _mesh;
-		std::vector<std::shared_ptr<Shape>> _shapes;
-		std::vector<float> _vertices;
-		std::vector<unsigned int> _indices;
-		std::vector<int> _samplers;
-		std::vector<glm::mat4> _translations;
-		std::vector<glm::mat4> _rotations;
-		// --- Helper object for creating new ones
-		std::shared_ptr<Shape> _addedDuringRuntime;
-		// --- Lightning
-		glm::vec3 _lightPosition{ 0.0f, 0.5f, 5.0f };
-		// --- Setup
-		const float* _gui_colors;
-		glm::mat4 _gui_rotation;
-		glm::mat4 _gui_translate;
-		glm::mat4 _camera_model;
-		glm::mat4 _camera_projection;
-		glm::mat4 _camera_view;
-		glm::vec3 _camera_position;
+		std::vector<std::string> _names;
 		// --- Knowledge about state of Renderer
-		float _nextShapeID;
 		float _nextTextureID;
 		bool _pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
-		unsigned int _maxValue;			// there is need to know max value of indices in order to push more object properly
 		bool _initialized = false;		// check, if renderer is initialized
 		bool _isGUIconnected = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
 		// --- Statistics
@@ -96,32 +76,28 @@ namespace mar {
 		void createRenderer(const std::shared_ptr<RendererFactory>& factory);
 		void closeRenderer();
 
-		void initialize();
+		void initialize(Mesh* mesh);
+		void loadScene(Mesh* mesh, Scene* scene);
 
-		void loadScene(Scene* scene);
+		void popObject(const unsigned int& index) { }
 
-		void pushObject(std::shared_ptr<Shape>& shape, glm::vec3& position, std::string texturePath = "empty");
-		void popObject(const unsigned int& index);
+		void draw(Mesh* mesh);
 
-		void bind();
-		void unbind();
-
-		void updateFrame(); 
-		void draw();
-
-		void clearBuffer();
-
-		void guiPush(GUIPushType pushType, glm::vec3& position);
+		void guiPush(GUIPushType pushType, glm::vec3& position) { return; }
 		
 		void connectGUI();
 		void disconnectGUI();
-		void updateGUIData(const GUIData* guidata);
-
+		void updateGUIData(Mesh* mesh, const GUIData* guidata);
 		void updateCameraData(const CameraData* cameradata);
 
-		const std::string& getObjectName(unsigned int index) { return _shapes[index]->getName(); }
+		const std::string& getObjectName(const unsigned int& index) { return _names[index]; }
 		const RendererStatistics& getStatistics() const { return _stats; }
-		const std::vector<int>& getSamplers() const { return _samplers; }
+
+	private:
+		void addShape(Mesh* mesh, std::shared_ptr<Shape>& shape, const glm::vec3& center, const glm::vec3& angle = {0.0f, 0.0f, 0.0f}, std::string texturePath = "empty");
+
+		void bind();
+		void unbind();
 	};
 }
 

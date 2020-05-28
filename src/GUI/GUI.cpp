@@ -251,7 +251,7 @@ namespace mar {
 			strcat_s(shapeIndex, int2char);
 
 			if (ImGui::Button(shapeIndex)) {
-				_renderer->popObject(i);
+				//! here delete object from scene!!!!
 				_guiData.centers.erase(_guiData.centers.begin() + i);
 				_guiData.angles.erase(_guiData.angles.begin() + i);
 			}

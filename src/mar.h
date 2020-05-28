@@ -86,6 +86,7 @@ namespace mar {
 	class RendererOpenGLFactory;
 
 	class Mesh;
+	class Light;
 	class Scene;
 
 	class Shape;
