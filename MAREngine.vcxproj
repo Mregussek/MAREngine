@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Renderer\Camera\buttons_def.h" />
     <ClInclude Include="src\Renderer\Mesh\Light\Light.h" />
     <ClInclude Include="MAR_3rd_party\MARMaths\MARMaths.h" />
     <ClInclude Include="MAR_3rd_party\MARMaths\src\maths.h" />
@@ -185,7 +186,6 @@
     <ClInclude Include="src\Renderer\Camera\Camera.h" />
     <ClInclude Include="src\MAREngine.h" />
     <ClInclude Include="other\stb_image\stb_image.h" />
-    <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Cube.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\Shapes.h" />
     <ClInclude Include="src\Renderer\Scene\Scene.h" />

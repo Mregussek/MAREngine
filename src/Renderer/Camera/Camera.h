@@ -7,7 +7,7 @@
 #define CAMERA_H
 
 #include "../../mar.h"
-#include "../../Devices/SerialPortMonitor.h"
+#include "buttons_def.h"
 
 namespace mar {
     namespace graphics {
@@ -24,8 +24,7 @@ namespace mar {
 			FORWARD,
 			BACKWARD,
 			LEFT,
-			RIGHT,
-			NONE
+			RIGHT
 		};
 
 		struct {
@@ -71,7 +70,6 @@ namespace mar {
 			// --- RealTime Operations
 			float _deltaTime;
 			float _lastFrame;
-			ObjectRotation _objectRotation;
 			// --- Data for renderer
 			CameraData _cameraData;
 
@@ -80,27 +78,25 @@ namespace mar {
 
 			void initialize(const int& w, const int& h);
 
-			const float& getZoom() const { return _zoom; }
-			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
-			const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
-			const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
-
 			void processInput(GLFWwindow* window);
 			void updateData();
 
 			void mouseCallback(float xpos, float ypos);
 			void scrollCallback(float ypos);
 
-			const glm::vec3& getCameraPosition() const;
-
-			const CameraData& getCameraData() const { return _cameraData; }
-
 		private:
 			void processKeyboard(CameraMovement&& direction);
-			void processKeyboard(ObjectRotation&& direction);
 			void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 			void processMouseScroll(float yoffset);
 			void updateCameraVectors();
+
+		public:
+			const glm::vec3& getCameraPosition() const { return _position; }
+			const CameraData& getCameraData() const { return _cameraData; }
+			const float& getZoom() const { return _zoom; }
+			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
+			const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
+			const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
 		};
 
 

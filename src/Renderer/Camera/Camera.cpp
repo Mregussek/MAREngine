@@ -39,33 +39,21 @@ namespace mar {
 			_deltaTime = currentFrame - _lastFrame;
 			_lastFrame = currentFrame;
 
-			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			if (glfwGetKey(window, MAR_KEY_ESCAPE) == MAR_KEY_IS_PRESSED)
 				glfwSetWindowShouldClose(window, true);
 
 			// Camera move check
-			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			if (glfwGetKey(window, MAR_KEY_W) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::FORWARD);
-			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			if (glfwGetKey(window, MAR_KEY_S) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::BACKWARD);
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			if (glfwGetKey(window, MAR_KEY_A) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::LEFT);
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			if (glfwGetKey(window, MAR_KEY_D) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::RIGHT);
 
-			// Rotation check
-			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-				processKeyboard(ObjectRotation::FORWARD);
-			else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-				processKeyboard(ObjectRotation::BACKWARD);
-			else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-				processKeyboard(ObjectRotation::RIGHT);
-			else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-				processKeyboard(ObjectRotation::LEFT);
-			else
-				processKeyboard(ObjectRotation::NONE);
-
 			// Enable Mouse Usage
-			if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+			if (glfwGetKey(window, MAR_KEY_1) == MAR_KEY_IS_PRESSED) {
 				if (_enableMouse) _enableMouse = false;
 				else _enableMouse = true;
 
@@ -87,14 +75,6 @@ namespace mar {
 			if (direction == CameraMovement::BACKWARD) _position -= _front * velocity;
 			if (direction == CameraMovement::LEFT) _position -= _right * velocity;
 			if (direction == CameraMovement::RIGHT) _position += _right * velocity;
-		}
-
-		void Camera::processKeyboard(ObjectRotation&& rotation) {
-			if (rotation == ObjectRotation::FORWARD) _objectRotation = ObjectRotation::FORWARD;
-			if (rotation == ObjectRotation::BACKWARD) _objectRotation = ObjectRotation::BACKWARD;
-			if (rotation == ObjectRotation::LEFT) _objectRotation = ObjectRotation::LEFT;
-			if (rotation == ObjectRotation::RIGHT) _objectRotation = ObjectRotation::RIGHT;
-			if (rotation == ObjectRotation::NONE) _objectRotation = ObjectRotation::NONE;
 		}
 
 		void Camera::mouseCallback(float xpos, float ypos) {
@@ -148,10 +128,6 @@ namespace mar {
 			_front = glm::normalize(front);
 			_right = glm::normalize(glm::cross(_front, _worldUp));
 			_up = glm::normalize(glm::cross(_right, _front));
-		}
-
-		const glm::vec3& Camera::getCameraPosition() const {
-			return _position;
 		}
 
 
