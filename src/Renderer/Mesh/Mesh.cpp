@@ -39,6 +39,8 @@ namespace mar {
 			if (new_shape->getTextureID() != 0.0f)
 				_samplers.push_back((int)new_shape->getTextureID());
 
+			_names.push_back(new_shape->getName());
+
 			_shapes.push_back(new_shape);
 		}
 
@@ -46,6 +48,8 @@ namespace mar {
 			if (_shapes[index]->getTextureID() != 0.0f) {
 				_samplers.erase(_samplers.begin() + index);
 			}
+
+			_names.erase(_names.begin() + index);
 
 			_shapes[index].reset();
 			_shapes.erase(_shapes.begin() + index);

@@ -40,9 +40,10 @@ namespace mar {
 			}
 		}
 
-		void Renderer::initialize(Mesh* mesh) {
-			// When we will use Engine as a real AR app we won't to see a manageable GUI
-			if (m_isGUIconnected)
+		void Renderer::initialize(Mesh* mesh, bool useGUI) {
+			m_useGUI = useGUI;
+
+			if (m_useGUI)
 				m_mainShader->initialize(ShaderType::DEFAULT);
 			else
 				m_mainShader->initialize(ShaderType::WITHOUT_GUI);
@@ -87,8 +88,6 @@ namespace mar {
 				m_texture->loadTexture(texturePath);
 			}
 
-			_names.push_back(shape->getName());
-
 			mesh->pushShape(shape);
 			mesh->pushMatrices(center, angle);
 		}
@@ -108,7 +107,7 @@ namespace mar {
 			m_stats._countOfIndices = mesh->getIndicesSize();
 			m_stats._countOfShapes = mesh->getShapesCount();
 
-			if (!m_isGUIconnected) {
+			if (!m_useGUI) {
 				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 				m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
 			}
@@ -125,17 +124,9 @@ namespace mar {
 				m_texture->bind(mesh->getSamplerID(i), m_texture->getID(i));
 		}
 
-		void Renderer::connectGUI() {
-			m_isGUIconnected = true;
-		}
-
-		void Renderer::disconnectGUI() {
-			m_isGUIconnected = false;
-		}
-
 		void Renderer::updateGUIData(Mesh* mesh, const gui::GUIData* guidata) {
-			if (!m_isGUIconnected) {
-				std::cerr << "GUI is not connected!" << std::endl;
+			if (!m_useGUI) {
+				std::cerr << "Data from GUI is not sent!" << std::endl;
 				return;
 			}
 

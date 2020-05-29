@@ -25,35 +25,33 @@ namespace mar {
 		};
 
 		class GUI {
-		private:
 			// --- Must-have to run GUI
-			window::Window* _window;
-			const char* _versionGLSL;
+			window::Window* m_window;
 			// --- Attributes for sliders
-			glm::vec3 _translation;
-			glm::vec3 _angle;
-			float _colors[4];
-			float _pos[3];
-			float _ang[3];
-			float _inputCenter[3];
+			glm::vec3 m_sceneTranslation;
+			glm::vec3 m_sceneAngle;
+			float m_sceneColors[4];
+			float m_shapePos[3];
+			float m_shapeAngle[3];
+			float m_inputCenter[3];
 			// --- Run-time GUI attributes
-			graphics::Renderer* _renderer;
-			GUIData _guiData;
-			bool _rendererConnected;
-			unsigned int _startupSceneSize;
+			std::vector<std::string> m_shapeNames;
+			const graphics::RendererStatistics* m_statistics;
+			GUIData m_guiData;
+			bool m_canModifyObjects;
+			unsigned int m_startupSceneSize;
 
 		public:
 			GUI();
 
-			void initialize(window::Window* window, const char* glsl_version);
+			void initialize(window::Window* window, const char* glsl_version, bool can_modify_objects);
 			void shutdown();
-
+			
 			void loadSceneParameters(graphics::Scene* scene);
 
-			void connectToRenderer(graphics::Renderer* renderer);
-
-			void push(const glm::vec3& newCenter, const glm::vec3& newAngle);
+			void push(const glm::vec3& new_center, const glm::vec3& new_angle);
 			void prepareNewFrame();
+			void updateSceneInfo(const graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
 			void display();
 
 		private:
@@ -70,7 +68,7 @@ namespace mar {
 		public:
 			const glm::mat4 getTranslationMatrix() const;
 			const glm::mat4 getRotationMatrix() const;
-			const GUIData& getGUIData() const { return _guiData; }
+			const GUIData& getGUIData() const { return m_guiData; }
 		};
 
 

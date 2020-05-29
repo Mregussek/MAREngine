@@ -22,7 +22,7 @@ namespace mar {
 			std::vector<glm::mat4> _translations;
 			std::vector<glm::mat4> _rotations;
 			Light _light;
-
+			std::vector<std::string> _names;
 			float _nextShapeID;
 			unsigned int _maxValue;
 
@@ -55,6 +55,7 @@ namespace mar {
 			const std::vector<unsigned int>& getLayout() const { return _shapes[0]->getLayoutVector(); }
 			const unsigned int& getLayoutSize() const { return _shapes[0]->getLayoutSize(); }
 			const glm::vec3& getLightPosition() const { return _light.getPosition(); }
+			const std::vector<std::string>& getNames() const { return _names; }
 		};
 
 
