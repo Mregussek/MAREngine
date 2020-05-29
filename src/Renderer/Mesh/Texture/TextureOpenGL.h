@@ -43,7 +43,7 @@ namespace mar {
 			\param shapeId - id of shape
 			\param texID - id of texture
 		*/
-		void bind(const float& shapeId, const unsigned int& texID) const override;
+		void bind(const int& shapeId, const unsigned int& texID) const override;
 		
 		//! Set default texture for each shape
 		void unbind() const override;
@@ -61,7 +61,7 @@ namespace mar {
 		*/
 		void addID(const unsigned int id) override;
 
-		//! Removes id prescribed to shape with specifed index
+		//! Removes id prescribed to shape with specified index
 		/*
 			\param index - index of shape
 		*/

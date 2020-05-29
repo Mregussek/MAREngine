@@ -46,7 +46,7 @@ namespace mar {
 		std::cerr << "Failed to load texture" << std::endl;
 	}
 
-	void TextureOpenGL::bind(const float& shapeId, const unsigned int& texID) const {
+	void TextureOpenGL::bind(const int& shapeId, const unsigned int& texID) const {
 		if (texID == 0.0f) 
 			return;
 

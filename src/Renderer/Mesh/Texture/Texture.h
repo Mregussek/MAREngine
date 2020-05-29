@@ -57,7 +57,7 @@ namespace mar {
 			\param shapeId - id of shape
 			\param texID - id of texture
 		*/
-		virtual void bind(const float& shapeId, const unsigned int& texID) const { }
+		virtual void bind(const int& shapeId, const unsigned int& texID) const { }
 
 		//! Method should set default texture for each shape. Method must be overloaded!
 		virtual void unbind() const { }

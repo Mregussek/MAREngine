@@ -21,13 +21,6 @@ namespace mar {
 		const size_t maxObjectsInScene = 32;
 	}
 
-	enum class GUIPushType {
-		CUBE,
-		WALL,
-		SURFACE,
-		PYRAMID
-	};
-
 	struct RendererStatistics {
 		unsigned int _countOfDrawCalls;
 		unsigned int _countOfVertices;
@@ -54,21 +47,19 @@ namespace mar {
 
 	class Renderer {
 		// --- Buffers
-		std::shared_ptr<VertexBuffer> _vbo;
-		std::shared_ptr<VertexBufferLayout> _lay;
-		std::shared_ptr<VertexArray> _vao;
-		std::shared_ptr<ElementBuffer> _ebo;
-		std::shared_ptr<Texture> _texture;
-		std::shared_ptr<Shader> _mainShader;
-		// --- Objects
-		std::vector<std::string> _names;
+		std::shared_ptr<VertexBuffer> m_vbo;
+		std::shared_ptr<VertexBufferLayout> m_layout;
+		std::shared_ptr<VertexArray> m_vao;
+		std::shared_ptr<ElementBuffer> m_ebo;
+		std::shared_ptr<Texture> m_texture;
+		std::shared_ptr<Shader> m_mainShader;
 		// --- Knowledge about state of Renderer
+		std::vector<std::string> _names;
 		float _nextTextureID;
-		bool _pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
-		bool _initialized = false;		// check, if renderer is initialized
-		bool _isGUIconnected = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
-		// --- Statistics
-		RendererStatistics _stats;
+		bool m_pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
+		bool m_initialized = false;		// check, if renderer is initialized
+		bool m_isGUIconnected = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
+		RendererStatistics m_stats;
 
 	public:
 		Renderer() = default;
@@ -79,11 +70,7 @@ namespace mar {
 		void initialize(Mesh* mesh);
 		void loadScene(Mesh* mesh, Scene* scene);
 
-		void popObject(const unsigned int& index) { }
-
 		void draw(Mesh* mesh);
-
-		void guiPush(GUIPushType pushType, glm::vec3& position) { return; }
 		
 		void connectGUI();
 		void disconnectGUI();
@@ -91,7 +78,7 @@ namespace mar {
 		void updateCameraData(const CameraData* cameradata);
 
 		const std::string& getObjectName(const unsigned int& index) { return _names[index]; }
-		const RendererStatistics& getStatistics() const { return _stats; }
+		const RendererStatistics& getStatistics() const { return m_stats; }
 
 	private:
 		void addShape(Mesh* mesh, std::shared_ptr<Shape>& shape, const glm::vec3& center, const glm::vec3& angle = {0.0f, 0.0f, 0.0f}, std::string texturePath = "empty");

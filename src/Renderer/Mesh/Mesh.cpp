@@ -81,14 +81,4 @@ namespace mar {
 			}
 		}
     }
-
-	const std::vector<unsigned int>& Mesh::getLayout() const {
-		if (!_shapes.empty()) return _shapes[0]->getLayoutVector();
-		else return std::vector<unsigned int>();
-	}
-
-	const unsigned int& Mesh::getLayoutSize() const {
-		if (!_shapes.empty()) return _shapes[0]->getLayoutSize();
-		else return 0;
-	}
 }

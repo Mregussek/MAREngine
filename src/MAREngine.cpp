@@ -13,9 +13,9 @@ namespace mar {
 		m_gui.initialize(&m_window, MAREngineDefaultSettings.glsl_version);
 		m_scene.initializeScene(SceneType::WITH_COLOURED_ELEMS);
 		m_renderer.createRenderer(std::make_shared<RendererOpenGLFactory>());
-		m_mesh.createMesh();
 
 		// --- PUSH SCENE TO RENDERER AND SET GUI --- //
+		m_mesh.createMesh();
 		m_renderer.loadScene(&m_mesh, &m_scene);
 		m_gui.loadSceneParameters(&m_scene);
 

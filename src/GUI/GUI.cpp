@@ -71,61 +71,22 @@ namespace mar {
 	void GUI::display() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("General")) {
-
-				if (_rendererConnected) {
-					eventOnScene();
-
-					ImGui::Separator();
-
-					eventOnEachObjectSeperately();
-				}
-				else
-					ImGui::Text("Renderer is not connected!");
-				
-				ImGui::Separator();
-
-				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-				
-				ImGui::Separator();
-
-				if (ImGui::Button("Exit")) 
-					glfwSetWindowShouldClose(_window->getWindow(), true);
-
+				display_GeneralMenu();
 				ImGui::EndMenu();
 			}
-
 			
 			if (ImGui::BeginMenu("Manage Objects")) {
-				if (_rendererConnected) {
-					addNewObjectToScene();
-
-					ImGui::Separator();
-
-					deleteObjectFromScene();
-
-				}
-				else
-					ImGui::Text("Renderer is not connected!");
-
+				display_ManageObjectsMenu();
 				ImGui::EndMenu();
 			}
 			
 			if (ImGui::BeginMenu("Statistics")) {
-
-				if (_rendererConnected) {
-					displayStatistics();
-				}
-				else {
-					ImGui::Text("Renderer is not connected!");
-				}
-
+				display_StatisticsMenu();
 				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("Exit")) {
-
 				glfwSetWindowShouldClose(_window->getWindow(), true);
-
 				ImGui::EndMenu();
 			}
 				
@@ -134,6 +95,27 @@ namespace mar {
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	}
+
+	void GUI::display_GeneralMenu() {
+		if (_rendererConnected) {
+			eventOnScene();
+
+			ImGui::Separator();
+
+			eventOnEachObjectSeperately();
+		}
+		else
+			ImGui::Text("Renderer is not connected!");
+
+		ImGui::Separator();
+
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImGui::Separator();
+
+		if (ImGui::Button("Exit"))
+			glfwSetWindowShouldClose(_window->getWindow(), true);
 	}
 
 	void GUI::eventOnScene() {
@@ -188,6 +170,19 @@ namespace mar {
 		}
 	}
 
+	void GUI::display_ManageObjectsMenu() {
+		if (_rendererConnected) {
+			addNewObjectToScene();
+
+			ImGui::Separator();
+
+			deleteObjectFromScene();
+
+		}
+		else
+			ImGui::Text("Renderer is not connected!");
+	}
+
 	void GUI::addNewObjectToScene() {
 		ImGui::Text("Add Object");
 		ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
@@ -205,8 +200,8 @@ namespace mar {
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-				_renderer->guiPush(GUIPushType::PYRAMID, center);
-				this->push(center, { 0.0f, 0.0f, 0.0f });
+				//_renderer->guiPush(GUIPushType::PYRAMID, center);
+				//this->push(center, { 0.0f, 0.0f, 0.0f });
 		}
 		
 		if (ImGui::Button("Select Cube")) {
@@ -214,8 +209,8 @@ namespace mar {
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-				_renderer->guiPush(GUIPushType::CUBE, center);
-				this->push(center, { 0.0f, 0.0f, 0.0f });
+				//_renderer->guiPush(GUIPushType::CUBE, center);
+				//this->push(center, { 0.0f, 0.0f, 0.0f });
 			
 		}
 
@@ -224,8 +219,8 @@ namespace mar {
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-				_renderer->guiPush(GUIPushType::SURFACE, center);
-				this->push(center, { 0.0f, 0.0f, 0.0f });
+				//_renderer->guiPush(GUIPushType::SURFACE, center);
+				//this->push(center, { 0.0f, 0.0f, 0.0f });
 		}
 
 		if (ImGui::Button("Select Wall")) {
@@ -233,8 +228,8 @@ namespace mar {
 					return;
 
 				glm::vec3 center{ _inputCenter[0], _inputCenter[1] , _inputCenter[2] };
-				_renderer->guiPush(GUIPushType::WALL, center);
-				this->push(center, { 0.0f, 0.0f, 0.0f });
+				//_renderer->guiPush(GUIPushType::WALL, center);
+				//this->push(center, { 0.0f, 0.0f, 0.0f });
 			
 		}
 	}
@@ -251,45 +246,49 @@ namespace mar {
 			strcat_s(shapeIndex, int2char);
 
 			if (ImGui::Button(shapeIndex)) {
-				//! here delete object from scene!!!!
-				_guiData.centers.erase(_guiData.centers.begin() + i);
-				_guiData.angles.erase(_guiData.angles.begin() + i);
+				//_renderer->popObject(i);
+				//_guiData.centers.erase(_guiData.centers.begin() + i);
+				//_guiData.angles.erase(_guiData.angles.begin() + i);
 			}
 		}
 	}
 
-	void GUI::displayStatistics() {
-		RendererStatistics stats = _renderer->getStatistics();
+	void GUI::display_StatisticsMenu() {
+		if (_rendererConnected) {
+			RendererStatistics stats = _renderer->getStatistics();
 
-		char int2char[7];
-		sprintf_s(int2char, "%d ", stats._countOfDrawCalls);
-		char drawCalls[28] = "Draw Calls: ";
-		strcat_s(drawCalls, int2char);
-		ImGui::Text(drawCalls);
+			char int2char[7];
+			sprintf_s(int2char, "%d ", stats._countOfDrawCalls);
+			char drawCalls[28] = "Draw Calls: ";
+			strcat_s(drawCalls, int2char);
+			ImGui::Text(drawCalls);
 
-		char int2char1[7];
-		sprintf_s(int2char1, "%d ", stats._countOfShapes);
-		char drawCalls1[28] = "Shapes Count: ";
-		strcat_s(drawCalls1, int2char1);
-		ImGui::Text(drawCalls1);
+			char int2char1[7];
+			sprintf_s(int2char1, "%d ", stats._countOfShapes);
+			char drawCalls1[28] = "Shapes Count: ";
+			strcat_s(drawCalls1, int2char1);
+			ImGui::Text(drawCalls1);
 
-		char int2char2[7];
-		sprintf_s(int2char2, "%d ", stats._countOfVertices);
-		char drawCalls2[28] = "Vertices: ";
-		strcat_s(drawCalls2, int2char2);
-		ImGui::Text(drawCalls2);
+			char int2char2[7];
+			sprintf_s(int2char2, "%d ", stats._countOfVertices);
+			char drawCalls2[28] = "Vertices: ";
+			strcat_s(drawCalls2, int2char2);
+			ImGui::Text(drawCalls2);
 
-		char int2char3[7];
-		sprintf_s(int2char3, "%d ", stats._countOfIndices);
-		char drawCalls3[28] = "Indices: ";
-		strcat_s(drawCalls3, int2char3);
-		ImGui::Text(drawCalls3);
+			char int2char3[7];
+			sprintf_s(int2char3, "%d ", stats._countOfIndices);
+			char drawCalls3[28] = "Indices: ";
+			strcat_s(drawCalls3, int2char3);
+			ImGui::Text(drawCalls3);
 
-		char int2char4[7];
-		sprintf_s(int2char4, "%d ", stats._countOfTriangles);
-		char drawCalls4[28] = "Triangles: ";
-		strcat_s(drawCalls4, int2char4);
-		ImGui::Text(drawCalls4);
+			char int2char4[7];
+			sprintf_s(int2char4, "%d ", stats._countOfTriangles);
+			char drawCalls4[28] = "Triangles: ";
+			strcat_s(drawCalls4, int2char4);
+			ImGui::Text(drawCalls4);
+		}
+		else 
+			ImGui::Text("Renderer is not connected!");
 	}
 
 	const glm::mat4 GUI::getTranslationMatrix() const { 

@@ -27,10 +27,9 @@ namespace mar {
 		// --- Must-have to run GUI
 		Window* _window;
 		const char* _versionGLSL;
-		// --- Attributes for objects
+		// --- Attributes for sliders
 		glm::vec3 _translation;
 		glm::vec3 _angle;
-		// --- Attributes for sliders
 		float _colors[4];
 		float _pos[3];
 		float _ang[3];
@@ -55,15 +54,20 @@ namespace mar {
 		void prepareNewFrame();
 		void display();
 
+	private:
+		void display_GeneralMenu();
 		void eventOnScene();
 		void eventOnEachObjectSeperately();
+
+		void display_ManageObjectsMenu();
 		void addNewObjectToScene();
 		void deleteObjectFromScene();
-		void displayStatistics();
 
+		void display_StatisticsMenu();
+
+	public:
 		const glm::mat4 getTranslationMatrix() const;
 		const glm::mat4 getRotationMatrix() const;
-		
 		const GUIData& getGUIData() const { return _guiData; }
 	};
 }
