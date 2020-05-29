@@ -17,6 +17,7 @@ namespace mar {
 			DEFAULT,
 			SURFACE,
 			WITH_COLOURED_ELEMS,
+			SECOND_MESH,
 			EMPTY
 		};
 
@@ -41,15 +42,20 @@ namespace mar {
 					createSurface();
 				else if (type == SceneType::WITH_COLOURED_ELEMS)
 					createWithColouredElements();
+				else if (type == SceneType::SECOND_MESH)
+					createOnlyColouredElements();
 				else if (type == SceneType::EMPTY)
 					createEmpty();
 			}
 
+		private:
 			void createDefault();
 			void createSurface();
 			void createWithColouredElements();
+			void createOnlyColouredElements();
 			void createEmpty();
 
+		public:
 			std::vector<std::shared_ptr<Shape>> getShapes() { return _shapes; }
 			std::vector<glm::vec3> getCenters() { return _centers; }
 			std::vector<glm::vec3> getAngles() { return _angles; }

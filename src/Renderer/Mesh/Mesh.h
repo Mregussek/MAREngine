@@ -10,6 +10,7 @@
 #include "../Renderer.h"
 #include "Light/Light.h"
 
+
 namespace mar {
     namespace graphics {
 
@@ -43,19 +44,25 @@ namespace mar {
 		public:
 			/// --- GET METHODS --- ///
 			const unsigned int& getShapesCount() const { return _shapes.size(); }
+			const std::vector<std::string>& getNames() const { return _names; }
+
 			const std::vector<float>& getVertices() const { return _vertices; }
+			const unsigned int& getVerticesSize() const { return _vertices.size(); }
+
 			const std::vector<unsigned int>& getIndices() const { return _indices; }
+			const unsigned int& getIndicesSize() const { return _indices.size(); }
 			const std::vector<int>& getSamplers() const { return _samplers; }
+			const int& getSamplerID(const unsigned int& index) { return _samplers[index]; }
+			const unsigned int& getSamplersSize() const { return _samplers.size(); }
+
 			const std::vector<glm::mat4>& getTranslationMatrices() const { return _translations; }
 			const std::vector<glm::mat4>& getRotationMatrices() const { return _rotations; }
-			const int& getSamplerID(const unsigned int& index) { return _samplers[index]; }
-			const unsigned int& getVerticesSize() const { return _vertices.size(); }
-			const unsigned int& getIndicesSize() const { return _indices.size(); }
-			const unsigned int& getSamplersSize() const { return _samplers.size(); }
+			
 			const std::vector<unsigned int>& getLayout() const { return _shapes[0]->getLayoutVector(); }
+			const unsigned int& getLayout(const unsigned int& index) const { return _shapes[0]->getLayout(index); }
 			const unsigned int& getLayoutSize() const { return _shapes[0]->getLayoutSize(); }
+
 			const glm::vec3& getLightPosition() const { return _light.getPosition(); }
-			const std::vector<std::string>& getNames() const { return _names; }
 		};
 
 

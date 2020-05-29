@@ -40,7 +40,7 @@ namespace mar {
 			}
 		}
 
-		void Renderer::initialize(Mesh* mesh, bool useGUI) {
+		void Renderer::initialize(const std::vector<unsigned int>& layout, bool useGUI) {
 			m_useGUI = useGUI;
 
 			if (m_useGUI)
@@ -49,10 +49,7 @@ namespace mar {
 				m_mainShader->initialize(ShaderType::WITHOUT_GUI);
 
 			if (!m_pushedLayout) {
-				std::vector<unsigned int> layout = mesh->getLayout();
-
-				for (size_t i = 0; i < mesh->getLayoutSize(); i++)
-					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
+				for (size_t i = 0; i < layout.size(); i++) m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
 
 				m_pushedLayout = true;
 			}
@@ -62,9 +59,6 @@ namespace mar {
 			m_ebo->initializeElement(constants::maxIndexCount);
 
 			m_vao->addBuffer(m_layout);
-
-			for (unsigned int i = 0; i < mesh->getSamplersSize(); i++)
-				m_texture->bind(mesh->getSamplerID(i), m_texture->getID(i));
 
 			m_mainShader->bind();
 
@@ -115,13 +109,13 @@ namespace mar {
 			m_mainShader->setUniformVector3("u_LightPos", mesh->getLightPosition());
 			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
 
+			for (unsigned int i = 0; i < mesh->getSamplersSize(); i++)
+				m_texture->bind(mesh->getSamplerID(i), m_texture->getID(i));
+
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
 
 			m_stats._countOfDrawCalls = 1;
 			m_stats._countOfTriangles = m_stats._countOfIndices / 3;
-
-			for (unsigned int i = 0; i < mesh->getSamplersSize(); i++)
-				m_texture->bind(mesh->getSamplerID(i), m_texture->getID(i));
 		}
 
 		void Renderer::updateGUIData(Mesh* mesh, const gui::GUIData* guidata) {
@@ -152,7 +146,6 @@ namespace mar {
 		}
 
 		void Renderer::bind() {
-			m_mainShader->bind();
 			m_vao->bind();
 			m_vbo->bind();
 			m_ebo->bind();

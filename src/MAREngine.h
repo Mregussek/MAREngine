@@ -36,6 +36,7 @@ namespace mar {
 			graphics::Renderer m_renderer;
 			graphics::Scene m_scene;
 			graphics::Mesh m_mesh;
+			graphics::Mesh m_secondMesh;
 
 		public:
 			MAREngine() = default;

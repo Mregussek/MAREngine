@@ -68,7 +68,7 @@ namespace mar {
 			void createRenderer(const std::shared_ptr<RendererFactory>& factory);
 			void closeRenderer();
 
-			void initialize(Mesh* mesh, bool useGUI);
+			void initialize(const std::vector<unsigned int>& layout, bool useGUI);
 			void loadScene(Mesh* mesh, Scene* scene);
 
 			void draw(Mesh* mesh);

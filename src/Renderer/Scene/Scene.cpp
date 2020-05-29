@@ -83,6 +83,25 @@ namespace mar {
 			};
 		}
 
+		void Scene::createOnlyColouredElements() {
+			_shapes = {
+				std::make_shared<Cube>()
+				, std::make_shared<Pyramid>()
+			};
+			_centers = {
+				{ 1.0f,  1.5f, -5.0f }
+				, { -1.0f,  1.5f, -5.0f }
+			};
+			_angles = {
+				 { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+			};
+			_textures = {
+				"empty"
+				, "empty"
+			};
+		}
+
 		void Scene::createSurface() {
 			_shapes = {
 				std::make_shared<Surface>()
