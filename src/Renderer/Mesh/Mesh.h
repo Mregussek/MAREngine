@@ -11,51 +11,54 @@
 #include "Light/Light.h"
 
 namespace mar {
+    namespace graphics {
 
-    class Mesh {
-		std::vector<std::shared_ptr<Shape>> _shapes;
-		std::vector<float> _vertices;
-		std::vector<unsigned int> _indices;
-		std::vector<int> _samplers;
-		std::vector<glm::mat4> _translations;
-		std::vector<glm::mat4> _rotations;
-        Light _light;
 
-		float _nextShapeID;
-        unsigned int _maxValue;
+		class Mesh {
+			std::vector<std::shared_ptr<Shape>> _shapes;
+			std::vector<float> _vertices;
+			std::vector<unsigned int> _indices;
+			std::vector<int> _samplers;
+			std::vector<glm::mat4> _translations;
+			std::vector<glm::mat4> _rotations;
+			Light _light;
 
-    public:
-        void createMesh();
+			float _nextShapeID;
+			unsigned int _maxValue;
 
-        void pushShape(std::shared_ptr<Shape>& new_shape);
-        void popShape(const unsigned int& index);
-        
-        void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
-        void popMatrices(const unsigned int& index);
+		public:
+			void createMesh();
 
-        void clearBuffers();
-        void clearMatrices();
+			void pushShape(std::shared_ptr<Shape>& new_shape);
+			void popShape(const unsigned int& index);
 
-        void update();
+			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
+			void popMatrices(const unsigned int& index);
 
-    public:
-        /// --- GET METHODS --- ///
-        const unsigned int& getShapesCount() const { return _shapes.size(); }
-        const std::vector<float>& getVertices() const { return _vertices; }
-        const std::vector<unsigned int>& getIndices() const { return _indices; }
-        const std::vector<int>& getSamplers() const { return _samplers; }
-        const std::vector<glm::mat4>& getTranslationMatrices() const { return _translations; }
-        const std::vector<glm::mat4>& getRotationMatrices() const { return _rotations; }
-        const int& getSamplerID(const unsigned int& index) { return _samplers[index]; }
-        const unsigned int& getVerticesSize() const { return _vertices.size(); }
-        const unsigned int& getIndicesSize() const { return _indices.size(); }
-        const unsigned int& getSamplersSize() const { return _samplers.size(); }
-		const std::vector<unsigned int>& getLayout() const { return _shapes[0]->getLayoutVector(); }
-		const unsigned int& getLayoutSize() const { return _shapes[0]->getLayoutSize(); }
-        const glm::vec3& getLightPosition() const { return _light.getPosition(); }
-	};
+			void clearBuffers();
+			void clearMatrices();
 
-}
+			void update();
+
+		public:
+			/// --- GET METHODS --- ///
+			const unsigned int& getShapesCount() const { return _shapes.size(); }
+			const std::vector<float>& getVertices() const { return _vertices; }
+			const std::vector<unsigned int>& getIndices() const { return _indices; }
+			const std::vector<int>& getSamplers() const { return _samplers; }
+			const std::vector<glm::mat4>& getTranslationMatrices() const { return _translations; }
+			const std::vector<glm::mat4>& getRotationMatrices() const { return _rotations; }
+			const int& getSamplerID(const unsigned int& index) { return _samplers[index]; }
+			const unsigned int& getVerticesSize() const { return _vertices.size(); }
+			const unsigned int& getIndicesSize() const { return _indices.size(); }
+			const unsigned int& getSamplersSize() const { return _samplers.size(); }
+			const std::vector<unsigned int>& getLayout() const { return _shapes[0]->getLayoutVector(); }
+			const unsigned int& getLayoutSize() const { return _shapes[0]->getLayoutSize(); }
+			const glm::vec3& getLightPosition() const { return _light.getPosition(); }
+		};
+
+
+} }
 
 #endif // !MAR_ENGINE_MESH_H
 

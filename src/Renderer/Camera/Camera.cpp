@@ -6,148 +6,153 @@
 #include "Camera.h"
 
 namespace mar {
-    Camera::Camera()
-        : _width(0), 
-        _height(0),
-        _position(CameraSettings.CAMERA_START),
-        _front(glm::vec3(0.0f, 0.0f, -1.0f)),
-        _worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-        _movementSpeed(CameraSettings.SPEED),
-        _mouseSensitivity(CameraSettings.SENSITIVITY),
-        _zoom(CameraSettings.ZOOM),
-        _enableMouse(false),
-        _firstMouse(false),
-        _lastX(0.0f),
-        _lastY(0.0f),
-        _yaw(CameraSettings.YAW),
-        _pitch(CameraSettings.PITCH),
-        _deltaTime(0.0f),
-        _lastFrame(0.0f)
-    { }
+    namespace graphics {
 
-    void Camera::initialize(const int& w, const int& h) {
-        _width = w;
-        _height = h;
-        updateCameraVectors();
-    }
 
-    void Camera::processInput(GLFWwindow* window) {
-        float currentFrame = (float)glfwGetTime();
-        _deltaTime = currentFrame - _lastFrame;
-        _lastFrame = currentFrame;
+		Camera::Camera()
+			: _width(0),
+			_height(0),
+			_position(CameraSettings.CAMERA_START),
+			_front(glm::vec3(0.0f, 0.0f, -1.0f)),
+			_worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+			_movementSpeed(CameraSettings.SPEED),
+			_mouseSensitivity(CameraSettings.SENSITIVITY),
+			_zoom(CameraSettings.ZOOM),
+			_enableMouse(false),
+			_firstMouse(false),
+			_lastX(0.0f),
+			_lastY(0.0f),
+			_yaw(CameraSettings.YAW),
+			_pitch(CameraSettings.PITCH),
+			_deltaTime(0.0f),
+			_lastFrame(0.0f)
+		{ }
 
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
+		void Camera::initialize(const int& w, const int& h) {
+			_width = w;
+			_height = h;
+			updateCameraVectors();
+		}
 
-        // Camera move check
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            processKeyboard(CameraMovement::FORWARD);
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            processKeyboard(CameraMovement::BACKWARD);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            processKeyboard(CameraMovement::LEFT);
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            processKeyboard(CameraMovement::RIGHT);
+		void Camera::processInput(GLFWwindow* window) {
+			float currentFrame = (float)glfwGetTime();
+			_deltaTime = currentFrame - _lastFrame;
+			_lastFrame = currentFrame;
 
-        // Rotation check
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-            processKeyboard(ObjectRotation::FORWARD);
-        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-            processKeyboard(ObjectRotation::BACKWARD);
-        else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-            processKeyboard(ObjectRotation::RIGHT);
-        else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-            processKeyboard(ObjectRotation::LEFT);
-        else
-            processKeyboard(ObjectRotation::NONE);
+			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+				glfwSetWindowShouldClose(window, true);
 
-        // Enable Mouse Usage
-        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-            if (_enableMouse) _enableMouse = false;
-            else _enableMouse = true;
+			// Camera move check
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+				processKeyboard(CameraMovement::FORWARD);
+			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+				processKeyboard(CameraMovement::BACKWARD);
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+				processKeyboard(CameraMovement::LEFT);
+			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+				processKeyboard(CameraMovement::RIGHT);
 
-            _firstMouse = true;
-        }    
-    }
+			// Rotation check
+			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+				processKeyboard(ObjectRotation::FORWARD);
+			else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+				processKeyboard(ObjectRotation::BACKWARD);
+			else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+				processKeyboard(ObjectRotation::RIGHT);
+			else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+				processKeyboard(ObjectRotation::LEFT);
+			else
+				processKeyboard(ObjectRotation::NONE);
 
-    void Camera::updateData() {
-        _cameraData.projection = getProjectionMatrix();
-        _cameraData.model = getModelMatrix();
-        _cameraData.view = getViewMatrix();
+			// Enable Mouse Usage
+			if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+				if (_enableMouse) _enableMouse = false;
+				else _enableMouse = true;
 
-        _cameraData.position = getCameraPosition();
-    }
+				_firstMouse = true;
+			}
+		}
 
-    void Camera::processKeyboard(CameraMovement&& direction) {
-        float velocity = _movementSpeed * _deltaTime;
-        if (direction == CameraMovement::FORWARD) _position += _front * velocity;
-        if (direction == CameraMovement::BACKWARD) _position -= _front * velocity;
-        if (direction == CameraMovement::LEFT) _position -= _right * velocity;
-        if (direction == CameraMovement::RIGHT) _position += _right * velocity;
-    }
+		void Camera::updateData() {
+			_cameraData.projection = getProjectionMatrix();
+			_cameraData.model = getModelMatrix();
+			_cameraData.view = getViewMatrix();
 
-    void Camera::processKeyboard(ObjectRotation&& rotation) {
-        if (rotation == ObjectRotation::FORWARD) _objectRotation = ObjectRotation::FORWARD;
-        if (rotation == ObjectRotation::BACKWARD) _objectRotation = ObjectRotation::BACKWARD;
-        if (rotation == ObjectRotation::LEFT) _objectRotation = ObjectRotation::LEFT;
-        if (rotation == ObjectRotation::RIGHT) _objectRotation = ObjectRotation::RIGHT;
-        if (rotation == ObjectRotation::NONE) _objectRotation = ObjectRotation::NONE;
-    }
+			_cameraData.position = getCameraPosition();
+		}
 
-    void Camera::mouseCallback(float xpos, float ypos) {
-        if (!_enableMouse) return;
+		void Camera::processKeyboard(CameraMovement&& direction) {
+			float velocity = _movementSpeed * _deltaTime;
+			if (direction == CameraMovement::FORWARD) _position += _front * velocity;
+			if (direction == CameraMovement::BACKWARD) _position -= _front * velocity;
+			if (direction == CameraMovement::LEFT) _position -= _right * velocity;
+			if (direction == CameraMovement::RIGHT) _position += _right * velocity;
+		}
 
-        if (_firstMouse) {
-            _lastX = (float)xpos;
-            _lastY = (float)ypos;
-            _firstMouse = false;
-        }
+		void Camera::processKeyboard(ObjectRotation&& rotation) {
+			if (rotation == ObjectRotation::FORWARD) _objectRotation = ObjectRotation::FORWARD;
+			if (rotation == ObjectRotation::BACKWARD) _objectRotation = ObjectRotation::BACKWARD;
+			if (rotation == ObjectRotation::LEFT) _objectRotation = ObjectRotation::LEFT;
+			if (rotation == ObjectRotation::RIGHT) _objectRotation = ObjectRotation::RIGHT;
+			if (rotation == ObjectRotation::NONE) _objectRotation = ObjectRotation::NONE;
+		}
 
-        float xoffset = (float)xpos - _lastX;
-        float yoffset = _lastY - (float)ypos;
+		void Camera::mouseCallback(float xpos, float ypos) {
+			if (!_enableMouse) return;
 
-        _lastX = (float)xpos;
-        _lastY = (float)ypos;
+			if (_firstMouse) {
+				_lastX = (float)xpos;
+				_lastY = (float)ypos;
+				_firstMouse = false;
+			}
 
-        processMouseMovement(xoffset, yoffset);
-    }
+			float xoffset = (float)xpos - _lastX;
+			float yoffset = _lastY - (float)ypos;
 
-    void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
-        xoffset *= _mouseSensitivity;
-        yoffset *= _mouseSensitivity;
+			_lastX = (float)xpos;
+			_lastY = (float)ypos;
 
-        _yaw += xoffset;
-        _pitch += yoffset;
+			processMouseMovement(xoffset, yoffset);
+		}
 
-        if (constrainPitch) {
-            if (_pitch > 89.0f) _pitch = 89.0f;
-            if (_pitch < -89.0f)_pitch = -89.0f;
-        }
+		void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch) {
+			xoffset *= _mouseSensitivity;
+			yoffset *= _mouseSensitivity;
 
-        updateCameraVectors();
-    }
+			_yaw += xoffset;
+			_pitch += yoffset;
 
-    void Camera::scrollCallback(float ypos) {
-        processMouseScroll(ypos);
-    }
+			if (constrainPitch) {
+				if (_pitch > 89.0f) _pitch = 89.0f;
+				if (_pitch < -89.0f)_pitch = -89.0f;
+			}
 
-    void Camera::processMouseScroll(float yoffset) {
-        if (_zoom >= 1.0f && _zoom <= 45.0f) _zoom -= yoffset;
-        if (_zoom <= 1.0f) _zoom = 1.0f;
-        if (_zoom >= 45.0f) _zoom = 45.0f;
-    }
+			updateCameraVectors();
+		}
 
-    void Camera::updateCameraVectors() {
-        glm::vec3 front;
-        front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-        front.y = sin(glm::radians(_pitch));
-        front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-        _front = glm::normalize(front);
-        _right = glm::normalize(glm::cross(_front, _worldUp));
-        _up = glm::normalize(glm::cross(_right, _front));
-    }
+		void Camera::scrollCallback(float ypos) {
+			processMouseScroll(ypos);
+		}
 
-    const glm::vec3& Camera::getCameraPosition() const {
-        return _position;
-    }
-}
+		void Camera::processMouseScroll(float yoffset) {
+			if (_zoom >= 1.0f && _zoom <= 45.0f) _zoom -= yoffset;
+			if (_zoom <= 1.0f) _zoom = 1.0f;
+			if (_zoom >= 45.0f) _zoom = 45.0f;
+		}
+
+		void Camera::updateCameraVectors() {
+			glm::vec3 front;
+			front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+			front.y = sin(glm::radians(_pitch));
+			front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+			_front = glm::normalize(front);
+			_right = glm::normalize(glm::cross(_front, _worldUp));
+			_up = glm::normalize(glm::cross(_right, _front));
+		}
+
+		const glm::vec3& Camera::getCameraPosition() const {
+			return _position;
+		}
+
+
+} }

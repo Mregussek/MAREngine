@@ -42,24 +42,26 @@ Layout is 3, 2, 1;
 */
 
 namespace mar {
+	namespace graphics {
 
-	//! Cube
-	/*!
-		Create new Shape with overloaded class.
-	*/
-	class Cube : public Shape {
-	public:
-		Cube() 
-			: Shape(
-				/* ID */ 
-				0.0f, 
-				/* NAME */
-				"Cube",
-				/* CENTER */ 
-				{ 0.0f, 0.0f, 0.0f },
-				/* ANGLE */ 
-				{ 0.0f, 0.0f, 0.0f },
-				/* VERTICES */ 
+
+		//! Cube
+		/*!
+			Create new Shape with overloaded class.
+		*/
+		class Cube : public Shape {
+		public:
+			Cube()
+				: Shape(
+					/* ID */
+					0.0f,
+					/* NAME */
+					"Cube",
+					/* CENTER */
+					{ 0.0f, 0.0f, 0.0f },
+					/* ANGLE */
+					{ 0.0f, 0.0f, 0.0f },
+					/* VERTICES */
 				{
 					//  front (x, y, z)		// BasicColors			// LightNormal			// Texture		// Texture Index	// ShapeIndex
 					-1.0f, -1.0f,  1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,		0.0f,				0.0f, // 0
@@ -71,8 +73,8 @@ namespace mar {
 					 1.0f, -1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f,		0.0f,				0.0f, // 5
 					 1.0f,  1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		1.0f, 1.0f,		0.0f,				0.0f, // 6
 					-1.0f,  1.0f, -1.0f,	0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,		0.0f,				0.0f  // 7
-				}, 
-				/* INDICES */ 
+				},
+					/* INDICES */
 				{
 					// front	// back
 					0, 1, 2,	7, 6, 5,
@@ -83,14 +85,15 @@ namespace mar {
 					// bottom	// top
 					4, 5, 1,	3, 2, 6,
 					1, 0, 4,	6, 7, 3
-				}, 
-				/* LAYOUT */ 
+				},
+					/* LAYOUT */
 				{
 					3, 3, 3, 2, 1, 1
 				})
-		{ }
-	};
+			{ }
+		};
 
-}
+
+} }
 
 #endif // !CUBE_H

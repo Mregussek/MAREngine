@@ -6,101 +6,106 @@
 #include "SerialPortMonitor.h"
 
 namespace mar {
-    SerialPortMonitor::SerialPortMonitor(char* portName, int tries)
-        : _port(portName),
-        _x(0.0f),
-        _y(0.0f),
-        _z(0.0f),
-        _connectTries(tries)
-    {
-        _arduino = new SerialPort(_port);
-    }
+    namespace devices {
 
-    SerialPortMonitor::~SerialPortMonitor() {
-        delete _arduino;
 
-        if (_thread.joinable()) 
-            _thread.join();
-    }
+		SerialPortMonitor::SerialPortMonitor(char* portName, int tries)
+			: _port(portName),
+			_x(0.0f),
+			_y(0.0f),
+			_z(0.0f),
+			_connectTries(tries)
+		{
+			_arduino = new SerialPort(_port);
+		}
 
-    void SerialPortMonitor::start() {
-        int checkTries{ 0 };
-        std::cout << "Searching for device on " << _port << " in progress";
+		SerialPortMonitor::~SerialPortMonitor() {
+			delete _arduino;
 
-        while (!_arduino->isConnected()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            std::cout << ".";
-            delete _arduino;
-            _arduino = new SerialPort(_port);
+			if (_thread.joinable())
+				_thread.join();
+		}
 
-            if (_connectTries < ++checkTries) {
-                std::cout << "Cannot connect to SP, playing without SerialPort\n";
-                return;
-            }
-        }
+		void SerialPortMonitor::start() {
+			int checkTries{ 0 };
+			std::cout << "Searching for device on " << _port << " in progress";
 
-        if (_arduino->isConnected()) std::cout << "\nConnection established!\n"; \
+			while (!_arduino->isConnected()) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				std::cout << ".";
+				delete _arduino;
+				_arduino = new SerialPort(_port);
 
-        _thread = std::thread([this] {
-            while (_arduino->isConnected()) receive();
-        });
-    }
+				if (_connectTries < ++checkTries) {
+					std::cout << "Cannot connect to SP, playing without SerialPort\n";
+					return;
+				}
+			}
 
-    void SerialPortMonitor::receive() {
-        int readResult = _arduino->readSerialPort(_incomingData, MAX_DATA_LENGTH);
-        _recvData = _incomingData;
-        parseInput();
-        std::this_thread::sleep_for(std::chrono::milliseconds(_sleepTime));
-    }
+			if (_arduino->isConnected()) std::cout << "\nConnection established!\n"; \
 
-    void SerialPortMonitor::parseInput() {
-        try {
-            auto xFound = _recvData.find("#x#");
-            auto yFound = _recvData.find("#y#");
-            auto zFound = _recvData.find("#z#");
+				_thread = std::thread([this] {
+				while (_arduino->isConnected()) receive();
+					});
+		}
 
-            if (xFound == std::string::npos || yFound == std::string::npos || zFound == std::string::npos)
-                return;
+		void SerialPortMonitor::receive() {
+			int readResult = _arduino->readSerialPort(_incomingData, MAX_DATA_LENGTH);
+			_recvData = _incomingData;
+			parseInput();
+			std::this_thread::sleep_for(std::chrono::milliseconds(_sleepTime));
+		}
 
-            auto xBegin = xFound + 3;
-            auto yBegin = yFound + 3;
-            auto zBegin = zFound + 3;
+		void SerialPortMonitor::parseInput() {
+			try {
+				auto xFound = _recvData.find("#x#");
+				auto yFound = _recvData.find("#y#");
+				auto zFound = _recvData.find("#z#");
 
-            auto xEnd = yFound - 1;
-            auto yEnd = zFound - 1;
-            auto zEnd = std::distance(_recvData.begin(), _recvData.end()) - 2;
+				if (xFound == std::string::npos || yFound == std::string::npos || zFound == std::string::npos)
+					return;
 
-            _x = std::stof(_recvData.substr(xBegin, xEnd));
-            _y = std::stof(_recvData.substr(yBegin, yEnd));
-            _z = std::stof(_recvData.substr(zBegin, zEnd));
-        }
-        catch (std::exception& e) {
-            std::cout << "Found error during parsing serial port: " << e.what() << std::endl;
-        }
-    }
+				auto xBegin = xFound + 3;
+				auto yBegin = yFound + 3;
+				auto zBegin = zFound + 3;
 
-    const float& SerialPortMonitor::getX() const {
-        static std::mutex _io_mutex;
-        std::lock_guard<std::mutex> lg(_io_mutex);
-        std::cout << "SPM _x: " << _x << std::endl;
-        return _x;
-    }
+				auto xEnd = yFound - 1;
+				auto yEnd = zFound - 1;
+				auto zEnd = std::distance(_recvData.begin(), _recvData.end()) - 2;
 
-    const float& SerialPortMonitor::getY() const {
-        static std::mutex _io_mutex;
-        std::lock_guard<std::mutex> lg(_io_mutex);
-        std::cout << "SPM _y: " << _y << std::endl;
-        return _y;
-    }
+				_x = std::stof(_recvData.substr(xBegin, xEnd));
+				_y = std::stof(_recvData.substr(yBegin, yEnd));
+				_z = std::stof(_recvData.substr(zBegin, zEnd));
+			}
+			catch (std::exception& e) {
+				std::cout << "Found error during parsing serial port: " << e.what() << std::endl;
+			}
+		}
 
-    const float& SerialPortMonitor::getZ() const {
-        static std::mutex _io_mutex;
-        std::lock_guard<std::mutex> lg(_io_mutex);
-        std::cout << "SPM _z: " << _z << std::endl;
-        return _z;
-    }
+		const float& SerialPortMonitor::getX() const {
+			static std::mutex _io_mutex;
+			std::lock_guard<std::mutex> lg(_io_mutex);
+			std::cout << "SPM _x: " << _x << std::endl;
+			return _x;
+		}
 
-    const bool SerialPortMonitor::isConnected() const {
-        return _arduino->isConnected(); 
-    }
-}
+		const float& SerialPortMonitor::getY() const {
+			static std::mutex _io_mutex;
+			std::lock_guard<std::mutex> lg(_io_mutex);
+			std::cout << "SPM _y: " << _y << std::endl;
+			return _y;
+		}
+
+		const float& SerialPortMonitor::getZ() const {
+			static std::mutex _io_mutex;
+			std::lock_guard<std::mutex> lg(_io_mutex);
+			std::cout << "SPM _z: " << _z << std::endl;
+			return _z;
+		}
+
+		const bool SerialPortMonitor::isConnected() const {
+			return _arduino->isConnected();
+		}
+
+
+} }

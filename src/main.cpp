@@ -2,7 +2,7 @@
 #include "MAREngine.h"
 
 int main() {
-	mar::MAREngine engine;
+	mar::engine::MAREngine engine;
 
 	engine.initialize();
 	engine.run();

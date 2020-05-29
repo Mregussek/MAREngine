@@ -33,24 +33,26 @@
  */
 
 namespace mar {
+	namespace graphics {
 
-	//! Pyramid
-	/*!
-		Create new Shape with overloaded class.
-	*/
-	class Pyramid : public Shape {
-	public:
-		Pyramid()
-			: Shape(
-				/* ID */
-				0.0f,
-				/* NAME */
-				"Pyramid",
-				/* CENTER */
-				{ 0.0f, 0.0f, 0.0f },
-				/* ANGLE */
-				{ 0.0f, 0.0f, 0.0f },
-				/* VERTICES */
+
+		//! Pyramid
+		/*!
+			Create new Shape with overloaded class.
+		*/
+		class Pyramid : public Shape {
+		public:
+			Pyramid()
+				: Shape(
+					/* ID */
+					0.0f,
+					/* NAME */
+					"Pyramid",
+					/* CENTER */
+					{ 0.0f, 0.0f, 0.0f },
+					/* ANGLE */
+					{ 0.0f, 0.0f, 0.0f },
+					/* VERTICES */
 				{
 					// (x, y, z)			// BasicColors			// LightNormal			// TextureCoords	// TexIndex	// ShapeIndex
 					-1.0f, -1.0f,  1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,		0.0f,
@@ -59,19 +61,20 @@ namespace mar {
 					-1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,		0.0f,
 					 0.0f,  1.0f,  0.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.5f, 0.5f,			0.0f,		0.0f
 				},
-				/* INDICES */
+					/* INDICES */
 				{
 					0, 1, 2,	2, 3, 0, // fundamental quad
 					0, 1, 4,	1, 2, 4, // side triangles
 					2, 3, 4,	3, 0, 4
 				},
-				/* LAYOUT */
+					/* LAYOUT */
 				{
 					3, 3, 3, 2, 1, 1
 				})
-		{ }
-	};
+			{ }
+		};
 
-}
+
+} }
 
 #endif // !PYRAMID_H

@@ -10,37 +10,40 @@
 #include "../Renderer/Camera/Camera.h"
 
 namespace mar {
+	namespace window {
 
-	class Window {
-		GLFWwindow* _window;
-		int _width;
-		int _height;
-		char* _windowName;
 
-	public:
-		Window() = default;
+		class Window {
+			GLFWwindow* _window;
+			int _width;
+			int _height;
+			char* _windowName;
 
-		void initialize(const int& H, const int& W, char* wN, Camera* camera = nullptr);
-		void shutdown();
+		public:
+			Window() = default;
 
-		void swapBuffers();
-		void clearScreen();
+			void initialize(const int& H, const int& W, char* wN, graphics::Camera* camera = nullptr);
+			void shutdown();
 
-		GLFWwindow* getWindow() const;
-		const bool shouldClose() const;
-	};
+			void swapBuffers();
+			void clearScreen();
 
-	namespace callbacks {
-		// Inline Variables and Methods, for solving linker problems
-		inline GLFWwindow* window; 
-		inline Camera* camera;
-		inline void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-		inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-		inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-		void setCallbacks(GLFWwindow* wind, Camera* cam);
-		void setCallbacks(GLFWwindow* wind);
-	}
+			GLFWwindow* getWindow() const;
+			const bool shouldClose() const;
+		};
 
-} // end mar namespace
+		namespace callbacks {
+			// Inline Variables and Methods, for solving linker problems
+			inline GLFWwindow* window;
+			inline graphics::Camera* camera;
+			inline void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+			inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+			inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+			void setCallbacks(GLFWwindow* wind, graphics::Camera* cam);
+			void setCallbacks(GLFWwindow* wind);
+		}
+
+
+} }
 
 #endif // !WINDOW_H

@@ -7,13 +7,18 @@
  *	something will be here. Also it defines 'mar' namespace with all its classes.
  */
 
- // --- Tell the compiler, if you imported repository from github
- // --- Leave it in comment, if you have the same setup as MR
- //#define IMPORTED_FROM_GITHUB
+// --- DECISIONS FOR USER {
+// --- Tell the compiler, if you imported repository from github
+// --- Leave it in comment, if you have the same setup as MR */
+//#define IMPORTED_FROM_GITHUB
 
- // Decide whether you want import GLEW or GLAD (comment to use GLAD)
+// Decide whether you want import GLEW or GLAD (comment to use GLAD)
 #define IMPORT_GLEW
 
+// }
+
+
+//! ---- ACTUAL INCLUDES ---- !// 
 // --- Import GLEW lib statically --- //
 #define GLEW_STATIC
 
@@ -72,44 +77,57 @@
 	cause it initializes OpenGL stuff. 
 */
 namespace mar {
-	class Camera;
-	class Window; 
+	namespace window {
+		class Window;
+	}
 
-	class SerialPortMonitor;
-	class ObjectLoader;
+	namespace devices {
+		class SerialPortMonitor;
+	}
 
-	class GUI;
-	struct GUIData;
+	namespace gui {
+		class GUI;
+		struct GUIData;
+	}
+	
+	namespace graphics {
+		class Camera;
 
-	struct RendererStatistics;
-	class Renderer;
-	class RendererFactory;
-	class RendererOpenGLFactory;
+		struct Vertex;
+		class ObjectLoader;
 
-	class Mesh;
-	class Light;
-	class Scene;
+		struct RendererStatistics;
+		class Renderer;
+		class RendererFactory;
+		class RendererOpenGLFactory;
 
-	class Shape;
-	class ShapeManipulator;
-	class Cube;
-	class Pyramid;
-	class Surface;
-	class Wall;
+		class Mesh;
+		class Light;
+		class Scene;
 
-	class VertexBuffer;
-	class VertexBufferOpenGL;
-	class VertexArray;
-	class VertexArrayOpenGL;
-	class VertexBufferLayout;
-	class VertexBufferLayoutOpenGL;
-	class ElementBuffer;
-	class ElementBufferOpenGL;
-	class Texture;
-	class TextureOpenGL;
-	class Shader;
-	class ShaderOpenGL;
+		class Shape;
+		class ShapeManipulator;
+		class Cube;
+		class Pyramid;
+		class Surface;
+		class Wall;
+
+		class VertexBuffer;
+		class VertexBufferOpenGL;
+		class VertexArray;
+		class VertexArrayOpenGL;
+		class VertexBufferLayout;
+		class VertexBufferLayoutOpenGL;
+		class ElementBuffer;
+		class ElementBufferOpenGL;
+		class Texture;
+		class TextureOpenGL;
+		class Shader;
+		class ShaderOpenGL;
+	}
 	
 	// and of course callbacks namespace in Window.h
-	class MAREngine;
+	namespace engine {
+		class MAREngine;
+	}
 }

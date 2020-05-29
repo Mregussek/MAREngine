@@ -18,32 +18,36 @@
 #include "Devices/SerialPortMonitor.h"
 
 namespace mar {
+	namespace engine {
 
-	struct {
-		char name[10] = "MAREngine";
-		int width{ 1280 };
-		int height{ 720 };
-		char portName[10] = "\\\\.\\COM7";
-		const char* glsl_version = "#version 460";
-	} MAREngineDefaultSettings;
 
-	class MAREngine {
-		Camera m_camera;
-		Window m_window;
-		GUI m_gui;
-		Renderer m_renderer;
-		Scene m_scene;
-		Mesh m_mesh;
+		struct {
+			char name[10] = "MAREngine";
+			int width{ 1280 };
+			int height{ 720 };
+			char portName[10] = "\\\\.\\COM7";
+			const char* glsl_version = "#version 460";
+		} MAREngineDefaultSettings;
 
-	public:
-		MAREngine() = default;
+		class MAREngine {
+			window::Window m_window;
+			gui::GUI m_gui;
+			graphics::Camera m_camera;
+			graphics::Renderer m_renderer;
+			graphics::Scene m_scene;
+			graphics::Mesh m_mesh;
 
-		void initialize();
+		public:
+			MAREngine() = default;
 
-		void run();
+			void initialize();
 
-		void shutdown();
-	};
-}
+			void run();
+
+			void shutdown();
+		};
+
+
+} }
 
 #endif // !MAR_ENGINE_MAIN_H

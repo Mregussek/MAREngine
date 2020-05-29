@@ -11,65 +11,69 @@
 #include "../Window/Window.h"
 
 namespace mar {
+	namespace gui {
 
-	struct GUIData {
-		float colors[4];
-		glm::mat4 rotation;
-		glm::mat4 translate;
-		std::vector<glm::vec3> centers;
-		std::vector<glm::vec3> angles;
 
-		GUIData() = default;
-	};
+		struct GUIData {
+			float colors[4];
+			glm::mat4 rotation;
+			glm::mat4 translate;
+			std::vector<glm::vec3> centers;
+			std::vector<glm::vec3> angles;
 
-	class GUI {
-	private:
-		// --- Must-have to run GUI
-		Window* _window;
-		const char* _versionGLSL;
-		// --- Attributes for sliders
-		glm::vec3 _translation;
-		glm::vec3 _angle;
-		float _colors[4];
-		float _pos[3];
-		float _ang[3];
-		float _inputCenter[3];
-		// --- Run-time GUI attributes
-		Renderer* _renderer;
-		GUIData _guiData;
-		bool _rendererConnected;
-		unsigned int _startupSceneSize;
-		
-	public:
-		GUI();
+			GUIData() = default;
+		};
 
-		void initialize(Window* window, const char* glsl_version);
-		void shutdown();
+		class GUI {
+		private:
+			// --- Must-have to run GUI
+			window::Window* _window;
+			const char* _versionGLSL;
+			// --- Attributes for sliders
+			glm::vec3 _translation;
+			glm::vec3 _angle;
+			float _colors[4];
+			float _pos[3];
+			float _ang[3];
+			float _inputCenter[3];
+			// --- Run-time GUI attributes
+			graphics::Renderer* _renderer;
+			GUIData _guiData;
+			bool _rendererConnected;
+			unsigned int _startupSceneSize;
 
-		void loadSceneParameters(Scene* scene);
+		public:
+			GUI();
 
-		void connectToRenderer(Renderer* renderer);
+			void initialize(window::Window* window, const char* glsl_version);
+			void shutdown();
 
-		void push(const glm::vec3& newCenter, const glm::vec3& newAngle);
-		void prepareNewFrame();
-		void display();
+			void loadSceneParameters(graphics::Scene* scene);
 
-	private:
-		void display_GeneralMenu();
-		void eventOnScene();
-		void eventOnEachObjectSeperately();
+			void connectToRenderer(graphics::Renderer* renderer);
 
-		void display_ManageObjectsMenu();
-		void addNewObjectToScene();
-		void deleteObjectFromScene();
+			void push(const glm::vec3& newCenter, const glm::vec3& newAngle);
+			void prepareNewFrame();
+			void display();
 
-		void display_StatisticsMenu();
+		private:
+			void display_GeneralMenu();
+			void eventOnScene();
+			void eventOnEachObjectSeperately();
 
-	public:
-		const glm::mat4 getTranslationMatrix() const;
-		const glm::mat4 getRotationMatrix() const;
-		const GUIData& getGUIData() const { return _guiData; }
-	};
-}
+			void display_ManageObjectsMenu();
+			void addNewObjectToScene();
+			void deleteObjectFromScene();
+
+			void display_StatisticsMenu();
+
+		public:
+			const glm::mat4 getTranslationMatrix() const;
+			const glm::mat4 getRotationMatrix() const;
+			const GUIData& getGUIData() const { return _guiData; }
+		};
+
+
+} }
 
 #endif // !GUI_H

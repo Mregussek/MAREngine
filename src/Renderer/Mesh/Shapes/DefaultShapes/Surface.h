@@ -30,24 +30,26 @@
  */
 
 namespace mar {
+	namespace graphics {
 
-	//! Surface
-	/*!
-		Create new Shape with overloaded class.
-	*/
-	class Surface : public Shape {
-	public:
-		Surface()
-			: Shape(
-				/* ID */
-				0.0f,
-				/* NAME */
-				"Surface",
-				/* CENTER */
-				{ 0.0f, 0.0f, 0.0f },
-				/* ANGLE */
-				{ 0.0f, 0.0f, 0.0f },
-				/* VERTICES */
+
+		//! Surface
+		/*!
+			Create new Shape with overloaded class.
+		*/
+		class Surface : public Shape {
+		public:
+			Surface()
+				: Shape(
+					/* ID */
+					0.0f,
+					/* NAME */
+					"Surface",
+					/* CENTER */
+					{ 0.0f, 0.0f, 0.0f },
+					/* ANGLE */
+					{ 0.0f, 0.0f, 0.0f },
+					/* VERTICES */
 				{
 					// (x, y, z)				// BasicColors		// LightNormal			// TextureCoords	// TexIndex		// ShapeIndex
 					-15.0f, -1.0f,  15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,			0.0f, // 0
@@ -55,18 +57,19 @@ namespace mar {
 					 15.0f, -1.0f, -15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		1.0f, 1.0f,			0.0f,			0.0f, // 2
 					-15.0f, -1.0f, -15.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f, 1.0f,		1.0f, 0.0f,			0.0f,			0.0f  // 3
 				},
-				/* INDICES */
+					/* INDICES */
 				{
 					0, 1, 2, // first triangle
 					2, 3, 0  // second triangle
 				},
-				/* LAYOUT */
+					/* LAYOUT */
 				{
 					3, 3, 3, 2, 1, 1
 				})
-		{ }
-	};
+			{ }
+		};
 
-}
+
+} }
 
 #endif // !SURFACE_H

@@ -10,15 +10,18 @@
 #include "../../../mar.h"
 
 namespace mar {
+    namespace graphics {
 
-    class Light {
-        glm::vec3 _position{ 0.0f, 0.5f, 5.0f };
-    public:
-        Light() = default;
 
-        const glm::vec3& getPosition() const { return _position; }
-    };
+		class Light {
+			glm::vec3 _position{ 0.0f, 0.5f, 5.0f };
+		public:
+			Light() = default;
 
-}
+			const glm::vec3& getPosition() const { return _position; }
+		};
+
+
+} }
 
 #endif //! MAR_ENGINE_LIGHT_H
