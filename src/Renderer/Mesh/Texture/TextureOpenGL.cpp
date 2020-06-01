@@ -25,7 +25,8 @@ namespace mar {
 			// load new texture and push new 
 			_paths.push_back(path);
 			_id.push_back(_idOfNextTexture);
-			_idOfNextTexture++;
+			_width.push_back(0);
+			_height.push_back(0);
 
 			glGenTextures(1, &_id.back());
 			glBindTexture(GL_TEXTURE_2D, _id.back());
@@ -37,12 +38,13 @@ namespace mar {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			stbi_set_flip_vertically_on_load(true);
-			_localBuffer = stbi_load(path.c_str(), &_width, &_height, &_bitPerPixel, 0);
+			_localBuffer = stbi_load(path.c_str(), &_width[_idOfNextTexture], &_height[_idOfNextTexture], &_bitPerPixel, 0);
 
 			if (_localBuffer) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _localBuffer);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width[_idOfNextTexture], _height[_idOfNextTexture], 0, GL_RGB, GL_UNSIGNED_BYTE, _localBuffer);
 				glGenerateMipmap(GL_TEXTURE_2D);
 				stbi_image_free(_localBuffer);
+				_idOfNextTexture++;
 				return;
 			}
 
@@ -72,12 +74,12 @@ namespace mar {
 			_id.erase(_id.begin() + index);
 		}
 
-		const int& TextureOpenGL::getWidth() const {
-			return _width;
+		const int& TextureOpenGL::getWidth(const unsigned int& index) const {
+			return _width[index];
 		}
 
-		const int& TextureOpenGL::getHeight() const {
-			return _height;
+		const int& TextureOpenGL::getHeight(const unsigned int& index) const {
+			return _height[index];
 		}
 
 

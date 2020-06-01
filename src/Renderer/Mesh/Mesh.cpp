@@ -8,8 +8,13 @@
 namespace mar {
     namespace graphics {
 
+		Mesh::~Mesh() {
+			_texture->shutdown();
+		}
 
-		void Mesh::createMesh() {
+		void Mesh::createMesh(const std::shared_ptr<RendererFactory>& factory) {
+			_texture = factory->createTexture();
+
 			_shapes = std::vector<std::shared_ptr<Shape>>();
 			_vertices = std::vector<float>();
 			_indices = std::vector<unsigned int>();
@@ -21,6 +26,21 @@ namespace mar {
 
 			_maxValue = 0;
 			_nextShapeID = 0.0f;
+		}
+
+		void Mesh::loadScene(Scene* scene) {
+			for (unsigned int i = 0; i < scene->getShapesNumber(); i++)
+				submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i));
+		}
+
+		void Mesh::submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle) {
+			pushShape(new_shape);
+			pushMatrices(center, angle);
+		}
+
+		void Mesh::flushShape(const unsigned int& index) {
+			popShape(index);
+			popMatrices(index);
 		}
 
 		void Mesh::pushShape(std::shared_ptr<Shape>& new_shape) {
@@ -35,9 +55,6 @@ namespace mar {
 			ShapeManipulator::changeIndicesFormat(new_shape, _maxValue);
 
 			_maxValue += new_shape->getSizeofVertices() / new_shape->getStride();
-
-			if (new_shape->getTextureID() != 0.0f)
-				_samplers.push_back((int)new_shape->getTextureID());
 
 			_names.push_back(new_shape->getName());
 

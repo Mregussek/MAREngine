@@ -53,10 +53,8 @@ namespace mar {
 			std::shared_ptr<VertexBufferLayout> m_layout;
 			std::shared_ptr<VertexArray> m_vao;
 			std::shared_ptr<ElementBuffer> m_ebo;
-			std::shared_ptr<Texture> m_texture;
 			std::shared_ptr<Shader> m_mainShader;
 			// --- Knowledge about state of Renderer
-			float _nextTextureID;
 			bool m_pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
 			bool m_initialized = false;		// check, if renderer is initialized
 			bool m_useGUI = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
@@ -69,7 +67,6 @@ namespace mar {
 			void closeRenderer();
 
 			void initialize(const std::vector<unsigned int>& layout, bool useGUI);
-			void loadScene(Mesh* mesh, Scene* scene);
 
 			void draw(Mesh* mesh);
 
@@ -77,8 +74,6 @@ namespace mar {
 			void updateCameraData(const CameraData* cameradata);
 
 		private:
-			void addShape(Mesh* mesh, std::shared_ptr<Shape>& shape, const glm::vec3& center, const glm::vec3& angle = { 0.0f, 0.0f, 0.0f }, std::string texturePath = "empty");
-
 			void bind();
 			void unbind();
 

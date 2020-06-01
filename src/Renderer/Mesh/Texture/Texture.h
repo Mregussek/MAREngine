@@ -86,15 +86,17 @@ namespace mar {
 
 			//! Method should return width of last loaded texture
 			/*
+				\param index - index of width stored in vector
 				\return _width - width of last loaded texture
 			*/
-			virtual const int& getWidth() const { return int(-1); }
+			virtual const int& getWidth(const unsigned int& index) const { return int(-1); }
 
 			//! Method should return height of last loaded texture
 			/*
+				\param index - index of height stored in vector
 				\return _height - height of last loaded texture
 			*/
-			virtual const int& getHeight() const { return int(-1); }
+			virtual const int& getHeight(const unsigned int& index) const { return int(-1); }
 		};
 
 

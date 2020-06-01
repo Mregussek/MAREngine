@@ -16,6 +16,8 @@ namespace mar {
 
 
 		class Mesh {
+			std::shared_ptr<Texture> _texture;
+
 			std::vector<std::shared_ptr<Shape>> _shapes;
 			std::vector<float> _vertices;
 			std::vector<unsigned int> _indices;
@@ -28,13 +30,13 @@ namespace mar {
 			unsigned int _maxValue;
 
 		public:
-			void createMesh();
+			virtual ~Mesh();
 
-			void pushShape(std::shared_ptr<Shape>& new_shape);
-			void popShape(const unsigned int& index);
+			void createMesh(const std::shared_ptr<RendererFactory>& factory);
+			void loadScene(Scene* scene);
 
-			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
-			void popMatrices(const unsigned int& index);
+			void submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
+			void flushShape(const unsigned int& index);
 
 			void clearBuffers();
 			void clearMatrices();
@@ -42,6 +44,12 @@ namespace mar {
 			void update();
 
 		public:
+			void pushShape(std::shared_ptr<Shape>& new_shape);
+			void popShape(const unsigned int& index);
+
+			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
+			void popMatrices(const unsigned int& index);
+
 			/// --- GET METHODS --- ///
 			const unsigned int& getShapesCount() const { return _shapes.size(); }
 			const std::vector<std::string>& getNames() const { return _names; }

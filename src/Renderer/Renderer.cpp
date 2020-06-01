@@ -15,12 +15,10 @@ namespace mar {
 				m_layout = factory->createVertexBufferLayout();
 				m_vao = factory->createVertexArray();
 				m_ebo = factory->createElementBuffer();
-				m_texture = factory->createTexture();
 				m_mainShader = factory->createShader();
 
 				m_stats = RendererStatistics();
 				m_pushedLayout = false;
-				_nextTextureID = 1.0f;
 			}
 			else {
 				std::cerr << "Renderer is already initialized!" << std::endl;
@@ -30,7 +28,6 @@ namespace mar {
 		void Renderer::closeRenderer() {
 			if (m_initialized) {
 				m_mainShader->shutdown();
-				m_texture->shutdown();
 				m_vao->closeArrayBuffer();
 				m_vbo->close();
 				m_ebo->close();
@@ -65,27 +62,6 @@ namespace mar {
 			m_initialized = true;
 		}
 
-		void Renderer::loadScene(Mesh* mesh, Scene* scene) {
-			for (unsigned int i = 0; i < scene->getShapesNumber(); i++)
-				addShape(mesh, scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
-		}
-
-		void Renderer::addShape(Mesh* mesh, std::shared_ptr<Shape>& shape, const glm::vec3& center, const glm::vec3& angle, std::string texturePath) {
-			if (texturePath == "empty") {
-				ShapeManipulator::extendTextureID(shape, 0.0f);
-			}
-
-			else {
-				ShapeManipulator::extendTextureID(shape, _nextTextureID);
-				_nextTextureID++;
-
-				m_texture->loadTexture(texturePath);
-			}
-
-			mesh->pushShape(shape);
-			mesh->pushMatrices(center, angle);
-		}
-
 		void Renderer::draw(Mesh* mesh) {
 			bind();
 
@@ -97,9 +73,9 @@ namespace mar {
 			m_vbo->updateDynamically(mesh->getVertices());
 			m_ebo->updateDynamically(mesh->getIndices());
 
-			m_stats._countOfVertices = mesh->getVerticesSize();
-			m_stats._countOfIndices = mesh->getIndicesSize();
-			m_stats._countOfShapes = mesh->getShapesCount();
+			m_stats._countOfVertices += mesh->getVerticesSize();
+			m_stats._countOfIndices += mesh->getIndicesSize();
+			m_stats._countOfShapes += mesh->getShapesCount();
 
 			if (!m_useGUI) {
 				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
@@ -107,14 +83,16 @@ namespace mar {
 			}
 
 			m_mainShader->setUniformVector3("u_LightPos", mesh->getLightPosition());
+			/*
 			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
 
 			for (unsigned int i = 0; i < mesh->getSamplersSize(); i++)
 				m_texture->bind(mesh->getSamplerID(i), m_texture->getID(i));
+			*/
 
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
 
-			m_stats._countOfDrawCalls = 1;
+			m_stats._countOfDrawCalls += 1;
 			m_stats._countOfTriangles = m_stats._countOfIndices / 3;
 		}
 

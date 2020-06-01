@@ -25,8 +25,8 @@ namespace mar {
 			std::vector<std::string> _paths;
 			unsigned int _idOfNextTexture{ 0 };
 			unsigned char* _localBuffer;
-			int _width;
-			int _height;
+			std::vector<int> _width;
+			std::vector<int> _height;
 			int _bitPerPixel;
 
 		public:
@@ -71,15 +71,17 @@ namespace mar {
 
 			//! Get width of last loaded texture
 			/*
+				\param index - index of width stored in vector
 				\return _width - width of last loaded texture
 			*/
-			const int& getWidth() const override;
+			const int& getWidth(const unsigned int& index) const override;
 
 			//! Get height of last loaded texture
 			/*
+				\param index - index of height stored in vector
 				\return _height - height of last loaded texture
 			*/
-			const int& getHeight() const override;
+			const int& getHeight(const unsigned int& index) const override;
 		};
 
 
