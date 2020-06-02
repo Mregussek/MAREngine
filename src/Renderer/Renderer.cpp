@@ -18,7 +18,6 @@ namespace mar {
 				m_mainShader = factory->createShader();
 
 				m_stats = RendererStatistics();
-				m_pushedLayout = false;
 			}
 			else {
 				std::cerr << "Renderer is already initialized!" << std::endl;
@@ -37,29 +36,28 @@ namespace mar {
 			}
 		}
 
-		void Renderer::initialize(const std::vector<unsigned int>& layout, bool useGUI) {
-			m_useGUI = useGUI;
+		void Renderer::initialize(const std::vector<unsigned int>& layout, const bool& useGUI) {
+			if (!m_initialized) {
+				m_useGUI = useGUI;
 
-			if (m_useGUI)
-				m_mainShader->initialize(ShaderType::DEFAULT);
-			else
-				m_mainShader->initialize(ShaderType::WITHOUT_GUI);
+				if (m_useGUI)
+					m_mainShader->initialize(ShaderType::DEFAULT);
+				else
+					m_mainShader->initialize(ShaderType::WITHOUT_GUI);
 
-			if (!m_pushedLayout) {
-				for (size_t i = 0; i < layout.size(); i++) m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
+				for (size_t i = 0; i < layout.size(); i++)
+					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
 
-				m_pushedLayout = true;
+				m_vao->initializeArrayBuffer();
+				m_vbo->initializeVertex(constants::maxVertexCount);
+				m_ebo->initializeElement(constants::maxIndexCount);
+
+				m_vao->addBuffer(m_layout);
+
+				m_mainShader->bind();
+
+				m_initialized = true;
 			}
-
-			m_vao->initializeArrayBuffer();
-			m_vbo->initializeVertex(constants::maxVertexCount);
-			m_ebo->initializeElement(constants::maxIndexCount);
-
-			m_vao->addBuffer(m_layout);
-
-			m_mainShader->bind();
-
-			m_initialized = true;
 		}
 
 		void Renderer::draw(Mesh* mesh) {
@@ -77,18 +75,8 @@ namespace mar {
 			m_stats._countOfIndices += mesh->getIndicesSize();
 			m_stats._countOfShapes += mesh->getShapesCount();
 
-			if (!m_useGUI) {
-				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
-				m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
-			}
-
 			m_mainShader->setUniformVector3("u_LightPos", mesh->getLightPosition());
-			/*
 			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
-
-			for (unsigned int i = 0; i < mesh->getSamplersSize(); i++)
-				m_texture->bind(mesh->getSamplerID(i), m_texture->getID(i));
-			*/
 
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
 
@@ -98,7 +86,9 @@ namespace mar {
 
 		void Renderer::updateGUIData(Mesh* mesh, const gui::GUIData* guidata) {
 			if (!m_useGUI) {
-				std::cerr << "Data from GUI is not sent!" << std::endl;
+				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
+				m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
+				
 				return;
 			}
 

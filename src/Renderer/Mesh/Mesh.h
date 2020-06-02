@@ -19,15 +19,17 @@ namespace mar {
 			std::shared_ptr<Texture> _texture;
 
 			std::vector<std::shared_ptr<Shape>> _shapes;
-			std::vector<float> _vertices;
-			std::vector<unsigned int> _indices;
+			std::vector<float> m_vertices;
+			std::vector<unsigned int> m_indices;
 			std::vector<int> _samplers;
-			std::vector<glm::mat4> _translations;
-			std::vector<glm::mat4> _rotations;
+			std::vector<glm::mat4> m_translationMats;
+			std::vector<glm::mat4> m_rotationMats;
 			Light _light;
 			std::vector<std::string> _names;
-			float _nextShapeID;
-			unsigned int _maxValue;
+
+			float m_availableShapeID;
+			float m_availableTextureID;
+			unsigned int m_indicesMaxValue;
 
 		public:
 			virtual ~Mesh();
@@ -35,7 +37,7 @@ namespace mar {
 			void createMesh(const std::shared_ptr<RendererFactory>& factory);
 			void loadScene(Scene* scene);
 
-			void submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
+			void submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
 			void flushShape(const unsigned int& index);
 
 			void clearBuffers();
@@ -50,23 +52,26 @@ namespace mar {
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
 			void popMatrices(const unsigned int& index);
 
+			void pushTexture(std::shared_ptr<Shape>& new_shape, const std::string& texture);
+			void popTexture(const unsigned int& index);
+
 			/// --- GET METHODS --- ///
 			const unsigned int& getShapesCount() const { return _shapes.size(); }
 			const std::vector<std::string>& getNames() const { return _names; }
 
-			const std::vector<float>& getVertices() const { return _vertices; }
-			const unsigned int& getVerticesSize() const { return _vertices.size(); }
+			const std::vector<float>& getVertices() const { return m_vertices; }
+			const unsigned int& getVerticesSize() const { return m_vertices.size(); }
 
-			const std::vector<unsigned int>& getIndices() const { return _indices; }
-			const unsigned int& getIndicesSize() const { return _indices.size(); }
+			const std::vector<unsigned int>& getIndices() const { return m_indices; }
+			const unsigned int& getIndicesSize() const { return m_indices.size(); }
 			const std::vector<int>& getSamplers() const { return _samplers; }
 			const int& getSamplerID(const unsigned int& index) { return _samplers[index]; }
 			const unsigned int& getSamplersSize() const { return _samplers.size(); }
 
-			const std::vector<glm::mat4>& getTranslationMatrices() const { return _translations; }
-			const std::vector<glm::mat4>& getRotationMatrices() const { return _rotations; }
+			const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
+			const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
 			
-			const std::vector<unsigned int>& getLayout() const { return _shapes[0]->getLayoutVector(); }
+			const std::vector<unsigned int>& getLayout() const { return _shapes[0]->getLayoutVector();}
 			const unsigned int& getLayout(const unsigned int& index) const { return _shapes[0]->getLayout(index); }
 			const unsigned int& getLayoutSize() const { return _shapes[0]->getLayoutSize(); }
 

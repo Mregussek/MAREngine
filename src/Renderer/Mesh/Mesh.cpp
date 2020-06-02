@@ -16,24 +16,28 @@ namespace mar {
 			_texture = factory->createTexture();
 
 			_shapes = std::vector<std::shared_ptr<Shape>>();
-			_vertices = std::vector<float>();
-			_indices = std::vector<unsigned int>();
+			m_vertices = std::vector<float>();
+			m_indices = std::vector<unsigned int>();
 			_samplers = std::vector<int>();
-			_translations = std::vector<glm::mat4>();
-			_rotations = std::vector<glm::mat4>();
+			m_translationMats = std::vector<glm::mat4>();
+			m_rotationMats = std::vector<glm::mat4>();
 
 			_light = Light();
 
-			_maxValue = 0;
-			_nextShapeID = 0.0f;
+			m_indicesMaxValue = 0;
+			m_availableShapeID = 0.0f;
+			m_availableTextureID = 1.0f;
 		}
 
 		void Mesh::loadScene(Scene* scene) {
-			for (unsigned int i = 0; i < scene->getShapesNumber(); i++)
-				submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i));
+			unsigned int shapesInSceneCount = scene->getShapesNumber();
+
+			for (unsigned int i = 0; i < shapesInSceneCount; i++)
+				submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
 		}
 
-		void Mesh::submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle) {
+		void Mesh::submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
+			pushTexture(new_shape, texture);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
 		}
@@ -49,12 +53,12 @@ namespace mar {
 				return;
 			}
 
-			ShapeManipulator::extendShapeID(new_shape, _nextShapeID);
-			_nextShapeID++;
+			ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
+			m_availableShapeID++;
 
-			ShapeManipulator::changeIndicesFormat(new_shape, _maxValue);
+			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
 
-			_maxValue += new_shape->getSizeofVertices() / new_shape->getStride();
+			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
 
 			_names.push_back(new_shape->getName());
 
@@ -63,7 +67,7 @@ namespace mar {
 
 		void Mesh::popShape(const unsigned int& index) {
 			if (_shapes[index]->getTextureID() != 0.0f) {
-				_samplers.erase(_samplers.begin() + index);
+				popTexture(index);
 			}
 
 			_names.erase(_names.begin() + index);
@@ -73,36 +77,54 @@ namespace mar {
 		}
 
 		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
-			_translations.push_back(glm::translate(glm::mat4(1.0f), center));
-			_rotations.push_back(ShapeManipulator::getRotationMatrix(center, angle));
+			m_translationMats.push_back(glm::translate(glm::mat4(1.0f), center));
+			m_rotationMats.push_back(ShapeManipulator::getRotationMatrix(center, angle));
 		}
 
 		void Mesh::popMatrices(const unsigned int& index) {
-			_translations.erase(_translations.begin() + index);
-			_rotations.erase(_rotations.begin() + index);
+			m_translationMats.erase(m_translationMats.begin() + index);
+			m_rotationMats.erase(m_rotationMats.begin() + index);
+		}
+
+		void Mesh::pushTexture(std::shared_ptr<Shape>& new_shape, const std::string& texture) {
+			if (texture != "empty") {
+				ShapeManipulator::extendTextureID(new_shape, m_availableTextureID);
+				m_availableTextureID++;
+
+				_texture->loadTexture(texture);
+
+				_samplers.push_back((int)m_availableTextureID);
+			}
+		}
+
+		void Mesh::popTexture(const unsigned int& index) {
+			_samplers.erase(_samplers.begin() + index);
 		}
 
 		void Mesh::clearBuffers() {
-			_vertices.clear();
-			_indices.clear();
+			m_vertices.clear();
+			m_indices.clear();
 		}
 
 		void Mesh::clearMatrices() {
-			_translations.clear();
-			_rotations.clear();
+			m_translationMats.clear();
+			m_rotationMats.clear();
 		}
 
 		void Mesh::update() {
 			for (unsigned int i = 0; i < _shapes.size(); i++) {
 
-				unsigned int currentVerticesSize = _vertices.size() + _shapes[i]->getSizeofVertices();
-				unsigned int currentIndicesSize = _indices.size() + _shapes[i]->getSizeofIndices();
+				unsigned int currentVerticesSize = m_vertices.size() + _shapes[i]->getSizeofVertices();
+				unsigned int currentIndicesSize = m_indices.size() + _shapes[i]->getSizeofIndices();
 
 				if (currentVerticesSize <= constants::maxVertexCount && currentIndicesSize <= constants::maxIndexCount) {
-					_vertices.insert(_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVerticesEnd());
-					_indices.insert(_indices.end(), _shapes[i]->getIndicesBegin(), _shapes[i]->getIndicesEnd());
+					m_vertices.insert(m_vertices.end(), _shapes[i]->getVerticesBegin(), _shapes[i]->getVerticesEnd());
+					m_indices.insert(m_indices.end(), _shapes[i]->getIndicesBegin(), _shapes[i]->getIndicesEnd());
 				}
 			}
+
+			for (unsigned int i = 0; i < _samplers.size(); i++)
+				_texture->bind(_samplers[i], _texture->getID(i));
 		}
 
 

@@ -35,11 +35,11 @@ namespace mar {
 			float m_shapeAngle[3];
 			float m_inputCenter[3];
 			// --- Run-time GUI attributes
+			const graphics::Mesh* global_mesh;
 			std::vector<std::string> m_shapeNames;
 			const graphics::RendererStatistics* m_statistics;
 			GUIData m_guiData;
 			bool m_canModifyObjects;
-			unsigned int m_startupSceneSize;
 
 		public:
 			GUI();

@@ -12,8 +12,7 @@ namespace mar {
 		GUI::GUI()
 			: m_sceneTranslation(glm::vec3(0.0f, 0.0f, 0.0f)),
 			m_sceneAngle(glm::vec3(0.0f, 0.0f, 0.0f)),
-			m_canModifyObjects(false),
-			m_startupSceneSize(0)
+			m_canModifyObjects(false)
 		{}
 
 		void GUI::initialize(window::Window* window, const char* glsl_version, bool can_modify_objects) {
@@ -39,7 +38,7 @@ namespace mar {
 				push(scene->getCenter(i), scene->getAngle(i));
 			}
 
-			m_startupSceneSize = scene->getShapesNumber();
+			//m_startupSceneSize = scene->getShapesNumber();
 		}
 
 		void GUI::push(const glm::vec3& new_center, const glm::vec3& new_angle) {
@@ -61,6 +60,7 @@ namespace mar {
 		}
 
 		void GUI::updateSceneInfo(const graphics::Mesh* mesh, const graphics::RendererStatistics* stats) {
+			global_mesh = mesh;
 			m_shapeNames = mesh->getNames();
 			m_statistics = stats;
 		}
@@ -236,7 +236,7 @@ namespace mar {
 		void GUI::deleteObjectFromScene() {
 			ImGui::MenuItem("Delete Object", "");
 
-			for (unsigned int i = m_startupSceneSize; i < m_guiData.centers.size(); i++) {
+			for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
 				char int2char[5];
 				sprintf_s(int2char, " %d ", i);
 				char shapeIndex[30] = " Delete ";

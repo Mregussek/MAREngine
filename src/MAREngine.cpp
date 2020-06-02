@@ -31,13 +31,11 @@ namespace mar {
 			while (m_window.shouldClose()) {
 				m_camera.processInput(m_window.getWindow());
 				m_camera.updateData();
-
 				m_gui.prepareNewFrame();
-				m_renderer.updateGUIData(&m_mesh, &m_gui.getGUIData());
 
+				m_renderer.updateGUIData(&m_mesh, &m_gui.getGUIData());
 				m_renderer.updateCameraData(&m_camera.getCameraData());
 				m_renderer.draw(&m_mesh);
-
 
 				m_gui.updateSceneInfo(&m_mesh, &m_renderer.getStatistics());
 				m_gui.display();

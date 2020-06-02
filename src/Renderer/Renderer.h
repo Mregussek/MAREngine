@@ -55,7 +55,6 @@ namespace mar {
 			std::shared_ptr<ElementBuffer> m_ebo;
 			std::shared_ptr<Shader> m_mainShader;
 			// --- Knowledge about state of Renderer
-			bool m_pushedLayout = false;		// we need to push layout once, for every shape it is the same pattern
 			bool m_initialized = false;		// check, if renderer is initialized
 			bool m_useGUI = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
 			RendererStatistics m_stats;
@@ -66,7 +65,7 @@ namespace mar {
 			void createRenderer(const std::shared_ptr<RendererFactory>& factory);
 			void closeRenderer();
 
-			void initialize(const std::vector<unsigned int>& layout, bool useGUI);
+			void initialize(const std::vector<unsigned int>& layout, const bool& useGUI);
 
 			void draw(Mesh* mesh);
 
