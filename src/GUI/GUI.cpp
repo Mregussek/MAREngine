@@ -37,8 +37,6 @@ namespace mar {
 			for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
 				push(scene->getCenter(i), scene->getAngle(i));
 			}
-
-			//m_startupSceneSize = scene->getShapesNumber();
 		}
 
 		void GUI::push(const glm::vec3& new_center, const glm::vec3& new_angle) {
@@ -59,9 +57,8 @@ namespace mar {
 			m_guiData.colors[3] = m_sceneColors[3];
 		}
 
-		void GUI::updateSceneInfo(const graphics::Mesh* mesh, const graphics::RendererStatistics* stats) {
+		void GUI::updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats) {
 			global_mesh = mesh;
-			m_shapeNames = mesh->getNames();
 			m_statistics = stats;
 		}
 
@@ -140,10 +137,7 @@ namespace mar {
 				sprintf_s(int2char, " %d", i);
 
 				char shapeIndex[25] = "";
-				if (m_canModifyObjects)
-					strcat_s(shapeIndex, m_shapeNames[i].c_str());
-				else
-					strcat_s(shapeIndex, "Object ");
+				strcat_s(shapeIndex, global_mesh->getName(i).c_str());
 
 				strcat_s(shapeIndex, int2char);
 				ImGui::Text(shapeIndex);
@@ -241,13 +235,14 @@ namespace mar {
 				sprintf_s(int2char, " %d ", i);
 				char shapeIndex[30] = " Delete ";
 
-				strcat_s(shapeIndex, m_shapeNames[i].c_str());
+				strcat_s(shapeIndex, global_mesh->getName(i).c_str());
 				strcat_s(shapeIndex, int2char);
 
 				if (ImGui::Button(shapeIndex)) {
+					global_mesh->flushShape(i);
 					//_renderer->popObject(i);
-					//m_guiData.centers.erase(m_guiData.centers.begin() + i);
-					//m_guiData.angles.erase(m_guiData.angles.begin() + i);
+					m_guiData.centers.erase(m_guiData.centers.begin() + i);
+					m_guiData.angles.erase(m_guiData.angles.begin() + i);
 				}
 			}
 		}

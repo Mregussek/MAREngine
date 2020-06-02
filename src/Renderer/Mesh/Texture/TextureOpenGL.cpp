@@ -71,7 +71,13 @@ namespace mar {
 		}
 
 		void TextureOpenGL::removeID(const unsigned int& index) {
-			_id.erase(_id.begin() + index);
+			std::vector<unsigned int> new_id;
+
+			for (unsigned int i = 0; i < _id.size(); i++)
+				if (i != index) 
+					new_id.push_back(_id[i]);
+			
+			_id = new_id;
 		}
 
 		const int& TextureOpenGL::getWidth(const unsigned int& index) const {

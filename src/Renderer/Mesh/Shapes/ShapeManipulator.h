@@ -40,47 +40,6 @@ namespace mar {
             */
             static void extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID);
 
-            //! Method is just easier implementation of shape rotation method. We need to pass only 2 values,
-            //! instead of 5. For more information check the method below.
-            /*!
-                \param shape - pointer to shape, which will be rotated
-                \param angle - vec3 contains angles for x, y and z axis.
-            */
-            static void rotateObject(std::shared_ptr<Shape>& shape, const glm::vec3& angle);
-
-            //! Method returns new verticesVector for shape after rotation process. It rotates around all axis,
-            //! x, y and z. For proper working you have to pass a few arguments.
-            /*!
-                \param size - size of verticesVector
-                \param stride - stride of verticesVector
-                \param angle - vec3 contains angles all axis (angle.x is angle for x axis and so on)
-                \param center - point of rotation
-                \param passedValue - passed verticesVector, we are gonna use this values for rotation
-                \return returnValue - vector containing new, rotated, verticesVector
-            */
-            static std::vector<float> rotateObject(const unsigned int& size, const unsigned int& stride,
-                const glm::vec3& angle, const glm::vec3& center, const std::vector<float>& passedValue);
-
-            //! Method is just easier implementation of shape new position method. We need to pass only 2 values,
-            //! instead of 4. For more information check the method below.
-            /*!
-                \param shape - pointer to shape
-                \param center - new center point for shape
-            */
-            static void changeCenterOfObject(std::shared_ptr<Shape>& shape, const glm::vec3& center);
-
-            //! Method returns new verticesVector for shape after changing center point process. 
-            //! For proper working you have to pass a few arguments.
-            /*!
-                \param size - size of verticesVector
-                \param stride - stride of verticesVector
-                \param center - point of rotation
-                \param passedValue - passed verticesVector, we are gonna use this values for changing center
-                \return returnValue - vector containing new, translated, verticesVector
-            */
-            static std::vector<float> changeCenterOfObject(const unsigned int& size, const unsigned int& stride,
-                const glm::vec3& center, const std::vector<float>& passedValue);
-
             //! Method is just easier implementation of extending indices method. For more information check the method below.
             /*!
                 \param shape - pointer to shape
@@ -98,26 +57,6 @@ namespace mar {
             */
             static std::vector<unsigned int> changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
                 const std::vector<unsigned int>& passedValue);
-
-            static void changeDefaultColor(std::shared_ptr<Shape>& shape, glm::vec3& new_color);
-            static std::vector<float> changeDefaultColor(const unsigned int& size, const unsigned int& stride,
-                glm::vec3& new_color, const std::vector<float>& passedValue);
-
-            //! Returns rotation matrix of all axis (x, y, z)
-            /*!
-                \param center - point of rotation
-                \param angle - vec3 contains angles all axis (angle.x is angle for x axis and so on)
-                \return matrix4x4 - structure containing rotation matrix
-            */
-            static glm::mat4 getRotationMatrix(const glm::vec3& center, const glm::vec3& angle);
-
-            //! Returns rotation matrix of all axis (x, y, z)
-            /*!
-                \param center - point of rotation
-                \param angle - just angle in degrees
-                \return matrix4x4 - structure containing rotation matrix
-            */
-            static glm::mat4 getRotationMatrix(const glm::vec3& center, const float& angle);
         };
 
 

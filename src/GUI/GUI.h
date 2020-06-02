@@ -35,8 +35,7 @@ namespace mar {
 			float m_shapeAngle[3];
 			float m_inputCenter[3];
 			// --- Run-time GUI attributes
-			const graphics::Mesh* global_mesh;
-			std::vector<std::string> m_shapeNames;
+			graphics::Mesh* global_mesh;
 			const graphics::RendererStatistics* m_statistics;
 			GUIData m_guiData;
 			bool m_canModifyObjects;
@@ -51,7 +50,7 @@ namespace mar {
 
 			void push(const glm::vec3& new_center, const glm::vec3& new_angle);
 			void prepareNewFrame();
-			void updateSceneInfo(const graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
+			void updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
 			void display();
 
 		private:
