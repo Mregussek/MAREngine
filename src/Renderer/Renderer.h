@@ -11,6 +11,7 @@
 #include "Camera/Camera.h"
 #include "RendererFactory.h"
 #include "Mesh/Mesh.h"
+#include "Mesh/MeshCreator.h"
 
 namespace mar {
 	namespace graphics {

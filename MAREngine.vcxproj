@@ -164,6 +164,7 @@
     <ClInclude Include="src\Renderer\Mesh\Mesh.h" />
     <ClInclude Include="src\Objects\ObjectLoader.h" />
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
+    <ClInclude Include="src\Renderer\Mesh\MeshCreator.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Pyramid.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Surface.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Wall.h" />

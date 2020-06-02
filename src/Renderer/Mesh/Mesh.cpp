@@ -39,7 +39,6 @@ namespace mar {
 		void Mesh::submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
 			if (m_shapes.size() == constants::maxObjectsInScene - 1) {
 				std::cout << "Cannot push more objects!" << std::endl;
-
 				return;
 			}
 			
@@ -55,11 +54,15 @@ namespace mar {
 		void Mesh::pushTexture(std::shared_ptr<Shape>& new_shape, const std::string& texture) {
 			if (texture != "empty") {
 				ShapeManipulator::extendTextureID(new_shape, m_availableTextureID);
+
+				m_samplers.push_back((int)m_availableTextureID);
+
 				m_availableTextureID++;
 
 				m_texture->loadTexture(texture);
-
-				m_samplers.push_back((int)m_availableTextureID);
+			}
+			else {
+				new_shape->setTextureID(0.f);
 			}
 		}
 
@@ -140,8 +143,13 @@ namespace mar {
 				unsigned int currentIndicesSize = m_indices.size() + m_shapes[i]->getSizeofIndices();
 
 				if (currentVerticesSize <= constants::maxVertexCount && currentIndicesSize <= constants::maxIndexCount) {
-					m_vertices.insert(m_vertices.end(), m_shapes[i]->getVerticesBegin(), m_shapes[i]->getVerticesEnd());
-					m_indices.insert(m_indices.end(), m_shapes[i]->getIndicesBegin(), m_shapes[i]->getIndicesEnd());
+					auto beginVert = m_shapes[i]->getVerticesBegin();
+					auto endVert = m_shapes[i]->getVerticesEnd();
+					auto beginIndices = m_shapes[i]->getIndicesBegin();
+					auto endIndices = m_shapes[i]->getIndicesEnd();
+					
+					m_vertices.insert(m_vertices.end(), beginVert, endVert);
+					m_indices.insert(m_indices.end(), beginIndices, endIndices);
 				}
 			}
 

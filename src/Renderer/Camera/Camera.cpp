@@ -71,10 +71,17 @@ namespace mar {
 
 		void Camera::processKeyboard(CameraMovement&& direction) {
 			float velocity = _movementSpeed * _deltaTime;
-			if (direction == CameraMovement::FORWARD) _position += _front * velocity;
-			if (direction == CameraMovement::BACKWARD) _position -= _front * velocity;
-			if (direction == CameraMovement::LEFT) _position -= _right * velocity;
-			if (direction == CameraMovement::RIGHT) _position += _right * velocity;
+
+			switch (direction) {
+			case CameraMovement::FORWARD:
+				_position += _front * velocity;		break;
+			case CameraMovement::BACKWARD:
+				_position -= _front * velocity;		break;
+			case CameraMovement::LEFT:
+				_position -= _right * velocity;		break;
+			case CameraMovement::RIGHT:
+				_position += _right * velocity;		break;
+			}
 		}
 
 		void Camera::mouseCallback(float xpos, float ypos) {

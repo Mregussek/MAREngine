@@ -3,12 +3,18 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef GUI_H
-#define GUI_H
+#ifndef MAR_ENGINE_GUI_H
+#define MAR_ENGINE_GUI_H
 
 #include "../mar.h"
 #include "../Renderer/Renderer.h"
 #include "../Window/Window.h"
+#include "../Renderer/Mesh/Mesh.h"
+#include "../Renderer/Mesh/MeshCreator.h"
+#include "../Renderer/Mesh/Shapes/DefaultShapes/Cube.h"
+#include "../Renderer/Mesh/Shapes/DefaultShapes/Wall.h"
+#include "../Renderer/Mesh/Shapes/DefaultShapes/Pyramid.h"
+#include "../Renderer/Mesh/Shapes/DefaultShapes/Surface.h"
 
 namespace mar {
 	namespace gui {
@@ -73,4 +79,4 @@ namespace mar {
 
 } }
 
-#endif // !GUI_H
+#endif // !MAR_ENGINE_GUI_H

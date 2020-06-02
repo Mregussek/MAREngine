@@ -7,6 +7,11 @@
 #define MAR_ENGINE_MESH_H
 
 #include "../../mar.h"
+#include "Shapes/Shapes.h"
+#include "Shapes/DefaultShapes/Cube.h"
+#include "Shapes/DefaultShapes/Wall.h"
+#include "Shapes/DefaultShapes/Surface.h"
+#include "Shapes/DefaultShapes/Pyramid.h"
 #include "../Renderer.h"
 #include "Light/Light.h"
 
@@ -33,6 +38,7 @@ namespace mar {
 			unsigned int m_indicesMaxValue;
 
 		public:
+			Mesh() = default;
 			virtual ~Mesh();
 
 			void createMesh(const std::shared_ptr<RendererFactory>& factory);

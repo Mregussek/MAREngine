@@ -192,38 +192,52 @@ namespace mar {
 				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
 					return;
 
+				auto new_shape = graphics::MeshCreator::createPyramid();
 				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				//_renderer->guiPush(GUIPushType::PYRAMID, center);
-				//this->push(center, { 0.0f, 0.0f, 0.0f });
+				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				std::string texture = "empty";
+
+				global_mesh->submitShape(new_shape, center, angle, texture);
+				this->push(center, angle);
 			}
 
 			if (ImGui::Button("Select Cube")) {
 				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
 					return;
 
+				auto new_shape = graphics::MeshCreator::createCube();
 				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				//_renderer->guiPush(GUIPushType::CUBE, center);
-				//this->push(center, { 0.0f, 0.0f, 0.0f });
+				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				std::string texture = "empty";
 
+				global_mesh->submitShape(new_shape, center, angle, texture);
+				this->push(center, angle);
 			}
 
 			if (ImGui::Button("Select Surface")) {
 				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
 					return;
 
+				auto new_shape = graphics::MeshCreator::createSurface();
 				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				//_renderer->guiPush(GUIPushType::SURFACE, center);
-				//this->push(center, { 0.0f, 0.0f, 0.0f });
+				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				std::string texture = "empty";
+
+				global_mesh->submitShape(new_shape, center, angle, texture);
+				this->push(center, angle);
 			}
 
 			if (ImGui::Button("Select Wall")) {
 				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
 					return;
 
+				auto new_shape = graphics::MeshCreator::createWall();
 				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				//_renderer->guiPush(GUIPushType::WALL, center);
-				//this->push(center, { 0.0f, 0.0f, 0.0f });
+				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				std::string texture = "empty";
 
+				global_mesh->submitShape(new_shape, center, angle, texture);
+				this->push(center, angle);
 			}
 		}
 
@@ -240,7 +254,6 @@ namespace mar {
 
 				if (ImGui::Button(shapeIndex)) {
 					global_mesh->flushShape(i);
-					//_renderer->popObject(i);
 					m_guiData.centers.erase(m_guiData.centers.begin() + i);
 					m_guiData.angles.erase(m_guiData.angles.begin() + i);
 				}
