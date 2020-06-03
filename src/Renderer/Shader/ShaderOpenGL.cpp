@@ -52,6 +52,10 @@ namespace mar {
 			glUniform1i(getUniformLocation(name), value);
 		}
 
+		void ShaderOpenGL::setUniform1f(const std::string& name, float value) {
+			glUniform1f(getUniformLocation(name), value);
+		}
+
 		void ShaderOpenGL::setUniform4f(const std::string& name, float red, float green, float blue, float alpha) {
 			glUniform4f(getUniformLocation(name), red, green, blue, alpha);
 		}

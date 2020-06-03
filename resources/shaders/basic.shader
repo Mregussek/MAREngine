@@ -54,9 +54,26 @@ in vec3 v_lightNormal;
 in vec3 v_Position;
 in vec3 v_basicColors;
 
+struct Material {
+	vec3 ambientStrength;
+	vec3 diffuseStrength;
+	vec3 specularStrength;
+
+	vec3 lightPos;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+
+	float shininess;
+
+	float constant;
+	float linear;
+	float quadratic;
+};
+
+uniform Material u_material;
 uniform vec4 u_GUISceneColor;
 uniform sampler2D u_Texture[32];
-uniform vec3 u_LightPos;
 uniform vec3 u_CameraPos;
 
 void main() {
@@ -69,34 +86,31 @@ void main() {
 	else
 		texColor = vec4(v_basicColors, 1.0f);
 
-	// Ambient Light
-	float ambientStrengh = 0.2f;
-	vec4 ambientLight = vec4(ambientStrengh, ambientStrengh, ambientStrengh, 1.0f);
+	// AMBIENT
+	vec3 ambient = u_material.ambientStrength * u_material.ambient;
 
-	// Diffuse Light
-	float diffuseStrengh = 0.75f;
-	vec3 diffuseColor = vec3(diffuseStrengh, diffuseStrengh, diffuseStrengh);
-	
-	vec3 lightNormalized = normalize(v_lightNormal);
-	vec3 posToLightDirVec = normalize(u_LightPos - v_Position);
-	float diffuse = max(dot(posToLightDirVec, lightNormalized), 0.0f);
-	vec4 diffuseLight = vec4(diffuseColor * diffuse, 1.0f);
+	// DIFFUSE
+	vec3 norm = normalize(v_lightNormal);
+	vec3 lightDir = normalize(u_material.lightPos - v_Position);
+	float diff = max(dot(norm, lightDir), 0.0f);
+	vec3 diffuse = u_material.diffuseStrength * (diff * u_material.diffuse);
 
-	// Specular Light
-	float specularStrength = 0.75f;
-	vec3 specularColor = vec3(specularStrength, specularStrength, specularStrength);
+	// SPECULAR
+	vec3 viewDir = normalize(u_CameraPos - v_Position);
+	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
+	vec3 specular = u_material.specularStrength * (spec * u_material.specular);
 
-	vec3 reflectDirVec = reflect(-posToLightDirVec, lightNormalized);
-	vec3 posToView = normalize(u_CameraPos - v_Position);
-	float specularConstant = pow(max(dot(posToView, reflectDirVec), 0.0f), 70);
-	vec4 specularLight = vec4(specularColor * specularConstant, 1.0f);
+	// ATTENUATION
+	float distance = length(u_material.lightPos - v_Position);
+	float attenuation = 1.0f / (u_material.constant + u_material.linear * distance +
+								u_material.quadratic * (distance * distance));
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
 
-	// Attenuation
-	float distance = length(u_LightPos - v_Position);
-	float attenuation = 1.0f / (1.0f + 0.005f * pow(distance, 2));
-	diffuseLight *= attenuation;
-	specularLight *= attenuation;
+	// FINAL
+	vec4 calculatedLight = vec4(ambient + diffuse + specular, 1.0f);
 
-	color = texColor * u_GUISceneColor *
-			(ambientLight + diffuseLight + specularLight);
+	color = texColor * u_GUISceneColor * calculatedLight;
 };

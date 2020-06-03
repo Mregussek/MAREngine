@@ -75,7 +75,6 @@ namespace mar {
 			m_stats._countOfIndices += mesh->getIndicesSize();
 			m_stats._countOfShapes += mesh->getShapesCount();
 
-			m_mainShader->setUniformVector3("u_LightPos", mesh->getLightPosition());
 			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
 
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
@@ -111,6 +110,32 @@ namespace mar {
 			m_mainShader->setUniformMat4f("u_Model", cameradata->model);
 
 			m_mainShader->setUniformVector3("u_CameraPos", cameradata->position);
+		}
+
+		void Renderer::updateLightData(Mesh* mesh) {
+			Light light = mesh->getLight();
+
+			light.setPosition({
+				1.0f + 0.5f * sin(glfwGetTime()),
+				light.getPosition().y,
+				5.0f + 3.0f * cos(glfwGetTime())
+			});
+
+			m_mainShader->setUniformVector3("u_material.lightPos", light.getPosition());
+
+			m_mainShader->setUniformVector3("u_material.ambient", light.getAmbient());
+			m_mainShader->setUniformVector3("u_material.diffuse", light.getDiffuse());
+			m_mainShader->setUniformVector3("u_material.specular", light.getSpecular());
+
+			m_mainShader->setUniformVector3("u_material.ambientStrength", light.getAmbientStrength());
+			m_mainShader->setUniformVector3("u_material.diffuseStrength", light.geDiffuseStrength());
+			m_mainShader->setUniformVector3("u_material.specularStrength", light.geSpecularStrength());
+
+			m_mainShader->setUniform1f("u_material.shininess", light.getShininess());
+
+			m_mainShader->setUniform1f("u_material.constant", light.getConstant());
+			m_mainShader->setUniform1f("u_material.linear", light.getLinear());
+			m_mainShader->setUniform1f("u_material.quadratic", light.getQuadratic());
 		}
 
 		void Renderer::bind() {

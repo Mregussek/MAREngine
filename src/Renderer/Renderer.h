@@ -72,6 +72,7 @@ namespace mar {
 
 			void updateGUIData(Mesh* mesh, const gui::GUIData* guidata);
 			void updateCameraData(const CameraData* cameradata);
+			void updateLightData(Mesh* mesh);
 
 		private:
 			void bind();

@@ -80,7 +80,7 @@ namespace mar {
 			const unsigned int& getLayout(const unsigned int& index) const { return m_shapes[0]->getLayout(index); }
 			const unsigned int& getLayoutSize() const { return m_shapes[0]->getLayoutSize(); }
 
-			const glm::vec3& getLightPosition() const { return _light.getPosition(); }
+			const Light& getLight() const { return _light; }
 		};
 
 
