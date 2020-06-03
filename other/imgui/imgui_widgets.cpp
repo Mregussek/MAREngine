@@ -693,7 +693,7 @@ bool ImGui::SmallButton(const char* label)
     return pressed;
 }
 
-// Tip: use ImGui::PushID()/PopID() to push indices or pointers in the ID stack.
+// Tip: use ImGui::PushID()/PopID() to pushData indices or pointers in the ID stack.
 // Then you can keep 'str_id' empty or the same for all your buttons (instead of creating a string based on a non-string id)
 bool ImGui::InvisibleButton(const char* str_id, const ImVec2& size_arg)
 {
@@ -991,7 +991,7 @@ bool ImGui::ImageButton(ImTextureID user_texture_id, const ImVec2& size, const I
     ImGuiContext& g = *GImGui;
     const ImGuiStyle& style = g.Style;
 
-    // Default to using texture ID as ID. User can still push string/integer prefixes.
+    // Default to using texture ID as ID. User can still pushData string/integer prefixes.
     // We could hash the size/uv to create a unique ID but that would prevent the user from animating UV.
     PushID((void*)(intptr_t)user_texture_id);
     const ImGuiID id = window->GetID("#image");
@@ -5531,7 +5531,7 @@ void ImGui::SetNextItemOpen(bool is_open, ImGuiCond cond)
     g.NextItemData.OpenCond = cond ? cond : ImGuiCond_Always;
 }
 
-// CollapsingHeader returns true when opened but do not indent nor push into the ID stack (because of the ImGuiTreeNodeFlags_NoTreePushOnOpen flag).
+// CollapsingHeader returns true when opened but do not indent nor pushData into the ID stack (because of the ImGuiTreeNodeFlags_NoTreePushOnOpen flag).
 // This is basically the same as calling TreeNodeEx(label, ImGuiTreeNodeFlags_CollapsingHeader). You can remove the _NoTreePushOnOpen flag if you want behavior closer to normal TreeNode().
 bool ImGui::CollapsingHeader(const char* label, ImGuiTreeNodeFlags flags)
 {
@@ -6984,7 +6984,7 @@ bool    ImGui::BeginTabItem(const char* label, bool* p_open, ImGuiTabItemFlags f
     if (ret && !(flags & ImGuiTabItemFlags_NoPushId))
     {
         ImGuiTabItem* tab = &tab_bar->Tabs[tab_bar->LastTabItemIdx];
-        PushOverrideID(tab->ID); // We already hashed 'label' so push into the ID stack directly instead of doing another hash through PushID(label)
+        PushOverrideID(tab->ID); // We already hashed 'label' so pushData into the ID stack directly instead of doing another hash through PushID(label)
     }
     return ret;
 }

@@ -65,7 +65,7 @@
 #include <vector> 
 #include <unordered_map>
 #include <tuple>
-#include <algorithm> // std::find, std::copy
+#include <algorithm> // std::find, std::copy, std::max_element
 // multi-threading
 #include <thread> 
 #include <mutex>
@@ -102,6 +102,7 @@ namespace mar {
 		class RendererOpenGLFactory;
 
 		class Mesh;
+		class MeshCreator;
 		class Light;
 		class Scene;
 

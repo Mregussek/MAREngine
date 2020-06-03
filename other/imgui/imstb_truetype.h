@@ -2215,7 +2215,7 @@ static int stbtt__run_charstring(const stbtt_fontinfo *info, int glyph_index, st
          if (b0 != 255 && b0 != 28 && (b0 < 32 || b0 > 254)) //-V560
             return STBTT__CSERR("reserved operator");
 
-         // push immediate
+         // pushData immediate
          if (b0 == 255) {
             f = (float)(stbtt_int32)stbtt__buf_get32(&b) / 0x10000;
          } else {

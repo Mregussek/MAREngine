@@ -18,11 +18,11 @@ namespace mar {
 			auto pathFound = std::find(_paths.begin(), _paths.end(), path);
 			if (pathFound != _paths.end()) { // if path found we don't want to load texture again
 				auto index = std::distance(_paths.begin(), pathFound);
-				_id.push_back(_id[index]); // push index of that found texture
+				_id.push_back(_id[index]); // pushData index of that found texture
 				return;
 			}
 
-			// load new texture and push new 
+			// load new texture and pushData new 
 			_paths.push_back(path);
 			_id.push_back(_idOfNextTexture);
 			_width.push_back(0);

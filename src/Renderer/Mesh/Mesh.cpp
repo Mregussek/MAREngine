@@ -63,6 +63,10 @@ namespace mar {
 			}
 			else {
 				new_shape->setTextureID(0.f);
+
+				m_texture->addID(0);
+
+				m_samplers.push_back(0);
 			}
 		}
 
@@ -90,40 +94,26 @@ namespace mar {
 		}
 
 		void Mesh::popShape(const unsigned int& index) {
-			if (m_shapes[index]->getTextureID() != 0.0f) {
-				unsigned int sizeDiff = m_shapes.size() - m_samplers.size();
-				std::vector<int> new_samplers;
+			m_samplers.erase(m_samplers.begin() + index);
+			m_texture->removeID(index);
 
-				for (unsigned int i = 0; i < m_samplers.size() ; i++)
-					if (i != index - sizeDiff)
-						new_samplers.push_back(m_samplers[i]);
-				
-				m_samplers = new_samplers;
+			m_names.erase(m_names.begin() + index);
+			m_translationMats.erase(m_translationMats.begin() + index);
+			m_rotationMats.erase(m_rotationMats.begin() + index);
 
-				m_texture->removeID(index - sizeDiff);
+			unsigned int maxval = 0;
+			unsigned int id = 0;
+
+			m_shapes[index].reset();
+			m_shapes.erase(m_shapes.begin() + index);
+
+			for (unsigned int i = 0; i < m_shapes.size(); i++) {
+				ShapeManipulator::extendShapeID(m_shapes[i], id);
+				id++;
+
+				ShapeManipulator::changeIndicesFormat(m_shapes[i], maxval);
+				maxval += m_shapes[i]->getSizeofVertices() / m_shapes[i]->getStride();
 			}
-
-			std::vector<std::string> new_names;
-			std::vector<std::shared_ptr<Shape>> new_shapes;
-			std::vector<glm::mat4> new_translations;
-			std::vector<glm::mat4> new_rotations;
-
-			for (unsigned int i = 0; i < m_names.size(); i++) {
-				if (i != index) {
-					new_names.push_back(m_names[i]);
-					new_shapes.push_back(m_shapes[i]);
-					new_translations.push_back(m_translationMats[i]);
-					new_rotations.push_back(m_rotationMats[i]);
-				}
-				
-				if(i == index)
-					m_shapes[i].reset();
-			}
-
-			m_names = new_names;
-			m_shapes = new_shapes;
-			m_translationMats = new_translations;
-			m_rotationMats = new_rotations;
 		}
 
 		void Mesh::clearBuffers() {

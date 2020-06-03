@@ -57,10 +57,10 @@ namespace mar {
 			*/
 			virtual unsigned int getStride() const { return 0; }
 
-			//! Method should push new element to layout by specifying its type and count
+			//! Method should pushData new element to layout by specifying its type and count
 			/*
 				\param count - value of next Vertex Attribute
-				\param what - specify what value you push (float[PUSH_FLOAT], unsigned int[PUSH_UNSIGNED INT] or char[PUSH_UNSIGNED_BYTE])
+				\param what - specify what value you pushData (float[PUSH_FLOAT], unsigned int[PUSH_UNSIGNED INT] or char[PUSH_UNSIGNED_BYTE])
 			*/
 			virtual void push(unsigned int count, PushBuffer what) { }
 		};

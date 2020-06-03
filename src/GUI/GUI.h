@@ -54,7 +54,7 @@ namespace mar {
 			
 			void loadSceneParameters(graphics::Scene* scene);
 
-			void push(const glm::vec3& new_center, const glm::vec3& new_angle);
+			
 			void prepareNewFrame();
 			void updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
 			void display();
@@ -69,6 +69,9 @@ namespace mar {
 			void deleteObjectFromScene();
 
 			void display_StatisticsMenu();
+
+			void pushData(const glm::vec3& new_center, const glm::vec3& new_angle);
+			void popData(const unsigned int& index);
 
 		public:
 			const glm::mat4 getTranslationMatrix() const;

@@ -35,13 +35,8 @@ namespace mar {
 
 		void GUI::loadSceneParameters(graphics::Scene* scene) {
 			for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
-				push(scene->getCenter(i), scene->getAngle(i));
+				pushData(scene->getCenter(i), scene->getAngle(i));
 			}
-		}
-
-		void GUI::push(const glm::vec3& new_center, const glm::vec3& new_angle) {
-			m_guiData.centers.push_back(new_center);
-			m_guiData.angles.push_back(new_angle);
 		}
 
 		void GUI::prepareNewFrame() {
@@ -183,61 +178,44 @@ namespace mar {
 
 			if (m_inputCenter[0] > 10.0f || m_inputCenter[0] < -10.0f)
 				return;
-			if (m_inputCenter[1] > 10.0f || m_inputCenter[1] < -10.0f)
+			else if (m_inputCenter[1] > 10.0f || m_inputCenter[1] < -10.0f)
 				return;
-			if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
+			else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
 				return;
+
+			if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene - 1)
+				return;
+
+			std::shared_ptr<graphics::Shape> new_shape;
+			bool buttonclicked = false;
 
 			if (ImGui::Button("Select Pyramid")) {
-				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
-					return;
-
-				auto new_shape = graphics::MeshCreator::createPyramid();
-				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				std::string texture = "empty";
-
-				global_mesh->submitShape(new_shape, center, angle, texture);
-				this->push(center, angle);
+				new_shape = graphics::MeshCreator::createPyramid();
+				buttonclicked = true;
 			}
 
 			if (ImGui::Button("Select Cube")) {
-				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
-					return;
-
-				auto new_shape = graphics::MeshCreator::createCube();
-				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				std::string texture = "empty";
-
-				global_mesh->submitShape(new_shape, center, angle, texture);
-				this->push(center, angle);
+				new_shape = graphics::MeshCreator::createCube();
+				buttonclicked = true;
 			}
 
 			if (ImGui::Button("Select Surface")) {
-				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
-					return;
-
-				auto new_shape = graphics::MeshCreator::createSurface();
-				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				std::string texture = "empty";
-
-				global_mesh->submitShape(new_shape, center, angle, texture);
-				this->push(center, angle);
+				new_shape = graphics::MeshCreator::createSurface();
+				buttonclicked = true;
 			}
 
 			if (ImGui::Button("Select Wall")) {
-				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene)
-					return;
+				new_shape = graphics::MeshCreator::createWall();
+				buttonclicked = true;
+			}
 
-				auto new_shape = graphics::MeshCreator::createWall();
+			if (buttonclicked) {
 				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
 				std::string texture = "empty";
-
+				
 				global_mesh->submitShape(new_shape, center, angle, texture);
-				this->push(center, angle);
+				this->pushData(center, angle);
 			}
 		}
 
@@ -254,8 +232,7 @@ namespace mar {
 
 				if (ImGui::Button(shapeIndex)) {
 					global_mesh->flushShape(i);
-					m_guiData.centers.erase(m_guiData.centers.begin() + i);
-					m_guiData.angles.erase(m_guiData.angles.begin() + i);
+					this->popData(i);
 				}
 			}
 		}
@@ -295,6 +272,16 @@ namespace mar {
 			else {
 				ImGui::Text("You cannot modify objects!");
 			}
+		}
+
+		void GUI::pushData(const glm::vec3& new_center, const glm::vec3& new_angle) {
+			m_guiData.centers.push_back(new_center);
+			m_guiData.angles.push_back(new_angle);
+		}
+
+		void GUI::popData(const unsigned int& index) {
+			m_guiData.centers.erase(m_guiData.centers.begin() + index);
+			m_guiData.angles.erase(m_guiData.angles.begin() + index);
 		}
 
 		const glm::mat4 GUI::getTranslationMatrix() const {

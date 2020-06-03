@@ -700,7 +700,7 @@ CODE
      Use PushID() / PopID() to create scopes and manipulate the ID stack, as to avoid ID conflicts
      within the same window. This is the most convenient way of distinguishing ID when iterating and
      creating many UI elements programmatically.
-     You can push a pointer, a string or an integer value into the ID stack.
+     You can pushData a pointer, a string or an integer value into the ID stack.
      Remember that ID are formed from the concatenation of _everything_ pushed into the ID stack.
      At each level of the stack we store the seed used for items at this level of the ID stack.
 
@@ -6786,7 +6786,7 @@ static void ImGui::ErrorCheckBeginEndCompareStacksSize(ImGuiWindow* window, bool
     short* p = &window->DC.StackSizesBackup[0];
 
     // Window stacks
-    // NOT checking: DC.ItemWidth, DC.AllowKeyboardFocus, DC.ButtonRepeat, DC.TextWrapPos (per window) to allow user to conveniently push once and not pop (they are cleared on Begin)
+    // NOT checking: DC.ItemWidth, DC.AllowKeyboardFocus, DC.ButtonRepeat, DC.TextWrapPos (per window) to allow user to conveniently pushData once and not pop (they are cleared on Begin)
     { int n = window->IDStack.Size;       if (write) *p = (short)n; else IM_ASSERT(*p == n && "PushID/PopID or TreeNode/TreePop Mismatch!");   p++; }    // Too few or too many PopID()/TreePop()
     { int n = window->DC.GroupStack.Size; if (write) *p = (short)n; else IM_ASSERT(*p == n && "BeginGroup/EndGroup Mismatch!");                p++; }    // Too few or too many EndGroup()
 
