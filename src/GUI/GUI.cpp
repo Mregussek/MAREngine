@@ -128,24 +128,13 @@ namespace mar {
 				m_shapeAngle[2] = m_guiData.angles[i].z;
 
 				// Prepare index on GUI
-				char int2char[5];
-				sprintf_s(int2char, " %d", i);
+				std::string shapeindex = global_mesh->getName(i) + " " + std::to_string(i);
+				std::string shapetrans = "Translate " + global_mesh->getName(i) + " " + std::to_string(i);
+				std::string shaperot = "Rotate " + global_mesh->getName(i) + " " + std::to_string(i);
 
-				char shapeIndex[25] = "";
-				strcat_s(shapeIndex, global_mesh->getName(i).c_str());
-
-				strcat_s(shapeIndex, int2char);
-				ImGui::Text(shapeIndex);
-
-				// Change center by GUI
-				char DragID[15] = "ObjPos ";
-				strcat_s(DragID, int2char);
-				ImGui::SliderFloat3(DragID, m_shapePos, -5.0f, 5.0f);
-
-				// Change angle by GUI
-				char RotID[15] = "ObjRot ";
-				strcat_s(RotID, int2char);
-				ImGui::SliderFloat3(RotID, m_shapeAngle, 0.0f, 360.0f);
+				ImGui::Text(shapeindex.c_str());
+				ImGui::SliderFloat3(shapetrans.c_str(), m_shapePos, -5.0f, 5.0f);
+				ImGui::SliderFloat3(shaperot.c_str(), m_shapeAngle, 0.0f, 360.0f);
 
 				// Set new variables to object
 				m_guiData.centers[i].x = m_shapePos[0];
@@ -223,51 +212,28 @@ namespace mar {
 			ImGui::MenuItem("Delete Object", "");
 
 			for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
-				char int2char[5];
-				sprintf_s(int2char, " %d ", i);
-				char shapeIndex[30] = " Delete ";
+				std::string shapeDel = "Delete " + global_mesh->getName(i) + " " + std::to_string(i);
 
-				strcat_s(shapeIndex, global_mesh->getName(i).c_str());
-				strcat_s(shapeIndex, int2char);
-
-				if (ImGui::Button(shapeIndex)) {
-					global_mesh->flushShape(i);
-					this->popData(i);
+				if (ImGui::Button(shapeDel.c_str())) {
+					//global_mesh->flushShape(i);
+					//this->popData(i);
 				}
 			}
 		}
 
 		void GUI::display_StatisticsMenu() {
 			if (m_canModifyObjects) {
-				char int2char[7];
-				sprintf_s(int2char, "%d ", m_statistics->_countOfDrawCalls);
-				char drawCalls[28] = "Draw Calls: ";
-				strcat_s(drawCalls, int2char);
-				ImGui::Text(drawCalls);
+				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->_countOfShapes);
+				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->_countOfShapes);
+				std::string vertices = "Vertices: " + std::to_string(m_statistics->_countOfVertices);
+				std::string indices = "Indices: " + std::to_string(m_statistics->_countOfIndices);
+				std::string triangles = "Triangles: " + std::to_string(m_statistics->_countOfTriangles);
 
-				char int2char1[7];
-				sprintf_s(int2char1, "%d ", m_statistics->_countOfShapes);
-				char drawCalls1[28] = "Shapes Count: ";
-				strcat_s(drawCalls1, int2char1);
-				ImGui::Text(drawCalls1);
-
-				char int2char2[7];
-				sprintf_s(int2char2, "%d ", m_statistics->_countOfVertices);
-				char drawCalls2[28] = "Vertices: ";
-				strcat_s(drawCalls2, int2char2);
-				ImGui::Text(drawCalls2);
-
-				char int2char3[7];
-				sprintf_s(int2char3, "%d ", m_statistics->_countOfIndices);
-				char drawCalls3[28] = "Indices: ";
-				strcat_s(drawCalls3, int2char3);
-				ImGui::Text(drawCalls3);
-
-				char int2char4[7];
-				sprintf_s(int2char4, "%d ", m_statistics->_countOfTriangles);
-				char drawCalls4[28] = "Triangles: ";
-				strcat_s(drawCalls4, int2char4);
-				ImGui::Text(drawCalls4);
+				ImGui::Text(drawcalls.c_str());
+				ImGui::Text(shapescount.c_str());
+				ImGui::Text(vertices.c_str());
+				ImGui::Text(indices.c_str());
+				ImGui::Text(triangles.c_str());
 			}
 			else {
 				ImGui::Text("You cannot modify objects!");
@@ -289,10 +255,9 @@ namespace mar {
 		}
 
 		const glm::mat4 GUI::getRotationMatrix() const {
-			glm::mat4 rotation = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-			return glm::rotate(rotation, glm::radians(m_sceneAngle.x), glm::vec3(1.0f, 0.0f, 0.0f))
-				* glm::rotate(rotation, glm::radians(m_sceneAngle.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(rotation, glm::radians(m_sceneAngle.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			return glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.y), glm::vec3(0.0f, 1.0f, 0.0f))
+				 * glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.z), glm::vec3(0.0f, 0.0f, 1.0f))
+				 * glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.x), glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 
 

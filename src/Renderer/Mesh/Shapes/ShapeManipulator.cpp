@@ -38,14 +38,14 @@ namespace mar {
 			shape->setTextureID(nextID);
 		}
 
-		void ShapeManipulator::changeIndicesFormat(std::shared_ptr<Shape>& shape, unsigned int& max_value) {
+		void ShapeManipulator::changeIndicesFormat(std::shared_ptr<Shape>& shape, int& max_value) {
 			if (max_value == 0) return;
 
 			std::vector<unsigned int> new_indices = changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->getIndicesVector());
 			shape->setIndicesVector(new_indices);
 		}
 
-		std::vector<unsigned int> ShapeManipulator::changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
+		std::vector<unsigned int> ShapeManipulator::changeIndicesFormat(const unsigned int& size, int& max_value,
 			const std::vector<unsigned int>& passedValue) {
 
 			std::vector<unsigned int> returnValue(passedValue.size());

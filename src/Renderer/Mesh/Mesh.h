@@ -35,7 +35,7 @@ namespace mar {
 
 			float m_availableShapeID;
 			float m_availableTextureID;
-			unsigned int m_indicesMaxValue;
+			int m_indicesMaxValue;
 
 		public:
 			Mesh() = default;

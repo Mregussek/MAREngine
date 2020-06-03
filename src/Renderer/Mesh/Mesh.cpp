@@ -86,7 +86,8 @@ namespace mar {
 		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
 			m_translationMats.push_back(glm::translate(glm::mat4(1.0f), center));
 
-			glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
+			glm::mat4 transform = 
+				  glm::rotate(glm::mat4(1.0f), glm::radians(angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
 				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
 				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -94,26 +95,7 @@ namespace mar {
 		}
 
 		void Mesh::popShape(const unsigned int& index) {
-			m_samplers.erase(m_samplers.begin() + index);
-			m_texture->removeID(index);
 
-			m_names.erase(m_names.begin() + index);
-			m_translationMats.erase(m_translationMats.begin() + index);
-			m_rotationMats.erase(m_rotationMats.begin() + index);
-
-			unsigned int maxval = 0;
-			unsigned int id = 0;
-
-			m_shapes[index].reset();
-			m_shapes.erase(m_shapes.begin() + index);
-
-			for (unsigned int i = 0; i < m_shapes.size(); i++) {
-				ShapeManipulator::extendShapeID(m_shapes[i], id);
-				id++;
-
-				ShapeManipulator::changeIndicesFormat(m_shapes[i], maxval);
-				maxval += m_shapes[i]->getSizeofVertices() / m_shapes[i]->getStride();
-			}
 		}
 
 		void Mesh::clearBuffers() {

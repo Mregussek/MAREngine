@@ -45,7 +45,7 @@ namespace mar {
                 \param shape - pointer to shape
                 \param max_value - max value of indices in current indices vector of renderer
             */
-            static void changeIndicesFormat(std::shared_ptr<Shape>& shape, unsigned int& max_value);
+            static void changeIndicesFormat(std::shared_ptr<Shape>& shape, int& max_value);
 
             //! If we want batch rendering, we need to change indices values for every shape. Default ones begin with 0.
             //! There is need to change begin value to new, in case of proper work of batch renderer.
@@ -55,7 +55,7 @@ namespace mar {
                 \param passedValue - passed indicesVector, its values are gonna be used to calculate new ones
                 \return returnValue - vector containing new, extended, indices
             */
-            static std::vector<unsigned int> changeIndicesFormat(const unsigned int& size, unsigned int& max_value,
+            static std::vector<unsigned int> changeIndicesFormat(const unsigned int& size, int& max_value,
                 const std::vector<unsigned int>& passedValue);
         };
 
