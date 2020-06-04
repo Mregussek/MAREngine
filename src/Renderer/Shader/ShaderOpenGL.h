@@ -16,9 +16,11 @@ namespace mar {
 #ifndef IMPORTED_FROM_GITHUB 
 			const std::string mainPath{ "resources/shaders/basic.shader" };
 			const std::string withoutGUIPath{ "resources/shaders/basicWithoutGUI.shader" };
+			const std::string cubemapPath{ "resources/shaders/cubemap.shader" };
 #else
 			const std::string mainPath{ "../../../resources/shaders/basic.shader" };
 			const std::string withoutGUIPath{ "../../../resources/shaders/basicWithoutGUI.shader" };
+			const std::string cubemapPath{ "../../../resources/shaders/cubemap.shader" };
 #endif
 		} ShaderOpenGLSettings;
 

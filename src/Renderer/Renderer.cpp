@@ -16,6 +16,7 @@ namespace mar {
 				m_vao = factory->createVertexArray();
 				m_ebo = factory->createElementBuffer();
 				m_mainShader = factory->createShader();
+				m_cubemapShader = factory->createShader();
 
 				m_stats = RendererStatistics();
 			}
@@ -27,6 +28,7 @@ namespace mar {
 		void Renderer::closeRenderer() {
 			if (m_initialized) {
 				m_mainShader->shutdown();
+				m_cubemapShader->shutdown();
 				m_vao->closeArrayBuffer();
 				m_vbo->close();
 				m_ebo->close();
@@ -45,6 +47,8 @@ namespace mar {
 				else
 					m_mainShader->initialize(ShaderType::WITHOUT_GUI);
 
+				m_cubemapShader->initialize(ShaderType::CUBEMAP);
+
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
 
@@ -61,8 +65,6 @@ namespace mar {
 		}
 
 		void Renderer::draw(Mesh* mesh) {
-			bind();
-
 			m_stats.resetStatistics();
 
 			mesh->clearBuffers();
@@ -116,9 +118,9 @@ namespace mar {
 			Light light = mesh->getLight();
 
 			light.setPosition({
-				1.0f + 0.5f * sin(glfwGetTime()),
+				0.5f + 0.5f * sin(glfwGetTime()),
 				light.getPosition().y,
-				5.0f + 3.0f * cos(glfwGetTime())
+				7.0f + 5.0f * cos(glfwGetTime())
 			});
 
 			m_mainShader->setUniformVector3("u_material.lightPos", light.getPosition());
@@ -139,6 +141,7 @@ namespace mar {
 		}
 
 		void Renderer::bind() {
+			m_mainShader->bind();
 			m_vao->bind();
 			m_vbo->bind();
 			m_ebo->bind();

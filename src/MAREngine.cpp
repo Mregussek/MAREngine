@@ -33,11 +33,15 @@ namespace mar {
 				m_camera.updateData();
 				m_gui.prepareNewFrame();
 
+				m_renderer.bind();
+
 				m_renderer.updateGUIData(&m_mesh, &m_gui.getGUIData());
 				m_renderer.updateCameraData(&m_camera.getCameraData());
 				m_renderer.updateLightData(&m_mesh);
 
 				m_renderer.draw(&m_mesh);
+
+				m_renderer.unbind();
 
 				m_gui.updateSceneInfo(&m_mesh, &m_renderer.getStatistics());
 				m_gui.display();

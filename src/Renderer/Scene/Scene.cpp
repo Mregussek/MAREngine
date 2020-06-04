@@ -47,6 +47,7 @@ namespace mar {
 		void Scene::createWithColouredElements() {
 			_shapes = {
 				std::make_shared<Cube>()
+				, std::make_shared<Cube>()
 				, std::make_shared<Pyramid>()
 				, std::make_shared<Surface>()
 				, std::make_shared<Wall>()
@@ -56,6 +57,7 @@ namespace mar {
 			};
 			_centers = {
 				{ 0.0f,  0.0f,  0.0f }
+				, { 0.0f,  2.0f,  0.0f }
 				, { 5.0f,  0.0f, -4.5f }
 				, { 0.0f,  -0.025f,  0.0f }
 				, { -6.0f,  0.0f,  0.0f }
@@ -71,9 +73,11 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
 			};
 			_textures = {
-				TexturePaths.mrTex
+				"empty"
+				, TexturePaths.mrTex
 				, TexturePaths.blueTex
 				, TexturePaths.grassTex
 				, TexturePaths.wallTex

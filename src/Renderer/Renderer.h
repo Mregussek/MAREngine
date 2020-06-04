@@ -55,6 +55,8 @@ namespace mar {
 			std::shared_ptr<VertexArray> m_vao;
 			std::shared_ptr<ElementBuffer> m_ebo;
 			std::shared_ptr<Shader> m_mainShader;
+			std::shared_ptr<Shader> m_cubemapShader;
+
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;		// check, if renderer is initialized
 			bool m_useGUI = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
@@ -74,11 +76,9 @@ namespace mar {
 			void updateCameraData(const CameraData* cameradata);
 			void updateLightData(Mesh* mesh);
 
-		private:
 			void bind();
 			void unbind();
 
-		public:
 			const RendererStatistics& getStatistics() const { return m_stats; }
 		};
 

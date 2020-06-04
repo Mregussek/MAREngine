@@ -21,6 +21,16 @@ namespace mar {
 			const std::string blueTex = "resources/textures/blue-texture.jpg";
 			const std::string redTex = "resources/textures/red-texture.jpg";
 			const std::string blackTex = "resources/textures/black-texture.jpg";
+
+			const std::vector<std::string> SkyboxFaces {
+				"resources/textures/skybox/right.jpg" , 
+				"resources/textures/skybox/left.jpg" ,
+				"resources/textures/skybox/top.jpg" ,
+				"resources/textures/skybox/bottom.jpg" ,
+				"resources/textures/skybox/front.jpg" ,
+				"resources/textures/skybox/back.jpg" ,
+			};
+
 #else
 			const std::string mrTex = "../../../resources/textures/mr.jpg";
 			const std::string yellowTex = "../../../resources/textures/yellow-texture.jpg";
@@ -29,6 +39,15 @@ namespace mar {
 			const std::string blueTex = "../../../resources/textures/blue-texture.jpg";
 			const std::string redTex = "../../../resources/textures/red-texture.jpg";
 			const std::string blackTex = "../../../resources/textures/black-texture.jpg";
+
+			const std::vector<std::string> SkyboxFaces{
+				"../../../resources/textures/skybox/right.jpg" ,
+				"../../../resources/textures/skybox/left.jpg" ,
+				"../../../resources/textures/skybox/top.jpg" ,
+				"../../../resources/textures/skybox/bottom.jpg" ,
+				"../../../resources/textures/skybox/front.jpg" ,
+				"../../../resources/textures/skybox/back.jpg" ,
+			};
 #endif
 		} TexturePaths;
 

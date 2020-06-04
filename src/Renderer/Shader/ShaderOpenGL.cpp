@@ -14,6 +14,8 @@ namespace mar {
 				_filePath = ShaderOpenGLSettings.mainPath;
 			else if (shadertype == ShaderType::WITHOUT_GUI)
 				_filePath = ShaderOpenGLSettings.withoutGUIPath;
+			else if (shadertype == ShaderType::CUBEMAP)
+				_filePath = ShaderOpenGLSettings.cubemapPath;
 
 			_rendererId = 0;
 			_programSource = parseShader();

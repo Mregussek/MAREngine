@@ -20,7 +20,8 @@ namespace mar {
 		enum class ShaderType {
 			DEFAULT,
 			WITHOUT_GUI,
-			LIGHT
+			LIGHT,
+			CUBEMAP
 		};
 
 		class Shader {
