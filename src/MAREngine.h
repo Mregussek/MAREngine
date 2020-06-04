@@ -23,8 +23,8 @@ namespace mar {
 
 		struct {
 			char name[10] = "MAREngine";
-			int width{ 1280 };
-			int height{ 720 };
+			int width{ 1500 };
+			int height{ 900 };
 			char portName[10] = "\\\\.\\COM7";
 			const char* glsl_version = "#version 460";
 		} MAREngineDefaultSettings;

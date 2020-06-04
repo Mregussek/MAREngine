@@ -33,7 +33,7 @@ namespace mar {
 			const float PITCH = 0.0f;
 			const float SPEED = 5.0f;
 			const float SENSITIVITY = 0.1f;
-			const float ZOOM = 45.0f;
+			const float ZOOM = 55.0f;
 			const glm::vec3 CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
 		} CameraSettings;
 
@@ -94,7 +94,7 @@ namespace mar {
 			const glm::vec3& getCameraPosition() const { return _position; }
 			const CameraData& getCameraData() const { return _cameraData; }
 			const float& getZoom() const { return _zoom; }
-			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.1f, 100.0f); }
+			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.01f, 100.0f); }
 			const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
 			const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
 		};

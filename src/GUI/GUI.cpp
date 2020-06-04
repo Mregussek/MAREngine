@@ -59,18 +59,47 @@ namespace mar {
 
 		void GUI::display() {
 			if (ImGui::BeginMainMenuBar()) {
-				if (ImGui::BeginMenu("General")) {
-					display_GeneralMenu();
+				if (ImGui::BeginMenu("File")) {
+					if (ImGui::MenuItem("New")) {
+
+					}
+
+					if (ImGui::MenuItem("Open")) {
+
+					}
+
+					if (ImGui::MenuItem("Save")) {
+
+					}
+
+					if (ImGui::MenuItem("Exit")) {
+						glfwSetWindowShouldClose(m_window->getWindow(), true);
+					}
+
 					ImGui::EndMenu();
 				}
 
-				if (ImGui::BeginMenu("Manage Objects")) {
-					display_ManageObjectsMenu();
-					ImGui::EndMenu();
-				}
+				if (ImGui::BeginMenu("Scene")) {
+					if(!m_displayGeneralScene)
+						if (ImGui::MenuItem("Open Scene Modification Window")) {
+							m_displayGeneralScene = true;
+						}
 
-				if (ImGui::BeginMenu("Statistics")) {
-					display_StatisticsMenu();
+					if (!m_displaySeperatelyShapes)
+						if (ImGui::MenuItem("Modify Shapes Separately Window")) {
+							m_displaySeperatelyShapes = true;
+						}
+
+					if (!m_displayShapePush)
+						if (ImGui::MenuItem("Add Shape to Scene Window")) {
+							m_displayShapePush = true;
+						}
+
+					if (!m_displayStatistics)
+						if (ImGui::MenuItem("Scene Statistics Window")) {
+							m_displayStatistics = true;
+						}
+
 					ImGui::EndMenu();
 				}
 
@@ -82,17 +111,24 @@ namespace mar {
 				ImGui::EndMainMenuBar();
 			}
 
+			if (m_displayGeneralScene) { eventOnScene(); }
+			if (m_displaySeperatelyShapes) { eventOnEachObjectSeperately(); }
+			if (m_displayShapePush) { addNewObjectToScene(); }
+			if (m_displayShapePop) { deleteObjectFromScene(); }
+			if (m_displayStatistics) { display_StatisticsMenu(); }
+
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 
-		void GUI::display_GeneralMenu() {
+		void GUI::eventOnScene() {
+			ImGui::Begin("GeneralSceneMenu");
+
 			if (m_canModifyObjects) {
-				eventOnScene();
-
-				ImGui::Separator();
-
-				eventOnEachObjectSeperately();
+				ImGui::Text("Scene");
+				ImGui::SliderFloat3("Translation", &m_sceneTranslation.x, -5.0f, 5.0f);
+				ImGui::SliderFloat3("Rotation", &m_sceneAngle.x, -360.0f, 360.0f);
+				ImGui::ColorEdit4("color", m_sceneColors);
 			}
 			else {
 				ImGui::Text("You cannot modify objects!");
@@ -100,128 +136,150 @@ namespace mar {
 
 			ImGui::Separator();
 
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			if (ImGui::Button("Close")) {
+				m_displayGeneralScene = false;
+			}
 
-			ImGui::Separator();
-
-			if (ImGui::Button("Exit"))
-				glfwSetWindowShouldClose(m_window->getWindow(), true);
-		}
-
-		void GUI::eventOnScene() {
-			ImGui::Text("Scene");
-			ImGui::SliderFloat3("Translation", &m_sceneTranslation.x, -5.0f, 5.0f);
-			ImGui::SliderFloat3("Rotation", &m_sceneAngle.x, -360.0f, 360.0f);
-			ImGui::ColorEdit4("color", m_sceneColors);
+			ImGui::End();
 		}
 
 		void GUI::eventOnEachObjectSeperately() {
-			ImGui::MenuItem("Objects Menu", "");
+			ImGui::Begin("GeneralShapeSeparatelyMenu");
 
-			for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
-				// Set current variables to sliders
-				m_shapePos[0] = m_guiData.centers[i].x;
-				m_shapePos[1] = m_guiData.centers[i].y;
-				m_shapePos[2] = m_guiData.centers[i].z;
-				m_shapeAngle[0] = m_guiData.angles[i].x;
-				m_shapeAngle[1] = m_guiData.angles[i].y;
-				m_shapeAngle[2] = m_guiData.angles[i].z;
-
-				// Prepare index on GUI
-				std::string shapeindex = global_mesh->getName(i) + " " + std::to_string(i);
-				std::string shapetrans = "Translate " + global_mesh->getName(i) + " " + std::to_string(i);
-				std::string shaperot = "Rotate " + global_mesh->getName(i) + " " + std::to_string(i);
-
-				ImGui::Text(shapeindex.c_str());
-				ImGui::SliderFloat3(shapetrans.c_str(), m_shapePos, -5.0f, 5.0f);
-				ImGui::SliderFloat3(shaperot.c_str(), m_shapeAngle, 0.0f, 360.0f);
-
-				// Set new variables to object
-				m_guiData.centers[i].x = m_shapePos[0];
-				m_guiData.centers[i].y = m_shapePos[1];
-				m_guiData.centers[i].z = m_shapePos[2];
-				m_guiData.angles[i].x = m_shapeAngle[0];
-				m_guiData.angles[i].y = m_shapeAngle[1];
-				m_guiData.angles[i].z = m_shapeAngle[2];
-			}
-		}
-
-		void GUI::display_ManageObjectsMenu() {
 			if (m_canModifyObjects) {
-				addNewObjectToScene();
+				ImGui::MenuItem("Objects Menu", "");
 
-				ImGui::Separator();
+				for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
+					// Set current variables to sliders
+					m_shapePos[0] = m_guiData.centers[i].x;
+					m_shapePos[1] = m_guiData.centers[i].y;
+					m_shapePos[2] = m_guiData.centers[i].z;
+					m_shapeAngle[0] = m_guiData.angles[i].x;
+					m_shapeAngle[1] = m_guiData.angles[i].y;
+					m_shapeAngle[2] = m_guiData.angles[i].z;
 
-				deleteObjectFromScene();
+					// Prepare index on GUI
+					std::string shapeindex = global_mesh->getName(i) + " " + std::to_string(i);
+					std::string shapetrans = "Translate " + global_mesh->getName(i) + " " + std::to_string(i);
+					std::string shaperot = "Rotate " + global_mesh->getName(i) + " " + std::to_string(i);
 
+					ImGui::Text(shapeindex.c_str());
+					ImGui::SliderFloat3(shapetrans.c_str(), m_shapePos, -5.0f, 5.0f);
+					ImGui::SliderFloat3(shaperot.c_str(), m_shapeAngle, 0.0f, 360.0f);
+
+					// Set new variables to object
+					m_guiData.centers[i].x = m_shapePos[0];
+					m_guiData.centers[i].y = m_shapePos[1];
+					m_guiData.centers[i].z = m_shapePos[2];
+					m_guiData.angles[i].x = m_shapeAngle[0];
+					m_guiData.angles[i].y = m_shapeAngle[1];
+					m_guiData.angles[i].z = m_shapeAngle[2];
+				}
 			}
 			else {
 				ImGui::Text("You cannot modify objects!");
 			}
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Close")) {
+				m_displaySeperatelyShapes = false;
+			}
+
+			ImGui::End();
 		}
 
 		void GUI::addNewObjectToScene() {
-			ImGui::Text("Add Object");
-			ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
-			ImGui::InputFloat3("Input Center", m_inputCenter);
+			ImGui::Begin("AddShapeToSceneWindow");
 
-			if (m_inputCenter[0] > 10.0f || m_inputCenter[0] < -10.0f)
-				return;
-			else if (m_inputCenter[1] > 10.0f || m_inputCenter[1] < -10.0f)
-				return;
-			else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
-				return;
+			if (m_canModifyObjects) {
+				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
+				ImGui::InputFloat3("Input Center", m_inputCenter);
 
-			if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene - 1)
-				return;
+				if (m_inputCenter[0] > 10.0f || m_inputCenter[0] < -10.0f)
+					return;
+				else if (m_inputCenter[1] > 10.0f || m_inputCenter[1] < -10.0f)
+					return;
+				else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
+					return;
 
-			std::shared_ptr<graphics::Shape> new_shape;
-			bool buttonclicked = false;
+				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene - 1)
+					return;
 
-			if (ImGui::Button("Select Pyramid")) {
-				new_shape = graphics::MeshCreator::createPyramid();
-				buttonclicked = true;
+				std::shared_ptr<graphics::Shape> new_shape;
+				bool buttonclicked = false;
+
+				if (ImGui::Button("Select Pyramid")) {
+					new_shape = graphics::MeshCreator::createPyramid();
+					buttonclicked = true;
+				}
+
+				if (ImGui::Button("Select Cube")) {
+					new_shape = graphics::MeshCreator::createCube();
+					buttonclicked = true;
+				}
+
+				if (ImGui::Button("Select Surface")) {
+					new_shape = graphics::MeshCreator::createSurface();
+					buttonclicked = true;
+				}
+
+				if (ImGui::Button("Select Wall")) {
+					new_shape = graphics::MeshCreator::createWall();
+					buttonclicked = true;
+				}
+
+				if (buttonclicked) {
+					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					std::string texture = "empty";
+
+					global_mesh->submitShape(new_shape, center, angle, texture);
+					this->pushData(center, angle);
+				}
+			}
+			else {
+				ImGui::Text("You cannot modify objects!");
 			}
 
-			if (ImGui::Button("Select Cube")) {
-				new_shape = graphics::MeshCreator::createCube();
-				buttonclicked = true;
+			ImGui::Separator();
+
+			if (ImGui::Button("Close")) {
+				m_displayShapePush = false;
 			}
 
-			if (ImGui::Button("Select Surface")) {
-				new_shape = graphics::MeshCreator::createSurface();
-				buttonclicked = true;
-			}
-
-			if (ImGui::Button("Select Wall")) {
-				new_shape = graphics::MeshCreator::createWall();
-				buttonclicked = true;
-			}
-
-			if (buttonclicked) {
-				glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				std::string texture = "empty";
-				
-				global_mesh->submitShape(new_shape, center, angle, texture);
-				this->pushData(center, angle);
-			}
+			ImGui::End();
 		}
 
 		void GUI::deleteObjectFromScene() {
-			ImGui::MenuItem("Delete Object", "");
+			ImGui::Begin("DeleteObjectFromSceneWindow");
 
-			for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
-				std::string shapeDel = "Delete " + global_mesh->getName(i) + " " + std::to_string(i);
+			if (m_canModifyObjects) {
+				for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
+					std::string shapeDel = "Delete " + global_mesh->getName(i) + " " + std::to_string(i);
 
-				if (ImGui::Button(shapeDel.c_str())) {
-					//global_mesh->flushShape(i);
-					//this->popData(i);
+					if (ImGui::Button(shapeDel.c_str())) {
+						//global_mesh->flushShape(i);
+						//this->popData(i);
+					}
 				}
 			}
+			else {
+				ImGui::Text("You cannot modify objects!");
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Close")) {
+				m_displayShapePop = false;
+			}
+
+			ImGui::End();
 		}
 
 		void GUI::display_StatisticsMenu() {
+			ImGui::Begin("DisplayStatisticsMenuWindow");
+
 			if (m_canModifyObjects) {
 				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->_countOfShapes);
 				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->_countOfShapes);
@@ -238,6 +296,22 @@ namespace mar {
 			else {
 				ImGui::Text("You cannot modify objects!");
 			}
+
+			ImGui::Separator();
+
+			std::string fpsinfo = "FPS: " + std::to_string(ImGui::GetIO().Framerate);
+			std::string msframe = "ms/frame: " + std::to_string(1000.0f / ImGui::GetIO().Framerate);
+
+			ImGui::Text(fpsinfo.c_str());
+			ImGui::Text(msframe.c_str());
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Close")) {
+				m_displayStatistics = false;
+			}
+
+			ImGui::End();
 		}
 
 		void GUI::pushData(const glm::vec3& new_center, const glm::vec3& new_angle) {

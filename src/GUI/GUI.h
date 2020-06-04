@@ -46,6 +46,12 @@ namespace mar {
 			GUIData m_guiData;
 			bool m_canModifyObjects;
 
+			bool m_displayGeneralScene{ false };
+			bool m_displaySeperatelyShapes{ false };
+			bool m_displayShapePush{ false };
+			bool m_displayShapePop{ false };
+			bool m_displayStatistics{ false };
+
 		public:
 			GUI();
 
@@ -53,18 +59,15 @@ namespace mar {
 			void shutdown();
 			
 			void loadSceneParameters(graphics::Scene* scene);
-
 			
 			void prepareNewFrame();
 			void updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
 			void display();
 
 		private:
-			void display_GeneralMenu();
 			void eventOnScene();
 			void eventOnEachObjectSeperately();
 
-			void display_ManageObjectsMenu();
 			void addNewObjectToScene();
 			void deleteObjectFromScene();
 
