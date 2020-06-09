@@ -281,7 +281,7 @@ namespace mar {
 			ImGui::Begin("DisplayStatisticsMenuWindow");
 
 			if (m_canModifyObjects) {
-				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->_countOfShapes);
+				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->_countOfDrawCalls);
 				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->_countOfShapes);
 				std::string vertices = "Vertices: " + std::to_string(m_statistics->_countOfVertices);
 				std::string indices = "Indices: " + std::to_string(m_statistics->_countOfIndices);

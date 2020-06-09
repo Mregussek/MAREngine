@@ -40,6 +40,8 @@
 // --- Include other third-party libraries --- //
 #pragma warning( push )
 #pragma warning( disable : 26495) 
+#pragma warning( disable : 26812) 
+#pragma warning( disable : 26451) 
 #pragma warning( disable : 6385) 
 #pragma warning( disable : 6011) 
 #pragma warning( disable : 6262) 
@@ -48,11 +50,13 @@
 #pragma warning( disable : 4286) 
 #pragma warning( disable : 4099) 
 
-#include "../other/stb_image/stb_image.h"
-#include "SerialPort/SerialPort.h"
-#include "../other/imgui/imgui.h"
-#include "../other/imgui/imgui_impl_glfw.h"
-#include "../other/imgui/imgui_impl_opengl3.h"
+#include "stb_image/stb_image.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "SerialPort.hpp"
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 #pragma warning (pop)
 
