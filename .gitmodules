@@ -1,3 +1,6 @@
 [submodule "other/spdlog"]
 	path = other/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "other/serialport"]
+	path = other/serialport
+	url = https://github.com/Mregussek/SerialPort
