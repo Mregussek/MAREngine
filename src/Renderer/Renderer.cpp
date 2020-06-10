@@ -16,7 +16,6 @@ namespace mar {
 				m_vao = factory->createVertexArray();
 				m_ebo = factory->createElementBuffer();
 				m_mainShader = factory->createShader();
-				m_cubemapShader = factory->createShader();
 
 				m_stats = RendererStatistics();
 			}
@@ -28,7 +27,6 @@ namespace mar {
 		void Renderer::closeRenderer() {
 			if (m_initialized) {
 				m_mainShader->shutdown();
-				m_cubemapShader->shutdown();
 				m_vao->closeArrayBuffer();
 				m_vbo->close();
 				m_ebo->close();
@@ -46,8 +44,6 @@ namespace mar {
 					m_mainShader->initialize(ShaderType::DEFAULT);
 				else
 					m_mainShader->initialize(ShaderType::WITHOUT_GUI);
-
-				m_cubemapShader->initialize(ShaderType::CUBEMAP);
 
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
@@ -73,34 +69,66 @@ namespace mar {
 			m_vbo->updateDynamically(mesh->getVertices());
 			m_ebo->updateDynamically(mesh->getIndices());
 
-			m_stats._countOfVertices += mesh->getVerticesSize();
-			m_stats._countOfIndices += mesh->getIndicesSize();
-			m_stats._countOfShapes += mesh->getShapesCount();
+			m_stats.verticesCount += mesh->getVerticesSize();
+			m_stats.indicesCount += mesh->getIndicesSize();
+			m_stats.shapesCount += mesh->getShapesCount();
 
 			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
 
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
 
-			m_stats._countOfDrawCalls += 1;
-			m_stats._countOfTriangles = m_stats._countOfIndices / 3;
+			m_stats.drawCallsCount += 1;
+			m_stats.trianglesCount = m_stats.indicesCount / 3;
 		}
 
-		void Renderer::updateGUIData(Mesh* mesh, const gui::GUIData* guidata) {
+		void Renderer::draw(Mesh* mesh, const gui::GUIData* guidata, const CameraData* cameradata) {
+			bind();
+
+			updateMeshData(mesh);
+			updateCameraData(cameradata);
+			updateGUIData(guidata);
+			updateLightData(&mesh->getLight());
+
+			m_stats.resetStatistics();
+
+			mesh->clearBuffers();
+			mesh->update();
+
+			m_vbo->updateDynamically(mesh->getVertices());
+			m_ebo->updateDynamically(mesh->getIndices());
+
+			m_stats.verticesCount += mesh->getVerticesSize();
+			m_stats.indicesCount += mesh->getIndicesSize();
+			m_stats.shapesCount += mesh->getShapesCount();
+
+			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
+
+			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
+
+			m_stats.drawCallsCount += 1;
+			m_stats.trianglesCount = m_stats.indicesCount / 3;
+
+			unbind();
+		}
+
+		void Renderer::updateMeshData(Mesh* mesh) {
 			if (!m_useGUI) {
 				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 				m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
-				
+
 				return;
 			}
 
 			mesh->clearMatrices();
 
 			for (unsigned int i = 0; i < mesh->getShapesCount(); i++)
-				mesh->pushMatrices(guidata->centers[i], guidata->angles[i]);
+				mesh->pushMatrices(mesh->getCenter(i), mesh->getAngle(i));
 
-			m_mainShader->setUniformVectorMat4("u_GUISeperateTranslate", mesh->getTranslationMatrices());
-			m_mainShader->setUniformVectorMat4("u_GUISeperateRotation", mesh->getRotationMatrices());
+			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
+			m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
+		}
 
+		void Renderer::updateGUIData(const gui::GUIData* guidata) {
 			m_mainShader->setUniform4fv("u_GUISceneColor", guidata->colors);
 			m_mainShader->setUniformMat4f("u_GUISceneTranslation", guidata->translate);
 			m_mainShader->setUniformMat4f("u_GUISceneRotation", guidata->rotation);
@@ -114,30 +142,28 @@ namespace mar {
 			m_mainShader->setUniformVector3("u_CameraPos", cameradata->position);
 		}
 
-		void Renderer::updateLightData(Mesh* mesh) {
-			Light light = mesh->getLight();
-
-			light.setPosition({
+		void Renderer::updateLightData(Light* light) {
+			light->setPosition({
 				0.5f + 0.5f * sin(glfwGetTime()),
-				light.getPosition().y,
+				light->getPosition().y,
 				7.0f + 5.0f * cos(glfwGetTime())
 			});
 
-			m_mainShader->setUniformVector3("u_material.lightPos", light.getPosition());
+			m_mainShader->setUniformVector3("u_material.lightPos", light->getPosition());
 
-			m_mainShader->setUniformVector3("u_material.ambient", light.getAmbient());
-			m_mainShader->setUniformVector3("u_material.diffuse", light.getDiffuse());
-			m_mainShader->setUniformVector3("u_material.specular", light.getSpecular());
+			m_mainShader->setUniformVector3("u_material.ambient", light->getAmbient());
+			m_mainShader->setUniformVector3("u_material.diffuse", light->getDiffuse());
+			m_mainShader->setUniformVector3("u_material.specular", light->getSpecular());
 
-			m_mainShader->setUniformVector3("u_material.ambientStrength", light.getAmbientStrength());
-			m_mainShader->setUniformVector3("u_material.diffuseStrength", light.geDiffuseStrength());
-			m_mainShader->setUniformVector3("u_material.specularStrength", light.geSpecularStrength());
+			m_mainShader->setUniformVector3("u_material.ambientStrength", light->getAmbientStrength());
+			m_mainShader->setUniformVector3("u_material.diffuseStrength", light->geDiffuseStrength());
+			m_mainShader->setUniformVector3("u_material.specularStrength", light->geSpecularStrength());
 
-			m_mainShader->setUniform1f("u_material.shininess", light.getShininess());
+			m_mainShader->setUniform1f("u_material.shininess", light->getShininess());
 
-			m_mainShader->setUniform1f("u_material.constant", light.getConstant());
-			m_mainShader->setUniform1f("u_material.linear", light.getLinear());
-			m_mainShader->setUniform1f("u_material.quadratic", light.getQuadratic());
+			m_mainShader->setUniform1f("u_material.constant", light->getConstant());
+			m_mainShader->setUniform1f("u_material.linear", light->getLinear());
+			m_mainShader->setUniform1f("u_material.quadratic", light->getQuadratic());
 		}
 
 		void Renderer::bind() {

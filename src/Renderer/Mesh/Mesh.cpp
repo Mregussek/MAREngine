@@ -22,7 +22,7 @@ namespace mar {
 			m_translationMats = std::vector<glm::mat4>();
 			m_rotationMats = std::vector<glm::mat4>();
 
-			_light = Light();
+			m_light = Light();
 
 			m_indicesMaxValue = 0;
 			m_availableShapeID = 0.0f;
@@ -42,6 +42,9 @@ namespace mar {
 				return;
 			}
 			
+			new_shape->setCenter(center);
+			new_shape->setAngle(angle);
+
 			pushTexture(new_shape, texture);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
@@ -64,9 +67,9 @@ namespace mar {
 			else {
 				new_shape->setTextureID(0.f);
 
-				m_texture->addID(0);
+				m_samplers.push_back(0.f);
 
-				m_samplers.push_back(0);
+				m_texture->addID(0.f);
 			}
 		}
 
@@ -77,8 +80,6 @@ namespace mar {
 			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
 
 			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
-
-			m_names.push_back(new_shape->getName());
 
 			m_shapes.push_back(new_shape);
 		}

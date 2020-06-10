@@ -75,10 +75,10 @@ namespace mar {
 			virtual void setTextureID(float newID);
 			virtual const float getTextureID() const;
 
-			virtual const glm::vec3 getCenter() const;
+			virtual glm::vec3& getCenter();
 			virtual void setCenter(const glm::vec3& new_center);
 
-			virtual const glm::vec3 getAngle() const;
+			virtual glm::vec3& getAngle();
 			virtual void setAngle(const glm::vec3& new_angle);
 
 			virtual const unsigned int getStride();

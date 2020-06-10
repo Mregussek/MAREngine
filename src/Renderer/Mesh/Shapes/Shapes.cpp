@@ -29,7 +29,7 @@ namespace mar {
 			return textureId;
 		}
 
-		const glm::vec3 Shape::getCenter() const {
+		glm::vec3& Shape::getCenter() {
 			return center;
 		}
 
@@ -37,12 +37,12 @@ namespace mar {
 			center = new_center;
 		}
 
-		const glm::vec3 Shape::getAngle() const {
+		glm::vec3& Shape::getAngle() {
 			return angle;
 		}
 
 		void Shape::setAngle(const glm::vec3& new_angle) {
-			center = new_angle;
+			angle = new_angle;
 		}
 
 		const unsigned int Shape::getStride() {

@@ -19,32 +19,32 @@ namespace mar {
 
 		namespace constants {
 			const size_t maxCount = 1000;
-			const size_t maxVertexCount = maxCount * 10 * sizeof(Vertex);
+			const size_t maxVertexCount = maxCount * sizeof(Vertex);
 			const size_t maxIndexCount = maxCount * 5;
 			const size_t maxObjectsInScene = 32;
 		}
 
 		struct RendererStatistics {
-			unsigned int _countOfDrawCalls;
-			unsigned int _countOfVertices;
-			unsigned int _countOfIndices;
-			unsigned int _countOfShapes;
-			unsigned int _countOfTriangles;
+			unsigned int drawCallsCount;
+			unsigned int verticesCount;
+			unsigned int indicesCount;
+			unsigned int shapesCount;
+			unsigned int trianglesCount;
 
 			RendererStatistics()
-				:_countOfDrawCalls(0),
-				_countOfVertices(0),
-				_countOfIndices(0),
-				_countOfShapes(0),
-				_countOfTriangles(0)
+				:drawCallsCount(0),
+				verticesCount(0),
+				indicesCount(0),
+				shapesCount(0),
+				trianglesCount(0)
 			{}
 
 			void resetStatistics() {
-				_countOfDrawCalls = 0;
-				_countOfIndices = 0;
-				_countOfShapes = 0;
-				_countOfVertices = 0;
-				_countOfTriangles = 0;
+				drawCallsCount = 0;
+				indicesCount = 0;
+				shapesCount = 0;
+				verticesCount = 0;
+				trianglesCount = 0;
 			}
 		};
 
@@ -55,7 +55,6 @@ namespace mar {
 			Ref<VertexArray> m_vao;
 			Ref<ElementBuffer> m_ebo;
 			Ref<Shader> m_mainShader;
-			Ref<Shader> m_cubemapShader;
 
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;		// check, if renderer is initialized
@@ -72,9 +71,12 @@ namespace mar {
 
 			void draw(Mesh* mesh);
 
-			void updateGUIData(Mesh* mesh, const gui::GUIData* guidata);
+			void draw(Mesh* mesh, const gui::GUIData* guidata, const CameraData* cameradata);
+
+			void updateMeshData(Mesh* mesh);
+			void updateGUIData(const gui::GUIData* guidata);
 			void updateCameraData(const CameraData* cameradata);
-			void updateLightData(Mesh* mesh);
+			void updateLightData(Light* light);
 
 			void bind();
 			void unbind();

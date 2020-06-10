@@ -24,14 +24,13 @@ namespace mar {
 			Ref<Texture> m_texture;
 
 			std::vector<Ref<Shape>> m_shapes;
-			std::vector<std::string> m_names;
 			std::vector<float> m_vertices;
 			std::vector<unsigned int> m_indices;
 			std::vector<int> m_samplers;
 			std::vector<glm::mat4> m_translationMats;
 			std::vector<glm::mat4> m_rotationMats;
 
-			Light _light;
+			Light m_light;
 
 			float m_availableShapeID;
 			float m_availableTextureID;
@@ -61,8 +60,7 @@ namespace mar {
 
 			/// --- GET METHODS --- ///
 			const unsigned int& getShapesCount() const { return m_shapes.size(); }
-			const std::vector<std::string>& getNames() const { return m_names; }
-			const std::string& getName(const unsigned int& index) const { return m_names[index]; }
+			const std::string& getName(const unsigned int& index) const { return m_shapes[index]->getName(); }
 
 			const std::vector<float>& getVertices() const { return m_vertices; }
 			const unsigned int& getVerticesSize() const { return m_vertices.size(); }
@@ -76,11 +74,18 @@ namespace mar {
 			const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
 			const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
 			
-			const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector();}
+			const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector(); }
 			const unsigned int& getLayout(const unsigned int& index) const { return m_shapes[0]->getLayout(index); }
 			const unsigned int& getLayoutSize() const { return m_shapes[0]->getLayoutSize(); }
 
-			const Light& getLight() const { return _light; }
+			Light& getLight() { return m_light; }
+
+			glm::vec3& getCenter(const unsigned int& index) { return m_shapes[index]->getCenter(); }
+			glm::vec3& getAngle(const unsigned int& index) { return m_shapes[index]->getAngle(); }
+
+			// --- SET METHODS --- //
+			void setCenter(const unsigned int& index, const glm::vec3& new_center) { m_shapes[index]->setCenter(new_center); }
+			void setAngle(const unsigned int& index, const glm::vec3& new_angle) { m_shapes[index]->setAngle(new_angle); }
 		};
 
 

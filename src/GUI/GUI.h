@@ -24,8 +24,6 @@ namespace mar {
 			float colors[4];
 			glm::mat4 rotation;
 			glm::mat4 translate;
-			std::vector<glm::vec3> centers;
-			std::vector<glm::vec3> angles;
 
 			GUIData() = default;
 		};
@@ -58,8 +56,6 @@ namespace mar {
 			void initialize(window::Window* window, const char* glsl_version, bool can_modify_objects);
 			void shutdown();
 			
-			void loadSceneParameters(graphics::Scene* scene);
-			
 			void prepareNewFrame();
 			void updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
 			void display();
@@ -72,9 +68,6 @@ namespace mar {
 			void deleteObjectFromScene();
 
 			void display_StatisticsMenu();
-
-			void pushData(const glm::vec3& new_center, const glm::vec3& new_angle);
-			void popData(const unsigned int& index);
 
 		public:
 			const glm::mat4 getTranslationMatrix() const;

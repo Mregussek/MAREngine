@@ -24,7 +24,6 @@ namespace mar {
 
 			m_scene.initializeScene(graphics::SceneType::WITH_COLOURED_ELEMS);
 			m_mesh.loadScene(&m_scene);
-			m_gui.loadSceneParameters(&m_scene);
 
 			m_renderer.initialize(m_mesh.getLayout(), usegui);
 		}
@@ -35,15 +34,7 @@ namespace mar {
 				m_camera.updateData();
 				m_gui.prepareNewFrame();
 
-				m_renderer.bind();
-
-				m_renderer.updateGUIData(&m_mesh, &m_gui.getGUIData());
-				m_renderer.updateCameraData(&m_camera.getCameraData());
-				m_renderer.updateLightData(&m_mesh);
-
-				m_renderer.draw(&m_mesh);
-
-				m_renderer.unbind();
+				m_renderer.draw(&m_mesh, &m_gui.getGUIData(), &m_camera.getCameraData());
 
 				m_gui.updateSceneInfo(&m_mesh, &m_renderer.getStatistics());
 				m_gui.display();

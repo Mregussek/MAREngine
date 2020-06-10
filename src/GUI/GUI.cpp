@@ -33,12 +33,6 @@ namespace mar {
 			ImGui::DestroyContext();
 		}
 
-		void GUI::loadSceneParameters(graphics::Scene* scene) {
-			for (unsigned int i = 0; i < scene->getShapesNumber(); i++) {
-				pushData(scene->getCenter(i), scene->getAngle(i));
-			}
-		}
-
 		void GUI::prepareNewFrame() {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -149,31 +143,14 @@ namespace mar {
 			if (m_canModifyObjects) {
 				ImGui::MenuItem("Objects Menu", "");
 
-				for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
-					// Set current variables to sliders
-					m_shapePos[0] = m_guiData.centers[i].x;
-					m_shapePos[1] = m_guiData.centers[i].y;
-					m_shapePos[2] = m_guiData.centers[i].z;
-					m_shapeAngle[0] = m_guiData.angles[i].x;
-					m_shapeAngle[1] = m_guiData.angles[i].y;
-					m_shapeAngle[2] = m_guiData.angles[i].z;
-
-					// Prepare index on GUI
+				for (unsigned int i = 0; i < global_mesh->getShapesCount(); i++) {
 					std::string shapeindex = global_mesh->getName(i) + " " + std::to_string(i);
 					std::string shapetrans = "Translate " + global_mesh->getName(i) + " " + std::to_string(i);
 					std::string shaperot = "Rotate " + global_mesh->getName(i) + " " + std::to_string(i);
 
 					ImGui::Text(shapeindex.c_str());
-					ImGui::SliderFloat3(shapetrans.c_str(), m_shapePos, -5.0f, 5.0f);
-					ImGui::SliderFloat3(shaperot.c_str(), m_shapeAngle, 0.0f, 360.0f);
-
-					// Set new variables to object
-					m_guiData.centers[i].x = m_shapePos[0];
-					m_guiData.centers[i].y = m_shapePos[1];
-					m_guiData.centers[i].z = m_shapePos[2];
-					m_guiData.angles[i].x = m_shapeAngle[0];
-					m_guiData.angles[i].y = m_shapeAngle[1];
-					m_guiData.angles[i].z = m_shapeAngle[2];
+					ImGui::SliderFloat3(shapetrans.c_str(), &global_mesh->getCenter(i).x, -5.0f, 5.0f, "%.3f", 0.5f);
+					ImGui::SliderFloat3(shaperot.c_str(), &global_mesh->getAngle(i).x, 0.0f, 360.0f, "%.3f", 0.5f);
 				}
 			}
 			else {
@@ -203,7 +180,7 @@ namespace mar {
 				else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
 					return;
 
-				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene - 1)
+				if (global_mesh->getShapesCount() == graphics::constants::maxObjectsInScene - 1)
 					return;
 
 				Ref<graphics::Shape> new_shape;
@@ -235,7 +212,6 @@ namespace mar {
 					std::string texture = "empty";
 
 					global_mesh->submitShape(new_shape, center, angle, texture);
-					this->pushData(center, angle);
 				}
 			}
 			else {
@@ -255,7 +231,7 @@ namespace mar {
 			ImGui::Begin("DeleteObjectFromSceneWindow");
 
 			if (m_canModifyObjects) {
-				for (unsigned int i = 0; i < m_guiData.centers.size(); i++) {
+				for (unsigned int i = 0; i < global_mesh->getShapesCount(); i++) {
 					std::string shapeDel = "Delete " + global_mesh->getName(i) + " " + std::to_string(i);
 
 					if (ImGui::Button(shapeDel.c_str())) {
@@ -281,11 +257,11 @@ namespace mar {
 			ImGui::Begin("DisplayStatisticsMenuWindow");
 
 			if (m_canModifyObjects) {
-				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->_countOfDrawCalls);
-				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->_countOfShapes);
-				std::string vertices = "Vertices: " + std::to_string(m_statistics->_countOfVertices);
-				std::string indices = "Indices: " + std::to_string(m_statistics->_countOfIndices);
-				std::string triangles = "Triangles: " + std::to_string(m_statistics->_countOfTriangles);
+				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->drawCallsCount);
+				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->shapesCount);
+				std::string vertices = "Vertices: " + std::to_string(m_statistics->verticesCount);
+				std::string indices = "Indices: " + std::to_string(m_statistics->indicesCount);
+				std::string triangles = "Triangles: " + std::to_string(m_statistics->trianglesCount);
 
 				ImGui::Text(drawcalls.c_str());
 				ImGui::Text(shapescount.c_str());
@@ -312,16 +288,6 @@ namespace mar {
 			}
 
 			ImGui::End();
-		}
-
-		void GUI::pushData(const glm::vec3& new_center, const glm::vec3& new_angle) {
-			m_guiData.centers.push_back(new_center);
-			m_guiData.angles.push_back(new_angle);
-		}
-
-		void GUI::popData(const unsigned int& index) {
-			m_guiData.centers.erase(m_guiData.centers.begin() + index);
-			m_guiData.angles.erase(m_guiData.angles.begin() + index);
 		}
 
 		const glm::mat4 GUI::getTranslationMatrix() const {
