@@ -9,7 +9,7 @@ namespace mar {
     namespace graphics {
 
 
-		void ShapeManipulator::extendShapeID(std::shared_ptr<Shape>& shape, const float& nextID) {
+		void ShapeManipulator::extendShapeID(Ref<Shape>& shape, const float& nextID) {
 			if (nextID == 0.0f) return;
 
 			unsigned int size = shape->getSizeofVertices();
@@ -22,7 +22,7 @@ namespace mar {
 			shape->setID(nextID);
 		}
 
-		void ShapeManipulator::extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID) {
+		void ShapeManipulator::extendTextureID(Ref<Shape>& shape, const float& nextID) {
 			if (nextID == 0.0f) {
 				shape->setTextureID(nextID);
 				return;
@@ -38,7 +38,7 @@ namespace mar {
 			shape->setTextureID(nextID);
 		}
 
-		void ShapeManipulator::changeIndicesFormat(std::shared_ptr<Shape>& shape, int& max_value) {
+		void ShapeManipulator::changeIndicesFormat(Ref<Shape>& shape, int& max_value) {
 			if (max_value == 0) return;
 
 			std::vector<unsigned int> new_indices = changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->getIndicesVector());

@@ -22,19 +22,19 @@ namespace mar {
 
         class MeshCreator {
         public:
-            static std::shared_ptr<Shape> createCube() {
+            static Ref<Shape> createCube() {
                 return std::make_shared<Cube>();
             }
 
-            static std::shared_ptr<Shape> createWall() {
+            static Ref<Shape> createWall() {
                 return std::make_shared<Wall>();
             }
 
-            static std::shared_ptr<Shape> createSurface() {
+            static Ref<Shape> createSurface() {
                 return std::make_shared<Surface>();
             }
 
-            static std::shared_ptr<Shape> createPyramid() {
+            static Ref<Shape> createPyramid() {
                 return std::make_shared<Pyramid>();
             }
 

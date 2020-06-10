@@ -206,7 +206,7 @@ namespace mar {
 				if (m_guiData.centers.size() == graphics::constants::maxObjectsInScene - 1)
 					return;
 
-				std::shared_ptr<graphics::Shape> new_shape;
+				Ref<graphics::Shape> new_shape;
 				bool buttonclicked = false;
 
 				if (ImGui::Button("Select Pyramid")) {

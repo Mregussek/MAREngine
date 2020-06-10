@@ -37,7 +37,7 @@ namespace mar {
 			/*
 				\param layout - specifies, how data should be formatted
 			*/
-			void addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) override;
+			void addBuffer(const Ref<VertexBufferLayout>& layout) override;
 
 			//! Binds class _id member to target, which is VAO
 			void bind() const override;

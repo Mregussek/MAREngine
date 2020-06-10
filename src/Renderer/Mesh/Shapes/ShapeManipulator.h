@@ -30,7 +30,7 @@ namespace mar {
                 \param shape - pointer to shape, which id must be changed
                 \param nextID - id value for shape
             */
-            static void extendShapeID(std::shared_ptr<Shape>& shape, const float& nextID);
+            static void extendShapeID(Ref<Shape>& shape, const float& nextID);
 
             //! Method changes the Texture ID value in verticesVector of any shape. It works every time, when ID
             //! is on the next to last position of data. 
@@ -38,14 +38,14 @@ namespace mar {
                 \param shape - pointer to shape, which id must be changed
                 \param nextID - id value for shape
             */
-            static void extendTextureID(std::shared_ptr<Shape>& shape, const float& nextID);
+            static void extendTextureID(Ref<Shape>& shape, const float& nextID);
 
             //! Method is just easier implementation of extending indices method. For more information check the method below.
             /*!
                 \param shape - pointer to shape
                 \param max_value - max value of indices in current indices vector of renderer
             */
-            static void changeIndicesFormat(std::shared_ptr<Shape>& shape, int& max_value);
+            static void changeIndicesFormat(Ref<Shape>& shape, int& max_value);
 
             //! If we want batch rendering, we need to change indices values for every shape. Default ones begin with 0.
             //! There is need to change begin value to new, in case of proper work of batch renderer.

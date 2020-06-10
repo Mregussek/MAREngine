@@ -40,27 +40,27 @@ namespace mar {
 		class RendererFactory {
 		public:
 			// This values should never be returned, cause we have derived factories
-			virtual std::shared_ptr<ElementBuffer> createElementBuffer()
+			virtual Ref<ElementBuffer> createElementBuffer()
 			{
 				return nullptr;
 			}
-			virtual std::shared_ptr<VertexBuffer> createVertexBuffer()
+			virtual Ref<VertexBuffer> createVertexBuffer()
 			{
 				return nullptr;
 			}
-			virtual std::shared_ptr<VertexBufferLayout> createVertexBufferLayout()
+			virtual Ref<VertexBufferLayout> createVertexBufferLayout()
 			{
 				return nullptr;
 			}
-			virtual std::shared_ptr<VertexArray> createVertexArray()
+			virtual Ref<VertexArray> createVertexArray()
 			{
 				return nullptr;
 			}
-			virtual std::shared_ptr<Texture> createTexture()
+			virtual Ref<Texture> createTexture()
 			{
 				return nullptr;
 			}
-			virtual std::shared_ptr<Shader> createShader()
+			virtual Ref<Shader> createShader()
 			{
 				return nullptr;
 			}

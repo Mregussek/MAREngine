@@ -9,7 +9,7 @@ namespace mar {
 	namespace graphics {
 
 
-		void Renderer::createRenderer(const std::shared_ptr<RendererFactory>& factory) {
+		void Renderer::createRenderer(const Ref<RendererFactory>& factory) {
 			if (!m_initialized) {
 				m_vbo = factory->createVertexBuffer();
 				m_layout = factory->createVertexBufferLayout();

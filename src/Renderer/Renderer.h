@@ -50,12 +50,12 @@ namespace mar {
 
 		class Renderer {
 			// --- Buffers
-			std::shared_ptr<VertexBuffer> m_vbo;
-			std::shared_ptr<VertexBufferLayout> m_layout;
-			std::shared_ptr<VertexArray> m_vao;
-			std::shared_ptr<ElementBuffer> m_ebo;
-			std::shared_ptr<Shader> m_mainShader;
-			std::shared_ptr<Shader> m_cubemapShader;
+			Ref<VertexBuffer> m_vbo;
+			Ref<VertexBufferLayout> m_layout;
+			Ref<VertexArray> m_vao;
+			Ref<ElementBuffer> m_ebo;
+			Ref<Shader> m_mainShader;
+			Ref<Shader> m_cubemapShader;
 
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;		// check, if renderer is initialized
@@ -65,7 +65,7 @@ namespace mar {
 		public:
 			Renderer() = default;
 
-			void createRenderer(const std::shared_ptr<RendererFactory>& factory);
+			void createRenderer(const Ref<RendererFactory>& factory);
 			void closeRenderer();
 
 			void initialize(const std::vector<unsigned int>& layout, const bool& useGUI);

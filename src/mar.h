@@ -7,14 +7,16 @@
  *	something will be here. Also it defines 'mar' namespace with all its classes.
  */
 
-// --- DECISIONS FOR USER {
+// --- DECISIONS FOR USER 
+// {
+//
 // --- Tell the compiler, if you imported repository from github
-// --- Leave it in comment, if you have the same setup as MR */
+// --- Leave it in comment, if you have the same setup as MR 
 //#define IMPORTED_FROM_GITHUB
-
+//
 // Decide whether you want import GLEW or GLAD (comment to use GLAD)
 #define IMPORT_GLEW
-
+//
 // }
 
 
@@ -69,18 +71,24 @@
 #include <vector> 
 #include <unordered_map>
 #include <tuple>
-#include <algorithm> // std::find, std::copy, std::max_element
+#include <algorithm> // std::find, std::copy
 // multi-threading
 #include <thread> 
 #include <mutex>
 
-//! mar
+
 /*!
 	mar is a main namespace for MAREngine. Below you can find all classes,
 	which are written for proper work of MAREngine. The most needed class is Window,
 	cause it initializes OpenGL stuff. 
 */
 namespace mar {
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
 	namespace window {
 		class Window;
 	}

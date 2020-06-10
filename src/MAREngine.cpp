@@ -11,6 +11,8 @@ namespace mar {
 
 
 		void MAREngine::initialize() {
+			MAR_LOG_INIT();
+
 			bool usegui = true;
 			auto factory = std::make_shared<graphics::RendererOpenGLFactory>();
 

@@ -6,6 +6,7 @@
 #ifndef MAR_ENGINE_MAIN_H
 #define MAR_ENGINE_MAIN_H
 
+#include "Debug/Log.h"
 // Rendering
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera/Camera.h"

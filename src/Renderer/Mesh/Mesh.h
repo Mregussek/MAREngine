@@ -21,9 +21,9 @@ namespace mar {
 
 
 		class Mesh {
-			std::shared_ptr<Texture> m_texture;
+			Ref<Texture> m_texture;
 
-			std::vector<std::shared_ptr<Shape>> m_shapes;
+			std::vector<Ref<Shape>> m_shapes;
 			std::vector<std::string> m_names;
 			std::vector<float> m_vertices;
 			std::vector<unsigned int> m_indices;
@@ -41,10 +41,10 @@ namespace mar {
 			Mesh() = default;
 			virtual ~Mesh();
 
-			void createMesh(const std::shared_ptr<RendererFactory>& factory);
+			void createMesh(const Ref<RendererFactory>& factory);
 			void loadScene(Scene* scene);
 
-			void submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
+			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
 			void flushShape(const unsigned int& index);
 
 			void clearBuffers();
@@ -53,11 +53,11 @@ namespace mar {
 			void update();
 
 		public:
-			void pushShape(std::shared_ptr<Shape>& new_shape);
+			void pushShape(Ref<Shape>& new_shape);
 			void popShape(const unsigned int& index);
 
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
-			void pushTexture(std::shared_ptr<Shape>& new_shape, const std::string& texture);
+			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
 
 			/// --- GET METHODS --- ///
 			const unsigned int& getShapesCount() const { return m_shapes.size(); }

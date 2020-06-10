@@ -14,27 +14,27 @@ namespace mar {
 
 		class RendererOpenGLFactory : public RendererFactory {
 		public:
-			virtual std::shared_ptr<ElementBuffer> createElementBuffer() override {
+			virtual Ref<ElementBuffer> createElementBuffer() override {
 				return std::make_shared<ElementBufferOpenGL>();
 			}
 
-			virtual std::shared_ptr<VertexBuffer> createVertexBuffer() override {
+			virtual Ref<VertexBuffer> createVertexBuffer() override {
 				return std::make_shared<VertexBufferOpenGL>();
 			}
 
-			virtual std::shared_ptr<VertexBufferLayout> createVertexBufferLayout() override {
+			virtual Ref<VertexBufferLayout> createVertexBufferLayout() override {
 				return std::make_shared<VertexBufferLayoutOpenGL>();
 			}
 
-			virtual std::shared_ptr<VertexArray> createVertexArray() override {
+			virtual Ref<VertexArray> createVertexArray() override {
 				return std::make_shared<VertexArrayOpenGL>();
 			}
 
-			virtual std::shared_ptr<Texture> createTexture() override {
+			virtual Ref<Texture> createTexture() override {
 				return std::make_shared<TextureOpenGL>();
 			}
 
-			virtual std::shared_ptr<Shader> createShader() override {
+			virtual Ref<Shader> createShader() override {
 				return std::make_shared<ShaderOpenGL>();
 			}
 		};

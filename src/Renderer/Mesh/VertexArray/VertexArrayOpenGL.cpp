@@ -18,7 +18,7 @@ namespace mar {
 			glDeleteVertexArrays(1, &_rendererId);
 		}
 
-		void VertexArrayOpenGL::addBuffer(const std::shared_ptr<VertexBufferLayout>& layout) {
+		void VertexArrayOpenGL::addBuffer(const Ref<VertexBufferLayout>& layout) {
 			const auto& elements = layout->getElements();
 			unsigned int offset = 0;
 

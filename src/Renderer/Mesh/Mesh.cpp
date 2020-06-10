@@ -12,10 +12,10 @@ namespace mar {
 			m_texture->shutdown();
 		}
 
-		void Mesh::createMesh(const std::shared_ptr<RendererFactory>& factory) {
+		void Mesh::createMesh(const Ref<RendererFactory>& factory) {
 			m_texture = factory->createTexture();
 
-			m_shapes = std::vector<std::shared_ptr<Shape>>();
+			m_shapes = std::vector<Ref<Shape>>();
 			m_vertices = std::vector<float>();
 			m_indices = std::vector<unsigned int>();
 			m_samplers = std::vector<int>();
@@ -36,7 +36,7 @@ namespace mar {
 				submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
 		}
 
-		void Mesh::submitShape(std::shared_ptr<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
+		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
 			if (m_shapes.size() == constants::maxObjectsInScene - 1) {
 				std::cout << "Cannot push more objects!" << std::endl;
 				return;
@@ -51,7 +51,7 @@ namespace mar {
 			popShape(index);
 		}
 
-		void Mesh::pushTexture(std::shared_ptr<Shape>& new_shape, const std::string& texture) {
+		void Mesh::pushTexture(Ref<Shape>& new_shape, const std::string& texture) {
 			if (texture != "empty") {
 				ShapeManipulator::extendTextureID(new_shape, m_availableTextureID);
 
@@ -70,7 +70,7 @@ namespace mar {
 			}
 		}
 
-		void Mesh::pushShape(std::shared_ptr<Shape>& new_shape) {
+		void Mesh::pushShape(Ref<Shape>& new_shape) {
 			ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 			m_availableShapeID++;
 

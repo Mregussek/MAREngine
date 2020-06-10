@@ -17,7 +17,7 @@ namespace mar {
 			Vertex is a structure, which holds all the information about format of data.
 			For VBO!
 			Now it is not implemented, but in future (with .obj files loading) there is going
-			to be need for some refactoring.
+			to be need for some Refactoring.
 		*/
 		struct Vertex {
 			float position[3];
@@ -53,7 +53,7 @@ namespace mar {
 				_stride(0)
 			{}
 
-			Shape(const std::shared_ptr<Shape>& shape)
+			Shape(const Ref<Shape>& shape)
 				: id(shape->getID()),
 				name(shape->getName()),
 				center(shape->getCenter()),
