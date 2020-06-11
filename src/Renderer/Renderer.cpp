@@ -11,7 +11,7 @@ namespace mar {
 
 		RendererStatistics Renderer::s_stats;
 
-		void Renderer::createRenderer(RendererFactory* factory, const RendererType type) {
+		void Renderer::createRenderer(const Ref<RendererFactory>& factory, const RendererType type) {
 			if (!m_initialized) {
 				m_vbo = factory->createVertexBuffer();
 				m_layout = factory->createVertexBufferLayout();
@@ -97,10 +97,6 @@ namespace mar {
 
 			m_guiData = guidata;
 			m_cameraData = cameradata;
-		}
-
-		void Renderer::startDraw() {
-			s_stats.resetStatistics();
 		}
 
 		void Renderer::draw(Mesh* mesh) {

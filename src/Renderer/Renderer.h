@@ -73,13 +73,11 @@ namespace mar {
 		public:
 			Renderer() = default;
 
-			void createRenderer(RendererFactory* factory, const RendererType type);
+			void createRenderer(const Ref<RendererFactory>& factory, const RendererType type);
 			void closeRenderer();
 
 			void initialize(const std::vector<unsigned int>& layout);
 			void setReferences(const gui::GUIData* guidata, const CameraData* cameradata);
-
-			static void startDraw();
 
 			void draw(Mesh* mesh);
 

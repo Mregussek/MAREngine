@@ -26,7 +26,7 @@ namespace mar {
 			m_shapes.clear();
 		}
 
-		void Mesh::createMesh(RendererFactory* factory) {
+		void Mesh::createMesh(const Ref<RendererFactory>& factory) {
 			m_texture = factory->createTexture();
 
 			m_shapes = std::vector<Ref<Shape>>();

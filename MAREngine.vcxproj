@@ -152,6 +152,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layers\Layer.h" />
+    <ClInclude Include="src\Layers\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Renderer\Camera\buttons_def.h" />
     <ClInclude Include="src\Renderer\Mesh\Light\Light.h" />
@@ -205,6 +207,8 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Layers\Layer.cpp" />
+    <ClCompile Include="src\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Light\Light.cpp" />
     <ClCompile Include="MAR_3rd_party\MARMaths\src\mat\mat4.cpp" />

@@ -137,6 +137,11 @@ namespace mar {
 		class Shader;
 		class ShaderOpenGL;
 	}
+
+	namespace layers {
+		class Layer;
+		class LayerStack;
+	}
 	
 	// and of course callbacks namespace in Window.h
 	namespace engine {

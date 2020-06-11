@@ -7,6 +7,9 @@
 #define MAR_ENGINE_MAIN_H
 
 #include "Debug/Log.h"
+// Layers
+#include "Layers/LayerStack.h"
+#include "Layers/Layer.h"
 // Rendering
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera/Camera.h"
@@ -34,10 +37,7 @@ namespace mar {
 			window::Window m_window;
 			gui::GUI m_gui;
 			graphics::Camera m_camera;
-			graphics::Renderer m_renderer;
-			graphics::Mesh m_mesh;
-			graphics::Renderer m_cubemapRenderer;
-			graphics::Mesh m_cubemapMesh;
+			layers::LayerStack m_stack;
 
 		public:
 			MAREngine() = default;
