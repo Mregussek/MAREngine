@@ -54,7 +54,6 @@ namespace mar {
 
 		void Renderer::initialize(const std::vector<unsigned int>& layout) {
 			if (!m_initialized) {
-
 				switch (m_type) {
 				case RendererType::DEFAULT:
 					m_mainShader->initialize(ShaderType::DEFAULT);

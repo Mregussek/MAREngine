@@ -320,6 +320,12 @@
     <Image Include="resources\textures\mc\mc-cobble.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="resources\textures\mc\dirt.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\mc\mc-grass-up.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

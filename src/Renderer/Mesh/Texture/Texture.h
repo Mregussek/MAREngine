@@ -34,8 +34,8 @@ namespace mar {
 			const std::vector<std::string> mc_grass_faces{
 				 "resources/textures/mc/mc-grass.jpg"
 				 ,  "resources/textures/mc/mc-grass.jpg"
-				 ,  "resources/textures/mc/mc-grass.jpg"
-				 ,  "resources/textures/mc/mc-grass.jpg"
+				 ,  "resources/textures/mc/mc-grass-up.jpg"
+				 ,  "resources/textures/mc/dirt.jpg"
 				 ,  "resources/textures/mc/mc-grass.jpg"
 				 ,  "resources/textures/mc/mc-grass.jpg"
 			};
@@ -70,8 +70,8 @@ namespace mar {
 			const std::vector<std::string> mc_grass_faces{
 				 "../../../resources/textures/mc/mc-grass.jpg"
 				 ,  "../../../resources/textures/mc/mc-grass.jpg"
-				 ,  "../../../resources/textures/mc/mc-grass.jpg"
-				 ,  "../../../resources/textures/mc/mc-grass.jpg"
+				 ,  "../../../resources/textures/mc/mc-grass-up.jpg"
+				 ,  "../../../resources/textures/mc/dirt.jpg"
 				 ,  "../../../resources/textures/mc/mc-grass.jpg"
 				 ,  "../../../resources/textures/mc/mc-grass.jpg"
 		};

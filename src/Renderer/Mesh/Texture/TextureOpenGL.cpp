@@ -68,6 +68,7 @@ namespace mar {
 
 			glGenTextures(1, &id);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+			stbi_set_flip_vertically_on_load(false);
 
 			for (unsigned int i = 0; i < faces.size(); i++) {
 
