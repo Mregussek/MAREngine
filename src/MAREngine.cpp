@@ -21,21 +21,21 @@ namespace mar {
 			MAR_LOG_INIT();
 
 			bool usegui = true;
-			auto factory = std::make_shared<graphics::RendererOpenGLFactory>();
+			graphics::RendererFactory factory = graphics::RendererOpenGLFactory();
 
 			m_camera.initialize(MAREngineSettings::width, MAREngineSettings::height);
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
 			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, usegui);
 
-			m_renderer.createRenderer(factory, graphics::RendererType::DEFAULT);
-			m_mesh.createMesh(factory);
+			m_renderer.createRenderer(&factory, graphics::RendererType::DEFAULT);
+			m_mesh.createMesh(&factory);
 
 			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS), graphics::MeshTextures::TEXTURES);
 			m_renderer.initialize(m_mesh.getLayout());
 			m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 
-			m_cubemapRenderer.createRenderer(factory, graphics::RendererType::CUBEMAP);
-			m_cubemapMesh.createMesh(factory);
+			m_cubemapRenderer.createRenderer(&factory, graphics::RendererType::CUBEMAP);
+			m_cubemapMesh.createMesh(&factory);
 
 			m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
 			m_cubemapRenderer.initialize(m_cubemapMesh.getLayout());
@@ -46,6 +46,8 @@ namespace mar {
 			while (m_window.shouldClose()) {
 				m_camera.processInput(m_window.getWindow());
 				m_camera.updateData();
+
+				graphics::Renderer::startDraw();
 
 				m_renderer.draw(&m_mesh);
 				m_cubemapRenderer.draw(&m_cubemapMesh);

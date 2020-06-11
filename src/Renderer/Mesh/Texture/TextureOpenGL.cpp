@@ -48,17 +48,19 @@ namespace mar {
 		}
 
 		void TextureOpenGL::loadTexture(const std::string& path) {
-			auto pathFound = std::find(m_paths.begin(), m_paths.end(), path);
-			if (pathFound != m_paths.end()) { 
-				auto index = std::distance(m_paths.begin(), pathFound);
-				m_id.push_back(m_id[index]);
+			auto search = m_paths.find(path);
+
+			if (search != m_paths.end()) { 
+				m_id.push_back(search->second);
+
+				MAR_CORE_TRACE("Assigning loaded texture!");
 
 				return;
 			}
 
 			unsigned int new_id = genNewTexture(path);
 			m_id.push_back(new_id);
-			m_paths.push_back(path);
+			m_paths.insert({ path, new_id });
 		}
 
 		unsigned int TextureOpenGL::genNewCubemap(const std::vector<std::string>& faces) {
@@ -72,21 +74,22 @@ namespace mar {
 
 			for (unsigned int i = 0; i < faces.size(); i++) {
 
-				unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &bitPerPixel, 0);
+				unsigned char* localBuffer = stbi_load(faces[i].c_str(), &width, &height, &bitPerPixel, 0);
 
-				if (data) {
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-					stbi_image_free(data);
+				if (localBuffer) {
+					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer);
+					stbi_image_free(localBuffer);
 				}
 				else {
 					MAR_CORE_ERROR("Cube map texture failed to load!");
 
-					stbi_image_free(data);
+					stbi_image_free(localBuffer);
 				}
 			}
 
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -97,23 +100,23 @@ namespace mar {
 		}
 
 		void TextureOpenGL::loadCubemap(const std::vector<std::string>& faces) {
-			auto pathFound = std::find(m_faces.begin(), m_faces.end(), faces);
-			if (pathFound != m_faces.end()) {
-				auto index = std::distance(m_faces.begin(), pathFound);
-				m_id.push_back(m_id[index]);
+			std::string helper = faces[0] + faces[1] + faces[2];
+			auto search = m_paths.find(helper);
+
+			if (search != m_paths.end()) {
+				m_id.push_back(search->second);
+
+				MAR_CORE_TRACE("Assigning loaded cubemap!");
 
 				return;
 			}
 
 			unsigned int new_id = genNewCubemap(faces);
 			m_id.push_back(new_id);
-			m_faces.push_back(faces);
+			m_paths.insert({ helper, new_id });
 		}
 
 		void TextureOpenGL::bind(const int& shapeId, const unsigned int& texID) const {
-			if (texID == 0.0f)
-				return;
-
 			glBindTextureUnit((unsigned int)shapeId, texID);
 		}
 

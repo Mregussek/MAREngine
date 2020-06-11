@@ -87,7 +87,7 @@ namespace mar {
 		}
 
 		void Window::clearScreen() {
-			glClearColor(0.85f, 0.85f, 0.85f, 1.0f); // light gray
+			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 

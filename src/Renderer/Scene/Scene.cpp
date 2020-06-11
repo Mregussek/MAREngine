@@ -54,6 +54,7 @@ namespace mar {
 				, std::make_shared<Cube>()
 				, std::make_shared<Pyramid>()
 				, std::make_shared<Cube>()
+				, std::make_shared<Wall>()
 			};
 			m_centers = {
 				{ 0.0f,  0.0f,  0.0f }
@@ -64,6 +65,7 @@ namespace mar {
 				, {-4.5f,  0.0f, -4.5f }
 				, {-2.5f,  0.0f, -2.5f }
 				, { 2.5f,  0.0f,  -3.5f }
+				, { 3.5f,  0.0f,  -10.5f }
 			};
 			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
@@ -74,6 +76,7 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 90.0f, 0.0f }
 			};
 			m_textures = {
 				"empty"
@@ -84,25 +87,62 @@ namespace mar {
 				, "empty"
 				, "empty"
 				, TexturePaths.blackTex
+				, TexturePaths.wallTex
 			};
 		}
 
 		void Scene::createSecondMesh() {
 			m_shapes = {
 				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
+				std::make_shared<Cube>() ,
 				std::make_shared<Cube>()
 			};
 			m_centers = {
-				  { 5.0f, 0.0f, 0.0f }
-				  , {7.0f, 0.0f, 0.0f }
+				{ 5.0f,  0.0f, 0.0f } ,
+				{ 7.0f,  0.0f, 0.0f } ,
+				{ 9.0f,  0.0f, 0.0f } ,
+				{ 11.0f, 0.0f, 0.0f } ,
+				{ 5.0f,  2.0f, 0.0f } ,
+				{ 7.0f,  2.0f, 0.0f } ,
+				{ 9.0f,  2.0f, 0.0f } ,
+				{ 11.0f, 2.0f, 0.0f } ,
+				{ 13.0f, 0.0f, 0.0f } ,
+				{ 13.0f, 0.0f, -2.0f } ,
+				{ 13.0f, 2.0f, -2.0f } ,
 			};
 			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
 			};
 			m_faces = {
-				TexturePaths.mc_grass_faces
-				, TexturePaths.mc_cobble_faces
+				TexturePaths.mc_grass_faces ,
+				TexturePaths.mc_grass_faces ,
+				TexturePaths.mc_grass_faces ,
+				TexturePaths.mc_grass_faces ,
+				TexturePaths.mc_grass_faces ,
+				TexturePaths.mc_grass_faces ,
+				TexturePaths.mc_cobble_faces ,
+				TexturePaths.mc_cobble_faces ,
+				TexturePaths.mc_cobble_faces ,
+				TexturePaths.mc_diamond_faces ,
+				TexturePaths.mc_diamond_faces
 			};
 		}
 

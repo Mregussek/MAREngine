@@ -23,10 +23,10 @@ namespace mar {
 		*/
 		class TextureOpenGL : public Texture, std::enable_shared_from_this<TextureOpenGL> {
 			std::vector<unsigned int> m_id;
-			std::vector<std::string> m_paths;
-			std::vector<std::vector<std::string>> m_faces;
+			std::unordered_map<std::string, unsigned int> m_paths;
 
 		public:
+
 			// Delete all existing textures
 			void shutdown() override;
 

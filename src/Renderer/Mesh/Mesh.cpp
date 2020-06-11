@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "../../Debug/Log.h"
 
+
 namespace mar {
     namespace graphics {
 
@@ -25,7 +26,7 @@ namespace mar {
 			m_shapes.clear();
 		}
 
-		void Mesh::createMesh(const Ref<RendererFactory>& factory) {
+		void Mesh::createMesh(RendererFactory* factory) {
 			m_texture = factory->createTexture();
 
 			m_shapes = std::vector<Ref<Shape>>();

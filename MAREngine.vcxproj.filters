@@ -165,6 +165,9 @@
     <ClInclude Include="src\Debug\Log.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh\Texture\TexturePaths.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Renderer.cpp">
@@ -324,6 +327,9 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="resources\textures\mc\mc-grass-up.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\mc\mc-diamond.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

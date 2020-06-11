@@ -48,7 +48,7 @@ namespace mar {
 			Mesh() = default;
 			virtual ~Mesh();
 
-			void createMesh(const Ref<RendererFactory>& factory);
+			void createMesh(RendererFactory* factory);
 			void loadScene(Scene* scene, MeshTextures type);
 
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);

@@ -170,6 +170,7 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Surface.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Wall.h" />
     <ClInclude Include="src\Renderer\Mesh\Texture\Texture.h" />
+    <ClInclude Include="src\Renderer\Mesh\Texture\TexturePaths.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexArray\VertexArray.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBuffer.h" />
     <ClInclude Include="src\Renderer\Mesh\VertexBuffer\VertexBufferLayout.h" />
@@ -257,6 +258,7 @@
     <Image Include="resources\textures\grass-texture.jpg" />
     <Image Include="resources\textures\mc\dirt.jpg" />
     <Image Include="resources\textures\mc\mc-cobble.jpg" />
+    <Image Include="resources\textures\mc\mc-diamond.jpg" />
     <Image Include="resources\textures\mc\mc-grass-up.jpg" />
     <Image Include="resources\textures\mc\mc-grass.jpg" />
     <Image Include="resources\textures\mr.jpg" />
