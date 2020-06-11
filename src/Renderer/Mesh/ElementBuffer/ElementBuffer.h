@@ -36,7 +36,7 @@ namespace mar {
 			*/
 			virtual void updateDynamically(const std::vector<unsigned int>& data) const { }
 
-			//! Method must bind class _id member to target, which is EBO. It must be overloaded!
+			//! Method must bind class m_id member to target, which is EBO. It must be overloaded!
 			virtual void bind() const { }
 
 			//! Method must unbind currently used EBO and restore memory usage for that buffer. Should be overloaded!

@@ -39,7 +39,7 @@ namespace mar {
 			*/
 			void addBuffer(const Ref<VertexBufferLayout>& layout) override;
 
-			//! Binds class _id member to target, which is VAO
+			//! Binds class m_id member to target, which is VAO
 			void bind() const override;
 
 			//! Unbind currently used VAO, break the existing VAO binding

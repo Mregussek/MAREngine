@@ -17,7 +17,7 @@ namespace mar {
 			DEFAULT,
 			SURFACE,
 			WITH_COLOURED_ELEMS,
-			SECOND_MESH,
+			CUBEMAPS,
 			EMPTY
 		};
 
@@ -32,6 +32,7 @@ namespace mar {
 			std::vector<glm::vec3> m_centers;
 			std::vector<glm::vec3> m_angles;
 			std::vector<std::string> m_textures;
+			std::vector<std::vector<std::string>> m_faces;
 
 		public:
 			Scene() = default;
@@ -45,7 +46,7 @@ namespace mar {
 					createSurface();					break;
 				case SceneType::WITH_COLOURED_ELEMS: 
 					createWithColouredElements();		break;	
-				case SceneType::SECOND_MESH: 	
+				case SceneType::CUBEMAPS: 	
 					createSecondMesh();					break;	
 				case SceneType::EMPTY: 
 					createEmpty();						break;
@@ -66,13 +67,15 @@ namespace mar {
 			inline std::vector<glm::vec3> getCenters() { return m_centers; }
 			inline std::vector<glm::vec3> getAngles() { return m_angles; }
 			inline std::vector<std::string> getTextures() { return m_textures; }
+			inline std::vector<std::vector<std::string>> getFaces() { return m_faces; }
 
 			inline const unsigned int getShapesNumber() { return m_shapes.size(); }
 
-			inline Ref<Shape>& getShape(unsigned int index) { return m_shapes[index]; }
-			inline glm::vec3& getCenter(unsigned int index) { return m_centers[index]; }
-			inline glm::vec3& getAngle(unsigned int index) { return m_angles[index]; }
-			inline std::string& getTexture(unsigned int index) { return m_textures[index]; }
+			inline Ref<Shape>& getShape(const unsigned int& index) { return m_shapes[index]; }
+			inline glm::vec3& getCenter(const unsigned int& index) { return m_centers[index]; }
+			inline glm::vec3& getAngle(const unsigned int& index) { return m_angles[index]; }
+			inline std::string& getTexture(const unsigned int& index) { return m_textures[index]; }
+			inline std::vector<std::string> getFace(const unsigned int& index) { return m_faces[index]; }
 		};
 
 

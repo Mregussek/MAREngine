@@ -10,26 +10,18 @@ namespace mar {
 
 
 		void TextureOpenGL::shutdown() {
-			for (auto const& id : _id)
+			for (auto const& id : m_id)
 				glDeleteTextures(1, &id);
 		}
 
-		void TextureOpenGL::loadTexture(const std::string& path) {
-			auto pathFound = std::find(_paths.begin(), _paths.end(), path);
-			if (pathFound != _paths.end()) { // if path found we don't want to load texture again
-				auto index = std::distance(_paths.begin(), pathFound);
-				_id.push_back(_id[index]); // pushData index of that found texture
-				return;
-			}
+		unsigned int TextureOpenGL::genNewTexture(const std::string& path) {
+			unsigned int id;
+			int width, height;
+			int bitPerPixel;
+			unsigned char* localBuffer;
 
-			// load new texture and pushData new 
-			_paths.push_back(path);
-			_id.push_back(_idOfNextTexture);
-			_width.push_back(0);
-			_height.push_back(0);
-
-			glGenTextures(1, &_id.back());
-			glBindTexture(GL_TEXTURE_2D, _id.back());
+			glGenTextures(1, &id);
+			glBindTexture(GL_TEXTURE_2D, id);
 
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -38,17 +30,83 @@ namespace mar {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 			stbi_set_flip_vertically_on_load(true);
-			_localBuffer = stbi_load(path.c_str(), &_width[_idOfNextTexture], &_height[_idOfNextTexture], &_bitPerPixel, 0);
+			localBuffer = stbi_load(path.c_str(), &width, &height, &bitPerPixel, 0);
 
-			if (_localBuffer) {
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width[_idOfNextTexture], _height[_idOfNextTexture], 0, GL_RGB, GL_UNSIGNED_BYTE, _localBuffer);
+			if (localBuffer) {
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer);
 				glGenerateMipmap(GL_TEXTURE_2D);
-				stbi_image_free(_localBuffer);
-				_idOfNextTexture++;
+				stbi_image_free(localBuffer);
+
+				MAR_CORE_TRACE("Texture loaded successfully!");
+
+				return id;
+			}
+
+			MAR_CORE_ERROR("Failed to load texture");
+
+			return 0;
+		}
+
+		void TextureOpenGL::loadTexture(const std::string& path) {
+			auto pathFound = std::find(m_paths.begin(), m_paths.end(), path);
+			if (pathFound != m_paths.end()) { 
+				auto index = std::distance(m_paths.begin(), pathFound);
+				m_id.push_back(m_id[index]);
+
 				return;
 			}
 
-			std::cerr << "Failed to load texture" << std::endl;
+			unsigned int new_id = genNewTexture(path);
+			m_id.push_back(new_id);
+			m_paths.push_back(path);
+		}
+
+		unsigned int TextureOpenGL::genNewCubemap(const std::vector<std::string>& faces) {
+			unsigned int id;
+			int width, height;
+			int bitPerPixel;
+
+			glGenTextures(1, &id);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+
+			for (unsigned int i = 0; i < faces.size(); i++) {
+
+				unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &bitPerPixel, 0);
+
+				if (data) {
+					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+					stbi_image_free(data);
+				}
+				else {
+					MAR_CORE_ERROR("Cube map texture failed to load!");
+
+					stbi_image_free(data);
+				}
+			}
+
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+			MAR_CORE_TRACE("Cube Map loaded successfully!");
+
+			return id;
+		}
+
+		void TextureOpenGL::loadCubemap(const std::vector<std::string>& faces) {
+			auto pathFound = std::find(m_faces.begin(), m_faces.end(), faces);
+			if (pathFound != m_faces.end()) {
+				auto index = std::distance(m_faces.begin(), pathFound);
+				m_id.push_back(m_id[index]);
+
+				return;
+			}
+
+			unsigned int new_id = genNewCubemap(faces);
+			m_id.push_back(new_id);
+			m_faces.push_back(faces);
 		}
 
 		void TextureOpenGL::bind(const int& shapeId, const unsigned int& texID) const {
@@ -63,29 +121,21 @@ namespace mar {
 		}
 
 		const unsigned int& TextureOpenGL::getID(int index) const {
-			return _id[index];
+			return m_id[index];
 		}
 
 		void TextureOpenGL::addID(const unsigned int id) {
-			_id.push_back(id);
+			m_id.push_back(id);
 		}
 
 		void TextureOpenGL::removeID(const unsigned int& index) {
 			std::vector<unsigned int> new_id;
 
-			for (unsigned int i = 0; i < _id.size(); i++)
+			for (unsigned int i = 0; i < m_id.size(); i++)
 				if (i != index) 
-					new_id.push_back(_id[i]);
+					new_id.push_back(m_id[i]);
 			
-			_id = new_id;
-		}
-
-		const int& TextureOpenGL::getWidth(const unsigned int& index) const {
-			return _width[index];
-		}
-
-		const int& TextureOpenGL::getHeight(const unsigned int& index) const {
-			return _height[index];
+			m_id = new_id;
 		}
 
 

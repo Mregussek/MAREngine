@@ -31,8 +31,8 @@ namespace mar {
 			m_mesh.createMesh(factory);
 			m_secondmesh.createMesh(factory);
 
-			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS));
-			m_secondmesh.loadScene(&graphics::Scene(graphics::SceneType::SECOND_MESH));
+			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS), graphics::MeshTextures::TEXTURES);
+			m_secondmesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
 
 			m_renderer.initialize(m_mesh.getLayout(), usegui);
 

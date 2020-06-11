@@ -9,6 +9,8 @@
 namespace mar {
     namespace graphics {
 
+		float Mesh::s_availableTextureID = 1.0f;
+
 		Mesh::~Mesh() {
 			m_texture->shutdown();
 
@@ -37,18 +39,30 @@ namespace mar {
 
 			m_indicesMaxValue = 0;
 			m_availableShapeID = 0.0f;
-			m_availableTextureID = 1.0f;
 
 			MAR_CORE_INFO("Mesh has been created!");
 		}
 
-		void Mesh::loadScene(Scene* scene) {
+		void Mesh::loadScene(Scene* scene, MeshTextures type) {
 			unsigned int shapesInSceneCount = scene->getShapesNumber();
 
-			for (unsigned int i = 0; i < shapesInSceneCount; i++)
-				submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
+			switch(type) {
+			case MeshTextures::TEXTURES:
+				for (unsigned int i = 0; i < shapesInSceneCount; i++)
+					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
 
-			MAR_CORE_INFO("Scene has been loaded!");
+				MAR_CORE_INFO("Scene has been loaded by textures!");
+
+				break;
+
+			case MeshTextures::CUBEMAPS:
+				for (unsigned int i = 0; i < shapesInSceneCount; i++)
+					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getFace(i));
+
+				MAR_CORE_INFO("Scene has been loaded by textures!");
+
+				break;
+			}
 		}
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
@@ -67,6 +81,22 @@ namespace mar {
 			MAR_CORE_INFO("Added new object to scene!");
 		}
 
+		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces) {
+			if (m_shapes.size() == constants::maxObjectsInScene - 1) {
+				std::cout << "Cannot push more objects!" << std::endl;
+				return;
+			}
+
+			new_shape->setCenter(center);
+			new_shape->setAngle(angle);
+
+			pushCubeMap(new_shape, faces);
+			pushShape(new_shape);
+			pushMatrices(center, angle);
+
+			MAR_CORE_INFO("Added new object to scene!");
+		}
+
 		void Mesh::flushShape(const unsigned int& index) {
 			popShape(index);
 
@@ -75,11 +105,11 @@ namespace mar {
 
 		void Mesh::pushTexture(Ref<Shape>& new_shape, const std::string& texture) {
 			if (texture != "empty") {
-				ShapeManipulator::extendTextureID(new_shape, m_availableTextureID);
+				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
-				m_samplers.push_back((int)m_availableTextureID);
+				m_samplers.push_back((int)s_availableTextureID);
 
-				m_availableTextureID++;
+				s_availableTextureID++;
 
 				m_texture->loadTexture(texture);
 			}
@@ -90,6 +120,16 @@ namespace mar {
 
 				m_texture->addID(0);
 			}
+		}
+
+		void Mesh::pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces) {
+			ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
+
+			m_samplers.push_back((int)s_availableTextureID);
+
+			s_availableTextureID++;
+
+			m_texture->loadCubemap(faces);
 		}
 
 		void Mesh::pushShape(Ref<Shape>& new_shape) {

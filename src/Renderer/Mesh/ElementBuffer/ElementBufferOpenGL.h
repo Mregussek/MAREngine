@@ -27,7 +27,7 @@ namespace mar {
 			//! Default constructor. For initialization use initializeElement() method.
 			ElementBufferOpenGL() = default;
 
-			//! Initializes ElementBufferObject to _id, defines data on GPU, reserves memory on GPU, 
+			//! Initializes ElementBufferObject to m_id, defines data on GPU, reserves memory on GPU, 
 			//! also tells the GPU that user will change resources dynamically. 
 			/*
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
@@ -40,7 +40,7 @@ namespace mar {
 			*/
 			void updateDynamically(const std::vector<unsigned int>& data) const override;
 
-			//! Binds class _id member to target, which is EBO
+			//! Binds class m_id member to target, which is EBO
 			void bind() const override;
 
 			//! Unbind currently used EBO and restore memory usage for that buffer

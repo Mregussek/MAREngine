@@ -296,9 +296,6 @@
     <Image Include="resources\textures\yellow-texture.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
-    <Image Include="resources\textures\mc\mc-cobble.png">
-      <Filter>Pliki zasobów</Filter>
-    </Image>
     <Image Include="resources\textures\mc\mc-grass.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
@@ -318,6 +315,9 @@
       <Filter>Pliki zasobów</Filter>
     </Image>
     <Image Include="resources\textures\skybox\top.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\mc\mc-cobble.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
   </ItemGroup>

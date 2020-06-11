@@ -20,6 +20,12 @@ namespace mar {
     namespace graphics {
 
 
+		enum class MeshTextures {
+			TEXTURES,
+			CUBEMAPS
+		};
+
+
 		class Mesh {
 			Ref<Texture> m_texture;
 
@@ -33,17 +39,21 @@ namespace mar {
 			Light m_light;
 
 			float m_availableShapeID;
-			float m_availableTextureID;
 			int m_indicesMaxValue;
+			static float s_availableTextureID;
+
+			bool m_onlyCubeMaps = false;
 
 		public:
 			Mesh() = default;
 			virtual ~Mesh();
 
 			void createMesh(const Ref<RendererFactory>& factory);
-			void loadScene(Scene* scene);
+			void loadScene(Scene* scene, MeshTextures type);
 
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
+			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);
+
 			void flushShape(const unsigned int& index);
 
 			void clearBuffers();
@@ -57,6 +67,7 @@ namespace mar {
 
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
 			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
+			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
 
 			/// --- GET METHODS --- ///
 			inline const unsigned int& getShapesCount() const { return m_shapes.size(); }

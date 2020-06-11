@@ -36,7 +36,7 @@ namespace mar {
 			*/
 			virtual void addBuffer(const Ref<VertexBufferLayout>& layout) { }
 
-			//! Method should bind class _id member to target, which is VAO. Must be overloaded!
+			//! Method should bind class m_id member to target, which is VAO. Must be overloaded!
 			virtual void bind() const { }
 
 			//! Method should unbind currently used VAO, break the existing VAO binding
