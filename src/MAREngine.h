@@ -36,7 +36,8 @@ namespace mar {
 			graphics::Camera m_camera;
 			graphics::Renderer m_renderer;
 			graphics::Mesh m_mesh;
-			graphics::Mesh m_secondmesh;
+			graphics::Renderer m_cubemapRenderer;
+			graphics::Mesh m_cubemapMesh;
 
 		public:
 			MAREngine() = default;

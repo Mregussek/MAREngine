@@ -27,16 +27,20 @@ namespace mar {
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
 			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, usegui);
 
-			m_renderer.createRenderer(factory);
+			m_renderer.createRenderer(factory, graphics::RendererType::DEFAULT);
 			m_mesh.createMesh(factory);
-			m_secondmesh.createMesh(factory);
 
 			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS), graphics::MeshTextures::TEXTURES);
-			m_secondmesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
-
-			m_renderer.initialize(m_mesh.getLayout(), usegui);
-
+			m_renderer.initialize(m_mesh.getLayout());
 			m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+
+			m_cubemapRenderer.createRenderer(factory, graphics::RendererType::CUBEMAP);
+			m_cubemapMesh.createMesh(factory);
+
+			m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
+			m_cubemapRenderer.initialize(m_cubemapMesh.getLayout());
+			m_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+
 			m_gui.setReferences(&m_mesh, &graphics::Renderer::getStatistics());
 
 			while (m_window.shouldClose()) {
@@ -44,7 +48,7 @@ namespace mar {
 				m_camera.updateData();
 
 				m_renderer.draw(&m_mesh);
-				m_renderer.draw(&m_secondmesh);
+				m_cubemapRenderer.draw(&m_cubemapMesh);
 				
 				m_gui.prepareNewFrame();
 				m_gui.display();

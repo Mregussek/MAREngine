@@ -89,16 +89,20 @@ namespace mar {
 
 		void Scene::createSecondMesh() {
 			m_shapes = {
+				std::make_shared<Cube>() ,
 				std::make_shared<Cube>()
 			};
 			m_centers = {
 				  { 5.0f, 0.0f, 0.0f }
+				  , {7.0f, 0.0f, 0.0f }
 			};
 			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
 			};
 			m_faces = {
 				TexturePaths.mc_grass_faces
+				, TexturePaths.mc_cobble_faces
 			};
 		}
 
@@ -115,13 +119,6 @@ namespace mar {
 			m_textures = {
 				TexturePaths.grassTex
 			};
-		}
-
-		void Scene::createEmpty() {
-			m_shapes.clear();
-			m_centers.clear();
-			m_angles.clear();
-			m_textures.clear();
 		}
 
 

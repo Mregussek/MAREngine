@@ -17,8 +17,7 @@ namespace mar {
 			DEFAULT,
 			SURFACE,
 			WITH_COLOURED_ELEMS,
-			CUBEMAPS,
-			EMPTY
+			CUBEMAPS
 		};
 
 		/*!
@@ -48,8 +47,6 @@ namespace mar {
 					createWithColouredElements();		break;	
 				case SceneType::CUBEMAPS: 	
 					createSecondMesh();					break;	
-				case SceneType::EMPTY: 
-					createEmpty();						break;
 				default:
 					createDefault();
 				}
@@ -60,7 +57,6 @@ namespace mar {
 			void createSurface();
 			void createWithColouredElements();
 			void createSecondMesh();
-			void createEmpty();
 
 		public:
 			inline std::vector<Ref<Shape>> getShapes() { return m_shapes; }

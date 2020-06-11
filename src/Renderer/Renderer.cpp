@@ -11,13 +11,15 @@ namespace mar {
 
 		RendererStatistics Renderer::s_stats;
 
-		void Renderer::createRenderer(const Ref<RendererFactory>& factory) {
+		void Renderer::createRenderer(const Ref<RendererFactory>& factory, const RendererType type) {
 			if (!m_initialized) {
 				m_vbo = factory->createVertexBuffer();
 				m_layout = factory->createVertexBufferLayout();
 				m_vao = factory->createVertexArray();
 				m_ebo = factory->createElementBuffer();
 				m_mainShader = factory->createShader();
+
+				m_type = type;
 
 				s_stats = RendererStatistics();
 
@@ -50,14 +52,26 @@ namespace mar {
 			}
 		}
 
-		void Renderer::initialize(const std::vector<unsigned int>& layout, const bool& useGUI) {
+		void Renderer::initialize(const std::vector<unsigned int>& layout) {
 			if (!m_initialized) {
-				m_useGUI = useGUI;
 
-				if (m_useGUI)
+				switch (m_type) {
+				case RendererType::DEFAULT:
 					m_mainShader->initialize(ShaderType::DEFAULT);
-				else
+					m_useGUI = true;
+
+					break;
+				case RendererType::WITHOUT_GUI:
 					m_mainShader->initialize(ShaderType::WITHOUT_GUI);
+					m_useGUI = false;
+
+					break;
+				case RendererType::CUBEMAP:
+					m_mainShader->initialize(ShaderType::CUBEMAP);
+					m_useGUI = true;
+
+					break;
+				}
 
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
