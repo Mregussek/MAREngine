@@ -10,7 +10,7 @@ namespace mar {
 
 
 		void Scene::createDefault() {
-			_shapes = {
+			m_shapes = {
 				std::make_shared<Cube>()
 				, std::make_shared<Pyramid>()
 				, std::make_shared<Surface>()
@@ -18,7 +18,7 @@ namespace mar {
 				, std::make_shared<Cube>()
 				, std::make_shared<Pyramid>()
 			};
-			_centers = {
+			m_centers = {
 				{ 0.0f,  0.0f,  0.0f }
 				, { 3.0f,  0.0f, -4.5f }
 				, { 0.0f,  -0.025f,  0.0f }
@@ -26,7 +26,7 @@ namespace mar {
 				, {-3.0f,  0.0f, -4.5f }
 				, {-1.5f,  0.0f, -2.5f }
 			};
-			_angles = {
+			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
@@ -34,7 +34,7 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 			};
-			_textures = {
+			m_textures = {
 				TexturePaths.mrTex
 				, TexturePaths.yellowTex
 				, TexturePaths.grassTex
@@ -45,7 +45,7 @@ namespace mar {
 		}
 
 		void Scene::createWithColouredElements() {
-			_shapes = {
+			m_shapes = {
 				std::make_shared<Cube>()
 				, std::make_shared<Cube>()
 				, std::make_shared<Pyramid>()
@@ -55,7 +55,7 @@ namespace mar {
 				, std::make_shared<Pyramid>()
 				, std::make_shared<Cube>()
 			};
-			_centers = {
+			m_centers = {
 				{ 0.0f,  0.0f,  0.0f }
 				, { 0.0f,  2.0f,  0.0f }
 				, { 5.0f,  0.0f, -4.5f }
@@ -65,7 +65,7 @@ namespace mar {
 				, {-2.5f,  0.0f, -2.5f }
 				, { 2.5f,  0.0f,  -3.5f }
 			};
-			_angles = {
+			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
@@ -75,7 +75,7 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 			};
-			_textures = {
+			m_textures = {
 				"empty"
 				, TexturePaths.mrTex
 				, TexturePaths.blueTex
@@ -88,44 +88,44 @@ namespace mar {
 		}
 
 		void Scene::createOnlyColouredElements() {
-			_shapes = {
+			m_shapes = {
 				std::make_shared<Cube>()
 				, std::make_shared<Pyramid>()
 			};
-			_centers = {
+			m_centers = {
 				{ 1.0f,  1.5f, -5.0f }
 				, { -1.0f,  1.5f, -5.0f }
 			};
-			_angles = {
+			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 			};
-			_textures = {
+			m_textures = {
 				"empty"
 				, "empty"
 			};
 		}
 
 		void Scene::createSurface() {
-			_shapes = {
+			m_shapes = {
 				std::make_shared<Surface>()
 			};
-			_centers = {
+			m_centers = {
 				{ 0.0f,  -0.025f,  0.0f }
 			};
-			_angles = {
+			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 			};
-			_textures = {
+			m_textures = {
 				TexturePaths.grassTex
 			};
 		}
 
 		void Scene::createEmpty() {
-			_shapes.clear();
-			_centers.clear();
-			_angles.clear();
-			_textures.clear();
+			m_shapes.clear();
+			m_centers.clear();
+			m_angles.clear();
+			m_textures.clear();
 		}
 
 

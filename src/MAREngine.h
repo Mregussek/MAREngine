@@ -35,7 +35,6 @@ namespace mar {
 			gui::GUI m_gui;
 			graphics::Camera m_camera;
 			graphics::Renderer m_renderer;
-			graphics::Scene m_scene;
 			graphics::Mesh m_mesh;
 
 		public:

@@ -27,15 +27,15 @@ namespace mar {
 			RIGHT
 		};
 
-		struct {
+		struct CameraSettings {
 			// --- Default Values for Camera
-			const float YAW = -90.0f;
-			const float PITCH = 0.0f;
-			const float SPEED = 5.0f;
-			const float SENSITIVITY = 0.1f;
-			const float ZOOM = 55.0f;
-			const glm::vec3 CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
-		} CameraSettings;
+			const static float YAW;
+			const static float PITCH;
+			const static float SPEED;
+			const static float SENSITIVITY;
+			const static float ZOOM;
+			const static glm::vec3 CAMERA_START;
+		};
 
 		struct CameraData {
 			glm::mat4 projection;
@@ -48,30 +48,30 @@ namespace mar {
 
 		class Camera {
 			// --- Window Attributes
-			int _width;
-			int _height;
+			int m_windowWidth;
+			int m_windowHeight;
 			// --- Camera Attributes
-			glm::vec3 _position;
-			glm::vec3 _front;
-			glm::vec3 _up;
-			glm::vec3 _right;
-			glm::vec3 _worldUp;
+			glm::vec3 m_position;
+			glm::vec3 m_front;
+			glm::vec3 m_up;
+			glm::vec3 m_right;
+			glm::vec3 m_worldUp;
 			// --- Mouse Settings
-			float _movementSpeed;
-			float _mouseSensitivity;
-			float _zoom;
-			bool _enableMouse;
-			bool _firstMouse;
-			float _lastX;
-			float _lastY;
+			float m_movementSpeed;
+			float m_mouseSensitivity;
+			float m_zoom;
+			bool m_enableMouse;
+			bool m_firstMouse;
+			float m_lastX;
+			float m_lastY;
 			// --- Maths (Euler Angles)
-			float _yaw;
-			float _pitch;
+			float m_yaw;
+			float m_pitch;
 			// --- RealTime Operations
-			float _deltaTime;
-			float _lastFrame;
+			float m_deltaTime;
+			float m_lastFrame;
 			// --- Data for renderer
-			CameraData _cameraData;
+			CameraData m_cameraData;
 
 		public:
 			Camera();
@@ -91,11 +91,12 @@ namespace mar {
 			void updateCameraVectors();
 
 		public:
-			const glm::vec3& getCameraPosition() const { return _position; }
-			const CameraData& getCameraData() const { return _cameraData; }
-			const float& getZoom() const { return _zoom; }
-			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(_zoom), (float)_width / (float)_height, 0.01f, 100.0f); }
-			const glm::mat4 getViewMatrix() const { return glm::lookAt(_position, _position + _front, _up); }
+			const CameraData& getCameraData() const { return m_cameraData; }
+
+			const glm::vec3& getCameraPosition() const { return m_position; }
+			const float& getZoom() const { return m_zoom; }
+			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(m_zoom), (float)m_windowWidth / (float)m_windowHeight, 0.01f, 100.0f); }
+			const glm::mat4 getViewMatrix() const { return glm::lookAt(m_position, m_position + m_front, m_up); }
 			const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
 		};
 

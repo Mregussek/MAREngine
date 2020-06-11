@@ -35,14 +35,12 @@ namespace mar {
 			glm::vec3 m_sceneTranslation;
 			glm::vec3 m_sceneAngle;
 			float m_sceneColors[4];
-			float m_shapePos[3];
-			float m_shapeAngle[3];
 			float m_inputCenter[3];
 			// --- Run-time GUI attributes
 			graphics::Mesh* global_mesh;
 			const graphics::RendererStatistics* m_statistics;
-			GUIData m_guiData;
 			bool m_canModifyObjects;
+			static GUIData s_guiData;
 
 			bool m_displayGeneralScene{ false };
 			bool m_displaySeperatelyShapes{ false };
@@ -57,7 +55,7 @@ namespace mar {
 			void shutdown();
 			
 			void prepareNewFrame();
-			void updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
+			void setReferences(graphics::Mesh* mesh, const graphics::RendererStatistics* stats);
 			void display();
 
 		private:
@@ -72,7 +70,7 @@ namespace mar {
 		public:
 			const glm::mat4 getTranslationMatrix() const;
 			const glm::mat4 getRotationMatrix() const;
-			const GUIData& getGUIData() const { return m_guiData; }
+			const static GUIData& getGUIData() { return s_guiData; }
 		};
 
 

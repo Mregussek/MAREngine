@@ -67,9 +67,9 @@ namespace mar {
 			else {
 				new_shape->setTextureID(0.f);
 
-				m_samplers.push_back(0.f);
+				m_samplers.push_back(0);
 
-				m_texture->addID(0.f);
+				m_texture->addID(0);
 			}
 		}
 

@@ -8,6 +8,7 @@
 namespace mar {
 	namespace gui {
 
+		GUIData GUI::s_guiData;
 
 		GUI::GUI()
 			: m_sceneTranslation(glm::vec3(0.0f, 0.0f, 0.0f)),
@@ -38,15 +39,15 @@ namespace mar {
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			m_guiData.translate = getTranslationMatrix();
-			m_guiData.rotation = getRotationMatrix();
-			m_guiData.colors[0] = m_sceneColors[0];
-			m_guiData.colors[1] = m_sceneColors[1];
-			m_guiData.colors[2] = m_sceneColors[2];
-			m_guiData.colors[3] = m_sceneColors[3];
+			s_guiData.translate = getTranslationMatrix();
+			s_guiData.rotation = getRotationMatrix();
+			s_guiData.colors[0] = m_sceneColors[0];
+			s_guiData.colors[1] = m_sceneColors[1];
+			s_guiData.colors[2] = m_sceneColors[2];
+			s_guiData.colors[3] = m_sceneColors[3];
 		}
 
-		void GUI::updateSceneInfo(graphics::Mesh* mesh, const graphics::RendererStatistics* stats) {
+		void GUI::setReferences(graphics::Mesh* mesh, const graphics::RendererStatistics* stats) {
 			global_mesh = mesh;
 			m_statistics = stats;
 		}

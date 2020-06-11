@@ -8,6 +8,7 @@
 namespace mar {
 	namespace graphics {
 
+		RendererStatistics Renderer::s_stats;
 
 		void Renderer::createRenderer(const Ref<RendererFactory>& factory) {
 			if (!m_initialized) {
@@ -17,7 +18,7 @@ namespace mar {
 				m_ebo = factory->createElementBuffer();
 				m_mainShader = factory->createShader();
 
-				m_stats = RendererStatistics();
+				s_stats = RendererStatistics();
 			}
 			else {
 				std::cerr << "Renderer is already initialized!" << std::endl;
@@ -60,36 +61,20 @@ namespace mar {
 			}
 		}
 
-		void Renderer::draw(Mesh* mesh) {
-			m_stats.resetStatistics();
-
-			mesh->clearBuffers();
-			mesh->update();
-
-			m_vbo->updateDynamically(mesh->getVertices());
-			m_ebo->updateDynamically(mesh->getIndices());
-
-			m_stats.verticesCount += mesh->getVerticesSize();
-			m_stats.indicesCount += mesh->getIndicesSize();
-			m_stats.shapesCount += mesh->getShapesCount();
-
-			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
-
-			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
-
-			m_stats.drawCallsCount += 1;
-			m_stats.trianglesCount = m_stats.indicesCount / 3;
+		void Renderer::setReferences(const gui::GUIData* guidata, const CameraData* cameradata) {
+			m_guiData = guidata;
+			m_cameraData = cameradata;
 		}
 
-		void Renderer::draw(Mesh* mesh, const gui::GUIData* guidata, const CameraData* cameradata) {
+		void Renderer::draw(Mesh* mesh) {
 			bind();
 
 			updateMeshData(mesh);
-			updateCameraData(cameradata);
-			updateGUIData(guidata);
+			updateCameraData();
+			updateGUIData();
 			updateLightData(&mesh->getLight());
 
-			m_stats.resetStatistics();
+			s_stats.resetStatistics();
 
 			mesh->clearBuffers();
 			mesh->update();
@@ -97,16 +82,16 @@ namespace mar {
 			m_vbo->updateDynamically(mesh->getVertices());
 			m_ebo->updateDynamically(mesh->getIndices());
 
-			m_stats.verticesCount += mesh->getVerticesSize();
-			m_stats.indicesCount += mesh->getIndicesSize();
-			m_stats.shapesCount += mesh->getShapesCount();
+			s_stats.verticesCount += mesh->getVerticesSize();
+			s_stats.indicesCount += mesh->getIndicesSize();
+			s_stats.shapesCount += mesh->getShapesCount();
 
 			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
 
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
 
-			m_stats.drawCallsCount += 1;
-			m_stats.trianglesCount = m_stats.indicesCount / 3;
+			s_stats.drawCallsCount += 1;
+			s_stats.trianglesCount = s_stats.indicesCount / 3;
 
 			unbind();
 		}
@@ -128,18 +113,18 @@ namespace mar {
 			m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
 		}
 
-		void Renderer::updateGUIData(const gui::GUIData* guidata) {
-			m_mainShader->setUniform4fv("u_GUISceneColor", guidata->colors);
-			m_mainShader->setUniformMat4f("u_GUISceneTranslation", guidata->translate);
-			m_mainShader->setUniformMat4f("u_GUISceneRotation", guidata->rotation);
+		void Renderer::updateGUIData() {
+			m_mainShader->setUniform4fv("u_GUISceneColor", m_guiData->colors);
+			m_mainShader->setUniformMat4f("u_GUISceneTranslation", m_guiData->translate);
+			m_mainShader->setUniformMat4f("u_GUISceneRotation", m_guiData->rotation);
 		}
 
-		void Renderer::updateCameraData(const CameraData* cameradata) {
-			m_mainShader->setUniformMat4f("u_Projection", cameradata->projection);
-			m_mainShader->setUniformMat4f("u_View", cameradata->view);
-			m_mainShader->setUniformMat4f("u_Model", cameradata->model);
+		void Renderer::updateCameraData() {
+			m_mainShader->setUniformMat4f("u_Projection", m_cameraData->projection);
+			m_mainShader->setUniformMat4f("u_View", m_cameraData->view);
+			m_mainShader->setUniformMat4f("u_Model", m_cameraData->model);
 
-			m_mainShader->setUniformVector3("u_CameraPos", cameradata->position);
+			m_mainShader->setUniformVector3("u_CameraPos", m_cameraData->position);
 		}
 
 		void Renderer::updateLightData(Light* light) {

@@ -22,10 +22,11 @@ namespace mar {
 			m_renderer.createRenderer(factory);
 			m_mesh.createMesh(factory);
 
-			m_scene.initializeScene(graphics::SceneType::WITH_COLOURED_ELEMS);
-			m_mesh.loadScene(&m_scene);
+			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS));
 
 			m_renderer.initialize(m_mesh.getLayout(), usegui);
+			m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			m_gui.setReferences(&m_mesh, &graphics::Renderer::getStatistics());
 		}
 
 		void MAREngine::run() {
@@ -34,9 +35,8 @@ namespace mar {
 				m_camera.updateData();
 				m_gui.prepareNewFrame();
 
-				m_renderer.draw(&m_mesh, &m_gui.getGUIData(), &m_camera.getCameraData());
-
-				m_gui.updateSceneInfo(&m_mesh, &m_renderer.getStatistics());
+				m_renderer.draw(&m_mesh);
+				
 				m_gui.display();
 
 				m_window.swapBuffers();

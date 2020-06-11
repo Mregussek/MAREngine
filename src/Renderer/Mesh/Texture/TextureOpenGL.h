@@ -72,14 +72,14 @@ namespace mar {
 			//! Get width of last loaded texture
 			/*
 				\param index - index of width stored in vector
-				\return _width - width of last loaded texture
+				\return m_windowWidth - width of last loaded texture
 			*/
 			const int& getWidth(const unsigned int& index) const override;
 
 			//! Get height of last loaded texture
 			/*
 				\param index - index of height stored in vector
-				\return _height - height of last loaded texture
+				\return m_windowHeight - height of last loaded texture
 			*/
 			const int& getHeight(const unsigned int& index) const override;
 		};

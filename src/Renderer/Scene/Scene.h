@@ -27,25 +27,30 @@ namespace mar {
 			on start of MAREngine.
 		*/
 		class Scene {
-			std::vector<Ref<Shape>> _shapes;
-			std::vector<glm::vec3> _centers;
-			std::vector<glm::vec3> _angles;
-			std::vector<std::string> _textures;
+			std::vector<Ref<Shape>> m_shapes;
+			std::vector<glm::vec3> m_centers;
+			std::vector<glm::vec3> m_angles;
+			std::vector<std::string> m_textures;
 
 		public:
 			Scene() = default;
+			Scene(SceneType type = SceneType::DEFAULT) { initializeScene(type); }
 
-			void initializeScene(SceneType type = SceneType::DEFAULT) {
-				if (type == SceneType::DEFAULT)
+			void initializeScene(SceneType type) {
+				switch (type) {
+				case SceneType::DEFAULT:  
+					createDefault();					break;
+				case SceneType::SURFACE: 
+					createSurface();					break;
+				case SceneType::WITH_COLOURED_ELEMS: 
+					createWithColouredElements();		break;	
+				case SceneType::SECOND_MESH: 	
+					createOnlyColouredElements();		break;	
+				case SceneType::EMPTY: 
+					createEmpty();						break;
+				default:
 					createDefault();
-				else if (type == SceneType::SURFACE)
-					createSurface();
-				else if (type == SceneType::WITH_COLOURED_ELEMS)
-					createWithColouredElements();
-				else if (type == SceneType::SECOND_MESH)
-					createOnlyColouredElements();
-				else if (type == SceneType::EMPTY)
-					createEmpty();
+				}
 			}
 
 		private:
@@ -56,17 +61,17 @@ namespace mar {
 			void createEmpty();
 
 		public:
-			std::vector<Ref<Shape>> getShapes() { return _shapes; }
-			std::vector<glm::vec3> getCenters() { return _centers; }
-			std::vector<glm::vec3> getAngles() { return _angles; }
-			std::vector<std::string> getTextures() { return _textures; }
+			std::vector<Ref<Shape>> getShapes() { return m_shapes; }
+			std::vector<glm::vec3> getCenters() { return m_centers; }
+			std::vector<glm::vec3> getAngles() { return m_angles; }
+			std::vector<std::string> getTextures() { return m_textures; }
 
-			const unsigned int getShapesNumber() { return _shapes.size(); }
+			const unsigned int getShapesNumber() { return m_shapes.size(); }
 
-			Ref<Shape>& getShape(unsigned int index) { return _shapes[index]; }
-			glm::vec3& getCenter(unsigned int index) { return _centers[index]; }
-			glm::vec3& getAngle(unsigned int index) { return _angles[index]; }
-			std::string& getTexture(unsigned int index) { return _textures[index]; }
+			Ref<Shape>& getShape(unsigned int index) { return m_shapes[index]; }
+			glm::vec3& getCenter(unsigned int index) { return m_centers[index]; }
+			glm::vec3& getAngle(unsigned int index) { return m_angles[index]; }
+			std::string& getTexture(unsigned int index) { return m_textures[index]; }
 		};
 
 

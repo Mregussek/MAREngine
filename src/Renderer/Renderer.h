@@ -55,11 +55,13 @@ namespace mar {
 			Ref<VertexArray> m_vao;
 			Ref<ElementBuffer> m_ebo;
 			Ref<Shader> m_mainShader;
-
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;		// check, if renderer is initialized
 			bool m_useGUI = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
-			RendererStatistics m_stats;
+			static RendererStatistics s_stats;
+			// --- References
+			const CameraData* m_cameraData;
+			const gui::GUIData* m_guiData;
 
 		public:
 			Renderer() = default;
@@ -68,20 +70,21 @@ namespace mar {
 			void closeRenderer();
 
 			void initialize(const std::vector<unsigned int>& layout, const bool& useGUI);
+			void setReferences(const gui::GUIData* guidata, const CameraData* cameradata);
 
 			void draw(Mesh* mesh);
 
-			void draw(Mesh* mesh, const gui::GUIData* guidata, const CameraData* cameradata);
-
+		private:
 			void updateMeshData(Mesh* mesh);
-			void updateGUIData(const gui::GUIData* guidata);
-			void updateCameraData(const CameraData* cameradata);
+			void updateGUIData();
+			void updateCameraData();
 			void updateLightData(Light* light);
 
 			void bind();
 			void unbind();
 
-			const RendererStatistics& getStatistics() const { return m_stats; }
+		public:
+			static RendererStatistics& getStatistics() { return s_stats; }
 		};
 
 
