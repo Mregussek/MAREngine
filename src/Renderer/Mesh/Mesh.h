@@ -7,6 +7,7 @@
 #define MAR_ENGINE_MESH_H
 
 #include "../../mar.h"
+#include "../../Objects/Object.h"
 #include "Shapes/Shapes.h"
 #include "Shapes/DefaultShapes/Cube.h"
 #include "Shapes/DefaultShapes/Wall.h"
@@ -50,6 +51,7 @@ namespace mar {
 
 			void createMesh(const Ref<RendererFactory>& factory);
 			void loadScene(Scene* scene, MeshTextures type);
+			void loadObject(objects::Object* object);
 
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);

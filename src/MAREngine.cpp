@@ -28,6 +28,12 @@ namespace mar {
 			graphics::Mesh m_mesh;
 			graphics::Renderer m_cubemapRenderer;
 			graphics::Mesh m_cubemapMesh;
+			graphics::Renderer m_objectRenderer;
+			graphics::Mesh m_objectMesh;
+
+			graphics::objects::Object object;
+			std::string pathToObj = "resources/objects/lego-human.obj";
+			object.assignDataFromFile(pathToObj);
 
 			m_camera.initialize(MAREngineSettings::width, MAREngineSettings::height);
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
@@ -47,6 +53,13 @@ namespace mar {
 			m_cubemapRenderer.initialize(m_cubemapMesh.getLayout());
 			m_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 
+			m_objectRenderer.createRenderer(factory, graphics::RendererType::DEFAULT);
+			m_objectMesh.createMesh(factory);
+
+			m_objectMesh.loadObject(&object);
+			m_objectRenderer.initialize(m_objectMesh.getLayout());
+			m_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+
 			m_gui.setReferences(&m_mesh, &graphics::Renderer::getStatistics());
 
 			while (m_window.shouldClose()) {
@@ -57,6 +70,7 @@ namespace mar {
 
 				m_renderer.draw(&m_mesh);
 				m_cubemapRenderer.draw(&m_cubemapMesh);
+				m_objectRenderer.draw(&m_objectMesh);
 				
 				m_gui.prepareNewFrame();
 				m_gui.display();

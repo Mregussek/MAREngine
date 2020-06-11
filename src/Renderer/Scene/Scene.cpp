@@ -151,13 +151,13 @@ namespace mar {
 				std::make_shared<Surface>()
 			};
 			m_centers = {
-				{ 0.0f,  -0.025f,  0.0f }
+				{ 0.0f,  -3.f,  0.0f }
 			};
 			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 			};
 			m_textures = {
-				TexturePaths.grassTex
+				TexturePaths.yellowTex
 			};
 		}
 

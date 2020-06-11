@@ -66,6 +66,21 @@ namespace mar {
 			}
 		}
 
+		void Mesh::loadObject(objects::Object* object) {
+			Ref<Shape> new_shape = std::make_shared<Shape>(
+				object->getID(),
+				object->getName(),
+				object->getCenter(),
+				object->getAngle(),
+				object->getVertices(),
+				object->getIndices(),
+				object->getLayout()
+			);
+
+			std::string empty = "empty";
+			submitShape(new_shape, new_shape->getCenter(), new_shape->getAngle(), empty);
+		}
+
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
 			if (m_shapes.size() == constants::maxObjectsInScene - 1) {
 				std::cout << "Cannot push more objects!" << std::endl;

@@ -67,6 +67,7 @@
 #include <iostream>
 #include <fstream> 
 #include <string>
+#include <sstream>
 // data structures
 #include <vector> 
 #include <unordered_map>
@@ -105,7 +106,12 @@ namespace mar {
 		class Camera;
 
 		struct Vertex;
-		class ObjectLoader;
+
+		namespace objects {
+			class Object;
+			class ObjectLoader;
+		}
+		
 
 		struct RendererStatistics;
 		class Renderer;
