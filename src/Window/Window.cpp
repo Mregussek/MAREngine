@@ -4,6 +4,8 @@
  */
 
 #include "Window.h"
+#include "../Debug/Log.h"
+
 
 namespace mar {
 	namespace window {
@@ -15,9 +17,11 @@ namespace mar {
 			_windowName = wN;
 
 			if (!glfwInit()) {
-				std::cout << "glfw() init failure" << std::endl;
+				MAR_CORE_ERROR("glfw() init failure");
 				exit(0);
 			}
+
+			MAR_CORE_TRACE("GLFW has been loaded successfully!");
 
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -28,7 +32,7 @@ namespace mar {
 			_window = glfwCreateWindow(_width, _height, _windowName, nullptr, nullptr);
 			if (!_window) {
 				glfwTerminate();
-				std::cout << "glfwCreate() failure" << std::endl;
+				MAR_CORE_ERROR("Cannot create window!");
 				exit(0);
 			}
 
@@ -40,7 +44,7 @@ namespace mar {
 			glewExperimental = GL_TRUE;
 			if (glewInit() != GLEW_OK) {
 				glfwTerminate();
-				std::cout << "glewInit() failure" << std::endl;
+				MAR_CORE_ERROR("glewInit() failure");
 				exit(0);
 			}
 #else
@@ -50,18 +54,29 @@ namespace mar {
 			}
 #endif
 
-			if (camera == nullptr)
+			if (camera == nullptr) {
 				callbacks::setCallbacks(_window);
-			else
+
+				MAR_CORE_TRACE("Did not add camera callbacks!");
+			}
+			else {
 				callbacks::setCallbacks(_window, camera);
+
+				MAR_CORE_TRACE("Added camera callbacks!");
+			}
+				
 
 			/// Vertical synchronization(VSync) is enabled by using glfwSwapInterval(1); 
 			glfwSwapInterval(1);
 			glEnable(GL_DEPTH_TEST);
+
+			MAR_CORE_INFO("OpenGL loaded successfully and window is working!");
 		}
 
 		void Window::shutdown() {
 			glfwTerminate();
+
+			MAR_CORE_INFO("Terminating GLFW!");
 		}
 
 		void Window::swapBuffers() {

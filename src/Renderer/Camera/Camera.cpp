@@ -4,6 +4,7 @@
  */
 
 #include "Camera.h"
+#include "../../Debug/Log.h"
 
 namespace mar {
     namespace graphics {
@@ -39,6 +40,8 @@ namespace mar {
 			m_windowWidth = w;
 			m_windowHeight = h;
 			updateCameraVectors();
+
+			MAR_CORE_INFO("Camera has been initialized successfully!");
 		}
 
 		void Camera::processInput(GLFWwindow* window) {

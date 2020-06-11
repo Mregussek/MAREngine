@@ -4,12 +4,23 @@
  */
 
 #include "Mesh.h"
+#include "../../Debug/Log.h"
 
 namespace mar {
     namespace graphics {
 
 		Mesh::~Mesh() {
 			m_texture->shutdown();
+
+			clearMatrices();
+			clearBuffers();
+
+			m_samplers.clear();
+
+			for (auto& s : m_shapes)
+				s.reset();
+
+			m_shapes.clear();
 		}
 
 		void Mesh::createMesh(const Ref<RendererFactory>& factory) {
@@ -27,6 +38,8 @@ namespace mar {
 			m_indicesMaxValue = 0;
 			m_availableShapeID = 0.0f;
 			m_availableTextureID = 1.0f;
+
+			MAR_CORE_INFO("Mesh has been created!");
 		}
 
 		void Mesh::loadScene(Scene* scene) {
@@ -34,6 +47,8 @@ namespace mar {
 
 			for (unsigned int i = 0; i < shapesInSceneCount; i++)
 				submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
+
+			MAR_CORE_INFO("Scene has been loaded!");
 		}
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
@@ -48,10 +63,14 @@ namespace mar {
 			pushTexture(new_shape, texture);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
+
+			MAR_CORE_INFO("Added new object to scene!");
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {
 			popShape(index);
+
+			MAR_CORE_INFO("Deleted object from scene!");
 		}
 
 		void Mesh::pushTexture(Ref<Shape>& new_shape, const std::string& texture) {

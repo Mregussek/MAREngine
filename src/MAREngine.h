@@ -45,6 +45,8 @@ namespace mar {
 			void run();
 
 			void shutdown();
+
+			void restart();
 		};
 
 

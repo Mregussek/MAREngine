@@ -4,6 +4,7 @@
  */
 
 #include "GUI.h"
+#include "../Debug/Log.h"
 
 namespace mar {
 	namespace gui {
@@ -26,12 +27,16 @@ namespace mar {
 			ImGui_ImplOpenGL3_Init(glsl_version);
 
 			for (auto& c : m_sceneColors) c = 1.0f;
+
+			MAR_CORE_INFO("GUI has initialized properly!");
 		}
 
 		void GUI::shutdown() {
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplGlfw_Shutdown();
 			ImGui::DestroyContext();
+
+			MAR_CORE_INFO("GUI is closed!");
 		}
 
 		void GUI::prepareNewFrame() {
@@ -75,25 +80,21 @@ namespace mar {
 				}
 
 				if (ImGui::BeginMenu("Scene")) {
-					if(!m_displayGeneralScene)
-						if (ImGui::MenuItem("Open Scene Modification Window")) {
-							m_displayGeneralScene = true;
-						}
+					if (ImGui::MenuItem("Open Scene Modification Window")) {
+						m_displayGeneralScene = true;
+					}
 
-					if (!m_displaySeperatelyShapes)
-						if (ImGui::MenuItem("Modify Shapes Separately Window")) {
-							m_displaySeperatelyShapes = true;
-						}
+					if (ImGui::MenuItem("Modify Shapes Separately Window")) {
+						m_displaySeperatelyShapes = true;
+					}
 
-					if (!m_displayShapePush)
-						if (ImGui::MenuItem("Add Shape to Scene Window")) {
-							m_displayShapePush = true;
-						}
+					if (ImGui::MenuItem("GUI: Add Shape to Scene Window")) {
+						m_displayShapePush = true;
+					}
 
-					if (!m_displayStatistics)
-						if (ImGui::MenuItem("Scene Statistics Window")) {
-							m_displayStatistics = true;
-						}
+					if (ImGui::MenuItem("Scene Statistics Window")) {
+						m_displayStatistics = true;
+					}
 
 					ImGui::EndMenu();
 				}

@@ -4,6 +4,7 @@
  */
 
 #include "Renderer.h"
+#include "../Debug/Log.h"
 
 namespace mar {
 	namespace graphics {
@@ -19,9 +20,11 @@ namespace mar {
 				m_mainShader = factory->createShader();
 
 				s_stats = RendererStatistics();
+
+				MAR_CORE_INFO("Renderer properly created!");
 			}
 			else {
-				std::cerr << "Renderer is already initialized!" << std::endl;
+				MAR_CORE_ERROR("Renderer is already initialized!");
 			}
 		}
 
@@ -31,9 +34,19 @@ namespace mar {
 				m_vao->closeArrayBuffer();
 				m_vbo->close();
 				m_ebo->close();
+
+				m_mainShader.reset();
+				m_vao.reset();
+				m_vbo.reset();
+				m_ebo.reset();
+				m_layout.reset();
+
+				m_initialized = false;
+
+				MAR_CORE_INFO("Renderer closed!");
 			}
 			else {
-				std::cerr << "Renderer is not initialized!" << std::endl;
+				MAR_CORE_ERROR("Renderer is not initialized!");
 			}
 		}
 
@@ -58,10 +71,17 @@ namespace mar {
 				m_mainShader->bind();
 
 				m_initialized = true;
+
+				MAR_CORE_INFO("Renderer properly initialized!");
+			}
+			else {
+				MAR_CORE_ERROR("Renderer is already initialized!");
 			}
 		}
 
 		void Renderer::setReferences(const gui::GUIData* guidata, const CameraData* cameradata) {
+			MAR_CORE_TRACE("Setting new references for Renderer!");
+
 			m_guiData = guidata;
 			m_cameraData = cameradata;
 		}

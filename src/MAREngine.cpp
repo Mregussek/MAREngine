@@ -19,12 +19,14 @@ namespace mar {
 			m_camera.initialize(MAREngineDefaultSettings.width, MAREngineDefaultSettings.height);
 			m_window.initialize(MAREngineDefaultSettings.height, MAREngineDefaultSettings.width, MAREngineDefaultSettings.name, &m_camera);
 			m_gui.initialize(&m_window, MAREngineDefaultSettings.glsl_version, usegui);
+
 			m_renderer.createRenderer(factory);
 			m_mesh.createMesh(factory);
 
 			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS));
 
 			m_renderer.initialize(m_mesh.getLayout(), usegui);
+
 			m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			m_gui.setReferences(&m_mesh, &graphics::Renderer::getStatistics());
 		}
@@ -47,6 +49,13 @@ namespace mar {
 			m_gui.shutdown();
 			m_renderer.closeRenderer();
 			m_window.shutdown();
+		}
+
+		
+		void MAREngine::restart() {
+			// TODO: Make it work!
+			shutdown();
+			initialize();
 		}
 
 
