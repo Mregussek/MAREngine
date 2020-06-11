@@ -11,7 +11,7 @@ namespace mar {
 	namespace window {
     
 
-		void Window::initialize(const int& H, const int& W, char* wN, graphics::Camera* camera) {
+		void Window::initialize(const int& H, const int& W, const char* wN, graphics::Camera* camera) {
 			_height = H;
 			_width = W;
 			_windowName = wN;

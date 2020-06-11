@@ -31,6 +31,9 @@ namespace mar {
 				"resources/textures/skybox/back.jpg" ,
 			};
 
+			const std::string mc_grass = "resources/textures/mc/mc-grass.jpg";
+			const std::string mc_cobble = "resources/textures/mc/mc-cobble.png";
+
 #else
 			const std::string mrTex = "../../../resources/textures/mr.jpg";
 			const std::string yellowTex = "../../../resources/textures/yellow-texture.jpg";
@@ -48,6 +51,9 @@ namespace mar {
 				"../../../resources/textures/skybox/front.jpg" ,
 				"../../../resources/textures/skybox/back.jpg" ,
 			};
+
+			const std::string mc_grass = "../../../resources/textures/mc/mc-grass.jpg";
+			const std::string mc_cobble = "../../../resources/textures/mc/mc-cobble.jpg";
 #endif
 		} TexturePaths;
 

@@ -22,13 +22,13 @@ namespace mar {
 	namespace engine {
 
 
-		struct {
-			char name[10] = "MAREngine";
-			int width{ 1500 };
-			int height{ 900 };
-			char portName[10] = "\\\\.\\COM7";
-			const char* glsl_version = "#version 460";
-		} MAREngineDefaultSettings;
+		struct MAREngineSettings {
+			static const char name[10];
+			static const int width;
+			static const int height;
+			static const char portName[10];
+			static const char* glsl_version;
+		};
 
 		class MAREngine {
 			window::Window m_window;
@@ -36,17 +36,12 @@ namespace mar {
 			graphics::Camera m_camera;
 			graphics::Renderer m_renderer;
 			graphics::Mesh m_mesh;
+			graphics::Mesh m_secondmesh;
 
 		public:
 			MAREngine() = default;
 
-			void initialize();
-
 			void run();
-
-			void shutdown();
-
-			void restart();
 		};
 
 

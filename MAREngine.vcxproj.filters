@@ -296,6 +296,30 @@
     <Image Include="resources\textures\yellow-texture.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="resources\textures\mc\mc-cobble.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\mc\mc-grass.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\skybox\back.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\skybox\bottom.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\skybox\front.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\skybox\left.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\skybox\right.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="resources\textures\skybox\top.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

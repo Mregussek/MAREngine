@@ -59,29 +59,29 @@ namespace mar {
 			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
 
 			/// --- GET METHODS --- ///
-			const unsigned int& getShapesCount() const { return m_shapes.size(); }
-			const std::string& getName(const unsigned int& index) const { return m_shapes[index]->getName(); }
+			inline const unsigned int& getShapesCount() const { return m_shapes.size(); }
+			inline const std::string& getName(const unsigned int& index) const { return m_shapes[index]->getName(); }
+	
+			inline const std::vector<float>& getVertices() const { return m_vertices; }
+			inline const unsigned int& getVerticesSize() const { return m_vertices.size(); }
 
-			const std::vector<float>& getVertices() const { return m_vertices; }
-			const unsigned int& getVerticesSize() const { return m_vertices.size(); }
+			inline const std::vector<unsigned int>& getIndices() const { return m_indices; }
+			inline const unsigned int& getIndicesSize() const { return m_indices.size(); }
+			inline const std::vector<int>& getSamplers() const { return m_samplers; }
+			inline const int& getSamplerID(const unsigned int& index) { return m_samplers[index]; }
+			inline const unsigned int& getSamplersSize() const { return m_samplers.size(); }
 
-			const std::vector<unsigned int>& getIndices() const { return m_indices; }
-			const unsigned int& getIndicesSize() const { return m_indices.size(); }
-			const std::vector<int>& getSamplers() const { return m_samplers; }
-			const int& getSamplerID(const unsigned int& index) { return m_samplers[index]; }
-			const unsigned int& getSamplersSize() const { return m_samplers.size(); }
+			inline const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
+			inline const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
+	
+			inline const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector(); }
+			inline const unsigned int& getLayout(const unsigned int& index) const { return m_shapes[0]->getLayout(index); }
+			inline const unsigned int& getLayoutSize() const { return m_shapes[0]->getLayoutSize(); }
+	
+			inline Light& getLight() { return m_light; }
 
-			const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
-			const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
-			
-			const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector(); }
-			const unsigned int& getLayout(const unsigned int& index) const { return m_shapes[0]->getLayout(index); }
-			const unsigned int& getLayoutSize() const { return m_shapes[0]->getLayoutSize(); }
-
-			Light& getLight() { return m_light; }
-
-			glm::vec3& getCenter(const unsigned int& index) { return m_shapes[index]->getCenter(); }
-			glm::vec3& getAngle(const unsigned int& index) { return m_shapes[index]->getAngle(); }
+			inline glm::vec3& getCenter(const unsigned int& index) { return m_shapes[index]->getCenter(); }
+			inline glm::vec3& getAngle(const unsigned int& index) { return m_shapes[index]->getAngle(); }
 
 			// --- SET METHODS --- //
 			void setCenter(const unsigned int& index, const glm::vec3& new_center) { m_shapes[index]->setCenter(new_center); }

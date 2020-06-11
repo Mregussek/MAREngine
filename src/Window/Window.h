@@ -17,12 +17,12 @@ namespace mar {
 			GLFWwindow* _window;
 			int _width;
 			int _height;
-			char* _windowName;
+			const char* _windowName;
 
 		public:
 			Window() = default;
 
-			void initialize(const int& H, const int& W, char* wN, graphics::Camera* camera = nullptr);
+			void initialize(const int& H, const int& W, const char* wN, graphics::Camera* camera = nullptr);
 			void shutdown();
 
 			void swapBuffers();

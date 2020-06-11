@@ -70,7 +70,7 @@ namespace mar {
 		public:
 			const glm::mat4 getTranslationMatrix() const;
 			const glm::mat4 getRotationMatrix() const;
-			const static GUIData& getGUIData() { return s_guiData; }
+			inline const static GUIData& getGUIData() { return s_guiData; }
 		};
 
 

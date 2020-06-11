@@ -87,22 +87,42 @@ namespace mar {
 			};
 		}
 
-		void Scene::createOnlyColouredElements() {
+		void Scene::createSecondMesh() {
 			m_shapes = {
 				std::make_shared<Cube>()
-				, std::make_shared<Pyramid>()
+				, std::make_shared<Cube>()
+				, std::make_shared<Cube>()
+				, std::make_shared<Cube>()
+				, std::make_shared<Cube>()
+				, std::make_shared<Cube>()
+				, std::make_shared<Cube>()
 			};
 			m_centers = {
-				{ 1.0f,  1.5f, -5.0f }
-				, { -1.0f,  1.5f, -5.0f }
+				  { 5.0f, 0.0f, 0.0f }
+				, { 7.0f, 0.0f, 0.0f }
+				, { 9.0f, 0.0f, 0.0f }
+				, { 5.0f, 0.0f, 2.0f }
+				, { 7.0f, 0.0f, 2.0f }
+				, { 9.0f, 0.0f, 2.0f }
+				, { 6.4f, 2.0f, 0.0f }
 			};
 			m_angles = {
 				 { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
+				 , { 0.0f, 0.0f, 0.0f }
 			};
 			m_textures = {
-				"empty"
-				, "empty"
+				TexturePaths.mc_grass
+				, TexturePaths.mc_grass
+				, TexturePaths.mc_grass
+				, TexturePaths.mc_grass
+				, TexturePaths.mc_cobble
+				, TexturePaths.mc_cobble
+				, TexturePaths.mc_cobble
 			};
 		}
 

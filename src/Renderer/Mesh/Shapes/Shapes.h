@@ -68,38 +68,38 @@ namespace mar {
 			}
 
 			virtual const std::string& getName() const;
-
+			
 			virtual void setID(float newID);
 			virtual const float getID() const;
-
+				 
 			virtual void setTextureID(float newID);
 			virtual const float getTextureID() const;
-
+				
 			virtual glm::vec3& getCenter();
 			virtual void setCenter(const glm::vec3& new_center);
-
+				
 			virtual glm::vec3& getAngle();
 			virtual void setAngle(const glm::vec3& new_angle);
-
+		
 			virtual const unsigned int getStride();
 			virtual const unsigned int getSizeofVertices() const;
 			virtual const unsigned int getSizeofIndices() const;
 			virtual const unsigned int getMaxValueOfIndices() const;
-
+		
 			virtual void setVerticesVector(const std::vector<float>& new_vertices);
 			virtual const std::vector<float>& getVerticesVector() const;
 			virtual float getVertice(size_t index) const;
 			virtual void setVertice(size_t index, float new_value);
 			virtual std::vector<float>::const_iterator getVerticesBegin() const;
 			virtual std::vector<float>::const_iterator getVerticesEnd() const;
-
+		
 			virtual void setIndicesVector(const std::vector<unsigned int>& new_indices);
 			virtual const std::vector<unsigned int>& getIndicesVector() const;
 			virtual unsigned int getIndice(size_t index) const;
 			virtual void setIndice(size_t index, unsigned int new_value);
 			virtual std::vector<unsigned int>::const_iterator getIndicesBegin() const;
 			virtual std::vector<unsigned int>::const_iterator getIndicesEnd() const;
-
+	
 			virtual const std::vector<unsigned int>& getLayoutVector() const;
 			virtual unsigned int getLayout(size_t index) const;
 			virtual unsigned int getLayoutSize() const;

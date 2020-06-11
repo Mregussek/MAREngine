@@ -91,13 +91,13 @@ namespace mar {
 			void updateCameraVectors();
 
 		public:
-			const CameraData& getCameraData() const { return m_cameraData; }
+			inline const CameraData& getCameraData() const { return m_cameraData; }
 
-			const glm::vec3& getCameraPosition() const { return m_position; }
-			const float& getZoom() const { return m_zoom; }
-			const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(m_zoom), (float)m_windowWidth / (float)m_windowHeight, 0.01f, 100.0f); }
-			const glm::mat4 getViewMatrix() const { return glm::lookAt(m_position, m_position + m_front, m_up); }
-			const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
+			inline const glm::vec3& getCameraPosition() const { return m_position; }
+			inline const float& getZoom() const { return m_zoom; }
+			inline const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(m_zoom), (float)m_windowWidth / (float)m_windowHeight, 0.01f, 100.0f); }
+			inline const glm::mat4 getViewMatrix() const { return glm::lookAt(m_position, m_position + m_front, m_up); }
+			inline const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
 		};
 
 

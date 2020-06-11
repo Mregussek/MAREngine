@@ -84,7 +84,7 @@ namespace mar {
 			void unbind();
 
 		public:
-			static RendererStatistics& getStatistics() { return s_stats; }
+			inline static RendererStatistics& getStatistics() { return s_stats; }
 		};
 
 
