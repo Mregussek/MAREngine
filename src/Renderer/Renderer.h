@@ -48,12 +48,6 @@ namespace mar {
 			}
 		};
 
-		enum class RendererType {
-			DEFAULT,
-			WITHOUT_GUI,
-			CUBEMAP
-		};
-
 		class Renderer {
 			// --- Buffers
 			Ref<VertexBuffer> m_vbo;
@@ -62,7 +56,6 @@ namespace mar {
 			Ref<ElementBuffer> m_ebo;
 			Ref<Shader> m_mainShader;
 			// --- Knowledge about state of Renderer
-			RendererType m_type;
 			bool m_initialized = false;		// check, if renderer is initialized
 			bool m_useGUI = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
 			static RendererStatistics s_stats;
@@ -73,10 +66,10 @@ namespace mar {
 		public:
 			Renderer() = default;
 
-			void createRenderer(const Ref<RendererFactory>& factory, const RendererType type);
+			void createRenderer(const Ref<RendererFactory>& factory);
 			void closeRenderer();
 
-			void initialize(const std::vector<unsigned int>& layout);
+			void initialize(const std::vector<unsigned int>& layout, const ShaderType type);
 			void setReferences(const gui::GUIData* guidata, const CameraData* cameradata);
 
 			void draw(Mesh* mesh);

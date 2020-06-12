@@ -6,7 +6,7 @@
 #ifndef MAR_ENGINE_OBJECT_H
 #define MAR_ENGINE_OBJECT_H
 
-#include "../mar.h"
+#include "../../../mar.h"
 #include "ObjectLoader.h"
 
 namespace mar {

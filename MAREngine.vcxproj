@@ -152,7 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Objects\Object.h" />
+    <ClInclude Include="src\Renderer\Mesh\Objects\Object.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\Layers\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
@@ -166,7 +166,7 @@
     <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="src\Renderer\Mesh\Mesh.h" />
-    <ClInclude Include="src\Objects\ObjectLoader.h" />
+    <ClInclude Include="src\Renderer\Mesh\Objects\ObjectLoader.h" />
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
     <ClInclude Include="src\Renderer\Mesh\MeshCreator.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Pyramid.h" />
@@ -208,11 +208,11 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Objects\Object.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\Objects\Object.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />
     <ClCompile Include="src\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
-    <ClCompile Include="src\Objects\ObjectLoader.cpp" />
+    <ClCompile Include="src\Renderer\Mesh\Objects\ObjectLoader.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Light\Light.cpp" />
     <ClCompile Include="MAR_3rd_party\MARMaths\src\mat\mat4.cpp" />
     <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec2.cpp" />

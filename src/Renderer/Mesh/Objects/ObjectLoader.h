@@ -6,7 +6,7 @@
 #ifndef MAR_ENGINE_OBJECT_LOADER_H
 #define MAR_ENGINE_OBJECT_LOADER_H
 
-#include "../mar.h"
+#include "../../../mar.h"
 
 namespace mar {
     namespace graphics { namespace objects {

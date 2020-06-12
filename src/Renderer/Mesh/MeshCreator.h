@@ -22,6 +22,10 @@ namespace mar {
 
         class MeshCreator {
         public:
+            static Ref<Shape> createEmptyShape() {
+                return std::make_shared<Shape>();
+            }
+
             static Ref<Shape> createCube() {
                 return std::make_shared<Cube>();
             }

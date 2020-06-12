@@ -4,7 +4,7 @@
  */
 
 #include "ObjectLoader.h"
-#include "../Debug/Log.h"
+#include "../../../Debug/Log.h"
 
 namespace mar {
 	namespace graphics { namespace objects {
@@ -86,17 +86,24 @@ namespace mar {
 			s_layout = { 3, 3, 3, 2, 1, 1 };
 			s_texid = 0.f;
 			s_id = 0.f;
+			s_center = { 0.0f, -1.0f, 2.0f };
+			s_angle = { 90.0f, 180.0f, 90.0f };
 			
 			for (unsigned int i = 0; i < vertex_positions.size(); i++) {
 				// x, y, z coords
-				s_vertices.push_back(vertex_positions[i].x);
-				s_vertices.push_back(vertex_positions[i].y);
-				s_vertices.push_back(vertex_positions[i].z);
+				s_vertices.push_back(vertex_positions[i].x / 5.0f);
+				s_vertices.push_back(vertex_positions[i].y / 5.0f);
+				s_vertices.push_back(vertex_positions[i].z / 5.0f);
 
 				// basic colors
 				s_vertices.push_back(basic_color.x);
 				s_vertices.push_back(basic_color.y);
 				s_vertices.push_back(basic_color.z);
+
+				// light normals
+				s_vertices.push_back(light_normal.x);
+				s_vertices.push_back(light_normal.y);
+				s_vertices.push_back(light_normal.z);
 
 				// texture coords
 				s_vertices.push_back(tex_coords.x);
@@ -109,6 +116,7 @@ namespace mar {
 				s_vertices.push_back(s_id);
 			}
 
+			MAR_CORE_TRACE("ObjectLoader has been set!");
 		} // end ObjectLoader::loadObject
 
 

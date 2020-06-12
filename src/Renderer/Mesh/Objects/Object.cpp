@@ -4,7 +4,7 @@
  */
 
 #include "Object.h"
-#include "../Debug/Log.h"
+#include "../../../Debug/Log.h"
 
 namespace mar {
 	namespace graphics { namespace objects {

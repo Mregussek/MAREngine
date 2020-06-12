@@ -11,6 +11,7 @@
 #include "Layers/LayerStack.h"
 #include "Layers/Layer.h"
 // Rendering
+#include "Renderer/Mesh/Mesh.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Camera/Camera.h"
 #include "Renderer/RendererFactory.h"

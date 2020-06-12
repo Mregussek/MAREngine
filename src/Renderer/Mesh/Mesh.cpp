@@ -66,16 +66,17 @@ namespace mar {
 			}
 		}
 
-		void Mesh::loadObject(objects::Object* object) {
-			Ref<Shape> new_shape = std::make_shared<Shape>(
-				object->getID(),
-				object->getName(),
-				object->getCenter(),
-				object->getAngle(),
-				object->getVertices(),
-				object->getIndices(),
-				object->getLayout()
-			);
+		void Mesh::submitObject(objects::Object* object) {
+			Ref<Shape> new_shape = MeshCreator::createEmptyShape();
+
+			new_shape->setName(object->getName());
+			new_shape->setCenter(object->getCenter());
+			new_shape->setAngle(object->getAngle());
+			new_shape->setVerticesVector(object->getVertices());
+			new_shape->setIndicesVector(object->getIndices());
+			new_shape->setID(object->getID());
+			new_shape->setTextureID(object->getTextureID());
+			new_shape->setLayout(object->getLayout());
 
 			std::string empty = "empty";
 			submitShape(new_shape, new_shape->getCenter(), new_shape->getAngle(), empty);

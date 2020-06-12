@@ -39,6 +39,8 @@ namespace mar {
 		*/
 		class Shape {
 		public:
+			Shape() = default;
+
 			Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
 				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
 				std::vector<unsigned int> new_layout)
@@ -68,6 +70,7 @@ namespace mar {
 			}
 
 			virtual const std::string& getName() const;
+			virtual void setName(const std::string& new_name);
 			
 			virtual void setID(float newID);
 			virtual const float getID() const;
@@ -101,6 +104,7 @@ namespace mar {
 			virtual std::vector<unsigned int>::const_iterator getIndicesEnd() const;
 	
 			virtual const std::vector<unsigned int>& getLayoutVector() const;
+			virtual void setLayout(const std::vector<unsigned int>& new_layout);
 			virtual unsigned int getLayout(size_t index) const;
 			virtual unsigned int getLayoutSize() const;
 

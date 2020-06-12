@@ -99,9 +99,6 @@
     <ClInclude Include="src\Renderer\Mesh\Shapes\DefaultShapes\Wall.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\ObjectLoader.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="MAR_3rd_party\MARMaths\src\mat\mat4.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -174,7 +171,10 @@
     <ClInclude Include="src\Layers\LayerStack.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Objects\Object.h">
+    <ClInclude Include="src\Renderer\Mesh\Objects\Object.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Renderer\Mesh\Objects\ObjectLoader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -275,10 +275,10 @@
     <ClCompile Include="src\Layers\LayerStack.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\Object.cpp">
+    <ClCompile Include="src\Renderer\Mesh\Objects\Object.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Objects\ObjectLoader.cpp">
+    <ClCompile Include="src\Renderer\Mesh\Objects\ObjectLoader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

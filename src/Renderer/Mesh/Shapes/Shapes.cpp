@@ -13,6 +13,10 @@ namespace mar {
 			return name;
 		}
 
+		void Shape:: setName(const std::string& new_name) {
+			name = new_name;
+		}
+
 		void Shape::setID(float newID) {
 			id = newID;
 		}
@@ -117,6 +121,10 @@ namespace mar {
 
 		const std::vector<unsigned int>& Shape::getLayoutVector() const {
 			return layout;
+		}
+
+		void Shape::setLayout(const std::vector<unsigned int>& new_layout) {
+			layout = new_layout;
 		}
 
 		unsigned int Shape::getLayout(size_t index) const {
