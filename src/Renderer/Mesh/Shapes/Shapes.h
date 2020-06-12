@@ -7,6 +7,8 @@
 #define SHAPES_H
 
 #include "../../../mar.h"
+#include "../Objects/ObjectLoader.h"
+#include "../../../Debug/Log.h"
 
 namespace mar {
 	namespace graphics {
@@ -44,30 +46,32 @@ namespace mar {
 			Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
 				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
 				std::vector<unsigned int> new_layout)
-				: id(new_id),
-				name(new_name),
-				center(new_center),
-				angle(new_angle),
-				verticesVector(new_vertices),
-				indicesVector(new_indices),
-				layout(new_layout),
-				_calculatedStride(false),
-				_stride(0)
+				: m_id(new_id),
+				m_texid(0.0f),
+				m_name(new_name),
+				m_center(new_center),
+				m_angle(new_angle),
+				m_verticesVector(new_vertices),
+				m_indicesVector(new_indices),
+				m_layout(new_layout),
+				m_calculatedStride(false),
+				m_stride(0)
 			{}
 
 			Shape(const Ref<Shape>& shape)
-				: id(shape->getID()),
-				name(shape->getName()),
-				center(shape->getCenter()),
-				angle(shape->getAngle()),
-				verticesVector(shape->getVerticesVector()),
-				indicesVector(shape->getIndicesVector()),
-				layout(shape->getLayoutVector()),
-				_calculatedStride(false),
-				_stride(0)
-			{
-				textureId = 0.0f;
-			}
+				: m_id(shape->getID()),
+				m_texid(0.0f),
+				m_name(shape->getName()),
+				m_center(shape->getCenter()),
+				m_angle(shape->getAngle()),
+				m_verticesVector(shape->getVerticesVector()),
+				m_indicesVector(shape->getIndicesVector()),
+				m_layout(shape->getLayoutVector()),
+				m_calculatedStride(false),
+				m_stride(0)
+			{}
+
+			void assignDataFromFile(const std::string& path);
 
 			virtual const std::string& getName() const;
 			virtual void setName(const std::string& new_name);
@@ -109,21 +113,19 @@ namespace mar {
 			virtual unsigned int getLayoutSize() const;
 
 		private:
-			float id;
-			float textureId;
-			std::string name;
+			float m_id;
+			float m_texid;
+			std::string m_name;
 
-			glm::vec3 center;
-			glm::vec3 angle;
+			glm::vec3 m_center;
+			glm::vec3 m_angle;
 
-			std::vector<float> verticesVector;
+			std::vector<float> m_verticesVector;
+			std::vector<unsigned int> m_indicesVector;
+			std::vector<unsigned int> m_layout;
 
-			std::vector<unsigned int> indicesVector;
-
-			std::vector<unsigned int> layout;
-
-			bool _calculatedStride;
-			unsigned int _stride;
+			bool m_calculatedStride;
+			unsigned int m_stride;
 		};
 
 

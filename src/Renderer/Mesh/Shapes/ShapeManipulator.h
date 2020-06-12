@@ -27,16 +27,16 @@ namespace mar {
             //! Method changes the Shape ID value in verticesVector of any shape. It works every time, when ID
             //! is on the last position of data. 
             /*!
-                \param shape - pointer to shape, which id must be changed
-                \param nextID - id value for shape
+                \param shape - pointer to shape, which m_id must be changed
+                \param nextID - m_id value for shape
             */
             static void extendShapeID(Ref<Shape>& shape, const float& nextID);
 
             //! Method changes the Texture ID value in verticesVector of any shape. It works every time, when ID
             //! is on the next to last position of data. 
             /*!
-                \param shape - pointer to shape, which id must be changed
-                \param nextID - id value for shape
+                \param shape - pointer to shape, which m_id must be changed
+                \param nextID - m_id value for shape
             */
             static void extendTextureID(Ref<Shape>& shape, const float& nextID);
 

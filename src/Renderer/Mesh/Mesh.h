@@ -52,8 +52,6 @@ namespace mar {
 			void createMesh(const Ref<RendererFactory>& factory);
 			void loadScene(Scene* scene, MeshTextures type);
 
-			void submitObject(objects::Object* object);
-
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);
 

@@ -152,7 +152,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Renderer\Mesh\Objects\Object.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\Layers\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
@@ -208,7 +207,6 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Renderer\Mesh\Objects\Object.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />
     <ClCompile Include="src\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />

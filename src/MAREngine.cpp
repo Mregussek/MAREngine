@@ -52,11 +52,12 @@ namespace mar {
 			m_objectRenderer.createRenderer(factory);
 			m_objectMesh.createMesh(factory);
 
-			graphics::objects::Object object;
+			Ref<graphics::Shape> object = graphics::MeshCreator::createEmptyShape();
+			std::string empty = "empty";
 			std::string pathToObj = "resources/objects/lego-human.obj";
-			object.assignDataFromFile(pathToObj);
+			object->assignDataFromFile(pathToObj);
 
-			m_objectMesh.submitObject(&object);
+			m_objectMesh.submitShape(object, object->getCenter(), object->getAngle(), empty);
 			m_objectRenderer.initialize(m_objectMesh.getLayout(), graphics::ShaderType::DEFAULT);
 			m_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 

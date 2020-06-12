@@ -15,7 +15,7 @@ namespace mar {
 			unsigned int size = shape->getSizeofVertices();
 			unsigned int stride = shape->getStride();
 
-			// extend all vertices, which defines texture id
+			// extend all vertices, which defines texture m_id
 			for (unsigned int j = 1; j < size / stride + 1; j++)
 				shape->setVertice(j * stride - 1, nextID);
 
@@ -31,7 +31,7 @@ namespace mar {
 			unsigned int size = shape->getSizeofVertices();
 			unsigned int stride = shape->getStride();
 
-			// extend all vertices, which defines texture id
+			// extend all vertices, which defines texture m_id
 			for (unsigned int j = 1; j < size / stride + 1; j++)
 				shape->setVertice(j * stride - 2, nextID);
 

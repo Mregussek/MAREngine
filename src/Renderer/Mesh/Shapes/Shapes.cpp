@@ -9,130 +9,145 @@ namespace mar {
 	namespace graphics {
 
 
+		void Shape::assignDataFromFile(const std::string& path) {
+			objects::ObjectLoader::loadObject(path);
+
+			m_name = objects::ObjectLoader::getName();
+			m_verticesVector = objects::ObjectLoader::getVertices();
+			m_indicesVector = objects::ObjectLoader::getIndices();
+			m_layout = objects::ObjectLoader::getLayout();
+			m_center = objects::ObjectLoader::getCenter();
+			m_angle = objects::ObjectLoader::getAngle();
+			m_id = objects::ObjectLoader::getID();
+			m_texid = objects::ObjectLoader::getTextureID();
+
+			MAR_CORE_INFO("Assigned object from ObjectLoader!");
+		}
+
 		const std::string& Shape::getName() const {
-			return name;
+			return m_name;
 		}
 
 		void Shape:: setName(const std::string& new_name) {
-			name = new_name;
+			m_name = new_name;
 		}
 
 		void Shape::setID(float newID) {
-			id = newID;
+			m_id = newID;
 		}
 
 		const float Shape::getID() const {
-			return id;
+			return m_id;
 		}
 
 		void Shape::setTextureID(float newID) {
-			textureId = newID;
+			m_texid = newID;
 		}
 
 		const float Shape::getTextureID() const {
-			return textureId;
+			return m_texid;
 		}
 
 		glm::vec3& Shape::getCenter() {
-			return center;
+			return m_center;
 		}
 
 		void Shape::setCenter(const glm::vec3& new_center) {
-			center = new_center;
+			m_center = new_center;
 		}
 
 		glm::vec3& Shape::getAngle() {
-			return angle;
+			return m_angle;
 		}
 
 		void Shape::setAngle(const glm::vec3& new_angle) {
-			angle = new_angle;
+			m_angle = new_angle;
 		}
 
 		const unsigned int Shape::getStride() {
-			if (!_calculatedStride) {
-				for (auto const& l : layout) _stride += l;
-				_calculatedStride = true;
-				return _stride;
+			if (!m_calculatedStride) {
+				for (auto const& l : m_layout) m_stride += l;
+				m_calculatedStride = true;
+				return m_stride;
 			}
 
-			return _stride;
+			return m_stride;
 		}
 
 		const unsigned int Shape::getSizeofVertices() const {
-			return verticesVector.size();
+			return m_verticesVector.size();
 		}
 
 		const unsigned int Shape::getSizeofIndices() const {
-			return indicesVector.size();
+			return m_indicesVector.size();
 		}
 
 		const unsigned int Shape::getMaxValueOfIndices() const {
-			return *std::max_element(indicesVector.begin(), indicesVector.end());
+			return *std::max_element(m_indicesVector.begin(), m_indicesVector.end());
 		}
 
 		void Shape::setVerticesVector(const std::vector<float>& new_vertices) {
-			verticesVector = new_vertices;
+			m_verticesVector = new_vertices;
 		}
 
 		const std::vector<float>& Shape::getVerticesVector() const {
-			return verticesVector;
+			return m_verticesVector;
 		}
 
 		float Shape::getVertice(size_t index) const {
-			return verticesVector[index];
+			return m_verticesVector[index];
 		}
 
 		void Shape::setVertice(size_t index, float new_value) {
-			verticesVector[index] = new_value;
+			m_verticesVector[index] = new_value;
 		}
 
 		std::vector<float>::const_iterator Shape::getVerticesBegin() const {
-			return verticesVector.begin();
+			return m_verticesVector.begin();
 		}
 
 		std::vector<float>::const_iterator Shape::getVerticesEnd() const {
-			return verticesVector.end();
+			return m_verticesVector.end();
 		}
 
 		void Shape::setIndicesVector(const std::vector<unsigned int>& new_indices) {
-			indicesVector = new_indices;
+			m_indicesVector = new_indices;
 		}
 
 		const std::vector<unsigned int>& Shape::getIndicesVector() const {
-			return indicesVector;
+			return m_indicesVector;
 		}
 
 		unsigned int Shape::getIndice(size_t index) const {
-			return indicesVector[index];
+			return m_indicesVector[index];
 		}
 
 		void Shape::setIndice(size_t index, unsigned int new_value) {
-			indicesVector[index] = new_value;
+			m_indicesVector[index] = new_value;
 		}
 
 		std::vector<unsigned int>::const_iterator Shape::getIndicesBegin() const {
-			return indicesVector.begin();
+			return m_indicesVector.begin();
 		}
 
 		std::vector<unsigned int>::const_iterator Shape::getIndicesEnd() const {
-			return indicesVector.end();
+			return m_indicesVector.end();
 		}
 
 		const std::vector<unsigned int>& Shape::getLayoutVector() const {
-			return layout;
+			return m_layout;
 		}
 
 		void Shape::setLayout(const std::vector<unsigned int>& new_layout) {
-			layout = new_layout;
+			m_layout = new_layout;
 		}
 
 		unsigned int Shape::getLayout(size_t index) const {
-			return layout[index];
+			return m_layout[index];
 		}
 
 		unsigned int Shape::getLayoutSize() const {
-			return layout.size();
+			return m_layout.size();
 		}
 
 

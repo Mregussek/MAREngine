@@ -171,9 +171,6 @@
     <ClInclude Include="src\Layers\LayerStack.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Renderer\Mesh\Objects\Object.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Renderer\Mesh\Objects\ObjectLoader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -273,9 +270,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Layers\LayerStack.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Renderer\Mesh\Objects\Object.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer\Mesh\Objects\ObjectLoader.cpp">

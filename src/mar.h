@@ -108,10 +108,8 @@ namespace mar {
 		struct Vertex;
 
 		namespace objects {
-			class Object;
 			class ObjectLoader;
 		}
-		
 
 		struct RendererStatistics;
 		class Renderer;
