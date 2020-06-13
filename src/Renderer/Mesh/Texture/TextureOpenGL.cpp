@@ -133,13 +133,10 @@ namespace mar {
 		}
 
 		void TextureOpenGL::removeID(const unsigned int& index) {
-			std::vector<unsigned int> new_id;
+			for (unsigned int i = index; i < m_id.size() - 1; i++)
+				m_id[i] = m_id[i + 1];
 
-			for (unsigned int i = 0; i < m_id.size(); i++)
-				if (i != index) 
-					new_id.push_back(m_id[i]);
-			
-			m_id = new_id;
+			m_id.pop_back();
 		}
 
 

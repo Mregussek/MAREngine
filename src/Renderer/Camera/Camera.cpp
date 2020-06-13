@@ -44,26 +44,26 @@ namespace mar {
 			MAR_CORE_INFO("Camera has been initialized successfully!");
 		}
 
-		void Camera::processInput(GLFWwindow* window) {
+		void Camera::processInput() {
 			float currentFrame = (float)glfwGetTime();
 			m_deltaTime = currentFrame - m_lastFrame;
 			m_lastFrame = currentFrame;
 
-			if (glfwGetKey(window, MAR_KEY_ESCAPE) == MAR_KEY_IS_PRESSED)
-				glfwSetWindowShouldClose(window, true);
+			if (glfwGetKey(m_window, MAR_KEY_ESCAPE) == MAR_KEY_IS_PRESSED)
+				glfwSetWindowShouldClose(m_window, true);
 
 			// Camera move check
-			if (glfwGetKey(window, MAR_KEY_W) == MAR_KEY_IS_PRESSED)
+			if (glfwGetKey(m_window, MAR_KEY_W) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::FORWARD);
-			if (glfwGetKey(window, MAR_KEY_S) == MAR_KEY_IS_PRESSED)
+			if (glfwGetKey(m_window, MAR_KEY_S) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::BACKWARD);
-			if (glfwGetKey(window, MAR_KEY_A) == MAR_KEY_IS_PRESSED)
+			if (glfwGetKey(m_window, MAR_KEY_A) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::LEFT);
-			if (glfwGetKey(window, MAR_KEY_D) == MAR_KEY_IS_PRESSED)
+			if (glfwGetKey(m_window, MAR_KEY_D) == MAR_KEY_IS_PRESSED)
 				processKeyboard(CameraMovement::RIGHT);
 
 			// Enable Mouse Usage
-			if (glfwGetKey(window, MAR_KEY_1) == MAR_KEY_IS_PRESSED) {
+			if (glfwGetKey(m_window, MAR_KEY_1) == MAR_KEY_IS_PRESSED) {
 				if (m_enableMouse) m_enableMouse = false;
 				else m_enableMouse = true;
 

@@ -40,79 +40,6 @@ namespace mar {
 			because names of functions says all what they do.
 		*/
 		class Shape {
-		public:
-			Shape() = default;
-
-			Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
-				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
-				std::vector<unsigned int> new_layout)
-				: m_id(new_id),
-				m_texid(0.0f),
-				m_name(new_name),
-				m_center(new_center),
-				m_angle(new_angle),
-				m_verticesVector(new_vertices),
-				m_indicesVector(new_indices),
-				m_layout(new_layout),
-				m_calculatedStride(false),
-				m_stride(0)
-			{}
-
-			Shape(const Ref<Shape>& shape)
-				: m_id(shape->getID()),
-				m_texid(0.0f),
-				m_name(shape->getName()),
-				m_center(shape->getCenter()),
-				m_angle(shape->getAngle()),
-				m_verticesVector(shape->getVerticesVector()),
-				m_indicesVector(shape->getIndicesVector()),
-				m_layout(shape->getLayoutVector()),
-				m_calculatedStride(false),
-				m_stride(0)
-			{}
-
-			void assignDataFromFile(const std::string& path);
-
-			virtual const std::string& getName() const;
-			virtual void setName(const std::string& new_name);
-			
-			virtual void setID(float newID);
-			virtual const float getID() const;
-				 
-			virtual void setTextureID(float newID);
-			virtual const float getTextureID() const;
-				
-			virtual glm::vec3& getCenter();
-			virtual void setCenter(const glm::vec3& new_center);
-				
-			virtual glm::vec3& getAngle();
-			virtual void setAngle(const glm::vec3& new_angle);
-		
-			virtual const unsigned int getStride();
-			virtual const unsigned int getSizeofVertices() const;
-			virtual const unsigned int getSizeofIndices() const;
-			virtual const unsigned int getMaxValueOfIndices() const;
-		
-			virtual void setVerticesVector(const std::vector<float>& new_vertices);
-			virtual const std::vector<float>& getVerticesVector() const;
-			virtual float getVertice(size_t index) const;
-			virtual void setVertice(size_t index, float new_value);
-			virtual std::vector<float>::const_iterator getVerticesBegin() const;
-			virtual std::vector<float>::const_iterator getVerticesEnd() const;
-		
-			virtual void setIndicesVector(const std::vector<unsigned int>& new_indices);
-			virtual const std::vector<unsigned int>& getIndicesVector() const;
-			virtual unsigned int getIndice(size_t index) const;
-			virtual void setIndice(size_t index, unsigned int new_value);
-			virtual std::vector<unsigned int>::const_iterator getIndicesBegin() const;
-			virtual std::vector<unsigned int>::const_iterator getIndicesEnd() const;
-	
-			virtual const std::vector<unsigned int>& getLayoutVector() const;
-			virtual void setLayout(const std::vector<unsigned int>& new_layout);
-			virtual unsigned int getLayout(size_t index) const;
-			virtual unsigned int getLayoutSize() const;
-
-		private:
 			float m_id;
 			float m_texid;
 			std::string m_name;
@@ -126,6 +53,53 @@ namespace mar {
 
 			bool m_calculatedStride;
 			unsigned int m_stride;
+
+		public:
+			Shape() = default;
+
+			Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
+				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
+				std::vector<unsigned int> new_layout);
+
+			Shape(const Ref<Shape>& shape);
+
+			void assignDataFromFile(const std::string& path);
+
+			// --- GET METHODS --- //
+			const std::string& getName() const;
+			const float getID() const;
+			const float getTextureID() const;
+			glm::vec3& getCenter();
+			glm::vec3& getAngle();
+			const unsigned int getStride();
+			const unsigned int getSizeofVertices() const;
+			const unsigned int getSizeofIndices() const;
+			const unsigned int& getMaxValueOfIndices() const;
+			const unsigned int& getMinValueOfIndices() const;
+			const std::vector<float>& getVerticesVector() const;
+			float getVertice(size_t index) const;
+			std::vector<float>::const_iterator getVerticesBegin() const;
+			std::vector<float>::const_iterator getVerticesEnd() const;
+			const std::vector<unsigned int>& getIndicesVector() const;
+			unsigned int getIndice(size_t index) const;
+			std::vector<unsigned int>::const_iterator getIndicesBegin() const;
+			std::vector<unsigned int>::const_iterator getIndicesEnd() const;
+			const std::vector<unsigned int>& getLayoutVector() const;
+			unsigned int getLayout(size_t index) const;
+			unsigned int getLayoutSize() const;
+
+			// --- SET METHODS --- //
+			void setName(const std::string& new_name);
+			void setID(float newID);
+			void setTextureID(float newID);
+			void setCenter(const glm::vec3& new_center);
+			void setAngle(const glm::vec3& new_angle);
+			void setVerticesVector(const std::vector<float>& new_vertices);
+			void setVertice(size_t index, float new_value);
+			void setIndicesVector(const std::vector<unsigned int>& new_indices);
+			void setIndice(size_t index, unsigned int new_value);
+			void setLayout(const std::vector<unsigned int>& new_layout);
+			
 		};
 
 

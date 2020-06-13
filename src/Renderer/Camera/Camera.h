@@ -72,13 +72,17 @@ namespace mar {
 			float m_lastFrame;
 			// --- Data for renderer
 			CameraData m_cameraData;
+			// --- Window Reference
+			GLFWwindow* m_window;
 
 		public:
 			Camera();
 
 			void initialize(const int& w, const int& h);
 
-			void processInput(GLFWwindow* window);
+			
+
+			void processInput();
 			void updateData();
 
 			void mouseCallback(float xpos, float ypos);
@@ -91,6 +95,10 @@ namespace mar {
 			void updateCameraVectors();
 
 		public:
+			// --- SET METHODS --- //
+			void setReference(GLFWwindow* window) { m_window = window; }
+
+			// --- GET METHODS --- //
 			inline const CameraData& getCameraData() const { return m_cameraData; }
 
 			inline const glm::vec3& getCameraPosition() const { return m_position; }

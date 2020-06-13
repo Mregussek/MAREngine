@@ -9,13 +9,19 @@
 namespace mar {
 	namespace gui {
 
-		GUIData GUI::s_guiData;
+		const const char* GUITextureList::s_textures[] = {
+			"empty",
+			graphics::TexturePaths.mrTex.c_str(),
+			graphics::TexturePaths.redTex.c_str(),
+			graphics::TexturePaths.blueTex.c_str(),
+			graphics::TexturePaths.blackTex.c_str(),
+			graphics::TexturePaths.yellowTex.c_str(),
+			graphics::TexturePaths.wallTex.c_str(),
+			graphics::TexturePaths.grassTex.c_str()
+		};
+		int GUITextureList::s_selectedItem;
 
-		GUI::GUI()
-			: m_sceneTranslation(glm::vec3(0.0f, 0.0f, 0.0f)),
-			m_sceneAngle(glm::vec3(0.0f, 0.0f, 0.0f)),
-			m_canModifyObjects(false)
-		{}
+		GUIData GUI::s_guiData;
 
 		void GUI::initialize(window::Window* window, const char* glsl_version, bool can_modify_objects) {
 			m_window = window;
@@ -52,11 +58,6 @@ namespace mar {
 			s_guiData.colors[3] = m_sceneColors[3];
 		}
 
-		void GUI::setReferences(graphics::Mesh* mesh, const graphics::RendererStatistics* stats) {
-			global_mesh = mesh;
-			m_statistics = stats;
-		}
-
 		void GUI::display() {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
@@ -80,23 +81,25 @@ namespace mar {
 				}
 
 				if (ImGui::BeginMenu("Scene")) {
-					if (ImGui::MenuItem("Open Scene Modification Window")) {
-						m_displayGeneralScene = true;
+					if (ImGui::BeginMenu("Add Shape to Scene Window")) {
+						Menu_PushShapeToScene();
+						ImGui::EndMenu();
 					}
 
-					if (ImGui::MenuItem("Modify Shapes Separately Window")) {
-						m_displaySeperatelyShapes = true;
-					}
-
-					if (ImGui::MenuItem("GUI: Add Shape to Scene Window")) {
-						m_displayShapePush = true;
-					}
-
-					if (ImGui::MenuItem("Scene Statistics Window")) {
-						m_displayStatistics = true;
+					if (ImGui::MenuItem("Open Window to modify scene and meshes", nullptr, &m_modifySceneWindowDisplay)) {
+						m_modifySceneWindowDisplay = true;
 					}
 
 					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Scene Statistics")) {
+					Menu_Statistics();
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("About")) {
+					m_infoWindow = true;
 				}
 
 				if (ImGui::BeginMenu("Exit")) {
@@ -107,52 +110,55 @@ namespace mar {
 				ImGui::EndMainMenuBar();
 			}
 
-			if (m_displayGeneralScene) { eventOnScene(); }
-			if (m_displaySeperatelyShapes) { eventOnEachObjectSeperately(); }
-			if (m_displayShapePush) { addNewObjectToScene(); }
-			if (m_displayShapePop) { deleteObjectFromScene(); }
-			if (m_displayStatistics) { display_StatisticsMenu(); }
+			if (m_modifySceneWindowDisplay) { Menu_ModifyScene(); }
+			if (m_infoWindow) { Menu_Info(); }
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		}
 
-		void GUI::eventOnScene() {
-			ImGui::Begin("GeneralSceneMenu");
+		void GUI::Menu_ModifyScene() {
+			ImGui::Begin("Scene Modification Menu");
 
 			if (m_canModifyObjects) {
-				ImGui::Text("Scene");
-				ImGui::SliderFloat3("Translation", &m_sceneTranslation.x, -5.0f, 5.0f);
-				ImGui::SliderFloat3("Rotation", &m_sceneAngle.x, -360.0f, 360.0f);
-				ImGui::ColorEdit4("color", m_sceneColors);
-			}
-			else {
-				ImGui::Text("You cannot modify objects!");
-			}
+				ImGui::MenuItem("Scene Menu");
 
-			ImGui::Separator();
+				if (ImGui::TreeNode("Modify Scene")) {
+					ImGui::SliderFloat3("T", &m_sceneTranslation.x, -5.0f, 5.0f);
+					ImGui::SliderFloat3("R", &m_sceneAngle.x, -360.0f, 360.0f);
+					ImGui::ColorEdit4("C", m_sceneColors);
 
-			if (ImGui::Button("Close")) {
-				m_displayGeneralScene = false;
-			}
+					ImGui::TreePop();
+				}
 
-			ImGui::End();
-		}
+				ImGui::MenuItem("Shapes Menu", "");
 
-		void GUI::eventOnEachObjectSeperately() {
-			ImGui::Begin("GeneralShapeSeparatelyMenu");
+				for (unsigned int index = 0; index < m_meshes.size(); index++) {
 
-			if (m_canModifyObjects) {
-				ImGui::MenuItem("Objects Menu", "");
+					std::string mesh = "M" + std::to_string(index);
 
-				for (unsigned int i = 0; i < global_mesh->getShapesCount(); i++) {
-					std::string shapeindex = global_mesh->getName(i) + " " + std::to_string(i);
-					std::string shapetrans = "Translate " + global_mesh->getName(i) + " " + std::to_string(i);
-					std::string shaperot = "Rotate " + global_mesh->getName(i) + " " + std::to_string(i);
+					if (ImGui::TreeNode(("Modify " + mesh).c_str())) {
+						for (unsigned int i = 0; i < m_meshes[index]->getShapesCount(); i++) {
+							std::string shapeindex = mesh + m_meshes[index]->getName(i)[0] + std::to_string(i);
+							std::string shapetrans = "T" + shapeindex;
+							std::string shaperot = "R" + shapeindex;
 
-					ImGui::Text(shapeindex.c_str());
-					ImGui::SliderFloat3(shapetrans.c_str(), &global_mesh->getCenter(i).x, -5.0f, 5.0f, "%.3f", 0.5f);
-					ImGui::SliderFloat3(shaperot.c_str(), &global_mesh->getAngle(i).x, 0.0f, 360.0f, "%.3f", 0.5f);
+							ImGui::Text(shapeindex.c_str());
+							ImGui::SliderFloat3(shapetrans.c_str(), &m_meshes[index]->getCenter(i).x, -15.0f, 15.0f, "%.2f", 1.f);
+							ImGui::SliderFloat3(shaperot.c_str(), &m_meshes[index]->getAngle(i).x, 0.0f, 360.0f, "%.2f", 1.f);
+							
+							std::string delete_shape = "Delete " + shapeindex;
+
+							if (ImGui::Button(delete_shape.c_str())) {
+								m_meshes[index]->flushShape(i);
+							}
+						}
+
+						ImGui::TreePop();
+					}
+
+					ImGui::Separator();
+
 				}
 			}
 			else {
@@ -162,15 +168,13 @@ namespace mar {
 			ImGui::Separator();
 
 			if (ImGui::Button("Close")) {
-				m_displaySeperatelyShapes = false;
+				m_modifySceneWindowDisplay = false;
 			}
 
 			ImGui::End();
 		}
 
-		void GUI::addNewObjectToScene() {
-			ImGui::Begin("AddShapeToSceneWindow");
-
+		void GUI::Menu_PushShapeToScene() {
 			if (m_canModifyObjects) {
 				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
 				ImGui::InputFloat3("Input Center", m_inputCenter);
@@ -182,82 +186,62 @@ namespace mar {
 				else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
 					return;
 
-				if (global_mesh->getShapesCount() == graphics::constants::maxObjectsInScene - 1)
+				if (m_meshes[0]->getShapesCount() == graphics::constants::maxObjectsInScene - 1)
 					return;
 
-				Ref<graphics::Shape> new_shape;
-				bool buttonclicked = false;
+				ImGui::Combo("Choose Texture", &GUITextureList::s_selectedItem, GUITextureList::s_textures, IM_ARRAYSIZE(GUITextureList::s_textures));
+
+				ImGui::Separator();
 
 				if (ImGui::Button("Select Pyramid")) {
-					new_shape = graphics::MeshCreator::createPyramid();
-					buttonclicked = true;
+					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
+					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
+
+					m_meshes[0]->submitShape(new_shape, center, angle, texture);
 				}
 
 				if (ImGui::Button("Select Cube")) {
-					new_shape = graphics::MeshCreator::createCube();
-					buttonclicked = true;
+					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
+					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
+
+					if (texture == "empty") {
+						m_meshes[0]->submitShape(new_shape, center, angle, texture);
+						return;
+					}
+						
+					std::vector<std::string> faces = { texture, texture, texture, texture, texture, texture };
+
+					m_meshes[1]->submitShape(new_shape, center, angle, faces);
 				}
 
 				if (ImGui::Button("Select Surface")) {
-					new_shape = graphics::MeshCreator::createSurface();
-					buttonclicked = true;
+					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
+					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
+
+					m_meshes[0]->submitShape(new_shape, center, angle, texture);
 				}
 
 				if (ImGui::Button("Select Wall")) {
-					new_shape = graphics::MeshCreator::createWall();
-					buttonclicked = true;
-				}
-
-				if (buttonclicked) {
+					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					std::string texture = "empty";
+					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
 
-					global_mesh->submitShape(new_shape, center, angle, texture);
+					m_meshes[0]->submitShape(new_shape, center, angle, texture);
 				}
 			}
 			else {
 				ImGui::Text("You cannot modify objects!");
 			}
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Close")) {
-				m_displayShapePush = false;
-			}
-
-			ImGui::End();
 		}
 
-		void GUI::deleteObjectFromScene() {
-			ImGui::Begin("DeleteObjectFromSceneWindow");
-
-			if (m_canModifyObjects) {
-				for (unsigned int i = 0; i < global_mesh->getShapesCount(); i++) {
-					std::string shapeDel = "Delete " + global_mesh->getName(i) + " " + std::to_string(i);
-
-					if (ImGui::Button(shapeDel.c_str())) {
-						//global_mesh->flushShape(i);
-						//this->popData(i);
-					}
-				}
-			}
-			else {
-				ImGui::Text("You cannot modify objects!");
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Close")) {
-				m_displayShapePop = false;
-			}
-
-			ImGui::End();
-		}
-
-		void GUI::display_StatisticsMenu() {
-			ImGui::Begin("DisplayStatisticsMenuWindow");
-
+		void GUI::Menu_Statistics() {
 			if (m_canModifyObjects) {
 				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->drawCallsCount);
 				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->shapesCount);
@@ -282,11 +266,22 @@ namespace mar {
 
 			ImGui::Text(fpsinfo.c_str());
 			ImGui::Text(msframe.c_str());
+		}
 
-			ImGui::Separator();
+		void GUI::Menu_Info() {
+			ImGui::Begin("About");
+
+			std::string aboutEngine = "MAREngine is a AR engine for abstracting 3D models in real world.";
+			std::string aboutAuthor = "Mateusz Rzeczyca is C++ / Python programmer and ethusiast of Augmented Reality && Machine Learning.\nHe is a student of Eletronics and Telecommunications at AGH University of Science and Technology";
+
+			ImGui::Text("About Engine");
+			ImGui::Text(aboutEngine.c_str());
+
+			ImGui::Text("About Author");
+			ImGui::Text(aboutAuthor.c_str());
 
 			if (ImGui::Button("Close")) {
-				m_displayStatistics = false;
+				m_infoWindow = false;
 			}
 
 			ImGui::End();

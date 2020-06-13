@@ -42,6 +42,16 @@ namespace mar {
                 return std::make_shared<Pyramid>();
             }
 
+            static void moveShape(Ref<Shape>& ref_shape, Ref<Shape>& shape_to_move) {
+                ref_shape->setName(shape_to_move->getName());
+                ref_shape->setID(shape_to_move->getID());
+                ref_shape->setTextureID(shape_to_move->getTextureID());
+                ref_shape->setCenter(shape_to_move->getCenter());
+                ref_shape->setAngle(shape_to_move->getAngle());
+                ref_shape->setVerticesVector(shape_to_move->getVerticesVector());
+                ref_shape->setIndicesVector(shape_to_move->getIndicesVector());
+            }
+
         };
 
 

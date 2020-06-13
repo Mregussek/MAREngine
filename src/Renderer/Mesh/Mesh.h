@@ -7,7 +7,6 @@
 #define MAR_ENGINE_MESH_H
 
 #include "../../mar.h"
-#include "Objects/Object.h"
 #include "Shapes/Shapes.h"
 #include "Shapes/DefaultShapes/Cube.h"
 #include "Shapes/DefaultShapes/Wall.h"

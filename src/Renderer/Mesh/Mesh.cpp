@@ -99,6 +99,11 @@ namespace mar {
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {
+			if (m_shapes.size() <= 1) {
+				MAR_CORE_ERROR("Cannot delete the last shape!");
+				return;
+			}
+
 			popShape(index);
 
 			MAR_CORE_INFO("Deleted object from scene!");
@@ -156,7 +161,23 @@ namespace mar {
 		}
 
 		void Mesh::popShape(const unsigned int& index) {
+			unsigned int min_value = m_shapes[index]->getMinValueOfIndices();
+			unsigned int max_value = m_shapes[index]->getMaxValueOfIndices();
+			int diff = (-1) * (max_value - min_value + 1);
 
+			for (unsigned int i = index; i < m_shapes.size() - 1; i++) {
+				ShapeManipulator::changeIndicesFormat(m_shapes[i + 1], diff);
+				ShapeManipulator::extendShapeID(m_shapes[i + 1], m_shapes[i + 1]->getID() - 1.f);
+
+				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
+			}
+
+			m_availableShapeID--;
+			
+			m_shapes[m_shapes.size() - 1].reset();
+			m_shapes.pop_back();
+			m_samplers.pop_back();
+			m_texture->removeID(index);
 		}
 
 		void Mesh::clearBuffers() {

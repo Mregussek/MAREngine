@@ -35,36 +35,47 @@ namespace mar {
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
 			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, usegui);
 
-			m_renderer.createRenderer(factory);
-			m_mesh.createMesh(factory);
+			{
+				m_renderer.createRenderer(factory);
+				m_mesh.createMesh(factory);
 
-			m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS), graphics::MeshTextures::TEXTURES);
-			m_renderer.initialize(m_mesh.getLayout(), graphics::ShaderType::DEFAULT);
-			m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+				m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS), graphics::MeshTextures::TEXTURES);
+				m_renderer.initialize(m_mesh.getLayout(), graphics::ShaderType::DEFAULT);
+				m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			}
+			
+			{
+				m_cubemapRenderer.createRenderer(factory);
+				m_cubemapMesh.createMesh(factory);
 
-			m_cubemapRenderer.createRenderer(factory);
-			m_cubemapMesh.createMesh(factory);
+				m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
+				m_cubemapRenderer.initialize(m_cubemapMesh.getLayout(), graphics::ShaderType::CUBEMAP);
+				m_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			}
+			
+			{
+				m_objectRenderer.createRenderer(factory);
+				m_objectMesh.createMesh(factory);
 
-			m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
-			m_cubemapRenderer.initialize(m_cubemapMesh.getLayout(), graphics::ShaderType::CUBEMAP);
-			m_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+				Ref<graphics::Shape> object = graphics::MeshCreator::createEmptyShape();
+				std::string empty = "empty";
+				std::string pathToObj = "resources/objects/lego-human.obj";
+				object->assignDataFromFile(pathToObj);
 
-			m_objectRenderer.createRenderer(factory);
-			m_objectMesh.createMesh(factory);
+				m_objectMesh.submitShape(object, object->getCenter(), object->getAngle(), empty);
+				m_objectRenderer.initialize(m_objectMesh.getLayout(), graphics::ShaderType::DEFAULT);
+				m_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			}
+			
+			m_camera.setReference(m_window.getWindow());
+			m_gui.setReferences(&graphics::Renderer::getStatistics());
 
-			Ref<graphics::Shape> object = graphics::MeshCreator::createEmptyShape();
-			std::string empty = "empty";
-			std::string pathToObj = "resources/objects/lego-human.obj";
-			object->assignDataFromFile(pathToObj);
-
-			m_objectMesh.submitShape(object, object->getCenter(), object->getAngle(), empty);
-			m_objectRenderer.initialize(m_objectMesh.getLayout(), graphics::ShaderType::DEFAULT);
-			m_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
-
-			m_gui.setReferences(&m_mesh, &graphics::Renderer::getStatistics());
+			m_gui.submitMesh(&m_mesh);
+			m_gui.submitMesh(&m_cubemapMesh);
+			m_gui.submitMesh(&m_objectMesh);
 
 			while (m_window.shouldClose()) {
-				m_camera.processInput(m_window.getWindow());
+				m_camera.processInput();
 				m_camera.updateData();
 
 				graphics::Renderer::getStatistics().resetStatistics();
