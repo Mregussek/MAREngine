@@ -133,6 +133,12 @@ namespace mar {
 		}
 
 		void TextureOpenGL::removeID(const unsigned int& index) {
+			unsigned int id_count = std::count(m_id.begin(), m_id.end(), m_id[index]);
+
+			if(id_count == 1) {
+				glDeleteTextures(1, &m_id[index]);
+			}
+
 			for (unsigned int i = index; i < m_id.size() - 1; i++)
 				m_id[i] = m_id[i + 1];
 

@@ -99,7 +99,7 @@ namespace mar {
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {
-			if (m_shapes.size() <= 1) {
+			if (m_shapes.size() == 1) {
 				MAR_CORE_ERROR("Cannot delete the last shape!");
 				return;
 			}
@@ -166,10 +166,14 @@ namespace mar {
 			int diff = (-1) * (max_value - min_value + 1);
 
 			for (unsigned int i = index; i < m_shapes.size() - 1; i++) {
-				ShapeManipulator::changeIndicesFormat(m_shapes[i + 1], diff);
-				ShapeManipulator::extendShapeID(m_shapes[i + 1], m_shapes[i + 1]->getID() - 1.f);
-
+				float save_tex_id = m_shapes[i + 1]->getTextureID();
+				m_samplers[i] = m_samplers[i + 1];
 				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
+
+				m_shapes[i]->setID(m_shapes[i]->getID() - 1.f);
+				ShapeManipulator::changeIndicesFormat(m_shapes[i], diff);
+				ShapeManipulator::extendShapeID(m_shapes[i], m_shapes[i]->getID());
+				ShapeManipulator::extendTextureID(m_shapes[i], save_tex_id);
 			}
 
 			m_availableShapeID--;

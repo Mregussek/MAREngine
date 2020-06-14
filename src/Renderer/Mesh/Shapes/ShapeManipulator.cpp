@@ -10,8 +10,6 @@ namespace mar {
 
 
 		void ShapeManipulator::extendShapeID(Ref<Shape>& shape, const float& nextID) {
-			if (nextID == 0.0f) return;
-
 			unsigned int size = shape->getSizeofVertices();
 			unsigned int stride = shape->getStride();
 
@@ -23,11 +21,6 @@ namespace mar {
 		}
 
 		void ShapeManipulator::extendTextureID(Ref<Shape>& shape, const float& nextID) {
-			if (nextID == 0.0f) {
-				shape->setTextureID(nextID);
-				return;
-			}
-
 			unsigned int size = shape->getSizeofVertices();
 			unsigned int stride = shape->getStride();
 
