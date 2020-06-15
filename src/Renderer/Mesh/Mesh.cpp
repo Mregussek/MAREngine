@@ -45,11 +45,11 @@ namespace mar {
 			MAR_CORE_INFO("Mesh has been created!");
 		}
 
-		void Mesh::loadScene(Scene* scene, MeshTextures type) {
+		void Mesh::loadScene(Scene* scene, MeshType type) {
 			unsigned int shapesInSceneCount = scene->getShapesNumber();
 
 			switch(type) {
-			case MeshTextures::TEXTURES:
+			case MeshType::NORMAL:
 				for (unsigned int i = 0; i < shapesInSceneCount; i++)
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
 
@@ -57,11 +57,22 @@ namespace mar {
 
 				break;
 
-			case MeshTextures::CUBEMAPS:
+			case MeshType::CUBEMAPS:
 				for (unsigned int i = 0; i < shapesInSceneCount; i++)
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getFace(i));
 
-				MAR_CORE_INFO("Scene has been loaded by textures!");
+				MAR_CORE_INFO("Scene has been loaded by cubemaps!");
+
+				break;
+			case MeshType::OBJECTS:
+				for (unsigned int i = 0; i < shapesInSceneCount; i++) {
+					auto shape = scene->getShape(i);
+					shape->assignDataFromFile(scene->getObjPath(i));
+
+					submitShape(shape, scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
+				}
+					
+				MAR_CORE_INFO("Scene has been loaded by objects!");
 
 				break;
 			}

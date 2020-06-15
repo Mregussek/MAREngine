@@ -21,8 +21,6 @@ namespace mar {
 			MAR_LOG_INIT();
 
 			bool usegui = true;
-
-
 			auto factory = std::make_shared<graphics::RendererOpenGLFactory>();
 			graphics::Renderer m_renderer;
 			graphics::Mesh m_mesh;
@@ -39,7 +37,7 @@ namespace mar {
 				m_renderer.createRenderer(factory);
 				m_mesh.createMesh(factory);
 
-				m_mesh.loadScene(&graphics::Scene(graphics::SceneType::WITH_COLOURED_ELEMS), graphics::MeshTextures::TEXTURES);
+				m_mesh.loadScene(&graphics::Scene(graphics::SceneType::DEFAULT), graphics::MeshType::NORMAL);
 				m_renderer.initialize(m_mesh.getLayout(), graphics::ShaderType::DEFAULT);
 				m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			}
@@ -48,7 +46,7 @@ namespace mar {
 				m_cubemapRenderer.createRenderer(factory);
 				m_cubemapMesh.createMesh(factory);
 
-				m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshTextures::CUBEMAPS);
+				m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshType::CUBEMAPS);
 				m_cubemapRenderer.initialize(m_cubemapMesh.getLayout(), graphics::ShaderType::CUBEMAP);
 				m_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			}
@@ -57,12 +55,7 @@ namespace mar {
 				m_objectRenderer.createRenderer(factory);
 				m_objectMesh.createMesh(factory);
 
-				Ref<graphics::Shape> object = graphics::MeshCreator::createEmptyShape();
-				std::string empty = "empty";
-				std::string pathToObj = "resources/objects/lego-human.obj";
-				object->assignDataFromFile(pathToObj);
-
-				m_objectMesh.submitShape(object, object->getCenter(), object->getAngle(), empty);
+				m_objectMesh.loadScene(&graphics::Scene(graphics::SceneType::OBJECTS), graphics::MeshType::OBJECTS);
 				m_objectRenderer.initialize(m_objectMesh.getLayout(), graphics::ShaderType::DEFAULT);
 				m_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			}

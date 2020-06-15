@@ -20,9 +20,10 @@ namespace mar {
     namespace graphics {
 
 
-		enum class MeshTextures {
-			TEXTURES,
-			CUBEMAPS
+		enum class MeshType {
+			NORMAL,
+			CUBEMAPS,
+			OBJECTS
 		};
 
 
@@ -50,7 +51,7 @@ namespace mar {
 			virtual ~Mesh();
 
 			void createMesh(const Ref<RendererFactory>& factory);
-			void loadScene(Scene* scene, MeshTextures type);
+			void loadScene(Scene* scene, MeshType type);
 
 			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
 			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);

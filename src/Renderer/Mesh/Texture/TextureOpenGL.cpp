@@ -134,12 +134,13 @@ namespace mar {
 
 		void TextureOpenGL::addID(const unsigned int id) {
 			m_id.push_back(id);
+			m_paths.push_back("empty");
 		}
 
 		void TextureOpenGL::removeID(const unsigned int& index) {
 			unsigned int id_count = std::count(m_id.begin(), m_id.end(), m_id[index]);
 
-			if(id_count == 1) { 
+			if (id_count == 1 && m_id[index] != 0) {
 				std::string path_to_find = m_paths[index];
 				auto it = m_path_id.find(path_to_find);
 
