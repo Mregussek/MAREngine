@@ -23,7 +23,8 @@ namespace mar {
 		*/
 		class TextureOpenGL : public Texture, std::enable_shared_from_this<TextureOpenGL> {
 			std::vector<unsigned int> m_id;
-			std::unordered_map<std::string, unsigned int> m_paths;
+			std::vector<std::string> m_paths;
+			std::unordered_map<std::string, unsigned int> m_path_id;
 
 		public:
 

@@ -42,6 +42,7 @@ namespace mar {
 			int m_indicesMaxValue;
 			static float s_availableTextureID;
 
+			unsigned int m_shapesCount;
 			bool m_onlyCubeMaps = false;
 
 		public:
@@ -50,6 +51,9 @@ namespace mar {
 
 			void createMesh(const Ref<RendererFactory>& factory);
 			void loadScene(Scene* scene, MeshTextures type);
+
+			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
+			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);
 
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);
@@ -66,11 +70,13 @@ namespace mar {
 			void popShape(const unsigned int& index);
 
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
+			void popMatrices(const unsigned int& index);
+
 			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
 			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
 
 			/// --- GET METHODS --- ///
-			inline const unsigned int& getShapesCount() const { return m_shapes.size(); }
+			inline const unsigned int& getShapesCount() const { return m_shapesCount; }
 			inline const std::string& getName(const unsigned int& index) const { return m_shapes[index]->getName(); }
 	
 			inline const std::vector<float>& getVertices() const { return m_vertices; }

@@ -48,10 +48,11 @@ namespace mar {
 		}
 
 		void TextureOpenGL::loadTexture(const std::string& path) {
-			auto search = m_paths.find(path);
+			auto search = m_path_id.find(path);
 
-			if (search != m_paths.end()) { 
+			if (search != m_path_id.end()) { 
 				m_id.push_back(search->second);
+				m_paths.push_back(search->first);
 
 				MAR_CORE_TRACE("Assigning loaded texture!");
 
@@ -60,7 +61,8 @@ namespace mar {
 
 			unsigned int new_id = genNewTexture(path);
 			m_id.push_back(new_id);
-			m_paths.insert({ path, new_id });
+			m_paths.push_back(path);
+			m_path_id.insert({ path, new_id });
 		}
 
 		unsigned int TextureOpenGL::genNewCubemap(const std::vector<std::string>& faces) {
@@ -101,10 +103,11 @@ namespace mar {
 
 		void TextureOpenGL::loadCubemap(const std::vector<std::string>& faces) {
 			std::string helper = faces[0] + faces[1] + faces[2];
-			auto search = m_paths.find(helper);
+			auto search = m_path_id.find(helper);
 
-			if (search != m_paths.end()) {
+			if (search != m_path_id.end()) {
 				m_id.push_back(search->second);
+				m_paths.push_back(search->first);
 
 				MAR_CORE_TRACE("Assigning loaded cubemap!");
 
@@ -113,7 +116,8 @@ namespace mar {
 
 			unsigned int new_id = genNewCubemap(faces);
 			m_id.push_back(new_id);
-			m_paths.insert({ helper, new_id });
+			m_paths.push_back(helper);
+			m_path_id.insert({ helper, new_id });
 		}
 
 		void TextureOpenGL::bind(const int& shapeId, const unsigned int& texID) const {
@@ -135,14 +139,23 @@ namespace mar {
 		void TextureOpenGL::removeID(const unsigned int& index) {
 			unsigned int id_count = std::count(m_id.begin(), m_id.end(), m_id[index]);
 
-			if(id_count == 1) {
-				glDeleteTextures(1, &m_id[index]);
+			if(id_count == 1) { 
+				std::string path_to_find = m_paths[index];
+				auto it = m_path_id.find(path_to_find);
+
+				if (it != m_path_id.end()) m_path_id.erase(it);
+				else MAR_CORE_ERROR("Could not delete last occurence of texture!");
+
+				glDeleteTextures(1, &m_id[index]); 
 			}
 
-			for (unsigned int i = index; i < m_id.size() - 1; i++)
-				m_id[i] = m_id[i + 1];
-
+			for (unsigned int i = index; i < m_id.size() - 1; i++) { 
+				m_id[i] = m_id[i + 1]; 
+				m_paths[i] = m_paths[i + 1];
+			}
+				
 			m_id.pop_back();
+			m_paths.pop_back();
 		}
 
 

@@ -40,6 +40,7 @@ namespace mar {
 
 			m_indicesMaxValue = 0;
 			m_availableShapeID = 0.0f;
+			m_shapesCount = 0;
 
 			MAR_CORE_INFO("Mesh has been created!");
 		}
@@ -66,8 +67,60 @@ namespace mar {
 			}
 		}
 
+		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
+			if (m_shapes.size() != m_shapesCount) {
+				new_shape->setCenter(center);
+				new_shape->setAngle(angle);
+
+				pushTexture(new_shape, texture);
+				pushMatrices(center, angle);
+
+				ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
+				m_availableShapeID++;
+
+				ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
+				m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
+				
+				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
+
+				m_shapesCount++;
+
+				MAR_CORE_INFO("Reusing shape object!");
+
+				return;
+			}
+
+			submitShape(new_shape, center, angle, texture);
+		}
+
+		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces) {
+			if (m_shapes.size() != m_shapesCount) {
+				new_shape->setCenter(center);
+				new_shape->setAngle(angle);
+
+				pushCubeMap(new_shape, faces);
+				pushMatrices(center, angle);
+
+				ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
+				m_availableShapeID++;
+
+				ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
+				m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
+
+				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
+
+				m_shapesCount++;
+
+				MAR_CORE_INFO("Reusing shape object!");
+
+				return;
+			}
+
+			submitShape(new_shape, center, angle, faces);
+		}
+
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
-			if (m_shapes.size() == constants::maxObjectsInScene - 1) {
+			if (m_shapesCount == constants::maxObjectsInScene - 1) {
 				std::cout << "Cannot push more objects!" << std::endl;
 				return;
 			}
@@ -79,11 +132,13 @@ namespace mar {
 			pushShape(new_shape);
 			pushMatrices(center, angle);
 
+			m_shapesCount++;
+
 			MAR_CORE_INFO("Added new object to scene!");
 		}
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces) {
-			if (m_shapes.size() == constants::maxObjectsInScene - 1) {
+			if (m_shapesCount == constants::maxObjectsInScene - 1) {
 				std::cout << "Cannot push more objects!" << std::endl;
 				return;
 			}
@@ -95,11 +150,13 @@ namespace mar {
 			pushShape(new_shape);
 			pushMatrices(center, angle);
 
+			m_shapesCount++;
+
 			MAR_CORE_INFO("Added new object to scene!");
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {
-			if (m_shapes.size() == 1) {
+			if (m_shapesCount == 1) {
 				MAR_CORE_ERROR("Cannot delete the last shape!");
 				return;
 			}
@@ -165,7 +222,9 @@ namespace mar {
 			unsigned int max_value = m_shapes[index]->getMaxValueOfIndices();
 			int diff = (-1) * (max_value - min_value + 1);
 
-			for (unsigned int i = index; i < m_shapes.size() - 1; i++) {
+			m_indicesMaxValue -= m_shapes[index]->getSizeofVertices() / m_shapes[index]->getStride();
+
+			for (unsigned int i = index; i < m_shapesCount - 1; i++) {
 				float save_tex_id = m_shapes[i + 1]->getTextureID();
 				m_samplers[i] = m_samplers[i + 1];
 				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
@@ -177,11 +236,17 @@ namespace mar {
 			}
 
 			m_availableShapeID--;
-			
-			m_shapes[m_shapes.size() - 1].reset();
-			m_shapes.pop_back();
+			m_shapesCount--;
+
 			m_samplers.pop_back();
 			m_texture->removeID(index);
+			
+			popMatrices(index);
+		}
+
+		void Mesh::popMatrices(const unsigned int& index) {
+			m_translationMats.erase(m_translationMats.begin() + index);
+			m_rotationMats.erase(m_rotationMats.begin() + index);
 		}
 
 		void Mesh::clearBuffers() {
@@ -195,7 +260,7 @@ namespace mar {
 		}
 
 		void Mesh::update() {
-			for (unsigned int i = 0; i < m_shapes.size(); i++) {
+			for (unsigned int i = 0; i < m_shapesCount; i++) {
 
 				unsigned int currentVerticesSize = m_vertices.size() + m_shapes[i]->getSizeofVertices();
 				unsigned int currentIndicesSize = m_indices.size() + m_shapes[i]->getSizeofIndices();
