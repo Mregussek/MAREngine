@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)MAR_3rd_party;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)MAR_3rd_party;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -108,10 +108,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\spdlog\include;$(SolutionDir)other\glad;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\serialport\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;$(UniversalCRT_LibraryPath_x86);$(SolutionDir)3rd_party\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;ucrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)MAR_3rd_party;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)MAR_3rd_party;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -143,27 +147,32 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\spdlog\include;$(SolutionDir)other\glad;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\serialport\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;$(SolutionDir)3rd_party\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;$(UniversalCRT_LibraryPath_x86);$(SolutionDir)3rd_party\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;ucrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="other\imgui\examples\imgui_impl_glfw.h" />
+    <ClInclude Include="other\imgui\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="other\imgui\imconfig.h" />
+    <ClInclude Include="other\imgui\imgui.h" />
+    <ClInclude Include="other\imgui\imgui_internal.h" />
+    <ClInclude Include="other\imgui\imstb_rectpack.h" />
+    <ClInclude Include="other\imgui\imstb_textedit.h" />
+    <ClInclude Include="other\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\Layers\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Renderer\Camera\buttons_def.h" />
     <ClInclude Include="src\Renderer\Mesh\Light\Light.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\MARMaths.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\src\maths.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\src\maths_functions.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\src\mat\mat4.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec2.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec3.h" />
-    <ClInclude Include="MAR_3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="src\Renderer\Mesh\Mesh.h" />
     <ClInclude Include="src\Renderer\Mesh\Objects\ObjectLoader.h" />
     <ClInclude Include="src\Renderer\Mesh\ElementBuffer\ElementBuffer.h" />
@@ -180,14 +189,6 @@
     <ClInclude Include="src\Renderer\RendererFactory.h" />
     <ClInclude Include="src\Renderer\Mesh\Shapes\ShapeManipulator.h" />
     <ClInclude Include="src\GUI\GUI.h" />
-    <ClInclude Include="other\imgui\include\imgui\imconfig.h" />
-    <ClInclude Include="other\imgui\include\imgui\imgui.h" />
-    <ClInclude Include="other\imgui\include\imgui\imgui_impl_glfw.h" />
-    <ClInclude Include="other\imgui\include\imgui\imgui_impl_opengl3.h" />
-    <ClInclude Include="other\imgui\include\imgui\imgui_internal.h" />
-    <ClInclude Include="other\imgui\include\imgui\imstb_rectpack.h" />
-    <ClInclude Include="other\imgui\include\imgui\imstb_textedit.h" />
-    <ClInclude Include="other\imgui\include\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Renderer\Camera\Camera.h" />
     <ClInclude Include="src\MAREngine.h" />
     <ClInclude Include="other\stb_image\include\stb_image\stb_image.h" />
@@ -207,25 +208,22 @@
     <ClInclude Include="src\Renderer\Mesh\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="other\imgui\examples\imgui_impl_glfw.cpp" />
+    <ClCompile Include="other\imgui\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="other\imgui\imgui.cpp" />
+    <ClCompile Include="other\imgui\imgui_demo.cpp" />
+    <ClCompile Include="other\imgui\imgui_draw.cpp" />
+    <ClCompile Include="other\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Layers\Layer.cpp" />
     <ClCompile Include="src\Layers\LayerStack.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Objects\ObjectLoader.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Light\Light.cpp" />
-    <ClCompile Include="MAR_3rd_party\MARMaths\src\mat\mat4.cpp" />
-    <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec2.cpp" />
-    <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec3.cpp" />
-    <ClCompile Include="MAR_3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\ShapeManipulator.cpp" />
     <ClCompile Include="src\GUI\GUI.cpp" />
-    <ClCompile Include="other\imgui\include\imgui\imgui.cpp" />
-    <ClCompile Include="other\imgui\include\imgui\imgui_demo.cpp" />
-    <ClCompile Include="other\imgui\include\imgui\imgui_draw.cpp" />
-    <ClCompile Include="other\imgui\include\imgui\imgui_impl_glfw.cpp" />
-    <ClCompile Include="other\imgui\include\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="other\imgui\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\MAREngine.cpp" />
     <ClCompile Include="src\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="other\glad\glad.c" />
@@ -234,7 +232,6 @@
     <ClCompile Include="src\Renderer\Scene\Scene.cpp" />
     <ClCompile Include="src\Renderer\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Mesh\ElementBuffer\ElementBufferOpenGL.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Mesh\VertexBuffer\VertexBufferOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Mesh\VertexArray\VertexArrayOpenGL.cpp" />

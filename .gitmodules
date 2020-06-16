@@ -4,3 +4,9 @@
 [submodule "other/serialport"]
 	path = other/serialport
 	url = https://github.com/Mregussek/SerialPort
+[submodule "other/imgui"]
+	path = other/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "other/MARMaths"]
+	path = other/MARMaths
+	url = https://github.com/Mregussek/MARMaths.git

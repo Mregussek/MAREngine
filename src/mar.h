@@ -36,9 +36,6 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-// --- Include MAR third-party libraries --- //
-#include "MARMaths/MARMaths.h"
-
 // --- Include other third-party libraries --- //
 #pragma warning( push )
 #pragma warning( disable : 26495) 
@@ -53,9 +50,9 @@
 #pragma warning( disable : 4099) 
 
 #include "stb_image/stb_image.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
+#include "imgui.h"
+#include "examples/imgui_impl_glfw.h"
+#include "examples/imgui_impl_opengl3.h"
 #include "SerialPort.hpp"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/stdout_color_sinks.h"

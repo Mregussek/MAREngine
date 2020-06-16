@@ -11,10 +11,6 @@
 #include "../Window/Window.h"
 #include "../Renderer/Mesh/Mesh.h"
 #include "../Renderer/Mesh/MeshCreator.h"
-#include "../Renderer/Mesh/Shapes/DefaultShapes/Cube.h"
-#include "../Renderer/Mesh/Shapes/DefaultShapes/Wall.h"
-#include "../Renderer/Mesh/Shapes/DefaultShapes/Pyramid.h"
-#include "../Renderer/Mesh/Shapes/DefaultShapes/Surface.h"
 
 namespace mar {
 	namespace gui {
