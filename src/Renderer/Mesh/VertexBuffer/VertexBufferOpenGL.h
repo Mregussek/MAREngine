@@ -43,6 +43,9 @@ namespace mar {
 			*/
 			void updateDynamically(const std::vector<float>& vertices) const override;
 
+			//! Method resets buffer.
+			void resetBuffer() override;
+
 			//! Unbinds currently used VBO and restore memory usage for that buffer
 			void unbind() const override;
 

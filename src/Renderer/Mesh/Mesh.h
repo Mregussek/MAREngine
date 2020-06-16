@@ -44,6 +44,7 @@ namespace mar {
 			static float s_availableTextureID;
 
 			unsigned int m_shapesCount;
+			unsigned int m_shapesDrawn;
 			bool m_onlyCubeMaps = false;
 
 		public:
@@ -64,6 +65,7 @@ namespace mar {
 			void clearBuffers();
 			void clearMatrices();
 
+			void resetDraw();
 			void update();
 
 		public:
@@ -77,6 +79,8 @@ namespace mar {
 			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
 
 			/// --- GET METHODS --- ///
+			inline const unsigned int& getShapesDrawn() const { return m_shapesDrawn; }
+
 			inline const unsigned int& getShapesCount() const { return m_shapesCount; }
 			inline const std::string& getName(const unsigned int& index) const { return m_shapes[index]->getName(); }
 	

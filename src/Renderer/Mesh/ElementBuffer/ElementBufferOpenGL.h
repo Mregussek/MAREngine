@@ -40,6 +40,9 @@ namespace mar {
 			*/
 			void updateDynamically(const std::vector<unsigned int>& data) const override;
 
+			//! Method resets buffer.
+			void resetBuffer() override;
+
 			//! Binds class m_id member to target, which is EBO
 			void bind() const override;
 

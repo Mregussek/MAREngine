@@ -30,6 +30,10 @@ namespace mar {
 			glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vertices.data());
 		}
 
+		void VertexBufferOpenGL::resetBuffer() {
+			glBufferSubData(GL_ARRAY_BUFFER, 0, 0, nullptr);
+		}
+
 		void VertexBufferOpenGL::unbind() const {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}

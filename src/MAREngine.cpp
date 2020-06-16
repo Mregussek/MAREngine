@@ -76,7 +76,7 @@ namespace mar {
 				m_renderer.draw(&m_mesh);
 				m_cubemapRenderer.draw(&m_cubemapMesh);
 				m_objectRenderer.draw(&m_objectMesh);
-				
+
 				m_gui.prepareNewFrame();
 				m_gui.display();
 

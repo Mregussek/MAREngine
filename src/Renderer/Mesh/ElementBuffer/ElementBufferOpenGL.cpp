@@ -30,6 +30,10 @@ namespace mar {
 			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), data.data());
 		}
 
+		void ElementBufferOpenGL::resetBuffer() {
+			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 0, nullptr);
+		}
+
 		void ElementBufferOpenGL::unbind() const {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}

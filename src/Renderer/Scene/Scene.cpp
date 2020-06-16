@@ -113,9 +113,9 @@ namespace mar {
 
 		void Scene::createObjects() {
 			m_shapes = {
-				MeshCreator::createEmptyShape() ,
-				MeshCreator::createEmptyShape() ,
 				MeshCreator::createEmptyShape() 
+				, MeshCreator::createEmptyShape() 
+				, MeshCreator::createEmptyShape() 
 			};
 			m_centers = {
 				{  0.0f, -1.8f, -2.0f } ,
@@ -133,9 +133,9 @@ namespace mar {
 				"empty" 
 			};
 			m_obj = {
-				"resources/objects/lego-human.obj" ,
-				"resources/objects/lego-human.obj" ,
-				"resources/objects/low-poly-tree.obj"
+				"resources/objects/lego-human.obj" 
+				, "resources/objects/lego-human.obj" 
+				, "resources/objects/low_poly_tree_triangles.obj"
 			};
 		}
 

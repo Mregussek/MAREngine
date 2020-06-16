@@ -35,6 +35,9 @@ namespace mar {
 			*/
 			virtual void updateDynamically(const std::vector<float>& vertices) const { }
 
+			//! Method should reset buffer. Must be overloaded!
+			virtual void resetBuffer() { }
+
 			//! Method should unbind currently used VBO and restore memory usage for that buffer. 
 			//! Method must be overloaded!
 			virtual void unbind() const { }

@@ -270,6 +270,10 @@ namespace mar {
 			m_rotationMats.clear();
 		}
 
+		void Mesh::resetDraw() {
+			m_shapesDrawn = 0;
+		}
+
 		void Mesh::update() {
 			for (unsigned int i = 0; i < m_shapesCount; i++) {
 
@@ -284,11 +288,15 @@ namespace mar {
 					
 					m_vertices.insert(m_vertices.end(), beginVert, endVert);
 					m_indices.insert(m_indices.end(), beginIndices, endIndices);
-				}
-			}
 
-			for (unsigned int i = 0; i < m_samplers.size(); i++)
-				m_texture->bind(m_samplers[i], m_texture->getID(i));
+					m_texture->bind(m_samplers[i], m_texture->getID(i));
+
+					m_shapesDrawn++;
+				}
+				else {
+					MAR_CORE_ERROR("To much vertices in vector!");
+				}
+			}		
 		}
 
 

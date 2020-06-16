@@ -94,13 +94,15 @@ namespace mar {
 		void Renderer::draw(Mesh* mesh) {
 			bind();
 
+			mesh->resetDraw();
+
+			mesh->clearBuffers();
+			mesh->update();
+
 			updateMeshData(mesh);
 			updateCameraData();
 			updateGUIData();
 			updateLightData(&mesh->getLight());
-
-			mesh->clearBuffers();
-			mesh->update();
 
 			m_vbo->updateDynamically(mesh->getVertices());
 			m_ebo->updateDynamically(mesh->getIndices());
@@ -129,7 +131,7 @@ namespace mar {
 
 			mesh->clearMatrices();
 
-			for (unsigned int i = 0; i < mesh->getShapesCount(); i++)
+			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++)
 				mesh->pushMatrices(mesh->getCenter(i), mesh->getAngle(i));
 
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
