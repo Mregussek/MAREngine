@@ -22,6 +22,66 @@ namespace mar {
 		int GUITextureList::s_selectedItem;
 
 		GUIData GUI::s_guiData;
+		bool GUI::s_dockspaceOpen{ true };
+		bool GUI::s_fullscreenPersisant{ true };
+
+		void GUI::ShowExampleAppDockSpace() {
+			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+			if (s_fullscreenPersisant) {
+				ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::SetNextWindowPos(viewport->GetWorkPos());
+				ImGui::SetNextWindowSize(viewport->GetWorkSize());
+				ImGui::SetNextWindowViewport(viewport->ID);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+				window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+				window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+			}
+
+			if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+				window_flags |= ImGuiWindowFlags_NoBackground;
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			ImGui::Begin("DockSpace Demo", &s_dockspaceOpen, window_flags);
+			ImGui::PopStyleVar();
+
+			if (s_fullscreenPersisant)
+				ImGui::PopStyleVar(2);
+
+			ImGuiIO& io = ImGui::GetIO();
+			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+			}
+
+			if (ImGui::BeginMenuBar()) {
+				if (ImGui::BeginMenu("Docking")) {
+					if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0))                 dockspace_flags ^= ImGuiDockNodeFlags_NoSplit;
+					if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0))                dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
+					if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))  dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
+					if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))     dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
+					if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))          dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
+					ImGui::Separator();
+					if (ImGui::MenuItem("Close DockSpace", NULL, false))
+						s_dockspaceOpen = false;
+					ImGui::EndMenu();
+				}
+
+				ImGui::EndMenuBar();
+			}
+
+			Menu_Info();
+			Menu_ModifyScene();
+
+			ImGui::End();
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		}
+
+
 
 		void GUI::initialize(window::Window* window, const char* glsl_version, bool can_modify_objects) {
 			m_window = window;
@@ -31,6 +91,9 @@ namespace mar {
 			ImGui::StyleColorsDark();
 			ImGui_ImplGlfw_InitForOpenGL(m_window->getWindow(), true);
 			ImGui_ImplOpenGL3_Init(glsl_version);
+
+			ImGuiIO& io = ImGui::GetIO();
+			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 			for (auto& c : m_sceneColors) c = 1.0f;
 
@@ -59,6 +122,36 @@ namespace mar {
 		}
 
 		void GUI::display() {
+			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+			if (s_fullscreenPersisant) {
+				ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::SetNextWindowPos(viewport->GetWorkPos());
+				ImGui::SetNextWindowSize(viewport->GetWorkSize());
+				ImGui::SetNextWindowViewport(viewport->ID);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+				window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+				window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+			}
+
+			if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+				window_flags |= ImGuiWindowFlags_NoBackground;
+
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+			ImGui::Begin("DockSpace Demo", &s_dockspaceOpen, window_flags);
+			ImGui::PopStyleVar();
+
+			if (s_fullscreenPersisant)
+				ImGui::PopStyleVar(2);
+
+			ImGuiIO& io = ImGui::GetIO();
+			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+			}
+
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if (ImGui::MenuItem("New")) {
@@ -113,8 +206,10 @@ namespace mar {
 			if (m_modifySceneWindowDisplay) { Menu_ModifyScene(); }
 			if (m_infoWindow) { Menu_Info(); }
 
+			ImGui::End();
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			ImGui::EndFrame();
 		}
 
 		void GUI::Menu_ModifyScene() {

@@ -41,12 +41,16 @@ namespace mar {
 			const graphics::RendererStatistics* m_statistics;
 			bool m_canModifyObjects{ false };
 			static GUIData s_guiData;
-
+			// --- Dockspace
+			static bool s_dockspaceOpen;
+			static bool s_fullscreenPersisant;
 			bool m_modifySceneWindowDisplay{ false };
 			bool m_infoWindow{ false };
 
 		public:
 			GUI() = default;
+
+			void ShowExampleAppDockSpace();
 
 			void initialize(window::Window* window, const char* glsl_version, bool can_modify_objects);
 			void shutdown();
