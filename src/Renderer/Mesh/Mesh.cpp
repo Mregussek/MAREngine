@@ -86,7 +86,6 @@ namespace mar {
 
 				pushTexture(new_shape, texture);
 				pushMatrices(center, angle);
-				pushColors(new_shape->getDefaultColor());
 
 				ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 				m_availableShapeID++;
@@ -113,7 +112,6 @@ namespace mar {
 
 				pushCubeMap(new_shape, faces);
 				pushMatrices(center, angle);
-				pushColors(new_shape->getDefaultColor());
 
 				ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 				m_availableShapeID++;
@@ -145,7 +143,6 @@ namespace mar {
 			pushTexture(new_shape, texture);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
-			pushColors(new_shape->getDefaultColor());
 
 			m_shapesCount++;
 
@@ -164,7 +161,6 @@ namespace mar {
 			pushCubeMap(new_shape, faces);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
-			pushColors(new_shape->getDefaultColor());
 
 			m_shapesCount++;
 
@@ -179,7 +175,6 @@ namespace mar {
 
 			popShape(index);
 			popMatrices(index);
-			popColors(index);
 
 			MAR_CORE_INFO("Deleted object from scene!");
 		}
@@ -190,12 +185,16 @@ namespace mar {
 
 				m_samplers.push_back((int)s_availableTextureID);
 
+				m_colors.push_back(new_shape->getDefaultColor());
+
 				s_availableTextureID++;
 
 				m_texture->loadTexture(texture);
 			}
 			else {
 				new_shape->setTextureID(0.f);
+
+				m_colors.push_back(new_shape->getDefaultColor());
 
 				m_samplers.push_back(0);
 
@@ -207,6 +206,8 @@ namespace mar {
 			ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
 			m_samplers.push_back((int)s_availableTextureID);
+
+			m_colors.push_back(new_shape->getDefaultColor());
 
 			s_availableTextureID++;
 
@@ -235,10 +236,6 @@ namespace mar {
 			m_rotationMats.push_back(transform);
 		}
 
-		void Mesh::pushColors(const glm::vec3& color) {
-			m_colors.push_back(color);
-		}
-
 		void Mesh::popShape(const unsigned int& index) {
 			unsigned int min_value = m_shapes[index]->getMinValueOfIndices();
 			unsigned int max_value = m_shapes[index]->getMaxValueOfIndices();
@@ -249,6 +246,7 @@ namespace mar {
 			for (unsigned int i = index; i < m_shapesCount - 1; i++) {
 				float save_tex_id = m_shapes[i + 1]->getTextureID();
 				m_samplers[i] = m_samplers[i + 1];
+				m_colors[i] = m_colors[i + 1];
 				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
 
 				m_shapes[i]->setID(m_shapes[i]->getID() - 1.f);
@@ -261,16 +259,13 @@ namespace mar {
 			m_shapesCount--;
 
 			m_samplers.pop_back();
+			m_colors.pop_back();
 			m_texture->removeID(index);
 		}
 
 		void Mesh::popMatrices(const unsigned int& index) {
 			m_translationMats.erase(m_translationMats.begin() + index);
 			m_rotationMats.erase(m_rotationMats.begin() + index);
-		}
-
-		void Mesh::popColors(const unsigned int& index) {
-			m_colors.erase(m_colors.begin() + index);
 		}
 
 		void Mesh::clearBuffers() {

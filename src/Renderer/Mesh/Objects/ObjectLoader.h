@@ -34,6 +34,7 @@ namespace mar {
             inline static unsigned int getTextureID() { return s_texid; }
             inline static glm::vec3 getCenter() { return s_center; }
             inline static glm::vec3 getAngle() { return s_angle; }
+            inline static glm::vec3 getColor() { return s_defaultcolor; }
         };
 
 

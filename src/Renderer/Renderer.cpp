@@ -136,11 +136,9 @@ namespace mar {
 			}
 
 			mesh->clearMatrices();
-			mesh->clearColors();
 
 			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++) {
 				mesh->pushMatrices(mesh->getCenter(i), mesh->getAngle(i));
-				mesh->pushColors(mesh->getColor(i));
 			}
 
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());

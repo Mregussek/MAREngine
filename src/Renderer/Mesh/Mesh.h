@@ -79,9 +79,6 @@ namespace mar {
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
 			void popMatrices(const unsigned int& index);
 
-			void pushColors(const glm::vec3& color);
-			void popColors(const unsigned int& index);
-
 			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
 			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
 

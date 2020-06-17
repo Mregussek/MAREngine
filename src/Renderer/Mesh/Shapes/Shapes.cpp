@@ -50,10 +50,7 @@ namespace mar {
 			m_angle = objects::ObjectLoader::getAngle();
 			m_id = objects::ObjectLoader::getID();
 			m_texid = objects::ObjectLoader::getTextureID();
-
-			m_defaultColor.x = m_verticesVector[3];
-			m_defaultColor.y = m_verticesVector[4];
-			m_defaultColor.z = m_verticesVector[5];
+			m_defaultColor = objects::ObjectLoader::getColor();
 
 			MAR_CORE_INFO("Assigned object from ObjectLoader!");
 		}
