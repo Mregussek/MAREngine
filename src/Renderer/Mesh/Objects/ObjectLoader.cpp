@@ -16,6 +16,7 @@ namespace mar {
 		std::vector<unsigned int> ObjectLoader::s_layout;
 		glm::vec3 ObjectLoader::s_center;
 		glm::vec3 ObjectLoader::s_angle;
+		glm::vec3 ObjectLoader::s_defaultcolor;
 		unsigned int ObjectLoader::s_id;
 		unsigned int  ObjectLoader::s_texid;
 
@@ -101,14 +102,14 @@ namespace mar {
 			float blue = distribution(generator);
 			float green = distribution(generator);
 
-			float basic_color[]{ red, green, blue };
+			s_defaultcolor = { red, green, blue };
 			float light_normal[]{ 0.0f, 0.0f, 1.0f };
 			float tex_coords[]{ 0.0f, 0.0f };
 			float scale = 4.0f;
 
 			s_indices = indices;
 			s_name = "Loaded Object";
-			s_layout = { 3, 3, 3, 2, 1, 1 };
+			s_layout = { 3, 3, 2, 1, 1 };
 			s_texid = 0.f;
 			s_id = 0.f;
 			s_center = { 0.0f, 0.0f, 0.0f };
@@ -119,11 +120,6 @@ namespace mar {
 				s_vertices.push_back(vertex_positions[i].x / scale);
 				s_vertices.push_back(vertex_positions[i].y / scale);
 				s_vertices.push_back(vertex_positions[i].z / scale);
-
-				// basic colors
-				s_vertices.push_back(basic_color[0]);
-				s_vertices.push_back(basic_color[1]);
-				s_vertices.push_back(basic_color[2]);
 
 				// light normals
 				s_vertices.push_back(light_normal[0]);

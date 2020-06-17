@@ -11,7 +11,7 @@ namespace mar {
 
 		RendererStatistics Renderer::s_stats;
 
-		void Renderer::createRenderer(const Ref<RendererFactory>& factory) {
+		void Renderer::createRenderer(const Ref<RendererFactory>& factory, const bool& usegui) {
 			if (!m_initialized) {
 				m_vbo = factory->createVertexBuffer();
 				m_layout = factory->createVertexBufferLayout();
@@ -20,6 +20,7 @@ namespace mar {
 				m_mainShader = factory->createShader();
 
 				s_stats = RendererStatistics();
+				m_useGUI = usegui;
 
 				MAR_CORE_INFO("Renderer properly created!");
 			}
@@ -52,17 +53,28 @@ namespace mar {
 
 		void Renderer::initialize(const std::vector<unsigned int>& layout, const ShaderType type) {
 			if (!m_initialized) {
-				switch (type) {
-				case ShaderType::DEFAULT:
-				case ShaderType::CUBEMAP:
-					m_useGUI = true;
-					break;
-				case ShaderType::WITHOUT_GUI:
-					m_useGUI = false;
-					break;
+				if (m_useGUI) {
+					switch (type) {
+					case ShaderType::DEFAULT:
+					case ShaderType::WITHOUT_GUI:
+						m_mainShader->initialize(ShaderType::DEFAULT);
+						break;
+					case ShaderType::CUBEMAP:
+						m_mainShader->initialize(ShaderType::CUBEMAP);
+						break;
+					}
 				}
-
-				m_mainShader->initialize(type);
+				else {
+					switch (type) {
+					case ShaderType::DEFAULT:
+					case ShaderType::WITHOUT_GUI:
+						m_mainShader->initialize(ShaderType::WITHOUT_GUI);
+						break;
+					case ShaderType::CUBEMAP:
+						m_mainShader->initialize(ShaderType::CUBEMAP_WITHOUT_GUI);
+						break;
+					}
+				}
 
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
@@ -82,13 +94,6 @@ namespace mar {
 			else {
 				MAR_CORE_ERROR("Renderer is already initialized!");
 			}
-		}
-
-		void Renderer::setReferences(const gui::GUIData* guidata, const CameraData* cameradata) {
-			MAR_CORE_TRACE("Setting new references for Renderer!");
-
-			m_guiData = guidata;
-			m_cameraData = cameradata;
 		}
 
 		void Renderer::draw(Mesh* mesh) {
@@ -111,7 +116,7 @@ namespace mar {
 			s_stats.indicesCount += mesh->getIndicesSize();
 			s_stats.shapesCount += mesh->getShapesCount();
 
-			m_mainShader->setUniformSampler2D("u_Texture", mesh->getSamplers());
+			m_mainShader->setUniformSampler("u_Texture", mesh->getSamplers());
 
 			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
 
@@ -125,23 +130,30 @@ namespace mar {
 			if (!m_useGUI) {
 				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 				m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
+				m_mainShader->setUniformVectorVec3("u_SeparateColor", mesh->getColors());
 
 				return;
 			}
 
 			mesh->clearMatrices();
+			mesh->clearColors();
 
-			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++)
+			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++) {
 				mesh->pushMatrices(mesh->getCenter(i), mesh->getAngle(i));
+				mesh->pushColors(mesh->getColor(i));
+			}
 
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 			m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
+			m_mainShader->setUniformVectorVec3("u_SeparateColor", mesh->getColors());
 		}
 
 		void Renderer::updateGUIData() {
-			m_mainShader->setUniform4fv("u_GUISceneColor", m_guiData->colors);
-			m_mainShader->setUniformMat4f("u_GUISceneTranslation", m_guiData->translate);
-			m_mainShader->setUniformMat4f("u_GUISceneRotation", m_guiData->rotation);
+			if (m_useGUI) {
+				m_mainShader->setUniform4fv("u_GUISceneColor", m_guiData->colors);
+				m_mainShader->setUniformMat4f("u_GUISceneTranslation", m_guiData->translate);
+				m_mainShader->setUniformMat4f("u_GUISceneRotation", m_guiData->rotation);
+			}
 		}
 
 		void Renderer::updateCameraData() {
@@ -188,6 +200,19 @@ namespace mar {
 			m_vao->unbind();
 			m_vbo->unbind();
 			m_ebo->unbind();
+		}
+
+		void Renderer::setReferences(const gui::GUIData* guidata, const CameraData* cameradata) {
+			MAR_CORE_TRACE("Setting references for Renderer (GUIData and CameraData)!");
+
+			m_guiData = guidata;
+			m_cameraData = cameradata;
+		}
+
+		void Renderer::setReferences(const CameraData* cameradata) {
+			MAR_CORE_TRACE("Setting references for Renderer (CameraData)!");
+
+			m_cameraData = cameradata;
 		}
 
 

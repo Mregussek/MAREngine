@@ -20,8 +20,8 @@ namespace mar {
 		enum class ShaderType {
 			DEFAULT,
 			WITHOUT_GUI,
-			LIGHT,
-			CUBEMAP
+			CUBEMAP,
+			CUBEMAP_WITHOUT_GUI
 		};
 
 		class Shader {
@@ -32,8 +32,8 @@ namespace mar {
 			virtual void bind() const { }
 			virtual void unbind() const { }
 
-			virtual void setUniformSamplerCube(const std::string& name, const std::vector<int>& sampler) { }
-			virtual void setUniformSampler2D(const std::string& name, const std::vector<int>& sampler) { }
+			virtual void setUniformSampler(const std::string& name, const std::vector<int>& sampler) { }
+			virtual void setUniformVectorVec3(const std::string& name, const std::vector<glm::vec3>& vec) { }
 			virtual void setUniformVectorMat4(const std::string& name, const std::vector<glm::mat4>& sampler) { }
 			virtual void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) { }
 			virtual void setUniformVector3(const std::string& name, const glm::vec3& vector3) { }

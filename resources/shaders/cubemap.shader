@@ -2,18 +2,16 @@
 #version 460 core
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec3 basicColors;
-layout(location = 2) in vec3 lightNormal;
-layout(location = 3) in vec2 texCoord;
-layout(location = 4) in float texIndex;
-layout(location = 5) in float shapeIndex;
+layout(location = 1) in vec3 lightNormal;
+layout(location = 2) in vec2 texCoord;
+layout(location = 3) in float texIndex;
+layout(location = 4) in float shapeIndex;
 
 out vec3 v_TexCoord;
 out float v_shapeIndex;
 out float v_textureIndex;
 out vec3 v_lightNormal;
 out vec3 v_Position;
-out vec3 v_basicColors;
 
 uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -39,7 +37,6 @@ void main() {
 	v_shapeIndex = shapeIndex;
 	v_lightNormal = mat3(u_Model) * lightNormal;
 	v_Position = vec4(u_Model * position).xyz;
-	v_basicColors = basicColors;
 };
 
 #shader fragment
@@ -52,7 +49,6 @@ in float v_shapeIndex;
 in float v_textureIndex;
 in vec3 v_lightNormal;
 in vec3 v_Position;
-in vec3 v_basicColors;
 
 struct Material {
 	vec3 ambientStrength;
@@ -73,6 +69,7 @@ struct Material {
 
 uniform Material u_material;
 uniform vec4 u_GUISceneColor;
+uniform vec3 u_SeparateColor[32];
 uniform samplerCube u_Texture[32];
 uniform vec3 u_CameraPos;
 
@@ -84,7 +81,7 @@ void main() {
 	if (v_textureIndex != 0.0f)
 		texColor = texture(u_Texture[index], v_TexCoord);
 	else
-		texColor = vec4(v_basicColors, 1.0f);
+		texColor = vec4(u_SeparateColor[index], 1.0f);
 
 	// AMBIENT
 	vec3 ambient = u_material.ambientStrength * u_material.ambient;

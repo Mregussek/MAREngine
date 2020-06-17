@@ -4,42 +4,44 @@
  */
 
 #include "ShaderOpenGL.h"
+#include "../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics {
 
 
 		void ShaderOpenGL::initialize(ShaderType shadertype) {
-			if (shadertype == ShaderType::DEFAULT)
-				_filePath = ShaderOpenGLSettings.mainPath;
-			else if (shadertype == ShaderType::WITHOUT_GUI)
-				_filePath = ShaderOpenGLSettings.withoutGUIPath;
-			else if (shadertype == ShaderType::CUBEMAP)
-				_filePath = ShaderOpenGLSettings.cubemapPath;
+			switch(shadertype) {
+			case ShaderType::DEFAULT: m_shaderPath = ShaderOpenGLSettings.mainPath; break;
+			case ShaderType::WITHOUT_GUI: m_shaderPath = ShaderOpenGLSettings.withoutGUIPath; break;
+			case ShaderType::CUBEMAP: m_shaderPath = ShaderOpenGLSettings.cubemapPath; break;
+			case ShaderType::CUBEMAP_WITHOUT_GUI: m_shaderPath = ShaderOpenGLSettings.cubemapWithoutGuiPath; break;
+			}
 
-			_rendererId = 0;
-			_programSource = parseShader();
-			_rendererId = createShader();
+			m_id = 0;
+			m_programSource = parseShader();
+			m_id = createShader();
 		}
 
 		void ShaderOpenGL::shutdown() {
-			glDeleteProgram(_rendererId);
+			glDeleteProgram(m_id);
 		}
 
 		void ShaderOpenGL::bind() const {
-			glUseProgram(_rendererId);
+			glUseProgram(m_id);
 		}
 
 		void ShaderOpenGL::unbind() const {
 			glUseProgram(0);
 		}
 
-		void ShaderOpenGL::setUniformSamplerCube(const std::string& name, const std::vector<int>& sampler) {
+		void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int>& sampler) {
 			glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data());
 		}
 
-		void ShaderOpenGL::setUniformSampler2D(const std::string& name, const std::vector<int>& sampler) {
-			glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data());
+		void ShaderOpenGL::setUniformVectorVec3(const std::string& name, const std::vector<glm::vec3>& vec) {
+			glUniform3fv(getUniformLocation(name), vec.size(), glm::value_ptr(*vec.data()));
 		}
 
 		void ShaderOpenGL::setUniformVectorMat4(const std::string& name, const std::vector<glm::mat4>& matrices) {
@@ -71,10 +73,10 @@ namespace mar {
 		}
 
 		int ShaderOpenGL::getUniformLocation(const std::string& name) {
-			if (_uniformLocationCache.find(name) != _uniformLocationCache.end())
-				return _uniformLocationCache[name];
+			if (m_uniformLocation.find(name) != m_uniformLocation.end())
+				return m_uniformLocation[name];
 
-			int location = glGetUniformLocation(_rendererId, name.c_str());
+			int location = glGetUniformLocation(m_id, name.c_str());
 			if (location == -1)
 				std::cout << "Warning: Uniform " << name << " does not exist!\n";
 
@@ -84,7 +86,7 @@ namespace mar {
 		ShaderProgramSource ShaderOpenGL::parseShader() {
 			enum class ShaderType { None = -1, Vertex = 0, Fragment = 1 };
 
-			std::ifstream stream(_filePath);
+			std::ifstream stream(m_shaderPath);
 			std::string line;
 			std::vector<std::string> vector(2);
 			auto type = ShaderType::None;
@@ -96,36 +98,42 @@ namespace mar {
 				}
 				else vector[(int)type] += line + "\n";
 
+			MAR_CORE_TRACE("Shader loaded successfully from source file!");
+
 			return { vector[0], vector[1] };
 		}
 
 		unsigned int ShaderOpenGL::compileShader(unsigned int type, const std::string& sourceCode) {
-			unsigned int _rendererId = glCreateShader(type);
+			unsigned int id = glCreateShader(type);
 			const char* src = sourceCode.c_str();
-			glShaderSource(_rendererId, 1, &src, nullptr);
-			glCompileShader(_rendererId);
+			glShaderSource(id, 1, &src, nullptr);
+			glCompileShader(id);
 
 			int result;
-			glGetShaderiv(_rendererId, GL_COMPILE_STATUS, &result);
+			glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 
 			if (result == GL_FALSE) {
 				int length = 100;
 				char message[100];
-				glGetShaderInfoLog(_rendererId, length, &length, message);
-				std::cout << "Failed to compile shader: "
-					<< (type == GL_VERTEX_SHADER ? "vertex" : "fragment")
-					<< message << std::endl;
-				glDeleteShader(_rendererId);
+				glGetShaderInfoLog(id, length, &length, message);
+				std::string shadertype = (type == GL_VERTEX_SHADER ? "vertex" : "fragment");
+				std::string s = "Failed to compile shader: " + shadertype + message;
+
+				MAR_CORE_ERROR(s);
+
+				glDeleteShader(id);
 				return 0;
 			}
 
-			return _rendererId;
+			MAR_CORE_TRACE("Shader compiled successfully!");
+
+			return id;
 		}
 
 		unsigned int ShaderOpenGL::createShader() {
 			unsigned int shaderProgramId = glCreateProgram();
-			unsigned int vs = compileShader(GL_VERTEX_SHADER, _programSource._vertexSource);
-			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, _programSource._fragmentSource);
+			unsigned int vs = compileShader(GL_VERTEX_SHADER, m_programSource._vertexSource);
+			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, m_programSource._fragmentSource);
 
 			glAttachShader(shaderProgramId, vs);
 			glAttachShader(shaderProgramId, fs);
@@ -138,8 +146,9 @@ namespace mar {
 				int length = 100;
 				char message[100];
 				glGetProgramInfoLog(shaderProgramId, length, &length, message);
-				std::cout << "Failed to link shaders: "
-					<< message << std::endl;
+				std::string s = "Failed to load shader: " + std::string(message);
+
+				MAR_CORE_ERROR(s);
 				return 0;
 			}
 
@@ -147,6 +156,8 @@ namespace mar {
 
 			glDeleteShader(vs);
 			glDeleteShader(fs);
+
+			MAR_CORE_TRACE("Shader created successfully!");
 
 			return shaderProgramId;
 		}

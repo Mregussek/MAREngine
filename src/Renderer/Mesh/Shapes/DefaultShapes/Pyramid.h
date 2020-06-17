@@ -54,12 +54,12 @@ namespace mar {
 					{ 0.0f, 0.0f, 0.0f },
 					/* VERTICES */
 				{
-					// (x, y, z)			// BasicColors			// LightNormal			// TextureCoords	// TexIndex	// ShapeIndex
-					-1.0f, -1.0f,  1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,		0.0f,
-					 1.0f, -1.0f,  1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,		0.0f,
-					 1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,		0.0f,
-					-1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,		0.0f,
-					 0.0f,  1.0f,  0.0f,	1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,		0.5f, 0.5f,			0.0f,		0.0f
+					// (x, y, z)			// LightNormal			// TextureCoords	// TexIndex	// ShapeIndex
+					-1.0f, -1.0f,  1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,		0.0f,
+					 1.0f, -1.0f,  1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,		0.0f,
+					 1.0f, -1.0f, -1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 0.0f,			0.0f,		0.0f,
+					-1.0f, -1.0f, -1.0f,	0.0f, 0.0f, 1.0f,		0.0f, 1.0f,			0.0f,		0.0f,
+					 0.0f,  1.0f,  0.0f,	0.0f, 0.0f, 1.0f,		0.5f, 0.5f,			0.0f,		0.0f
 				},
 					/* INDICES */
 				{
@@ -69,7 +69,11 @@ namespace mar {
 				},
 					/* LAYOUT */
 				{
-					3, 3, 3, 2, 1, 1
+					3, 3, 2, 1, 1
+				},
+					/* DEFAULT COLOR */
+				{
+					1.0f, 0.0f, 0.0f
 				})
 			{ }
 		};

@@ -18,6 +18,7 @@ namespace mar {
             static std::vector<unsigned int> s_layout;
             static glm::vec3 s_center;
             static glm::vec3 s_angle;
+            static glm::vec3 s_defaultcolor;
             static unsigned int s_id;
             static unsigned int s_texid;
 

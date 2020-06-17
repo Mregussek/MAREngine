@@ -56,8 +56,8 @@ namespace mar {
 			Ref<ElementBuffer> m_ebo;
 			Ref<Shader> m_mainShader;
 			// --- Knowledge about state of Renderer
-			bool m_initialized = false;		// check, if renderer is initialized
-			bool m_useGUI = false;	// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
+			bool m_initialized = false;	// check, if renderer is initialized
+			bool m_useGUI = false;		// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
 			static RendererStatistics s_stats;
 			// --- References
 			const CameraData* m_cameraData;
@@ -66,11 +66,10 @@ namespace mar {
 		public:
 			Renderer() = default;
 
-			void createRenderer(const Ref<RendererFactory>& factory);
+			void createRenderer(const Ref<RendererFactory>& factory, const bool& usegui);
 			void closeRenderer();
 
-			void initialize(const std::vector<unsigned int>& layout, const ShaderType type);
-			void setReferences(const gui::GUIData* guidata, const CameraData* cameradata);
+			void initialize(const std::vector<unsigned int>& layout, const ShaderType type = ShaderType::DEFAULT);
 
 			void draw(Mesh* mesh);
 
@@ -84,6 +83,11 @@ namespace mar {
 			void unbind();
 
 		public:
+			// --- SET METHODS --- //
+			void setReferences(const gui::GUIData* guidata, const CameraData* cameradata);
+			void setReferences(const CameraData* cameradata);
+
+			// --- GET METHODS --- // 
 			inline static RendererStatistics& getStatistics() { return s_stats; }
 		};
 

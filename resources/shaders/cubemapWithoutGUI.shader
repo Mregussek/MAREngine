@@ -7,7 +7,7 @@ layout(location = 2) in vec2 texCoord;
 layout(location = 3) in float texIndex;
 layout(location = 4) in float shapeIndex;
 
-out vec2 v_TexCoord;
+out vec3 v_TexCoord;
 out float v_shapeIndex;
 out float v_textureIndex;
 out vec3 v_lightNormal;
@@ -16,23 +16,20 @@ out vec3 v_Position;
 uniform mat4 u_Model;
 uniform mat4 u_View;
 uniform mat4 u_Projection;
-uniform mat4 u_GUISceneTranslation;
-uniform mat4 u_GUISceneRotation;
 uniform mat4 u_SeperateTranslate[32];
 uniform mat4 u_SeperateRotation[32];
 
 void main() {
 	// Calculate all transformations
 	int index = int(shapeIndex);
-	mat4 GUISeperateMatrix = u_SeperateTranslate[index] * u_SeperateRotation[index];
-	mat4 GUISceneMatrix = u_GUISceneTranslation * u_GUISceneRotation;
+	mat4 renderTrans = u_SeperateTranslate[index] * u_SeperateRotation[index];
 
 	mat4 MVP = u_Projection * u_View * u_Model;
 
-	gl_Position = MVP * GUISceneMatrix * GUISeperateMatrix * position;
+	gl_Position = MVP * renderTrans * position;
 
 	// Pass values to fragment shader
-	v_TexCoord = texCoord;
+	v_TexCoord = position.xyz;
 	v_textureIndex = texIndex;
 	v_shapeIndex = shapeIndex;
 	v_lightNormal = mat3(u_Model) * lightNormal;
@@ -44,7 +41,7 @@ void main() {
 
 layout(location = 0) out vec4 color;
 
-in vec2 v_TexCoord;
+in vec3 v_TexCoord;
 in float v_shapeIndex;
 in float v_textureIndex;
 in vec3 v_lightNormal;
@@ -68,9 +65,8 @@ struct Material {
 };
 
 uniform Material u_material;
-uniform vec4 u_GUISceneColor;
 uniform vec3 u_SeparateColor[32];
-uniform sampler2D u_Texture[32];
+uniform samplerCube u_Texture[32];
 uniform vec3 u_CameraPos;
 
 void main() {
@@ -78,7 +74,7 @@ void main() {
 	int index = int(v_shapeIndex);
 	vec4 texColor;
 
-	if(v_textureIndex != 0.0f)
+	if (v_textureIndex != 0.0f)
 		texColor = texture(u_Texture[index], v_TexCoord);
 	else
 		texColor = vec4(u_SeparateColor[index], 1.0f);
@@ -101,7 +97,7 @@ void main() {
 	// ATTENUATION
 	float distance = length(u_material.lightPos - v_Position);
 	float attenuation = 1.0f / (u_material.constant + u_material.linear * distance +
-								u_material.quadratic * (distance * distance));
+		u_material.quadratic * (distance * distance));
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	specular *= attenuation;
@@ -109,5 +105,5 @@ void main() {
 	// FINAL
 	vec4 calculatedLight = vec4(ambient + diffuse + specular, 1.0f);
 
-	color = texColor * u_GUISceneColor * calculatedLight;
+	color = texColor * calculatedLight;
 };

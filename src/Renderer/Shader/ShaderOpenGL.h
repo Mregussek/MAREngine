@@ -17,18 +17,20 @@ namespace mar {
 			const std::string mainPath{ "resources/shaders/basic.shader" };
 			const std::string withoutGUIPath{ "resources/shaders/basicWithoutGUI.shader" };
 			const std::string cubemapPath{ "resources/shaders/cubemap.shader" };
+			const std::string cubemapWithoutGuiPath{ "resources/shaders/cubemapWithoutGUI.shader" };
 #else
 			const std::string mainPath{ "../../../resources/shaders/basic.shader" };
 			const std::string withoutGUIPath{ "../../../resources/shaders/basicWithoutGUI.shader" };
 			const std::string cubemapPath{ "../../../resources/shaders/cubemap.shader" };
+			const std::string cubemapWithoutGuiPath{ "../../../resources/shaders/cubemapWithoutGUI.shader" };
 #endif
 		} ShaderOpenGLSettings;
 
 		class ShaderOpenGL : public Shader {
-			unsigned int _rendererId;
-			std::string _filePath;
-			std::unordered_map<std::string, int> _uniformLocationCache;
-			ShaderProgramSource _programSource;
+			unsigned int m_id;
+			std::string m_shaderPath;
+			std::unordered_map<std::string, int> m_uniformLocation;
+			ShaderProgramSource m_programSource;
 
 		public:
 			ShaderOpenGL() = default;
@@ -39,8 +41,8 @@ namespace mar {
 			void bind() const;
 			void unbind() const;
 
-			void setUniformSamplerCube(const std::string& name, const std::vector<int>& sampler) override;
-			void setUniformSampler2D(const std::string& name, const std::vector<int>& sampler) override;
+			void setUniformSampler(const std::string& name, const std::vector<int>& sampler) override;
+			void setUniformVectorVec3(const std::string& name, const std::vector<glm::vec3>& vec) override;
 			void setUniformVectorMat4(const std::string& name, const std::vector<glm::mat4>& matrices) override;
 			void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) override;
 			void setUniformVector3(const std::string& name, const glm::vec3& vector3) override;
@@ -53,7 +55,7 @@ namespace mar {
 			int getUniformLocation(const std::string& name) override;
 
 			ShaderProgramSource parseShader() override;
-			unsigned int compileShader(unsigned int type, const std::string& source) override;
+			unsigned int compileShader(unsigned int type, const std::string& sourceCode) override;
 			unsigned int createShader() override;
 		};
     

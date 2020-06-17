@@ -77,4 +77,10 @@ namespace mar {
 
 } }
 
+
+#define DEFAULT_SCENE ::mar::graphics::SceneType::DEFAULT
+#define CUBEMAPS_SCENE ::mar::graphics::SceneType::CUBEMAPS
+#define OBJECTS_SCENE ::mar::graphics::SceneType::OBJECTS
+
+
 #endif // !SCENE_H

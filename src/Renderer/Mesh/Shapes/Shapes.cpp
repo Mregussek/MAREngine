@@ -11,12 +11,13 @@ namespace mar {
 
 		Shape::Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
 			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
-			std::vector<unsigned int> new_layout)
+			std::vector<unsigned int> new_layout, glm::vec3 new_color)
 			: m_id(new_id),
 			m_texid(0.0f),
 			m_name(new_name),
 			m_center(new_center),
 			m_angle(new_angle),
+			m_defaultColor(new_color),
 			m_verticesVector(new_vertices),
 			m_indicesVector(new_indices),
 			m_layout(new_layout),
@@ -30,6 +31,7 @@ namespace mar {
 			m_name(shape->getName()),
 			m_center(shape->getCenter()),
 			m_angle(shape->getAngle()),
+			m_defaultColor(shape->getDefaultColor()),
 			m_verticesVector(shape->getVerticesVector()),
 			m_indicesVector(shape->getIndicesVector()),
 			m_layout(shape->getLayoutVector()),
@@ -48,6 +50,10 @@ namespace mar {
 			m_angle = objects::ObjectLoader::getAngle();
 			m_id = objects::ObjectLoader::getID();
 			m_texid = objects::ObjectLoader::getTextureID();
+
+			m_defaultColor.x = m_verticesVector[3];
+			m_defaultColor.y = m_verticesVector[4];
+			m_defaultColor.z = m_verticesVector[5];
 
 			MAR_CORE_INFO("Assigned object from ObjectLoader!");
 		}
@@ -81,6 +87,10 @@ namespace mar {
 		glm::vec3& Shape::getAngle() { return m_angle; }
 
 		void Shape::setAngle(const glm::vec3& new_angle) { m_angle = new_angle; }
+
+		glm::vec3& Shape::getDefaultColor() { return m_defaultColor; }
+
+		void Shape::setDefaultColor(const glm::vec3& new_color) { m_defaultColor = new_color; }
 
 		const unsigned int Shape::getSizeofVertices() const { return m_verticesVector.size(); }
 

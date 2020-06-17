@@ -39,6 +39,7 @@ namespace mar {
 			std::vector<int> m_samplers;
 			std::vector<glm::mat4> m_translationMats;
 			std::vector<glm::mat4> m_rotationMats;
+			std::vector<glm::vec3> m_colors;
 
 			Light m_light;
 
@@ -65,18 +66,21 @@ namespace mar {
 
 			void flushShape(const unsigned int& index);
 
-			void clearBuffers();
-			void clearMatrices();
-
 			void resetDraw();
 			void update();
 
-		public:
+			void clearBuffers();
+			void clearMatrices();
+			void clearColors();
+
 			void pushShape(Ref<Shape>& new_shape);
 			void popShape(const unsigned int& index);
 
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
 			void popMatrices(const unsigned int& index);
+
+			void pushColors(const glm::vec3& color);
+			void popColors(const unsigned int& index);
 
 			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
 			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
@@ -102,7 +106,9 @@ namespace mar {
 
 			inline const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
 			inline const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
-	
+			inline const std::vector<glm::vec3>& getColors() const { return m_colors; }
+			inline glm::vec3& getColor(const unsigned int& index) { return m_shapes[index]->getDefaultColor(); }
+
 			inline const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector(); }
 			inline const unsigned int& getLayout(const unsigned int& index) const { return m_shapes[0]->getLayout(index); }
 			inline const unsigned int& getLayoutSize() const { return m_shapes[0]->getLayoutSize(); }
@@ -115,10 +121,17 @@ namespace mar {
 			// --- SET METHODS --- //
 			void setCenter(const unsigned int& index, const glm::vec3& new_center) { m_shapes[index]->setCenter(new_center); }
 			void setAngle(const unsigned int& index, const glm::vec3& new_angle) { m_shapes[index]->setAngle(new_angle); }
+			void setColor(const unsigned int& index, const glm::vec3& new_color) { m_shapes[index]->setDefaultColor(new_color); }
 		};
 
 
 } }
+
+
+#define NORMAL_MESH_TYPE ::mar::graphics::MeshType::NORMAL
+#define CUBEMAPS_MESH_TYPE ::mar::graphics::MeshType::CUBEMAPS
+#define OBJECTS_MESH_TYPE ::mar::graphics::MeshType::OBJECTS
+
 
 #endif // !MAR_ENGINE_MESH_H
 

@@ -86,6 +86,7 @@ namespace mar {
 
 				pushTexture(new_shape, texture);
 				pushMatrices(center, angle);
+				pushColors(new_shape->getDefaultColor());
 
 				ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 				m_availableShapeID++;
@@ -112,6 +113,7 @@ namespace mar {
 
 				pushCubeMap(new_shape, faces);
 				pushMatrices(center, angle);
+				pushColors(new_shape->getDefaultColor());
 
 				ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 				m_availableShapeID++;
@@ -143,6 +145,7 @@ namespace mar {
 			pushTexture(new_shape, texture);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
+			pushColors(new_shape->getDefaultColor());
 
 			m_shapesCount++;
 
@@ -161,6 +164,7 @@ namespace mar {
 			pushCubeMap(new_shape, faces);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
+			pushColors(new_shape->getDefaultColor());
 
 			m_shapesCount++;
 
@@ -174,6 +178,8 @@ namespace mar {
 			}
 
 			popShape(index);
+			popMatrices(index);
+			popColors(index);
 
 			MAR_CORE_INFO("Deleted object from scene!");
 		}
@@ -229,6 +235,10 @@ namespace mar {
 			m_rotationMats.push_back(transform);
 		}
 
+		void Mesh::pushColors(const glm::vec3& color) {
+			m_colors.push_back(color);
+		}
+
 		void Mesh::popShape(const unsigned int& index) {
 			unsigned int min_value = m_shapes[index]->getMinValueOfIndices();
 			unsigned int max_value = m_shapes[index]->getMaxValueOfIndices();
@@ -252,13 +262,15 @@ namespace mar {
 
 			m_samplers.pop_back();
 			m_texture->removeID(index);
-			
-			popMatrices(index);
 		}
 
 		void Mesh::popMatrices(const unsigned int& index) {
 			m_translationMats.erase(m_translationMats.begin() + index);
 			m_rotationMats.erase(m_rotationMats.begin() + index);
+		}
+
+		void Mesh::popColors(const unsigned int& index) {
+			m_colors.erase(m_colors.begin() + index);
 		}
 
 		void Mesh::clearBuffers() {
@@ -269,6 +281,10 @@ namespace mar {
 		void Mesh::clearMatrices() {
 			m_translationMats.clear();
 			m_rotationMats.clear();
+		}
+
+		void Mesh::clearColors() {
+			m_colors.clear();
 		}
 
 		void Mesh::resetDraw() {

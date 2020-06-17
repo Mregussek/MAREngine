@@ -194,6 +194,7 @@ namespace mar {
 					ImGui::SliderFloat("RZ", &m_sceneAngle.z, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::Separator();
 
+					ImGui::Text("Color Scene");
 					ImGui::ColorEdit4("C", m_sceneColors);
 
 					ImGui::TreePop();
@@ -256,6 +257,7 @@ namespace mar {
 					const char* x_rot = "X rotation";
 					const char* y_rot = "Y rotation";
 					const char* z_rot = "Z rotation";
+					const char* color_shape = "Color shape";
 
 					glm::vec3& center = m_meshes[m_meshIndex]->getCenter(m_shapeIndex);
 					glm::vec3& angle = m_meshes[m_meshIndex]->getAngle(m_shapeIndex);
@@ -275,11 +277,22 @@ namespace mar {
 					ImGui::SliderFloat(z_rot, &angle.z, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::Separator();
 
-					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS)
+					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS) {
 						if (m_meshes[m_meshIndex]->getShapesTexture(m_shapeIndex) != "empty") {
-							ImGui::Image((void*)m_meshes[m_meshIndex]->getTextureID(m_shapeIndex), 
+							ImGui::Image((void*)m_meshes[m_meshIndex]->getTextureID(m_shapeIndex),
 								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 						}
+						else {
+							glm::vec3 v = m_meshes[m_meshIndex]->getColor(m_shapeIndex);
+							float color[3] = { v.x, v.y, v.z };
+
+							ImGui::ColorEdit3(color_shape, color);
+
+							v.x = color[0]; v.y = color[1]; v.z = color[2];
+							m_meshes[m_meshIndex]->setColor(m_shapeIndex, v);
+						}
+					}
+						
 
 					ImGui::Separator();
 					if (ImGui::Button(delete_shape.c_str())) {

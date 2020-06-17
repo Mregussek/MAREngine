@@ -84,13 +84,12 @@ namespace mar {
 		void Window::swapBuffers() {
 			glfwSwapBuffers(m_window);
 			glfwPollEvents();
-
-			clearScreen();
 		}
 
 		void Window::clearScreen() {
 			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			glViewport(0, 0, m_width, m_height);
 		}
 
 		namespace callbacks {
