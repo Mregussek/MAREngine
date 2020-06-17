@@ -135,6 +135,8 @@ namespace mar {
 		class VertexBufferLayoutOpenGL;
 		class ElementBuffer;
 		class ElementBufferOpenGL;
+		class FragmentBuffer;
+		class FragmentBufferOpenGL;
 		class Texture;
 		class TextureOpenGL;
 		class Shader;

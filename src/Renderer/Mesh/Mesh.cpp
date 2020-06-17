@@ -47,8 +47,9 @@ namespace mar {
 
 		void Mesh::loadScene(Scene* scene, MeshType type) {
 			unsigned int shapesInSceneCount = scene->getShapesNumber();
+			m_type = type;
 
-			switch(type) {
+			switch(m_type) {
 			case MeshType::NORMAL:
 				for (unsigned int i = 0; i < shapesInSceneCount; i++)
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));

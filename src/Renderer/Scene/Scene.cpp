@@ -115,7 +115,7 @@ namespace mar {
 			m_shapes = {
 				MeshCreator::createEmptyShape() 
 				, MeshCreator::createEmptyShape() 
-				, MeshCreator::createEmptyShape() 
+				//, MeshCreator::createEmptyShape() 
 			};
 			m_centers = {
 				{  0.0f, -1.8f, -2.0f } ,

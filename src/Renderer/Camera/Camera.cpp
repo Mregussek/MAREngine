@@ -18,8 +18,8 @@ namespace mar {
 		const glm::vec3 CameraSettings::CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
 
 		Camera::Camera()
-			: m_windowWidth(0),
-			m_windowHeight(0),
+			: m_windowWidth(0.f),
+			m_windowHeight(0.f),
 			m_position(CameraSettings::CAMERA_START),
 			m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
 			m_worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
@@ -36,7 +36,7 @@ namespace mar {
 			m_lastFrame(0.0f)
 		{ }
 
-		void Camera::initialize(const int& w, const int& h) {
+		void Camera::initialize(const float& w, const float& h) {
 			m_windowWidth = w;
 			m_windowHeight = h;
 			updateCameraVectors();

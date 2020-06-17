@@ -18,6 +18,9 @@
 #include "Mesh/VertexBuffer/VertexBufferLayout.h"
 #include "Mesh/VertexBuffer/VertexBufferLayoutOpenGL.h"
 
+#include "Mesh/FrameBuffer/FrameBuffer.h"
+#include "Mesh/FrameBuffer/FrameBufferOpenGL.h"
+
 #include "Mesh/Texture/Texture.h"
 #include "Mesh/Texture/TextureOpenGL.h"
 
@@ -61,6 +64,10 @@ namespace mar {
 				return nullptr;
 			}
 			virtual Ref<Shader> createShader()
+			{
+				return nullptr;
+			}
+			virtual Ref<FrameBuffer> createFrameBuffer() 
 			{
 				return nullptr;
 			}

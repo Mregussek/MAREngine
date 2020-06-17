@@ -25,67 +25,13 @@ namespace mar {
 		bool GUI::s_dockspaceOpen{ true };
 		bool GUI::s_fullscreenPersisant{ true };
 
-		void GUI::ShowExampleAppDockSpace() {
-			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-
-			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-			if (s_fullscreenPersisant) {
-				ImGuiViewport* viewport = ImGui::GetMainViewport();
-				ImGui::SetNextWindowPos(viewport->GetWorkPos());
-				ImGui::SetNextWindowSize(viewport->GetWorkSize());
-				ImGui::SetNextWindowViewport(viewport->ID);
-				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-				window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-				window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-			}
-
-			if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-				window_flags |= ImGuiWindowFlags_NoBackground;
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			ImGui::Begin("DockSpace Demo", &s_dockspaceOpen, window_flags);
-			ImGui::PopStyleVar();
-
-			if (s_fullscreenPersisant)
-				ImGui::PopStyleVar(2);
-
-			ImGuiIO& io = ImGui::GetIO();
-			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-				ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-			}
-
-			if (ImGui::BeginMenuBar()) {
-				if (ImGui::BeginMenu("Docking")) {
-					if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0))                 dockspace_flags ^= ImGuiDockNodeFlags_NoSplit;
-					if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0))                dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
-					if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))  dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-					if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))     dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
-					if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))          dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
-					ImGui::Separator();
-					if (ImGui::MenuItem("Close DockSpace", NULL, false))
-						s_dockspaceOpen = false;
-					ImGui::EndMenu();
-				}
-
-				ImGui::EndMenuBar();
-			}
-
-			Menu_Info();
-			Menu_ModifyScene();
-
-			ImGui::End();
-
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		}
-
-
 
 		void GUI::initialize(window::Window* window, const char* glsl_version, bool can_modify_objects) {
 			m_window = window;
 			m_canModifyObjects = can_modify_objects;
+
+			m_meshIndex = -1;
+			m_shapeIndex = -1;
 
 			ImGui::CreateContext();
 			ImGui::StyleColorsDark();
@@ -94,6 +40,8 @@ namespace mar {
 
 			ImGuiIO& io = ImGui::GetIO();
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
+			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
 			for (auto& c : m_sceneColors) c = 1.0f;
 
@@ -179,10 +127,6 @@ namespace mar {
 						ImGui::EndMenu();
 					}
 
-					if (ImGui::MenuItem("Open Window to modify scene and meshes", nullptr, &m_modifySceneWindowDisplay)) {
-						m_modifySceneWindowDisplay = true;
-					}
-
 					ImGui::EndMenu();
 				}
 
@@ -203,13 +147,32 @@ namespace mar {
 				ImGui::EndMainMenuBar();
 			}
 
-			if (m_modifySceneWindowDisplay) { Menu_ModifyScene(); }
+			Menu_ModifyScene();
+			Menu_ModifyShape();
+			Display_ViewPort();
+
 			if (m_infoWindow) { Menu_Info(); }
 
 			ImGui::End();
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			ImGui::EndFrame();
+		}
+
+		void GUI::Display_ViewPort() {
+			ImGui::Begin("ViewPort");
+
+			graphics::FrameBufferSpecification spec = m_framebuffer->getSpecification();
+			unsigned int id = m_framebuffer->getColorAttach();
+
+			ImVec2 size = ImGui::GetContentRegionAvail();
+			spec.width = size.x;
+			spec.height = size.y;
+
+			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, 
+				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+			ImGui::End();
 		}
 
 		void GUI::Menu_ModifyScene() {
@@ -219,33 +182,45 @@ namespace mar {
 				ImGui::MenuItem("Scene Menu");
 
 				if (ImGui::TreeNode("Modify Scene")) {
-					ImGui::SliderFloat3("T", &m_sceneTranslation.x, -5.0f, 5.0f);
-					ImGui::SliderFloat3("R", &m_sceneAngle.x, -360.0f, 360.0f);
+					ImGui::Text("Move Scene");
+					ImGui::SliderFloat("TX", &m_sceneTranslation.x, -5.0f, 5.0f, "%.2f", 1.f);
+					ImGui::SliderFloat("TY", &m_sceneTranslation.y, -5.0f, 5.0f, "%.2f", 1.f);
+					ImGui::SliderFloat("TZ", &m_sceneTranslation.z, -5.0f, 5.0f, "%.2f", 1.f);
+					ImGui::Separator();
+
+					ImGui::Text("Rotate Scene");
+					ImGui::SliderFloat("RX", &m_sceneAngle.x, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::SliderFloat("RY", &m_sceneAngle.y, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::SliderFloat("RZ", &m_sceneAngle.z, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::Separator();
+
 					ImGui::ColorEdit4("C", m_sceneColors);
 
 					ImGui::TreePop();
 				}
 
-				ImGui::MenuItem("Shapes Menu", "");
+				ImGui::MenuItem("Select Shape");
 
 				for (unsigned int index = 0; index < m_meshes.size(); index++) {
+					std::string mesh;
 
-					std::string mesh = "M" + std::to_string(index);
+					switch (m_meshes[index]->getMeshType()) {
+					case graphics::MeshType::NORMAL: mesh = "Default Mesh " + std::to_string(index);
+						break;
+					case graphics::MeshType::CUBEMAPS: mesh = "Cubemap Mesh " + std::to_string(index);
+						break;
+					case graphics::MeshType::OBJECTS: mesh = "Object Mesh " + std::to_string(index);
+						break;
+					}
 
-					if (ImGui::TreeNode(("Modify " + mesh).c_str())) {
+					if (ImGui::TreeNode(mesh.c_str())) {
 						for (unsigned int i = 0; i < m_meshes[index]->getShapesCount(); i++) {
-							std::string shapeindex = mesh + m_meshes[index]->getName(i)[0] + std::to_string(i);
-							std::string shapetrans = "T" + shapeindex;
-							std::string shaperot = "R" + shapeindex;
+							std::string shapeindex = " " + mesh + " " + m_meshes[index]->getName(i) 
+								+ " " +std::to_string(i);
 
-							ImGui::Text(shapeindex.c_str());
-							ImGui::SliderFloat3(shapetrans.c_str(), &m_meshes[index]->getCenter(i).x, -15.0f, 15.0f, "%.2f", 1.f);
-							ImGui::SliderFloat3(shaperot.c_str(), &m_meshes[index]->getAngle(i).x, 0.0f, 360.0f, "%.2f", 1.f);
-							
-							std::string delete_shape = "Delete " + shapeindex;
-
-							if (ImGui::Button(delete_shape.c_str())) {
-								m_meshes[index]->flushShape(i);
+							if (ImGui::MenuItem(shapeindex.c_str())) {
+								m_meshIndex = index;
+								m_shapeIndex = i;
 							}
 						}
 
@@ -253,17 +228,73 @@ namespace mar {
 					}
 
 					ImGui::Separator();
-
 				}
 			}
 			else {
 				ImGui::Text("You cannot modify objects!");
 			}
 
-			ImGui::Separator();
+			ImGui::End();
+		}
 
-			if (ImGui::Button("Close")) {
-				m_modifySceneWindowDisplay = false;
+		void GUI::Menu_ModifyShape() {
+			ImGui::Begin("Modify Shape");
+
+			if (m_canModifyObjects) {
+
+				ImGui::MenuItem("Shapes Menu", "");
+
+				if (m_meshIndex != -1 && m_shapeIndex != -1) {
+					std::string shape = "Shape";
+					std::string shape_trans = "Translate " + shape;
+					std::string shape_rot = "Rotate " + shape;
+					std::string delete_shape = "Delete " + shape;
+
+					const char* x_trans = "X translation";
+					const char* y_trans = "Y translation";
+					const char* z_trans = "Z translation";
+					const char* x_rot = "X rotation";
+					const char* y_rot = "Y rotation";
+					const char* z_rot = "Z rotation";
+
+					glm::vec3& center = m_meshes[m_meshIndex]->getCenter(m_shapeIndex);
+					glm::vec3& angle = m_meshes[m_meshIndex]->getAngle(m_shapeIndex);
+
+					ImGui::Text(shape.c_str());
+					ImGui::Separator();
+
+					ImGui::Text(shape_trans.c_str());
+					ImGui::SliderFloat(x_trans, &center.x, -15.0f, 15.0f, "%.2f", 1.f);
+					ImGui::SliderFloat(y_trans, &center.y, -15.0f, 15.0f, "%.2f", 1.f);
+					ImGui::SliderFloat(z_trans, &center.z, -15.0f, 15.0f, "%.2f", 1.f);
+					ImGui::Separator();
+
+					ImGui::Text(shape_rot.c_str());
+					ImGui::SliderFloat(x_rot, &angle.x, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::SliderFloat(y_rot, &angle.y, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::SliderFloat(z_rot, &angle.z, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::Separator();
+
+					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS)
+						if (m_meshes[m_meshIndex]->getShapesTexture(m_shapeIndex) != "empty") {
+							ImGui::Image((void*)m_meshes[m_meshIndex]->getTextureID(m_shapeIndex), 
+								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+						}
+
+					ImGui::Separator();
+					if (ImGui::Button(delete_shape.c_str())) {
+						m_meshes[m_meshIndex]->flushShape(m_shapeIndex);
+
+						m_meshIndex = -1;
+						m_shapeIndex = -1;
+					}
+				}
+				else {
+					ImGui::Text("No shape selected!");
+				}
+			}
+			else {
+				ImGui::Text("You cannot modify objects!");
 			}
 
 			ImGui::End();

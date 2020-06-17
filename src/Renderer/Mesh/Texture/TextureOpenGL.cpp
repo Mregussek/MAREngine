@@ -128,10 +128,6 @@ namespace mar {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-		const unsigned int& TextureOpenGL::getID(int index) const {
-			return m_id[index];
-		}
-
 		void TextureOpenGL::addID(const unsigned int id) {
 			m_id.push_back(id);
 			m_paths.push_back("empty");

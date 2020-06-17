@@ -12,9 +12,9 @@ namespace mar {
     
 
 		void Window::initialize(const int& H, const int& W, const char* wN, graphics::Camera* camera) {
-			_height = H;
-			_width = W;
-			_windowName = wN;
+			m_height = H;
+			m_width = W;
+			m_windowName = wN;
 
 			if (!glfwInit()) {
 				MAR_CORE_ERROR("glfw() init failure");
@@ -26,19 +26,19 @@ namespace mar {
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-			glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+			glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 			/// TODO: read about fullscreen mode. One of the nullptr's should not be nullptr
-			_window = glfwCreateWindow(_width, _height, _windowName, nullptr, nullptr);
-			if (!_window) {
+			m_window = glfwCreateWindow(m_width, m_height, m_windowName, nullptr, nullptr);
+			if (!m_window) {
 				glfwTerminate();
 				MAR_CORE_ERROR("Cannot create window!");
 				exit(0);
 			}
 
 			/// make the associated OpenGL context current
-			glfwMakeContextCurrent(_window);
-			glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwMakeContextCurrent(m_window);
+			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 #ifdef IMPORT_GLEW
 			glewExperimental = GL_TRUE;
@@ -54,13 +54,15 @@ namespace mar {
 			}
 #endif
 
+			callbacks::setWindowSize(&m_height, &m_width);
+
 			if (camera == nullptr) {
-				callbacks::setCallbacks(_window);
+				callbacks::setCallbacks(m_window);
 
 				MAR_CORE_TRACE("Did not add camera callbacks!");
 			}
 			else {
-				callbacks::setCallbacks(_window, camera);
+				callbacks::setCallbacks(m_window, camera);
 
 				MAR_CORE_TRACE("Added camera callbacks!");
 			}
@@ -80,7 +82,7 @@ namespace mar {
 		}
 
 		void Window::swapBuffers() {
-			glfwSwapBuffers(_window);
+			glfwSwapBuffers(m_window);
 			glfwPollEvents();
 
 			clearScreen();
@@ -88,20 +90,13 @@ namespace mar {
 
 		void Window::clearScreen() {
 			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		}
-
-		GLFWwindow* Window::getWindow() const {
-			return _window;
-		}
-
-		const bool Window::shouldClose() const {
-			return !glfwWindowShouldClose(_window);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		}
 
 		namespace callbacks {
 			inline void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-				glViewport(0, 0, width, height);
+				*window_width = width;
+				*window_height = height;
 			}
 
 			inline void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -114,6 +109,11 @@ namespace mar {
 				if (camera == nullptr) return;
 
 				camera->scrollCallback((float)yoffset);
+			}
+
+			void setWindowSize(int* height, int* width) {
+				window_width = width;
+				window_height = height;
 			}
 
 			void setCallbacks(GLFWwindow* wind, graphics::Camera* cam) {

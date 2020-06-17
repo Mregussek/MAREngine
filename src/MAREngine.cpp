@@ -22,60 +22,73 @@ namespace mar {
 
 			bool usegui = true;
 			auto factory = std::make_shared<graphics::RendererOpenGLFactory>();
-			graphics::Renderer m_renderer;
-			graphics::Mesh m_mesh;
-			graphics::Renderer m_cubemapRenderer;
-			graphics::Mesh m_cubemapMesh;
-			graphics::Renderer m_objectRenderer;
-			graphics::Mesh m_objectMesh;
+			graphics::Renderer loc_renderer;
+			graphics::Mesh loc_mesh;
+			graphics::Renderer loc_cubemapRenderer;
+			graphics::Mesh loc_cubemapMesh;
+			graphics::Renderer loc_objectRenderer;
+			graphics::Mesh loc_objectMesh;
 
 			m_camera.initialize(MAREngineSettings::width, MAREngineSettings::height);
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
 			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, usegui);
 
-			{
-				m_renderer.createRenderer(factory);
-				m_mesh.createMesh(factory);
+			graphics::FrameBufferSpecification spec;
+			spec.width = 800.f;
+			spec.height = 600.f;
+			auto loc_framebuffer = factory->createFrameBuffer();
+			loc_framebuffer->initialize(spec);
 
-				m_mesh.loadScene(&graphics::Scene(graphics::SceneType::DEFAULT), graphics::MeshType::NORMAL);
-				m_renderer.initialize(m_mesh.getLayout(), graphics::ShaderType::DEFAULT);
-				m_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			{
+				loc_renderer.createRenderer(factory);
+				loc_mesh.createMesh(factory);
+
+				loc_mesh.loadScene(&graphics::Scene(graphics::SceneType::DEFAULT), graphics::MeshType::NORMAL);
+				loc_renderer.initialize(loc_mesh.getLayout(), graphics::ShaderType::DEFAULT);
+				loc_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			}
 			
 			{
-				m_cubemapRenderer.createRenderer(factory);
-				m_cubemapMesh.createMesh(factory);
+				loc_cubemapRenderer.createRenderer(factory);
+				loc_cubemapMesh.createMesh(factory);
 
-				m_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshType::CUBEMAPS);
-				m_cubemapRenderer.initialize(m_cubemapMesh.getLayout(), graphics::ShaderType::CUBEMAP);
-				m_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+				loc_cubemapMesh.loadScene(&graphics::Scene(graphics::SceneType::CUBEMAPS), graphics::MeshType::CUBEMAPS);
+				loc_cubemapRenderer.initialize(loc_cubemapMesh.getLayout(), graphics::ShaderType::CUBEMAP);
+				loc_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			}
 			
 			{
-				m_objectRenderer.createRenderer(factory);
-				m_objectMesh.createMesh(factory);
+				loc_objectRenderer.createRenderer(factory);
+				loc_objectMesh.createMesh(factory);
 
-				m_objectMesh.loadScene(&graphics::Scene(graphics::SceneType::OBJECTS), graphics::MeshType::OBJECTS);
-				m_objectRenderer.initialize(m_objectMesh.getLayout(), graphics::ShaderType::DEFAULT);
-				m_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+				loc_objectMesh.loadScene(&graphics::Scene(graphics::SceneType::OBJECTS), graphics::MeshType::OBJECTS);
+				loc_objectRenderer.initialize(loc_objectMesh.getLayout(), graphics::ShaderType::DEFAULT);
+				loc_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
 			}
 			
 			m_camera.setReference(m_window.getWindow());
 			m_gui.setReferences(&graphics::Renderer::getStatistics());
+			m_gui.setFrameBuffer(loc_framebuffer);
 
-			m_gui.submitMesh(&m_mesh);
-			m_gui.submitMesh(&m_cubemapMesh);
-			m_gui.submitMesh(&m_objectMesh);
+			m_gui.submitMesh(&loc_mesh);
+			m_gui.submitMesh(&loc_cubemapMesh);
+			m_gui.submitMesh(&loc_objectMesh);
 
 			while (m_window.shouldClose()) {
 				m_camera.processInput();
+				m_camera.setWindowSize(spec.width, spec.height);
 				m_camera.updateData();
 
 				graphics::Renderer::getStatistics().resetStatistics();
 
-				m_renderer.draw(&m_mesh);
-				m_cubemapRenderer.draw(&m_cubemapMesh);
-				m_objectRenderer.draw(&m_objectMesh);
+				loc_framebuffer->bind();
+				loc_framebuffer->clear();
+
+				loc_renderer.draw(&loc_mesh);
+				loc_cubemapRenderer.draw(&loc_cubemapMesh);
+				loc_objectRenderer.draw(&loc_objectMesh);
+
+				loc_framebuffer->unbind();
 
 				m_gui.prepareNewFrame();
 				m_gui.display();
@@ -83,8 +96,9 @@ namespace mar {
 				m_window.swapBuffers();
 			}
 
+			loc_framebuffer->close();
 			m_gui.shutdown();
-			m_renderer.closeRenderer();
+			loc_renderer.closeRenderer();
 			m_window.shutdown();
 		}
 

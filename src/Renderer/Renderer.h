@@ -20,7 +20,7 @@ namespace mar {
 		namespace constants {
 			const size_t maxCount = 100000;
 			const size_t maxVertexCount = maxCount * sizeof(Vertex);
-			const size_t maxIndexCount = maxCount * 5;
+			const size_t maxIndexCount = maxCount * sizeof(Vertex);
 			const size_t maxObjectsInScene = 32;
 		}
 

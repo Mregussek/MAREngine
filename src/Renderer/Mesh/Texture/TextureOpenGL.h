@@ -76,14 +76,6 @@ namespace mar {
 			void unbind() const override;
 
 			/*
-			Get id of texture bounded to shape on specific index
-
-				\param index - index of shape
-				\return m_id[index] - id of texture prescribed to shape
-			*/
-			const unsigned int& getID(int index) const override;
- 
-			/*
 			Adds id prescribed to shape
 
 				\param id - new id
@@ -96,6 +88,23 @@ namespace mar {
 				\param index - index of shape
 			*/
 			void removeID(const unsigned int& index) override;
+
+			/*
+			Get id of texture bounded to shape on specific index
+
+				\param index - index of shape
+				\return m_id[index] - id of texture prescribed to shape
+			*/
+			const unsigned int& getID(const unsigned int& index) const override { return m_id[index]; }
+ 
+			/*
+			Get path to texture associated to shape with specified index.
+			Method must be overloaded!
+
+				\param index - index of path
+				\return m_path[index] - path of texture prescribed to shape
+			*/
+			const std::string& getPath(const unsigned int& index) const override { return m_paths[index]; }
 		};
 
 

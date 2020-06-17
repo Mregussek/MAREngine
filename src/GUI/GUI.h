@@ -11,6 +11,7 @@
 #include "../Window/Window.h"
 #include "../Renderer/Mesh/Mesh.h"
 #include "../Renderer/Mesh/MeshCreator.h"
+#include "../Renderer/Mesh/FrameBuffer/FrameBuffer.h"
 
 namespace mar {
 	namespace gui {
@@ -41,27 +42,32 @@ namespace mar {
 			const graphics::RendererStatistics* m_statistics;
 			bool m_canModifyObjects{ false };
 			static GUIData s_guiData;
+
+			int m_meshIndex;
+			int m_shapeIndex;
 			// --- Dockspace
+			Ref<graphics::FrameBuffer> m_framebuffer;
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
-			bool m_modifySceneWindowDisplay{ false };
 			bool m_infoWindow{ false };
 
 		public:
 			GUI() = default;
 
-			void ShowExampleAppDockSpace();
-
 			void initialize(window::Window* window, const char* glsl_version, bool can_modify_objects);
 			void shutdown();
 			
+			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
+
 			void prepareNewFrame();
 			void display();
 
 			void submitMesh(graphics::Mesh* mesh) { m_meshes.push_back(mesh); }
 
 		private:
+			void Display_ViewPort();
 			void Menu_ModifyScene();
+			void Menu_ModifyShape();
 			void Menu_PushShapeToScene();
 			void Menu_Statistics();
 			void Menu_Info();

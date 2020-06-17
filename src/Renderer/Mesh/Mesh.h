@@ -13,6 +13,7 @@
 #include "Shapes/DefaultShapes/Surface.h"
 #include "Shapes/DefaultShapes/Pyramid.h"
 #include "../Renderer.h"
+#include "Texture/Texture.h"
 #include "Light/Light.h"
 
 
@@ -28,6 +29,8 @@ namespace mar {
 
 
 		class Mesh {
+			MeshType m_type;
+
 			Ref<Texture> m_texture;
 
 			std::vector<Ref<Shape>> m_shapes;
@@ -79,8 +82,12 @@ namespace mar {
 			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
 
 			/// --- GET METHODS --- ///
+			inline const MeshType& getMeshType() const { return m_type; }
+
 			inline const unsigned int& getShapesDrawn() const { return m_shapesDrawn; }
 
+			inline const unsigned int& getTextureID(const unsigned int& index) const { return m_texture->getID(index); }
+			inline const std::string& getShapesTexture(const unsigned int& index) const { return m_texture->getPath(index); }
 			inline const unsigned int& getShapesCount() const { return m_shapesCount; }
 			inline const std::string& getName(const unsigned int& index) const { return m_shapes[index]->getName(); }
 	
