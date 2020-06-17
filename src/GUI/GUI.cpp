@@ -283,13 +283,7 @@ namespace mar {
 								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 						}
 						else {
-							glm::vec3 v = m_meshes[m_meshIndex]->getColor(m_shapeIndex);
-							float color[3] = { v.x, v.y, v.z };
-
-							ImGui::ColorEdit3(color_shape, color);
-
-							v.x = color[0]; v.y = color[1]; v.z = color[2];
-							m_meshes[m_meshIndex]->setColor(m_shapeIndex, v);
+							ImGui::ColorPicker3(color_shape, (float*)&m_meshes[m_meshIndex]->getColor(m_shapeIndex));
 						}
 					}
 						

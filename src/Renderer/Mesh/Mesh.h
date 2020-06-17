@@ -104,7 +104,7 @@ namespace mar {
 			inline const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
 			inline const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
 			inline const std::vector<glm::vec3>& getColors() const { return m_colors; }
-			inline glm::vec3& getColor(const unsigned int& index) { return m_shapes[index]->getDefaultColor(); }
+			inline glm::vec3& getColor(const unsigned int& index) { return m_colors[index]; }
 
 			inline const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector(); }
 			inline const unsigned int& getLayout(const unsigned int& index) const { return m_shapes[0]->getLayout(index); }
@@ -118,7 +118,7 @@ namespace mar {
 			// --- SET METHODS --- //
 			void setCenter(const unsigned int& index, const glm::vec3& new_center) { m_shapes[index]->setCenter(new_center); }
 			void setAngle(const unsigned int& index, const glm::vec3& new_angle) { m_shapes[index]->setAngle(new_angle); }
-			void setColor(const unsigned int& index, const glm::vec3& new_color) { m_shapes[index]->setDefaultColor(new_color); }
+			void setColor(const unsigned int& index, const glm::vec3& new_color) { m_colors[index] = new_color; m_shapes[index]->setDefaultColor(new_color); }
 		};
 
 
