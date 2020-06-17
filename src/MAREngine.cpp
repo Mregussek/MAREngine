@@ -75,24 +75,31 @@ namespace mar {
 			m_gui.submitMesh(&loc_objectMesh);
 
 			while (m_window.shouldClose()) {
-				m_camera.processInput();
-				m_camera.setWindowSize(spec.width, spec.height);
-				m_camera.updateData();
-
-				graphics::Renderer::getStatistics().resetStatistics();
+				{
+					m_camera.processInput();
+					m_camera.setWindowSize(spec.width, spec.height);
+					m_camera.updateData();
+				}
 
 				loc_framebuffer->bind();
 				loc_framebuffer->clear();
 
-				loc_renderer.draw(&loc_mesh);
-				loc_cubemapRenderer.draw(&loc_cubemapMesh);
-				loc_objectRenderer.draw(&loc_objectMesh);
+				{
+					graphics::Renderer::getStatistics().resetStatistics();
+
+					loc_renderer.draw(&loc_mesh);
+					loc_cubemapRenderer.draw(&loc_cubemapMesh);
+					loc_objectRenderer.draw(&loc_objectMesh);
+				}
+				
 
 				loc_framebuffer->unbind();
 
-				m_gui.prepareNewFrame();
-				m_gui.display();
-
+				{
+					m_gui.prepareNewFrame();
+					m_gui.display();
+				}
+				
 				m_window.swapBuffers();
 			}
 
