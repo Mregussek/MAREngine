@@ -133,9 +133,15 @@ namespace mar {
 				"empty" 
 			};
 			m_obj = {
+#ifndef IMPORTED_FROM_GITHUB
 				"resources/objects/lego-human.obj" 
 				, "resources/objects/lego-human.obj" 
 				, "resources/objects/low_poly_tree_triangles.obj"
+#else	
+				"../../../resources/objects/lego-human.obj"
+				, "../../../resources/objects/lego-human.obj"
+				, "../../../resources/objects/low_poly_tree_triangles.obj"
+#endif
 			};
 		}
 
