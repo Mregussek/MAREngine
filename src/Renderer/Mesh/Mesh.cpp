@@ -245,7 +245,15 @@ namespace mar {
 
 			for (unsigned int i = index; i < m_shapesCount - 1; i++) {
 				float save_tex_id = m_shapes[i + 1]->getTextureID();
-				m_samplers[i] = m_samplers[i + 1];
+
+				if (save_tex_id != 0.0f && save_tex_id != 1.0f) {
+					save_tex_id--;
+					m_samplers[i] = m_samplers[i + 1] - 1;
+				}
+				else {
+					m_samplers[i] = m_samplers[i + 1];
+				}
+				
 				m_colors[i] = m_colors[i + 1];
 				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
 
