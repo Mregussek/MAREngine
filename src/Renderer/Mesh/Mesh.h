@@ -14,7 +14,7 @@
 #include "Shapes/DefaultShapes/Pyramid.h"
 #include "../Renderer.h"
 #include "Texture/Texture.h"
-#include "Light/Light.h"
+#include "../Light/Light.h"
 
 
 namespace mar {
@@ -71,17 +71,21 @@ namespace mar {
 
 			void clearBuffers();
 			void clearMatrices();
-			void clearColors();
-
-			void pushShape(Ref<Shape>& new_shape);
-			void popShape(const unsigned int& index);
 
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
-			void popMatrices(const unsigned int& index);
 
+		private:
+			void reuse(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
+			void submit(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
+
+			void pushShape(Ref<Shape>& new_shape);
 			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
 			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
 
+			void popShape(const unsigned int& index);
+			void popMatrices(const unsigned int& index);
+
+		public:
 			/// --- GET METHODS --- ///
 			inline const MeshType& getMeshType() const { return m_type; }
 

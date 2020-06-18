@@ -16,9 +16,17 @@ namespace mar {
 
 
 		class Layer {
-			
+		public:
+			Layer(std::string name) : m_debugName(name) { }
 
+			virtual void prepareFrame() { }
 
+			virtual void update() { }
+
+			virtual void endFrame() { }
+
+		protected:
+			std::string m_debugName;
 		};
 
 

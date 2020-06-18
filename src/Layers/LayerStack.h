@@ -18,11 +18,52 @@ namespace mar {
 
 		class LayerStack {
 			std::vector<Layer*> m_layers;
+			std::vector<Layer*>::iterator m_layerInsert;
 
 		public:
-			void pushLayer(Layer* layer);
-			void pushOverlayer(Layer* layer);
-			void flush();
+			LayerStack() {
+				m_layerInsert = m_layers.begin();
+			}
+
+			void prepareFrame() {
+			
+			}
+
+			void updateFrame() { 
+			
+			}
+
+			void endFrame() { 
+			
+			}
+
+			void pushLayer(Layer* layer) {
+				m_layerInsert = m_layers.emplace(m_layerInsert, layer);
+			}
+
+			void pushOverlay(Layer* overlay) {
+				m_layers.emplace_back(overlay);
+			}
+
+			void popLayer(Layer* layer) {
+				auto it = std::find(m_layers.begin(), m_layers.end(), layer);
+				if (it != m_layers.end()) {
+					m_layers.erase(it);
+					m_layerInsert--;
+				}
+			}
+
+			void popOverlay(Layer* overlay) {
+				auto it = std::find(m_layers.begin(), m_layers.end(), overlay);
+				if (it != m_layers.end()) {
+					m_layers.erase(it);
+				}
+			}
+
+			void flush() {
+
+			}
+
 		};
 
 

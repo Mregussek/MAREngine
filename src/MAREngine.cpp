@@ -5,8 +5,6 @@
 
 #include "MAREngine.h"
 
-#define USE_GUI 1
-
 
 namespace mar {
     namespace engine {
@@ -31,6 +29,9 @@ namespace mar {
 			graphics::Mesh loc_cubemapMesh;
 			graphics::Renderer loc_objectRenderer;
 			graphics::Mesh loc_objectMesh;
+
+			layers::LayerStack loc_stack;
+			layers::GUILayer loc_guilayer("Default GUI Layer");
 
 			m_camera.initialize(MAREngineSettings::width, MAREngineSettings::height);
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
@@ -74,10 +75,6 @@ namespace mar {
 			m_gui.submitMesh(&loc_mesh);
 			m_gui.submitMesh(&loc_cubemapMesh);
 			m_gui.submitMesh(&loc_objectMesh);
-
-			loc_renderer.setReferences(&m_camera.getCameraData());
-			loc_cubemapRenderer.setReferences(&m_camera.getCameraData());
-			loc_objectRenderer.setReferences(&m_camera.getCameraData());
 
 			m_camera.setReference(m_window.getWindow());
 

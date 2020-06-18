@@ -11,7 +11,7 @@
 #include "../Window/Window.h"
 #include "../Renderer/Mesh/Mesh.h"
 #include "../Renderer/Mesh/MeshCreator.h"
-#include "../Renderer/Mesh/FrameBuffer/FrameBuffer.h"
+#include "../Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 
 namespace mar {
 	namespace gui {
@@ -42,7 +42,6 @@ namespace mar {
 			const graphics::RendererStatistics* m_statistics;
 			bool m_canModifyObjects{ false };
 			static GUIData s_guiData;
-
 			int m_meshIndex;
 			int m_shapeIndex;
 			// --- Dockspace

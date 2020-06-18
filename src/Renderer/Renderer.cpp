@@ -140,7 +140,7 @@ namespace mar {
 			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++) {
 				mesh->pushMatrices(mesh->getCenter(i), mesh->getAngle(i));
 			}
-
+				
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 			m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
 			m_mainShader->setUniformVectorVec3("u_SeparateColor", mesh->getColors());

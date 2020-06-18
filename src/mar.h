@@ -74,6 +74,8 @@
 #include <mutex>
 // random numbers
 #include <random>
+// filesystem
+#include <filesystem>
 
 
 /*!
@@ -96,11 +98,22 @@ namespace mar {
 		class SerialPortMonitor;
 	}
 
+	namespace filesystem {
+		class FileSystem;
+	}
+
 	namespace gui {
 		class GUI;
 		struct GUIData;
 	}
 	
+	namespace layers {
+		class Layer;
+		class GUILayer;
+		class MeshLayer;
+		class LayerStack;
+	}
+
 	namespace graphics {
 		class Camera;
 
@@ -142,13 +155,9 @@ namespace mar {
 		class Shader;
 		class ShaderOpenGL;
 	}
-
-	namespace layers {
-		class Layer;
-		class LayerStack;
-	}
 	
 	// and of course callbacks namespace in Window.h
+
 	namespace engine {
 		class MAREngine;
 	}

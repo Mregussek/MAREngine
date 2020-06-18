@@ -70,7 +70,12 @@ namespace mar {
 
 			/// Vertical synchronization(VSync) is enabled by using glfwSwapInterval(1); 
 			glfwSwapInterval(1);
+			/// Enable DEPTH, in other words 3D
 			glEnable(GL_DEPTH_TEST);
+			/// Enable loading PNG files and transparency
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			
 
 			MAR_CORE_INFO("OpenGL loaded successfully and window is working!");
 		}

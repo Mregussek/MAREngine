@@ -6,10 +6,12 @@
 #ifndef MAR_ENGINE_MAIN_H
 #define MAR_ENGINE_MAIN_H
 
+
 #include "Debug/Log.h"
 // Layers
 #include "Layers/LayerStack.h"
 #include "Layers/Layer.h"
+#include "Layers/GUILayer.h"
 // Rendering
 #include "Renderer/Mesh/Mesh.h"
 #include "Renderer/Renderer.h"

@@ -53,4 +53,10 @@ namespace mar {
 
 } }
 
+
+#define SHADER_DEFAULT ::mar::graphics::ShaderType::DEFAULT
+#define SHADER_WITHOUT_GUI ::mar::graphics::ShaderType::WITHOUT_GUI
+#define SHADER_CUBEMAP ::mar::graphics::ShaderType::CUBEMAP
+#define SHADER_CUBEMAP_WITHOUT_GUI ::mar::graphics::ShaderType::CUBEMAP_WITHOUT_GUI
+
 #endif // SHADER_H

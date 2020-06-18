@@ -96,11 +96,12 @@ namespace mar {
 				else { } // end if statement
 			} // end while loop
 
-			std::default_random_engine generator;
-			std::uniform_real_distribution<float> distribution(0.0, 1.0);
-			float red = distribution(generator);
-			float blue = distribution(generator);
-			float green = distribution(generator);
+			std::random_device rd;
+			std::mt19937 mt(rd());
+			std::uniform_int_distribution<int> dist(0, 1);
+			float red = dist(mt);
+			float green = dist(mt);
+			float blue = dist(mt);
 
 			s_defaultcolor = { red, green, blue };
 			float light_normal[]{ 0.0f, 0.0f, 1.0f };

@@ -6,20 +6,20 @@
 #ifndef RENDERER_FACTORY_H
 #define RENDERER_FACTORY_H
 
-#include "Mesh/ElementBuffer/ElementBuffer.h"
-#include "Mesh/ElementBuffer/ElementBufferOpenGL.h"
+#include "Buffers/ElementBuffer/ElementBuffer.h"
+#include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
+	
+#include "Buffers/VertexArray/VertexArray.h"
+#include "Buffers/VertexArray/VertexArrayOpenGL.h"
 
-#include "Mesh/VertexArray/VertexArray.h"
-#include "Mesh/VertexArray/VertexArrayOpenGL.h"
+#include "Buffers/VertexBuffer/VertexBuffer.h"
+#include "Buffers/VertexBuffer/VertexBufferOpenGL.h"
+	
+#include "Buffers/VertexBuffer/VertexBufferLayout.h"
+#include "Buffers/VertexBuffer/VertexBufferLayoutOpenGL.h"
 
-#include "Mesh/VertexBuffer/VertexBuffer.h"
-#include "Mesh/VertexBuffer/VertexBufferOpenGL.h"
-
-#include "Mesh/VertexBuffer/VertexBufferLayout.h"
-#include "Mesh/VertexBuffer/VertexBufferLayoutOpenGL.h"
-
-#include "Mesh/FrameBuffer/FrameBuffer.h"
-#include "Mesh/FrameBuffer/FrameBufferOpenGL.h"
+#include "Buffers/FrameBuffer/FrameBuffer.h"
+#include "Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
 #include "Mesh/Texture/Texture.h"
 #include "Mesh/Texture/TextureOpenGL.h"
@@ -74,8 +74,7 @@ namespace mar {
 		};
 
 
-}
-}
+} }
 
 #endif // !RENDERER_FACTORY_H
 

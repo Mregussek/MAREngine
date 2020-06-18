@@ -7,7 +7,7 @@
 #define MAR_ENGINE_LIGHT_H
 
 
-#include "../../../mar.h"
+#include "../../mar.h"
 
 namespace mar {
     namespace graphics {
