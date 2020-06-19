@@ -69,7 +69,7 @@ namespace mar {
 			void createRenderer(const Ref<RendererFactory>& factory, const bool& usegui);
 			void closeRenderer();
 
-			void initialize(const std::vector<unsigned int>& layout, const ShaderType type = ShaderType::DEFAULT);
+			void initialize(const std::vector<unsigned int>& layout, const ShaderType type);
 
 			void draw(Mesh* mesh);
 
@@ -89,6 +89,7 @@ namespace mar {
 
 			// --- GET METHODS --- // 
 			inline static RendererStatistics& getStatistics() { return s_stats; }
+			inline const bool useGUI() const { return m_useGUI; }
 		};
 
 

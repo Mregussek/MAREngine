@@ -21,23 +21,20 @@ namespace mar {
 			gui::GUI* m_gui;
 
 		public:
+			GUILayer() = default;
 			GUILayer(std::string name) : m_debugName(name) { }
 
-			void set(const graphics::RendererStatistics* stats, const Ref<graphics::FrameBuffer>& framebuf = nullptr) {
-				m_gui->setReferences(stats);
+			void initializeLayer(gui::GUI* gui);
+			void submit(graphics::Mesh* mesh);
 
-				if (framebuf != nullptr)
-					m_gui->setFrameBuffer(framebuf);
-			}
+			// --- OVERLOADED METHODS --- // 
+			void prepareFrame() override { }
+			void update() override;
+			void endFrame() override { }
+			void closeLayer() override;
 
-			void submit(graphics::Mesh* mesh) {
-				m_gui->submitMesh(mesh);
-			}
-
-			void update() override {
-				m_gui->prepareNewFrame();
-				m_gui->display();
-			}
+			// --- SET METHODS --- //
+			void set(const graphics::RendererStatistics* stats, const Ref<graphics::FrameBuffer>& framebuf = nullptr);
 		};
 
 

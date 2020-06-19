@@ -43,6 +43,10 @@ namespace mar {
 		class RendererFactory {
 		public:
 			// This values should never be returned, cause we have derived factories
+			static Ref<RendererFactory> createFactory()
+			{
+				return nullptr;
+			}
 			virtual Ref<ElementBuffer> createElementBuffer()
 			{
 				return nullptr;

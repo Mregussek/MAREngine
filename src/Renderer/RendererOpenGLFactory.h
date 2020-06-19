@@ -14,6 +14,10 @@ namespace mar {
 
 		class RendererOpenGLFactory : public RendererFactory {
 		public:
+			static Ref<RendererFactory> createFactory() {
+				return std::make_shared<RendererOpenGLFactory>();
+			}
+
 			virtual Ref<ElementBuffer> createElementBuffer() override {
 				return std::make_shared<ElementBufferOpenGL>();
 			}

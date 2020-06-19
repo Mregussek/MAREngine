@@ -254,7 +254,10 @@
     <ClCompile Include="src\Renderer\Light\Light.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Layers\Źródło.cpp">
+    <ClCompile Include="src\Layers\MeshLayer.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layers\GUILayer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

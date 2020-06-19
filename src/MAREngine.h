@@ -12,6 +12,7 @@
 #include "Layers/LayerStack.h"
 #include "Layers/Layer.h"
 #include "Layers/GUILayer.h"
+#include "Layers/MeshLayer.h"
 // Rendering
 #include "Renderer/Mesh/Mesh.h"
 #include "Renderer/Renderer.h"
@@ -37,11 +38,6 @@ namespace mar {
 		};
 
 		class MAREngine {
-			window::Window m_window;
-			gui::GUI m_gui;
-			graphics::Camera m_camera;
-			layers::LayerStack m_stack;
-
 		public:
 			MAREngine() = default;
 

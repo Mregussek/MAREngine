@@ -222,7 +222,8 @@
     <ClCompile Include="other\imgui\imgui_draw.cpp" />
     <ClCompile Include="other\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
-    <ClCompile Include="src\Layers\Źródło.cpp" />
+    <ClCompile Include="src\Layers\GUILayer.cpp" />
+    <ClCompile Include="src\Layers\MeshLayer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Renderer\Buffers\FrameBuffer\FrameBufferOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Objects\ObjectLoader.cpp" />

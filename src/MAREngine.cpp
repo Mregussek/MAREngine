@@ -20,97 +20,82 @@ namespace mar {
 		void MAREngine::run() {
 			MAR_LOG_INIT();
 
-			bool usegui = true;
-
-			auto factory = std::make_shared<graphics::RendererOpenGLFactory>();
-			graphics::Renderer loc_renderer;
-			graphics::Mesh loc_mesh;
-			graphics::Renderer loc_cubemapRenderer;
-			graphics::Mesh loc_cubemapMesh;
-			graphics::Renderer loc_objectRenderer;
-			graphics::Mesh loc_objectMesh;
-
-			layers::LayerStack loc_stack;
-			layers::GUILayer loc_guilayer("Default GUI Layer");
+			bool m_usegui = true;
+			window::Window m_window;
+			gui::GUI m_gui;
+			graphics::Camera m_camera;
+			layers::LayerStack m_stack;
+			auto m_factory = graphics::RendererOpenGLFactory::createFactory();
+			auto m_framebuffer = m_factory->createFrameBuffer();
 
 			m_camera.initialize(MAREngineSettings::width, MAREngineSettings::height);
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name, &m_camera);
-
-			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, usegui);
-			graphics::FrameBufferSpecification spec;
-			spec.width = 800.f;
-			spec.height = 600.f;
-			auto loc_framebuffer = factory->createFrameBuffer();
-			loc_framebuffer->initialize(spec);
-
-			{
-				loc_renderer.createRenderer(factory, usegui);
-				loc_mesh.createMesh(factory);
-
-				loc_mesh.loadScene(&graphics::Scene(DEFAULT_SCENE), NORMAL_MESH_TYPE);
-				loc_renderer.initialize(loc_mesh.getLayout());
-			}
-			{
-				loc_cubemapRenderer.createRenderer(factory, usegui);
-				loc_cubemapMesh.createMesh(factory);
-
-				loc_cubemapMesh.loadScene(&graphics::Scene(CUBEMAPS_SCENE), CUBEMAPS_MESH_TYPE);
-				loc_cubemapRenderer.initialize(loc_cubemapMesh.getLayout(), graphics::ShaderType::CUBEMAP);
-			}
-			{
-				loc_objectRenderer.createRenderer(factory, usegui);
-				loc_objectMesh.createMesh(factory);
-
-				loc_objectMesh.loadScene(&graphics::Scene(OBJECTS_SCENE), OBJECTS_MESH_TYPE);
-				loc_objectRenderer.initialize(loc_objectMesh.getLayout());
-			}
-			
-			loc_renderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
-			loc_cubemapRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
-			loc_objectRenderer.setReferences(&gui::GUI::getGUIData(), &m_camera.getCameraData());
-
-			m_gui.setReferences(&graphics::Renderer::getStatistics());
-			m_gui.setFrameBuffer(loc_framebuffer);
-
-			m_gui.submitMesh(&loc_mesh);
-			m_gui.submitMesh(&loc_cubemapMesh);
-			m_gui.submitMesh(&loc_objectMesh);
+			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, m_usegui);
+			m_framebuffer->initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
 			m_camera.setReference(m_window.getWindow());
+
+			graphics::Renderer normal_renderer;  graphics::Mesh normal_mesh;
+			graphics::Renderer cubemap_renderer; graphics::Mesh cubemap_mesh;
+			graphics::Renderer objects_renderer; graphics::Mesh objects_mesh;
+
+			layers::GUILayer gui_layer("Default GUI Layer");
+			layers::MeshLayer normalmesh_layer("Normal Mesh Layer");
+			layers::MeshLayer cubemapmesh_layer("CubeMap Mesh Layer");
+			layers::MeshLayer objectsmesh_layer("Objects Mesh Layer");
+
+			{
+				normalmesh_layer.initializeLayer(&normal_renderer, &normal_mesh);
+				normalmesh_layer.create(m_factory, m_usegui);
+				normalmesh_layer.scene(DEFAULT_SCENE, NORMAL_MESH_TYPE);
+				normalmesh_layer.set(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			}
+			{
+				cubemapmesh_layer.initializeLayer(&cubemap_renderer, &cubemap_mesh);
+				cubemapmesh_layer.create(m_factory, m_usegui);
+				cubemapmesh_layer.scene(CUBEMAPS_SCENE, CUBEMAPS_MESH_TYPE);
+				cubemapmesh_layer.set(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			}
+			{
+				objectsmesh_layer.initializeLayer(&objects_renderer, &objects_mesh);
+				objectsmesh_layer.create(m_factory, m_usegui);
+				objectsmesh_layer.scene(OBJECTS_SCENE, OBJECTS_MESH_TYPE);
+				objectsmesh_layer.set(&gui::GUI::getGUIData(), &m_camera.getCameraData());
+			}
+
+			normalmesh_layer.set(m_framebuffer);
+			cubemapmesh_layer.set(m_framebuffer);
+			objectsmesh_layer.set(m_framebuffer);
+
+			gui_layer.initializeLayer(&m_gui);
+			gui_layer.set(&graphics::Renderer::getStatistics(), m_framebuffer);
+
+			gui_layer.submit(normalmesh_layer.getMesh());
+			gui_layer.submit(cubemapmesh_layer.getMesh());
+			gui_layer.submit(objectsmesh_layer.getMesh());
+
+			m_stack.pushLayer(&normalmesh_layer);
+			m_stack.pushLayer(&cubemapmesh_layer);
+			m_stack.pushLayer(&objectsmesh_layer);
+			m_stack.pushOverlay(&gui_layer);
 
 			while (m_window.shouldClose()) {
 				m_window.clearScreen();
 				m_camera.processInput();
 				m_camera.updateData();
 				
-				m_camera.setWindowSize(spec.width, spec.height);
-				loc_framebuffer->bind();
-				loc_framebuffer->clear();
+				graphics::Renderer::getStatistics().resetStatistics();
+				m_camera.setWindowSize(m_framebuffer->getSpecification().width, m_framebuffer->getSpecification().height);
 
-				{
-					graphics::Renderer::getStatistics().resetStatistics();
-
-					loc_renderer.draw(&loc_mesh);
-					loc_cubemapRenderer.draw(&loc_cubemapMesh);
-					loc_objectRenderer.draw(&loc_objectMesh);
-				}
-
-				loc_framebuffer->unbind();
-
-				{
-					m_gui.prepareNewFrame();
-					m_gui.display();
-				}
+				m_stack.update();
 
 				m_window.swapBuffers();
 			}
 
-			loc_framebuffer->close();
-			m_gui.shutdown();
+			m_framebuffer->close();
+			
+			m_stack.close();
 
-			loc_renderer.closeRenderer();
-			loc_cubemapRenderer.closeRenderer();
-			loc_objectRenderer.closeRenderer();
 			m_window.shutdown();
 		}
 

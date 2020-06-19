@@ -53,28 +53,7 @@ namespace mar {
 
 		void Renderer::initialize(const std::vector<unsigned int>& layout, const ShaderType type) {
 			if (!m_initialized) {
-				if (m_useGUI) {
-					switch (type) {
-					case ShaderType::DEFAULT:
-					case ShaderType::WITHOUT_GUI:
-						m_mainShader->initialize(ShaderType::DEFAULT);
-						break;
-					case ShaderType::CUBEMAP:
-						m_mainShader->initialize(ShaderType::CUBEMAP);
-						break;
-					}
-				}
-				else {
-					switch (type) {
-					case ShaderType::DEFAULT:
-					case ShaderType::WITHOUT_GUI:
-						m_mainShader->initialize(ShaderType::WITHOUT_GUI);
-						break;
-					case ShaderType::CUBEMAP:
-						m_mainShader->initialize(ShaderType::CUBEMAP_WITHOUT_GUI);
-						break;
-					}
-				}
+				m_mainShader->initialize(type);
 
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);

@@ -19,6 +19,9 @@ namespace mar {
 			unsigned int samples = 1;
 
 			bool swapChainTarget = false;
+			
+			FrameBufferSpecification() = default;
+			FrameBufferSpecification(float w, float h) : width(w), height(h) { }
 		};
 
 
