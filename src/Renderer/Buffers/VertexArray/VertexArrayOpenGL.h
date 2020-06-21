@@ -14,8 +14,9 @@ namespace mar {
 	namespace graphics {
 
 
-		//! VertexArrayOpenGL
 		/*!
+		VertexArrayOpenGL
+
 			VertexArrayOpenGL is a object needed for storing state for supplying vertex data. Should contain
 			format of vertex data, by providing vertex arrays.
 			This is overloaded class of base one - VertexArrayOpenGL, which implements solution to that problem with OpenGL.
@@ -33,8 +34,9 @@ namespace mar {
 			//! Deletes VAO
 			void closeArrayBuffer() override;
 
-			//! Defines array of generic vertex attribute data and enables it
 			/*
+			Defines array of generic vertex attribute data and enables it
+
 				\param layout - specifies, how data should be formatted
 			*/
 			void addBuffer(const Ref<VertexBufferLayout>& layout) override;

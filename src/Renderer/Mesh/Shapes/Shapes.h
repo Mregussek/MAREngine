@@ -42,7 +42,7 @@ namespace mar {
 		class Shape {
 			float m_id;
 			float m_texid;
-			std::string m_name;
+			std::string m_name{};
 
 			glm::vec3 m_center;
 			glm::vec3 m_angle;

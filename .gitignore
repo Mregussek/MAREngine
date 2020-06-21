@@ -1,6 +1,7 @@
 ### ---- Added by MR ---- ###
 MAREngine\tests
 build
+bin
 
 ### ---- Created By Visual Studio ---- ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -70,7 +71,7 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-*.obj
+#*.obj
 *.iobj
 *.pch
 *.pdb

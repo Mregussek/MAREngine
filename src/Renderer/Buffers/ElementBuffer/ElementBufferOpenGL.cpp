@@ -39,8 +39,10 @@ namespace mar {
 		}
 
 		void ElementBufferOpenGL::close() {
-			glDeleteBuffers(1, &_id);
-			_initialized = false;
+			if (_initialized) {
+				glDeleteBuffers(1, &_id);
+				_initialized = false;
+			}
 		}
 
 

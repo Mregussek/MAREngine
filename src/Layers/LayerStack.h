@@ -27,6 +27,8 @@ namespace mar {
 				MAR_CORE_INFO("Initialized Layer Stack!");
 			}
 
+			Layer* operator[](const unsigned int& index) { return m_layers[index]; }
+
 			void close() {
 				for (auto& layer : m_layers) {
 					layer->closeLayer();

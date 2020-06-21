@@ -12,8 +12,9 @@ namespace mar {
 	namespace graphics {
 
 
-		//! VertexArray
 		/*!
+		VertexArray
+
 			VertexArray is a object needed for storing state for supplying vertex data. Should contain
 			format of vertex data, by providing vertex arrays.
 			This is just base class for other implementations of VertexArray.
@@ -29,9 +30,10 @@ namespace mar {
 			//! Method should deletes all data associated with VAO. Must be overloaded!
 			virtual void closeArrayBuffer() { }
 
-			//! Method should defines array of generic vertex attribute data and enables it
-			//! Must be overloaded!
 			/*
+			Method should defines array of generic vertex attribute data and enables it
+			Must be overloaded!
+
 				\param layout - specifies, how data should be formatted
 			*/
 			virtual void addBuffer(const Ref<VertexBufferLayout>& layout) { }

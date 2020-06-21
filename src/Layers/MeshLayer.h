@@ -21,6 +21,8 @@ namespace mar {
 			graphics::Mesh* m_mesh;
 			graphics::Renderer* m_renderer;
 
+			bool m_useGUI{ false };
+
 		public:
 			MeshLayer() = default;
 			MeshLayer(std::string name) : m_debugName(name) { }
@@ -37,7 +39,7 @@ namespace mar {
 
 			// --- SET METHODS --- //
 			void set(const gui::GUIData* guidata, const graphics::CameraData* cameradata);
-			void set(graphics::CameraData* cameradata);
+			void set(const graphics::CameraData* cameradata);
 			void set(const Ref<graphics::FrameBuffer>& framebuffer);
 
 			// --- GET METHODS --- //

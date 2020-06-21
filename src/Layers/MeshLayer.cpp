@@ -16,6 +16,7 @@ namespace mar {
 		}
 
 		void MeshLayer::create(const Ref<graphics::RendererFactory>& factory, const bool& usegui) {
+			m_useGUI = usegui;
 			m_renderer->createRenderer(factory, usegui);
 			m_mesh->createMesh(factory);
 		}
@@ -58,7 +59,7 @@ namespace mar {
 			m_renderer->setReferences(guidata, cameradata);
 		}
 
-		void MeshLayer::set(graphics::CameraData* cameradata) {
+		void MeshLayer::set(const graphics::CameraData* cameradata) {
 			m_renderer->setReferences(cameradata);
 		}
 
@@ -67,17 +68,24 @@ namespace mar {
 		}
 
 		void MeshLayer::prepareFrame() {
-			m_framebuffer->bind();
-			m_framebuffer->clear();
-			m_framebuffer->unbind();
+			if (m_useGUI) {
+				m_framebuffer->bind();
+				m_framebuffer->clear();
+				m_framebuffer->unbind();
+			}
 		}
 
 		void MeshLayer::update() {
-			m_framebuffer->bind();
+			if (m_useGUI) {
+				m_framebuffer->bind();
 
-			m_renderer->draw(m_mesh);
+				m_renderer->draw(m_mesh);
 
-			m_framebuffer->unbind();
+				m_framebuffer->unbind();
+			}
+			else {
+				m_renderer->draw(m_mesh);
+			}
 		}
 
 		void MeshLayer::closeLayer() {

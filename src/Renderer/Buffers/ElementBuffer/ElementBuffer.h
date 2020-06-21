@@ -12,8 +12,9 @@ namespace mar {
 	namespace graphics {
 
 
-		//! ElementBuffer
 		/*!
+		ElementBuffer
+
 			ElementBuffer is used to store indices in GPU memory and dynamically set new values if needed.
 			Other common name for ElementBuffer is IndexBuffer.
 			This is just base class for other implementations of ElementBuffer.
@@ -23,15 +24,17 @@ namespace mar {
 			//! Default constructor. For initialization use initializeElement() method.
 			ElementBuffer() = default;
 
-			//! This method should initialize ElementBufferObject to some id instance, define data on GPU, reserve memory on GPU, 
-			//! also tell the GPU that user will change resources dynamically. Method must be overloaded!
 			/*
+			This method should initialize ElementBufferObject to some id instance, define data on GPU, reserve memory on GPU,
+			also tell the GPU that user will change resources dynamically. Method must be overloaded!
+
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
 			virtual void initializeElement(const unsigned int allocationMemory) { }
 
-			//! Method must redefine some or all of data stored in EBO. Method must be overloaded!
 			/*
+			Method must redefine some or all of data stored in EBO. Method must be overloaded!
+
 				\param data - indices, which will be drawn
 			*/
 			virtual void updateDynamically(const std::vector<unsigned int>& data) const { }
