@@ -37,7 +37,7 @@ namespace mar {
 			auto m_framebuffer = m_factory->createFrameBuffer();
 			m_framebuffer->initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
-			graphics::Renderer normal_renderer;  graphics::Mesh normal_mesh;
+			graphics::Renderer normal_renderer;	 graphics::Mesh normal_mesh;
 			graphics::Renderer cubemap_renderer; graphics::Mesh cubemap_mesh;
 			graphics::Renderer objects_renderer; graphics::Mesh objects_mesh;
 			

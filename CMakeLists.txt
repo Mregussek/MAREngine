@@ -1,3 +1,8 @@
+#
+#	Mateusz Rzeczyca
+#	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+#
+
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(MAREngine)
 
@@ -10,11 +15,6 @@ file(GLOB_RECURSE HEADER_FILES
 	${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 link_directories(${CMAKE_SOURCE_DIR}/3rd_party)
-include_directories(
-	"${CMAKE_BINARY_DIR}/src"
-	"${CMAKE_SOURCE_DIR}/src"
-	"${CMAKE_SOURCE_DIR}/3rd_party"
-)
 
 # CMake files for external dependencies
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
@@ -30,19 +30,30 @@ message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 find_package(GLFW3 REQUIRED)
 message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
 
-find_package(SDL2 REQUIRED)
-message(STATUS "GLM included at ${SDL2_INCLUDE_DIRS}")
+add_subdirectory(other)
 
-file(GLOB IMGUI_SOURCE_FILES
-    "other/imgui/*.cpp"
-    "other/imgui/*.h"
+set(LIBS opengl32 glfw3 STB_IMAGE GLAD IMGUI)
+
+###################################
+# Include all packages to project #
+###################################
+
+include_directories(
+	"${CMAKE_SOURCE_DIR}/src"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GL/include"
+	"${CMAKE_SOURCE_DIR}/3rd_party/glad/include"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019"
+	"${CMAKE_SOURCE_DIR}/3rd_party/glm"
+	"${CMAKE_SOURCE_DIR}/other/stb_image/include"
+	"${CMAKE_SOURCE_DIR}/other/imgui"
+	"${CMAKE_SOURCE_DIR}/other/serialport/include"
+	"${CMAKE_SOURCE_DIR}/other/spdlog/include"
 )
 
-add_library(IMGUI ${IMGUI_SOURCE_FILES})
-add_library(GLAD "other/glad/glad.c")
-add_library(STB_IMAGE "other/stb_image/stb_image.cpp")
-
-set(LIBS glfw3 opengl32 ${SDL2_LIBRARY} STB_IMAGE GLAD IMGUI)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
@@ -51,6 +62,8 @@ target_link_libraries(${PROJECT_NAME} ${LIBS})
 # VS setup for nicer look #
 ###########################
 if(MSVC_IDE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+
 	macro(GroupSources curdir)
 		file(GLOB children RELATIVE ${PROJECT_SOURCE_DIR}/${curdir} ${PROJECT_SOURCE_DIR}/${curdir}/*)
 

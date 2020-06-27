@@ -270,7 +270,6 @@
     <None Include=".gitignore" />
     <None Include="cmake\FindGLFW3.cmake" />
     <None Include="cmake\FindGLM.cmake" />
-    <None Include="cmake\FindSDL2.cmake" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />
     <None Include="resources\shaders\basic.shader" />
     <None Include="resources\shaders\cubemap.shader" />
@@ -335,5 +334,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
+    <Text Include="other\CMakeLists.txt" />
+    <Text Include="other\glad\CMakeLists.txt" />
+    <Text Include="other\imgui\CMakeLists.txt" />
   </ItemGroup>
 </Project>
