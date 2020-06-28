@@ -7,7 +7,7 @@
 #define CAMERA_H
 
 #include "../../mar.h"
-#include "buttons_def.h"
+#include "../../Window/Input.h"
 
 namespace mar {
     namespace graphics {
@@ -48,8 +48,8 @@ namespace mar {
 
 		class Camera {
 			// --- Window Attributes
-			float m_windowWidth;
-			float m_windowHeight;
+			const float* m_windowWidth;
+			const float* m_windowHeight;
 			// --- Camera Attributes
 			glm::vec3 m_position;
 			glm::vec3 m_front;
@@ -70,15 +70,18 @@ namespace mar {
 			// --- RealTime Operations
 			float m_deltaTime;
 			float m_lastFrame;
+			// --- References
+			const float* m_mouseCallX;
+			const float* m_mouseCallY;
+			const float* m_scrollCallX;
+			const float* m_scrollCallY;
 			// --- Data for renderer
 			CameraData m_cameraData;
-			// --- Window Reference
-			GLFWwindow* m_window;
 
 		public:
 			Camera();
 
-			void initialize(const float& w, const float& h);
+			void initialize();
 
 			void processInput();
 			void updateData();
@@ -94,15 +97,27 @@ namespace mar {
 
 		public:
 			// --- SET METHODS --- //
-			void setReference(GLFWwindow* window) { m_window = window; }
-			void setWindowSize(const float& width, const float& height) { m_windowHeight = height; m_windowWidth = width; }
+			void setWindowSize(const float* width, const float* height) { 
+				m_windowHeight = height; 
+				m_windowWidth = width; 
+			}
+
+			void setMouseCall(const float* x, const float* y) {
+				m_mouseCallX = x;
+				m_mouseCallY = y;
+			}
+
+			void setScrollCall(const float* x, const float* y) {
+				m_scrollCallX = x;
+				m_scrollCallY = y;
+			}
 
 			// --- GET METHODS --- //
 			inline const CameraData& getCameraData() const { return m_cameraData; }
 
 			inline const glm::vec3& getCameraPosition() const { return m_position; }
 			inline const float& getZoom() const { return m_zoom; }
-			inline const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(m_zoom), m_windowWidth / m_windowHeight, 0.01f, 100.0f); }
+			inline const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(m_zoom), *m_windowWidth / *m_windowHeight, 0.01f, 100.0f); }
 			inline const glm::mat4 getViewMatrix() const { return glm::lookAt(m_position, m_position + m_front, m_up); }
 			inline const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
 		};

@@ -49,7 +49,7 @@ namespace mar {
 			m_center = objects::ObjectLoader::getCenter();
 			m_angle = objects::ObjectLoader::getAngle();
 			m_id = objects::ObjectLoader::getID();
-			m_texid = objects::ObjectLoader::getTextureID();
+			m_texid = (float)objects::ObjectLoader::getTextureID();
 			m_defaultColor = objects::ObjectLoader::getColor();
 
 			MAR_CORE_INFO("Assigned object from ObjectLoader!");

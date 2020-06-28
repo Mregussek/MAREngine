@@ -90,6 +90,9 @@ namespace mar {
 
 		void MeshLayer::closeLayer() {
 			m_renderer->closeRenderer();
+
+			delete m_renderer;
+			delete m_mesh;
 		}
 
 

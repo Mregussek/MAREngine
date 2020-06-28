@@ -91,7 +91,9 @@ namespace mar {
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
 
+
 	namespace window {
+		class Input;
 		class Window;
 	}
 
@@ -112,6 +114,7 @@ namespace mar {
 		class Layer;
 		class GUILayer;
 		class MeshLayer;
+		class CameraLayer;
 		class LayerStack;
 	}
 

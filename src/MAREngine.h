@@ -13,6 +13,7 @@
 #include "Layers/Layer.h"
 #include "Layers/GUILayer.h"
 #include "Layers/MeshLayer.h"
+#include "Layers/CameraLayer.h"
 // Rendering
 #include "Renderer/Mesh/Mesh.h"
 #include "Renderer/Renderer.h"
@@ -21,6 +22,7 @@
 #include "Renderer/RendererOpenGLFactory.h"
 #include "Renderer/Scene/Scene.h"
 // Window && Input
+#include "Window/Input.h"
 #include "Window/Window.h"
 #include "GUI/GUI.h"
 #include "Devices/SerialPortMonitor.h"
@@ -38,6 +40,9 @@ namespace mar {
 		};
 
 		class MAREngine {
+			window::Window m_window;
+			
+
 		public:
 			MAREngine() = default;
 

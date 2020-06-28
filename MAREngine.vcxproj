@@ -170,13 +170,15 @@
     <ClInclude Include="other\imgui\imstb_rectpack.h" />
     <ClInclude Include="other\imgui\imstb_textedit.h" />
     <ClInclude Include="other\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Layers\CameraLayer.h" />
+    <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\FileSystem\FileSystem.h" />
     <ClInclude Include="src\Layers\GUILayer.h" />
     <ClInclude Include="src\Layers\Layer.h" />
     <ClInclude Include="src\Layers\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Layers\MeshLayer.h" />
-    <ClInclude Include="src\Renderer\Camera\buttons_def.h" />
+    <ClInclude Include="src\Window\buttons_def.h" />
     <ClInclude Include="src\Renderer\Buffers\FrameBuffer\FrameBuffer.h" />
     <ClInclude Include="src\Renderer\Buffers\FrameBuffer\FrameBufferOpenGL.h" />
     <ClInclude Include="src\Renderer\Light\Light.h" />
@@ -243,6 +245,7 @@
     <ClCompile Include="src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Buffers\VertexArray\VertexArrayOpenGL.cpp" />
+    <ClCompile Include="src\Window\Input.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Texture\TextureOpenGL.cpp" />
   </ItemGroup>

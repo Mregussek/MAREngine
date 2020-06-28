@@ -341,14 +341,7 @@ namespace mar {
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
 
-					if (texture == "empty") {
-						m_meshes[0]->tryReuseShape(new_shape, center, angle, texture);
-						return;
-					}
-						
-					std::vector<std::string> faces = { texture, texture, texture, texture, texture, texture };
-
-					m_meshes[1]->tryReuseShape(new_shape, center, angle, faces);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, texture);
 				}
 
 				if (ImGui::Button("Select Surface")) {

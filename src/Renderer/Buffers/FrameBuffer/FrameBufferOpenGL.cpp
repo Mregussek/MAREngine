@@ -16,14 +16,14 @@ namespace mar {
 
 			glGenTextures(1, &m_colorAttachment);
 			glBindTexture(GL_TEXTURE_2D, m_colorAttachment);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_specification.width, m_specification.height, 0, GL_RGB,
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_specification.width, (size_t)m_specification.height, 0, GL_RGB,
 						GL_UNSIGNED_BYTE, 0);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			
 			glGenRenderbuffers(1, &m_depthAttanchment);
 			glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttanchment);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_specification.width, m_specification.height);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (size_t)m_specification.width, (size_t)m_specification.height);
 			glBindRenderbuffer(GL_RENDERBUFFER, 0);
 			
 			glGenFramebuffers(1, &m_id);
@@ -50,7 +50,7 @@ namespace mar {
 		}
 
 		void FrameBufferOpenGL::clear() const {
-			glViewport(0, 0, m_specification.width, m_specification.height);
+			glViewport(0, 0, (const size_t)m_specification.width, (const size_t)m_specification.height);
 			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}

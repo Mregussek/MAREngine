@@ -99,9 +99,9 @@ namespace mar {
 			std::random_device rd;
 			std::mt19937 mt(rd());
 			std::uniform_int_distribution<int> dist(0, 1);
-			float red = dist(mt);
-			float green = dist(mt);
-			float blue = dist(mt);
+			float red = (float)dist(mt);
+			float green = (float)dist(mt);
+			float blue = (float)dist(mt);
 
 			s_defaultcolor = { red, green, blue };
 			float light_normal[]{ 0.0f, 0.0f, 1.0f };

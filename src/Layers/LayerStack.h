@@ -18,12 +18,10 @@ namespace mar {
 
 		class LayerStack {
 			std::vector<Layer*> m_layers;
-			std::vector<Layer*>::iterator m_layerInsert;
+			unsigned int m_layerInsert{ 0 };
 
 		public:
 			LayerStack() {
-				m_layerInsert = m_layers.begin();
-
 				MAR_CORE_INFO("Initialized Layer Stack!");
 			}
 
@@ -32,6 +30,7 @@ namespace mar {
 			void close() {
 				for (auto& layer : m_layers) {
 					layer->closeLayer();
+					delete layer;
 				}
 
 				MAR_CORE_INFO("Closed Layer Stack!");
@@ -50,7 +49,8 @@ namespace mar {
 			}
 
 			void pushLayer(Layer* layer) {
-				m_layerInsert = m_layers.emplace(m_layerInsert, layer);
+				m_layers.emplace(m_layers.begin() + m_layerInsert, layer);
+				m_layerInsert++;
 
 				MAR_CORE_INFO("Pushed layer to stack!");
 			}
@@ -62,8 +62,8 @@ namespace mar {
 			}
 
 			void popLayer(Layer* layer) {
-				auto it = std::find(m_layers.begin(), m_layers.end(), layer);
-				if (it != m_layers.end()) {
+				auto it = std::find(m_layers.begin(), m_layers.begin() + m_layerInsert, layer);
+				if (it != m_layers.begin() + m_layerInsert) {
 					m_layers.erase(it);
 					m_layerInsert--;
 
@@ -76,7 +76,7 @@ namespace mar {
 			}
 
 			void popOverlay(Layer* overlay) {
-				auto it = std::find(m_layers.begin(), m_layers.end(), overlay);
+				auto it = std::find(m_layers.begin() + m_layerInsert, m_layers.end(), overlay);
 				if (it != m_layers.end()) {
 					m_layers.erase(it);
 

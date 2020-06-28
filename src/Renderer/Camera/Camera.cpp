@@ -18,9 +18,7 @@ namespace mar {
 		const glm::vec3 CameraSettings::CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
 
 		Camera::Camera()
-			: m_windowWidth(0.f),
-			m_windowHeight(0.f),
-			m_position(CameraSettings::CAMERA_START),
+			: m_position(CameraSettings::CAMERA_START),
 			m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
 			m_worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
 			m_movementSpeed(CameraSettings::SPEED),
@@ -36,9 +34,7 @@ namespace mar {
 			m_lastFrame(0.0f)
 		{ }
 
-		void Camera::initialize(const float& w, const float& h) {
-			m_windowWidth = w;
-			m_windowHeight = h;
+		void Camera::initialize() {
 			updateCameraVectors();
 
 			MAR_CORE_INFO("Camera has been initialized successfully!");
@@ -49,26 +45,26 @@ namespace mar {
 			m_deltaTime = currentFrame - m_lastFrame;
 			m_lastFrame = currentFrame;
 
-			if (glfwGetKey(m_window, MAR_KEY_ESCAPE) == MAR_KEY_IS_PRESSED)
-				glfwSetWindowShouldClose(m_window, true);
-
 			// Camera move check
-			if (glfwGetKey(m_window, MAR_KEY_W) == MAR_KEY_IS_PRESSED)
+			if (window::Input::isKeyPressed(MAR_KEY_W))
 				processKeyboard(CameraMovement::FORWARD);
-			if (glfwGetKey(m_window, MAR_KEY_S) == MAR_KEY_IS_PRESSED)
+			if (window::Input::isKeyPressed(MAR_KEY_S))
 				processKeyboard(CameraMovement::BACKWARD);
-			if (glfwGetKey(m_window, MAR_KEY_A) == MAR_KEY_IS_PRESSED)
+			if (window::Input::isKeyPressed(MAR_KEY_A))
 				processKeyboard(CameraMovement::LEFT);
-			if (glfwGetKey(m_window, MAR_KEY_D) == MAR_KEY_IS_PRESSED)
+			if (window::Input::isKeyPressed(MAR_KEY_D))
 				processKeyboard(CameraMovement::RIGHT);
 
 			// Enable Mouse Usage
-			if (glfwGetKey(m_window, MAR_KEY_1) == MAR_KEY_IS_PRESSED) {
+			if (window::Input::isKeyPressed(MAR_KEY_1)) {
 				if (m_enableMouse) m_enableMouse = false;
 				else m_enableMouse = true;
 
 				m_firstMouse = true;
 			}
+
+			mouseCallback(*m_mouseCallX, *m_mouseCallY);
+			processMouseScroll(*m_scrollCallY);
 		}
 
 		void Camera::updateData() {
