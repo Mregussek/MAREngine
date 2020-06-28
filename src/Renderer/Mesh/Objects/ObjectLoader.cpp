@@ -17,8 +17,8 @@ namespace mar {
 		glm::vec3 ObjectLoader::s_center;
 		glm::vec3 ObjectLoader::s_angle;
 		glm::vec3 ObjectLoader::s_defaultcolor;
-		unsigned int ObjectLoader::s_id;
-		unsigned int ObjectLoader::s_texid;
+		float ObjectLoader::s_id;
+		float ObjectLoader::s_texid;
 
 
 		void ObjectLoader::loadObject(const char* path) {
@@ -27,6 +27,7 @@ namespace mar {
 			std::vector<glm::vec2> vertex_texcoords;
 			std::vector<unsigned int> indices;
 			std::vector<unsigned int> normal_indices;
+			std::vector<unsigned int> texcoord_indices;
 
 			float input[3];
 
@@ -39,8 +40,20 @@ namespace mar {
 			}
 
 			while (std::getline(stream, line)) {
+				// VERTEX TEXTURE COORDINATES
+				if (line.substr(0, 2) == "vt") {
+					std::istringstream ss(line.substr(3));
+					ss >> input[0] >> input[1];
+					vertex_texcoords.push_back({ input[0] , input[1] });
+				}
+				// VERTEX NORMALS
+				else if (line.substr(0, 2) == "vn") {
+					std::istringstream ss(line.substr(3));
+					ss >> input[0] >> input[1] >> input[2];
+					vertex_normals.push_back({ input[0] , input[1] , input[2] });
+				}
 				// VERTICES
-				if (line[0] == 'v') {
+				else if (line[0] == 'v') {
 					std::istringstream ss(line.substr(2));
 					ss >> input[0] >> input[1] >> input[2];
 					vertex_positions.push_back({ input[0] , input[1] , input[2] });
@@ -64,8 +77,9 @@ namespace mar {
 								normal_indices.push_back(normal_indice - 1);
 							}
 							else {
-								unsigned int t;
-								ss >> t >> std::ws;
+								unsigned int tex_indice;
+								ss >> tex_indice >> std::ws;
+								texcoord_indices.push_back(tex_indice - 1);
 
 								if (ss.peek() == '/') {
 									ss.get();
@@ -77,18 +91,6 @@ namespace mar {
 						}
 					}
 				}
-				// VERTEX TEXTURE COORDINATES
-				else if (line[0] == 'v' && line[1] == 't') { 
-					std::istringstream ss(line.substr(3));
-					ss >> input[0] >> input[1];
-					vertex_texcoords.push_back({ input[0] , input[1] });
-				}
-				// VERTEX NORMALS
-				else if (line[0] == 'v' && line[1] == 'n') {
-					std::istringstream ss(line.substr(3));
-					ss >> input[0] >> input[1] >> input[2];
-					vertex_normals.push_back({ input[0] , input[1] , input[2] });
-				}
 				else if (line[0] == 'o') { }
 				else if (line[0] == '#') { }
 				else if (line[0] == 's') { }
@@ -99,9 +101,9 @@ namespace mar {
 			std::random_device rd;
 			std::mt19937 mt(rd());
 			std::uniform_int_distribution<int> dist(0, 1);
-			float red = (float)dist(mt);
-			float green = (float)dist(mt);
-			float blue = (float)dist(mt);
+			float red   = (float) dist(mt);
+			float green = (float) dist(mt);
+			float blue  = (float) dist(mt);
 
 			s_defaultcolor = { red, green, blue };
 			float light_normal[]{ 0.0f, 0.0f, 1.0f };
@@ -115,26 +117,48 @@ namespace mar {
 			s_id = 0.f;
 			s_center = { 0.0f, 0.0f, 0.0f };
 			s_angle = { 0.f, 0.f, 0.f };
-			
-			for (unsigned int i = 0; i < vertex_positions.size(); i++) {
-				// x, y, z coords
-				s_vertices.push_back(vertex_positions[i].x / scale);
-				s_vertices.push_back(vertex_positions[i].y / scale);
-				s_vertices.push_back(vertex_positions[i].z / scale);
 
-				// light normals
-				s_vertices.push_back(light_normal[0]);
-				s_vertices.push_back(light_normal[1]);
-				s_vertices.push_back(light_normal[2]);
+			std::cout << "indices: " << indices.size() << std::endl;
+			std::cout << "normal indices: " << normal_indices.size() << std::endl;
+			std::cout << "vertex normals: " << vertex_normals.size() << std::endl;
+			std::cout << "vertex pos: " << vertex_positions.size() << std::endl;
+			std::cout << "vertex texcoords: " << vertex_texcoords.size() << std::endl;
 
-				// texture coords
-				s_vertices.push_back(tex_coords[0]);
-				s_vertices.push_back(tex_coords[1]);
+			s_vertices.clear();
 
-				// tex index
+			for (unsigned int i = 0; i < indices.size(); i++) {
+				if (!vertex_normals.empty()) {
+					s_vertices.push_back(vertex_positions[indices[i]].x);
+					s_vertices.push_back(vertex_positions[indices[i]].y);
+					s_vertices.push_back(vertex_positions[indices[i]].z);
+
+					s_vertices.push_back(vertex_normals[normal_indices[i]].x);
+					s_vertices.push_back(vertex_normals[normal_indices[i]].y);
+					s_vertices.push_back(vertex_normals[normal_indices[i]].z);
+				}
+				else {
+					if (vertex_positions.size() == i) 
+						break;
+						
+					s_vertices.push_back(vertex_positions[i].x / scale);
+					s_vertices.push_back(vertex_positions[i].y / scale);
+					s_vertices.push_back(vertex_positions[i].z / scale);
+
+					s_vertices.push_back(light_normal[0]);
+					s_vertices.push_back(light_normal[1]);
+					s_vertices.push_back(light_normal[2]);
+				}
+
+				if (!vertex_texcoords.empty()) {
+					s_vertices.push_back(vertex_texcoords[texcoord_indices[i]].x);
+					s_vertices.push_back(vertex_texcoords[texcoord_indices[i]].y);
+				}
+				else {
+					s_vertices.push_back(tex_coords[0]);
+					s_vertices.push_back(tex_coords[1]);
+				}
+
 				s_vertices.push_back(s_texid);
-
-				// shape index
 				s_vertices.push_back(s_id);
 			}
 

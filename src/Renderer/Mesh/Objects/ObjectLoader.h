@@ -19,8 +19,8 @@ namespace mar {
             static glm::vec3 s_center;
             static glm::vec3 s_angle;
             static glm::vec3 s_defaultcolor;
-            static unsigned int s_id;
-            static unsigned int s_texid;
+            static float s_id;
+            static float s_texid;
 
         public:
             static void loadObject(const char* path);
@@ -30,8 +30,8 @@ namespace mar {
             inline static std::vector<float> getVertices() { return s_vertices; }
             inline static std::vector<unsigned int> getIndices() { return s_indices; }
             inline static std::vector<unsigned int> getLayout() { return s_layout; }
-            inline static unsigned int getID() { return s_id; }
-            inline static unsigned int getTextureID() { return s_texid; }
+            inline static float getID() { return s_id; }
+            inline static float getTextureID() { return s_texid; }
             inline static glm::vec3 getCenter() { return s_center; }
             inline static glm::vec3 getAngle() { return s_angle; }
             inline static glm::vec3 getColor() { return s_defaultcolor; }
