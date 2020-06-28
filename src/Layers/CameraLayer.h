@@ -17,9 +17,12 @@ namespace mar {
 
 
 		class CameraLayer : public Layer {
+			const char* m_debugName;
 			graphics::Camera* m_camera;
 
 		public:
+
+			CameraLayer(const char* name) : m_debugName(name) {}
 
 			void initializeLayer(graphics::Camera* cam) {
 				m_camera = cam;

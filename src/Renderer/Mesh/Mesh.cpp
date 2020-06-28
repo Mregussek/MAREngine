@@ -79,7 +79,7 @@ namespace mar {
 			}
 		}
 
-		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
+		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture) {
 			if (m_shapes.size() != m_shapesCount) {
 				pushTexture(new_shape, texture);
 				reuse(new_shape, center, angle);
@@ -90,7 +90,7 @@ namespace mar {
 			submitShape(new_shape, center, angle, texture);
 		}
 
-		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces) {
+		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces) {
 			if (m_shapes.size() != m_shapesCount) {
 				pushCubeMap(new_shape, faces);
 				reuse(new_shape, center, angle);
@@ -119,7 +119,7 @@ namespace mar {
 			MAR_CORE_INFO("Reusing shape object!");
 		}
 
-		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture) {
+		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture) {
 			if (m_shapesCount == constants::maxObjectsInScene - 1) {
 				MAR_CORE_ERROR("Cannot push more objects!");
 				return;
@@ -129,7 +129,7 @@ namespace mar {
 			submit(new_shape, center, angle);
 		}
 
-		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces) {
+		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces) {
 			if (m_shapesCount == constants::maxObjectsInScene - 1) {
 				MAR_CORE_ERROR("Cannot push more objects!");
 				return;
@@ -150,7 +150,7 @@ namespace mar {
 			MAR_CORE_INFO("Added new object to scene!");
 		}
 
-		void Mesh::pushTexture(Ref<Shape>& new_shape, const std::string& texture) {
+		void Mesh::pushTexture(Ref<Shape>& new_shape, const char* texture) {
 			if (texture != "empty") {
 				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
@@ -173,7 +173,7 @@ namespace mar {
 			}
 		}
 
-		void Mesh::pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces) {
+		void Mesh::pushCubeMap(Ref<Shape>& new_shape, const std::vector<const char*>& faces) {
 			ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
 			m_samplers.push_back((int)s_availableTextureID);

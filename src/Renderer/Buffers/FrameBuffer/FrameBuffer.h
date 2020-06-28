@@ -14,8 +14,8 @@ namespace mar {
 
 
 		struct FrameBufferSpecification {
-			float width;
-			float height;
+			float width{ 0.f };
+			float height{ 0.f };
 			unsigned int samples = 1;
 
 			bool swapChainTarget = false;

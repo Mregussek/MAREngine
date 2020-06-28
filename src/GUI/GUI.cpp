@@ -9,15 +9,15 @@
 namespace mar {
 	namespace gui {
 
-		const const char* GUITextureList::s_textures[] = {
+		const char* GUITextureList::s_textures[] = {
 			"empty",
-			graphics::TexturePaths.mrTex.c_str(),
-			graphics::TexturePaths.redTex.c_str(),
-			graphics::TexturePaths.blueTex.c_str(),
-			graphics::TexturePaths.blackTex.c_str(),
-			graphics::TexturePaths.yellowTex.c_str(),
-			graphics::TexturePaths.wallTex.c_str(),
-			graphics::TexturePaths.grassTex.c_str()
+			graphics::TexturePaths.mrTex,
+			graphics::TexturePaths.redTex,
+			graphics::TexturePaths.blueTex,
+			graphics::TexturePaths.blackTex,
+			graphics::TexturePaths.yellowTex,
+			graphics::TexturePaths.wallTex,
+			graphics::TexturePaths.grassTex 
 		};
 		int GUITextureList::s_selectedItem;
 
@@ -246,10 +246,10 @@ namespace mar {
 				ImGui::MenuItem("Shapes Menu", "");
 
 				if (m_meshIndex != -1 && m_shapeIndex != -1) {
-					std::string shape = "Shape";
-					std::string shape_trans = "Translate " + shape;
-					std::string shape_rot = "Rotate " + shape;
-					std::string delete_shape = "Delete " + shape;
+					const char* shape = "Shape";
+					const char* shape_trans = "Translate Shape";
+					const char* shape_rot = "Rotate Shape";
+					const char* delete_shape = "Delete Shape";
 
 					const char* x_trans = "X translation";
 					const char* y_trans = "Y translation";
@@ -262,16 +262,16 @@ namespace mar {
 					glm::vec3& center = m_meshes[m_meshIndex]->getCenter(m_shapeIndex);
 					glm::vec3& angle = m_meshes[m_meshIndex]->getAngle(m_shapeIndex);
 
-					ImGui::Text(shape.c_str());
+					ImGui::Text(shape);
 					ImGui::Separator();
 
-					ImGui::Text(shape_trans.c_str());
+					ImGui::Text(shape_trans);
 					ImGui::SliderFloat(x_trans, &center.x, -15.0f, 15.0f, "%.2f", 1.f);
 					ImGui::SliderFloat(y_trans, &center.y, -15.0f, 15.0f, "%.2f", 1.f);
 					ImGui::SliderFloat(z_trans, &center.z, -15.0f, 15.0f, "%.2f", 1.f);
 					ImGui::Separator();
 
-					ImGui::Text(shape_rot.c_str());
+					ImGui::Text(shape_rot);
 					ImGui::SliderFloat(x_rot, &angle.x, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::SliderFloat(y_rot, &angle.y, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::SliderFloat(z_rot, &angle.z, -360.f, 360.f, "%.2f", 1.f);
@@ -289,7 +289,7 @@ namespace mar {
 						
 
 					ImGui::Separator();
-					if (ImGui::Button(delete_shape.c_str())) {
+					if (ImGui::Button(delete_shape)) {
 						m_meshes[m_meshIndex]->flushShape(m_shapeIndex);
 
 						m_meshIndex = -1;
@@ -330,36 +330,32 @@ namespace mar {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, texture);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 
 				if (ImGui::Button("Select Cube")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, texture);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 
 				if (ImGui::Button("Select Surface")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, texture);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 
 				if (ImGui::Button("Select Wall")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					std::string texture = GUITextureList::s_textures[GUITextureList::s_selectedItem];
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, texture);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 			}
 			else {
@@ -397,14 +393,14 @@ namespace mar {
 		void GUI::Menu_Info() {
 			ImGui::Begin("About");
 
-			std::string aboutEngine = "MAREngine is a AR engine for abstracting 3D models in real world.";
-			std::string aboutAuthor = "Mateusz Rzeczyca is C++ / Python programmer and ethusiast of Augmented Reality && Machine Learning.\nHe is a student of Eletronics and Telecommunications at AGH University of Science and Technology";
+			const char* aboutEngine = "MAREngine is a AR engine for abstracting 3D models in real world.";
+			const char* aboutAuthor = "Mateusz Rzeczyca is C++ / Python programmer and ethusiast of Augmented Reality && Machine Learning.\nHe is a student of Eletronics and Telecommunications at AGH University of Science and Technology";
 
 			ImGui::Text("About Engine");
-			ImGui::Text(aboutEngine.c_str());
+			ImGui::Text(aboutEngine);
 
 			ImGui::Text("About Author");
-			ImGui::Text(aboutAuthor.c_str());
+			ImGui::Text(aboutAuthor);
 
 			if (ImGui::Button("Close")) {
 				m_infoWindow = false;

@@ -16,13 +16,13 @@ namespace mar {
 
 		class GUILayer : public Layer {
 		protected:
-			std::string m_debugName;
+			const char* m_debugName;
 
 			gui::GUI* m_gui;
 
 		public:
 			GUILayer() = default;
-			GUILayer(std::string name) : m_debugName(name) { }
+			GUILayer(const char* name) : m_debugName(name) { }
 
 			void initializeLayer(gui::GUI* gui);
 			void submit(graphics::Mesh* mesh);

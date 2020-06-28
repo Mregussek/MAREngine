@@ -23,7 +23,7 @@ namespace mar {
             static unsigned int s_texid;
 
         public:
-            static void loadObject(const std::string& path);
+            static void loadObject(const char* path);
 
             // --- GET METHODS --- //
             inline static std::string getName() { return s_name; }

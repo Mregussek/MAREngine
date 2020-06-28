@@ -15,7 +15,7 @@ namespace mar {
 
 
 		class MeshLayer : public Layer {
-			std::string m_debugName;
+			const char* m_debugName;
 
 			Ref<graphics::FrameBuffer> m_framebuffer;
 			graphics::Mesh* m_mesh;
@@ -25,7 +25,7 @@ namespace mar {
 
 		public:
 			MeshLayer() = default;
-			MeshLayer(std::string name) : m_debugName(name) { }
+			MeshLayer(const char* name) : m_debugName(name) { }
 
 			void initializeLayer(graphics::Renderer* renderer, graphics::Mesh* mesh);
 			void create(const Ref<graphics::RendererFactory>& factory, const bool& usegui);

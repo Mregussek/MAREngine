@@ -58,11 +58,11 @@ namespace mar {
 			void createMesh(const Ref<RendererFactory>& factory);
 			void loadScene(Scene* scene, MeshType type);
 
-			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
-			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);
+			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture);
+			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces);
 
-			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::string& texture);
-			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<std::string>& faces);
+			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture);
+			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces);
 
 			void flushShape(const unsigned int& index);
 
@@ -79,8 +79,8 @@ namespace mar {
 			void submit(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
 
 			void pushShape(Ref<Shape>& new_shape);
-			void pushTexture(Ref<Shape>& new_shape, const std::string& texture);
-			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<std::string>& faces);
+			void pushTexture(Ref<Shape>& new_shape, const char* texture);
+			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<const char*>& faces);
 
 			void popShape(const unsigned int& index);
 			void popMatrices(const unsigned int& index);

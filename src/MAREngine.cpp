@@ -35,7 +35,7 @@ namespace mar {
 			auto m_framebuffer = m_factory->createFrameBuffer();
 			m_framebuffer->initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
-			layers::CameraLayer* camera_layer = new layers::CameraLayer();
+			layers::CameraLayer* camera_layer = new layers::CameraLayer("Default Camera Layer");
 			camera_layer->initializeLayer(new graphics::Camera());
 			camera_layer->set(&m_framebuffer->getSpecification().width, &m_framebuffer->getSpecification().height);
 			camera_layer->set(&m_window);
@@ -54,7 +54,8 @@ namespace mar {
 			};
 
 			for (unsigned int i = 0; i < types.size(); i++) {
-				layers::MeshLayer* layer = new layers::MeshLayer("Mesh Layer " + std::to_string(i));
+				std::string name = "Mesh Layer " + std::to_string(i);
+				layers::MeshLayer* layer = new layers::MeshLayer(name.c_str());
 				layer->initializeLayer(new graphics::Renderer(), new graphics::Mesh());
 				layer->create(m_factory, m_usegui);
 				layer->scene(types[i].first, types[i].second);

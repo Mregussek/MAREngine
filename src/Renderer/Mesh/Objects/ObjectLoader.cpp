@@ -18,10 +18,10 @@ namespace mar {
 		glm::vec3 ObjectLoader::s_angle;
 		glm::vec3 ObjectLoader::s_defaultcolor;
 		unsigned int ObjectLoader::s_id;
-		unsigned int  ObjectLoader::s_texid;
+		unsigned int ObjectLoader::s_texid;
 
 
-		void ObjectLoader::loadObject(const std::string& path) {
+		void ObjectLoader::loadObject(const char* path) {
 			std::vector<glm::vec3> vertex_positions;
 			std::vector<glm::vec3> vertex_normals;
 			std::vector<glm::vec2> vertex_texcoords;

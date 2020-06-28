@@ -39,7 +39,7 @@ namespace mar {
 			m_stride(0)
 		{}
 
-		void Shape::assignDataFromFile(const std::string& path) {
+		void Shape::assignDataFromFile(const char* path) {
 			objects::ObjectLoader::loadObject(path);
 
 			m_name = objects::ObjectLoader::getName();

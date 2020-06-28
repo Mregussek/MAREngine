@@ -18,7 +18,7 @@ namespace mar {
 		class Layer {
 		public:
 			Layer() = default;
-			Layer(std::string name) : m_debugName(name) { }
+			Layer(const char* name) : m_debugName(name) { }
 
 			virtual void prepareFrame() { }
 
@@ -29,7 +29,7 @@ namespace mar {
 			virtual void closeLayer() { }
 
 		protected:
-			std::string m_debugName;
+			const char* m_debugName;
 		};
 
 

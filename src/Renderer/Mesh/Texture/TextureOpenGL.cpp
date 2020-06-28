@@ -14,13 +14,13 @@ namespace mar {
 				glDeleteTextures(1, &id);
 		}
 
-		unsigned int TextureOpenGL::genNewTexture(const std::string& path) {
+		unsigned int TextureOpenGL::genNewTexture(const char* path) {
 			int width, height;
 			int bitPerPixel;
 			unsigned char* localBuffer;
 
 			stbi_set_flip_vertically_on_load(true);
-			localBuffer = stbi_load(path.c_str(), &width, &height, &bitPerPixel, 0);
+			localBuffer = stbi_load(path, &width, &height, &bitPerPixel, 0);
 
 			if (localBuffer) {
 				unsigned int id;
@@ -64,7 +64,7 @@ namespace mar {
 			return 0;
 		}
 
-		void TextureOpenGL::loadTexture(const std::string& path) {
+		void TextureOpenGL::loadTexture(const char* path) {
 			auto search = m_path_id.find(path);
 
 			if (search != m_path_id.end()) { 
@@ -82,7 +82,7 @@ namespace mar {
 			m_path_id.insert({ path, new_id });
 		}
 
-		unsigned int TextureOpenGL::genNewCubemap(const std::vector<std::string>& faces) {
+		unsigned int TextureOpenGL::genNewCubemap(const std::vector<const char*>& faces) {
 			unsigned int id;
 			int width, height;
 			int bitPerPixel;
@@ -93,7 +93,7 @@ namespace mar {
 
 			for (unsigned int i = 0; i < faces.size(); i++) {
 
-				unsigned char* localBuffer = stbi_load(faces[i].c_str(), &width, &height, &bitPerPixel, 0);
+				unsigned char* localBuffer = stbi_load(faces[i], &width, &height, &bitPerPixel, 0);
 
 				if (localBuffer) {
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer);
@@ -118,8 +118,8 @@ namespace mar {
 			return id;
 		}
 
-		void TextureOpenGL::loadCubemap(const std::vector<std::string>& faces) {
-			std::string helper = faces[0] + faces[1] + faces[2];
+		void TextureOpenGL::loadCubemap(const std::vector<const char*>& faces) {
+			std::string helper = std::string(faces[0]) + std::string(faces[1]) + std::string(faces[2]);
 			auto search = m_path_id.find(helper);
 
 			if (search != m_path_id.end()) {

@@ -64,7 +64,7 @@ namespace mar {
 
 			Shape(const Ref<Shape>& shape);
 
-			void assignDataFromFile(const std::string& path);
+			void assignDataFromFile(const char* path);
 
 			// --- GET METHODS --- //
 			const std::string& getName() const;

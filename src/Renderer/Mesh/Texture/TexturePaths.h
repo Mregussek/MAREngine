@@ -10,16 +10,15 @@ namespace mar {
 
 
 		struct {
-#ifndef IMPORTED_FROM_GITHUB 
-			const std::string mrTex = "resources/textures/mr.jpg";
-			const std::string yellowTex = "resources/textures/yellow-texture.jpg";
-			const std::string grassTex = "resources/textures/grass-texture.jpg";
-			const std::string wallTex = "resources/textures/wall.jpg";
-			const std::string blueTex = "resources/textures/blue-texture.jpg";
-			const std::string redTex = "resources/textures/red-texture.jpg";
-			const std::string blackTex = "resources/textures/black-texture.jpg";
+			const char* mrTex = "resources/textures/mr.jpg";
+			const char* yellowTex = "resources/textures/yellow-texture.jpg";
+			const char* grassTex = "resources/textures/grass-texture.jpg";
+			const char* wallTex = "resources/textures/wall.jpg";
+			const char* blueTex = "resources/textures/blue-texture.jpg";
+			const char* redTex = "resources/textures/red-texture.jpg";
+			const char* blackTex = "resources/textures/black-texture.jpg";
 
-			const std::vector<std::string> SkyboxFaces{
+			const std::vector<const char*> SkyboxFaces{
 				"resources/textures/skybox/right.jpg" ,
 				"resources/textures/skybox/left.jpg" ,
 				"resources/textures/skybox/top.jpg" ,
@@ -28,7 +27,7 @@ namespace mar {
 				"resources/textures/skybox/back.jpg" ,
 			};
 
-			const std::vector<std::string> mc_grass_faces{
+			const std::vector<const char*> mc_grass_faces{
 				 "resources/textures/mc/mc-grass.jpg"
 				 ,  "resources/textures/mc/mc-grass.jpg"
 				 ,  "resources/textures/mc/mc-grass-up.jpg"
@@ -37,7 +36,7 @@ namespace mar {
 				 ,  "resources/textures/mc/mc-grass.jpg"
 			};
 
-			const std::vector<std::string> mc_cobble_faces{
+			const std::vector<const char*> mc_cobble_faces{
 				"resources/textures/mc/mc-cobble.jpg"
 				, "resources/textures/mc/mc-cobble.jpg"
 				, "resources/textures/mc/mc-cobble.jpg"
@@ -46,7 +45,7 @@ namespace mar {
 				, "resources/textures/mc/mc-cobble.jpg"
 			};
 
-			const std::vector<std::string> mc_diamond_faces{
+			const std::vector<const char*> mc_diamond_faces{
 				"resources/textures/mc/mc-diamond.jpg",
 				"resources/textures/mc/mc-diamond.jpg",
 				"resources/textures/mc/mc-diamond.jpg",
@@ -54,52 +53,6 @@ namespace mar {
 				"resources/textures/mc/mc-diamond.jpg",
 				"resources/textures/mc/mc-diamond.jpg"
 			};
-
-#else
-			const std::string mrTex = "../../../resources/textures/mr.jpg";
-			const std::string yellowTex = "../../../resources/textures/yellow-texture.jpg";
-			const std::string grassTex = "../../../resources/textures/grass-texture.jpg";
-			const std::string wallTex = "../../../resources/textures/wall.jpg";
-			const std::string blueTex = "../../../resources/textures/blue-texture.jpg";
-			const std::string redTex = "../../../resources/textures/red-texture.jpg";
-			const std::string blackTex = "../../../resources/textures/black-texture.jpg";
-
-			const std::vector<std::string> SkyboxFaces{
-				"../../../resources/textures/skybox/right.jpg" ,
-				"../../../resources/textures/skybox/left.jpg" ,
-				"../../../resources/textures/skybox/top.jpg" ,
-				"../../../resources/textures/skybox/bottom.jpg" ,
-				"../../../resources/textures/skybox/front.jpg" ,
-				"../../../resources/textures/skybox/back.jpg" ,
-			};
-
-			const std::vector<std::string> mc_grass_faces{
-				 "../../../resources/textures/mc/mc-grass.jpg"
-				 ,  "../../../resources/textures/mc/mc-grass.jpg"
-				 ,  "../../../resources/textures/mc/mc-grass-up.jpg"
-				 ,  "../../../resources/textures/mc/dirt.jpg"
-				 ,  "../../../resources/textures/mc/mc-grass.jpg"
-				 ,  "../../../resources/textures/mc/mc-grass.jpg"
-			};
-
-			const std::vector<std::string> mc_cobble_faces{
-				"../../../resources/textures/mc/mc-cobble.jpg"
-				, "../../../resources/textures/mc/mc-cobble.jpg"
-				, "../../../resources/textures/mc/mc-cobble.jpg"
-				, "../../../resources/textures/mc/mc-cobble.jpg"
-				, "../../../resources/textures/mc/mc-cobble.jpg"
-				, "../../../resources/textures/mc/mc-cobble.jpg"
-			};
-
-			const std::vector<std::string> mc_diamond_faces{
-				"../../../resources/textures/mc/mc-diamond.jpg",
-				"../../../resources/textures/mc/mc-diamond.jpg",
-				"../../../resources/textures/mc/mc-diamond.jpg",
-				"../../../resources/textures/mc/mc-diamond.jpg",
-				"../../../resources/textures/mc/mc-diamond.jpg",
-				"../../../resources/textures/mc/mc-diamond.jpg"
-			};
-#endif
 		} TexturePaths;
 
 
