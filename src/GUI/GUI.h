@@ -39,11 +39,12 @@ namespace mar {
 		class GUI {
 			// --- Must-have to run GUI
 			window::Window* m_window;
-			// --- Attributes for sliders
+			// --- Attributes for sliders && input
 			glm::vec3 m_sceneTranslation{ 0.0f, 0.0f, 0.0f };
 			glm::vec3 m_sceneAngle{ 0.0f, 0.0f, 0.0f };
 			float m_sceneColors[4];
 			float m_inputCenter[3];
+			char m_inputStr[20];
 			// --- Run-time GUI attributes
 			std::vector<graphics::Mesh*> m_meshes;
 			const graphics::RendererStatistics* m_statistics;

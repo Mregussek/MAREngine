@@ -133,7 +133,11 @@ namespace mar {
 						ImGui::Separator();
 
 						if (ImGui::Button("Open Selected File")) {
-							if (GUIMarFiles::s_selectedItem == 0) return;
+							if (GUIMarFiles::s_selectedItem == 0) {
+								MAR_CORE_ERROR("Wrong file selected!");
+								return;
+							}
+								
 							std::string path = "resources/mar_files";
 							std::string selected = path + "/" + std::string(GUIMarFiles::s_files[GUIMarFiles::s_selectedItem]);
 
@@ -146,10 +150,24 @@ namespace mar {
 						ImGui::EndMenu();
 					}
 
-					if (ImGui::MenuItem("Save")) {
-						MAR_CORE_INFO("Clicked Save Button!");
+					if (ImGui::BeginMenu("Save")) {
+						ImGui::InputText(".marscene", m_inputStr, IM_ARRAYSIZE(m_inputStr));
+						
+						ImGui::Separator();
 
-						filesystem::fnc::saveSceneToFile("resources/mar_files/scene.marscene", m_meshes);
+						std::string str{ m_inputStr };
+						std::string save = "resources/mar_files/" + str + ".marscene";
+
+						ImGui::Text("Saving to: ");
+						ImGui::Text(save.c_str());
+
+						ImGui::Separator();
+
+						if (ImGui::Button("Save to selected name")) {
+							filesystem::fnc::saveSceneToFile(save.c_str(), m_meshes);
+						}
+						
+						ImGui::EndMenu();
 					}
 
 					if (ImGui::MenuItem("Exit")) {

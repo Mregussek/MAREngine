@@ -27,8 +27,8 @@ namespace mar {
 			float m_id;
 			float m_texid;
 			const char* m_name;
-			const char* m_usedTexture;
-			const char* m_usedOBJ;
+			std::string m_usedTexture;
+			std::string m_usedOBJ;
 
 			glm::vec3 m_center;
 			glm::vec3 m_angle;
@@ -54,8 +54,8 @@ namespace mar {
 
 			// --- GET METHODS --- //
 			const char* getName() const;
-			const char* getUsedTexture() const { return m_usedTexture; }
-			const char* getUsedObj() const { return m_usedOBJ; }
+			const std::string& getUsedTexture() const { return m_usedTexture; }
+			const std::string& getUsedObj() const { return m_usedOBJ; }
 			const float getID() const;
 			const float getTextureID() const;
 			glm::vec3& getCenter();
@@ -80,8 +80,8 @@ namespace mar {
 
 			// --- SET METHODS --- //
 			void setName(const char* new_name);
-			void setUsedTexture(const char* used_tex) { m_usedTexture = used_tex; }
-			void setUsedObj(const char* used_obj) { m_usedOBJ = used_obj; }
+			void setUsedTexture(std::string used_tex) { m_usedTexture = used_tex; }
+			void setUsedObj(std::string used_obj) { m_usedOBJ = used_obj; }
 			void setID(float newID);
 			void setTextureID(float newID);
 			void setCenter(const glm::vec3& new_center);

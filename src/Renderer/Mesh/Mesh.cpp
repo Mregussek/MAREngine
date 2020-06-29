@@ -84,6 +84,8 @@ namespace mar {
 				pushTexture(new_shape, texture);
 				reuse(new_shape, center, angle);
 
+				m_shapes[m_shapesCount - 1]->setUsedTexture(texture);
+
 				return;
 			}
 
@@ -127,6 +129,8 @@ namespace mar {
 			
 			pushTexture(new_shape, texture);
 			submit(new_shape, center, angle);
+
+			m_shapes[m_shapesCount - 1]->setUsedTexture(texture);
 		}
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces) {
