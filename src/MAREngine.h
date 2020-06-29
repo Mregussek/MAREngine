@@ -40,12 +40,27 @@ namespace mar {
 		};
 
 		class MAREngine {
+			static MAREngine s_instance;
+
 			window::Window m_window;
+			std::string m_pathLoad{ "resources/mar_files/to_load.marscene" };
+
+			Ref<graphics::RendererFactory> m_factory{ graphics::RendererOpenGLFactory::createFactory() };
+			bool m_usegui{ true };
+			bool m_shouldRestart{ false };
 
 		public:
 			MAREngine() = default;
 
+			void initialize();
 			void run();
+			void exit();
+
+			// --- SET METHODS --- //
+			static MAREngine* getEngine() { return &s_instance; }
+
+			void setLoadPath(std::string path) { m_pathLoad = path.c_str(); }
+			void setRestart() { m_shouldRestart = true; }
 		};
 
 

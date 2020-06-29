@@ -7,6 +7,8 @@
 #define MAR_ENGINE_GUI_H
 
 #include "../mar.h"
+#include "../Debug/Log.h"
+#include "../MAREngine.h"
 #include "../FileSystem/FileSystem.h"
 #include "../Renderer/Renderer.h"
 #include "../Window/Window.h"
@@ -16,8 +18,13 @@
 namespace mar {
 	namespace gui {
 
+		struct GUIMarFiles {
+			static std::vector<const char*> s_files;
+			static int s_selectedItem;
+		};
+
 		struct GUITextureList {
-			static const char* s_textures[];
+			static std::vector<const char*> s_textures;
 			static int s_selectedItem;
 		};
 

@@ -16,20 +16,22 @@ namespace mar {
 		const char MAREngineSettings::portName[10] = "\\\\.\\COM7";
 		const char* MAREngineSettings::glsl_version = "#version 460";
 
+		MAREngine MAREngine::s_instance;
 
-		void MAREngine::run() {
+
+		void MAREngine::initialize() {
 			MAR_LOG_INIT();
 
-			layers::LayerStack m_stack;
-			auto m_factory = graphics::RendererOpenGLFactory::createFactory();
-			bool m_usegui = true;
-
 			filesystem::Storage::getInstance()->setup(m_factory, m_usegui);
+
+			m_window = window::Window();
 
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name);
 			window::Input::initialize(m_window.getWindow());
 			window::Input::enableInput();
-			
+		}
+
+		void MAREngine::run() {
 			gui::GUI m_gui;
 			m_gui.initialize(&m_window, MAREngineSettings::glsl_version, m_usegui);
 
@@ -45,10 +47,11 @@ namespace mar {
 			gui_layer->initializeLayer(&m_gui);
 			gui_layer->set(&graphics::Renderer::getStatistics(), m_framebuffer);
 
+			layers::LayerStack m_stack;
 			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
 
-			auto vec = filesystem::fnc::loadSceneFromFile("resources/mar_files/load_default.marscene");
+			auto vec = filesystem::fnc::loadSceneFromFile(m_pathLoad);
 
 			for(auto& layer : vec) {
 				layer->set(&gui::GUI::getGUIData(), &camera_layer->getCameraData());
@@ -57,7 +60,7 @@ namespace mar {
 				gui_layer->submit(layer->getMesh());
 			}
 
-			while (m_window.shouldClose()) {
+			while (m_window.shouldClose() && !m_shouldRestart) {
 				m_window.clearScreen();
 				
 				graphics::Renderer::getStatistics().resetStatistics();
@@ -68,10 +71,16 @@ namespace mar {
 			}
 
 			m_framebuffer->close();
-
 			m_stack.close();
-			m_window.shutdown();
+
+			if (m_shouldRestart) {
+				m_shouldRestart = false;
+				run();
+			}
 		}
 
+		void MAREngine::exit() {
+			m_window.shutdown();
+		}
 
 } }

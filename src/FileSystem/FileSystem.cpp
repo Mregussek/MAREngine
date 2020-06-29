@@ -11,6 +11,18 @@ namespace mar {
 
 		Storage Storage::s_instance;
 
+		std::vector<std::string> fnc::s_storage;
+
+		void fnc::updateMarFiles() {
+			std::string path = "resources/mar_files";
+			s_storage.clear();
+
+			for (const auto& entry : std::filesystem::directory_iterator(path)) {
+				std::string s = entry.path().filename().string();
+				s_storage.push_back(s);
+			}
+		}
+
 		void fnc::saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes) {
 			const char* c = "Going to save mesh to: ";
 			MAR_CORE_INFO(c);
@@ -73,7 +85,7 @@ namespace mar {
 			MAR_CORE_INFO("Saved!");
 		}
 
-		std::vector<layers::MeshLayer*> fnc::loadSceneFromFile(const char* path) {
+		std::vector<layers::MeshLayer*> fnc::loadSceneFromFile(std::string path) {
 			MAR_CORE_INFO("Going to read scene from: ");
 			MAR_CORE_INFO(path);
 
@@ -88,11 +100,10 @@ namespace mar {
 			std::vector<std::vector<glm::vec3>> centers;
 			std::vector<std::vector<glm::vec3>> angles;
 			std::vector<std::vector<glm::vec3>> colors;
-			std::vector<std::vector<const char*>> textures;
+			std::vector<std::vector<std::string>> textures;
+			std::vector<std::vector<std::string>> objs;
 
 			float input[3];
-			std::string sinput;
-			int shape_count{ 0 };
 			int mesh_count{ -1 };
 			int scene_count{ -1 };
 
@@ -106,15 +117,14 @@ namespace mar {
 			while (std::getline(file, line)) {
 				if (line.find("#mesh_id") != std::string::npos) {
 
-					loaded_layers.push_back(new layers::MeshLayer());
 					shapes.push_back(std::vector<Ref<graphics::Shape>>());
 					centers.push_back(std::vector<glm::vec3>());
 					angles.push_back(std::vector<glm::vec3>());
 					colors.push_back(std::vector<glm::vec3>());
-					textures.push_back(std::vector<const char*>());
+					textures.push_back(std::vector<std::string>());
+					objs.push_back(std::vector<std::string>());
 
 					mesh_count++;
-					shape_count = 0;
 				}
 				else if (line.find("#mesh_type") != std::string::npos) {
 					if (line.find("normal") != std::string::npos)
@@ -125,7 +135,7 @@ namespace mar {
 						mesh_type.push_back(OBJECTS_MESH_TYPE);
 				}
 				else if (line.find("#shape_id") != std::string::npos) {
-					shape_count++;
+
 				}
 				else if (line.find("#shape_name") != std::string::npos) {
 					if (line.find("Cube") != std::string::npos)
@@ -156,8 +166,9 @@ namespace mar {
 				}
 				else if (line.find("#shape_texture") != std::string::npos) {
 					std::istringstream ss(line.substr(15));
+					std::string sinput;
 					ss >> sinput;
-					textures[mesh_count].push_back(sinput.c_str());
+					textures[mesh_count].push_back(sinput);
 				}
 				else if (line.find("#shape_obj") != std::string::npos) {
 					if (mesh_type[mesh_count] != OBJECTS_MESH_TYPE) {
@@ -165,9 +176,13 @@ namespace mar {
 						continue;
 					}
 					else {
-
+						std::istringstream ss(line.substr(11));
+						std::string sinput;
+						ss >> sinput;
+						objs[mesh_count].push_back(sinput);
 					}
 				}
+				/* SCENE LOADER */
 				else if (line.find("#scene_id") != std::string::npos) {
 					scene_count++;
 				}
@@ -193,12 +208,43 @@ namespace mar {
 			MAR_CORE_TRACE("Scene has been loaded!");
 
 			if (mesh_count != -1) {
+				MAR_CORE_TRACE("Mesh count != -1");
 
+				if (mesh_type.size() != mesh_count + 1) {
+					MAR_CORE_ERROR("Mesh Types size is not equal to mesh_count!");
+					return loaded_layers;
+				}
+					
+				for (int i = 0; i < mesh_count + 1; i++) {
+					std::string name = "Mesh Layer " + std::to_string(i);
+					auto layer = new layers::MeshLayer(name.c_str());
+					layer->initializeLayer(new graphics::Renderer(), new graphics::Mesh());
+					layer->create(Storage::getInstance()->factory, Storage::getInstance()->usegui);
+					layer->getMesh()->setType(mesh_type[i]);
+
+					for (unsigned int j = 0; j < shapes[i].size(); j++) {
+						if (layer->getMesh()->getMeshType() == OBJECTS_MESH_TYPE) {
+							shapes[i][j]->assignDataFromFile(objs[i][j].c_str());
+						}
+
+						shapes[i][j]->setDefaultColor(colors[i][j]);
+						layer->getMesh()->submitShape(shapes[i][j], centers[i][j], angles[i][j], textures[i][j].c_str());
+					}
+
+					layer->load();
+					loaded_layers.push_back(layer);
+				}
+
+				MAR_CORE_INFO("Scene is loaded from meshes!");
 			}
 
 			if (scene_count != -1) {
-				if (mesh_type.size() != scene_type.size()) 
+				MAR_CORE_TRACE("Scene count != -1");
+
+				if (mesh_type.size() != scene_type.size()) {
 					MAR_CORE_ERROR("Loaded types of mesh are not equal to the size of scene types size!");
+					return loaded_layers;
+				}
 				else {
 					for (unsigned int i = 0; i < mesh_type.size(); i++) {
 						std::string name = "Mesh Layer " + std::to_string(i);

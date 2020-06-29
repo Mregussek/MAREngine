@@ -36,9 +36,15 @@ namespace mar {
 		};
 
 		class fnc {
+			static std::vector<std::string> s_storage;
+
 		public:
+			static void updateMarFiles();
+
 			static void saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes);
-			static std::vector<layers::MeshLayer*> loadSceneFromFile(const char* path);
+			static std::vector<layers::MeshLayer*> loadSceneFromFile(std::string path);
+		
+			static std::vector<std::string>& getMarFiles() { return s_storage; }
 		};
 		
 

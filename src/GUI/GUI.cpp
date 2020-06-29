@@ -9,7 +9,7 @@
 namespace mar {
 	namespace gui {
 
-		const char* GUITextureList::s_textures[] = {
+		std::vector<const char*> GUITextureList::s_textures = {
 			"empty",
 			TexturePaths::mrTex,
 			TexturePaths::redTex,
@@ -20,6 +20,11 @@ namespace mar {
 			TexturePaths::grassTex 
 		};
 		int GUITextureList::s_selectedItem;
+
+		std::vector<const char*> GUIMarFiles::s_files = {
+			"empty"
+		};
+		int GUIMarFiles::s_selectedItem;
 
 		GUIData GUI::s_guiData;
 		bool GUI::s_dockspaceOpen{ true };
@@ -106,11 +111,44 @@ namespace mar {
 					
 					}
 
-					if (ImGui::MenuItem("Open")) {
-						//filesystem::fnc::loadSceneFromFile("resources/mar_files/scene.marscene");
+					if (ImGui::BeginMenu("Open")) {
+						if (ImGui::Button("Reload files in directory")) {
+							filesystem::fnc::updateMarFiles();
+
+							GUIMarFiles::s_files.clear();
+							GUIMarFiles::s_files.push_back("empty");
+
+							for (auto& m : filesystem::fnc::getMarFiles()) {
+								GUIMarFiles::s_files.push_back(m.c_str());
+							}
+	
+						}
+
+						ImGui::Separator();
+
+						ImGui::Text("Select file, which you want to be opened:");
+
+						ImGui::Combo("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
+						
+						ImGui::Separator();
+
+						if (ImGui::Button("Open Selected File")) {
+							if (GUIMarFiles::s_selectedItem == 0) return;
+							std::string path = "resources/mar_files";
+							std::string selected = path + "/" + std::string(GUIMarFiles::s_files[GUIMarFiles::s_selectedItem]);
+
+							std::cout << selected << std::endl;
+
+							engine::MAREngine::getEngine()->setLoadPath(selected);
+							engine::MAREngine::getEngine()->setRestart();
+						}
+
+						ImGui::EndMenu();
 					}
 
 					if (ImGui::MenuItem("Save")) {
+						MAR_CORE_INFO("Clicked Save Button!");
+
 						filesystem::fnc::saveSceneToFile("resources/mar_files/scene.marscene", m_meshes);
 					}
 
@@ -322,7 +360,8 @@ namespace mar {
 				if (m_meshes[0]->getShapesCount() == constants::maxObjectsInScene - 1)
 					return;
 
-				ImGui::Combo("Choose Texture", &GUITextureList::s_selectedItem, GUITextureList::s_textures, IM_ARRAYSIZE(GUITextureList::s_textures));
+				ImGui::Combo("Choose Texture", &GUITextureList::s_selectedItem, 
+					GUITextureList::s_textures.data(), GUITextureList::s_textures.size());
 
 				ImGui::Separator();
 

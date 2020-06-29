@@ -22,37 +22,12 @@ namespace mar {
 		}
 
 		void MeshLayer::scene(graphics::SceneType scenetype, graphics::MeshType meshtype) {
-			graphics::ShaderType shader;
-
-			if (m_renderer->useGUI()) {
-				switch (meshtype) {
-				case NORMAL_MESH_TYPE:
-				case OBJECTS_MESH_TYPE:
-					shader = SHADER_DEFAULT; break;
-				case CUBEMAPS_MESH_TYPE:
-					shader = SHADER_CUBEMAP; break;
-				default:
-					MAR_CORE_ERROR("Trying to iniitialize shader with GUI to Renderer without GUI!");
-					MAR_CORE_ERROR("Cannot initialize Renderer!");
-					return;
-				}
-			}
-			else {
-				switch (meshtype) {
-				case NORMAL_MESH_TYPE:
-				case OBJECTS_MESH_TYPE:
-					shader = SHADER_WITHOUT_GUI; break;
-				case CUBEMAPS_MESH_TYPE:
-					shader = SHADER_CUBEMAP_WITHOUT_GUI; break;
-				default:
-					MAR_CORE_ERROR("Trying to iniitialize shader without GUI to Renderer with GUI!");
-					MAR_CORE_ERROR("Cannot initialize Renderer!");
-					return;
-				}
-			}
-
 			m_mesh->loadScene(&graphics::Scene(scenetype), meshtype);
-			m_renderer->initialize(m_mesh->getLayout(), shader);
+			m_renderer->initialize(m_mesh->getLayout(), getShaderType(meshtype));
+		}
+
+		void MeshLayer::load() {
+			m_renderer->initialize(m_mesh->getLayout(), getShaderType(m_mesh->getMeshType()));
 		}
 
 		void MeshLayer::set(const gui::GUIData* guidata, const graphics::CameraData* cameradata) {
@@ -95,6 +70,34 @@ namespace mar {
 			delete m_mesh;
 		}
 
+		graphics::ShaderType MeshLayer::getShaderType(graphics::MeshType meshtype) {
+			if (m_renderer->useGUI()) {
+				switch (meshtype) {
+				case NORMAL_MESH_TYPE:
+				case OBJECTS_MESH_TYPE:
+					return SHADER_DEFAULT; break;
+				case CUBEMAPS_MESH_TYPE:
+					return SHADER_CUBEMAP; break;
+				default:
+					MAR_CORE_ERROR("Trying to iniitialize shader with GUI to Renderer without GUI!");
+					MAR_CORE_ERROR("Cannot initialize Renderer!");
+					return SHADER_DEFAULT;
+				}
+			}
+			else {
+				switch (meshtype) {
+				case NORMAL_MESH_TYPE:
+				case OBJECTS_MESH_TYPE:
+					return SHADER_WITHOUT_GUI; break;
+				case CUBEMAPS_MESH_TYPE:
+					return SHADER_CUBEMAP_WITHOUT_GUI; break;
+				default:
+					MAR_CORE_ERROR("Trying to iniitialize shader without GUI to Renderer with GUI!");
+					MAR_CORE_ERROR("Cannot initialize Renderer!");
+					return SHADER_WITHOUT_GUI;
+				}
+			}
+		}
 
 
 } }

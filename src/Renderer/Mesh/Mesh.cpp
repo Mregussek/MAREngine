@@ -151,7 +151,7 @@ namespace mar {
 		}
 
 		void Mesh::pushTexture(Ref<Shape>& new_shape, const char* texture) {
-			if (texture != "empty") {
+			if (std::strcmp(texture, "empty") != 0) {
 				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
 				m_samplers.push_back((int)s_availableTextureID);
