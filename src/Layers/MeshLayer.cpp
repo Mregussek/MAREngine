@@ -55,10 +55,6 @@ namespace mar {
 			m_renderer->initialize(m_mesh->getLayout(), shader);
 		}
 
-		//void MeshLayer::load(graphics::MeshType meshtype) {
-			
-		//}
-
 		void MeshLayer::set(const gui::GUIData* guidata, const graphics::CameraData* cameradata) {
 			m_renderer->setReferences(guidata, cameradata);
 		}

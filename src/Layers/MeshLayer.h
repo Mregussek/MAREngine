@@ -32,7 +32,6 @@ namespace mar {
 			void initializeLayer(graphics::Renderer* renderer, graphics::Mesh* mesh);
 			void create(const Ref<graphics::RendererFactory>& factory, const bool& usegui);
 			void scene(graphics::SceneType scenetype, graphics::MeshType meshtype);
-			//void load(graphics::MeshType meshtype);
 
 			// --- OVERLOADED METHODS --- //
 			void prepareFrame() override;

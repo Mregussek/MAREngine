@@ -1,0 +1,16 @@
+MAR ENGINE SCENE FILE
+#BEGIN
+
+#scene_id 0
+#scene_type default
+#scene_mesh normal
+
+#scene_id 1
+#scene_type cubemaps
+#scene_mesh cubemaps
+
+#scene_id 2
+#scene_type objects
+#scene_mesh objects
+
+#END

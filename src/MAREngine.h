@@ -8,6 +8,7 @@
 
 
 #include "Debug/Log.h"
+#include "FileSystem/FileSystem.h"
 // Layers
 #include "Layers/LayerStack.h"
 #include "Layers/GUILayer.h"
@@ -40,7 +41,6 @@ namespace mar {
 
 		class MAREngine {
 			window::Window m_window;
-			
 
 		public:
 			MAREngine() = default;

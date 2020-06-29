@@ -21,9 +21,10 @@ namespace mar {
 			MAR_LOG_INIT();
 
 			layers::LayerStack m_stack;
-
 			auto m_factory = graphics::RendererOpenGLFactory::createFactory();
 			bool m_usegui = true;
+
+			filesystem::Storage::getInstance()->setup(m_factory, m_usegui);
 
 			m_window.initialize(MAREngineSettings::height, MAREngineSettings::width, MAREngineSettings::name);
 			window::Input::initialize(m_window.getWindow());
@@ -35,30 +36,21 @@ namespace mar {
 			auto m_framebuffer = m_factory->createFrameBuffer();
 			m_framebuffer->initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
-			layers::CameraLayer* camera_layer = new layers::CameraLayer("Default Camera Layer");
+			auto camera_layer = new layers::CameraLayer("Default Camera Layer");
 			camera_layer->initializeLayer(new graphics::Camera());
 			camera_layer->set(&m_framebuffer->getSpecification().width, &m_framebuffer->getSpecification().height);
 			camera_layer->set(&m_window);
 
-			layers::GUILayer* gui_layer = new layers::GUILayer("Default GUI Layer");
+			auto gui_layer = new layers::GUILayer("Default GUI Layer");
 			gui_layer->initializeLayer(&m_gui);
 			gui_layer->set(&graphics::Renderer::getStatistics(), m_framebuffer);
 
 			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
 
-			std::vector<std::pair<graphics::SceneType, graphics::MeshType>> types = {
-				{DEFAULT_SCENE, NORMAL_MESH_TYPE},
-				//{CUBEMAPS_SCENE, CUBEMAPS_MESH_TYPE},
-				{OBJECTS_SCENE, OBJECTS_MESH_TYPE}
-			};
+			auto vec = filesystem::fnc::loadSceneFromFile("resources/mar_files/load_default.marscene");
 
-			for (unsigned int i = 0; i < types.size(); i++) {
-				std::string name = "Mesh Layer " + std::to_string(i);
-				layers::MeshLayer* layer = new layers::MeshLayer(name.c_str());
-				layer->initializeLayer(new graphics::Renderer(), new graphics::Mesh());
-				layer->create(m_factory, m_usegui);
-				layer->scene(types[i].first, types[i].second);
+			for(auto& layer : vec) {
 				layer->set(&gui::GUI::getGUIData(), &camera_layer->getCameraData());
 				layer->set(m_framebuffer);
 				m_stack.pushLayer(layer);

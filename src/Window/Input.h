@@ -33,6 +33,7 @@ namespace mar {
 				if (s_useInput) {
 					return glfwGetKey(s_nativewindow, key) == MAR_KEY_PRESS;
 				}
+				else return false;
 			}
 
 			// --- GET METHODS --- //

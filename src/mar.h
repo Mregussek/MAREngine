@@ -105,6 +105,11 @@ namespace mar {
 
 	struct TexturePaths;
 
+	namespace filesystem {
+		class Storage;
+		class fnc;
+	}
+
 	namespace window {
 		/* namespace callbacks in Window.h */
 
@@ -114,10 +119,6 @@ namespace mar {
 
 	namespace devices {
 		class SerialPortMonitor;
-	}
-
-	namespace filesystem {
-		class FileSystem;
 	}
 
 	namespace gui {

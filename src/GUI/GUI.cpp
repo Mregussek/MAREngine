@@ -107,11 +107,11 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Open")) {
-						//filesystem::loadSceneFromFile("resources/mar_files/scene.marscene");
+						//filesystem::fnc::loadSceneFromFile("resources/mar_files/scene.marscene");
 					}
 
 					if (ImGui::MenuItem("Save")) {
-						filesystem::saveSceneToFile("resources/mar_files/scene.marscene", m_meshes);
+						filesystem::fnc::saveSceneToFile("resources/mar_files/scene.marscene", m_meshes);
 					}
 
 					if (ImGui::MenuItem("Exit")) {

@@ -9,8 +9,9 @@
 namespace mar {
 	namespace filesystem {
 
+		Storage Storage::s_instance;
 
-		void saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes) {
+		void fnc::saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes) {
 			const char* c = "Going to save mesh to: ";
 			MAR_CORE_INFO(c);
 			MAR_CORE_INFO(path);
@@ -72,14 +73,17 @@ namespace mar {
 			MAR_CORE_INFO("Saved!");
 		}
 
-		std::vector<layers::MeshLayer*> loadSceneFromFile(const char* path) {
+		std::vector<layers::MeshLayer*> fnc::loadSceneFromFile(const char* path) {
 			MAR_CORE_INFO("Going to read scene from: ");
 			MAR_CORE_INFO(path);
 
 			std::ifstream file(path);
 			std::string line;
 			std::vector<layers::MeshLayer*> loaded_layers;
+
+			std::vector<graphics::SceneType> scene_type;
 			std::vector<graphics::MeshType> mesh_type;
+
 			std::vector<std::vector<Ref<graphics::Shape>>> shapes;
 			std::vector<std::vector<glm::vec3>> centers;
 			std::vector<std::vector<glm::vec3>> angles;
@@ -90,6 +94,7 @@ namespace mar {
 			std::string sinput;
 			int shape_count{ 0 };
 			int mesh_count{ -1 };
+			int scene_count{ -1 };
 
 			if (!file.is_open()) {
 				MAR_CORE_ERROR("Cannot open file!");
@@ -163,10 +168,50 @@ namespace mar {
 
 					}
 				}
+				else if (line.find("#scene_id") != std::string::npos) {
+					scene_count++;
+				}
+				else if (line.find("#scene_type") != std::string::npos) {
+					if (line.find("default") != std::string::npos)
+						scene_type.push_back(DEFAULT_SCENE);
+					else if (line.find("cubemaps") != std::string::npos)
+						scene_type.push_back(CUBEMAPS_SCENE);
+					else if (line.find("objects") != std::string::npos)
+						scene_type.push_back(OBJECTS_SCENE);
+				}
+				else if (line.find("#scene_mesh") != std::string::npos) {
+					if (line.find("normal") != std::string::npos)
+						mesh_type.push_back(NORMAL_MESH_TYPE);
+					else if (line.find("cubemaps") != std::string::npos)
+						mesh_type.push_back(CUBEMAPS_MESH_TYPE);
+					else if (line.find("objects") != std::string::npos)
+						mesh_type.push_back(OBJECTS_MESH_TYPE);
+				}
 			}
 
 			file.close();
-			MAR_CORE_INFO("Scene has been loaded!");
+			MAR_CORE_TRACE("Scene has been loaded!");
+
+			if (mesh_count != -1) {
+
+			}
+
+			if (scene_count != -1) {
+				if (mesh_type.size() != scene_type.size()) 
+					MAR_CORE_ERROR("Loaded types of mesh are not equal to the size of scene types size!");
+				else {
+					for (unsigned int i = 0; i < mesh_type.size(); i++) {
+						std::string name = "Mesh Layer " + std::to_string(i);
+						layers::MeshLayer* layer = new layers::MeshLayer(name.c_str());
+						layer->initializeLayer(new graphics::Renderer(), new graphics::Mesh());
+						layer->create(Storage::getInstance()->factory, Storage::getInstance()->usegui);
+						layer->scene(scene_type[i], mesh_type[i]);
+						loaded_layers.push_back(layer);
+					}
+
+					MAR_CORE_INFO("Created Mesh Layers!");
+				}
+			}
 
 			return loaded_layers;
 		}
