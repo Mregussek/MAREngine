@@ -12,7 +12,7 @@ namespace mar {
     namespace graphics { namespace objects {
 
         class ObjectLoader {
-            static std::string s_name;
+            static const char* s_name;
             static std::vector<float> s_vertices;
             static std::vector<unsigned int> s_indices;
             static std::vector<unsigned int> s_layout;
@@ -26,7 +26,7 @@ namespace mar {
             static void loadObject(const char* path);
 
             // --- GET METHODS --- //
-            inline static std::string getName() { return s_name; }
+            inline static const char* getName() { return s_name; }
             inline static std::vector<float> getVertices() { return s_vertices; }
             inline static std::vector<unsigned int> getIndices() { return s_indices; }
             inline static std::vector<unsigned int> getLayout() { return s_layout; }

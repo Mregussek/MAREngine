@@ -30,11 +30,8 @@
 #include "Scene/Scene.h"
 
 #include "Mesh/Shapes/ShapeManipulator.h"
-#include "Mesh/Shapes/Shapes.h"
-#include "Mesh/Shapes/DefaultShapes/Cube.h"
-#include "Mesh/Shapes/DefaultShapes/Pyramid.h"
-#include "Mesh/Shapes/DefaultShapes/Surface.h"
-#include "Mesh/Shapes/DefaultShapes/Wall.h"
+#include "Mesh/MeshCreator.h"
+
 
 namespace mar {
 	namespace graphics {

@@ -10,7 +10,6 @@
 #include "Debug/Log.h"
 // Layers
 #include "Layers/LayerStack.h"
-#include "Layers/Layer.h"
 #include "Layers/GUILayer.h"
 #include "Layers/MeshLayer.h"
 #include "Layers/CameraLayer.h"

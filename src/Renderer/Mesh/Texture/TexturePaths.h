@@ -3,22 +3,24 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+#ifndef MAR_ENGINE_TEXTURE_PATHS_H
+#define MAR_ENGINE_TEXTURE_PATHS_H
+
 #include "../../../mar.h"
 
 namespace mar {
-	namespace graphics {
+	
 
+		struct TexturePaths {
+			inline static const char* mrTex = "resources/textures/mr.jpg";
+			inline static const char* yellowTex = "resources/textures/yellow-texture.jpg";
+			inline static const char* grassTex = "resources/textures/grass-texture.jpg";
+			inline static const char* wallTex = "resources/textures/wall.jpg";
+			inline static const char* blueTex = "resources/textures/blue-texture.jpg";
+			inline static const char* redTex = "resources/textures/red-texture.jpg";
+			inline static const char* blackTex = "resources/textures/black-texture.jpg";
 
-		struct {
-			const char* mrTex = "resources/textures/mr.jpg";
-			const char* yellowTex = "resources/textures/yellow-texture.jpg";
-			const char* grassTex = "resources/textures/grass-texture.jpg";
-			const char* wallTex = "resources/textures/wall.jpg";
-			const char* blueTex = "resources/textures/blue-texture.jpg";
-			const char* redTex = "resources/textures/red-texture.jpg";
-			const char* blackTex = "resources/textures/black-texture.jpg";
-
-			const std::vector<const char*> SkyboxFaces{
+			inline static const std::vector<const char*> SkyboxFaces{
 				"resources/textures/skybox/right.jpg" ,
 				"resources/textures/skybox/left.jpg" ,
 				"resources/textures/skybox/top.jpg" ,
@@ -27,7 +29,7 @@ namespace mar {
 				"resources/textures/skybox/back.jpg" ,
 			};
 
-			const std::vector<const char*> mc_grass_faces{
+			inline static const std::vector<const char*> mc_grass_faces{
 				 "resources/textures/mc/mc-grass.jpg"
 				 ,  "resources/textures/mc/mc-grass.jpg"
 				 ,  "resources/textures/mc/mc-grass-up.jpg"
@@ -36,7 +38,7 @@ namespace mar {
 				 ,  "resources/textures/mc/mc-grass.jpg"
 			};
 
-			const std::vector<const char*> mc_cobble_faces{
+			inline static const std::vector<const char*> mc_cobble_faces{
 				"resources/textures/mc/mc-cobble.jpg"
 				, "resources/textures/mc/mc-cobble.jpg"
 				, "resources/textures/mc/mc-cobble.jpg"
@@ -45,7 +47,7 @@ namespace mar {
 				, "resources/textures/mc/mc-cobble.jpg"
 			};
 
-			const std::vector<const char*> mc_diamond_faces{
+			inline static const std::vector<const char*> mc_diamond_faces{
 				"resources/textures/mc/mc-diamond.jpg",
 				"resources/textures/mc/mc-diamond.jpg",
 				"resources/textures/mc/mc-diamond.jpg",
@@ -53,7 +55,9 @@ namespace mar {
 				"resources/textures/mc/mc-diamond.jpg",
 				"resources/textures/mc/mc-diamond.jpg"
 			};
-		} TexturePaths;
+		};
 
 
-} }
+}
+
+#endif // !MAR_ENGINE_TEXTURE_PATHS_H

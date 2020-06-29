@@ -3,11 +3,13 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+#ifndef MAR_ENGINE_MESH_LAYER_H
+#define MAR_ENGINE_MESH_LAYER_H
 
 #include "../mar.h"
 #include "Layer.h"
-#include "../Renderer/Renderer.h"
 #include "../Renderer/Mesh/Mesh.h"
+#include "../Renderer/Renderer.h"
 
 
 namespace mar {
@@ -30,6 +32,7 @@ namespace mar {
 			void initializeLayer(graphics::Renderer* renderer, graphics::Mesh* mesh);
 			void create(const Ref<graphics::RendererFactory>& factory, const bool& usegui);
 			void scene(graphics::SceneType scenetype, graphics::MeshType meshtype);
+			//void load(graphics::MeshType meshtype);
 
 			// --- OVERLOADED METHODS --- //
 			void prepareFrame() override;
@@ -49,3 +52,5 @@ namespace mar {
 
 
 } }
+
+#endif // !MAR_ENGINE_MESH_LAYER_H

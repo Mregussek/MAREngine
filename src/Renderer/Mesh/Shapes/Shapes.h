@@ -14,22 +14,6 @@ namespace mar {
 	namespace graphics {
 
 
-		//! Vertex
-		/*!
-			Vertex is a structure, which holds all the information about format of data.
-			For VBO!
-			Now it is not implemented, but in future (with .obj files loading) there is going
-			to be need for some Refactoring.
-		*/
-		struct Vertex {
-			float position[3];
-			float basicColors[3];
-			float lightNormal[3];
-			float texCoord[2];
-			float texId;
-			float shapeId;
-		};
-
 		//! Shape
 		/*!
 			Shape is a base class for the whole types of possible shapes.
@@ -42,7 +26,9 @@ namespace mar {
 		class Shape {
 			float m_id;
 			float m_texid;
-			std::string m_name{};
+			const char* m_name;
+			const char* m_usedTexture;
+			const char* m_usedOBJ;
 
 			glm::vec3 m_center;
 			glm::vec3 m_angle;
@@ -58,7 +44,7 @@ namespace mar {
 		public:
 			Shape() = default;
 
-			Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
+			Shape(float new_id, const char* new_name, glm::vec3 new_center, glm::vec3 new_angle,
 				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
 				std::vector<unsigned int> new_layout, glm::vec3 new_color);
 
@@ -67,7 +53,9 @@ namespace mar {
 			void assignDataFromFile(const char* path);
 
 			// --- GET METHODS --- //
-			const std::string& getName() const;
+			const char* getName() const;
+			const char* getUsedTexture() const { return m_usedTexture; }
+			const char* getUsedObj() const { return m_usedOBJ; }
 			const float getID() const;
 			const float getTextureID() const;
 			glm::vec3& getCenter();
@@ -91,7 +79,9 @@ namespace mar {
 			unsigned int getLayoutSize() const;
 
 			// --- SET METHODS --- //
-			void setName(const std::string& new_name);
+			void setName(const char* new_name);
+			void setUsedTexture(const char* used_tex) { m_usedTexture = used_tex; }
+			void setUsedObj(const char* used_obj) { m_usedOBJ = used_obj; }
 			void setID(float newID);
 			void setTextureID(float newID);
 			void setCenter(const glm::vec3& new_center);

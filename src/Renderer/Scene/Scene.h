@@ -7,7 +7,6 @@
 #define SCENE_H
 
 #include "../../mar.h"
-#include "../RendererFactory.h"
 #include "../Mesh/MeshCreator.h"
 
 namespace mar {
@@ -36,7 +35,7 @@ namespace mar {
 
 		public:
 			Scene() = default;
-			Scene(SceneType type = SceneType::DEFAULT) { initializeScene(type); }
+			Scene(SceneType type) { initializeScene(type); }
 
 			void initializeScene(SceneType type) {
 				switch (type) {

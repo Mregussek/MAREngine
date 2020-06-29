@@ -91,13 +91,13 @@ namespace mar {
 			m_vbo->updateDynamically(mesh->getVertices());
 			m_ebo->updateDynamically(mesh->getIndices());
 
-			s_stats.verticesCount += mesh->getVerticesSize();
-			s_stats.indicesCount += mesh->getIndicesSize();
+			s_stats.verticesCount += mesh->getVertices().size();
+			s_stats.indicesCount += mesh->getIndices().size();
 			s_stats.shapesCount += mesh->getShapesCount();
 
 			m_mainShader->setUniformSampler("u_Texture", mesh->getSamplers());
 
-			glDrawElements(GL_TRIANGLES, mesh->getIndicesSize(), GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr);
 
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
@@ -117,7 +117,7 @@ namespace mar {
 			mesh->clearMatrices();
 
 			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++) {
-				mesh->pushMatrices(mesh->getCenter(i), mesh->getAngle(i));
+				mesh->pushMatrices(mesh->getShape(i)->getCenter(), mesh->getShape(i)->getAngle());
 			}
 				
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());

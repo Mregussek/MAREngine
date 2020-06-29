@@ -10,7 +10,7 @@ namespace mar {
 	namespace graphics { namespace objects {
 
 
-		std::string ObjectLoader::s_name;
+		const char* ObjectLoader::s_name;
 		std::vector<float> ObjectLoader::s_vertices;
 		std::vector<unsigned int> ObjectLoader::s_indices;
 		std::vector<unsigned int> ObjectLoader::s_layout;
@@ -111,7 +111,7 @@ namespace mar {
 			float scale = 4.0f;
 
 			s_indices = indices;
-			s_name = "Loaded Object";
+			s_name = "Object";
 			s_layout = { 3, 3, 2, 1, 1 };
 			s_texid = 0.f;
 			s_id = 0.f;

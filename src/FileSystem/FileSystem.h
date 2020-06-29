@@ -8,22 +8,15 @@
 
 #include "../mar.h"
 #include "../Debug/Log.h"
+#include "../Layers/MeshLayer.h"
 
 
 namespace mar {
 	namespace filesystem {
 
 
-		class FileSystem {
-		public:
-			void getTexturePaths(const std::filesystem::path& path) {
-				for (const auto& p : std::filesystem::recursive_directory_iterator(path)) {
-					if (!std::filesystem::is_directory(p)) {
-						std::cout << p.path() << '\n';
-					}
-				}
-			}
-		};
+		void saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes);
+		std::vector<layers::MeshLayer*> loadSceneFromFile(const char* path);
 
 
 } }

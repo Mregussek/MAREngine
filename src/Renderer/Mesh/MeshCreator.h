@@ -10,10 +10,10 @@
 #include "../../mar.h"
 #include "Shapes/Shapes.h"
 #include "Shapes/DefaultShapes/Cube.h"
-#include "Shapes/DefaultShapes/Wall.h"
-#include "Shapes/DefaultShapes/Surface.h"
 #include "Shapes/DefaultShapes/Pyramid.h"
-#include "Mesh.h"
+#include "Shapes/DefaultShapes/Surface.h"
+#include "Shapes/DefaultShapes/Wall.h"
+#include "Texture/TexturePaths.h"
 
 
 namespace mar {

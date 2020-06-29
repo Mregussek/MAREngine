@@ -45,14 +45,14 @@ namespace mar {
 			};
 			m_textures = {
 				"empty"
-				, TexturePaths.mrTex
-				, TexturePaths.blueTex
-				, TexturePaths.grassTex
-				, TexturePaths.wallTex
+				, TexturePaths::mrTex
+				, TexturePaths::blueTex
+				, TexturePaths::grassTex
+				, TexturePaths::wallTex
 				, "empty"
 				, "empty"
-				, TexturePaths.blackTex
-				, TexturePaths.wallTex
+				, TexturePaths::blackTex
+				, TexturePaths::wallTex
 			};
 		}
 
@@ -97,17 +97,17 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 			};
 			m_faces = {
-				TexturePaths.mc_grass_faces ,
-				TexturePaths.mc_grass_faces ,
-				TexturePaths.mc_grass_faces ,
-				TexturePaths.mc_grass_faces ,
-				TexturePaths.mc_grass_faces ,
-				TexturePaths.mc_grass_faces ,
-				TexturePaths.mc_cobble_faces ,
-				TexturePaths.mc_cobble_faces ,
-				TexturePaths.mc_cobble_faces ,
-				TexturePaths.mc_diamond_faces ,
-				TexturePaths.mc_diamond_faces
+				TexturePaths::mc_grass_faces ,
+				TexturePaths::mc_grass_faces ,
+				TexturePaths::mc_grass_faces ,
+				TexturePaths::mc_grass_faces ,
+				TexturePaths::mc_grass_faces ,
+				TexturePaths::mc_grass_faces ,
+				TexturePaths::mc_cobble_faces ,
+				TexturePaths::mc_cobble_faces ,
+				TexturePaths::mc_cobble_faces ,
+				TexturePaths::mc_diamond_faces ,
+				TexturePaths::mc_diamond_faces
 			};
 		}
 

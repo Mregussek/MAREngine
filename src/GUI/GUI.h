@@ -7,9 +7,9 @@
 #define MAR_ENGINE_GUI_H
 
 #include "../mar.h"
+#include "../FileSystem/FileSystem.h"
 #include "../Renderer/Renderer.h"
 #include "../Window/Window.h"
-#include "../Renderer/Mesh/Mesh.h"
 #include "../Renderer/Mesh/MeshCreator.h"
 #include "../Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 

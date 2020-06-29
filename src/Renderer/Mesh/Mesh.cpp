@@ -171,6 +171,8 @@ namespace mar {
 
 				m_texture->addID(0);
 			}
+
+			new_shape->setUsedTexture(texture);
 		}
 
 		void Mesh::pushCubeMap(Ref<Shape>& new_shape, const std::vector<const char*>& faces) {
@@ -194,6 +196,17 @@ namespace mar {
 			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
 
 			m_shapes.push_back(new_shape);
+		}
+
+		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
+			m_translationMats.push_back(glm::translate(glm::mat4(1.0f), center));
+
+			glm::mat4 transform =
+				glm::rotate(glm::mat4(1.0f), glm::radians(angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
+				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
+				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+			m_rotationMats.push_back(transform);
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {
@@ -277,17 +290,6 @@ namespace mar {
 		void Mesh::clearMatrices() {
 			m_translationMats.clear();
 			m_rotationMats.clear();
-		}
-
-		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
-			m_translationMats.push_back(glm::translate(glm::mat4(1.0f), center));
-
-			glm::mat4 transform =
-				glm::rotate(glm::mat4(1.0f), glm::radians(angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-			m_rotationMats.push_back(transform);
 		}
 
 

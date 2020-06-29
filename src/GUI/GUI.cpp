@@ -11,13 +11,13 @@ namespace mar {
 
 		const char* GUITextureList::s_textures[] = {
 			"empty",
-			graphics::TexturePaths.mrTex,
-			graphics::TexturePaths.redTex,
-			graphics::TexturePaths.blueTex,
-			graphics::TexturePaths.blackTex,
-			graphics::TexturePaths.yellowTex,
-			graphics::TexturePaths.wallTex,
-			graphics::TexturePaths.grassTex 
+			TexturePaths::mrTex,
+			TexturePaths::redTex,
+			TexturePaths::blueTex,
+			TexturePaths::blackTex,
+			TexturePaths::yellowTex,
+			TexturePaths::wallTex,
+			TexturePaths::grassTex 
 		};
 		int GUITextureList::s_selectedItem;
 
@@ -107,11 +107,11 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Open")) {
-
+						//filesystem::loadSceneFromFile("resources/mar_files/scene.marscene");
 					}
 
 					if (ImGui::MenuItem("Save")) {
-
+						filesystem::saveSceneToFile("resources/mar_files/scene.marscene", m_meshes);
 					}
 
 					if (ImGui::MenuItem("Exit")) {
@@ -216,8 +216,8 @@ namespace mar {
 
 					if (ImGui::TreeNode(mesh.c_str())) {
 						for (unsigned int i = 0; i < m_meshes[index]->getShapesCount(); i++) {
-							std::string shapeindex = " " + mesh + " " + m_meshes[index]->getName(i) 
-								+ " " +std::to_string(i);
+							std::string name = m_meshes[index]->getShape(i)->getName();
+							std::string shapeindex = mesh + " " + name + " " +std::to_string(i);
 
 							if (ImGui::MenuItem(shapeindex.c_str())) {
 								m_meshIndex = index;
@@ -259,8 +259,8 @@ namespace mar {
 					const char* z_rot = "Z rotation";
 					const char* color_shape = "Color shape";
 
-					glm::vec3& center = m_meshes[m_meshIndex]->getCenter(m_shapeIndex);
-					glm::vec3& angle = m_meshes[m_meshIndex]->getAngle(m_shapeIndex);
+					glm::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
+					glm::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
 
 					ImGui::Text(shape);
 					ImGui::Separator();
@@ -278,12 +278,12 @@ namespace mar {
 					ImGui::Separator();
 
 					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS) {
-						if (m_meshes[m_meshIndex]->getShapesTexture(m_shapeIndex) != "empty") {
-							ImGui::Image((void*)m_meshes[m_meshIndex]->getTextureID(m_shapeIndex),
+						if (m_meshes[m_meshIndex]->getTexture()->getPath(m_shapeIndex) != "empty") {
+							ImGui::Image((void*)m_meshes[m_meshIndex]->getTexture()->getID(m_shapeIndex),
 								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 						}
 						else {
-							ImGui::ColorPicker3(color_shape, (float*)&m_meshes[m_meshIndex]->getColor(m_shapeIndex));
+							ImGui::ColorPicker3(color_shape, (float*)&m_meshes[m_meshIndex]->getColors()[m_shapeIndex]);
 						}
 					}
 						
@@ -319,7 +319,7 @@ namespace mar {
 				else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
 					return;
 
-				if (m_meshes[0]->getShapesCount() == graphics::constants::maxObjectsInScene - 1)
+				if (m_meshes[0]->getShapesCount() == constants::maxObjectsInScene - 1)
 					return;
 
 				ImGui::Combo("Choose Texture", &GUITextureList::s_selectedItem, GUITextureList::s_textures, IM_ARRAYSIZE(GUITextureList::s_textures));

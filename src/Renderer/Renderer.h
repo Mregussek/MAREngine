@@ -7,22 +7,15 @@
 #define RENDERER_H
 
 #include "../mar.h"
+#include "RendererFactory.h"
 #include "../GUI/GUI.h"
 #include "Camera/Camera.h"
-#include "RendererFactory.h"
 #include "Mesh/Mesh.h"
 #include "Mesh/MeshCreator.h"
 
 namespace mar {
 	namespace graphics {
 
-
-		namespace constants {
-			const size_t maxCount = 100000;
-			const size_t maxVertexCount = maxCount * sizeof(Vertex);
-			const size_t maxIndexCount = maxCount * sizeof(Vertex);
-			const size_t maxObjectsInScene = 32;
-		}
 
 		struct RendererStatistics {
 			unsigned int drawCallsCount;

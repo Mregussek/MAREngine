@@ -9,7 +9,7 @@ namespace mar {
 	namespace graphics {
 
 
-		Shape::Shape(float new_id, std::string new_name, glm::vec3 new_center, glm::vec3 new_angle,
+		Shape::Shape(float new_id, const char* new_name, glm::vec3 new_center, glm::vec3 new_angle,
 			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
 			std::vector<unsigned int> new_layout, glm::vec3 new_color)
 			: m_id(new_id),
@@ -51,6 +51,7 @@ namespace mar {
 			m_id = objects::ObjectLoader::getID();
 			m_texid = (float)objects::ObjectLoader::getTextureID();
 			m_defaultColor = objects::ObjectLoader::getColor();
+			m_usedOBJ = path;
 
 			MAR_CORE_INFO("Assigned object from ObjectLoader!");
 		}
@@ -65,9 +66,9 @@ namespace mar {
 			return m_stride;
 		}
 
-		const std::string& Shape::getName() const { return m_name; }
+		const char* Shape::getName() const { return m_name; }
 
-		void Shape:: setName(const std::string& new_name) { m_name = new_name; }
+		void Shape:: setName(const char* new_name) { m_name = new_name; }
 
 		void Shape::setID(float newID) { m_id = newID; }
 

@@ -49,7 +49,7 @@ namespace mar {
 
 			std::vector<std::pair<graphics::SceneType, graphics::MeshType>> types = {
 				{DEFAULT_SCENE, NORMAL_MESH_TYPE},
-				{CUBEMAPS_SCENE, CUBEMAPS_MESH_TYPE},
+				//{CUBEMAPS_SCENE, CUBEMAPS_MESH_TYPE},
 				{OBJECTS_SCENE, OBJECTS_MESH_TYPE}
 			};
 
