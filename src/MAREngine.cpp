@@ -22,6 +22,8 @@ namespace mar {
 		void MAREngine::initialize() {
 			MAR_LOG_INIT();
 
+			m_usegui = true;
+
 			filesystem::Storage::getInstance()->setup(m_factory, m_usegui);
 
 			m_window = window::Window();
@@ -40,7 +42,8 @@ namespace mar {
 
 			auto camera_layer = new layers::CameraLayer("Default Camera Layer");
 			camera_layer->initializeLayer(new graphics::Camera());
-			camera_layer->set(&m_framebuffer->getSpecification().width, &m_framebuffer->getSpecification().height);
+			if(m_usegui) camera_layer->set(&m_framebuffer->getSpecification().width, &m_framebuffer->getSpecification().height);
+			else camera_layer->set((const float*)&MAREngineSettings::width, (const float*)&MAREngineSettings::height);
 			camera_layer->set(&m_window);
 
 			auto gui_layer = new layers::GUILayer("Default GUI Layer");
@@ -60,7 +63,10 @@ namespace mar {
 				gui_layer->submit(layer->getMesh());
 			}
 
-			while (m_window.shouldClose() && !m_shouldRestart) {
+			//////////////////////////////////////////////////////
+			// --------------- RENDER LOOP -------------------- //
+			while (m_window.shouldClose() && !m_shouldRestart) 
+			{
 				m_window.clearScreen();
 				
 				graphics::Renderer::getStatistics().resetStatistics();
@@ -69,17 +75,21 @@ namespace mar {
 
 				m_window.swapBuffers();
 			}
+			// --------------- RENDER LOOP -------------------- //
+			//////////////////////////////////////////////////////
 
 			m_framebuffer->close();
 			m_stack.close();
-
-			if (m_shouldRestart) {
-				m_shouldRestart = false;
-				run();
-			}
 		}
 
 		void MAREngine::exit() {
+		start_again:
+			if (m_shouldRestart) {
+				m_shouldRestart = false;
+				run();
+				goto start_again;
+			}
+
 			m_window.shutdown();
 		}
 

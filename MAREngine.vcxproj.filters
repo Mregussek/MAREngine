@@ -287,6 +287,9 @@
     <None Include="resources\shaders\cubemap.shader" />
     <None Include=".gitmodules" />
     <None Include="resources\shaders\cubemapWithoutGUI.shader" />
+    <None Include="resources\mar_files\load_default.marscene" />
+    <None Include="resources\mar_files\modified.marscene" />
+    <None Include="resources\mar_files\to_load.marscene" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">

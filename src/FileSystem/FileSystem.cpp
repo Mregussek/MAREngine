@@ -13,8 +13,7 @@ namespace mar {
 
 		std::vector<std::string> fnc::s_storage;
 
-		void fnc::updateMarFiles() {
-			std::string path = "resources/mar_files";
+		void fnc::updateMarFiles(const char* path) {
 			s_storage.clear();
 
 			for (const auto& entry : std::filesystem::directory_iterator(path)) {
@@ -38,6 +37,8 @@ namespace mar {
 			ss << "MAR ENGINE SCENE FILE" << std::endl;
 			ss << "#BEGIN" << std::endl << std::endl;
 
+			////////////////////////////////////////////////
+			/// --------- WRITING LOOP TO FILE --------- ///
 			for (unsigned int i = 0; i < meshes.size(); i++) {
 				std::string mesh_type;
 
@@ -78,6 +79,8 @@ namespace mar {
 					ss << std::endl;
 				}
 			}
+			/// ------- END WRITING LOOP TO FILE ------- ///
+			////////////////////////////////////////////////
 
 			ss << "#END" << std::endl;
 
@@ -90,7 +93,17 @@ namespace mar {
 			MAR_CORE_INFO(path);
 
 			std::ifstream file(path);
+
+			if (!file.is_open()) {
+				MAR_CORE_ERROR("Cannot open file!");
+				return std::vector<layers::MeshLayer*>();
+			}
+
 			std::string line;
+			float input[3];
+			int mesh_count{ -1 };
+			int scene_count{ -1 };
+
 			std::vector<layers::MeshLayer*> loaded_layers;
 
 			std::vector<graphics::SceneType> scene_type;
@@ -103,17 +116,8 @@ namespace mar {
 			std::vector<std::vector<std::string>> textures;
 			std::vector<std::vector<std::string>> objs;
 
-			float input[3];
-			int mesh_count{ -1 };
-			int scene_count{ -1 };
-
-			if (!file.is_open()) {
-				MAR_CORE_ERROR("Cannot open file!");
-				return std::vector<layers::MeshLayer*>();
-			}
-
-			loaded_layers.clear();
-
+			//////////////////////////////////////////////////
+			/// --------- READING LOOP FROM FILE --------- ///
 			while (std::getline(file, line)) {
 				if (line.find("#mesh_id") != std::string::npos) {
 
@@ -182,7 +186,7 @@ namespace mar {
 						objs[mesh_count].push_back(sinput);
 					}
 				}
-				/* SCENE LOADER */
+				/* DEFAULT SCENE LOADERS (from engine code) */
 				else if (line.find("#scene_id") != std::string::npos) {
 					scene_count++;
 				}
@@ -203,10 +207,14 @@ namespace mar {
 						mesh_type.push_back(OBJECTS_MESH_TYPE);
 				}
 			}
+			/// ------- END READING LOOP FROM FILE ------- ///
+			//////////////////////////////////////////////////
 
 			file.close();
 			MAR_CORE_TRACE("Scene has been loaded!");
 
+			///////////////////////////////////////////
+			/// --------- IF MESHES FOUND --------- ///
 			if (mesh_count != -1) {
 				MAR_CORE_TRACE("Mesh count != -1");
 
@@ -237,7 +245,11 @@ namespace mar {
 
 				MAR_CORE_INFO("Scene is loaded from meshes!");
 			}
+			/// ------- END IF MESHES FOUND ------- ///
+			///////////////////////////////////////////
 
+			///////////////////////////////////////////
+			/// --------- IF SCENES FOUND --------- ///
 			if (scene_count != -1) {
 				MAR_CORE_TRACE("Scene count != -1");
 
@@ -258,6 +270,8 @@ namespace mar {
 					MAR_CORE_INFO("Created Mesh Layers!");
 				}
 			}
+			/// ------ END IF SCENES FOUND -------- ///
+			///////////////////////////////////////////
 
 			return loaded_layers;
 		}

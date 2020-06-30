@@ -141,11 +141,6 @@ namespace mar {
 					m_instructionWindow = true;
 				}
 
-				if (ImGui::BeginMenu("Exit")) {
-					glfwSetWindowShouldClose(m_window->getWindow(), true);
-					ImGui::EndMenu();
-				}
-
 				ImGui::EndMainMenuBar();
 			}
 
@@ -168,7 +163,7 @@ namespace mar {
 			ImGui::Begin("Open File");
 
 			if (ImGui::Button("Reload files in directory")) {
-				filesystem::fnc::updateMarFiles();
+				filesystem::fnc::updateMarFiles("resources/mar_files");
 
 				GUIMarFiles::s_files.clear();
 				GUIMarFiles::s_files.push_back("empty");
@@ -182,7 +177,7 @@ namespace mar {
 
 			ImGui::Text("Select file, which you want to be opened:");
 
-			ImGui::Combo("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
+			ImGui::ListBox("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
 
 			ImGui::Separator();
 
@@ -194,8 +189,6 @@ namespace mar {
 
 				std::string path = "resources/mar_files";
 				std::string selected = path + "/" + std::string(GUIMarFiles::s_files[GUIMarFiles::s_selectedItem]);
-
-				std::cout << selected << std::endl;
 
 				engine::MAREngine::getEngine()->setLoadPath(selected);
 				engine::MAREngine::getEngine()->setRestart();

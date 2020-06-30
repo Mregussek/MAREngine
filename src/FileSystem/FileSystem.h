@@ -39,7 +39,7 @@ namespace mar {
 			static std::vector<std::string> s_storage;
 
 		public:
-			static void updateMarFiles();
+			static void updateMarFiles(const char* path);
 
 			static void saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes);
 			static std::vector<layers::MeshLayer*> loadSceneFromFile(std::string path);

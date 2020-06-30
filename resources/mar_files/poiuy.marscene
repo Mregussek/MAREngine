@@ -83,7 +83,7 @@ MAR ENGINE SCENE FILE
 
 #shape_id 11
 #shape_name Wall
-#shape_center 0.000000 0.000000 0.000000
+#shape_center 0.910000 4.390000 0.000000
 #shape_angle 0.000000 0.000000 0.000000
 #shape_color 1.000000 1.000000 0.000000
 #shape_texture empty
