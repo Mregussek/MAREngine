@@ -56,7 +56,7 @@ namespace mar {
 				processKeyboard(CameraMovement::RIGHT);
 
 			// Enable Mouse Usage
-			if (window::Input::isKeyPressed(MAR_KEY_1)) {
+			if (window::Input::isKeyPressed(MAR_KEY_Q)) {
 				if (m_enableMouse) m_enableMouse = false;
 				else m_enableMouse = true;
 

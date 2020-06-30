@@ -47,6 +47,9 @@ namespace mar {
 			const float& getScrollY() const { return m_scrollY; }
 
 			const bool shouldClose() const { return !glfwWindowShouldClose(m_window); }
+		
+			// --- SET METHODS --- //
+			void closeWindow() { glfwSetWindowShouldClose(m_window, true); }
 		};
 
 		namespace callbacks {
@@ -62,12 +65,15 @@ namespace mar {
 			inline float* scroll_x;
 			inline float* scroll_y;
 
+			inline const bool* use_input;
+
 			inline void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 			inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 			inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 			void setWindowSize(int* height, int* width);
 			void setMouse(float* x, float* y);
 			void setScroll(float* x, float* y);
+			void setUseInput(const bool* use);
 			void setCallbacks(GLFWwindow* wind);
 		}
 

@@ -160,8 +160,6 @@ namespace mar {
 
 				m_samplers.push_back((int)s_availableTextureID);
 
-				m_colors.push_back(new_shape->getDefaultColor());
-
 				s_availableTextureID++;
 
 				m_texture->loadTexture(texture);
@@ -169,13 +167,12 @@ namespace mar {
 			else {
 				new_shape->setTextureID(0.f);
 
-				m_colors.push_back(new_shape->getDefaultColor());
-
 				m_samplers.push_back(0);
 
 				m_texture->addID(0);
 			}
 
+			m_colors.push_back(new_shape->getDefaultColor());
 			new_shape->setUsedTexture(texture);
 		}
 

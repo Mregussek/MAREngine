@@ -107,71 +107,16 @@ namespace mar {
 
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
-					if (ImGui::MenuItem("New")) {
-					
+					if (ImGui::MenuItem("Open")) {
+						m_fileOpenWindow = true;
 					}
 
-					if (ImGui::BeginMenu("Open")) {
-						if (ImGui::Button("Reload files in directory")) {
-							filesystem::fnc::updateMarFiles();
-
-							GUIMarFiles::s_files.clear();
-							GUIMarFiles::s_files.push_back("empty");
-
-							for (auto& m : filesystem::fnc::getMarFiles()) {
-								GUIMarFiles::s_files.push_back(m.c_str());
-							}
-	
-						}
-
-						ImGui::Separator();
-
-						ImGui::Text("Select file, which you want to be opened:");
-
-						ImGui::Combo("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
-						
-						ImGui::Separator();
-
-						if (ImGui::Button("Open Selected File")) {
-							if (GUIMarFiles::s_selectedItem == 0) {
-								MAR_CORE_ERROR("Wrong file selected!");
-								return;
-							}
-								
-							std::string path = "resources/mar_files";
-							std::string selected = path + "/" + std::string(GUIMarFiles::s_files[GUIMarFiles::s_selectedItem]);
-
-							std::cout << selected << std::endl;
-
-							engine::MAREngine::getEngine()->setLoadPath(selected);
-							engine::MAREngine::getEngine()->setRestart();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::BeginMenu("Save")) {
-						ImGui::InputText(".marscene", m_inputStr, IM_ARRAYSIZE(m_inputStr));
-						
-						ImGui::Separator();
-
-						std::string str{ m_inputStr };
-						std::string save = "resources/mar_files/" + str + ".marscene";
-
-						ImGui::Text("Saving to: ");
-						ImGui::Text(save.c_str());
-
-						ImGui::Separator();
-
-						if (ImGui::Button("Save to selected name")) {
-							filesystem::fnc::saveSceneToFile(save.c_str(), m_meshes);
-						}
-						
-						ImGui::EndMenu();
+					if (ImGui::MenuItem("Save")) {
+						m_fileSaveWindow = true;
 					}
 
 					if (ImGui::MenuItem("Exit")) {
-						glfwSetWindowShouldClose(m_window->getWindow(), true);
+						m_window->closeWindow();
 					}
 
 					ImGui::EndMenu();
@@ -193,6 +138,7 @@ namespace mar {
 
 				if (ImGui::MenuItem("About")) {
 					m_infoWindow = true;
+					m_instructionWindow = true;
 				}
 
 				if (ImGui::BeginMenu("Exit")) {
@@ -207,7 +153,10 @@ namespace mar {
 			Menu_ModifyShape();
 			Display_ViewPort();
 
+			if (m_fileOpenWindow) { File_Open(); }
+			if (m_fileSaveWindow) { File_Save(); }
 			if (m_infoWindow) { Menu_Info(); }
+			if (m_instructionWindow) { Menu_Instruction(); }
 
 			ImGui::End();
 			ImGui::Render();
@@ -215,8 +164,82 @@ namespace mar {
 			ImGui::EndFrame();
 		}
 
+		void GUI::File_Open() {
+			ImGui::Begin("Open File");
+
+			if (ImGui::Button("Reload files in directory")) {
+				filesystem::fnc::updateMarFiles();
+
+				GUIMarFiles::s_files.clear();
+				GUIMarFiles::s_files.push_back("empty");
+
+				for (auto& m : filesystem::fnc::getMarFiles()) {
+					GUIMarFiles::s_files.push_back(m.c_str());
+				}
+			}
+
+			ImGui::Separator();
+
+			ImGui::Text("Select file, which you want to be opened:");
+
+			ImGui::Combo("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Open Selected File")) {
+				if (GUIMarFiles::s_selectedItem == 0) {
+					MAR_CORE_ERROR("Wrong file selected!");
+					return;
+				}
+
+				std::string path = "resources/mar_files";
+				std::string selected = path + "/" + std::string(GUIMarFiles::s_files[GUIMarFiles::s_selectedItem]);
+
+				std::cout << selected << std::endl;
+
+				engine::MAREngine::getEngine()->setLoadPath(selected);
+				engine::MAREngine::getEngine()->setRestart();
+			}
+
+			if (ImGui::Button("Close")) 
+				m_fileOpenWindow = false;
+
+			ImGui::End();
+		}
+
+		void GUI::File_Save() {
+			ImGui::Begin("Save File");
+
+			ImGui::InputText(".marscene", m_inputStr, IM_ARRAYSIZE(m_inputStr));
+
+			ImGui::Separator();
+
+			std::string str{ m_inputStr };
+			std::string save = "resources/mar_files/" + str + ".marscene";
+
+			ImGui::Text("Saving to: ");
+			ImGui::Text(save.c_str());
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Save to selected name")) {
+				filesystem::fnc::saveSceneToFile(save.c_str(), m_meshes);
+			}
+
+			if (ImGui::Button("Close")) {
+				m_fileSaveWindow = false;
+			}
+
+			ImGui::End();
+		}
+
 		void GUI::Display_ViewPort() {
 			ImGui::Begin("ViewPort");
+
+			if (ImGui::IsWindowFocused())
+				window::Input::enableInput();
+			else
+				window::Input::disableInput();
 
 			graphics::FrameBufferSpecification spec = m_framebuffer->getSpecification();
 			unsigned int id = m_framebuffer->getColorAttach();
@@ -461,6 +484,48 @@ namespace mar {
 
 			if (ImGui::Button("Close")) {
 				m_infoWindow = false;
+				m_instructionWindow = false;
+			}
+
+			ImGui::End();
+		}
+
+		void GUI::Menu_Instruction() {
+			ImGui::Begin("Instructions");
+
+			const char* fileManage = "File Management";
+			const char* aboutFileManageSave = "\nSave Method:\nYou have to give the name of file, where you want to write current scene.\nIf file exists, it will be truncated and new scene will be put there.";
+			const char* aboutFileManageOpen = "\nOpen Method:\nMethod searches all files in directory resources/mar_files and gets all scenes.\nYou have to click reload button in order to see current state of directory.\nThen you choose one path, which will be loaded into MAREngine.";
+
+			ImGui::Text(fileManage);
+			ImGui::Text(aboutFileManageSave);
+			ImGui::Text(aboutFileManageOpen);
+			ImGui::Separator();
+
+			const char* keyboardSettings = "\nKeyboard Settings";
+			const char* aboutKeySettings = "\nIf Viewport window is selected you can move in scene using WASD keys.\nIf you click Q key, then mouse usage will be enabled! Press it again to disable mouse!";
+
+			ImGui::Text(keyboardSettings);
+			ImGui::Text(aboutKeySettings);
+			ImGui::Separator();
+
+			const char* mouseSettings = "\nMouse Settings";
+			const char* aboutMouseSettings = "\nIf you have clicked Q key, you can move around with mouse. Scroll is also available to see things.";
+
+			ImGui::Text(mouseSettings);
+			ImGui::Text(aboutMouseSettings);
+			ImGui::Separator();
+
+			const char* addShape = "\nAdding Shapes to Scene";
+			const char* aboutAddShape = "\nIn order to add shape to scene, you need to give center of the object. Next point is to select texture.\nIf empty is chosen, shape will be rendered with its default color!";
+
+			ImGui::Text(addShape);
+			ImGui::Text(aboutAddShape);
+			ImGui::Separator();
+
+			if (ImGui::Button("Close")) {
+				m_infoWindow = false;
+				m_instructionWindow = false;
 			}
 
 			ImGui::End();

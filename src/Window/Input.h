@@ -31,7 +31,8 @@ namespace mar {
 
 			static bool isKeyPressed(int key) {
 				if (s_useInput) {
-					return glfwGetKey(s_nativewindow, key) == MAR_KEY_PRESS;
+					return glfwGetKey(s_nativewindow, key) == MAR_KEY_PRESS ||
+						glfwGetKey(s_nativewindow, key) == MAR_KEY_REPEAT;
 				}
 				else return false;
 			}

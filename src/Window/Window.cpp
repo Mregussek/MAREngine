@@ -57,6 +57,7 @@ namespace mar {
 			callbacks::setWindowSize(&m_height, &m_width);
 			callbacks::setMouse(&m_mouseX, &m_mouseY);
 			callbacks::setScroll(&m_scrollX, &m_scrollY);
+			callbacks::setUseInput(&Input::getUseInput());
 
 			callbacks::setCallbacks(m_window);
 				
@@ -99,13 +100,17 @@ namespace mar {
 			}
 
 			inline void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-				*mouse_x = (float)xpos;
-				*mouse_y = (float)ypos;
+				if (*use_input) {
+					*mouse_x = (float)xpos;
+					*mouse_y = (float)ypos;
+				}
 			}
 
 			inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-				*scroll_x = (float)xoffset;
-				*scroll_y = (float)yoffset;
+				if (*use_input) {
+					*scroll_x = (float)xoffset;
+					*scroll_y = (float)yoffset;
+				}
 			}
 
 			void setWindowSize(int* height, int* width) {
@@ -121,6 +126,10 @@ namespace mar {
 			void setScroll(float* x, float* y) {
 				scroll_x = x;
 				scroll_y = y;
+			}
+
+			void setUseInput(const bool* use) {
+				use_input = use;
 			}
 
 			void setCallbacks(GLFWwindow* wind) {

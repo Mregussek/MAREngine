@@ -57,6 +57,9 @@ namespace mar {
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
 			bool m_infoWindow{ false };
+			bool m_instructionWindow{ false };
+			bool m_fileOpenWindow{ false };
+			bool m_fileSaveWindow{ false };
 
 		public:
 			GUI() = default;
@@ -72,12 +75,16 @@ namespace mar {
 			void submitMesh(graphics::Mesh* mesh) { m_meshes.push_back(mesh); }
 
 		private:
+			void File_Open();
+			void File_Save();
+
 			void Display_ViewPort();
 			void Menu_ModifyScene();
 			void Menu_ModifyShape();
 			void Menu_PushShapeToScene();
 			void Menu_Statistics();
 			void Menu_Info();
+			void Menu_Instruction();
 
 		public:
 			// --- SET METHODS --- //
