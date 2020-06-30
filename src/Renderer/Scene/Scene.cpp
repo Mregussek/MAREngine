@@ -96,18 +96,18 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 			};
-			m_faces = {
-				TexturePaths::mc_grass_faces ,
-				TexturePaths::mc_grass_faces ,
-				TexturePaths::mc_grass_faces ,
-				TexturePaths::mc_grass_faces ,
-				TexturePaths::mc_grass_faces ,
-				TexturePaths::mc_grass_faces ,
-				TexturePaths::mc_cobble_faces ,
-				TexturePaths::mc_cobble_faces ,
-				TexturePaths::mc_cobble_faces ,
-				TexturePaths::mc_diamond_faces ,
-				TexturePaths::mc_diamond_faces
+			m_textures = {
+				TexturePaths::mc_grass ,
+				TexturePaths::mc_grass ,
+				TexturePaths::mc_grass ,
+				TexturePaths::mc_grass ,
+				TexturePaths::mc_grass ,
+				TexturePaths::mc_grass ,
+				TexturePaths::mc_cobble ,
+				TexturePaths::mc_cobble ,
+				TexturePaths::mc_cobble ,
+				TexturePaths::mc_diamond ,
+				TexturePaths::mc_diamond
 			};
 		}
 
@@ -133,15 +133,9 @@ namespace mar {
 				"empty" 
 			};
 			m_obj = {
-#ifndef IMPORTED_FROM_GITHUB
 				"resources/objects/lego-human.obj" 
 				, "resources/objects/lego-human.obj" 
 				, "resources/objects/low_poly_tree_triangles.obj"
-#else	
-				"../../../resources/objects/lego-human.obj"
-				, "../../../resources/objects/lego-human.obj"
-				, "../../../resources/objects/low_poly_tree_triangles.obj"
-#endif
 			};
 		}
 

@@ -9,7 +9,6 @@
 #include "../mar.h"
 #include "../Debug/Log.h"
 #include "../Layers/MeshLayer.h"
-#include "../Renderer/RendererFactory.h"
 
 
 namespace mar {

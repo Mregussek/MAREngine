@@ -23,6 +23,8 @@ namespace mar {
 			for (auto& s : m_shapes)
 				s.reset();
 
+			m_texture.reset();
+
 			m_shapes.clear();
 		}
 
@@ -51,18 +53,11 @@ namespace mar {
 
 			switch(m_type) {
 			case MeshType::NORMAL:
+			case MeshType::CUBEMAPS:
 				for (unsigned int i = 0; i < shapesInSceneCount; i++)
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
 
 				MAR_CORE_INFO("Scene has been loaded by textures!");
-
-				break;
-
-			case MeshType::CUBEMAPS:
-				for (unsigned int i = 0; i < shapesInSceneCount; i++)
-					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getFace(i));
-
-				MAR_CORE_INFO("Scene has been loaded by cubemaps!");
 
 				break;
 			case MeshType::OBJECTS:
@@ -81,44 +76,23 @@ namespace mar {
 
 		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture) {
 			if (m_shapes.size() != m_shapesCount) {
+				new_shape->setCenter(center);
+				new_shape->setAngle(angle);
 				pushTexture(new_shape, texture);
-				reuse(new_shape, center, angle);
+				pushMatrices(center, angle);
+				pushShape(new_shape);
 
-				m_shapes[m_shapesCount - 1]->setUsedTexture(texture);
+				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
+				m_shapes[m_shapesCount]->setUsedTexture(texture);
+
+				m_shapesCount++;
+
+				MAR_CORE_INFO("Reusing shape object!");
 
 				return;
 			}
 
 			submitShape(new_shape, center, angle, texture);
-		}
-
-		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces) {
-			if (m_shapes.size() != m_shapesCount) {
-				pushCubeMap(new_shape, faces);
-				reuse(new_shape, center, angle);
-
-				return;
-			}
-
-			submitShape(new_shape, center, angle, faces);
-		}
-
-		void Mesh::reuse(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle) {
-			new_shape->setCenter(center);
-			new_shape->setAngle(angle);
-			pushMatrices(center, angle);
-
-			ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
-			m_availableShapeID++;
-
-			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
-			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
-
-			MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
-
-			m_shapesCount++;
-
-			MAR_CORE_INFO("Reusing shape object!");
 		}
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture) {
@@ -127,28 +101,14 @@ namespace mar {
 				return;
 			}
 			
-			pushTexture(new_shape, texture);
-			submit(new_shape, center, angle);
-
-			m_shapes[m_shapesCount - 1]->setUsedTexture(texture);
-		}
-
-		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces) {
-			if (m_shapesCount == constants::maxObjectsInScene - 1) {
-				MAR_CORE_ERROR("Cannot push more objects!");
-				return;
-			}
-
-			pushCubeMap(new_shape, faces);
-			submit(new_shape, center, angle);
-		}
-
-		void Mesh::submit(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle) {
 			new_shape->setCenter(center);
 			new_shape->setAngle(angle);
+			pushTexture(new_shape, texture);
 			pushShape(new_shape);
 			pushMatrices(center, angle);
 
+			m_shapes.push_back(new_shape);
+			m_shapes[m_shapesCount]->setUsedTexture(texture);
 			m_shapesCount++;
 
 			MAR_CORE_INFO("Added new object to scene!");
@@ -159,10 +119,12 @@ namespace mar {
 				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
 				m_samplers.push_back((int)s_availableTextureID);
-
 				s_availableTextureID++;
 
-				m_texture->loadTexture(texture);
+				if (!checkIfCubemap(".jpg", texture)) 
+					m_texture->loadCubemap(texture);
+				else 
+					m_texture->loadTexture(texture);
 			}
 			else {
 				new_shape->setTextureID(0.f);
@@ -176,27 +138,12 @@ namespace mar {
 			new_shape->setUsedTexture(texture);
 		}
 
-		void Mesh::pushCubeMap(Ref<Shape>& new_shape, const std::vector<const char*>& faces) {
-			ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
-
-			m_samplers.push_back((int)s_availableTextureID);
-
-			m_colors.push_back(new_shape->getDefaultColor());
-
-			s_availableTextureID++;
-
-			m_texture->loadCubemap(faces);
-		}
-
 		void Mesh::pushShape(Ref<Shape>& new_shape) {
 			ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 			m_availableShapeID++;
 
 			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
-
 			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
-
-			m_shapes.push_back(new_shape);
 		}
 
 		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
@@ -254,10 +201,6 @@ namespace mar {
 			m_rotationMats.erase(m_rotationMats.begin() + index);
 		}
 
-		void Mesh::resetDraw() {
-			m_shapesDrawn = 0;
-		}
-
 		void Mesh::update() {
 			for (unsigned int i = 0; i < m_shapesCount; i++) {
 
@@ -274,8 +217,6 @@ namespace mar {
 					m_indices.insert(m_indices.end(), beginIndices, endIndices);
 
 					m_texture->bind(m_samplers[i], m_texture->getID(i));
-
-					m_shapesDrawn++;
 				}
 				else {
 					MAR_CORE_ERROR("To much vertices in vector!");

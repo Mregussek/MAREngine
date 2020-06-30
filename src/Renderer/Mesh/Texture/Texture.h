@@ -48,7 +48,7 @@ namespace mar {
 				\param faces - paths to textures, which will be loaded
 				\return id - id for new loaded cubemap
 			*/
-			virtual unsigned int genNewCubemap(const std::vector<const char*>& faces) { return 0; }
+			virtual unsigned int genNewCubemap(const char* path) { return 0; }
 
 			/*
 			Method should load Cube Map and prescribe it to available index.
@@ -56,7 +56,7 @@ namespace mar {
 
 				\param faces - paths to textures, which will be loaded
 			*/
-			virtual void loadCubemap(const std::vector<const char*>& faces) { }
+			virtual void loadCubemap(const char* path) { }
 
 			/*
 			Method should bind texture (with unique ID) to selected shape (with unique ID)

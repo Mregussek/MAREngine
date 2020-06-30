@@ -6,6 +6,8 @@
 #ifndef RENDERER_FACTORY_H
 #define RENDERER_FACTORY_H
 
+#include "../mar.h"
+
 #include "Buffers/ElementBuffer/ElementBuffer.h"
 #include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
 	

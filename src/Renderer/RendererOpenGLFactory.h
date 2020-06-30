@@ -6,6 +6,7 @@
 #ifndef RENDERER_OPENGL_FACTORY_H
 #define RENDERER_OPENGL_FACTORY_H
 
+#include "../mar.h"
 #include "RendererFactory.h"
 
 namespace mar {

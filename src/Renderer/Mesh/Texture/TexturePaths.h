@@ -20,41 +20,10 @@ namespace mar {
 			inline static const char* redTex = "resources/textures/red-texture.jpg";
 			inline static const char* blackTex = "resources/textures/black-texture.jpg";
 
-			inline static const std::vector<const char*> SkyboxFaces{
-				"resources/textures/skybox/right.jpg" ,
-				"resources/textures/skybox/left.jpg" ,
-				"resources/textures/skybox/top.jpg" ,
-				"resources/textures/skybox/bottom.jpg" ,
-				"resources/textures/skybox/front.jpg" ,
-				"resources/textures/skybox/back.jpg" ,
-			};
-
-			inline static const std::vector<const char*> mc_grass_faces{
-				 "resources/textures/mc/mc-grass.jpg"
-				 ,  "resources/textures/mc/mc-grass.jpg"
-				 ,  "resources/textures/mc/mc-grass-up.jpg"
-				 ,  "resources/textures/mc/dirt.jpg"
-				 ,  "resources/textures/mc/mc-grass.jpg"
-				 ,  "resources/textures/mc/mc-grass.jpg"
-			};
-
-			inline static const std::vector<const char*> mc_cobble_faces{
-				"resources/textures/mc/mc-cobble.jpg"
-				, "resources/textures/mc/mc-cobble.jpg"
-				, "resources/textures/mc/mc-cobble.jpg"
-				, "resources/textures/mc/mc-cobble.jpg"
-				, "resources/textures/mc/mc-cobble.jpg"
-				, "resources/textures/mc/mc-cobble.jpg"
-			};
-
-			inline static const std::vector<const char*> mc_diamond_faces{
-				"resources/textures/mc/mc-diamond.jpg",
-				"resources/textures/mc/mc-diamond.jpg",
-				"resources/textures/mc/mc-diamond.jpg",
-				"resources/textures/mc/mc-diamond.jpg",
-				"resources/textures/mc/mc-diamond.jpg",
-				"resources/textures/mc/mc-diamond.jpg"
-			};
+			inline static const char* mc_diamond = "resources/textures/mc/diamond";
+			inline static const char* mc_cobble = "resources/textures/mc/cobble";
+			inline static const char* mc_dirt = "resources/textures/mc/dirt";
+			inline static const char* mc_grass = "resources/textures/mc/grass";
 		};
 
 

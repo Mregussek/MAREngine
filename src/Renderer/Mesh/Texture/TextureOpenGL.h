@@ -54,7 +54,7 @@ namespace mar {
 				\param faces - paths to textures, which will be loaded
 				\return id - id for new loaded cubemap
 			*/
-			unsigned int genNewCubemap(const std::vector<const char*>& faces) override;
+			unsigned int genNewCubemap(const char* path) override;
 
 			/*
 			Method loads Cube Map and prescribe it to available index.
@@ -62,7 +62,7 @@ namespace mar {
 
 				\param faces - paths to textures, which will be loaded
 			*/
-			void loadCubemap(const std::vector<const char*>& faces) override;
+			void loadCubemap(const char* path) override;
 
 			/*
 			Bind texture with texID to selected shape with shapeId.

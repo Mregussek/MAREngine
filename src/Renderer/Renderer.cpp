@@ -64,8 +64,6 @@ namespace mar {
 
 				m_vao->addBuffer(m_layout);
 
-				m_mainShader->bind();
-
 				m_initialized = true;
 
 				MAR_CORE_INFO("Renderer properly initialized!");
@@ -77,8 +75,6 @@ namespace mar {
 
 		void Renderer::draw(Mesh* mesh) {
 			bind();
-
-			mesh->resetDraw();
 
 			mesh->clearBuffers();
 			mesh->update();
@@ -106,20 +102,14 @@ namespace mar {
 		}
 
 		void Renderer::updateMeshData(Mesh* mesh) {
-			if (!m_useGUI) {
-				m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
-				m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
-				m_mainShader->setUniformVectorVec3("u_SeparateColor", mesh->getColors());
+			if (m_useGUI) {
+				mesh->clearMatrices();
 
-				return;
+				for (unsigned int i = 0; i < mesh->getShapesCount(); i++) {
+					mesh->pushMatrices(mesh->getShape(i)->getCenter(), mesh->getShape(i)->getAngle());
+				}
 			}
 
-			mesh->clearMatrices();
-
-			for (unsigned int i = 0; i < mesh->getShapesDrawn(); i++) {
-				mesh->pushMatrices(mesh->getShape(i)->getCenter(), mesh->getShape(i)->getAngle());
-			}
-				
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 			m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
 			m_mainShader->setUniformVectorVec3("u_SeparateColor", mesh->getColors());

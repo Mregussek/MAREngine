@@ -82,7 +82,27 @@ namespace mar {
 			m_path_id.insert({ path, new_id });
 		}
 
-		unsigned int TextureOpenGL::genNewCubemap(const std::vector<const char*>& faces) {
+		unsigned int TextureOpenGL::genNewCubemap(const char* path) {
+			std::vector<std::string> faces(6);
+			int check = 0;
+
+			for (const auto& entry : std::filesystem::directory_iterator(path)) {
+				check++;
+			}
+
+			if (check == 6) {
+				faces[0] = std::string(path) + "/right.jpg";
+				faces[1] = std::string(path) + "/left.jpg";
+				faces[2] = std::string(path) + "/top.jpg";
+				faces[3] = std::string(path) + "/bottom.jpg";
+				faces[4] = std::string(path) + "/front.jpg";
+				faces[5] = std::string(path) + "/back.jpg";
+			}
+			else {
+				MAR_CORE_ERROR("Cannot load 6 files for cubemap!");
+				return 0;
+			}
+
 			unsigned int id;
 			int width, height;
 			int bitPerPixel;
@@ -93,7 +113,7 @@ namespace mar {
 
 			for (unsigned int i = 0; i < faces.size(); i++) {
 
-				unsigned char* localBuffer = stbi_load(faces[i], &width, &height, &bitPerPixel, 0);
+				unsigned char* localBuffer = stbi_load(faces[i].c_str(), &width, &height, &bitPerPixel, 0);
 
 				if (localBuffer) {
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer);
@@ -118,8 +138,8 @@ namespace mar {
 			return id;
 		}
 
-		void TextureOpenGL::loadCubemap(const std::vector<const char*>& faces) {
-			std::string helper = std::string(faces[0]) + std::string(faces[1]) + std::string(faces[2]);
+		void TextureOpenGL::loadCubemap(const char* path) {
+			std::string helper = std::string(path);
 			auto search = m_path_id.find(helper);
 
 			if (search != m_path_id.end()) {
@@ -131,7 +151,7 @@ namespace mar {
 				return;
 			}
 
-			unsigned int new_id = genNewCubemap(faces);
+			unsigned int new_id = genNewCubemap(path);
 			m_id.push_back(new_id);
 			m_paths.push_back(helper);
 			m_path_id.insert({ helper, new_id });

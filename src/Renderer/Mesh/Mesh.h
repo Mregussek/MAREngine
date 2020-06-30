@@ -24,10 +24,9 @@ namespace mar {
 
 
 		class Mesh {
-			MeshType m_type;
-
+			// --- One needed buffer
 			Ref<Texture> m_texture;
-
+			// --- Run-Time data for mesh
 			std::vector<Ref<Shape>> m_shapes;
 			std::vector<float> m_vertices;
 			std::vector<unsigned int> m_indices;
@@ -35,15 +34,14 @@ namespace mar {
 			std::vector<glm::mat4> m_translationMats;
 			std::vector<glm::mat4> m_rotationMats;
 			std::vector<glm::vec3> m_colors;
-
+			// --- Light object
 			Light m_light;
-
+			// --- State information 
+			MeshType m_type;
+			static float s_availableTextureID;
 			float m_availableShapeID;
 			int m_indicesMaxValue;
-			static float s_availableTextureID;
-
 			unsigned int m_shapesCount;
-			unsigned int m_shapesDrawn;
 			bool m_onlyCubeMaps = false;
 
 		public:
@@ -54,14 +52,9 @@ namespace mar {
 			void loadScene(Scene* scene, MeshType type);
 
 			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture);
-			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces);
-
 			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture);
-			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const std::vector<const char*>& faces);
-
 			void flushShape(const unsigned int& index);
 
-			void resetDraw();
 			void update();
 
 			void clearBuffers();
@@ -70,22 +63,27 @@ namespace mar {
 			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
 
 		private:
-			void reuse(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
-			void submit(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle);
-
 			void pushShape(Ref<Shape>& new_shape);
 			void pushTexture(Ref<Shape>& new_shape, const char* texture);
-			void pushCubeMap(Ref<Shape>& new_shape, const std::vector<const char*>& faces);
 
 			void popShape(const unsigned int& index);
 			void popMatrices(const unsigned int& index);
+
+			bool checkIfCubemap(const char* withwhat, const char* what) {
+				int l1 = strlen(withwhat);
+				int l2 = strlen(what);
+
+				if (l1 > l2)
+					return false;
+
+				return std::strcmp(withwhat, what + (l2 - l1)) == 0;
+			}
 
 		public:
 			/// --- GET METHODS --- ///
 			inline const MeshType& getMeshType() const { return m_type; }
 
 			inline const Ref<Shape>& getShape(const unsigned int& index) const { return m_shapes[index]; }
-			inline const unsigned int& getShapesDrawn() const { return m_shapesDrawn; }
 			inline const unsigned int& getShapesCount() const { return m_shapesCount; }
 
 			inline const Ref<Texture>& getTexture() const { return m_texture; }
