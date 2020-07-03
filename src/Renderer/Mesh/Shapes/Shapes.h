@@ -54,47 +54,35 @@ namespace mar {
 			void assignDataFromFile(const char* path);
 
 			// --- GET METHODS --- //
-			const char* getName() const;
-			const std::string& getUsedTexture() const { return m_usedTexture; }
-			const std::string& getUsedObj() const { return m_usedOBJ; }
-			const float getID() const;
-			const float getTextureID() const;
-			glm::vec3& getCenter();
-			glm::vec3& getAngle();
-			glm::vec3& getScale() { return m_scale; }
-			glm::vec3& getDefaultColor();
+			inline const char* getName() const { return m_name; }
+			inline const std::string& getUsedTexture() const { return m_usedTexture; }
+			inline const std::string& getUsedObj() const { return m_usedOBJ; }
+			inline const float getID() const { return m_id; }
+			inline const float getTextureID() const { return m_texid; }
+			inline glm::vec3& getCenter() { return m_center; }
+			inline glm::vec3& getAngle() { return m_angle; }
+			inline glm::vec3& getScale() { return m_scale; }
+			inline glm::vec3& getDefaultColor() { return m_defaultColor; }
 			const unsigned int getStride();
-			const unsigned int getSizeofVertices() const;
-			const unsigned int getSizeofIndices() const;
-			const unsigned int& getMaxValueOfIndices() const;
-			const unsigned int& getMinValueOfIndices() const;
-			const std::vector<float>& getVerticesVector() const;
-			float getVertice(size_t index) const;
-			std::vector<float>::const_iterator getVerticesBegin() const;
-			std::vector<float>::const_iterator getVerticesEnd() const;
-			const std::vector<unsigned int>& getIndicesVector() const;
-			unsigned int getIndice(size_t index) const;
-			std::vector<unsigned int>::const_iterator getIndicesBegin() const;
-			std::vector<unsigned int>::const_iterator getIndicesEnd() const;
-			const std::vector<unsigned int>& getLayoutVector() const;
-			unsigned int getLayout(size_t index) const;
-			unsigned int getLayoutSize() const;
+			inline const std::vector<float>& getVertices() const { return m_verticesVector; }
+			inline const std::vector<unsigned int>& getIndices() const { return m_indicesVector; }
+			inline const std::vector<unsigned int>& getLayout() const { return m_layout; }
 
 			// --- SET METHODS --- //
-			void setName(const char* new_name);
+			void setName(const char* new_name) { m_name = new_name; }
 			void setUsedTexture(std::string used_tex) { m_usedTexture = used_tex; }
 			void setUsedObj(std::string used_obj) { m_usedOBJ = used_obj; }
-			void setID(float newID);
-			void setTextureID(float newID);
-			void setCenter(const glm::vec3& new_center);
-			void setAngle(const glm::vec3& new_angle);
+			void setID(float new_id) { m_id = new_id; }
+			void setTextureID(float new_tex_id) { m_texid = new_tex_id; }
+			void setCenter(const glm::vec3& new_center) { m_center = new_center; }
+			void setAngle(const glm::vec3& new_angle) { m_angle = new_angle; }
 			void setScale(const glm::vec3& new_scale) { m_scale = new_scale; }
-			void setDefaultColor(const glm::vec3& new_color);
-			void setVerticesVector(const std::vector<float>& new_vertices);
-			void setVertice(size_t index, float new_value);
-			void setIndicesVector(const std::vector<unsigned int>& new_indices);
-			void setIndice(size_t index, unsigned int new_value);
-			void setLayout(const std::vector<unsigned int>& new_layout);
+			void setDefaultColor(const glm::vec3& new_color) { m_defaultColor = new_color; }
+			void setVertices(const std::vector<float>& new_vertices) { m_verticesVector = new_vertices; }
+			void setVertice(size_t index, float new_value) { m_verticesVector[index] = new_value; }
+			void setIndices(const std::vector<unsigned int>& new_indices) { m_indicesVector = new_indices; }
+			void setIndice(size_t index, unsigned int new_value) { m_indicesVector[index] = new_value; }
+			void setLayout(const std::vector<unsigned int>& new_layout) { m_layout = new_layout; }
 			
 		};
 

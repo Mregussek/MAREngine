@@ -87,7 +87,6 @@ namespace mar {
 				pushShape(new_shape);
 
 				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
-				m_shapes[m_shapesCount]->setUsedTexture(texture);
 
 				m_shapesCount++;
 
@@ -148,7 +147,7 @@ namespace mar {
 			m_availableShapeID++;
 
 			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
-			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
+			m_indicesMaxValue += new_shape->getVertices().size() / new_shape->getStride();
 		}
 
 		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale) {
@@ -177,11 +176,12 @@ namespace mar {
 		}
 
 		void Mesh::popShape(const unsigned int& index) {
-			unsigned int min_value = m_shapes[index]->getMinValueOfIndices();
-			unsigned int max_value = m_shapes[index]->getMaxValueOfIndices();
+			const auto& vec = m_shapes[index]->getIndices();
+			unsigned int min_value = *std::min_element(vec.begin(), vec.end());
+			unsigned int max_value = *std::max_element(vec.begin(), vec.end());
 			int diff = (-1) * (max_value - min_value + 1);
 
-			m_indicesMaxValue -= m_shapes[index]->getSizeofVertices() / m_shapes[index]->getStride();
+			m_indicesMaxValue -= m_shapes[index]->getVertices().size() / m_shapes[index]->getStride();
 
 			for (unsigned int i = index; i < m_shapesCount - 1; i++) {
 				float save_tex_id = m_shapes[i + 1]->getTextureID();
@@ -212,14 +212,14 @@ namespace mar {
 		void Mesh::update() {
 			for (unsigned int i = 0; i < m_shapesCount; i++) {
 
-				unsigned int currentVerticesSize = m_vertices.size() + m_shapes[i]->getSizeofVertices();
-				unsigned int currentIndicesSize = m_indices.size() + m_shapes[i]->getSizeofIndices();
+				unsigned int currentVerticesSize = m_vertices.size() + m_shapes[i]->getVertices().size();
+				unsigned int currentIndicesSize = m_indices.size() + m_shapes[i]->getIndices().size();
 
 				if (currentVerticesSize <= constants::maxVertexCount && currentIndicesSize <= constants::maxIndexCount) {
-					auto beginVert = m_shapes[i]->getVerticesBegin();
-					auto endVert = m_shapes[i]->getVerticesEnd();
-					auto beginIndices = m_shapes[i]->getIndicesBegin();
-					auto endIndices = m_shapes[i]->getIndicesEnd();
+					auto beginVert = m_shapes[i]->getVertices().begin();
+					auto endVert = m_shapes[i]->getVertices().end();
+					auto beginIndices = m_shapes[i]->getIndices().begin();
+					auto endIndices = m_shapes[i]->getIndices().end();
 					
 					m_vertices.insert(m_vertices.end(), beginVert, endVert);
 					m_indices.insert(m_indices.end(), beginIndices, endIndices);

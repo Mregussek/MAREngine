@@ -92,7 +92,7 @@ namespace mar {
 			inline const std::vector<float>& getVertices() const { return m_vertices; }
 			inline const std::vector<unsigned int>& getIndices() const { return m_indices; }
 			inline const std::vector<int>& getSamplers() const { return m_samplers; }
-			inline const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayoutVector(); }
+			inline const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayout(); }
 
 			inline const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
 			inline const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }

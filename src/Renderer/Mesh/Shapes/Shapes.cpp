@@ -17,7 +17,7 @@ namespace mar {
 			m_name(new_name),
 			m_center(new_center),
 			m_angle(new_angle),
-			m_scale({1.f, 1.f, 1.f}),
+			m_scale({ 1.f, 1.f, 1.f }),
 			m_defaultColor(new_color),
 			m_verticesVector(new_vertices),
 			m_indicesVector(new_indices),
@@ -34,9 +34,9 @@ namespace mar {
 			m_angle(shape->getAngle()),
 			m_scale(shape->getScale()),
 			m_defaultColor(shape->getDefaultColor()),
-			m_verticesVector(shape->getVerticesVector()),
-			m_indicesVector(shape->getIndicesVector()),
-			m_layout(shape->getLayoutVector()),
+			m_verticesVector(shape->getVertices()),
+			m_indicesVector(shape->getIndices()),
+			m_layout(shape->getLayout()),
 			m_calculatedStride(false),
 			m_stride(0)
 		{}
@@ -68,70 +68,6 @@ namespace mar {
 
 			return m_stride;
 		}
-
-		const char* Shape::getName() const { return m_name; }
-
-		void Shape:: setName(const char* new_name) { m_name = new_name; }
-
-		void Shape::setID(float newID) { m_id = newID; }
-
-		const float Shape::getID() const { return m_id; }
-
-		void Shape::setTextureID(float newID) { m_texid = newID; }
-
-		const float Shape::getTextureID() const { return m_texid; }
-
-		glm::vec3& Shape::getCenter() { return m_center; }
-
-		void Shape::setCenter(const glm::vec3& new_center) { m_center = new_center; }
-
-		glm::vec3& Shape::getAngle() { return m_angle; }
-
-		void Shape::setAngle(const glm::vec3& new_angle) { m_angle = new_angle; }
-
-		glm::vec3& Shape::getDefaultColor() { return m_defaultColor; }
-
-		void Shape::setDefaultColor(const glm::vec3& new_color) { m_defaultColor = new_color; }
-
-		const unsigned int Shape::getSizeofVertices() const { return m_verticesVector.size(); }
-
-		const unsigned int Shape::getSizeofIndices() const { return m_indicesVector.size(); }
-
-		const unsigned int& Shape::getMaxValueOfIndices() const { return *std::max_element(m_indicesVector.begin(), m_indicesVector.end()); }
-
-		const unsigned int& Shape::getMinValueOfIndices() const { return *std::min_element(m_indicesVector.begin(), m_indicesVector.end()); }
-
-		void Shape::setVerticesVector(const std::vector<float>& new_vertices) { m_verticesVector = new_vertices; }
-
-		const std::vector<float>& Shape::getVerticesVector() const { return m_verticesVector; }
-
-		float Shape::getVertice(size_t index) const { return m_verticesVector[index]; }
-
-		void Shape::setVertice(size_t index, float new_value) { m_verticesVector[index] = new_value; }
-
-		std::vector<float>::const_iterator Shape::getVerticesBegin() const { return m_verticesVector.begin(); }
-
-		std::vector<float>::const_iterator Shape::getVerticesEnd() const { return m_verticesVector.end(); }
-
-		void Shape::setIndicesVector(const std::vector<unsigned int>& new_indices) { m_indicesVector = new_indices; }
-
-		const std::vector<unsigned int>& Shape::getIndicesVector() const { return m_indicesVector; }
-
-		unsigned int Shape::getIndice(size_t index) const { return m_indicesVector[index]; }
-
-		void Shape::setIndice(size_t index, unsigned int new_value) { m_indicesVector[index] = new_value; }
-
-		std::vector<unsigned int>::const_iterator Shape::getIndicesBegin() const { return m_indicesVector.begin(); }
-
-		std::vector<unsigned int>::const_iterator Shape::getIndicesEnd() const { return m_indicesVector.end(); }
-
-		const std::vector<unsigned int>& Shape::getLayoutVector() const { return m_layout; }
-
-		void Shape::setLayout(const std::vector<unsigned int>& new_layout) { m_layout = new_layout; }
-
-		unsigned int Shape::getLayout(size_t index) const { return m_layout[index]; }
-
-		unsigned int Shape::getLayoutSize() const { return m_layout.size(); }
 
 
 } }

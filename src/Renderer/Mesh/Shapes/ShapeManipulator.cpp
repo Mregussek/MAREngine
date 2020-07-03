@@ -10,7 +10,7 @@ namespace mar {
 
 
 		void ShapeManipulator::extendShapeID(Ref<Shape>& shape, const float& nextID) {
-			unsigned int size = shape->getSizeofVertices();
+			unsigned int size = shape->getVertices().size();
 			unsigned int stride = shape->getStride();
 
 			// extend all vertices, which defines texture m_id
@@ -21,7 +21,7 @@ namespace mar {
 		}
 
 		void ShapeManipulator::extendTextureID(Ref<Shape>& shape, const float& nextID) {
-			unsigned int size = shape->getSizeofVertices();
+			unsigned int size = shape->getVertices().size();
 			unsigned int stride = shape->getStride();
 
 			// extend all vertices, which defines texture m_id
@@ -34,8 +34,8 @@ namespace mar {
 		void ShapeManipulator::changeIndicesFormat(Ref<Shape>& shape, int& max_value) {
 			if (max_value == 0) return;
 
-			std::vector<unsigned int> new_indices = changeIndicesFormat(shape->getSizeofIndices(), max_value, shape->getIndicesVector());
-			shape->setIndicesVector(new_indices);
+			std::vector<unsigned int> new_indices = changeIndicesFormat(shape->getIndices().size(), max_value, shape->getIndices());
+			shape->setIndices(new_indices);
 		}
 
 		std::vector<unsigned int> ShapeManipulator::changeIndicesFormat(const unsigned int& size, int& max_value,
