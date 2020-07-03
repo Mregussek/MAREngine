@@ -124,40 +124,56 @@ namespace mar {
 			std::cout << "vertex pos: " << vertex_positions.size() << std::endl;
 			std::cout << "vertex texcoords: " << vertex_texcoords.size() << std::endl;
 
+			/**/
+			if(!vertex_normals.empty())
+				for (unsigned int i = 0; i < indices.size(); i += 3) {
+					unsigned int a = indices[i];
+					unsigned int b = indices[i + 1];
+					unsigned int c = indices[i + 2];
+
+					if (a >= vertex_positions.size() || b >= vertex_positions.size() ||
+						c >= vertex_positions.size()) break;
+
+					if (a >= vertex_normals.size() || b >= vertex_normals.size() ||
+						c >= vertex_normals.size()) break;
+
+					glm::vec3 U = vertex_positions[b] - vertex_positions[a];
+					glm::vec3 V = vertex_positions[c] - vertex_positions[a];
+
+					glm::vec3 normal = glm::normalize(glm::cross(U, V));
+
+					vertex_normals[a] = normal;
+					vertex_normals[b] = normal;
+					vertex_normals[c] = normal;
+				}
+
 			s_vertices.clear();
 
-			for (unsigned int i = 0; i < indices.size(); i++) {
-				if (!vertex_normals.empty()) {
-					s_vertices.push_back(vertex_positions[indices[i]].x);
-					s_vertices.push_back(vertex_positions[indices[i]].y);
-					s_vertices.push_back(vertex_positions[indices[i]].z);
+			for (unsigned int i = 0; i < vertex_positions.size(); i++) {
+				s_vertices.push_back(vertex_positions[i].x);
+				s_vertices.push_back(vertex_positions[i].y);
+				s_vertices.push_back(vertex_positions[i].z);
 
-					s_vertices.push_back(vertex_normals[normal_indices[i]].x);
-					s_vertices.push_back(vertex_normals[normal_indices[i]].y);
-					s_vertices.push_back(vertex_normals[normal_indices[i]].z);
+				if (i < vertex_normals.size()) {
+					s_vertices.push_back(vertex_normals[i].x);
+					s_vertices.push_back(vertex_normals[i].y);
+					s_vertices.push_back(vertex_normals[i].z);
 				}
 				else {
-					if (vertex_positions.size() == i) 
-						break;
-						
-					s_vertices.push_back(vertex_positions[i].x / scale);
-					s_vertices.push_back(vertex_positions[i].y / scale);
-					s_vertices.push_back(vertex_positions[i].z / scale);
-
 					s_vertices.push_back(light_normal[0]);
 					s_vertices.push_back(light_normal[1]);
 					s_vertices.push_back(light_normal[2]);
 				}
-
-				if (!vertex_texcoords.empty()) {
-					s_vertices.push_back(vertex_texcoords[texcoord_indices[i]].x);
-					s_vertices.push_back(vertex_texcoords[texcoord_indices[i]].y);
+				
+				if (i < vertex_texcoords.size()) {
+					s_vertices.push_back(vertex_texcoords[i].x);
+					s_vertices.push_back(vertex_texcoords[i].y);
 				}
 				else {
 					s_vertices.push_back(tex_coords[0]);
 					s_vertices.push_back(tex_coords[1]);
 				}
-
+				
 				s_vertices.push_back(s_texid);
 				s_vertices.push_back(s_id);
 			}

@@ -119,13 +119,13 @@ namespace mar {
 			};
 			m_centers = {
 				{  0.0f, -1.8f, -2.0f } ,
-				{  2.0f, -1.8f, -2.0f } ,
+				{  0.0f, -2.8f, -5.0f } ,
 				{ -2.0f,  0.0f,  1.0f } 
 			};
 			m_angles = {
 				{ 270.f,  0.f, 90.f } ,
-				{ 270.f,  0.f,  0.f } ,
-				{ 270.f,  0.f, 90.f }
+				{   0.f,  0.f,  0.f } ,
+				{ 270.f,  0.f,  0.f }
 			};
 			m_textures = {
 				"empty" ,
@@ -134,8 +134,8 @@ namespace mar {
 			};
 			m_obj = {
 				"resources/objects/lego-human.obj" 
-				, "resources/objects/lego-human.obj" 
-				, "resources/objects/low_poly_tree_triangles.obj"
+				, "resources/objects/m4.obj" 
+				, "resources/objects/monkey.obj"
 			};
 		}
 
