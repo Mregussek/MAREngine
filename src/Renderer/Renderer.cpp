@@ -106,12 +106,14 @@ namespace mar {
 				mesh->clearMatrices();
 
 				for (unsigned int i = 0; i < mesh->getShapesCount(); i++) {
-					mesh->pushMatrices(mesh->getShape(i)->getCenter(), mesh->getShape(i)->getAngle());
+					mesh->pushMatrices(mesh->getShape(i)->getCenter(), mesh->getShape(i)->getAngle(), 
+						mesh->getShape(i)->getScale());
 				}
 			}
 
 			m_mainShader->setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
 			m_mainShader->setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
+			m_mainShader->setUniformVectorMat4("u_SeperateScale", mesh->getScaleMatrices());
 			m_mainShader->setUniformVectorVec3("u_SeparateColor", mesh->getColors());
 		}
 

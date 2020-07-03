@@ -319,10 +319,11 @@ namespace mar {
 
 				if (m_meshIndex != -1 && m_shapeIndex != -1) {
 					const char* shape = "Shape";
-					const char* shape_trans = "Translate Shape";
-					const char* shape_rot = "Rotate Shape";
+					const char* shape_trans = "\nTranslate Shape\n";
+					const char* shape_rot = "\nRotate Shape\n";
+					const char* shape_scale = "\nScale Shape\n";
+					const char* general_scale = "General Scale\n";
 					const char* delete_shape = "Delete Shape";
-
 					const char* x_trans = "X translation";
 					const char* y_trans = "Y translation";
 					const char* z_trans = "Z translation";
@@ -333,6 +334,7 @@ namespace mar {
 
 					glm::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
 					glm::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
+					glm::vec3& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScale();
 
 					ImGui::Text(shape);
 					ImGui::Separator();
@@ -347,6 +349,15 @@ namespace mar {
 					ImGui::SliderFloat(x_rot, &angle.x, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::SliderFloat(y_rot, &angle.y, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::SliderFloat(z_rot, &angle.z, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::Separator();
+
+					ImGui::Text(shape_scale);
+					m_generalScale = scale.x;
+					ImGui::SliderFloat(general_scale, &m_generalScale, 0.f, 2.f, "%.2f", 1.f);
+					scale.x = m_generalScale;
+					scale.y = m_generalScale;
+					scale.z = m_generalScale;
+
 					ImGui::Separator();
 
 					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS) {
@@ -403,32 +414,36 @@ namespace mar {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 
 				if (ImGui::Button("Select Cube")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 
 				if (ImGui::Button("Select Surface")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 
 				if (ImGui::Button("Select Wall")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
 				}
 			}
 			else {

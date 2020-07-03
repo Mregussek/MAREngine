@@ -18,6 +18,7 @@ namespace mar {
             static std::vector<unsigned int> s_layout;
             static glm::vec3 s_center;
             static glm::vec3 s_angle;
+            static glm::vec3 s_scale;
             static glm::vec3 s_defaultcolor;
             static float s_id;
             static float s_texid;
@@ -34,6 +35,7 @@ namespace mar {
             inline static float getTextureID() { return s_texid; }
             inline static glm::vec3 getCenter() { return s_center; }
             inline static glm::vec3 getAngle() { return s_angle; }
+            inline static glm::vec3 getScale() { return s_scale; }
             inline static glm::vec3 getColor() { return s_defaultcolor; }
         };
 

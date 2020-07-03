@@ -32,6 +32,7 @@ namespace mar {
 
 			glm::vec3 m_center;
 			glm::vec3 m_angle;
+			glm::vec3 m_scale;
 			glm::vec3 m_defaultColor;
 
 			std::vector<float> m_verticesVector;
@@ -60,6 +61,7 @@ namespace mar {
 			const float getTextureID() const;
 			glm::vec3& getCenter();
 			glm::vec3& getAngle();
+			glm::vec3& getScale() { return m_scale; }
 			glm::vec3& getDefaultColor();
 			const unsigned int getStride();
 			const unsigned int getSizeofVertices() const;
@@ -86,6 +88,7 @@ namespace mar {
 			void setTextureID(float newID);
 			void setCenter(const glm::vec3& new_center);
 			void setAngle(const glm::vec3& new_angle);
+			void setScale(const glm::vec3& new_scale) { m_scale = new_scale; }
 			void setDefaultColor(const glm::vec3& new_color);
 			void setVerticesVector(const std::vector<float>& new_vertices);
 			void setVertice(size_t index, float new_value);

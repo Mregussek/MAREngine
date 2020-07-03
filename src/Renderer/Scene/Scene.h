@@ -29,6 +29,7 @@ namespace mar {
 			std::vector<Ref<Shape>> m_shapes;
 			std::vector<glm::vec3> m_centers;
 			std::vector<glm::vec3> m_angles;
+			std::vector<glm::vec3> m_scales;
 			std::vector<const char*> m_textures;
 			std::vector<const char*> m_obj;
 
@@ -58,6 +59,7 @@ namespace mar {
 			inline std::vector<Ref<Shape>> getShapes() { return m_shapes; }
 			inline std::vector<glm::vec3> getCenters() { return m_centers; }
 			inline std::vector<glm::vec3> getAngles() { return m_angles; }
+			inline std::vector<glm::vec3> getScales() { return m_scales; }
 			inline std::vector<const char*> getTextures() { return m_textures; }
 			inline std::vector<const char*> getObjPaths() { return m_obj; }
 
@@ -66,6 +68,7 @@ namespace mar {
 			inline Ref<Shape>& getShape(const unsigned int& index) { return m_shapes[index]; }
 			inline glm::vec3& getCenter(const unsigned int& index) { return m_centers[index]; }
 			inline glm::vec3& getAngle(const unsigned int& index) { return m_angles[index]; }
+			inline glm::vec3& getScale(const unsigned int& index) { return m_scales[index]; }
 			inline const char* getTexture(const unsigned int& index) { return m_textures[index]; }
 			inline const char* getObjPath(const unsigned int& index) { return m_obj[index]; }
 		};

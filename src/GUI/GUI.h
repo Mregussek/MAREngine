@@ -44,6 +44,7 @@ namespace mar {
 			glm::vec3 m_sceneAngle{ 0.0f, 0.0f, 0.0f };
 			float m_sceneColors[4];
 			float m_inputCenter[3];
+			float m_generalScale{ 1.f };
 			char m_inputStr[20];
 			// --- Run-time GUI attributes
 			std::vector<graphics::Mesh*> m_meshes;

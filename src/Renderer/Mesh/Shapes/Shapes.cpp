@@ -17,6 +17,7 @@ namespace mar {
 			m_name(new_name),
 			m_center(new_center),
 			m_angle(new_angle),
+			m_scale({1.f, 1.f, 1.f}),
 			m_defaultColor(new_color),
 			m_verticesVector(new_vertices),
 			m_indicesVector(new_indices),
@@ -31,6 +32,7 @@ namespace mar {
 			m_name(shape->getName()),
 			m_center(shape->getCenter()),
 			m_angle(shape->getAngle()),
+			m_scale(shape->getScale()),
 			m_defaultColor(shape->getDefaultColor()),
 			m_verticesVector(shape->getVerticesVector()),
 			m_indicesVector(shape->getIndicesVector()),
@@ -50,6 +52,7 @@ namespace mar {
 			m_angle = objects::ObjectLoader::getAngle();
 			m_id = objects::ObjectLoader::getID();
 			m_texid = (float)objects::ObjectLoader::getTextureID();
+			m_scale = objects::ObjectLoader::getScale();
 			m_defaultColor = objects::ObjectLoader::getColor();
 			m_usedOBJ = path;
 

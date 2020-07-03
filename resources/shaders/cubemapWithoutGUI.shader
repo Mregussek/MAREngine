@@ -18,11 +18,12 @@ uniform mat4 u_View;
 uniform mat4 u_Projection;
 uniform mat4 u_SeperateTranslate[32];
 uniform mat4 u_SeperateRotation[32];
+uniform mat4 u_SeperateScale[32];
 
 void main() {
 	// Calculate all transformations
 	int index = int(shapeIndex);
-	mat4 renderTrans = u_SeperateTranslate[index] * u_SeperateRotation[index];
+	mat4 renderTrans = u_SeperateTranslate[index] * u_SeperateRotation[index] * u_SeperateScale[index];
 
 	mat4 MVP = u_Projection * u_View * u_Model;
 

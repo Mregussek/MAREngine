@@ -33,6 +33,7 @@ namespace mar {
 			std::vector<int> m_samplers;
 			std::vector<glm::mat4> m_translationMats;
 			std::vector<glm::mat4> m_rotationMats;
+			std::vector<glm::mat4> m_scaleMats;
 			std::vector<glm::vec3> m_colors;
 			// --- Light object
 			Light m_light;
@@ -51,8 +52,8 @@ namespace mar {
 			void createMesh(const Ref<RendererFactory>& factory);
 			void loadScene(Scene* scene, MeshType type);
 
-			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture);
-			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture);
+			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture);
+			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture);
 			void flushShape(const unsigned int& index);
 
 			void update();
@@ -60,7 +61,7 @@ namespace mar {
 			void clearBuffers();
 			void clearMatrices();
 
-			void pushMatrices(const glm::vec3& center, const glm::vec3& angle);
+			void pushMatrices(const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale);
 
 		private:
 			void pushShape(Ref<Shape>& new_shape);
@@ -95,6 +96,7 @@ namespace mar {
 
 			inline const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
 			inline const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
+			inline const std::vector<glm::mat4>& getScaleMatrices() const { return m_scaleMats; }
 			inline const std::vector<glm::vec3>& getColors() const { return m_colors; }
 
 			inline Light& getLight() { return m_light; }

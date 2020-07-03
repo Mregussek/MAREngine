@@ -43,6 +43,17 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 90.0f, 0.0f }
 			};
+			m_scales = {
+				{ 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+			};
 			m_textures = {
 				"empty"
 				, TexturePaths::mrTex
@@ -96,6 +107,19 @@ namespace mar {
 				 , { 0.0f, 0.0f, 0.0f }
 				 , { 0.0f, 0.0f, 0.0f }
 			};
+			m_scales = {
+				{ 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 1.0f, 1.0f, 1.0f }
+			};
 			m_textures = {
 				TexturePaths::mc_grass ,
 				TexturePaths::mc_grass ,
@@ -119,13 +143,18 @@ namespace mar {
 			};
 			m_centers = {
 				{  0.0f, -1.8f, -2.0f } ,
-				{  0.0f, -2.8f, -5.0f } ,
-				{ -2.0f,  0.0f,  1.0f } 
+				{ -2.0f,  0.0f,  1.0f } ,
+				{  -8.0f, -2.8f, -8.0f }
 			};
 			m_angles = {
 				{ 270.f,  0.f, 90.f } ,
-				{   0.f,  0.f,  0.f } ,
-				{ 270.f,  0.f,  0.f }
+				{ 270.f,  0.f,  0.f } ,
+				{   0.f,  90.f,  0.f }
+			};
+			m_scales = {
+				{ 0.3f, 0.3f, 0.3f }
+				, { 1.0f, 1.0f, 1.0f }
+				, { 0.5f, 0.5f, 0.5f }
 			};
 			m_textures = {
 				"empty" ,
@@ -134,8 +163,8 @@ namespace mar {
 			};
 			m_obj = {
 				"resources/objects/lego-human.obj" 
-				, "resources/objects/m4.obj" 
-				, "resources/objects/monkey.obj"
+				, "resources/objects/monkey.obj" 
+				, "resources/objects/m4.obj"
 			};
 		}
 

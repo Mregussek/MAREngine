@@ -35,6 +35,7 @@ namespace mar {
 			m_vertices = std::vector<float>();
 			m_indices = std::vector<unsigned int>();
 			m_samplers = std::vector<int>();
+			m_scaleMats = std::vector<glm::mat4>();
 			m_translationMats = std::vector<glm::mat4>();
 			m_rotationMats = std::vector<glm::mat4>();
 
@@ -55,7 +56,8 @@ namespace mar {
 			case MeshType::NORMAL:
 			case MeshType::CUBEMAPS:
 				for (unsigned int i = 0; i < shapesInSceneCount; i++)
-					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
+					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), 
+						scene->getScale(i), scene->getTexture(i));
 
 				MAR_CORE_INFO("Scene has been loaded by textures!");
 
@@ -65,7 +67,8 @@ namespace mar {
 					auto shape = scene->getShape(i);
 					shape->assignDataFromFile(scene->getObjPath(i));
 
-					submitShape(shape, scene->getCenter(i), scene->getAngle(i), scene->getTexture(i));
+					submitShape(shape, scene->getCenter(i), scene->getAngle(i), 
+						scene->getScale(i), scene->getTexture(i));
 				}
 					
 				MAR_CORE_INFO("Scene has been loaded by objects!");
@@ -74,12 +77,13 @@ namespace mar {
 			}
 		}
 
-		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture) {
+		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture) {
 			if (m_shapes.size() != m_shapesCount) {
 				new_shape->setCenter(center);
 				new_shape->setAngle(angle);
+				new_shape->setScale(scale);
 				pushTexture(new_shape, texture);
-				pushMatrices(center, angle);
+				pushMatrices(center, angle, scale);
 				pushShape(new_shape);
 
 				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
@@ -92,10 +96,10 @@ namespace mar {
 				return;
 			}
 
-			submitShape(new_shape, center, angle, texture);
+			submitShape(new_shape, center, angle, scale, texture);
 		}
 
-		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const char* texture) {
+		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture) {
 			if (m_shapesCount == constants::maxObjectsInScene - 1) {
 				MAR_CORE_ERROR("Cannot push more objects!");
 				return;
@@ -103,9 +107,10 @@ namespace mar {
 			
 			new_shape->setCenter(center);
 			new_shape->setAngle(angle);
+			new_shape->setScale(scale);
 			pushTexture(new_shape, texture);
 			pushShape(new_shape);
-			pushMatrices(center, angle);
+			pushMatrices(center, angle, scale);
 
 			m_shapes.push_back(new_shape);
 			m_shapes[m_shapesCount]->setUsedTexture(texture);
@@ -146,7 +151,7 @@ namespace mar {
 			m_indicesMaxValue += new_shape->getSizeofVertices() / new_shape->getStride();
 		}
 
-		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle) {
+		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale) {
 			m_translationMats.push_back(glm::translate(glm::mat4(1.0f), center));
 
 			glm::mat4 transform =
@@ -155,6 +160,8 @@ namespace mar {
 				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
 			m_rotationMats.push_back(transform);
+
+			m_scaleMats.push_back(glm::scale(glm::mat4(1.0f), scale));
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {
@@ -199,6 +206,7 @@ namespace mar {
 		void Mesh::popMatrices(const unsigned int& index) {
 			m_translationMats.erase(m_translationMats.begin() + index);
 			m_rotationMats.erase(m_rotationMats.begin() + index);
+			m_scaleMats.erase(m_scaleMats.begin() + index);
 		}
 
 		void Mesh::update() {
@@ -232,6 +240,7 @@ namespace mar {
 		void Mesh::clearMatrices() {
 			m_translationMats.clear();
 			m_rotationMats.clear();
+			m_scaleMats.clear();
 		}
 
 

@@ -61,6 +61,7 @@ namespace mar {
 					auto shape = meshes[i]->getShape(j);
 					auto center = shape->getCenter();
 					auto angle = shape->getAngle();
+					auto scale = shape->getScale();
 					auto color = shape->getDefaultColor();
 
 					ss << "#shape_id " + std::to_string(j) << std::endl;
@@ -69,6 +70,8 @@ namespace mar {
 						+ " " + std::to_string(center.z) << std::endl;
 					ss << "#shape_angle " + std::to_string(angle.x) + " " + std::to_string(angle.y)
 						+ " " + std::to_string(angle.z) << std::endl;
+					ss << "#shape_scale " + std::to_string(scale.x) + " " + std::to_string(scale.y)
+						+ " " + std::to_string(scale.z) << std::endl;
 					ss << "#shape_color " + std::to_string(color.x) + " " + std::to_string(color.y)
 						+ " " + std::to_string(color.z) << std::endl;
 					ss << "#shape_texture " << shape->getUsedTexture() << std::endl;
@@ -112,6 +115,7 @@ namespace mar {
 			std::vector<std::vector<Ref<graphics::Shape>>> shapes;
 			std::vector<std::vector<glm::vec3>> centers;
 			std::vector<std::vector<glm::vec3>> angles;
+			std::vector<std::vector<glm::vec3>> scales;
 			std::vector<std::vector<glm::vec3>> colors;
 			std::vector<std::vector<std::string>> textures;
 			std::vector<std::vector<std::string>> objs;
@@ -124,6 +128,7 @@ namespace mar {
 					shapes.push_back(std::vector<Ref<graphics::Shape>>());
 					centers.push_back(std::vector<glm::vec3>());
 					angles.push_back(std::vector<glm::vec3>());
+					scales.push_back(std::vector<glm::vec3>());
 					colors.push_back(std::vector<glm::vec3>());
 					textures.push_back(std::vector<std::string>());
 					objs.push_back(std::vector<std::string>());
@@ -162,6 +167,11 @@ namespace mar {
 					std::istringstream ss(line.substr(13));
 					ss >> input[0] >> input[1] >> input[2];
 					angles[mesh_count].push_back({ input[0], input[1], input[2] });
+				}
+				else if (line.find("#shape_scale") != std::string::npos) {
+					std::istringstream ss(line.substr(13));
+					ss >> input[0] >> input[1] >> input[2];
+					scales[mesh_count].push_back({ input[0], input[1], input[2] });
 				}
 				else if (line.find("#shape_color") != std::string::npos) {
 					std::istringstream ss(line.substr(13));
@@ -236,7 +246,7 @@ namespace mar {
 						}
 
 						shapes[i][j]->setDefaultColor(colors[i][j]);
-						layer->getMesh()->submitShape(shapes[i][j], centers[i][j], angles[i][j], textures[i][j].c_str());
+						layer->getMesh()->submitShape(shapes[i][j], centers[i][j], angles[i][j], scales[i][j], textures[i][j].c_str());
 					}
 
 					layer->load();

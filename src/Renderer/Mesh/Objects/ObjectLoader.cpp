@@ -16,6 +16,7 @@ namespace mar {
 		std::vector<unsigned int> ObjectLoader::s_layout;
 		glm::vec3 ObjectLoader::s_center;
 		glm::vec3 ObjectLoader::s_angle;
+		glm::vec3 ObjectLoader::s_scale;
 		glm::vec3 ObjectLoader::s_defaultcolor;
 		float ObjectLoader::s_id;
 		float ObjectLoader::s_texid;
@@ -108,23 +109,16 @@ namespace mar {
 			s_defaultcolor = { red, green, blue };
 			float light_normal[]{ 0.0f, 0.0f, 1.0f };
 			float tex_coords[]{ 0.0f, 0.0f };
-			float scale = 4.0f;
 
 			s_indices = indices;
 			s_name = "Object";
 			s_layout = { 3, 3, 2, 1, 1 };
 			s_texid = 0.f;
 			s_id = 0.f;
+			s_scale = { 1.f, 1.f, 1.f };
 			s_center = { 0.0f, 0.0f, 0.0f };
 			s_angle = { 0.f, 0.f, 0.f };
 
-			std::cout << "indices: " << indices.size() << std::endl;
-			std::cout << "normal indices: " << normal_indices.size() << std::endl;
-			std::cout << "vertex normals: " << vertex_normals.size() << std::endl;
-			std::cout << "vertex pos: " << vertex_positions.size() << std::endl;
-			std::cout << "vertex texcoords: " << vertex_texcoords.size() << std::endl;
-
-			/**/
 			if(!vertex_normals.empty())
 				for (unsigned int i = 0; i < indices.size(); i += 3) {
 					unsigned int a = indices[i];
