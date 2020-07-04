@@ -13,10 +13,14 @@ namespace mar {
 
 		void ShaderOpenGL::initialize(ShaderType shadertype) {
 			switch(shadertype) {
-			case ShaderType::DEFAULT: m_shaderPath = ShaderOpenGLSettings.mainPath; break;
-			case ShaderType::WITHOUT_GUI: m_shaderPath = ShaderOpenGLSettings.withoutGUIPath; break;
-			case ShaderType::CUBEMAP: m_shaderPath = ShaderOpenGLSettings.cubemapPath; break;
-			case ShaderType::CUBEMAP_WITHOUT_GUI: m_shaderPath = ShaderOpenGLSettings.cubemapWithoutGuiPath; break;
+			case ShaderType::DEFAULT: m_shaderPath = "resources/shaders/basic.shader";
+				break;
+			case ShaderType::WITHOUT_GUI: m_shaderPath = "resources/shaders/basicWithoutGUI.shader"; 
+				break;
+			case ShaderType::CUBEMAP: m_shaderPath = "resources/shaders/cubemap.shader";
+				break;
+			case ShaderType::CUBEMAP_WITHOUT_GUI: m_shaderPath = "resources/shaders/cubemapWithoutGUI.shader"; 
+				break;
 			}
 
 			m_id = 0;

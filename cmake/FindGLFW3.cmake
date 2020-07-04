@@ -1,15 +1,37 @@
+# Locate the glfw3 library
+#
+# This module defines the following variables:
+#
+# GLFW3_LIBRARY the name of the library;
+# GLFW3_INCLUDE_DIR where to find glfw include files.
+# GLFW3_FOUND true if both the GLFW3_LIBRARY and GLFW3_INCLUDE_DIR have been found.
+#
+# To help locate the library and include file, you can define a
+# variable called GLFW3_ROOT which points to the root of the glfw library
+# installation.
+#
+# default search dirs
+# 
+# Cmake file from: https://github.com/daw42/glslcookbook
 
-# Set search paths
 set( _glfw3_HEADER_SEARCH_DIRS
-		"${CMAKE_SOURCE_DIR}/3rd_party"
-		"${CMAKE_SOURCE_DIR}/3rd_party/GLFW"
-		"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include"
+    "/usr/include"
+    "/usr/local/include"
+    "${CMAKE_SOURCE_DIR}/include"
+    "C:/Program Files (x86)/glfw/include" 
+    "${CMAKE_SOURCE_DIR}/3rd_party"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include"
 )
 
 set( _glfw3_LIB_SEARCH_DIRS
-		"${CMAKE_SOURCE_DIR}/3rd_party"
-		"${CMAKE_SOURCE_DIR}/3rd_party/GLFW"
-		"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019"
+    "/usr/lib"
+    "/usr/local/lib"
+    "${CMAKE_SOURCE_DIR}/lib"
+    "C:/Program Files (x86)/glfw/lib-msvc110" 
+    "${CMAKE_SOURCE_DIR}/3rd_party"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW"
+	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019"
 )
 
 # Check environment for root search directory
