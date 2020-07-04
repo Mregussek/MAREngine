@@ -22,7 +22,9 @@
 
 //! ---- ACTUAL INCLUDES ---- !// 
 // --- Import GLEW lib statically --- //
+#ifndef GLEW_STATIC
 #define GLEW_STATIC
+#endif
 
 // --- Include OpenGL Libs --- //
 #ifdef IMPORT_GLEW

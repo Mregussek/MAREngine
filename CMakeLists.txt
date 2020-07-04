@@ -11,80 +11,150 @@ link_directories(
     ${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
 )
 
-file(GLOB_RECURSE SOURCE_FILES 
-	${CMAKE_SOURCE_DIR}/src/*.c
-	${CMAKE_SOURCE_DIR}/src/*.cpp
-    ${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_glfw.cpp
+set(STB_IMAGE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/stb_image/include")
+set(STB_IMAGE_H "${CMAKE_SOURCE_DIR}/other/stb_image/include/stb_image/stb_image.h")
+set(STB_IMAGE_SRC "${CMAKE_SOURCE_DIR}/other/stb_image/include/stb_image/stb_image.cpp")
+
+set(IMGUI_SOURCES
+	${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_glfw.cpp
     ${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_opengl3.cpp
 	${CMAKE_SOURCE_DIR}/other/imgui/imgui.cpp
 	${CMAKE_SOURCE_DIR}/other/imgui/imgui_demo.cpp
 	${CMAKE_SOURCE_DIR}/other/imgui/imgui_draw.cpp
-	${CMAKE_SOURCE_DIR}/other/imgui/imgui_widgets.cpp
-)
-	
-file(GLOB_RECURSE HEADER_FILES 
-	${CMAKE_SOURCE_DIR}/src/*.h
-	${CMAKE_SOURCE_DIR}/src/*.hpp
-    ${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_opengl3.h
+	${CMAKE_SOURCE_DIR}/other/imgui/imgui_widgets.cpp)
+
+set(IMGUI_HEADERS
+	${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_opengl3.h
     ${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_glfw.h
 	${CMAKE_SOURCE_DIR}/other/imgui/imgui.h
 	${CMAKE_SOURCE_DIR}/other/imgui/imconfig.h
     ${CMAKE_SOURCE_DIR}/other/imgui/imgui_internal.h
     ${CMAKE_SOURCE_DIR}/other/imgui/imstb_rectpack.h
     ${CMAKE_SOURCE_DIR}/other/imgui/imstb_textedit.h
-    ${CMAKE_SOURCE_DIR}/other/imgui/imstb_truetype.h
-)
+    ${CMAKE_SOURCE_DIR}/other/imgui/imstb_truetype.h)
 
-include_directories(
-	"${CMAKE_SOURCE_DIR}/src"
-    "${CMAKE_SOURCE_DIR}/3rd_party/glad/include"
-	"${CMAKE_SOURCE_DIR}/3rd_party/GL/include"
-	"${CMAKE_SOURCE_DIR}/3rd_party/glad/include"
-	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include"
-	"${CMAKE_SOURCE_DIR}/3rd_party/glm"
-	"${CMAKE_SOURCE_DIR}/other/stb_image/include"
-	"${CMAKE_SOURCE_DIR}/other/imgui"
-	"${CMAKE_SOURCE_DIR}/other/serialport/include"
-	"${CMAKE_SOURCE_DIR}/other/spdlog/include"
-)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
+file(GLOB_RECURSE SOURCE_FILES 
+	${CMAKE_SOURCE_DIR}/src/*.c
+	${CMAKE_SOURCE_DIR}/src/*.cpp)
+	
+file(GLOB_RECURSE HEADER_FILES 
+	${CMAKE_SOURCE_DIR}/src/*.h
+	${CMAKE_SOURCE_DIR}/src/*.hpp)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 # OpenGL
 message("Looking for: OpenGL")
 find_package(OpenGL REQUIRED)
+if(OPENGL_FOUND)
+	message(STATUS "OPENGL_INCLUDE_DIR:= ${OPENGL_INCLUDE_DIR}")
+	message(STATUS "OPENGL_gl_LIBRARY:= ${OPENGL_gl_LIBRARY}")
+	message(STATUS "OPENGL_LIBRARY:= ${OPENGL_LIBRARY}")
+	message(STATUS "OPENGL_LIBRARIES:= ${OPENGL_LIBRARIES}")
+else()
+    message("Error: Cannot find OpenGL!")
+endif()
+
+# GLEW
+message("Looking for: GLEW")
+add_definitions(-DGLEW_STATIC)
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/3rd_party/GL")
+find_package(GLEW REQUIRED)
+if (GLEW_FOUND)
+	message(STATUS "GLEW_INCLUDE_DIRS:= ${GLEW_INCLUDE_DIRS}")
+    message(STATUS "GLEW_LIBRARIES:= ${GLEW_LIBRARIES}")
+    message(STATUS "GLEW_STATIC_LIBRARIES:= ${GLEW_STATIC_LIBRARIES}")
+else()
+	message(STATUS "Error: Cannot find GLEW!")
+endif()
 
 # GLM
 message("Looking for: GLM")
 find_package(GLM REQUIRED)
+if(GLM_FOUND)
+	MESSAGE(STATUS "GLM_INCLUDE_DIR = ${GLM_INCLUDE_DIR}")
+else()
+	MESSAGE(STATUS "Error: Cannot find GLM!")
+endif()
 
 # GLFW
 message("Looking for: GLFW")
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 find_package(GLFW3 REQUIRED)
-message(STATUS "Found GLFW3 in ${GLFW3_INCLUDE_DIR}")
+if(GLFW3_FOUND)
+	message(STATUS "GLFW_INDLUCE_DIR:= ${GLFW3_INCLUDE_DIR}")
+	message(STATUS "GLFW3_LIBRARY:= ${GLFW3_LIBRARY}")
+	set(MAR_GLFW_DIR "${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include")
+	message(STATUS "MAR_GLFW_DIR:= ${MAR_GLFW_DIR}")
+else()
+	message(STATUS "Error: Cannot find GLFW3!")
+endif()
 
 # spdlog
 message("Looking for: SPDLOG")
 add_subdirectory(other/spdlog)
-
-# STB_IMAGE
-message("Looking for: STB_IMAGE")
-add_library(STB_IMAGE "${CMAKE_SOURCE_DIR}/other/stb_image/include/stb_image/stb_image.cpp")
+set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/spdlog/include")
+message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
 # GLAD
-message("Looking for: GLAD")
-add_library(GLAD "${CMAKE_SOURCE_DIR}/other/glad/glad.c")
+#message("Looking for: GLAD")
+#add_library(GLAD 
+	#"${CMAKE_SOURCE_DIR}/3rd_party/glad/include/glad/glad.h"
+	#"${CMAKE_SOURCE_DIR}/other/glad/glad.c")
+#set(GLAD_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/glad/include")
+#message(STATUS "GLAD_INCLUDE_DIR:= ${GLAD_INCLUDE_DIR}")
 
-set(LIBS glfw3 opengl32 STB_IMAGE GLAD)
+include_directories(
+	"${CMAKE_SOURCE_DIR}/src"
+	"${CMAKE_SOURCE_DIR}/other/imgui"
+	"${CMAKE_SOURCE_DIR}/other/serialport/include"
+	${GLEW_INCLUDE_DIRS}
+	${GLFW_INDLUCE_DIR}
+	${MAR_GLFW_DIR}
+	${GLM_INCLUDE_DIR}
+	${STB_IMAGE_INCLUDE_DIR}
+	${SPDLOG_INCLUDE_DIR})
 
+# MAREngine
+message("Creating executable...")
+add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} 
+		${IMGUI_SOURCES} ${IMGUI_HEADERS} ${STB_IMAGE_H} ${STB_IMAGE_SRC})
 message("Linking libraries to MAREngine")
-target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)	
+if(WIN32)
+	set(MAR_OPENGL_IMPORT opengl32 glew32s glfw3)
+	target_link_libraries ( ${PROJECT_NAME} PRIVATE ${MAR_OPENGL_IMPORT} )
+endif()
+
+IF(MSVC)
+	SET(VS_MULTITHREADED_DEBUG_DLL_IGNORE_LIBRARY_FLAGS
+	   "/NODEFAULTLIB:libc.lib
+	    /NODEFAULTLIB:libcmt.lib
+	    /NODEFAULTLIB:msvcrt.lib
+	    /NODEFAULTLIB:libcd.lib
+	    /NODEFAULTLIB:libcmtd.lib")
+	SET(VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS
+	   "/NODEFAULTLIB:libc.lib
+	    /NODEFAULTLIB:libcmt.lib
+	    /NODEFAULTLIB:libcd.lib
+	    /NODEFAULTLIB:libcmtd.lib
+	    /NODEFAULTLIB:msvcrtd.lib")
+
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
+       LINK_FLAGS_DEBUG
+       ${VS_MULTITHREADED_DEBUG_DLL_IGNORE_LIBRARY_FLAGS})
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
+        LINK_FLAGS_RELWITHDEBINFO
+        ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS})
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
+        LINK_FLAGS_RELEASE
+        ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS})
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
+        LINK_FLAGS_MINSIZEREL
+        ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS})
+ENDIF(MSVC)
 
 if(MSVC_IDE)
 	# Macro to preserve source files hierarchy in the IDE
@@ -108,7 +178,10 @@ endif()
 
 if(WIN32)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_directory
-		"${PROJECT_SOURCE_DIR}/dlls"
-		$<TARGET_FILE_DIR:${PROJECT_NAME}>)
+		COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources"
+		"$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
+
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/imgui.ini"
+		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 endif()
