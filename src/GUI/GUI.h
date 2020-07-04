@@ -67,15 +67,25 @@ namespace mar {
 
 			void initialize(window::Window* window, const char* glsl_version, bool can_modify_objects);
 			void shutdown();
-			
-			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
 
 			void prepareNewFrame();
 			void display();
 
 			void submitMesh(graphics::Mesh* mesh) { m_meshes.push_back(mesh); }
 
+
+			// --- SET METHODS --- //
+			void setReferences(const graphics::RendererStatistics* stats) { m_statistics = stats; }
+			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
+
+			// --- GET METHODS --- //
+			const glm::mat4 getTranslationMatrix() const;
+			const glm::mat4 getRotationMatrix() const;
+			inline const static GUIData& getGUIData() { return s_guiData; }
+
 		private:
+			void Setup_Theme();
+
 			void File_Open();
 			void File_Save();
 
@@ -86,15 +96,6 @@ namespace mar {
 			void Menu_Statistics();
 			void Menu_Info();
 			void Menu_Instruction();
-
-		public:
-			// --- SET METHODS --- //
-			void setReferences(const graphics::RendererStatistics* stats) { m_statistics = stats; }
-
-			// --- GET METHODS --- //
-			const glm::mat4 getTranslationMatrix() const;
-			const glm::mat4 getRotationMatrix() const;
-			inline const static GUIData& getGUIData() { return s_guiData; }
 		};
 
 
