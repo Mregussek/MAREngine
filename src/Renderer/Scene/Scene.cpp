@@ -140,23 +140,28 @@ namespace mar {
 				MeshCreator::createEmptyShape() 
 				, MeshCreator::createEmptyShape() 
 				, MeshCreator::createEmptyShape() 
+				, MeshCreator::createEmptyShape() 
 			};
 			m_centers = {
 				{  0.0f, -1.8f, -2.0f } ,
 				{ -2.0f,  0.0f,  1.0f } ,
-				{  -8.0f, -2.8f, -8.0f }
+				{ -8.0f, -2.8f, -8.0f } ,
+				{ -6.5f,  0.0f, -4.0f } ,
 			};
 			m_angles = {
-				{ 270.f,  0.f, 90.f } ,
-				{ 270.f,  0.f,  0.f } ,
+				{ 270.f,   0.f, 90.f } ,
+				{ 270.f,   0.f,  0.f } ,
+				{   0.f,  90.f,  0.f } ,
 				{   0.f,  90.f,  0.f }
 			};
 			m_scales = {
 				{ 0.3f, 0.3f, 0.3f }
 				, { 1.0f, 1.0f, 1.0f }
 				, { 0.5f, 0.5f, 0.5f }
+				, { 0.5f, 0.5f, 0.5f }
 			};
 			m_textures = {
+				"empty" ,
 				"empty" ,
 				"empty" ,
 				"empty" 
@@ -165,6 +170,7 @@ namespace mar {
 				"resources/objects/lego-human.obj" 
 				, "resources/objects/monkey.obj" 
 				, "resources/objects/m4.obj"
+				, "resources/objects/deagle.obj"
 			};
 		}
 
