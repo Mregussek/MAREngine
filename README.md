@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="720" height="256" src="img/marengine.jpg">
+  <img width="720" height="350" src="img/marengine.jpg">
 </p>
 
 # MAREngine
