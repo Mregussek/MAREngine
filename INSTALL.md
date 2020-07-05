@@ -34,7 +34,7 @@ git clone --recurse-submodules https://github.com/mregussek/MAREngine.git
 2. Open MAREngine.sln (located in main directory).
 
 <p align="center">
-  <img width="600" height="100" src="img/marenginesln.jpg">
+  <img width="500" height="100" src="img/marenginesln.jpg">
 </p>
 
 3. Make sure, that selected target is x86 (no x64!!!)
