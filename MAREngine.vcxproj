@@ -269,6 +269,8 @@
     <None Include="resources\shaders\cubemapWithoutGUI.shader" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="img\marengine.jpg" />
+    <Image Include="img\marenginesln.jpg" />
     <Image Include="resources\textures\black-texture.jpg" />
     <Image Include="resources\textures\blue-texture.jpg" />
     <Image Include="resources\textures\grass-texture.jpg" />

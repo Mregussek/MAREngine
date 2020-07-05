@@ -346,6 +346,12 @@
     <Image Include="resources\textures\mc\mc-diamond.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="img\marengine.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+    <Image Include="img\marenginesln.jpg">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

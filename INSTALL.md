@@ -1,26 +1,86 @@
 # How to install MAREngine
 
-The version, currently the only one available, is prepared for Windows 10 64-bit. OpenGL libraries (64-bit versions) are downloaded and added by default to linker, so you do not have to download them again. Only dependency is actually this repository.
+The version, currently the only one available, is prepared for Windows 10 32-bit. OpenGL libraries (32-bit versions) are downloaded and added by default to linker, so you do not have to download them again. Only dependency is actually this repository.
 
-## Software
+# Software
 
-- Visual Studio 2019
+The most needed application for MAREngine on Windows is Visual Studio 2019. Through it I am able to compile sources correctly. CMake is also added 
+for future integration with Linux Operating Systems.
 
-I have prepared solution file for Visual Studio 2019, so it will be wise to run this on VS2019. I am using free, community version. It containts everything needed for this project.
+# Dependencies
 
-I will soon write CMake files for Linux version of MAREngine.
-
-## Dependencies
-
-All requirements are added to this repository!
+All requirements are added to this repository! You need to compile sources for your machine!
 
 - OpenGL (4.6.0 used in this project)
 - stb-image (v2.25)
-- Dear ImGui (v1.76)
+- Dear ImGui (v1.77 from docking branch)
+- spdlog (1.6.0)
+- SerialPort
 
-## Installation
+# Installation
 
-1. Create new project and choose to clone the repository.
-2. In Repository Localization paste: *[https://github.com/Mregussek/MAREngine.git](https://github.com/Mregussek/MAREngine)*
-3. VS2019 should do everything for us (download project and prepare a directory).
-4. After cloning repository you must open file named **mar.h**. Path is *"/MAREngine/src/mar.h"*. There you fill a line, which asks you, if you imported repository from github. Please, uncomment this line and then you will be able the project properly.
+Please, do not download repository as a .zip file, because you will not fullfil dependencies such as submodules above!
+
+## Windows
+
+### #1 The easiest way
+
+1. Clone repository (with submodules, cause I use ImGui, spdlog, serialport and MARMaths from its own sources!)
+
+```
+git clone --recurse-submodules https://github.com/mregussek/MAREngine.git
+```
+
+2. Open MAREngine.sln (located in main directory).
+
+<p align="center">
+  <img width="600" height="100" src="img/marenginesln.jpg">
+</p>
+
+3. Make sure, that selected target is x86 (no x64!!!)
+
+<p align="center">
+  <img width="382" height="50" src="img/x86.jpg">
+</p>
+
+4. Compile ;)
+
+### #2 CMake on Windows
+
+1. Clone repository (with submodules, cause I use ImGui, spdlog, serialport and MARMaths from its own sources!)
+
+```
+git clone --recurse-submodules https://github.com/mregussek/MAREngine.git
+```
+
+2. Open CMake (CMake-GUI in my case)
+3. Select proper paths!
+- Where is the source code: Here please select path, where you cloned repository!
+- Where to build binaries: Please select path to repository with /build directory!
+
+Examples:
+- Where is the source code: *C:/Path/to/MAREngine*
+- Where to build binaries: *C:/Path/to/MAREngine/build*
+
+4. Press **Generate** button!
+
+<p align="center">
+  <img width="800" height="400" src="img/cmake_generate.jpg">
+</p>
+
+5. New window will be opened. Here make sure, that you choose generator for Win32!)
+
+<p align="center">
+  <img width="500" height="400" src="img/win32cmake.jpg">
+</p>
+
+6. Press **Finish**. CMake will generate all needed files.
+7. Select **Open Project** button. You will be able to compile project.
+8. Select **MAREngine** as a starting project. Then project should be marked as bold.
+
+<p align="center">
+  <img width="300" height="175" src="img/starting.jpg">
+</p>
+
+9. Compile ;)
+
