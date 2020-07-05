@@ -62,6 +62,12 @@ namespace mar {
 
 			void setLoadPath(std::string path) { m_pathLoad = path.c_str(); }
 			void setRestart() { m_shouldRestart = true; }
+
+		private:
+			void assignLoadedLayers(layers::LayerStack* stack,
+									layers::GUILayer* gui_layer,
+									layers::CameraLayer* camera_layer,
+									Ref<graphics::FrameBuffer>& framebuffer);
 		};
 
 

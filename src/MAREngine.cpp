@@ -54,14 +54,8 @@ namespace mar {
 			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
 
-			auto vec = filesystem::fnc::loadSceneFromFile(m_pathLoad);
-
-			for(auto& layer : vec) {
-				layer->set(&gui::GUI::getGUIData(), &camera_layer->getCameraData());
-				layer->set(m_framebuffer);
-				m_stack.pushLayer(layer);
-				gui_layer->submit(layer->getMesh());
-			}
+			filesystem::fnc::loadSceneFromFile(m_pathLoad);
+			assignLoadedLayers(&m_stack, gui_layer, camera_layer, m_framebuffer);
 
 			//////////////////////////////////////////////////////
 			// --------------- RENDER LOOP -------------------- //
@@ -92,5 +86,72 @@ namespace mar {
 
 			m_window.shutdown();
 		}
+
+		void MAREngine::assignLoadedLayers(	layers::LayerStack* stack,
+											layers::GUILayer* gui_layer,
+											layers::CameraLayer* camera_layer,
+											Ref<graphics::FrameBuffer>& framebuffer) {
+			using fs = filesystem::fnc;
+			using sto = filesystem::Storage;
+
+			if (fs::getMeshCount() == MESHES_LOADER) {
+				if (fs::getMeshCount() != fs::getMeshTypes().size() + 1) {
+					MAR_CORE_ERROR("Mesh Types size is not equal to mesh_count!");
+					return;
+				}
+
+				for (int i = 0; i < fs::getMeshCount() + 1; i++) {
+					std::string name = "Mesh Layer " + std::to_string(i);
+					auto layer = new layers::MeshLayer(name.c_str());
+					layer->initializeLayer(new graphics::Renderer(), new graphics::Mesh());
+					layer->create(sto::getInstance()->factory, sto::getInstance()->usegui);
+					layer->getMesh()->setType(fs::getMeshTypes()[i]);
+
+					for (unsigned int j = 0; j < fs::getShapes()[i].size(); j++) {
+						if (layer->getMesh()->getMeshType() == OBJECTS_MESH_TYPE) {
+							fs::getShapes()[i][j]->assignDataFromFile(fs::getObjs()[i][j].c_str());
+						}
+
+						fs::getShapes()[i][j]->setDefaultColor(fs::getColors()[i][j]);
+						layer->getMesh()->submitShape(fs::getShapes()[i][j], fs::getCenters()[i][j],
+							fs::getAngles()[i][j], fs::getScales()[i][j], fs::getTextures()[i][j].c_str());
+					}
+
+					layer->load();
+					layer->set(&gui::GUI::getGUIData(), &camera_layer->getCameraData());
+					layer->set(framebuffer);
+
+					gui_layer->submit(layer->getMesh());
+					stack->pushLayer(layer);
+				}
+
+				MAR_CORE_INFO("Scene is loaded from meshes!");
+			}
+			else if (fs::getSceneCount() == SCENES_LOADER) {
+				if (fs::getMeshTypes().size() != fs::getSceneTypes().size()) {
+					MAR_CORE_ERROR("Loaded types of mesh are not equal to the size of scene types size!");
+					return;
+				}
+
+				for (unsigned int i = 0; i < fs::getMeshTypes().size(); i++) {
+					std::string name = "Mesh Layer " + std::to_string(i);
+					layers::MeshLayer* layer = new layers::MeshLayer(name.c_str());
+					layer->initializeLayer(new graphics::Renderer(), new graphics::Mesh());
+					layer->create(sto::getInstance()->factory, sto::getInstance()->usegui);
+					layer->scene(fs::getSceneTypes()[i], fs::getMeshTypes()[i]);
+					layer->set(&gui::GUI::getGUIData(), &camera_layer->getCameraData());
+					layer->set(framebuffer);
+					stack->pushLayer(layer);
+					gui_layer->submit(layer->getMesh());
+				}
+
+				MAR_CORE_INFO("Created Mesh Layers!");
+			}
+			else {
+				MAR_CORE_ERROR("Unsupported Data!");
+				return;
+			}
+		}
+
 
 } }

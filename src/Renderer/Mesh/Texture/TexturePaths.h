@@ -20,10 +20,10 @@ namespace mar {
 			inline static const char* redTex = "resources/textures/red-texture.jpg";
 			inline static const char* blackTex = "resources/textures/black-texture.jpg";
 
-			inline static const char* mc_diamond = "resources/textures/mc/diamond";
-			inline static const char* mc_cobble = "resources/textures/mc/cobble";
-			inline static const char* mc_dirt = "resources/textures/mc/dirt";
-			inline static const char* mc_grass = "resources/textures/mc/grass";
+			inline static const char* mc_diamond = "resources/textures/diamond";
+			inline static const char* mc_cobble = "resources/textures/cobble";
+			inline static const char* mc_dirt = "resources/textures/dirt";
+			inline static const char* mc_grass = "resources/textures/grass";
 		};
 
 

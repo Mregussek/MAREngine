@@ -53,6 +53,7 @@ namespace mar {
 			static GUIData s_guiData;
 			int m_meshIndex;
 			int m_shapeIndex;
+			int m_pushMeshIndex;
 			// --- Dockspace
 			Ref<graphics::FrameBuffer> m_framebuffer;
 			static bool s_dockspaceOpen;
@@ -96,6 +97,23 @@ namespace mar {
 			void Menu_Statistics();
 			void Menu_Info();
 			void Menu_Instruction();
+
+			bool checkCharsEnding(const char* withwhat, const char* what) {
+				int l1 = strlen(withwhat);
+				int l2 = strlen(what);
+
+				if (l1 > l2)
+					return false;
+
+				return std::strcmp(withwhat, what + (l2 - l1)) == 0;
+			}
+
+			bool checkCharsStart(const char* withwhat, const char* what) {
+				const char* check = strstr(what, withwhat);
+
+				if (what == check) return true;
+				else return false;
+			}
 		};
 
 

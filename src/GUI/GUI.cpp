@@ -9,21 +9,10 @@
 namespace mar {
 	namespace gui {
 
-		std::vector<const char*> GUITextureList::s_textures = {
-			"empty",
-			TexturePaths::mrTex,
-			TexturePaths::redTex,
-			TexturePaths::blueTex,
-			TexturePaths::blackTex,
-			TexturePaths::yellowTex,
-			TexturePaths::wallTex,
-			TexturePaths::grassTex 
-		};
+		std::vector<const char*> GUITextureList::s_textures = { "empty" };
 		int GUITextureList::s_selectedItem;
 
-		std::vector<const char*> GUIMarFiles::s_files = {
-			"empty"
-		};
+		std::vector<const char*> GUIMarFiles::s_files = { "empty" };
 		int GUIMarFiles::s_selectedItem;
 
 		GUIData GUI::s_guiData;
@@ -233,7 +222,7 @@ namespace mar {
 
 			ImGui::Text("Select file, which you want to be opened:");
 
-			ImGui::ListBox("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
+			ImGui::Combo("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
 
 			ImGui::Separator();
 
@@ -374,42 +363,28 @@ namespace mar {
 				ImGui::MenuItem("Shapes Menu", "");
 
 				if (m_meshIndex != -1 && m_shapeIndex != -1) {
-					const char* shape = "Shape";
-					const char* shape_trans = "\nTranslate Shape\n";
-					const char* shape_rot = "\nRotate Shape\n";
-					const char* shape_scale = "\nScale Shape\n";
-					const char* general_scale = "General Scale\n";
-					const char* delete_shape = "Delete Shape";
-					const char* x_trans = "X translation";
-					const char* y_trans = "Y translation";
-					const char* z_trans = "Z translation";
-					const char* x_rot = "X rotation";
-					const char* y_rot = "Y rotation";
-					const char* z_rot = "Z rotation";
-					const char* color_shape = "Color shape";
-
 					glm::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
 					glm::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
 					glm::vec3& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScale();
 
-					ImGui::Text(shape);
+					ImGui::Text("Shape");
 					ImGui::Separator();
 
-					ImGui::Text(shape_trans);
-					ImGui::SliderFloat(x_trans, &center.x, -15.0f, 15.0f, "%.2f", 1.f);
-					ImGui::SliderFloat(y_trans, &center.y, -15.0f, 15.0f, "%.2f", 1.f);
-					ImGui::SliderFloat(z_trans, &center.z, -15.0f, 15.0f, "%.2f", 1.f);
+					ImGui::Text("\nTranslate Shape\n");
+					ImGui::SliderFloat("X translation", &center.x, -15.0f, 15.0f, "%.2f", 1.f);
+					ImGui::SliderFloat("Y translation", &center.y, -15.0f, 15.0f, "%.2f", 1.f);
+					ImGui::SliderFloat("Z translation", &center.z, -15.0f, 15.0f, "%.2f", 1.f);
 					ImGui::Separator();
 
-					ImGui::Text(shape_rot);
-					ImGui::SliderFloat(x_rot, &angle.x, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::SliderFloat(y_rot, &angle.y, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::SliderFloat(z_rot, &angle.z, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::Text("\nRotate Shape\n");
+					ImGui::SliderFloat("X rotation", &angle.x, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::SliderFloat("Y rotation", &angle.y, -360.f, 360.f, "%.2f", 1.f);
+					ImGui::SliderFloat("Z rotation", &angle.z, -360.f, 360.f, "%.2f", 1.f);
 					ImGui::Separator();
 
-					ImGui::Text(shape_scale);
+					ImGui::Text("\nScale Shape\n");
 					m_generalScale = scale.x;
-					ImGui::SliderFloat(general_scale, &m_generalScale, 0.f, 2.f, "%.2f", 1.f);
+					ImGui::SliderFloat("General Scale\n", &m_generalScale, 0.f, 2.f, "%.2f", 1.f);
 					scale.x = m_generalScale;
 					scale.y = m_generalScale;
 					scale.z = m_generalScale;
@@ -422,26 +397,21 @@ namespace mar {
 								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 						}
 						else {
-							ImGui::ColorPicker3(color_shape, (float*)&m_meshes[m_meshIndex]->getColors()[m_shapeIndex]);
+							ImGui::ColorPicker3("Color shape", (float*)&m_meshes[m_meshIndex]->getColors()[m_shapeIndex]);
 						}
 					}
 						
-
 					ImGui::Separator();
-					if (ImGui::Button(delete_shape)) {
+					if (ImGui::Button("Delete Shape")) {
 						m_meshes[m_meshIndex]->flushShape(m_shapeIndex);
 
 						m_meshIndex = -1;
 						m_shapeIndex = -1;
 					}
 				}
-				else {
-					ImGui::Text("No shape selected!");
-				}
+				else { ImGui::Text("No shape selected!"); }
 			}
-			else {
-				ImGui::Text("You cannot modify objects!");
-			}
+			else { ImGui::Text("You cannot modify objects!"); }
 
 			ImGui::End();
 		}
@@ -461,18 +431,68 @@ namespace mar {
 				if (m_meshes[0]->getShapesCount() == constants::maxObjectsInScene - 1)
 					return;
 
+				std::vector<std::string> str_meshes;
+
+				for (unsigned int i = 0; i < m_meshes.size(); i++) {
+					std::string type;
+					std::string num = std::to_string(i);
+					switch (m_meshes[i]->getMeshType()) {
+					case NORMAL_MESH_TYPE: type = "Normal "; break;
+					case CUBEMAPS_MESH_TYPE: type = "Cubemaps "; break;
+					case OBJECTS_MESH_TYPE: type = "Objects "; break;
+					default: type = "Unknown "; break;
+					}
+
+					std::string push = type + num;
+					str_meshes.push_back(push.c_str());
+				}
+
+				std::vector<const char*> str(str_meshes.size());
+				for (unsigned int i = 0; i < str_meshes.size(); i++) str[i] = str_meshes[i].c_str();
+
+				ImGui::Combo("Choose Mesh", &m_pushMeshIndex, str.data(), str.size());
+
+				ImGui::Separator();
+
+				if (ImGui::Button("Reload textures in directory")) {
+					filesystem::fnc::updateMarTextures("resources/textures");
+
+					GUITextureList::s_textures.clear();
+					GUITextureList::s_textures.push_back("empty");
+
+					for (auto& m : filesystem::fnc::getMarTextures()) {
+						GUITextureList::s_textures.push_back(m.c_str());
+					}
+				}
+
 				ImGui::Combo("Choose Texture", &GUITextureList::s_selectedItem, 
 					GUITextureList::s_textures.data(), GUITextureList::s_textures.size());
 
 				ImGui::Separator();
 
+				if (checkCharsEnding(".jpg", GUITextureList::s_textures[GUITextureList::s_selectedItem])) {
+					if (checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
+						ImGui::Text("Cannot push single .jpg file to cubemaps!");
+						return;
+					}
+				}
+				else {
+					if (!checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
+						ImGui::Text("Cannot push cubemap directory to no cubemaps!");
+						return;
+					}
+				}
+					
 				if (ImGui::Button("Select Pyramid")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
 					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string path = "resources/textures";
+					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+
+					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
 
 				if (ImGui::Button("Select Cube")) {
@@ -481,7 +501,10 @@ namespace mar {
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string path = "resources/textures";
+					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+
+					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
 
 				if (ImGui::Button("Select Surface")) {
@@ -490,7 +513,10 @@ namespace mar {
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string path = "resources/textures";
+					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+
+					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
 
 				if (ImGui::Button("Select Wall")) {
@@ -499,7 +525,10 @@ namespace mar {
 					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					glm::vec3 scale{ 1.f, 1.f, 1.f };
 
-					m_meshes[0]->tryReuseShape(new_shape, center, angle, scale, GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string path = "resources/textures";
+					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+
+					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
 			}
 			else {
