@@ -14,7 +14,7 @@ namespace mar {
 		const int MAREngineSettings::width{ 1500 };
 		const int MAREngineSettings::height{ 900 };
 		const char MAREngineSettings::portName[10] = "\\\\.\\COM7";
-		const char* MAREngineSettings::glsl_version = "#version 460";
+		const char* MAREngineSettings::glsl_version = "#version 330";
 
 		MAREngine MAREngine::s_instance;
 
@@ -62,12 +62,11 @@ namespace mar {
 			while (m_window.shouldClose() && !m_shouldRestart) 
 			{
 				m_window.clearScreen();
-				
 				graphics::Renderer::getStatistics().resetStatistics();
-
 				m_stack.update();
-
 				m_window.swapBuffers();
+
+				MAR_CORE_CHECK_FOR_ERROR();
 			}
 			// --------------- RENDER LOOP -------------------- //
 			//////////////////////////////////////////////////////
@@ -145,7 +144,7 @@ namespace mar {
 					gui_layer->submit(layer->getMesh());
 				}
 
-				MAR_CORE_INFO("Created Mesh Layers!");
+				MAR_CORE_INFO("Default scene is being loaded!");
 			}
 			else {
 				MAR_CORE_ERROR("Unsupported Data!");

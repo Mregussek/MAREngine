@@ -19,21 +19,28 @@ namespace mar {
 		public:
 			static void init();
 
-            static void glCheckError_(const char* file, int line) {
-                GLenum errorCode;
-                while ((errorCode = glGetError()) != GL_NO_ERROR) {
-                    std::string error;
-                    switch (errorCode) {
-                    case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
-                    case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
-                    case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
-                    case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
-                    case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
-                    case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
-                    case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
-                    }
+            static const char* GetGLErrorStr(GLenum err) {
+                switch (err) {
+                case GL_NO_ERROR:          return "No error";
+                case GL_INVALID_ENUM:      return "Invalid enum";
+                case GL_INVALID_VALUE:     return "Invalid value";
+                case GL_INVALID_OPERATION: return "Invalid operation";
+                case GL_STACK_OVERFLOW:    return "Stack overflow";
+                case GL_STACK_UNDERFLOW:   return "Stack underflow";
+                case GL_OUT_OF_MEMORY:     return "Out of memory";
+                default:                   return "Unknown error";
+                }
+            }
 
-                    s_CoreLogger->error(error + " | " + file + " (" + std::to_string(line) + ")");
+            static void CheckGLError(const char* file, int line) {
+                while (true) {
+                    GLenum err = glGetError();
+                    if (GL_NO_ERROR == err)
+                        return;
+
+                    getCoreLogger()->error(GetGLErrorStr(err));
+                    getCoreLogger()->error(file);
+                    getCoreLogger()->error(line);
                 }
             }
 
@@ -51,7 +58,7 @@ namespace mar {
 #define MAR_CORE_WARN(...)  ::mar::debug::Log::getCoreLogger()->warn(__VA_ARGS__)
 #define MAR_CORE_ERROR(...) ::mar::debug::Log::getCoreLogger()->error(__VA_ARGS__)
 
-#define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::glCheckError_(__FILE__, __LINE__) 
+#define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::CheckGLError(__FILE__, __LINE__) 
 
 #define MAR_TRACE(...) ::mar::debug::Log::getClientLogger()->trace(__VA_ARGS__)
 #define MAR_INFO(...)  ::mar::debug::Log::getClientLogger()->info(__VA_ARGS__)

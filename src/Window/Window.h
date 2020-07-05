@@ -35,6 +35,9 @@ namespace mar {
 			void swapBuffers();
 			void clearScreen();
 
+			static void windowErrorCallback(int error, const char* description) {
+				std::cerr << "GLFW error " << error << ": " << description << std::endl; }
+
 			// --- GET METHODS --- //
 			GLFWwindow* getWindow() const { return m_window; }
 			const int& getWidth() const { return m_width; }

@@ -16,6 +16,8 @@ namespace mar {
 			m_width = W;
 			m_windowName = wN;
 
+			glfwSetErrorCallback(windowErrorCallback);
+
 			if (!glfwInit()) {
 				MAR_CORE_ERROR("glfw() init failure");
 				exit(0);
@@ -24,8 +26,8 @@ namespace mar {
 			MAR_CORE_TRACE("GLFW has been loaded successfully!");
 
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 			/// TODO: read about fullscreen mode. One of the nullptr's should not be nullptr
@@ -68,7 +70,6 @@ namespace mar {
 			/// Enable loading PNG files and transparency
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			
 
 			MAR_CORE_INFO("OpenGL loaded successfully and window is working!");
 		}
@@ -82,15 +83,14 @@ namespace mar {
 		void Window::swapBuffers() {
 			glfwSwapBuffers(m_window);
 			glfwPollEvents();
+
+			if (Input::isKeyPressed(MAR_KEY_ESCAPE))
+				closeWindow();
 		}
 
 		void Window::clearScreen() {
 			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			glViewport(0, 0, m_width, m_height);
-
-			if (glfwGetKey(m_window, MAR_KEY_ESCAPE) == MAR_KEY_PRESS)
-				glfwSetWindowShouldClose(m_window, true);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
 		namespace callbacks {

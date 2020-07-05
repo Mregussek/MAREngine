@@ -130,6 +130,10 @@ namespace mar {
 					m_instructionWindow = true;
 				}
 
+				if (ImGui::MenuItem("Exit")) {
+					m_window->closeWindow();
+				}
+
 				ImGui::EndMainMenuBar();
 			}
 
