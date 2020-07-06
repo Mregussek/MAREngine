@@ -66,8 +66,6 @@ namespace mar {
 				m_vbo->unbind();
 				m_vao->unbind();
 
-				//unbind();
-
 				m_initialized = true;
 
 				MAR_CORE_INFO("Renderer properly initialized!");
@@ -100,7 +98,7 @@ namespace mar {
 			m_ebo->bind();
 			m_ebo->updateDynamically(mesh->getIndices());
 
-			glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr);
+			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr) );
 
 			m_vbo->resetBuffer();
 			m_vbo->unbind();
@@ -147,6 +145,12 @@ namespace mar {
 		}
 
 		void Renderer::updateLightData(Light* light) {
+			light->setPosition({
+				0.5f + 0.5f * sin(glfwGetTime()),
+				0.2f + 0.2f * sin(glfwGetTime()),
+				7.0f + 5.0f * cos(glfwGetTime())
+			});
+
 			m_mainShader->setUniformVector3("u_material.lightPos", light->getPosition());
 
 			m_mainShader->setUniformVector3("u_material.ambient", light->getAmbient());

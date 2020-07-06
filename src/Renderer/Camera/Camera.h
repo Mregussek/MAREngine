@@ -3,11 +3,12 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef MAR_ENGINE_CAMERA_H
+#define MAR_ENGINE_CAMERA_H
 
 #include "../../mar.h"
 #include "../../Window/Input.h"
+
 
 namespace mar {
     namespace graphics {
@@ -17,7 +18,9 @@ namespace mar {
 			FORWARD,
 			BACKWARD,
 			LEFT,
-			RIGHT
+			RIGHT,
+			UP,
+			DOWN
 		};
 
 		enum class ObjectRotation {
@@ -86,11 +89,12 @@ namespace mar {
 			void processInput();
 			void updateData();
 
+			void mouseButtonCallback(float xpos, float ypos);
 			void mouseCallback(float xpos, float ypos);
 			void scrollCallback(float ypos);
 
 		private:
-			void processKeyboard(CameraMovement&& direction);
+			void processCameraMovement(CameraMovement&& direction);
 			void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 			void processMouseScroll(float yoffset);
 			void updateCameraVectors();
@@ -125,4 +129,4 @@ namespace mar {
 
 } }
 
-#endif // !CAMERA_H
+#endif // !MAR_ENGINE_CAMERA_H

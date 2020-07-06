@@ -7,7 +7,7 @@
 #define SURFACE_H
 
 #include "../../../../mar.h"
-#include "../Shapes.h"
+#include "Wall.h"
 
  /*
 

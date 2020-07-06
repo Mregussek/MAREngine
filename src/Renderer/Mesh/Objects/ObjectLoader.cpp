@@ -4,7 +4,7 @@
  */
 
 #include "ObjectLoader.h"
-#include "../../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics { namespace objects {

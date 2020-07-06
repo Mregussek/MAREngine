@@ -11,5 +11,8 @@ namespace mar {
 		GLFWwindow* Input::s_nativewindow;
 		bool Input::s_useInput{ false };
 
+		int Input::m_clickedButton{0};
+		int Input::m_clickedAction{0};
+
 
 } }

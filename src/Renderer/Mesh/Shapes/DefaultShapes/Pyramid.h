@@ -7,7 +7,7 @@
 #define PYRAMID_H
 
 #include "../../../../mar.h"
-#include "../Shapes.h"
+#include "Surface.h"
 
  /*											(0.0f,  1.0f,  0.0f)[5]
 											  x

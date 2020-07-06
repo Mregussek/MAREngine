@@ -47,22 +47,26 @@ namespace mar {
 			m_deltaTime = currentFrame - m_lastFrame;
 			m_lastFrame = currentFrame;
 
-			// Camera move check
 			if (window::Input::isKeyPressed(MAR_KEY_W))
-				processKeyboard(CameraMovement::FORWARD);
+				processCameraMovement(CameraMovement::FORWARD);
 			if (window::Input::isKeyPressed(MAR_KEY_S))
-				processKeyboard(CameraMovement::BACKWARD);
+				processCameraMovement(CameraMovement::BACKWARD);
 			if (window::Input::isKeyPressed(MAR_KEY_A))
-				processKeyboard(CameraMovement::LEFT);
+				processCameraMovement(CameraMovement::LEFT);
 			if (window::Input::isKeyPressed(MAR_KEY_D))
-				processKeyboard(CameraMovement::RIGHT);
+				processCameraMovement(CameraMovement::RIGHT);
 
-			// Enable Mouse Usage
 			if (window::Input::isKeyPressed(MAR_KEY_Q)) {
 				if (m_enableMouse) m_enableMouse = false;
 				else m_enableMouse = true;
 
 				m_firstMouse = true;
+			}
+
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_LEFT) &&
+				window::Input::isMousePressed(MAR_MOUSE_BUTTON_RIGHT)) {
+				
+				//mouseButtonCallback(*m_mouseCallX, *m_mouseCallY);
 			}
 
 			mouseCallback(*m_mouseCallX, *m_mouseCallY);
@@ -77,7 +81,7 @@ namespace mar {
 			s_cameraData.position = getCameraPosition();
 		}
 
-		void Camera::processKeyboard(CameraMovement&& direction) {
+		void Camera::processCameraMovement(CameraMovement&& direction) {
 			float velocity = m_movementSpeed * m_deltaTime;
 
 			switch (direction) {
@@ -89,7 +93,21 @@ namespace mar {
 				m_position -= m_right * velocity;		break;
 			case CameraMovement::RIGHT:
 				m_position += m_right * velocity;		break;
+			case CameraMovement::UP:
+				m_position += m_up * velocity;			break;
+			case CameraMovement::DOWN:
+				m_position -= m_up * velocity;		break;
 			}
+		}
+
+		void Camera::mouseButtonCallback(float xpos, float ypos) {
+			float xoffset = (float)xpos - m_lastX;
+			float yoffset = m_lastY - (float)ypos;
+
+			m_lastX = (float)xpos;
+			m_lastY = (float)ypos;
+
+			processMouseMovement(xoffset, yoffset);
 		}
 
 		void Camera::mouseCallback(float xpos, float ypos) {
@@ -118,8 +136,8 @@ namespace mar {
 			m_pitch += yoffset;
 
 			if (constrainPitch) {
-				if (m_pitch > 89.0f) m_pitch = 89.0f;
-				if (m_pitch < -89.0f)m_pitch = -89.0f;
+				if (m_pitch >  89.0f) m_pitch = 89.0f;
+				if (m_pitch < -89.0f) m_pitch = -89.0f;
 			}
 
 			updateCameraVectors();

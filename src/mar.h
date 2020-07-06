@@ -63,6 +63,8 @@
 #include <filesystem>
 
 
+#define MAR_ENGINE_DEBUG_MODE
+
 /*!
 	mar is a main namespace for MAREngine. Below you can find all classes,
 	which are written for proper work of MAREngine. The most needed class is Window,

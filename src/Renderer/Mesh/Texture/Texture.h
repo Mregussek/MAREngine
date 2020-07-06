@@ -8,6 +8,8 @@
 
 #include "../../../mar.h"
 #include "TexturePaths.h"
+#include "../../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics {

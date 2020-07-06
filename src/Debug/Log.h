@@ -8,6 +8,7 @@
 
 #include "../mar.h"
 
+
 namespace mar {
 	namespace debug {
 
@@ -19,7 +20,7 @@ namespace mar {
 		public:
 			static void init();
 
-            static const char* GetGLErrorStr(GLenum err) {
+            static std::string GetGLErrorStr(GLenum err) {
                 switch (err) {
                 case GL_NO_ERROR:          return "No error";
                 case GL_INVALID_ENUM:      return "Invalid enum";
@@ -44,12 +45,29 @@ namespace mar {
                 }
             }
 
+            static void chernoClear() {
+                while (glGetError() != GL_NO_ERROR);
+            }
+
+            static bool chernoCheck(const char* function, const char* file, int line) {
+                while (GLenum err = glGetError()) {
+                    getCoreLogger()->error("[OpenGL Error] " + GetGLErrorStr(err));
+                    getCoreLogger()->error(std::string(function) + " - " + std::string(file) 
+                        + " - " + std::to_string(line));
+                    return false;
+                }
+
+                return true;
+            }
+
 			inline static Ref<spdlog::logger>& getCoreLogger() { return s_CoreLogger; }
 			inline static Ref<spdlog::logger>& getClientLogger() { return s_ClientLogger; }
 		};
 
 		
 } }
+
+#define ASSERT(x) if(!(x)) __debugbreak()
 
 #define MAR_LOG_INIT() ::mar::debug::Log::init()
 
@@ -64,5 +82,13 @@ namespace mar {
 #define MAR_INFO(...)  ::mar::debug::Log::getClientLogger()->info(__VA_ARGS__)
 #define MAR_WARN(...)  ::mar::debug::Log::getClientLogger()->warn(__VA_ARGS__)
 #define MAR_ERROR(...) ::mar::debug::Log::getClientLogger()->error(__VA_ARGS__)
+
+#ifdef MAR_ENGINE_DEBUG_MODE
+#define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::chernoClear();\
+                            x;\
+                            ASSERT(::mar::debug::Log::chernoCheck(#x, __FILE__, __LINE__))
+#else
+#define MAR_CORE_GL_FUNC(x) x;
+#endif
 
 #endif // !MAR_ENGINE_LOG_H

@@ -7,6 +7,7 @@
 #define MAR_ENGINE_FRAME_BUFFER_H
 
 #include "../../../mar.h"
+#include "../../../Debug/Log.h"
 
 
 namespace mar {

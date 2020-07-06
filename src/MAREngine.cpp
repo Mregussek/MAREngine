@@ -60,12 +60,10 @@ namespace mar {
 					camera_layer->set(m_framebuffer->getSpecification().width, m_framebuffer->getSpecification().height);
 				else
 					camera_layer->set(window::Window::getInstance().getWidth(), window::Window::getInstance().getHeight());
-
+				
 				m_stack.update();
 
 				window::Window::getInstance().swapBuffers();
-
-				//MAR_CORE_CHECK_FOR_ERROR();
 			}
 			// --------------- RENDER LOOP -------------------- //
 			//////////////////////////////////////////////////////

@@ -35,51 +35,51 @@ namespace mar {
 		}
 
 		void ShaderOpenGL::shutdown() {
-			glDeleteProgram(m_id);
+			MAR_CORE_GL_FUNC(glDeleteProgram(m_id));
 		}
 
 		void ShaderOpenGL::bind() const {
-			glUseProgram(m_id);
+			MAR_CORE_GL_FUNC(glUseProgram(m_id));
 		}
 
 		void ShaderOpenGL::unbind() const {
-			glUseProgram(0);
+			MAR_CORE_GL_FUNC(glUseProgram(0));
 		}
 
 		void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int>& sampler) {
-			glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data());
+			MAR_CORE_GL_FUNC( glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()) );
 		}
 
 		void ShaderOpenGL::setUniformVectorVec3(const std::string& name, const std::vector<glm::vec3>& vec) {
-			glUniform3fv(getUniformLocation(name), vec.size(), glm::value_ptr(*vec.data()));
+			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), vec.size(), glm::value_ptr(*vec.data())) );
 		}
 
 		void ShaderOpenGL::setUniformVectorMat4(const std::string& name, const std::vector<glm::mat4>& matrices) {
-			glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, glm::value_ptr(*matrices.data()));
+			MAR_CORE_GL_FUNC( glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, glm::value_ptr(*matrices.data())) );
 		}
 
 		void ShaderOpenGL::setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) {
-			glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix4x4));
+			MAR_CORE_GL_FUNC( glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(matrix4x4)) );
 		}
 
 		void ShaderOpenGL::setUniformVector3(const std::string& name, const glm::vec3& vector3) {
-			glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(vector3));
+			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, glm::value_ptr(vector3)) );
 		}
 
 		void ShaderOpenGL::setUniform1i(const std::string& name, int value) {
-			glUniform1i(getUniformLocation(name), value);
+			MAR_CORE_GL_FUNC( glUniform1i(getUniformLocation(name), value) );
 		}
 
 		void ShaderOpenGL::setUniform1f(const std::string& name, float value) {
-			glUniform1f(getUniformLocation(name), value);
+			MAR_CORE_GL_FUNC( glUniform1f(getUniformLocation(name), value) );
 		}
 
 		void ShaderOpenGL::setUniform4f(const std::string& name, float red, float green, float blue, float alpha) {
-			glUniform4f(getUniformLocation(name), red, green, blue, alpha);
+			MAR_CORE_GL_FUNC( glUniform4f(getUniformLocation(name), red, green, blue, alpha) );
 		}
 
 		void ShaderOpenGL::setUniform4fv(const std::string& name, const float* floats4) {
-			glUniform4fv(getUniformLocation(name), 1, floats4);
+			MAR_CORE_GL_FUNC( glUniform4fv(getUniformLocation(name), 1, floats4) );
 		}
 
 		int ShaderOpenGL::getUniformLocation(const std::string& name) {

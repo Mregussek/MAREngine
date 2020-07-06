@@ -55,6 +55,7 @@ namespace mar {
 			callbacks::setWindowSize(&m_height, &m_width);
 			callbacks::setMouse(&m_mouseX, &m_mouseY);
 			callbacks::setScroll(&m_scrollX, &m_scrollY);
+			callbacks::setMouseButtons(&Input::getMouseButton(), &Input::getMouseButton());
 			callbacks::setUseInput(&Input::getUseInput());
 
 			callbacks::setCallbacks(m_window);
@@ -62,10 +63,10 @@ namespace mar {
 			/// Vertical synchronization(VSync) is enabled by using glfwSwapInterval(1); 
 			glfwSwapInterval(1);
 			/// Enable DEPTH, in other words 3D
-			glEnable(GL_DEPTH_TEST);
+			MAR_CORE_GL_FUNC( glEnable(GL_DEPTH_TEST) );
 			/// Enable loading PNG files and transparency
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			MAR_CORE_GL_FUNC( glEnable(GL_BLEND) );
+			MAR_CORE_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
 			MAR_CORE_INFO("OpenGL loaded successfully and window is working!");
 		}
@@ -85,8 +86,8 @@ namespace mar {
 		}
 
 		void Window::clearScreen() {
-			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			MAR_CORE_GL_FUNC(glClearColor(0.22f, 0.69f, 0.87f, 1.0f) );
+			MAR_CORE_GL_FUNC(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 		}
 
 		namespace callbacks {
@@ -109,6 +110,13 @@ namespace mar {
 				}
 			}
 
+			inline void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+				if (*use_input) {
+					*clicked_button = button;
+					*clicked_action = action;
+				}
+			}
+
 			void setWindowSize(int* height, int* width) {
 				window_width = width;
 				window_height = height;
@@ -124,6 +132,11 @@ namespace mar {
 				scroll_y = y;
 			}
 
+			void setMouseButtons(int* button, int* action) {
+				clicked_button = button;
+				clicked_action = action;
+			}
+
 			void setUseInput(const bool* use) {
 				use_input = use;
 			}
@@ -134,6 +147,8 @@ namespace mar {
 				glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 				glfwSetCursorPosCallback(window, mouse_callback);
 				glfwSetScrollCallback(window, scroll_callback);
+
+				glfwSetMouseButtonCallback(window, mouse_button_callback);
 			}
 		}
 

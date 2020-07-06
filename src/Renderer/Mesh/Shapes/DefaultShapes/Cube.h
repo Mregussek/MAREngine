@@ -7,7 +7,7 @@
 #define CUBE_H
 	
 #include "../../../../mar.h"
-#include "../Shapes.h"
+#include "Pyramid.h"
 
 /*		
 			(-1.0f, 1.0f, -1.0f)[7]							(1.0f,  1.0f, -1.0f)[6]

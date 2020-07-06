@@ -7,6 +7,7 @@
 #define MAR_ENGINE_OBJECT_LOADER_H
 
 #include "../../../mar.h"
+#include "../../../Debug/Log.h"
 
 namespace mar {
     namespace graphics { namespace objects {

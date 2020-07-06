@@ -5,6 +5,7 @@
 
 #include "ElementBufferOpenGL.h"
 
+
 namespace mar {
 	namespace graphics {
 
@@ -12,9 +13,9 @@ namespace mar {
 		void ElementBufferOpenGL::initializeElement(const unsigned int allocationMemory) {
 			if (!_initialized) {
 				_allocatedMemory = allocationMemory;
-				glGenBuffers(1, &_id);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocatedMemory, nullptr, GL_DYNAMIC_DRAW);
+				MAR_CORE_GL_FUNC( glGenBuffers(1, &_id) );
+				MAR_CORE_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id) );
+				MAR_CORE_GL_FUNC( glBufferData(GL_ELEMENT_ARRAY_BUFFER, _allocatedMemory, nullptr, GL_DYNAMIC_DRAW) );
 				_initialized = true;
 			}
 			else {
@@ -23,24 +24,24 @@ namespace mar {
 		}
 
 		void ElementBufferOpenGL::bind() const {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
+			MAR_CORE_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id) );
 		}
 
 		void ElementBufferOpenGL::updateDynamically(const std::vector<unsigned int>& data) const {
-			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), data.data());
+			MAR_CORE_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), data.data()) );
 		}
 
 		void ElementBufferOpenGL::resetBuffer() {
-			glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 0, nullptr);
+			MAR_CORE_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 0, nullptr) );
 		}
 
 		void ElementBufferOpenGL::unbind() const {
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			MAR_CORE_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
 		}
 
 		void ElementBufferOpenGL::close() {
 			if (_initialized) {
-				glDeleteBuffers(1, &_id);
+				MAR_CORE_GL_FUNC( glDeleteBuffers(1, &_id) );
 				_initialized = false;
 			}
 		}

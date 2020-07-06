@@ -4,7 +4,6 @@
  */
 
 #include "Mesh.h"
-#include "../../Debug/Log.h"
 
 
 namespace mar {
