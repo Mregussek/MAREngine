@@ -17,7 +17,6 @@ namespace mar {
 				m_layout = factory->createVertexBufferLayout();
 				m_vao = factory->createVertexArray();
 				m_ebo = factory->createElementBuffer();
-				m_mainShader = factory->createShader();
 
 				s_stats = RendererStatistics();
 				m_useGUI = usegui;
@@ -53,6 +52,7 @@ namespace mar {
 
 		void Renderer::initialize(const std::vector<unsigned int>& layout, const ShaderType type) {
 			if (!m_initialized) {
+				m_mainShader = filesystem::Storage::getInstance()->factory->createShader(type);
 				m_mainShader->initialize(type);
 
 				for (size_t i = 0; i < layout.size(); i++)
@@ -61,8 +61,8 @@ namespace mar {
 				m_vao->initializeArrayBuffer();
 				m_vbo->initializeVertex(constants::maxVertexCount);
 				m_ebo->initializeElement(constants::maxIndexCount);
-
 				m_vao->addBuffer(m_layout);
+				unbind();
 
 				m_initialized = true;
 
@@ -74,31 +74,30 @@ namespace mar {
 		}
 
 		void Renderer::draw(Mesh* mesh) {
-			bind();
-
 			mesh->clearBuffers();
 			mesh->update();
-
-			updateMeshData(mesh);
-			updateCameraData();
-			updateGUIData();
-			updateLightData(&mesh->getLight());
-
-			m_vbo->updateDynamically(mesh->getVertices());
-			m_ebo->updateDynamically(mesh->getIndices());
 
 			s_stats.verticesCount += mesh->getVertices().size();
 			s_stats.indicesCount += mesh->getIndices().size();
 			s_stats.shapesCount += mesh->getShapesCount();
 
+			bind();
+
+			updateMeshData(mesh);
+			updateCameraData();
+			updateGUIData();
+			updateLightData(&mesh->getLight());
 			m_mainShader->setUniformSampler("u_Texture", mesh->getSamplers());
 
+			m_vbo->updateDynamically(mesh->getVertices());
+			m_ebo->updateDynamically(mesh->getIndices());
+			
 			glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr);
+
+			unbind();
 
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
-
-			unbind();
 		}
 
 		void Renderer::updateMeshData(Mesh* mesh) {
@@ -159,7 +158,7 @@ namespace mar {
 		}
 
 		void Renderer::unbind() {
-			m_mainShader->unbind();
+			//m_mainShader->unbind();
 			m_vao->unbind();
 			m_vbo->unbind();
 			m_ebo->unbind();

@@ -12,6 +12,8 @@ namespace mar {
 
 
 		void ShaderOpenGL::initialize(ShaderType shadertype) {
+			if (m_initialized) return;
+
 			switch(shadertype) {
 			case ShaderType::DEFAULT: m_shaderPath = "resources/shaders/basic.shader";
 				break;
@@ -26,6 +28,7 @@ namespace mar {
 			m_id = 0;
 			m_programSource = parseShader();
 			m_id = createShader();
+			m_initialized = true;
 		}
 
 		void ShaderOpenGL::shutdown() {

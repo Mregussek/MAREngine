@@ -13,6 +13,8 @@ namespace mar {
 
 
 		class ShaderOpenGL : public Shader {
+			bool m_initialized{false};
+
 			unsigned int m_id;
 			std::string m_shaderPath;
 			std::unordered_map<std::string, int> m_uniformLocation;
@@ -27,6 +29,7 @@ namespace mar {
 			void bind() const;
 			void unbind() const;
 
+			// --- SET METHODS --- //
 			void setUniformSampler(const std::string& name, const std::vector<int>& sampler) override;
 			void setUniformVectorVec3(const std::string& name, const std::vector<glm::vec3>& vec) override;
 			void setUniformVectorMat4(const std::string& name, const std::vector<glm::mat4>& matrices) override;

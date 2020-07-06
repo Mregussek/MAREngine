@@ -66,7 +66,7 @@ namespace mar {
 			{
 				return nullptr;
 			}
-			virtual Ref<Shader> createShader()
+			virtual Ref<Shader> createShader(ShaderType type)
 			{
 				return nullptr;
 			}
