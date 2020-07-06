@@ -17,6 +17,8 @@ namespace mar {
 		const float CameraSettings::ZOOM = 55.0f;
 		const glm::vec3 CameraSettings::CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
 
+		CameraData Camera::s_cameraData;
+
 		Camera::Camera()
 			: m_position(CameraSettings::CAMERA_START),
 			m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
@@ -68,11 +70,11 @@ namespace mar {
 		}
 
 		void Camera::updateData() {
-			m_cameraData.projection = getProjectionMatrix();
-			m_cameraData.model = getModelMatrix();
-			m_cameraData.view = getViewMatrix();
+			s_cameraData.projection = getProjectionMatrix();
+			s_cameraData.model = getModelMatrix();
+			s_cameraData.view = getViewMatrix();
 
-			m_cameraData.position = getCameraPosition();
+			s_cameraData.position = getCameraPosition();
 		}
 
 		void Camera::processKeyboard(CameraMovement&& direction) {

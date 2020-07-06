@@ -12,28 +12,9 @@
 
 
 namespace mar {
-
-
 	namespace filesystem {
 
-		class Storage {
-			static Storage s_instance;
-
-		public:
-			Ref<graphics::RendererFactory> factory;
-			bool usegui;
-
-		public:
-			Storage() = default;
-
-			void setup(const Ref<graphics::RendererFactory>& f, const bool& u) {
-				factory = f;
-				usegui = u;
-			}
-
-			inline static Storage* getInstance() { return &s_instance; }
-		};
-
+	
 		class fnc {
 			static std::vector<std::string> s_marfiles;
 			static std::vector<std::string> s_texturefiles;
@@ -72,13 +53,12 @@ namespace mar {
 			inline static std::vector<std::vector<std::string>>& getTextures() { return s_textures; }
 			inline static std::vector<std::vector<std::string>>& getObjs() { return s_objs; }
 
+			static bool shouldLoadMeshes() { return s_mesh_count != -1; }
+			static bool shouldLoadScene() { return s_scene_count != -1; }
 		};
 
 	}
 }						 
 
-
-#define MESHES_LOADER 1
-#define SCENES_LOADER 2
 
 #endif // !MAR_ENGINE_FILE_SYSTEM_H

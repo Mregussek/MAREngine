@@ -37,8 +37,6 @@ namespace mar {
 		};
 
 		class GUI {
-			// --- Must-have to run GUI
-			window::Window* m_window;
 			// --- Attributes for sliders && input
 			glm::vec3 m_sceneTranslation{ 0.0f, 0.0f, 0.0f };
 			glm::vec3 m_sceneAngle{ 0.0f, 0.0f, 0.0f };
@@ -48,8 +46,6 @@ namespace mar {
 			char m_inputStr[20];
 			// --- Run-time GUI attributes
 			std::vector<graphics::Mesh*> m_meshes;
-			const graphics::RendererStatistics* m_statistics;
-			bool m_canModifyObjects{ false };
 			static GUIData s_guiData;
 			int m_meshIndex;
 			int m_shapeIndex;
@@ -66,7 +62,7 @@ namespace mar {
 		public:
 			GUI() = default;
 
-			void initialize(window::Window* window, const char* glsl_version, bool can_modify_objects);
+			void initialize(const char* glsl_version);
 			void shutdown();
 
 			void prepareNewFrame();
@@ -74,9 +70,7 @@ namespace mar {
 
 			void submitMesh(graphics::Mesh* mesh) { m_meshes.push_back(mesh); }
 
-
 			// --- SET METHODS --- //
-			void setReferences(const graphics::RendererStatistics* stats) { m_statistics = stats; }
 			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
 
 			// --- GET METHODS --- //

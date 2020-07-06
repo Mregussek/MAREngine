@@ -24,8 +24,8 @@ namespace mar {
 
 			CameraLayer(const char* name) : m_debugName(name) {}
 
-			void initializeLayer(graphics::Camera* cam) {
-				m_camera = cam;
+			void initialize() {
+				m_camera = new graphics::Camera();
 
 				m_camera->initialize();
 			}
@@ -52,11 +52,13 @@ namespace mar {
 			inline const graphics::CameraData& getCameraData() const { return m_camera->getCameraData(); }
 
 			// --- SET METHODS --- //
-			void set(const float* win_h, const float* win_w) {
-				m_camera->setWindowSize(win_h, win_w);
+			void set(const int& win_h, const int& win_w) {
+				m_camera->setWindowSize((const float*)&win_h, (const float*)&win_w);
 			}
 
-			void set(const window::Window* win) {
+			void mouseSetup() {
+				auto win = &window::Window::getInstance();
+
 				m_camera->setMouseCall(&win->getMouseX(), &win->getMouseY());
 				m_camera->setScrollCall(&win->getScrollX(), &win->getScrollY());
 			}

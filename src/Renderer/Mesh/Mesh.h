@@ -49,7 +49,7 @@ namespace mar {
 			Mesh() = default;
 			virtual ~Mesh();
 
-			void createMesh(const Ref<RendererFactory>& factory);
+			void create();
 			void loadScene(Scene* scene, MeshType type);
 
 			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture);

@@ -28,8 +28,8 @@ namespace mar {
 			m_shapes.clear();
 		}
 
-		void Mesh::createMesh(const Ref<RendererFactory>& factory) {
-			m_texture = factory->createTexture();
+		void Mesh::create() {
+			m_texture = storage::factory->createTexture();
 
 			m_shapes = std::vector<Ref<Shape>>();
 			m_vertices = std::vector<float>();
@@ -58,7 +58,7 @@ namespace mar {
 				for (unsigned int i = 0; i < shapesInSceneCount; i++)
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), 
 						scene->getScale(i), scene->getTexture(i));
-
+					
 				MAR_CORE_INFO("Scene has been loaded by textures!");
 
 				break;
@@ -119,7 +119,7 @@ namespace mar {
 		}
 
 		void Mesh::pushTexture(Ref<Shape>& new_shape, const char* texture) {
-			if (std::strcmp(texture, "empty") != 0) {
+			if (std::strcmp(texture, "resources/textures/empty") != 0) {
 				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
 				m_samplers.push_back((int)s_availableTextureID);
@@ -215,20 +215,23 @@ namespace mar {
 				unsigned int currentVerticesSize = m_vertices.size() + m_shapes[i]->getVertices().size();
 				unsigned int currentIndicesSize = m_indices.size() + m_shapes[i]->getIndices().size();
 
-				if (currentVerticesSize <= constants::maxVertexCount && currentIndicesSize <= constants::maxIndexCount) {
-					auto beginVert = m_shapes[i]->getVertices().begin();
-					auto endVert = m_shapes[i]->getVertices().end();
-					auto beginIndices = m_shapes[i]->getIndices().begin();
-					auto endIndices = m_shapes[i]->getIndices().end();
-					
-					m_vertices.insert(m_vertices.end(), beginVert, endVert);
-					m_indices.insert(m_indices.end(), beginIndices, endIndices);
+				if (currentVerticesSize >= constants::maxVertexCount) {
+					MAR_CORE_ERROR("To much vertices in vector!"); break;
+				}
 
-					m_texture->bind(m_samplers[i], m_texture->getID(i));
+				if (currentIndicesSize >= constants::maxIndexCount) {
+					MAR_CORE_ERROR("To much indices in vector!"); break;
 				}
-				else {
-					MAR_CORE_ERROR("To much vertices in vector!");
-				}
+
+				auto beginVert = m_shapes[i]->getVertices().begin();
+				auto endVert = m_shapes[i]->getVertices().end();
+				auto beginIndices = m_shapes[i]->getIndices().begin();
+				auto endIndices = m_shapes[i]->getIndices().end();
+				
+				m_vertices.insert(m_vertices.end(), beginVert, endVert);
+				m_indices.insert(m_indices.end(), beginIndices, endIndices);
+
+				m_texture->bind(m_samplers[i], m_texture->getID(i));
 			}		
 		}
 

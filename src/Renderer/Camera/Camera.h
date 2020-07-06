@@ -76,7 +76,7 @@ namespace mar {
 			const float* m_scrollCallX;
 			const float* m_scrollCallY;
 			// --- Data for renderer
-			CameraData m_cameraData;
+			static CameraData s_cameraData;
 
 		public:
 			Camera();
@@ -113,7 +113,7 @@ namespace mar {
 			}
 
 			// --- GET METHODS --- //
-			inline const CameraData& getCameraData() const { return m_cameraData; }
+			inline static CameraData& getCameraData() { return s_cameraData; }
 
 			inline const glm::vec3& getCameraPosition() const { return m_position; }
 			inline const float& getZoom() const { return m_zoom; }

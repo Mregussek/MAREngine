@@ -50,17 +50,13 @@ namespace mar {
 			Ref<Shader> m_mainShader;
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;	// check, if renderer is initialized
-			bool m_useGUI = false;		// check, which type of shader we want to use (we don't need gui calculations if it is not connected)
 			static RendererStatistics s_stats;
-			// --- References
-			const CameraData* m_cameraData;
-			const gui::GUIData* m_guiData;
 
 		public:
 			Renderer() = default;
 
-			void createRenderer(const Ref<RendererFactory>& factory, const bool& usegui);
-			void closeRenderer();
+			void create();
+			void close();
 
 			void initialize(const std::vector<unsigned int>& layout, const ShaderType type);
 
@@ -72,17 +68,9 @@ namespace mar {
 			void updateCameraData();
 			void updateLightData(Light* light);
 
-			void bind();
-			void unbind();
-
 		public:
-			// --- SET METHODS --- //
-			void setReferences(const gui::GUIData* guidata, const CameraData* cameradata);
-			void setReferences(const CameraData* cameradata);
-
 			// --- GET METHODS --- // 
 			inline static RendererStatistics& getStatistics() { return s_stats; }
-			inline const bool useGUI() const { return m_useGUI; }
 		};
 
 

@@ -10,13 +10,12 @@ namespace mar {
 	namespace layers {
 
 
-		void GUILayer::initializeLayer(gui::GUI* gui) {
-			m_gui = gui;
+		void GUILayer::initialize() {
+			m_gui = new gui::GUI();
+			m_gui->initialize(settings::glsl_version);
 		}
 
-		void GUILayer::set(const graphics::RendererStatistics* stats, const Ref<graphics::FrameBuffer>& framebuf) {
-			m_gui->setReferences(stats);
-
+		void GUILayer::set(const Ref<graphics::FrameBuffer>& framebuf) {
 			if (framebuf != nullptr)
 				m_gui->setFrameBuffer(framebuf);
 		}
@@ -32,6 +31,8 @@ namespace mar {
 
 		void GUILayer::closeLayer() {
 			m_gui->shutdown();
+
+			delete m_gui;
 		}
 
 

@@ -12,7 +12,10 @@ namespace mar {
 
 
 		void ShaderOpenGL::initialize(ShaderType shadertype) {
-			if (m_initialized) return;
+			if (m_initialized) {
+				MAR_CORE_TRACE("Cannot re-initialize once compiled shader!");
+				return;
+			}
 
 			switch(shadertype) {
 			case ShaderType::DEFAULT: m_shaderPath = "resources/shaders/basic.shader";

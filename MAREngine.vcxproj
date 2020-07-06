@@ -240,7 +240,6 @@
     <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\Shapes.cpp" />
-    <ClCompile Include="src\Renderer\RendererFactoryOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Scene\Scene.cpp" />
     <ClCompile Include="src\Renderer\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.cpp" />

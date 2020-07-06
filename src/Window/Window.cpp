@@ -9,7 +9,10 @@
 
 namespace mar {
 	namespace window {
-    
+		
+
+		Window Window::s_window;
+
 
 		void Window::initialize(const int& H, const int& W, const char* wN) {
 			m_height = H;
@@ -42,19 +45,12 @@ namespace mar {
 			glfwMakeContextCurrent(m_window);
 			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-#ifdef IMPORT_GLEW
 			glewExperimental = GL_TRUE;
 			if (glewInit() != GLEW_OK) {
 				glfwTerminate();
 				MAR_CORE_ERROR("glewInit() failure");
 				exit(0);
 			}
-#else
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-				std::cout << "Failed to initialize GLAD" << std::endl;
-				exit(0);
-			}
-#endif
 
 			callbacks::setWindowSize(&m_height, &m_width);
 			callbacks::setMouse(&m_mouseX, &m_mouseY);

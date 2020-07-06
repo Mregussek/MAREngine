@@ -9,7 +9,6 @@
 namespace mar {
 	namespace filesystem {
 
-		Storage Storage::s_instance;
 
 		std::vector<std::string> fnc::s_marfiles;
 		std::vector<std::string> fnc::s_texturefiles;

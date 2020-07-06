@@ -7,18 +7,6 @@
  *	something will be here. Also it defines 'mar' namespace with all its classes.
  */
 
-// --- DECISIONS FOR USER 
-// {
-//
-// --- Tell the compiler, if you imported repository from github
-// --- Leave it in comment, if you have the same setup as MR 
-//#define IMPORTED_FROM_GITHUB
-//
-// Decide whether you want import GLEW or GLAD (comment to use GLAD)
-#define IMPORT_GLEW
-//
-// }
-
 
 //! ---- ACTUAL INCLUDES ---- !// 
 // --- Import GLEW lib statically --- //
@@ -27,12 +15,7 @@
 #endif
 
 // --- Include OpenGL Libs --- //
-#ifdef IMPORT_GLEW
 #include <GL/glew.h> 
-#else
-#include <glad/glad.h>
-#endif
-
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
@@ -67,7 +50,6 @@
 #include <fstream> 
 #include <string>
 #include <sstream>
-// data structures
 #include <vector> 
 #include <utility>
 #include <unordered_map>
@@ -93,22 +75,9 @@ namespace mar {
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
 
-#ifndef MAR_ENGINE_CONSTANTS
-#define MAR_ENGINE_CONSTANTS
-
-	namespace constants {
-		const size_t maxCount = 100000;
-		const size_t maxVertexCount = maxCount * 50;
-		const size_t maxIndexCount = maxCount * 50;
-		const size_t maxObjectsInScene = 32;
-	}
-
-#endif // !MAR_ENGINE_CONSTANTS
-
 	struct TexturePaths;
 
 	namespace filesystem {
-		class Storage;
 		class fnc;
 	}
 
@@ -180,4 +149,43 @@ namespace mar {
 	namespace engine {
 		class MAREngine;
 	}
+
+#ifndef MAR_ENGINE_SETTINGS
+#define MAR_ENGINE_SETTINGS
+
+	namespace settings {
+		inline const char name[10] = "MAREngine";
+		inline const int width{ 1500 };
+		inline const int height{ 900 };
+		inline const char portName[10] = "\\\\.\\COM7";
+		inline const char* glsl_version = "#version 330";
+	}
+
+#endif // !MAR_ENGINE_SETTINGS
+
+
+#ifndef MAR_ENGINE_CONSTANTS
+#define MAR_ENGINE_CONSTANTS
+
+	namespace constants {
+		inline const size_t maxCount = 100000;
+		inline const size_t maxVertexCount = maxCount * 50;
+		inline const size_t maxIndexCount = maxCount * 50;
+		inline const size_t maxObjectsInScene = 32;
+	}
+
+#endif // !MAR_ENGINE_CONSTANTS
+
+
+#ifndef MAR_ENGINE_STORAGE
+#define MAR_ENGINE_STORAGE
+
+	namespace storage {
+		inline Ref<graphics::RendererFactory> factory;
+		inline bool usegui;
+	}
+
+#endif // !MAR_ENGINE_STORAGE
+
+
 }

@@ -14,6 +14,7 @@ namespace mar {
 
 
 		class Window {
+			static Window s_window;
 			GLFWwindow* m_window;
 			const char* m_windowName;
 			// --- Window Size Callback
@@ -39,6 +40,7 @@ namespace mar {
 				std::cerr << "GLFW error " << error << ": " << description << std::endl; }
 
 			// --- GET METHODS --- //
+			inline static Window& getInstance() { return s_window; }
 			GLFWwindow* getWindow() const { return m_window; }
 			const int& getWidth() const { return m_width; }
 			const int& getHeight() const { return m_height; }

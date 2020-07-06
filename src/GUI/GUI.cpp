@@ -20,16 +20,13 @@ namespace mar {
 		bool GUI::s_fullscreenPersisant{ true };
 
 
-		void GUI::initialize(window::Window* window, const char* glsl_version, bool can_modify_objects) {
-			m_window = window;
-			m_canModifyObjects = can_modify_objects;
-
+		void GUI::initialize(const char* glsl_version) {
 			m_meshIndex = -1;
 			m_shapeIndex = -1;
 
 			ImGui::CreateContext();
 			Setup_Theme();
-			ImGui_ImplGlfw_InitForOpenGL(m_window->getWindow(), true);
+			ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().getWindow(), true);
 			ImGui_ImplOpenGL3_Init(glsl_version);
 
 			ImGuiIO& io = ImGui::GetIO();
@@ -105,7 +102,7 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Exit")) {
-						m_window->closeWindow();
+						window::Window::getInstance().closeWindow();
 					}
 
 					ImGui::EndMenu();
@@ -131,7 +128,7 @@ namespace mar {
 				}
 
 				if (ImGui::MenuItem("Exit")) {
-					m_window->closeWindow();
+					window::Window::getInstance().closeWindow();
 				}
 
 				ImGui::EndMainMenuBar();
@@ -299,7 +296,7 @@ namespace mar {
 		void GUI::Menu_ModifyScene() {
 			ImGui::Begin("Scene Modification Menu");
 
-			if (m_canModifyObjects) {
+			if (storage::usegui) {
 				ImGui::MenuItem("Scene Menu");
 
 				if (ImGui::TreeNode("Modify Scene")) {
@@ -362,7 +359,7 @@ namespace mar {
 		void GUI::Menu_ModifyShape() {
 			ImGui::Begin("Modify Shape");
 
-			if (m_canModifyObjects) {
+			if (storage::usegui) {
 
 				ImGui::MenuItem("Shapes Menu", "");
 
@@ -421,7 +418,7 @@ namespace mar {
 		}
 
 		void GUI::Menu_PushShapeToScene() {
-			if (m_canModifyObjects) {
+			if (storage::usegui) {
 				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
 				ImGui::InputFloat3("Input Center", m_inputCenter);
 
@@ -474,6 +471,11 @@ namespace mar {
 
 				ImGui::Separator();
 
+				if (checkCharsStart("Objects", str[m_pushMeshIndex])) {
+					ImGui::Text("MAREngine do not support push to objects!");
+					return;
+				}
+
 				if (checkCharsEnding(".jpg", GUITextureList::s_textures[GUITextureList::s_selectedItem])) {
 					if (checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
 						ImGui::Text("Cannot push single .jpg file to cubemaps!");
@@ -482,8 +484,10 @@ namespace mar {
 				}
 				else {
 					if (!checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
-						ImGui::Text("Cannot push cubemap directory to no cubemaps!");
-						return;
+						if (std::strcmp(GUITextureList::s_textures[GUITextureList::s_selectedItem], "empty") != 0) {
+							ImGui::Text("Cannot push cubemap directory to no cubemaps!");
+							return;
+						}
 					}
 				}
 					
@@ -541,12 +545,14 @@ namespace mar {
 		}
 
 		void GUI::Menu_Statistics() {
-			if (m_canModifyObjects) {
-				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->drawCallsCount);
-				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->shapesCount);
-				std::string vertices = "Vertices: " + std::to_string(m_statistics->verticesCount);
-				std::string indices = "Indices: " + std::to_string(m_statistics->indicesCount);
-				std::string triangles = "Triangles: " + std::to_string(m_statistics->trianglesCount);
+			if (storage::usegui) {
+				using stats = graphics::Renderer;
+
+				auto drawcalls = "Draw Calls: " + std::to_string(stats::getStatistics().drawCallsCount);
+				auto shapescount = "Shapes Count: " + std::to_string(stats::getStatistics().shapesCount);
+				auto vertices = "Vertices: " + std::to_string(stats::getStatistics().verticesCount);
+				auto indices = "Indices: " + std::to_string(stats::getStatistics().indicesCount);
+				auto triangles = "Triangles: " + std::to_string(stats::getStatistics().trianglesCount);
 
 				ImGui::Text(drawcalls.c_str());
 				ImGui::Text(shapescount.c_str());

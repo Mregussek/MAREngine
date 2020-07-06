@@ -14,9 +14,6 @@ namespace mar {
 
 
 		class RendererOpenGLFactory : public RendererFactory {
-			static std::vector<ShaderType> s_shaderTypes;
-			static std::vector<Ref<ShaderOpenGL>> s_storedShaders;
-
 		public:
 			static Ref<RendererFactory> createFactory() {
 				return std::make_shared<RendererOpenGLFactory>();
@@ -43,18 +40,9 @@ namespace mar {
 			}
 
 			virtual Ref<Shader> createShader(ShaderType type) override {
-				auto search = std::find(s_shaderTypes.begin(), s_shaderTypes.end(), type);
-
-				if (search != s_shaderTypes.end()) {
-					size_t dist = std::distance(s_shaderTypes.begin(), search);
-					MAR_CORE_TRACE("Returning once created shader!");
-					return s_storedShaders[dist];
-				}
-
-				s_shaderTypes.push_back(type);
-				s_storedShaders.push_back(std::make_shared<ShaderOpenGL>());
-				return s_storedShaders[s_storedShaders.size() - 1];
+				return std::make_shared<ShaderOpenGL>();
 			}
+
 			virtual Ref<FrameBuffer> createFrameBuffer() override {
 				return std::make_shared<FrameBufferOpenGL>();
 			}
