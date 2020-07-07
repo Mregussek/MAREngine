@@ -79,7 +79,7 @@ namespace mar {
 				\param index - index of shape
 				\return m_id[index] - id of texture prescribed to shape
 			*/
-			virtual const unsigned int& getID(const unsigned int& index) const { return unsigned int(0); }
+			virtual const unsigned int& getID(const unsigned int& index) const { return 0; }
 
 			/*
 			Method should return path to texture associated to shape with specified index.
@@ -88,7 +88,7 @@ namespace mar {
 				\param index - index of path
 				\return m_path[index] - path of texture prescribed to shape
 			*/
-			virtual const std::string& getPath(const unsigned int& index) const { return std::string(); }
+			virtual const std::string& getPath(const unsigned int& index) const { return "empty"; }
 
 			/*
 			Method should add specified item to id vector. Must be overloaded!

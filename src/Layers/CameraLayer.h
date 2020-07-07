@@ -53,9 +53,8 @@ namespace mar {
 			inline const graphics::CameraData& getCameraData() const { return m_camera->getCameraData(); }
 
 			// --- SET METHODS --- //
-			void set(const int& win_h, const int& win_w) {
-				m_camera->setWindowSize((const float*)&win_h, (const float*)&win_w);
-			}
+			void set(const int& win_h, const int& win_w) { m_camera->setWindowSize((const float*)&win_h, (const float*)&win_w); }
+			void set(const float& win_h, const float& win_w) { m_camera->setWindowSize(&win_h, &win_w);	}
 
 			void mouseSetup() {
 				auto win = &window::Window::getInstance();

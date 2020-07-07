@@ -56,8 +56,8 @@ namespace mar {
 				return;
 			}
 
-			ss << "MAR ENGINE SCENE FILE" << std::endl;
-			ss << "#BEGIN" << std::endl << std::endl;
+			ss << "MAR ENGINE SCENE FILE" << "\n";
+			ss << "#BEGIN" << "\n" << "\n";
 
 			////////////////////////////////////////////////
 			/// --------- WRITING LOOP TO FILE --------- ///
@@ -76,8 +76,8 @@ namespace mar {
 					break;
 				}
 
-				ss << "#mesh_id " + std::to_string(i) << std::endl;
-				ss << "#mesh_type " + mesh_type << std::endl << std::endl;
+				ss << "#mesh_id " + std::to_string(i) << "\n";
+				ss << "#mesh_type " + mesh_type << "\n\n";
 
 				for (unsigned int j = 0; j < meshes[i]->getShapesCount(); j++) {
 					auto shape = meshes[i]->getShape(j);
@@ -86,28 +86,28 @@ namespace mar {
 					auto scale = shape->getScale();
 					auto color = shape->getDefaultColor();
 
-					ss << "#shape_id " + std::to_string(j) << std::endl;
-					ss << "#shape_name " << shape->getName() << std::endl;
+					ss << "#shape_id " + std::to_string(j) << "\n";
+					ss << "#shape_name " << shape->getName() << "\n";
 					ss << "#shape_center " + std::to_string(center.x) + " " + std::to_string(center.y)
-						+ " " + std::to_string(center.z) << std::endl;
+						+ " " + std::to_string(center.z) << "\n";
 					ss << "#shape_angle " + std::to_string(angle.x) + " " + std::to_string(angle.y)
-						+ " " + std::to_string(angle.z) << std::endl;
+						+ " " + std::to_string(angle.z) << "\n";
 					ss << "#shape_scale " + std::to_string(scale.x) + " " + std::to_string(scale.y)
-						+ " " + std::to_string(scale.z) << std::endl;
+						+ " " + std::to_string(scale.z) << "\n";
 					ss << "#shape_color " + std::to_string(color.x) + " " + std::to_string(color.y)
-						+ " " + std::to_string(color.z) << std::endl;
-					ss << "#shape_texture " << shape->getUsedTexture() << std::endl;
+						+ " " + std::to_string(color.z) << "\n";
+					ss << "#shape_texture " << shape->getUsedTexture() << "\n";
 
 					if (std::strcmp(shape->getName(), "Object") == 0)
-						ss << "#shape_obj " << shape->getUsedObj() << std::endl;
+						ss << "#shape_obj " << shape->getUsedObj() << "\n";
 
-					ss << std::endl;
+					ss << "\n";
 				}
 			}
 			/// ------- END WRITING LOOP TO FILE ------- ///
 			////////////////////////////////////////////////
 
-			ss << "#END" << std::endl;
+			ss << "#END" << "\n";
 
 			ss.close();
 			MAR_CORE_INFO("Saved!");

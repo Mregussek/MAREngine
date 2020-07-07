@@ -93,7 +93,7 @@ namespace mar {
 					return;
 				}
 
-				for (int i = 0; i < fs::getMeshTypes().size(); i++) {
+				for (size_t i = 0; i < fs::getMeshTypes().size(); i++) {
 					auto layer = new layers::MeshLayer("Mesh Layer");
 					layer->initialize();
 					layer->getMesh()->setType(fs::getMeshTypes()[i]);

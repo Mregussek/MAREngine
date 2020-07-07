@@ -27,6 +27,8 @@ namespace mar {
 
 
 		class FrameBuffer : std::enable_shared_from_this<FrameBuffer> {
+			FrameBufferSpecification m_spec;
+
 		public:
 			FrameBuffer() = default;
 
@@ -40,11 +42,11 @@ namespace mar {
 
 			virtual void close() { }
 
-			virtual const unsigned int& getColorAttach() const { return unsigned int(0); }
+			virtual const unsigned int& getColorAttach() const { return 0; }
 
-			virtual const unsigned int& getDepthAttach() const { return unsigned int(0); }
+			virtual const unsigned int& getDepthAttach() const { return 0; }
 
-			virtual const FrameBufferSpecification& getSpecification() const { return FrameBufferSpecification(); }
+			virtual const FrameBufferSpecification& getSpecification() const { return m_spec; }
 		};
 
 

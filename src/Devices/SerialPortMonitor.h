@@ -7,6 +7,8 @@
 #define SERIALPORT_H
 
 #include "../mar.h"
+#include "../Debug/Log.h"
+
 
 namespace mar {
     namespace devices {
