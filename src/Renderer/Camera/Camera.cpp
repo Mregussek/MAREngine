@@ -15,14 +15,14 @@ namespace mar {
 		const float CameraSettings::SPEED = 5.0f;
 		const float CameraSettings::SENSITIVITY = 0.1f;
 		const float CameraSettings::ZOOM = 55.0f;
-		const glm::vec3 CameraSettings::CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
+		const maths::vec3 CameraSettings::CAMERA_START{ 0.0f, 0.0f, 7.0f };
 
 		CameraData Camera::s_cameraData;
 
 		Camera::Camera()
 			: m_position(CameraSettings::CAMERA_START),
-			m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
-			m_worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+			m_front({ 0.0f, 0.0f, -1.0f }),
+			m_worldUp({ 0.0f, 1.0f, 0.0f }),
 			m_movementSpeed(CameraSettings::SPEED),
 			m_mouseSensitivity(CameraSettings::SENSITIVITY),
 			m_zoom(CameraSettings::ZOOM),
@@ -156,15 +156,15 @@ namespace mar {
 		}
 
 		void Camera::updateCameraVectors() {
-			glm::vec3 front;
+			maths::vec3 front;
 
-			front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
-			front.y = sin(glm::radians(m_pitch));
-			front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+			front.x = maths::Trig::cosine(maths::Trig::toRadians(m_yaw)) * maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
+			front.y = maths::Trig::sine(maths::Trig::toRadians(m_pitch));
+			front.z = maths::Trig::sine(maths::Trig::toRadians(m_yaw)) * maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
 
-			m_front = glm::normalize(front);
-			m_right = glm::normalize(glm::cross(m_front, m_worldUp));
-			m_up = glm::normalize(glm::cross(m_right, m_front));
+			m_front = maths::vec3::normalize(front);
+			m_right = maths::vec3::normalize(maths::vec3::cross(m_front, m_worldUp));
+			m_up = maths::vec3::normalize(maths::vec3::cross(m_right, m_front));
 		}
 
 

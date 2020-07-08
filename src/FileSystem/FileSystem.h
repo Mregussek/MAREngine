@@ -23,10 +23,10 @@ namespace mar {
 			static std::vector<graphics::SceneType> s_scene_type;
 			static std::vector<graphics::MeshType> s_mesh_type;
 			static std::vector<std::vector<Ref<graphics::Shape>>> s_shapes;
-			static std::vector<std::vector<glm::vec3>> s_centers;
-			static std::vector<std::vector<glm::vec3>> s_angles;
-			static std::vector<std::vector<glm::vec3>> s_scales;
-			static std::vector<std::vector<glm::vec3>> s_colors;
+			static std::vector<std::vector<maths::vec3>> s_centers;
+			static std::vector<std::vector<maths::vec3>> s_angles;
+			static std::vector<std::vector<maths::vec3>> s_scales;
+			static std::vector<std::vector<maths::vec3>> s_colors;
 			static std::vector<std::vector<std::string>> s_textures;
 			static std::vector<std::vector<std::string>> s_objs;
 
@@ -46,10 +46,10 @@ namespace mar {
 			inline static std::vector<graphics::SceneType>& getSceneTypes() { return s_scene_type; }
 			inline static std::vector<graphics::MeshType>& getMeshTypes() { return s_mesh_type; }
 			inline static std::vector<std::vector<Ref<graphics::Shape>>>& getShapes() { return s_shapes; }
-			inline static std::vector<std::vector<glm::vec3>>& getCenters() { return s_centers; }
-			inline static std::vector<std::vector<glm::vec3>>& getAngles() { return s_angles; }
-			inline static std::vector<std::vector<glm::vec3>>& getScales() { return s_scales; }
-			inline static std::vector<std::vector<glm::vec3>>& getColors() { return s_colors; }
+			inline static std::vector<std::vector<maths::vec3>>& getCenters() { return s_centers; }
+			inline static std::vector<std::vector<maths::vec3>>& getAngles() { return s_angles; }
+			inline static std::vector<std::vector<maths::vec3>>& getScales() { return s_scales; }
+			inline static std::vector<std::vector<maths::vec3>>& getColors() { return s_colors; }
 			inline static std::vector<std::vector<std::string>>& getTextures() { return s_textures; }
 			inline static std::vector<std::vector<std::string>>& getObjs() { return s_objs; }
 

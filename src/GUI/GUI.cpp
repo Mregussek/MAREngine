@@ -364,9 +364,9 @@ namespace mar {
 				ImGui::MenuItem("Shapes Menu", "");
 
 				if (m_meshIndex != -1 && m_shapeIndex != -1) {
-					glm::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
-					glm::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
-					glm::vec3& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScale();
+					maths::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
+					maths::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
+					maths::vec3& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScale();
 
 					ImGui::Text("Shape");
 					ImGui::Separator();
@@ -493,9 +493,9 @@ namespace mar {
 					
 				if (ImGui::Button("Select Pyramid")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -505,9 +505,9 @@ namespace mar {
 
 				if (ImGui::Button("Select Cube")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -517,9 +517,9 @@ namespace mar {
 
 				if (ImGui::Button("Select Surface")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -529,9 +529,9 @@ namespace mar {
 
 				if (ImGui::Button("Select Wall")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -634,14 +634,14 @@ namespace mar {
 			ImGui::End();
 		}
 
-		const glm::mat4 GUI::getTranslationMatrix() const {
-			return glm::translate(glm::mat4(1.0f), m_sceneTranslation);
+		const maths::mat4 GUI::getTranslationMatrix() const {
+			return maths::mat4::translation(m_sceneTranslation);
 		}
 
-		const glm::mat4 GUI::getRotationMatrix() const {
-			return glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				 * glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.z), glm::vec3(0.0f, 0.0f, 1.0f))
-				 * glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		const maths::mat4 GUI::getRotationMatrix() const {
+			return maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.y), maths::vec3(0.0f, 1.0f, 0.0f))
+				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.z), maths::vec3(0.0f, 0.0f, 1.0f))
+				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.x), maths::vec3(1.0f, 0.0f, 0.0f));
 		}
 
 

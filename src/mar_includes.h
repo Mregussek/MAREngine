@@ -21,6 +21,7 @@
 	#error
 #endif
 
+/*
 #if __has_include(<glm.hpp>)
 	#include <glm.hpp>
 	#include <gtc/matrix_transform.hpp>
@@ -29,6 +30,7 @@
 #else
 	#error "MAR ENGINE: Cannot import glm.hpp!"
 #endif
+*/
 
 // --- Include other third-party libraries --- //
 #pragma warning( push )
@@ -75,6 +77,15 @@
 #endif
 
 #pragma warning (pop)
+
+// --- Include MAR libraries --- //
+
+#if __has_include("MARMaths.h")
+	#include "MARMaths.h"
+	#define MAR_ENGINE_MAR_MATHS_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import MARMaths.h!"
+#endif
 
 // --- Include C++ STL libraries --- //
 // I/O events

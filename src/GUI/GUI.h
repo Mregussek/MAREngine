@@ -30,16 +30,16 @@ namespace mar {
 
 		struct GUIData {
 			float colors[4];
-			glm::mat4 rotation;
-			glm::mat4 translate;
+			maths::mat4 rotation;
+			maths::mat4 translate;
 
 			GUIData() = default;
 		};
 
 		class GUI {
 			// --- Attributes for sliders && input
-			glm::vec3 m_sceneTranslation{ 0.0f, 0.0f, 0.0f };
-			glm::vec3 m_sceneAngle{ 0.0f, 0.0f, 0.0f };
+			maths::vec3 m_sceneTranslation{ 0.0f, 0.0f, 0.0f };
+			maths::vec3 m_sceneAngle{ 0.0f, 0.0f, 0.0f };
 			float m_sceneColors[4];
 			float m_inputCenter[3];
 			float m_generalScale{ 1.f };
@@ -74,8 +74,8 @@ namespace mar {
 			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
 
 			// --- GET METHODS --- //
-			const glm::mat4 getTranslationMatrix() const;
-			const glm::mat4 getRotationMatrix() const;
+			const maths::mat4 getTranslationMatrix() const;
+			const maths::mat4 getRotationMatrix() const;
 			inline const static GUIData& getGUIData() { return s_guiData; }
 
 		private:

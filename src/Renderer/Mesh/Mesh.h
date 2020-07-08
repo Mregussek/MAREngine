@@ -31,10 +31,10 @@ namespace mar {
 			std::vector<float> m_vertices;
 			std::vector<unsigned int> m_indices;
 			std::vector<int> m_samplers;
-			std::vector<glm::mat4> m_translationMats;
-			std::vector<glm::mat4> m_rotationMats;
-			std::vector<glm::mat4> m_scaleMats;
-			std::vector<glm::vec3> m_colors;
+			std::vector<maths::mat4> m_translationMats;
+			std::vector<maths::mat4> m_rotationMats;
+			std::vector<maths::mat4> m_scaleMats;
+			std::vector<maths::vec3> m_colors;
 			// --- Light object
 			Light m_light;
 			// --- State information 
@@ -52,8 +52,8 @@ namespace mar {
 			void create();
 			void loadScene(Scene* scene, MeshType type);
 
-			void tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture);
-			void submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture);
+			void tryReuseShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture);
+			void submitShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture);
 			void flushShape(const unsigned int& index);
 
 			void update();
@@ -61,7 +61,7 @@ namespace mar {
 			void clearBuffers();
 			void clearMatrices();
 
-			void pushMatrices(const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale);
+			void pushMatrices(const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale);
 
 		private:
 			void pushShape(Ref<Shape>& new_shape);
@@ -94,10 +94,10 @@ namespace mar {
 			inline const std::vector<int>& getSamplers() const { return m_samplers; }
 			inline const std::vector<unsigned int>& getLayout() const { return m_shapes[0]->getLayout(); }
 
-			inline const std::vector<glm::mat4>& getTranslationMatrices() const { return m_translationMats; }
-			inline const std::vector<glm::mat4>& getRotationMatrices() const { return m_rotationMats; }
-			inline const std::vector<glm::mat4>& getScaleMatrices() const { return m_scaleMats; }
-			inline const std::vector<glm::vec3>& getColors() const { return m_colors; }
+			inline const std::vector<maths::mat4>& getTranslationMatrices() const { return m_translationMats; }
+			inline const std::vector<maths::mat4>& getRotationMatrices() const { return m_rotationMats; }
+			inline const std::vector<maths::mat4>& getScaleMatrices() const { return m_scaleMats; }
+			inline const std::vector<maths::vec3>& getColors() const { return m_colors; }
 
 			inline Light& getLight() { return m_light; }
 

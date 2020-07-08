@@ -9,9 +9,9 @@ namespace mar {
 	namespace graphics {
 
 
-		Shape::Shape(float new_id, const char* new_name, glm::vec3 new_center, glm::vec3 new_angle,
+		Shape::Shape(float new_id, const char* new_name, maths::vec3 new_center, maths::vec3 new_angle,
 			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
-			std::vector<unsigned int> new_layout, glm::vec3 new_color)
+			std::vector<unsigned int> new_layout, maths::vec3 new_color)
 			: m_id(new_id),
 			m_texid(0.0f),
 			m_name(new_name),

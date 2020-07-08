@@ -170,6 +170,13 @@
     <ClInclude Include="other\imgui\imstb_rectpack.h" />
     <ClInclude Include="other\imgui\imstb_textedit.h" />
     <ClInclude Include="other\imgui\imstb_truetype.h" />
+    <ClInclude Include="other\MARMaths\MARMaths.h" />
+    <ClInclude Include="other\MARMaths\src\maths.h" />
+    <ClInclude Include="other\MARMaths\src\mat\mat4.h" />
+    <ClInclude Include="other\MARMaths\src\trig\trigonometric.h" />
+    <ClInclude Include="other\MARMaths\src\vec\vec2.h" />
+    <ClInclude Include="other\MARMaths\src\vec\vec3.h" />
+    <ClInclude Include="other\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="src\Layers\CameraLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Window\Input.h" />
@@ -224,6 +231,10 @@
     <ClCompile Include="other\imgui\imgui_demo.cpp" />
     <ClCompile Include="other\imgui\imgui_draw.cpp" />
     <ClCompile Include="other\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="other\MARMaths\src\mat\mat4.cpp" />
+    <ClCompile Include="other\MARMaths\src\vec\vec2.cpp" />
+    <ClCompile Include="other\MARMaths\src\vec\vec3.cpp" />
+    <ClCompile Include="other\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\FileSystem\FileSystem.cpp" />
     <ClCompile Include="src\Layers\GUILayer.cpp" />

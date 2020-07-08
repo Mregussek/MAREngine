@@ -34,9 +34,9 @@ namespace mar {
 			m_vertices = std::vector<float>();
 			m_indices = std::vector<unsigned int>();
 			m_samplers = std::vector<int>();
-			m_scaleMats = std::vector<glm::mat4>();
-			m_translationMats = std::vector<glm::mat4>();
-			m_rotationMats = std::vector<glm::mat4>();
+			m_scaleMats = std::vector<maths::mat4>();
+			m_translationMats = std::vector<maths::mat4>();
+			m_rotationMats = std::vector<maths::mat4>();
 
 			m_light = Light();
 
@@ -76,7 +76,7 @@ namespace mar {
 			}
 		}
 
-		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture) {
+		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
 			if (m_shapes.size() != m_shapesCount) {
 				new_shape->setCenter(center);
 				new_shape->setAngle(angle);
@@ -97,7 +97,7 @@ namespace mar {
 			submitShape(new_shape, center, angle, scale, texture);
 		}
 
-		void Mesh::submitShape(Ref<Shape>& new_shape, const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale, const char* texture) {
+		void Mesh::submitShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
 			if (m_shapesCount == constants::maxObjectsInScene - 1) {
 				MAR_CORE_ERROR("Cannot push more objects!");
 				return;
@@ -149,17 +149,17 @@ namespace mar {
 			m_indicesMaxValue += new_shape->getVertices().size() / new_shape->getStride();
 		}
 
-		void Mesh::pushMatrices(const glm::vec3& center, const glm::vec3& angle, const glm::vec3& scale) {
-			m_translationMats.push_back(glm::translate(glm::mat4(1.0f), center));
+		void Mesh::pushMatrices(const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale) {
+			m_translationMats.push_back(maths::mat4::translation(center));
 
-			glm::mat4 transform =
-				glm::rotate(glm::mat4(1.0f), glm::radians(angle.x), glm::vec3(1.0f, 0.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(glm::mat4(1.0f), glm::radians(angle.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			maths::mat4 transform =
+				  maths::mat4::rotation(maths::Trig::toRadians(angle.x), {1.0f, 0.0f, 0.0f})
+				* maths::mat4::rotation(maths::Trig::toRadians(angle.y), {0.0f, 1.0f, 0.0f})
+				* maths::mat4::rotation(maths::Trig::toRadians(angle.z), {0.0f, 0.0f, 1.0f});
 
 			m_rotationMats.push_back(transform);
 
-			m_scaleMats.push_back(glm::scale(glm::mat4(1.0f), scale));
+			m_scaleMats.push_back(maths::mat4::scale(scale));
 		}
 
 		void Mesh::flushShape(const unsigned int& index) {

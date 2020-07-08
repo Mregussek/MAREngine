@@ -144,12 +144,6 @@ namespace mar {
 		}
 
 		void Renderer::updateLightData(Light* light) {
-			light->setPosition({
-				0.5f + 0.5f * sin(glfwGetTime()),
-				0.2f + 0.2f * sin(glfwGetTime()),
-				7.0f + 5.0f * cos(glfwGetTime())
-			});
-
 			m_mainShader->setUniformVector3("u_material.lightPos", light->getPosition());
 
 			m_mainShader->setUniformVector3("u_material.ambient", light->getAmbient());

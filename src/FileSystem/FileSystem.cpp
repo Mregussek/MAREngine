@@ -17,10 +17,10 @@ namespace mar {
 		std::vector<graphics::SceneType> fnc::s_scene_type;
 		std::vector<graphics::MeshType> fnc::s_mesh_type;
 		std::vector<std::vector<Ref<graphics::Shape>>> fnc::s_shapes;
-		std::vector<std::vector<glm::vec3>> fnc::s_centers;
-		std::vector<std::vector<glm::vec3>> fnc::s_angles;
-		std::vector<std::vector<glm::vec3>> fnc::s_scales;
-		std::vector<std::vector<glm::vec3>> fnc::s_colors;
+		std::vector<std::vector<maths::vec3>> fnc::s_centers;
+		std::vector<std::vector<maths::vec3>> fnc::s_angles;
+		std::vector<std::vector<maths::vec3>> fnc::s_scales;
+		std::vector<std::vector<maths::vec3>> fnc::s_colors;
 		std::vector<std::vector<std::string>> fnc::s_textures;
 		std::vector<std::vector<std::string>> fnc::s_objs;
 
@@ -146,10 +146,10 @@ namespace mar {
 				if (line.find("#mesh_id") != std::string::npos) {
 
 					s_shapes.push_back(std::vector<Ref<graphics::Shape>>());
-					s_centers.push_back(std::vector<glm::vec3>());
-					s_angles.push_back(std::vector<glm::vec3>());
-					s_scales.push_back(std::vector<glm::vec3>());
-					s_colors.push_back(std::vector<glm::vec3>());
+					s_centers.push_back(std::vector<maths::vec3>());
+					s_angles.push_back(std::vector<maths::vec3>());
+					s_scales.push_back(std::vector<maths::vec3>());
+					s_colors.push_back(std::vector<maths::vec3>());
 					s_textures.push_back(std::vector<std::string>());
 					s_objs.push_back(std::vector<std::string>());
 
