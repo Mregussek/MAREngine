@@ -290,6 +290,8 @@
     <None Include="resources\mar_files\load_default.marscene" />
     <None Include="resources\mar_files\modified.marscene" />
     <None Include="resources\mar_files\to_load.marscene" />
+    <None Include="resources\mar_files\pushed_to_meshes.marscene" />
+    <None Include="resources\mar_files\test.marscene" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">

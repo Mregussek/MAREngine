@@ -262,6 +262,8 @@
     <None Include="README.md" />
     <None Include="resources\mar_files\load_default.marscene" />
     <None Include="resources\mar_files\modified.marscene" />
+    <None Include="resources\mar_files\pushed_to_meshes.marscene" />
+    <None Include="resources\mar_files\test.marscene" />
     <None Include="resources\mar_files\to_load.marscene" />
     <None Include="resources\shaders\basic.shader" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />

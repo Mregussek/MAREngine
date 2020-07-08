@@ -14,8 +14,7 @@ out vec3 v_lightNormal;
 out vec3 v_Position;
 
 uniform mat4 u_Model;
-uniform mat4 u_View;
-uniform mat4 u_Projection;
+uniform mat4 u_MVP;
 uniform mat4 u_SeperateTranslate[32];
 uniform mat4 u_SeperateRotation[32];
 uniform mat4 u_SeperateScale[32];
@@ -25,9 +24,7 @@ void main() {
 	int index = int(shapeIndex);
 	mat4 renderTrans = u_SeperateTranslate[index] * u_SeperateRotation[index] * u_SeperateScale[index];
 
-	mat4 MVP = u_Projection * u_View * u_Model;
-
-	gl_Position = MVP * renderTrans * position;
+	gl_Position = u_MVP * renderTrans * position;
 
 	// Pass values to fragment shader
 	v_TexCoord = position.xyz;

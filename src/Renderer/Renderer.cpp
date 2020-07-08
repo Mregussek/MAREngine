@@ -137,8 +137,7 @@ namespace mar {
 		}
 
 		void Renderer::updateCameraData() {
-			m_mainShader->setUniformMat4f("u_Projection", Camera::getCameraData().projection);
-			m_mainShader->setUniformMat4f("u_View", Camera::getCameraData().view);
+			m_mainShader->setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
 			m_mainShader->setUniformMat4f("u_Model", Camera::getCameraData().model);
 
 			m_mainShader->setUniformVector3("u_CameraPos", Camera::getCameraData().position);

@@ -78,6 +78,8 @@ namespace mar {
 			s_cameraData.model = getModelMatrix();
 			s_cameraData.view = getViewMatrix();
 
+			s_cameraData.mvp = s_cameraData.projection * s_cameraData.view * s_cameraData.model;
+
 			s_cameraData.position = getCameraPosition();
 		}
 
