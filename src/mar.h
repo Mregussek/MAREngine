@@ -1,69 +1,10 @@
 /*
  *	Mateusz Rzeczyca
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * 
- *	Description:
- *	This file contains all the include libraries for this engine, so that everything used to create
- *	something will be here. Also it defines 'mar' namespace with all its classes.
  */
 
 
-//! ---- ACTUAL INCLUDES ---- !// 
-// --- Import GLEW lib statically --- //
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-// --- Include OpenGL Libs --- //
-#include <GL/glew.h> 
-#include <GLFW/glfw3.h>
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>
-
-// --- Include other third-party libraries --- //
-#pragma warning( push )
-#pragma warning( disable : 26495) 
-#pragma warning( disable : 26812) 
-#pragma warning( disable : 26451) 
-#pragma warning( disable : 6385) 
-#pragma warning( disable : 6011) 
-#pragma warning( disable : 6262) 
-#pragma warning( disable : 6308) 
-#pragma warning( disable : 4005) 
-#pragma warning( disable : 4286) 
-#pragma warning( disable : 4099) 
-
-#include "stb_image/stb_image.h"
-#include "imgui.h"
-#include "examples/imgui_impl_glfw.h"
-#include "examples/imgui_impl_opengl3.h"
-#include "SerialPort.hpp"
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
-#pragma warning (pop)
-
-// --- Include C++ STL libraries --- //
-// I/O events
-#include <iostream>
-#include <fstream> 
-#include <string>
-#include <sstream>
-#include <vector> 
-#include <utility>
-#include <unordered_map>
-#include <algorithm> // std::find, std::copy
-// multi-threading
-#include <thread> 
-#include <mutex>
-// random numbers
-#include <random>
-// filesystem
-#include <filesystem>
-
-
-#define MAR_ENGINE_DEBUG_MODE
+#include "mar_includes.h"
 
 /*!
 	mar is a main namespace for MAREngine. Below you can find all classes,
@@ -71,6 +12,7 @@
 	cause it initializes OpenGL stuff. 
 */
 namespace mar {
+
 	template<typename T>
 	using Scope = std::unique_ptr<T>;
 
@@ -163,12 +105,6 @@ namespace mar {
 		inline const char* glsl_version = "#version 330";
 	}
 
-#endif // !MAR_ENGINE_SETTINGS
-
-
-#ifndef MAR_ENGINE_CONSTANTS
-#define MAR_ENGINE_CONSTANTS
-
 	namespace constants {
 		inline const size_t maxCount = 100000;
 		inline const size_t maxVertexCount = maxCount * 50;
@@ -176,18 +112,10 @@ namespace mar {
 		inline const size_t maxObjectsInScene = 32;
 	}
 
-#endif // !MAR_ENGINE_CONSTANTS
-
-
-#ifndef MAR_ENGINE_STORAGE
-#define MAR_ENGINE_STORAGE
-
 	namespace storage {
 		inline Ref<graphics::RendererFactory> factory;
 		inline bool usegui;
 	}
 
-#endif // !MAR_ENGINE_STORAGE
-
-
+#endif // !MAR_ENGINE_SETTINGS
 }

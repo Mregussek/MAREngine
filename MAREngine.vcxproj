@@ -171,6 +171,7 @@
     <ClInclude Include="other\imgui\imstb_textedit.h" />
     <ClInclude Include="other\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Layers\CameraLayer.h" />
+    <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\FileSystem\FileSystem.h" />
     <ClInclude Include="src\Layers\GUILayer.h" />
