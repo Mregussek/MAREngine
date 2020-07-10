@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
