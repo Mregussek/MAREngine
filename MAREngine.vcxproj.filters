@@ -206,9 +206,6 @@
     <ClCompile Include="src\Window\Window.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="other\glad\glad.c">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\GUI\GUI.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -393,8 +390,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
-    <Text Include="other\CMakeLists.txt" />
-    <Text Include="other\glad\CMakeLists.txt" />
-    <Text Include="other\imgui\CMakeLists.txt" />
   </ItemGroup>
 </Project>

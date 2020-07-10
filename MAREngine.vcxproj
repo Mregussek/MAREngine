@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\spdlog\include;$(SolutionDir)other\glad;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\serialport\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\spdlog\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\serialport\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -149,7 +149,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\spdlog\include;$(SolutionDir)other\glad;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\serialport\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\glad\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\spdlog\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\serialport\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\glm;$(SolutionDir)3rd_party/SerialPort;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -249,7 +249,6 @@
     <ClCompile Include="src\GUI\GUI.cpp" />
     <ClCompile Include="src\MAREngine.cpp" />
     <ClCompile Include="src\Renderer\Camera\Camera.cpp" />
-    <ClCompile Include="other\glad\glad.c" />
     <ClCompile Include="other\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Renderer\Mesh\Shapes\Shapes.cpp" />
     <ClCompile Include="src\Renderer\Scene\Scene.cpp" />
@@ -306,9 +305,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
-    <Text Include="other\CMakeLists.txt" />
-    <Text Include="other\glad\CMakeLists.txt" />
-    <Text Include="other\imgui\CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

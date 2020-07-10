@@ -99,21 +99,17 @@ add_subdirectory(other/spdlog)
 set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
-# MARMaths
-message("Looking for: MARMaths")
-set(MAR_MATHS_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/MARMaths")
-message(STATUS "MAR_MATHS_INCLUDE_DIR:= ${MAR_MATHS_INCLUDE_DIR}")
-
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
 	"${CMAKE_SOURCE_DIR}/other/imgui"
 	"${CMAKE_SOURCE_DIR}/other/serialport/include"
+	"${CMAKE_SOURCE_DIR}/other/MARMaths"
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
 	${MAR_GLFW_DIR}
 	${STB_IMAGE_INCLUDE_DIR}
 	${SPDLOG_INCLUDE_DIR}
-	${MAR_MATHS_INCLUDE_DIR})
+)
 
 # MAREngine
 message("Creating executable...")
