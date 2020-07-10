@@ -33,6 +33,16 @@ set(IMGUI_HEADERS
     ${CMAKE_SOURCE_DIR}/other/imgui/imstb_textedit.h
     ${CMAKE_SOURCE_DIR}/other/imgui/imstb_truetype.h)
 
+file(GLOB_RECURSE SOURCE_MATH 
+	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.c
+	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.cpp)
+	
+file(GLOB_RECURSE HEADER_MATH 
+	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.h
+	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.hpp)
+	
+set(MAIN_MATH ${CMAKE_SOURCE_DIR}/other/MARMaths/MARMaths.h)
+
 file(GLOB_RECURSE SOURCE_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.c
 	${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -68,15 +78,6 @@ else()
 	message(STATUS "Error: Cannot find GLEW!")
 endif()
 
-# GLM
-message("Looking for: GLM")
-find_package(GLM REQUIRED)
-if(GLM_FOUND)
-	MESSAGE(STATUS "GLM_INCLUDE_DIR = ${GLM_INCLUDE_DIR}")
-else()
-	MESSAGE(STATUS "Error: Cannot find GLM!")
-endif()
-
 # GLFW
 message("Looking for: GLFW")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -98,13 +99,10 @@ add_subdirectory(other/spdlog)
 set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
-# GLAD
-#message("Looking for: GLAD")
-#add_library(GLAD 
-	#"${CMAKE_SOURCE_DIR}/3rd_party/glad/include/glad/glad.h"
-	#"${CMAKE_SOURCE_DIR}/other/glad/glad.c")
-#set(GLAD_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/glad/include")
-#message(STATUS "GLAD_INCLUDE_DIR:= ${GLAD_INCLUDE_DIR}")
+# MARMaths
+message("Looking for: MARMaths")
+set(MAR_MATHS_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/MARMaths")
+message(STATUS "MAR_MATHS_INCLUDE_DIR:= ${MAR_MATHS_INCLUDE_DIR}")
 
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
@@ -113,19 +111,20 @@ include_directories(
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
 	${MAR_GLFW_DIR}
-	${GLM_INCLUDE_DIR}
 	${STB_IMAGE_INCLUDE_DIR}
-	${SPDLOG_INCLUDE_DIR})
+	${SPDLOG_INCLUDE_DIR}
+	${MAR_MATHS_INCLUDE_DIR})
 
 # MAREngine
 message("Creating executable...")
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} 
-		${IMGUI_SOURCES} ${IMGUI_HEADERS} ${STB_IMAGE_H} ${STB_IMAGE_SRC})
+		${IMGUI_SOURCES} ${IMGUI_HEADERS} ${STB_IMAGE_H} ${STB_IMAGE_SRC}
+		${SOURCE_MATH} ${HEADER_MATH} ${MAIN_MATH})
 message("Linking libraries to MAREngine")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)	
 if(WIN32)
 	set(MAR_OPENGL_IMPORT opengl32 glew32s glfw3)
-	target_link_libraries ( ${PROJECT_NAME} PRIVATE ${MAR_OPENGL_IMPORT} )
+	target_link_libraries ( ${PROJECT_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
 endif()
 
 IF(MSVC)

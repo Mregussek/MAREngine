@@ -2,6 +2,7 @@
 .vscode
 build
 bin
+other
 
 ### ---- Created By Visual Studio ---- ###
 ## Ignore Visual Studio temporary files, build results, and
