@@ -11,16 +11,14 @@ namespace mar {
 
 		RendererStatistics Renderer::s_stats;
 
-		void Renderer::createRenderer(const Ref<RendererFactory>& factory, const bool& usegui) {
+		void Renderer::create() {
 			if (!m_initialized) {
-				m_vbo = factory->createVertexBuffer();
-				m_layout = factory->createVertexBufferLayout();
-				m_vao = factory->createVertexArray();
-				m_ebo = factory->createElementBuffer();
-				m_mainShader = factory->createShader();
+				m_vbo = storage::factory->createVertexBuffer();
+				m_layout = storage::factory->createVertexBufferLayout();
+				m_vao = storage::factory->createVertexArray();
+				m_ebo = storage::factory->createElementBuffer();
 
 				s_stats = RendererStatistics();
-				m_useGUI = usegui;
 
 				MAR_CORE_INFO("Renderer properly created!");
 			}
@@ -29,7 +27,7 @@ namespace mar {
 			}
 		}
 
-		void Renderer::closeRenderer() {
+		void Renderer::close() {
 			if (m_initialized) {
 				m_mainShader->shutdown();
 				m_vao->closeArrayBuffer();
@@ -53,16 +51,20 @@ namespace mar {
 
 		void Renderer::initialize(const std::vector<unsigned int>& layout, const ShaderType type) {
 			if (!m_initialized) {
+				m_mainShader = storage::factory->createShader(type);
 				m_mainShader->initialize(type);
 
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
 
+				m_ebo->initializeElement(constants::maxIndexCount);
+				m_ebo->unbind();
+
 				m_vao->initializeArrayBuffer();
 				m_vbo->initializeVertex(constants::maxVertexCount);
-				m_ebo->initializeElement(constants::maxIndexCount);
-
 				m_vao->addBuffer(m_layout);
+				m_vbo->unbind();
+				m_vao->unbind();
 
 				m_initialized = true;
 
@@ -74,35 +76,44 @@ namespace mar {
 		}
 
 		void Renderer::draw(Mesh* mesh) {
-			bind();
-
 			mesh->clearBuffers();
 			mesh->update();
-
-			updateMeshData(mesh);
-			updateCameraData();
-			updateGUIData();
-			updateLightData(&mesh->getLight());
-
-			m_vbo->updateDynamically(mesh->getVertices());
-			m_ebo->updateDynamically(mesh->getIndices());
 
 			s_stats.verticesCount += mesh->getVertices().size();
 			s_stats.indicesCount += mesh->getIndices().size();
 			s_stats.shapesCount += mesh->getShapesCount();
 
+			m_mainShader->bind();
 			m_mainShader->setUniformSampler("u_Texture", mesh->getSamplers());
+			updateMeshData(mesh);
+			updateCameraData();
+			updateGUIData();
+			updateLightData(&mesh->getLight());
 
-			glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr);
+			m_vao->bind();
+
+			m_vbo->bind();
+			m_vbo->updateDynamically(mesh->getVertices());
+
+			m_ebo->bind();
+			m_ebo->updateDynamically(mesh->getIndices());
+
+			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr) );
+
+			m_vbo->resetBuffer();
+			m_vbo->unbind();
+
+			m_ebo->resetBuffer();
+			m_ebo->unbind();
+
+			m_vao->unbind();
 
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
-
-			unbind();
 		}
 
 		void Renderer::updateMeshData(Mesh* mesh) {
-			if (m_useGUI) {
+			if (storage::usegui) {
 				mesh->clearMatrices();
 
 				for (unsigned int i = 0; i < mesh->getShapesCount(); i++) {
@@ -118,19 +129,18 @@ namespace mar {
 		}
 
 		void Renderer::updateGUIData() {
-			if (m_useGUI) {
-				m_mainShader->setUniform4fv("u_GUISceneColor", m_guiData->colors);
-				m_mainShader->setUniformMat4f("u_GUISceneTranslation", m_guiData->translate);
-				m_mainShader->setUniformMat4f("u_GUISceneRotation", m_guiData->rotation);
+			if (storage::usegui) {
+				m_mainShader->setUniform4fv("u_GUISceneColor", gui::GUI::getGUIData().colors);
+				m_mainShader->setUniformMat4f("u_GUISceneTranslation", gui::GUI::getGUIData().translate);
+				m_mainShader->setUniformMat4f("u_GUISceneRotation", gui::GUI::getGUIData().rotation);
 			}
 		}
 
 		void Renderer::updateCameraData() {
-			m_mainShader->setUniformMat4f("u_Projection", m_cameraData->projection);
-			m_mainShader->setUniformMat4f("u_View", m_cameraData->view);
-			m_mainShader->setUniformMat4f("u_Model", m_cameraData->model);
+			m_mainShader->setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
+			m_mainShader->setUniformMat4f("u_Model", Camera::getCameraData().model);
 
-			m_mainShader->setUniformVector3("u_CameraPos", m_cameraData->position);
+			m_mainShader->setUniformVector3("u_CameraPos", Camera::getCameraData().position);
 		}
 
 		void Renderer::updateLightData(Light* light) {
@@ -149,33 +159,6 @@ namespace mar {
 			m_mainShader->setUniform1f("u_material.constant", light->getConstant());
 			m_mainShader->setUniform1f("u_material.linear", light->getLinear());
 			m_mainShader->setUniform1f("u_material.quadratic", light->getQuadratic());
-		}
-
-		void Renderer::bind() {
-			m_mainShader->bind();
-			m_vao->bind();
-			m_vbo->bind();
-			m_ebo->bind();
-		}
-
-		void Renderer::unbind() {
-			m_mainShader->unbind();
-			m_vao->unbind();
-			m_vbo->unbind();
-			m_ebo->unbind();
-		}
-
-		void Renderer::setReferences(const gui::GUIData* guidata, const CameraData* cameradata) {
-			MAR_CORE_TRACE("Setting references for Renderer (GUIData and CameraData)!");
-
-			m_guiData = guidata;
-			m_cameraData = cameradata;
-		}
-
-		void Renderer::setReferences(const CameraData* cameradata) {
-			MAR_CORE_TRACE("Setting references for Renderer (CameraData)!");
-
-			m_cameraData = cameradata;
 		}
 
 

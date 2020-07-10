@@ -8,7 +8,7 @@
 
 #include "../../../mar.h"
 #include "VertexArray.h"
-#include "../VertexBuffer/VertexBufferLayout.h"
+
 
 namespace mar {
 	namespace graphics {

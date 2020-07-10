@@ -174,15 +174,36 @@
     <ClInclude Include="src\Layers\CameraLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\mar_includes.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\src\mat\mat4.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\src\trig\trigonometric.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\src\vec\vec2.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\src\vec\vec3.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\src\vec\vec4.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\src\maths.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="other\MARMaths\MARMaths.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Renderer\Renderer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Window\Window.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="other\glad\glad.c">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\GUI.cpp">
@@ -272,6 +293,18 @@
     <ClCompile Include="src\FileSystem\FileSystem.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="other\MARMaths\src\mat\mat4.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="other\MARMaths\src\vec\vec2.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="other\MARMaths\src\vec\vec3.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="other\MARMaths\src\vec\vec4.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -290,6 +323,8 @@
     <None Include="resources\mar_files\load_default.marscene" />
     <None Include="resources\mar_files\modified.marscene" />
     <None Include="resources\mar_files\to_load.marscene" />
+    <None Include="resources\mar_files\pushed_to_meshes.marscene" />
+    <None Include="resources\mar_files\test.marscene" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">
@@ -355,8 +390,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
-    <Text Include="other\CMakeLists.txt" />
-    <Text Include="other\glad\CMakeLists.txt" />
-    <Text Include="other\imgui\CMakeLists.txt" />
   </ItemGroup>
 </Project>

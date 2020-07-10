@@ -14,15 +14,15 @@ namespace mar {
 
 
 		class Light {
-			glm::vec3 _position{ 0.0f, 0.0f, 10.0f };
+			maths::vec3 _position{ 0.0f, 0.0f, 10.0f };
 
-			glm::vec3 _ambient{ 0.5f, 0.5f, 0.5f };
-			glm::vec3 _diffuse{ 0.9f, 0.9f, 0.9f };
-			glm::vec3 _specular{ 0.5f, 0.5f, 0.5f };
+			maths::vec3 _ambient{ 0.5f, 0.5f, 0.5f };
+			maths::vec3 _diffuse{ 0.9f, 0.9f, 0.9f };
+			maths::vec3 _specular{ 0.5f, 0.5f, 0.5f };
 
-			glm::vec3 _ambientStrength{ 0.2f, 0.2f, 0.2f };
-			glm::vec3 _diffuseStrength{ 0.7f, 0.7f, 0.7f };
-			glm::vec3 _specularStrength{ 1.0f, 1.0f, 1.0f };
+			maths::vec3 _ambientStrength{ 0.2f, 0.2f, 0.2f };
+			maths::vec3 _diffuseStrength{ 0.7f, 0.7f, 0.7f };
+			maths::vec3 _specularStrength{ 1.0f, 1.0f, 1.0f };
 
 			float _constant{ 1.0f };
 			float _linear{ 0.045f };
@@ -33,16 +33,16 @@ namespace mar {
 		public:
 			Light() = default;
 
-			void setPosition(const glm::vec3 new_pos) { _position = new_pos; }
+			void setPosition(const maths::vec3 new_pos) { _position = new_pos; }
 
-			const glm::vec3& getPosition() const { return _position; }
-			const glm::vec3& getAmbient() const { return _ambient; }
-			const glm::vec3& getDiffuse() const { return _diffuse; }
-			const glm::vec3& getSpecular() const { return _specular; }
-
-			const glm::vec3& getAmbientStrength() const { return _ambientStrength; }
-			const glm::vec3& geDiffuseStrength() const { return _diffuseStrength; }
-			const glm::vec3& geSpecularStrength() const { return _specularStrength; }
+			const maths::vec3& getPosition() const { return _position; }
+			const maths::vec3& getAmbient() const { return _ambient; }
+			const maths::vec3& getDiffuse() const { return _diffuse; }
+			const maths::vec3& getSpecular() const { return _specular; }
+		
+			const maths::vec3& getAmbientStrength() const { return _ambientStrength; }
+			const maths::vec3& geDiffuseStrength() const { return _diffuseStrength; }
+			const maths::vec3& geSpecularStrength() const { return _specularStrength; }
 
 			const float& getShininess() const { return _shininess; }
 

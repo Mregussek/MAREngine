@@ -9,12 +9,17 @@
 
 namespace mar {
 	namespace window {
-    
+		
+
+		Window Window::s_window;
+
 
 		void Window::initialize(const int& H, const int& W, const char* wN) {
 			m_height = H;
 			m_width = W;
 			m_windowName = wN;
+
+			glfwSetErrorCallback(windowErrorCallback);
 
 			if (!glfwInit()) {
 				MAR_CORE_ERROR("glfw() init failure");
@@ -24,8 +29,8 @@ namespace mar {
 			MAR_CORE_TRACE("GLFW has been loaded successfully!");
 
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 			/// TODO: read about fullscreen mode. One of the nullptr's should not be nullptr
@@ -40,23 +45,17 @@ namespace mar {
 			glfwMakeContextCurrent(m_window);
 			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-#ifdef IMPORT_GLEW
 			glewExperimental = GL_TRUE;
 			if (glewInit() != GLEW_OK) {
 				glfwTerminate();
 				MAR_CORE_ERROR("glewInit() failure");
 				exit(0);
 			}
-#else
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-				std::cout << "Failed to initialize GLAD" << std::endl;
-				exit(0);
-			}
-#endif
 
 			callbacks::setWindowSize(&m_height, &m_width);
 			callbacks::setMouse(&m_mouseX, &m_mouseY);
 			callbacks::setScroll(&m_scrollX, &m_scrollY);
+			callbacks::setMouseButtons(&Input::getMouseButton(), &Input::getMouseButton());
 			callbacks::setUseInput(&Input::getUseInput());
 
 			callbacks::setCallbacks(m_window);
@@ -64,11 +63,10 @@ namespace mar {
 			/// Vertical synchronization(VSync) is enabled by using glfwSwapInterval(1); 
 			glfwSwapInterval(1);
 			/// Enable DEPTH, in other words 3D
-			glEnable(GL_DEPTH_TEST);
+			MAR_CORE_GL_FUNC( glEnable(GL_DEPTH_TEST) );
 			/// Enable loading PNG files and transparency
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			
+			MAR_CORE_GL_FUNC( glEnable(GL_BLEND) );
+			MAR_CORE_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
 			MAR_CORE_INFO("OpenGL loaded successfully and window is working!");
 		}
@@ -82,15 +80,14 @@ namespace mar {
 		void Window::swapBuffers() {
 			glfwSwapBuffers(m_window);
 			glfwPollEvents();
+
+			if (Input::isKeyPressed(MAR_KEY_ESCAPE))
+				closeWindow();
 		}
 
 		void Window::clearScreen() {
-			glClearColor(0.22f, 0.69f, 0.87f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			glViewport(0, 0, m_width, m_height);
-
-			if (glfwGetKey(m_window, MAR_KEY_ESCAPE) == MAR_KEY_PRESS)
-				glfwSetWindowShouldClose(m_window, true);
+			MAR_CORE_GL_FUNC(glClearColor(0.22f, 0.69f, 0.87f, 1.0f) );
+			MAR_CORE_GL_FUNC(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 		}
 
 		namespace callbacks {
@@ -113,6 +110,13 @@ namespace mar {
 				}
 			}
 
+			inline void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+				if (*use_input) {
+					*clicked_button = button;
+					*clicked_action = action;
+				}
+			}
+
 			void setWindowSize(int* height, int* width) {
 				window_width = width;
 				window_height = height;
@@ -128,6 +132,11 @@ namespace mar {
 				scroll_y = y;
 			}
 
+			void setMouseButtons(int* button, int* action) {
+				clicked_button = button;
+				clicked_action = action;
+			}
+
 			void setUseInput(const bool* use) {
 				use_input = use;
 			}
@@ -138,6 +147,8 @@ namespace mar {
 				glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 				glfwSetCursorPosCallback(window, mouse_callback);
 				glfwSetScrollCallback(window, scroll_callback);
+
+				glfwSetMouseButtonCallback(window, mouse_button_callback);
 			}
 		}
 

@@ -20,16 +20,13 @@ namespace mar {
 		bool GUI::s_fullscreenPersisant{ true };
 
 
-		void GUI::initialize(window::Window* window, const char* glsl_version, bool can_modify_objects) {
-			m_window = window;
-			m_canModifyObjects = can_modify_objects;
-
+		void GUI::initialize(const char* glsl_version) {
 			m_meshIndex = -1;
 			m_shapeIndex = -1;
 
 			ImGui::CreateContext();
 			Setup_Theme();
-			ImGui_ImplGlfw_InitForOpenGL(m_window->getWindow(), true);
+			ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().getWindow(), true);
 			ImGui_ImplOpenGL3_Init(glsl_version);
 
 			ImGuiIO& io = ImGui::GetIO();
@@ -105,7 +102,7 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Exit")) {
-						m_window->closeWindow();
+						window::Window::getInstance().closeWindow();
 					}
 
 					ImGui::EndMenu();
@@ -128,6 +125,10 @@ namespace mar {
 				if (ImGui::MenuItem("About")) {
 					m_infoWindow = true;
 					m_instructionWindow = true;
+				}
+
+				if (ImGui::MenuItem("Exit")) {
+					window::Window::getInstance().closeWindow();
 				}
 
 				ImGui::EndMainMenuBar();
@@ -295,7 +296,7 @@ namespace mar {
 		void GUI::Menu_ModifyScene() {
 			ImGui::Begin("Scene Modification Menu");
 
-			if (m_canModifyObjects) {
+			if (storage::usegui) {
 				ImGui::MenuItem("Scene Menu");
 
 				if (ImGui::TreeNode("Modify Scene")) {
@@ -358,14 +359,14 @@ namespace mar {
 		void GUI::Menu_ModifyShape() {
 			ImGui::Begin("Modify Shape");
 
-			if (m_canModifyObjects) {
+			if (storage::usegui) {
 
 				ImGui::MenuItem("Shapes Menu", "");
 
 				if (m_meshIndex != -1 && m_shapeIndex != -1) {
-					glm::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
-					glm::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
-					glm::vec3& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScale();
+					maths::vec3& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
+					maths::vec3& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
+					maths::vec3& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScale();
 
 					ImGui::Text("Shape");
 					ImGui::Separator();
@@ -417,7 +418,7 @@ namespace mar {
 		}
 
 		void GUI::Menu_PushShapeToScene() {
-			if (m_canModifyObjects) {
+			if (storage::usegui) {
 				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
 				ImGui::InputFloat3("Input Center", m_inputCenter);
 
@@ -470,6 +471,11 @@ namespace mar {
 
 				ImGui::Separator();
 
+				if (checkCharsStart("Objects", str[m_pushMeshIndex])) {
+					ImGui::Text("MAREngine do not support push to objects!");
+					return;
+				}
+
 				if (checkCharsEnding(".jpg", GUITextureList::s_textures[GUITextureList::s_selectedItem])) {
 					if (checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
 						ImGui::Text("Cannot push single .jpg file to cubemaps!");
@@ -478,16 +484,18 @@ namespace mar {
 				}
 				else {
 					if (!checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
-						ImGui::Text("Cannot push cubemap directory to no cubemaps!");
-						return;
+						if (std::strcmp(GUITextureList::s_textures[GUITextureList::s_selectedItem], "empty") != 0) {
+							ImGui::Text("Cannot push cubemap directory to no cubemaps!");
+							return;
+						}
 					}
 				}
 					
 				if (ImGui::Button("Select Pyramid")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -497,9 +505,9 @@ namespace mar {
 
 				if (ImGui::Button("Select Cube")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -509,9 +517,9 @@ namespace mar {
 
 				if (ImGui::Button("Select Surface")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -521,9 +529,9 @@ namespace mar {
 
 				if (ImGui::Button("Select Wall")) {
 					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
-					glm::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					glm::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					glm::vec3 scale{ 1.f, 1.f, 1.f };
+					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+					maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 					std::string path = "resources/textures";
 					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
@@ -537,12 +545,14 @@ namespace mar {
 		}
 
 		void GUI::Menu_Statistics() {
-			if (m_canModifyObjects) {
-				std::string drawcalls = "Draw Calls: " + std::to_string(m_statistics->drawCallsCount);
-				std::string shapescount = "Shapes Count: " + std::to_string(m_statistics->shapesCount);
-				std::string vertices = "Vertices: " + std::to_string(m_statistics->verticesCount);
-				std::string indices = "Indices: " + std::to_string(m_statistics->indicesCount);
-				std::string triangles = "Triangles: " + std::to_string(m_statistics->trianglesCount);
+			if (storage::usegui) {
+				using stats = graphics::Renderer;
+
+				auto drawcalls = "Draw Calls: " + std::to_string(stats::getStatistics().drawCallsCount);
+				auto shapescount = "Shapes Count: " + std::to_string(stats::getStatistics().shapesCount);
+				auto vertices = "Vertices: " + std::to_string(stats::getStatistics().verticesCount);
+				auto indices = "Indices: " + std::to_string(stats::getStatistics().indicesCount);
+				auto triangles = "Triangles: " + std::to_string(stats::getStatistics().trianglesCount);
 
 				ImGui::Text(drawcalls.c_str());
 				ImGui::Text(shapescount.c_str());
@@ -624,14 +634,14 @@ namespace mar {
 			ImGui::End();
 		}
 
-		const glm::mat4 GUI::getTranslationMatrix() const {
-			return glm::translate(glm::mat4(1.0f), m_sceneTranslation);
+		const maths::mat4 GUI::getTranslationMatrix() const {
+			return maths::mat4::translation(m_sceneTranslation);
 		}
 
-		const glm::mat4 GUI::getRotationMatrix() const {
-			return glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.y), glm::vec3(0.0f, 1.0f, 0.0f))
-				 * glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.z), glm::vec3(0.0f, 0.0f, 1.0f))
-				 * glm::rotate(glm::mat4(1.0f), glm::radians(m_sceneAngle.x), glm::vec3(1.0f, 0.0f, 0.0f));
+		const maths::mat4 GUI::getRotationMatrix() const {
+			return maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.y), maths::vec3(0.0f, 1.0f, 0.0f))
+				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.z), maths::vec3(0.0f, 0.0f, 1.0f))
+				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.x), maths::vec3(1.0f, 0.0f, 0.0f));
 		}
 
 

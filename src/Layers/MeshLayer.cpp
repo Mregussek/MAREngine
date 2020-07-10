@@ -10,15 +10,12 @@ namespace mar {
 	namespace layers {
 
 
-		void MeshLayer::initializeLayer(graphics::Renderer* renderer, graphics::Mesh* mesh) {
-			m_mesh = mesh;
-			m_renderer = renderer;
-		}
+		void MeshLayer::initialize() {
+			m_mesh = new graphics::Mesh();
+			m_renderer = new graphics::Renderer();
 
-		void MeshLayer::create(const Ref<graphics::RendererFactory>& factory, const bool& usegui) {
-			m_useGUI = usegui;
-			m_renderer->createRenderer(factory, usegui);
-			m_mesh->createMesh(factory);
+			m_renderer->create();
+			m_mesh->create();
 		}
 
 		void MeshLayer::scene(graphics::SceneType scenetype, graphics::MeshType meshtype) {
@@ -30,20 +27,12 @@ namespace mar {
 			m_renderer->initialize(m_mesh->getLayout(), getShaderType(m_mesh->getMeshType()));
 		}
 
-		void MeshLayer::set(const gui::GUIData* guidata, const graphics::CameraData* cameradata) {
-			m_renderer->setReferences(guidata, cameradata);
-		}
-
-		void MeshLayer::set(const graphics::CameraData* cameradata) {
-			m_renderer->setReferences(cameradata);
-		}
-
 		void MeshLayer::set(const Ref<graphics::FrameBuffer>& framebuffer) {
 			m_framebuffer = framebuffer;
 		}
 
 		void MeshLayer::prepareFrame() {
-			if (m_useGUI) {
+			if (storage::usegui) {
 				m_framebuffer->bind();
 				m_framebuffer->clear();
 				m_framebuffer->unbind();
@@ -51,7 +40,7 @@ namespace mar {
 		}
 
 		void MeshLayer::update() {
-			if (m_useGUI) {
+			if (storage::usegui) {
 				m_framebuffer->bind();
 
 				m_renderer->draw(m_mesh);
@@ -64,14 +53,14 @@ namespace mar {
 		}
 
 		void MeshLayer::closeLayer() {
-			m_renderer->closeRenderer();
+			m_renderer->close();
 
 			delete m_renderer;
 			delete m_mesh;
 		}
 
 		graphics::ShaderType MeshLayer::getShaderType(graphics::MeshType meshtype) {
-			if (m_renderer->useGUI()) {
+			if (storage::usegui) {
 				switch (meshtype) {
 				case NORMAL_MESH_TYPE:
 				case OBJECTS_MESH_TYPE:

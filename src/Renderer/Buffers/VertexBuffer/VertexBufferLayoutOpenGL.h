@@ -8,6 +8,7 @@
 
 #include "VertexBufferLayout.h"
 
+
 namespace mar {
 	namespace graphics {
 
@@ -65,7 +66,7 @@ namespace mar {
 					_stride += count * sizeof(GL_UNSIGNED_BYTE);
 				}
 				else {
-					std::cerr << "Trying to push wrong element" << std::endl;
+					MAR_CORE_ERROR("VertexBufferLayout: Trying to push wrong element");
 					return;
 				}
 			}

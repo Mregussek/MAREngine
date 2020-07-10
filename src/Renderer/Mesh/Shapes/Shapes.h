@@ -30,10 +30,10 @@ namespace mar {
 			std::string m_usedTexture;
 			std::string m_usedOBJ;
 
-			glm::vec3 m_center;
-			glm::vec3 m_angle;
-			glm::vec3 m_scale;
-			glm::vec3 m_defaultColor;
+			maths::vec3 m_center;
+			maths::vec3 m_angle;
+			maths::vec3 m_scale;
+			maths::vec3 m_defaultColor;
 
 			std::vector<float> m_verticesVector;
 			std::vector<unsigned int> m_indicesVector;
@@ -45,9 +45,9 @@ namespace mar {
 		public:
 			Shape() = default;
 
-			Shape(float new_id, const char* new_name, glm::vec3 new_center, glm::vec3 new_angle,
+			Shape(float new_id, const char* new_name, maths::vec3 new_center, maths::vec3 new_angle,
 				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
-				std::vector<unsigned int> new_layout, glm::vec3 new_color);
+				std::vector<unsigned int> new_layout, maths::vec3 new_color);
 
 			Shape(const Ref<Shape>& shape);
 
@@ -59,10 +59,10 @@ namespace mar {
 			inline const std::string& getUsedObj() const { return m_usedOBJ; }
 			inline const float getID() const { return m_id; }
 			inline const float getTextureID() const { return m_texid; }
-			inline glm::vec3& getCenter() { return m_center; }
-			inline glm::vec3& getAngle() { return m_angle; }
-			inline glm::vec3& getScale() { return m_scale; }
-			inline glm::vec3& getDefaultColor() { return m_defaultColor; }
+			inline maths::vec3& getCenter() { return m_center; }
+			inline maths::vec3& getAngle() { return m_angle; }
+			inline maths::vec3& getScale() { return m_scale; }
+			inline maths::vec3& getDefaultColor() { return m_defaultColor; }
 			const unsigned int getStride();
 			inline const std::vector<float>& getVertices() const { return m_verticesVector; }
 			inline const std::vector<unsigned int>& getIndices() const { return m_indicesVector; }
@@ -74,10 +74,10 @@ namespace mar {
 			void setUsedObj(std::string used_obj) { m_usedOBJ = used_obj; }
 			void setID(float new_id) { m_id = new_id; }
 			void setTextureID(float new_tex_id) { m_texid = new_tex_id; }
-			void setCenter(const glm::vec3& new_center) { m_center = new_center; }
-			void setAngle(const glm::vec3& new_angle) { m_angle = new_angle; }
-			void setScale(const glm::vec3& new_scale) { m_scale = new_scale; }
-			void setDefaultColor(const glm::vec3& new_color) { m_defaultColor = new_color; }
+			void setCenter(const maths::vec3& new_center) { m_center = new_center; }
+			void setAngle(const maths::vec3& new_angle) { m_angle = new_angle; }
+			void setScale(const maths::vec3& new_scale) { m_scale = new_scale; }
+			void setDefaultColor(const maths::vec3& new_color) { m_defaultColor = new_color; }
 			void setVertices(const std::vector<float>& new_vertices) { m_verticesVector = new_vertices; }
 			void setVertice(size_t index, float new_value) { m_verticesVector[index] = new_value; }
 			void setIndices(const std::vector<unsigned int>& new_indices) { m_indicesVector = new_indices; }

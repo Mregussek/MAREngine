@@ -3,11 +3,12 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef MAR_ENGINE_CAMERA_H
+#define MAR_ENGINE_CAMERA_H
 
 #include "../../mar.h"
 #include "../../Window/Input.h"
+
 
 namespace mar {
     namespace graphics {
@@ -17,7 +18,9 @@ namespace mar {
 			FORWARD,
 			BACKWARD,
 			LEFT,
-			RIGHT
+			RIGHT,
+			UP,
+			DOWN
 		};
 
 		enum class ObjectRotation {
@@ -34,14 +37,15 @@ namespace mar {
 			const static float SPEED;
 			const static float SENSITIVITY;
 			const static float ZOOM;
-			const static glm::vec3 CAMERA_START;
+			const static maths::vec3 CAMERA_START;
 		};
 
 		struct CameraData {
-			glm::mat4 projection;
-			glm::mat4 view;
-			glm::mat4 model;
-			glm::vec3 position;
+			maths::mat4 projection;
+			maths::mat4 view;
+			maths::mat4 model;
+			maths::mat4 mvp;
+			maths::vec3 position;
 
 			CameraData() = default;
 		};
@@ -51,11 +55,11 @@ namespace mar {
 			const float* m_windowWidth;
 			const float* m_windowHeight;
 			// --- Camera Attributes
-			glm::vec3 m_position;
-			glm::vec3 m_front;
-			glm::vec3 m_up;
-			glm::vec3 m_right;
-			glm::vec3 m_worldUp;
+			maths::vec3 m_position;
+			maths::vec3 m_front;
+			maths::vec3 m_up;
+			maths::vec3 m_right;
+			maths::vec3 m_worldUp;
 			// --- Mouse Settings
 			float m_movementSpeed;
 			float m_mouseSensitivity;
@@ -76,7 +80,7 @@ namespace mar {
 			const float* m_scrollCallX;
 			const float* m_scrollCallY;
 			// --- Data for renderer
-			CameraData m_cameraData;
+			static CameraData s_cameraData;
 
 		public:
 			Camera();
@@ -86,11 +90,12 @@ namespace mar {
 			void processInput();
 			void updateData();
 
+			void mouseButtonCallback(float xpos, float ypos);
 			void mouseCallback(float xpos, float ypos);
 			void scrollCallback(float ypos);
 
 		private:
-			void processKeyboard(CameraMovement&& direction);
+			void processCameraMovement(CameraMovement&& direction);
 			void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 			void processMouseScroll(float yoffset);
 			void updateCameraVectors();
@@ -113,16 +118,19 @@ namespace mar {
 			}
 
 			// --- GET METHODS --- //
-			inline const CameraData& getCameraData() const { return m_cameraData; }
+			inline static CameraData& getCameraData() { return s_cameraData; }
 
-			inline const glm::vec3& getCameraPosition() const { return m_position; }
+			inline const maths::vec3& getCameraPosition() const { return m_position; }
 			inline const float& getZoom() const { return m_zoom; }
-			inline const glm::mat4 getProjectionMatrix() const { return glm::perspective(glm::radians(m_zoom), *m_windowWidth / *m_windowHeight, 0.01f, 100.0f); }
-			inline const glm::mat4 getViewMatrix() const { return glm::lookAt(m_position, m_position + m_front, m_up); }
-			inline const glm::mat4 getModelMatrix() const { return glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 0.0f }); }
+			inline const maths::mat4 getProjectionMatrix() const 
+			{ return maths::mat4::perspective(maths::Trig::toRadians(m_zoom), *m_windowWidth / *m_windowHeight, 0.01f, 100.0f); }
+			inline const maths::mat4 getViewMatrix() const 
+			{ return maths::mat4::lookAt(m_position, m_position + m_front, m_up); }
+			inline const maths::mat4 getModelMatrix() const 
+			{ return maths::mat4::translation({ 0.0f, 0.0f, 0.0f }); }
 		};
 
 
 } }
 
-#endif // !CAMERA_H
+#endif // !MAR_ENGINE_CAMERA_H

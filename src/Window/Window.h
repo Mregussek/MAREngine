@@ -7,13 +7,16 @@
 #define WINDOW_H
 
 #include "../mar.h"
-#include "../Renderer/Camera/Camera.h"
+#include "Input.h"
+#include "../Debug/Log.h"
+
 
 namespace mar {
 	namespace window {
 
 
 		class Window {
+			static Window s_window;
 			GLFWwindow* m_window;
 			const char* m_windowName;
 			// --- Window Size Callback
@@ -35,7 +38,12 @@ namespace mar {
 			void swapBuffers();
 			void clearScreen();
 
+			static void windowErrorCallback(int error, const char* description) 
+			{ MAR_CORE_ERROR("GLFW Error: " + std::string(description)); }
+				
+
 			// --- GET METHODS --- //
+			inline static Window& getInstance() { return s_window; }
 			GLFWwindow* getWindow() const { return m_window; }
 			const int& getWidth() const { return m_width; }
 			const int& getHeight() const { return m_height; }
@@ -65,14 +73,19 @@ namespace mar {
 			inline float* scroll_x;
 			inline float* scroll_y;
 
+			inline int* clicked_button;
+			inline int* clicked_action;
+
 			inline const bool* use_input;
 
 			inline void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 			inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 			inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+			inline void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 			void setWindowSize(int* height, int* width);
 			void setMouse(float* x, float* y);
 			void setScroll(float* x, float* y);
+			void setMouseButtons(int* button, int* action);
 			void setUseInput(const bool* use);
 			void setCallbacks(GLFWwindow* wind);
 		}

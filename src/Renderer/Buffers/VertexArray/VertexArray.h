@@ -7,6 +7,9 @@
 #define VERTEXARRAY_H
 
 #include "../../../mar.h"
+#include "../VertexBuffer/VertexBufferLayout.h"
+#include "../../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics {

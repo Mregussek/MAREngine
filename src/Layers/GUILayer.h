@@ -24,7 +24,7 @@ namespace mar {
 			GUILayer() = default;
 			GUILayer(const char* name) : m_debugName(name) { }
 
-			void initializeLayer(gui::GUI* gui);
+			void initialize();
 			void submit(graphics::Mesh* mesh);
 
 			// --- OVERLOADED METHODS --- // 
@@ -34,7 +34,7 @@ namespace mar {
 			void closeLayer() override;
 
 			// --- SET METHODS --- //
-			void set(const graphics::RendererStatistics* stats, const Ref<graphics::FrameBuffer>& framebuf = nullptr);
+			void set(const Ref<graphics::FrameBuffer>& framebuf = nullptr);
 		};
 
 

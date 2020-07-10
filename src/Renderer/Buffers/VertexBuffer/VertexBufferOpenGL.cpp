@@ -12,9 +12,9 @@ namespace mar {
 		void VertexBufferOpenGL::initializeVertex(unsigned int allocationMemory) {
 			if (!_initialized) {
 				_allocatedMemory = allocationMemory;
-				glGenBuffers(1, &_id);
-				glBindBuffer(GL_ARRAY_BUFFER, _id);
-				glBufferData(GL_ARRAY_BUFFER, _allocatedMemory, nullptr, GL_DYNAMIC_DRAW);
+				MAR_CORE_GL_FUNC(glGenBuffers(1, &_id));
+				MAR_CORE_GL_FUNC(glBindBuffer(GL_ARRAY_BUFFER, _id));
+				MAR_CORE_GL_FUNC(glBufferData(GL_ARRAY_BUFFER, _allocatedMemory, nullptr, GL_DYNAMIC_DRAW));
 				_initialized = true;
 			}
 			else {
@@ -23,23 +23,23 @@ namespace mar {
 		}
 
 		void VertexBufferOpenGL::bind() const {
-			glBindBuffer(GL_ARRAY_BUFFER, _id);
+			MAR_CORE_GL_FUNC(glBindBuffer(GL_ARRAY_BUFFER, _id));
 		}
 
 		void VertexBufferOpenGL::updateDynamically(const std::vector<float>& vertices) const {
-			glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vertices.data());
+			MAR_CORE_GL_FUNC(glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vertices.data()));
 		}
 
 		void VertexBufferOpenGL::resetBuffer() {
-			glBufferSubData(GL_ARRAY_BUFFER, 0, 0, nullptr);
+			MAR_CORE_GL_FUNC(glBufferSubData(GL_ARRAY_BUFFER, 0, 0, nullptr));
 		}
 
 		void VertexBufferOpenGL::unbind() const {
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			MAR_CORE_GL_FUNC(glBindBuffer(GL_ARRAY_BUFFER, 0));
 		}
 
 		void VertexBufferOpenGL::close() {
-			glDeleteBuffers(1, &_id);
+			MAR_CORE_GL_FUNC(glDeleteBuffers(1, &_id));
 			_initialized = false;
 		}
 

@@ -1,5 +1,5 @@
 #shader vertex
-#version 460 core
+#version 330 core
 
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec3 lightNormal;
@@ -14,8 +14,7 @@ out vec3 v_lightNormal;
 out vec3 v_Position;
 
 uniform mat4 u_Model;
-uniform mat4 u_View;
-uniform mat4 u_Projection;
+uniform mat4 u_MVP;
 uniform mat4 u_GUISceneTranslation;
 uniform mat4 u_GUISceneRotation;
 uniform mat4 u_SeperateTranslate[32];
@@ -28,9 +27,7 @@ void main() {
 	mat4 GUISeperateMatrix = u_SeperateTranslate[index] * u_SeperateRotation[index] * u_SeperateScale[index];
 	mat4 GUISceneMatrix = u_GUISceneTranslation * u_GUISceneRotation;
 
-	mat4 MVP = u_Projection * u_View * u_Model;
-
-	gl_Position = MVP * GUISceneMatrix * GUISeperateMatrix * position;
+	gl_Position = u_MVP * GUISceneMatrix * GUISeperateMatrix * position;
 
 	// Pass values to fragment shader
 	v_TexCoord = texCoord;
@@ -41,7 +38,7 @@ void main() {
 };
 
 #shader fragment
-#version 460 core
+#version 330 core
 
 layout(location = 0) out vec4 color;
 

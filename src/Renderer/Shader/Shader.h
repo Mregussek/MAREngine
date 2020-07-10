@@ -33,10 +33,10 @@ namespace mar {
 			virtual void unbind() const { }
 
 			virtual void setUniformSampler(const std::string& name, const std::vector<int>& sampler) { }
-			virtual void setUniformVectorVec3(const std::string& name, const std::vector<glm::vec3>& vec) { }
-			virtual void setUniformVectorMat4(const std::string& name, const std::vector<glm::mat4>& sampler) { }
-			virtual void setUniformMat4f(const std::string& name, const glm::mat4& matrix4x4) { }
-			virtual void setUniformVector3(const std::string& name, const glm::vec3& vector3) { }
+			virtual void setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec) { }
+			virtual void setUniformVectorMat4(const std::string& name, const std::vector<maths::mat4>& sampler) { }
+			virtual void setUniformMat4f(const std::string& name, const maths::mat4& matrix4x4) { }
+			virtual void setUniformVector3(const std::string& name, const maths::vec3& vector3) { }
 			virtual void setUniform1i(const std::string& name, int value) { }
 			virtual void setUniform1f(const std::string& name, float value) { }
 			virtual void setUniform4f(const std::string& name, float red, float green, float blue, float alpha) { }

@@ -39,9 +39,10 @@ namespace mar {
 				return std::make_shared<TextureOpenGL>();
 			}
 
-			virtual Ref<Shader> createShader() override {
+			virtual Ref<Shader> createShader(ShaderType type) override {
 				return std::make_shared<ShaderOpenGL>();
 			}
+
 			virtual Ref<FrameBuffer> createFrameBuffer() override {
 				return std::make_shared<FrameBufferOpenGL>();
 			}

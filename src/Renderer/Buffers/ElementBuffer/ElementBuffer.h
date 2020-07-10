@@ -7,6 +7,8 @@
 #define ELEMENTBUFFER_H
 
 #include "../../../mar.h"
+#include "../../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics {

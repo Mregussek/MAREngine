@@ -55,13 +55,13 @@ namespace mar {
 				, { 1.0f, 1.0f, 1.0f }
 			};
 			m_textures = {
-				"empty"
+				TexturePaths::empty
 				, TexturePaths::mrTex
 				, TexturePaths::blueTex
 				, TexturePaths::grassTex
 				, TexturePaths::wallTex
-				, "empty"
-				, "empty"
+				, TexturePaths::empty
+				, TexturePaths::empty
 				, TexturePaths::blackTex
 				, TexturePaths::wallTex
 			};
@@ -161,10 +161,10 @@ namespace mar {
 				, { 0.5f, 0.5f, 0.5f }
 			};
 			m_textures = {
-				"empty" ,
-				"empty" ,
-				"empty" ,
-				"empty" 
+				TexturePaths::empty ,
+				TexturePaths::empty ,
+				TexturePaths::empty ,
+				TexturePaths::empty 
 			};
 			m_obj = {
 				"resources/objects/lego-human.obj" 

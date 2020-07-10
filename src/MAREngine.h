@@ -32,18 +32,9 @@ namespace mar {
 	namespace engine {
 
 
-		struct MAREngineSettings {
-			static const char name[10];
-			static const int width;
-			static const int height;
-			static const char portName[10];
-			static const char* glsl_version;
-		};
-
 		class MAREngine {
 			static MAREngine s_instance;
 
-			window::Window m_window;
 			std::string m_pathLoad{ "resources/mar_files/load_default.marscene" };
 
 			Ref<graphics::RendererFactory> m_factory{ graphics::RendererOpenGLFactory::createFactory() };

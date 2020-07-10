@@ -12,6 +12,8 @@ namespace mar {
 	
 
 		struct TexturePaths {
+			inline static const char* empty = "resources/textures/empty";
+
 			inline static const char* mrTex = "resources/textures/mr.jpg";
 			inline static const char* yellowTex = "resources/textures/yellow-texture.jpg";
 			inline static const char* grassTex = "resources/textures/grass-texture.jpg";

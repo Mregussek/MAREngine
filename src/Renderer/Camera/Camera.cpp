@@ -15,12 +15,14 @@ namespace mar {
 		const float CameraSettings::SPEED = 5.0f;
 		const float CameraSettings::SENSITIVITY = 0.1f;
 		const float CameraSettings::ZOOM = 55.0f;
-		const glm::vec3 CameraSettings::CAMERA_START = glm::vec3(0.0f, 0.0f, 7.0f);
+		const maths::vec3 CameraSettings::CAMERA_START{ 0.0f, 0.0f, 7.0f };
+
+		CameraData Camera::s_cameraData;
 
 		Camera::Camera()
 			: m_position(CameraSettings::CAMERA_START),
-			m_front(glm::vec3(0.0f, 0.0f, -1.0f)),
-			m_worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+			m_front({ 0.0f, 0.0f, -1.0f }),
+			m_worldUp({ 0.0f, 1.0f, 0.0f }),
 			m_movementSpeed(CameraSettings::SPEED),
 			m_mouseSensitivity(CameraSettings::SENSITIVITY),
 			m_zoom(CameraSettings::ZOOM),
@@ -45,17 +47,15 @@ namespace mar {
 			m_deltaTime = currentFrame - m_lastFrame;
 			m_lastFrame = currentFrame;
 
-			// Camera move check
 			if (window::Input::isKeyPressed(MAR_KEY_W))
-				processKeyboard(CameraMovement::FORWARD);
+				processCameraMovement(CameraMovement::FORWARD);
 			if (window::Input::isKeyPressed(MAR_KEY_S))
-				processKeyboard(CameraMovement::BACKWARD);
+				processCameraMovement(CameraMovement::BACKWARD);
 			if (window::Input::isKeyPressed(MAR_KEY_A))
-				processKeyboard(CameraMovement::LEFT);
+				processCameraMovement(CameraMovement::LEFT);
 			if (window::Input::isKeyPressed(MAR_KEY_D))
-				processKeyboard(CameraMovement::RIGHT);
+				processCameraMovement(CameraMovement::RIGHT);
 
-			// Enable Mouse Usage
 			if (window::Input::isKeyPressed(MAR_KEY_Q)) {
 				if (m_enableMouse) m_enableMouse = false;
 				else m_enableMouse = true;
@@ -63,19 +63,27 @@ namespace mar {
 				m_firstMouse = true;
 			}
 
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_LEFT) &&
+				window::Input::isMousePressed(MAR_MOUSE_BUTTON_RIGHT)) {
+				
+				//mouseButtonCallback(*m_mouseCallX, *m_mouseCallY);
+			}
+
 			mouseCallback(*m_mouseCallX, *m_mouseCallY);
 			processMouseScroll(*m_scrollCallY);
 		}
 
 		void Camera::updateData() {
-			m_cameraData.projection = getProjectionMatrix();
-			m_cameraData.model = getModelMatrix();
-			m_cameraData.view = getViewMatrix();
+			s_cameraData.projection = getProjectionMatrix();
+			s_cameraData.model = getModelMatrix();
+			s_cameraData.view = getViewMatrix();
 
-			m_cameraData.position = getCameraPosition();
+			s_cameraData.mvp = s_cameraData.projection * s_cameraData.view * s_cameraData.model;
+
+			s_cameraData.position = getCameraPosition();
 		}
 
-		void Camera::processKeyboard(CameraMovement&& direction) {
+		void Camera::processCameraMovement(CameraMovement&& direction) {
 			float velocity = m_movementSpeed * m_deltaTime;
 
 			switch (direction) {
@@ -87,7 +95,21 @@ namespace mar {
 				m_position -= m_right * velocity;		break;
 			case CameraMovement::RIGHT:
 				m_position += m_right * velocity;		break;
+			case CameraMovement::UP:
+				m_position += m_up * velocity;			break;
+			case CameraMovement::DOWN:
+				m_position -= m_up * velocity;		break;
 			}
+		}
+
+		void Camera::mouseButtonCallback(float xpos, float ypos) {
+			float xoffset = (float)xpos - m_lastX;
+			float yoffset = m_lastY - (float)ypos;
+
+			m_lastX = (float)xpos;
+			m_lastY = (float)ypos;
+
+			processMouseMovement(xoffset, yoffset);
 		}
 
 		void Camera::mouseCallback(float xpos, float ypos) {
@@ -116,8 +138,8 @@ namespace mar {
 			m_pitch += yoffset;
 
 			if (constrainPitch) {
-				if (m_pitch > 89.0f) m_pitch = 89.0f;
-				if (m_pitch < -89.0f)m_pitch = -89.0f;
+				if (m_pitch >  89.0f) m_pitch = 89.0f;
+				if (m_pitch < -89.0f) m_pitch = -89.0f;
 			}
 
 			updateCameraVectors();
@@ -134,15 +156,15 @@ namespace mar {
 		}
 
 		void Camera::updateCameraVectors() {
-			glm::vec3 front;
+			maths::vec3 front;
 
-			front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
-			front.y = sin(glm::radians(m_pitch));
-			front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+			front.x = maths::Trig::cosine(maths::Trig::toRadians(m_yaw)) * maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
+			front.y = maths::Trig::sine(maths::Trig::toRadians(m_pitch));
+			front.z = maths::Trig::sine(maths::Trig::toRadians(m_yaw)) * maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
 
-			m_front = glm::normalize(front);
-			m_right = glm::normalize(glm::cross(m_front, m_worldUp));
-			m_up = glm::normalize(glm::cross(m_right, m_front));
+			m_front = maths::vec3::normalize(front);
+			m_right = maths::vec3::normalize(maths::vec3::cross(m_front, m_worldUp));
+			m_up = maths::vec3::normalize(maths::vec3::cross(m_right, m_front));
 		}
 
 

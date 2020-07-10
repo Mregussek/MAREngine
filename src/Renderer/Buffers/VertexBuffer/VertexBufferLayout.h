@@ -7,6 +7,8 @@
 #define VERTEXBUFFERLAYOUT_H
 
 #include "../../../mar.h"
+#include "../../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics {
@@ -44,6 +46,8 @@ namespace mar {
 			This is just base class for other implementations of VertexBufferLayout.
 		*/
 		class VertexBufferLayout {
+			std::vector<VertexBufferElement> m_return;
+
 		public:
 			//! Constructor, which should initialize stride counter with 0
 			VertexBufferLayout() = default;
@@ -53,7 +57,7 @@ namespace mar {
 
 				\return _elements - vector of VertexBufferElement
 			*/
-			virtual const std::vector<VertexBufferElement>& getElements() const { return std::vector<VertexBufferElement>(); }
+			virtual const std::vector<VertexBufferElement>& getElements() const { return m_return; }
 
 			/*
 			 Method should returns stride of data

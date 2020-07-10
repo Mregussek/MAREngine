@@ -23,14 +23,11 @@ namespace mar {
 			graphics::Mesh* m_mesh;
 			graphics::Renderer* m_renderer;
 
-			bool m_useGUI{ false };
-
 		public:
 			MeshLayer() = default;
 			MeshLayer(const char* name) : m_debugName(name) { }
 
-			void initializeLayer(graphics::Renderer* renderer, graphics::Mesh* mesh);
-			void create(const Ref<graphics::RendererFactory>& factory, const bool& usegui);
+			void initialize();
 			void scene(graphics::SceneType scenetype, graphics::MeshType meshtype);
 			void load();
 
@@ -41,8 +38,6 @@ namespace mar {
 			void closeLayer() override;
 
 			// --- SET METHODS --- //
-			void set(const gui::GUIData* guidata, const graphics::CameraData* cameradata);
-			void set(const graphics::CameraData* cameradata);
 			void set(const Ref<graphics::FrameBuffer>& framebuffer);
 
 			// --- GET METHODS --- //

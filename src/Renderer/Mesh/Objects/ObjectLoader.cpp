@@ -4,7 +4,7 @@
  */
 
 #include "ObjectLoader.h"
-#include "../../../Debug/Log.h"
+
 
 namespace mar {
 	namespace graphics { namespace objects {
@@ -14,18 +14,18 @@ namespace mar {
 		std::vector<float> ObjectLoader::s_vertices;
 		std::vector<unsigned int> ObjectLoader::s_indices;
 		std::vector<unsigned int> ObjectLoader::s_layout;
-		glm::vec3 ObjectLoader::s_center;
-		glm::vec3 ObjectLoader::s_angle;
-		glm::vec3 ObjectLoader::s_scale;
-		glm::vec3 ObjectLoader::s_defaultcolor;
+		maths::vec3 ObjectLoader::s_center;
+		maths::vec3 ObjectLoader::s_angle;
+		maths::vec3 ObjectLoader::s_scale;
+		maths::vec3 ObjectLoader::s_defaultcolor;
 		float ObjectLoader::s_id;
 		float ObjectLoader::s_texid;
 
 
 		void ObjectLoader::loadObject(const char* path) {
-			std::vector<glm::vec3> vertex_positions;
-			std::vector<glm::vec3> vertex_normals;
-			std::vector<glm::vec2> vertex_texcoords;
+			std::vector<maths::vec3> vertex_positions;
+			std::vector<maths::vec3> vertex_normals;
+			std::vector<maths::vec2> vertex_texcoords;
 			std::vector<unsigned int> indices;
 			std::vector<unsigned int> normal_indices;
 			std::vector<unsigned int> texcoord_indices;
@@ -131,10 +131,10 @@ namespace mar {
 					if (a >= vertex_normals.size() || b >= vertex_normals.size() ||
 						c >= vertex_normals.size()) break;
 
-					glm::vec3 U = vertex_positions[b] - vertex_positions[a];
-					glm::vec3 V = vertex_positions[c] - vertex_positions[a];
+					maths::vec3 U = vertex_positions[b] - vertex_positions[a];
+					maths::vec3 V = vertex_positions[c] - vertex_positions[a];
 
-					glm::vec3 normal = glm::normalize(glm::cross(U, V));
+					maths::vec3 normal = maths::vec3::normalize(maths::vec3::cross(U, V));
 
 					vertex_normals[a] = normal;
 					vertex_normals[b] = normal;

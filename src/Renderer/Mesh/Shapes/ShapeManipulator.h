@@ -7,7 +7,7 @@
 #define SHAPEMANIPULATOR_H
 
 #include "../../../mar.h"
-#include "Shapes.h"
+#include "DefaultShapes/Cube.h"
 
 namespace mar {
     namespace graphics {

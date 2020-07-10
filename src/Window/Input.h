@@ -16,10 +16,15 @@
 namespace mar {
 	namespace window {
 
+		class Window;
 
 		class Input {
 			static GLFWwindow* s_nativewindow;
 			static bool s_useInput;
+
+			// --- Mouse Button Callback
+			static int m_clickedButton;
+			static int m_clickedAction;
 
 		public:
 
@@ -37,8 +42,19 @@ namespace mar {
 				else return false;
 			}
 
+			static bool isMousePressed(int key) {
+				if (s_useInput) {
+					return glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_PRESS ||
+						glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_REPEAT;
+				}
+				else return false;
+			}
+
 			// --- GET METHODS --- //
 			static const bool& getUseInput() { return s_useInput; }
+
+			static int& getMouseButton() { return m_clickedButton; }
+			static int& getMouseAction() { return m_clickedAction; }
 
 			// --- SET METHODS --- //
 			static void enableInput() { s_useInput = true; }
