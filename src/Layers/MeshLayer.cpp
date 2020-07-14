@@ -14,8 +14,8 @@ namespace mar {
 			m_mesh = new graphics::Mesh();
 			m_renderer = new graphics::Renderer();
 
-			m_renderer->create();
 			m_mesh->create();
+			m_renderer->create();
 		}
 
 		void MeshLayer::scene(graphics::SceneType scenetype, graphics::MeshType meshtype) {

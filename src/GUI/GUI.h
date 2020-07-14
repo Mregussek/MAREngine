@@ -46,6 +46,7 @@ namespace mar {
 			char m_inputStr[20];
 			// --- Run-time GUI attributes
 			std::vector<graphics::Mesh*> m_meshes;
+			std::vector<const char*> m_meshesNames;
 			static GUIData s_guiData;
 			int m_meshIndex;
 			int m_shapeIndex;
@@ -68,7 +69,10 @@ namespace mar {
 			void prepareNewFrame();
 			void display();
 
-			void submitMesh(graphics::Mesh* mesh) { m_meshes.push_back(mesh); }
+			void submitMesh(graphics::Mesh* mesh) { 
+				m_meshes.push_back(mesh);
+				m_meshesNames.push_back(mesh->getMeshName());
+			}
 
 			// --- SET METHODS --- //
 			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
@@ -87,6 +91,7 @@ namespace mar {
 			void Display_ViewPort();
 			void Menu_ModifyScene();
 			void Menu_ModifyShape();
+			void Menu_SelectShape();
 			void Menu_PushShapeToScene();
 			void Menu_Statistics();
 			void Menu_Info();

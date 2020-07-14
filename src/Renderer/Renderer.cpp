@@ -76,7 +76,6 @@ namespace mar {
 		}
 
 		void Renderer::draw(Mesh* mesh) {
-			mesh->clearBuffers();
 			mesh->update();
 
 			s_stats.verticesCount += mesh->getVertices().size();

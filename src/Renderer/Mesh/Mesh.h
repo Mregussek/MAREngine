@@ -22,8 +22,14 @@ namespace mar {
 			OBJECTS
 		};
 
+#define NORMAL_MESH_TYPE ::mar::graphics::MeshType::NORMAL
+#define CUBEMAPS_MESH_TYPE ::mar::graphics::MeshType::CUBEMAPS
+#define OBJECTS_MESH_TYPE ::mar::graphics::MeshType::OBJECTS
+
 
 		class Mesh {
+			const char* m_meshName;
+			static unsigned int s_existingInstance;
 			// --- One needed buffer
 			Ref<Texture> m_texture;
 			// --- Run-Time data for mesh
@@ -40,9 +46,9 @@ namespace mar {
 			// --- State information 
 			MeshType m_type;
 			static float s_availableTextureID;
-			float m_availableShapeID;
-			int m_indicesMaxValue;
-			unsigned int m_shapesCount;
+			float m_availableShapeID{ 0.f };
+			int m_indicesMaxValue{ 0 };
+			unsigned int m_shapesCount{ 0 };
 			bool m_onlyCubeMaps = false;
 
 		public:
@@ -64,11 +70,34 @@ namespace mar {
 			void pushMatrices(const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale);
 
 		private:
-			void pushShape(Ref<Shape>& new_shape);
+			void prepareShape(Ref<Shape>& new_shape);
+			void pushShape(const Ref<Shape>& new_shape);
 			void pushTexture(Ref<Shape>& new_shape, const char* texture);
 
 			void popShape(const unsigned int& index);
 			void popMatrices(const unsigned int& index);
+
+			bool canPushShape(const Ref<Shape>& new_shape) {
+				unsigned int currentVerticesSize = m_vertices.size() + new_shape->getVertices().size();
+				unsigned int currentIndicesSize = m_indices.size() + new_shape->getIndices().size();
+
+				if (currentVerticesSize >= constants::maxVertexCount) {
+					MAR_CORE_ERROR("To much vertices in vector!");
+					return false;
+				}
+
+				if (currentIndicesSize >= constants::maxIndexCount) {
+					MAR_CORE_ERROR("To much indices in vector!");
+					return false;
+				}
+
+				if (m_shapesCount == constants::maxObjectsInScene - 1) {
+					MAR_CORE_ERROR("Cannot push more objects!");
+					return false;
+				}
+
+				return true;
+			}
 
 			bool checkIfCubemap(const char* withwhat, const char* what) {
 				int l1 = strlen(withwhat);
@@ -83,6 +112,7 @@ namespace mar {
 		public:
 			/// --- GET METHODS --- ///
 			inline const MeshType& getMeshType() const { return m_type; }
+			inline const char* getMeshName() const { return m_meshName; }
 
 			inline const Ref<Shape>& getShape(const unsigned int& index) const { return m_shapes[index]; }
 			inline const unsigned int& getShapesCount() const { return m_shapesCount; }
@@ -102,16 +132,20 @@ namespace mar {
 			inline Light& getLight() { return m_light; }
 
 			// --- SET METHODS --- //
-			void setType(const MeshType type) { m_type = type; }
+			void setMeshType(const MeshType type) {
+				m_type = type;
+
+				switch (type) {
+				case NORMAL_MESH_TYPE: m_meshName = "Normal"; break;
+				case CUBEMAPS_MESH_TYPE: m_meshName = "Cubemap"; break;
+				case OBJECTS_MESH_TYPE: m_meshName = "Objects"; break;
+				}
+			}
 		};
 
 
 } }
 
-
-#define NORMAL_MESH_TYPE ::mar::graphics::MeshType::NORMAL
-#define CUBEMAPS_MESH_TYPE ::mar::graphics::MeshType::CUBEMAPS
-#define OBJECTS_MESH_TYPE ::mar::graphics::MeshType::OBJECTS
 
 
 #endif // !MAR_ENGINE_MESH_H

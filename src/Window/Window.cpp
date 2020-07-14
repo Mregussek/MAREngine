@@ -52,6 +52,8 @@ namespace mar {
 				exit(0);
 			}
 
+			MAR_CORE_TRACE("Glew has been loaded successfully!");
+
 			callbacks::setWindowSize(&m_height, &m_width);
 			callbacks::setMouse(&m_mouseX, &m_mouseY);
 			callbacks::setScroll(&m_scrollX, &m_scrollY);
@@ -86,8 +88,8 @@ namespace mar {
 		}
 
 		void Window::clearScreen() {
-			MAR_CORE_GL_FUNC(glClearColor(0.22f, 0.69f, 0.87f, 1.0f) );
-			MAR_CORE_GL_FUNC(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
+			MAR_CORE_GL_FUNC( glClearColor(0.22f, 0.69f, 0.87f, 1.0f) );
+			MAR_CORE_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 		}
 
 		namespace callbacks {

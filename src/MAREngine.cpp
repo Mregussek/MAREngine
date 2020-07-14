@@ -96,7 +96,7 @@ namespace mar {
 				for (size_t i = 0; i < fs::getMeshTypes().size(); i++) {
 					auto layer = new layers::MeshLayer("Mesh Layer");
 					layer->initialize();
-					layer->getMesh()->setType(fs::getMeshTypes()[i]);
+					layer->getMesh()->setMeshType(fs::getMeshTypes()[i]);
 
 					for (unsigned int j = 0; j < fs::getShapes()[i].size(); j++) {
 						auto shape = fs::getShapes()[i][j];
@@ -111,7 +111,6 @@ namespace mar {
 							shape->assignDataFromFile(obj.c_str());
 						}
 							
-						shape->setDefaultColor(color);
 						layer->getMesh()->submitShape(shape, center, angle, scale, texture.c_str());
 					}
 

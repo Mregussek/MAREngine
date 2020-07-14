@@ -10,6 +10,8 @@ namespace mar {
     namespace graphics {
 
 		float Mesh::s_availableTextureID = 1.0f;
+		unsigned int Mesh::s_existingInstance = 0;
+
 
 		Mesh::~Mesh() {
 			m_texture->shutdown();
@@ -25,31 +27,20 @@ namespace mar {
 			m_texture.reset();
 
 			m_shapes.clear();
+
+			s_existingInstance--;
 		}
 
 		void Mesh::create() {
 			m_texture = storage::factory->createTexture();
-
-			m_shapes = std::vector<Ref<Shape>>();
-			m_vertices = std::vector<float>();
-			m_indices = std::vector<unsigned int>();
-			m_samplers = std::vector<int>();
-			m_scaleMats = std::vector<maths::mat4>();
-			m_translationMats = std::vector<maths::mat4>();
-			m_rotationMats = std::vector<maths::mat4>();
-
-			m_light = Light();
-
-			m_indicesMaxValue = 0;
-			m_availableShapeID = 0.0f;
-			m_shapesCount = 0;
+			s_existingInstance++;
 
 			MAR_CORE_INFO("Mesh has been created!");
 		}
 
 		void Mesh::loadScene(Scene* scene, MeshType type) {
 			unsigned int shapesInSceneCount = scene->getShapesNumber();
-			m_type = type;
+			setMeshType(type);
 
 			switch(m_type) {
 			case MeshType::NORMAL:
@@ -77,15 +68,20 @@ namespace mar {
 		}
 
 		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
+			if (!canPushShape(new_shape)) {
+				MAR_CORE_ERROR("Cannot push more shapes!");
+				return;
+			}
+
 			if (m_shapes.size() != m_shapesCount) {
 				new_shape->setCenter(center);
 				new_shape->setAngle(angle);
 				new_shape->setScale(scale);
 				pushTexture(new_shape, texture);
 				pushMatrices(center, angle, scale);
-				pushShape(new_shape);
-
+				prepareShape(new_shape);
 				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
+				pushShape(m_shapes[m_shapesCount]);
 
 				m_shapesCount++;
 
@@ -98,8 +94,8 @@ namespace mar {
 		}
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
-			if (m_shapesCount == constants::maxObjectsInScene - 1) {
-				MAR_CORE_ERROR("Cannot push more objects!");
+			if (!canPushShape(new_shape)) {
+				MAR_CORE_ERROR("Cannot push more shapes!");
 				return;
 			}
 			
@@ -107,8 +103,9 @@ namespace mar {
 			new_shape->setAngle(angle);
 			new_shape->setScale(scale);
 			pushTexture(new_shape, texture);
-			pushShape(new_shape);
 			pushMatrices(center, angle, scale);
+			prepareShape(new_shape);
+			pushShape(new_shape);
 
 			m_shapes.push_back(new_shape);
 			m_shapes[m_shapesCount]->setUsedTexture(texture);
@@ -118,22 +115,36 @@ namespace mar {
 		}
 
 		void Mesh::pushTexture(Ref<Shape>& new_shape, const char* texture) {
-			if (std::strcmp(texture, "resources/textures/empty") != 0) {
+			// If texture is equal to empty
+			if (std::strcmp(texture, "resources/textures/empty") != 0) { 
+				// if texture is not ending with .jpg
+				if (!checkIfCubemap(".jpg", texture)) {					
+					if (getMeshType() == CUBEMAPS_MESH_TYPE)
+						m_texture->loadCubemap(texture);
+					else {
+						MAR_CORE_ERROR("Pushed Cubemap texture to non-cubemap mesh type");
+						goto loading_default_colors;
+					}
+				}
+				else {
+					if(getMeshType() != CUBEMAPS_MESH_TYPE)
+						m_texture->loadTexture(texture);
+					else {
+						MAR_CORE_ERROR("Pushed 2D texture to cubemap mesh type!");
+						goto loading_default_colors;
+					}
+				}
+
 				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
 
 				m_samplers.push_back((int)s_availableTextureID);
 				s_availableTextureID++;
-
-				if (!checkIfCubemap(".jpg", texture)) 
-					m_texture->loadCubemap(texture);
-				else 
-					m_texture->loadTexture(texture);
 			}
 			else {
+			loading_default_colors:
+
 				new_shape->setTextureID(0.f);
-
 				m_samplers.push_back(0);
-
 				m_texture->addID(0);
 			}
 
@@ -141,12 +152,22 @@ namespace mar {
 			new_shape->setUsedTexture(texture);
 		}
 
-		void Mesh::pushShape(Ref<Shape>& new_shape) {
+		void Mesh::prepareShape(Ref<Shape>& new_shape) {
 			ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 			m_availableShapeID++;
 
 			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
 			m_indicesMaxValue += new_shape->getVertices().size() / new_shape->getStride();
+		}
+
+		void Mesh::pushShape(const Ref<Shape>& new_shape) {
+			auto beginVert = new_shape->getVertices().begin();
+			auto endVert = new_shape->getVertices().end();
+			auto beginIndices = new_shape->getIndices().begin();
+			auto endIndices = new_shape->getIndices().end();
+
+			m_vertices.insert(m_vertices.end(), beginVert, endVert);
+			m_indices.insert(m_indices.end(), beginIndices, endIndices);
 		}
 
 		void Mesh::pushMatrices(const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale) {
@@ -200,6 +221,17 @@ namespace mar {
 			m_samplers.pop_back();
 			m_colors.pop_back();
 			m_texture->removeID(index);
+
+			clearBuffers();
+			for (unsigned int i = 0; i < m_shapesCount; i++) {
+				auto beginVert = m_shapes[i]->getVertices().begin();
+				auto endVert = m_shapes[i]->getVertices().end();
+				auto beginIndices = m_shapes[i]->getIndices().begin();
+				auto endIndices = m_shapes[i]->getIndices().end();
+
+				m_vertices.insert(m_vertices.end(), beginVert, endVert);
+				m_indices.insert(m_indices.end(), beginIndices, endIndices);
+			}
 		}
 
 		void Mesh::popMatrices(const unsigned int& index) {
@@ -209,29 +241,8 @@ namespace mar {
 		}
 
 		void Mesh::update() {
-			for (unsigned int i = 0; i < m_shapesCount; i++) {
-
-				unsigned int currentVerticesSize = m_vertices.size() + m_shapes[i]->getVertices().size();
-				unsigned int currentIndicesSize = m_indices.size() + m_shapes[i]->getIndices().size();
-
-				if (currentVerticesSize >= constants::maxVertexCount) {
-					MAR_CORE_ERROR("To much vertices in vector!"); break;
-				}
-
-				if (currentIndicesSize >= constants::maxIndexCount) {
-					MAR_CORE_ERROR("To much indices in vector!"); break;
-				}
-
-				auto beginVert = m_shapes[i]->getVertices().begin();
-				auto endVert = m_shapes[i]->getVertices().end();
-				auto beginIndices = m_shapes[i]->getIndices().begin();
-				auto endIndices = m_shapes[i]->getIndices().end();
-				
-				m_vertices.insert(m_vertices.end(), beginVert, endVert);
-				m_indices.insert(m_indices.end(), beginIndices, endIndices);
-
+			for (unsigned int i = 0; i < m_shapesCount; i++)
 				m_texture->bind(m_samplers[i], m_texture->getID(i));
-			}		
 		}
 
 		void Mesh::clearBuffers() {

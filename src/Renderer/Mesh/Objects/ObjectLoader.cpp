@@ -111,7 +111,7 @@ namespace mar {
 			float tex_coords[]{ 0.0f, 0.0f };
 
 			s_indices = indices;
-			s_name = "Object";
+			s_name = path;
 			s_layout = { 3, 3, 2, 1, 1 };
 			s_texid = 0.f;
 			s_id = 0.f;

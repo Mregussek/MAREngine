@@ -98,8 +98,9 @@ namespace mar {
 						+ " " + std::to_string(color.z) << "\n";
 					ss << "#shape_texture " << shape->getUsedTexture() << "\n";
 
-					if (std::strcmp(shape->getName(), "Object") == 0)
+					if (graphics::MeshType::OBJECTS == meshes[i]->getMeshType()) {
 						ss << "#shape_obj " << shape->getUsedObj() << "\n";
+					}
 
 					ss << "\n";
 				}
@@ -175,7 +176,7 @@ namespace mar {
 						s_shapes[s_mesh_count].push_back(graphics::MeshCreator::createSurface());
 					else if (line.find("Wall") != std::string::npos)
 						s_shapes[s_mesh_count].push_back(graphics::MeshCreator::createWall());
-					else if (line.find("Object") != std::string::npos)
+					else
 						s_shapes[s_mesh_count].push_back(graphics::MeshCreator::createEmptyShape());
 				}
 				else if (line.find("#shape_center") != std::string::npos) {

@@ -20,11 +20,11 @@ namespace mar {
 
 		class Input {
 			static GLFWwindow* s_nativewindow;
-			static bool s_useInput;
-
 			// --- Mouse Button Callback
-			static int m_clickedButton;
-			static int m_clickedAction;
+			static int s_clickedButton;
+			static int s_clickedAction;
+			// --- Run-time Attributes
+			static bool s_useInput;
 
 		public:
 
@@ -53,8 +53,8 @@ namespace mar {
 			// --- GET METHODS --- //
 			static const bool& getUseInput() { return s_useInput; }
 
-			static int& getMouseButton() { return m_clickedButton; }
-			static int& getMouseAction() { return m_clickedAction; }
+			static int& getMouseButton() { return s_clickedButton; }
+			static int& getMouseAction() { return s_clickedAction; }
 
 			// --- SET METHODS --- //
 			static void enableInput() { s_useInput = true; }

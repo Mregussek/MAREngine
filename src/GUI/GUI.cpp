@@ -135,6 +135,7 @@ namespace mar {
 			}
 
 			Menu_ModifyScene();
+			Menu_SelectShape();
 			Menu_ModifyShape();
 			Display_ViewPort();
 
@@ -317,27 +318,28 @@ namespace mar {
 
 					ImGui::TreePop();
 				}
+			}
+			else {
+				ImGui::Text("You cannot modify objects!");
+			}
 
+			ImGui::End();
+		}
+
+		void GUI::Menu_SelectShape() {
+			ImGui::Begin("Select Shape Menu");
+
+			if (storage::usegui) {
 				ImGui::MenuItem("Select Shape");
 
 				for (unsigned int index = 0; index < m_meshes.size(); index++) {
-					std::string mesh;
+					const char* mesh_name = m_meshes[index]->getMeshName();
 
-					switch (m_meshes[index]->getMeshType()) {
-					case graphics::MeshType::NORMAL: mesh = "Default Mesh " + std::to_string(index);
-						break;
-					case graphics::MeshType::CUBEMAPS: mesh = "Cubemap Mesh " + std::to_string(index);
-						break;
-					case graphics::MeshType::OBJECTS: mesh = "Object Mesh " + std::to_string(index);
-						break;
-					}
-
-					if (ImGui::TreeNode(mesh.c_str())) {
+					if (ImGui::TreeNode(mesh_name)) {
 						for (unsigned int i = 0; i < m_meshes[index]->getShapesCount(); i++) {
-							std::string name = m_meshes[index]->getShape(i)->getName();
-							std::string shapeindex = mesh + " " + name + " " +std::to_string(i);
+							const char* shape_name = m_meshes[index]->getShape(i)->getName();
 
-							if (ImGui::MenuItem(shapeindex.c_str())) {
+							if (ImGui::MenuItem(shape_name)) {
 								m_meshIndex = index;
 								m_shapeIndex = i;
 							}
@@ -422,36 +424,11 @@ namespace mar {
 				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
 				ImGui::InputFloat3("Input Center", m_inputCenter);
 
-				if (m_inputCenter[0] > 10.0f || m_inputCenter[0] < -10.0f)
-					return;
-				else if (m_inputCenter[1] > 10.0f || m_inputCenter[1] < -10.0f)
-					return;
-				else if (m_inputCenter[2] > 10.0f || m_inputCenter[2] < -10.0f)
-					return;
+				for (unsigned int i = 0; i < 3; i++)
+					if (m_inputCenter[i] > 10.f || m_inputCenter[i] < -10.f)
+						return;
 
-				if (m_meshes[0]->getShapesCount() == constants::maxObjectsInScene - 1)
-					return;
-
-				std::vector<std::string> str_meshes;
-
-				for (unsigned int i = 0; i < m_meshes.size(); i++) {
-					std::string type;
-					std::string num = std::to_string(i);
-					switch (m_meshes[i]->getMeshType()) {
-					case NORMAL_MESH_TYPE: type = "Normal "; break;
-					case CUBEMAPS_MESH_TYPE: type = "Cubemaps "; break;
-					case OBJECTS_MESH_TYPE: type = "Objects "; break;
-					default: type = "Unknown "; break;
-					}
-
-					std::string push = type + num;
-					str_meshes.push_back(push.c_str());
-				}
-
-				std::vector<const char*> str(str_meshes.size());
-				for (unsigned int i = 0; i < str_meshes.size(); i++) str[i] = str_meshes[i].c_str();
-
-				ImGui::Combo("Choose Mesh", &m_pushMeshIndex, str.data(), str.size());
+				ImGui::Combo("Choose Mesh", &m_pushMeshIndex, m_meshesNames.data(), m_meshesNames.size());
 
 				ImGui::Separator();
 
@@ -471,24 +448,9 @@ namespace mar {
 
 				ImGui::Separator();
 
-				if (checkCharsStart("Objects", str[m_pushMeshIndex])) {
+				if (checkCharsStart("Objects", m_meshesNames[m_pushMeshIndex])) {
 					ImGui::Text("MAREngine do not support push to objects!");
 					return;
-				}
-
-				if (checkCharsEnding(".jpg", GUITextureList::s_textures[GUITextureList::s_selectedItem])) {
-					if (checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
-						ImGui::Text("Cannot push single .jpg file to cubemaps!");
-						return;
-					}
-				}
-				else {
-					if (!checkCharsStart("Cubemaps", str[m_pushMeshIndex])) {
-						if (std::strcmp(GUITextureList::s_textures[GUITextureList::s_selectedItem], "empty") != 0) {
-							ImGui::Text("Cannot push cubemap directory to no cubemaps!");
-							return;
-						}
-					}
 				}
 					
 				if (ImGui::Button("Select Pyramid")) {
