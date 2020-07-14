@@ -7,7 +7,7 @@
 #define MAR_ENGINE_GUI_LAYER_H
 
 #include "../mar.h"
-#include "../GUI/GUI.h"
+#include "../Editor/GUI/GUI.h"
 #include "Layer.h"
 
 namespace mar {
@@ -18,7 +18,7 @@ namespace mar {
 		protected:
 			const char* m_debugName;
 
-			gui::GUI* m_gui;
+			editor::GUI* m_gui;
 
 		public:
 			GUILayer() = default;

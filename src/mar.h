@@ -21,10 +21,6 @@ namespace mar {
 
 	struct TexturePaths;
 
-	namespace filesystem {
-		class fnc;
-	}
-
 	namespace window {
 		/* namespace callbacks in Window.h */
 
@@ -36,7 +32,9 @@ namespace mar {
 		class SerialPortMonitor;
 	}
 
-	namespace gui {
+	namespace editor {
+		class filesystem;
+
 		struct GUIData;
 		class GUI;
 	}

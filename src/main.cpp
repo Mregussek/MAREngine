@@ -3,9 +3,11 @@
 
 int main() {
 
-	mar::engine::MAREngine::getEngine()->initialize();
-	mar::engine::MAREngine::getEngine()->run();
-	mar::engine::MAREngine::getEngine()->exit();
+	using namespace mar::engine;
+
+	MAREngine::getEngine()->initialize();
+	MAREngine::getEngine()->run();
+	MAREngine::getEngine()->exit();
 
 	return 0;
 }

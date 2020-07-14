@@ -11,20 +11,19 @@ namespace mar {
 
 
 		void MeshLayer::initialize() {
-			m_mesh = new graphics::Mesh();
 			m_renderer = new graphics::Renderer();
 
-			m_mesh->create();
+			m_mesh.create();
 			m_renderer->create();
 		}
 
 		void MeshLayer::scene(graphics::SceneType scenetype, graphics::MeshType meshtype) {
-			m_mesh->loadScene(&graphics::Scene(scenetype), meshtype);
-			m_renderer->initialize(m_mesh->getLayout(), getShaderType(meshtype));
+			m_mesh.loadScene(&graphics::Scene(scenetype), meshtype);
+			m_renderer->initialize(m_mesh.getLayout(), getShaderType(meshtype));
 		}
 
 		void MeshLayer::load() {
-			m_renderer->initialize(m_mesh->getLayout(), getShaderType(m_mesh->getMeshType()));
+			m_renderer->initialize(m_mesh.getLayout(), getShaderType(m_mesh.getMeshType()));
 		}
 
 		void MeshLayer::set(const Ref<graphics::FrameBuffer>& framebuffer) {
@@ -43,12 +42,12 @@ namespace mar {
 			if (storage::usegui) {
 				m_framebuffer->bind();
 
-				m_renderer->draw(m_mesh);
+				m_renderer->draw(&m_mesh);
 
 				m_framebuffer->unbind();
 			}
 			else {
-				m_renderer->draw(m_mesh);
+				m_renderer->draw(&m_mesh);
 			}
 		}
 
@@ -56,7 +55,6 @@ namespace mar {
 			m_renderer->close();
 
 			delete m_renderer;
-			delete m_mesh;
 		}
 
 		graphics::ShaderType MeshLayer::getShaderType(graphics::MeshType meshtype) {

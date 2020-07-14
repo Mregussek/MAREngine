@@ -8,8 +8,8 @@
 
 #include "../mar.h"
 #include "Layer.h"
-#include "../Renderer/Mesh/Mesh.h"
-#include "../Renderer/Renderer.h"
+#include "../Core/Mesh/Mesh.h"
+#include "../Core/Renderer/Renderer.h"
 
 
 namespace mar {
@@ -20,11 +20,10 @@ namespace mar {
 			const char* m_debugName;
 
 			Ref<graphics::FrameBuffer> m_framebuffer;
-			graphics::Mesh* m_mesh;
+			graphics::Mesh m_mesh;
 			graphics::Renderer* m_renderer;
 
 		public:
-			MeshLayer() = default;
 			MeshLayer(const char* name) : m_debugName(name) { }
 
 			void initialize();
@@ -41,7 +40,7 @@ namespace mar {
 			void set(const Ref<graphics::FrameBuffer>& framebuffer);
 
 			// --- GET METHODS --- //
-			graphics::Mesh* getMesh() { return m_mesh; }
+			graphics::Mesh* getMesh() { return &m_mesh; }
 			graphics::ShaderType getShaderType(graphics::MeshType meshtype);
 
 		};

@@ -46,20 +46,19 @@ namespace mar {
 			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
 
-			filesystem::fnc::loadSceneFromFile(m_pathLoad);
-			assignLoadedLayers(&m_stack, gui_layer, camera_layer, m_framebuffer);
-
+			editor::filesystem::loadSceneFromFile(m_pathLoad);
+			if (auto loaded = editor::filesystem::assignLoadedLayers(m_framebuffer)) 
+				for (unsigned int i = 0; i < loaded->size(); i++) {
+					gui_layer->submit(loaded->at(i)->getMesh());
+					m_stack.pushLayer(loaded->at(i));
+				}
+			
 			//////////////////////////////////////////////////////
 			// --------------- RENDER LOOP -------------------- //
 			while (window::Window::getInstance().shouldClose() && !m_shouldRestart) 
 			{
 				window::Window::getInstance().clearScreen();
 				graphics::Renderer::getStatistics().resetStatistics();
-
-				if (storage::usegui)
-					camera_layer->set(m_framebuffer->getSpecification().width, m_framebuffer->getSpecification().height);
-				else
-					camera_layer->set(window::Window::getInstance().getWidth(), window::Window::getInstance().getHeight());
 				
 				m_stack.update();
 
@@ -81,69 +80,6 @@ namespace mar {
 			}
 
 			window::Window::getInstance().shutdown();
-		}
-
-		void MAREngine::assignLoadedLayers(	layers::LayerStack* stack, layers::GUILayer* gui_layer,
-											layers::CameraLayer* camera_layer, Ref<graphics::FrameBuffer>& framebuffer) {
-			using fs = filesystem::fnc;
-
-			if (fs::shouldLoadMeshes()) {
-				if (fs::getMeshCount() + 1 != fs::getMeshTypes().size()) {
-					MAR_CORE_ERROR("Mesh Types size is not equal to mesh_count!");
-					return;
-				}
-
-				for (size_t i = 0; i < fs::getMeshTypes().size(); i++) {
-					auto layer = new layers::MeshLayer("Mesh Layer");
-					layer->initialize();
-					layer->getMesh()->setMeshType(fs::getMeshTypes()[i]);
-
-					for (unsigned int j = 0; j < fs::getShapes()[i].size(); j++) {
-						auto shape = fs::getShapes()[i][j];
-						auto center = fs::getCenters()[i][j];
-						auto angle = fs::getAngles()[i][j];
-						auto scale = fs::getScales()[i][j];
-						auto color = fs::getColors()[i][j];
-						auto texture = fs::getTextures()[i][j];
-
-						if (layer->getMesh()->getMeshType() == OBJECTS_MESH_TYPE) {
-							auto obj = fs::getObjs()[i][j];
-							shape->assignDataFromFile(obj.c_str());
-						}
-							
-						layer->getMesh()->submitShape(shape, center, angle, scale, texture.c_str());
-					}
-
-					layer->load();
-					layer->set(framebuffer);
-
-					gui_layer->submit(layer->getMesh());
-					stack->pushLayer(layer);
-				}
-
-				MAR_CORE_INFO("Scene is loaded from meshes!");
-			}
-			else if (fs::shouldLoadScene()) {
-				if (fs::getMeshTypes().size() != fs::getSceneTypes().size()) {
-					MAR_CORE_ERROR("Loaded types of mesh are not equal to the size of scene types size!");
-					return;
-				}
-
-				for (unsigned int i = 0; i < fs::getMeshTypes().size(); i++) {
-					auto layer = new layers::MeshLayer("Mesh Layer");
-					layer->initialize();
-					layer->scene(fs::getSceneTypes()[i], fs::getMeshTypes()[i]);
-					layer->set(framebuffer);
-					stack->pushLayer(layer);
-					gui_layer->submit(layer->getMesh());
-				}
-
-				MAR_CORE_INFO("Default scene is being loaded!");
-			}
-			else {
-				MAR_CORE_ERROR("Unsupported Data!");
-				return;
-			}
 		}
 
 

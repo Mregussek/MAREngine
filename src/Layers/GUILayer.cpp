@@ -11,7 +11,7 @@ namespace mar {
 
 
 		void GUILayer::initialize() {
-			m_gui = new gui::GUI();
+			m_gui = new editor::GUI();
 			m_gui->initialize(settings::glsl_version);
 		}
 

@@ -3,6 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+
+ // Uncomment if release mode
+#define MAR_ENGINE_DEBUG_MODE
+
+
 // --- Include OpenGL Libs --- //
 #if __has_include(<GL/glew.h>)
 	#ifndef GLEW_STATIC
@@ -20,17 +25,6 @@
 #else
 	#error
 #endif
-
-/*
-#if __has_include(<glm.hpp>)
-	#include <glm.hpp>
-	#include <gtc/matrix_transform.hpp>
-	#include <gtc/type_ptr.hpp>
-	#define MAR_ENGINE_GLM_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import glm.hpp!"
-#endif
-*/
 
 // --- Include other third-party libraries --- //
 #pragma warning( push )
@@ -95,6 +89,7 @@
 #include <sstream>
 #include <vector> 
 #include <utility>
+#include <optional>
 #include <unordered_map>
 #include <algorithm> // std::find, std::copy
 // multi-threading
@@ -104,7 +99,4 @@
 #include <random>
 // filesystem
 #include <filesystem>
-
-// Uncomment if release mode
-#define MAR_ENGINE_DEBUG_MODE
 

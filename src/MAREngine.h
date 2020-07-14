@@ -9,24 +9,25 @@
 
 // Log && Filesystem
 #include "Debug/Log.h"
-#include "FileSystem/FileSystem.h"
+#include "Editor/FileSystem/filesystem.h"
 // Layers
 #include "Layers/LayerStack.h"
 #include "Layers/GUILayer.h"
 #include "Layers/MeshLayer.h"
 #include "Layers/CameraLayer.h"
 // Rendering
-#include "Renderer/Mesh/Mesh.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/Camera/Camera.h"
-#include "Renderer/RendererFactory.h"
-#include "Renderer/RendererOpenGLFactory.h"
-#include "Renderer/Scene/Scene.h"
+#include "Core/Mesh/Mesh.h"
+#include "Core/Scene/Scene.h"
+#include "Core/Camera/Camera.h"
+#include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/RendererFactory.h"
+#include "Core/Renderer/RendererOpenGLFactory.h"
 // Window && Input
 #include "Window/Input.h"
 #include "Window/Window.h"
-#include "GUI/GUI.h"
+#include "Editor/GUI/GUI.h"
 #include "Devices/SerialPortMonitor.h"
+
 
 namespace mar {
 	namespace engine {
@@ -53,12 +54,6 @@ namespace mar {
 
 			void setLoadPath(std::string path) { m_pathLoad = path.c_str(); }
 			void setRestart() { m_shouldRestart = true; }
-
-		private:
-			void assignLoadedLayers(layers::LayerStack* stack,
-									layers::GUILayer* gui_layer,
-									layers::CameraLayer* camera_layer,
-									Ref<graphics::FrameBuffer>& framebuffer);
 		};
 
 
