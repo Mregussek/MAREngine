@@ -15,19 +15,20 @@
 #include "../../Core/Renderer/Renderer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 
+
 namespace mar {
 	namespace editor {
 
-		struct GUIMarFiles {
-			static std::vector<const char*> s_files;
-			static int s_selectedItem;
+		struct scene {
+			static std::vector<const char*> files;
+			static int selected;
 		};
 
-		struct GUITextureList {
-			static std::vector<const char*> s_textures;
-			static int s_selectedItem;
+		struct texture {
+			static std::vector<const char*> files;
+			static int selected;
 		};
-
+		
 		struct GUIData {
 			float colors[4];
 			maths::mat4 rotation;
@@ -98,8 +99,11 @@ namespace mar {
 			void Menu_Instruction();
 
 			bool checkCharsEnding(const char* withwhat, const char* what) {
-				int l1 = strlen(withwhat);
-				int l2 = strlen(what);
+				static int l1;
+				static int l2;
+
+				l1 = strlen(withwhat);
+				l2 = strlen(what);
 
 				if (l1 > l2)
 					return false;
@@ -113,6 +117,7 @@ namespace mar {
 				if (what == check) return true;
 				else return false;
 			}
+
 		};
 
 

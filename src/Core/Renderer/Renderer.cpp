@@ -56,13 +56,9 @@ namespace mar {
 					m_layout->push(layout[i], PushBuffer::PUSH_FLOAT);
 
 				m_ebo->initializeElement(constants::maxIndexCount);
-				m_ebo->unbind();
-
 				m_vao->initializeArrayBuffer();
 				m_vbo->initializeVertex(constants::maxVertexCount);
 				m_vao->addBuffer(m_layout);
-				m_vbo->unbind();
-				m_vao->unbind();
 
 				m_initialized = true;
 

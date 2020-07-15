@@ -43,7 +43,9 @@ namespace mar {
 		}
 
 		void Camera::processInput() {
-			float currentFrame = (float)glfwGetTime();
+			static float currentFrame;
+
+			currentFrame = (float)glfwGetTime();
 			m_deltaTime = currentFrame - m_lastFrame;
 			m_lastFrame = currentFrame;
 
@@ -84,7 +86,9 @@ namespace mar {
 		}
 
 		void Camera::processCameraMovement(CameraMovement&& direction) {
-			float velocity = m_movementSpeed * m_deltaTime;
+			static float velocity;
+
+			velocity = m_movementSpeed * m_deltaTime;
 
 			switch (direction) {
 			case CameraMovement::FORWARD:
@@ -103,29 +107,35 @@ namespace mar {
 		}
 
 		void Camera::mouseButtonCallback(float xpos, float ypos) {
-			float xoffset = (float)xpos - m_lastX;
-			float yoffset = m_lastY - (float)ypos;
+			static float xoffset;
+			static float yoffset;
 
-			m_lastX = (float)xpos;
-			m_lastY = (float)ypos;
+			xoffset = xpos - m_lastX;
+			yoffset = m_lastY - ypos;
+
+			m_lastX = xpos;
+			m_lastY = ypos;
 
 			processMouseMovement(xoffset, yoffset);
 		}
 
 		void Camera::mouseCallback(float xpos, float ypos) {
+			static float xoffset;
+			static float yoffset;
+			
 			if (!m_enableMouse) return;
 
 			if (m_firstMouse) {
-				m_lastX = (float)xpos;
-				m_lastY = (float)ypos;
+				m_lastX = xpos;
+				m_lastY = ypos;
 				m_firstMouse = false;
 			}
 
-			float xoffset = (float)xpos - m_lastX;
-			float yoffset = m_lastY - (float)ypos;
+			xoffset = xpos - m_lastX;
+			yoffset = m_lastY - ypos;
 
-			m_lastX = (float)xpos;
-			m_lastY = (float)ypos;
+			m_lastX = xpos;
+			m_lastY = ypos;
 
 			processMouseMovement(xoffset, yoffset);
 		}
@@ -156,11 +166,11 @@ namespace mar {
 		}
 
 		void Camera::updateCameraVectors() {
-			maths::vec3 front;
+			static maths::vec3 front;
 
-			front.x = maths::Trig::cosine(maths::Trig::toRadians(m_yaw)) * maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
+			front.x = maths::Trig::cosine(maths::Trig::toRadians(m_yaw))* maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
 			front.y = maths::Trig::sine(maths::Trig::toRadians(m_pitch));
-			front.z = maths::Trig::sine(maths::Trig::toRadians(m_yaw)) * maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
+			front.z = maths::Trig::sine(maths::Trig::toRadians(m_yaw))* maths::Trig::cosine(maths::Trig::toRadians(m_pitch));
 
 			m_front = maths::vec3::normalize(front);
 			m_right = maths::vec3::normalize(maths::vec3::cross(m_front, m_worldUp));

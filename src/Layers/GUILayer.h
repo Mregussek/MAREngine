@@ -28,7 +28,7 @@ namespace mar {
 			void submit(graphics::Mesh* mesh);
 
 			// --- OVERLOADED METHODS --- // 
-			void prepareFrame() override { }
+			void prepareFrame() override;
 			void update() override;
 			void endFrame() override { }
 			void closeLayer() override;

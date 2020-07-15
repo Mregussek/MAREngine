@@ -179,6 +179,7 @@
     <ClInclude Include="other\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="src\Layers\CameraLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
+    <ClInclude Include="src\Window\callbacks.h" />
     <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\Editor\FileSystem\filesystem.h" />
     <ClInclude Include="src\Layers\GUILayer.h" />
@@ -259,6 +260,7 @@
     <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\VertexArray\VertexArrayOpenGL.cpp" />
+    <ClCompile Include="src\Window\callbacks.cpp" />
     <ClCompile Include="src\Window\Input.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Core\Mesh\Texture\TextureOpenGL.cpp" />

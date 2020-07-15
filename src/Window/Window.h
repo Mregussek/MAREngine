@@ -7,8 +7,9 @@
 #define WINDOW_H
 
 #include "../mar.h"
-#include "Input.h"
 #include "../Debug/Log.h"
+#include "Input.h"
+#include "callbacks.h"
 
 
 namespace mar {
@@ -59,36 +60,6 @@ namespace mar {
 			// --- SET METHODS --- //
 			void closeWindow() { glfwSetWindowShouldClose(m_window, true); }
 		};
-
-		namespace callbacks {
-			// Inline Variables and Methods, for solving linker problems
-			inline GLFWwindow* window;
-
-			inline int* window_width;
-			inline int* window_height;
-
-			inline float* mouse_x;
-			inline float* mouse_y;
-
-			inline float* scroll_x;
-			inline float* scroll_y;
-
-			inline int* clicked_button;
-			inline int* clicked_action;
-
-			inline const bool* use_input;
-
-			inline void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-			inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-			inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-			inline void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-			void setWindowSize(int* height, int* width);
-			void setMouse(float* x, float* y);
-			void setScroll(float* x, float* y);
-			void setMouseButtons(int* button, int* action);
-			void setUseInput(const bool* use);
-			void setCallbacks(GLFWwindow* wind);
-		}
 
 
 } }

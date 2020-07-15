@@ -29,43 +29,51 @@ MAR ENGINE SCENE FILE
 #shape_texture resources/textures/blue-texture.jpg
 
 #shape_id 3
+#shape_name Surface
+#shape_center 0.000000 -0.025000 0.000000
+#shape_angle 0.000000 0.000000 0.000000
+#shape_scale 1.000000 1.000000 1.000000
+#shape_color 0.000000 0.000000 1.000000
+#shape_texture resources/textures/grass-texture.jpg
+
+#shape_id 4
 #shape_name Wall
 #shape_center -10.000000 0.000000 0.000000
 #shape_angle 0.000000 0.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
-#shape_color 0.000000 0.000000 1.000000
+#shape_color 1.000000 1.000000 0.000000
 #shape_texture resources/textures/wall.jpg
 
-#shape_id 4
+#shape_id 5
 #shape_name Cube
 #shape_center -7.500000 0.000000 -7.500000
-#shape_angle 0.000000 0.000000 0.000000
-#shape_scale 1.000000 1.000000 1.000000
-#shape_color 1.000000 1.000000 0.000000
-#shape_texture resources/textures/empty
-
-#shape_id 5
-#shape_name Pyramid
-#shape_center -5.500000 0.000000 -6.500000
 #shape_angle 0.000000 0.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
 #shape_color 0.000000 1.000000 0.000000
 #shape_texture resources/textures/empty
 
 #shape_id 6
+#shape_name Pyramid
+#shape_center -5.500000 0.000000 -6.500000
+#shape_angle 0.000000 0.000000 0.000000
+#shape_scale 1.000000 1.000000 1.000000
+#shape_color 1.000000 0.000000 0.000000
+#shape_texture resources/textures/empty
+
+#shape_id 7
 #shape_name Cube
 #shape_center 1.250000 0.000000 -6.500000
 #shape_angle 0.000000 0.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
-#shape_color 1.000000 0.000000 0.000000
+#shape_color 0.000000 1.000000 0.000000
 #shape_texture resources/textures/black-texture.jpg
 
-#shape_id 7
+#shape_id 8
 #shape_name Wall
 #shape_center -0.500000 0.000000 -10.500000
 #shape_angle 0.000000 90.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
-#shape_color 0.000000 1.000000 0.000000
+#shape_color 1.000000 1.000000 0.000000
 #shape_texture resources/textures/wall.jpg
 
 #mesh_id 1
@@ -145,7 +153,7 @@ MAR ENGINE SCENE FILE
 
 #shape_id 9
 #shape_name Cube
-#shape_center 3.110000 0.000000 -4.000000
+#shape_center 13.000000 0.000000 -4.000000
 #shape_angle 0.000000 0.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
 #shape_color 0.000000 1.000000 0.000000
@@ -153,7 +161,7 @@ MAR ENGINE SCENE FILE
 
 #shape_id 10
 #shape_name Cube
-#shape_center 3.460000 2.000000 -4.000000
+#shape_center 13.000000 2.000000 -4.000000
 #shape_angle 0.000000 0.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
 #shape_color 0.000000 1.000000 0.000000
@@ -167,7 +175,7 @@ MAR ENGINE SCENE FILE
 #shape_center 0.000000 -1.800000 -2.000000
 #shape_angle 270.000000 0.000000 90.000000
 #shape_scale 0.300000 0.300000 0.300000
-#shape_color 1.000000 0.000000 1.000000
+#shape_color 1.000000 1.000000 1.000000
 #shape_texture resources/textures/empty
 #shape_obj resources/objects/lego-human.obj
 
@@ -176,26 +184,17 @@ MAR ENGINE SCENE FILE
 #shape_center -2.000000 0.000000 1.000000
 #shape_angle 270.000000 0.000000 0.000000
 #shape_scale 1.000000 1.000000 1.000000
-#shape_color 1.000000 1.000000 1.000000
+#shape_color 0.000000 0.000000 1.000000
 #shape_texture resources/textures/empty
 #shape_obj resources/objects/monkey.obj
 
 #shape_id 2
 #shape_name resources/objects/m4.obj
-#shape_center -8.000000 -2.800000 0.090000
+#shape_center -8.000000 -2.800000 -8.000000
 #shape_angle 0.000000 90.000000 0.000000
 #shape_scale 0.500000 0.500000 0.500000
 #shape_color 0.000000 1.000000 0.000000
 #shape_texture resources/textures/empty
 #shape_obj resources/objects/m4.obj
-
-#shape_id 3
-#shape_name resources/objects/deagle.obj
-#shape_center -0.980000 4.700000 -4.000000
-#shape_angle 0.000000 90.000000 0.000000
-#shape_scale 0.500000 0.500000 0.500000
-#shape_color 0.000000 1.000000 0.000000
-#shape_texture resources/textures/empty
-#shape_obj resources/objects/deagle.obj
 
 #END

@@ -18,10 +18,10 @@ namespace mar {
 
 	
 		class filesystem {
+			// --- Updating files in directories
 			static std::vector<std::string> s_marfiles;
 			static std::vector<std::string> s_texturefiles;
-			static int s_mesh_count;
-			static int s_scene_count;
+			// --- Loading scene from file
 			static std::vector<graphics::SceneType> s_scene_type;
 			static std::vector<graphics::MeshType> s_mesh_type;
 			static std::vector<std::vector<Ref<graphics::Shape>>> s_shapes;
@@ -31,12 +31,14 @@ namespace mar {
 			static std::vector<std::vector<maths::vec3>> s_colors;
 			static std::vector<std::vector<std::string>> s_textures;
 			static std::vector<std::vector<std::string>> s_objs;
+			static int s_mesh_count;
+			static int s_scene_count;
 
 		public:
 			static void updateMarFiles(const char* path);
 			static void updateMarTextures(const char* path);
 
-			static void saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes);
+			static void saveSceneToFile(const std::string& path, const std::vector<graphics::Mesh*>& meshes);
 			static void loadSceneFromFile(std::string path);
 			
 			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers(Ref<graphics::FrameBuffer>& framebuffer);
@@ -44,8 +46,8 @@ namespace mar {
 			static const std::vector<layers::MeshLayer*> loadScene(Ref<graphics::FrameBuffer>& framebuffer);
 
 			// --- GET METHODS --- //
-			static std::vector<std::string>& getMarFiles() { return s_marfiles; }
-			static std::vector<std::string>& getMarTextures() { return s_texturefiles; }
+			inline static std::vector<std::string>& getMarFiles() { return s_marfiles; }
+			inline static std::vector<std::string>& getMarTextures() { return s_texturefiles; }
 
 			inline static int& getMeshCount() { return s_mesh_count; }
 			inline static int& getSceneCount() { return s_scene_count; }
@@ -59,15 +61,15 @@ namespace mar {
 			inline static std::vector<std::vector<std::string>>& getTextures() { return s_textures; }
 			inline static std::vector<std::vector<std::string>>& getObjs() { return s_objs; }
 
-			static bool shouldLoadMeshes() { return s_mesh_count != -1; }
-			static bool shouldLoadScene() { return s_scene_count != -1; }
-
-			static bool checkMeshEquality() { return getMeshCount() + 1 != getMeshTypes().size(); }
-			static bool checkSceneEquality() { return getMeshTypes().size() != getSceneTypes().size(); }
+			inline static bool shouldLoadMeshes() { return s_mesh_count != -1; }
+			inline static bool shouldLoadScene() { return s_scene_count != -1; }
+			inline static bool checkMeshEquality() { return getMeshCount() + 1 != getMeshTypes().size(); }
+			inline static bool checkSceneEquality() { return getMeshTypes().size() != getSceneTypes().size(); }
 		};
 
 	}
 }						 
+
 
 
 #endif // !MAR_ENGINE_FILE_SYSTEM_H

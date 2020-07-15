@@ -35,20 +35,20 @@ namespace mar {
 
 			void setPosition(const maths::vec3 new_pos) { _position = new_pos; }
 
-			const maths::vec3& getPosition() const { return _position; }
-			const maths::vec3& getAmbient() const { return _ambient; }
-			const maths::vec3& getDiffuse() const { return _diffuse; }
-			const maths::vec3& getSpecular() const { return _specular; }
-		
-			const maths::vec3& getAmbientStrength() const { return _ambientStrength; }
-			const maths::vec3& geDiffuseStrength() const { return _diffuseStrength; }
-			const maths::vec3& geSpecularStrength() const { return _specularStrength; }
-
-			const float& getShininess() const { return _shininess; }
-
-			const float& getConstant() const { return _constant; }
-			const float& getLinear() const { return _linear; }
-			const float& getQuadratic() const { return _quadratic; }
+			inline const maths::vec3& getPosition() const { return _position; }
+			inline const maths::vec3& getAmbient() const { return _ambient; }
+			inline const maths::vec3& getDiffuse() const { return _diffuse; }
+			inline const maths::vec3& getSpecular() const { return _specular; }
+			
+			inline const maths::vec3& getAmbientStrength() const { return _ambientStrength; }
+			inline const maths::vec3& geDiffuseStrength() const { return _diffuseStrength; }
+			inline const maths::vec3& geSpecularStrength() const { return _specularStrength; }
+			 
+			inline const float& getShininess() const { return _shininess; }
+			
+			inline const float& getConstant() const { return _constant; }
+			inline const float& getLinear() const { return _linear; }
+			inline const float& getQuadratic() const { return _quadratic; }
 		};
 
 

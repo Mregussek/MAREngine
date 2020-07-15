@@ -9,11 +9,11 @@
 namespace mar {
 	namespace editor {
 
-		std::vector<const char*> GUITextureList::s_textures = { "empty" };
-		int GUITextureList::s_selectedItem;
+		std::vector<const char*> texture::files = { "empty" };
+		int texture::selected;
 
-		std::vector<const char*> GUIMarFiles::s_files = { "empty" };
-		int GUIMarFiles::s_selectedItem;
+		std::vector<const char*> scene::files = { "empty" };
+		int scene::selected;
 
 		GUIData GUI::s_guiData;
 		bool GUI::s_dockspaceOpen{ true };
@@ -212,30 +212,29 @@ namespace mar {
 			if (ImGui::Button("Reload files in directory")) {
 				filesystem::updateMarFiles("resources/mar_files");
 
-				GUIMarFiles::s_files.clear();
-				GUIMarFiles::s_files.push_back("empty");
+				scene::files.clear();
+				scene::files.push_back("empty");
 
-				for (auto& m : filesystem::getMarFiles()) {
-					GUIMarFiles::s_files.push_back(m.c_str());
-				}
+				for (auto& m : filesystem::getMarFiles())
+					scene::files.push_back(m.c_str());
 			}
 
 			ImGui::Separator();
 
 			ImGui::Text("Select file, which you want to be opened:");
 
-			ImGui::Combo("Choose File", &GUIMarFiles::s_selectedItem, GUIMarFiles::s_files.data(), GUIMarFiles::s_files.size());
+			ImGui::Combo("Choose File", &scene::selected, scene::files.data(), scene::files.size());
 
 			ImGui::Separator();
 
 			if (ImGui::Button("Open Selected File")) {
-				if (GUIMarFiles::s_selectedItem == 0) {
+				if (scene::selected == 0) {
 					MAR_CORE_ERROR("Wrong file selected!");
 					return;
 				}
 
-				std::string path = "resources/mar_files";
-				std::string selected = path + "/" + std::string(GUIMarFiles::s_files[GUIMarFiles::s_selectedItem]);
+				static std::string selected;
+				selected = "resources/mar_files/" + std::string( scene::files[scene::selected] );
 
 				engine::MAREngine::getEngine()->setLoadPath(selected);
 				engine::MAREngine::getEngine()->setRestart();
@@ -254,21 +253,19 @@ namespace mar {
 
 			ImGui::Separator();
 
-			std::string str{ m_inputStr };
-			std::string save = "resources/mar_files/" + str + ".marscene";
+			static std::string save;
+			save = "resources/mar_files/" + std::string(m_inputStr) + ".marscene";
 
 			ImGui::Text("Saving to: ");
 			ImGui::Text(save.c_str());
 
 			ImGui::Separator();
 
-			if (ImGui::Button("Save to selected name")) {
-				filesystem::saveSceneToFile(save.c_str(), m_meshes);
-			}
+			if (ImGui::Button("Save to selected name")) 
+				filesystem::saveSceneToFile(save, m_meshes);
 
-			if (ImGui::Button("Close")) {
+			if (ImGui::Button("Close")) 
 				m_fileSaveWindow = false;
-			}
 
 			ImGui::End();
 		}
@@ -281,8 +278,8 @@ namespace mar {
 			else
 				window::Input::disableInput();
 
-			graphics::FrameBufferSpecification spec = m_framebuffer->getSpecification();
-			unsigned int id = m_framebuffer->getColorAttach();
+			static graphics::FrameBufferSpecification spec = m_framebuffer->getSpecification();
+			static unsigned int id = m_framebuffer->getColorAttach();
 
 			ImVec2 size = ImGui::GetContentRegionAvail();
 			spec.width = size.x;
@@ -435,21 +432,20 @@ namespace mar {
 				if (ImGui::Button("Reload textures in directory")) {
 					filesystem::updateMarTextures("resources/textures");
 
-					GUITextureList::s_textures.clear();
-					GUITextureList::s_textures.push_back("empty");
+					texture::files.clear();
+					texture::files.push_back("empty");
 
 					for (auto& m : filesystem::getMarTextures()) {
-						GUITextureList::s_textures.push_back(m.c_str());
+						texture::files.push_back(m.c_str());
 					}
 				}
 
-				ImGui::Combo("Choose Texture", &GUITextureList::s_selectedItem, 
-					GUITextureList::s_textures.data(), GUITextureList::s_textures.size());
+				ImGui::Combo("Choose Texture", &texture::selected, texture::files.data(), texture::files.size());
 
 				ImGui::Separator();
 
 				if (checkCharsStart("Objects", m_meshesNames[m_pushMeshIndex])) {
-					ImGui::Text("MAREngine do not support push to objects!");
+					ImGui::Text("MAREngine do not support push to objects mesh!");
 					return;
 				}
 					
@@ -458,9 +454,7 @@ namespace mar {
 					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					maths::vec3 scale{ 1.f, 1.f, 1.f };
-
-					std::string path = "resources/textures";
-					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
 
 					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
@@ -470,9 +464,7 @@ namespace mar {
 					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					maths::vec3 scale{ 1.f, 1.f, 1.f };
-
-					std::string path = "resources/textures";
-					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
 
 					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
@@ -482,9 +474,7 @@ namespace mar {
 					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					maths::vec3 scale{ 1.f, 1.f, 1.f };
-
-					std::string path = "resources/textures";
-					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
 
 					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}
@@ -494,9 +484,7 @@ namespace mar {
 					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
 					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
 					maths::vec3 scale{ 1.f, 1.f, 1.f };
-
-					std::string path = "resources/textures";
-					std::string selected = path + "/" + std::string(GUITextureList::s_textures[GUITextureList::s_selectedItem]);
+					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
 
 					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
 				}

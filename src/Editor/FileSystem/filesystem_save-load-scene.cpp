@@ -24,7 +24,7 @@ namespace mar {
 		std::vector<std::vector<std::string>> filesystem::s_objs;
 
 
-		void filesystem::saveSceneToFile(const char* path, const std::vector<graphics::Mesh*>& meshes) {
+		void filesystem::saveSceneToFile(const std::string& path, const std::vector<graphics::Mesh*>& meshes) {
 			const char* c = "Going to save mesh to: ";
 			MAR_CORE_INFO(c);
 			MAR_CORE_INFO(path);

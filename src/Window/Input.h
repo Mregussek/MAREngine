@@ -19,6 +19,7 @@ namespace mar {
 		class Window;
 
 		class Input {
+			// --- Pointer to native window
 			static GLFWwindow* s_nativewindow;
 			// --- Mouse Button Callback
 			static int s_clickedButton;

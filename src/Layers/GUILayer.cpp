@@ -24,8 +24,11 @@ namespace mar {
 			m_gui->submitMesh(mesh);
 		}
 
-		void GUILayer::update() {
+		void GUILayer::prepareFrame() {
 			m_gui->prepareNewFrame();
+		}
+
+		void GUILayer::update() {
 			m_gui->display();
 		}
 
