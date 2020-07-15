@@ -26,7 +26,7 @@ namespace mar {
 		class Shape {
 			float m_id;
 			float m_texid;
-			const char* m_name;
+			std::string m_name;
 			std::string m_usedTexture;
 			std::string m_usedOBJ;
 
@@ -58,7 +58,7 @@ namespace mar {
 			void assignDataFromFile(const char* path);
 
 			// --- GET METHODS --- //
-			inline const char* getName() const { return m_name; }
+			inline const std::string& getName() const { return m_name; }
 			inline const std::string& getUsedTexture() const { return m_usedTexture; }
 			inline const std::string& getUsedObj() const { return m_usedOBJ; }
 			inline const float getID() const { return m_id; }
@@ -76,7 +76,7 @@ namespace mar {
 			inline const std::vector<unsigned int>& getLayout() const { return m_layout; }
 
 			// --- SET METHODS --- //
-			void setName(const char* new_name) { m_name = new_name; }
+			void setName(std::string new_name) { m_name = new_name; }
 			void setUsedTexture(std::string used_tex) { m_usedTexture = used_tex; }
 			void setUsedObj(std::string used_obj) { m_usedOBJ = used_obj; }
 			void setID(float new_id) { m_id = new_id; }

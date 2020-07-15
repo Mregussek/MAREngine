@@ -337,7 +337,7 @@ namespace mar {
 
 					if (ImGui::TreeNode(mesh_name)) {
 						for (unsigned int i = 0; i < m_meshes[index]->getShapesCount(); i++) {
-							const char* shape_name = m_meshes[index]->getShape(i)->getName();
+							const char* shape_name = m_meshes[index]->getShape(i)->getName().c_str();
 
 							if (ImGui::MenuItem(shape_name)) {
 								m_meshIndex = index;

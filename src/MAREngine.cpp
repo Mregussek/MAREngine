@@ -16,10 +16,8 @@ namespace mar {
 		void MAREngine::initialize() {
 			MAR_LOG_INIT();
 
-			m_usegui = true;
-
 			storage::factory = m_factory;
-			storage::usegui = m_usegui;
+			storage::usegui = true;
 
 			window::Window::getInstance().initialize(settings::height, settings::width, settings::name);
 			window::Input::initialize(window::Window::getInstance().getWindow());

@@ -267,8 +267,13 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include=".gitmodules" />
+    <None Include="cmake\FindGLEW.cmake" />
     <None Include="cmake\FindGLFW3.cmake" />
     <None Include="cmake\FindGLM.cmake" />
+    <None Include="cmake\FindOpenGL.cmake" />
+    <None Include="cmake\FindPackageHandleStandardArgs.cmake" />
+    <None Include="cmake\FindPackageMessage.cmake" />
+    <None Include="cmake\SelectLibraryConfigurations.cmake" />
     <None Include="imgui.ini" />
     <None Include="INSTALL.md" />
     <None Include="LICENSE.md" />
@@ -284,8 +289,12 @@
     <None Include="resources\shaders\cubemapWithoutGUI.shader" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="img\cmake_generate.jpg" />
     <Image Include="img\marengine.jpg" />
     <Image Include="img\marenginesln.jpg" />
+    <Image Include="img\starting.jpg" />
+    <Image Include="img\win32cmake.jpg" />
+    <Image Include="img\x86.jpg" />
     <Image Include="resources\textures\black-texture.jpg" />
     <Image Include="resources\textures\blue-texture.jpg" />
     <Image Include="resources\textures\grass-texture.jpg" />
