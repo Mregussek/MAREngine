@@ -242,7 +242,7 @@
     <ClCompile Include="src\Editor\FileSystem\filesystem_save-load-scene.cpp" />
     <ClCompile Include="src\Layers\GUILayer.cpp" />
     <ClCompile Include="src\Layers\MeshLayer.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\FrameBuffer\FrameBufferOpenGL.cpp" />
     <ClCompile Include="src\Core\Mesh\Objects\ObjectLoader.cpp" />
     <ClCompile Include="src\Core\Light\Light.cpp" />
@@ -250,6 +250,7 @@
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Core\Mesh\Shapes\ShapeManipulator.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
+    <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\MAREngine.cpp" />
     <ClCompile Include="src\Core\Camera\Camera.cpp" />
     <ClCompile Include="other\stb_image\include\stb_image\stb_image.cpp" />

@@ -16,35 +16,35 @@ namespace mar {
 		class RendererOpenGLFactory : public RendererFactory {
 		public:
 			static Ref<RendererFactory> createFactory() {
-				return std::make_shared<RendererOpenGLFactory>();
+				return PointerFactory<RendererOpenGLFactory>::makeRef();
 			}
 
 			virtual Ref<ElementBuffer> createElementBuffer() override {
-				return std::make_shared<ElementBufferOpenGL>();
+				return PointerFactory<ElementBufferOpenGL>::makeRef();
 			}
 
 			virtual Ref<VertexBuffer> createVertexBuffer() override {
-				return std::make_shared<VertexBufferOpenGL>();
+				return PointerFactory<VertexBufferOpenGL>::makeRef();
 			}
 
 			virtual Ref<VertexBufferLayout> createVertexBufferLayout() override {
-				return std::make_shared<VertexBufferLayoutOpenGL>();
+				return PointerFactory<VertexBufferLayoutOpenGL>::makeRef();
 			}
 
 			virtual Ref<VertexArray> createVertexArray() override {
-				return std::make_shared<VertexArrayOpenGL>();
+				return PointerFactory<VertexArrayOpenGL>::makeRef();
 			}
 
 			virtual Ref<Texture> createTexture() override {
-				return std::make_shared<TextureOpenGL>();
+				return PointerFactory<TextureOpenGL>::makeRef();
 			}
 
 			virtual Ref<Shader> createShader(ShaderType type) override {
-				return std::make_shared<ShaderOpenGL>();
+				return PointerFactory<ShaderOpenGL>::makeRef();
 			}
 
 			virtual Ref<FrameBuffer> createFrameBuffer() override {
-				return std::make_shared<FrameBufferOpenGL>();
+				return PointerFactory<FrameBufferOpenGL>::makeRef();
 			}
 		};
 

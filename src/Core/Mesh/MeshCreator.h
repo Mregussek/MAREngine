@@ -19,23 +19,23 @@ namespace mar {
         class MeshCreator {
         public:
             static Ref<Shape> createEmptyShape() {
-                return std::make_shared<Shape>();
+                return PointerFactory<Shape>::makeRef();
             }
 
             static Ref<Shape> createCube() {
-                return std::make_shared<Cube>();
+                return PointerFactory<Cube>::makeRef();
             }
 
             static Ref<Shape> createWall() {
-                return std::make_shared<Wall>();
+                return PointerFactory<Wall>::makeRef();
             }
 
             static Ref<Shape> createSurface() {
-                return std::make_shared<Surface>();
+                return PointerFactory<Surface>::makeRef();
             }
 
             static Ref<Shape> createPyramid() {
-                return std::make_shared<Pyramid>();
+                return PointerFactory<Pyramid>::makeRef();
             }
 
             static void moveShape(Ref<Shape>& ref_shape, Ref<Shape>& shape_to_move) {
