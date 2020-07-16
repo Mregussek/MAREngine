@@ -9,7 +9,6 @@
 namespace mar {
     namespace graphics {
 
-		float Mesh::s_availableTextureID = 1.0f;
 		uint32_t Mesh::s_existingInstance = 0;
 
 
@@ -123,29 +122,29 @@ namespace mar {
 
 			// If texture is not equal to empty (if empty we want to load default colors)
 			if (std::strcmp(texture, "resources/textures/empty") != 0) { 
+				static float id_texture;
+
 				// if texture is not ending with .jpg
 				if (!checkEnding(".jpg", texture)) {					
-					if (getMeshType() == CUBEMAPS_MESH_TYPE) {
-						m_texture->loadCubemap(texture);
-					}
-					else {
+					if (getMeshType() != CUBEMAPS_MESH_TYPE) {
 						MAR_CORE_ERROR("MESH: Pushed Cubemap texture to non-cubemap mesh type");
 						goto loading_default_colors;
 					}
+
+					id_texture = m_texture->loadCubemap(texture);
 				}
 				else {
-					if(getMeshType() != CUBEMAPS_MESH_TYPE)
-						m_texture->loadTexture(texture);
-					else {
+					if(getMeshType() == CUBEMAPS_MESH_TYPE) {
 						MAR_CORE_ERROR("MESH: Pushed 2D texture to cubemap mesh type!");
 						goto loading_default_colors;
 					}
+
+					id_texture = m_texture->loadTexture(texture);
 				}
 
-				ShapeManipulator::extendTextureID(new_shape, s_availableTextureID);
-
-				m_samplers.push_back((int)s_availableTextureID);
-				s_availableTextureID++;
+				ShapeManipulator::extendTextureID(new_shape, m_availableTextureID);
+				m_samplers.push_back((int)m_availableTextureID);
+				m_availableTextureID++;
 			}
 			else {
 			loading_default_colors:
@@ -225,25 +224,28 @@ namespace mar {
 
 			m_indicesMaxValue -= m_shapes[index]->getVertices().size() / m_shapes[index]->getStride();
 
+			m_texture->removeID(index);
+
 			for (uint32_t i = index; i < m_shapesCount - 1; i++) {
-				float save_tex_id = m_shapes[i + 1]->getTextureID();
-				m_samplers[i] = m_samplers[i + 1];
+				uint32_t save_tex_id = m_texture->getID(i);
+
+				m_samplers[i] = save_tex_id;
 				m_colors[i] = m_colors[i + 1];
 				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
 
 				m_shapes[i]->setID(m_shapes[i]->getID() - 1.f);
 				ShapeManipulator::changeIndicesFormat(m_shapes[i], diff);
 				ShapeManipulator::extendShapeID(m_shapes[i], m_shapes[i]->getID());
-				ShapeManipulator::extendTextureID(m_shapes[i], save_tex_id);
+				ShapeManipulator::extendTextureID(m_shapes[i], (float) save_tex_id);
 			}
 
 			m_availableShapeID--;
+			m_availableTextureID--;
 			m_shapesCount--;
 
 			m_samplers.pop_back();
 			m_colors.pop_back();
-			m_texture->removeID(index);
-
+			
 			clearBuffers();
 			updateBuffers();
 		}
@@ -258,6 +260,8 @@ namespace mar {
 
 		void Mesh::update() {
 			MAR_CORE_TRACE("MESH: update");
+
+			m_texture->resetTextureUnit();
 
 			for (uint32_t i = 0; i < m_shapesCount; i++)
 				m_texture->bind(m_samplers[i], m_texture->getID(i));

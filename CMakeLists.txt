@@ -6,43 +6,9 @@
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(MAREngine)
 
-link_directories(
-    ${CMAKE_SOURCE_DIR}/3rd_party/GL/lib
-    ${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
-)
-
-set(STB_IMAGE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/stb_image/include")
-set(STB_IMAGE_H "${CMAKE_SOURCE_DIR}/other/stb_image/include/stb_image/stb_image.h")
-set(STB_IMAGE_SRC "${CMAKE_SOURCE_DIR}/other/stb_image/include/stb_image/stb_image.cpp")
-
-set(IMGUI_SOURCES
-	${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_glfw.cpp
-    ${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_opengl3.cpp
-	${CMAKE_SOURCE_DIR}/other/imgui/imgui.cpp
-	${CMAKE_SOURCE_DIR}/other/imgui/imgui_demo.cpp
-	${CMAKE_SOURCE_DIR}/other/imgui/imgui_draw.cpp
-	${CMAKE_SOURCE_DIR}/other/imgui/imgui_widgets.cpp)
-
-set(IMGUI_HEADERS
-	${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_opengl3.h
-    ${CMAKE_SOURCE_DIR}/other/imgui/examples/imgui_impl_glfw.h
-	${CMAKE_SOURCE_DIR}/other/imgui/imgui.h
-	${CMAKE_SOURCE_DIR}/other/imgui/imconfig.h
-    ${CMAKE_SOURCE_DIR}/other/imgui/imgui_internal.h
-    ${CMAKE_SOURCE_DIR}/other/imgui/imstb_rectpack.h
-    ${CMAKE_SOURCE_DIR}/other/imgui/imstb_textedit.h
-    ${CMAKE_SOURCE_DIR}/other/imgui/imstb_truetype.h)
-
-file(GLOB_RECURSE SOURCE_MATH 
-	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.c
-	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.cpp)
-	
-file(GLOB_RECURSE HEADER_MATH 
-	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.h
-	${CMAKE_SOURCE_DIR}/other/MARMaths/src/*.hpp)
-	
-set(MAIN_MATH ${CMAKE_SOURCE_DIR}/other/MARMaths/MARMaths.h)
-
+# -------------------------------------------------------------
+# MAREngine source files
+# -------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES 
 	${CMAKE_SOURCE_DIR}/src/*.c
 	${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -51,9 +17,19 @@ file(GLOB_RECURSE HEADER_FILES
 	${CMAKE_SOURCE_DIR}/src/*.h
 	${CMAKE_SOURCE_DIR}/src/*.hpp)
 
+set(MAIN_MAR_ENGINE_FILE ${CMAKE_SOURCE_DIR}/main.cpp)
+set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES} ${MAIN_MAR_ENGINE_FILE})
+
+# -------------------------------------------------------------
+# Include statically other libs
+# -------------------------------------------------------------
+
+# in cmake/ dir there are Find***.cmake files, set path to them
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
+# -------------------------------------------------------------
 # OpenGL
+# -------------------------------------------------------------
 message("Looking for: OpenGL")
 find_package(OpenGL REQUIRED)
 if(OPENGL_FOUND)
@@ -65,7 +41,9 @@ else()
     message("Error: Cannot find OpenGL!")
 endif()
 
-# GLEW
+# -------------------------------------------------------------
+# glew
+# -------------------------------------------------------------
 message("Looking for: GLEW")
 add_definitions(-DGLEW_STATIC)
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/3rd_party/GL")
@@ -78,7 +56,9 @@ else()
 	message(STATUS "Error: Cannot find GLEW!")
 endif()
 
-# GLFW
+# -------------------------------------------------------------
+# glfw
+# -------------------------------------------------------------
 message("Looking for: GLFW")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -93,17 +73,82 @@ else()
 	message(STATUS "Error: Cannot find GLFW3!")
 endif()
 
+# -------------------------------------------------------------
 # spdlog
+# -------------------------------------------------------------
 message("Looking for: SPDLOG")
 add_subdirectory(other/spdlog)
 set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
+# -------------------------------------------------------------
+# stb_image
+# -------------------------------------------------------------
+message("Looking for: stb_image")
+set(STB_IMAGE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/stb_image/include")
+set(STB_IMAGE_H "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.h")
+set(STB_IMAGE_SRC "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.cpp")
+set(STB_IMAGE_FILES ${STB_IMAGE_H} ${STB_IMAGE_SRC})
+message(STATUS "STB_IMAGE_INCLUDE_DIR:= ${STB_IMAGE_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# Dear ImGui
+# -------------------------------------------------------------
+message("Looking for: Dear ImGui")
+set(IMGUI_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/imgui")
+set(IMGUI_SOURCES
+	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.cpp
+    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.cpp
+	${IMGUI_INCLUDE_DIR}/imgui.cpp
+	${IMGUI_INCLUDE_DIR}/imgui_demo.cpp
+	${IMGUI_INCLUDE_DIR}/imgui_draw.cpp
+	${IMGUI_INCLUDE_DIR}/imgui_widgets.cpp
+)
+set(IMGUI_HEADERS
+	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.h
+    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.h
+	${IMGUI_INCLUDE_DIR}/imgui.h
+	${IMGUI_INCLUDE_DIR}/imconfig.h
+    ${IMGUI_INCLUDE_DIR}/imgui_internal.h
+    ${IMGUI_INCLUDE_DIR}/imstb_rectpack.h
+    ${IMGUI_INCLUDE_DIR}/imstb_textedit.h
+    ${IMGUI_INCLUDE_DIR}/imstb_truetype.h
+)
+set(IMGUI_FILES ${IMGUI_HEADERS} ${IMGUI_SOURCES})
+message(STATUS "IMGUI_INCLUDE_DIR:= ${IMGUI_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# MARMaths
+# -------------------------------------------------------------
+message("Looking for: MARMaths")
+set(MAR_MATH_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/MARMaths")
+file(GLOB_RECURSE SOURCE_MATH 
+	${MAR_MATH_INCLUDE_DIR}/src/*.c
+	${MAR_MATH_INCLUDE_DIR}/src/*.cpp)
+	
+file(GLOB_RECURSE HEADER_MATH 
+	${MAR_MATH_INCLUDE_DIR}/src/*.h
+	${MAR_MATH_INCLUDE_DIR}/src/*.hpp)
+	
+set(MAIN_MATH ${MAR_MATH_INCLUDE_DIR}/MARMaths.h)
+set(MAR_MATH_FILES ${SOURCE_MATH} ${HEADER_MATH} ${MAIN_MATH})
+message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# SerialPort
+# -------------------------------------------------------------
+message("Looking for: SerialPort")
+set(SERIALPORT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/serialport/include")
+message(STATUS "SERIALPORT_INCLUDE_DIR:= ${SERIALPORT_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# Set includes for MAREngine (mar_includes.h file)
+# -------------------------------------------------------------
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
-	"${CMAKE_SOURCE_DIR}/other/imgui"
-	"${CMAKE_SOURCE_DIR}/other/serialport/include"
-	"${CMAKE_SOURCE_DIR}/other/MARMaths"
+	${SERIALPORT_INCLUDE_DIR}
+	${IMGUI_INCLUDE_DIR}
+	${MAR_MATH_INCLUDE_DIR}
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
 	${MAR_GLFW_DIR}
@@ -111,47 +156,66 @@ include_directories(
 	${SPDLOG_INCLUDE_DIR}
 )
 
-# MAREngine
+# -------------------------------------------------------------
+# link .lib files for MAREngine
+# -------------------------------------------------------------
+link_directories(
+    ${CMAKE_SOURCE_DIR}/3rd_party/GL/lib
+    ${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
+)
+
+# -------------------------------------------------------------
+# Create executable
+# -------------------------------------------------------------
 message("Creating executable...")
-add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} 
-		${IMGUI_SOURCES} ${IMGUI_HEADERS} ${STB_IMAGE_H} ${STB_IMAGE_SRC}
-		${SOURCE_MATH} ${HEADER_MATH} ${MAIN_MATH})
-message("Linking libraries to MAREngine")
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)	
-if(WIN32)
+if(MSVC)
+	add_executable(${PROJECT_NAME} ${MAR_ENGINE_FILES} 
+		${IMGUI_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${MAR_MATH_FILES}
+	)
+	
+	message("Linking libraries to MAREngine")
+	target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 	set(MAR_OPENGL_IMPORT opengl32 glew32s glfw3)
 	target_link_libraries ( ${PROJECT_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
-endif()
 
-IF(MSVC)
-	SET(VS_MULTITHREADED_DEBUG_DLL_IGNORE_LIBRARY_FLAGS
+# -------------------------------------------------------------
+# Ignore dynamic linking
+# -------------------------------------------------------------
+	add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+
+	set(VS_MULTITHREADED_DEBUG_DLL_IGNORE_LIBRARY_FLAGS
 	   "/NODEFAULTLIB:libc.lib
 	    /NODEFAULTLIB:libcmt.lib
 	    /NODEFAULTLIB:msvcrt.lib
 	    /NODEFAULTLIB:libcd.lib
 	    /NODEFAULTLIB:libcmtd.lib")
-	SET(VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS
+	set(VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS
 	   "/NODEFAULTLIB:libc.lib
 	    /NODEFAULTLIB:libcmt.lib
 	    /NODEFAULTLIB:libcd.lib
 	    /NODEFAULTLIB:libcmtd.lib
 	    /NODEFAULTLIB:msvcrtd.lib")
 
-    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
-       LINK_FLAGS_DEBUG
-       ${VS_MULTITHREADED_DEBUG_DLL_IGNORE_LIBRARY_FLAGS})
-    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
-        LINK_FLAGS_RELWITHDEBINFO
-        ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS})
-    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
-        LINK_FLAGS_RELEASE
-        ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS})
-    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
-        LINK_FLAGS_MINSIZEREL
-        ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS})
-ENDIF(MSVC)
-
-if(MSVC_IDE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+       LINK_FLAGS_DEBUG ${VS_MULTITHREADED_DEBUG_DLL_IGNORE_LIBRARY_FLAGS}
+	)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        LINK_FLAGS_RELWITHDEBINFO ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS}
+	)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        LINK_FLAGS_RELEASE ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS}
+	)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        LINK_FLAGS_MINSIZEREL ${VS_MULTITHREADED_RELEASE_DLL_IGNORE_LIBRARY_FLAGS}
+	)
+		
+# -------------------------------------------------------------
+# Organize files in Visual Studio
+# -------------------------------------------------------------
 	# Macro to preserve source files hierarchy in the IDE
 	macro(GroupSources curdir)
 		file(GLOB children RELATIVE ${PROJECT_SOURCE_DIR}/${curdir} ${PROJECT_SOURCE_DIR}/${curdir}/*)
@@ -169,9 +233,10 @@ if(MSVC_IDE)
 
 	# Run macro
 	GroupSources(src)
-endif()
-
-if(WIN32)
+	
+# -------------------------------------------------------------
+# Copy imgui.ini and /resources to build dir's
+# -------------------------------------------------------------
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources"
 		"$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")

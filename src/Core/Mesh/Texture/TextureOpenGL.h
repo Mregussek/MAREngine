@@ -22,6 +22,7 @@ namespace mar {
 			solutions to specified problems using OpenGL.
 		*/
 		class TextureOpenGL : public Texture, std::enable_shared_from_this<TextureOpenGL> {
+			static uint32_t s_textureUnit;
 			std::vector<uint32_t> m_id;
 			std::vector<std::string> m_paths;
 			std::unordered_map<std::string, uint32_t> m_path_id;
@@ -46,7 +47,7 @@ namespace mar {
 				\param path - path to texture, which will be loaded
 				\return id - id for new loaded texture
 			*/
-			void loadTexture(const char* path) override;
+			float loadTexture(const char* path) override;
 
 			/*
 			Method generates new id for cubemap. Must be overloaded!
@@ -62,7 +63,7 @@ namespace mar {
 
 				\param faces - paths to textures, which will be loaded
 			*/
-			void loadCubemap(const char* path) override;
+			float loadCubemap(const char* path) override;
 
 			/*
 			Bind texture with texID to selected shape with shapeId.
@@ -105,6 +106,11 @@ namespace mar {
 				\return m_path[index] - path of texture prescribed to shape
 			*/
 			const std::string& getPath(const uint32_t& index) const override { return m_paths[index]; }
+
+			/*
+			Method resets static variable - texture unit.
+			*/
+			void resetTextureUnit() override { s_textureUnit = 1; }
 		};
 
 

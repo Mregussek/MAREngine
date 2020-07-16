@@ -25,6 +25,8 @@ namespace mar {
 		}
 
 		void MAREngine::run() {
+			layers::LayerStack m_stack;
+
 			auto m_framebuffer = storage::factory->createFrameBuffer();
 			m_framebuffer->initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
@@ -40,7 +42,6 @@ namespace mar {
 			gui_layer->initialize();
 			gui_layer->set(m_framebuffer);
 
-			layers::LayerStack m_stack;
 			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
 

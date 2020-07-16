@@ -45,7 +45,7 @@ namespace mar {
 			Light m_light;
 			// --- State information 
 			MeshType m_type;
-			static float s_availableTextureID;
+			float m_availableTextureID{ 1.f };
 			float m_availableShapeID{ 0.f };
 			int m_indicesMaxValue{ 0 };
 			uint32_t m_shapesCount{ 0 };

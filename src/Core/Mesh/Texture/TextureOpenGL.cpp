@@ -9,9 +9,12 @@ namespace mar {
 	namespace graphics {
 
 
+		uint32_t TextureOpenGL::s_textureUnit = 1;
+
 		void TextureOpenGL::shutdown() {
-			for (auto const& id : m_id)
-				glDeleteTextures(1, &id);
+			for (auto const& id : m_id) {
+				MAR_CORE_GL_FUNC( glDeleteTextures(1, &id) );
+			}
 		}
 
 		uint32_t TextureOpenGL::genNewTexture(const char* path) {
@@ -41,17 +44,16 @@ namespace mar {
 					return 0;
 				}
 
-				glGenTextures(1, &id);
-				glBindTexture(GL_TEXTURE_2D, id);
+				MAR_CORE_GL_FUNC ( glCreateTextures(GL_TEXTURE_2D, 1, &id) );
+				MAR_CORE_GL_FUNC ( glTextureStorage2D(id, 1, internalFormat, width, height) );
+				MAR_CORE_GL_FUNC ( glTextureSubImage2D(id, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, localBuffer) );
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				MAR_CORE_GL_FUNC ( glTextureParameteri(id, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
+				MAR_CORE_GL_FUNC ( glTextureParameteri(id, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
+			
+				MAR_CORE_GL_FUNC ( glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
+				MAR_CORE_GL_FUNC ( glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, localBuffer);
-				glGenerateMipmap(GL_TEXTURE_2D);
 				stbi_image_free(localBuffer);
 
 				MAR_CORE_TRACE("Texture loaded successfully!");
@@ -64,7 +66,7 @@ namespace mar {
 			return 0;
 		}
 
-		void TextureOpenGL::loadTexture(const char* path) {
+		float TextureOpenGL::loadTexture(const char* path) {
 			auto search = m_path_id.find(path);
 
 			if (search != m_path_id.end()) { 
@@ -73,13 +75,14 @@ namespace mar {
 
 				MAR_CORE_TRACE("Assigning loaded texture!");
 
-				return;
+				return (float) search->second;
 			}
 
 			uint32_t new_id = genNewTexture(path);
 			m_id.push_back(new_id);
 			m_paths.push_back(path);
 			m_path_id.insert({ path, new_id });
+			return (float) new_id;
 		}
 
 		uint32_t TextureOpenGL::genNewCubemap(const char* path) {
@@ -138,7 +141,7 @@ namespace mar {
 			return id;
 		}
 
-		void TextureOpenGL::loadCubemap(const char* path) {
+		float TextureOpenGL::loadCubemap(const char* path) {
 			std::string helper = std::string(path);
 			auto search = m_path_id.find(helper);
 
@@ -148,21 +151,26 @@ namespace mar {
 
 				MAR_CORE_TRACE("Assigning loaded cubemap!");
 
-				return;
+				return (float) search->second;
 			}
 
 			uint32_t new_id = genNewCubemap(path);
 			m_id.push_back(new_id);
 			m_paths.push_back(helper);
 			m_path_id.insert({ helper, new_id });
+
+			return (float) new_id;
 		}
 
 		void TextureOpenGL::bind(const int& shapeId, const uint32_t& texID) const {
-			glBindTextureUnit((uint32_t)shapeId, texID);
+			if (texID == 0) return;
+
+			MAR_CORE_GL_FUNC( glBindTextureUnit(s_textureUnit, texID) );
+			s_textureUnit++;
 		}
 
 		void TextureOpenGL::unbind() const {
-			glBindTexture(GL_TEXTURE_2D, 0);
+			MAR_CORE_GL_FUNC( glBindTexture(GL_TEXTURE_2D, 0) );
 		}
 
 		void TextureOpenGL::addID(const uint32_t id) {
@@ -180,7 +188,7 @@ namespace mar {
 				if (it != m_path_id.end()) m_path_id.erase(it);
 				else MAR_CORE_ERROR("Could not delete last occurence of texture!");
 
-				glDeleteTextures(1, &m_id[index]); 
+				MAR_CORE_GL_FUNC( glDeleteTextures(1, &m_id[index]) );
 			}
 
 			for (uint32_t i = index; i < m_id.size() - 1; i++) { 

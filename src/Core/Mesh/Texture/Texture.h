@@ -42,7 +42,7 @@ namespace mar {
 
 				\param path - path to texture, which will be loaded
 			*/
-			virtual void loadTexture(const char* path) { }
+			virtual float loadTexture(const char* path) { return 0.f; }
 
 			/*
 			Method should generate new id for cubemap. Must be overloaded!
@@ -58,7 +58,7 @@ namespace mar {
 
 				\param faces - paths to textures, which will be loaded
 			*/
-			virtual void loadCubemap(const char* path) { }
+			virtual float loadCubemap(const char* path) { return 0.f; }
 
 			/*
 			Method should bind texture (with unique ID) to selected shape (with unique ID)
@@ -103,6 +103,11 @@ namespace mar {
 				\param index - index of shape
 			*/
 			virtual void removeID(const uint32_t& index) { }
+
+			/*
+			Method should reset static variable - texture unit.
+			*/
+			virtual void resetTextureUnit() { }
 		};
 
 
