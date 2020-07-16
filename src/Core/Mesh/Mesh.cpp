@@ -217,27 +217,8 @@ namespace mar {
 		void Mesh::popShape(const uint32_t& index) {
 			MAR_CORE_TRACE("MESH: Trying to pop shape");
 
-			const auto& vec = m_shapes[index]->getIndices();
-			uint32_t min_value = *std::min_element(vec.begin(), vec.end());
-			uint32_t max_value = *std::max_element(vec.begin(), vec.end());
-			int diff = (-1) * (max_value - min_value + 1);
-
-			m_indicesMaxValue -= m_shapes[index]->getVertices().size() / m_shapes[index]->getStride();
-
-			if (m_samplers[index] == 0) {
-				for (uint32_t i = index + 1; i < m_shapesCount; i++)
-					if (m_samplers[i] != 0) {
-						m_availableTextureID = m_samplers[i];
-						break;
-					}
-			}
-			else {
-				if(index == 0)
-					m_availableTextureID = 1;
-				else
-					m_availableTextureID = index;
-			}
-			
+			int32_t diff = PopHelper_newIndicesMaxVal(index);
+			PopHelper_newTextureID(index);
 
 			for (uint32_t i = index; i < m_shapesCount - 1; i++) {
 				if (m_samplers[i + 1] != 0) {
@@ -275,6 +256,33 @@ namespace mar {
 			m_translationMats.erase(m_translationMats.begin() + index);
 			m_rotationMats.erase(m_rotationMats.begin() + index);
 			m_scaleMats.erase(m_scaleMats.begin() + index);
+		}
+
+		int32_t Mesh::PopHelper_newIndicesMaxVal(const uint32_t& index) {
+			const auto& vec = m_shapes[index]->getIndices();
+			uint32_t min_value = *std::min_element(vec.begin(), vec.end());
+			uint32_t max_value = *std::max_element(vec.begin(), vec.end());
+			int32_t diff = (-1) * (max_value - min_value + 1);
+
+			m_indicesMaxValue -= m_shapes[index]->getVertices().size() / m_shapes[index]->getStride();
+
+			return diff;
+		}
+
+		void Mesh::PopHelper_newTextureID(const uint32_t& index) {
+			if (m_samplers[index] == 0) {
+				for (uint32_t i = index + 1; i < m_shapesCount; i++)
+					if (m_samplers[i] != 0) {
+						m_availableTextureID = m_samplers[i];
+						break;
+					}
+			}
+			else {
+				if (index == 0)
+					m_availableTextureID = 1;
+				else 
+					m_availableTextureID = m_samplers[0] == 1 ? index + 1 : index;
+			}
 		}
 
 		void Mesh::update() {

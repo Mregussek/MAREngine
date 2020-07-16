@@ -77,6 +77,8 @@ namespace mar {
 			void pushTexture(Ref<Shape>& new_shape, const char* texture);
 
 			void popShape(const uint32_t& index);
+			void PopHelper_newTextureID(const uint32_t& index);
+			int32_t PopHelper_newIndicesMaxVal(const uint32_t& index);
 			void popMatrices(const uint32_t& index);
 
 			bool canPushShape(const Ref<Shape>& new_shape);
