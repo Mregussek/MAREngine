@@ -22,9 +22,9 @@ namespace mar {
 			solutions to specified problems using OpenGL.
 		*/
 		class TextureOpenGL : public Texture, std::enable_shared_from_this<TextureOpenGL> {
-			std::vector<unsigned int> m_id;
+			std::vector<uint32_t> m_id;
 			std::vector<std::string> m_paths;
-			std::unordered_map<std::string, unsigned int> m_path_id;
+			std::unordered_map<std::string, uint32_t> m_path_id;
 
 		public:
 
@@ -37,7 +37,7 @@ namespace mar {
 				\param path - path to texture, which will be loaded
 				\return id - id for new loaded texture
 			*/
-			unsigned int genNewTexture(const char* path) override;
+			uint32_t genNewTexture(const char* path) override;
 
 			/*
 			Load 2D texture and prescribe it to available index. If texture is loaded
@@ -54,7 +54,7 @@ namespace mar {
 				\param faces - paths to textures, which will be loaded
 				\return id - id for new loaded cubemap
 			*/
-			unsigned int genNewCubemap(const char* path) override;
+			uint32_t genNewCubemap(const char* path) override;
 
 			/*
 			Method loads Cube Map and prescribe it to available index.
@@ -70,7 +70,7 @@ namespace mar {
 				\param shapeId - id of shape
 				\param texID - id of texture
 			*/
-			void bind(const int& shapeId, const unsigned int& texID) const override;
+			void bind(const int& shapeId, const uint32_t& texID) const override;
 
 			// Set default texture for each shape
 			void unbind() const override;
@@ -80,14 +80,14 @@ namespace mar {
 
 				\param id - new id
 			*/
-			void addID(const unsigned int id) override;
+			void addID(const uint32_t id) override;
 
 			/*
 			Removes id prescribed to shape with specified index
 
 				\param index - index of shape
 			*/
-			void removeID(const unsigned int& index) override;
+			void removeID(const uint32_t& index) override;
 
 			/*
 			Get id of texture bounded to shape on specific index
@@ -95,7 +95,7 @@ namespace mar {
 				\param index - index of shape
 				\return m_id[index] - id of texture prescribed to shape
 			*/
-			const unsigned int& getID(const unsigned int& index) const override { return m_id[index]; }
+			const uint32_t& getID(const uint32_t& index) const override { return m_id[index]; }
  
 			/*
 			Get path to texture associated to shape with specified index.
@@ -104,7 +104,7 @@ namespace mar {
 				\param index - index of path
 				\return m_path[index] - path of texture prescribed to shape
 			*/
-			const std::string& getPath(const unsigned int& index) const override { return m_paths[index]; }
+			const std::string& getPath(const uint32_t& index) const override { return m_paths[index]; }
 		};
 
 

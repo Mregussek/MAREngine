@@ -20,8 +20,8 @@ namespace mar {
 			This is overloaded class of base one - ElementBuffer, which implements solution to that problem with OpenGL.
 		*/
 		class ElementBufferOpenGL : public ElementBuffer, std::enable_shared_from_this<ElementBufferOpenGL> {
-			unsigned int _id;
-			unsigned int _allocatedMemory;
+			uint32_t _id;
+			uint32_t _allocatedMemory;
 			bool _initialized = false;
 
 		public:
@@ -34,14 +34,14 @@ namespace mar {
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
-			void initializeElement(const unsigned int allocationMemory) override;
+			void initializeElement(const uint32_t allocationMemory) override;
 
 			/*
 			Redefines some or all of data stored in EBO.
 
 				\param data - indices, which will be drawn
 			*/
-			void updateDynamically(const std::vector<unsigned int>& data) const override;
+			void updateDynamically(const std::vector<uint32_t>& data) const override;
 
 			//! Method resets buffer.
 			void resetBuffer() override;

@@ -63,14 +63,14 @@ namespace mar {
 			inline std::vector<const char*> getTextures() { return m_textures; }
 			inline std::vector<const char*> getObjPaths() { return m_obj; }
 
-			inline const unsigned int getShapesNumber() { return m_shapes.size(); }
+			inline const uint32_t getShapesNumber() { return m_shapes.size(); }
 
-			inline Ref<Shape>& getShape(const unsigned int& index) { return m_shapes[index]; }
-			inline maths::vec3& getCenter(const unsigned int& index) { return m_centers[index]; }
-			inline maths::vec3& getAngle(const unsigned int& index) { return m_angles[index]; }
-			inline maths::vec3& getScale(const unsigned int& index) { return m_scales[index]; }
-			inline const char* getTexture(const unsigned int& index) { return m_textures[index]; }
-			inline const char* getObjPath(const unsigned int& index) { return m_obj[index]; }
+			inline Ref<Shape>& getShape(const uint32_t& index) { return m_shapes[index]; }
+			inline maths::vec3& getCenter(const uint32_t& index) { return m_centers[index]; }
+			inline maths::vec3& getAngle(const uint32_t& index) { return m_angles[index]; }
+			inline maths::vec3& getScale(const uint32_t& index) { return m_scales[index]; }
+			inline const char* getTexture(const uint32_t& index) { return m_textures[index]; }
+			inline const char* getObjPath(const uint32_t& index) { return m_obj[index]; }
 		};
 
 

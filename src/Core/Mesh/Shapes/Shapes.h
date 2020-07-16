@@ -40,18 +40,18 @@ namespace mar {
 			maths::mat4 m_scaleMat;
 
 			std::vector<float> m_verticesVector;
-			std::vector<unsigned int> m_indicesVector;
-			std::vector<unsigned int> m_layout;
+			std::vector<uint32_t> m_indicesVector;
+			std::vector<uint32_t> m_layout;
 
 			bool m_calculatedStride;
-			unsigned int m_stride;
+			uint32_t m_stride;
 
 		public:
 			Shape() = default;
 
 			Shape(float new_id, const char* new_name, maths::vec3 new_center, maths::vec3 new_angle,
-				std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
-				std::vector<unsigned int> new_layout, maths::vec3 new_color);
+				std::vector<float> new_vertices, std::vector<uint32_t> new_indices,
+				std::vector<uint32_t> new_layout, maths::vec3 new_color);
 
 			Shape(const Ref<Shape>& shape);
 
@@ -70,10 +70,10 @@ namespace mar {
 			inline maths::mat4& getTranslation() { return m_translation; }
 			inline maths::mat4& getRotation() { return m_rotation; }
 			inline maths::mat4& getScaleMat() { return m_scaleMat; }
-			const unsigned int getStride();
+			const uint32_t getStride();
 			inline const std::vector<float>& getVertices() const { return m_verticesVector; }
-			inline const std::vector<unsigned int>& getIndices() const { return m_indicesVector; }
-			inline const std::vector<unsigned int>& getLayout() const { return m_layout; }
+			inline const std::vector<uint32_t>& getIndices() const { return m_indicesVector; }
+			inline const std::vector<uint32_t>& getLayout() const { return m_layout; }
 
 			// --- SET METHODS --- //
 			void setName(std::string new_name) { 
@@ -132,15 +132,15 @@ namespace mar {
 				m_verticesVector[index] = new_value; 
 				//MAR_CORE_TRACE("SHAPE: set new vertice at index");
 			}
-			void setIndices(const std::vector<unsigned int>& new_indices) { 
+			void setIndices(const std::vector<uint32_t>& new_indices) { 
 				m_indicesVector = new_indices; 
 				MAR_CORE_TRACE("SHAPE: set new indices");
 			}
-			void setIndice(size_t index, unsigned int new_value) { 
+			void setIndice(size_t index, uint32_t new_value) { 
 				m_indicesVector[index] = new_value; 
 				//MAR_CORE_TRACE("SHAPE: set new indice at index");
 			}
-			void setLayout(const std::vector<unsigned int>& new_layout) { 
+			void setLayout(const std::vector<uint32_t>& new_layout) { 
 				m_layout = new_layout; 
 				MAR_CORE_TRACE("SHAPE: set new layout");
 			}

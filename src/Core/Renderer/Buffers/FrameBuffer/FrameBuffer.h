@@ -17,7 +17,7 @@ namespace mar {
 		struct FrameBufferSpecification {
 			float width{ 0.f };
 			float height{ 0.f };
-			unsigned int samples = 1;
+			uint32_t samples = 1;
 
 			bool swapChainTarget = false;
 			
@@ -42,9 +42,9 @@ namespace mar {
 
 			virtual void close() { }
 
-			virtual const unsigned int& getColorAttach() const { return 0; }
+			virtual const uint32_t& getColorAttach() const { return 0; }
 
-			virtual const unsigned int& getDepthAttach() const { return 0; }
+			virtual const uint32_t& getDepthAttach() const { return 0; }
 
 			virtual const FrameBufferSpecification& getSpecification() const { return m_spec; }
 		};

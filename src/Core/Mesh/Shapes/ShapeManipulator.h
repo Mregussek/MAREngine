@@ -55,8 +55,8 @@ namespace mar {
                 \param passedValue - passed indicesVector, its values are gonna be used to calculate new ones
                 \return returnValue - vector containing new, extended, indices
             */
-            static std::vector<unsigned int> changeIndicesFormat(const unsigned int& size, int& max_value,
-                const std::vector<unsigned int>& passedValue);
+            static std::vector<uint32_t> changeIndicesFormat(const uint32_t& size, int& max_value,
+                const std::vector<uint32_t>& passedValue);
         };
 
 

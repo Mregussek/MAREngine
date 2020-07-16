@@ -22,7 +22,7 @@ namespace mar {
 			This is overloaded class of base one - VertexArrayOpenGL, which implements solution to that problem with OpenGL.
 		*/
 		class VertexArrayOpenGL : public VertexArray, std::enable_shared_from_this<VertexArrayOpenGL> {
-			unsigned int _rendererId;
+			uint32_t _rendererId;
 
 		public:
 			//! Default constructor. For initialization use initializeArrayBuffer() method.

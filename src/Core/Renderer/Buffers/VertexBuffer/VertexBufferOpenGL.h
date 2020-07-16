@@ -20,9 +20,9 @@ namespace mar {
 			This is overloaded class of base one - VertexBuffer, which implements solution to that problem with OpenGL.
 		*/
 		class VertexBufferOpenGL : public VertexBuffer, std::enable_shared_from_this<VertexBufferOpenGL> {
-			unsigned int _id;
-			unsigned int _size;
-			unsigned int _allocatedMemory;
+			uint32_t _id;
+			uint32_t _size;
+			uint32_t _allocatedMemory;
 			bool _initialized = false;
 
 		public:
@@ -35,7 +35,7 @@ namespace mar {
 
 				\param allocationMemory - size of memory (bytes!), which will be allocated on GPU
 			*/
-			void initializeVertex(unsigned int allocationMemory) override;
+			void initializeVertex(uint32_t allocationMemory) override;
 
 			//! Binds class m_id member to target, which is VBO
 			void bind() const override;
@@ -61,7 +61,7 @@ namespace mar {
 
 				\return size - returns size allocated on GPU
 			*/
-			unsigned int getSize() const override;
+			uint32_t getSize() const override;
 		};
 
 

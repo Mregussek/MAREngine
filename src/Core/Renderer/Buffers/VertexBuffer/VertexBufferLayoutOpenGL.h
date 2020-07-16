@@ -22,7 +22,7 @@ namespace mar {
 		*/
 		class VertexBufferLayoutOpenGL : public VertexBufferLayout, std::enable_shared_from_this<VertexBufferLayoutOpenGL> {
 			std::vector<VertexBufferElement> _elements;
-			unsigned int _stride;
+			uint32_t _stride;
 
 		public:
 			//! Constructor, which initializes _stride with 0
@@ -42,7 +42,7 @@ namespace mar {
 
 				\return _stride - calculated stride for proper data format
 			*/
-			unsigned int getStride() const override {
+			uint32_t getStride() const override {
 				return _stride;
 			}
 
@@ -50,9 +50,9 @@ namespace mar {
 			Pushes new element to layout by specifying its type and count
 
 				\param count - value of next Vertex Attribute
-				\param what - specify what value you pushData (float[PUSH_FLOAT], unsigned int[PUSH_UNSIGNED INT] or char[PUSH_UNSIGNED_BYTE])
+				\param what - specify what value you pushData (float[PUSH_FLOAT], uint32_t[PUSH_uint32_t] or char[PUSH_UNSIGNED_BYTE])
 			*/
-			void push(unsigned int count, PushBuffer what) override {
+			void push(uint32_t count, PushBuffer what) override {
 				if (what == PushBuffer::PUSH_FLOAT) {
 					_elements.push_back({ GL_FLOAT, count, GL_FALSE });
 					_stride += count * sizeof(GL_FLOAT);

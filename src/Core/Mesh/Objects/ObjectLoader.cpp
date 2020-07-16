@@ -12,8 +12,8 @@ namespace mar {
 
 		const char* ObjectLoader::s_name;
 		std::vector<float> ObjectLoader::s_vertices;
-		std::vector<unsigned int> ObjectLoader::s_indices;
-		std::vector<unsigned int> ObjectLoader::s_layout;
+		std::vector<uint32_t> ObjectLoader::s_indices;
+		std::vector<uint32_t> ObjectLoader::s_layout;
 		maths::vec3 ObjectLoader::s_center;
 		maths::vec3 ObjectLoader::s_angle;
 		maths::vec3 ObjectLoader::s_scale;
@@ -26,9 +26,9 @@ namespace mar {
 			std::vector<maths::vec3> vertex_positions;
 			std::vector<maths::vec3> vertex_normals;
 			std::vector<maths::vec2> vertex_texcoords;
-			std::vector<unsigned int> indices;
-			std::vector<unsigned int> normal_indices;
-			std::vector<unsigned int> texcoord_indices;
+			std::vector<uint32_t> indices;
+			std::vector<uint32_t> normal_indices;
+			std::vector<uint32_t> texcoord_indices;
 
 			float input[3];
 
@@ -64,7 +64,7 @@ namespace mar {
 					std::istringstream ss(line.substr(2));
 					
 					while (!ss.eof()) {
-						unsigned int indice;
+						uint32_t indice;
 						ss >> indice >> std::ws;
 						indices.push_back(indice - 1);
 
@@ -73,18 +73,18 @@ namespace mar {
 
 							if (ss.peek() == '/') {
 								ss.get();
-								unsigned int normal_indice;
+								uint32_t normal_indice;
 								ss >> normal_indice >> std::ws;
 								normal_indices.push_back(normal_indice - 1);
 							}
 							else {
-								unsigned int tex_indice;
+								uint32_t tex_indice;
 								ss >> tex_indice >> std::ws;
 								texcoord_indices.push_back(tex_indice - 1);
 
 								if (ss.peek() == '/') {
 									ss.get();
-									unsigned int normal_indice;
+									uint32_t normal_indice;
 									ss >> normal_indice >> std::ws;
 									normal_indices.push_back(normal_indice - 1);
 								}
@@ -120,10 +120,10 @@ namespace mar {
 			s_angle = { 0.f, 0.f, 0.f };
 
 			if(!vertex_normals.empty())
-				for (unsigned int i = 0; i < indices.size(); i += 3) {
-					unsigned int a = indices[i];
-					unsigned int b = indices[i + 1];
-					unsigned int c = indices[i + 2];
+				for (uint32_t i = 0; i < indices.size(); i += 3) {
+					uint32_t a = indices[i];
+					uint32_t b = indices[i + 1];
+					uint32_t c = indices[i + 2];
 
 					if (a >= vertex_positions.size() || b >= vertex_positions.size() ||
 						c >= vertex_positions.size()) break;
@@ -143,7 +143,7 @@ namespace mar {
 
 			s_vertices.clear();
 
-			for (unsigned int i = 0; i < vertex_positions.size(); i++) {
+			for (uint32_t i = 0; i < vertex_positions.size(); i++) {
 				s_vertices.push_back(vertex_positions[i].x);
 				s_vertices.push_back(vertex_positions[i].y);
 				s_vertices.push_back(vertex_positions[i].z);

@@ -51,7 +51,7 @@ namespace mar {
 			}
 		}
 
-		void Renderer::initialize(const std::vector<unsigned int>& layout, const ShaderType type) {
+		void Renderer::initialize(const std::vector<uint32_t>& layout, const ShaderType type) {
 			MAR_CORE_TRACE("RENDERER: Trying to initialize renderer");
 
 			if (!m_initialized) {
@@ -122,7 +122,7 @@ namespace mar {
 			if (storage::usegui) {
 				mesh->clearMatrices();
 
-				for (unsigned int i = 0; i < mesh->getShapesCount(); i++) 
+				for (uint32_t i = 0; i < mesh->getShapesCount(); i++) 
 					mesh->pushMatrices(mesh->getShape(i));
 			}
 

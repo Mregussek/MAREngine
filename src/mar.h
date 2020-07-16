@@ -37,8 +37,8 @@ namespace mar {
 
 	template<typename T>
 	struct PointerFactory {
-		inline static unsigned int ref_counter;
-		inline static unsigned int scope_counter;
+		inline static uint32_t ref_counter;
+		inline static uint32_t scope_counter;
 
 		template<typename... Args>
 		static std::unique_ptr<T> makeScope(Args&&... args) {

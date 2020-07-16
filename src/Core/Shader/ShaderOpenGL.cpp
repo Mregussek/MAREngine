@@ -113,8 +113,8 @@ namespace mar {
 			return { vector[0], vector[1] };
 		}
 
-		unsigned int ShaderOpenGL::compileShader(unsigned int type, const std::string& sourceCode) {
-			unsigned int id = glCreateShader(type);
+		uint32_t ShaderOpenGL::compileShader(uint32_t type, const std::string& sourceCode) {
+			uint32_t id = glCreateShader(type);
 			const char* src = sourceCode.c_str();
 			glShaderSource(id, 1, &src, nullptr);
 			glCompileShader(id);
@@ -140,10 +140,10 @@ namespace mar {
 			return id;
 		}
 
-		unsigned int ShaderOpenGL::createShader() {
-			unsigned int shaderProgramId = glCreateProgram();
-			unsigned int vs = compileShader(GL_VERTEX_SHADER, m_programSource._vertexSource);
-			unsigned int fs = compileShader(GL_FRAGMENT_SHADER, m_programSource._fragmentSource);
+		uint32_t ShaderOpenGL::createShader() {
+			uint32_t shaderProgramId = glCreateProgram();
+			uint32_t vs = compileShader(GL_VERTEX_SHADER, m_programSource._vertexSource);
+			uint32_t fs = compileShader(GL_FRAGMENT_SHADER, m_programSource._fragmentSource);
 
 			glAttachShader(shaderProgramId, vs);
 			glAttachShader(shaderProgramId, fs);

@@ -21,8 +21,8 @@ namespace mar {
 			VertexAttribPointer.
 		*/
 		struct VertexBufferElement {
-			unsigned int _type;
-			unsigned int _count;
+			uint32_t _type;
+			uint32_t _count;
 			unsigned char _normalized;
 		};
 
@@ -64,15 +64,15 @@ namespace mar {
 
 				\return _stride - calculated stride for proper data format
 			*/
-			virtual unsigned int getStride() const { return 0; }
+			virtual uint32_t getStride() const { return 0; }
 
 			/*
 			Method should pushData new element to layout by specifying its type and count
 
 				\param count - value of next Vertex Attribute
-				\param what - specify what value you pushData (float[PUSH_FLOAT], unsigned int[PUSH_UNSIGNED INT] or char[PUSH_UNSIGNED_BYTE])
+				\param what - specify what value you pushData (float[PUSH_FLOAT], uint32_t[PUSH_uint32_t] or char[PUSH_UNSIGNED_BYTE])
 			*/
-			virtual void push(unsigned int count, PushBuffer what) { }
+			virtual void push(uint32_t count, PushBuffer what) { }
 		};
 
 

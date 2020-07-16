@@ -29,7 +29,7 @@ namespace mar {
 
 				\param allocationMemory - size of memory (bytes!), which will be allocated on GPU
 			*/
-			virtual void initializeVertex(unsigned int allocationMemory) { }
+			virtual void initializeVertex(uint32_t allocationMemory) { }
 
 			//! Method must bind class id member to target, which is VBO. Method must be overloaded!
 			virtual void bind() const { }
@@ -56,7 +56,7 @@ namespace mar {
 
 				\return size - returns size allocated on GPU
 			*/
-			virtual unsigned int getSize() const { return 0; }
+			virtual uint32_t getSize() const { return 0; }
 		};
 
 

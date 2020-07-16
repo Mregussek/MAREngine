@@ -46,8 +46,8 @@ namespace mar {
 			virtual int getUniformLocation(const std::string& name) { return 0; }
 
 			virtual ShaderProgramSource parseShader() { return { "empty", "empty" }; }
-			virtual unsigned int compileShader(unsigned int type, const std::string& source) { return 0; }
-			virtual unsigned int createShader() { return 0; }
+			virtual uint32_t compileShader(uint32_t type, const std::string& source) { return 0; }
+			virtual uint32_t createShader() { return 0; }
 		};
 
 

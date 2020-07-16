@@ -15,7 +15,7 @@ namespace mar {
 		class ShaderOpenGL : public Shader {
 			bool m_initialized{false};
 
-			unsigned int m_id;
+			uint32_t m_id;
 			std::string m_shaderPath;
 			std::unordered_map<std::string, int> m_uniformLocation;
 			ShaderProgramSource m_programSource;
@@ -44,8 +44,8 @@ namespace mar {
 			int getUniformLocation(const std::string& name) override;
 
 			ShaderProgramSource parseShader() override;
-			unsigned int compileShader(unsigned int type, const std::string& sourceCode) override;
-			unsigned int createShader() override;
+			uint32_t compileShader(uint32_t type, const std::string& sourceCode) override;
+			uint32_t createShader() override;
 		};
     
     

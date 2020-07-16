@@ -42,7 +42,7 @@ namespace mar {
 				layer->initialize();
 				layer->getMesh()->setMeshType(getMeshTypes()[i]);
 
-				for (unsigned int j = 0; j < getShapes()[i].size(); j++) {
+				for (uint32_t j = 0; j < getShapes()[i].size(); j++) {
 					auto shape =  getShapes()[i][j];
 					auto center = getCenters()[i][j];
 					auto angle =  getAngles()[i][j];
@@ -71,7 +71,7 @@ namespace mar {
 		const std::vector<layers::MeshLayer*> filesystem::loadScene(Ref<graphics::FrameBuffer>& framebuffer) {
 			std::vector<layers::MeshLayer*> lay;
 
-			for (unsigned int i = 0; i < getMeshTypes().size(); i++) {
+			for (uint32_t i = 0; i < getMeshTypes().size(); i++) {
 				auto layer = new layers::MeshLayer("Mesh Layer");
 				layer->initialize();
 				layer->scene(getSceneTypes()[i], getMeshTypes()[i]);

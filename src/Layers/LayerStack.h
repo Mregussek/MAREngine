@@ -18,14 +18,14 @@ namespace mar {
 
 		class LayerStack {
 			std::vector<Layer*> m_layers;
-			unsigned int m_layerInsert{ 0 };
+			uint32_t m_layerInsert{ 0 };
 
 		public:
 			LayerStack() {
 				MAR_CORE_INFO("Initialized Layer Stack!");
 			}
 
-			Layer* operator[](const unsigned int& index) { return m_layers[index]; }
+			Layer* operator[](const uint32_t& index) { return m_layers[index]; }
 
 			void close() {
 				for (auto& layer : m_layers) {

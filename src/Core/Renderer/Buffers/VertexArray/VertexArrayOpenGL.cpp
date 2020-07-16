@@ -20,9 +20,9 @@ namespace mar {
 
 		void VertexArrayOpenGL::addBuffer(const Ref<VertexBufferLayout>& layout) {
 			const auto& elements = layout->getElements();
-			unsigned int offset = 0;
+			uint32_t offset = 0;
 
-			for (unsigned int i = 0; i < elements.size(); i++) {
+			for (uint32_t i = 0; i < elements.size(); i++) {
 				MAR_CORE_GL_FUNC(glVertexAttribPointer(i, elements[i]._count, elements[i]._type, elements[i]._normalized, layout->getStride(), (const void*)offset));
 
 				MAR_CORE_GL_FUNC(glEnableVertexAttribArray(i));

@@ -9,7 +9,7 @@ namespace mar {
 	namespace graphics {
 
 
-		void VertexBufferOpenGL::initializeVertex(unsigned int allocationMemory) {
+		void VertexBufferOpenGL::initializeVertex(uint32_t allocationMemory) {
 			if (!_initialized) {
 				_allocatedMemory = allocationMemory;
 				MAR_CORE_GL_FUNC(glGenBuffers(1, &_id));
@@ -43,10 +43,10 @@ namespace mar {
 			_initialized = false;
 		}
 
-		unsigned int VertexBufferOpenGL::getSize() const {
+		uint32_t VertexBufferOpenGL::getSize() const {
 			int size;
 			glGetBufferParameteriv(GL_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-			return (unsigned int)size;
+			return (uint32_t)size;
 		}
 
 

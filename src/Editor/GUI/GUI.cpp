@@ -279,7 +279,7 @@ namespace mar {
 				window::Input::disableInput();
 
 			static graphics::FrameBufferSpecification spec = m_framebuffer->getSpecification();
-			static unsigned int id = m_framebuffer->getColorAttach();
+			static uint32_t id = m_framebuffer->getColorAttach();
 
 			ImVec2 size = ImGui::GetContentRegionAvail();
 			spec.width = size.x;
@@ -329,11 +329,11 @@ namespace mar {
 			if (storage::usegui) {
 				ImGui::MenuItem("Select Shape");
 
-				for (unsigned int index = 0; index < m_meshes.size(); index++) {
+				for (uint32_t index = 0; index < m_meshes.size(); index++) {
 					const char* mesh_name = m_meshes[index]->getMeshName();
 
 					if (ImGui::TreeNode(mesh_name)) {
-						for (unsigned int i = 0; i < m_meshes[index]->getShapesCount(); i++) {
+						for (uint32_t i = 0; i < m_meshes[index]->getShapesCount(); i++) {
 							const char* shape_name = m_meshes[index]->getShape(i)->getName().c_str();
 
 							if (ImGui::MenuItem(shape_name)) {
@@ -421,7 +421,7 @@ namespace mar {
 				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
 				ImGui::InputFloat3("Input Center", m_inputCenter);
 
-				for (unsigned int i = 0; i < 3; i++)
+				for (uint32_t i = 0; i < 3; i++)
 					if (m_inputCenter[i] > 10.f || m_inputCenter[i] < -10.f)
 						return;
 

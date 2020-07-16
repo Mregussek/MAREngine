@@ -14,7 +14,7 @@ namespace mar {
 				glDeleteTextures(1, &id);
 		}
 
-		unsigned int TextureOpenGL::genNewTexture(const char* path) {
+		uint32_t TextureOpenGL::genNewTexture(const char* path) {
 			int width, height;
 			int bitPerPixel;
 			unsigned char* localBuffer;
@@ -23,7 +23,7 @@ namespace mar {
 			localBuffer = stbi_load(path, &width, &height, &bitPerPixel, 0);
 
 			if (localBuffer) {
-				unsigned int id;
+				uint32_t id;
 				GLenum internalFormat = 0;
 				GLenum dataFormat = 0;
 
@@ -76,13 +76,13 @@ namespace mar {
 				return;
 			}
 
-			unsigned int new_id = genNewTexture(path);
+			uint32_t new_id = genNewTexture(path);
 			m_id.push_back(new_id);
 			m_paths.push_back(path);
 			m_path_id.insert({ path, new_id });
 		}
 
-		unsigned int TextureOpenGL::genNewCubemap(const char* path) {
+		uint32_t TextureOpenGL::genNewCubemap(const char* path) {
 			std::vector<std::string> faces(6);
 			int check = 0;
 
@@ -103,7 +103,7 @@ namespace mar {
 				return 0;
 			}
 
-			unsigned int id;
+			uint32_t id;
 			int width, height;
 			int bitPerPixel;
 
@@ -111,7 +111,7 @@ namespace mar {
 			glBindTexture(GL_TEXTURE_CUBE_MAP, id);
 			stbi_set_flip_vertically_on_load(false);
 
-			for (unsigned int i = 0; i < faces.size(); i++) {
+			for (uint32_t i = 0; i < faces.size(); i++) {
 
 				unsigned char* localBuffer = stbi_load(faces[i].c_str(), &width, &height, &bitPerPixel, 0);
 
@@ -151,27 +151,27 @@ namespace mar {
 				return;
 			}
 
-			unsigned int new_id = genNewCubemap(path);
+			uint32_t new_id = genNewCubemap(path);
 			m_id.push_back(new_id);
 			m_paths.push_back(helper);
 			m_path_id.insert({ helper, new_id });
 		}
 
-		void TextureOpenGL::bind(const int& shapeId, const unsigned int& texID) const {
-			glBindTextureUnit((unsigned int)shapeId, texID);
+		void TextureOpenGL::bind(const int& shapeId, const uint32_t& texID) const {
+			glBindTextureUnit((uint32_t)shapeId, texID);
 		}
 
 		void TextureOpenGL::unbind() const {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-		void TextureOpenGL::addID(const unsigned int id) {
+		void TextureOpenGL::addID(const uint32_t id) {
 			m_id.push_back(id);
 			m_paths.push_back("empty");
 		}
 
-		void TextureOpenGL::removeID(const unsigned int& index) {
-			unsigned int id_count = std::count(m_id.begin(), m_id.end(), m_id[index]);
+		void TextureOpenGL::removeID(const uint32_t& index) {
+			uint32_t id_count = std::count(m_id.begin(), m_id.end(), m_id[index]);
 
 			if (id_count == 1 && m_id[index] != 0) {
 				std::string path_to_find = m_paths[index];
@@ -183,7 +183,7 @@ namespace mar {
 				glDeleteTextures(1, &m_id[index]); 
 			}
 
-			for (unsigned int i = index; i < m_id.size() - 1; i++) { 
+			for (uint32_t i = index; i < m_id.size() - 1; i++) { 
 				m_id[i] = m_id[i + 1]; 
 				m_paths[i] = m_paths[i + 1];
 			}

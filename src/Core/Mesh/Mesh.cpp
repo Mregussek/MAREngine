@@ -10,7 +10,7 @@ namespace mar {
     namespace graphics {
 
 		float Mesh::s_availableTextureID = 1.0f;
-		unsigned int Mesh::s_existingInstance = 0;
+		uint32_t Mesh::s_existingInstance = 0;
 
 
 		Mesh::~Mesh() {
@@ -41,13 +41,13 @@ namespace mar {
 		}
 
 		void Mesh::loadScene(Scene* scene, MeshType type) {
-			unsigned int shapesInSceneCount = scene->getShapesNumber();
+			uint32_t shapesInSceneCount = scene->getShapesNumber();
 			setMeshType(type);
 
 			switch(m_type) {
 			case MeshType::NORMAL:
 			case MeshType::CUBEMAPS:
-				for (unsigned int i = 0; i < shapesInSceneCount; i++)
+				for (uint32_t i = 0; i < shapesInSceneCount; i++)
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), 
 						scene->getScale(i), scene->getTexture(i));
 					
@@ -55,7 +55,7 @@ namespace mar {
 
 				break;
 			case MeshType::OBJECTS:
-				for (unsigned int i = 0; i < shapesInSceneCount; i++) {
+				for (uint32_t i = 0; i < shapesInSceneCount; i++) {
 					auto shape = scene->getShape(i);
 					shape->assignDataFromFile(scene->getObjPath(i));
 
@@ -203,7 +203,7 @@ namespace mar {
 			m_scaleMats.push_back(new_shape->getScaleMat());
 		}
 
-		void Mesh::flushShape(const unsigned int& index) {
+		void Mesh::flushShape(const uint32_t& index) {
 			if (m_shapesCount == 1) {
 				MAR_CORE_ERROR("MESH: Cannot delete the last shape!");
 				return;
@@ -215,17 +215,17 @@ namespace mar {
 			MAR_CORE_INFO("MESH: Deleted object from scene!");
 		}
 
-		void Mesh::popShape(const unsigned int& index) {
+		void Mesh::popShape(const uint32_t& index) {
 			MAR_CORE_TRACE("MESH: Trying to pop shape");
 
 			const auto& vec = m_shapes[index]->getIndices();
-			unsigned int min_value = *std::min_element(vec.begin(), vec.end());
-			unsigned int max_value = *std::max_element(vec.begin(), vec.end());
+			uint32_t min_value = *std::min_element(vec.begin(), vec.end());
+			uint32_t max_value = *std::max_element(vec.begin(), vec.end());
 			int diff = (-1) * (max_value - min_value + 1);
 
 			m_indicesMaxValue -= m_shapes[index]->getVertices().size() / m_shapes[index]->getStride();
 
-			for (unsigned int i = index; i < m_shapesCount - 1; i++) {
+			for (uint32_t i = index; i < m_shapesCount - 1; i++) {
 				float save_tex_id = m_shapes[i + 1]->getTextureID();
 				m_samplers[i] = m_samplers[i + 1];
 				m_colors[i] = m_colors[i + 1];
@@ -248,7 +248,7 @@ namespace mar {
 			updateBuffers();
 		}
 
-		void Mesh::popMatrices(const unsigned int& index) {
+		void Mesh::popMatrices(const uint32_t& index) {
 			MAR_CORE_TRACE("MESH: Popping matrices");
 
 			m_translationMats.erase(m_translationMats.begin() + index);
@@ -259,7 +259,7 @@ namespace mar {
 		void Mesh::update() {
 			MAR_CORE_TRACE("MESH: update");
 
-			for (unsigned int i = 0; i < m_shapesCount; i++)
+			for (uint32_t i = 0; i < m_shapesCount; i++)
 				m_texture->bind(m_samplers[i], m_texture->getID(i));
 		}
 
@@ -273,7 +273,7 @@ namespace mar {
 		void Mesh::updateBuffers() {
 			MAR_CORE_TRACE("MESH: Updating buffers");
 
-			for (unsigned int i = 0; i < m_shapesCount; i++) {
+			for (uint32_t i = 0; i < m_shapesCount; i++) {
 				auto beginVert = m_shapes[i]->getVertices().begin();
 				auto endVert = m_shapes[i]->getVertices().end();
 				auto beginIndices = m_shapes[i]->getIndices().begin();
@@ -293,8 +293,8 @@ namespace mar {
 		}
 
 		bool Mesh::canPushShape(const Ref<Shape>& new_shape) {
-			unsigned int currentVerticesSize = m_vertices.size() + new_shape->getVertices().size();
-			unsigned int currentIndicesSize = m_indices.size() + new_shape->getIndices().size();
+			uint32_t currentVerticesSize = m_vertices.size() + new_shape->getVertices().size();
+			uint32_t currentIndicesSize = m_indices.size() + new_shape->getIndices().size();
 
 			if (currentVerticesSize >= constants::maxVertexCount) {
 				MAR_CORE_ERROR("MESH: To much vertices in vector!");

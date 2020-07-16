@@ -19,11 +19,11 @@ namespace mar {
 
 
 		struct RendererStatistics {
-			unsigned int drawCallsCount;
-			unsigned int verticesCount;
-			unsigned int indicesCount;
-			unsigned int shapesCount;
-			unsigned int trianglesCount;
+			uint32_t drawCallsCount;
+			uint32_t verticesCount;
+			uint32_t indicesCount;
+			uint32_t shapesCount;
+			uint32_t trianglesCount;
 
 			RendererStatistics()
 				: drawCallsCount(0),
@@ -59,7 +59,7 @@ namespace mar {
 			void create();
 			void close();
 
-			void initialize(const std::vector<unsigned int>& layout, const ShaderType type);
+			void initialize(const std::vector<uint32_t>& layout, const ShaderType type);
 
 			void draw(Mesh* mesh);
 

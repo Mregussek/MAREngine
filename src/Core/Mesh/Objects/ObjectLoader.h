@@ -16,8 +16,8 @@ namespace mar {
         class ObjectLoader {
             static const char* s_name;
             static std::vector<float> s_vertices;
-            static std::vector<unsigned int> s_indices;
-            static std::vector<unsigned int> s_layout;
+            static std::vector<uint32_t> s_indices;
+            static std::vector<uint32_t> s_layout;
             static maths::vec3 s_center;
             static maths::vec3 s_angle;
             static maths::vec3 s_scale;
@@ -31,8 +31,8 @@ namespace mar {
             // --- GET METHODS --- //
             inline static const char* getName() { return s_name; }
             inline static std::vector<float> getVertices() { return s_vertices; }
-            inline static std::vector<unsigned int> getIndices() { return s_indices; }
-            inline static std::vector<unsigned int> getLayout() { return s_layout; }
+            inline static std::vector<uint32_t> getIndices() { return s_indices; }
+            inline static std::vector<uint32_t> getLayout() { return s_layout; }
             inline static float getID() { return s_id; }
             inline static float getTextureID() { return s_texid; }
             inline static maths::vec3 getCenter() { return s_center; }

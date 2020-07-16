@@ -46,7 +46,7 @@ namespace mar {
 
 			editor::filesystem::loadSceneFromFile(m_pathLoad);
 			if (auto loaded = editor::filesystem::assignLoadedLayers(m_framebuffer)) 
-				for (unsigned int i = 0; i < loaded->size(); i++) {
+				for (uint32_t i = 0; i < loaded->size(); i++) {
 					gui_layer->submit(loaded->at(i)->getMesh());
 					m_stack.pushLayer(loaded->at(i));
 				}

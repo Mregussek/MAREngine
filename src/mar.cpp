@@ -10,10 +10,10 @@ namespace mar {
 
 
 	template<typename T>
-	unsigned int PointerFactory<T>::ref_counter{ 0 };
+	uint32_t PointerFactory<T>::ref_counter{ 0 };
 
 	template<typename T>
-	unsigned int PointerFactory<T>::scope_counter{ 0 };
+	uint32_t PointerFactory<T>::scope_counter{ 0 };
 
 
 }

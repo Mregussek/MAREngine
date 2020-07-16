@@ -10,7 +10,7 @@ namespace mar {
 	namespace graphics {
 
 
-		void ElementBufferOpenGL::initializeElement(const unsigned int allocationMemory) {
+		void ElementBufferOpenGL::initializeElement(const uint32_t allocationMemory) {
 			if (!_initialized) {
 				_allocatedMemory = allocationMemory;
 				MAR_CORE_GL_FUNC( glGenBuffers(1, &_id) );
@@ -27,8 +27,8 @@ namespace mar {
 			MAR_CORE_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id) );
 		}
 
-		void ElementBufferOpenGL::updateDynamically(const std::vector<unsigned int>& data) const {
-			MAR_CORE_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(unsigned int), data.data()) );
+		void ElementBufferOpenGL::updateDynamically(const std::vector<uint32_t>& data) const {
+			MAR_CORE_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(uint32_t), data.data()) );
 		}
 
 		void ElementBufferOpenGL::resetBuffer() {

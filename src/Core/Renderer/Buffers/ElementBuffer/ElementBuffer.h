@@ -32,14 +32,14 @@ namespace mar {
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
-			virtual void initializeElement(const unsigned int allocationMemory) { }
+			virtual void initializeElement(const uint32_t allocationMemory) { }
 
 			/*
 			Method must redefine some or all of data stored in EBO. Method must be overloaded!
 
 				\param data - indices, which will be drawn
 			*/
-			virtual void updateDynamically(const std::vector<unsigned int>& data) const { }
+			virtual void updateDynamically(const std::vector<uint32_t>& data) const { }
 
 			//! Method should reset buffer. Must be overloaded!
 			virtual void resetBuffer() { }

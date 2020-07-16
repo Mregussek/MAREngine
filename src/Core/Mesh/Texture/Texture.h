@@ -34,7 +34,7 @@ namespace mar {
 				\param path - path to texture, which will be loaded
 				\return id - id for new loaded texture
 			*/
-			virtual unsigned int genNewTexture(const char* path) { return 0; }
+			virtual uint32_t genNewTexture(const char* path) { return 0; }
 
 			/*
 			Method should load 2D texture and prescribe it to available index.
@@ -50,7 +50,7 @@ namespace mar {
 				\param faces - paths to textures, which will be loaded
 				\return id - id for new loaded cubemap
 			*/
-			virtual unsigned int genNewCubemap(const char* path) { return 0; }
+			virtual uint32_t genNewCubemap(const char* path) { return 0; }
 
 			/*
 			Method should load Cube Map and prescribe it to available index.
@@ -67,7 +67,7 @@ namespace mar {
 				\param shapeId - id of shape
 				\param texID - id of texture
 			*/
-			virtual void bind(const int& shapeId, const unsigned int& texID) const { }
+			virtual void bind(const int& shapeId, const uint32_t& texID) const { }
 
 			// Method should set default texture for each shape. Method must be overloaded!
 			virtual void unbind() const { }
@@ -79,7 +79,7 @@ namespace mar {
 				\param index - index of shape
 				\return m_id[index] - id of texture prescribed to shape
 			*/
-			virtual const unsigned int& getID(const unsigned int& index) const { return 0; }
+			virtual const uint32_t& getID(const uint32_t& index) const { return 0; }
 
 			/*
 			Method should return path to texture associated to shape with specified index.
@@ -88,21 +88,21 @@ namespace mar {
 				\param index - index of path
 				\return m_path[index] - path of texture prescribed to shape
 			*/
-			virtual const std::string& getPath(const unsigned int& index) const { return "empty"; }
+			virtual const std::string& getPath(const uint32_t& index) const { return "empty"; }
 
 			/*
 			Method should add specified item to id vector. Must be overloaded!
 
 				\param id - new id
 			*/
-			virtual void addID(const unsigned int id) { }
+			virtual void addID(const uint32_t id) { }
 
 			/*
 			Method should remove id prescribed to shape with specified index. Must be overloaded!
 
 				\param index - index of shape
 			*/
-			virtual void removeID(const unsigned int& index) { }
+			virtual void removeID(const uint32_t& index) { }
 		};
 
 

@@ -41,7 +41,7 @@ namespace mar {
 
 			////////////////////////////////////////////////
 			/// --------- WRITING LOOP TO FILE --------- ///
-			for (unsigned int i = 0; i < meshes.size(); i++) {
+			for (uint32_t i = 0; i < meshes.size(); i++) {
 				std::string mesh_type;
 
 				switch (meshes[i]->getMeshType()) {
@@ -59,7 +59,7 @@ namespace mar {
 				ss << "#mesh_id " + std::to_string(i) << "\n";
 				ss << "#mesh_type " + mesh_type << "\n\n";
 
-				for (unsigned int j = 0; j < meshes[i]->getShapesCount(); j++) {
+				for (uint32_t j = 0; j < meshes[i]->getShapesCount(); j++) {
 					auto shape = meshes[i]->getShape(j);
 					auto center = shape->getCenter();
 					auto angle = shape->getAngle();

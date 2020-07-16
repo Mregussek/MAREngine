@@ -10,8 +10,8 @@ namespace mar {
 
 
 		Shape::Shape(float new_id, const char* new_name, maths::vec3 new_center, maths::vec3 new_angle,
-			std::vector<float> new_vertices, std::vector<unsigned int> new_indices,
-			std::vector<unsigned int> new_layout, maths::vec3 new_color)
+			std::vector<float> new_vertices, std::vector<uint32_t> new_indices,
+			std::vector<uint32_t> new_layout, maths::vec3 new_color)
 			: m_id(new_id),
 			m_texid(0.0f),
 			m_name(new_name),
@@ -59,7 +59,7 @@ namespace mar {
 			MAR_CORE_INFO("Assigned object from ObjectLoader!");
 		}
 
-		const unsigned int Shape::getStride() {
+		const uint32_t Shape::getStride() {
 			if (!m_calculatedStride) {
 				for (auto const& l : m_layout) m_stride += l;
 				m_calculatedStride = true;
