@@ -64,7 +64,8 @@
 
 #if __has_include("spdlog/spdlog.h")
 	#include "spdlog/spdlog.h"
-	#include "spdlog/sinks/stdout_color_sinks.h"
+	//#include "spdlog/sinks/stdout_color_sinks.h"
+	#include "spdlog/sinks/basic_file_sink.h"
 	#define MAR_ENGINE_SPDLOG_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import spdlog/spdlog.h!"
@@ -79,6 +80,15 @@
 	#define MAR_ENGINE_MAR_MATHS_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import MARMaths.h!"
+#endif
+
+// --- OS Specific libraries --- //
+#ifdef WIN32
+	#if __has_include(<crtdbg.h>)
+		#include <crtdbg.h>
+	#else	
+		#error "MAR ENGINE: Cannot import crtdbg.h for Windows Platform!"
+	#endif
 #endif
 
 // --- Include C++ STL libraries --- //

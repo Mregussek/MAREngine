@@ -58,8 +58,14 @@ namespace mar {
 			static int& getMouseAction() { return s_clickedAction; }
 
 			// --- SET METHODS --- //
-			static void enableInput() { s_useInput = true; }
-			static void disableInput() { s_useInput = false; }
+			static void enableInput() { 
+				s_useInput = true; 
+				MAR_CORE_TRACE("INPUT: enabled!");
+			}
+			static void disableInput() { 
+				s_useInput = false; 
+				MAR_CORE_TRACE("INPUT: disabled!");
+			}
 		};
 
 

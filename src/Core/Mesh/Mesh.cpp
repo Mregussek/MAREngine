@@ -29,13 +29,15 @@ namespace mar {
 			m_shapes.clear();
 
 			s_existingInstance--;
+
+			MAR_CORE_INFO("MESH: Mesh has been deleted!");
 		}
 
 		void Mesh::create() {
 			m_texture = storage::factory->createTexture();
 			s_existingInstance++;
 
-			MAR_CORE_INFO("Mesh has been created!");
+			MAR_CORE_INFO("MESH: Mesh has been created!");
 		}
 
 		void Mesh::loadScene(Scene* scene, MeshType type) {
@@ -49,7 +51,7 @@ namespace mar {
 					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), 
 						scene->getScale(i), scene->getTexture(i));
 					
-				MAR_CORE_INFO("Scene has been loaded by textures!");
+				MAR_CORE_INFO("MESH: Scene has been loaded by textures!");
 
 				break;
 			case MeshType::OBJECTS:
@@ -61,15 +63,17 @@ namespace mar {
 						scene->getScale(i), scene->getTexture(i));
 				}
 					
-				MAR_CORE_INFO("Scene has been loaded by objects!");
+				MAR_CORE_INFO("MESH: Scene has been loaded by objects!");
 
 				break;
+			default:
+				MAR_CORE_ERROR("MESH: Unsupported mesh type!");
 			}
 		}
 
 		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
 			if (!canPushShape(new_shape)) {
-				MAR_CORE_ERROR("Cannot push more shapes!");
+				MAR_CORE_ERROR("MESH: Cannot push more shapes!");
 				return;
 			}
 
@@ -85,7 +89,7 @@ namespace mar {
 
 				m_shapesCount++;
 
-				MAR_CORE_INFO("Reusing shape object!");
+				MAR_CORE_INFO("MESH: Reusing shape object!");
 
 				return;
 			}
@@ -95,7 +99,7 @@ namespace mar {
 
 		void Mesh::submitShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
 			if (!canPushShape(new_shape)) {
-				MAR_CORE_ERROR("Cannot push more shapes!");
+				MAR_CORE_ERROR("MESH: Cannot push more shapes!");
 				return;
 			}
 			
@@ -111,10 +115,12 @@ namespace mar {
 			m_shapes[m_shapesCount]->setUsedTexture(texture);
 			m_shapesCount++;
 
-			MAR_CORE_INFO("Added new object to scene!");
+			MAR_CORE_INFO("MESH: Added new object to scene!");
 		}
 
 		void Mesh::pushTexture(Ref<Shape>& new_shape, const char* texture) {
+			MAR_CORE_TRACE("MESH: Trying to push texture");
+
 			// If texture is not equal to empty (if empty we want to load default colors)
 			if (std::strcmp(texture, "resources/textures/empty") != 0) { 
 				// if texture is not ending with .jpg
@@ -123,7 +129,7 @@ namespace mar {
 						m_texture->loadCubemap(texture);
 					}
 					else {
-						MAR_CORE_ERROR("Pushed Cubemap texture to non-cubemap mesh type");
+						MAR_CORE_ERROR("MESH: Pushed Cubemap texture to non-cubemap mesh type");
 						goto loading_default_colors;
 					}
 				}
@@ -131,7 +137,7 @@ namespace mar {
 					if(getMeshType() != CUBEMAPS_MESH_TYPE)
 						m_texture->loadTexture(texture);
 					else {
-						MAR_CORE_ERROR("Pushed 2D texture to cubemap mesh type!");
+						MAR_CORE_ERROR("MESH: Pushed 2D texture to cubemap mesh type!");
 						goto loading_default_colors;
 					}
 				}
@@ -154,6 +160,8 @@ namespace mar {
 		}
 
 		void Mesh::prepareShape(Ref<Shape>& new_shape) {
+			MAR_CORE_TRACE("MESH: Preparing shape");
+
 			ShapeManipulator::extendShapeID(new_shape, m_availableShapeID);
 			m_availableShapeID++;
 
@@ -162,6 +170,8 @@ namespace mar {
 		}
 
 		void Mesh::pushShape(const Ref<Shape>& new_shape) {
+			MAR_CORE_TRACE("MESH: Pushing shape");
+
 			auto beginVert = new_shape->getVertices().begin();
 			auto endVert = new_shape->getVertices().end();
 			auto beginIndices = new_shape->getIndices().begin();
@@ -172,6 +182,8 @@ namespace mar {
 		}
 
 		void Mesh::pushMatrices(const Ref<Shape>& new_shape) {
+			MAR_CORE_TRACE("MESH: Pushing matrix");
+
 			new_shape->setTranslation(
 				maths::mat4::translation(new_shape->getCenter())
 			);
@@ -193,17 +205,19 @@ namespace mar {
 
 		void Mesh::flushShape(const unsigned int& index) {
 			if (m_shapesCount == 1) {
-				MAR_CORE_ERROR("Cannot delete the last shape!");
+				MAR_CORE_ERROR("MESH: Cannot delete the last shape!");
 				return;
 			}
 
 			popShape(index);
 			popMatrices(index);
 
-			MAR_CORE_INFO("Deleted object from scene!");
+			MAR_CORE_INFO("MESH: Deleted object from scene!");
 		}
 
 		void Mesh::popShape(const unsigned int& index) {
+			MAR_CORE_TRACE("MESH: Trying to pop shape");
+
 			const auto& vec = m_shapes[index]->getIndices();
 			unsigned int min_value = *std::min_element(vec.begin(), vec.end());
 			unsigned int max_value = *std::max_element(vec.begin(), vec.end());
@@ -235,22 +249,30 @@ namespace mar {
 		}
 
 		void Mesh::popMatrices(const unsigned int& index) {
+			MAR_CORE_TRACE("MESH: Popping matrices");
+
 			m_translationMats.erase(m_translationMats.begin() + index);
 			m_rotationMats.erase(m_rotationMats.begin() + index);
 			m_scaleMats.erase(m_scaleMats.begin() + index);
 		}
 
 		void Mesh::update() {
+			MAR_CORE_TRACE("MESH: update");
+
 			for (unsigned int i = 0; i < m_shapesCount; i++)
 				m_texture->bind(m_samplers[i], m_texture->getID(i));
 		}
 
 		void Mesh::clearBuffers() {
+			MAR_CORE_TRACE("MESH: Clearing buffers");
+
 			m_vertices.clear();
 			m_indices.clear();
 		}
 
 		void Mesh::updateBuffers() {
+			MAR_CORE_TRACE("MESH: Updating buffers");
+
 			for (unsigned int i = 0; i < m_shapesCount; i++) {
 				auto beginVert = m_shapes[i]->getVertices().begin();
 				auto endVert = m_shapes[i]->getVertices().end();
@@ -263,6 +285,8 @@ namespace mar {
 		}
 
 		void Mesh::clearMatrices() {
+			MAR_CORE_TRACE("MESH: Clearing matrices");
+
 			m_translationMats.clear();
 			m_rotationMats.clear();
 			m_scaleMats.clear();
@@ -273,17 +297,17 @@ namespace mar {
 			unsigned int currentIndicesSize = m_indices.size() + new_shape->getIndices().size();
 
 			if (currentVerticesSize >= constants::maxVertexCount) {
-				MAR_CORE_ERROR("To much vertices in vector!");
+				MAR_CORE_ERROR("MESH: To much vertices in vector!");
 				return false;
 			}
 
 			if (currentIndicesSize >= constants::maxIndexCount) {
-				MAR_CORE_ERROR("To much indices in vector!");
+				MAR_CORE_ERROR("MESH: To much indices in vector!");
 				return false;
 			}
 
 			if (m_shapesCount == constants::maxObjectsInScene - 1) {
-				MAR_CORE_ERROR("Cannot push more objects!");
+				MAR_CORE_ERROR("MESH: Cannot push more objects!");
 				return false;
 			}
 

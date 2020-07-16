@@ -1,6 +1,7 @@
 ### ---- Added by MR ---- ###
 .vscode
 build
+logs
 bin
 other
 

@@ -38,7 +38,6 @@ namespace mar {
 
 			std::string m_pathLoad{ "resources/mar_files/load_default.marscene" };
 
-			Ref<graphics::RendererFactory> m_factory{ graphics::RendererOpenGLFactory::createFactory() };
 			bool m_shouldRestart{ false };
 
 		public:

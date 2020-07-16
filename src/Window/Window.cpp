@@ -22,11 +22,11 @@ namespace mar {
 			glfwSetErrorCallback(windowErrorCallback);
 
 			if (!glfwInit()) {
-				MAR_CORE_ERROR("glfw() init failure");
+				MAR_CORE_ERROR("OPENGL: glfw() init failure");
 				exit(0);
 			}
 
-			MAR_CORE_TRACE("GLFW has been loaded successfully!");
+			MAR_CORE_TRACE("OPENGL: GLFW has been loaded successfully!");
 
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -37,7 +37,7 @@ namespace mar {
 			m_window = glfwCreateWindow(m_width, m_height, m_windowName, nullptr, nullptr);
 			if (!m_window) {
 				glfwTerminate();
-				MAR_CORE_ERROR("Cannot create window!");
+				MAR_CORE_ERROR("OPENGL: Cannot create window!");
 				exit(0);
 			}
 
@@ -48,11 +48,11 @@ namespace mar {
 			glewExperimental = GL_TRUE;
 			if (glewInit() != GLEW_OK) {
 				glfwTerminate();
-				MAR_CORE_ERROR("glewInit() failure");
+				MAR_CORE_ERROR("OPENGL: glewInit() failure");
 				exit(0);
 			}
 
-			MAR_CORE_TRACE("Glew has been loaded successfully!");
+			MAR_CORE_TRACE("OPENGL: Glew has been loaded successfully!");
 
 			callbacks::setWindowSize(&m_height, &m_width);
 			callbacks::setMouse(&m_mouseX, &m_mouseY);
@@ -70,13 +70,13 @@ namespace mar {
 			MAR_CORE_GL_FUNC( glEnable(GL_BLEND) );
 			MAR_CORE_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
-			MAR_CORE_INFO("OpenGL loaded successfully and window is working!");
+			MAR_CORE_INFO("OPENGL: loaded successfully and window is working!");
 		}
 
 		void Window::shutdown() {
 			glfwTerminate();
 
-			MAR_CORE_INFO("Terminating GLFW!");
+			MAR_CORE_INFO("OPENGL: Terminating GLFW!");
 		}
 
 		void Window::swapBuffers() {

@@ -16,7 +16,7 @@ namespace mar {
 		void MAREngine::initialize() {
 			MAR_LOG_INIT();
 
-			storage::factory = m_factory;
+			storage::factory = graphics::RendererOpenGLFactory::createFactory();
 			storage::usegui = true;
 
 			window::Window::getInstance().initialize(settings::height, settings::width, settings::name);

@@ -37,12 +37,18 @@ namespace mar {
 			}
 
 			void update() { 
+				MAR_CORE_TRACE("STACK: preparing frame");
+
 				for (auto& layer : m_layers) 
 					layer->prepareFrame();
+
+				MAR_CORE_TRACE("STACK: updating frame");
 
 				for (auto& layer : m_layers) 
 					layer->update();
 				
+				MAR_CORE_TRACE("STACK: ending frame");
+
 				for (auto& layer : m_layers) {
 					layer->endFrame();
 				}

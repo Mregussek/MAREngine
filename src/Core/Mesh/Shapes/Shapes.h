@@ -76,23 +76,74 @@ namespace mar {
 			inline const std::vector<unsigned int>& getLayout() const { return m_layout; }
 
 			// --- SET METHODS --- //
-			void setName(std::string new_name) { m_name = new_name; }
-			void setUsedTexture(std::string used_tex) { m_usedTexture = used_tex; }
-			void setUsedObj(std::string used_obj) { m_usedOBJ = used_obj; }
-			void setID(float new_id) { m_id = new_id; }
-			void setTextureID(float new_tex_id) { m_texid = new_tex_id; }
-			void setCenter(const maths::vec3& new_center) { m_center = new_center; }
-			void setAngle(const maths::vec3& new_angle) { m_angle = new_angle; }
-			void setScaleVec(const maths::vec3& new_scale) { m_scaleVec = new_scale; }
-			void setTranslation(const maths::mat4& new_trans) { m_translation = new_trans; }
-			void setRotation(const maths::mat4& new_rot) { m_rotation = new_rot; }
-			void setScaleMat(const maths::mat4& new_scal) { m_scaleMat = new_scal; }
-			void setDefaultColor(const maths::vec3& new_color) { m_defaultColor = new_color; }
-			void setVertices(const std::vector<float>& new_vertices) { m_verticesVector = new_vertices; }
-			void setVertice(size_t index, float new_value) { m_verticesVector[index] = new_value; }
-			void setIndices(const std::vector<unsigned int>& new_indices) { m_indicesVector = new_indices; }
-			void setIndice(size_t index, unsigned int new_value) { m_indicesVector[index] = new_value; }
-			void setLayout(const std::vector<unsigned int>& new_layout) { m_layout = new_layout; }
+			void setName(std::string new_name) { 
+				m_name = new_name; 
+				MAR_CORE_TRACE("SHAPE: set new name");
+			}
+			void setUsedTexture(std::string used_tex) { 
+				m_usedTexture = used_tex; 
+				MAR_CORE_TRACE("SHAPE: set new used texture");
+			}
+			void setUsedObj(std::string used_obj) { 
+				m_usedOBJ = used_obj; 
+				MAR_CORE_TRACE("SHAPE: set new .obj file");
+			}
+			void setID(float new_id) { 
+				m_id = new_id; 
+				MAR_CORE_TRACE("SHAPE: set new ID");
+			}
+			void setTextureID(float new_tex_id) { 
+				m_texid = new_tex_id; 
+				MAR_CORE_TRACE("SHAPE: set new texture ID");
+			}
+			void setCenter(const maths::vec3& new_center) { 
+				m_center = new_center; 
+				MAR_CORE_TRACE("SHAPE: set new center");
+			}
+			void setAngle(const maths::vec3& new_angle) { 
+				m_angle = new_angle; 
+				MAR_CORE_TRACE("SHAPE: set new angle");
+			}
+			void setScaleVec(const maths::vec3& new_scale) { 
+				m_scaleVec = new_scale; 
+				MAR_CORE_TRACE("SHAPE: set new scale vector");
+			}
+			void setTranslation(const maths::mat4& new_trans) { 
+				m_translation = new_trans; 
+				//MAR_CORE_TRACE("SHAPE: set new translation");
+			}
+			void setRotation(const maths::mat4& new_rot) { 
+				m_rotation = new_rot; 
+				//MAR_CORE_TRACE("SHAPE: set new rotation");
+			}
+			void setScaleMat(const maths::mat4& new_scal) { 
+				m_scaleMat = new_scal; 
+				//MAR_CORE_TRACE("SHAPE: set new scale matrix");
+			}
+			void setDefaultColor(const maths::vec3& new_color) { 
+				m_defaultColor = new_color; 
+				MAR_CORE_TRACE("SHAPE: set new default color");
+			}
+			void setVertices(const std::vector<float>& new_vertices) {
+				m_verticesVector = new_vertices; 
+				MAR_CORE_TRACE("SHAPE: set new vertices");
+			}
+			void setVertice(size_t index, float new_value) { 
+				m_verticesVector[index] = new_value; 
+				//MAR_CORE_TRACE("SHAPE: set new vertice at index");
+			}
+			void setIndices(const std::vector<unsigned int>& new_indices) { 
+				m_indicesVector = new_indices; 
+				MAR_CORE_TRACE("SHAPE: set new indices");
+			}
+			void setIndice(size_t index, unsigned int new_value) { 
+				m_indicesVector[index] = new_value; 
+				//MAR_CORE_TRACE("SHAPE: set new indice at index");
+			}
+			void setLayout(const std::vector<unsigned int>& new_layout) { 
+				m_layout = new_layout; 
+				MAR_CORE_TRACE("SHAPE: set new layout");
+			}
 		};
 
 

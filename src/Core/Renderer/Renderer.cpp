@@ -12,20 +12,24 @@ namespace mar {
 		RendererStatistics Renderer::s_stats;
 
 		void Renderer::create() {
+			MAR_CORE_TRACE("RENDERER: Trying to create renderer!");
+
 			if (!m_initialized) {
 				m_vbo = storage::factory->createVertexBuffer();
 				m_layout = storage::factory->createVertexBufferLayout();
 				m_vao = storage::factory->createVertexArray();
 				m_ebo = storage::factory->createElementBuffer();
 
-				MAR_CORE_INFO("Renderer properly created!");
+				MAR_CORE_INFO("RENDERER: created!");
 			}
 			else {
-				MAR_CORE_ERROR("Renderer is already initialized!");
+				MAR_CORE_ERROR("RENDERER: is already initialized!");
 			}
 		}
 
 		void Renderer::close() {
+			MAR_CORE_TRACE("RENDERER: Trying to close renderer!");
+
 			if (m_initialized) {
 				m_mainShader->shutdown();
 				m_vao->closeArrayBuffer();
@@ -40,14 +44,16 @@ namespace mar {
 
 				m_initialized = false;
 
-				MAR_CORE_INFO("Renderer closed!");
+				MAR_CORE_INFO("RENDERER: closed!");
 			}
 			else {
-				MAR_CORE_ERROR("Renderer is not initialized!");
+				MAR_CORE_ERROR("RENDERER: is not initialized!");
 			}
 		}
 
 		void Renderer::initialize(const std::vector<unsigned int>& layout, const ShaderType type) {
+			MAR_CORE_TRACE("RENDERER: Trying to initialize renderer");
+
 			if (!m_initialized) {
 				m_mainShader = storage::factory->createShader(type);
 				m_mainShader->initialize(type);
@@ -62,14 +68,16 @@ namespace mar {
 
 				m_initialized = true;
 
-				MAR_CORE_INFO("Renderer properly initialized!");
+				MAR_CORE_INFO("RENDERER: properly initialized!");
 			}
 			else {
-				MAR_CORE_ERROR("Renderer is already initialized!");
+				MAR_CORE_ERROR("RENDERER: is already initialized!");
 			}
 		}
 
 		void Renderer::draw(Mesh* mesh) {
+			MAR_CORE_TRACE("RENDERER: is preparing to draw!");
+
 			mesh->update();
 
 			s_stats.verticesCount += mesh->getVertices().size();
@@ -103,9 +111,14 @@ namespace mar {
 
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
+
+			MAR_CORE_INFO("RENDERER: has drawn the scene!");
+			MAR_CORE_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
 		}
 
 		void Renderer::updateMeshData(Mesh* mesh) {
+			MAR_CORE_TRACE("RENDERER: updating mesh data");
+
 			if (storage::usegui) {
 				mesh->clearMatrices();
 
@@ -121,6 +134,8 @@ namespace mar {
 		}
 
 		void Renderer::updateGUIData() {
+			MAR_CORE_TRACE("RENDERER: updating gui data");
+
 			if (!storage::usegui)
 				return;
 
@@ -131,6 +146,8 @@ namespace mar {
 		}
 
 		void Renderer::updateCameraData() {
+			MAR_CORE_TRACE("RENDERER: updating camera data");
+
 			m_mainShader->setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
 			m_mainShader->setUniformMat4f("u_Model", Camera::getCameraData().model);
 
@@ -138,6 +155,8 @@ namespace mar {
 		}
 
 		void Renderer::updateLightData(Light* light) {
+			MAR_CORE_TRACE("RENDERER: updating light data");
+
 			m_mainShader->setUniformVector3("u_material.lightPos", light->getPosition());
 
 			m_mainShader->setUniformVector3("u_material.ambient", light->getAmbient());

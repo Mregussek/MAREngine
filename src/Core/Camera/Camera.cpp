@@ -65,12 +65,6 @@ namespace mar {
 				m_firstMouse = true;
 			}
 
-			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_LEFT) &&
-				window::Input::isMousePressed(MAR_MOUSE_BUTTON_RIGHT)) {
-				
-				//mouseButtonCallback(*m_mouseCallX, *m_mouseCallY);
-			}
-
 			mouseCallback(*m_mouseCallX, *m_mouseCallY);
 			processMouseScroll(*m_scrollCallY);
 		}

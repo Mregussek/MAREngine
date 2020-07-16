@@ -4,6 +4,7 @@
  */
 
 #include "MeshLayer.h"
+#include "../Debug/Log.h"
 
 
 namespace mar {
@@ -15,19 +16,27 @@ namespace mar {
 
 			m_mesh.create();
 			m_renderer->create();
+
+			MAR_CORE_INFO("MESH_LAYER: initialized");
 		}
 
 		void MeshLayer::scene(graphics::SceneType scenetype, graphics::MeshType meshtype) {
 			m_mesh.loadScene(&graphics::Scene(scenetype), meshtype);
 			m_renderer->initialize(m_mesh.getLayout(), getShaderType(meshtype));
+
+			MAR_CORE_INFO("MESH_LAYER: loaded scene");
 		}
 
 		void MeshLayer::load() {
 			m_renderer->initialize(m_mesh.getLayout(), getShaderType(m_mesh.getMeshType()));
+
+			MAR_CORE_INFO("MESH_LAYER: loaded");
 		}
 
 		void MeshLayer::set(const Ref<graphics::FrameBuffer>& framebuffer) {
 			m_framebuffer = framebuffer;
+
+			MAR_CORE_INFO("MESH_LAYER: framebuffer is set");
 		}
 
 		void MeshLayer::prepareFrame() {
@@ -35,6 +44,9 @@ namespace mar {
 				m_framebuffer->bind();
 				m_framebuffer->clear();
 				m_framebuffer->unbind();
+
+				MAR_CORE_TRACE("MESH_LAYER: cleared framebuffer");
+				return;
 			}
 		}
 
@@ -45,6 +57,8 @@ namespace mar {
 				m_renderer->draw(&m_mesh);
 
 				m_framebuffer->unbind();
+
+				MAR_CORE_TRACE("MESH_LAYER: Scene loaded to framebuffer");
 			}
 			else {
 				m_renderer->draw(&m_mesh);
@@ -55,6 +69,8 @@ namespace mar {
 			m_renderer->close();
 
 			delete m_renderer;
+
+			MAR_CORE_INFO("MESH_LAYER: Closed layer!");
 		}
 
 		graphics::ShaderType MeshLayer::getShaderType(graphics::MeshType meshtype) {

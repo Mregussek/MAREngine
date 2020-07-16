@@ -14,6 +14,7 @@ namespace mar {
 
 		class Log {
 			static bool s_initialized;
+            static Ref<spdlog::sinks::basic_file_sink_mt> s_file;
 			static Ref<spdlog::logger> s_CoreLogger;
 			static Ref<spdlog::logger> s_ClientLogger;
 
