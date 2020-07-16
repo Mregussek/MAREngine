@@ -162,10 +162,12 @@ namespace mar {
 			return (float) new_id;
 		}
 
-		void TextureOpenGL::bind(const int& shapeId, const uint32_t& texID) const {
+		void TextureOpenGL::bind(const int& texture_type, const uint32_t& texID) const {
 			if (texID == 0) return;
 
-			MAR_CORE_GL_FUNC( glBindTextureUnit(s_textureUnit, texID) );
+			MAR_CORE_GL_FUNC( glActiveTexture(GL_TEXTURE0 + s_textureUnit) );
+			MAR_CORE_GL_FUNC( glBindTexture(texture_type, texID) );
+
 			s_textureUnit++;
 		}
 
@@ -198,6 +200,8 @@ namespace mar {
 				
 			m_id.pop_back();
 			m_paths.pop_back();
+
+			return;
 		}
 
 

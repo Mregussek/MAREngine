@@ -4,8 +4,8 @@
  */
 
 
- // Uncomment if release mode
-#define MAR_ENGINE_DEBUG_MODE
+ // Comment if release mode
+//#define MAR_ENGINE_DEBUG_MODE
 
 
 // --- Include OpenGL Libs --- //
@@ -64,7 +64,7 @@
 
 #if __has_include("spdlog/spdlog.h")
 	#include "spdlog/spdlog.h"
-	//#include "spdlog/sinks/stdout_color_sinks.h"
+	#include "spdlog/sinks/stdout_color_sinks.h"
 	#include "spdlog/sinks/basic_file_sink.h"
 	#define MAR_ENGINE_SPDLOG_LIB_IMPORTED
 #else

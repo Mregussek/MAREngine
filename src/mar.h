@@ -58,7 +58,7 @@ namespace mar {
 		inline const int width{ 1500 };
 		inline const int height{ 900 };
 		inline const char portName[10] = "\\\\.\\COM7";
-		inline const char* glsl_version = "#version 450";
+		inline const char* glsl_version = "#version 330";
 	}
 
 	namespace constants {

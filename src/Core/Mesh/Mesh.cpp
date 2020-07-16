@@ -77,13 +77,13 @@ namespace mar {
 			}
 
 			if (m_shapes.size() != m_shapesCount) {
-				new_shape->setCenter(center);
-				new_shape->setAngle(angle);
-				new_shape->setScaleVec(scale);
-				pushTexture(new_shape, texture);
-				pushMatrices(new_shape);
-				prepareShape(new_shape);
 				MeshCreator::moveShape(m_shapes[m_shapesCount], new_shape);
+				m_shapes[m_shapesCount]->setCenter(center);
+				m_shapes[m_shapesCount]->setAngle(angle);
+				m_shapes[m_shapesCount]->setScaleVec(scale);
+				pushTexture(m_shapes[m_shapesCount], texture);
+				pushMatrices(m_shapes[m_shapesCount]);
+				prepareShape(m_shapes[m_shapesCount]);
 				pushShape(m_shapes[m_shapesCount]);
 
 				m_shapesCount++;
@@ -224,24 +224,43 @@ namespace mar {
 
 			m_indicesMaxValue -= m_shapes[index]->getVertices().size() / m_shapes[index]->getStride();
 
-			m_texture->removeID(index);
+			if (m_samplers[index] == 0) {
+				for (uint32_t i = index + 1; i < m_shapesCount; i++)
+					if (m_samplers[i] != 0) {
+						m_availableTextureID = m_samplers[i];
+						break;
+					}
+			}
+			else {
+				if(index == 0)
+					m_availableTextureID = 1;
+				else
+					m_availableTextureID = index;
+			}
+			
 
 			for (uint32_t i = index; i < m_shapesCount - 1; i++) {
-				uint32_t save_tex_id = m_texture->getID(i);
-
-				m_samplers[i] = save_tex_id;
+				if (m_samplers[i + 1] != 0) {
+					m_samplers[i] = m_availableTextureID;
+					m_availableTextureID++;
+				}
+				else {
+					m_samplers[i] = 0;
+				}
+				
 				m_colors[i] = m_colors[i + 1];
 				MeshCreator::moveShape(m_shapes[i], m_shapes[i + 1]);
 
 				m_shapes[i]->setID(m_shapes[i]->getID() - 1.f);
 				ShapeManipulator::changeIndicesFormat(m_shapes[i], diff);
 				ShapeManipulator::extendShapeID(m_shapes[i], m_shapes[i]->getID());
-				ShapeManipulator::extendTextureID(m_shapes[i], (float) save_tex_id);
+				ShapeManipulator::extendTextureID(m_shapes[i], (float) m_samplers[i]);
 			}
 
 			m_availableShapeID--;
-			m_availableTextureID--;
 			m_shapesCount--;
+
+			m_texture->removeID(index);
 
 			m_samplers.pop_back();
 			m_colors.pop_back();
@@ -261,10 +280,13 @@ namespace mar {
 		void Mesh::update() {
 			MAR_CORE_TRACE("MESH: update");
 
+			static int type;
+
 			m_texture->resetTextureUnit();
+			type = m_type == CUBEMAPS_MESH_TYPE ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D;
 
 			for (uint32_t i = 0; i < m_shapesCount; i++)
-				m_texture->bind(m_samplers[i], m_texture->getID(i));
+				m_texture->bind(type, m_texture->getID(i));
 		}
 
 		void Mesh::clearBuffers() {
