@@ -18,6 +18,7 @@ namespace mar {
 			m_center(new_center),
 			m_angle(new_angle),
 			m_scaleVec({ 1.f, 1.f, 1.f }),
+			m_generalScale(0.f),
 			m_defaultColor(new_color),
 			m_verticesVector(new_vertices),
 			m_indicesVector(new_indices),
@@ -30,6 +31,7 @@ namespace mar {
 			: m_id(shape->getID()),
 			m_texid(0.0f),
 			m_name(shape->getName()),
+			m_generalScale(shape->getGeneralScale()),
 			m_center(shape->getCenter()),
 			m_angle(shape->getAngle()),
 			m_scaleVec(shape->getScaleVec()),
@@ -54,6 +56,7 @@ namespace mar {
 			m_texid = (float)objects::ObjectLoader::getTextureID();
 			m_scaleVec = objects::ObjectLoader::getScale();
 			m_defaultColor = objects::ObjectLoader::getColor();
+			m_generalScale = 0.f;
 			m_usedOBJ = path;
 
 			MAR_CORE_INFO("Assigned object from ObjectLoader!");

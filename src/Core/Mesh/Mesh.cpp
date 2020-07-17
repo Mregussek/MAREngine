@@ -124,8 +124,8 @@ namespace mar {
 			if (std::strcmp(texture, "resources/textures/empty") != 0) { 
 				static float id_texture;
 
-				// if texture is not ending with .jpg
-				if (!checkEnding(".jpg", texture)) {					
+				// if texture is not ending with .jpg or png
+				if (!checkEnding(".jpg", texture) && !checkEnding(".png", texture)) {
 					if (getMeshType() != CUBEMAPS_MESH_TYPE) {
 						MAR_CORE_ERROR("MESH: Pushed Cubemap texture to non-cubemap mesh type");
 						goto loading_default_colors;

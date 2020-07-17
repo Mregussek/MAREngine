@@ -5,7 +5,7 @@
 
 
  // Comment if release mode
-//#define MAR_ENGINE_DEBUG_MODE
+#define MAR_ENGINE_DEBUG_MODE
 
 
 // --- Include OpenGL Libs --- //

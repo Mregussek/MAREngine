@@ -30,6 +30,8 @@ namespace mar {
 			std::string m_usedTexture;
 			std::string m_usedOBJ;
 
+			float m_generalScale;
+
 			maths::vec3 m_center;
 			maths::vec3 m_angle;
 			maths::vec3 m_scaleVec;
@@ -63,6 +65,7 @@ namespace mar {
 			inline const std::string& getUsedObj() const { return m_usedOBJ; }
 			inline const float getID() const { return m_id; }
 			inline const float getTextureID() const { return m_texid; }
+			inline float& getGeneralScale() { return m_generalScale; }
 			inline maths::vec3& getCenter() { return m_center; }
 			inline maths::vec3& getAngle() { return m_angle; }
 			inline maths::vec3& getScaleVec() { return m_scaleVec; }
@@ -78,35 +81,39 @@ namespace mar {
 			// --- SET METHODS --- //
 			void setName(std::string new_name) { 
 				m_name = new_name; 
-				MAR_CORE_TRACE("SHAPE: set new name");
+				//MAR_CORE_TRACE("SHAPE: set new name");
 			}
 			void setUsedTexture(std::string used_tex) { 
 				m_usedTexture = used_tex; 
-				MAR_CORE_TRACE("SHAPE: set new used texture");
+				//MAR_CORE_TRACE("SHAPE: set new used texture");
 			}
 			void setUsedObj(std::string used_obj) { 
 				m_usedOBJ = used_obj; 
-				MAR_CORE_TRACE("SHAPE: set new .obj file");
+				//MAR_CORE_TRACE("SHAPE: set new .obj file");
 			}
 			void setID(float new_id) { 
 				m_id = new_id; 
-				MAR_CORE_TRACE("SHAPE: set new ID");
+				//MAR_CORE_TRACE("SHAPE: set new ID");
 			}
 			void setTextureID(float new_tex_id) { 
 				m_texid = new_tex_id; 
-				MAR_CORE_TRACE("SHAPE: set new texture ID");
+				//MAR_CORE_TRACE("SHAPE: set new texture ID");
+			}
+			void setGeneralScale(float new_general) {
+				m_generalScale = new_general;
+				//MAR_CORE_TRACE("SHAPE: set general scale");
 			}
 			void setCenter(const maths::vec3& new_center) { 
 				m_center = new_center; 
-				MAR_CORE_TRACE("SHAPE: set new center");
+				//MAR_CORE_TRACE("SHAPE: set new center");
 			}
 			void setAngle(const maths::vec3& new_angle) { 
 				m_angle = new_angle; 
-				MAR_CORE_TRACE("SHAPE: set new angle");
+				//MAR_CORE_TRACE("SHAPE: set new angle");
 			}
 			void setScaleVec(const maths::vec3& new_scale) { 
 				m_scaleVec = new_scale; 
-				MAR_CORE_TRACE("SHAPE: set new scale vector");
+				//MAR_CORE_TRACE("SHAPE: set new scale vector");
 			}
 			void setTranslation(const maths::mat4& new_trans) { 
 				m_translation = new_trans; 
@@ -122,11 +129,11 @@ namespace mar {
 			}
 			void setDefaultColor(const maths::vec3& new_color) { 
 				m_defaultColor = new_color; 
-				MAR_CORE_TRACE("SHAPE: set new default color");
+				//MAR_CORE_TRACE("SHAPE: set new default color");
 			}
 			void setVertices(const std::vector<float>& new_vertices) {
 				m_verticesVector = new_vertices; 
-				MAR_CORE_TRACE("SHAPE: set new vertices");
+				//MAR_CORE_TRACE("SHAPE: set new vertices");
 			}
 			void setVertice(size_t index, float new_value) { 
 				m_verticesVector[index] = new_value; 
@@ -134,7 +141,7 @@ namespace mar {
 			}
 			void setIndices(const std::vector<uint32_t>& new_indices) { 
 				m_indicesVector = new_indices; 
-				MAR_CORE_TRACE("SHAPE: set new indices");
+				//MAR_CORE_TRACE("SHAPE: set new indices");
 			}
 			void setIndice(size_t index, uint32_t new_value) { 
 				m_indicesVector[index] = new_value; 
@@ -142,7 +149,7 @@ namespace mar {
 			}
 			void setLayout(const std::vector<uint32_t>& new_layout) { 
 				m_layout = new_layout; 
-				MAR_CORE_TRACE("SHAPE: set new layout");
+				//MAR_CORE_TRACE("SHAPE: set new layout");
 			}
 		};
 

@@ -363,9 +363,14 @@ namespace mar {
 				ImGui::MenuItem("Shapes Menu", "");
 
 				if (m_meshIndex != -1 && m_shapeIndex != -1) {
+					static float last_general;
+
 					auto& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
 					auto& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
 					auto& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScaleVec();
+					auto& general_scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getGeneralScale();
+					auto copy_scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScaleVec();
+					last_general = general_scale;
 
 					ImGui::Text("Shape");
 					ImGui::Separator();
@@ -383,11 +388,22 @@ namespace mar {
 					ImGui::Separator();
 
 					ImGui::Text("\nScale Shape\n");
-					m_generalScale = scale.x;
-					ImGui::SliderFloat("General Scale\n", &m_generalScale, 0.f, 2.f, "%.2f", 1.f);
-					scale.x = m_generalScale;
-					scale.y = m_generalScale;
-					scale.z = m_generalScale;
+					
+					ImGui::SliderFloat("General Scale\n", &general_scale, -0.5f, 0.5f, "%.2f", 1.f);
+					if (last_general != general_scale) {
+						scale += general_scale - last_general;
+					}
+
+					ImGui::SliderFloat("X scale", &scale.x, 0.1f, 5.f, "%.2f", 1.f);
+					ImGui::SliderFloat("Y scale", &scale.y, 0.1f, 5.f, "%.2f", 1.f);
+					ImGui::SliderFloat("Z scale", &scale.z, 0.1f, 5.f, "%.2f", 1.f);
+					
+					if (ImGui::Button("Reset to default scale")) {
+						general_scale = 1.f;
+						scale.x = 1.f;
+						scale.y = 1.f;
+						scale.z = 1.f;
+					}
 
 					ImGui::Separator();
 
