@@ -19,12 +19,14 @@ namespace mar {
 		enum class MeshType {
 			NORMAL,
 			CUBEMAPS,
-			OBJECTS
+			OBJECTS,
+			ALPHA_CHANNEL
 		};
 
 #define NORMAL_MESH_TYPE ::mar::graphics::MeshType::NORMAL
 #define CUBEMAPS_MESH_TYPE ::mar::graphics::MeshType::CUBEMAPS
 #define OBJECTS_MESH_TYPE ::mar::graphics::MeshType::OBJECTS
+#define ALPHA_CHANNEL_MESH_TYPE ::mar::graphics::MeshType::ALPHA_CHANNEL
 
 
 		class Mesh {
@@ -115,6 +117,7 @@ namespace mar {
 				case NORMAL_MESH_TYPE: m_meshName = "Normal"; break;
 				case CUBEMAPS_MESH_TYPE: m_meshName = "Cubemap"; break;
 				case OBJECTS_MESH_TYPE: m_meshName = "Objects"; break;
+				case ALPHA_CHANNEL_MESH_TYPE: m_meshName = "AlphaChannel"; break;
 				}
 			}
 		};

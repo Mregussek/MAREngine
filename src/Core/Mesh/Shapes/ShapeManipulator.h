@@ -57,6 +57,11 @@ namespace mar {
             */
             static std::vector<uint32_t> changeIndicesFormat(const uint32_t& size, int& max_value,
                 const std::vector<uint32_t>& passedValue);
+
+            static void calculateVertexNormals(Ref<Shape>& shape);
+
+            static std::vector<float> calculateVertexNormals(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
+                const uint32_t& stride);
         };
 
 

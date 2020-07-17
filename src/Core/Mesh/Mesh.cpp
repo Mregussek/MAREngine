@@ -166,6 +166,8 @@ namespace mar {
 
 			ShapeManipulator::changeIndicesFormat(new_shape, m_indicesMaxValue);
 			m_indicesMaxValue += new_shape->getVertices().size() / new_shape->getStride();
+
+			//ShapeManipulator::calculateVertexNormals(new_shape);
 		}
 
 		void Mesh::pushShape(const Ref<Shape>& new_shape) {
@@ -291,9 +293,10 @@ namespace mar {
 			static int type;
 
 			m_texture->resetTextureUnit();
-			type = m_type == CUBEMAPS_MESH_TYPE ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D;
+			
+			type = (m_type == CUBEMAPS_MESH_TYPE) ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D;
 
-			for (uint32_t i = 0; i < m_shapesCount; i++)
+			for (uint32_t i = 0; i < m_shapesCount; i++) 
 				m_texture->bind(type, m_texture->getID(i));
 		}
 

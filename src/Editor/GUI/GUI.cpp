@@ -330,9 +330,9 @@ namespace mar {
 				ImGui::MenuItem("Select Shape");
 
 				for (uint32_t index = 0; index < m_meshes.size(); index++) {
-					const char* mesh_name = m_meshes[index]->getMeshName();
+					std::string mesh_name = m_meshes[index]->getMeshName() + std::to_string(index);
 
-					if (ImGui::TreeNode(mesh_name)) {
+					if (ImGui::TreeNode(mesh_name.c_str())) {
 						for (uint32_t i = 0; i < m_meshes[index]->getShapesCount(); i++) {
 							const char* shape_name = m_meshes[index]->getShape(i)->getName().c_str();
 
@@ -394,9 +394,9 @@ namespace mar {
 						scale += general_scale - last_general;
 					}
 
-					ImGui::SliderFloat("X scale", &scale.x, 0.1f, 5.f, "%.2f", 1.f);
-					ImGui::SliderFloat("Y scale", &scale.y, 0.1f, 5.f, "%.2f", 1.f);
-					ImGui::SliderFloat("Z scale", &scale.z, 0.1f, 5.f, "%.2f", 1.f);
+					ImGui::SliderFloat("X scale", &scale.x, 0.001f, 5.f, "%.3f", 1.f);
+					ImGui::SliderFloat("Y scale", &scale.y, 0.001f, 5.f, "%.3f", 1.f);
+					ImGui::SliderFloat("Z scale", &scale.z, 0.001f, 5.f, "%.3f", 1.f);
 					
 					if (ImGui::Button("Reset to default scale")) {
 						general_scale = 1.f;

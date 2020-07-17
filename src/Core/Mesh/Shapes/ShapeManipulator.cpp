@@ -49,5 +49,77 @@ namespace mar {
 			return returnValue;
 		}
 
+		void ShapeManipulator::calculateVertexNormals(Ref<Shape>& shape) {
+			std::vector<float> new_vertices_with_normals = calculateVertexNormals(shape->getVertices(), shape->getIndices(), shape->getStride());
+
+			shape->setVertices(new_vertices_with_normals);
+		}
+
+		std::vector<float> ShapeManipulator::calculateVertexNormals(const std::vector<float>& vertices, const std::vector<uint32_t>& indices, 
+			const uint32_t& stride) {
+
+			uint32_t size = vertices.size();
+			std::vector<float> returnValue = vertices;
+		
+			maths::vec3 vec[3];
+			maths::vec3 edge[2];
+			maths::vec3 normal;
+
+			for (uint32_t j = 0; j < size / stride; j++) {
+				returnValue[j * stride + 3] = 0.f;
+				returnValue[j * stride + 4] = 0.f;
+				returnValue[j * stride + 5] = 0.f;
+			}
+
+			for (uint32_t i = 0; i < indices.size(); i += 3) {
+				vec[0] = {
+					vertices[ indices[i + 0] * stride + 0 ],
+					vertices[ indices[i + 0] * stride + 1 ],
+					vertices[ indices[i + 0] * stride + 2 ]
+				};
+
+				vec[1] = {
+					vertices[ indices[i + 1] * stride + 0 ],
+					vertices[ indices[i + 1] * stride + 1 ],
+					vertices[ indices[i + 1] * stride + 2 ]
+				};
+
+				vec[2] = {
+					vertices[ indices[i + 2] * stride + 0 ],
+					vertices[ indices[i + 2] * stride + 1 ],
+					vertices[ indices[i + 2] * stride + 2 ]
+				};
+
+				edge[0] = vec[0] - vec[1];
+				edge[1] = vec[0] - vec[2];
+
+				normal = edge[0].cross(edge[1]);
+
+				returnValue[indices[i + 0] * stride + 0] += normal.x;
+				returnValue[indices[i + 0] * stride + 1] += normal.y;
+				returnValue[indices[i + 0] * stride + 2] += normal.x;
+														 
+				returnValue[indices[i + 1] * stride + 0] += normal.x;
+				returnValue[indices[i + 1] * stride + 1] += normal.y;
+				returnValue[indices[i + 1] * stride + 2] += normal.x;
+														 
+				returnValue[indices[i + 2] * stride + 0] += normal.x;
+				returnValue[indices[i + 2] * stride + 1] += normal.y;
+				returnValue[indices[i + 2] * stride + 2] += normal.x;
+			}
+
+
+			for (uint32_t j = 0; j < size / stride; j++) {
+				float le = maths::vec3::length({ returnValue[j * stride + 3] ,
+						returnValue[j * stride + 3] ,returnValue[j * stride + 3] });
+
+				returnValue[j * stride + 3] /= le;
+				returnValue[j * stride + 4] /= le;
+				returnValue[j * stride + 5] /= le;
+			}
+
+			return returnValue;
+		}
+
 
 } }

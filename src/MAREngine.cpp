@@ -46,19 +46,19 @@ namespace mar {
 			m_stack.pushLayer(camera_layer);
 
 			editor::filesystem::loadSceneFromFile(m_pathLoad);
-			if (auto loaded = editor::filesystem::assignLoadedLayers(m_framebuffer)) 
+			if (auto loaded = editor::filesystem::assignLoadedLayers(m_framebuffer))
 				for (uint32_t i = 0; i < loaded->size(); i++) {
 					gui_layer->submit(loaded->at(i)->getMesh());
 					m_stack.pushLayer(loaded->at(i));
 				}
-			
+
 			//////////////////////////////////////////////////////
 			// --------------- RENDER LOOP -------------------- //
 			while (window::Window::getInstance().shouldClose() && !m_shouldRestart) 
 			{
 				window::Window::getInstance().clearScreen();
 				graphics::Renderer::getStatistics().resetStatistics();
-				
+			
 				m_stack.update();
 
 				window::Window::getInstance().swapBuffers();

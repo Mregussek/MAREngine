@@ -121,10 +121,10 @@ namespace mar {
 				, { 1.0f, 1.0f, 1.0f }
 			};
 			m_textures = {
-				TexturePaths::mc_grass ,
-				TexturePaths::mc_grass ,
-				TexturePaths::mc_grass ,
-				TexturePaths::mc_grass ,
+				TexturePaths::mc_dirt ,
+				TexturePaths::mc_dirt ,
+				TexturePaths::mc_dirt ,
+				TexturePaths::mc_dirt ,
 				TexturePaths::mc_grass ,
 				TexturePaths::mc_grass ,
 				TexturePaths::mc_cobble ,
