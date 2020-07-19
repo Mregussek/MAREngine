@@ -18,7 +18,7 @@ namespace mar {
 			MAR_CORE_GL_FUNC(glDeleteVertexArrays(1, &_rendererId));
 		}
 
-		void VertexArrayOpenGL::addBuffer(const VertexBufferLayout<VertexBufferLayoutOpenGL>& layout) {
+		void VertexArrayOpenGL::addBuffer(const VertexBufferLayoutOpenGL& layout) {
 			const auto& elements = layout.getElements();
 			uint32_t offset = 0;
 

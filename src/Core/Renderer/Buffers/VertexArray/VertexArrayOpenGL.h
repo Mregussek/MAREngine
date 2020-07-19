@@ -39,7 +39,7 @@ namespace mar {
 
 				\param layout - specifies, how data should be formatted
 			*/
-			void addBuffer(const VertexBufferLayout<VertexBufferLayoutOpenGL>& layout);
+			void addBuffer(const VertexBufferLayoutOpenGL& layout);
 
 			//! Binds class m_id member to target, which is VAO
 			void bind() const;

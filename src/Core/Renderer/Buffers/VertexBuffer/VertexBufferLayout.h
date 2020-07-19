@@ -44,6 +44,10 @@ namespace mar {
 			VertexBufferLayout is used for collecting format of vertices. Main point of this class is for
 			automating creating new objects.
 			This is just base class for other implementations of VertexBufferLayout.
+
+			Example Usage:
+
+			VertexBufferLayout<VertexBufferLayoutOpenGL> m_vbl;
 		*/
 		template <typename VBL>
 		class VertexBufferLayout {
@@ -81,6 +85,15 @@ namespace mar {
 			*/
 			void push(uint32_t count, PushBuffer what) { 
 				m_vbl.push(count, what);
+			}
+
+			/*
+			Returns templated instance of VertexBufferLayout.
+
+				\return VBL - original instance of VertexBufferLayout
+			*/
+			VBL& getInstance() {
+				return m_vbl;
 			}
 		};
 

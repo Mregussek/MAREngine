@@ -20,6 +20,12 @@ namespace mar {
 			ElementBuffer is used to store indices in GPU memory and dynamically set new values if needed.
 			Other common name for ElementBuffer is IndexBuffer.
 			This is just base class for other implementations of ElementBuffer.
+
+			Example usage:
+
+			ElementBuffer<ElementBufferOpenGL> m_ebo;
+
+			This is how we can call OpenGL implementation of ElementBuffer.
 		*/
 		template<typename EBO>
 		class ElementBuffer {
@@ -30,8 +36,8 @@ namespace mar {
 			ElementBuffer() = default;
 
 			/*
-			This method should initialize ElementBufferObject to some id instance, define data on GPU, reserve memory on GPU,
-			also tell the GPU that user will change resources dynamically. Method must be overloaded!
+			This method should initialize ElementBufferObject to some id instance, reserve memory on GPU,
+			also tell the GPU that user will change resources dynamically. Must be overloaded!
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
@@ -40,12 +46,12 @@ namespace mar {
 			}
 
 			/*
-			Method must redefine some or all of data stored in EBO. Method must be overloaded!
+			Method must redefine some or all of data stored in EBO. Must be overloaded!
 
 				\param data - indices, which will be drawn
 			*/
-			void updateDynamically(const std::vector<uint32_t>& data) const {
-				m_ebo.updateDynamically(data);
+			void update(const std::vector<uint32_t>& data) const {
+				m_ebo.update(data);
 			}
 
 			//! Method should reset buffer. Must be overloaded!
@@ -53,17 +59,17 @@ namespace mar {
 				m_ebo.resetBuffer();
 			}
 
-			//! Method must bind class m_id member to target, which is EBO. It must be overloaded!
+			//! Method must bind class m_id member to target, which is EBO. Must be overloaded!
 			void bind() const { 
 				m_ebo.bind();
 			}
 
-			//! Method must unbind currently used EBO and restore memory usage for that buffer. Should be overloaded!
+			//! Method must unbind currently used EBO and restore memory usage for that buffer. Must be overloaded!
 			void unbind() const {
 				m_ebo.unbind();
 			}
 
-			//! This method should delete everything from GPU, that is bounded to EBO
+			//! This method should delete everything from GPU, that is bounded to EBO. Must be overloaded!
 			void close() {
 				m_ebo.close();
 			}

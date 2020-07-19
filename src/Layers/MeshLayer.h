@@ -24,7 +24,7 @@ namespace mar {
 
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			graphics::Mesh m_mesh;
-			graphics::Renderer* m_renderer;
+			graphics::RendererOpenGL* m_renderer;
 
 		public:
 			MeshLayer(const char* name) : m_debugName(name) { }

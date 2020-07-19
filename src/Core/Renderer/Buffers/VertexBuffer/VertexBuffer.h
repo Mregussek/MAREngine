@@ -19,6 +19,10 @@ namespace mar {
 
 			VertexBuffer is used to store vertices on the GPU memory and as being the source for vertex array data.
 			This is just base class for other implementations of VertexBuffer.
+
+			Example Usage:
+
+			VertexBuffer<VertexBufferOpenGL> m_vbo;
 		*/
 		template<typename VBO>
 		class VertexBuffer {
@@ -73,6 +77,15 @@ namespace mar {
 			*/
 			uint32_t getSize() const { 
 				return m_vbo.getSize(); 
+			}
+
+			/*
+			Returns templated instance of VertexBuffer.
+
+				\return VBO - original instance of VertexBuffer
+			*/
+			VBO& getInstance() {
+				return m_vbo;
 			}
 		};
 

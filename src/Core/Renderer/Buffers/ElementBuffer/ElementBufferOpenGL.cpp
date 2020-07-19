@@ -27,7 +27,7 @@ namespace mar {
 			MAR_CORE_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id) );
 		}
 
-		void ElementBufferOpenGL::updateDynamically(const std::vector<uint32_t>& data) const {
+		void ElementBufferOpenGL::update(const std::vector<uint32_t>& data) const {
 			MAR_CORE_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(uint32_t), data.data()) );
 		}
 

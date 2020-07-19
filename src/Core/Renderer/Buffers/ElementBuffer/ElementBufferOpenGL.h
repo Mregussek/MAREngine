@@ -41,7 +41,7 @@ namespace mar {
 
 				\param data - indices, which will be drawn
 			*/
-			void updateDynamically(const std::vector<uint32_t>& data) const;
+			void update(const std::vector<uint32_t>& data) const;
 
 			//! Method resets buffer.
 			void resetBuffer();

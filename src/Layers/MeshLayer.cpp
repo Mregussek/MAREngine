@@ -12,7 +12,7 @@ namespace mar {
 
 
 		void MeshLayer::initialize() {
-			m_renderer = new graphics::Renderer();
+			m_renderer = new graphics::RendererOpenGL();
 
 			m_mesh.create();
 			m_renderer->create();

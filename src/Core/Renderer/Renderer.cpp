@@ -9,9 +9,9 @@
 namespace mar {
 	namespace graphics {
 
-		RendererStatistics Renderer::s_stats;
+		RendererStatistics RendererOpenGL::s_stats;
 
-		void Renderer::create() {
+		void RendererOpenGL::create() {
 			MAR_CORE_TRACE("RENDERER: Trying to create renderer!");
 
 			if (!m_initialized) {
@@ -22,7 +22,7 @@ namespace mar {
 			}
 		}
 
-		void Renderer::close() {
+		void RendererOpenGL::close() {
 			MAR_CORE_TRACE("RENDERER: Trying to close renderer!");
 
 			if (m_initialized) {
@@ -40,7 +40,7 @@ namespace mar {
 			}
 		}
 
-		void Renderer::initialize(const std::vector<uint32_t>& layout, const ShaderType type) {
+		void RendererOpenGL::initialize(const std::vector<uint32_t>& layout, const ShaderType type) {
 			MAR_CORE_TRACE("RENDERER: Trying to initialize renderer");
 
 			if (!m_initialized) {
@@ -63,7 +63,7 @@ namespace mar {
 			}
 		}
 
-		void Renderer::draw(Mesh* mesh) {
+		void RendererOpenGL::draw(Mesh* mesh) {
 			MAR_CORE_TRACE("RENDERER: is preparing to draw!");
 
 			mesh->update();
@@ -85,7 +85,7 @@ namespace mar {
 			m_vbo.updateDynamically(mesh->getVertices());
 
 			m_ebo.bind();
-			m_ebo.updateDynamically(mesh->getIndices());
+			m_ebo.update(mesh->getIndices());
 
 			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, mesh->getIndices().size(), GL_UNSIGNED_INT, nullptr) );
 
@@ -104,7 +104,7 @@ namespace mar {
 			MAR_CORE_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
 		}
 
-		void Renderer::updateMeshData(Mesh* mesh) {
+		void RendererOpenGL::updateMeshData(Mesh* mesh) {
 			MAR_CORE_TRACE("RENDERER: updating mesh data");
 
 			if (storage::usegui) {
@@ -121,7 +121,7 @@ namespace mar {
 			m_mainShader.setUniformVectorVec3("u_SeparateColor", mesh->getColors());
 		}
 
-		void Renderer::updateGUIData() {
+		void RendererOpenGL::updateGUIData() {
 			MAR_CORE_TRACE("RENDERER: updating gui data");
 
 			if (!storage::usegui)
@@ -133,7 +133,7 @@ namespace mar {
 			m_mainShader.setUniformMat4f("u_GUISceneRotation", editor::GUI::getGUIData().rotation);
 		}
 
-		void Renderer::updateCameraData() {
+		void RendererOpenGL::updateCameraData() {
 			MAR_CORE_TRACE("RENDERER: updating camera data");
 
 			m_mainShader.setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
@@ -142,7 +142,7 @@ namespace mar {
 			m_mainShader.setUniformVector3("u_CameraPos", Camera::getCameraData().position);
 		}
 
-		void Renderer::updateLightData(Light* light) {
+		void RendererOpenGL::updateLightData(Light* light) {
 			MAR_CORE_TRACE("RENDERER: updating light data");
 
 			m_mainShader.setUniformVector3("u_material.lightPos", light->getPosition());

@@ -22,6 +22,10 @@ namespace mar {
 			VertexArray is a object needed for storing state for supplying vertex data. Should contain
 			format of vertex data, by providing vertex arrays.
 			This is just base class for other implementations of VertexArray.
+
+			Example Usage:
+
+			VertexArray<VertexArrayOpenGL> m_vao;
 		*/
 		template<typename VAO>
 		class VertexArray {
@@ -51,15 +55,23 @@ namespace mar {
 				m_vao.addBuffer(layout);
 			}
 
-			//! Method should bind class m_id member to target, which is VAO. Must be overloaded!
+			// Method should bind class m_id member to target, which is VAO. Must be overloaded!
 			void bind() const { 
 				m_vao.bind();
 			}
 
-			//! Method should unbind currently used VAO, break the existing VAO binding
-			//! Must be overloaded!
+			// Method should unbind currently used VAO, break the existing VAO binding. Must be overloaded!
 			void unbind() const { 
 				m_vao.unbind();
+			}
+
+			/*
+			Returns VAO in order to access original VAO.
+			
+				\return VAO - specified implementation of VAO (template)
+			*/
+			VAO& getInstance() {
+				return m_vao;
 			}
 		};
 

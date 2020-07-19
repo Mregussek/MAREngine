@@ -24,7 +24,7 @@ namespace mar {
 	}
 
 	namespace graphics {
-		class Renderer;
+		class RendererOpenGL;
 	}
 
 	namespace layers {

@@ -510,7 +510,7 @@ namespace mar {
 			ImGui::Begin("Statistics Menu");
 
 			if (storage::usegui) {
-				using stats = graphics::Renderer;
+				using stats = graphics::RendererOpenGL;
 
 				auto drawcalls = "Draw Calls: " + std::to_string(stats::getStatistics().drawCallsCount);
 				auto shapescount = "Shapes Count: " + std::to_string(stats::getStatistics().shapesCount);

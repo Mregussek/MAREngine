@@ -69,19 +69,19 @@ namespace mar {
 			}
 		};
 
-		class Renderer {
+		class RendererOpenGL {
 			// --- Buffers
-			VertexBuffer<VertexBufferOpenGL> m_vbo;
-			VertexBufferLayout<VertexBufferLayoutOpenGL> m_layout;
-			VertexArray<VertexArrayOpenGL> m_vao;
-			ElementBuffer<ElementBufferOpenGL> m_ebo;
-			Shader<ShaderOpenGL> m_mainShader;
+			VertexBufferOpenGL m_vbo;
+			VertexBufferLayoutOpenGL m_layout;
+			VertexArrayOpenGL m_vao;
+			ElementBufferOpenGL m_ebo;
+			ShaderOpenGL m_mainShader;
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;	// check, if renderer is initialized
 			static RendererStatistics s_stats;
 
 		public:
-			Renderer() = default;
+			RendererOpenGL() = default;
 
 			void create();
 			void close();

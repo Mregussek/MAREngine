@@ -56,7 +56,7 @@ namespace mar {
 			while (window::Window::getInstance().shouldClose() && !m_shouldRestart) 
 			{
 				window::Window::getInstance().clearScreen();
-				graphics::Renderer::getStatistics().resetStatistics();
+				graphics::RendererOpenGL::getStatistics().resetStatistics();
 
 				m_stack.update();
 
