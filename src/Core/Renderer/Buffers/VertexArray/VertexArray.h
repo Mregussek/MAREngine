@@ -8,6 +8,7 @@
 
 #include "../../../../mar.h"
 #include "../VertexBuffer/VertexBufferLayout.h"
+#include "../VertexBuffer/VertexBufferLayoutOpenGL.h"
 #include "../../../../Debug/Log.h"
 
 
@@ -22,16 +23,23 @@ namespace mar {
 			format of vertex data, by providing vertex arrays.
 			This is just base class for other implementations of VertexArray.
 		*/
-		class VertexArray : std::enable_shared_from_this<VertexArray> {
+		template<typename VAO>
+		class VertexArray {
+			VAO m_vao;
+
 		public:
 			//! Default constructor. For initialization use initializeArrayBuffer() method.
 			VertexArray() = default;
 
 			//! Method should generates and binds VAO. Method must be overloaded!
-			virtual void initializeArrayBuffer() { }
+			void initializeArrayBuffer() { 
+				m_vao.initializeArrayBuffer();
+			}
 
 			//! Method should deletes all data associated with VAO. Must be overloaded!
-			virtual void closeArrayBuffer() { }
+			void closeArrayBuffer() {
+				m_vao.closeArrayBuffer();
+			}
 
 			/*
 			Method should defines array of generic vertex attribute data and enables it
@@ -39,14 +47,20 @@ namespace mar {
 
 				\param layout - specifies, how data should be formatted
 			*/
-			virtual void addBuffer(const Ref<VertexBufferLayout>& layout) { }
+			void addBuffer(const VertexBufferLayout<VertexBufferLayoutOpenGL>& layout) {
+				m_vao.addBuffer(layout);
+			}
 
 			//! Method should bind class m_id member to target, which is VAO. Must be overloaded!
-			virtual void bind() const { }
+			void bind() const { 
+				m_vao.bind();
+			}
 
 			//! Method should unbind currently used VAO, break the existing VAO binding
 			//! Must be overloaded!
-			virtual void unbind() const { }
+			void unbind() const { 
+				m_vao.unbind();
+			}
 		};
 
 

@@ -20,20 +20,20 @@ namespace mar {
 			automating creating new objects.
 			This is overloaded class of base one - VertexBufferLayout, which implements solution to that problem with OpenGL.
 		*/
-		class VertexBufferLayoutOpenGL : public VertexBufferLayout, std::enable_shared_from_this<VertexBufferLayoutOpenGL> {
+		class VertexBufferLayoutOpenGL {
 			std::vector<VertexBufferElement> _elements;
-			uint32_t _stride;
+			uint32_t _stride{ 0 };
 
 		public:
 			//! Constructor, which initializes _stride with 0
-			VertexBufferLayoutOpenGL() : _stride(0) {}
+			VertexBufferLayoutOpenGL() = default;
 
 			/*
 			Returns all elements, which help the data to be formatted properly
 
 				\return _elements - vector of VertexBufferElement
 			*/
-			const std::vector<VertexBufferElement>& getElements() const override {
+			const std::vector<VertexBufferElement>& getElements() const {
 				return _elements;
 			}
 
@@ -42,7 +42,7 @@ namespace mar {
 
 				\return _stride - calculated stride for proper data format
 			*/
-			uint32_t getStride() const override {
+			uint32_t getStride() const {
 				return _stride;
 			}
 
@@ -52,7 +52,7 @@ namespace mar {
 				\param count - value of next Vertex Attribute
 				\param what - specify what value you pushData (float[PUSH_FLOAT], uint32_t[PUSH_uint32_t] or char[PUSH_UNSIGNED_BYTE])
 			*/
-			void push(uint32_t count, PushBuffer what) override {
+			void push(uint32_t count, PushBuffer what) {
 				if (what == PushBuffer::PUSH_FLOAT) {
 					_elements.push_back({ GL_FLOAT, count, GL_FALSE });
 					_stride += count * sizeof(GL_FLOAT);

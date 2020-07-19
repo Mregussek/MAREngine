@@ -21,7 +21,10 @@ namespace mar {
 			Other common name for ElementBuffer is IndexBuffer.
 			This is just base class for other implementations of ElementBuffer.
 		*/
-		class ElementBuffer : std::enable_shared_from_this<ElementBuffer> {
+		template<typename EBO>
+		class ElementBuffer {
+			EBO m_ebo;
+
 		public:
 			//! Default constructor. For initialization use initializeElement() method.
 			ElementBuffer() = default;
@@ -32,26 +35,38 @@ namespace mar {
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
-			virtual void initializeElement(const uint32_t allocationMemory) { }
+			void initializeElement(const uint32_t allocationMemory) { 
+				m_ebo.initializeElement(allocationMemory); 
+			}
 
 			/*
 			Method must redefine some or all of data stored in EBO. Method must be overloaded!
 
 				\param data - indices, which will be drawn
 			*/
-			virtual void updateDynamically(const std::vector<uint32_t>& data) const { }
+			void updateDynamically(const std::vector<uint32_t>& data) const {
+				m_ebo.updateDynamically(data);
+			}
 
 			//! Method should reset buffer. Must be overloaded!
-			virtual void resetBuffer() { }
+			void resetBuffer() { 
+				m_ebo.resetBuffer();
+			}
 
 			//! Method must bind class m_id member to target, which is EBO. It must be overloaded!
-			virtual void bind() const { }
+			void bind() const { 
+				m_ebo.bind();
+			}
 
 			//! Method must unbind currently used EBO and restore memory usage for that buffer. Should be overloaded!
-			virtual void unbind() const { }
+			void unbind() const {
+				m_ebo.unbind();
+			}
 
 			//! This method should delete everything from GPU, that is bounded to EBO
-			virtual void close() { }
+			void close() {
+				m_ebo.close();
+			}
 		};
 
 

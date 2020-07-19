@@ -11,6 +11,8 @@
 #include "../../Layers/MeshLayer.h"
 #include "../../Core/Mesh/Mesh.h"
 #include "../../Core/Scene/Scene.h"
+#include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
+#include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
 
 namespace mar {
@@ -42,9 +44,9 @@ namespace mar {
 			static void saveSceneToFile(const std::string& path, const std::vector<graphics::Mesh*>& meshes);
 			static void loadSceneFromFile(std::string path);
 			
-			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers(Ref<graphics::FrameBuffer>& framebuffer);
-			static const std::vector<layers::MeshLayer*> loadMesh(Ref<graphics::FrameBuffer>& framebuffer);
-			static const std::vector<layers::MeshLayer*> loadScene(Ref<graphics::FrameBuffer>& framebuffer);
+			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
+			static const std::vector<layers::MeshLayer*> loadMesh(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
+			static const std::vector<layers::MeshLayer*> loadScene(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
 
 			// --- GET METHODS --- //
 			inline static std::vector<std::string>& getMarFiles() { return s_marfiles; }

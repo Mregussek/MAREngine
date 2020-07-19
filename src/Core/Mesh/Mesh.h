@@ -7,7 +7,9 @@
 #define MAR_ENGINE_MESH_H
 
 #include "../../mar.h"
-#include "../Renderer/RendererFactory.h"
+#include "Shapes/Shapes.h"
+#include "../Scene/Scene.h"
+#include "Texture/TextureOpenGL.h"
 #include "Texture/Texture.h"
 #include "../Light/Light.h"
 
@@ -33,7 +35,7 @@ namespace mar {
 			const char* m_meshName;
 			static uint32_t s_existingInstance;
 			// --- One needed buffer
-			Ref<Texture> m_texture;
+			Texture<TextureOpenGL> m_texture;
 			// --- Run-Time data for mesh
 			std::vector<Ref<Shape>> m_shapes;
 			std::vector<float> m_vertices;
@@ -95,7 +97,7 @@ namespace mar {
 			inline const Ref<Shape>& getShape(const uint32_t& index) const { return m_shapes[index]; }
 			inline const uint32_t& getShapesCount() const { return m_shapesCount; }
 
-			inline const Ref<Texture>& getTexture() const { return m_texture; }
+			inline const Texture<TextureOpenGL>& getTexture() const { return m_texture; }
 
 			inline const std::vector<float>& getVertices() const { return m_vertices; }
 			inline const std::vector<uint32_t>& getIndices() const { return m_indices; }

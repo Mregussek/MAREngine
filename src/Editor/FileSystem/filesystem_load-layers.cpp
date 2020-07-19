@@ -11,7 +11,7 @@ namespace mar {
 	namespace editor {
 
 
-		std::optional<std::vector<layers::MeshLayer*>> filesystem::assignLoadedLayers(Ref<graphics::FrameBuffer>& framebuffer) {
+		std::optional<std::vector<layers::MeshLayer*>> filesystem::assignLoadedLayers(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
 			if (shouldLoadMeshes()) {
 				if (checkMeshEquality()) {
 					MAR_CORE_ERROR("Mesh Types size is not equal to mesh_count!");
@@ -34,7 +34,7 @@ namespace mar {
 			return std::nullopt;
 		}
 
-		const std::vector<layers::MeshLayer*> filesystem::loadMesh(Ref<graphics::FrameBuffer>& framebuffer) {
+		const std::vector<layers::MeshLayer*> filesystem::loadMesh(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
 			std::vector<layers::MeshLayer*> lay;
 
 			for (size_t i = 0; i < getMeshTypes().size(); i++) {
@@ -68,7 +68,7 @@ namespace mar {
 			return lay;
 		}
 
-		const std::vector<layers::MeshLayer*> filesystem::loadScene(Ref<graphics::FrameBuffer>& framebuffer) {
+		const std::vector<layers::MeshLayer*> filesystem::loadScene(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
 			std::vector<layers::MeshLayer*> lay;
 
 			for (uint32_t i = 0; i < getMeshTypes().size(); i++) {

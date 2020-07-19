@@ -18,11 +18,9 @@ namespace mar {
 			MAR_CORE_INFO("GUI_LAYER: initialized");
 		}
 
-		void GUILayer::set(const Ref<graphics::FrameBuffer>& framebuf) {
-			if (framebuf != nullptr) {
-				m_gui->setFrameBuffer(framebuf);
-				MAR_CORE_TRACE("GUI_LAYER: Framebuffer is set");
-			}
+		void GUILayer::set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuf) {
+			m_gui->setFrameBuffer(framebuf);
+			MAR_CORE_TRACE("GUI_LAYER: Framebuffer is set");
 		}
 
 		void GUILayer::submit(graphics::Mesh* mesh) {

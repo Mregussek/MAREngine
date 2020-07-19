@@ -14,6 +14,7 @@
 #include "../../Core/Mesh/MeshCreator.h"
 #include "../../Core/Renderer/Renderer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
+#include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
 
 namespace mar {
@@ -53,7 +54,7 @@ namespace mar {
 			int m_shapeIndex;
 			int m_pushMeshIndex;
 			// --- Dockspace
-			Ref<graphics::FrameBuffer> m_framebuffer;
+			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
 			bool m_infoWindow{ false };
@@ -76,7 +77,7 @@ namespace mar {
 			}
 
 			// --- SET METHODS --- //
-			void setFrameBuffer(const Ref<graphics::FrameBuffer>& framebuffer) { m_framebuffer = framebuffer; }
+			void setFrameBuffer(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) { m_framebuffer = framebuffer; }
 
 			// --- GET METHODS --- //
 			const maths::mat4 getTranslationMatrix() const;

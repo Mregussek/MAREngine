@@ -24,7 +24,6 @@ namespace mar {
 	}
 
 	namespace graphics {
-		class RendererFactory;
 		class Renderer;
 	}
 
@@ -69,7 +68,6 @@ namespace mar {
 	}
 
 	namespace storage {
-		inline Ref<graphics::RendererFactory> factory;
 		inline bool usegui;
 	}
 

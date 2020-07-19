@@ -7,11 +7,38 @@
 #define MAR_ENGINE_RENDERER_H
 
 #include "../../mar.h"
+
 #include "../../Editor/GUI/GUI.h"
-#include "RendererFactory.h"
+
 #include "../Camera/Camera.h"
+
 #include "../Mesh/Mesh.h"
+#include "../Mesh/Shapes/ShapeManipulator.h"
 #include "../Mesh/MeshCreator.h"
+
+#include "Buffers/ElementBuffer/ElementBuffer.h"
+#include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
+
+#include "Buffers/VertexArray/VertexArray.h"
+#include "Buffers/VertexArray/VertexArrayOpenGL.h"
+
+#include "Buffers/VertexBuffer/VertexBuffer.h"
+#include "Buffers/VertexBuffer/VertexBufferOpenGL.h"
+
+#include "Buffers/VertexBuffer/VertexBufferLayout.h"
+#include "Buffers/VertexBuffer/VertexBufferLayoutOpenGL.h"
+
+#include "Buffers/FrameBuffer/FrameBuffer.h"
+#include "Buffers/FrameBuffer/FrameBufferOpenGL.h"
+
+#include "../Mesh/Texture/Texture.h"
+#include "../Mesh/Texture/TextureOpenGL.h"
+
+#include "../Shader/Shader.h"
+#include "../Shader/ShaderOpenGL.h"
+
+#include "../Scene/Scene.h"
+
 
 
 namespace mar {
@@ -44,11 +71,11 @@ namespace mar {
 
 		class Renderer {
 			// --- Buffers
-			Ref<VertexBuffer> m_vbo;
-			Ref<VertexBufferLayout> m_layout;
-			Ref<VertexArray> m_vao;
-			Ref<ElementBuffer> m_ebo;
-			Ref<Shader> m_mainShader;
+			VertexBuffer<VertexBufferOpenGL> m_vbo;
+			VertexBufferLayout<VertexBufferLayoutOpenGL> m_layout;
+			VertexArray<VertexArrayOpenGL> m_vao;
+			ElementBuffer<ElementBufferOpenGL> m_ebo;
+			Shader<ShaderOpenGL> m_mainShader;
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;	// check, if renderer is initialized
 			static RendererStatistics s_stats;

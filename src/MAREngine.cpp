@@ -16,7 +16,6 @@ namespace mar {
 		void MAREngine::initialize() {
 			MAR_LOG_INIT();
 
-			storage::factory = graphics::RendererOpenGLFactory::createFactory();
 			storage::usegui = true;
 
 			window::Window::getInstance().initialize(settings::height, settings::width, settings::name);
@@ -27,13 +26,13 @@ namespace mar {
 		void MAREngine::run() {
 			layers::LayerStack m_stack;
 
-			auto m_framebuffer = storage::factory->createFrameBuffer();
-			m_framebuffer->initialize(graphics::FrameBufferSpecification(800.f, 600.f));
+			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
+			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
 			auto camera_layer = new layers::CameraLayer("Default Camera Layer");
 			camera_layer->initialize();
 			if (storage::usegui)
-				camera_layer->set(m_framebuffer->getSpecification().width, m_framebuffer->getSpecification().height);
+				camera_layer->set(m_framebuffer.getSpecification().width, m_framebuffer.getSpecification().height);
 			else
 				camera_layer->set(window::Window::getInstance().getWidth(), window::Window::getInstance().getHeight());
 			camera_layer->mouseSetup();
@@ -58,7 +57,7 @@ namespace mar {
 			{
 				window::Window::getInstance().clearScreen();
 				graphics::Renderer::getStatistics().resetStatistics();
-			
+
 				m_stack.update();
 
 				window::Window::getInstance().swapBuffers();
@@ -66,7 +65,7 @@ namespace mar {
 			// --------------- RENDER LOOP -------------------- //
 			//////////////////////////////////////////////////////
 
-			m_framebuffer->close();
+			m_framebuffer.close();
 			m_stack.close();
 		}
 

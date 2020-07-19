@@ -19,7 +19,7 @@ namespace mar {
 			Other common name for ElementBuffer is IndexBuffer.
 			This is overloaded class of base one - ElementBuffer, which implements solution to that problem with OpenGL.
 		*/
-		class ElementBufferOpenGL : public ElementBuffer, std::enable_shared_from_this<ElementBufferOpenGL> {
+		class ElementBufferOpenGL {
 			uint32_t _id;
 			uint32_t _allocatedMemory;
 			bool _initialized = false;
@@ -34,26 +34,26 @@ namespace mar {
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
-			void initializeElement(const uint32_t allocationMemory) override;
+			void initializeElement(const uint32_t allocationMemory);
 
 			/*
 			Redefines some or all of data stored in EBO.
 
 				\param data - indices, which will be drawn
 			*/
-			void updateDynamically(const std::vector<uint32_t>& data) const override;
+			void updateDynamically(const std::vector<uint32_t>& data) const;
 
 			//! Method resets buffer.
-			void resetBuffer() override;
+			void resetBuffer();
 
 			//! Binds class m_id member to target, which is EBO
-			void bind() const override;
+			void bind() const;
 
 			//! Unbind currently used EBO and restore memory usage for that buffer
-			void unbind() const override;
+			void unbind() const;
 
 			//! Deletes EBO
-			void close() override;
+			void close();
 		};
 
 

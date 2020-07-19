@@ -117,11 +117,6 @@ namespace mar {
 					ImGui::EndMenu();
 				}
 
-				if (ImGui::BeginMenu("Scene Statistics")) {
-					Menu_Statistics();
-					ImGui::EndMenu();
-				}
-
 				if (ImGui::MenuItem("About")) {
 					m_infoWindow = true;
 					m_instructionWindow = true;
@@ -137,6 +132,7 @@ namespace mar {
 			Menu_ModifyScene();
 			Menu_SelectShape();
 			Menu_ModifyShape();
+			Menu_Statistics();
 			Display_ViewPort();
 
 			if (m_fileOpenWindow) { File_Open(); }
@@ -278,8 +274,8 @@ namespace mar {
 			else
 				window::Input::disableInput();
 
-			static graphics::FrameBufferSpecification spec = m_framebuffer->getSpecification();
-			static uint32_t id = m_framebuffer->getColorAttach();
+			static graphics::FrameBufferSpecification spec = m_framebuffer.getSpecification();
+			static uint32_t id = m_framebuffer.getColorAttach();
 
 			ImVec2 size = ImGui::GetContentRegionAvail();
 			spec.width = size.x;
@@ -408,8 +404,8 @@ namespace mar {
 					ImGui::Separator();
 
 					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS) {
-						if (m_meshes[m_meshIndex]->getTexture()->getPath(m_shapeIndex) != "empty") {
-							ImGui::Image((void*)m_meshes[m_meshIndex]->getTexture()->getID(m_shapeIndex),
+						if (m_meshes[m_meshIndex]->getTexture().getPath(m_shapeIndex) != "empty") {
+							ImGui::Image((void*)m_meshes[m_meshIndex]->getTexture().getID(m_shapeIndex),
 								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 						}
 						else {
@@ -511,6 +507,8 @@ namespace mar {
 		}
 
 		void GUI::Menu_Statistics() {
+			ImGui::Begin("Statistics Menu");
+
 			if (storage::usegui) {
 				using stats = graphics::Renderer;
 
@@ -532,11 +530,31 @@ namespace mar {
 
 			ImGui::Separator();
 
+			static double lasttime = GetTickCount() * 0.001;
+			static double currenttime;
+			static double fps = 0.0;
+			static int frames = 0;
+
+			currenttime = GetTickCount() * 0.001;
+			frames++;
+
+			if (currenttime - lasttime > 1.0) {
+				fps = frames / (currenttime - lasttime);
+				frames = 0;
+				lasttime = currenttime;
+			}
+
+			ImGui::Text("My FPS: %f ms/frame", fps);
+
+			ImGui::Separator();
+
 			std::string fpsinfo = "FPS: " + std::to_string(ImGui::GetIO().Framerate);
 			std::string msframe = "ms/frame: " + std::to_string(1000.0f / ImGui::GetIO().Framerate);
 
 			ImGui::Text(fpsinfo.c_str());
 			ImGui::Text(msframe.c_str());
+
+			ImGui::End();
 		}
 
 		void GUI::Menu_Info() {

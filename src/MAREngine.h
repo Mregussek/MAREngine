@@ -20,8 +20,6 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Camera/Camera.h"
 #include "Core/Renderer/Renderer.h"
-#include "Core/Renderer/RendererFactory.h"
-#include "Core/Renderer/RendererOpenGLFactory.h"
 // Window && Input
 #include "Window/Input.h"
 #include "Window/Window.h"

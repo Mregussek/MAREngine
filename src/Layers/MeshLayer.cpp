@@ -33,7 +33,7 @@ namespace mar {
 			MAR_CORE_INFO("MESH_LAYER: loaded");
 		}
 
-		void MeshLayer::set(const Ref<graphics::FrameBuffer>& framebuffer) {
+		void MeshLayer::set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
 			m_framebuffer = framebuffer;
 
 			MAR_CORE_INFO("MESH_LAYER: framebuffer is set");
@@ -41,9 +41,9 @@ namespace mar {
 
 		void MeshLayer::prepareFrame() {
 			if (storage::usegui) {
-				m_framebuffer->bind();
-				m_framebuffer->clear();
-				m_framebuffer->unbind();
+				m_framebuffer.bind();
+				m_framebuffer.clear();
+				m_framebuffer.unbind();
 
 				MAR_CORE_TRACE("MESH_LAYER: cleared framebuffer");
 				return;
@@ -52,11 +52,11 @@ namespace mar {
 
 		void MeshLayer::update() {
 			if (storage::usegui) {
-				m_framebuffer->bind();
+				m_framebuffer.bind();
 
 				m_renderer->draw(&m_mesh);
 
-				m_framebuffer->unbind();
+				m_framebuffer.unbind();
 
 				MAR_CORE_TRACE("MESH_LAYER: Scene loaded to framebuffer");
 			}

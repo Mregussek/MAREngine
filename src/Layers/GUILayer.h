@@ -8,6 +8,8 @@
 
 #include "../mar.h"
 #include "../Editor/GUI/GUI.h"
+#include "../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
+#include "../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 #include "Layer.h"
 
 
@@ -35,7 +37,7 @@ namespace mar {
 			void closeLayer() override;
 
 			// --- SET METHODS --- //
-			void set(const Ref<graphics::FrameBuffer>& framebuf = nullptr);
+			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuf);
 		};
 
 

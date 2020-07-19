@@ -10,6 +10,9 @@
 #include "Layer.h"
 #include "../Core/Mesh/Mesh.h"
 #include "../Core/Renderer/Renderer.h"
+#include "../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
+#include "../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
+#include "../Core/Shader/Shader.h"
 
 
 namespace mar {
@@ -19,7 +22,7 @@ namespace mar {
 		class MeshLayer : public Layer {
 			const char* m_debugName;
 
-			Ref<graphics::FrameBuffer> m_framebuffer;
+			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			graphics::Mesh m_mesh;
 			graphics::Renderer* m_renderer;
 
@@ -37,7 +40,7 @@ namespace mar {
 			void closeLayer() override;
 
 			// --- SET METHODS --- //
-			void set(const Ref<graphics::FrameBuffer>& framebuffer);
+			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
 
 			// --- GET METHODS --- //
 			graphics::Mesh* getMesh() { return &m_mesh; }

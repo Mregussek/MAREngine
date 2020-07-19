@@ -14,7 +14,7 @@ namespace mar {
 	namespace graphics {
 
 
-		class FrameBufferOpenGL : public FrameBuffer, std::enable_shared_from_this<FrameBufferOpenGL> {
+		class FrameBufferOpenGL {
 			uint32_t m_id;
 			uint32_t m_colorAttachment;
 			uint32_t m_depthAttanchment;
@@ -23,20 +23,20 @@ namespace mar {
 		public:
 			FrameBufferOpenGL() = default;
 
-			void initialize(const FrameBufferSpecification& spec) override;
+			void initialize(const FrameBufferSpecification& spec);
 
-			void bind() const override;
+			void bind() const;
 
-			void unbind() const override;
+			void unbind() const;
 
-			void clear() const override;
+			void clear() const;
 
-			void close() override;
+			void close();
 
 			// --- GET METHODS
-			const uint32_t& getColorAttach() const override { return m_colorAttachment; }
-			const uint32_t& getDepthAttach() const override { return m_depthAttanchment; }
-			const FrameBufferSpecification& getSpecification() const override { return m_specification; }
+			const uint32_t& getColorAttach() const { return m_colorAttachment; }
+			const uint32_t& getDepthAttach() const { return m_depthAttanchment; }
+			const FrameBufferSpecification& getSpecification() const { return m_specification; }
 		};
 
 

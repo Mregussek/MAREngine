@@ -20,7 +20,10 @@ namespace mar {
 			VertexBuffer is used to store vertices on the GPU memory and as being the source for vertex array data.
 			This is just base class for other implementations of VertexBuffer.
 		*/
-		class VertexBuffer : std::enable_shared_from_this<VertexBuffer> {
+		template<typename VBO>
+		class VertexBuffer {
+			VBO m_vbo;
+			
 		public:
 
 			/*
@@ -29,34 +32,48 @@ namespace mar {
 
 				\param allocationMemory - size of memory (bytes!), which will be allocated on GPU
 			*/
-			virtual void initializeVertex(uint32_t allocationMemory) { }
+			void initializeVertex(uint32_t allocationMemory) { 
+				m_vbo.initializeVertex(allocationMemory);
+			}
 
 			//! Method must bind class id member to target, which is VBO. Method must be overloaded!
-			virtual void bind() const { }
+			void bind() const { 
+				m_vbo.bind();
+			}
 
 			/*
 			Method must redefine some or all of data stored in VBO. Method must be overloaded!
 
 				\param vertices - object, which will replace data stored in GPU
 			*/
-			virtual void updateDynamically(const std::vector<float>& vertices) const { }
+			void updateDynamically(const std::vector<float>& vertices) const { 
+				m_vbo.updateDynamically(vertices);
+			}
 
 			//! Method should reset buffer. Must be overloaded!
-			virtual void resetBuffer() { }
+			void resetBuffer() { 
+				m_vbo.resetBuffer();
+			}
 
 			//! Method should unbind currently used VBO and restore memory usage for that buffer. 
 			//! Method must be overloaded!
-			virtual void unbind() const { }
+			void unbind() const { 
+				m_vbo.unbind();
+			}
 
 			//! Method should delete VBO. Method must be overloaded!
-			virtual void close() { }
+			void close() { 
+				m_vbo.close();
+			}
 
 			/*
 			Method should return size (in bytes!), which is allocated on GPU. Method must be overloaded!
 
 				\return size - returns size allocated on GPU
 			*/
-			virtual uint32_t getSize() const { return 0; }
+			uint32_t getSize() const { 
+				return m_vbo.getSize(); 
+			}
 		};
 
 

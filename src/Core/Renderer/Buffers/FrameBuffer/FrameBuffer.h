@@ -25,28 +25,44 @@ namespace mar {
 			FrameBufferSpecification(float w, float h) : width(w), height(h) { }
 		};
 
-
-		class FrameBuffer : std::enable_shared_from_this<FrameBuffer> {
-			FrameBufferSpecification m_spec;
+		template<typename FRMBUF>
+		class FrameBuffer {
+			FRMBUF m_framebuffer;
 
 		public:
 			FrameBuffer() = default;
 
-			virtual void initialize(const FrameBufferSpecification& spec) { }
+			void initialize(const FrameBufferSpecification& spec) { 
+				m_framebuffer.initialize(spec);
+			}
 
-			virtual void bind() const { }
+			void bind() const { 
+				m_framebuffer.bind();
+			}
 
-			virtual void unbind() const { }
+			void unbind() const { 
+				m_framebuffer.unbind();
+			}
 
-			virtual void clear() const  { }
+			void clear() const  { 
+				m_framebuffer.clear();
+			}
 
-			virtual void close() { }
+			void close() { 
+				m_framebuffer.close();
+			}
 
-			virtual const uint32_t& getColorAttach() const { return 0; }
+			const uint32_t& getColorAttach() const { 
+				return m_framebuffer.getColorAttach();
+			}
 
-			virtual const uint32_t& getDepthAttach() const { return 0; }
+			const uint32_t& getDepthAttach() const { 
+				return m_framebuffer.getDepthAttach(); 
+			}
 
-			virtual const FrameBufferSpecification& getSpecification() const { return m_spec; }
+			const FrameBufferSpecification& getSpecification() const { 
+				return m_framebuffer.getSpecification();
+			}
 		};
 
 

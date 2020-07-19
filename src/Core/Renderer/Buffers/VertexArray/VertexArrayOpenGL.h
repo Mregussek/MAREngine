@@ -21,7 +21,7 @@ namespace mar {
 			format of vertex data, by providing vertex arrays.
 			This is overloaded class of base one - VertexArrayOpenGL, which implements solution to that problem with OpenGL.
 		*/
-		class VertexArrayOpenGL : public VertexArray, std::enable_shared_from_this<VertexArrayOpenGL> {
+		class VertexArrayOpenGL {
 			uint32_t _rendererId;
 
 		public:
@@ -29,23 +29,23 @@ namespace mar {
 			VertexArrayOpenGL() = default;
 
 			//! Generates and binds VAO
-			void initializeArrayBuffer() override;
+			void initializeArrayBuffer();
 
 			//! Deletes VAO
-			void closeArrayBuffer() override;
+			void closeArrayBuffer();
 
 			/*
 			Defines array of generic vertex attribute data and enables it
 
 				\param layout - specifies, how data should be formatted
 			*/
-			void addBuffer(const Ref<VertexBufferLayout>& layout) override;
+			void addBuffer(const VertexBufferLayout<VertexBufferLayoutOpenGL>& layout);
 
 			//! Binds class m_id member to target, which is VAO
-			void bind() const override;
+			void bind() const;
 
 			//! Unbind currently used VAO, break the existing VAO binding
-			void unbind() const override;
+			void unbind() const;
 		};
 
 

@@ -13,7 +13,7 @@ namespace mar {
 
 
 		Mesh::~Mesh() {
-			m_texture->shutdown();
+			m_texture.shutdown();
 
 			clearMatrices();
 			clearBuffers();
@@ -23,8 +23,6 @@ namespace mar {
 			for (auto& s : m_shapes)
 				s.reset();
 
-			m_texture.reset();
-
 			m_shapes.clear();
 
 			s_existingInstance--;
@@ -33,7 +31,6 @@ namespace mar {
 		}
 
 		void Mesh::create() {
-			m_texture = storage::factory->createTexture();
 			s_existingInstance++;
 
 			MAR_CORE_INFO("MESH: Mesh has been created!");
@@ -131,7 +128,7 @@ namespace mar {
 						goto loading_default_colors;
 					}
 
-					id_texture = m_texture->loadCubemap(texture);
+					id_texture = m_texture.loadCubemap(texture);
 				}
 				else {
 					if(getMeshType() == CUBEMAPS_MESH_TYPE) {
@@ -139,7 +136,7 @@ namespace mar {
 						goto loading_default_colors;
 					}
 
-					id_texture = m_texture->loadTexture(texture);
+					id_texture = m_texture.loadTexture(texture);
 				}
 
 				ShapeManipulator::extendTextureID(new_shape, m_availableTextureID);
@@ -151,7 +148,7 @@ namespace mar {
 
 				new_shape->setTextureID(0.f);
 				m_samplers.push_back(0);
-				m_texture->addID(0);
+				m_texture.addID(0);
 			}
 
 			m_colors.push_back(new_shape->getDefaultColor());
@@ -243,7 +240,7 @@ namespace mar {
 			m_availableShapeID--;
 			m_shapesCount--;
 
-			m_texture->removeID(index);
+			m_texture.removeID(index);
 
 			m_samplers.pop_back();
 			m_colors.pop_back();
@@ -292,12 +289,12 @@ namespace mar {
 
 			static int type;
 
-			m_texture->resetTextureUnit();
+			m_texture.resetTextureUnit();
 			
 			type = (m_type == CUBEMAPS_MESH_TYPE) ? GL_TEXTURE_CUBE_MAP : GL_TEXTURE_2D;
 
 			for (uint32_t i = 0; i < m_shapesCount; i++) 
-				m_texture->bind(type, m_texture->getID(i));
+				m_texture.bind(type, m_texture.getID(i));
 		}
 
 		void Mesh::clearBuffers() {

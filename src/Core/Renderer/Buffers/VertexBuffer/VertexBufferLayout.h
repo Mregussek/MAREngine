@@ -45,7 +45,10 @@ namespace mar {
 			automating creating new objects.
 			This is just base class for other implementations of VertexBufferLayout.
 		*/
+		template <typename VBL>
 		class VertexBufferLayout {
+			VBL m_vbl;
+
 			std::vector<VertexBufferElement> m_return;
 
 		public:
@@ -57,14 +60,18 @@ namespace mar {
 
 				\return _elements - vector of VertexBufferElement
 			*/
-			virtual const std::vector<VertexBufferElement>& getElements() const { return m_return; }
+			const std::vector<VertexBufferElement>& getElements() const { 
+				return m_vbl.getElements(); 
+			}
 
 			/*
 			 Method should returns stride of data
 
 				\return _stride - calculated stride for proper data format
 			*/
-			virtual uint32_t getStride() const { return 0; }
+			uint32_t getStride() const { 
+				return m_vbl.getStride(); 
+			}
 
 			/*
 			Method should pushData new element to layout by specifying its type and count
@@ -72,7 +79,9 @@ namespace mar {
 				\param count - value of next Vertex Attribute
 				\param what - specify what value you pushData (float[PUSH_FLOAT], uint32_t[PUSH_uint32_t] or char[PUSH_UNSIGNED_BYTE])
 			*/
-			virtual void push(uint32_t count, PushBuffer what) { }
+			void push(uint32_t count, PushBuffer what) { 
+				m_vbl.push(count, what);
+			}
 		};
 
 
