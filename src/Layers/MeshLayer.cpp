@@ -102,5 +102,9 @@ namespace mar {
 			}
 		}
 
+		void MeshLayer::set(graphics::Light* light) { 
+			m_renderer->setLight(light);
+		}
+
 
 } }

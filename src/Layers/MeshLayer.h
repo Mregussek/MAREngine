@@ -40,6 +40,7 @@ namespace mar {
 			void closeLayer() override;
 
 			// --- SET METHODS --- //
+			void set(graphics::Light* light);
 			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
 
 			// --- GET METHODS --- //

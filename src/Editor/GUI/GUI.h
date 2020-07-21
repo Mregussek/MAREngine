@@ -12,6 +12,7 @@
 #include "../../MAREngine.h"
 #include "../../Window/Window.h"
 #include "../../Core/Mesh/MeshCreator.h"
+#include "../../Core/Light/Light.h"
 #include "../../Core/Renderer/Renderer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
@@ -49,6 +50,7 @@ namespace mar {
 			// --- Run-time GUI attributes
 			std::vector<graphics::Mesh*> m_meshes;
 			std::vector<const char*> m_meshesNames;
+			graphics::Light* m_light;
 			static GUIData s_guiData;
 			int m_meshIndex;
 			int m_shapeIndex;
@@ -78,6 +80,7 @@ namespace mar {
 
 			// --- SET METHODS --- //
 			void setFrameBuffer(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) { m_framebuffer = framebuffer; }
+			void setLight(graphics::Light* light) { m_light = light; }
 
 			// --- GET METHODS --- //
 			const maths::mat4 getTranslationMatrix() const;
@@ -95,6 +98,7 @@ namespace mar {
 			void Menu_ModifyShape();
 			void Menu_SelectShape();
 			void Menu_PushShapeToScene();
+			void Menu_Environment();
 			void Menu_Statistics();
 			void Menu_Info();
 			void Menu_Instruction();

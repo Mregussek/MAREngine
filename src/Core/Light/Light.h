@@ -35,20 +35,20 @@ namespace mar {
 
 			void setPosition(const maths::vec3 new_pos) { _position = new_pos; }
 
-			inline const maths::vec3& getPosition() const { return _position; }
-			inline const maths::vec3& getAmbient() const { return _ambient; }
-			inline const maths::vec3& getDiffuse() const { return _diffuse; }
-			inline const maths::vec3& getSpecular() const { return _specular; }
+			inline maths::vec3& getPosition() { return _position; }
+			inline maths::vec3& getAmbient() { return _ambient; }
+			inline maths::vec3& getDiffuse() { return _diffuse; }
+			inline maths::vec3& getSpecular() { return _specular; }
 			
-			inline const maths::vec3& getAmbientStrength() const { return _ambientStrength; }
-			inline const maths::vec3& geDiffuseStrength() const { return _diffuseStrength; }
-			inline const maths::vec3& geSpecularStrength() const { return _specularStrength; }
+			inline maths::vec3& getAmbientStrength() { return _ambientStrength; }
+			inline maths::vec3& getDiffuseStrength() { return _diffuseStrength; }
+			inline maths::vec3& getSpecularStrength() { return _specularStrength; }
 			 
-			inline const float& getShininess() const { return _shininess; }
+			inline float& getShininess() { return _shininess; }
 			
-			inline const float& getConstant() const { return _constant; }
-			inline const float& getLinear() const { return _linear; }
-			inline const float& getQuadratic() const { return _quadratic; }
+			inline float& getConstant() { return _constant; }
+			inline float& getLinear() { return _linear; }
+			inline float& getQuadratic() { return _quadratic; }
 		};
 
 

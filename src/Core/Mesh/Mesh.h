@@ -45,8 +45,6 @@ namespace mar {
 			std::vector<maths::mat4> m_rotationMats;
 			std::vector<maths::mat4> m_scaleMats;
 			std::vector<maths::vec3> m_colors;
-			// --- Light object
-			Light m_light;
 			// --- State information 
 			MeshType m_type;
 			float m_availableTextureID{ 1.f };
@@ -108,8 +106,6 @@ namespace mar {
 			inline const std::vector<maths::mat4>& getRotationMatrices() const { return m_rotationMats; }
 			inline const std::vector<maths::mat4>& getScaleMatrices() const { return m_scaleMats; }
 			inline const std::vector<maths::vec3>& getColors() const { return m_colors; }
-
-			inline Light& getLight() { return m_light; }
 
 			// --- SET METHODS --- //
 			void setMeshType(const MeshType type) {

@@ -25,6 +25,7 @@ namespace mar {
 
 		void MAREngine::run() {
 			layers::LayerStack m_stack;
+			graphics::Light m_light;
 
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
@@ -40,6 +41,7 @@ namespace mar {
 			auto gui_layer = new layers::GUILayer("Default GUI Layer");
 			gui_layer->initialize();
 			gui_layer->set(m_framebuffer);
+			gui_layer->set(&m_light);
 
 			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
@@ -47,6 +49,7 @@ namespace mar {
 			editor::filesystem::loadSceneFromFile(m_pathLoad);
 			if (auto loaded = editor::filesystem::assignLoadedLayers(m_framebuffer))
 				for (uint32_t i = 0; i < loaded->size(); i++) {
+					loaded->at(i)->set(&m_light);
 					gui_layer->submit(loaded->at(i)->getMesh());
 					m_stack.pushLayer(loaded->at(i));
 				}

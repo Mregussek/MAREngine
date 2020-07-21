@@ -8,6 +8,7 @@
 
 #include "../mar.h"
 #include "../Editor/GUI/GUI.h"
+#include "../Core/Light/Light.h"
 #include "../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 #include "../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 #include "Layer.h"
@@ -38,6 +39,7 @@ namespace mar {
 
 			// --- SET METHODS --- //
 			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuf);
+			void set(graphics::Light* light);
 		};
 
 

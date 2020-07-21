@@ -129,6 +129,7 @@ namespace mar {
 				ImGui::EndMainMenuBar();
 			}
 
+			Menu_Environment();
 			Menu_ModifyScene();
 			Menu_SelectShape();
 			Menu_ModifyShape();
@@ -385,7 +386,7 @@ namespace mar {
 
 					ImGui::Text("\nScale Shape\n");
 					
-					ImGui::SliderFloat("General Scale\n", &general_scale, -0.5f, 0.5f, "%.2f", 1.f);
+					ImGui::SliderFloat("General Scale\n", &general_scale, -2.f, 2.f, "%.2f", 1.f);
 					if (last_general != general_scale) {
 						scale += general_scale - last_general;
 					}
@@ -429,81 +430,167 @@ namespace mar {
 		}
 
 		void GUI::Menu_PushShapeToScene() {
-			if (storage::usegui) {
-				ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
-				ImGui::InputFloat3("Input Center", m_inputCenter);
-
-				for (uint32_t i = 0; i < 3; i++)
-					if (m_inputCenter[i] > 10.f || m_inputCenter[i] < -10.f)
-						return;
-
-				ImGui::Combo("Choose Mesh", &m_pushMeshIndex, m_meshesNames.data(), m_meshesNames.size());
-
-				ImGui::Separator();
-
-				if (ImGui::Button("Reload textures in directory")) {
-					filesystem::updateMarTextures("resources/textures");
-
-					texture::files.clear();
-					texture::files.push_back("empty");
-
-					for (auto& m : filesystem::getMarTextures()) {
-						texture::files.push_back(m.c_str());
-					}
-				}
-
-				ImGui::Combo("Choose Texture", &texture::selected, texture::files.data(), texture::files.size());
-
-				ImGui::Separator();
-
-				if (checkCharsStart("Objects", m_meshesNames[m_pushMeshIndex])) {
-					ImGui::Text("MAREngine do not support push to objects mesh!");
-					return;
-				}
-					
-				if (ImGui::Button("Select Pyramid")) {
-					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
-					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					maths::vec3 scale{ 1.f, 1.f, 1.f };
-					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
-
-					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-				}
-
-				if (ImGui::Button("Select Cube")) {
-					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
-					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					maths::vec3 scale{ 1.f, 1.f, 1.f };
-					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
-
-					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-				}
-
-				if (ImGui::Button("Select Surface")) {
-					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
-					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					maths::vec3 scale{ 1.f, 1.f, 1.f };
-					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
-
-					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-				}
-
-				if (ImGui::Button("Select Wall")) {
-					Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
-					maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-					maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-					maths::vec3 scale{ 1.f, 1.f, 1.f };
-					std::string selected = "resources/textures/" + std::string( texture::files[texture::selected] );
-
-					m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-				}
-			}
-			else {
+			if (!storage::usegui) {
 				ImGui::Text("You cannot modify objects!");
+				return;
 			}
+
+			ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
+			ImGui::InputFloat3("Input Center", m_inputCenter);
+
+			for (uint32_t i = 0; i < 3; i++)
+				if (m_inputCenter[i] > 10.f || m_inputCenter[i] < -10.f)
+					return;
+
+			ImGui::Combo("Choose Mesh", &m_pushMeshIndex, m_meshesNames.data(), m_meshesNames.size());
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Reload textures in directory")) {
+				filesystem::updateMarTextures("resources/textures");
+
+				texture::files.clear();
+				texture::files.push_back("empty");
+
+				for (auto& m : filesystem::getMarTextures()) {
+					texture::files.push_back(m.c_str());
+				}
+			}
+
+			ImGui::Combo("Choose Texture", &texture::selected, texture::files.data(), texture::files.size());
+
+			ImGui::Separator();
+
+			if (checkCharsStart("Objects", m_meshesNames[m_pushMeshIndex])) {
+				ImGui::Text("MAREngine do not support push to objects mesh!");
+				return;
+			}
+
+			if (ImGui::Button("Select Pyramid")) {
+				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
+				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				maths::vec3 scale{ 1.f, 1.f, 1.f };
+				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
+
+				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
+			}
+
+			if (ImGui::Button("Select Cube")) {
+				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
+				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				maths::vec3 scale{ 1.f, 1.f, 1.f };
+				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
+
+				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
+			}
+
+			if (ImGui::Button("Select Surface")) {
+				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
+				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				maths::vec3 scale{ 1.f, 1.f, 1.f };
+				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
+
+				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
+			}
+
+			if (ImGui::Button("Select Wall")) {
+				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
+				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
+				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
+				maths::vec3 scale{ 1.f, 1.f, 1.f };
+				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
+
+				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
+			}
+		}
+
+		void GUI::Menu_Environment() {
+			ImGui::Begin("Environment");
+
+			if (!storage::usegui) {
+				ImGui::Text("You cannot modify objects!");
+
+				ImGui::End();
+				return;
+			}
+
+			ImGui::Text("Lightning");
+
+			auto& position = m_light->getPosition();
+			auto& ambient = m_light->getAmbient();
+			auto& ambientStrength = m_light->getAmbientStrength();
+			auto& diffuse = m_light->getDiffuse();
+			auto& diffuseStrength = m_light->getDiffuseStrength();
+			auto& specular = m_light->getSpecular();
+			auto& specularStrength = m_light->getSpecularStrength();
+			auto& constant = m_light->getConstant();
+			auto& linear = m_light->getLinear();
+			auto& quadratic = m_light->getQuadratic();
+			auto& shininess = m_light->getShininess();
+
+			ImGui::Separator();
+
+			ImGui::Text("Light Position");
+
+			ImGui::SliderFloat("X Pos", &position.x, -10.f, 10.f);
+			ImGui::SliderFloat("Y Pos", &position.y, -10.f, 10.f);
+			ImGui::SliderFloat("Z Pos", &position.z, -10.f, 10.f);
+
+			ImGui::Separator();
+
+			ImGui::Text("Ambient Light");
+
+			ImGui::SliderFloat("X Ambient", &ambient.x, 0.f, 1.f);
+			ImGui::SliderFloat("Y Ambient", &ambient.y, 0.f, 1.f);
+			ImGui::SliderFloat("Z Ambient", &ambient.z, 0.f, 1.f);
+
+			ImGui::Text("Ambient Strength");
+
+			ImGui::SliderFloat("X StrengthAmbient", &ambientStrength.x, 0.f, 1.f);
+			ImGui::SliderFloat("Y StrengthAmbient", &ambientStrength.y, 0.f, 1.f);
+			ImGui::SliderFloat("Z StrengthAmbient", &ambientStrength.z, 0.f, 1.f);
+
+			ImGui::Separator();
+
+			ImGui::Text("Diffuse Light");
+
+			ImGui::SliderFloat("X Diffuse", &diffuse.x, 0.f, 1.f);
+			ImGui::SliderFloat("Y Diffuse", &diffuse.y, 0.f, 1.f);
+			ImGui::SliderFloat("Z Diffuse", &diffuse.z, 0.f, 1.f);
+
+			ImGui::Text("Diffuse Strength");
+
+			ImGui::SliderFloat("X StrengthDiffuse", &diffuseStrength.x, 0.f, 1.f);
+			ImGui::SliderFloat("Y StrengthDiffuse", &diffuseStrength.y, 0.f, 1.f);
+			ImGui::SliderFloat("Z StrengthDiffuse", &diffuseStrength.z, 0.f, 1.f);
+
+			ImGui::Separator();
+
+			ImGui::Text("Specular Light");
+
+			ImGui::SliderFloat("X Specular", &specular.x, 0.f, 1.f);
+			ImGui::SliderFloat("Y Specular", &specular.y, 0.f, 1.f);
+			ImGui::SliderFloat("Z Specular", &specular.z, 0.f, 1.f);
+
+			ImGui::Text("Specular Strength");
+
+			ImGui::SliderFloat("X StrengthSpecular", &specularStrength.x, 0.f, 1.f);
+			ImGui::SliderFloat("Y StrengthSpecular", &specularStrength.y, 0.f, 1.f);
+			ImGui::SliderFloat("Z StrengthSpecular", &specularStrength.z, 0.f, 1.f);
+
+			ImGui::Separator();
+
+			ImGui::Text("Attenuation");
+
+			ImGui::InputFloat("Constant", &constant);
+			ImGui::InputFloat("Linear", &linear);
+			ImGui::InputFloat("Quadratic", &quadratic);
+			ImGui::InputFloat("Shininess", &shininess);
+
+			ImGui::End();
 		}
 
 		void GUI::Menu_Statistics() {

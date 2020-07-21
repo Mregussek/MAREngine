@@ -76,6 +76,8 @@ namespace mar {
 			VertexArrayOpenGL m_vao;
 			ElementBufferOpenGL m_ebo;
 			ShaderOpenGL m_mainShader;
+			// --- Run-time
+			static Light* s_light;
 			// --- Knowledge about state of Renderer
 			bool m_initialized = false;	// check, if renderer is initialized
 			static RendererStatistics s_stats;
@@ -97,6 +99,9 @@ namespace mar {
 			void updateLightData(Light* light);
 
 		public:
+			// --- SET METHODS --- //
+			static void setLight(Light* light) { s_light = light; }
+
 			// --- GET METHODS --- // 
 			inline static RendererStatistics& getStatistics() { return s_stats; }
 		};

@@ -23,6 +23,11 @@ namespace mar {
 			MAR_CORE_TRACE("GUI_LAYER: Framebuffer is set");
 		}
 
+		void GUILayer::set(graphics::Light* light) {
+			m_gui->setLight(light);
+			MAR_CORE_TRACE("GUI_LAYER: Light is set");
+		}
+
 		void GUILayer::submit(graphics::Mesh* mesh) {
 			m_gui->submitMesh(mesh);
 

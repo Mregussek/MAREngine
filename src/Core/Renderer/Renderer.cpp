@@ -10,6 +10,7 @@ namespace mar {
 	namespace graphics {
 
 		RendererStatistics RendererOpenGL::s_stats;
+		Light* RendererOpenGL::s_light;
 
 		void RendererOpenGL::create() {
 			MAR_CORE_TRACE("RENDERER: Trying to create renderer!");
@@ -77,7 +78,7 @@ namespace mar {
 			updateMeshData(mesh);
 			updateCameraData();
 			updateGUIData();
-			updateLightData(&mesh->getLight());
+			updateLightData(s_light);
 
 			m_vao.bind();
 
@@ -152,8 +153,8 @@ namespace mar {
 			m_mainShader.setUniformVector3("u_material.specular", light->getSpecular());
 						
 			m_mainShader.setUniformVector3("u_material.ambientStrength", light->getAmbientStrength());
-			m_mainShader.setUniformVector3("u_material.diffuseStrength", light->geDiffuseStrength());
-			m_mainShader.setUniformVector3("u_material.specularStrength", light->geSpecularStrength());
+			m_mainShader.setUniformVector3("u_material.diffuseStrength", light->getDiffuseStrength());
+			m_mainShader.setUniformVector3("u_material.specularStrength", light->getSpecularStrength());
 						
 			m_mainShader.setUniform1f("u_material.shininess", light->getShininess());
 						
