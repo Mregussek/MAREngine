@@ -25,14 +25,14 @@ namespace mar {
 			uint32_t _rendererId;
 
 		public:
-			//! Default constructor. For initialization use initializeArrayBuffer() method.
+			//! Default constructor. For initialization use initialize() method.
 			VertexArrayOpenGL() = default;
 
 			//! Generates and binds VAO
-			void initializeArrayBuffer();
+			void initialize();
 
 			//! Deletes VAO
-			void closeArrayBuffer();
+			void close();
 
 			/*
 			Defines array of generic vertex attribute data and enables it

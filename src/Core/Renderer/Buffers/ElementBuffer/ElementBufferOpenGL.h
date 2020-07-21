@@ -25,7 +25,7 @@ namespace mar {
 			bool _initialized = false;
 
 		public:
-			//! Default constructor. For initialization use initializeElement() method.
+			//! Default constructor. For initialization use initialize() method.
 			ElementBufferOpenGL() = default;
 
 			/*
@@ -34,7 +34,7 @@ namespace mar {
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
-			void initializeElement(const uint32_t allocationMemory);
+			void initialize(const uint32_t allocationMemory);
 
 			/*
 			Redefines some or all of data stored in EBO.

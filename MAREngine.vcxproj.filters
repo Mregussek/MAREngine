@@ -195,6 +195,9 @@
     <ClInclude Include="src\Window\callbacks.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="other\MARMaths\src\math_func\Basic_Math.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">

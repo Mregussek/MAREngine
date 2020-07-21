@@ -9,7 +9,7 @@ namespace mar {
 	namespace graphics {
 
 
-		void VertexBufferOpenGL::initializeVertex(uint32_t allocationMemory) {
+		void VertexBufferOpenGL::initialize(uint32_t allocationMemory) {
 			if (!_initialized) {
 				_allocatedMemory = allocationMemory;
 				MAR_CORE_GL_FUNC(glGenBuffers(1, &_id));

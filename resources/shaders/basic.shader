@@ -17,17 +17,14 @@ uniform mat4 u_Model;
 uniform mat4 u_MVP;
 uniform mat4 u_GUISceneTranslation;
 uniform mat4 u_GUISceneRotation;
-uniform mat4 u_SeperateTranslate[32];
-uniform mat4 u_SeperateRotation[32];
-uniform mat4 u_SeperateScale[32];
+uniform mat4 u_SeparateTransform[32];
 
 void main() {
 	// Calculate all transformations
 	int index = int(shapeIndex);
-	mat4 GUISeperateMatrix = u_SeperateTranslate[index] * u_SeperateRotation[index] * u_SeperateScale[index];
 	mat4 GUISceneMatrix = u_GUISceneTranslation * u_GUISceneRotation;
 
-	gl_Position = u_MVP * GUISceneMatrix * GUISeperateMatrix * position;
+	gl_Position = u_MVP * GUISceneMatrix * u_SeparateTransform[index] * position;
 
 	// Pass values to fragment shader
 	v_TexCoord = texCoord;

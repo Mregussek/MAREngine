@@ -36,8 +36,8 @@ namespace mar {
 
 				\param allocationMemory - size of memory (bytes!), which will be allocated on GPU
 			*/
-			void initializeVertex(uint32_t allocationMemory) { 
-				m_vbo.initializeVertex(allocationMemory);
+			void initialize(uint32_t allocationMemory) { 
+				m_vbo.initialize(allocationMemory);
 			}
 
 			//! Method must bind class id member to target, which is VBO. Method must be overloaded!

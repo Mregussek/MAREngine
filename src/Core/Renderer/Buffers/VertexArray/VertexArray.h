@@ -32,17 +32,17 @@ namespace mar {
 			VAO m_vao;
 
 		public:
-			//! Default constructor. For initialization use initializeArrayBuffer() method.
+			//! Default constructor. For initialization use initialize() method.
 			VertexArray() = default;
 
 			//! Method should generates and binds VAO. Method must be overloaded!
-			void initializeArrayBuffer() { 
-				m_vao.initializeArrayBuffer();
+			void initialize() { 
+				m_vao.initialize();
 			}
 
 			//! Method should deletes all data associated with VAO. Must be overloaded!
-			void closeArrayBuffer() {
-				m_vao.closeArrayBuffer();
+			void close() {
+				m_vao.close();
 			}
 
 			/*

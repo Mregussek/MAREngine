@@ -26,7 +26,7 @@ namespace mar {
 			bool _initialized = false;
 
 		public:
-			//! Default constructor. For initialization use initializeVertex() method.
+			//! Default constructor. For initialization use initialize() method.
 			VertexBufferOpenGL() = default;
 
 			/*
@@ -35,7 +35,7 @@ namespace mar {
 
 				\param allocationMemory - size of memory (bytes!), which will be allocated on GPU
 			*/
-			void initializeVertex(uint32_t allocationMemory);
+			void initialize(uint32_t allocationMemory);
 
 			//! Binds class m_id member to target, which is VBO
 			void bind() const;

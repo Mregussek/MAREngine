@@ -44,6 +44,7 @@ namespace mar {
 			std::vector<maths::mat4> m_translationMats;
 			std::vector<maths::mat4> m_rotationMats;
 			std::vector<maths::mat4> m_scaleMats;
+			std::vector<maths::mat4> m_transforms;
 			std::vector<maths::vec3> m_colors;
 			// --- State information 
 			MeshType m_type;
@@ -102,9 +103,10 @@ namespace mar {
 			inline const std::vector<int>& getSamplers() const { return m_samplers; }
 			inline const std::vector<uint32_t>& getLayout() const { return m_shapes[0]->getLayout(); }
 
-			inline const std::vector<maths::mat4>& getTranslationMatrices() const { return m_translationMats; }
-			inline const std::vector<maths::mat4>& getRotationMatrices() const { return m_rotationMats; }
-			inline const std::vector<maths::mat4>& getScaleMatrices() const { return m_scaleMats; }
+			//inline const std::vector<maths::mat4>& getTranslationMatrices() const { return m_translationMats; }
+			//inline const std::vector<maths::mat4>& getRotationMatrices() const { return m_rotationMats; }
+			//inline const std::vector<maths::mat4>& getScaleMatrices() const { return m_scaleMats; }
+			inline const std::vector<maths::mat4>& getTransforms() const { return m_transforms; }
 			inline const std::vector<maths::vec3>& getColors() const { return m_colors; }
 
 			// --- SET METHODS --- //

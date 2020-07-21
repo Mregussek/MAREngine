@@ -28,7 +28,7 @@ namespace mar {
 
 			if (m_initialized) {
 				m_mainShader.shutdown();
-				m_vao.closeArrayBuffer();
+				m_vao.close();
 				m_vbo.close();
 				m_ebo.close();
 
@@ -50,9 +50,9 @@ namespace mar {
 				for (size_t i = 0; i < layout.size(); i++)
 					m_layout.push(layout[i], PushBuffer::PUSH_FLOAT);
 
-				m_ebo.initializeElement(constants::maxIndexCount);
-				m_vao.initializeArrayBuffer();
-				m_vbo.initializeVertex(constants::maxVertexCount);
+				m_ebo.initialize(constants::maxIndexCount);
+				m_vao.initialize();
+				m_vbo.initialize(constants::maxVertexCount);
 				m_vao.addBuffer(m_layout);
 
 				m_initialized = true;
@@ -115,10 +115,7 @@ namespace mar {
 					mesh->pushMatrices(mesh->getShape(i));
 			}
 
-			m_mainShader.setUniformVectorMat4("u_SeperateTranslate", mesh->getTranslationMatrices());
-			m_mainShader.setUniformVectorMat4("u_SeperateRotation", mesh->getRotationMatrices());
-			m_mainShader.setUniformVectorMat4("u_SeperateScale", mesh->getScaleMatrices());
-						
+			m_mainShader.setUniformVectorMat4("u_SeparateTransform", mesh->getTransforms());
 			m_mainShader.setUniformVectorVec3("u_SeparateColor", mesh->getColors());
 		}
 

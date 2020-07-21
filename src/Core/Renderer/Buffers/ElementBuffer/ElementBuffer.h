@@ -32,7 +32,7 @@ namespace mar {
 			EBO m_ebo;
 
 		public:
-			//! Default constructor. For initialization use initializeElement() method.
+			//! Default constructor. For initialization use initialize() method.
 			ElementBuffer() = default;
 
 			/*
@@ -41,8 +41,8 @@ namespace mar {
 
 				\param allocationMemory - memory (in bytes!), which will be allocated in GPU
 			*/
-			void initializeElement(const uint32_t allocationMemory) { 
-				m_ebo.initializeElement(allocationMemory); 
+			void initialize(const uint32_t allocationMemory) { 
+				m_ebo.initialize(allocationMemory); 
 			}
 
 			/*

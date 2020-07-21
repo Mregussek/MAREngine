@@ -9,12 +9,12 @@ namespace mar {
 	namespace graphics {
 
 
-		void VertexArrayOpenGL::initializeArrayBuffer() {
+		void VertexArrayOpenGL::initialize() {
 			MAR_CORE_GL_FUNC(glGenVertexArrays(1, &_rendererId));
 			MAR_CORE_GL_FUNC(glBindVertexArray(_rendererId));
 		}
 
-		void VertexArrayOpenGL::closeArrayBuffer() {
+		void VertexArrayOpenGL::close() {
 			MAR_CORE_GL_FUNC(glDeleteVertexArrays(1, &_rendererId));
 		}
 

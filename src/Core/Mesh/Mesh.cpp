@@ -182,23 +182,19 @@ namespace mar {
 		void Mesh::pushMatrices(const Ref<Shape>& new_shape) {
 			MAR_CORE_TRACE("MESH: Pushing matrix");
 
-			new_shape->setTranslation(
-				maths::mat4::translation(new_shape->getCenter())
-			);
+			static maths::mat4 trans;
+			static maths::mat4 rot;
+			static maths::mat4 scal;
 
-			new_shape->setRotation(
-				maths::mat4::rotation(maths::Trig::toRadians(new_shape->getAngle().x), { 1.0f, 0.0f, 0.0f }) *
-				maths::mat4::rotation(maths::Trig::toRadians(new_shape->getAngle().y), { 0.0f, 1.0f, 0.0f }) *
-				maths::mat4::rotation(maths::Trig::toRadians(new_shape->getAngle().z), { 0.0f, 0.0f, 1.0f })
-			);
+			trans = maths::mat4::translation(new_shape->getCenter());
 
-			new_shape->setScaleMat(
-				maths::mat4::scale(new_shape->getScaleVec())
-			);
+			rot = maths::mat4::rotation(maths::Trig::toRadians(new_shape->getAngle().x), { 1.0f, 0.0f, 0.0f }) *
+				  maths::mat4::rotation(maths::Trig::toRadians(new_shape->getAngle().y), { 0.0f, 1.0f, 0.0f }) *
+				  maths::mat4::rotation(maths::Trig::toRadians(new_shape->getAngle().z), { 0.0f, 0.0f, 1.0f });
 
-			m_translationMats.push_back(new_shape->getTranslation());
-			m_rotationMats.push_back(new_shape->getRotation());
-			m_scaleMats.push_back(new_shape->getScaleMat());
+			scal = maths::mat4::scale(new_shape->getScaleVec());
+
+			m_transforms.push_back(trans * rot * scal);
 		}
 
 		void Mesh::flushShape(const uint32_t& index) {
@@ -252,9 +248,10 @@ namespace mar {
 		void Mesh::popMatrices(const uint32_t& index) {
 			MAR_CORE_TRACE("MESH: Popping matrices");
 
-			m_translationMats.erase(m_translationMats.begin() + index);
-			m_rotationMats.erase(m_rotationMats.begin() + index);
-			m_scaleMats.erase(m_scaleMats.begin() + index);
+			//m_translationMats.erase(m_translationMats.begin() + index);
+			//m_rotationMats.erase(m_rotationMats.begin() + index);
+			//m_scaleMats.erase(m_scaleMats.begin() + index);
+			m_transforms.erase(m_transforms.begin() + index);
 		}
 
 		int32_t Mesh::PopHelper_newIndicesMaxVal(const uint32_t& index) {
@@ -321,9 +318,10 @@ namespace mar {
 		void Mesh::clearMatrices() {
 			MAR_CORE_TRACE("MESH: Clearing matrices");
 
-			m_translationMats.clear();
-			m_rotationMats.clear();
-			m_scaleMats.clear();
+			//m_translationMats.clear();
+			//m_rotationMats.clear();
+			//m_scaleMats.clear();
+			m_transforms.clear();
 		}
 
 		bool Mesh::canPushShape(const Ref<Shape>& new_shape) {

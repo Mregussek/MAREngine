@@ -51,19 +51,19 @@ namespace mar {
 		}
 
 		void ShaderOpenGL::setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec) {
-			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), vec.size(),  &(*vec.data()).x) );
+			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), vec.size(),  maths::vec3::value_ptr(vec)) );
 		}
 
 		void ShaderOpenGL::setUniformVectorMat4(const std::string& name, const std::vector<maths::mat4>& matrices) {
-			MAR_CORE_GL_FUNC( glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, &(*matrices.data())[0]) );
+			MAR_CORE_GL_FUNC( glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, maths::mat4::value_ptr(matrices)) );
 		}
 
 		void ShaderOpenGL::setUniformMat4f(const std::string& name, const maths::mat4& matrix4x4) {
-			MAR_CORE_GL_FUNC( glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, matrix4x4.elements) );
+			MAR_CORE_GL_FUNC( glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, maths::mat4::value_ptr(matrix4x4)) );
 		}
 
 		void ShaderOpenGL::setUniformVector3(const std::string& name, const maths::vec3& vector3) {
-			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, &vector3.x) );
+			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, maths::vec3::value_ptr(vector3)) );
 		}
 
 		void ShaderOpenGL::setUniform1i(const std::string& name, int value) {
