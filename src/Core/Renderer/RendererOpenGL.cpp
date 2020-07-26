@@ -3,7 +3,7 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "Renderer.h"
+#include "RendererOpenGL.h"
 #include "../../Debug/Log.h"
 
 namespace mar {
@@ -11,17 +11,6 @@ namespace mar {
 
 		RendererStatistics RendererOpenGL::s_stats;
 		Light* RendererOpenGL::s_light;
-
-		void RendererOpenGL::create() {
-			MAR_CORE_TRACE("RENDERER: Trying to create renderer!");
-
-			if (!m_initialized) {
-				MAR_CORE_INFO("RENDERER: created!");
-			}
-			else {
-				MAR_CORE_ERROR("RENDERER: is already initialized!");
-			}
-		}
 
 		void RendererOpenGL::close() {
 			MAR_CORE_TRACE("RENDERER: Trying to close renderer!");

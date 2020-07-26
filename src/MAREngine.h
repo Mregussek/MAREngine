@@ -21,7 +21,7 @@
 #include "Core/Mesh/Mesh.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Camera/Camera.h"
-#include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/RendererOpenGL.h"
 // Window && Input
 #include "Window/Input.h"
 #include "Window/Window.h"
@@ -36,7 +36,7 @@ namespace mar {
 		class MAREngine {
 			static MAREngine s_instance;
 
-			std::string m_pathLoad{ "resources/mar_files/load_default.marscene" };
+			std::string m_pathLoad{ "resources/mar_files/another_default.marscene" };
 
 			bool m_shouldRestart{ false };
 

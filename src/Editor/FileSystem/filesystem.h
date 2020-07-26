@@ -42,8 +42,8 @@ namespace mar {
 			static void saveSceneToFile(const std::string& path, const std::vector<graphics::Mesh*>& meshes);
 			static void loadSceneFromFile(std::string path);
 			
-			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
-			static const std::vector<layers::MeshLayer*> loadMesh(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
+			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers();
+			static const std::vector<layers::MeshLayer*> loadMesh();
 
 			// --- GET METHODS --- //
 			inline static std::vector<std::string>& getMarFiles() { return s_marfiles; }

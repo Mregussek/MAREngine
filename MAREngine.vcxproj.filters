@@ -153,9 +153,6 @@
     <ClInclude Include="src\Core\Shader\ShaderOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Renderer\Renderer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\GUI\GUI.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -205,6 +202,12 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Layers\EntityLayer.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\RendererEntity.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\RendererOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -290,9 +293,6 @@
     <ClCompile Include="src\Core\Shader\ShaderOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Renderer\Renderer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\GUI\GUI.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -329,6 +329,12 @@
     <ClCompile Include="src\Layers\EntityLayer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\RendererEntity.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\RendererOpenGL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -354,6 +360,9 @@
     <None Include="cmake\FindPackageHandleStandardArgs.cmake" />
     <None Include="cmake\FindPackageMessage.cmake" />
     <None Include="cmake\SelectLibraryConfigurations.cmake" />
+    <None Include="resources\shaders\entityColor.shader" />
+    <None Include="resources\shaders\entityTexture2D.shader" />
+    <None Include="resources\shaders\entityCubemap.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">

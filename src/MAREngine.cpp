@@ -44,11 +44,11 @@ namespace mar {
 			gui_layer->set(m_framebuffer);
 			gui_layer->set(&m_light);
 
-			m_stack.pushOverlay(gui_layer);
 			m_stack.pushLayer(camera_layer);
+			m_stack.pushOverlay(gui_layer);
 
 			editor::filesystem::loadSceneFromFile(m_pathLoad);
-			if (auto loaded = editor::filesystem::assignLoadedLayers(m_framebuffer))
+			if (auto loaded = editor::filesystem::assignLoadedLayers())
 				for (uint32_t i = 0; i < loaded->size(); i++) {
 					loaded->at(i)->set(&m_light);
 					gui_layer->submit(loaded->at(i)->getMesh());
@@ -62,7 +62,15 @@ namespace mar {
 				window::Window::getInstance().clearScreen();
 				graphics::RendererOpenGL::getStatistics().resetStatistics();
 
-				m_stack.update();
+				if (storage::usegui) {
+					m_framebuffer.bind();
+					m_framebuffer.clear();
+
+					m_stack.update();
+				}
+				else {
+					m_stack.update();
+				}
 
 				window::Window::getInstance().swapBuffers();
 			}

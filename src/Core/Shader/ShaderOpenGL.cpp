@@ -26,6 +26,12 @@ namespace mar {
 				break;
 			case ShaderType::CUBEMAP_WITHOUT_GUI: m_shaderPath = "resources/shaders/cubemapWithoutGUI.shader"; 
 				break;
+			case ShaderType::ENTITY_COLOR: m_shaderPath = "resources/shaders/entityColor.shader";
+				break;
+			case ShaderType::ENTITY_TEXTURE2D: m_shaderPath = "resources/shaders/entityTexture2D.shader";
+				break;
+			case ShaderType::ENTITY_CUBEMAP: m_shaderPath = "resources/shaders/entityCubemap.shader";
+				break;
 			}
 
 			m_id = 0;

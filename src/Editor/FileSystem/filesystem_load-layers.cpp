@@ -11,21 +11,21 @@ namespace mar {
 	namespace editor {
 
 
-		std::optional<std::vector<layers::MeshLayer*>> filesystem::assignLoadedLayers(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
+		std::optional<std::vector<layers::MeshLayer*>> filesystem::assignLoadedLayers() {
 			if (shouldLoadMeshes()) {
 				if (checkMeshEquality()) {
 					MAR_CORE_ERROR("Mesh Types size is not equal to mesh_count!");
 					return std::nullopt;
 				}
 
-				return loadMesh(framebuffer);
+				return loadMesh();
 			}
 
 			MAR_CORE_ERROR("Unsupported Data!");
 			return std::nullopt;
 		}
 
-		const std::vector<layers::MeshLayer*> filesystem::loadMesh(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
+		const std::vector<layers::MeshLayer*> filesystem::loadMesh() {
 			std::vector<layers::MeshLayer*> lay;
 
 			for (size_t i = 0; i < getMeshTypes().size(); i++) {
@@ -50,7 +50,6 @@ namespace mar {
 				}
 
 				layer->load();
-				layer->set(framebuffer);
 				lay.push_back(layer);
 			}
 

@@ -8,6 +8,7 @@
 
 #include "../mar.h"
 #include "Layer.h"
+#include "../Core/Light/Light.h"
 #include "../Core/Scene/Scene.h"
 #include "../Core/Scene/Entity/Entity.h"
 #include "../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
@@ -23,7 +24,6 @@ namespace mar {
 			const char* m_debugName;
 			ecs::Scene m_scene;
 			graphics::RendererOpenGL* m_renderer;
-			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 
 		public:
 			EntityLayer(const char* debugname)
@@ -38,11 +38,11 @@ namespace mar {
 
 			void closeLayer() override;
 
-			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
-				m_framebuffer = framebuffer;
-			}
-
+			// --- GET METHODS --- //
 			inline ecs::Scene& getScene() { return m_scene; }
+
+			// --- SET METHODS --- //
+			void set(graphics::Light* light);
 		};
 
 

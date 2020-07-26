@@ -13,7 +13,7 @@
 #include "../../Window/Window.h"
 #include "../../Core/Mesh/MeshCreator.h"
 #include "../../Core/Light/Light.h"
-#include "../../Core/Renderer/Renderer.h"
+#include "../../Core/Renderer/RendererOpenGL.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 

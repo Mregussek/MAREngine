@@ -15,7 +15,6 @@ namespace mar {
 			m_renderer = new graphics::RendererOpenGL();
 
 			m_mesh.create();
-			m_renderer->create();
 
 			MAR_CORE_INFO("MESH_LAYER: initialized");
 		}
@@ -26,36 +25,12 @@ namespace mar {
 			MAR_CORE_INFO("MESH_LAYER: loaded");
 		}
 
-		void MeshLayer::set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
-			m_framebuffer = framebuffer;
-
-			MAR_CORE_INFO("MESH_LAYER: framebuffer is set");
-		}
-
 		void MeshLayer::prepareFrame() {
-			if (storage::usegui) {
-				m_framebuffer.bind();
-				m_framebuffer.clear();
-				m_framebuffer.unbind();
 
-				MAR_CORE_TRACE("MESH_LAYER: cleared framebuffer");
-				return;
-			}
 		}
 
 		void MeshLayer::update() {
-			if (storage::usegui) {
-				m_framebuffer.bind();
-
-				m_renderer->draw(&m_mesh);
-
-				m_framebuffer.unbind();
-
-				MAR_CORE_TRACE("MESH_LAYER: Scene loaded to framebuffer");
-			}
-			else {
-				m_renderer->draw(&m_mesh);
-			}
+			m_renderer->draw(&m_mesh);
 		}
 
 		void MeshLayer::closeLayer() {

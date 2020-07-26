@@ -180,6 +180,7 @@
     <ClInclude Include="other\MARMaths\src\vec\vec2.h" />
     <ClInclude Include="other\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="other\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="src\Core\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\Scene\Component\Components.h" />
     <ClInclude Include="src\Core\Scene\Entity\Entity.h" />
     <ClInclude Include="src\Layers\CameraLayer.h" />
@@ -221,7 +222,7 @@
     <ClInclude Include="src\Core\Shader\ShaderOpenGL.h" />
     <ClInclude Include="src\Core\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.h" />
     <ClInclude Include="src\mar.h" />
-    <ClInclude Include="src\Core\Renderer\Renderer.h" />
+    <ClInclude Include="src\Core\Renderer\RendererOpenGL.h" />
     <ClInclude Include="src\Core\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.h" />
     <ClInclude Include="src\Core\Renderer\Buffers\VertexArray\VertexArrayOpenGL.h" />
     <ClInclude Include="src\Core\Renderer\Buffers\VertexBuffer\VertexBufferLayoutOpenGL.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="other\MARMaths\src\vec\vec2.cpp" />
     <ClCompile Include="other\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="other\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="src\Core\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\FileSystem\filesystem_update.cpp" />
     <ClCompile Include="src\Editor\FileSystem\filesystem_load-layers.cpp" />
@@ -263,7 +265,7 @@
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
     <ClCompile Include="src\Core\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.cpp" />
-    <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Core\Renderer\RendererOpenGL.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\VertexArray\VertexArrayOpenGL.cpp" />
     <ClCompile Include="src\Window\callbacks.cpp" />
@@ -295,6 +297,9 @@
     <None Include="resources\shaders\basicWithoutGUI.shader" />
     <None Include="resources\shaders\cubemap.shader" />
     <None Include="resources\shaders\cubemapWithoutGUI.shader" />
+    <None Include="resources\shaders\entityColor.shader" />
+    <None Include="resources\shaders\entityCubemap.shader" />
+    <None Include="resources\shaders\entityTexture2D.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\cmake_generate.jpg" />

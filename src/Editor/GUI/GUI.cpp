@@ -61,6 +61,8 @@ namespace mar {
 		}
 
 		void GUI::display() {
+			m_framebuffer.unbind();
+
 			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
 			ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;

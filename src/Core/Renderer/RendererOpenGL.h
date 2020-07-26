@@ -85,7 +85,6 @@ namespace mar {
 		public:
 			RendererOpenGL() = default;
 
-			void create();
 			void close();
 
 			void initialize(const std::vector<uint32_t>& layout, const ShaderType type);
@@ -97,8 +96,6 @@ namespace mar {
 			void updateGUIData();
 			void updateCameraData();
 			void updateLightData(Light* light);
-
-			void updateSceneData(ecs::Scene* scene);
 
 		public:
 			// --- SET METHODS --- //

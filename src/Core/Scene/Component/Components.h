@@ -13,40 +13,32 @@ namespace mar {
 	namespace ecs {
 
 
-		struct IdentifierComponent {
-			float id{ 0.f };
-			std::string name{ "empty" };
+		struct TagComponent {
+			std::string tag{ "empty" };
 
-			IdentifierComponent() = default;
-			IdentifierComponent(const IdentifierComponent& id) = default;
-			IdentifierComponent(float i, std::string n)
-				: id(i),
-				name(n)
+			TagComponent() = default;
+			TagComponent(const TagComponent& id) = default;
+			TagComponent(std::string t)
+				: tag(t)
 			{}
 
-			operator float() { return id; }
-			operator const float() const { return id; }
-
-			operator std::string() { return name; }
-			operator const std::string() const { return name; }
+			operator std::string&() { return tag; }
+			operator const std::string&() const { return tag; }
 		};
 
 		struct RenderableComponent {
 			std::vector<float> vertices;
 			std::vector<uint32_t> indices;
-			std::vector<uint32_t> layout;
-			uint32_t stride;
 
 			RenderableComponent() = default;
 			RenderableComponent(const RenderableComponent& ren) = default;
-			RenderableComponent(const std::vector<float>& ver, const std::vector<uint32_t>& ind,
-								const std::vector<uint32_t>& lay, const uint32_t& str)
+			RenderableComponent(const std::vector<float>& ver, const std::vector<uint32_t>& ind)
 				: vertices(ver),
-				indices(ind),
-				layout(lay),
-				stride(str)
+				indices(ind)
 			{}
 
+			operator const std::vector<float>&() const { return vertices; }
+			operator const std::vector<uint32_t>&() const { return indices; }
 		};
 
 		struct TransformComponent {
@@ -62,12 +54,11 @@ namespace mar {
 				: transform(mat) 
 			{}
 
-			operator maths::mat4() { return transform; }
-			operator const maths::mat4() const { return transform; }
+			operator maths::mat4&() { return transform; }
+			operator const maths::mat4&() const { return transform; }
 		};
 
 		struct ColorComponent {
-			float id{ 0.f };
 			maths::vec3 color{ 0.5f, 0.5f, 0.5f };
 
 			ColorComponent() = default;
@@ -76,23 +67,36 @@ namespace mar {
 				: color(col)
 			{}
 
-			operator maths::vec3() { return color; }
-			operator const maths::vec3() const { return color; }
+			operator maths::vec3&() { return color; }
+			operator const maths::vec3&() const { return color; }
 		};
 
-		struct TextureComponent {
-			float id{ 0.f };
+		struct Texture2DComponent {
 			std::string texture{ "empty" };
 
-			TextureComponent() = default;
-			TextureComponent(const TextureComponent& tex) = default;
-			TextureComponent(const std::string& tex)
+			Texture2DComponent() = default;
+			Texture2DComponent(const Texture2DComponent& tex) = default;
+			Texture2DComponent(const std::string& tex)
 				: texture(tex)
 			{}
 
-			operator std::string() { return texture; }
-			operator const std::string() const { return texture; }
+			operator std::string&() { return texture; }
+			operator const std::string&() const { return texture; }
 		};
+
+		struct TextureCubemapComponent {
+			std::string cubemap{ "empty" };
+
+			TextureCubemapComponent() = default;
+			TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
+			TextureCubemapComponent(const std::string& cub)
+				: cubemap(cub)
+			{}
+
+			operator std::string&() { return cubemap; }
+			operator const std::string&() const { return cubemap; }
+		};
+
 
 } }
 

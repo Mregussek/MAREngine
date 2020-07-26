@@ -48,6 +48,13 @@ namespace mar {
 				return m_scene->m_registry.get<T>(m_entityHandle);
 			}
 
+			template<typename T, typename... Args>
+			T& updateComponent(Args&&... args) {
+				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
+
+				return m_scene->m_registry.patch<T>(m_entityHandle, std::forward<Args>(args)...);
+			}
+
 			template<typename T>
 			void removeComponent() {
 				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
@@ -56,7 +63,7 @@ namespace mar {
 			}
 
 			operator bool() const {
-				return (uint32_t)m_entityHandle != 0;
+				return m_scene->m_registry.valid(m_entityHandle);
 			}
 		};
 
