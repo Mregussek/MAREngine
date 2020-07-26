@@ -4,174 +4,49 @@
  */
 
 #include "Scene.h"
+#include "Entity/Entity.h"
 
 namespace mar {
-	namespace graphics {
+	namespace ecs {
 
 
-		void Scene::createDefault() {
-			m_shapes = {
-				MeshCreator::createCube()
-				, MeshCreator::createCube()
-				, MeshCreator::createPyramid()
-				, MeshCreator::createSurface()
-				, MeshCreator::createWall()
-				, MeshCreator::createCube()
-				, MeshCreator::createPyramid()
-				, MeshCreator::createCube()
-				, MeshCreator::createWall()
-			};
-			m_centers = {
-				{ -2.0f,  0.0f,  -4.0f }
-				, { -2.0f,  2.0f, -4.0f }
-				, {  3.5f,  0.0f, -5.5f }
-				, {  0.0f,  -0.025f,  0.0f }
-				, { -10.0f,  0.0f,  0.0f }
-				, { -7.5f,  0.0f, -7.5f }
-				, { -5.5f,  0.0f, -6.5f }
-				, {  1.25f,  0.0f,  -6.5f }
-				, { -0.5f,  0.0f,  -10.5f }
-			};
-			m_angles = {
-				 { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 90.0f, 0.0f }
-			};
-			m_scales = {
-				{ 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-			};
-			m_textures = {
-				TexturePaths::empty
-				, TexturePaths::mrTex
-				, TexturePaths::blueTex
-				, TexturePaths::grassTex
-				, TexturePaths::wallTex
-				, TexturePaths::empty
-				, TexturePaths::empty
-				, TexturePaths::blackTex
-				, TexturePaths::wallTex
-			};
+		Scene::Scene() {
+
 		}
 
-		void Scene::createSecondMesh() {
-			m_shapes = {
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube() ,
-				MeshCreator::createCube()
-			};
-			m_centers = {
-				{ 5.0f,  0.0f, -2.0f } ,
-				{ 7.0f,  0.0f, -2.0f } ,
-				{ 9.0f,  0.0f, -2.0f } ,
-				{ 11.0f, 0.0f, -2.0f } ,
-				{ 5.0f,  2.0f, -2.0f } ,
-				{ 7.0f,  2.0f, -2.0f } ,
-				{ 9.0f,  2.0f, -2.0f } ,
-				{ 11.0f, 2.0f, -2.0f } ,
-				{ 13.0f, 0.0f, -2.0f } ,
-				{ 13.0f, 0.0f, -4.0f } ,
-				{ 13.0f, 2.0f, -4.0f } ,
-			};
-			m_angles = {
-				 { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-				 , { 0.0f, 0.0f, 0.0f }
-			};
-			m_scales = {
-				{ 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 1.0f, 1.0f, 1.0f }
-			};
-			m_textures = {
-				TexturePaths::mc_dirt ,
-				TexturePaths::mc_dirt ,
-				TexturePaths::mc_dirt ,
-				TexturePaths::mc_dirt ,
-				TexturePaths::mc_grass ,
-				TexturePaths::mc_grass ,
-				TexturePaths::mc_cobble ,
-				TexturePaths::mc_cobble ,
-				TexturePaths::mc_cobble ,
-				TexturePaths::mc_diamond ,
-				TexturePaths::mc_diamond
-			};
+		Scene::~Scene() {
+
 		}
 
-		void Scene::createObjects() {
-			m_shapes = {
-				MeshCreator::createEmptyShape() 
-				, MeshCreator::createEmptyShape() 
-				, MeshCreator::createEmptyShape() 
-				, MeshCreator::createEmptyShape() 
-			};
-			m_centers = {
-				{  0.0f, -1.8f, -2.0f } ,
-				{ -2.0f,  0.0f,  1.0f } ,
-				{ -8.0f, -2.8f, -8.0f } ,
-				{ -6.5f,  0.0f, -4.0f } ,
-			};
-			m_angles = {
-				{ 270.f,   0.f, 90.f } ,
-				{ 270.f,   0.f,  0.f } ,
-				{   0.f,  90.f,  0.f } ,
-				{   0.f,  90.f,  0.f }
-			};
-			m_scales = {
-				{ 0.3f, 0.3f, 0.3f }
-				, { 1.0f, 1.0f, 1.0f }
-				, { 0.5f, 0.5f, 0.5f }
-				, { 0.5f, 0.5f, 0.5f }
-			};
-			m_textures = {
-				TexturePaths::empty ,
-				TexturePaths::empty ,
-				TexturePaths::empty ,
-				TexturePaths::empty 
-			};
-			m_obj = {
-				"resources/objects/lego-human.obj" 
-				, "resources/objects/monkey.obj" 
-				, "resources/objects/m4.obj"
-				, "resources/objects/deagle.obj"
-			};
+		Entity Scene::createEntity() {
+			Entity entity{ m_registry.create(), this };
+			entity.addComponent<IdentifierComponent>();
+			entity.addComponent<TransformComponent>();
+
+
+
+			return entity;
+		}
+
+		void Scene::update() {
+			m_vertices.clear();
+			m_indices.clear();
+			m_samplers.clear();
+			m_transforms.clear();
+			m_colors.clear();
+
+			for (auto& entity : m_entities) {
+				auto& tran = entity.getComponent<TransformComponent>();
+				m_transforms.push_back(tran);
+
+				auto& col = entity.getComponent<ColorComponent>();
+				m_colors.push_back(col);
+				m_samplers.push_back(0);
+
+				auto& ren = entity.getComponent<RenderableComponent>();
+				m_vertices.insert(m_vertices.end(), ren.vertices.begin(), ren.vertices.end());
+				m_indices.insert(m_indices.end(), ren.indices.begin(), ren.indices.end());
+			}
 		}
 
 

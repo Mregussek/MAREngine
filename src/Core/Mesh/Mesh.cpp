@@ -36,37 +36,6 @@ namespace mar {
 			MAR_CORE_INFO("MESH: Mesh has been created!");
 		}
 
-		void Mesh::loadScene(Scene* scene, MeshType type) {
-			uint32_t shapesInSceneCount = scene->getShapesNumber();
-			setMeshType(type);
-
-			switch(m_type) {
-			case MeshType::NORMAL:
-			case MeshType::CUBEMAPS:
-				for (uint32_t i = 0; i < shapesInSceneCount; i++)
-					submitShape(scene->getShape(i), scene->getCenter(i), scene->getAngle(i), 
-						scene->getScale(i), scene->getTexture(i));
-					
-				MAR_CORE_INFO("MESH: Scene has been loaded by textures!");
-
-				break;
-			case MeshType::OBJECTS:
-				for (uint32_t i = 0; i < shapesInSceneCount; i++) {
-					auto shape = scene->getShape(i);
-					shape->assignDataFromFile(scene->getObjPath(i));
-
-					submitShape(shape, scene->getCenter(i), scene->getAngle(i), 
-						scene->getScale(i), scene->getTexture(i));
-				}
-					
-				MAR_CORE_INFO("MESH: Scene has been loaded by objects!");
-
-				break;
-			default:
-				MAR_CORE_ERROR("MESH: Unsupported mesh type!");
-			}
-		}
-
 		void Mesh::tryReuseShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture) {
 			if (!canPushShape(new_shape)) {
 				MAR_CORE_ERROR("MESH: Cannot push more shapes!");
@@ -217,7 +186,7 @@ namespace mar {
 
 			for (uint32_t i = index; i < m_shapesCount - 1; i++) {
 				if (m_samplers[i + 1] != 0) {
-					m_samplers[i] = m_availableTextureID;
+					m_samplers[i] = (int)m_availableTextureID;
 					m_availableTextureID++;
 				}
 				else {
@@ -269,7 +238,7 @@ namespace mar {
 			if (m_samplers[index] == 0) {
 				for (uint32_t i = index + 1; i < m_shapesCount; i++)
 					if (m_samplers[i] != 0) {
-						m_availableTextureID = m_samplers[i];
+						m_availableTextureID = (float)m_samplers[i];
 						break;
 					}
 			}
@@ -277,7 +246,7 @@ namespace mar {
 				if (index == 0)
 					m_availableTextureID = 1;
 				else 
-					m_availableTextureID = m_samplers[0] == 1 ? index + 1 : index;
+					m_availableTextureID = m_samplers[0] == 1 ? (float)index + 1 : (float)index;
 			}
 		}
 

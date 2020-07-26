@@ -13,7 +13,6 @@ namespace mar {
 
 		int filesystem::s_mesh_count{ -1 };
 		int filesystem::s_scene_count{ -1 };
-		std::vector<graphics::SceneType> filesystem::s_scene_type;
 		std::vector<graphics::MeshType> filesystem::s_mesh_type;
 		std::vector<std::vector<Ref<graphics::Shape>>> filesystem::s_shapes;
 		std::vector<std::vector<maths::vec3>> filesystem::s_centers;
@@ -111,7 +110,6 @@ namespace mar {
 			std::vector<layers::MeshLayer*> loaded_layers;
 			s_mesh_count = -1;
 			s_scene_count = -1;
-			s_scene_type.clear();
 			s_mesh_type.clear();
 			s_shapes.clear();
 			s_centers.clear();
@@ -196,26 +194,6 @@ namespace mar {
 						ss >> sinput;
 						s_objs[s_mesh_count].push_back(sinput);
 					}
-				}
-				/* DEFAULT SCENE LOADERS (from engine code) */
-				else if (line.find("#scene_id") != std::string::npos) {
-					s_scene_count++;
-				}
-				else if (line.find("#scene_type") != std::string::npos) {
-					if (line.find("default") != std::string::npos)
-						s_scene_type.push_back(DEFAULT_SCENE);
-					else if (line.find("cubemaps") != std::string::npos)
-						s_scene_type.push_back(CUBEMAPS_SCENE);
-					else if (line.find("objects") != std::string::npos)
-						s_scene_type.push_back(OBJECTS_SCENE);
-				}
-				else if (line.find("#scene_mesh") != std::string::npos) {
-					if (line.find("normal") != std::string::npos)
-						s_mesh_type.push_back(NORMAL_MESH_TYPE);
-					else if (line.find("cubemaps") != std::string::npos)
-						s_mesh_type.push_back(CUBEMAPS_MESH_TYPE);
-					else if (line.find("objects") != std::string::npos)
-						s_mesh_type.push_back(OBJECTS_MESH_TYPE);
 				}
 			}
 			/// ------- END READING LOOP FROM FILE ------- ///

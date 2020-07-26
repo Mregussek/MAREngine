@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\entt\include;$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)other\entt\include;$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -180,7 +180,10 @@
     <ClInclude Include="other\MARMaths\src\vec\vec2.h" />
     <ClInclude Include="other\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="other\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="src\Core\Scene\Component\Components.h" />
+    <ClInclude Include="src\Core\Scene\Entity\Entity.h" />
     <ClInclude Include="src\Layers\CameraLayer.h" />
+    <ClInclude Include="src\Layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Window\callbacks.h" />
     <ClInclude Include="src\Window\Input.h" />
@@ -241,6 +244,7 @@
     <ClCompile Include="src\Editor\FileSystem\filesystem_update.cpp" />
     <ClCompile Include="src\Editor\FileSystem\filesystem_load-layers.cpp" />
     <ClCompile Include="src\Editor\FileSystem\filesystem_save-load-scene.cpp" />
+    <ClCompile Include="src\Layers\EntityLayer.cpp" />
     <ClCompile Include="src\Layers\GUILayer.cpp" />
     <ClCompile Include="src\Layers\MeshLayer.cpp" />
     <ClCompile Include="main.cpp" />

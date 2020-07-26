@@ -3,83 +3,52 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef MAR_ENGINE_SCENE_H
+#define MAR_ENGINE_SCENE_H
 
 #include "../../mar.h"
-#include "../Mesh/MeshCreator.h"
+#include "Component/Components.h"
+
 
 namespace mar {
-	namespace graphics {
+	namespace ecs {
+
+		class Entity;
 
 
-		enum class SceneType {
-			DEFAULT,
-			CUBEMAPS,
-			OBJECTS
-		};
-
-		/*!
-			Scene
-
-			Scene contains everything needed to create basic and default scene
-			on start of MAREngine.
-		*/
 		class Scene {
-			std::vector<Ref<Shape>> m_shapes;
-			std::vector<maths::vec3> m_centers;
-			std::vector<maths::vec3> m_angles;
-			std::vector<maths::vec3> m_scales;
-			std::vector<const char*> m_textures;
-			std::vector<const char*> m_obj;
+			friend class Entity;
+
+			entt::registry m_registry;
+
+			std::vector<Entity> m_entities;
+
+			std::vector<float> m_vertices;
+			std::vector<uint32_t> m_indices;
+			std::vector<int32_t> m_samplers;
+			std::vector<maths::mat4> m_transforms;
+			std::vector<maths::vec3> m_colors;
 
 		public:
-			Scene() = default;
-			Scene(SceneType type) { initializeScene(type); }
+			Scene();
+			~Scene();
 
-			void initializeScene(SceneType type) {
-				switch (type) {
-				case SceneType::DEFAULT:  
-					createDefault();					break;
-				case SceneType::CUBEMAPS: 	
-					createSecondMesh();					break;	
-				case SceneType::OBJECTS:
-					createObjects();					break;
-				default:
-					createDefault();
-				}
-			}
+			void update();
 
-		private:
-			void createDefault();
-			void createSecondMesh();
-			void createObjects();
+			Entity createEntity();
 
-		public:
-			inline std::vector<Ref<Shape>> getShapes() { return m_shapes; }
-			inline std::vector<maths::vec3> getCenters() { return m_centers; }
-			inline std::vector<maths::vec3> getAngles() { return m_angles; }
-			inline std::vector<maths::vec3> getScales() { return m_scales; }
-			inline std::vector<const char*> getTextures() { return m_textures; }
-			inline std::vector<const char*> getObjPaths() { return m_obj; }
+			// --- GET METHODS --- //
+			inline const std::vector<float>& getVertices() const { return m_vertices; }
+			inline const std::vector<uint32_t>& getIndices() const { return m_indices; }
+			inline const std::vector<maths::mat4>& getTransforms() const { return m_transforms; }
+			inline const std::vector<int32_t>& getSamplers() const { return m_samplers; }
+			inline const std::vector<maths::vec3>& getColors() const { return m_colors; }
 
-			inline const uint32_t getShapesNumber() { return m_shapes.size(); }
-
-			inline Ref<Shape>& getShape(const uint32_t& index) { return m_shapes[index]; }
-			inline maths::vec3& getCenter(const uint32_t& index) { return m_centers[index]; }
-			inline maths::vec3& getAngle(const uint32_t& index) { return m_angles[index]; }
-			inline maths::vec3& getScale(const uint32_t& index) { return m_scales[index]; }
-			inline const char* getTexture(const uint32_t& index) { return m_textures[index]; }
-			inline const char* getObjPath(const uint32_t& index) { return m_obj[index]; }
+			inline const uint32_t& getEntitiesCount() const { return (uint32_t) m_registry.size(); }
 		};
 
 
 } }
 
 
-#define DEFAULT_SCENE ::mar::graphics::SceneType::DEFAULT
-#define CUBEMAPS_SCENE ::mar::graphics::SceneType::CUBEMAPS
-#define OBJECTS_SCENE ::mar::graphics::SceneType::OBJECTS
-
-
-#endif // !SCENE_H
+#endif // !MAR_ENGINE_SCENE_H

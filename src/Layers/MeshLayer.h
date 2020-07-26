@@ -30,7 +30,6 @@ namespace mar {
 			MeshLayer(const char* name) : m_debugName(name) { }
 
 			void initialize();
-			void scene(graphics::SceneType scenetype, graphics::MeshType meshtype);
 			void load();
 
 			// --- OVERLOADED METHODS --- //

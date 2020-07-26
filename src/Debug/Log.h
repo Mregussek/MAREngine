@@ -68,46 +68,53 @@ namespace mar {
 		
 } }
 
+
 #ifdef MAR_ENGINE_DEBUG_MODE
 
-#define ASSERT(x) if(!(x)) __debugbreak()
+    #define ASSERT(x) if(!(x)) __debugbreak()
+    
+    #define MAR_LOG_INIT() ::mar::debug::Log::init()
+    
+    #define MAR_CORE_TRACE(...) ::mar::debug::Log::getCoreLogger()->trace(__VA_ARGS__)
+    #define MAR_CORE_INFO(...)  ::mar::debug::Log::getCoreLogger()->info(__VA_ARGS__)
+    #define MAR_CORE_WARN(...)  ::mar::debug::Log::getCoreLogger()->warn(__VA_ARGS__)
+    #define MAR_CORE_ERROR(...) ::mar::debug::Log::getCoreLogger()->error(__VA_ARGS__)
+    
+    #define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::CheckGLError(__FILE__, __LINE__) 
+    
+    #define MAR_TRACE(...) ::mar::debug::Log::getClientLogger()->trace(__VA_ARGS__)
+    #define MAR_INFO(...)  ::mar::debug::Log::getClientLogger()->info(__VA_ARGS__)
+    #define MAR_WARN(...)  ::mar::debug::Log::getClientLogger()->warn(__VA_ARGS__)
+    #define MAR_ERROR(...) ::mar::debug::Log::getClientLogger()->error(__VA_ARGS__)
 
-#define MAR_LOG_INIT() ::mar::debug::Log::init()
+    #define MAR_CORE_ASSERT(x, msg) ASSERT(x);\
+                                    MAR_CORE_ERROR(msg)
+    
+    #define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::chernoClear();\
+                                x;\
+                                ASSERT(::mar::debug::Log::chernoCheck(#x, __FILE__, __LINE__))
 
-#define MAR_CORE_TRACE(...) ::mar::debug::Log::getCoreLogger()->trace(__VA_ARGS__)
-#define MAR_CORE_INFO(...)  ::mar::debug::Log::getCoreLogger()->info(__VA_ARGS__)
-#define MAR_CORE_WARN(...)  ::mar::debug::Log::getCoreLogger()->warn(__VA_ARGS__)
-#define MAR_CORE_ERROR(...) ::mar::debug::Log::getCoreLogger()->error(__VA_ARGS__)
-
-#define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::CheckGLError(__FILE__, __LINE__) 
-
-#define MAR_TRACE(...) ::mar::debug::Log::getClientLogger()->trace(__VA_ARGS__)
-#define MAR_INFO(...)  ::mar::debug::Log::getClientLogger()->info(__VA_ARGS__)
-#define MAR_WARN(...)  ::mar::debug::Log::getClientLogger()->warn(__VA_ARGS__)
-#define MAR_ERROR(...) ::mar::debug::Log::getClientLogger()->error(__VA_ARGS__)
-
-
-#define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::chernoClear();\
-                            x;\
-                            ASSERT(::mar::debug::Log::chernoCheck(#x, __FILE__, __LINE__))
 #else
-#define ASSERT(x)
 
-#define MAR_LOG_INIT()
+    #define ASSERT(x)
+    #define MAR_CORE_ASSERT(x)
+    
+    #define MAR_LOG_INIT()
+    
+    #define MAR_CORE_TRACE(...) 
+    #define MAR_CORE_INFO(...)  
+    #define MAR_CORE_WARN(...)  
+    #define MAR_CORE_ERROR(...) 
+    
+    #define MAR_CORE_CHECK_FOR_ERROR()  
+    
+    #define MAR_TRACE(...) 
+    #define MAR_INFO(...)  
+    #define MAR_WARN(...)  
+    #define MAR_ERROR(...) 
+    
+    #define MAR_CORE_GL_FUNC(x) x;
 
-#define MAR_CORE_TRACE(...) 
-#define MAR_CORE_INFO(...)  
-#define MAR_CORE_WARN(...)  
-#define MAR_CORE_ERROR(...) 
-
-#define MAR_CORE_CHECK_FOR_ERROR()  
-
-#define MAR_TRACE(...) 
-#define MAR_INFO(...)  
-#define MAR_WARN(...)  
-#define MAR_ERROR(...) 
-
-#define MAR_CORE_GL_FUNC(x) x;
 #endif
 
 #endif // !MAR_ENGINE_LOG_H

@@ -10,7 +10,6 @@
 #include "../../Debug/Log.h"
 #include "../../Layers/MeshLayer.h"
 #include "../../Core/Mesh/Mesh.h"
-#include "../../Core/Scene/Scene.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
@@ -25,7 +24,6 @@ namespace mar {
 			static std::vector<std::string> s_marfiles;
 			static std::vector<std::string> s_texturefiles;
 			// --- Loading scene from file
-			static std::vector<graphics::SceneType> s_scene_type;
 			static std::vector<graphics::MeshType> s_mesh_type;
 			static std::vector<std::vector<Ref<graphics::Shape>>> s_shapes;
 			static std::vector<std::vector<maths::vec3>> s_centers;
@@ -46,7 +44,6 @@ namespace mar {
 			
 			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
 			static const std::vector<layers::MeshLayer*> loadMesh(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
-			static const std::vector<layers::MeshLayer*> loadScene(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer);
 
 			// --- GET METHODS --- //
 			inline static std::vector<std::string>& getMarFiles() { return s_marfiles; }
@@ -54,7 +51,6 @@ namespace mar {
 
 			inline static int& getMeshCount() { return s_mesh_count; }
 			inline static int& getSceneCount() { return s_scene_count; }
-			inline static std::vector<graphics::SceneType>& getSceneTypes() { return s_scene_type; }
 			inline static std::vector<graphics::MeshType>& getMeshTypes() { return s_mesh_type; }
 			inline static std::vector<std::vector<Ref<graphics::Shape>>>& getShapes() { return s_shapes; }
 			inline static std::vector<std::vector<maths::vec3>>& getCenters() { return s_centers; }
@@ -65,9 +61,7 @@ namespace mar {
 			inline static std::vector<std::vector<std::string>>& getObjs() { return s_objs; }
 
 			inline static bool shouldLoadMeshes() { return s_mesh_count != -1; }
-			inline static bool shouldLoadScene() { return s_scene_count != -1; }
 			inline static bool checkMeshEquality() { return getMeshCount() + 1 != getMeshTypes().size(); }
-			inline static bool checkSceneEquality() { return getMeshTypes().size() != getSceneTypes().size(); }
 		};
 
 	}

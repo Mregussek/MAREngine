@@ -7,8 +7,9 @@
 #define MAR_ENGINE_MESH_H
 
 #include "../../mar.h"
+#include "MeshCreator.h"
 #include "Shapes/Shapes.h"
-#include "../Scene/Scene.h"
+#include "Shapes/ShapeManipulator.h"
 #include "Texture/TextureOpenGL.h"
 #include "Texture/Texture.h"
 #include "../Light/Light.h"
@@ -59,7 +60,6 @@ namespace mar {
 			virtual ~Mesh();
 
 			void create();
-			void loadScene(Scene* scene, MeshType type);
 
 			void tryReuseShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture);
 			void submitShape(Ref<Shape>& new_shape, const maths::vec3& center, const maths::vec3& angle, const maths::vec3& scale, const char* texture);

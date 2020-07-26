@@ -4,6 +4,7 @@
  */
 
 #include "MAREngine.h"
+#include "Core/Scene/Scene.h"
 
 
 namespace mar {

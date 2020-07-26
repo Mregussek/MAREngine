@@ -20,13 +20,6 @@ namespace mar {
 			MAR_CORE_INFO("MESH_LAYER: initialized");
 		}
 
-		void MeshLayer::scene(graphics::SceneType scenetype, graphics::MeshType meshtype) {
-			m_mesh.loadScene(&graphics::Scene(scenetype), meshtype);
-			m_renderer->initialize(m_mesh.getLayout(), getShaderType(meshtype));
-
-			MAR_CORE_INFO("MESH_LAYER: loaded scene");
-		}
-
 		void MeshLayer::load() {
 			m_renderer->initialize(m_mesh.getLayout(), getShaderType(m_mesh.getMeshType()));
 

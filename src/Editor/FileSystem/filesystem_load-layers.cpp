@@ -21,15 +21,6 @@ namespace mar {
 				return loadMesh(framebuffer);
 			}
 
-			if (shouldLoadScene()) {
-				if (checkSceneEquality()) {
-					MAR_CORE_ERROR("Loaded types of mesh are not equal to the size of scene types size!");
-					return std::nullopt;
-				}
-
-				return loadScene(framebuffer);
-			}
-
 			MAR_CORE_ERROR("Unsupported Data!");
 			return std::nullopt;
 		}
@@ -64,22 +55,6 @@ namespace mar {
 			}
 
 			MAR_CORE_INFO("Scene is loaded from meshes!");
-
-			return lay;
-		}
-
-		const std::vector<layers::MeshLayer*> filesystem::loadScene(graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) {
-			std::vector<layers::MeshLayer*> lay;
-
-			for (uint32_t i = 0; i < getMeshTypes().size(); i++) {
-				auto layer = new layers::MeshLayer("Mesh Layer");
-				layer->initialize();
-				layer->scene(getSceneTypes()[i], getMeshTypes()[i]);
-				layer->set(framebuffer);
-				lay.push_back(layer);
-			}
-
-			MAR_CORE_INFO("Default scene is being loaded!");
 
 			return lay;
 		}

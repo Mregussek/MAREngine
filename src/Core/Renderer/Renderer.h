@@ -98,6 +98,8 @@ namespace mar {
 			void updateCameraData();
 			void updateLightData(Light* light);
 
+			void updateSceneData(ecs::Scene* scene);
+
 		public:
 			// --- SET METHODS --- //
 			static void setLight(Light* light) { s_light = light; }

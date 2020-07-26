@@ -15,6 +15,7 @@
 #include "Layers/GUILayer.h"
 #include "Layers/MeshLayer.h"
 #include "Layers/CameraLayer.h"
+#include "Layers/EntityLayer.h"
 // Rendering
 #include "Core/Light/Light.h"
 #include "Core/Mesh/Mesh.h"

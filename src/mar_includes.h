@@ -7,6 +7,10 @@
  // Comment if release mode
 #define MAR_ENGINE_DEBUG_MODE
 
+// Solve std::min / std::max error on windows
+#ifndef NOMINMAX
+	#define NOMINMAX
+#endif
 
 // --- Include OpenGL Libs --- //
 #if __has_include(<GL/glew.h>)
@@ -23,7 +27,7 @@
 	#include <GLFW/glfw3.h>
 	#define MAR_ENGINE_GLFW_LIB_IMPORTED
 #else
-	#error
+	#error "MAR ENGINE: Cannot import GLFW/glfw3.h!"
 #endif
 
 // --- Include other third-party libraries --- //
@@ -69,6 +73,13 @@
 	#define MAR_ENGINE_SPDLOG_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import spdlog/spdlog.h!"
+#endif
+
+#if __has_include("entt/entt.hpp")
+	#include "entt/entt.hpp"
+	#define MAR_ENGINE_ENTT_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import entt/entt.hpp!"
 #endif
 
 #pragma warning (pop)
