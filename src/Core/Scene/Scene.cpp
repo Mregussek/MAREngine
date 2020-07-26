@@ -16,7 +16,7 @@ namespace mar {
 		}
 
 		Scene::~Scene() {
-
+			clear();
 		}
 
 		Entity Scene::createEntity() {
@@ -25,7 +25,6 @@ namespace mar {
 			entity.addComponent<TagComponent>();
 			entity.addComponent<RenderableComponent>();
 			entity.addComponent<TransformComponent>();
-			entity.addComponent<ColorComponent>();
 
 			return entity;
 		}

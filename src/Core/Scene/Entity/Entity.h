@@ -16,7 +16,7 @@ namespace mar {
 
 
 		class Entity {
-			entt::entity m_entityHandle{ 0 };
+			entt::entity m_entityHandle{ entt::null };
 			Scene* m_scene{ nullptr };
 
 		public:

@@ -22,6 +22,7 @@
 #include "Core/Scene/Scene.h"
 #include "Core/Camera/Camera.h"
 #include "Core/Renderer/RendererOpenGL.h"
+#include "Core/Renderer/RendererEntity.h"
 // Window && Input
 #include "Window/Input.h"
 #include "Window/Window.h"

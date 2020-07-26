@@ -55,6 +55,25 @@ namespace mar {
 					m_stack.pushLayer(loaded->at(i));
 				}
 
+			ecs::Scene scene;
+			auto entity = scene.createEntity();
+
+			auto& ren = entity.getComponent<ecs::RenderableComponent>();
+			ren.vertices = graphics::MeshCreator::getVertices();
+			ren.indices = graphics::MeshCreator::getIndices();
+
+			auto& tran = entity.getComponent<ecs::TransformComponent>();
+			tran.scale = maths::mat4::scale({ 1.f, 1.f, 1.f });
+			tran.translation = maths::mat4::translation({0.f, 2.f, 1.f});
+			tran.rotation = maths::mat4::rotation(maths::Trig::toRadians(65.f), {1.f, 0.f, 0.f});
+			tran = tran.scale * tran.translation * tran.rotation;
+
+			entity.addComponent<ecs::ColorComponent>(maths::vec3{0.2f, 0.5f, 0.2f});
+
+			graphics::RendererEntity entrenderer;
+			entrenderer.initialize();
+			entrenderer.setMVP(&graphics::Camera::getCameraData().mvp);
+
 			//////////////////////////////////////////////////////
 			// --------------- RENDER LOOP -------------------- //
 			while (window::Window::getInstance().shouldClose() && !m_shouldRestart) 
@@ -65,6 +84,10 @@ namespace mar {
 				if (storage::usegui) {
 					m_framebuffer.bind();
 					m_framebuffer.clear();
+
+					entrenderer.submit(entity);
+					entrenderer.update();
+					entrenderer.clear();
 
 					m_stack.update();
 				}
@@ -77,6 +100,7 @@ namespace mar {
 			// --------------- RENDER LOOP -------------------- //
 			//////////////////////////////////////////////////////
 
+			entrenderer.close();
 			m_framebuffer.close();
 			m_stack.close();
 		}

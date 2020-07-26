@@ -53,7 +53,7 @@ namespace mar {
                 };
             }
             
-            static std::vector<float> getIndices() {
+            static std::vector<uint32_t> getIndices() {
                 return {
                     // front	// back
                     0, 1, 2,	7, 6, 5,
