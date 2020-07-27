@@ -60,11 +60,11 @@ namespace mar {
 			// --- SET METHODS --- //
 			static void enableInput() { 
 				s_useInput = true; 
-				MAR_CORE_TRACE("INPUT: enabled!");
+				MAR_CORE_INFO("INPUT: enabled!");
 			}
 			static void disableInput() { 
 				s_useInput = false; 
-				MAR_CORE_TRACE("INPUT: disabled!");
+				MAR_CORE_INFO("INPUT: disabled!");
 			}
 		};
 

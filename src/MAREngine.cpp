@@ -67,15 +67,15 @@ namespace mar {
 				auto& tag = entity.getComponent<ecs::TagComponent>();
 				tag = std::string("First Entity");
 
-				auto& ren = entity.getComponent<ecs::RenderableComponent>();
-				ren.vertices = graphics::MeshCreator::getVertices_Cube();
-				ren.indices = graphics::MeshCreator::getIndices_Cube();
-
 				auto& tran = entity.getComponent<ecs::TransformComponent>();
 				tran.scale = { 1.f, 1.f, 1.f };
 				tran.angles = { 65.f, 0.f, 0.f };
 				tran.center = { 0.f, 2.f, 1.f };
 				ecs::System::handleTransformComponent(tran);
+
+				auto& ren = entity.addComponent<ecs::RenderableComponent>();
+				ren.vertices = graphics::MeshCreator::getVertices_Cube();
+				ren.indices = graphics::MeshCreator::getIndices_Cube();
 
 				entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.2f, 0.5f, 0.2f });
 			}
@@ -87,7 +87,7 @@ namespace mar {
 				auto& tag = entity.getComponent<ecs::TagComponent>();
 				tag = std::string("Second Entity");
 
-				auto& ren = entity.getComponent<ecs::RenderableComponent>();
+				auto& ren = entity.addComponent<ecs::RenderableComponent>();
 				ren.vertices = graphics::MeshCreator::getVertices_Pyramid();
 				ren.indices = graphics::MeshCreator::getIndices_Pyramid();
 
@@ -107,7 +107,7 @@ namespace mar {
 				auto& tag = entity.getComponent<ecs::TagComponent>();
 				tag = std::string("Third Entity");
 
-				auto& ren = entity.getComponent<ecs::RenderableComponent>();
+				auto& ren = entity.addComponent<ecs::RenderableComponent>();
 				ren.vertices = graphics::MeshCreator::getVertices_Surface();
 				ren.indices = graphics::MeshCreator::getIndices_Surface();
 
@@ -127,7 +127,7 @@ namespace mar {
 				auto& tag = entity.getComponent<ecs::TagComponent>();
 				tag = std::string("Fourth Entity");
 
-				auto& ren = entity.getComponent<ecs::RenderableComponent>();
+				auto& ren = entity.addComponent<ecs::RenderableComponent>();
 				ren.vertices = graphics::MeshCreator::getVertices_Wall();
 				ren.indices = graphics::MeshCreator::getIndices_Wall();
 
@@ -156,7 +156,13 @@ namespace mar {
 					m_framebuffer.bind();
 					m_framebuffer.clear();
 
+					auto view = entitylayer->getScene()->getView<ecs::RenderableComponent>();
+					for (auto entity : view)
+						entitylayer->getRenderer()->submit(entity, entitylayer->getScene());
+
 					m_stack.update();
+
+					graphics::RendererEntity::clearStatistics();
 				}
 				else {
 					m_stack.update();

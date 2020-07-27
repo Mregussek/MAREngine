@@ -20,14 +20,15 @@ namespace mar {
 			Scene* m_scene{ nullptr };
 
 		public:
-			Entity() = default;
-
 			Entity(entt::entity handle, Scene* scene)
 				: m_entityHandle(handle),
 				m_scene(scene)
 			{ }
 
-			Entity(const Entity& other) = default;
+			Entity(const Entity& other) 
+				: m_entityHandle(other.m_entityHandle),
+				m_scene(other.m_scene)
+			{}
 
 			template<typename T>
 			bool hasComponent() {

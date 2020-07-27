@@ -23,10 +23,7 @@ namespace mar {
 			Entity entity{ m_registry.create(), this };
 
 			entity.addComponent<TagComponent>();
-			entity.addComponent<RenderableComponent>();
 			entity.addComponent<TransformComponent>();
-
-			m_entities.emplace_back(entity);
 
 			return entity;
 		}

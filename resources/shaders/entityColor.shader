@@ -55,9 +55,7 @@ uniform Material u_material;
 uniform vec3 u_CameraPos;
 uniform vec3 u_SeparateColor[32];
 
-void main() {
-	int index = int(v_shapeIndex);
-
+vec4 calculateLight() {
 	// AMBIENT
 	vec3 ambient = u_material.ambientStrength * u_material.ambient;
 
@@ -81,9 +79,14 @@ void main() {
 	diffuse *= attenuation;
 	specular *= attenuation;
 
-	// FINAL
-	vec4 calculatedLight = vec4(ambient + diffuse + specular, 1.0f);
+	return(vec4(ambient + diffuse + specular, 1.0f));
+}
 
-	color = vec4(u_SeparateColor[index], 1.0f)
-		* calculatedLight;
+void main() {
+	int index = int(v_shapeIndex);
+
+	vec4 batchColor = vec4(u_SeparateColor[index], 1.0f);
+	vec4 lightColor = calculateLight();
+
+	color = batchColor * lightColor;
 };

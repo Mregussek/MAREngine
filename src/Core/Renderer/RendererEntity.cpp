@@ -32,13 +32,7 @@ namespace mar {
 
 			m_stride = 3 + 3 + 2 + 1;
 
-			m_counterColor = 0;
-			m_counterTexture2D = 0;
-			m_counterCubemap = 0;
-
-			m_indicesMaxColor = 0;
-			m_indicesMaxTexture2D = 0;
-			m_indicesMaxCubemap = 0;
+			clear();
 
 			MAR_CORE_INFO("RENDERERENTITY: initialized!");
 		}
@@ -56,8 +50,7 @@ namespace mar {
 		}
 
 		void RendererEntity::submit(ecs::Scene* scene) {
-			for (auto& entity : scene->getEntities())
-				submit(entity);
+
 
 			MAR_CORE_TRACE("RENDERERENTITY: submitted scene!");
 		}
@@ -110,6 +103,7 @@ namespace mar {
 			std::vector<uint32_t>& indices, uint32_t& indicesmax, int32_t& counter, uint32_t& stride)
 		{
 			std::vector<uint32_t> copy = ren.indices;
+
 			ShapeManipulator::extendShapeID(ren.vertices, stride, (float)counter);
 			ShapeManipulator::extendIndices(copy, indicesmax);
 
@@ -134,6 +128,8 @@ namespace mar {
 				draw(m_verticesCubemap, m_indicesCubemap, m_transformsCubemap, m_samplersCubemap, m_shaderCubemap);
 			}
 
+			clear();
+
 			MAR_CORE_INFO("RENDERERENTITY: Draw calls finished for this scene!");
 		}
 
@@ -142,26 +138,22 @@ namespace mar {
 			m_indicesColor.clear();
 			m_transformsColor.clear();
 			m_samplersColors.clear();
-
-			m_verticesCubemap.clear();
-			m_indicesCubemap.clear();
-			m_transformsCubemap.clear();
-			m_samplersCubemap.clear();
+			m_counterColor = 0;
+			m_indicesMaxColor = 0;
 
 			m_verticesTexture2D.clear();
 			m_indicesTexture2D.clear();
 			m_transformsTexture2D.clear();
 			m_samplersTexture2D.clear();
-
-			m_counterColor = 0;
 			m_counterTexture2D = 0;
-			m_counterCubemap = 0;
-
-			m_indicesMaxColor = 0;
 			m_indicesMaxTexture2D = 0;
-			m_indicesMaxCubemap = 0;
 
-			s_stats.resetStatistics();
+			m_verticesCubemap.clear();
+			m_indicesCubemap.clear();
+			m_transformsCubemap.clear();
+			m_samplersCubemap.clear();
+			m_counterCubemap = 0;
+			m_indicesMaxCubemap = 0;
 		
 			MAR_CORE_TRACE("RENDERERENTITY: called clear method!");
 		}
@@ -272,6 +264,14 @@ namespace mar {
 			shader.setUniformVector3("u_CameraPos", camdata->position);
 			shader.setUniformMat4f("u_Model", camdata->model);
 			shader.setUniformMat4f("u_MVP", camdata->mvp);
+		}
+
+		RendererStatistics& RendererEntity::getStatistics() { 
+			return s_stats; 
+		}
+
+		void RendererEntity::clearStatistics() {
+			s_stats.resetStatistics();
 		}
 
 

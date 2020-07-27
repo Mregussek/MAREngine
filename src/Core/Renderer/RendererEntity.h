@@ -73,12 +73,25 @@ namespace mar {
 
 			void submit(ecs::Scene* scene);
 			void submit(ecs::Entity& entity);
+			void submit(entt::entity entity, ecs::Scene* scene) {
+				auto e = ecs::Entity{ entity, scene };
+				submit(e);
+			}
 			
 			void update();
 
 			void clear();
 
+			// --- SET METHODS --- //
+
 			void setLight(Light* light) { m_light = light; }
+
+			// --- GET METHODS --- //
+
+			// --- STATISTICS --- //
+			
+			static RendererStatistics& getStatistics();
+			static void clearStatistics();
 
 		private:
 			// --- DRAW METHODS --- //

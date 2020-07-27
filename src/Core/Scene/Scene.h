@@ -22,7 +22,6 @@ namespace mar {
 
 			const char* m_name{ "Empty Scene" };
 
-			std::vector<Entity> m_entities;
 			entt::registry m_registry;
 
 		public:
@@ -35,8 +34,17 @@ namespace mar {
 
 			// --- GET METHODS --- //
 
-			inline std::vector<Entity>& getEntities() { return m_entities; }
 			inline const char* getName() const { return m_name; }
+
+			template<typename T>
+			auto getView() ->decltype(m_registry.view<T>()) {
+				return m_registry.view<T>();
+			}
+
+			template<typename T>
+			T& getComponent(entt::entity entity) {
+				return m_registry.get<T>(entity);
+			}
 
 			// --- SET METHODS --- //
 

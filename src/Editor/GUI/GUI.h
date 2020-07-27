@@ -18,6 +18,7 @@
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
 
+#include "../../Core/Renderer/RendererEntity.h"
 #include "../../Core/Scene/Scene.h"
 #include "../../Core/Scene/Entity/Entity.h"
 #include "../../Core/Scene/Component/Components.h"
@@ -100,10 +101,12 @@ namespace mar {
 			void File_Save();
 
 			void Display_ViewPort();
+			/*
 			void Menu_ModifyScene();
 			void Menu_ModifyShape();
 			void Menu_SelectShape();
 			void Menu_PushShapeToScene();
+			*/
 			void Scene_Environment();
 			void Scene_Statistics();
 			void Menu_Info();

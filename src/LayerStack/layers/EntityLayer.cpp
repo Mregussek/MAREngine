@@ -26,7 +26,6 @@ namespace mar {
 		void EntityLayer::update() {
 			m_renderer->submit(&m_scene);
 			m_renderer->update();
-			m_renderer->clear();
 		}
 
 		void EntityLayer::closeLayer() {
