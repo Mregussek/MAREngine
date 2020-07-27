@@ -132,6 +132,7 @@ namespace mar {
 			}
 
 			Scene_Hierarchy();
+			Scene_Entity_Modify();
 			Scene_Environment();
 			Scene_Statistics();
 			Display_ViewPort();
@@ -747,22 +748,46 @@ namespace mar {
 			ImGui::Begin("Scene Hierarchy");
 
 			for (auto scene : m_scenes) {
-				if (ImGui::TreeNode(scene->getName())) {
+				auto& entities = scene->getEntities();
 
-					auto& entities = scene->getEntities();
-
-					for (uint32_t i = 0; i < entities.size(); i++) {
-						std::string& s = entities[i].getComponent<ecs::TagComponent>();
-						ImGui::MenuItem(s.c_str());
+				for (uint32_t i = 0; i < entities.size(); i++) {
+					std::string& s = entities[i].getComponent<ecs::TagComponent>();
+					if( ImGui::MenuItem(s.c_str()) ) {
+						
 					}
-
-					ImGui::TreePop();
 				}
 			}
 
 			ImGui::End();
 		}
 
+		void GUI::Scene_Entity_Modify() {
+			ImGui::Begin("Entity Modification");
 
+			/*
+			if (entity) {
+				ImGui::Text("No Entity Selected!");
+				ImGui::End();
+				return;
+			}
+
+			auto& tran = entity.getComponent<ecs::TransformComponent>();
+
+			ImGui::Text("\nPosition\n");
+			ImGui::SliderFloat("X translation", &tran.center.x, -15.0f, 15.0f, "%.2f", 1.f);
+			ImGui::SliderFloat("Y translation", &tran.center.y, -15.0f, 15.0f, "%.2f", 1.f);
+			ImGui::SliderFloat("Z translation", &tran.center.z, -15.0f, 15.0f, "%.2f", 1.f);
+			ImGui::Separator();
+
+			ImGui::Text("\nRotation\n");
+			ImGui::SliderFloat("X rotation", &tran.angles.x, -360.f, 360.f, "%.2f", 1.f);
+			ImGui::SliderFloat("Y rotation", &tran.angles.y, -360.f, 360.f, "%.2f", 1.f);
+			ImGui::SliderFloat("Z rotation", &tran.angles.z, -360.f, 360.f, "%.2f", 1.f);
+			ImGui::Separator();
+
+			ecs::System::handleTransformComponent(tran);
+			*/
+			ImGui::End();
+		}
 
 } }

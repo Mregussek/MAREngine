@@ -117,6 +117,7 @@ namespace mar {
 			std::vector<ecs::Scene*> m_scenes;
 			void submit(ecs::Scene* scene);
 			void Scene_Hierarchy();
+			void Scene_Entity_Modify();
 
 		};
 

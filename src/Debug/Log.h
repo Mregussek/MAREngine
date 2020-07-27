@@ -71,8 +71,6 @@ namespace mar {
 
 #ifdef MAR_ENGINE_DEBUG_MODE
 
-    #define ASSERT(x) if(!(x)) __debugbreak()
-    
     #define MAR_LOG_INIT() ::mar::debug::Log::init()
     
     #define MAR_CORE_TRACE(...) ::mar::debug::Log::getCoreLogger()->trace(__VA_ARGS__)
@@ -87,12 +85,14 @@ namespace mar {
     #define MAR_WARN(...)  ::mar::debug::Log::getClientLogger()->warn(__VA_ARGS__)
     #define MAR_ERROR(...) ::mar::debug::Log::getClientLogger()->error(__VA_ARGS__)
 
-    #define MAR_CORE_ASSERT(x, msg) ASSERT(x);\
-                                    MAR_CORE_ERROR(msg)
+    #define ASSERT(x, msg) if(!(x)) MAR_CORE_ERROR(msg);\
+                           if(!(x)) __debugbreak()
+                           
+    #define MAR_CORE_ASSERT(x, msg) ASSERT(x, msg)
     
     #define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::chernoClear();\
                                 x;\
-                                ASSERT(::mar::debug::Log::chernoCheck(#x, __FILE__, __LINE__))
+                                ASSERT(::mar::debug::Log::chernoCheck(#x, __FILE__, __LINE__), "OPENGL")
 
 #else
 

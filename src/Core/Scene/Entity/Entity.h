@@ -62,8 +62,16 @@ namespace mar {
 				m_scene->m_registry.remove<T>();
 			}
 
-			operator bool() const {
+			const bool isValid() const {
 				return m_scene->m_registry.valid(m_entityHandle);
+			}
+
+			operator bool() const {
+				return isValid();
+			}
+
+			Entity copyEntity() {
+				return { m_entityHandle, m_scene };
 			}
 		};
 

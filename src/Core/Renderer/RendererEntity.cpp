@@ -6,6 +6,7 @@
 
 #include "RendererEntity.h"
 #include "Renderer.h"
+#include "../../Debug/Log.h"
 
 
 namespace mar {
@@ -38,6 +39,8 @@ namespace mar {
 			m_indicesMaxColor = 0;
 			m_indicesMaxTexture2D = 0;
 			m_indicesMaxCubemap = 0;
+
+			MAR_CORE_INFO("RENDERERENTITY: initialized!");
 		}
 
 		void RendererEntity::close() {
@@ -48,14 +51,18 @@ namespace mar {
 			m_shaderColor.shutdown();
 			m_shaderTexture2D.shutdown();
 			m_shaderCubemap.shutdown();
+
+			MAR_CORE_INFO("RENDERERENTITY: closed!");
 		}
 
 		void RendererEntity::submit(ecs::Scene* scene) {
 			for (auto& entity : scene->getEntities())
 				submit(entity);
+
+			MAR_CORE_TRACE("RENDERERENTITY: submitted scene!");
 		}
 
-		void RendererEntity::submit(ecs::Entity entity) {
+		void RendererEntity::submit(ecs::Entity& entity) {
 			if (!entity.hasComponent<ecs::RenderableComponent>())
 				return;
 
@@ -89,10 +96,14 @@ namespace mar {
 				m_samplersCubemap.push_back(m_counterCubemap);
 				m_counterCubemap++;
 			}
+
+			MAR_CORE_TRACE("RENDERERENTITY: submitted Entity!");
 		}
 
 		void RendererEntity::submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform) {
 			transforms.push_back(transform);
+
+			MAR_CORE_TRACE("RENDERERENTITY: submitted transform component!");
 		}
 
 		void RendererEntity::submitVerticesIndices(ecs::RenderableComponent& ren, std::vector<float>& vertices, 
@@ -106,6 +117,8 @@ namespace mar {
 			indices.insert(indices.end(), copy.begin(), copy.end());
 
 			indicesmax += vertices.size() / stride;
+		
+			MAR_CORE_TRACE("RENDERERENTITY: submitted renderable component!");
 		}
 
 		void RendererEntity::update() {
@@ -120,6 +133,8 @@ namespace mar {
 			if (!m_verticesCubemap.empty()) {
 				draw(m_verticesCubemap, m_indicesCubemap, m_transformsCubemap, m_samplersCubemap, m_shaderCubemap);
 			}
+
+			MAR_CORE_INFO("RENDERERENTITY: Draw calls finished for this scene!");
 		}
 
 		void RendererEntity::clear() {
@@ -145,6 +160,10 @@ namespace mar {
 			m_indicesMaxColor = 0;
 			m_indicesMaxTexture2D = 0;
 			m_indicesMaxCubemap = 0;
+
+			s_stats.resetStatistics();
+		
+			MAR_CORE_TRACE("RENDERERENTITY: called clear method!");
 		}
 
 		void RendererEntity::draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
@@ -155,30 +174,37 @@ namespace mar {
 			s_stats.verticesCount += vertices.size();
 			s_stats.indicesCount += indices.size();
 
-			shader.bind();
+			{ // SEND ALL DATA TO SHADERS
+				shader.bind();
 
-			shader.setUniformMat4f("u_MVP", *m_mvp);
-			shader.setUniformVectorMat4("u_SeparateTransform", transforms);
-			shader.setUniformVectorVec3("u_SeparateColor", samplers);
+				passLightToShader(shader, m_light);
+				passCameraToShader(shader, &Camera::getCameraData());
+				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
+				shader.setUniformVectorVec3("u_SeparateColor", samplers);
+			}
+			
+			{ // BIND ALL NEEDED BUFFERS
+				m_vao.bind();
 
-			m_vao.bind();
+				m_vbo.bind();
+				m_vbo.updateDynamically(vertices);
 
-			m_vbo.bind();
-			m_vbo.updateDynamically(vertices);
+				m_ebo.bind();
+				m_ebo.update(indices);
+			}
+			
+			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr) );
 
-			m_ebo.bind();
-			m_ebo.update(indices);
+			{ // UNBIND ALREADY DRAWN BUFFERS
+				m_vbo.resetBuffer();
+				m_vbo.unbind();
 
-			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr));
+				m_ebo.resetBuffer();
+				m_ebo.unbind();
 
-			m_vbo.resetBuffer();
-			m_vbo.unbind();
-
-			m_ebo.resetBuffer();
-			m_ebo.unbind();
-
-			m_vao.unbind();
-
+				m_vao.unbind();
+			}
+			
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
 
@@ -207,7 +233,7 @@ namespace mar {
 			m_ebo.bind();
 			m_ebo.update(indices);
 
-			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr));
+			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr) );
 
 			m_vbo.resetBuffer();
 			m_vbo.unbind();
@@ -222,6 +248,30 @@ namespace mar {
 
 			MAR_CORE_INFO("RENDERER: has drawn the scene!");
 			MAR_CORE_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
+		}
+
+		void RendererEntity::passLightToShader(ShaderOpenGL& shader, Light* light) {
+			shader.setUniformVector3("u_material.lightPos", light->getPosition());
+
+			shader.setUniformVector3("u_material.ambient", light->getAmbient());
+			shader.setUniformVector3("u_material.diffuse", light->getDiffuse());
+			shader.setUniformVector3("u_material.specular", light->getSpecular());
+
+			shader.setUniformVector3("u_material.ambientStrength", light->getAmbientStrength());
+			shader.setUniformVector3("u_material.diffuseStrength", light->getDiffuseStrength());
+			shader.setUniformVector3("u_material.specularStrength", light->getSpecularStrength());
+	
+			shader.setUniform1f("u_material.shininess", light->getShininess());
+	
+			shader.setUniform1f("u_material.constant", light->getConstant());
+			shader.setUniform1f("u_material.linear", light->getLinear());
+			shader.setUniform1f("u_material.quadratic", light->getQuadratic());
+		}
+
+		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, CameraData* camdata) {
+			shader.setUniformVector3("u_CameraPos", camdata->position);
+			shader.setUniformMat4f("u_Model", camdata->model);
+			shader.setUniformMat4f("u_MVP", camdata->mvp);
 		}
 
 

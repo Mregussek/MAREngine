@@ -60,6 +60,7 @@ namespace mar {
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
 			entitylayer->getScene()->setName("Default Scene");
 			
+			// FIRST ENTITY
 			{
 				auto entity = entitylayer->getScene()->createEntity();
 
@@ -79,6 +80,7 @@ namespace mar {
 				entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.2f, 0.5f, 0.2f });
 			}
 			
+			// SECOND ENTITY
 			{
 				auto entity = entitylayer->getScene()->createEntity();
 
@@ -97,9 +99,49 @@ namespace mar {
 
 				entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.5f, 0.9f, 0.25f });
 			}
+
+			// THIRD ENTITY
+			{
+				auto entity = entitylayer->getScene()->createEntity();
+
+				auto& tag = entity.getComponent<ecs::TagComponent>();
+				tag = std::string("Third Entity");
+
+				auto& ren = entity.getComponent<ecs::RenderableComponent>();
+				ren.vertices = graphics::MeshCreator::getVertices_Surface();
+				ren.indices = graphics::MeshCreator::getIndices_Surface();
+
+				auto& tran = entity.getComponent<ecs::TransformComponent>();
+				tran.scale = { 1.f, 1.f, 1.f };
+				tran.angles = { 0.f, 0.f, 0.f };
+				tran.center = { 0.f, 0.f, 0.f };
+				ecs::System::handleTransformComponent(tran);
+
+				entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.5f, 0.2f, 0.9f });
+			}
+
+			// FOURTH ENTITY
+			{
+				auto entity = entitylayer->getScene()->createEntity();
+
+				auto& tag = entity.getComponent<ecs::TagComponent>();
+				tag = std::string("Fourth Entity");
+
+				auto& ren = entity.getComponent<ecs::RenderableComponent>();
+				ren.vertices = graphics::MeshCreator::getVertices_Wall();
+				ren.indices = graphics::MeshCreator::getIndices_Wall();
+
+				auto& tran = entity.getComponent<ecs::TransformComponent>();
+				tran.scale = { 1.f, 1.f, 1.f };
+				tran.angles = { 0.f, 25.f, 0.f };
+				tran.center = { -2.f, 0.f, 0.f };
+				ecs::System::handleTransformComponent(tran);
+
+				entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.9f, 0.2f, 0.3f });
+			}
 			
 			entitylayer->initialize();
-			entitylayer->getRenderer()->setMVP(&graphics::Camera::getCameraData().mvp); 
+			entitylayer->getRenderer()->setLight(&m_light);
 			m_stack.pushLayer(entitylayer);
 			gui->submit(entitylayer->getScene());
 

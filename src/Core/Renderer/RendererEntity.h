@@ -11,6 +11,7 @@
 #include "../Scene/Component/Components.h"
 #include "../Scene/Scene.h"
 
+#include "../Camera/Camera.h"
 #include "../Shader/ShaderOpenGL.h"
 #include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
 #include "Buffers/VertexArray/VertexArrayOpenGL.h"
@@ -60,7 +61,6 @@ namespace mar {
 			uint32_t m_indicesMaxCubemap;
 
 			// --- OTHER --- //
-			maths::mat4* m_mvp;
 			Light* m_light;
 			uint32_t m_stride;
 			static RendererStatistics s_stats;
@@ -72,14 +72,13 @@ namespace mar {
 			void close();
 
 			void submit(ecs::Scene* scene);
-			void submit(ecs::Entity entity);
-			void submit(Light* light);
-
+			void submit(ecs::Entity& entity);
+			
 			void update();
 
 			void clear();
 
-			void setMVP(maths::mat4* mvp) { m_mvp = mvp; }
+			void setLight(Light* light) { m_light = light; }
 
 		private:
 			// --- DRAW METHODS --- //
@@ -96,7 +95,9 @@ namespace mar {
 				std::vector<uint32_t>& indices, uint32_t& indicesmax, int32_t& counter, uint32_t& stride);
 		
 			static void submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform);
-
+		
+			static void passLightToShader(ShaderOpenGL& shader, Light* light);
+			static void passCameraToShader(ShaderOpenGL& shader, CameraData* camdata);
 		};
 
 
