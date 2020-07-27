@@ -73,14 +73,14 @@ namespace mar {
 			void prepareNewFrame();
 			void display();
 
-			void submitMesh(graphics::Mesh* mesh) { 
+			void submit(graphics::Mesh* mesh) { 
 				m_meshes.push_back(mesh);
 				m_meshesNames.push_back(mesh->getMeshName());
 			}
 
 			// --- SET METHODS --- //
-			void setFrameBuffer(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) { m_framebuffer = framebuffer; }
-			void setLight(graphics::Light* light) { m_light = light; }
+			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) { m_framebuffer = framebuffer; }
+			void set(graphics::Light* light) { m_light = light; }
 
 			// --- GET METHODS --- //
 			const maths::mat4 getTranslationMatrix() const;

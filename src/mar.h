@@ -19,18 +19,6 @@ namespace mar {
 	template<typename T>
 	using Ref = std::shared_ptr<T>;
 
-	namespace editor {
-		class GUI;
-	}
-
-	namespace graphics {
-		class RendererOpenGL;
-	}
-
-	namespace layers {
-		class MeshLayer;
-	}
-
 #ifndef MAR_ENGINE_SETTINGS
 #define MAR_ENGINE_SETTINGS
 

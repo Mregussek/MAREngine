@@ -4,8 +4,7 @@
 layout(location = 0) in vec4 position;
 layout(location = 1) in vec3 lightNormal;
 layout(location = 2) in vec2 texCoord;
-layout(location = 3) in float texIndex;
-layout(location = 4) in float shapeIndex;
+layout(location = 3) in float shapeIndex;
 
 out float v_shapeIndex;
 

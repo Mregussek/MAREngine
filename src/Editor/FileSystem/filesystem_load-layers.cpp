@@ -11,7 +11,7 @@ namespace mar {
 	namespace editor {
 
 
-		std::optional<std::vector<layers::MeshLayer*>> filesystem::assignLoadedLayers() {
+		std::optional<std::vector<layers::LayerMesh*>> filesystem::assignLoadedLayers() {
 			if (shouldLoadMeshes()) {
 				if (checkMeshEquality()) {
 					MAR_CORE_ERROR("Mesh Types size is not equal to mesh_count!");
@@ -25,11 +25,11 @@ namespace mar {
 			return std::nullopt;
 		}
 
-		const std::vector<layers::MeshLayer*> filesystem::loadMesh() {
-			std::vector<layers::MeshLayer*> lay;
+		const std::vector<layers::LayerMesh*> filesystem::loadMesh() {
+			std::vector<layers::LayerMesh*> lay;
 
 			for (size_t i = 0; i < getMeshTypes().size(); i++) {
-				auto layer = new layers::MeshLayer("Mesh Layer");
+				auto layer = new layers::LayerMesh("Mesh Layer");
 				layer->initialize();
 				layer->getMesh()->setMeshType(getMeshTypes()[i]);
 

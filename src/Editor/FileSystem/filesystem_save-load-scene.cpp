@@ -107,7 +107,7 @@ namespace mar {
 			std::string line;
 			float input[3];
 
-			std::vector<layers::MeshLayer*> loaded_layers;
+			std::vector<layers::LayerMesh*> loaded_layers;
 			s_mesh_count = -1;
 			s_scene_count = -1;
 			s_mesh_type.clear();

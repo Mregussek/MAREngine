@@ -9,6 +9,7 @@
 #include "../../mar.h"
 #include "../Scene/Entity/Entity.h"
 #include "../Scene/Component/Components.h"
+#include "../Scene/Scene.h"
 
 #include "../Shader/ShaderOpenGL.h"
 #include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
@@ -69,6 +70,7 @@ namespace mar {
 
 			void close();
 
+			void submit(ecs::Scene* scene);
 			void submit(ecs::Entity entity);
 
 			void update();

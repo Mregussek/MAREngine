@@ -16,7 +16,7 @@ namespace mar {
 		}
 
 		Scene::~Scene() {
-			clear();
+			m_registry.clear();
 		}
 
 		Entity Scene::createEntity() {
@@ -26,15 +26,13 @@ namespace mar {
 			entity.addComponent<RenderableComponent>();
 			entity.addComponent<TransformComponent>();
 
+			m_entities.emplace_back(entity);
+
 			return entity;
 		}
 
 		void Scene::update() {
 
-		}
-
-		void Scene::clear() {
-			m_registry.clear();
 		}
 
 

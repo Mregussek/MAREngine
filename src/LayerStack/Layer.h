@@ -20,11 +20,7 @@ namespace mar {
 			Layer() = default;
 			Layer(const char* name) : m_debugName(name) { }
 
-			virtual void prepareFrame() { }
-
 			virtual void update() { }
-
-			virtual void endFrame() { }
 
 			virtual void closeLayer() { }
 

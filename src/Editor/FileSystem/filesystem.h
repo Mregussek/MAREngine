@@ -8,7 +8,7 @@
 
 #include "../../mar.h"
 #include "../../Debug/Log.h"
-#include "../../Layers/MeshLayer.h"
+#include "../../LayerStack/layers/MeshLayer.h"
 #include "../../Core/Mesh/Mesh.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
@@ -42,8 +42,8 @@ namespace mar {
 			static void saveSceneToFile(const std::string& path, const std::vector<graphics::Mesh*>& meshes);
 			static void loadSceneFromFile(std::string path);
 			
-			static std::optional<std::vector<layers::MeshLayer*>> assignLoadedLayers();
-			static const std::vector<layers::MeshLayer*> loadMesh();
+			static std::optional<std::vector<layers::LayerMesh*>> assignLoadedLayers();
+			static const std::vector<layers::LayerMesh*> loadMesh();
 
 			// --- GET METHODS --- //
 			inline static std::vector<std::string>& getMarFiles() { return s_marfiles; }

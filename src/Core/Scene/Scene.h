@@ -19,6 +19,7 @@ namespace mar {
 		class Scene {
 			friend class Entity;
 
+			std::vector<Entity> m_entities;
 			entt::registry m_registry;
 
 		public:
@@ -29,7 +30,8 @@ namespace mar {
 
 			Entity createEntity();
 
-			void clear();
+			// --- GET METHODS --- //
+			inline const std::vector<Entity>& getEntities() const { return m_entities; }
 		};
 
 

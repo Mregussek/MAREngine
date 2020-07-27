@@ -15,7 +15,7 @@ namespace mar {
 		RendererStatistics RendererEntity::s_stats;
 
 		void RendererEntity::initialize() {
-			const std::vector<uint32_t> layout{ 3, 3, 2, 1, 1 };
+			const std::vector<uint32_t> layout{ 3, 3, 2, 1 };
 
 			for (size_t i = 0; i < layout.size(); i++)
 				m_layout.push(layout[i], PushBuffer::PUSH_FLOAT);
@@ -29,7 +29,7 @@ namespace mar {
 			m_shaderTexture2D.initialize(SHADER_ENTITY_TEXTURE2D);
 			m_shaderCubemap.initialize(SHADER_ENTITY_CUBEMAP);
 
-			m_stride = 3 + 3 + 2 + 1 + 1;
+			m_stride = 3 + 3 + 2 + 1;
 
 			m_counterColor = 0;
 			m_counterTexture2D = 0;
@@ -48,6 +48,11 @@ namespace mar {
 			m_shaderColor.shutdown();
 			m_shaderTexture2D.shutdown();
 			m_shaderCubemap.shutdown();
+		}
+
+		void RendererEntity::submit(ecs::Scene* scene) {
+			for (auto& entity : scene->getEntities())
+				submit(entity);
 		}
 
 		void RendererEntity::submit(ecs::Entity entity) {
@@ -82,7 +87,7 @@ namespace mar {
 				m_transformsTexture2D.push_back(tran);
 
 				std::vector<uint32_t> indices = renderable.indices;
-				ShapeManipulator::extendBothIDs(renderable.vertices, m_stride, (float)m_counterTexture2D);
+				ShapeManipulator::extendShapeID(renderable.vertices, m_stride, (float)m_counterTexture2D);
 				ShapeManipulator::extendIndices(indices, m_indicesMaxTexture2D);
 
 				m_verticesTexture2D.insert(m_verticesTexture2D.end(), renderable.vertices.begin(), renderable.vertices.end());
@@ -101,7 +106,7 @@ namespace mar {
 				m_transformsCubemap.push_back(tran);
 
 				std::vector<uint32_t> indices = renderable.indices;
-				ShapeManipulator::extendBothIDs(renderable.vertices, m_stride, (float)m_counterCubemap);
+				ShapeManipulator::extendShapeID(renderable.vertices, m_stride, (float)m_counterCubemap);
 				ShapeManipulator::extendIndices(indices, m_indicesMaxCubemap);
 
 				m_verticesCubemap.insert(m_verticesCubemap.end(), renderable.vertices.begin(), renderable.vertices.end());

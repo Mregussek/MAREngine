@@ -4,44 +4,50 @@
  */
 
 #include "MeshLayer.h"
-#include "../Debug/Log.h"
+#include "../../Debug/Log.h"
+#include "../../Core/Renderer/RendererOpenGL.h"
+#include "../../Core/Mesh/Mesh.h"
 
 
 namespace mar {
 	namespace layers {
 
 
-		void MeshLayer::initialize() {
-			m_renderer = new graphics::RendererOpenGL();
+		LayerMesh::LayerMesh(const char* name) 
+			: m_debugName(name),
+			m_renderer(nullptr),
+			m_mesh(nullptr)
+		{ }
 
-			m_mesh.create();
+		void LayerMesh::initialize() {
+			m_renderer = new graphics::RendererOpenGL();
+			m_mesh = new graphics::Mesh();
+
+			m_mesh->create();
 
 			MAR_CORE_INFO("MESH_LAYER: initialized");
 		}
 
-		void MeshLayer::load() {
-			m_renderer->initialize(m_mesh.getLayout(), getShaderType(m_mesh.getMeshType()));
+		void LayerMesh::load() {
+			m_renderer->initialize(m_mesh->getLayout(), getShaderType(m_mesh->getMeshType()));
 
 			MAR_CORE_INFO("MESH_LAYER: loaded");
 		}
 
-		void MeshLayer::prepareFrame() {
-
+		void LayerMesh::update() {
+			m_renderer->draw(m_mesh);
 		}
 
-		void MeshLayer::update() {
-			m_renderer->draw(&m_mesh);
-		}
-
-		void MeshLayer::closeLayer() {
+		void LayerMesh::closeLayer() {
 			m_renderer->close();
 
+			delete m_mesh;
 			delete m_renderer;
 
 			MAR_CORE_INFO("MESH_LAYER: Closed layer!");
 		}
 
-		graphics::ShaderType MeshLayer::getShaderType(graphics::MeshType meshtype) {
+		graphics::ShaderType LayerMesh::getShaderType(graphics::MeshType meshtype) {
 			if (storage::usegui) {
 				switch (meshtype) {
 				case NORMAL_MESH_TYPE:
@@ -70,8 +76,12 @@ namespace mar {
 			}
 		}
 
-		void MeshLayer::set(graphics::Light* light) { 
-			m_renderer->setLight(light);
+		graphics::RendererOpenGL* LayerMesh::getRenderer() { 
+			return m_renderer; 
+		}
+
+		graphics::Mesh* LayerMesh::getMesh() { 
+			return m_mesh; 
 		}
 
 

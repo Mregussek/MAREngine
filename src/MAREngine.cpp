@@ -34,42 +34,64 @@ namespace mar {
 			auto camera_layer = new layers::CameraLayer("Default Camera Layer");
 			camera_layer->initialize();
 			if (storage::usegui)
-				camera_layer->set(m_framebuffer.getSpecification().width, m_framebuffer.getSpecification().height);
+				camera_layer->getCamera()->setWindowSize(&m_framebuffer.getSpecification().width, &m_framebuffer.getSpecification().height);
 			else
-				camera_layer->set(window::Window::getInstance().getWidth(), window::Window::getInstance().getHeight());
+				camera_layer->getCamera()->setWindowSize((const float*)&window::Window::getInstance().getWidth(), (const float*)&window::Window::getInstance().getHeight());
 			camera_layer->mouseSetup();
 
-			auto gui_layer = new layers::GUILayer("Default GUI Layer");
+			auto gui_layer = new layers::LayerGUI("Default GUI Layer");
 			gui_layer->initialize();
-			gui_layer->set(m_framebuffer);
-			gui_layer->set(&m_light);
+			auto gui = gui_layer->getGUIInstance();
+			gui->set(m_framebuffer);
+			gui->set(&m_light);
 
 			m_stack.pushLayer(camera_layer);
 			m_stack.pushOverlay(gui_layer);
 
+			/*
+			
 			editor::filesystem::loadSceneFromFile(m_pathLoad);
 			if (auto loaded = editor::filesystem::assignLoadedLayers())
 				for (uint32_t i = 0; i < loaded->size(); i++) {
-					loaded->at(i)->set(&m_light);
-					gui_layer->submit(loaded->at(i)->getMesh());
+					loaded->at(i)->getRenderer()->setLight(&m_light);
+					gui->submit(loaded->at(i)->getMesh());
 					m_stack.pushLayer(loaded->at(i));
 				}
+			*/
 
 			ecs::Scene scene;
 			auto entity = scene.createEntity();
 
-			auto& ren = entity.getComponent<ecs::RenderableComponent>();
-			ren.vertices = graphics::MeshCreator::getVertices();
-			ren.indices = graphics::MeshCreator::getIndices();
+			{
+				auto& ren = entity.getComponent<ecs::RenderableComponent>();
+				ren.vertices = graphics::MeshCreator::getVertices_Cube();
+				ren.indices = graphics::MeshCreator::getIndices_Cube();
 
-			auto& tran = entity.getComponent<ecs::TransformComponent>();
-			tran.scale = maths::mat4::scale({ 1.f, 1.f, 1.f });
-			tran.translation = maths::mat4::translation({0.f, 2.f, 1.f});
-			tran.rotation = maths::mat4::rotation(maths::Trig::toRadians(65.f), {1.f, 0.f, 0.f});
-			tran = tran.scale * tran.translation * tran.rotation;
+				auto& tran = entity.getComponent<ecs::TransformComponent>();
+				tran.scale = maths::mat4::scale({ 1.f, 1.f, 1.f });
+				tran.translation = maths::mat4::translation({ 0.f, 2.f, 1.f });
+				tran.rotation = maths::mat4::rotation(maths::Trig::toRadians(65.f), { 1.f, 0.f, 0.f });
+				tran = tran.scale * tran.translation * tran.rotation;
 
-			entity.addComponent<ecs::ColorComponent>(maths::vec3{0.2f, 0.5f, 0.2f});
+				entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.2f, 0.5f, 0.2f });
+			}
+			
+			auto secentity = scene.createEntity();
 
+			{
+				auto& secren = secentity.getComponent<ecs::RenderableComponent>();
+				secren.vertices = graphics::MeshCreator::getVertices_Pyramid();
+				secren.indices = graphics::MeshCreator::getIndices_Pyramid();
+
+				auto& sectran = secentity.getComponent<ecs::TransformComponent>();
+				sectran.scale = maths::mat4::scale({ 1.f, 1.5f, 1.f });
+				sectran.translation = maths::mat4::translation({ -3.f, 2.f, -1.f });
+				sectran.rotation = maths::mat4::rotation(maths::Trig::toRadians(25.f), { 0.f, 1.f, 0.f });
+				sectran = sectran.scale * sectran.translation * sectran.rotation;
+
+				secentity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.5f, 0.9f, 0.25f });
+			}
+			
 			graphics::RendererEntity entrenderer;
 			entrenderer.initialize();
 			entrenderer.setMVP(&graphics::Camera::getCameraData().mvp);
@@ -86,6 +108,7 @@ namespace mar {
 					m_framebuffer.clear();
 
 					entrenderer.submit(entity);
+					entrenderer.submit(secentity);
 					entrenderer.update();
 					entrenderer.clear();
 
