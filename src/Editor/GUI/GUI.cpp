@@ -131,12 +131,14 @@ namespace mar {
 				ImGui::EndMainMenuBar();
 			}
 
-			Menu_Environment();
-			Menu_ModifyScene();
-			Menu_SelectShape();
-			Menu_ModifyShape();
-			Menu_Statistics();
+			Scene_Hierarchy();
+			Scene_Environment();
+			Scene_Statistics();
 			Display_ViewPort();
+
+			//Menu_ModifyScene();
+			//Menu_SelectShape();
+			//Menu_ModifyShape();
 
 			if (m_fileOpenWindow) { File_Open(); }
 			if (m_fileSaveWindow) { File_Save(); }
@@ -509,7 +511,7 @@ namespace mar {
 			}
 		}
 
-		void GUI::Menu_Environment() {
+		void GUI::Scene_Environment() {
 			ImGui::Begin("Environment");
 
 			if (!storage::usegui) {
@@ -595,7 +597,7 @@ namespace mar {
 			ImGui::End();
 		}
 
-		void GUI::Menu_Statistics() {
+		void GUI::Scene_Statistics() {
 			ImGui::Begin("Statistics Menu");
 
 			if (storage::usegui) {
@@ -716,6 +718,51 @@ namespace mar {
 				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.z), maths::vec3(0.0f, 0.0f, 1.0f))
 				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.x), maths::vec3(1.0f, 0.0f, 0.0f));
 		}
+
+		bool GUI::checkCharsEnding(const char* withwhat, const char* what) {
+			static int l1;
+			static int l2;
+
+			l1 = strlen(withwhat);
+			l2 = strlen(what);
+
+			if (l1 > l2)
+				return false;
+
+			return std::strcmp(withwhat, what + (l2 - l1)) == 0;
+		}
+
+		bool GUI::checkCharsStart(const char* withwhat, const char* what) {
+			const char* check = strstr(what, withwhat);
+
+			if (what == check) return true;
+			else return false;
+		}
+
+		void GUI::submit(ecs::Scene* scene) {
+			m_scenes.push_back(scene);
+		}
+
+		void GUI::Scene_Hierarchy() {
+			ImGui::Begin("Scene Hierarchy");
+
+			for (auto scene : m_scenes) {
+				if (ImGui::TreeNode(scene->getName())) {
+
+					auto& entities = scene->getEntities();
+
+					for (uint32_t i = 0; i < entities.size(); i++) {
+						std::string& s = entities[i].getComponent<ecs::TagComponent>();
+						ImGui::MenuItem(s.c_str());
+					}
+
+					ImGui::TreePop();
+				}
+			}
+
+			ImGui::End();
+		}
+
 
 
 } }

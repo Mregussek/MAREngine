@@ -59,64 +59,53 @@ namespace mar {
 			if (!entity.hasComponent<ecs::RenderableComponent>())
 				return;
 
+			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
+			auto& tran = entity.getComponent<ecs::TransformComponent>();
+
 			if (entity.hasComponent<ecs::ColorComponent>()) {
-				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 				auto& color = entity.getComponent<ecs::ColorComponent>();
-				auto& tran = entity.getComponent<ecs::TransformComponent>();
 
-				m_transformsColor.push_back(tran);
-
-				std::vector<uint32_t> indices = renderable.indices;
-
-				ShapeManipulator::extendShapeID(renderable.vertices, m_stride, (float)m_counterColor);
-				ShapeManipulator::extendIndices(indices, m_indicesMaxColor);
-
-				m_verticesColor.insert(m_verticesColor.end(), renderable.vertices.begin(), renderable.vertices.end());
-				m_indicesColor.insert(m_indicesColor.end(), indices.begin(), indices.end());
+				submitTransform(m_transformsColor, tran);
+				submitVerticesIndices(renderable, m_verticesColor, m_indicesColor, m_indicesMaxColor, m_counterColor, m_stride);
 
 				m_samplersColors.push_back(color);
 				m_counterColor++;
-
-				m_indicesMaxColor += m_verticesColor.size() / m_stride;
 			}
 			else if (entity.hasComponent<ecs::Texture2DComponent>()) {
-				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 				auto& tex = entity.getComponent<ecs::Texture2DComponent>();
-				auto& tran = entity.getComponent<ecs::TransformComponent>();
 
-				m_transformsTexture2D.push_back(tran);
-
-				std::vector<uint32_t> indices = renderable.indices;
-				ShapeManipulator::extendShapeID(renderable.vertices, m_stride, (float)m_counterTexture2D);
-				ShapeManipulator::extendIndices(indices, m_indicesMaxTexture2D);
-
-				m_verticesTexture2D.insert(m_verticesTexture2D.end(), renderable.vertices.begin(), renderable.vertices.end());
-				m_indicesTexture2D.insert(m_indicesTexture2D.end(), indices.begin(), indices.end());
+				submitTransform(m_transformsTexture2D, tran);
+				submitVerticesIndices(renderable, m_verticesTexture2D, m_indicesTexture2D, m_indicesMaxTexture2D, m_counterTexture2D, m_stride);
 
 				m_samplersTexture2D.push_back(m_counterTexture2D);
 				m_counterTexture2D++;
-
-				m_indicesMaxTexture2D += m_verticesTexture2D.size() / m_stride;
 			}
 			else if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
-				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 				auto& cube = entity.getComponent<ecs::TextureCubemapComponent>();
-				auto& tran = entity.getComponent<ecs::TransformComponent>();
-
-				m_transformsCubemap.push_back(tran);
-
-				std::vector<uint32_t> indices = renderable.indices;
-				ShapeManipulator::extendShapeID(renderable.vertices, m_stride, (float)m_counterCubemap);
-				ShapeManipulator::extendIndices(indices, m_indicesMaxCubemap);
-
-				m_verticesCubemap.insert(m_verticesCubemap.end(), renderable.vertices.begin(), renderable.vertices.end());
-				m_indicesCubemap.insert(m_indicesCubemap.end(), indices.begin(), indices.end());
-
+				
+				submitTransform(m_transformsCubemap, tran);
+				submitVerticesIndices(renderable, m_verticesCubemap, m_indicesCubemap, m_indicesMaxCubemap, m_counterCubemap, m_stride);
+				
 				m_samplersCubemap.push_back(m_counterCubemap);
 				m_counterCubemap++;
-
-				m_indicesMaxCubemap += m_verticesCubemap.size() / m_stride;
 			}
+		}
+
+		void RendererEntity::submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform) {
+			transforms.push_back(transform);
+		}
+
+		void RendererEntity::submitVerticesIndices(ecs::RenderableComponent& ren, std::vector<float>& vertices, 
+			std::vector<uint32_t>& indices, uint32_t& indicesmax, int32_t& counter, uint32_t& stride)
+		{
+			std::vector<uint32_t> copy = ren.indices;
+			ShapeManipulator::extendShapeID(ren.vertices, stride, (float)counter);
+			ShapeManipulator::extendIndices(copy, indicesmax);
+
+			vertices.insert(vertices.end(), ren.vertices.begin(), ren.vertices.end());
+			indices.insert(indices.end(), copy.begin(), copy.end());
+
+			indicesmax += vertices.size() / stride;
 		}
 
 		void RendererEntity::update() {

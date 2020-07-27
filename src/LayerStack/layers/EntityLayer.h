@@ -35,7 +35,8 @@ namespace mar {
 
 			// --- GET METHODS --- //
 
-			inline ecs::Scene* getScene();
+			graphics::RendererEntity* getRenderer();
+			ecs::Scene* getScene();
 		};
 
 

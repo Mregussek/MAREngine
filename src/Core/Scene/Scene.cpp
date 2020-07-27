@@ -11,9 +11,9 @@ namespace mar {
 	namespace ecs {
 
 
-		Scene::Scene() {
-
-		}
+		Scene::Scene(const char* name)
+			: m_name(name)
+		{}
 
 		Scene::~Scene() {
 			m_registry.clear();
@@ -33,6 +33,10 @@ namespace mar {
 
 		void Scene::update() {
 
+		}
+
+		void Scene::setName(const char* name) {
+			m_name = name;
 		}
 
 

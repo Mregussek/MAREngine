@@ -13,7 +13,8 @@ namespace mar {
 
 		EntityLayer::EntityLayer(const char* debugname)
 			: m_debugName(debugname),
-			m_renderer(nullptr)
+			m_renderer(nullptr),
+			m_scene("Empty")
 		{}
 
 		void EntityLayer::initialize() {
@@ -24,12 +25,18 @@ namespace mar {
 
 		void EntityLayer::update() {
 			m_renderer->submit(&m_scene);
+			m_renderer->update();
+			m_renderer->clear();
 		}
 
 		void EntityLayer::closeLayer() {
 			m_renderer->close();
 
 			delete m_renderer;
+		}
+
+		graphics::RendererEntity* EntityLayer::getRenderer() {
+			return m_renderer;
 		}
 
 		ecs::Scene* EntityLayer::getScene() {

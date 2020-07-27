@@ -8,6 +8,7 @@
 
 #include "../../mar.h"
 #include "Component/Components.h"
+#include "System/Systems.h"
 
 
 namespace mar {
@@ -19,11 +20,13 @@ namespace mar {
 		class Scene {
 			friend class Entity;
 
+			const char* m_name{ "Empty Scene" };
+
 			std::vector<Entity> m_entities;
 			entt::registry m_registry;
 
 		public:
-			Scene();
+			Scene(const char* name);
 			~Scene();
 
 			void update();
@@ -31,7 +34,13 @@ namespace mar {
 			Entity createEntity();
 
 			// --- GET METHODS --- //
-			inline const std::vector<Entity>& getEntities() const { return m_entities; }
+
+			inline std::vector<Entity>& getEntities() { return m_entities; }
+			inline const char* getName() const { return m_name; }
+
+			// --- SET METHODS --- //
+
+			void setName(const char* name);
 		};
 
 

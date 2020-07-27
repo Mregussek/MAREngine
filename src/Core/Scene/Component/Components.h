@@ -42,9 +42,9 @@ namespace mar {
 		};
 
 		struct TransformComponent {
-			maths::mat4 scale;
-			maths::mat4 rotation;
-			maths::mat4 translation;
+			maths::vec3 center;
+			maths::vec3 angles;
+			maths::vec3 scale;
 
 			maths::mat4 transform{ 1.f };
 

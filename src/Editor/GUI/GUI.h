@@ -18,6 +18,12 @@
 #include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
 
+#include "../../Core/Scene/Scene.h"
+#include "../../Core/Scene/Entity/Entity.h"
+#include "../../Core/Scene/Component/Components.h"
+#include "../../Core/Scene/System/Systems.h"
+
+
 namespace mar {
 	namespace editor {
 
@@ -98,30 +104,19 @@ namespace mar {
 			void Menu_ModifyShape();
 			void Menu_SelectShape();
 			void Menu_PushShapeToScene();
-			void Menu_Environment();
-			void Menu_Statistics();
+			void Scene_Environment();
+			void Scene_Statistics();
 			void Menu_Info();
 			void Menu_Instruction();
 
-			bool checkCharsEnding(const char* withwhat, const char* what) {
-				static int l1;
-				static int l2;
+			bool checkCharsEnding(const char* withwhat, const char* what);
+			bool checkCharsStart(const char* withwhat, const char* what);
 
-				l1 = strlen(withwhat);
-				l2 = strlen(what);
 
-				if (l1 > l2)
-					return false;
-
-				return std::strcmp(withwhat, what + (l2 - l1)) == 0;
-			}
-
-			bool checkCharsStart(const char* withwhat, const char* what) {
-				const char* check = strstr(what, withwhat);
-
-				if (what == check) return true;
-				else return false;
-			}
+		public:
+			std::vector<ecs::Scene*> m_scenes;
+			void submit(ecs::Scene* scene);
+			void Scene_Hierarchy();
 
 		};
 

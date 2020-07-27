@@ -184,6 +184,7 @@
     <ClInclude Include="src\Core\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\Scene\Component\Components.h" />
     <ClInclude Include="src\Core\Scene\Entity\Entity.h" />
+    <ClInclude Include="src\Core\Scene\System\Systems.h" />
     <ClInclude Include="src\LayerStack\layers\CameraLayer.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
