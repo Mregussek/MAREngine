@@ -52,6 +52,7 @@
 
 #if __has_include("imgui.h")
 	#include "imgui.h"
+	#include "imgui_internal.h"
 	#include "examples/imgui_impl_glfw.h"
 	#include "examples/imgui_impl_opengl3.h"
 	#define MAR_ENGINE_IMGUI_LIB_IMPORTED

@@ -28,27 +28,17 @@ namespace mar {
 			Scene(const char* name);
 			~Scene();
 
-			void update();
-
 			Entity createEntity();
 
 			// --- GET METHODS --- //
 
 			inline const char* getName() const { return m_name; }
 
-			template<typename T>
-			auto getView() ->decltype(m_registry.view<T>()) {
-				return m_registry.view<T>();
-			}
-
-			template<typename T>
-			T& getComponent(entt::entity entity) {
-				return m_registry.get<T>(entity);
-			}
-
 			// --- SET METHODS --- //
 
 			void setName(const char* name);
+		
+			std::vector<Entity> entities;
 		};
 
 

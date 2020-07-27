@@ -690,15 +690,15 @@ namespace mar {
 		void GUI::Scene_Hierarchy() {
 			ImGui::Begin("Scene Hierarchy");
 
-			for (auto scene : m_scenes) {
-
-				auto view = scene->getView<ecs::TagComponent>();
-
-				for (auto entity : view) {
-					std::string s = scene->getComponent<ecs::TagComponent>(entity);
-					ImGui::MenuItem(s.c_str());
+			for (int32_t j = 0; j < m_scenes.size(); j++) {
+				for (int32_t i = 0; i < m_scenes[j]->entities.size(); i++) {
+					std::string s = m_scenes[j]->entities[i].getComponent<ecs::TagComponent>();
+					if (ImGui::MenuItem(s.c_str())) {
+						index_scene = j;
+						index_entity = i;
+					}
 				}
-
+				
 			}
 
 			ImGui::End();
@@ -707,24 +707,73 @@ namespace mar {
 		void GUI::Scene_Entity_Modify() {
 			ImGui::Begin("Entity Modification");
 
-			/*
-			auto& tran = chosenOne.getComponent<ecs::TransformComponent>();
+			if (index_scene == -1 || index_entity == -1) {
+				ImGui::Text("No entity selected!");
+				ImGui::End();
+				return;
+			}
+			
+			auto& entity = m_scenes[index_scene]->entities[index_entity];
 
-			ImGui::Text("\nPosition\n");
+			if (entity.hasComponent<ecs::TagComponent>())
+				Scene_Handle_TagComponent();
+
+			if (entity.hasComponent<ecs::TransformComponent>())
+				Scene_Handle_TransformComponent();
+			
+			if (entity.hasComponent<ecs::ColorComponent>())
+				Scene_Handle_ColorComponent();
+
+			ImGui::End();
+		}
+
+		void GUI::Scene_Handle_TagComponent() {
+			ImGui::Separator();
+			ImGui::Text("\nTagComponent\n");
+
+			auto& tag = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::TagComponent>();
+
+			std::string s = tag.tag;
+
+			ImGui::InputText("- Tag", (char*)s.c_str(), 30);
+
+			tag.tag = s;
+
+			ImGui::Text("\n");
+		}
+
+		void GUI::Scene_Handle_TransformComponent() {
+			ImGui::Separator();
+			ImGui::Text("\nTransformComponent\n");
+
+			auto& tran = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::TransformComponent>();
+
+			ImGui::Text("Position\n");
 			ImGui::SliderFloat("X translation", &tran.center.x, -15.0f, 15.0f, "%.2f", 1.f);
 			ImGui::SliderFloat("Y translation", &tran.center.y, -15.0f, 15.0f, "%.2f", 1.f);
 			ImGui::SliderFloat("Z translation", &tran.center.z, -15.0f, 15.0f, "%.2f", 1.f);
-			ImGui::Separator();
 
-			ImGui::Text("\nRotation\n");
+			ImGui::Text("Rotation\n");
 			ImGui::SliderFloat("X rotation", &tran.angles.x, -360.f, 360.f, "%.2f", 1.f);
 			ImGui::SliderFloat("Y rotation", &tran.angles.y, -360.f, 360.f, "%.2f", 1.f);
 			ImGui::SliderFloat("Z rotation", &tran.angles.z, -360.f, 360.f, "%.2f", 1.f);
-			ImGui::Separator();
+
+			
 
 			ecs::System::handleTransformComponent(tran);
-			*/
-			ImGui::End();
+
+			ImGui::Text("\n");
+		}
+
+		void GUI::Scene_Handle_ColorComponent() {
+			ImGui::Separator();
+			ImGui::Text("\nColorComponent\n");
+
+			auto& color = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::ColorComponent>();
+		
+			ImGui::ColorEdit3("- color", (float*)maths::vec3::value_ptr(color.color));
+
+			ImGui::Text("\n");
 		}
 
 		void GUI::Setup_Theme() {

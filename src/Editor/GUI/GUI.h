@@ -118,10 +118,15 @@ namespace mar {
 
 		public:
 			std::vector<ecs::Scene*> m_scenes;
+			int32_t index_scene{ -1 };
+			int32_t index_entity{ -1 };
 			void submit(ecs::Scene* scene);
 			void Scene_Hierarchy();
 			void Scene_Entity_Modify();
 
+			void Scene_Handle_TagComponent();
+			void Scene_Handle_TransformComponent();
+			void Scene_Handle_ColorComponent();
 		};
 
 

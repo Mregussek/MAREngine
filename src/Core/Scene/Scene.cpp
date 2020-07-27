@@ -25,11 +25,9 @@ namespace mar {
 			entity.addComponent<TagComponent>();
 			entity.addComponent<TransformComponent>();
 
+			entities.push_back(entity);
+
 			return entity;
-		}
-
-		void Scene::update() {
-
 		}
 
 		void Scene::setName(const char* name) {

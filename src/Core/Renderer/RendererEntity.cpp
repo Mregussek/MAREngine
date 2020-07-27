@@ -50,7 +50,8 @@ namespace mar {
 		}
 
 		void RendererEntity::submit(ecs::Scene* scene) {
-
+			for (auto& entity : scene->entities)
+				submit(entity);
 
 			MAR_CORE_TRACE("RENDERERENTITY: submitted scene!");
 		}
@@ -110,7 +111,7 @@ namespace mar {
 			vertices.insert(vertices.end(), ren.vertices.begin(), ren.vertices.end());
 			indices.insert(indices.end(), copy.begin(), copy.end());
 
-			indicesmax += vertices.size() / stride;
+			indicesmax += ren.vertices.size() / stride;
 		
 			MAR_CORE_TRACE("RENDERERENTITY: submitted renderable component!");
 		}

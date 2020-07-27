@@ -156,9 +156,7 @@ namespace mar {
 					m_framebuffer.bind();
 					m_framebuffer.clear();
 
-					auto view = entitylayer->getScene()->getView<ecs::RenderableComponent>();
-					for (auto entity : view)
-						entitylayer->getRenderer()->submit(entity, entitylayer->getScene());
+					entitylayer->getRenderer()->submit(entitylayer->getScene());
 
 					m_stack.update();
 

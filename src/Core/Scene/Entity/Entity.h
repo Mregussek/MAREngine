@@ -14,12 +14,22 @@
 namespace mar {
 	namespace ecs {
 
+		enum class EntityComponents {
+			COLOR,
+			TEXTURE2D,
+			CUBEMAP,
+			RENDERABLE,
+			TAG,
+			TRANSFORM
+		};
 
 		class Entity {
 			entt::entity m_entityHandle{ entt::null };
 			Scene* m_scene{ nullptr };
 
 		public:
+			Entity() = default;
+
 			Entity(entt::entity handle, Scene* scene)
 				: m_entityHandle(handle),
 				m_scene(scene)
@@ -79,5 +89,12 @@ namespace mar {
 
 } }
 
+
+#define ECS_RENDERABLE ::mar::ecs::EntityComponents::RENDERABLE
+#define ECS_COLOR ::mar::ecs::EntityComponents::COLOR
+#define ECS_TEXTURE2D ::mar::ecs::EntityComponents::TEXTURE2D
+#define ECS_CUBEMAP ::mar::ecs::EntityComponents::CUBEMAP
+#define ECS_TAG ::mar::ecs::EntityComponents::TAG
+#define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
 
 #endif // !MAR_ENGINE_ECS_ENTITY_H
