@@ -23,6 +23,7 @@
 #include "../../Core/Scene/Entity/Entity.h"
 #include "../../Core/Scene/Component/Components.h"
 #include "../../Core/Scene/System/Systems.h"
+#include "../../Core/Camera/Camera.h"
 
 
 namespace mar {

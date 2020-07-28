@@ -60,6 +60,14 @@
 	#error "MAR ENGINE: Cannot import imgui.h!"
 #endif
 
+#if __has_include("ImGuizmo.h")
+	#include "ImGuizmo.h"
+	#include "ImSequencer.h"
+	#define MAR_ENGINE_IMGUIZMO_LIB
+#else
+	#error "MAR ENGINE: Cannot import ImGuizmo.h!"
+#endif
+
 #if __has_include("SerialPort.hpp")
 	#include "SerialPort.hpp"
 	#define MAR_ENGINE_SERIAL_PORT_LIB_IMPORTED

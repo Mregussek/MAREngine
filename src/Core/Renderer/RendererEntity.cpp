@@ -32,6 +32,8 @@ namespace mar {
 
 			m_stride = 3 + 3 + 2 + 1;
 
+			m_lastSize = 0;
+
 			clear();
 
 			MAR_CORE_INFO("RENDERERENTITY: initialized!");
@@ -50,6 +52,14 @@ namespace mar {
 		}
 
 		void RendererEntity::submit(ecs::Scene* scene) {
+			if (m_lastSize == scene->entities.size()) {
+				m_lastSizeSet = false;
+				return;
+			}
+				
+			m_lastSizeSet = true;
+			m_lastSize = scene->entities.size();
+
 			for (auto& entity : scene->entities)
 				submit(entity);
 
@@ -135,6 +145,9 @@ namespace mar {
 		}
 
 		void RendererEntity::clear() {
+			if (!m_lastSizeSet)
+				return;
+
 			m_verticesColor.clear();
 			m_indicesColor.clear();
 			m_transformsColor.clear();

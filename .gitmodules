@@ -10,3 +10,6 @@
 [submodule "other/MARMaths"]
 	path = other/MARMaths
 	url = https://github.com/Mregussek/MARMaths.git
+[submodule "other/ImGuizmo"]
+	path = other/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

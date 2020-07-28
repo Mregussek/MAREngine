@@ -63,6 +63,8 @@ namespace mar {
 			// --- OTHER --- //
 			Light* m_light;
 			uint32_t m_stride;
+			bool m_lastSizeSet;
+			uint32_t m_lastSize;
 			static RendererStatistics s_stats;
 
 		public:

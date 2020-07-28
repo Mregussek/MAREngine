@@ -51,6 +51,7 @@ namespace mar {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
+			ImGuizmo::BeginFrame();
 
 			/*
 			s_guiData.translate = getTranslationMatrix();
@@ -758,8 +759,23 @@ namespace mar {
 			ImGui::SliderFloat("Y rotation", &tran.angles.y, -360.f, 360.f, "%.2f", 1.f);
 			ImGui::SliderFloat("Z rotation", &tran.angles.z, -360.f, 360.f, "%.2f", 1.f);
 
-			
 
+			static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::ROTATE);
+			static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+
+			ImGuiIO& io = ImGui::GetIO();
+			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+			ImGuizmo::Manipulate(
+				maths::mat4::value_ptr(graphics::Camera::getCameraData().view),
+				maths::mat4::value_ptr(graphics::Camera::getCameraData().projection),
+				mCurrentGizmoOperation,
+				mCurrentGizmoMode,
+				(float*)maths::mat4::value_ptr(tran),
+				NULL,
+				NULL
+				\
+			);
+			
 			ecs::System::handleTransformComponent(tran);
 
 			ImGui::Text("\n");
