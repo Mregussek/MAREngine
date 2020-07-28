@@ -12,7 +12,11 @@ namespace mar {
 
 
 		Scene::Scene(const char* name)
-			: m_name(name)
+			: m_name(name),
+			updatedTransforms(false),
+			updatedColors(false),
+			updatedTextures2D(false),
+			updatedTexturesCubemap(false)
 		{}
 
 		Scene::~Scene() {

@@ -53,12 +53,20 @@ namespace mar {
 
 		void RendererEntity::submit(ecs::Scene* scene) {
 			if (m_lastSize == scene->entities.size()) {
+				if (scene->updatedTransforms)
+					updateTransforms(scene);
+
+				if (scene->updatedColors)
+					updateColors(scene);
+
 				m_lastSizeSet = false;
 				return;
 			}
 				
 			m_lastSizeSet = true;
 			m_lastSize = scene->entities.size();
+
+			clear();
 
 			for (auto& entity : scene->entities)
 				submit(entity);
@@ -139,8 +147,6 @@ namespace mar {
 				draw(m_verticesCubemap, m_indicesCubemap, m_transformsCubemap, m_samplersCubemap, m_shaderCubemap);
 			}
 
-			clear();
-
 			MAR_CORE_INFO("RENDERERENTITY: Draw calls finished for this scene!");
 		}
 
@@ -210,7 +216,7 @@ namespace mar {
 
 				m_vao.unbind();
 			}
-			
+
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
 
@@ -286,6 +292,31 @@ namespace mar {
 
 		void RendererEntity::clearStatistics() {
 			s_stats.resetStatistics();
+		}
+
+		void RendererEntity::updateTransforms(ecs::Scene* scene) {
+			m_transformsColor.clear();
+			m_transformsTexture2D.clear();
+			m_transformsCubemap.clear();
+
+			for (auto& entity : scene->entities) {
+				if (entity.hasComponent<ecs::ColorComponent>())
+					m_transformsColor.push_back(entity.getComponent<ecs::TransformComponent>());
+
+				if (entity.hasComponent<ecs::Texture2DComponent>())
+					m_transformsTexture2D.push_back(entity.getComponent<ecs::TransformComponent>());
+
+				if (entity.hasComponent<ecs::TextureCubemapComponent>())
+					m_transformsCubemap.push_back(entity.getComponent<ecs::TransformComponent>());
+			}
+		}
+
+		void RendererEntity::updateColors(ecs::Scene* scene) {
+			m_samplersColors.clear();
+
+			for (auto& entity : scene->entities)
+				if (entity.hasComponent<ecs::ColorComponent>())
+					m_samplersColors.push_back(entity.getComponent<ecs::ColorComponent>());
 		}
 
 

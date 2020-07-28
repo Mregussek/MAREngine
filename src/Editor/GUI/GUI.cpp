@@ -749,20 +749,65 @@ namespace mar {
 
 			auto& tran = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::TransformComponent>();
 
-			ImGui::Text("Position\n");
-			ImGui::SliderFloat("X translation", &tran.center.x, -15.0f, 15.0f, "%.2f", 1.f);
-			ImGui::SliderFloat("Y translation", &tran.center.y, -15.0f, 15.0f, "%.2f", 1.f);
-			ImGui::SliderFloat("Z translation", &tran.center.z, -15.0f, 15.0f, "%.2f", 1.f);
+			// Sliders
+			{
+				// Position
+				{
+					ImGui::Text("Position\n");
+					ImGui::SliderFloat3("pos", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
+				}
 
-			ImGui::Text("Rotation\n");
-			ImGui::SliderFloat("X rotation", &tran.angles.x, -360.f, 360.f, "%.2f", 1.f);
-			ImGui::SliderFloat("Y rotation", &tran.angles.y, -360.f, 360.f, "%.2f", 1.f);
-			ImGui::SliderFloat("Z rotation", &tran.angles.z, -360.f, 360.f, "%.2f", 1.f);
+				// Rotation
+				{
+					ImGui::Text("Rotation\n");
+					ImGui::SliderFloat3("rot", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
+				}
 
+				// Scale 
+				{
+					ImGui::Text("Scale");
+
+					static float last_general;
+					last_general = tran.general_scale;
+
+					ImGui::SliderFloat("General\n", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
+					if (last_general != tran.general_scale) {
+						tran.scale += tran.general_scale - last_general;
+					}
+
+					ImGui::SliderFloat3("scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
+
+					if (ImGui::Button("Reset to default scale")) {
+						tran.general_scale = 1.f;
+						tran.scale.x = 1.f;
+						tran.scale.y = 1.f;
+						tran.scale.z = 1.f;
+					}
+				}
+			}
+			
+			ecs::System::handleTransformComponent(tran);
 
 			static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::ROTATE);
 			static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
 
+			if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
+				mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+			ImGui::SameLine();
+			if (ImGui::RadioButton("Rotate", mCurrentGizmoOperation == ImGuizmo::ROTATE))
+				mCurrentGizmoOperation = ImGuizmo::ROTATE;
+			ImGui::SameLine();
+			if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
+				mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+			if (mCurrentGizmoOperation != ImGuizmo::SCALE) {
+				if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
+					mCurrentGizmoMode = ImGuizmo::LOCAL;
+				ImGui::SameLine();
+				if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
+					mCurrentGizmoMode = ImGuizmo::WORLD;
+			}
+			
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 			ImGuizmo::Manipulate(
@@ -770,13 +815,23 @@ namespace mar {
 				maths::mat4::value_ptr(graphics::Camera::getCameraData().projection),
 				mCurrentGizmoOperation,
 				mCurrentGizmoMode,
-				(float*)maths::mat4::value_ptr(tran),
-				NULL,
-				NULL
-				\
+				maths::mat4::value_ptr_nonconst(tran.transform),
+				nullptr,
+				nullptr,
+				nullptr,
+				nullptr
 			);
-			
-			ecs::System::handleTransformComponent(tran);
+
+			/*
+			ImGuizmo::DrawGrid(
+				maths::mat4::value_ptr(graphics::Camera::getCameraData().view),
+				maths::mat4::value_ptr(graphics::Camera::getCameraData().projection),
+				maths::mat4::value_ptr(maths::mat4(1.0f)), 
+				100.f
+			);
+			*/
+
+			m_scenes[index_scene]->updatedTransforms = true;
 
 			ImGui::Text("\n");
 		}
@@ -787,7 +842,9 @@ namespace mar {
 
 			auto& color = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::ColorComponent>();
 		
-			ImGui::ColorEdit3("- color", (float*)maths::vec3::value_ptr(color.color));
+			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
+
+			m_scenes[index_scene]->updatedColors = true;
 
 			ImGui::Text("\n");
 		}

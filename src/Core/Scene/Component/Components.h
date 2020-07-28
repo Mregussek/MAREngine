@@ -42,6 +42,7 @@ namespace mar {
 		};
 
 		struct TransformComponent {
+			float general_scale;
 			maths::vec3 center;
 			maths::vec3 angles;
 			maths::vec3 scale;

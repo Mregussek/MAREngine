@@ -113,6 +113,9 @@ namespace mar {
 		
 			static void passLightToShader(ShaderOpenGL& shader, Light* light);
 			static void passCameraToShader(ShaderOpenGL& shader, CameraData* camdata);
+		
+			void updateTransforms(ecs::Scene* scene);
+			void updateColors(ecs::Scene* scene);
 		};
 
 
