@@ -14,13 +14,15 @@
 namespace mar {
 	namespace ecs {
 
+
 		enum class EntityComponents {
 			COLOR,
 			TEXTURE2D,
 			CUBEMAP,
 			RENDERABLE,
 			TAG,
-			TRANSFORM
+			TRANSFORM,
+			LIGHT
 		};
 
 		class Entity {
@@ -28,6 +30,8 @@ namespace mar {
 			Scene* m_scene{ nullptr };
 
 		public:
+			std::vector<EntityComponents> components;
+			
 			Entity() = default;
 
 			Entity(entt::entity handle, Scene* scene)
@@ -46,8 +50,10 @@ namespace mar {
 			}
 
 			template<typename T, typename... Args>
-			T& addComponent(Args&&... args) {
+			T& addComponent(EntityComponents entcmp, Args&&... args) {
 				MAR_CORE_ASSERT(!hasComponent<T>(), "Entity already has this component!");
+
+				components.push_back(entcmp);
 
 				return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 			}
@@ -67,8 +73,12 @@ namespace mar {
 			}
 
 			template<typename T>
-			void removeComponent() {
+			void removeComponent(EntityComponents entcmp) {
 				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
+
+				auto it = std::find(components.begin(), components.end(), entcmp);
+				if (it != components.end()) 
+					components.erase(it);
 
 				m_scene->m_registry.remove<T>();
 			}
@@ -79,10 +89,6 @@ namespace mar {
 
 			operator bool() const {
 				return isValid();
-			}
-
-			Entity copyEntity() {
-				return { m_entityHandle, m_scene };
 			}
 		};
 
@@ -96,5 +102,7 @@ namespace mar {
 #define ECS_CUBEMAP ::mar::ecs::EntityComponents::CUBEMAP
 #define ECS_TAG ::mar::ecs::EntityComponents::TAG
 #define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
+#define ECS_LIGHT ::mar::ecs::EntityComponents::LIGHT
+
 
 #endif // !MAR_ENGINE_ECS_ENTITY_H

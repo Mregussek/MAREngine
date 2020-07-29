@@ -8,8 +8,7 @@
 
 
 #include "../../mar.h"
-#include "Shapes/ShapeManipulator.h"
-#include "Texture/TexturePaths.h"
+#include "Manipulators/ShapeManipulator.h"
 
 
 namespace mar {

@@ -10,7 +10,7 @@
 
 #include "../Camera/Camera.h"
 
-#include "../Mesh/Shapes/ShapeManipulator.h"
+#include "../Mesh/Manipulators/ShapeManipulator.h"
 #include "../Mesh/MeshCreator.h"
 
 #include "Buffers/ElementBuffer/ElementBuffer.h"
@@ -28,8 +28,8 @@
 #include "Buffers/FrameBuffer/FrameBuffer.h"
 #include "Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
-#include "../Mesh/Texture/Texture.h"
-#include "../Mesh/Texture/TextureOpenGL.h"
+#include "Texture/Texture.h"
+#include "Texture/TextureOpenGL.h"
 
 #include "../Shader/Shader.h"
 #include "../Shader/ShaderOpenGL.h"

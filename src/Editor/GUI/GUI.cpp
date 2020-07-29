@@ -5,6 +5,8 @@
 
 #include "GUI.h"
 #include "../../Debug/Log.h"
+#include "../Filesystem/EditorFilesystem.h"
+
 
 namespace mar {
 	namespace editor {
@@ -90,6 +92,7 @@ namespace mar {
 			Scene_Statistics();
 			Display_ViewPort();
 
+			if (m_saveSceneWindow) { Filesystem_SaveScene(); }
 			if (m_infoWindow) { Menu_Info(); }
 			if (m_instructionWindow) { Menu_Instruction(); }
 		}
@@ -109,7 +112,7 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Save")) {
-
+						m_saveSceneWindow = true;
 					}
 
 					if (ImGui::MenuItem("Exit")) {
@@ -266,6 +269,11 @@ namespace mar {
 		}
 
 		void GUI::submit(ecs::Scene* scene) {
+			if (m_scenes.size() == 1) {
+				MAR_CORE_ERROR("Cannot push more scenes! You must pop the one existing!");
+				return;
+			}
+
 			m_scenes.push_back(scene);
 		}
 
@@ -304,6 +312,14 @@ namespace mar {
 
 			if (entity.hasComponent<ecs::TagComponent>())
 				Scene_Handle_TagComponent();
+
+			if (entity.hasComponent<ecs::RenderableComponent>()) {
+				ImGui::Separator();
+				ImGui::Text("\nRenderableComponent\n");
+				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
+				ImGui::Text(renderable.id.c_str());
+				ImGui::Text("\n");
+			}
 
 			if (entity.hasComponent<ecs::TransformComponent>())
 				Scene_Handle_TransformComponent();
@@ -427,7 +443,33 @@ namespace mar {
 
 			ImGui::Text("\n");
 		}
-  
+		
+		void GUI::Filesystem_SaveScene() {
+			ImGui::Begin("Save File");
+
+			static char filename[30]{ "empty" };
+
+			ImGui::InputText(".marscene", filename, 30);
+
+			ImGui::Separator();
+
+			static std::string save;
+			save = "resources/mar_files/" + std::string(filename) + ".marscene";
+
+			ImGui::Text("\nSaving to: ");
+			ImGui::Text(save.c_str());
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Save to selected name"))
+				Filesystem::saveToFile(m_scenes[0], save.c_str());
+
+			if (ImGui::Button("Close"))
+				m_saveSceneWindow = false;
+
+			ImGui::End();
+		}
+
 		void GUI::Setup_Theme() {
 			ImGui::GetStyle().FrameRounding = 4.0f;
 			ImGui::GetStyle().GrabRounding = 4.0f;

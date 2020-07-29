@@ -27,16 +27,19 @@ namespace mar {
 		};
 
 		struct RenderableComponent {
+			std::string id;
 			std::vector<float> vertices;
 			std::vector<uint32_t> indices;
 
 			RenderableComponent() = default;
 			RenderableComponent(const RenderableComponent& ren) = default;
-			RenderableComponent(const std::vector<float>& ver, const std::vector<uint32_t>& ind)
-				: vertices(ver),
+			RenderableComponent(std::string i, const std::vector<float>& ver, const std::vector<uint32_t>& ind)
+				: id(i),
+				vertices(ver),
 				indices(ind)
 			{}
 
+			operator const std::string& () const { return id; }
 			operator const std::vector<float>&() const { return vertices; }
 			operator const std::vector<uint32_t>&() const { return indices; }
 		};

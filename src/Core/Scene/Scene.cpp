@@ -27,8 +27,7 @@ namespace mar {
 		Entity Scene::createEntity() {
 			Entity entity{ m_registry.create(), this };
 
-			entity.addComponent<TagComponent>();
-			entity.addComponent<TransformComponent>();
+			entity.addComponent<TagComponent>(ECS_TAG);
 
 			entities.push_back(entity);
 

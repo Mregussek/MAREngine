@@ -57,17 +57,18 @@ namespace mar {
 					auto& tag = entity.getComponent<ecs::TagComponent>();
 					tag = std::string("First Entity");
 
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					tran.scale = { 1.f, 1.f, 1.f };
 					tran.angles = { 65.f, 0.f, 0.f };
 					tran.center = { 0.f, 2.f, 1.f };
 					ecs::System::handleTransformComponent(tran);
 
-					auto& ren = entity.addComponent<ecs::RenderableComponent>();
+					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					ren.id = "Cube";
 					ren.vertices = graphics::MeshCreator::getVertices_Cube();
 					ren.indices = graphics::MeshCreator::getIndices_Cube();
 
-					entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.2f, 0.5f, 0.2f });
+					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.2f, 0.5f, 0.2f });
 				}
 
 				// SECOND ENTITY
@@ -77,17 +78,18 @@ namespace mar {
 					auto& tag = entity.getComponent<ecs::TagComponent>();
 					tag = std::string("Second Entity");
 
-					auto& ren = entity.addComponent<ecs::RenderableComponent>();
+					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					ren.id = "Pyramid";
 					ren.vertices = graphics::MeshCreator::getVertices_Pyramid();
 					ren.indices = graphics::MeshCreator::getIndices_Pyramid();
 
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					tran.scale = { 1.f, 1.5f, 1.f };
 					tran.angles = { 0.f, 25.f, 0.f };
 					tran.center = { -3.f, 2.f, -1.f };
 					ecs::System::handleTransformComponent(tran);
 
-					entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.5f, 0.9f, 0.25f });
+					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.5f, 0.9f, 0.25f });
 				}
 
 				// THIRD ENTITY
@@ -97,17 +99,18 @@ namespace mar {
 					auto& tag = entity.getComponent<ecs::TagComponent>();
 					tag = std::string("Third Entity");
 
-					auto& ren = entity.addComponent<ecs::RenderableComponent>();
+					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					ren.id = "Surface";
 					ren.vertices = graphics::MeshCreator::getVertices_Surface();
 					ren.indices = graphics::MeshCreator::getIndices_Surface();
 
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					tran.scale = { 1.f, 1.f, 1.f };
 					tran.angles = { 0.f, 0.f, 0.f };
 					tran.center = { 0.f, 0.f, 0.f };
 					ecs::System::handleTransformComponent(tran);
 
-					entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.5f, 0.2f, 0.9f });
+					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.5f, 0.2f, 0.9f });
 				}
 
 				// FOURTH ENTITY
@@ -117,17 +120,18 @@ namespace mar {
 					auto& tag = entity.getComponent<ecs::TagComponent>();
 					tag = std::string("Fourth Entity");
 
-					auto& ren = entity.addComponent<ecs::RenderableComponent>();
+					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					ren.id = "Wall";
 					ren.vertices = graphics::MeshCreator::getVertices_Wall();
 					ren.indices = graphics::MeshCreator::getIndices_Wall();
 
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					tran.scale = { 1.f, 1.f, 1.f };
 					tran.angles = { 0.f, 25.f, 0.f };
 					tran.center = { -2.f, 0.f, 0.f };
 					ecs::System::handleTransformComponent(tran);
 
-					entity.addComponent<ecs::ColorComponent>(maths::vec3{ 0.9f, 0.2f, 0.3f });
+					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.9f, 0.2f, 0.3f });
 				}
 
 				// FIFTH ENTITY
@@ -137,18 +141,19 @@ namespace mar {
 					auto& tag = entity.getComponent<ecs::TagComponent>();
 					tag = std::string("Light Entity");
 
-					auto& ren = entity.addComponent<ecs::RenderableComponent>();
+					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					ren.id = "Cube";
 					ren.vertices = graphics::MeshCreator::getVertices_Cube();
 					ren.indices = graphics::MeshCreator::getIndices_Cube();
 
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					tran.scale = { 0.5f, 0.5f, 0.5f };
 					tran.angles = { 0.f, 0.f, 0.f };
 					tran.center = { 0.f, 0.f, 5.0f };
 					ecs::System::handleTransformComponent(tran);
 
-					entity.addComponent<ecs::ColorComponent>(maths::vec3{ 1.f, 1.f, 1.f });
-					entity.addComponent<ecs::LightComponent>();
+					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 1.f, 1.f, 1.f });
+					entity.addComponent<ecs::LightComponent>(ECS_LIGHT);
 				}
 			}
 			

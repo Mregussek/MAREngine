@@ -32,6 +32,7 @@ namespace mar {
 			// --- Viewport
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			// --- Should Window Be Opened ?
+			bool m_saveSceneWindow{ false };
 			bool m_infoWindow{ false };
 			bool m_instructionWindow{ false };
 			// --- Storage for scenes
@@ -78,6 +79,9 @@ namespace mar {
 			void Scene_Handle_LightComponent();
 		
 			void Scene_Statistics();
+
+			// --- FILESYSTEM HANDLERS --- //
+			void Filesystem_SaveScene();
 		};
 
 

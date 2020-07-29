@@ -120,6 +120,7 @@
 #include <vector> 
 #include <utility>
 #include <optional>
+#include <variant>
 #include <unordered_map>
 #include <algorithm> // std::find, std::copy
 // multi-threading
