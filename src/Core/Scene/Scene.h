@@ -53,6 +53,7 @@ namespace mar {
 			bool updatedColors;
 			bool updatedTextures2D;
 			bool updatedTexturesCubemap;
+			bool updatedLight;
 		};
 
 

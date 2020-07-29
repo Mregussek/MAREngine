@@ -62,6 +62,8 @@ namespace mar {
 
 			// --- OTHER --- //
 			Light* m_light;
+			maths::vec3 m_lightPosition;
+			ecs::LightComponent m_lightComponent;
 			uint32_t m_stride;
 			bool m_lastSizeSet;
 			uint32_t m_lastSize;
@@ -111,11 +113,12 @@ namespace mar {
 		
 			static void submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform);
 		
-			static void passLightToShader(ShaderOpenGL& shader, Light* light);
+			void passLightToShader(ShaderOpenGL& shader);
 			static void passCameraToShader(ShaderOpenGL& shader, CameraData* camdata);
 		
 			void updateTransforms(ecs::Scene* scene);
 			void updateColors(ecs::Scene* scene);
+			void updateLight(ecs::Scene* scene);
 		};
 
 

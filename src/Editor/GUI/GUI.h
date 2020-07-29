@@ -128,6 +128,7 @@ namespace mar {
 			void Scene_Handle_TagComponent();
 			void Scene_Handle_TransformComponent();
 			void Scene_Handle_ColorComponent();
+			void Scene_Handle_LightComponent();
 		};
 
 

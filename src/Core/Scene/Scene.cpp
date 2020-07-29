@@ -16,7 +16,8 @@ namespace mar {
 			updatedTransforms(false),
 			updatedColors(false),
 			updatedTextures2D(false),
-			updatedTexturesCubemap(false)
+			updatedTexturesCubemap(false),
+			updatedLight(false)
 		{}
 
 		Scene::~Scene() {

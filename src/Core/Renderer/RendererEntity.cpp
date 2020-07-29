@@ -59,6 +59,11 @@ namespace mar {
 				if (scene->updatedColors)
 					updateColors(scene);
 
+				if (scene->updatedLight)
+					updateLight(scene);
+				
+				auto view = scene->getView<ecs::LightComponent>();
+
 				m_lastSizeSet = false;
 				return;
 			}
@@ -80,6 +85,11 @@ namespace mar {
 
 			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 			auto& tran = entity.getComponent<ecs::TransformComponent>();
+
+			if (entity.hasComponent<ecs::LightComponent>()) {
+				m_lightComponent = entity.getComponent<ecs::LightComponent>();
+				m_lightPosition = entity.getComponent<ecs::TransformComponent>().center;
+			}
 
 			if (entity.hasComponent<ecs::ColorComponent>()) {
 				auto& color = entity.getComponent<ecs::ColorComponent>();
@@ -189,7 +199,7 @@ namespace mar {
 			{ // SEND ALL DATA TO SHADERS
 				shader.bind();
 
-				passLightToShader(shader, m_light);
+				passLightToShader(shader);
 				passCameraToShader(shader, &Camera::getCameraData());
 				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
 				shader.setUniformVectorVec3("u_SeparateColor", samplers);
@@ -262,22 +272,22 @@ namespace mar {
 			MAR_CORE_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
 		}
 
-		void RendererEntity::passLightToShader(ShaderOpenGL& shader, Light* light) {
-			shader.setUniformVector3("u_material.lightPos", light->getPosition());
+		void RendererEntity::passLightToShader(ShaderOpenGL& shader) {
+			shader.setUniformVector3("u_material.lightPos", m_lightPosition);
 
-			shader.setUniformVector3("u_material.ambient", light->getAmbient());
-			shader.setUniformVector3("u_material.diffuse", light->getDiffuse());
-			shader.setUniformVector3("u_material.specular", light->getSpecular());
+			shader.setUniformVector3("u_material.ambient", m_lightComponent.ambient);
+			shader.setUniformVector3("u_material.diffuse", m_lightComponent.ambient);
+			shader.setUniformVector3("u_material.specular", m_lightComponent.ambient);
 
-			shader.setUniformVector3("u_material.ambientStrength", light->getAmbientStrength());
-			shader.setUniformVector3("u_material.diffuseStrength", light->getDiffuseStrength());
-			shader.setUniformVector3("u_material.specularStrength", light->getSpecularStrength());
-	
-			shader.setUniform1f("u_material.shininess", light->getShininess());
-	
-			shader.setUniform1f("u_material.constant", light->getConstant());
-			shader.setUniform1f("u_material.linear", light->getLinear());
-			shader.setUniform1f("u_material.quadratic", light->getQuadratic());
+			shader.setUniformVector3("u_material.ambientStrength", m_lightComponent.ambient);
+			shader.setUniformVector3("u_material.diffuseStrength", m_lightComponent.ambient);
+			shader.setUniformVector3("u_material.specularStrength", m_lightComponent.ambient);
+
+			shader.setUniform1f("u_material.shininess", m_lightComponent.shininess);
+
+			shader.setUniform1f("u_material.constant", m_lightComponent.constant);
+			shader.setUniform1f("u_material.linear", m_lightComponent.linear);
+			shader.setUniform1f("u_material.quadratic", m_lightComponent.quadratic);
 		}
 
 		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, CameraData* camdata) {
@@ -317,6 +327,15 @@ namespace mar {
 			for (auto& entity : scene->entities)
 				if (entity.hasComponent<ecs::ColorComponent>())
 					m_samplersColors.push_back(entity.getComponent<ecs::ColorComponent>());
+		}
+
+		void RendererEntity::updateLight(ecs::Scene* scene) {
+			auto view = scene->getView<ecs::LightComponent>();
+
+			for (auto entity : view) {
+				m_lightComponent = scene->getComponent<ecs::LightComponent>(entity);
+				m_lightPosition = scene->getComponent<ecs::TransformComponent>(entity).center;
+			}
 		}
 
 

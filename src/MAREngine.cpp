@@ -25,7 +25,7 @@ namespace mar {
 
 		void MAREngine::run() {
 			layers::LayerStack m_stack;
-			graphics::Light m_light;
+			//graphics::Light m_light;
 
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
@@ -42,7 +42,7 @@ namespace mar {
 			gui_layer->initialize();
 			auto gui = gui_layer->getGUIInstance();
 			gui->set(m_framebuffer);
-			gui->set(&m_light);
+			//gui->set(&m_light);
 
 			m_stack.pushLayer(camera_layer);
 			m_stack.pushOverlay(gui_layer);
@@ -156,14 +156,16 @@ namespace mar {
 					auto& tran = entity.getComponent<ecs::TransformComponent>();
 					tran.scale = { 0.5f, 0.5f, 0.5f };
 					tran.angles = { 0.f, 0.f, 0.f };
+					tran.center = { 0.f, 0.f, 5.0f };
 					ecs::System::handleTransformComponent(tran);
 
 					entity.addComponent<ecs::ColorComponent>(maths::vec3{ 1.f, 1.f, 1.f });
+					entity.addComponent<ecs::LightComponent>();
 				}
 			}
 			
 			entitylayer->initialize();
-			entitylayer->getRenderer()->setLight(&m_light);
+			//entitylayer->getRenderer()->setLight(&m_light);
 			m_stack.pushLayer(entitylayer);
 			gui->submit(entitylayer->getScene());
 

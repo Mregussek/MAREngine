@@ -136,7 +136,7 @@ namespace mar {
 
 			Scene_Hierarchy();
 			Scene_Entity_Modify();
-			Scene_Environment();
+			//Scene_Environment();
 			Scene_Statistics();
 			Display_ViewPort();
 
@@ -725,6 +725,9 @@ namespace mar {
 			if (entity.hasComponent<ecs::ColorComponent>())
 				Scene_Handle_ColorComponent();
 
+			if (entity.hasComponent<ecs::LightComponent>())
+				Scene_Handle_LightComponent();
+
 			ImGui::End();
 		}
 
@@ -849,6 +852,48 @@ namespace mar {
 			ImGui::Text("\n");
 		}
 
+		void GUI::Scene_Handle_LightComponent() {
+			ImGui::Separator();
+			ImGui::Text("\nLightComponent\n");
+
+			auto& light = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::LightComponent>();
+
+			ImGui::Text("Ambient Light");
+
+			ImGui::SliderFloat3("A", &light.ambient.x, 0.f, 1.f);
+
+			ImGui::Text("Ambient Strength");
+
+			ImGui::SliderFloat3("SA", &light.ambientStrength.x, 0.f, 1.f);
+
+			ImGui::Text("Diffuse Light");
+
+			ImGui::SliderFloat3("D", &light.diffuse.x, 0.f, 1.f);
+
+			ImGui::Text("Diffuse Strength");
+
+			ImGui::SliderFloat3("SD", &light.diffuseStrength.x, 0.f, 1.f);
+
+			ImGui::Text("Specular Light");
+
+			ImGui::SliderFloat3("S", &light.specular.x, 0.f, 1.f);
+
+			ImGui::Text("Specular Strength");
+
+			ImGui::SliderFloat3("SS", &light.specularStrength.x, 0.f, 1.f);
+
+			ImGui::Text("Attenuation");
+
+			ImGui::InputFloat("Constant", &light.constant);
+			ImGui::InputFloat("Linear", &light.linear);
+			ImGui::InputFloat("Quadratic", &light.quadratic);
+			ImGui::InputFloat("Shininess", &light.shininess);
+
+			m_scenes[index_scene]->updatedLight = true;
+
+			ImGui::Text("\n");
+		}
+  
 		void GUI::Setup_Theme() {
 			ImGui::GetStyle().FrameRounding = 4.0f;
 			ImGui::GetStyle().GrabRounding = 4.0f;
