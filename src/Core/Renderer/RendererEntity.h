@@ -61,9 +61,10 @@ namespace mar {
 			uint32_t m_indicesMaxCubemap;
 
 			// --- OTHER --- //
-			Light* m_light;
+
 			maths::vec3 m_lightPosition;
 			ecs::LightComponent m_lightComponent;
+
 			uint32_t m_stride;
 			bool m_lastSizeSet;
 			uint32_t m_lastSize;
@@ -77,20 +78,10 @@ namespace mar {
 
 			void submit(ecs::Scene* scene);
 			void submit(ecs::Entity& entity);
-			void submit(entt::entity entity, ecs::Scene* scene) {
-				auto e = ecs::Entity{ entity, scene };
-				submit(e);
-			}
 			
 			void update();
 
 			void clear();
-
-			// --- SET METHODS --- //
-
-			void setLight(Light* light) { m_light = light; }
-
-			// --- GET METHODS --- //
 
 			// --- STATISTICS --- //
 			

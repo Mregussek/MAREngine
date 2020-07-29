@@ -25,7 +25,6 @@ namespace mar {
 		}
 
 		void LayerGUI::update() {
-			m_gui->prepareNewFrame();
 			m_gui->display();
 
 			MAR_CORE_TRACE("GUI_LAYER: displaying frame");

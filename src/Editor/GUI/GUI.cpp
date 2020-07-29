@@ -9,21 +9,12 @@
 namespace mar {
 	namespace editor {
 
-		std::vector<const char*> texture::files = { "empty" };
-		int texture::selected;
 
-		std::vector<const char*> scene::files = { "empty" };
-		int scene::selected;
-
-		GUIData GUI::s_guiData;
 		bool GUI::s_dockspaceOpen{ true };
 		bool GUI::s_fullscreenPersisant{ true };
 
 
 		void GUI::initialize(const char* glsl_version) {
-			m_meshIndex = -1;
-			m_shapeIndex = -1;
-
 			ImGui::CreateContext();
 			Setup_Theme();
 			ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().getWindow(), true);
@@ -33,8 +24,6 @@ namespace mar {
 			io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-
-			for (auto& c : m_sceneColors) c = 1.0f;
 
 			MAR_CORE_INFO("GUI has initialized properly!");
 		}
@@ -47,23 +36,18 @@ namespace mar {
 			MAR_CORE_INFO("GUI is closed!");
 		}
 
+		void GUI::display() {
+			prepareNewFrame();
+			updateFrame();
+			endFrame();
+		}
+
 		void GUI::prepareNewFrame() {
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 			ImGuizmo::BeginFrame();
 
-			/*
-			s_guiData.translate = getTranslationMatrix();
-			s_guiData.rotation = getRotationMatrix();
-			s_guiData.colors[0] = m_sceneColors[0];
-			s_guiData.colors[1] = m_sceneColors[1];
-			s_guiData.colors[2] = m_sceneColors[2];
-			s_guiData.colors[3] = m_sceneColors[3];
-			*/
-		}
-
-		void GUI::display() {
 			m_framebuffer.unbind();
 
 			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -95,15 +79,37 @@ namespace mar {
 				ImGuiID dockspace_id = ImGui::GetID("MARDockspace");
 				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 			}
+		}
 
+		void GUI::updateFrame() {
+			Menu_MainMenuBar();
+
+			Scene_Hierarchy();
+			Scene_Entity_Modify();
+
+			Scene_Statistics();
+			Display_ViewPort();
+
+			if (m_infoWindow) { Menu_Info(); }
+			if (m_instructionWindow) { Menu_Instruction(); }
+		}
+
+		void GUI::endFrame() {
+			ImGui::End();
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			ImGui::EndFrame();
+		}
+
+		void GUI::Menu_MainMenuBar() {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if (ImGui::MenuItem("Open")) {
-						m_fileOpenWindow = true;
+
 					}
 
 					if (ImGui::MenuItem("Save")) {
-						m_fileSaveWindow = true;
+
 					}
 
 					if (ImGui::MenuItem("Exit")) {
@@ -114,10 +120,6 @@ namespace mar {
 				}
 
 				if (ImGui::BeginMenu("Scene")) {
-					if (ImGui::BeginMenu("Add Shape to Scene Window")) {
-						//Menu_PushShapeToScene();
-						ImGui::EndMenu();
-					}
 
 					ImGui::EndMenu();
 				}
@@ -133,90 +135,6 @@ namespace mar {
 
 				ImGui::EndMainMenuBar();
 			}
-
-			Scene_Hierarchy();
-			Scene_Entity_Modify();
-			//Scene_Environment();
-			Scene_Statistics();
-			Display_ViewPort();
-
-			//Menu_ModifyScene();
-			//Menu_SelectShape();
-			//Menu_ModifyShape();
-
-			if (m_fileOpenWindow) { File_Open(); }
-			if (m_fileSaveWindow) { File_Save(); }
-			if (m_infoWindow) { Menu_Info(); }
-			if (m_instructionWindow) { Menu_Instruction(); }
-
-			ImGui::End();
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			ImGui::EndFrame();
-		}
-
-		void GUI::File_Open() {
-			ImGui::Begin("Open File");
-
-			if (ImGui::Button("Reload files in directory")) {
-				filesystem::updateMarFiles("resources/mar_files");
-
-				scene::files.clear();
-				scene::files.push_back("empty");
-
-				for (auto& m : filesystem::getMarFiles())
-					scene::files.push_back(m.c_str());
-			}
-
-			ImGui::Separator();
-
-			ImGui::Text("Select file, which you want to be opened:");
-
-			ImGui::Combo("Choose File", &scene::selected, scene::files.data(), scene::files.size());
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Open Selected File")) {
-				if (scene::selected == 0) {
-					MAR_CORE_ERROR("Wrong file selected!");
-					return;
-				}
-
-				static std::string selected;
-				selected = "resources/mar_files/" + std::string( scene::files[scene::selected] );
-
-				engine::MAREngine::getEngine()->setLoadPath(selected);
-				engine::MAREngine::getEngine()->setRestart();
-			}
-
-			if (ImGui::Button("Close")) 
-				m_fileOpenWindow = false;
-
-			ImGui::End();
-		}
-
-		void GUI::File_Save() {
-			ImGui::Begin("Save File");
-
-			ImGui::InputText(".marscene", m_inputStr, IM_ARRAYSIZE(m_inputStr));
-
-			ImGui::Separator();
-
-			static std::string save;
-			save = "resources/mar_files/" + std::string(m_inputStr) + ".marscene";
-
-			ImGui::Text("Saving to: ");
-			ImGui::Text(save.c_str());
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Save to selected name")) 
-				filesystem::saveSceneToFile(save, m_meshes);
-
-			if (ImGui::Button("Close")) 
-				m_fileSaveWindow = false;
-
-			ImGui::End();
 		}
 
 		void GUI::Display_ViewPort() {
@@ -236,313 +154,6 @@ namespace mar {
 
 			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, 
 				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-			ImGui::End();
-		}
-
-		/*
-		void GUI::Menu_ModifyScene() {
-			ImGui::Begin("Scene Modification Menu");
-
-			if (storage::usegui) {
-				ImGui::MenuItem("Scene Menu");
-
-				if (ImGui::TreeNode("Modify Scene")) {
-					ImGui::Text("Move Scene");
-					ImGui::SliderFloat("TX", &m_sceneTranslation.x, -5.0f, 5.0f, "%.2f", 1.f);
-					ImGui::SliderFloat("TY", &m_sceneTranslation.y, -5.0f, 5.0f, "%.2f", 1.f);
-					ImGui::SliderFloat("TZ", &m_sceneTranslation.z, -5.0f, 5.0f, "%.2f", 1.f);
-					ImGui::Separator();
-
-					ImGui::Text("Rotate Scene");
-					ImGui::SliderFloat("RX", &m_sceneAngle.x, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::SliderFloat("RY", &m_sceneAngle.y, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::SliderFloat("RZ", &m_sceneAngle.z, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::Separator();
-
-					ImGui::Text("Color Scene");
-					ImGui::ColorEdit4("C", m_sceneColors);
-
-					ImGui::TreePop();
-				}
-			}
-			else {
-				ImGui::Text("You cannot modify objects!");
-			}
-
-			ImGui::End();
-		}
-
-		void GUI::Menu_SelectShape() {
-			ImGui::Begin("Select Shape Menu");
-
-			if (storage::usegui) {
-				ImGui::MenuItem("Select Shape");
-
-				for (uint32_t index = 0; index < m_meshes.size(); index++) {
-					std::string mesh_name = m_meshes[index]->getMeshName() + std::to_string(index);
-
-					if (ImGui::TreeNode(mesh_name.c_str())) {
-						for (uint32_t i = 0; i < m_meshes[index]->getShapesCount(); i++) {
-							const char* shape_name = m_meshes[index]->getShape(i)->getName().c_str();
-
-							if (ImGui::MenuItem(shape_name)) {
-								m_meshIndex = index;
-								m_shapeIndex = i;
-							}
-						}
-
-						ImGui::TreePop();
-					}
-
-					ImGui::Separator();
-				}
-			}
-			else {
-				ImGui::Text("You cannot modify objects!");
-			}
-
-			ImGui::End();
-		}
-
-		void GUI::Menu_ModifyShape() {
-			ImGui::Begin("Modify Shape");
-
-			if (storage::usegui) {
-
-				ImGui::MenuItem("Shapes Menu", "");
-
-				if (m_meshIndex != -1 && m_shapeIndex != -1) {
-					static float last_general;
-
-					auto& center = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getCenter();
-					auto& angle = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getAngle();
-					auto& scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScaleVec();
-					auto& general_scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getGeneralScale();
-					auto copy_scale = m_meshes[m_meshIndex]->getShape(m_shapeIndex)->getScaleVec();
-					last_general = general_scale;
-
-					ImGui::Text("Shape");
-					ImGui::Separator();
-
-					ImGui::Text("\nTranslate Shape\n");
-					ImGui::SliderFloat("X translation", &center.x, -15.0f, 15.0f, "%.2f", 1.f);
-					ImGui::SliderFloat("Y translation", &center.y, -15.0f, 15.0f, "%.2f", 1.f);
-					ImGui::SliderFloat("Z translation", &center.z, -15.0f, 15.0f, "%.2f", 1.f);
-					ImGui::Separator();
-
-					ImGui::Text("\nRotate Shape\n");
-					ImGui::SliderFloat("X rotation", &angle.x, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::SliderFloat("Y rotation", &angle.y, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::SliderFloat("Z rotation", &angle.z, -360.f, 360.f, "%.2f", 1.f);
-					ImGui::Separator();
-
-					ImGui::Text("\nScale Shape\n");
-					
-					ImGui::SliderFloat("General Scale\n", &general_scale, -2.f, 2.f, "%.2f", 1.f);
-					if (last_general != general_scale) {
-						scale += general_scale - last_general;
-					}
-
-					ImGui::SliderFloat("X scale", &scale.x, 0.001f, 5.f, "%.3f", 1.f);
-					ImGui::SliderFloat("Y scale", &scale.y, 0.001f, 5.f, "%.3f", 1.f);
-					ImGui::SliderFloat("Z scale", &scale.z, 0.001f, 5.f, "%.3f", 1.f);
-					
-					if (ImGui::Button("Reset to default scale")) {
-						general_scale = 1.f;
-						scale.x = 1.f;
-						scale.y = 1.f;
-						scale.z = 1.f;
-					}
-
-					ImGui::Separator();
-
-					if (m_meshes[m_meshIndex]->getMeshType() != graphics::MeshType::CUBEMAPS) {
-						if (m_meshes[m_meshIndex]->getTexture().getPath(m_shapeIndex) != "empty") {
-							ImGui::Image((void*)m_meshes[m_meshIndex]->getTexture().getID(m_shapeIndex),
-								ImVec2(100, 100), ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-						}
-						else {
-							ImGui::ColorPicker3("Color shape", (float*)&m_meshes[m_meshIndex]->getColors()[m_shapeIndex]);
-						}
-					}
-						
-					ImGui::Separator();
-					if (ImGui::Button("Delete Shape")) {
-						m_meshes[m_meshIndex]->flushShape(m_shapeIndex);
-
-						m_meshIndex = -1;
-						m_shapeIndex = -1;
-					}
-				}
-				else { ImGui::Text("No shape selected!"); }
-			}
-			else { ImGui::Text("You cannot modify objects!"); }
-
-			ImGui::End();
-		}
-
-		void GUI::Menu_PushShapeToScene() {
-			if (!storage::usegui) {
-				ImGui::Text("You cannot modify objects!");
-				return;
-			}
-
-			ImGui::Text("Give value for each coordinate, which is in range (-10, 10)");
-			ImGui::InputFloat3("Input Center", m_inputCenter);
-
-			for (uint32_t i = 0; i < 3; i++)
-				if (m_inputCenter[i] > 10.f || m_inputCenter[i] < -10.f)
-					return;
-
-			ImGui::Combo("Choose Mesh", &m_pushMeshIndex, m_meshesNames.data(), m_meshesNames.size());
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Reload textures in directory")) {
-				filesystem::updateMarTextures("resources/textures");
-
-				texture::files.clear();
-				texture::files.push_back("empty");
-
-				for (auto& m : filesystem::getMarTextures()) {
-					texture::files.push_back(m.c_str());
-				}
-			}
-
-			ImGui::Combo("Choose Texture", &texture::selected, texture::files.data(), texture::files.size());
-
-			ImGui::Separator();
-
-			if (checkCharsStart("Objects", m_meshesNames[m_pushMeshIndex])) {
-				ImGui::Text("MAREngine do not support push to objects mesh!");
-				return;
-			}
-
-			if (ImGui::Button("Select Pyramid")) {
-				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createPyramid();
-				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				maths::vec3 scale{ 1.f, 1.f, 1.f };
-				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
-
-				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-			}
-
-			if (ImGui::Button("Select Cube")) {
-				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createCube();
-				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				maths::vec3 scale{ 1.f, 1.f, 1.f };
-				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
-
-				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-			}
-
-			if (ImGui::Button("Select Surface")) {
-				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createSurface();
-				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				maths::vec3 scale{ 1.f, 1.f, 1.f };
-				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
-
-				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-			}
-
-			if (ImGui::Button("Select Wall")) {
-				Ref<graphics::Shape> new_shape = graphics::MeshCreator::createWall();
-				maths::vec3 center{ m_inputCenter[0], m_inputCenter[1] , m_inputCenter[2] };
-				maths::vec3 angle{ 0.0f, 0.0f, 0.0f };
-				maths::vec3 scale{ 1.f, 1.f, 1.f };
-				std::string selected = "resources/textures/" + std::string(texture::files[texture::selected]);
-
-				m_meshes[m_pushMeshIndex]->tryReuseShape(new_shape, center, angle, scale, selected.c_str());
-			}
-		}
-		*/
-
-		void GUI::Scene_Environment() {
-			ImGui::Begin("Environment");
-
-			if (!storage::usegui) {
-				ImGui::Text("You cannot modify objects!");
-
-				ImGui::End();
-				return;
-			}
-
-			ImGui::Text("Lightning");
-
-			auto& position = m_light->getPosition();
-			auto& ambient = m_light->getAmbient();
-			auto& ambientStrength = m_light->getAmbientStrength();
-			auto& diffuse = m_light->getDiffuse();
-			auto& diffuseStrength = m_light->getDiffuseStrength();
-			auto& specular = m_light->getSpecular();
-			auto& specularStrength = m_light->getSpecularStrength();
-			auto& constant = m_light->getConstant();
-			auto& linear = m_light->getLinear();
-			auto& quadratic = m_light->getQuadratic();
-			auto& shininess = m_light->getShininess();
-
-			ImGui::Separator();
-
-			ImGui::Text("Light Position");
-
-			ImGui::SliderFloat("X Pos", &position.x, -10.f, 10.f);
-			ImGui::SliderFloat("Y Pos", &position.y, -10.f, 10.f);
-			ImGui::SliderFloat("Z Pos", &position.z, -10.f, 10.f);
-
-			ImGui::Separator();
-
-			ImGui::Text("Ambient Light");
-
-			ImGui::SliderFloat("X Ambient", &ambient.x, 0.f, 1.f);
-			ImGui::SliderFloat("Y Ambient", &ambient.y, 0.f, 1.f);
-			ImGui::SliderFloat("Z Ambient", &ambient.z, 0.f, 1.f);
-
-			ImGui::Text("Ambient Strength");
-
-			ImGui::SliderFloat("X StrengthAmbient", &ambientStrength.x, 0.f, 1.f);
-			ImGui::SliderFloat("Y StrengthAmbient", &ambientStrength.y, 0.f, 1.f);
-			ImGui::SliderFloat("Z StrengthAmbient", &ambientStrength.z, 0.f, 1.f);
-
-			ImGui::Separator();
-
-			ImGui::Text("Diffuse Light");
-
-			ImGui::SliderFloat("X Diffuse", &diffuse.x, 0.f, 1.f);
-			ImGui::SliderFloat("Y Diffuse", &diffuse.y, 0.f, 1.f);
-			ImGui::SliderFloat("Z Diffuse", &diffuse.z, 0.f, 1.f);
-
-			ImGui::Text("Diffuse Strength");
-
-			ImGui::SliderFloat("X StrengthDiffuse", &diffuseStrength.x, 0.f, 1.f);
-			ImGui::SliderFloat("Y StrengthDiffuse", &diffuseStrength.y, 0.f, 1.f);
-			ImGui::SliderFloat("Z StrengthDiffuse", &diffuseStrength.z, 0.f, 1.f);
-
-			ImGui::Separator();
-
-			ImGui::Text("Specular Light");
-
-			ImGui::SliderFloat("X Specular", &specular.x, 0.f, 1.f);
-			ImGui::SliderFloat("Y Specular", &specular.y, 0.f, 1.f);
-			ImGui::SliderFloat("Z Specular", &specular.z, 0.f, 1.f);
-
-			ImGui::Text("Specular Strength");
-
-			ImGui::SliderFloat("X StrengthSpecular", &specularStrength.x, 0.f, 1.f);
-			ImGui::SliderFloat("Y StrengthSpecular", &specularStrength.y, 0.f, 1.f);
-			ImGui::SliderFloat("Z StrengthSpecular", &specularStrength.z, 0.f, 1.f);
-
-			ImGui::Separator();
-
-			ImGui::Text("Attenuation");
-
-			ImGui::InputFloat("Constant", &constant);
-			ImGui::InputFloat("Linear", &linear);
-			ImGui::InputFloat("Quadratic", &quadratic);
-			ImGui::InputFloat("Shininess", &shininess);
 
 			ImGui::End();
 		}
@@ -654,36 +265,6 @@ namespace mar {
 			ImGui::End();
 		}
 
-		const maths::mat4 GUI::getTranslationMatrix() const {
-			return maths::mat4::translation(m_sceneTranslation);
-		}
-
-		const maths::mat4 GUI::getRotationMatrix() const {
-			return maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.y), maths::vec3(0.0f, 1.0f, 0.0f))
-				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.z), maths::vec3(0.0f, 0.0f, 1.0f))
-				 * maths::mat4::rotation(maths::Trig::toRadians(m_sceneAngle.x), maths::vec3(1.0f, 0.0f, 0.0f));
-		}
-
-		bool GUI::checkCharsEnding(const char* withwhat, const char* what) {
-			static int l1;
-			static int l2;
-
-			l1 = strlen(withwhat);
-			l2 = strlen(what);
-
-			if (l1 > l2)
-				return false;
-
-			return std::strcmp(withwhat, what + (l2 - l1)) == 0;
-		}
-
-		bool GUI::checkCharsStart(const char* withwhat, const char* what) {
-			const char* check = strstr(what, withwhat);
-
-			if (what == check) return true;
-			else return false;
-		}
-
 		void GUI::submit(ecs::Scene* scene) {
 			m_scenes.push_back(scene);
 		}
@@ -691,8 +272,13 @@ namespace mar {
 		void GUI::Scene_Hierarchy() {
 			ImGui::Begin("Scene Hierarchy");
 
-			for (int32_t j = 0; j < m_scenes.size(); j++) {
-				for (int32_t i = 0; i < m_scenes[j]->entities.size(); i++) {
+			for (int32_t j = 0; j < (int32_t)m_scenes.size(); j++) {
+				
+				ImGui::Text(" - ");
+				ImGui::SameLine();
+				ImGui::Text(m_scenes[j]->getName());
+
+				for (int32_t i = 0; i < (int32_t)m_scenes[j]->entities.size(); i++) {
 					std::string s = m_scenes[j]->entities[i].getComponent<ecs::TagComponent>();
 					if (ImGui::MenuItem(s.c_str())) {
 						index_scene = j;
@@ -754,85 +340,33 @@ namespace mar {
 
 			// Sliders
 			{
-				// Position
-				{
-					ImGui::Text("Position\n");
-					ImGui::SliderFloat3("pos", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
+				ImGui::Text("Position\n");
+				ImGui::SliderFloat3("pos", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
+				
+				ImGui::Text("Rotation\n");
+				ImGui::SliderFloat3("rot", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
+				
+				ImGui::Text("Scale");
+
+				static float last_general;
+				last_general = tran.general_scale;
+
+				ImGui::SliderFloat("General\n", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
+				if (last_general != tran.general_scale) {
+					tran.scale += tran.general_scale - last_general;
 				}
 
-				// Rotation
-				{
-					ImGui::Text("Rotation\n");
-					ImGui::SliderFloat3("rot", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
-				}
+				ImGui::SliderFloat3("scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
 
-				// Scale 
-				{
-					ImGui::Text("Scale");
-
-					static float last_general;
-					last_general = tran.general_scale;
-
-					ImGui::SliderFloat("General\n", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
-					if (last_general != tran.general_scale) {
-						tran.scale += tran.general_scale - last_general;
-					}
-
-					ImGui::SliderFloat3("scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
-
-					if (ImGui::Button("Reset to default scale")) {
-						tran.general_scale = 1.f;
-						tran.scale.x = 1.f;
-						tran.scale.y = 1.f;
-						tran.scale.z = 1.f;
-					}
+				if (ImGui::Button("Reset to default scale")) {
+					tran.general_scale = 1.f;
+					tran.scale.x = 1.f;
+					tran.scale.y = 1.f;
+					tran.scale.z = 1.f;
 				}
 			}
 			
 			ecs::System::handleTransformComponent(tran);
-
-			static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::ROTATE);
-			static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
-
-			if (ImGui::RadioButton("Translate", mCurrentGizmoOperation == ImGuizmo::TRANSLATE))
-				mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-			ImGui::SameLine();
-			if (ImGui::RadioButton("Rotate", mCurrentGizmoOperation == ImGuizmo::ROTATE))
-				mCurrentGizmoOperation = ImGuizmo::ROTATE;
-			ImGui::SameLine();
-			if (ImGui::RadioButton("Scale", mCurrentGizmoOperation == ImGuizmo::SCALE))
-				mCurrentGizmoOperation = ImGuizmo::SCALE;
-
-			if (mCurrentGizmoOperation != ImGuizmo::SCALE) {
-				if (ImGui::RadioButton("Local", mCurrentGizmoMode == ImGuizmo::LOCAL))
-					mCurrentGizmoMode = ImGuizmo::LOCAL;
-				ImGui::SameLine();
-				if (ImGui::RadioButton("World", mCurrentGizmoMode == ImGuizmo::WORLD))
-					mCurrentGizmoMode = ImGuizmo::WORLD;
-			}
-			
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-			ImGuizmo::Manipulate(
-				maths::mat4::value_ptr(graphics::Camera::getCameraData().view),
-				maths::mat4::value_ptr(graphics::Camera::getCameraData().projection),
-				mCurrentGizmoOperation,
-				mCurrentGizmoMode,
-				maths::mat4::value_ptr_nonconst(tran.transform),
-				nullptr,
-				nullptr,
-				nullptr,
-				nullptr
-			);
-
-			/*
-			ImGuizmo::DrawGrid(
-				maths::mat4::value_ptr(graphics::Camera::getCameraData().view),
-				maths::mat4::value_ptr(graphics::Camera::getCameraData().projection),
-				maths::mat4::value_ptr(maths::mat4(1.0f)), 
-				100.f
-			);
-			*/
 
 			m_scenes[index_scene]->updatedTransforms = true;
 

@@ -7,7 +7,7 @@
 #define SHAPEMANIPULATOR_H
 
 #include "../../../mar.h"
-#include "DefaultShapes/Cube.h"
+
 
 namespace mar {
     namespace graphics {
@@ -22,17 +22,6 @@ namespace mar {
 		*/
         class ShapeManipulator {
         public:
-            //! Default constructor. Actually not used
-            ShapeManipulator() = default;
-
-            /*
-            Method changes the Shape ID value in verticesVector of any shape. It works every time, when ID
-            is on the last position of data. 
-            
-                \param shape - pointer to shape, which m_id must be changed
-                \param nextID - m_id value for shape
-            */
-            static void extendShapeID(Ref<Shape>& shape, const float& nextID);
 
             /*
             Method changes the Shape ID value in verticesVector of any shape. It works every time, when ID
@@ -43,15 +32,6 @@ namespace mar {
                 \param newid - m_id value for shape
             */
             static void extendShapeID(std::vector<float>& vertices, const uint32_t& stride, const float& newid);
-
-            /*
-             Method changes the Texture ID value in verticesVector of any shape. It works every time, when ID
-             is on the next to last position of data. 
-            
-                \param shape - pointer to shape, which m_id must be changed
-                \param nextID - m_id value for shape
-            */
-            static void extendTextureID(Ref<Shape>& shape, const float& nextID);
 
             /*
             Method changes the Texture ID value in verticesVector of any shape. It works every time, when ID
@@ -79,14 +59,6 @@ namespace mar {
                 \param extension - factor for increasing indices
             */
             static void extendIndices(std::vector<uint32_t>& indices, const uint32_t& extension);
-
-            /* 
-            Method is just easier implementation of extending indices method. For more information check the method below.
-            
-                \param shape - pointer to shape
-                \param max_value - max value of indices in current indices vector of renderer
-            */
-            static void changeIndicesFormat(Ref<Shape>& shape, int& max_value);
 
             /*
             If we want batch rendering, we need to change indices values for every shape. Default ones begin with 0.

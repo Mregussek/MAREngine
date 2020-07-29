@@ -25,7 +25,6 @@ namespace mar {
 
 		void MAREngine::run() {
 			layers::LayerStack m_stack;
-			//graphics::Light m_light;
 
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
@@ -42,21 +41,10 @@ namespace mar {
 			gui_layer->initialize();
 			auto gui = gui_layer->getGUIInstance();
 			gui->set(m_framebuffer);
-			//gui->set(&m_light);
 
 			m_stack.pushLayer(camera_layer);
 			m_stack.pushOverlay(gui_layer);
 			
-			/*
-			editor::filesystem::loadSceneFromFile(m_pathLoad);
-			if (auto loaded = editor::filesystem::assignLoadedLayers())
-				for (uint32_t i = 0; i < loaded->size(); i++) {
-					loaded->at(i)->getRenderer()->setLight(&m_light);
-					gui->submit(loaded->at(i)->getMesh());
-					m_stack.pushLayer(loaded->at(i));
-				}
-			*/
-
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
 			entitylayer->getScene()->setName("Default Scene");
 			
@@ -165,7 +153,6 @@ namespace mar {
 			}
 			
 			entitylayer->initialize();
-			//entitylayer->getRenderer()->setLight(&m_light);
 			m_stack.pushLayer(entitylayer);
 			gui->submit(entitylayer->getScene());
 
@@ -174,7 +161,6 @@ namespace mar {
 			while (window::Window::getInstance().shouldClose() && !m_shouldRestart) 
 			{
 				window::Window::getInstance().clearScreen();
-				graphics::RendererOpenGL::getStatistics().resetStatistics();
 
 				if (storage::usegui) {
 					m_framebuffer.bind();

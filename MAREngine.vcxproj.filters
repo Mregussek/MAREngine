@@ -93,28 +93,10 @@
     <ClInclude Include="src\Core\Scene\Scene.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Light\Light.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Mesh\Objects\ObjectLoader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Mesh\Shapes\DefaultShapes\Cube.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Mesh\Shapes\DefaultShapes\Pyramid.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Mesh\Shapes\DefaultShapes\Surface.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Mesh\Shapes\DefaultShapes\Wall.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Mesh\Shapes\ShapeManipulator.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Mesh\Shapes\Shapes.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Mesh\Texture\Texture.h">
@@ -124,9 +106,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Mesh\Texture\TexturePaths.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Mesh\Mesh.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Mesh\MeshCreator.h">
@@ -171,9 +150,6 @@
     <ClInclude Include="src\Core\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\FileSystem\filesystem.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Window\callbacks.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -187,9 +163,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\RendererEntity.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Renderer\RendererOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Renderer.h">
@@ -208,9 +181,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\LayerStack\layers\GUILayer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LayerStack\layers\MeshLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Scene\System\Systems.h">
@@ -284,22 +254,13 @@
     <ClCompile Include="src\Core\Scene\Scene.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Light\Light.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Mesh\Objects\ObjectLoader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Mesh\Shapes\ShapeManipulator.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Mesh\Shapes\Shapes.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Mesh\Texture\TextureOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Mesh\Mesh.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Shader\ShaderOpenGL.cpp">
@@ -320,15 +281,6 @@
     <ClCompile Include="src\Core\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\FileSystem\filesystem_save-load-scene.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\FileSystem\filesystem_load-layers.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\FileSystem\filesystem_update.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Window\callbacks.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -341,13 +293,7 @@
     <ClCompile Include="src\Core\Renderer\RendererEntity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Renderer\RendererOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LayerStack\layers\MeshLayer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp">

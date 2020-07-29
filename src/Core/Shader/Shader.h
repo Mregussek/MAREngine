@@ -18,10 +18,6 @@ namespace mar {
 		};
 
 		enum class ShaderType {
-			DEFAULT,
-			WITHOUT_GUI,
-			CUBEMAP,
-			CUBEMAP_WITHOUT_GUI,
 			ENTITY_COLOR,
 			ENTITY_TEXTURE2D,
 			ENTITY_CUBEMAP
@@ -93,10 +89,6 @@ namespace mar {
 } }
 
 
-#define SHADER_DEFAULT ::mar::graphics::ShaderType::DEFAULT
-#define SHADER_WITHOUT_GUI ::mar::graphics::ShaderType::WITHOUT_GUI
-#define SHADER_CUBEMAP ::mar::graphics::ShaderType::CUBEMAP
-#define SHADER_CUBEMAP_WITHOUT_GUI ::mar::graphics::ShaderType::CUBEMAP_WITHOUT_GUI
 #define SHADER_ENTITY_COLOR ::mar::graphics::ShaderType::ENTITY_COLOR
 #define SHADER_ENTITY_TEXTURE2D ::mar::graphics::ShaderType::ENTITY_TEXTURE2D
 #define SHADER_ENTITY_CUBEMAP ::mar::graphics::ShaderType::ENTITY_CUBEMAP

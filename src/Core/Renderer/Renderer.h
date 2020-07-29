@@ -10,7 +10,6 @@
 
 #include "../Camera/Camera.h"
 
-#include "../Mesh/Mesh.h"
 #include "../Mesh/Shapes/ShapeManipulator.h"
 #include "../Mesh/MeshCreator.h"
 

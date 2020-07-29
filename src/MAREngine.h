@@ -9,20 +9,15 @@
 
 // Log && Filesystem
 #include "Debug/Log.h"
-#include "Editor/FileSystem/filesystem.h"
 #include "Editor/GUI/GUI.h"
 // Layers
 #include "LayerStack/LayerStack.h"
 #include "LayerStack/layers/GUILayer.h"
-#include "LayerStack/layers/MeshLayer.h"
 #include "LayerStack/layers/CameraLayer.h"
 #include "LayerStack/layers/EntityLayer.h"
 // Rendering
-#include "Core/Light/Light.h"
-#include "Core/Mesh/Mesh.h"
 #include "Core/Scene/Scene.h"
 #include "Core/Camera/Camera.h"
-#include "Core/Renderer/RendererOpenGL.h"
 #include "Core/Renderer/RendererEntity.h"
 // Window && Input
 #include "Window/Input.h"

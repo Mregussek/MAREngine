@@ -42,18 +42,15 @@ namespace mar {
 		};
 
 		struct TransformComponent {
-			float general_scale;
-			maths::vec3 center;
-			maths::vec3 angles;
-			maths::vec3 scale;
+			float general_scale{ 1.f };
+			maths::vec3 center{ 0.f, 0.f, 0.f };
+			maths::vec3 angles{ 0.f, 0.f, 0.f };
+			maths::vec3 scale{1.f, 1.f, 1.f };
 
 			maths::mat4 transform{ 1.f };
 
 			TransformComponent() = default;
 			TransformComponent(const TransformComponent& tc) = default;
-			TransformComponent(const maths::mat4& mat)
-				: transform(mat) 
-			{}
 
 			operator maths::mat4&() { return transform; }
 			operator const maths::mat4&() const { return transform; }

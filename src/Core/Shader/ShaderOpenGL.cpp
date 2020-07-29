@@ -18,14 +18,6 @@ namespace mar {
 			}
 
 			switch(shadertype) {
-			case ShaderType::DEFAULT: m_shaderPath = "resources/shaders/basic.shader";
-				break;
-			case ShaderType::WITHOUT_GUI: m_shaderPath = "resources/shaders/basicWithoutGUI.shader"; 
-				break;
-			case ShaderType::CUBEMAP: m_shaderPath = "resources/shaders/cubemap.shader";
-				break;
-			case ShaderType::CUBEMAP_WITHOUT_GUI: m_shaderPath = "resources/shaders/cubemapWithoutGUI.shader"; 
-				break;
 			case ShaderType::ENTITY_COLOR: m_shaderPath = "resources/shaders/entityColor.shader";
 				break;
 			case ShaderType::ENTITY_TEXTURE2D: m_shaderPath = "resources/shaders/entityTexture2D.shader";
