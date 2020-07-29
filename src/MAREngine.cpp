@@ -46,8 +46,11 @@ namespace mar {
 			m_stack.pushOverlay(gui_layer);
 			
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
-			entitylayer->getScene()->setName("Default Scene");
 			
+			auto scene = editor::Filesystem::openFile(m_pathLoad.c_str());
+			//entitylayer->getScene()->setName("DefaultScene");
+			
+			/*
 			// ADD ENTITIES
 			{
 				// FIRST ENTITY
@@ -55,7 +58,7 @@ namespace mar {
 					auto entity = entitylayer->getScene()->createEntity();
 
 					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("First Entity");
+					tag = std::string("FirstEntity");
 
 					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					tran.scale = { 1.f, 1.f, 1.f };
@@ -76,7 +79,7 @@ namespace mar {
 					auto entity = entitylayer->getScene()->createEntity();
 
 					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("Second Entity");
+					tag = std::string("SecondEntity");
 
 					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 					ren.id = "Pyramid";
@@ -97,7 +100,7 @@ namespace mar {
 					auto entity = entitylayer->getScene()->createEntity();
 
 					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("Third Entity");
+					tag = std::string("ThirdEntity");
 
 					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 					ren.id = "Surface";
@@ -118,7 +121,7 @@ namespace mar {
 					auto entity = entitylayer->getScene()->createEntity();
 
 					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("Fourth Entity");
+					tag = std::string("FourthEntity");
 
 					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 					ren.id = "Wall";
@@ -139,7 +142,7 @@ namespace mar {
 					auto entity = entitylayer->getScene()->createEntity();
 
 					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("Light Entity");
+					tag = std::string("LightEntity");
 
 					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 					ren.id = "Cube";
@@ -156,8 +159,8 @@ namespace mar {
 					entity.addComponent<ecs::LightComponent>(ECS_LIGHT);
 				}
 			}
-			
-			entitylayer->initialize();
+			*/
+			entitylayer->initialize(scene);
 			m_stack.pushLayer(entitylayer);
 			gui->submit(entitylayer->getScene());
 

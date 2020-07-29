@@ -4,12 +4,12 @@ MAREngine scene file
 #Scene_Name DefaultScene
 
 #Entity
-#TagComponent FirstEntity
+#TagComponent GreenCubeGi
 #TransformComponent Begin
-#center 0 2 1
-#angles 65 0 0
-#scale 1 1 1
-#general_scale 1
+#center -6.82 2 1
+#angles 65 81.82 0
+#scale 2.34 2.34 2.34
+#general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.2 0.5 0.2
 
@@ -17,11 +17,11 @@ MAREngine scene file
 #TagComponent SecondEntity
 #RenderableComponent Pyramid
 #TransformComponent Begin
-#center -3 2 -1
+#center 3.41 0 -1
 #angles 0 25 0
 #scale 1 1.5 1
-#general_scale 1
-#ColorComponent 0.5 0.9 0.25
+#general_scale 0
+#ColorComponent 0.25 0.402941 0.9
 
 #Entity
 #TagComponent ThirdEntity
@@ -30,35 +30,35 @@ MAREngine scene file
 #center 0 0 0
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #ColorComponent 0.5 0.2 0.9
 
 #Entity
-#TagComponent FourthEntity
+#TagComponent WallBehind
 #RenderableComponent Wall
 #TransformComponent Begin
-#center -2 0 0
-#angles 0 25 0
+#center -2 0 -11
+#angles 0 81.82 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #ColorComponent 0.9 0.2 0.3
 
 #Entity
 #TagComponent LightEntity
 #RenderableComponent Cube
 #TransformComponent Begin
-#center 0 0 5
+#center 0 0 -8.33
 #angles 0 0 0
-#scale 0.5 0.5 0.5
-#general_scale 1
-#ColorComponent 1 1 1
+#scale 1 1 1
+#general_scale 0
+#ColorComponent 0.632353 0 0
 #LightComponent Begin
-#ambientlight 0.5 0.5 0.5
-#diffuselight 0.9 0.9 0.9
-#specularlight 0.5 0.5 0.5
-#ambientstrength 0.2 0.2 0.2
-#diffusestrength 0.7 0.7 0.7
-#specularstrength 1 1 1
+#ambientlight 0.636 0.477 0.5
+#diffuselight 0.9 0 0.9
+#specularlight 0.5 0.977 0.5
+#ambientstrength 0.2 0.886 0.2
+#diffusestrength 0.068 0.7 0.7
+#specularstrength 1 0.818 1
 #constant 1
 #linear 0.045
 #quadratic 0.0075

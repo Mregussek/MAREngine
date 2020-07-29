@@ -19,13 +19,13 @@ namespace mar {
 
 		class EntityLayer : public Layer {
 			const char* m_debugName;
-			ecs::Scene m_scene;
+			ecs::Scene* m_scene;
 			graphics::RendererEntity* m_renderer;
 
 		public:
 			EntityLayer(const char* debugname);
 
-			void initialize();
+			void initialize(ecs::Scene* scene);
 
 			// --- OVERLOADED METHODS --- //
 

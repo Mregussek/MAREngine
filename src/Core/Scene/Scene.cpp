@@ -11,30 +11,33 @@ namespace mar {
 	namespace ecs {
 
 
-		Scene::Scene(const char* name)
+		Scene::Scene(std::string name)
 			: m_name(name),
 			updatedTransforms(false),
 			updatedColors(false),
 			updatedTextures2D(false),
 			updatedTexturesCubemap(false),
 			updatedLight(false)
-		{}
+		{
+			m_registry = entt::registry();
+		}
 
 		Scene::~Scene() {
 			m_registry.clear();
 		}
 
-		Entity Scene::createEntity() {
-			Entity entity{ m_registry.create(), this };
+		Entity& Scene::createEntity() {
+			Entity entity{ this };
 
+			entity.addDefault();
 			entity.addComponent<TagComponent>(ECS_TAG);
 
 			entities.push_back(entity);
 
-			return entity;
+			return entities[entities.size() - 1];
 		}
 
-		void Scene::setName(const char* name) {
+		void Scene::setName(std::string name) {
 			m_name = name;
 		}
 

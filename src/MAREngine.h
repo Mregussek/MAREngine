@@ -10,6 +10,7 @@
 // Log && Filesystem
 #include "Debug/Log.h"
 #include "Editor/GUI/GUI.h"
+#include "Editor/Filesystem/EditorFilesystem.h"
 // Layers
 #include "LayerStack/LayerStack.h"
 #include "LayerStack/layers/GUILayer.h"
@@ -32,7 +33,7 @@ namespace mar {
 		class MAREngine {
 			static MAREngine s_instance;
 
-			std::string m_pathLoad{ "resources/mar_files/another_default.marscene" };
+			std::string m_pathLoad{ "resources/mar_files/empty.marscene" };
 
 			bool m_shouldRestart{ false };
 

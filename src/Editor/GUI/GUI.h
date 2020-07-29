@@ -33,10 +33,11 @@ namespace mar {
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			// --- Should Window Be Opened ?
 			bool m_saveSceneWindow{ false };
+			bool m_loadSceneWindow{ false };
 			bool m_infoWindow{ false };
 			bool m_instructionWindow{ false };
 			// --- Storage for scenes
-			std::vector<ecs::Scene*> m_scenes;
+			ecs::Scene* m_scene;
 			// --- Which entity should be displayed
 			int32_t index_scene{ -1 };
 			int32_t index_entity{ -1 };
@@ -82,6 +83,7 @@ namespace mar {
 
 			// --- FILESYSTEM HANDLERS --- //
 			void Filesystem_SaveScene();
+			void Filesystem_LoadScene();
 		};
 
 

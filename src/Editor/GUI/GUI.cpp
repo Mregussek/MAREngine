@@ -92,6 +92,7 @@ namespace mar {
 			Scene_Statistics();
 			Display_ViewPort();
 
+			if (m_loadSceneWindow) { Filesystem_LoadScene(); }
 			if (m_saveSceneWindow) { Filesystem_SaveScene(); }
 			if (m_infoWindow) { Menu_Info(); }
 			if (m_instructionWindow) { Menu_Instruction(); }
@@ -108,7 +109,7 @@ namespace mar {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if (ImGui::MenuItem("Open")) {
-
+						m_loadSceneWindow = true;
 					}
 
 					if (ImGui::MenuItem("Save")) {
@@ -269,31 +270,21 @@ namespace mar {
 		}
 
 		void GUI::submit(ecs::Scene* scene) {
-			if (m_scenes.size() == 1) {
-				MAR_CORE_ERROR("Cannot push more scenes! You must pop the one existing!");
-				return;
-			}
-
-			m_scenes.push_back(scene);
+			m_scene = scene;
 		}
 
 		void GUI::Scene_Hierarchy() {
 			ImGui::Begin("Scene Hierarchy");
 
-			for (int32_t j = 0; j < (int32_t)m_scenes.size(); j++) {
-				
-				ImGui::Text(" - ");
-				ImGui::SameLine();
-				ImGui::Text(m_scenes[j]->getName());
+			ImGui::Text(" - ");
+			ImGui::SameLine();
+			ImGui::Text(m_scene->getName().c_str());
 
-				for (int32_t i = 0; i < (int32_t)m_scenes[j]->entities.size(); i++) {
-					std::string s = m_scenes[j]->entities[i].getComponent<ecs::TagComponent>();
-					if (ImGui::MenuItem(s.c_str())) {
-						index_scene = j;
-						index_entity = i;
-					}
+			for (int32_t i = 0; i < (int32_t)m_scene->entities.size(); i++) {
+				std::string s = m_scene->entities[i].getComponent<ecs::TagComponent>();
+				if (ImGui::MenuItem(s.c_str())) {
+					index_entity = i;
 				}
-				
 			}
 
 			ImGui::End();
@@ -302,13 +293,13 @@ namespace mar {
 		void GUI::Scene_Entity_Modify() {
 			ImGui::Begin("Entity Modification");
 
-			if (index_scene == -1 || index_entity == -1) {
+			if (index_entity == -1) {
 				ImGui::Text("No entity selected!");
 				ImGui::End();
 				return;
 			}
 			
-			auto& entity = m_scenes[index_scene]->entities[index_entity];
+			auto& entity = m_scene->entities[index_entity];
 
 			if (entity.hasComponent<ecs::TagComponent>())
 				Scene_Handle_TagComponent();
@@ -337,7 +328,7 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("\nTagComponent\n");
 
-			auto& tag = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::TagComponent>();
+			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
 
 			std::string s = tag.tag;
 
@@ -352,7 +343,7 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("\nTransformComponent\n");
 
-			auto& tran = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::TransformComponent>();
+			auto& tran = m_scene->entities[index_entity].getComponent<ecs::TransformComponent>();
 
 			// Sliders
 			{
@@ -384,7 +375,7 @@ namespace mar {
 			
 			ecs::System::handleTransformComponent(tran);
 
-			m_scenes[index_scene]->updatedTransforms = true;
+			m_scene->updatedTransforms = true;
 
 			ImGui::Text("\n");
 		}
@@ -393,11 +384,11 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("\nColorComponent\n");
 
-			auto& color = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::ColorComponent>();
+			auto& color = m_scene->entities[index_entity].getComponent<ecs::ColorComponent>();
 		
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
 
-			m_scenes[index_scene]->updatedColors = true;
+			m_scene->updatedColors = true;
 
 			ImGui::Text("\n");
 		}
@@ -406,7 +397,7 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("\nLightComponent\n");
 
-			auto& light = m_scenes[index_scene]->entities[index_entity].getComponent<ecs::LightComponent>();
+			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
 
 			ImGui::Text("Ambient Light");
 
@@ -439,7 +430,7 @@ namespace mar {
 			ImGui::InputFloat("Quadratic", &light.quadratic);
 			ImGui::InputFloat("Shininess", &light.shininess);
 
-			m_scenes[index_scene]->updatedLight = true;
+			m_scene->updatedLight = true;
 
 			ImGui::Text("\n");
 		}
@@ -462,10 +453,40 @@ namespace mar {
 			ImGui::Separator();
 
 			if (ImGui::Button("Save to selected name"))
-				Filesystem::saveToFile(m_scenes[0], save.c_str());
+				Filesystem::saveToFile(m_scene, save.c_str());
 
 			if (ImGui::Button("Close"))
 				m_saveSceneWindow = false;
+
+			ImGui::End();
+		}
+
+		void GUI::Filesystem_LoadScene() {
+			ImGui::Begin("Open File");
+
+			ImGui::Text("Select file, which you want to be opened:");
+
+			static char input[30];
+			ImGui::InputText(".marscene", input, 30);
+
+			ImGui::Separator();
+
+			static std::string will_open;
+			will_open = "resources/mar_files/" + std::string(input) + ".marscene";
+
+			ImGui::Text("File, which is going to be opened:");
+			ImGui::SameLine();
+			ImGui::Text(will_open.c_str());
+
+			ImGui::Text("PLEASE MAKE SURE PATH IS CORRECT!");
+
+			if (ImGui::Button("Open Selected File")) {
+				engine::MAREngine::getEngine()->setLoadPath(will_open);
+				engine::MAREngine::getEngine()->setRestart();
+			}
+
+			if (ImGui::Button("Close"))
+				m_loadSceneWindow = false;
 
 			ImGui::End();
 		}

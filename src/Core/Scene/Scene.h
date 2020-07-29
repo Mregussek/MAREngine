@@ -14,25 +14,25 @@
 namespace mar {
 	namespace ecs {
 
+
 		class Entity;
 
 
 		class Scene {
 			friend class Entity;
 
-			const char* m_name{ "Empty Scene" };
-
+			std::string m_name{ "Empty Scene" };
 			entt::registry m_registry;
 
 		public:
-			Scene(const char* name);
+			Scene(std::string name);
 			~Scene();
 
-			Entity createEntity();
+			Entity& createEntity();
 
 			// --- GET METHODS --- //
 
-			inline const char* getName() const { return m_name; }
+			inline const std::string& getName() const { return m_name; }
 
 			template<typename T>
 			auto getView() ->decltype(m_registry.view<T>()) {
@@ -46,7 +46,7 @@ namespace mar {
 
 			// --- SET METHODS --- //
 
-			void setName(const char* name);
+			void setName(std::string name);
 		
 			std::vector<Entity> entities;
 			bool updatedTransforms;
