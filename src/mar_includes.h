@@ -62,7 +62,6 @@
 
 #if __has_include("ImGuizmo.h")
 	#include "ImGuizmo.h"
-	#include "ImSequencer.h"
 	#define MAR_ENGINE_IMGUIZMO_LIB
 #else
 	#error "MAR ENGINE: Cannot import ImGuizmo.h!"

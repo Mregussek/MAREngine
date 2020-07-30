@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\ImGuizmo;$(SolutionDir)other\entt\include;$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\entt\include;$(SolutionDir)3rd_party\MARMaths;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)other\ImGuizmo;$(SolutionDir)other\entt\include;$(SolutionDir)other\MARMaths;$(SolutionDir)other\serialport\include;$(SolutionDir)other\stb_image\include;$(SolutionDir)other\spdlog\include;$(SolutionDir)other\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\entt\include;$(SolutionDir)3rd_party\MARMaths;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)MAR_3rd_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -163,26 +163,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="other\ImGuizmo\ImCurveEdit.h" />
-    <ClInclude Include="other\ImGuizmo\ImGradient.h" />
-    <ClInclude Include="other\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="other\ImGuizmo\ImSequencer.h" />
-    <ClInclude Include="other\imgui\examples\imgui_impl_glfw.h" />
-    <ClInclude Include="other\imgui\examples\imgui_impl_opengl3.h" />
-    <ClInclude Include="other\imgui\imconfig.h" />
-    <ClInclude Include="other\imgui\imgui.h" />
-    <ClInclude Include="other\imgui\imgui_internal.h" />
-    <ClInclude Include="other\imgui\imstb_rectpack.h" />
-    <ClInclude Include="other\imgui\imstb_textedit.h" />
-    <ClInclude Include="other\imgui\imstb_truetype.h" />
-    <ClInclude Include="other\MARMaths\MARMaths.h" />
-    <ClInclude Include="other\MARMaths\src\maths.h" />
-    <ClInclude Include="other\MARMaths\src\math_func\Basic_Math.h" />
-    <ClInclude Include="other\MARMaths\src\mat\mat4.h" />
-    <ClInclude Include="other\MARMaths\src\trig\trigonometric.h" />
-    <ClInclude Include="other\MARMaths\src\vec\vec2.h" />
-    <ClInclude Include="other\MARMaths\src\vec\vec3.h" />
-    <ClInclude Include="other\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="3rd_party\entt\include\entt\entt.hpp" />
+    <ClInclude Include="3rd_party\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_glfw.h" />
+    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="3rd_party\imgui\imconfig.h" />
+    <ClInclude Include="3rd_party\imgui\imgui.h" />
+    <ClInclude Include="3rd_party\imgui\imgui_internal.h" />
+    <ClInclude Include="3rd_party\imgui\imstb_rectpack.h" />
+    <ClInclude Include="3rd_party\imgui\imstb_textedit.h" />
+    <ClInclude Include="3rd_party\imgui\imstb_truetype.h" />
+    <ClInclude Include="3rd_party\MARMaths\MARMaths.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\maths.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\math_func\Basic_Math.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\mat\mat4.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\trig\trigonometric.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="3rd_party\serialport\include\SerialPort.hpp" />
+    <ClInclude Include="3rd_party\stb_image\include\stb_image\stb_image.h" />
     <ClInclude Include="src\Core\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\Scene\Component\Components.h" />
@@ -213,7 +213,6 @@
     <ClInclude Include="src\Editor\GUI\GUI.h" />
     <ClInclude Include="src\Core\Camera\Camera.h" />
     <ClInclude Include="src\MAREngine.h" />
-    <ClInclude Include="other\stb_image\include\stb_image\stb_image.h" />
     <ClInclude Include="src\Core\Scene\Scene.h" />
     <ClInclude Include="src\Core\Shader\Shader.h" />
     <ClInclude Include="src\Core\Shader\ShaderOpenGL.h" />
@@ -227,20 +226,18 @@
     <ClInclude Include="src\Core\Renderer\Texture\TextureOpenGL.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="other\ImGuizmo\ImCurveEdit.cpp" />
-    <ClCompile Include="other\ImGuizmo\ImGradient.cpp" />
-    <ClCompile Include="other\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="other\ImGuizmo\ImSequencer.cpp" />
-    <ClCompile Include="other\imgui\examples\imgui_impl_glfw.cpp" />
-    <ClCompile Include="other\imgui\examples\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="other\imgui\imgui.cpp" />
-    <ClCompile Include="other\imgui\imgui_demo.cpp" />
-    <ClCompile Include="other\imgui\imgui_draw.cpp" />
-    <ClCompile Include="other\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="other\MARMaths\src\mat\mat4.cpp" />
-    <ClCompile Include="other\MARMaths\src\vec\vec2.cpp" />
-    <ClCompile Include="other\MARMaths\src\vec\vec3.cpp" />
-    <ClCompile Include="other\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="3rd_party\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_glfw.cpp" />
+    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="3rd_party\imgui\imgui.cpp" />
+    <ClCompile Include="3rd_party\imgui\imgui_demo.cpp" />
+    <ClCompile Include="3rd_party\imgui\imgui_draw.cpp" />
+    <ClCompile Include="3rd_party\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\mat\mat4.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
@@ -256,7 +253,6 @@
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\MAREngine.cpp" />
     <ClCompile Include="src\Core\Camera\Camera.cpp" />
-    <ClCompile Include="other\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
     <ClCompile Include="src\Core\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.cpp" />

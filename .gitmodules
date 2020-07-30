@@ -1,15 +1,15 @@
 [submodule "other/spdlog"]
-	path = other/spdlog
+	path = 3rd_party/spdlog
 	url = https://github.com/gabime/spdlog.git
 [submodule "other/serialport"]
-	path = other/serialport
+	path = 3rd_party/serialport
 	url = https://github.com/Mregussek/SerialPort
 [submodule "other/imgui"]
-	path = other/imgui
+	path = 3rd_party/imgui
 	url = https://github.com/ocornut/imgui.git
 [submodule "other/MARMaths"]
-	path = other/MARMaths
+	path = 3rd_party/MARMaths
 	url = https://github.com/Mregussek/MARMaths.git
 [submodule "other/ImGuizmo"]
-	path = other/ImGuizmo
+	path = 3rd_party/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
