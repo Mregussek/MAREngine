@@ -78,7 +78,7 @@ namespace mar {
 				if (it != com.components.end()) 
 					com.components.erase(it);
 
-				m_scene->m_registry.remove<T>();
+				m_scene->m_registry.remove<T>(m_entityHandle);
 			}
 
 			const bool isValid() const {

@@ -27,8 +27,8 @@ namespace mar {
 			m_vao.addBuffer(m_layout);
 
 			m_shaderColor.initialize(SHADER_ENTITY_COLOR);
-			m_shaderTexture2D.initialize(SHADER_ENTITY_TEXTURE2D);
-			m_shaderCubemap.initialize(SHADER_ENTITY_CUBEMAP);
+			//m_shaderTexture2D.initialize(SHADER_ENTITY_TEXTURE2D);
+			//m_shaderCubemap.initialize(SHADER_ENTITY_CUBEMAP);
 
 			m_stride = 3 + 3 + 2 + 1;
 
@@ -45,8 +45,8 @@ namespace mar {
 			m_ebo.close();
 
 			m_shaderColor.shutdown();
-			m_shaderTexture2D.shutdown();
-			m_shaderCubemap.shutdown();
+			//m_shaderTexture2D.shutdown();
+			//m_shaderCubemap.shutdown();
 
 			MAR_CORE_INFO("RENDERERENTITY: closed!");
 		}
@@ -65,8 +65,6 @@ namespace mar {
 				if (scene->updatedLight)
 					updateLight(scene);
 				
-				auto view = scene->getView<ecs::LightComponent>();
-
 				m_lastSizeSet = false;
 				return;
 			}
@@ -105,7 +103,7 @@ namespace mar {
 
 				m_samplersColors.push_back(color);
 				m_counterColor++;
-			}
+			}/*
 			else if (entity.hasComponent<ecs::Texture2DComponent>()) {
 				auto& tex = entity.getComponent<ecs::Texture2DComponent>();
 
@@ -124,7 +122,7 @@ namespace mar {
 				m_samplersCubemap.push_back(m_counterCubemap);
 				m_counterCubemap++;
 			}
-
+			*/
 			MAR_CORE_TRACE("RENDERERENTITY: submitted Entity!");
 		}
 
@@ -154,7 +152,7 @@ namespace mar {
 			if (!m_verticesColor.empty()) {
 				draw(m_verticesColor, m_indicesColor, m_transformsColor, m_samplersColors, m_shaderColor);
 			}
-
+			/*
 			if (!m_verticesTexture2D.empty()) {
 				draw(m_verticesTexture2D, m_indicesTexture2D, m_transformsTexture2D, m_samplersTexture2D, m_shaderTexture2D);
 			}
@@ -162,7 +160,7 @@ namespace mar {
 			if (!m_verticesCubemap.empty()) {
 				draw(m_verticesCubemap, m_indicesCubemap, m_transformsCubemap, m_samplersCubemap, m_shaderCubemap);
 			}
-
+			*/
 			MAR_CORE_INFO("RENDERERENTITY: Draw calls finished for this scene!");
 		}
 
@@ -176,7 +174,7 @@ namespace mar {
 			m_samplersColors.clear();
 			m_counterColor = 0;
 			m_indicesMaxColor = 0;
-
+			/*
 			m_verticesTexture2D.clear();
 			m_indicesTexture2D.clear();
 			m_transformsTexture2D.clear();
@@ -190,7 +188,7 @@ namespace mar {
 			m_samplersCubemap.clear();
 			m_counterCubemap = 0;
 			m_indicesMaxCubemap = 0;
-		
+			*/
 			MAR_CORE_TRACE("RENDERERENTITY: called clear method!");
 		}
 

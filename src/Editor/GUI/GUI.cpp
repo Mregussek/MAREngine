@@ -333,11 +333,11 @@ namespace mar {
 			if (entity.hasComponent<ecs::TagComponent>())
 				Scene_Handle_TagComponent();
 
-			if (entity.hasComponent<ecs::RenderableComponent>())
-				Scene_Handle_RenderableComponent();
-
 			if (entity.hasComponent<ecs::TransformComponent>())
 				Scene_Handle_TransformComponent();
+
+			if (entity.hasComponent<ecs::RenderableComponent>())
+				Scene_Handle_RenderableComponent();
 			
 			if (entity.hasComponent<ecs::ColorComponent>())
 				Scene_Handle_ColorComponent();
@@ -398,9 +398,55 @@ namespace mar {
 			ImGui::InputText("- Tag", (char*)tag.tag.c_str(), 30);
 		}
 
+		void GUI::Scene_Handle_TransformComponent() {
+			ImGui::Separator();
+			ImGui::Text("TransformComponent\n");
+
+			auto& tran = m_scene->entities[index_entity].getComponent<ecs::TransformComponent>();
+
+			// Sliders
+			{
+				ImGui::Text("Position\n");
+				ImGui::SliderFloat3("pos", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
+
+				ImGui::Text("Rotation\n");
+				ImGui::SliderFloat3("rot", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
+
+				ImGui::Text("Scale");
+
+				static float last_general;
+				last_general = tran.general_scale;
+
+				ImGui::SliderFloat("General\n", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
+				if (last_general != tran.general_scale) {
+					tran.scale += tran.general_scale - last_general;
+				}
+
+				ImGui::SliderFloat3("scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
+
+				if (ImGui::Button("Reset to default scale")) {
+					tran.general_scale = 1.f;
+					tran.scale.x = 1.f;
+					tran.scale.y = 1.f;
+					tran.scale.z = 1.f;
+				}
+			}
+
+			ecs::System::handleTransformComponent(tran);
+
+			m_scene->updatedTransforms = true;
+		}
+
 		void GUI::Scene_Handle_RenderableComponent() {
 			ImGui::Separator();
 			ImGui::Text("RenderableComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Renderable")) {
+				m_scene->entities[index_entity].removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+				m_scene->updatedBuffers = true;
+				return;
+			}
+
 			auto& renderable = m_scene->entities[index_entity].getComponent<ecs::RenderableComponent>();
 			ImGui::Text(renderable.id.c_str());
 
@@ -445,48 +491,15 @@ namespace mar {
 			}
 		}
 
-		void GUI::Scene_Handle_TransformComponent() {
-			ImGui::Separator();
-			ImGui::Text("TransformComponent\n");
-
-			auto& tran = m_scene->entities[index_entity].getComponent<ecs::TransformComponent>();
-
-			// Sliders
-			{
-				ImGui::Text("Position\n");
-				ImGui::SliderFloat3("pos", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
-				
-				ImGui::Text("Rotation\n");
-				ImGui::SliderFloat3("rot", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
-				
-				ImGui::Text("Scale");
-
-				static float last_general;
-				last_general = tran.general_scale;
-
-				ImGui::SliderFloat("General\n", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
-				if (last_general != tran.general_scale) {
-					tran.scale += tran.general_scale - last_general;
-				}
-
-				ImGui::SliderFloat3("scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
-
-				if (ImGui::Button("Reset to default scale")) {
-					tran.general_scale = 1.f;
-					tran.scale.x = 1.f;
-					tran.scale.y = 1.f;
-					tran.scale.z = 1.f;
-				}
-			}
-			
-			ecs::System::handleTransformComponent(tran);
-
-			m_scene->updatedTransforms = true;
-		}
-
 		void GUI::Scene_Handle_ColorComponent() {
 			ImGui::Separator();
 			ImGui::Text("ColorComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Color")) {
+				m_scene->entities[index_entity].removeComponent<ecs::ColorComponent>(ECS_COLOR);
+				m_scene->updatedBuffers = true;
+				return;
+			}
 
 			auto& color = m_scene->entities[index_entity].getComponent<ecs::ColorComponent>();
 		
@@ -498,6 +511,11 @@ namespace mar {
 		void GUI::Scene_Handle_LightComponent() {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Light")) {
+				m_scene->entities[index_entity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
+				return;
+			}
 
 			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
 
