@@ -4,11 +4,28 @@
  */
 
 
+// ----------------------------------------------
+// MAR_ENGINE_COMPILE_SETUP
+// ----------------------------------------------
+
  // Comment if release mode
 #define MAR_ENGINE_DEBUG_MODE
 
 // Comment if logs should be in logs/log.txt file instead of printed on the terminal
 //#define MAR_ENGINE_TERMINAL_LOGS
+
+// Uncomment to see Editor logs
+//#define MAR_ENGINE_EDITOR_LOGS
+
+// Uncomment to see Graphics logs
+#define MAR_ENGINE_GRAPHICS_LOGS
+
+// Uncomment to see Entity Component System logs
+#define MAR_ENGINE_ECS_LOGS
+
+// ----------------------------------------------
+// MAR_ENGINE_INCLUDE_LIBRARIES
+// ----------------------------------------------
 
 // Solve std::min / std::max error on windows
 #ifndef NOMINMAX
@@ -35,6 +52,7 @@
 
 // --- Include other third-party libraries --- //
 #pragma warning( push )
+#pragma warning( disable : 26439 )
 #pragma warning( disable : 26495) 
 #pragma warning( disable : 26812) 
 #pragma warning( disable : 26451) 
@@ -125,6 +143,7 @@
 #include <variant>
 #include <unordered_map>
 #include <algorithm> // std::find, std::copy
+#include <ctime>
 // multi-threading
 #include <thread> 
 #include <mutex>

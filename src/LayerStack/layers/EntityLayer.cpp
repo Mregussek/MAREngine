@@ -4,7 +4,7 @@
  */
 
 #include "EntityLayer.h"
-#include "../../Core/Renderer/RendererEntity.h"
+#include "../../Core/graphics/Renderer/RendererEntity.h"
 
 
 namespace mar {

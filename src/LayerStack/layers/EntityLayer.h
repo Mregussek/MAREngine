@@ -8,7 +8,7 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
-#include "../../Core/Scene/Scene.h"
+#include "../../Core/ecs/Scene.h"
 
 
 namespace mar {

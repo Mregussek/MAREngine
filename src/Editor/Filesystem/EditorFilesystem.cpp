@@ -4,7 +4,7 @@
  */
 
 #include "EditorFilesystem.h"
-#include "../../Core/Mesh/MeshCreator.h"
+#include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../Debug/Log.h"
 
 

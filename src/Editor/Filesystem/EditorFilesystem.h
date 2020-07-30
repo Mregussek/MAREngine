@@ -7,9 +7,9 @@
 #define MAR_ENGINE_EDITOR_FILESYSTEM_H
 
 #include "../../mar.h"
-#include "../../Core/Scene/Scene.h"
-#include "../../Core/Scene/Entity/Entity.h"
-#include "../../Core/Scene/Component/Components.h"
+#include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/Entity.h"
+#include "../../Core/ecs/Components.h"
 
 
 namespace mar {

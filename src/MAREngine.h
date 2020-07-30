@@ -17,9 +17,9 @@
 #include "LayerStack/layers/CameraLayer.h"
 #include "LayerStack/layers/EntityLayer.h"
 // Rendering
-#include "Core/Scene/Scene.h"
-#include "Core/Camera/Camera.h"
-#include "Core/Renderer/RendererEntity.h"
+#include "Core/ecs/Scene.h"
+#include "Core/graphics/Camera/Camera.h"
+#include "Core/graphics/Renderer/RendererEntity.h"
 // Window && Input
 #include "Window/Input.h"
 #include "Window/Window.h"

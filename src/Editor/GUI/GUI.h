@@ -7,18 +7,20 @@
 #define MAR_ENGINE_GUI_H
 
 #include "../../mar.h"
-#include "../../Debug/Log.h"
+#include "../EditorLogging.h"
+
 #include "../../MAREngine.h"
 #include "../../Window/Window.h"
-#include "../../Core/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
-#include "../../Core/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 
-#include "../../Core/Renderer/RendererEntity.h"
-#include "../../Core/Scene/Scene.h"
-#include "../../Core/Scene/Entity/Entity.h"
-#include "../../Core/Scene/Component/Components.h"
-#include "../../Core/Scene/System/Systems.h"
-#include "../../Core/Camera/Camera.h"
+#include "../../Core/graphics/Camera/Camera.h"
+#include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
+#include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
+#include "../../Core/graphics/Renderer/RendererEntity.h"
+
+#include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/Entity.h"
+#include "../../Core/ecs/Components.h"
+#include "../../Core/ecs/Systems.h"
 
 
 namespace mar {
