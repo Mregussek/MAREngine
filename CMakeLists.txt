@@ -77,15 +77,15 @@ endif()
 # spdlog
 # -------------------------------------------------------------
 message("Looking for: SPDLOG")
-add_subdirectory(other/spdlog)
-set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/spdlog/include")
+add_subdirectory(3rd_party/spdlog)
+set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # stb_image
 # -------------------------------------------------------------
 message("Looking for: stb_image")
-set(STB_IMAGE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/stb_image/include")
+set(STB_IMAGE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/stb_image/include")
 set(STB_IMAGE_H "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.h")
 set(STB_IMAGE_SRC "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.cpp")
 set(STB_IMAGE_FILES ${STB_IMAGE_H} ${STB_IMAGE_SRC})
@@ -95,7 +95,7 @@ message(STATUS "STB_IMAGE_INCLUDE_DIR:= ${STB_IMAGE_INCLUDE_DIR}")
 # Dear ImGui
 # -------------------------------------------------------------
 message("Looking for: Dear ImGui")
-set(IMGUI_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/imgui")
+set(IMGUI_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/imgui")
 set(IMGUI_SOURCES
 	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.cpp
     ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.cpp
@@ -118,10 +118,20 @@ set(IMGUI_FILES ${IMGUI_HEADERS} ${IMGUI_SOURCES})
 message(STATUS "IMGUI_INCLUDE_DIR:= ${IMGUI_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
+# ImGuizmo
+# -------------------------------------------------------------
+message("Looking for: ImGuizmo")
+set(IMGUIZMO_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/ImGuizmo")
+set(IMGUIZMO_HEADERS ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.h)
+set(IMGUIZMO_SOURCES ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.cpp)
+set(IMGUIZMO_FILES ${IMGUIZMO_HEADERS} ${IMGUIZMO_SOURCES})
+message(STATUS "IMGUIZMO_INCLUDE_DIR:= ${IMGUIZMO_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
 # MARMaths
 # -------------------------------------------------------------
 message("Looking for: MARMaths")
-set(MAR_MATH_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/MARMaths")
+set(MAR_MATH_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/MARMaths")
 file(GLOB_RECURSE SOURCE_MATH 
 	${MAR_MATH_INCLUDE_DIR}/src/*.c
 	${MAR_MATH_INCLUDE_DIR}/src/*.cpp)
@@ -135,10 +145,18 @@ set(MAR_MATH_FILES ${SOURCE_MATH} ${HEADER_MATH} ${MAIN_MATH})
 message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
+# entt
+# -------------------------------------------------------------
+message("Looking for: entt")
+set(ENTT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/entt/include")
+set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
+message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
 # SerialPort
 # -------------------------------------------------------------
 message("Looking for: SerialPort")
-set(SERIALPORT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/other/serialport/include")
+set(SERIALPORT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/serialport/include")
 message(STATUS "SERIALPORT_INCLUDE_DIR:= ${SERIALPORT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
@@ -148,12 +166,14 @@ include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
 	${SERIALPORT_INCLUDE_DIR}
 	${IMGUI_INCLUDE_DIR}
+	${IMGUIZMO_INCLUDE_DIR}
 	${MAR_MATH_INCLUDE_DIR}
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
 	${MAR_GLFW_DIR}
 	${STB_IMAGE_INCLUDE_DIR}
 	${SPDLOG_INCLUDE_DIR}
+	${ENTT_INCLUDE_DIR}
 )
 
 # -------------------------------------------------------------
@@ -170,7 +190,7 @@ link_directories(
 message("Creating executable...")
 if(MSVC)
 	add_executable(${PROJECT_NAME} ${MAR_ENGINE_FILES} 
-		${IMGUI_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${MAR_MATH_FILES}
+		${IMGUI_FILES} ${IMGUIZMO_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${MAR_MATH_FILES} ${ENTT_FILES}
 	)
 	
 	message("Linking libraries to MAREngine")
