@@ -292,12 +292,16 @@ namespace mar {
 			shader.setUniform1f("u_material.constant", m_lightComponent.constant);
 			shader.setUniform1f("u_material.linear", m_lightComponent.linear);
 			shader.setUniform1f("u_material.quadratic", m_lightComponent.quadratic);
+
+			MAR_CORE_TRACE("RENDERERENTITY: passed light to shader!");
 		}
 
 		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, CameraData* camdata) {
 			shader.setUniformVector3("u_CameraPos", camdata->position);
 			shader.setUniformMat4f("u_Model", camdata->model);
 			shader.setUniformMat4f("u_MVP", camdata->mvp);
+
+			MAR_CORE_TRACE("RENDERERENTITY: passed camera to shader!");
 		}
 
 		RendererStatistics& RendererEntity::getStatistics() { 
@@ -306,23 +310,29 @@ namespace mar {
 
 		void RendererEntity::clearStatistics() {
 			s_stats.resetStatistics();
+
+			MAR_CORE_INFO("RENDERERENTITY: reseting renderer statistics!");
 		}
 
 		void RendererEntity::updateTransforms(ecs::Scene* scene) {
 			m_transformsColor.clear();
-			m_transformsTexture2D.clear();
-			m_transformsCubemap.clear();
+			//m_transformsTexture2D.clear();
+			//m_transformsCubemap.clear();
 
 			for (auto& entity : scene->entities) {
 				if (entity.hasComponent<ecs::ColorComponent>())
 					m_transformsColor.push_back(entity.getComponent<ecs::TransformComponent>());
 
+				/*
 				if (entity.hasComponent<ecs::Texture2DComponent>())
 					m_transformsTexture2D.push_back(entity.getComponent<ecs::TransformComponent>());
 
 				if (entity.hasComponent<ecs::TextureCubemapComponent>())
 					m_transformsCubemap.push_back(entity.getComponent<ecs::TransformComponent>());
+				*/
 			}
+
+			MAR_CORE_TRACE("RENDERINGENTITY: updating transforms");
 		}
 
 		void RendererEntity::updateColors(ecs::Scene* scene) {
@@ -331,6 +341,8 @@ namespace mar {
 			for (auto& entity : scene->entities)
 				if (entity.hasComponent<ecs::ColorComponent>())
 					m_samplersColors.push_back(entity.getComponent<ecs::ColorComponent>());
+			
+			MAR_CORE_TRACE("RENDERERENTITY: updating colors");
 		}
 
 		void RendererEntity::updateLight(ecs::Scene* scene) {
@@ -340,6 +352,8 @@ namespace mar {
 				m_lightComponent = scene->getComponent<ecs::LightComponent>(entity);
 				m_lightPosition = scene->getComponent<ecs::TransformComponent>(entity).center;
 			}
+			
+			MAR_CORE_TRACE("RENDERERENTITY: updating light");
 		}
 
 

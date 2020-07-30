@@ -27,7 +27,7 @@ namespace mar {
 			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-			MAR_CORE_INFO("GUI has initialized properly!");
+			MAR_CORE_INFO("GUI: initialized properly!");
 		}
 
 		void GUI::shutdown() {
@@ -35,13 +35,15 @@ namespace mar {
 			ImGui_ImplGlfw_Shutdown();
 			ImGui::DestroyContext();
 
-			MAR_CORE_INFO("GUI is closed!");
+			MAR_CORE_INFO("GUI: closed properly!");
 		}
 
 		void GUI::display() {
 			prepareNewFrame();
 			updateFrame();
 			endFrame();
+
+			MAR_CORE_INFO("GUI: displayed frame!");
 		}
 
 		void GUI::prepareNewFrame() {
@@ -81,6 +83,8 @@ namespace mar {
 				ImGuiID dockspace_id = ImGui::GetID("MARDockspace");
 				ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
 			}
+
+			MAR_CORE_TRACE("GUI: prepared frame (render, dockspace, other...)");
 		}
 
 		void GUI::updateFrame() {
@@ -96,6 +100,8 @@ namespace mar {
 			if (m_saveSceneWindow) { Filesystem_SaveScene(); }
 			if (m_infoWindow) { Menu_Info(); }
 			if (m_instructionWindow) { Menu_Instruction(); }
+
+			MAR_CORE_TRACE("GUI: updated frame! (Actual Editor Windows)");
 		}
 
 		void GUI::endFrame() {
@@ -103,6 +109,8 @@ namespace mar {
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 			ImGui::EndFrame();
+
+			MAR_CORE_TRACE("GUI: ending frame! (rendering gathered data)");
 		}
 
 		void GUI::Menu_MainMenuBar() {
@@ -139,6 +147,8 @@ namespace mar {
 
 				ImGui::EndMainMenuBar();
 			}
+
+			MAR_CORE_TRACE("GUI: pushing main menu bar");
 		}
 
 		void GUI::Display_ViewPort() {
@@ -160,6 +170,8 @@ namespace mar {
 				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: Displaying viewport");
 		}
 
 		void GUI::Scene_Statistics() {
@@ -206,6 +218,8 @@ namespace mar {
 			ImGui::Text(msframe.c_str());
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: scene_statistics");
 		}
 
 		void GUI::Menu_Info() {
@@ -228,6 +242,8 @@ namespace mar {
 			}
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: menu_info");
 		}
 
 		void GUI::Menu_Instruction() {
@@ -269,10 +285,14 @@ namespace mar {
 			}
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: menu_instruction");
 		}
 
 		void GUI::submit(ecs::Scene* scene) {
 			m_scene = scene;
+
+			MAR_CORE_INFO("GUI: scene has been submitted!");
 		}
 
 		void GUI::Scene_Hierarchy() {
@@ -292,6 +312,8 @@ namespace mar {
 			Scene_Hierarchy_PopUp();
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: scene_hierarchy");
 		}
 
 		void GUI::Scene_Hierarchy_PopUp() {
@@ -317,6 +339,8 @@ namespace mar {
 
 				ImGui::EndPopup();
 			}
+
+			MAR_CORE_TRACE("GUI: scene_hierarchy_popup");
 		}
 
 		void GUI::Scene_Entity_Modify() {
@@ -348,6 +372,8 @@ namespace mar {
 			Scene_Entity_Modify_PopUp();
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: scene_entity_modify");
 		}
 
 		void GUI::Scene_Entity_Modify_PopUp() {
@@ -387,6 +413,7 @@ namespace mar {
 				}
 			}
 			
+			MAR_CORE_TRACE("GUI: scene_entity_modify_popup");
 		}
 
 		void GUI::Scene_Handle_TagComponent() {
@@ -396,6 +423,8 @@ namespace mar {
 			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
 
 			ImGui::InputText("- Tag", (char*)tag.tag.c_str(), 30);
+
+			MAR_CORE_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 		}
 
 		void GUI::Scene_Handle_TransformComponent() {
@@ -435,6 +464,8 @@ namespace mar {
 			ecs::System::handleTransformComponent(tran);
 
 			m_scene->updatedTransforms = true;
+
+			MAR_CORE_TRACE("GUI: SELECTED-ENTITY: handling transform component");
 		}
 
 		void GUI::Scene_Handle_RenderableComponent() {
@@ -489,6 +520,8 @@ namespace mar {
 					m_scene->updatedBuffers = true;
 				}
 			}
+			MAR_CORE_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
+
 		}
 
 		void GUI::Scene_Handle_ColorComponent() {
@@ -506,6 +539,8 @@ namespace mar {
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
 
 			m_scene->updatedColors = true;
+
+			MAR_CORE_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
 
 		void GUI::Scene_Handle_LightComponent() {
@@ -551,6 +586,8 @@ namespace mar {
 			ImGui::InputFloat("Shininess", &light.shininess);
 
 			m_scene->updatedLight = true;
+
+			MAR_CORE_TRACE("GUI: SELECTED-ENTITY: handling light component");
 		}
 		
 		void GUI::Filesystem_SaveScene() {
@@ -579,6 +616,8 @@ namespace mar {
 				m_saveSceneWindow = false;
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: filesystem_savescene");
 		}
 
 		void GUI::Filesystem_LoadScene() {
@@ -611,6 +650,8 @@ namespace mar {
 				m_loadSceneWindow = false;
 
 			ImGui::End();
+
+			MAR_CORE_TRACE("GUI: filesystem_loadscene");
 		}
 
 		void GUI::Setup_Theme() {
@@ -666,6 +707,8 @@ namespace mar {
 			style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
 			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 			style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
+
+			MAR_CORE_INFO("GUI: default theme has been loaded!");
 		}
 
 

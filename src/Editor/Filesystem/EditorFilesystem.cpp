@@ -5,6 +5,7 @@
 
 #include "EditorFilesystem.h"
 #include "../../Core/Mesh/MeshCreator.h"
+#include "../../Debug/Log.h"
 
 
 namespace mar {
@@ -12,6 +13,9 @@ namespace mar {
 
 
 		void Filesystem::saveToFile(ecs::Scene* scene, const char* filename) {
+			MAR_CORE_INFO("FILESYSTEM: going to save scene at:");
+			MAR_CORE_INFO(filename);
+
 			std::ofstream ss(filename, std::ios::out | std::ios::trunc);
 
 			if (!ss.is_open()) {
@@ -80,9 +84,14 @@ namespace mar {
 
  				}
 			}
+
+			MAR_CORE_INFO("FILESYSTEM: scene has been saved!");
 		}
 
 		ecs::Scene* Filesystem::openFile(const char* filename) {
+			MAR_CORE_INFO("FILESYSTEM: going to load scene from:");
+			MAR_CORE_INFO(filename);
+
 			ecs::Scene* scene = nullptr;
 
 			std::ifstream file(filename);
@@ -287,6 +296,10 @@ namespace mar {
 
 				}
 			}
+
+			file.close();
+
+			MAR_CORE_INFO("FILESYSTEM: returning loaded scene");
 
 			return scene;
 		}

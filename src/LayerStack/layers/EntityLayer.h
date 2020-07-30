@@ -25,7 +25,7 @@ namespace mar {
 		public:
 			EntityLayer(const char* debugname);
 
-			void initialize(ecs::Scene* scene);
+			void initialize(ecs::Scene* scene = nullptr);
 
 			// --- OVERLOADED METHODS --- //
 

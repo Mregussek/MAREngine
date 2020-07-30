@@ -7,6 +7,9 @@
  // Comment if release mode
 #define MAR_ENGINE_DEBUG_MODE
 
+// Comment if logs should be in logs/log.txt file instead of printed on the terminal
+//#define MAR_ENGINE_TERMINAL_LOGS
+
 // Solve std::min / std::max error on windows
 #ifndef NOMINMAX
 	#define NOMINMAX

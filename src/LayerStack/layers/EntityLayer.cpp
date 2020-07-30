@@ -22,7 +22,10 @@ namespace mar {
 
 			m_renderer->initialize();
 		
-			m_scene = scene;
+			if (scene)
+				m_scene = scene;
+			else
+				m_scene = new ecs::Scene("EmptyScene");
 		}
 
 		void EntityLayer::update() {

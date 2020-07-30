@@ -46,120 +46,7 @@ namespace mar {
 			m_stack.pushOverlay(gui_layer);
 			
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
-			
 			auto scene = editor::Filesystem::openFile(m_pathLoad.c_str());
-			//entitylayer->getScene()->setName("DefaultScene");
-			
-			/*
-			// ADD ENTITIES
-			{
-				// FIRST ENTITY
-				{
-					auto entity = entitylayer->getScene()->createEntity();
-
-					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("FirstEntity");
-
-					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					tran.scale = { 1.f, 1.f, 1.f };
-					tran.angles = { 65.f, 0.f, 0.f };
-					tran.center = { 0.f, 2.f, 1.f };
-					ecs::System::handleTransformComponent(tran);
-
-					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					ren.id = "Cube";
-					ren.vertices = graphics::MeshCreator::getVertices_Cube();
-					ren.indices = graphics::MeshCreator::getIndices_Cube();
-
-					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.2f, 0.5f, 0.2f });
-				}
-
-				// SECOND ENTITY
-				{
-					auto entity = entitylayer->getScene()->createEntity();
-
-					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("SecondEntity");
-
-					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					ren.id = "Pyramid";
-					ren.vertices = graphics::MeshCreator::getVertices_Pyramid();
-					ren.indices = graphics::MeshCreator::getIndices_Pyramid();
-
-					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					tran.scale = { 1.f, 1.5f, 1.f };
-					tran.angles = { 0.f, 25.f, 0.f };
-					tran.center = { -3.f, 2.f, -1.f };
-					ecs::System::handleTransformComponent(tran);
-
-					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.5f, 0.9f, 0.25f });
-				}
-
-				// THIRD ENTITY
-				{
-					auto entity = entitylayer->getScene()->createEntity();
-
-					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("ThirdEntity");
-
-					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					ren.id = "Surface";
-					ren.vertices = graphics::MeshCreator::getVertices_Surface();
-					ren.indices = graphics::MeshCreator::getIndices_Surface();
-
-					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					tran.scale = { 1.f, 1.f, 1.f };
-					tran.angles = { 0.f, 0.f, 0.f };
-					tran.center = { 0.f, 0.f, 0.f };
-					ecs::System::handleTransformComponent(tran);
-
-					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.5f, 0.2f, 0.9f });
-				}
-
-				// FOURTH ENTITY
-				{
-					auto entity = entitylayer->getScene()->createEntity();
-
-					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("FourthEntity");
-
-					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					ren.id = "Wall";
-					ren.vertices = graphics::MeshCreator::getVertices_Wall();
-					ren.indices = graphics::MeshCreator::getIndices_Wall();
-
-					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					tran.scale = { 1.f, 1.f, 1.f };
-					tran.angles = { 0.f, 25.f, 0.f };
-					tran.center = { -2.f, 0.f, 0.f };
-					ecs::System::handleTransformComponent(tran);
-
-					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 0.9f, 0.2f, 0.3f });
-				}
-
-				// FIFTH ENTITY
-				{
-					auto entity = entitylayer->getScene()->createEntity();
-
-					auto& tag = entity.getComponent<ecs::TagComponent>();
-					tag = std::string("LightEntity");
-
-					auto& ren = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					ren.id = "Cube";
-					ren.vertices = graphics::MeshCreator::getVertices_Cube();
-					ren.indices = graphics::MeshCreator::getIndices_Cube();
-
-					auto& tran = entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					tran.scale = { 0.5f, 0.5f, 0.5f };
-					tran.angles = { 0.f, 0.f, 0.f };
-					tran.center = { 0.f, 0.f, 5.0f };
-					ecs::System::handleTransformComponent(tran);
-
-					entity.addComponent<ecs::ColorComponent>(ECS_COLOR, maths::vec3{ 1.f, 1.f, 1.f });
-					entity.addComponent<ecs::LightComponent>(ECS_LIGHT);
-				}
-			}
-			*/
 			entitylayer->initialize(scene);
 			m_stack.pushLayer(entitylayer);
 			gui->submit(entitylayer->getScene());
@@ -189,6 +76,8 @@ namespace mar {
 			// --------------- RENDER LOOP -------------------- //
 			//////////////////////////////////////////////////////
 
+			MAR_CORE_INFO("ENGINE: user has exited main loop!");
+
 			m_framebuffer.close();
 			m_stack.close();
 		}
@@ -197,6 +86,9 @@ namespace mar {
 		start_again:
 			if (m_shouldRestart) {
 				m_shouldRestart = false;
+				
+				MAR_CORE_INFO("ENGINE: restarting...");
+
 				run();
 				goto start_again;
 			}

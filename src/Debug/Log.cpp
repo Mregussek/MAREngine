@@ -21,10 +21,12 @@ namespace mar {
 
 			spdlog::set_pattern("%^[%T] %n: %v%$");
 
-			//s_file = PointerFactory<spdlog::sinks::basic_file_sink_mt>::makeRef("logs/log.txt");
-
-			//s_CoreLogger = PointerFactory<spdlog::logger>::makeRef("MAR ENGINE", s_file);
+#ifndef MAR_ENGINE_TERMINAL_LOGS
+			s_file = PointerFactory<spdlog::sinks::basic_file_sink_mt>::makeRef("logs/log.txt");
+			s_CoreLogger = PointerFactory<spdlog::logger>::makeRef("MAR ENGINE", s_file);
+#else
 			s_CoreLogger = spdlog::stdout_color_mt("MAR ENGINE");
+#endif
 			s_CoreLogger->set_level(spdlog::level::trace);
 
 			//s_ClientLogger = PointerFactory<spdlog::logger>::makeRef("APPLICATION", s_file);
