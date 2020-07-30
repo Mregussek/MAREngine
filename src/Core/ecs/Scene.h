@@ -31,6 +31,8 @@ namespace mar {
 
 			Entity& createEntity();
 
+			void destroyEntity(const int32_t& index);
+
 			// --- GET METHODS --- //
 
 			inline const std::string& getName() const { return m_name; }

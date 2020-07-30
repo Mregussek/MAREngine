@@ -44,6 +44,15 @@ namespace mar {
 			return entities[entities.size() - 1];
 		}
 
+		void Scene::destroyEntity(const int32_t& index) {
+			if (entities[index].isValid()) {
+				entities[index].destroyYourself();
+				entities.erase(entities.begin() + index);
+			}
+
+			ECS_INFO("SCENE: destroyed entity!");
+		}
+
 		void Scene::setName(std::string name) {
 			m_name = name;
 		}

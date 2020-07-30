@@ -29,7 +29,7 @@ namespace mar {
 				"logs/log" + 
 				std::to_string(1900 + ltm.tm_year) + std::to_string(1 + ltm.tm_mon) + std::to_string(ltm.tm_mday) + 
 				"_" +
-				std::to_string(1 + ltm.tm_hour) + std::to_string(1 + ltm.tm_min) + std::to_string(1 + ltm.tm_sec) +
+				std::to_string(ltm.tm_hour) + std::to_string(1 + ltm.tm_min) + std::to_string(1 + ltm.tm_sec) +
 				".txt";
 
 			s_file = PointerFactory<spdlog::sinks::basic_file_sink_mt>::makeRef(filename);

@@ -397,15 +397,21 @@ namespace mar {
 				if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
 					auto& entity = m_scene->entities[index_entity];
 
-					auto& cmp = entity.getComponent<ecs::Components>();
+					if (ImGui::BeginMenu("Add Component")) {
+						auto& cmp = entity.getComponent<ecs::Components>();
 
-					for (auto& existing : ecs::AllExistingComponents) {
+						for (auto& existing : ecs::AllExistingComponents) {
+							auto it = std::find(cmp.components.begin(), cmp.components.end(), existing.first);
+							if (it == cmp.components.end())
+								if (ImGui::MenuItem(existing.second))
+									entity.addComponent(existing.first);
+						}
 
-						auto it = std::find(cmp.components.begin(), cmp.components.end(), existing.first);
-						if (it == cmp.components.end())
-							if (ImGui::MenuItem(existing.second))
-								entity.addComponent(existing.first);
+						ImGui::EndMenu();
+					}
 
+					if (ImGui::MenuItem("Delete Entity from Scene")) {
+						m_scene->destroyEntity(index_entity);
 					}
 
 					ImGui::EndPopup();
@@ -416,12 +422,11 @@ namespace mar {
 		}
 
 		void GUI::Scene_Handle_TagComponent() {
-			ImGui::Separator();
 			ImGui::Text("TagComponent\n");
 
 			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
 
-			ImGui::InputText("- Tag", (char*)tag.tag.c_str(), 30);
+			ImGui::InputText("Tag", (char*)tag.tag.c_str(), 30);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 		}
@@ -434,23 +439,16 @@ namespace mar {
 
 			// Sliders
 			{
-				ImGui::Text("Position\n");
-				ImGui::SliderFloat3("pos", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
-
-				ImGui::Text("Rotation\n");
-				ImGui::SliderFloat3("rot", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
-
-				ImGui::Text("Scale");
-
 				static float last_general;
 				last_general = tran.general_scale;
 
-				ImGui::SliderFloat("General\n", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
-				if (last_general != tran.general_scale) {
-					tran.scale += tran.general_scale - last_general;
-				}
+				ImGui::SliderFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
+				ImGui::SliderFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
+				ImGui::SliderFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
+				ImGui::SliderFloat("GeneralScale", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
 
-				ImGui::SliderFloat3("scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
+				if (last_general != tran.general_scale) 
+					tran.scale += tran.general_scale - last_general;
 
 				if (ImGui::Button("Reset to default scale")) {
 					tran.general_scale = 1.f;
@@ -471,11 +469,12 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("RenderableComponent\n");
 			ImGui::SameLine();
-			if (ImGui::MenuItem("Remove Renderable")) {
-				m_scene->entities[index_entity].removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-				m_scene->updatedBuffers = true;
-				return;
-			}
+			if(!m_scene->entities[index_entity].hasComponent<ecs::ColorComponent>())
+				if (ImGui::MenuItem("Remove Renderable")) {
+					m_scene->entities[index_entity].removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					m_scene->updatedBuffers = true;
+					return;
+				}
 
 			auto& renderable = m_scene->entities[index_entity].getComponent<ecs::RenderableComponent>();
 			ImGui::Text(renderable.id.c_str());
@@ -546,10 +545,12 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
 			ImGui::SameLine();
+			/*
 			if (ImGui::MenuItem("Remove Light")) {
 				m_scene->entities[index_entity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
 				return;
 			}
+			*/
 
 			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
 

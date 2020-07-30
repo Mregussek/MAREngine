@@ -17,9 +17,12 @@ namespace mar {
 
 
 		enum class EntityComponents;
+		class Scene;
 
 
 		class Entity {
+			friend class Scene;
+
 			entt::entity m_entityHandle{ entt::null };
 			Scene* m_scene{ nullptr };
 
@@ -37,7 +40,10 @@ namespace mar {
 			{}
 
 			void addDefault() {
-				m_scene->m_registry.emplace<Components>(m_entityHandle);
+				auto& com = m_scene->m_registry.emplace<Components>(m_entityHandle);
+				com.components.push_back(ECS_DEFAULT);
+
+				ECS_TRACE("ENTITY: Adding default component");
 			}
 
 			template<typename T>
@@ -127,6 +133,13 @@ namespace mar {
 					addComponent<ecs::ColorComponent>(ECS_DEFAULT);
 					break;
 				}
+			}
+
+		private:
+			void destroyYourself() {
+				m_scene->m_registry.destroy(m_entityHandle);
+
+				ECS_INFO("ENTITY: destroyed yourself!");
 			}
 		};
 

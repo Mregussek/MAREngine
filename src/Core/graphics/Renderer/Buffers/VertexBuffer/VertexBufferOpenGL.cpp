@@ -46,6 +46,8 @@ namespace mar {
 		void VertexBufferOpenGL::close() {
 			MAR_CORE_GL_FUNC(glDeleteBuffers(1, &_id));
 			_initialized = false;
+
+			GRAPHICS_INFO("VERTEXBUFFER_OPENGL: closed!");
 		}
 
 		uint32_t VertexBufferOpenGL::getSize() const {
