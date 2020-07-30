@@ -217,6 +217,8 @@ namespace mar {
 			ImGui::Text("About Engine");
 			ImGui::Text(aboutEngine);
 
+			ImGui::Separator();
+
 			ImGui::Text("About Author");
 			ImGui::Text(aboutAuthor);
 
@@ -232,30 +234,30 @@ namespace mar {
 			ImGui::Begin("Instructions");
 
 			const char* fileManage = "File Management";
-			const char* aboutFileManageSave = "\nSave Method:\nYou have to give the name of file, where you want to write current scene.\nIf file exists, it will be truncated and new scene will be put there.";
-			const char* aboutFileManageOpen = "\nOpen Method:\nMethod searches all files in directory resources/mar_files and gets all scenes.\nYou have to click reload button in order to see current state of directory.\nThen you choose one path, which will be loaded into MAREngine.";
+			const char* aboutFileManageSave = "Save Method:\nYou have to give the name of file, where you want to write current scene.\nIf file exists, it will be truncated and new scene will be put there.";
+			const char* aboutFileManageOpen = "Open Method:\nMethod searches all files in directory resources/mar_files and gets all scenes.\nYou have to click reload button in order to see current state of directory.\nThen you choose one path, which will be loaded into MAREngine.";
 
 			ImGui::Text(fileManage);
 			ImGui::Text(aboutFileManageSave);
 			ImGui::Text(aboutFileManageOpen);
 			ImGui::Separator();
 
-			const char* keyboardSettings = "\nKeyboard Settings";
-			const char* aboutKeySettings = "\nIf Viewport window is selected you can move in scene using WASD keys.\nIf you click Q key, then mouse usage will be enabled! Press it again to disable mouse!";
+			const char* keyboardSettings = "Keyboard Settings";
+			const char* aboutKeySettings = "If Viewport window is selected you can move in scene using WASD keys.\nIf you click Q key, then mouse usage will be enabled! Press it again to disable mouse!";
 
 			ImGui::Text(keyboardSettings);
 			ImGui::Text(aboutKeySettings);
 			ImGui::Separator();
 
-			const char* mouseSettings = "\nMouse Settings";
-			const char* aboutMouseSettings = "\nIf you have clicked Q key, you can move around with mouse. Scroll is also available to see things.";
+			const char* mouseSettings = "Mouse Settings";
+			const char* aboutMouseSettings = "If you have clicked Q key, you can move around with mouse. Scroll is also available to see things.";
 
 			ImGui::Text(mouseSettings);
 			ImGui::Text(aboutMouseSettings);
 			ImGui::Separator();
 
-			const char* addShape = "\nAdding Shapes to Scene";
-			const char* aboutAddShape = "\nIn order to add shape to scene, you need to give center of the object. Next point is to select texture.\nIf empty is chosen, shape will be rendered with its default color!";
+			const char* addShape = "Adding Shapes to Scene";
+			const char* aboutAddShape = "In order to add shape to scene, you need to give center of the object. Next point is to select texture.\nIf empty is chosen, shape will be rendered with its default color!";
 
 			ImGui::Text(addShape);
 			ImGui::Text(aboutAddShape);
@@ -304,13 +306,8 @@ namespace mar {
 			if (entity.hasComponent<ecs::TagComponent>())
 				Scene_Handle_TagComponent();
 
-			if (entity.hasComponent<ecs::RenderableComponent>()) {
-				ImGui::Separator();
-				ImGui::Text("\nRenderableComponent\n");
-				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
-				ImGui::Text(renderable.id.c_str());
-				ImGui::Text("\n");
-			}
+			if (entity.hasComponent<ecs::RenderableComponent>())
+				Scene_Handle_RenderableComponent();
 
 			if (entity.hasComponent<ecs::TransformComponent>())
 				Scene_Handle_TransformComponent();
@@ -326,7 +323,7 @@ namespace mar {
 
 		void GUI::Scene_Handle_TagComponent() {
 			ImGui::Separator();
-			ImGui::Text("\nTagComponent\n");
+			ImGui::Text("TagComponent\n");
 
 			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
 
@@ -335,13 +332,18 @@ namespace mar {
 			ImGui::InputText("- Tag", (char*)s.c_str(), 30);
 
 			tag.tag = s;
+		}
 
-			ImGui::Text("\n");
+		void GUI::Scene_Handle_RenderableComponent() {
+			ImGui::Separator();
+			ImGui::Text("RenderableComponent\n");
+			auto& renderable = m_scene->entities[index_entity].getComponent<ecs::RenderableComponent>();
+			ImGui::Text(renderable.id.c_str());
 		}
 
 		void GUI::Scene_Handle_TransformComponent() {
 			ImGui::Separator();
-			ImGui::Text("\nTransformComponent\n");
+			ImGui::Text("TransformComponent\n");
 
 			auto& tran = m_scene->entities[index_entity].getComponent<ecs::TransformComponent>();
 
@@ -376,26 +378,22 @@ namespace mar {
 			ecs::System::handleTransformComponent(tran);
 
 			m_scene->updatedTransforms = true;
-
-			ImGui::Text("\n");
 		}
 
 		void GUI::Scene_Handle_ColorComponent() {
 			ImGui::Separator();
-			ImGui::Text("\nColorComponent\n");
+			ImGui::Text("ColorComponent\n");
 
 			auto& color = m_scene->entities[index_entity].getComponent<ecs::ColorComponent>();
 		
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
 
 			m_scene->updatedColors = true;
-
-			ImGui::Text("\n");
 		}
 
 		void GUI::Scene_Handle_LightComponent() {
 			ImGui::Separator();
-			ImGui::Text("\nLightComponent\n");
+			ImGui::Text("LightComponent\n");
 
 			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
 
@@ -431,8 +429,6 @@ namespace mar {
 			ImGui::InputFloat("Shininess", &light.shininess);
 
 			m_scene->updatedLight = true;
-
-			ImGui::Text("\n");
 		}
 		
 		void GUI::Filesystem_SaveScene() {
@@ -447,13 +443,15 @@ namespace mar {
 			static std::string save;
 			save = "resources/mar_files/" + std::string(filename) + ".marscene";
 
-			ImGui::Text("\nSaving to: ");
+			ImGui::Text("Saving to: ");
 			ImGui::Text(save.c_str());
 
 			ImGui::Separator();
 
 			if (ImGui::Button("Save to selected name"))
 				Filesystem::saveToFile(m_scene, save.c_str());
+
+			ImGui::SameLine();
 
 			if (ImGui::Button("Close"))
 				m_saveSceneWindow = false;
@@ -485,6 +483,8 @@ namespace mar {
 				engine::MAREngine::getEngine()->setRestart();
 			}
 
+			ImGui::SameLine();
+
 			if (ImGui::Button("Close"))
 				m_loadSceneWindow = false;
 
@@ -492,59 +492,58 @@ namespace mar {
 		}
 
 		void GUI::Setup_Theme() {
-			ImGui::GetStyle().FrameRounding = 4.0f;
-			ImGui::GetStyle().GrabRounding = 4.0f;
+			auto& io = ImGui::GetIO();
+			io.Fonts->AddFontFromFileTTF("resources/fonts/Ruda-Bold.ttf", 15.0f);
 
-			ImVec4* colors = ImGui::GetStyle().Colors;
+			ImGuiStyle* style = &ImGui::GetStyle();
 
-			colors[ImGuiCol_Text] = ImVec4(0.95f, 0.96f, 0.98f, 1.00f);
-			colors[ImGuiCol_TextDisabled] = ImVec4(0.36f, 0.42f, 0.47f, 1.00f);
-			colors[ImGuiCol_WindowBg] = ImVec4(0.11f, 0.15f, 0.17f, 1.00f);
-			colors[ImGuiCol_ChildBg] = ImVec4(0.15f, 0.18f, 0.22f, 1.00f);
-			colors[ImGuiCol_PopupBg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
-			colors[ImGuiCol_Border] = ImVec4(0.08f, 0.10f, 0.12f, 1.00f);
-			colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-			colors[ImGuiCol_FrameBg] = ImVec4(0.20f, 0.25f, 0.29f, 1.00f);
-			colors[ImGuiCol_FrameBgHovered] = ImVec4(0.12f, 0.20f, 0.28f, 1.00f);
-			colors[ImGuiCol_FrameBgActive] = ImVec4(0.09f, 0.12f, 0.14f, 1.00f);
-			colors[ImGuiCol_TitleBg] = ImVec4(0.09f, 0.12f, 0.14f, 0.65f);
-			colors[ImGuiCol_TitleBgActive] = ImVec4(0.08f, 0.10f, 0.12f, 1.00f);
-			colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
-			colors[ImGuiCol_MenuBarBg] = ImVec4(0.15f, 0.18f, 0.22f, 1.00f);
-			colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.39f);
-			colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.20f, 0.25f, 0.29f, 1.00f);
-			colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.18f, 0.22f, 0.25f, 1.00f);
-			colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.09f, 0.21f, 0.31f, 1.00f);
-			colors[ImGuiCol_CheckMark] = ImVec4(0.28f, 0.56f, 1.00f, 1.00f);
-			colors[ImGuiCol_SliderGrab] = ImVec4(0.28f, 0.56f, 1.00f, 1.00f);
-			colors[ImGuiCol_SliderGrabActive] = ImVec4(0.37f, 0.61f, 1.00f, 1.00f);
-			colors[ImGuiCol_Button] = ImVec4(0.20f, 0.25f, 0.29f, 1.00f);
-			colors[ImGuiCol_ButtonHovered] = ImVec4(0.28f, 0.56f, 1.00f, 1.00f);
-			colors[ImGuiCol_ButtonActive] = ImVec4(0.06f, 0.53f, 0.98f, 1.00f);
-			colors[ImGuiCol_Header] = ImVec4(0.20f, 0.25f, 0.29f, 0.55f);
-			colors[ImGuiCol_HeaderHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
-			colors[ImGuiCol_HeaderActive] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-			colors[ImGuiCol_Separator] = ImVec4(0.20f, 0.25f, 0.29f, 1.00f);
-			colors[ImGuiCol_SeparatorHovered] = ImVec4(0.10f, 0.40f, 0.75f, 0.78f);
-			colors[ImGuiCol_SeparatorActive] = ImVec4(0.10f, 0.40f, 0.75f, 1.00f);
-			colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
-			colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
-			colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
-			colors[ImGuiCol_Tab] = ImVec4(0.11f, 0.15f, 0.17f, 1.00f);
-			colors[ImGuiCol_TabHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.80f);
-			colors[ImGuiCol_TabActive] = ImVec4(0.20f, 0.25f, 0.29f, 1.00f);
-			colors[ImGuiCol_TabUnfocused] = ImVec4(0.11f, 0.15f, 0.17f, 1.00f);
-			colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.11f, 0.15f, 0.17f, 1.00f);
-			colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
-			colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
-			colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
-			colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
-			colors[ImGuiCol_TextSelectedBg] = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
-			colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
-			colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
-			colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
-			colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
-			colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
+			style->WindowPadding = ImVec2(15, 15);
+			style->WindowRounding = 5.0f;
+			style->FramePadding = ImVec2(5, 5);
+			style->FrameRounding = 4.0f;
+			style->ItemSpacing = ImVec2(12, 8);
+			style->ItemInnerSpacing = ImVec2(8, 6);
+			style->IndentSpacing = 25.0f;
+			style->ScrollbarSize = 15.0f;
+			style->ScrollbarRounding = 9.0f;
+			style->GrabMinSize = 5.0f;
+			style->GrabRounding = 3.0f;
+
+			style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
+			style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+			style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+			style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+			style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
+			style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
+			style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+			style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+			style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
+			style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+			style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+			style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+			style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+			style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+			style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+			style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+			style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+			style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+			style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+			style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+			style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+			style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+			style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
+			style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
+			style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
+			style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
+			style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
+			style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
+			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
+			style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 		}
 
 } }

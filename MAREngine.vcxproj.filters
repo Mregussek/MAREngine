@@ -410,8 +410,14 @@
     <Image Include="img\x86.jpg">
       <Filter>Pliki zasobów</Filter>
     </Image>
+    <Image Include="resources\textures\grass_alpha.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="resources\fonts\Ruda-Bold.ttf" />
   </ItemGroup>
 </Project>

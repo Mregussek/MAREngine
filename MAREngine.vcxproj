@@ -301,6 +301,7 @@
     <Image Include="resources\textures\black-texture.jpg" />
     <Image Include="resources\textures\blue-texture.jpg" />
     <Image Include="resources\textures\grass-texture.jpg" />
+    <Image Include="resources\textures\grass_alpha.png" />
     <Image Include="resources\textures\mc\dirt.jpg" />
     <Image Include="resources\textures\mc\mc-cobble.jpg" />
     <Image Include="resources\textures\mc\mc-diamond.jpg" />
@@ -319,6 +320,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="resources\fonts\Ruda-Bold.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
