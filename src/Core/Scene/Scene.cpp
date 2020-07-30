@@ -17,7 +17,8 @@ namespace mar {
 			updatedColors(false),
 			updatedTextures2D(false),
 			updatedTexturesCubemap(false),
-			updatedLight(false)
+			updatedLight(false),
+			updatedBuffers(false)
 		{
 			m_registry = entt::registry();
 		}

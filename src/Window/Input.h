@@ -51,6 +51,11 @@ namespace mar {
 				else return false;
 			}
 
+			static bool isMousePressed_NotViewport(int key) {
+				return glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_PRESS ||
+						glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_REPEAT;
+			}
+
 			// --- GET METHODS --- //
 			static const bool& getUseInput() { return s_useInput; }
 

@@ -24,6 +24,17 @@ namespace mar {
 			LIGHT
 		};
 
+		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents {
+				{ EntityComponents::DEFAULT_COMPONENT, "DefaultComponent" },
+				{ EntityComponents::COLOR, "ColorComponent" },
+				{ EntityComponents::TEXTURE2D, "Texture2DComponent" },
+				{ EntityComponents::CUBEMAP, "TextureCubemapComponent" },
+				{ EntityComponents::RENDERABLE, "RenderableComponent" },
+				{ EntityComponents::TAG, "TagComponent" },
+				{ EntityComponents::TRANSFORM, "TransformComponent" },
+				{ EntityComponents::LIGHT, "LightComponent" }
+		};
+
 		struct Components {
 			std::vector<EntityComponents> components;
 
@@ -57,6 +68,9 @@ namespace mar {
 
 			RenderableComponent() = default;
 			RenderableComponent(const RenderableComponent& ren) = default;
+			RenderableComponent(std::string i)
+				: id(i)
+			{}
 			RenderableComponent(std::string i, const std::vector<float>& ver, const std::vector<uint32_t>& ind)
 				: id(i),
 				vertices(ver),

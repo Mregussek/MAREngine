@@ -49,6 +49,7 @@ namespace mar {
 			void setName(std::string name);
 		
 			std::vector<Entity> entities;
+			bool updatedBuffers;
 			bool updatedTransforms;
 			bool updatedColors;
 			bool updatedTextures2D;

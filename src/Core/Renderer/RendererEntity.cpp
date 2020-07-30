@@ -53,6 +53,9 @@ namespace mar {
 
 		void RendererEntity::submit(ecs::Scene* scene) {
 			if (m_lastSize == scene->entities.size()) {
+				if (scene->updatedBuffers)
+					goto resubmit_all;
+
 				if (scene->updatedTransforms)
 					updateTransforms(scene);
 
@@ -68,6 +71,9 @@ namespace mar {
 				return;
 			}
 				
+		resubmit_all:
+
+			scene->updatedBuffers = false;
 			m_lastSizeSet = true;
 			m_lastSize = scene->entities.size();
 

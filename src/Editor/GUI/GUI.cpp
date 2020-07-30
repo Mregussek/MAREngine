@@ -289,7 +289,34 @@ namespace mar {
 				}
 			}
 
+			Scene_Hierarchy_PopUp();
+
 			ImGui::End();
+		}
+
+		void GUI::Scene_Hierarchy_PopUp() {
+			static bool b = false;
+
+			if (ImGui::IsWindowFocused())
+				b = window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_2);
+			else
+				b = false;
+
+			if (b) {
+				ImGui::OpenPopup("SceneHierarchyPopUp");
+				if (window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_1))
+					b = false;
+			}
+
+			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
+				if (ImGui::MenuItem("Add Entity to scene")) {
+					auto& entity = m_scene->createEntity();
+					entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
+					index_entity = m_scene->entities.size() - 1;
+				}
+
+				ImGui::EndPopup();
+			}
 		}
 
 		void GUI::Scene_Entity_Modify() {
@@ -318,7 +345,48 @@ namespace mar {
 			if (entity.hasComponent<ecs::LightComponent>())
 				Scene_Handle_LightComponent();
 
+			Scene_Entity_Modify_PopUp();
+
 			ImGui::End();
+		}
+
+		void GUI::Scene_Entity_Modify_PopUp() {
+			static bool b = false;
+
+			// PopMenu should be opened?
+			{
+				if (ImGui::IsWindowFocused())
+					b = window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_2);
+				else
+					b = false;
+
+				if (b) {
+					ImGui::OpenPopup("SceneEntityModifyPopUp");
+					if (window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_1))
+						b = false;
+				}
+			}
+			
+			// Actual PopUp menu
+			{
+				if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
+					auto& entity = m_scene->entities[index_entity];
+
+					auto& cmp = entity.getComponent<ecs::Components>();
+
+					for (auto& existing : ecs::AllExistingComponents) {
+
+						auto it = std::find(cmp.components.begin(), cmp.components.end(), existing.first);
+						if (it == cmp.components.end())
+							if (ImGui::MenuItem(existing.second))
+								entity.addComponent(existing.first);
+
+					}
+
+					ImGui::EndPopup();
+				}
+			}
+			
 		}
 
 		void GUI::Scene_Handle_TagComponent() {
@@ -327,11 +395,7 @@ namespace mar {
 
 			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
 
-			std::string s = tag.tag;
-
-			ImGui::InputText("- Tag", (char*)s.c_str(), 30);
-
-			tag.tag = s;
+			ImGui::InputText("- Tag", (char*)tag.tag.c_str(), 30);
 		}
 
 		void GUI::Scene_Handle_RenderableComponent() {
@@ -339,6 +403,46 @@ namespace mar {
 			ImGui::Text("RenderableComponent\n");
 			auto& renderable = m_scene->entities[index_entity].getComponent<ecs::RenderableComponent>();
 			ImGui::Text(renderable.id.c_str());
+
+			if (!m_scene->entities[index_entity].hasComponent<ecs::ColorComponent>()) {
+				ImGui::Text("WARNING: Object will not be rendered until you will add ColorComponent!");
+			}
+
+			if (renderable.vertices.empty()) {
+				if (ImGui::Button("Cube")) {
+					renderable.id = "Cube";
+					renderable.vertices = graphics::MeshCreator::getVertices_Cube();
+					renderable.indices = graphics::MeshCreator::getIndices_Cube();
+					m_scene->updatedBuffers = true;
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Pyramid")) {
+					renderable.id = "Pyramid";
+					renderable.vertices = graphics::MeshCreator::getVertices_Pyramid();
+					renderable.indices = graphics::MeshCreator::getIndices_Pyramid();
+					m_scene->updatedBuffers = true;
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Wall")) {
+					renderable.id = "Wall";
+					renderable.vertices = graphics::MeshCreator::getVertices_Wall();
+					renderable.indices = graphics::MeshCreator::getIndices_Wall();
+					m_scene->updatedBuffers = true;
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Surface")) {
+					renderable.id = "Surface";
+					renderable.vertices = graphics::MeshCreator::getVertices_Surface();
+					renderable.indices = graphics::MeshCreator::getIndices_Surface();
+					m_scene->updatedBuffers = true;
+				}
+			}
 		}
 
 		void GUI::Scene_Handle_TransformComponent() {
@@ -545,5 +649,6 @@ namespace mar {
 			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
 			style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
 		}
+
 
 } }

@@ -26,21 +26,21 @@ namespace mar {
 
 
 		class GUI {
+			// --- Storage for scenes
+			ecs::Scene* m_scene;
+			// --- Viewport
+			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
+			// --- Which entity should be displayed
+			int32_t index_scene{ -1 };
+			int32_t index_entity{ -1 };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
-			// --- Viewport
-			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			// --- Should Window Be Opened ?
 			bool m_saveSceneWindow{ false };
 			bool m_loadSceneWindow{ false };
 			bool m_infoWindow{ false };
 			bool m_instructionWindow{ false };
-			// --- Storage for scenes
-			ecs::Scene* m_scene;
-			// --- Which entity should be displayed
-			int32_t index_scene{ -1 };
-			int32_t index_entity{ -1 };
 
 		public:
 			GUI() = default;
@@ -71,8 +71,10 @@ namespace mar {
 
 			// --- SCENE HANDLERS --- //
 			void Scene_Hierarchy();
+			void Scene_Hierarchy_PopUp();
 
 			void Scene_Entity_Modify();
+			void Scene_Entity_Modify_PopUp();
 
 			void Scene_Handle_TagComponent();
 			void Scene_Handle_RenderableComponent();
