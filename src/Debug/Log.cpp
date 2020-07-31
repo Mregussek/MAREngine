@@ -5,6 +5,8 @@
 
 #include "Log.h"
 
+#ifdef MAR_ENGINE_DEBUG_MODE
+
 namespace mar {
 	namespace debug {
 
@@ -47,3 +49,6 @@ namespace mar {
 
 
 } }
+
+
+#endif

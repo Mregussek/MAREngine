@@ -6,6 +6,8 @@
 #ifndef MAR_ENGINE_LOG_H
 #define MAR_ENGINE_LOG_H
 
+#ifdef MAR_ENGINE_DEBUG_MODE
+
 #include "../mar.h"
 
 
@@ -69,8 +71,6 @@ namespace mar {
 } }
 
 
-#ifdef MAR_ENGINE_DEBUG_MODE
-
     #define MAR_LOG_INIT() ::mar::debug::Log::init()
     
     #define MAR_CORE_TRACE(...) ::mar::debug::Log::getCoreLogger()->trace(__VA_ARGS__)
@@ -96,8 +96,8 @@ namespace mar {
 
 #else
 
-    #define ASSERT(x)
-    #define MAR_CORE_ASSERT(x)
+    #define ASSERT(...)
+    #define MAR_CORE_ASSERT(...)
     
     #define MAR_LOG_INIT()
     

@@ -17,12 +17,13 @@ uniform mat4 u_SeparateTransform[32];
 void main() {
 	// Calculate all transformations
 	int index = int(shapeIndex);
-	gl_Position = u_MVP * u_SeparateTransform[index] * position;
+	vec4 verter_transformed = u_SeparateTransform[index] * position;
+	gl_Position = u_MVP * verter_transformed;
 
 	// Pass values to fragment shader
 	v_shapeIndex = shapeIndex;
 	v_lightNormal = mat3(u_Model) * lightNormal;
-	v_Position = vec4(u_Model * position).xyz;
+	v_Position = vec4(u_Model * verter_transformed).xyz;
 };
 
 #shader fragment
