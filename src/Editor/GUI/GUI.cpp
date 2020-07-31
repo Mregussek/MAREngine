@@ -412,8 +412,9 @@ namespace mar {
 
 					if (ImGui::MenuItem("Delete Entity from Scene")) {
 						m_scene->destroyEntity(index_entity);
+						index_entity = -1;
 					}
-
+				
 					ImGui::EndPopup();
 				}
 			}
