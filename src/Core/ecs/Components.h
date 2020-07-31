@@ -141,10 +141,6 @@ namespace mar {
 			maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
 			maths::vec3 specular{ 0.5f, 0.5f, 0.5f };
 
-			maths::vec3 ambientStrength{ 0.2f, 0.2f, 0.2f };
-			maths::vec3 diffuseStrength{ 0.7f, 0.7f, 0.7f };
-			maths::vec3 specularStrength{ 1.0f, 1.0f, 1.0f };
-
 			float constant{ 1.0f };
 			float linear{ 0.045f };
 			float quadratic{ 0.0075f };

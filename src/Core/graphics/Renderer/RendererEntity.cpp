@@ -280,12 +280,8 @@ namespace mar {
 			shader.setUniformVector3("u_material.lightPos", m_lightPosition);
 
 			shader.setUniformVector3("u_material.ambient", m_lightComponent.ambient);
-			shader.setUniformVector3("u_material.diffuse", m_lightComponent.ambient);
-			shader.setUniformVector3("u_material.specular", m_lightComponent.ambient);
-
-			shader.setUniformVector3("u_material.ambientStrength", m_lightComponent.ambient);
-			shader.setUniformVector3("u_material.diffuseStrength", m_lightComponent.ambient);
-			shader.setUniformVector3("u_material.specularStrength", m_lightComponent.ambient);
+			shader.setUniformVector3("u_material.diffuse", m_lightComponent.diffuse);
+			shader.setUniformVector3("u_material.specular", m_lightComponent.specular);
 
 			shader.setUniform1f("u_material.shininess", m_lightComponent.shininess);
 

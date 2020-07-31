@@ -76,10 +76,6 @@ namespace mar {
 						ss << "#diffuselight " << light.diffuse.x << " " << light.diffuse.y << " " << light.diffuse.z << "\n";
 						ss << "#specularlight " << light.specular.x << " " << light.specular.y << " " << light.specular.z << "\n";
 
-						ss << "#ambientstrength " << light.ambientStrength.x << " " << light.ambientStrength.y << " " << light.ambientStrength.z << "\n";
-						ss << "#diffusestrength " << light.diffuseStrength.x << " " << light.diffuseStrength.y << " " << light.diffuseStrength.z << "\n";
-						ss << "#specularstrength " << light.specularStrength.x << " " << light.specularStrength.y << " " << light.specularStrength.z << "\n";
-					
 						ss << "#constant " << light.constant << "\n";
 						ss << "#linear " << light.linear << "\n";
 						ss << "#quadratic " << light.quadratic << "\n";
@@ -235,36 +231,6 @@ namespace mar {
 					light.specular.x = arr[0];
 					light.specular.y = arr[1];
 					light.specular.z = arr[2];
-
-					// #ambientstrength - 16
-					std::getline(file, line);
-					is.clear();
-					is = std::istringstream(line.substr(16));
-					is >> arr[0] >> arr[1] >> arr[2];
-
-					light.ambientStrength.x = arr[0];
-					light.ambientStrength.y = arr[1];
-					light.ambientStrength.z = arr[2];
-
-					// #diffusestrength - 16
-					std::getline(file, line);
-					is.clear();
-					is = std::istringstream(line.substr(16));
-					is >> arr[0] >> arr[1] >> arr[2];
-
-					light.diffuseStrength.x = arr[0];
-					light.diffuseStrength.y = arr[1];
-					light.diffuseStrength.z = arr[2];
-
-					// #specularstrength - 17
-					std::getline(file, line);
-					is.clear();
-					is = std::istringstream(line.substr(17));
-					is >> arr[0] >> arr[1] >> arr[2];
-
-					light.specularStrength.x = arr[0];
-					light.specularStrength.y = arr[1];
-					light.specularStrength.z = arr[2];
 
 					// #constant - 9
 					std::getline(file, line);

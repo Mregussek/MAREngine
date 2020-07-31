@@ -36,10 +36,6 @@ in vec3 v_lightNormal;
 in float v_shapeIndex;
 
 struct Material {
-	vec3 ambientStrength;
-	vec3 diffuseStrength;
-	vec3 specularStrength;
-
 	vec3 lightPos;
 	vec3 ambient;
 	vec3 diffuse;
@@ -56,21 +52,32 @@ uniform Material u_material;
 uniform vec3 u_CameraPos;
 uniform vec3 u_SeparateColor[32];
 
-vec4 calculateLight() {
+vec4 calculateLight(vec3 passed_color_light);
+
+void main() {
+	int index = int(v_shapeIndex);
+
+	vec4 batchColor = vec4(u_SeparateColor[index], 1.0f);
+	vec4 lightColor = calculateLight(batchColor.xyz);
+
+	color = batchColor * lightColor;
+};
+
+vec4 calculateLight(vec3 passed_color_light) {
 	// AMBIENT
-	vec3 ambient = u_material.ambientStrength * u_material.ambient;
+	vec3 ambient = passed_color_light * u_material.ambient;
 
 	// DIFFUSE
 	vec3 norm = normalize(v_lightNormal);
 	vec3 lightDir = normalize(u_material.lightPos - v_Position);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = u_material.diffuseStrength * (diff * u_material.diffuse);
+	vec3 diffuse = passed_color_light * (diff * u_material.diffuse);
 
 	// SPECULAR
 	vec3 viewDir = normalize(u_CameraPos - v_Position);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
-	vec3 specular = u_material.specularStrength * (spec * u_material.specular);
+	vec3 specular = passed_color_light * (spec * u_material.specular);
 
 	// ATTENUATION
 	float distance = length(u_material.lightPos - v_Position);
@@ -80,14 +87,5 @@ vec4 calculateLight() {
 	diffuse *= attenuation;
 	specular *= attenuation;
 
-	return(vec4(ambient + diffuse + specular, 1.0f));
+	return( vec4(ambient + diffuse + specular, 1.0f) );
 }
-
-void main() {
-	int index = int(v_shapeIndex);
-
-	vec4 batchColor = vec4(u_SeparateColor[index], 1.0f);
-	vec4 lightColor = calculateLight();
-
-	color = batchColor * lightColor;
-};

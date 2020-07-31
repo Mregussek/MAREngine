@@ -588,21 +588,15 @@ namespace mar {
 			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
 
 			ImGui::SliderFloat3("Ambient Light", &light.ambient.x, 0.f, 1.f);
-			ImGui::SliderFloat3("Ambient Strength", &light.ambientStrength.x, 0.f, 1.f);
 			ImGui::SliderFloat3("Diffuse Light", &light.diffuse.x, 0.f, 1.f);
-			ImGui::SliderFloat3("Diffuse Strength", &light.diffuseStrength.x, 0.f, 1.f);
 			ImGui::SliderFloat3("Specular Light", &light.specular.x, 0.f, 1.f);
-
-			ImGui::Text("Specular Strength");
-
-			ImGui::SliderFloat3("SS", &light.specularStrength.x, 0.f, 1.f);
 
 			ImGui::Text("Attenuation");
 
-			ImGui::InputFloat("Constant", &light.constant);
-			ImGui::InputFloat("Linear", &light.linear);
-			ImGui::InputFloat("Quadratic", &light.quadratic);
-			ImGui::InputFloat("Shininess", &light.shininess);
+			ImGui::SliderFloat("Constant", &light.constant, 0.f, 2.f);
+			ImGui::SliderFloat("Linear", &light.linear, 0.f, 0.5f);
+			ImGui::SliderFloat("Quadratic", &light.quadratic, 0.f, 0.1f);
+			ImGui::SliderFloat("Shininess", &light.shininess, 0.f, 256.f);
 
 			m_scene->updatedLight = true;
 
