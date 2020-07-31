@@ -114,6 +114,7 @@ namespace mar {
 					addComponent<ecs::ColorComponent>(ECS_COLOR);
 					m_scene->updatedBuffers = true;
 					break;
+					/*
 				case ECS_TEXTURE2D:
 					addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
 					break;
@@ -123,6 +124,7 @@ namespace mar {
 				case ECS_LIGHT:
 					addComponent<ecs::LightComponent>(ECS_LIGHT);
 					break;
+					*/
 				case ECS_TRANSFORM:
 					addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					break;

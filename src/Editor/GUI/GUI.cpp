@@ -401,10 +401,22 @@ namespace mar {
 						auto& cmp = entity.getComponent<ecs::Components>();
 
 						for (auto& existing : ecs::AllExistingComponents) {
+							
 							auto it = std::find(cmp.components.begin(), cmp.components.end(), existing.first);
 							if (it == cmp.components.end())
 								if (ImGui::MenuItem(existing.second))
 									entity.addComponent(existing.first);
+							
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::BeginMenu("Modify Component")) {
+						if (entity.hasComponent<ecs::RenderableComponent>()) {
+							if (ImGui::MenuItem("RenderableComponent")) {
+								modifyRenderable = true;
+							}
 						}
 
 						ImGui::EndMenu();
@@ -425,9 +437,14 @@ namespace mar {
 		void GUI::Scene_Handle_TagComponent() {
 			ImGui::Text("TagComponent\n");
 
+			static char* input;
 			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
 
-			ImGui::InputText("Tag", (char*)tag.tag.c_str(), 30);
+			input = (char*)tag.tag.c_str();
+
+			ImGui::InputText("Tag", input, 25);
+
+			tag.tag = std::string(input);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 		}
@@ -484,12 +501,16 @@ namespace mar {
 				ImGui::Text("WARNING: Object will not be rendered until you will add ColorComponent!");
 			}
 
-			if (renderable.vertices.empty()) {
+			if(renderable.vertices.empty())
+				modifyRenderable = true;
+
+			if (modifyRenderable) {
 				if (ImGui::Button("Cube")) {
 					renderable.id = "Cube";
 					renderable.vertices = graphics::MeshCreator::getVertices_Cube();
 					renderable.indices = graphics::MeshCreator::getIndices_Cube();
 					m_scene->updatedBuffers = true;
+					modifyRenderable = false;
 				}
 
 				ImGui::SameLine();
@@ -499,6 +520,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::getVertices_Pyramid();
 					renderable.indices = graphics::MeshCreator::getIndices_Pyramid();
 					m_scene->updatedBuffers = true;
+					modifyRenderable = false;
 				}
 
 				ImGui::SameLine();
@@ -508,6 +530,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::getVertices_Wall();
 					renderable.indices = graphics::MeshCreator::getIndices_Wall();
 					m_scene->updatedBuffers = true;
+					modifyRenderable = false;
 				}
 
 				ImGui::SameLine();
@@ -517,6 +540,14 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::getVertices_Surface();
 					renderable.indices = graphics::MeshCreator::getIndices_Surface();
 					m_scene->updatedBuffers = true;
+					modifyRenderable = false;
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Do not modify")) {
+					modifyRenderable = false;
+					m_scene->updatedBuffers = false;
 				}
 			}
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
@@ -545,8 +576,9 @@ namespace mar {
 		void GUI::Scene_Handle_LightComponent() {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
-			ImGui::SameLine();
 			/*
+			ImGui::SameLine();
+			
 			if (ImGui::MenuItem("Remove Light")) {
 				m_scene->entities[index_entity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
 				return;
@@ -555,25 +587,11 @@ namespace mar {
 
 			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
 
-			ImGui::Text("Ambient Light");
-
-			ImGui::SliderFloat3("A", &light.ambient.x, 0.f, 1.f);
-
-			ImGui::Text("Ambient Strength");
-
-			ImGui::SliderFloat3("SA", &light.ambientStrength.x, 0.f, 1.f);
-
-			ImGui::Text("Diffuse Light");
-
-			ImGui::SliderFloat3("D", &light.diffuse.x, 0.f, 1.f);
-
-			ImGui::Text("Diffuse Strength");
-
-			ImGui::SliderFloat3("SD", &light.diffuseStrength.x, 0.f, 1.f);
-
-			ImGui::Text("Specular Light");
-
-			ImGui::SliderFloat3("S", &light.specular.x, 0.f, 1.f);
+			ImGui::SliderFloat3("Ambient Light", &light.ambient.x, 0.f, 1.f);
+			ImGui::SliderFloat3("Ambient Strength", &light.ambientStrength.x, 0.f, 1.f);
+			ImGui::SliderFloat3("Diffuse Light", &light.diffuse.x, 0.f, 1.f);
+			ImGui::SliderFloat3("Diffuse Strength", &light.diffuseStrength.x, 0.f, 1.f);
+			ImGui::SliderFloat3("Specular Light", &light.specular.x, 0.f, 1.f);
 
 			ImGui::Text("Specular Strength");
 

@@ -35,6 +35,7 @@ namespace mar {
 			// --- Which entity should be displayed
 			int32_t index_scene{ -1 };
 			int32_t index_entity{ -1 };
+			bool modifyRenderable{ false };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;

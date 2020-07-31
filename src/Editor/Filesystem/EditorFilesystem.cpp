@@ -23,10 +23,14 @@ namespace mar {
 				return;
 			}
 
+			std::string name = scene->getName();
+			if (name == "EmptyScene")
+				name = std::string(filename);
+
 			ss << "MAREngine scene file\n\n";
 
 			ss << "#Scene\n";
-			ss << "#Scene_Name " << scene->getName() << "\n";
+			ss << "#Scene_Name " << name << "\n";
 
 			for (auto& entity : scene->entities) {
 				ss << "\n#Entity\n";

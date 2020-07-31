@@ -35,13 +35,13 @@ MAREngine scene file
 
 #Entity
 #TagComponent FourthEntity
-#RenderableComponent Wall
 #TransformComponent Begin
-#center -2 0 -11.08
+#center -8.75 0 -11.08
 #angles 0 -99.69 0
 #scale 1 1 1
 #general_scale 0
-#ColorComponent 0.9 0.2 0.3
+#RenderableComponent Cube
+#ColorComponent 1 0.093985 0.093985
 
 #Entity
 #TagComponent LightEntity
@@ -70,7 +70,7 @@ MAREngine scene file
 #center -8.77 3.23 0
 #angles 265.85 210.46 0
 #scale 1 2 1
-#general_scale 1
+#general_scale 0
 #ColorComponent 0.5 0.5 0.5
 #RenderableComponent Cube
 
@@ -80,6 +80,14 @@ MAREngine scene file
 #center 0 0 -5.08
 #angles 0 0 55.38
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Wall
 #ColorComponent 1 0.947369 0
+
+#Entity
+#TagComponent empty
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1

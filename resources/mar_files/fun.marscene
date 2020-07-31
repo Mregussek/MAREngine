@@ -1,0 +1,125 @@
+MAREngine scene file
+
+#Scene
+#Scene_Name empty.marscene
+
+#Entity
+#TagComponent FirstEntity
+#TransformComponent Begin
+#center 0 -2.12 1
+#angles 65 84.71 0
+#scale 1.82 1.82 1.82
+#general_scale 0.82
+#RenderableComponent Cube
+#ColorComponent 0.288993 0.315928 0.800752
+
+#Entity
+#TagComponent FourthEntity
+#RenderableComponent Wall
+#TransformComponent Begin
+#center -2 0 -11.08
+#angles 0 -99.69 0
+#scale 1 1 1
+#general_scale 0
+#ColorComponent 0.9 0.2 0.3
+
+#Entity
+#TagComponent LightEntity
+#RenderableComponent Cube
+#TransformComponent Begin
+#center 0 0 5
+#angles 0 0 0
+#scale 0.5 0.5 0.5
+#general_scale 0
+#ColorComponent 1 1 1
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#ambientstrength 0.2 0.2 0.2
+#diffusestrength 0.7 0.7 0.7
+#specularstrength 1 1 1
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
+
+#Entity
+#TagComponent FirstAdded
+#TransformComponent Begin
+#center -8.77 3.23 0
+#angles 265.85 210.46 0
+#scale 1 2 1
+#general_scale 0
+#ColorComponent 0.5 0.5 0.5
+#RenderableComponent Cube
+
+#Entity
+#TagComponent Added
+#TransformComponent Begin
+#center 0 0 -5.08
+#angles 0 0 55.38
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Wall
+#ColorComponent 1 0.947369 0
+
+#Entity
+#TagComponent newSu
+#TransformComponent Begin
+#center 0 6.35 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Surface
+#ColorComponent 1 0.99999 0.99999
+
+#Entity
+#TagComponent Pyram
+#TransformComponent Begin
+#center -6.35 0 0
+#angles 0 0 0
+#scale 0.91 0.91 0.91
+#general_scale 0.91
+#ColorComponent 0 0.952391 1
+#RenderableComponent Pyramid
+
+#Entity
+#TagComponent Added
+#TransformComponent Begin
+#center 6 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#ColorComponent 1 0 0.833334
+#RenderableComponent Wall
+
+#Entity
+#TagComponent surf1
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Surface
+#ColorComponent 0.5 0.5 0.5
+
+#Entity
+#TagComponent surf2
+#TransformComponent Begin
+#center -15 1.41 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Surface
+#ColorComponent 1 0 0
+
+#Entity
+#TagComponent surf3
+#TransformComponent Begin
+#center 15 2.82 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Surface
+#ColorComponent 1 0.99999 0.99999

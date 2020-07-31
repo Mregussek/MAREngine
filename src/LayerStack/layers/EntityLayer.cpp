@@ -19,7 +19,6 @@ namespace mar {
 
 		void EntityLayer::initialize(ecs::Scene* scene) {
 			m_renderer = new graphics::RendererEntity();
-
 			m_renderer->initialize();
 		
 			if (scene)
