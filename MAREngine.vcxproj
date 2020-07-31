@@ -240,6 +240,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />

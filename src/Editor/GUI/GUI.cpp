@@ -501,51 +501,86 @@ namespace mar {
 				ImGui::Text("WARNING: Object will not be rendered until you will add ColorComponent!");
 			}
 
+			static bool display_obj = false;
+
 			if(renderable.vertices.empty())
 				modifyRenderable = true;
 
 			if (modifyRenderable) {
 				if (ImGui::Button("Cube")) {
 					renderable.id = "Cube";
-					renderable.vertices = graphics::MeshCreator::getVertices_Cube();
-					renderable.indices = graphics::MeshCreator::getIndices_Cube();
+					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
+					renderable.indices = graphics::MeshCreator::Cube::getIndices();
 					m_scene->updatedBuffers = true;
 					modifyRenderable = false;
+					display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (ImGui::Button("Pyramid")) {
 					renderable.id = "Pyramid";
-					renderable.vertices = graphics::MeshCreator::getVertices_Pyramid();
-					renderable.indices = graphics::MeshCreator::getIndices_Pyramid();
+					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
+					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
 					m_scene->updatedBuffers = true;
 					modifyRenderable = false;
+					display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (ImGui::Button("Wall")) {
 					renderable.id = "Wall";
-					renderable.vertices = graphics::MeshCreator::getVertices_Wall();
-					renderable.indices = graphics::MeshCreator::getIndices_Wall();
+					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
+					renderable.indices = graphics::MeshCreator::Wall::getIndices();
 					m_scene->updatedBuffers = true;
 					modifyRenderable = false;
+					display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (ImGui::Button("Surface")) {
 					renderable.id = "Surface";
-					renderable.vertices = graphics::MeshCreator::getVertices_Surface();
-					renderable.indices = graphics::MeshCreator::getIndices_Surface();
+					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
+					renderable.indices = graphics::MeshCreator::Surface::getIndices();
 					m_scene->updatedBuffers = true;
 					modifyRenderable = false;
+					display_obj = false;
 				}
 
 				ImGui::SameLine();
 
+				if (ImGui::Button("Load OBJ")) 
+					display_obj = true;
+
+				if(display_obj) {
+					static char filename[30]{ "empty" };
+					ImGui::InputText(".obj", filename, 30);
+					static std::string load;
+					load = "resources/objects/" + std::string(filename) + ".obj";
+
+					ImGui::Text(".obj file, which will be loaded: ");
+					ImGui::SameLine();
+					ImGui::Text(load.c_str());
+					ImGui::Text("WARNING: if .obj file do not exist, no renderable will be assigned!");
+
+					if (ImGui::Button("Load")) {
+						graphics::MeshCreator::OBJ::loadOBJ(load.c_str());
+
+						renderable.id = graphics::MeshCreator::OBJ::vertices.empty() ? "empty" : load;
+						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
+						renderable.indices = graphics::MeshCreator::OBJ::indices;
+						m_scene->updatedBuffers = true;
+						modifyRenderable = false;
+						display_obj = false;
+					}
+
+					ImGui::SameLine();
+				}
+
 				if (ImGui::Button("Do not modify")) {
+					display_obj = false;
 					modifyRenderable = false;
 					m_scene->updatedBuffers = false;
 				}

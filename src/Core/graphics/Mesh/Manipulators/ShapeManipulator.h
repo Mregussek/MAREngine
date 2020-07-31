@@ -3,11 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef SHAPEMANIPULATOR_H
-#define SHAPEMANIPULATOR_H
+#ifndef MAR_ENGINE_SHAPEMANIPULATOR_H
+#define MAR_ENGINE_SHAPEMANIPULATOR_H
 
 #include "../../../../mar.h"
-
+#include "../../GraphicsLogs.h"
 
 namespace mar {
     namespace graphics {
@@ -71,9 +71,21 @@ namespace mar {
             */
             static std::vector<uint32_t> changeIndicesFormat(const uint32_t& size, int& max_value,
                 const std::vector<uint32_t>& passedValue);
+        
+        
+            /*
+            Calculates vertex normals for set of vertices. Make sure that mesh is triangulated (indices.size() divisible by 3!).
+            Also correct stride is needed, in order for correct calculation! (If wrong there will be seg fault!)
+                
+                \param vertices - vector of vertices (non-const in order of modification)
+                \param indices - vector of indices
+                \param stride - number, where new vertex begins
+            */
+            static void calculateNormals(std::vector<float>& vertices, const std::vector<uint32_t>& indices, const int32_t stride);
+        
         };
 
 
 } }
 
-#endif // !SHAPEMANIPULATOR_H
+#endif // !MAR_ENGINE_SHAPEMANIPULATOR_H

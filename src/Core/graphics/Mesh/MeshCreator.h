@@ -8,6 +8,7 @@
 
 
 #include "../../../mar.h"
+#include "../GraphicsLogs.h"
 #include "Manipulators/ShapeManipulator.h"
 
 
@@ -18,99 +19,35 @@ namespace mar {
         class MeshCreator {
         public:
 
-            static std::vector<float> getVertices_Cube() {
-                return {
-                    //  front (x, y, z)		// LightNormal			// Texture		// ShapeIndex
-                    -1.0f, -1.0f,  1.0f,	-1.0f, -1.0f, 2.0f,		0.0f, 0.0f,		0.0f, // 0
-                     1.0f, -1.0f,  1.0f,	2.0f, -2.0f, 1.0f,		1.0f, 0.0f,		0.0f, // 1
-                     1.0f,  1.0f,  1.0f,	1.0f, 1.0f, 2.0f,		1.0f, 1.0f,		0.0f, // 2
-                    -1.0f,  1.0f,  1.0f,	-2.0f, 2.0f, 1.0f,		0.0f, 1.0f,		0.0f, // 3
-                    //  back 							
-                    -1.0f, -1.0f, -1.0f,	-2.0f, -2.0f, -1.0f,		0.0f, 0.0f,		0.0f, // 4
-                     1.0f, -1.0f, -1.0f,	1.0f, -1.0f, -2.0f,		1.0f, 0.0f,		0.0f, // 5
-                     1.0f,  1.0f, -1.0f,	2.0f, 2.0f, -1.0f,		1.0f, 1.0f,		0.0f, // 6
-                    -1.0f,  1.0f, -1.0f,	-1.0f, 1.0f, -2.0f,		0.0f, 1.0f,		0.0f  // 7
-                };
-            }
-            
-            static std::vector<uint32_t> getIndices_Cube() {
-                return {
-                    // front	// back
-                    0, 1, 2,	7, 6, 5,
-                    2, 3, 0,	5, 4, 7,
-                    // right	// left
-                    1, 5, 6,	4, 0, 3,
-                    6, 2, 1,	3, 7, 4,
-                    // bottom	// top
-                    4, 5, 1,	3, 2, 6,
-                    1, 0, 4,	6, 7, 3
-                };
-            }
+            struct Cube {
+                static std::vector<float> getVertices();
+                static std::vector<uint32_t> getIndices();
+            };
 
-            static std::vector<float> getVertices_Wall() {
-                return {
-                    //  front (x, y, z)			// LightNormal			// Texture		// ShapeIndex
-                    -0.2f, -1.0f,  10.0f,		-1.f, -1.f, 3.f,		0.0f, 0.0f,		0.0f, // 0
-                     0.2f, -1.0f,  10.0f,		2.f, -2.f, 2.f,		0.0f, 0.0f,		0.0f, // 1
-                     0.2f,  5.0f,  10.0f,		1.f, 1.f, 3.f,		1.0f, 0.0f,		0.0f, // 2
-                    -0.2f,  5.0f,  10.0f,		-2.f, 2.f, 2.f,		1.0f, 0.0f,		0.0f, // 3
-                    //  back 								
-                    -0.2f, -1.0f, -10.0f,		-2.f, -2.f, 0.f,		0.0f, 1.0f,		0.0f, // 4
-                     0.2f, -1.0f, -10.0f,		1.f, -1.f, -1.f,		0.0f, 1.0f,		0.0f, // 5
-                     0.2f,  5.0f, -10.0f,		2.f, 2.f, 0.f,		1.0f, 1.0f,		0.0f, // 6
-                    -0.2f,  5.0f, -10.0f,		-1.f, 1.f, -1.f,		1.0f, 1.0f,		0.0f  // 7
-                };
-            }
+            struct Pyramid {
+                static std::vector<float> getVertices();
+                static std::vector<uint32_t> getIndices();
+            };
 
-            static std::vector<uint32_t> getIndices_Wall() {
-                return {
-                    // front	// back
-                    0, 1, 2,	7, 6, 5,
-                    2, 3, 0,	5, 4, 7,
-                    // right	// left
-                    1, 5, 6,	4, 0, 3,
-                    6, 2, 1,	3, 7, 4,
-                    // bottom	// top
-                    4, 5, 1,	3, 2, 6,
-                    1, 0, 4,	6, 7, 3
-                };
-            }
+            struct Wall {
+                static std::vector<float> getVertices();
+                static std::vector<uint32_t> getIndices();
+            }; 
 
-            static std::vector<float> getVertices_Surface() {
-                return {
-                    // (x, y, z)			// LightNormal			// TextureCoords	// ShapeIndex
-                    -15.0f, -1.0f,  15.0f,	0.f, 2.f, 1.f,		0.0f, 0.0f,			0.0f, // 0
-                     15.0f, -1.0f,  15.0f,	0.f, 1.f, 1.f,		0.0f, 1.0f,			0.0f, // 1
-                     15.0f, -1.0f, -15.0f,	0.f, 2.f, 1.f,		1.0f, 1.0f,			0.0f, // 2
-                    -15.0f, -1.0f, -15.0f,	0.f, 1.f, 1.f,		1.0f, 0.0f,			0.0f  // 3
-                };
-            }
+            struct Surface {
+                static std::vector<float> getVertices();
+                static std::vector<uint32_t> getIndices();
+            };
 
-            static std::vector<uint32_t> getIndices_Surface() {
-                return {
-                        0, 1, 2, // first triangle
-                        2, 3, 0  // second triangle
-                };
-            }
+            struct OBJ {
+                static std::vector<float> vertices;
+                static std::vector<uint32_t> indices;
 
-            static std::vector<float> getVertices_Pyramid() {
-                return {
-                    // (x, y, z)			// LightNormal			// TextureCoords // ShapeIndex
-                    -1.0f, -1.0f,  1.0f,	-0.894427f, 2.89443f, 1.89443f,		0.0f, 0.0f,		 0.0f,
-                     1.0f, -1.0f,  1.0f,	0.894427f, 1.89443f, 1.89443f,		0.0f, 1.0f,		 0.0f,
-                     1.0f, -1.0f, -1.0f,	0.894427f, 2.89443f, 0.105573f,		0.0f, 0.0f,		 0.0f,
-                    -1.0f, -1.0f, -1.0f,	-0.894427f, 1.89443f, 0.105573f,		0.0f, 1.0f,		 0.0f,
-                     0.0f,  1.0f,  0.0f,	0.f, 1.78885f, 1.f,		0.5f, 0.5f,		 0.0f
-                };
-            }
+                static void loadOBJ(const char* filename);
 
-            static std::vector<uint32_t> getIndices_Pyramid() {
-                return {
-                    0, 1, 2,	2, 3, 0, // fundamental quad
-                    0, 1, 4,	1, 2, 4, // side triangles
-                    2, 3, 4,	3, 0, 4
-                };
-            }
+                static std::vector<float> getVertices();
+                static std::vector<uint32_t> getIndices();
+            };
 
         };
 
