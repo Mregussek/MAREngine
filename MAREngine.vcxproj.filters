@@ -204,6 +204,9 @@
     <ClInclude Include="src\Core\ecs\ECSLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">

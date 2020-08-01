@@ -121,10 +121,10 @@ namespace mar {
 				case ECS_CUBEMAP:
 					addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
 					break;
+					*/
 				case ECS_LIGHT:
 					addComponent<ecs::LightComponent>(ECS_LIGHT);
 					break;
-					*/
 				case ECS_TRANSFORM:
 					addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					break;

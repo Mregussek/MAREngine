@@ -62,8 +62,8 @@ namespace mar {
 
 			// --- OTHER --- //
 
-			maths::vec3 m_lightPosition;
-			ecs::LightComponent m_lightComponent;
+			std::vector<maths::vec3> m_lightPositions;
+			std::vector<ecs::LightComponent> m_lightComponents;
 
 			uint32_t m_stride;
 			bool m_lastSizeSet;
@@ -91,16 +91,32 @@ namespace mar {
 		private:
 			// --- DRAW METHODS --- //
 
-			void draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
-				const std::vector<maths::mat4>& transforms, const std::vector<maths::vec3>& samplers, ShaderOpenGL& shader);
+			void draw(
+				const std::vector<float>& vertices, 
+				const std::vector<uint32_t>& indices,
+				const std::vector<maths::mat4>& transforms, 
+				const std::vector<maths::vec3>& samplers, 
+				ShaderOpenGL& shader
+			);
 
-			void draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
-				const std::vector<maths::mat4>& transforms, const std::vector<int32_t>& samplers, ShaderOpenGL& shader);
+			void draw(
+				const std::vector<float>& vertices, 
+				const std::vector<uint32_t>& indices,
+				const std::vector<maths::mat4>& transforms, 
+				const std::vector<int32_t>& samplers, 
+				ShaderOpenGL& shader
+			);
 		
 			// --- OTHER METHODS / HELPERS --- //
 
-			static void submitVerticesIndices(ecs::RenderableComponent& ren, std::vector<float>& vertices, 
-				std::vector<uint32_t>& indices, uint32_t& indicesmax, int32_t& counter, uint32_t& stride);
+			static void submitVerticesIndices(
+				ecs::RenderableComponent& ren, 
+				std::vector<float>& vertices, 
+				std::vector<uint32_t>& indices, 
+				uint32_t& indicesmax, 
+				int32_t& counter, 
+				uint32_t& stride
+			);
 		
 			static void submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform);
 		

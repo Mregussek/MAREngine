@@ -7,6 +7,7 @@
 #include "RendererEntity.h"
 #include "Renderer.h"
 #include "../GraphicsLogs.h"
+#include "Shader/ShaderUniforms.h"
 
 
 namespace mar {
@@ -77,6 +78,8 @@ namespace mar {
 
 			clear();
 
+			updateLight(scene);
+
 			for (auto& entity : scene->entities)
 				submit(entity);
 
@@ -89,11 +92,6 @@ namespace mar {
 
 			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 			auto& tran = entity.getComponent<ecs::TransformComponent>();
-
-			if (entity.hasComponent<ecs::LightComponent>()) {
-				m_lightComponent = entity.getComponent<ecs::LightComponent>();
-				m_lightPosition = entity.getComponent<ecs::TransformComponent>().center;
-			}
 
 			if (entity.hasComponent<ecs::ColorComponent>()) {
 				auto& color = entity.getComponent<ecs::ColorComponent>();
@@ -277,17 +275,26 @@ namespace mar {
 		}
 
 		void RendererEntity::passLightToShader(ShaderOpenGL& shader) {
-			shader.setUniformVector3("u_material.lightPos", m_lightPosition);
+			if (m_lightPositions.size() != m_lightComponents.size()) 
+				return;
+			
+			using namespace ShaderUniforms;
 
-			shader.setUniformVector3("u_material.ambient", m_lightComponent.ambient);
-			shader.setUniformVector3("u_material.diffuse", m_lightComponent.diffuse);
-			shader.setUniformVector3("u_material.specular", m_lightComponent.specular);
+			for (size_t i = 0; i < m_lightPositions.size(); i++) {
+				shader.setUniformVector3(u_material[i].lightPos, m_lightPositions[i]);
 
-			shader.setUniform1f("u_material.shininess", m_lightComponent.shininess);
+				shader.setUniformVector3(u_material[i].ambient, m_lightComponents[i].ambient);
+				shader.setUniformVector3(u_material[i].diffuse, m_lightComponents[i].diffuse);
+				shader.setUniformVector3(u_material[i].specular, m_lightComponents[i].specular);
 
-			shader.setUniform1f("u_material.constant", m_lightComponent.constant);
-			shader.setUniform1f("u_material.linear", m_lightComponent.linear);
-			shader.setUniform1f("u_material.quadratic", m_lightComponent.quadratic);
+				shader.setUniform1f(u_material[i].shininess, m_lightComponents[i].shininess);
+
+				shader.setUniform1f(u_material[i].constant, m_lightComponents[i].constant);
+				shader.setUniform1f(u_material[i].linear, m_lightComponents[i].linear);
+				shader.setUniform1f(u_material[i].quadratic, m_lightComponents[i].quadratic);
+			}
+
+			shader.setUniform1i(u_materialSize, m_lightPositions.size());
 
 			GRAPHICS_TRACE("RENDERERENTITY: passed light to shader!");
 		}
@@ -342,12 +349,14 @@ namespace mar {
 		}
 
 		void RendererEntity::updateLight(ecs::Scene* scene) {
-			auto view = scene->getView<ecs::LightComponent>();
+			m_lightPositions.clear();
+			m_lightComponents.clear();
 
-			for (auto entity : view) {
-				m_lightComponent = scene->getComponent<ecs::LightComponent>(entity);
-				m_lightPosition = scene->getComponent<ecs::TransformComponent>(entity).center;
-				break;
+			for (auto& entity : scene->entities) {
+				if (entity.hasComponent<ecs::LightComponent>()) {
+					m_lightComponents.push_back(entity.getComponent<ecs::LightComponent>());
+					m_lightPositions.push_back(entity.getComponent<ecs::TransformComponent>().center);
+				}
 			}
 			
 			GRAPHICS_TRACE("RENDERERENTITY: updating light");

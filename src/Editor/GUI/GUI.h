@@ -33,9 +33,8 @@ namespace mar {
 			// --- Viewport
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			// --- Which entity should be displayed
-			int32_t index_scene{ -1 };
-			int32_t index_entity{ -1 };
-			bool modifyRenderable{ false };
+			int32_t m_indexEntity{ -1 };
+			bool m_modifyRenderable{ false };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;

@@ -35,54 +35,60 @@ in vec3 v_Position;
 in vec3 v_lightNormal;
 in float v_shapeIndex;
 
-struct Material {
+uniform struct Material {
 	vec3 lightPos;
 	vec3 ambient;
 	vec3 diffuse;
 	vec3 specular;
 
-	float shininess;
-
 	float constant;
 	float linear;
 	float quadratic;
-};
+	float shininess;
+} u_material[15];
 
-uniform Material u_material;
+uniform int u_materialSize;
 uniform vec3 u_CameraPos;
 uniform vec3 u_SeparateColor[32];
 
-vec4 calculateLight(vec3 passed_color_light);
+vec4 calculateLight(Material passed_material, vec3 passed_color_light);
 
 void main() {
 	int index = int(v_shapeIndex);
 
 	vec4 batchColor = vec4(u_SeparateColor[index], 1.0f);
-	vec4 lightColor = calculateLight(batchColor.xyz);
+	vec4 lightColor = calculateLight(u_material[0], batchColor.xyz);
+
+	for (int i = 1; i < 15; i++) {
+		if (i >= u_materialSize) break;
+		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
+	}
+
+	//vec4 lightColor = calculateLight(u_material, batchColor.xyz);
 
 	color = batchColor * lightColor;
 };
 
-vec4 calculateLight(vec3 passed_color_light) {
+vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
 	// AMBIENT
-	vec3 ambient = passed_color_light * u_material.ambient;
+	vec3 ambient = passed_color_light * passed_material.ambient;
 
 	// DIFFUSE
 	vec3 norm = normalize(v_lightNormal);
-	vec3 lightDir = normalize(u_material.lightPos - v_Position);
+	vec3 lightDir = normalize(passed_material.lightPos - v_Position);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = passed_color_light * (diff * u_material.diffuse);
+	vec3 diffuse = passed_color_light * (diff * passed_material.diffuse);
 
 	// SPECULAR
 	vec3 viewDir = normalize(u_CameraPos - v_Position);
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
-	vec3 specular = passed_color_light * (spec * u_material.specular);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), passed_material.shininess);
+	vec3 specular = passed_color_light * (spec * passed_material.specular);
 
 	// ATTENUATION
-	float distance = length(u_material.lightPos - v_Position);
-	float attenuation = 1.0f / (u_material.constant + u_material.linear * distance +
-		u_material.quadratic * (distance * distance));
+	float distance = length(passed_material.lightPos - v_Position);
+	float attenuation = 1.0f / (passed_material.constant + passed_material.linear * distance +
+		passed_material.quadratic * (distance * distance));
 	ambient *= attenuation;
 	diffuse *= attenuation;
 	specular *= attenuation;

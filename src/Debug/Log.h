@@ -6,10 +6,9 @@
 #ifndef MAR_ENGINE_LOG_H
 #define MAR_ENGINE_LOG_H
 
-#ifdef MAR_ENGINE_DEBUG_MODE
-
 #include "../mar.h"
 
+#ifdef MAR_ENGINE_DEBUG_MODE
 
 namespace mar {
 	namespace debug {

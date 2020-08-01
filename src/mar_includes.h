@@ -17,7 +17,7 @@ by actual line of code. Commenting MAR_ENGINE_DEBUG_MODE means all those macro's
 
 Logging is damaging perfomance, so it will be wise to comment it (Of course if you don't need logging).
 */
-//#define MAR_ENGINE_DEBUG_MODE
+#define MAR_ENGINE_DEBUG_MODE
 
 /* 
 !!! Comment if logs should be in logs/log.txt file instead of printed on the terminal
@@ -27,7 +27,7 @@ Also it is needed to store somewhere loggings (let's say in release mode). I saw
 affecting actual perfomance of engine so much, so I created another option here. Leave uncommented in order to see
 every log on terminal.
 */
-//#define MAR_ENGINE_TERMINAL_LOGS
+#define MAR_ENGINE_TERMINAL_LOGS
 
 
 /*
@@ -45,7 +45,7 @@ saving scene to file, load scene from file and others. In summary all things ass
 Uncommenting this macro will create ability to see logs from code, such as Renderer API, the whole EBO, VBO stuff,
 what happens during rendering, calling shaders, mesh creation and others.
 */
-//#define MAR_ENGINE_GRAPHICS_LOGS
+#define MAR_ENGINE_GRAPHICS_LOGS
 
 
 // 

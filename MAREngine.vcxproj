@@ -190,6 +190,7 @@
     <ClInclude Include="src\Core\ecs\Components.h" />
     <ClInclude Include="src\Core\ecs\Entity.h" />
     <ClInclude Include="src\Core\ecs\Systems.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
     <ClInclude Include="src\LayerStack\layers\CameraLayer.h" />

@@ -1,0 +1,118 @@
+MAREngine scene file
+
+#Scene
+#Scene_Name empty.marscene
+
+#Entity
+#TagComponent Character
+#TransformComponent Begin
+#center 1.96 0.54 -6.45
+#angles 65 0 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Cube
+#ColorComponent 0.2 0.5 0.2
+
+#Entity
+#TagComponent M4loaded
+#RenderableComponent resources/objects/m4.obj
+#TransformComponent Begin
+#center -7.06 -3.53 -15
+#angles 0 25 0
+#scale 0.66 0.64 0.66
+#general_scale -0.34
+#ColorComponent 0.5 0.9 0.25
+
+#Entity
+#TagComponent ThirdEntity
+#RenderableComponent Surface
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#ColorComponent 0.5 0.2 0.9
+
+#Entity
+#TagComponent FourthEntity
+#RenderableComponent Wall
+#TransformComponent Begin
+#center -2 0 -11.08
+#angles 0 -99.69 0
+#scale 1 1 1
+#general_scale 0
+#ColorComponent 0.9 0.2 0.3
+
+#Entity
+#TagComponent LightEntity
+#RenderableComponent Cube
+#TransformComponent Begin
+#center -1.41 1.06 3.1
+#angles 0 0 0
+#scale 0.5 0.5 0.5
+#general_scale 0
+#ColorComponent 1 1 1
+#LightComponent Begin
+#ambientlight 0.465 0.606 0.569
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 0.663
+#linear 0.02
+#quadratic 0.01
+#shininess 0.44
+
+#Entity
+#TagComponent MonkeyOBJ
+#TransformComponent Begin
+#center 0.18 0.54 -1.97
+#angles -90 0 0
+#scale 1 1 1
+#general_scale 0
+#ColorComponent 1 0.781955 0.781955
+#RenderableComponent resources/objects/monkey.obj
+
+#Entity
+#TagComponent Added
+#TransformComponent Begin
+#center 6.96 0 -5.08
+#angles 0 0 55.38
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Wall
+#ColorComponent 1 0.947369 0
+
+#Entity
+#TagComponent loadedDeagle
+#TransformComponent Begin
+#center -5.29 1.06 1.38
+#angles 0 -237.18 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent resources/objects/deagle.obj
+#ColorComponent 0.940473 1 0
+
+#Entity
+#TagComponent empty
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+
+#Entity
+#TagComponent empty
+#TransformComponent Begin
+#center 8.47 -4.24 0
+#angles 0 0 24.83
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Wall
+#ColorComponent 0.5 0.5 0.5
+
+#Entity
+#TagComponent empty
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1

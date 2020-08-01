@@ -304,7 +304,7 @@ namespace mar {
 			for (int32_t i = 0; i < (int32_t)m_scene->entities.size(); i++) {
 				std::string s = m_scene->entities[i].getComponent<ecs::TagComponent>();
 				if (ImGui::MenuItem(s.c_str())) {
-					index_entity = i;
+					m_indexEntity = i;
 				}
 			}
 
@@ -333,7 +333,7 @@ namespace mar {
 				if (ImGui::MenuItem("Add Entity to scene")) {
 					auto& entity = m_scene->createEntity();
 					entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					index_entity = m_scene->entities.size() - 1;
+					m_indexEntity = m_scene->entities.size() - 1;
 				}
 
 				ImGui::EndPopup();
@@ -345,13 +345,13 @@ namespace mar {
 		void GUI::Scene_Entity_Modify() {
 			ImGui::Begin("Entity Modification");
 
-			if (index_entity == -1) {
+			if (m_indexEntity == -1) {
 				ImGui::Text("No entity selected!");
 				ImGui::End();
 				return;
 			}
 			
-			auto& entity = m_scene->entities[index_entity];
+			auto& entity = m_scene->entities[m_indexEntity];
 
 			if (entity.hasComponent<ecs::TagComponent>())
 				Scene_Handle_TagComponent();
@@ -395,7 +395,7 @@ namespace mar {
 			// Actual PopUp menu
 			{
 				if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
-					auto& entity = m_scene->entities[index_entity];
+					auto& entity = m_scene->entities[m_indexEntity];
 
 					if (ImGui::BeginMenu("Add Component")) {
 						auto& cmp = entity.getComponent<ecs::Components>();
@@ -415,7 +415,7 @@ namespace mar {
 					if (ImGui::BeginMenu("Modify Component")) {
 						if (entity.hasComponent<ecs::RenderableComponent>()) {
 							if (ImGui::MenuItem("RenderableComponent")) {
-								modifyRenderable = true;
+								m_modifyRenderable = true;
 							}
 						}
 
@@ -423,8 +423,8 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Delete Entity from Scene")) {
-						m_scene->destroyEntity(index_entity);
-						index_entity = -1;
+						m_scene->destroyEntity(m_indexEntity);
+						m_indexEntity = -1;
 					}
 				
 					ImGui::EndPopup();
@@ -438,7 +438,7 @@ namespace mar {
 			ImGui::Text("TagComponent\n");
 
 			static char* input;
-			auto& tag = m_scene->entities[index_entity].getComponent<ecs::TagComponent>();
+			auto& tag = m_scene->entities[m_indexEntity].getComponent<ecs::TagComponent>();
 
 			input = (char*)tag.tag.c_str();
 
@@ -453,7 +453,7 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("TransformComponent\n");
 
-			auto& tran = m_scene->entities[index_entity].getComponent<ecs::TransformComponent>();
+			auto& tran = m_scene->entities[m_indexEntity].getComponent<ecs::TransformComponent>();
 
 			// Sliders
 			{
@@ -463,7 +463,7 @@ namespace mar {
 				ImGui::SliderFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
 				ImGui::SliderFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
 				ImGui::SliderFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
-				ImGui::SliderFloat("GeneralScale", &tran.general_scale, -2.f, 2.f, "%.2f", 1.f);
+				ImGui::SliderFloat("GeneralScale", &tran.general_scale, 0.001f, 2.f, "%.3f", 1.f);
 
 				if (last_general != tran.general_scale) 
 					tran.scale += tran.general_scale - last_general;
@@ -487,32 +487,32 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("RenderableComponent\n");
 			ImGui::SameLine();
-			if(!m_scene->entities[index_entity].hasComponent<ecs::ColorComponent>())
+			if(!m_scene->entities[m_indexEntity].hasComponent<ecs::ColorComponent>())
 				if (ImGui::MenuItem("Remove Renderable")) {
-					m_scene->entities[index_entity].removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					m_scene->entities[m_indexEntity].removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 					m_scene->updatedBuffers = true;
 					return;
 				}
 
-			auto& renderable = m_scene->entities[index_entity].getComponent<ecs::RenderableComponent>();
+			auto& renderable = m_scene->entities[m_indexEntity].getComponent<ecs::RenderableComponent>();
 			ImGui::Text(renderable.id.c_str());
 
-			if (!m_scene->entities[index_entity].hasComponent<ecs::ColorComponent>()) {
+			if (!m_scene->entities[m_indexEntity].hasComponent<ecs::ColorComponent>()) {
 				ImGui::Text("WARNING: Object will not be rendered until you will add ColorComponent!");
 			}
 
 			static bool display_obj = false;
 
 			if(renderable.vertices.empty())
-				modifyRenderable = true;
+				m_modifyRenderable = true;
 
-			if (modifyRenderable) {
+			if (m_modifyRenderable) {
 				if (ImGui::Button("Cube")) {
 					renderable.id = "Cube";
 					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
 					renderable.indices = graphics::MeshCreator::Cube::getIndices();
 					m_scene->updatedBuffers = true;
-					modifyRenderable = false;
+					m_modifyRenderable = false;
 					display_obj = false;
 				}
 
@@ -523,7 +523,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
 					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
 					m_scene->updatedBuffers = true;
-					modifyRenderable = false;
+					m_modifyRenderable = false;
 					display_obj = false;
 				}
 
@@ -534,7 +534,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
 					renderable.indices = graphics::MeshCreator::Wall::getIndices();
 					m_scene->updatedBuffers = true;
-					modifyRenderable = false;
+					m_modifyRenderable = false;
 					display_obj = false;
 				}
 
@@ -545,7 +545,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
 					renderable.indices = graphics::MeshCreator::Surface::getIndices();
 					m_scene->updatedBuffers = true;
-					modifyRenderable = false;
+					m_modifyRenderable = false;
 					display_obj = false;
 				}
 
@@ -572,7 +572,7 @@ namespace mar {
 						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
 						renderable.indices = graphics::MeshCreator::OBJ::indices;
 						m_scene->updatedBuffers = true;
-						modifyRenderable = false;
+						m_modifyRenderable = false;
 						display_obj = false;
 					}
 
@@ -581,7 +581,7 @@ namespace mar {
 
 				if (ImGui::Button("Do not modify")) {
 					display_obj = false;
-					modifyRenderable = false;
+					m_modifyRenderable = false;
 					m_scene->updatedBuffers = false;
 				}
 			}
@@ -594,12 +594,12 @@ namespace mar {
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Color")) {
-				m_scene->entities[index_entity].removeComponent<ecs::ColorComponent>(ECS_COLOR);
+				m_scene->entities[m_indexEntity].removeComponent<ecs::ColorComponent>(ECS_COLOR);
 				m_scene->updatedBuffers = true;
 				return;
 			}
 
-			auto& color = m_scene->entities[index_entity].getComponent<ecs::ColorComponent>();
+			auto& color = m_scene->entities[m_indexEntity].getComponent<ecs::ColorComponent>();
 		
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
 
@@ -611,22 +611,19 @@ namespace mar {
 		void GUI::Scene_Handle_LightComponent() {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
-			/*
+			
 			ImGui::SameLine();
 			
 			if (ImGui::MenuItem("Remove Light")) {
-				m_scene->entities[index_entity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
+				m_scene->entities[m_indexEntity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
 				return;
 			}
-			*/
 
-			auto& light = m_scene->entities[index_entity].getComponent<ecs::LightComponent>();
+			auto& light = m_scene->entities[m_indexEntity].getComponent<ecs::LightComponent>();
 
 			ImGui::SliderFloat3("Ambient Light", &light.ambient.x, 0.f, 1.f);
 			ImGui::SliderFloat3("Diffuse Light", &light.diffuse.x, 0.f, 1.f);
 			ImGui::SliderFloat3("Specular Light", &light.specular.x, 0.f, 1.f);
-
-			ImGui::Text("Attenuation");
 
 			ImGui::SliderFloat("Constant", &light.constant, 0.f, 2.f);
 			ImGui::SliderFloat("Linear", &light.linear, 0.f, 0.5f);
