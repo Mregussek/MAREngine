@@ -93,12 +93,14 @@ namespace mar {
 			Scene_Entity_Modify();
 
 			Scene_Statistics();
-			Display_ViewPort();
 
 			if (m_loadSceneWindow) { Filesystem_LoadScene(); }
 			if (m_saveSceneWindow) { Filesystem_SaveScene(); }
 			if (m_infoWindow) { Menu_Info(); }
 			if (m_instructionWindow) { Menu_Instruction(); }
+
+			Display_ViewPort();
+			//Display_Game();
 
 			EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 		}
@@ -130,11 +132,6 @@ namespace mar {
 					ImGui::EndMenu();
 				}
 
-				if (ImGui::BeginMenu("Scene")) {
-
-					ImGui::EndMenu();
-				}
-
 				if (ImGui::MenuItem("About")) {
 					m_infoWindow = true;
 					m_instructionWindow = true;
@@ -153,10 +150,19 @@ namespace mar {
 		void GUI::Display_ViewPort() {
 			ImGui::Begin("ViewPort");
 
-			if (ImGui::IsWindowFocused())
+			if (ImGui::IsWindowFocused()) {
 				window::Input::enableInput();
-			else
+				m_displayViewport = true;
+			}
+			else {
 				window::Input::disableInput();
+			}
+				
+			if (!m_displayViewport) {
+				ImGui::End();
+				EDITOR_TRACE("GUI: viewport displaying is disabled!");
+				return;
+			}
 
 			static graphics::FrameBufferSpecification spec = m_framebuffer.getSpecification();
 			static uint32_t id = m_framebuffer.getColorAttach();
@@ -171,6 +177,33 @@ namespace mar {
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: Displaying viewport");
+		}
+
+		void GUI::Display_Game() {
+			ImGui::Begin("Game");
+
+			if (ImGui::IsWindowFocused()) 
+				m_displayViewport = false;
+
+			if (m_displayViewport) {
+				ImGui::End();
+				EDITOR_TRACE("GUI: game displaying is game!");
+				return;
+			}
+
+			static graphics::FrameBufferSpecification spec = m_framebuffer.getSpecification();
+			static uint32_t id = m_framebuffer.getColorAttach();
+
+			ImVec2 size = ImGui::GetContentRegionAvail();
+			spec.width = size.x;
+			spec.height = size.y;
+
+			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height },
+				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+			ImGui::End();
+
+			EDITOR_TRACE("GUI: Displaying game");
 		}
 
 		void GUI::Scene_Statistics() {
@@ -361,6 +394,9 @@ namespace mar {
 
 			if (entity.hasComponent<ecs::RenderableComponent>())
 				Scene_Handle_RenderableComponent();
+
+			if (entity.hasComponent<ecs::CameraComponent>())
+				Scene_Handle_CameraComponent();
 			
 			if (entity.hasComponent<ecs::ColorComponent>())
 				Scene_Handle_ColorComponent();
@@ -587,6 +623,24 @@ namespace mar {
 			}
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 
+		}
+
+		void GUI::Scene_Handle_CameraComponent() {
+			ImGui::Separator();
+			ImGui::Text("CameraComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Camera")) {
+				m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
+				m_scene->updatedCamera = true;
+				return;
+			}
+
+			static bool use_camera = false;
+			ImGui::Checkbox("UseCamera", &use_camera);
+
+			m_scene->updatedCamera = use_camera;
+
+			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
 
 		void GUI::Scene_Handle_ColorComponent() {

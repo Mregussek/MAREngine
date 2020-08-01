@@ -49,7 +49,7 @@ namespace mar {
 				GRAPHICS_ERROR("SHAPEMANIPULATOR: indices.size() is not divisible by 3!!!");
 
 			int32_t index[3];
-			for (int32_t i = 0; i < indices.size(); i += 3) {
+			for (size_t i = 0; i < indices.size(); i += 3) {
 				maths::vec3 triangles[3];
 
 				for (int32_t j = 0; j < 3; j++) {

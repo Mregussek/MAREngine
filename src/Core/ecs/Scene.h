@@ -54,6 +54,7 @@ namespace mar {
 			std::vector<Entity> entities;
 			bool updatedBuffers;
 			bool updatedTransforms;
+			bool updatedCamera;
 			bool updatedColors;
 			bool updatedTextures2D;
 			bool updatedTexturesCubemap;

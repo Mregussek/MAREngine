@@ -125,6 +125,9 @@ namespace mar {
 				case ECS_LIGHT:
 					addComponent<ecs::LightComponent>(ECS_LIGHT);
 					break;
+				case ECS_CAMERA:
+					addComponent<ecs::CameraComponent>(ECS_CAMERA);
+					break;
 				case ECS_TRANSFORM:
 					addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					break;

@@ -65,6 +65,11 @@ namespace mar {
 			std::vector<maths::vec3> m_lightPositions;
 			std::vector<ecs::LightComponent> m_lightComponents;
 
+			maths::mat4 m_cameraModel;
+			maths::mat4 m_cameraProjection;
+			maths::vec3 m_cameraCenter;
+			bool m_useViewportCamera;
+
 			uint32_t m_stride;
 			bool m_lastSizeSet;
 			uint32_t m_lastSize;
@@ -121,11 +126,13 @@ namespace mar {
 			static void submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform);
 		
 			void passLightToShader(ShaderOpenGL& shader);
-			static void passCameraToShader(ShaderOpenGL& shader, CameraData* camdata);
+			void passCameraToShader(ShaderOpenGL& shader);
+			void passCameraToShader(ShaderOpenGL& shader, graphics::CameraData* camdata);
 		
 			void updateTransforms(ecs::Scene* scene);
 			void updateColors(ecs::Scene* scene);
 			void updateLight(ecs::Scene* scene);
+			void updateCamera(ecs::Scene* scene);
 		};
 
 

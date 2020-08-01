@@ -63,6 +63,13 @@ namespace mar {
 				if (scene->updatedColors)
 					updateColors(scene);
 
+				m_useViewportCamera = false;
+
+				if (scene->updatedCamera)
+					updateCamera(scene);
+				else
+					m_useViewportCamera = true;
+
 				if (scene->updatedLight)
 					updateLight(scene);
 				
@@ -72,6 +79,7 @@ namespace mar {
 				
 		resubmit_all:
 
+			m_useViewportCamera = true;
 			scene->updatedBuffers = false;
 			m_lastSizeSet = true;
 			m_lastSize = scene->entities.size();
@@ -202,7 +210,11 @@ namespace mar {
 				shader.bind();
 
 				passLightToShader(shader);
-				passCameraToShader(shader, &Camera::getCameraData());
+				if (m_useViewportCamera)
+					passCameraToShader(shader, &Camera::getCameraData());
+				else
+					passCameraToShader(shader);
+
 				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
 				shader.setUniformVectorVec3("u_SeparateColor", samplers);
 			}
@@ -299,12 +311,20 @@ namespace mar {
 			GRAPHICS_TRACE("RENDERERENTITY: passed light to shader!");
 		}
 
-		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, CameraData* camdata) {
+		void RendererEntity::passCameraToShader(ShaderOpenGL& shader) {
+			shader.setUniformVector3("u_CameraPos", m_cameraCenter);
+			shader.setUniformMat4f("u_Model", m_cameraModel);
+			shader.setUniformMat4f("u_MVP", m_cameraProjection);
+
+			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader (by values)!");
+		}
+
+		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, graphics::CameraData* camdata) {
 			shader.setUniformVector3("u_CameraPos", camdata->position);
 			shader.setUniformMat4f("u_Model", camdata->model);
 			shader.setUniformMat4f("u_MVP", camdata->mvp);
 
-			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader!");
+			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader (by CameraData)!");
 		}
 
 		RendererStatistics& RendererEntity::getStatistics() { 
@@ -360,6 +380,21 @@ namespace mar {
 			}
 			
 			GRAPHICS_TRACE("RENDERERENTITY: updating light");
+		}
+
+		void RendererEntity::updateCamera(ecs::Scene* scene) {
+			for (auto& entity : scene->entities) {
+				if (entity.hasComponent<ecs::CameraComponent>()) {
+					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					auto& cam = entity.getComponent<ecs::CameraComponent>();
+					m_cameraCenter = tran.center;
+					m_cameraModel = maths::mat4::translation(m_cameraCenter);
+					cam.view = maths::mat4::lookAt(m_cameraCenter, m_cameraCenter + maths::vec3{0.f, 0.f, 1.f}, {0.f, 1.f, 0.f});
+					m_cameraProjection = cam.projection * cam.view * m_cameraModel;
+				}
+			}
+
+			GRAPHICS_TRACE("RENDERERENTITY: updating camera");
 		}
 
 

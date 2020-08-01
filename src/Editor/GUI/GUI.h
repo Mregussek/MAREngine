@@ -35,6 +35,7 @@ namespace mar {
 			// --- Which entity should be displayed
 			int32_t m_indexEntity{ -1 };
 			bool m_modifyRenderable{ false };
+			bool m_displayViewport{ true };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
@@ -66,6 +67,7 @@ namespace mar {
 			void Setup_Theme();
 
 			void Display_ViewPort();
+			void Display_Game();
 			
 			void Menu_MainMenuBar();
 			void Menu_Info();
@@ -81,6 +83,7 @@ namespace mar {
 			void Scene_Handle_TagComponent();
 			void Scene_Handle_RenderableComponent();
 			void Scene_Handle_TransformComponent();
+			void Scene_Handle_CameraComponent();
 			void Scene_Handle_ColorComponent();
 			void Scene_Handle_LightComponent();
 		

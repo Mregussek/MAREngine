@@ -21,7 +21,8 @@ namespace mar {
 			RENDERABLE,
 			TAG,
 			TRANSFORM,
-			LIGHT
+			LIGHT,
+			CAMERA
 		};
 
 		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents {
@@ -32,7 +33,8 @@ namespace mar {
 				{ EntityComponents::RENDERABLE, "RenderableComponent" },
 				{ EntityComponents::TAG, "TagComponent" },
 				{ EntityComponents::TRANSFORM, "TransformComponent" },
-				{ EntityComponents::LIGHT, "LightComponent" }
+				{ EntityComponents::LIGHT, "LightComponent" },
+				{ EntityComponents::CAMERA, "CameraComponent" }
 		};
 
 		struct Components {
@@ -136,6 +138,19 @@ namespace mar {
 			operator const std::string&() const { return cubemap; }
 		};
 
+		struct CameraComponent {
+			maths::mat4 projection{ maths::mat4::perspective(maths::Trig::toRadians(45.f), 800.f / 600.f, 0.01f, 100.0f) };
+			maths::mat4 view{ maths::mat4::lookAt({0.f, 0.f, 5.f}, {0.f, 0.f, 0.f}, {0.f, 1.0f, 0.f}) };
+
+			bool primary{ true };
+
+			CameraComponent() = default;
+			CameraComponent(const CameraComponent& cam) = default;
+			CameraComponent(const maths::mat4& proj)
+				: projection(proj)
+			{}
+		};
+
 		struct LightComponent {
 			maths::vec3 ambient{ 0.5f, 0.5f, 0.5f };
 			maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
@@ -163,6 +178,7 @@ namespace mar {
 #define ECS_TAG ::mar::ecs::EntityComponents::TAG
 #define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
 #define ECS_LIGHT ::mar::ecs::EntityComponents::LIGHT
+#define ECS_CAMERA ::mar::ecs::EntityComponents::CAMERA
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_H
