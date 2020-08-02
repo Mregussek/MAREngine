@@ -47,7 +47,7 @@ MAREngine scene file
 #TagComponent LightEntity
 #RenderableComponent Cube
 #TransformComponent Begin
-#center -3.75 0 5
+#center -4.66 1.82 -3.6
 #angles 0 0 0
 #scale 0.5 0.5 0.5
 #general_scale 0
@@ -94,13 +94,14 @@ MAREngine scene file
 #Entity
 #TagComponent CameraSavedFile
 #TransformComponent Begin
-#center 0 0 0
+#center -13.58 7.5 15
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
 #CameraComponent Begin
+#id main
 #type perspective
-#fov 31.302
-#aspectratio5.675
-#near 2.209
-#far9.232
+#fov 44.807
+#aspectratio1.368
+#near 0.001
+#far101.197

@@ -85,6 +85,8 @@ namespace mar {
 						auto& cam = entity.getComponent<ecs::CameraComponent>();
 
 						ss << "#CameraComponent Begin\n";
+						ss << "#id " << cam.id << "\n";
+
 						if (cam.Perspective) {
 							ss << "#type perspective\n";
 							ss << "#fov " << cam.p_fov << "\n";
@@ -296,11 +298,21 @@ namespace mar {
 				else if (line.find("#CameraComponent") != std::string::npos) {
 					auto& cam = currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
 
-					// #type - 5
+					// #id - 3
 					std::getline(file, line);
-					std::istringstream iss(line.substr(5));
+					std::istringstream iss(line.substr(3));
 					std::string type;
 					iss >> type;
+
+					cam.id = type;
+
+					// #type - 5
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(5));
+					type.clear();
+					iss >> type;
+
 					if (type.find("perspective") != std::string::npos) {
 						cam.Perspective = true;
 						float var;
@@ -388,6 +400,39 @@ namespace mar {
 						iss >> var;
 
 						cam.o_far = var;
+					}
+
+					if (cam.id.find("main") != std::string::npos) {
+						if (cam.Perspective) {
+							scene->scene_camera.projection = maths::mat4::perspective(
+								maths::Trig::toRadians(cam.p_fov),
+								cam.p_aspectRatio,
+								cam.p_near,
+								cam.p_far
+							);
+						}
+						else {
+							scene->scene_camera.projection = maths::mat4::orthographic(
+								cam.o_left,
+								cam.o_right,
+								cam.o_top,
+								cam.o_bottom,
+								cam.o_near,
+								cam.o_far
+							);
+						}
+
+						auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
+
+						scene->scene_camera.view = maths::mat4::lookAt(
+							tran.center,
+							{ 0.f, 0.f, -1.f },
+							{ 0.f, 1.0f, 0.f }
+						);
+
+						scene->scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
+
+						scene->useEditorCamera = false;
 					}
 				}
 

@@ -596,14 +596,15 @@ namespace mar {
 		}
 
 		void GUI::Scene_Handle_CameraComponent(bool& window_focused) {
+			auto& camcmp = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
+
 			static std::vector<const char*> cameras = { "Perspective", "Orthographic" };
-			static int32_t selected = 0;
+			static int32_t selected = !camcmp.Perspective;
 			static bool use_camera_editor = true; // should use Camera from editor or CameraComponent?
 			static bool last_set_value = !use_camera_editor;
 
 			last_set_value = use_camera_editor;
-			auto& camcmp = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
-
+			
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
 			ImGui::SameLine();
@@ -616,17 +617,11 @@ namespace mar {
 			ImGui::SameLine();
 			ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
 
-			
-
 			ImGui::Combo("Camera Type", &selected, cameras.data(), 2);
 
-			if (selected == 0) {
-				camcmp.Perspective = true;
-			}
-			else {
-				camcmp.Perspective = false;
-			}
-
+			if (selected == 0) camcmp.Perspective = true;
+			else camcmp.Perspective = false;
+			
 			if (camcmp.Perspective) {
 				ImGui::SliderFloat("FOV", &camcmp.p_fov, 1.f, 90.f);
 				ImGui::SliderFloat("AspectRatio", &camcmp.p_aspectRatio, 1.f, 10.f);
@@ -713,6 +708,7 @@ namespace mar {
 			
 			if (ImGui::MenuItem("Remove Light")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
+				m_scene->updatedLight = true;
 				return;
 			}
 

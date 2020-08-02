@@ -28,6 +28,7 @@ namespace mar {
 		}
 
 		void EntityLayer::update() {
+			m_scene->update();
 			m_renderer->submit(m_scene);
 			m_renderer->update();
 		}
