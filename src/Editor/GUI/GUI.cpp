@@ -379,6 +379,9 @@ namespace mar {
 			if (entity.hasComponent<ecs::Texture2DComponent>())
 				Scene_Handle_Texture2DComponent(is_window_focused);
 
+			if (entity.hasComponent<ecs::TextureCubemapComponent>())
+				Scene_Handle_TextureCubemapComponent(is_window_focused);
+
 			if (entity.hasComponent<ecs::LightComponent>())
 				Scene_Handle_LightComponent(is_window_focused);
 
@@ -730,7 +733,7 @@ namespace mar {
 			ImGui::Text("Texture, which will be loaded: ");
 			ImGui::SameLine();
 			ImGui::Text(load.c_str());
-			ImGui::Text("WARNING: if texture do not exist, black shape will appear!");
+			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Texture")) {
 				tex.texture = load;
@@ -738,6 +741,40 @@ namespace mar {
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
+		}
+
+		void GUI::Scene_Handle_TextureCubemapComponent(bool& window_focused) {
+			auto& cubemap = m_scene->entities[m_indexEntity].getComponent<ecs::TextureCubemapComponent>();
+
+			ImGui::Separator();
+			ImGui::Text("Texture2DComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Texture")) {
+				m_scene->entities[m_indexEntity].removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+				m_scene->updatedTexturesCubemap = true;
+				return;
+			}
+
+			ImGui::Text("Current Cubemap: ");
+			ImGui::SameLine();
+			ImGui::Text(cubemap.cubemap.c_str());
+
+			static char filename[30]{ "empty" };
+			ImGui::InputText(" directory", filename, 30);
+			static std::string load;
+			load = "resources/textures/" + std::string(filename);
+
+			ImGui::Text("Cubemap, which will be loaded: ");
+			ImGui::SameLine();
+			ImGui::Text(load.c_str());
+			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
+
+			if (ImGui::Button("Load Cubemap")) {
+				cubemap.cubemap = load;
+				m_scene->updatedTexturesCubemap = true;
+			}
+
+			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
 		}
 
 		void GUI::Scene_Handle_LightComponent(bool& window_focused) {

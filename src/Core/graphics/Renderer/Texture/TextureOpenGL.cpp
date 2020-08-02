@@ -68,7 +68,7 @@ namespace mar {
 			return 0;
 		}
 
-		float TextureOpenGL::loadTexture(const char* path) {
+		float TextureOpenGL::loadTexture(const std::string& path) {
 			auto search = m_2d.find(path);
 
 			if (search != m_2d.end()) { 
@@ -76,7 +76,7 @@ namespace mar {
 				return (float) search->second;
 			}
 
-			uint32_t new_id = genNewTexture(path);
+			uint32_t new_id = genNewTexture(path.c_str());
 			m_2d.insert({ path, new_id });
 			return (float) new_id;
 		}
@@ -137,17 +137,16 @@ namespace mar {
 			return id;
 		}
 
-		float TextureOpenGL::loadCubemap(const char* path) {
-			std::string helper = std::string(path);
-			auto search = m_cubemaps.find(helper);
+		float TextureOpenGL::loadCubemap(const std::string& path) {
+			auto search = m_cubemaps.find(path);
 
 			if (search != m_cubemaps.end()) {
 				GRAPHICS_TRACE("TEXTURE_OPENGL: Assigning loaded cubemap!");
 				return (float) search->second;
 			}
 
-			uint32_t new_id = genNewCubemap(path);
-			m_cubemaps.insert({ helper, new_id });
+			uint32_t new_id = genNewCubemap(path.c_str());
+			m_cubemaps.insert({ path, new_id });
 
 			return (float) new_id;
 		}

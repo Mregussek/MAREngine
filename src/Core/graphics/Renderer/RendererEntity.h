@@ -103,7 +103,9 @@ namespace mar {
 				const std::vector<uint32_t>& indices,
 				const std::vector<maths::mat4>& transforms,
 				const std::vector<int32_t>& samplers,
-				ShaderOpenGL& shader
+				ShaderOpenGL& shader,
+				const int32_t& texture_type,
+				const std::vector<std::string>& texture_names
 			);
 		
 			// --- OTHER METHODS / HELPERS --- //

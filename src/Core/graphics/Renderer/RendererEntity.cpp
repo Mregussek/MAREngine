@@ -54,7 +54,7 @@ namespace mar {
 
 		void RendererEntity::submit(ecs::Scene* scene) {
 			if (m_lastSize == scene->entities.size()) {
-				if (scene->updatedBuffers || scene->updatedTextures2D)
+				if (scene->updatedBuffers || scene->updatedTextures2D || scene->updatedTexturesCubemap)
 					goto resubmit_all;
 
 				if (scene->updatedTransforms)
@@ -82,6 +82,7 @@ namespace mar {
 
 			scene->updatedBuffers = false;
 			scene->updatedTextures2D = false;
+			scene->updatedTexturesCubemap = false;
 
 			m_lastSize = scene->entities.size();
 			m_lastSizeSet = true;
@@ -112,6 +113,8 @@ namespace mar {
 
 				m_storageColor.samplers.push_back(color);
 				m_storageColor.counter++;
+
+				GRAPHICS_TRACE("RENDERERENTITY: during submition added ColorComponent!");
 			}
 			
 			if (entity.hasComponent<ecs::Texture2DComponent>()) {
@@ -119,13 +122,31 @@ namespace mar {
 
 				m_textures.push_back(texture.texture);
 
-				float id = m_texture.loadTexture(texture.texture.c_str());
+				float id = m_texture.loadTexture(texture.texture);
 
 				m_storageTexture2D.transforms.push_back(tran.transform);
 				submitVerticesIndices(renderable, m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.indicesMax, m_storageTexture2D.counter, m_stride);
 
 				m_storageTexture2D.samplers.push_back(m_storageTexture2D.counter);
 				m_storageTexture2D.counter++;
+
+				GRAPHICS_TRACE("RENDERERENTITY: during submition added Texture2DComponent!");
+			}
+
+			if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
+				auto& cubemap = entity.getComponent<ecs::TextureCubemapComponent>();
+
+				m_cubemaps.push_back(cubemap.cubemap);
+
+				float id = m_texture.loadCubemap(cubemap.cubemap);
+
+				m_storageCubemap.transforms.push_back(tran.transform);
+				submitVerticesIndices(renderable, m_storageCubemap.vertices, m_storageCubemap.indices, m_storageCubemap.indicesMax, m_storageCubemap.counter, m_stride);
+
+				m_storageCubemap.samplers.push_back(m_storageCubemap.counter);
+				m_storageCubemap.counter++;
+
+				GRAPHICS_TRACE("RENDERERENTITY: during submition added TextureCubemapComponent!");
 			}
 
 			GRAPHICS_TRACE("RENDERERENTITY: submitted Entity!");
@@ -152,8 +173,14 @@ namespace mar {
 				draw(m_storageColor.vertices, m_storageColor.indices, m_storageColor.transforms, m_storageColor.samplers, m_shaderColor);
 			}
 
+			if(!m_storageCubemap.vertices.empty()) {
+				draw(m_storageCubemap.vertices, m_storageCubemap.indices, m_storageCubemap.transforms, 
+					m_storageCubemap.samplers, m_shaderCubemaps, GL_TEXTURE_CUBE_MAP, m_cubemaps);
+			}
+
 			if (!m_storageTexture2D.vertices.empty()) {
-				draw(m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.transforms, m_storageTexture2D.samplers, m_shaderTextures2D);
+				draw(m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.transforms,
+					m_storageTexture2D.samplers, m_shaderTextures2D, GL_TEXTURE_2D, m_textures);
 			}
 
 			GRAPHICS_INFO("RENDERERENTITY: Draw calls finished for this scene!");
@@ -177,6 +204,14 @@ namespace mar {
 			m_storageTexture2D.samplers.clear();
 			m_storageTexture2D.counter = 0;
 			m_storageTexture2D.indicesMax = 0;
+
+			m_cubemaps.clear();
+			m_storageCubemap.vertices.clear();
+			m_storageCubemap.indices.clear();
+			m_storageCubemap.transforms.clear();
+			m_storageCubemap.samplers.clear();
+			m_storageCubemap.counter = 0;
+			m_storageCubemap.indicesMax = 0;
 
 			GRAPHICS_TRACE("RENDERERENTITY: called clear method!");
 		}
@@ -229,13 +264,18 @@ namespace mar {
 		}
 
 		void RendererEntity::draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
-			const std::vector<maths::mat4>& transforms, const std::vector<int32_t>& samplers, ShaderOpenGL& shader)
+			const std::vector<maths::mat4>& transforms, const std::vector<int32_t>& samplers, 
+			ShaderOpenGL& shader, const int32_t& texture_type, const std::vector<std::string>& texture_names)
 		{
 			GRAPHICS_TRACE("RENDERER: is preparing to draw!");
 
 			{ // BIND TEXTURES
-				for (int32_t i = 0; i < samplers.size(); i++) 
-					m_texture.bind(GL_TEXTURE_2D, samplers[i], m_texture.getTexture(m_textures[i]));
+				if(texture_type == GL_TEXTURE_2D)
+					for (int32_t i = 0; i < samplers.size(); i++) 
+						m_texture.bind(texture_type, samplers[i], m_texture.getTexture(texture_names[i]));
+				else if(texture_type == GL_TEXTURE_CUBE_MAP)
+					for (int32_t i = 0; i < samplers.size(); i++)
+						m_texture.bind(texture_type, samplers[i], m_texture.getCubemap(texture_names[i]));
 			}
 
 			{ // SEND ALL DATA TO SHADERS
@@ -325,6 +365,7 @@ namespace mar {
 		void RendererEntity::updateTransforms(ecs::Scene* scene) {
 			m_storageColor.transforms.clear();
 			m_storageTexture2D.transforms.clear();
+			m_storageCubemap.transforms.clear();
 
 			for (auto& entity : scene->entities) {
 				if (entity.hasComponent<ecs::ColorComponent>())
@@ -332,6 +373,10 @@ namespace mar {
 			
 				if (entity.hasComponent<ecs::Texture2DComponent>())
 					m_storageTexture2D.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
+			
+				if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
+					m_storageCubemap.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
+				}
 			}
 
 			GRAPHICS_TRACE("RENDERINGENTITY: updating transforms");

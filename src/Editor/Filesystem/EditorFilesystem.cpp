@@ -238,6 +238,14 @@ namespace mar {
 					auto& texture = currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
 					texture.texture = tex;
 				}
+				else if (line.find("#TextureCubemapComponent") != std::string::npos) {
+					std::istringstream iss(line.substr(25));
+					std::string tex;
+					iss >> tex;
+
+					auto& cubemap = currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+					cubemap.cubemap = tex;
+				}
 				else if (line.find("#LightComponent") != std::string::npos) {
 					auto& light = currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
 
@@ -444,7 +452,6 @@ namespace mar {
 						scene->useEditorCamera = false;
 					}
 				}
-
 			}
 
 			file.close();

@@ -85,6 +85,7 @@ namespace mar {
 			void Scene_Handle_CameraComponent(bool& window_focused);
 			void Scene_Handle_ColorComponent(bool& window_focused);
 			void Scene_Handle_Texture2DComponent(bool& window_focused);
+			void Scene_Handle_TextureCubemapComponent(bool& window_focused);
 			void Scene_Handle_LightComponent(bool& window_focused);
 		
 			void Scene_Statistics();
