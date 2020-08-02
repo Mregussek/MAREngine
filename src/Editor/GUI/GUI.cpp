@@ -608,15 +608,21 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
 			ImGui::SameLine();
-			if (ImGui::Button("Remove Camera")) {
-				m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
-				m_scene->updatedCamera = true;
-				m_scene->useEditorCamera = true;
-				return;
-			}
+			if (camcmp.id.find("main") == std::string::npos)
+				if (ImGui::Button("Remove Camera")) {
+					
+					m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
+					m_scene->updatedCamera = true;
+					m_scene->useEditorCamera = true;
+					return;
+				}
+
 			ImGui::SameLine();
 			ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
 
+			ImGui::Text("CamID: ");
+			ImGui::SameLine();
+			ImGui::Text(camcmp.id.c_str());
 			ImGui::Combo("Camera Type", &selected, cameras.data(), 2);
 
 			if (selected == 0) camcmp.Perspective = true;

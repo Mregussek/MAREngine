@@ -139,7 +139,7 @@ namespace mar {
 		};
 
 		struct CameraComponent {
-			std::string id{ "main" };
+			std::string id{ "secondary" };
 
 			bool Perspective; // true - perspective | false - orthographic
 

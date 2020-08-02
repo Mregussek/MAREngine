@@ -55,9 +55,5 @@ namespace mar {
 		inline const size_t maxObjectsInScene = 32;
 	}
 
-	namespace storage {
-		inline bool usegui;
-	}
-
 #endif // !MAR_ENGINE_SETTINGS
 }

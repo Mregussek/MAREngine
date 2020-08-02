@@ -36,8 +36,6 @@ namespace mar {
 			ElementBufferOpenGL m_ebo;
 			
 			ShaderOpenGL m_shaderColor;
-			ShaderOpenGL m_shaderTexture2D;
-			ShaderOpenGL m_shaderCubemap;
 
 			// --- STORAGE --- //
 			std::vector<float> m_verticesColor;
@@ -46,20 +44,6 @@ namespace mar {
 			std::vector<maths::vec3> m_samplersColors;
 			int32_t m_counterColor;
 			uint32_t m_indicesMaxColor;
-
-			std::vector<float> m_verticesTexture2D;
-			std::vector<uint32_t> m_indicesTexture2D;
-			std::vector<maths::mat4> m_transformsTexture2D;
-			std::vector<int32_t> m_samplersTexture2D;
-			int32_t m_counterTexture2D;
-			uint32_t m_indicesMaxTexture2D;
-
-			std::vector<float> m_verticesCubemap;
-			std::vector<uint32_t> m_indicesCubemap;
-			std::vector<maths::mat4> m_transformsCubemap;
-			std::vector<int32_t> m_samplersCubemap;
-			int32_t m_counterCubemap;
-			uint32_t m_indicesMaxCubemap;
 
 			// --- OTHER --- //
 
@@ -100,14 +84,6 @@ namespace mar {
 				const std::vector<uint32_t>& indices,
 				const std::vector<maths::mat4>& transforms, 
 				const std::vector<maths::vec3>& samplers, 
-				ShaderOpenGL& shader
-			);
-
-			void draw(
-				const std::vector<float>& vertices, 
-				const std::vector<uint32_t>& indices,
-				const std::vector<maths::mat4>& transforms, 
-				const std::vector<int32_t>& samplers, 
 				ShaderOpenGL& shader
 			);
 		

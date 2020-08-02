@@ -17,28 +17,47 @@
 namespace mar {
 	namespace ecs {
 
-
 		class Entity;
 
 
 		class Scene {
-			friend class Entity;
-
 			std::string m_name{ "Empty Scene" };
 			entt::registry m_registry;
 
 		public:
+			/* updated RenderableComponent in at least one entity / deleted Color/Texture Component!
+			(It means that, we should reload vertices in VertexBuffer and Indices in ElementBuffer)
+			(If no texture is bounded to entity, there is nothing to draw!) */
+			bool updatedBuffers;
+			bool updatedTransforms;
+			bool updatedCamera;
+			bool updatedColors;
+			bool updatedTextures2D;
+			bool updatedTexturesCubemap;
+			bool updatedLight;
+
+			bool useEditorCamera;
+
 			Scene(std::string name);
 			~Scene();
 
 			Entity& createEntity();
-
 			void destroyEntity(const int32_t& index);
+
+			void update();
 
 			// --- GET METHODS --- //
 
 			inline const std::string& getName() const { return m_name; }
 
+			// --- SET METHODS --- //
+
+			void setName(std::string name);
+			
+			graphics::RenderCamera scene_camera;
+			std::vector<Entity> entities;
+
+		private:
 			template<typename T>
 			auto getView() ->decltype(m_registry.view<T>()) {
 				return m_registry.view<T>();
@@ -49,60 +68,7 @@ namespace mar {
 				return m_registry.get<T>(entity);
 			}
 
-			void update() {
-				auto view = getView<CameraComponent>();
-				for (auto entity : view) {
-					auto& tran = getComponent<TransformComponent>(entity);
-					auto& cam = getComponent<CameraComponent>(entity);
-
-					scene_camera.position = tran.center;
-					scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-					scene_camera.view = maths::mat4::lookAt(
-						tran.center,
-						{ 0.f, 0.f, -1.f },
-						{ 0.f, 1.0f, 0.f }
-					);
-
-					if (cam.Perspective) {
-						scene_camera.projection = maths::mat4::perspective(
-							maths::Trig::toRadians(cam.p_fov),
-							cam.p_aspectRatio,
-							cam.p_near,
-							cam.p_far
-						);
-					}
-					else {
-						scene_camera.projection = maths::mat4::orthographic(
-							cam.o_left,
-							cam.o_right,
-							cam.o_top,
-							cam.o_bottom,
-							cam.o_near,
-							cam.o_far
-						);
-					}
-				}
-			}
-
-			// --- SET METHODS --- //
-
-			void setName(std::string name);
-			
-			graphics::RenderCamera scene_camera;
-			std::vector<Entity> entities;
-
-			/* updated RenderableComponent in at least one entity / deleted Color/Texture Component!
-			(It means that, we should reload vertices in VertexBuffer and Indices in ElementBuffer)
-			(If no texture is bounded to entity, there is nothing to draw!) */
-			bool updatedBuffers; 
-			bool updatedTransforms;
-			bool updatedCamera;
-			bool updatedColors;
-			bool updatedTextures2D;
-			bool updatedTexturesCubemap;
-			bool updatedLight;
-
-			bool useEditorCamera;
+			friend class Entity;
 		};
 
 

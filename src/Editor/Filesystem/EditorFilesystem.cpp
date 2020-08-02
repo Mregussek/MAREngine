@@ -127,12 +127,10 @@ namespace mar {
 
 			while (std::getline(file, line)) {
 				if (line.find("#Scene_Name") != std::string::npos) {
-					scene = new ecs::Scene("empty");
-
 					std::istringstream is(line.substr(12));
 					std::string new_scene_name;
 					is >> new_scene_name;
-					scene->setName(new_scene_name);
+					scene = new ecs::Scene(new_scene_name);
 				}
 				else if (line.find("#Entity") != std::string::npos) {
 					currentEntity = &scene->createEntity();
