@@ -26,10 +26,14 @@ namespace mar {
 			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
+			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
+
 			EDITOR_INFO("GUI: initialized properly!");
 		}
 
 		void GUI::shutdown() {
+			m_framebuffer.close();
+
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplGlfw_Shutdown();
 			ImGui::DestroyContext();
@@ -100,7 +104,6 @@ namespace mar {
 			if (m_instructionWindow) { Menu_Instruction(); }
 
 			Display_ViewPort();
-			//Display_Game();
 
 			EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 		}
@@ -152,16 +155,9 @@ namespace mar {
 
 			if (ImGui::IsWindowFocused()) {
 				window::Input::enableInput();
-				m_displayViewport = true;
 			}
 			else {
 				window::Input::disableInput();
-			}
-				
-			if (!m_displayViewport) {
-				ImGui::End();
-				EDITOR_TRACE("GUI: viewport displaying is disabled!");
-				return;
 			}
 
 			static graphics::FrameBufferSpecification spec = m_framebuffer.getSpecification();
@@ -177,33 +173,6 @@ namespace mar {
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: Displaying viewport");
-		}
-
-		void GUI::Display_Game() {
-			ImGui::Begin("Game");
-
-			if (ImGui::IsWindowFocused()) 
-				m_displayViewport = false;
-
-			if (m_displayViewport) {
-				ImGui::End();
-				EDITOR_TRACE("GUI: game displaying is game!");
-				return;
-			}
-
-			static graphics::FrameBufferSpecification spec = m_framebuffer.getSpecification();
-			static uint32_t id = m_framebuffer.getColorAttach();
-
-			ImVec2 size = ImGui::GetContentRegionAvail();
-			spec.width = size.x;
-			spec.height = size.y;
-
-			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height },
-				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: Displaying game");
 		}
 
 		void GUI::Scene_Statistics() {
@@ -386,23 +355,28 @@ namespace mar {
 			
 			auto& entity = m_scene->entities[m_indexEntity];
 
+			static bool is_window_focused = false;
+
+			if (ImGui::IsWindowFocused()) is_window_focused = true;
+			else is_window_focused = false;
+
 			if (entity.hasComponent<ecs::TagComponent>())
-				Scene_Handle_TagComponent();
+				Scene_Handle_TagComponent(is_window_focused);
 
 			if (entity.hasComponent<ecs::TransformComponent>())
-				Scene_Handle_TransformComponent();
+				Scene_Handle_TransformComponent(is_window_focused);
 
 			if (entity.hasComponent<ecs::RenderableComponent>())
-				Scene_Handle_RenderableComponent();
+				Scene_Handle_RenderableComponent(is_window_focused);
 
 			if (entity.hasComponent<ecs::CameraComponent>())
-				Scene_Handle_CameraComponent();
+				Scene_Handle_CameraComponent(is_window_focused);
 			
 			if (entity.hasComponent<ecs::ColorComponent>())
-				Scene_Handle_ColorComponent();
+				Scene_Handle_ColorComponent(is_window_focused);
 
 			if (entity.hasComponent<ecs::LightComponent>())
-				Scene_Handle_LightComponent();
+				Scene_Handle_LightComponent(is_window_focused);
 
 			Scene_Entity_Modify_PopUp();
 
@@ -439,20 +413,10 @@ namespace mar {
 						for (auto& existing : ecs::AllExistingComponents) {
 							
 							auto it = std::find(cmp.components.begin(), cmp.components.end(), existing.first);
-							if (it == cmp.components.end())
+							if (it == cmp.components.end()) // if not found
 								if (ImGui::MenuItem(existing.second))
 									entity.addComponent(existing.first);
 							
-						}
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::BeginMenu("Modify Component")) {
-						if (entity.hasComponent<ecs::RenderableComponent>()) {
-							if (ImGui::MenuItem("RenderableComponent")) {
-								m_modifyRenderable = true;
-							}
 						}
 
 						ImGui::EndMenu();
@@ -470,7 +434,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: scene_entity_modify_popup");
 		}
 
-		void GUI::Scene_Handle_TagComponent() {
+		void GUI::Scene_Handle_TagComponent(bool& window_focused) {
 			ImGui::Text("TagComponent\n");
 
 			static char* input;
@@ -485,7 +449,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 		}
 
-		void GUI::Scene_Handle_TransformComponent() {
+		void GUI::Scene_Handle_TransformComponent(bool& window_focused) {
 			ImGui::Separator();
 			ImGui::Text("TransformComponent\n");
 
@@ -512,14 +476,19 @@ namespace mar {
 				}
 			}
 
-			ecs::System::handleTransformComponent(tran);
-
-			m_scene->updatedTransforms = true;
-
+			if (window_focused) {
+				ecs::System::handleTransformComponent(tran);
+				m_scene->updatedTransforms = true;
+			}
+				
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
 		}
 
-		void GUI::Scene_Handle_RenderableComponent() {
+		void GUI::Scene_Handle_RenderableComponent(bool& window_focused) {
+			static bool modify_renderable = false; // should display option to modify the whole RenderableComponent ?
+			static bool display_obj = false; // should display obj file loading to RenderableComponent ?
+			auto& renderable = m_scene->entities[m_indexEntity].getComponent<ecs::RenderableComponent>();
+
 			ImGui::Separator();
 			ImGui::Text("RenderableComponent\n");
 			ImGui::SameLine();
@@ -530,25 +499,21 @@ namespace mar {
 					return;
 				}
 
-			auto& renderable = m_scene->entities[m_indexEntity].getComponent<ecs::RenderableComponent>();
 			ImGui::Text(renderable.id.c_str());
 
-			if (!m_scene->entities[m_indexEntity].hasComponent<ecs::ColorComponent>()) {
+			if (!m_scene->entities[m_indexEntity].hasComponent<ecs::ColorComponent>()) 
 				ImGui::Text("WARNING: Object will not be rendered until you will add ColorComponent!");
-			}
-
-			static bool display_obj = false;
 
 			if(renderable.vertices.empty())
-				m_modifyRenderable = true;
+				modify_renderable = true;
 
-			if (m_modifyRenderable) {
+			if (modify_renderable) {
 				if (ImGui::Button("Cube")) {
 					renderable.id = "Cube";
 					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
 					renderable.indices = graphics::MeshCreator::Cube::getIndices();
 					m_scene->updatedBuffers = true;
-					m_modifyRenderable = false;
+					modify_renderable = false;
 					display_obj = false;
 				}
 
@@ -559,7 +524,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
 					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
 					m_scene->updatedBuffers = true;
-					m_modifyRenderable = false;
+					modify_renderable = false;
 					display_obj = false;
 				}
 
@@ -570,7 +535,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
 					renderable.indices = graphics::MeshCreator::Wall::getIndices();
 					m_scene->updatedBuffers = true;
-					m_modifyRenderable = false;
+					modify_renderable = false;
 					display_obj = false;
 				}
 
@@ -581,7 +546,7 @@ namespace mar {
 					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
 					renderable.indices = graphics::MeshCreator::Surface::getIndices();
 					m_scene->updatedBuffers = true;
-					m_modifyRenderable = false;
+					modify_renderable = false;
 					display_obj = false;
 				}
 
@@ -608,7 +573,7 @@ namespace mar {
 						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
 						renderable.indices = graphics::MeshCreator::OBJ::indices;
 						m_scene->updatedBuffers = true;
-						m_modifyRenderable = false;
+						modify_renderable = false;
 						display_obj = false;
 					}
 
@@ -617,15 +582,23 @@ namespace mar {
 
 				if (ImGui::Button("Do not modify")) {
 					display_obj = false;
-					m_modifyRenderable = false;
+					modify_renderable = false;
 					m_scene->updatedBuffers = false;
 				}
 			}
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
+			else {
+				if (ImGui::Button("ModifyRenderable")) {
+					modify_renderable = true;
+				}
+			}
 
+			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 		}
 
-		void GUI::Scene_Handle_CameraComponent() {
+		void GUI::Scene_Handle_CameraComponent(bool& window_focused) {
+			static bool use_camera_editor = false; // should use Camera from editor or CameraComponent?
+			static bool last_set_value = !use_camera_editor;
+
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
 			ImGui::SameLine();
@@ -635,15 +608,47 @@ namespace mar {
 				return;
 			}
 
-			static bool use_camera = false;
-			ImGui::Checkbox("UseCamera", &use_camera);
+			last_set_value = use_camera_editor;
+			ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
 
-			m_scene->updatedCamera = use_camera;
+			if (last_set_value == use_camera_editor) {
+				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component (returned because no change!)");
+				return;
+			}
+
+			if (use_camera_editor) {
+				window::Input::enableInput();
+				auto& camdata = Camera::getCameraData();
+
+				m_scene->scene_camera.projection = camdata.projection;
+				m_scene->scene_camera.view = camdata.view;
+				m_scene->scene_camera.model = camdata.model;
+				m_scene->scene_camera.position = camdata.position;
+
+				m_scene->updatedCamera = true;
+			}
+			else {
+				window::Input::disableInput();
+				auto& camdata = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
+				auto& tran = m_scene->entities[m_indexEntity].getComponent<ecs::TransformComponent>();
+
+				m_scene->scene_camera.position = tran.center;
+
+				m_scene->scene_camera.projection = camdata.projection;
+				m_scene->scene_camera.view = maths::mat4::lookAt(
+					tran.center, 
+					tran.center + maths::vec3{0.f, 0.f, 1.0f},
+					{ 0.f, 1.0f, 0.f }
+				);
+				m_scene->scene_camera.model = maths::mat4::translation({0.f, 0.f, 0.f});
+
+				m_scene->updatedCamera = true;
+			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
 
-		void GUI::Scene_Handle_ColorComponent() {
+		void GUI::Scene_Handle_ColorComponent(bool& window_focused) {
 			ImGui::Separator();
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
@@ -657,12 +662,13 @@ namespace mar {
 		
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
 
-			m_scene->updatedColors = true;
+			if(window_focused)
+				m_scene->updatedColors = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
 
-		void GUI::Scene_Handle_LightComponent() {
+		void GUI::Scene_Handle_LightComponent(bool& window_focused) {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
 			
@@ -684,7 +690,8 @@ namespace mar {
 			ImGui::SliderFloat("Quadratic", &light.quadratic, 0.f, 0.1f);
 			ImGui::SliderFloat("Shininess", &light.shininess, 0.f, 256.f);
 
-			m_scene->updatedLight = true;
+			if (window_focused)
+				m_scene->updatedLight = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 		}

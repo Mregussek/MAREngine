@@ -60,41 +60,48 @@ namespace mar {
 				if (scene->updatedTransforms)
 					updateTransforms(scene);
 
+				scene->updatedTransforms = false;
+
+				if (scene->updatedCamera)
+					updateCamera(scene->scene_camera.projection, scene->scene_camera.view, 
+						scene->scene_camera.model, scene->scene_camera.position);
+
+				scene->updatedCamera = false;
+
 				if (scene->updatedColors)
 					updateColors(scene);
 
-				m_useViewportCamera = false;
-
-				if (scene->updatedCamera)
-					updateCamera(scene);
-				else
-					m_useViewportCamera = true;
+				scene->updatedColors = false;
 
 				if (scene->updatedLight)
 					updateLight(scene);
 				
+				scene->updatedLight = false;
+
 				m_lastSizeSet = false;
 				return;
 			}
 				
 		resubmit_all:
 
-			m_useViewportCamera = true;
 			scene->updatedBuffers = false;
-			m_lastSizeSet = true;
+			
 			m_lastSize = scene->entities.size();
+			m_lastSizeSet = true;
 
 			clear();
 
 			updateLight(scene);
+			updateCamera(scene->scene_camera.projection, scene->scene_camera.view,
+				scene->scene_camera.model, scene->scene_camera.position);
 
 			for (auto& entity : scene->entities)
-				submit(entity);
+				submitEntity(entity);
 
 			GRAPHICS_TRACE("RENDERERENTITY: submitted scene!");
 		}
 
-		void RendererEntity::submit(ecs::Entity& entity) {
+		void RendererEntity::submitEntity(ecs::Entity& entity) {
 			if (!entity.hasComponent<ecs::RenderableComponent>())
 				return;
 
@@ -104,7 +111,7 @@ namespace mar {
 			if (entity.hasComponent<ecs::ColorComponent>()) {
 				auto& color = entity.getComponent<ecs::ColorComponent>();
 
-				submitTransform(m_transformsColor, tran);
+				m_transformsColor.push_back(tran.transform);
 				submitVerticesIndices(renderable, m_verticesColor, m_indicesColor, m_indicesMaxColor, m_counterColor, m_stride);
 
 				m_samplersColors.push_back(color);
@@ -130,12 +137,6 @@ namespace mar {
 			}
 			*/
 			GRAPHICS_TRACE("RENDERERENTITY: submitted Entity!");
-		}
-
-		void RendererEntity::submitTransform(std::vector<maths::mat4>& transforms, maths::mat4& transform) {
-			transforms.push_back(transform);
-
-			GRAPHICS_TRACE("RENDERERENTITY: submitted transform component!");
 		}
 
 		void RendererEntity::submitVerticesIndices(ecs::RenderableComponent& ren, std::vector<float>& vertices, 
@@ -210,10 +211,7 @@ namespace mar {
 				shader.bind();
 
 				passLightToShader(shader);
-				if (m_useViewportCamera)
-					passCameraToShader(shader, &Camera::getCameraData());
-				else
-					passCameraToShader(shader);
+				passCameraToShader(shader);
 
 				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
 				shader.setUniformVectorVec3("u_SeparateColor", samplers);
@@ -287,8 +285,7 @@ namespace mar {
 		}
 
 		void RendererEntity::passLightToShader(ShaderOpenGL& shader) {
-			if (m_lightPositions.size() != m_lightComponents.size()) 
-				return;
+			MAR_CORE_ASSERT(m_lightPositions.size() == m_lightComponents.size(), "Light positions are not equal to light components!");
 			
 			using namespace ShaderUniforms;
 
@@ -314,17 +311,9 @@ namespace mar {
 		void RendererEntity::passCameraToShader(ShaderOpenGL& shader) {
 			shader.setUniformVector3("u_CameraPos", m_cameraCenter);
 			shader.setUniformMat4f("u_Model", m_cameraModel);
-			shader.setUniformMat4f("u_MVP", m_cameraProjection);
+			shader.setUniformMat4f("u_MVP", m_cameraMVP);
 
 			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader (by values)!");
-		}
-
-		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, graphics::CameraData* camdata) {
-			shader.setUniformVector3("u_CameraPos", camdata->position);
-			shader.setUniformMat4f("u_Model", camdata->model);
-			shader.setUniformMat4f("u_MVP", camdata->mvp);
-
-			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader (by CameraData)!");
 		}
 
 		RendererStatistics& RendererEntity::getStatistics() { 
@@ -382,19 +371,12 @@ namespace mar {
 			GRAPHICS_TRACE("RENDERERENTITY: updating light");
 		}
 
-		void RendererEntity::updateCamera(ecs::Scene* scene) {
-			for (auto& entity : scene->entities) {
-				if (entity.hasComponent<ecs::CameraComponent>()) {
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
-					auto& cam = entity.getComponent<ecs::CameraComponent>();
-					m_cameraCenter = tran.center;
-					m_cameraModel = maths::mat4::translation(m_cameraCenter);
-					cam.view = maths::mat4::lookAt(m_cameraCenter, m_cameraCenter + maths::vec3{0.f, 0.f, 1.f}, {0.f, 1.f, 0.f});
-					m_cameraProjection = cam.projection * cam.view * m_cameraModel;
-				}
-			}
+		void RendererEntity::updateCamera(maths::mat4& projection, maths::mat4& view, maths::mat4& model, maths::vec3& position) {
+			m_cameraModel = model;
+			m_cameraMVP = projection * view * model;
+			m_cameraCenter = position;
 
-			GRAPHICS_TRACE("RENDERERENTITY: updating camera");
+			GRAPHICS_TRACE("RENDERERENTITY: updated camera!");
 		}
 
 

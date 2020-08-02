@@ -6,12 +6,12 @@
 #ifndef MAR_ENGINE_CAMERA_H
 #define MAR_ENGINE_CAMERA_H
 
-#include "../../../mar.h"
-#include "../../../Window/Input.h"
+#include "../../mar.h"
+#include "../../Window/Input.h"
 
 
 namespace mar {
-    namespace graphics {
+    namespace editor {
         
 
 		enum class CameraMovement {

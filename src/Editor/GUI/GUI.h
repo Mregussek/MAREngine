@@ -8,11 +8,11 @@
 
 #include "../../mar.h"
 #include "../EditorLogging.h"
+#include "../Camera/Camera.h"
 
 #include "../../MAREngine.h"
 #include "../../Window/Window.h"
 
-#include "../../Core/graphics/Camera/Camera.h"
 #include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
 #include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
 #include "../../Core/graphics/Renderer/RendererEntity.h"
@@ -34,8 +34,6 @@ namespace mar {
 			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
 			// --- Which entity should be displayed
 			int32_t m_indexEntity{ -1 };
-			bool m_modifyRenderable{ false };
-			bool m_displayViewport{ true };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
@@ -55,8 +53,10 @@ namespace mar {
 
 			void display();
 
-			// --- SET METHODS --- //
-			void set(const graphics::FrameBuffer<graphics::FrameBufferOpenGL>& framebuffer) { m_framebuffer = framebuffer; }
+			// --- GET METHODS --- //
+			const float& getViewportWidth() const { return m_framebuffer.getSpecification().width; }
+			const float& getViewportHeight() const { return m_framebuffer.getSpecification().height; }
+			graphics::FrameBuffer<graphics::FrameBufferOpenGL>& getFramebuffer() { return m_framebuffer; }
 
 		private:
 			// --- DISPLAY --- //
@@ -67,7 +67,6 @@ namespace mar {
 			void Setup_Theme();
 
 			void Display_ViewPort();
-			void Display_Game();
 			
 			void Menu_MainMenuBar();
 			void Menu_Info();
@@ -80,12 +79,12 @@ namespace mar {
 			void Scene_Entity_Modify();
 			void Scene_Entity_Modify_PopUp();
 
-			void Scene_Handle_TagComponent();
-			void Scene_Handle_RenderableComponent();
-			void Scene_Handle_TransformComponent();
-			void Scene_Handle_CameraComponent();
-			void Scene_Handle_ColorComponent();
-			void Scene_Handle_LightComponent();
+			void Scene_Handle_TagComponent(bool& window_focused);
+			void Scene_Handle_RenderableComponent(bool& window_focused);
+			void Scene_Handle_TransformComponent(bool& window_focused);
+			void Scene_Handle_CameraComponent(bool& window_focused);
+			void Scene_Handle_ColorComponent(bool& window_focused);
+			void Scene_Handle_LightComponent(bool& window_focused);
 		
 			void Scene_Statistics();
 

@@ -90,3 +90,11 @@ MAREngine scene file
 #general_scale 0
 #RenderableComponent Wall
 #ColorComponent 1 0.947369 0
+
+#Entity
+#TagComponent Camera
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1

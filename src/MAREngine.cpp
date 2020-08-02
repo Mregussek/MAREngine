@@ -26,30 +26,24 @@ namespace mar {
 		void MAREngine::run() {
 			layers::LayerStack m_stack;
 
-			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
-			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
-
-			auto camera_layer = new layers::CameraLayer("Default Camera Layer");
-			camera_layer->initialize();
-			if (storage::usegui)
-				camera_layer->getCamera()->setWindowSize(&m_framebuffer.getSpecification().width, &m_framebuffer.getSpecification().height);
-			else
-				camera_layer->getCamera()->setWindowSize((const float*)&window::Window::getInstance().getWidth(), (const float*)&window::Window::getInstance().getHeight());
-			camera_layer->mouseSetup();
-
 			auto gui_layer = new layers::LayerGUI("Default GUI Layer");
 			gui_layer->initialize();
-			auto gui = gui_layer->getGUIInstance();
-			gui->set(m_framebuffer);
 
-			m_stack.pushLayer(camera_layer);
 			m_stack.pushOverlay(gui_layer);
 			
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
 			auto scene = editor::Filesystem::openFile(m_pathLoad.c_str());
 			entitylayer->initialize(scene);
 			m_stack.pushLayer(entitylayer);
-			gui->submit(entitylayer->getScene());
+			gui_layer->getGUIInstance()->submit(scene);
+
+			auto& camdata = gui_layer->getCamera()->getCameraData();
+			scene->scene_camera.projection = camdata.projection;
+			scene->scene_camera.view = camdata.view;
+			scene->scene_camera.model = camdata.model;
+			scene->scene_camera.position = camdata.position;
+
+			auto& framebuffer = gui_layer->getGUIInstance()->getFramebuffer();
 
 			//////////////////////////////////////////////////////
 			// --------------- RENDER LOOP -------------------- //
@@ -57,19 +51,14 @@ namespace mar {
 			{
 				window::Window::getInstance().clearScreen();
 
-				if (storage::usegui) {
-					m_framebuffer.bind();
-					m_framebuffer.clear();
+				framebuffer.bind();
+				framebuffer.clear();
 
-					entitylayer->getRenderer()->submit(entitylayer->getScene());
+				entitylayer->getRenderer()->submit(entitylayer->getScene());
 
-					m_stack.update();
+				m_stack.update();
 
-					graphics::RendererEntity::clearStatistics();
-				}
-				else {
-					m_stack.update();
-				}
+				graphics::RendererEntity::clearStatistics();
 
 				window::Window::getInstance().swapBuffers();
 			}
@@ -78,7 +67,6 @@ namespace mar {
 
 			MAR_CORE_INFO("ENGINE: user has exited main loop!");
 
-			m_framebuffer.close();
 			m_stack.close();
 		}
 

@@ -20,6 +20,14 @@ namespace mar {
 
 
 		class Scene {
+			struct RenderCamera {
+				maths::mat4 projection;
+				maths::mat4 view;
+				maths::mat4 model;
+
+				maths::vec3 position;
+			};
+
 			friend class Entity;
 
 			std::string m_name{ "Empty Scene" };
@@ -50,9 +58,14 @@ namespace mar {
 			// --- SET METHODS --- //
 
 			void setName(std::string name);
-		
+			
+			RenderCamera scene_camera;
 			std::vector<Entity> entities;
-			bool updatedBuffers;
+
+			/* updated RenderableComponent in at least one entity / deleted Color/Texture Component!
+			(It means that, we should reload vertices in VertexBuffer and Indices in ElementBuffer)
+			(If no texture is bounded to entity, there is nothing to draw!) */
+			bool updatedBuffers; 
 			bool updatedTransforms;
 			bool updatedCamera;
 			bool updatedColors;

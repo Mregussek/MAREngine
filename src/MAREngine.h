@@ -11,14 +11,13 @@
 #include "Debug/Log.h"
 #include "Editor/GUI/GUI.h"
 #include "Editor/Filesystem/EditorFilesystem.h"
+#include "Editor/Camera/Camera.h"
 // Layers
 #include "LayerStack/LayerStack.h"
 #include "LayerStack/layers/GUILayer.h"
-#include "LayerStack/layers/CameraLayer.h"
 #include "LayerStack/layers/EntityLayer.h"
 // Rendering
 #include "Core/ecs/Scene.h"
-#include "Core/graphics/Camera/Camera.h"
 #include "Core/graphics/Renderer/RendererEntity.h"
 // Window && Input
 #include "Window/Input.h"

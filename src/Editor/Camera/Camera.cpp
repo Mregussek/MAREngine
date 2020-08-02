@@ -4,10 +4,10 @@
  */
 
 #include "Camera.h"
-#include "../../../Debug/Log.h"
+#include "../EditorLogging.h"
 
 namespace mar {
-    namespace graphics {
+    namespace editor {
 
 
 		const float CameraSettings::YAW = -90.0f;
@@ -74,7 +74,7 @@ namespace mar {
 			s_cameraData.model = getModelMatrix();
 			s_cameraData.view = getViewMatrix();
 
-			s_cameraData.mvp = s_cameraData.projection * s_cameraData.view * s_cameraData.model;
+			s_cameraData.mvp = s_cameraData.projection * s_cameraData.view;// *s_cameraData.model;
 
 			s_cameraData.position = getCameraPosition();
 		}

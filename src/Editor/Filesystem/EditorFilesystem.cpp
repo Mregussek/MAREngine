@@ -81,6 +81,11 @@ namespace mar {
 						ss << "#quadratic " << light.quadratic << "\n";
 						ss << "#shininess " << light.shininess << '\n';
 					}
+					else if (component == ECS_CAMERA) {
+						auto& cam = entity.getComponent<ecs::CameraComponent>();
+
+						ss << "#CameraComponent Begin\n";
+					}
 
  				}
 			}

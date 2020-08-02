@@ -193,7 +193,6 @@
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
-    <ClInclude Include="src\LayerStack\layers\CameraLayer.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Window\callbacks.h" />
@@ -214,7 +213,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexBuffer\VertexBufferLayout.h" />
     <ClInclude Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.h" />
     <ClInclude Include="src\Editor\GUI\GUI.h" />
-    <ClInclude Include="src\Core\graphics\Camera\Camera.h" />
+    <ClInclude Include="src\Editor\Camera\Camera.h" />
     <ClInclude Include="src\MAREngine.h" />
     <ClInclude Include="src\Core\ecs\Scene.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\Shader.h" />
@@ -245,7 +244,6 @@
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
-    <ClCompile Include="src\LayerStack\layers\CameraLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -255,7 +253,7 @@
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\MAREngine.cpp" />
-    <ClCompile Include="src\Core\graphics\Camera\Camera.cpp" />
+    <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\Shader\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.cpp" />

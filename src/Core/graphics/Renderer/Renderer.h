@@ -6,10 +6,6 @@
 #ifndef MAR_ENGINE_RENDERER_INCLUDE_H
 #define MAR_ENGINE_RENDERER_INCLUDE_H
 
-#include "../../../Editor/GUI/GUI.h"
-
-#include "../Camera/Camera.h"
-
 #include "../Mesh/Manipulators/ShapeManipulator.h"
 #include "../Mesh/MeshCreator.h"
 
