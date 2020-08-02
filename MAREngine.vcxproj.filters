@@ -204,6 +204,9 @@
     <ClInclude Include="src\Editor\Camera\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\Window.cpp">

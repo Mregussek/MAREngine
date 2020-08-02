@@ -34,15 +34,10 @@ namespace mar {
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
 			auto scene = editor::Filesystem::openFile(m_pathLoad.c_str());
 			entitylayer->initialize(scene);
-			m_stack.pushLayer(entitylayer);
 			gui_layer->getGUIInstance()->submit(scene);
+			m_stack.pushLayer(entitylayer);
 
-			auto& camdata = gui_layer->getCamera()->getCameraData();
-			scene->scene_camera.projection = camdata.projection;
-			scene->scene_camera.view = camdata.view;
-			scene->scene_camera.model = camdata.model;
-			scene->scene_camera.position = camdata.position;
-
+			scene->useEditorCamera = true;
 			auto& framebuffer = gui_layer->getGUIInstance()->getFramebuffer();
 
 			//////////////////////////////////////////////////////
@@ -53,8 +48,6 @@ namespace mar {
 
 				framebuffer.bind();
 				framebuffer.clear();
-
-				entitylayer->getRenderer()->submit(entitylayer->getScene());
 
 				m_stack.update();
 

@@ -62,12 +62,6 @@ namespace mar {
 
 				scene->updatedTransforms = false;
 
-				if (scene->updatedCamera)
-					updateCamera(scene->scene_camera.projection, scene->scene_camera.view, 
-						scene->scene_camera.model, scene->scene_camera.position);
-
-				scene->updatedCamera = false;
-
 				if (scene->updatedColors)
 					updateColors(scene);
 
@@ -77,6 +71,8 @@ namespace mar {
 					updateLight(scene);
 				
 				scene->updatedLight = false;
+
+				updateCamera(scene);
 
 				m_lastSizeSet = false;
 				return;
@@ -92,8 +88,7 @@ namespace mar {
 			clear();
 
 			updateLight(scene);
-			updateCamera(scene->scene_camera.projection, scene->scene_camera.view,
-				scene->scene_camera.model, scene->scene_camera.position);
+			updateCamera(scene);
 
 			for (auto& entity : scene->entities)
 				submitEntity(entity);
@@ -258,7 +253,6 @@ namespace mar {
 
 			/////! TODO: write shaders for textures2D and cubemap, send uniforms
 
-
 			m_vao.bind();
 
 			m_vbo.bind();
@@ -312,7 +306,7 @@ namespace mar {
 			shader.setUniformVector3("u_CameraPos", m_cameraCenter);
 			shader.setUniformMat4f("u_Model", m_cameraModel);
 			shader.setUniformMat4f("u_MVP", m_cameraMVP);
-
+			
 			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader (by values)!");
 		}
 
@@ -371,10 +365,22 @@ namespace mar {
 			GRAPHICS_TRACE("RENDERERENTITY: updating light");
 		}
 
-		void RendererEntity::updateCamera(maths::mat4& projection, maths::mat4& view, maths::mat4& model, maths::vec3& position) {
-			m_cameraModel = model;
-			m_cameraMVP = projection * view * model;
-			m_cameraCenter = position;
+		void RendererEntity::updateCamera(ecs::Scene* scene) {
+			if (scene->useEditorCamera) {
+				auto& camdata = editor::Camera::getCameraData();
+
+				m_cameraModel = camdata.model;
+				m_cameraMVP = camdata.mvp;
+				m_cameraCenter = camdata.position;
+			}
+			else {
+				auto& camdata = scene->scene_camera;
+
+				m_cameraModel = camdata.model;
+				m_cameraMVP = camdata.projection * camdata.view * camdata.model;
+				m_cameraCenter = camdata.position;
+			}
+			
 
 			GRAPHICS_TRACE("RENDERERENTITY: updated camera!");
 		}

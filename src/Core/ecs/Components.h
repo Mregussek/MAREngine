@@ -139,16 +139,22 @@ namespace mar {
 		};
 
 		struct CameraComponent {
-			maths::mat4 projection{ maths::mat4::perspective(maths::Trig::toRadians(45.f), 800.f / 600.f, 0.01f, 100.0f) };
-			maths::mat4 view{ maths::mat4::lookAt({0.f, 0.f, 5.f}, {0.f, 0.f, 0.f}, {0.f, 1.0f, 0.f}) };
+			float p_fov{ 45.f };
+			float p_aspectRatio{ 800.f / 600.f };
+			float p_near{ 0.01f };
+			float p_far{ 100.0f };
+			bool Perspective;
 
-			bool primary{ true };
+			float o_left{ 10.f };
+			float o_right{ 10.f };
+			float o_top{ 10.f };
+			float o_bottom{ 10.f };
+			float o_near{ 0.01f };
+			float o_far{ 100.0f };
+			bool Orthographic;
 
 			CameraComponent() = default;
 			CameraComponent(const CameraComponent& cam) = default;
-			CameraComponent(const maths::mat4& proj)
-				: projection(proj)
-			{}
 		};
 
 		struct LightComponent {

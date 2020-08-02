@@ -368,7 +368,7 @@ namespace mar {
 
 			if (entity.hasComponent<ecs::RenderableComponent>())
 				Scene_Handle_RenderableComponent(is_window_focused);
-
+			
 			if (entity.hasComponent<ecs::CameraComponent>())
 				Scene_Handle_CameraComponent(is_window_focused);
 			
@@ -596,20 +596,65 @@ namespace mar {
 		}
 
 		void GUI::Scene_Handle_CameraComponent(bool& window_focused) {
-			static bool use_camera_editor = false; // should use Camera from editor or CameraComponent?
+			static std::vector<const char*> cameras = { "Perspective", "Orthographic" };
+			static int32_t selected = 0;
+			static bool use_camera_editor = true; // should use Camera from editor or CameraComponent?
 			static bool last_set_value = !use_camera_editor;
+
+			last_set_value = use_camera_editor;
+			auto& camcmp = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
 
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
 			ImGui::SameLine();
-			if (ImGui::MenuItem("Remove Camera")) {
+			if (ImGui::Button("Remove Camera")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
 				m_scene->updatedCamera = true;
+				m_scene->useEditorCamera = true;
 				return;
 			}
-
-			last_set_value = use_camera_editor;
+			ImGui::SameLine();
 			ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
+
+			
+
+			ImGui::Combo("Camera Type", &selected, cameras.data(), 2);
+
+			if (selected == 0) {
+				camcmp.Perspective = true;
+			}
+			else {
+				camcmp.Perspective = false;
+			}
+
+			if (camcmp.Perspective) {
+				ImGui::SliderFloat("FOV", &camcmp.p_fov, 1.f, 90.f);
+				ImGui::SliderFloat("AspectRatio", &camcmp.p_aspectRatio, 1.f, 10.f);
+				ImGui::SliderFloat("Near", &camcmp.p_near, 0.001f, 5.f);
+				ImGui::SliderFloat("Far", &camcmp.p_far, 5.001f, 150.f);
+				m_scene->scene_camera.projection = maths::mat4::perspective(
+					maths::Trig::toRadians(camcmp.p_fov),
+					camcmp.p_aspectRatio,
+					camcmp.p_near,
+					camcmp.p_far
+				);
+			} 
+			else {
+				ImGui::SliderFloat("Left", &camcmp.o_left, 0.001f, 10.f);
+				ImGui::SliderFloat("Right", &camcmp.o_right, 0.001f, 10.f);
+				ImGui::SliderFloat("Top", &camcmp.o_top, 0.001f, 10.f);
+				ImGui::SliderFloat("Bottom", &camcmp.o_bottom, 0.001f, 10.f);
+				ImGui::SliderFloat("Near", &camcmp.o_near, 0.001f, 5.f);
+				ImGui::SliderFloat("Far", &camcmp.o_far, 5.001f, 150.f);
+				m_scene->scene_camera.projection = maths::mat4::orthographic(
+					camcmp.o_left,
+					camcmp.o_right,
+					camcmp.o_top, 
+					camcmp.o_bottom,
+					camcmp.o_near,
+					camcmp.o_far
+				);
+			}
 
 			if (last_set_value == use_camera_editor) {
 				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component (returned because no change!)");
@@ -617,31 +662,23 @@ namespace mar {
 			}
 
 			if (use_camera_editor) {
-				window::Input::enableInput();
-				auto& camdata = Camera::getCameraData();
-
-				m_scene->scene_camera.projection = camdata.projection;
-				m_scene->scene_camera.view = camdata.view;
-				m_scene->scene_camera.model = camdata.model;
-				m_scene->scene_camera.position = camdata.position;
-
+				m_scene->useEditorCamera = true;
 				m_scene->updatedCamera = true;
 			}
 			else {
-				window::Input::disableInput();
-				auto& camdata = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
 				auto& tran = m_scene->entities[m_indexEntity].getComponent<ecs::TransformComponent>();
 
 				m_scene->scene_camera.position = tran.center;
 
-				m_scene->scene_camera.projection = camdata.projection;
 				m_scene->scene_camera.view = maths::mat4::lookAt(
 					tran.center, 
-					tran.center + maths::vec3{0.f, 0.f, 1.0f},
+					{ 0.f, 0.f, -1.f },
 					{ 0.f, 1.0f, 0.f }
 				);
+
 				m_scene->scene_camera.model = maths::mat4::translation({0.f, 0.f, 0.f});
 
+				m_scene->useEditorCamera = false;
 				m_scene->updatedCamera = true;
 			}
 

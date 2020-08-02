@@ -11,6 +11,8 @@
 #include "../../ecs/Components.h"
 #include "../../ecs/Scene.h"
 
+#include "../../../Editor/Camera/Camera.h"
+
 #include "Shader/ShaderOpenGL.h"
 #include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
 #include "Buffers/VertexArray/VertexArrayOpenGL.h"
@@ -128,12 +130,7 @@ namespace mar {
 			void updateTransforms(ecs::Scene* scene);
 			void updateColors(ecs::Scene* scene);
 			void updateLight(ecs::Scene* scene);
-			void updateCamera(
-				maths::mat4& projection,
-				maths::mat4& view,
-				maths::mat4& model,
-				maths::vec3& position
-			);
+			void updateCamera(ecs::Scene* scene);
 		};
 
 

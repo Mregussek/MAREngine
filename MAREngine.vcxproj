@@ -185,6 +185,7 @@
     <ClInclude Include="3rd_party\stb_image\include\stb_image\stb_image.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\ecs\Components.h" />

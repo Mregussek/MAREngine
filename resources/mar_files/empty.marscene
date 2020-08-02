@@ -92,9 +92,15 @@ MAREngine scene file
 #ColorComponent 1 0.947369 0
 
 #Entity
-#TagComponent Camera
+#TagComponent CameraSavedFile
 #TransformComponent Begin
 #center 0 0 0
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
+#CameraComponent Begin
+#type perspective
+#fov 31.302
+#aspectratio5.675
+#near 2.209
+#far9.232

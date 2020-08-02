@@ -11,6 +11,8 @@
 #include "Systems.h"
 #include "ECSLogs.h"
 
+#include "../graphics/Renderer/RenderCamera.h"
+
 
 namespace mar {
 	namespace ecs {
@@ -20,14 +22,6 @@ namespace mar {
 
 
 		class Scene {
-			struct RenderCamera {
-				maths::mat4 projection;
-				maths::mat4 view;
-				maths::mat4 model;
-
-				maths::vec3 position;
-			};
-
 			friend class Entity;
 
 			std::string m_name{ "Empty Scene" };
@@ -59,7 +53,7 @@ namespace mar {
 
 			void setName(std::string name);
 			
-			RenderCamera scene_camera;
+			graphics::RenderCamera scene_camera;
 			std::vector<Entity> entities;
 
 			/* updated RenderableComponent in at least one entity / deleted Color/Texture Component!
@@ -72,6 +66,8 @@ namespace mar {
 			bool updatedTextures2D;
 			bool updatedTexturesCubemap;
 			bool updatedLight;
+
+			bool useEditorCamera;
 		};
 
 

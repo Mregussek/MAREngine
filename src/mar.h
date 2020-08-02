@@ -42,8 +42,8 @@ namespace mar {
 
 	namespace settings {
 		inline const char name[10] = "MAREngine";
-		inline const int width{ 1900 };
-		inline const int height{ 1000 };
+		inline const int width{ 1700 };
+		inline const int height{ 900 };
 		inline const char portName[10] = "\\\\.\\COM7";
 		inline const char* glsl_version = "#version 330";
 	}
