@@ -230,6 +230,14 @@ namespace mar {
 					color.color.y = arr[1];
 					color.color.z = arr[2];
 				}
+				else if (line.find("Texture2DComponent") != std::string::npos) {
+					std::istringstream iss(line.substr(19));
+					std::string tex;
+					iss >> tex;
+
+					auto& texture = currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+					texture.texture = tex;
+				}
 				else if (line.find("#LightComponent") != std::string::npos) {
 					auto& light = currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
 

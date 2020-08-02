@@ -89,12 +89,12 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Wall
-#ColorComponent 1 0.947369 0
+#Texture2DComponent resources/textures/red-brick.jpg
 
 #Entity
 #TagComponent CameraSavedFile
 #TransformComponent Begin
-#center 0.05 1.06 -2.65
+#center -20.85 1.06 -2.65
 #angles -8.54 -0.38 0
 #scale 1 1 1
 #general_scale 0
@@ -113,3 +113,61 @@ MAREngine scene file
 #bottom -20
 #near 69.8
 #far 69.8
+
+#Entity
+#TagComponent MRtextureFirst
+#TransformComponent Begin
+#center 16.65 -1.5 -5.4
+#angles 1 -62.5 -5.5
+#scale 1 1 1
+#general_scale 0
+#Texture2DComponent resources/textures/mr.jpg
+#RenderableComponent Cube
+
+#Entity
+#TagComponent WallTexture
+#TransformComponent Begin
+#center 15.35 -1.85 -2.8
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Pyramid
+#Texture2DComponent resources/textures/wall.jpg
+
+#Entity
+#TagComponent GrassSurface
+#TransformComponent Begin
+#center -8.65 -1.85 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#Texture2DComponent resources/textures/grass-texture.jpg
+#RenderableComponent Surface
+
+#Entity
+#TagComponent YellowTextureLight
+#TransformComponent Begin
+#center -4.9 -1.45 10.75
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Cube
+#Texture2DComponent resources/textures/yellow-texture.jpg
+#LightComponent Begin
+#ambientlight 0.5 0.61 0.68
+#diffuselight 0.63 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 0.356
+#linear 0.015
+#quadratic 0.01
+#shininess 31.5
+
+#Entity
+#TagComponent AlphaGrassPNG
+#TransformComponent Begin
+#center 2.45 -1.2 0.6
+#angles 90 0 0
+#scale 0.02 2 0.15
+#general_scale 0
+#RenderableComponent Wall
+#Texture2DComponent resources/textures/grass_alpha.png

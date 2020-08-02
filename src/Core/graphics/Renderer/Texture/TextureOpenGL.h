@@ -22,10 +22,8 @@ namespace mar {
 			solutions to specified problems using OpenGL.
 		*/
 		class TextureOpenGL {
-			static uint32_t s_textureUnit;
-			std::vector<uint32_t> m_id;
-			std::vector<std::string> m_paths;
-			std::unordered_map<std::string, uint32_t> m_path_id;
+			std::unordered_map<std::string, uint32_t> m_2d;
+			std::unordered_map<std::string, uint32_t> m_cubemaps;
 
 		public:
 
@@ -71,46 +69,15 @@ namespace mar {
 				\param shapeId - id of shape
 				\param texID - id of texture
 			*/
-			void bind(const int& shapeId, const uint32_t& texID) const;
+			void bind(const int32_t& texture_type, const uint32_t& unit, const uint32_t& texID) const;
 
 			// Set default texture for each shape
 			void unbind() const;
 
-			/*
-			Adds id prescribed to shape
+			const uint32_t& getTexture(const std::string& key) const { return m_2d.at(key); }
 
-				\param id - new id
-			*/
-			void addID(const uint32_t id);
-
-			/*
-			Removes id prescribed to shape with specified index
-
-				\param index - index of shape
-			*/
-			void removeID(const uint32_t& index);
-
-			/*
-			Get id of texture bounded to shape on specific index
-
-				\param index - index of shape
-				\return m_id[index] - id of texture prescribed to shape
-			*/
-			const uint32_t& getID(const uint32_t& index) const { return m_id[index]; }
- 
-			/*
-			Get path to texture associated to shape with specified index.
-			Method must be overloaded!
-
-				\param index - index of path
-				\return m_path[index] - path of texture prescribed to shape
-			*/
-			const std::string& getPath(const uint32_t& index) const { return m_paths[index]; }
-
-			/*
-			Method resets static variable - texture unit.
-			*/
-			void resetTextureUnit() { s_textureUnit = 1; }
+			const uint32_t& getCubemap(const std::string& key) const { return m_cubemaps.at(key); }
+		
 		};
 
 

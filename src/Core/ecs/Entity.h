@@ -113,10 +113,11 @@ namespace mar {
 				case ECS_COLOR:
 					addComponent<ecs::ColorComponent>(ECS_COLOR);
 					break;
-					/*
+					
 				case ECS_TEXTURE2D:
 					addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
 					break;
+					/*
 				case ECS_CUBEMAP:
 					addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
 					break;

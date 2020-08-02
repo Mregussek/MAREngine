@@ -10,11 +10,12 @@ namespace mar {
 	namespace graphics {
 
 
-		uint32_t TextureOpenGL::s_textureUnit = 1;
-
 		void TextureOpenGL::shutdown() {
-			for (auto const& id : m_id) {
-				MAR_CORE_GL_FUNC( glDeleteTextures(1, &id) );
+			for (auto& tex : m_2d) {
+				MAR_CORE_GL_FUNC( glDeleteTextures(1, &tex.second) );
+			}
+			for (auto& tex : m_cubemaps) {
+				MAR_CORE_GL_FUNC(glDeleteTextures(1, &tex.second));
 			}
 		}
 
@@ -68,21 +69,15 @@ namespace mar {
 		}
 
 		float TextureOpenGL::loadTexture(const char* path) {
-			auto search = m_path_id.find(path);
+			auto search = m_2d.find(path);
 
-			if (search != m_path_id.end()) { 
-				m_id.push_back(search->second);
-				m_paths.push_back(search->first);
-
+			if (search != m_2d.end()) { 
 				GRAPHICS_TRACE("TEXTURE_OPENGL: Assigning loaded texture!");
-
 				return (float) search->second;
 			}
 
 			uint32_t new_id = genNewTexture(path);
-			m_id.push_back(new_id);
-			m_paths.push_back(path);
-			m_path_id.insert({ path, new_id });
+			m_2d.insert({ path, new_id });
 			return (float) new_id;
 		}
 
@@ -144,65 +139,28 @@ namespace mar {
 
 		float TextureOpenGL::loadCubemap(const char* path) {
 			std::string helper = std::string(path);
-			auto search = m_path_id.find(helper);
+			auto search = m_cubemaps.find(helper);
 
-			if (search != m_path_id.end()) {
-				m_id.push_back(search->second);
-				m_paths.push_back(search->first);
-
+			if (search != m_cubemaps.end()) {
 				GRAPHICS_TRACE("TEXTURE_OPENGL: Assigning loaded cubemap!");
-
 				return (float) search->second;
 			}
 
 			uint32_t new_id = genNewCubemap(path);
-			m_id.push_back(new_id);
-			m_paths.push_back(helper);
-			m_path_id.insert({ helper, new_id });
+			m_cubemaps.insert({ helper, new_id });
 
 			return (float) new_id;
 		}
 
-		void TextureOpenGL::bind(const int& texture_type, const uint32_t& texID) const {
+		void TextureOpenGL::bind(const int32_t& texture_type, const uint32_t& unit, const uint32_t& texID) const {
 			if (texID == 0) return;
 
-			MAR_CORE_GL_FUNC( glActiveTexture(GL_TEXTURE0 + s_textureUnit) );
+			MAR_CORE_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
 			MAR_CORE_GL_FUNC( glBindTexture(texture_type, texID) );
-
-			s_textureUnit++;
 		}
 
 		void TextureOpenGL::unbind() const {
 			MAR_CORE_GL_FUNC( glBindTexture(GL_TEXTURE_2D, 0) );
-		}
-
-		void TextureOpenGL::addID(const uint32_t id) {
-			m_id.push_back(id);
-			m_paths.push_back("empty");
-		}
-
-		void TextureOpenGL::removeID(const uint32_t& index) {
-			uint32_t id_count = std::count(m_id.begin(), m_id.end(), m_id[index]);
-
-			if (id_count == 1 && m_id[index] != 0) {
-				std::string path_to_find = m_paths[index];
-				auto it = m_path_id.find(path_to_find);
-
-				if (it != m_path_id.end()) m_path_id.erase(it);
-				else GRAPHICS_ERROR("TEXTURE_OPENGL: Could not delete last occurence of texture!");
-
-				MAR_CORE_GL_FUNC( glDeleteTextures(1, &m_id[index]) );
-			}
-
-			for (uint32_t i = index; i < m_id.size() - 1; i++) { 
-				m_id[i] = m_id[i + 1]; 
-				m_paths[i] = m_paths[i + 1];
-			}
-				
-			m_id.pop_back();
-			m_paths.pop_back();
-
-			return;
 		}
 
 

@@ -187,13 +187,10 @@
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\RendererColors.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\RendererCubemaps.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\ecs\Components.h" />
     <ClInclude Include="src\Core\ecs\Entity.h" />
     <ClInclude Include="src\Core\ecs\Systems.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\RendererTextures2D.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />

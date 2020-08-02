@@ -28,6 +28,8 @@ namespace mar {
 			m_vao.addBuffer(m_layout);
 
 			m_shaderColor.initialize(SHADER_ENTITY_COLOR);
+			m_shaderTextures2D.initialize(SHADER_ENTITY_TEXTURE2D);
+			m_shaderCubemaps.initialize(SHADER_ENTITY_CUBEMAP);
 
 			m_stride = 3 + 3 + 2 + 1;
 
@@ -44,13 +46,15 @@ namespace mar {
 			m_ebo.close();
 
 			m_shaderColor.shutdown();
+			m_shaderTextures2D.shutdown();
+			m_shaderCubemaps.shutdown();
 
 			GRAPHICS_INFO("RENDERERENTITY: closed!");
 		}
 
 		void RendererEntity::submit(ecs::Scene* scene) {
 			if (m_lastSize == scene->entities.size()) {
-				if (scene->updatedBuffers)
+				if (scene->updatedBuffers || scene->updatedTextures2D)
 					goto resubmit_all;
 
 				if (scene->updatedTransforms)
@@ -77,7 +81,8 @@ namespace mar {
 		resubmit_all:
 
 			scene->updatedBuffers = false;
-			
+			scene->updatedTextures2D = false;
+
 			m_lastSize = scene->entities.size();
 			m_lastSizeSet = true;
 
@@ -102,11 +107,25 @@ namespace mar {
 			if (entity.hasComponent<ecs::ColorComponent>()) {
 				auto& color = entity.getComponent<ecs::ColorComponent>();
 
-				m_transformsColor.push_back(tran.transform);
-				submitVerticesIndices(renderable, m_verticesColor, m_indicesColor, m_indicesMaxColor, m_counterColor, m_stride);
+				m_storageColor.transforms.push_back(tran.transform);
+				submitVerticesIndices(renderable, m_storageColor.vertices, m_storageColor.indices, m_storageColor.indicesMax, m_storageColor.counter, m_stride);
 
-				m_samplersColors.push_back(color);
-				m_counterColor++;
+				m_storageColor.samplers.push_back(color);
+				m_storageColor.counter++;
+			}
+			
+			if (entity.hasComponent<ecs::Texture2DComponent>()) {
+				auto& texture = entity.getComponent<ecs::Texture2DComponent>();
+
+				m_textures.push_back(texture.texture);
+
+				float id = m_texture.loadTexture(texture.texture.c_str());
+
+				m_storageTexture2D.transforms.push_back(tran.transform);
+				submitVerticesIndices(renderable, m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.indicesMax, m_storageTexture2D.counter, m_stride);
+
+				m_storageTexture2D.samplers.push_back(m_storageTexture2D.counter);
+				m_storageTexture2D.counter++;
 			}
 
 			GRAPHICS_TRACE("RENDERERENTITY: submitted Entity!");
@@ -129,8 +148,12 @@ namespace mar {
 		}
 
 		void RendererEntity::update() {
-			if (!m_verticesColor.empty()) {
-				draw(m_verticesColor, m_indicesColor, m_transformsColor, m_samplersColors, m_shaderColor);
+			if (!m_storageColor.vertices.empty()) {
+				draw(m_storageColor.vertices, m_storageColor.indices, m_storageColor.transforms, m_storageColor.samplers, m_shaderColor);
+			}
+
+			if (!m_storageTexture2D.vertices.empty()) {
+				draw(m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.transforms, m_storageTexture2D.samplers, m_shaderTextures2D);
 			}
 
 			GRAPHICS_INFO("RENDERERENTITY: Draw calls finished for this scene!");
@@ -140,12 +163,20 @@ namespace mar {
 			if (!m_lastSizeSet)
 				return;
 
-			m_verticesColor.clear();
-			m_indicesColor.clear();
-			m_transformsColor.clear();
-			m_samplersColors.clear();
-			m_counterColor = 0;
-			m_indicesMaxColor = 0;
+			m_storageColor.vertices.clear();
+			m_storageColor.indices.clear();
+			m_storageColor.transforms.clear();
+			m_storageColor.samplers.clear();
+			m_storageColor.counter = 0;
+			m_storageColor.indicesMax = 0;
+
+			m_textures.clear();
+			m_storageTexture2D.vertices.clear();
+			m_storageTexture2D.indices.clear();
+			m_storageTexture2D.transforms.clear();
+			m_storageTexture2D.samplers.clear();
+			m_storageTexture2D.counter = 0;
+			m_storageTexture2D.indicesMax = 0;
 
 			GRAPHICS_TRACE("RENDERERENTITY: called clear method!");
 		}
@@ -197,6 +228,58 @@ namespace mar {
 			GRAPHICS_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
 		}
 
+		void RendererEntity::draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
+			const std::vector<maths::mat4>& transforms, const std::vector<int32_t>& samplers, ShaderOpenGL& shader)
+		{
+			GRAPHICS_TRACE("RENDERER: is preparing to draw!");
+
+			{ // BIND TEXTURES
+				for (int32_t i = 0; i < samplers.size(); i++) 
+					m_texture.bind(GL_TEXTURE_2D, samplers[i], m_texture.getTexture(m_textures[i]));
+			}
+
+			{ // SEND ALL DATA TO SHADERS
+				shader.bind();
+
+				passLightToShader(shader);
+				passCameraToShader(shader);
+
+				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
+				shader.setUniformSampler("u_SeparateColor", samplers);
+			}
+
+			{ // BIND ALL NEEDED BUFFERS
+				m_vao.bind();
+
+				m_vbo.bind();
+				m_vbo.updateDynamically(vertices);
+
+				m_ebo.bind();
+				m_ebo.update(indices);
+			}
+
+			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr));
+
+			{ // UNBIND ALREADY DRAWN BUFFERS
+				m_vbo.resetBuffer();
+				m_vbo.unbind();
+
+				m_ebo.resetBuffer();
+				m_ebo.unbind();
+
+				m_vao.unbind();
+			}
+
+			s_stats.verticesCount += vertices.size();
+			s_stats.indicesCount += indices.size();
+
+			s_stats.drawCallsCount += 1;
+			s_stats.trianglesCount = s_stats.indicesCount / 3;
+
+			GRAPHICS_INFO("RENDERER: has drawn the scene!");
+			GRAPHICS_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
+		}
+
 		void RendererEntity::passLightToShader(ShaderOpenGL& shader) {
 			MAR_CORE_ASSERT(m_lightPositions.size() == m_lightComponents.size(), "Light positions are not equal to light components!");
 			
@@ -240,22 +323,26 @@ namespace mar {
 		}
 
 		void RendererEntity::updateTransforms(ecs::Scene* scene) {
-			m_transformsColor.clear();
+			m_storageColor.transforms.clear();
+			m_storageTexture2D.transforms.clear();
 
 			for (auto& entity : scene->entities) {
 				if (entity.hasComponent<ecs::ColorComponent>())
-					m_transformsColor.push_back(entity.getComponent<ecs::TransformComponent>());
+					m_storageColor.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
+			
+				if (entity.hasComponent<ecs::Texture2DComponent>())
+					m_storageTexture2D.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
 			}
 
 			GRAPHICS_TRACE("RENDERINGENTITY: updating transforms");
 		}
 
 		void RendererEntity::updateColors(ecs::Scene* scene) {
-			m_samplersColors.clear();
+			m_storageColor.samplers.clear();
 
 			for (auto& entity : scene->entities)
 				if (entity.hasComponent<ecs::ColorComponent>())
-					m_samplersColors.push_back(entity.getComponent<ecs::ColorComponent>());
+					m_storageColor.samplers.push_back(entity.getComponent<ecs::ColorComponent>());
 			
 			GRAPHICS_TRACE("RENDERERENTITY: updating colors");
 		}

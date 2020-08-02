@@ -29,21 +29,32 @@ namespace mar {
 
 
 		class RendererEntity {
+			// --- STORAGE --- //
+			template<typename T>
+			struct RendererStorage {
+				std::vector<float> vertices;
+				std::vector<uint32_t> indices;
+				std::vector<maths::mat4> transforms;
+				std::vector<T> samplers;
+				int32_t counter;
+				uint32_t indicesMax;
+			};
+
+			RendererStorage<maths::vec3> m_storageColor;
+			std::vector<std::string> m_textures;
+			RendererStorage<int32_t> m_storageTexture2D;
+			std::vector<std::string> m_cubemaps;
+			RendererStorage<int32_t> m_storageCubemap;
+
 			// --- BUFFERS --- //
 			VertexBufferOpenGL m_vbo;
 			VertexBufferLayoutOpenGL m_layout;
 			VertexArrayOpenGL m_vao;
 			ElementBufferOpenGL m_ebo;
-			
+			TextureOpenGL m_texture;
 			ShaderOpenGL m_shaderColor;
-
-			// --- STORAGE --- //
-			std::vector<float> m_verticesColor;
-			std::vector<uint32_t> m_indicesColor;
-			std::vector<maths::mat4> m_transformsColor;
-			std::vector<maths::vec3> m_samplersColors;
-			int32_t m_counterColor;
-			uint32_t m_indicesMaxColor;
+			ShaderOpenGL m_shaderTextures2D;
+			ShaderOpenGL m_shaderCubemaps;
 
 			// --- OTHER --- //
 
@@ -84,6 +95,14 @@ namespace mar {
 				const std::vector<uint32_t>& indices,
 				const std::vector<maths::mat4>& transforms, 
 				const std::vector<maths::vec3>& samplers, 
+				ShaderOpenGL& shader
+			);
+
+			void draw(
+				const std::vector<float>& vertices,
+				const std::vector<uint32_t>& indices,
+				const std::vector<maths::mat4>& transforms,
+				const std::vector<int32_t>& samplers,
 				ShaderOpenGL& shader
 			);
 		

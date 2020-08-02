@@ -376,6 +376,9 @@ namespace mar {
 			if (entity.hasComponent<ecs::ColorComponent>())
 				Scene_Handle_ColorComponent(is_window_focused);
 
+			if (entity.hasComponent<ecs::Texture2DComponent>())
+				Scene_Handle_Texture2DComponent(is_window_focused);
+
 			if (entity.hasComponent<ecs::LightComponent>())
 				Scene_Handle_LightComponent(is_window_focused);
 
@@ -463,8 +466,8 @@ namespace mar {
 
 				ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -100.0f, 100.0f, "%.2f", 1.f);
 				ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f);
-				ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.5f, 0.f, 2.0f, "%.2f", 1.f);
-				ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.05f, 0.001f, 2.f, "%.3f", 1.f);
+				ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.01f, 0.f, 2.0f, "%.2f", 1.f);
+				ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 2.f, "%.3f", 1.f);
 
 				if (last_general != tran.general_scale) 
 					tran.scale += tran.general_scale - last_general;
@@ -701,6 +704,40 @@ namespace mar {
 				m_scene->updatedColors = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
+		}
+
+		void GUI::Scene_Handle_Texture2DComponent(bool& window_focused) {
+			auto& tex = m_scene->entities[m_indexEntity].getComponent<ecs::Texture2DComponent>();
+
+			ImGui::Separator();
+			ImGui::Text("Texture2DComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Texture")) {
+				m_scene->entities[m_indexEntity].removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+				m_scene->updatedTextures2D = true;
+				return;
+			}
+
+			ImGui::Text("Current Texture: ");
+			ImGui::SameLine();
+			ImGui::Text(tex.texture.c_str());
+
+			static char filename[30]{ "empty" };
+			ImGui::InputText(" ex. .jpg / .png", filename, 30);
+			static std::string load;
+			load = "resources/textures/" + std::string(filename);
+
+			ImGui::Text("Texture, which will be loaded: ");
+			ImGui::SameLine();
+			ImGui::Text(load.c_str());
+			ImGui::Text("WARNING: if texture do not exist, black shape will appear!");
+
+			if (ImGui::Button("Load Texture")) {
+				tex.texture = load;
+				m_scene->updatedTextures2D = true;
+			}
+
+			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
 		}
 
 		void GUI::Scene_Handle_LightComponent(bool& window_focused) {

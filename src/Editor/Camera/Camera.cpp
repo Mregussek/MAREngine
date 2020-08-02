@@ -15,7 +15,7 @@ namespace mar {
 		const float CameraSettings::SPEED = 5.0f;
 		const float CameraSettings::SENSITIVITY = 0.1f;
 		const float CameraSettings::ZOOM = 55.0f;
-		const maths::vec3 CameraSettings::CAMERA_START{ -1.0f, 2.0f, 0.0f };
+		const maths::vec3 CameraSettings::CAMERA_START{ -10.0f, 2.0f, 0.0f };
 
 		CameraData Camera::s_cameraData;
 

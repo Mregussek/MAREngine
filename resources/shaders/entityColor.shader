@@ -64,8 +64,6 @@ void main() {
 		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
 	}
 
-	//vec4 lightColor = calculateLight(u_material, batchColor.xyz);
-
 	color = batchColor * lightColor;
 };
 
