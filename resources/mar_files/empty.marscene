@@ -4,9 +4,9 @@ MAREngine scene file
 #Scene_Name empty.marscene
 
 #Entity
-#TagComponent FirstEntity
+#TagComponent DarkGreenCube
 #TransformComponent Begin
-#center 1.96 0.54 -6.45
+#center 23.41 0.54 4.55
 #angles 65 0 0
 #scale 1 1 1
 #general_scale 0
@@ -14,42 +14,42 @@ MAREngine scene file
 #ColorComponent 0.2 0.5 0.2
 
 #Entity
-#TagComponent SecondEntity
+#TagComponent GreenPyramid
 #RenderableComponent Pyramid
 #TransformComponent Begin
-#center -3 2 -1
+#center 21.05 0.7 2
 #angles 0 25 0
-#scale 1 1.5 1
+#scale 3 3.5 3
 #general_scale 0
 #ColorComponent 0.5 0.9 0.25
 
 #Entity
-#TagComponent ThirdEntity
+#TagComponent SurfacePurple
 #RenderableComponent Surface
 #TransformComponent Begin
-#center 0 0 0
+#center 21.3 -1.85 0
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
 #ColorComponent 0.5 0.2 0.9
 
 #Entity
-#TagComponent FourthEntity
+#TagComponent RedWall
 #RenderableComponent Wall
 #TransformComponent Begin
-#center -2 0 -11.08
+#center 21.8 -2.15 -7.83
 #angles 0 -99.69 0
 #scale 1 1 1
 #general_scale 0
 #ColorComponent 0.9 0.2 0.3
 
 #Entity
-#TagComponent LightEntity
+#TagComponent LightCube
 #RenderableComponent Cube
 #TransformComponent Begin
-#center -4.66 1.82 -3.6
+#center 17.69 0.72 7.7
 #angles 0 0 0
-#scale 0.5 0.5 0.5
+#scale 0.750999 1.5 0.750999
 #general_scale 0
 #ColorComponent 1 1 1
 #LightComponent Begin
@@ -62,9 +62,9 @@ MAREngine scene file
 #shininess 64
 
 #Entity
-#TagComponent FirstAdded
+#TagComponent FlyingGrayRectangle
 #TransformComponent Begin
-#center -8.77 3.23 0
+#center 20.93 3.23 -3.7
 #angles 265.85 210.46 0
 #scale 1 2 1
 #general_scale 0
@@ -74,18 +74,18 @@ MAREngine scene file
 #Entity
 #TagComponent MonkeyOBJ
 #TransformComponent Begin
-#center 0.18 0.54 -1.97
-#angles -90 0 0
-#scale 1 1 1
+#center 15.83 0.54 -1.97
+#angles -102.5 4 -91
+#scale 1.6 1.6 1.6
 #general_scale 0
-#ColorComponent 0.5 0.5 0.5
+#ColorComponent 1 0.99999 0.99999
 #RenderableComponent resources/objects/monkey.obj
 
 #Entity
-#TagComponent Added
+#TagComponent YellowWall
 #TransformComponent Begin
-#center 6.96 0 -5.08
-#angles 0 0 55.38
+#center 30.76 -1.7 4.02
+#angles 0 0 -0.12
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Wall
@@ -94,14 +94,22 @@ MAREngine scene file
 #Entity
 #TagComponent CameraSavedFile
 #TransformComponent Begin
-#center -13.58 7.5 15
-#angles 0 0 0
+#center 0.05 1.06 -2.65
+#angles -8.54 -0.38 0
 #scale 1 1 1
 #general_scale 0
 #CameraComponent Begin
 #id main
+#used perspective
 #type perspective
 #fov 44.807
-#aspectratio1.368
+#aspectratio 1.368
 #near 0.001
-#far101.197
+#far 101.197
+#type orthographic
+#left -20
+#right 20
+#top 18.5
+#bottom -20
+#near 69.8
+#far 69.8

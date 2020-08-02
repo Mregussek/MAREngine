@@ -148,11 +148,10 @@ namespace mar {
 			float p_near{ 0.01f };
 			float p_far{ 100.0f };
 			
-
-			float o_left{ 10.f };
+			float o_left{ -10.f };
 			float o_right{ 10.f };
 			float o_top{ 10.f };
-			float o_bottom{ 10.f };
+			float o_bottom{ -10.f };
 			float o_near{ 0.01f };
 			float o_far{ 100.0f };
 

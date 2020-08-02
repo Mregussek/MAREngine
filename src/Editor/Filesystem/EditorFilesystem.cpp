@@ -87,22 +87,24 @@ namespace mar {
 						ss << "#CameraComponent Begin\n";
 						ss << "#id " << cam.id << "\n";
 
-						if (cam.Perspective) {
-							ss << "#type perspective\n";
-							ss << "#fov " << cam.p_fov << "\n";
-							ss << "#aspectratio" << cam.p_aspectRatio << "\n";
-							ss << "#near " << cam.p_near << "\n";
-							ss << "#far" << cam.p_far << "\n";
-						}
-						else {
-							ss << "#type orthographic\n";
-							ss << "#left " << cam.o_left << "\n";
-							ss << "#right" << cam.o_right << "\n";
-							ss << "#top " << cam.o_top << "\n";
-							ss << "#bottom" << cam.o_bottom<< "\n";
-							ss << "#near" << cam.o_far << "\n";
-							ss << "#far" << cam.o_far << "\n";
-						}
+						if (cam.Perspective)
+							ss << "#used perspective\n";
+						else 
+							ss << "#used orthographic\n";
+
+						ss << "#type perspective\n";
+						ss << "#fov " << cam.p_fov << "\n";
+						ss << "#aspectratio " << cam.p_aspectRatio << "\n";
+						ss << "#near " << cam.p_near << "\n";
+						ss << "#far " << cam.p_far << "\n";
+
+						ss << "#type orthographic\n";
+						ss << "#left " << cam.o_left << "\n";
+						ss << "#right " << cam.o_right << "\n";
+						ss << "#top " << cam.o_top << "\n";
+						ss << "#bottom " << cam.o_bottom << "\n";
+						ss << "#near " << cam.o_far << "\n";
+						ss << "#far " << cam.o_far << "\n";
 					}
  				}
 			}
@@ -295,110 +297,111 @@ namespace mar {
 				}
 				else if (line.find("#CameraComponent") != std::string::npos) {
 					auto& cam = currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
+					std::string type;
+					float var;
 
 					// #id - 3
 					std::getline(file, line);
 					std::istringstream iss(line.substr(3));
-					std::string type;
 					iss >> type;
 
 					cam.id = type;
 
-					// #type - 5
+					// #used - 5
 					std::getline(file, line);
 					iss.clear();
 					iss = std::istringstream(line.substr(5));
 					type.clear();
 					iss >> type;
 
-					if (type.find("perspective") != std::string::npos) {
-						cam.Perspective = true;
-						float var;
+					if (type.find("perspective") != std::string::npos) cam.Perspective = true;
+					else cam.Perspective = false;
 
-						// #fov
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(4));
-						iss >> var;
+					// #type - 5
+					std::getline(file, line);
 
-						cam.p_fov = var;
+					// #fov
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(4));
+					iss >> var;
 
-						// #aspectratio
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(12));
-						iss >> var;
+					cam.p_fov = var;
 
-						cam.p_aspectRatio = var;
+					// #aspectratio
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(12));
+					iss >> var;
 
-						// #near
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(5));
-						iss >> var;
+					cam.p_aspectRatio = var;
 
-						cam.p_near = var;
+					// #near
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(5));
+					iss >> var;
 
-						// #far
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(4));
-						iss >> var;
+					cam.p_near = var;
 
-						cam.p_far = var;
-					}
-					else if (type.find("orthographic") != std::string::npos) {
-						cam.Perspective = false;
-						float var;
+					// #far
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(4));
+					iss >> var;
 
-						// #left
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(5));
-						iss >> var;
+					cam.p_far = var;
+					
+					// #type - 5
+					std::getline(file, line);
 
-						cam.o_left = var;
+					// #left
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(5));
+					iss >> var;
 
-						// #right
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(6));
-						iss >> var;
+					cam.o_left = var;
 
-						cam.o_right = var;
+					// #right
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(6));
+					iss >> var;
 
-						// #top
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(4));
-						iss >> var;
+					cam.o_right = var;
 
-						cam.o_top = var;
+					// #top
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(4));
+					iss >> var;
 
-						// #bottom
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(7));
-						iss >> var;
+					cam.o_top = var;
 
-						cam.o_bottom = var;
+					// #bottom
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(7));
+					iss >> var;
 
-						// #near
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(5));
-						iss >> var;
+					cam.o_bottom = var;
 
-						cam.o_near = var;
+					// #near
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(5));
+					iss >> var;
 
-						// #far
-						std::getline(file, line);
-						iss.clear();
-						iss = std::istringstream(line.substr(4));
-						iss >> var;
+					cam.o_near = var;
 
-						cam.o_far = var;
-					}
+					// #far
+					std::getline(file, line);
+					iss.clear();
+					iss = std::istringstream(line.substr(4));
+					iss >> var;
+
+					cam.o_far = var;
 
 					if (cam.id.find("main") != std::string::npos) {
 						if (cam.Perspective) {

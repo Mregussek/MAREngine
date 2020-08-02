@@ -59,24 +59,33 @@ namespace mar {
 		}
 
 		void Scene::update() {
+			typedef maths::Trig trig;
+			static maths::vec3 front;
+
 			auto view = getView<CameraComponent>();
 			for (auto entity : view) {
-				auto& tran = getComponent<TransformComponent>(entity);
 				auto& cam = getComponent<CameraComponent>(entity);
 
 				if (cam.id.find("main") == std::string::npos) continue;
+
+				auto& tran = getComponent<TransformComponent>(entity);
+
+				front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
+				front.y = trig::sine(trig::toRadians(tran.angles.x));
+				front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
+				front = maths::vec3::normalize(front);
 
 				scene_camera.position = tran.center;
 				scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
 				scene_camera.view = maths::mat4::lookAt(
 					tran.center,
-					{ 0.f, 0.f, -1.f },
+					tran.center + front,
 					{ 0.f, 1.0f, 0.f }
 				);
 
 				if (cam.Perspective) {
 					scene_camera.projection = maths::mat4::perspective(
-						maths::Trig::toRadians(cam.p_fov),
+						trig::toRadians(cam.p_fov),
 						cam.p_aspectRatio,
 						cam.p_near,
 						cam.p_far

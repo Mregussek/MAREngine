@@ -24,18 +24,16 @@ namespace mar {
 		void MAREngine::run() {
 			layers::LayerStack m_stack;
 
-			auto gui_layer = new layers::LayerGUI("Default GUI Layer");
-			gui_layer->initialize();
-
-			m_stack.pushOverlay(gui_layer);
-			
 			auto entitylayer = new layers::EntityLayer("Entity Layer");
 			auto scene = editor::Filesystem::openFile(m_pathLoad.c_str());
 			entitylayer->initialize(scene);
-			gui_layer->getGUIInstance()->submit(scene);
 			m_stack.pushLayer(entitylayer);
 
-			scene->useEditorCamera = true;
+			auto gui_layer = new layers::LayerGUI("Default GUI Layer");
+			gui_layer->initialize();
+			gui_layer->getGUIInstance()->submit(scene);
+			m_stack.pushOverlay(gui_layer);
+
 			auto& framebuffer = gui_layer->getGUIInstance()->getFramebuffer();
 
 			//////////////////////////////////////////////////////

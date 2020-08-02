@@ -292,6 +292,7 @@ namespace mar {
 
 		void GUI::submit(ecs::Scene* scene) {
 			m_scene = scene;
+			m_scene->useEditorCamera = true;
 
 			EDITOR_INFO("GUI: scene has been submitted!");
 		}
@@ -460,10 +461,10 @@ namespace mar {
 				static float last_general;
 				last_general = tran.general_scale;
 
-				ImGui::SliderFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), -15.0f, 15.0f, "%.2f", 1.f);
-				ImGui::SliderFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), -360.f, 360.f, "%.2f", 1.f);
-				ImGui::SliderFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.f, 2.0f, "%.2f", 1.f);
-				ImGui::SliderFloat("GeneralScale", &tran.general_scale, 0.001f, 2.f, "%.3f", 1.f);
+				ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -100.0f, 100.0f, "%.2f", 1.f);
+				ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f);
+				ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.5f, 0.f, 2.0f, "%.2f", 1.f);
+				ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.05f, 0.001f, 2.f, "%.3f", 1.f);
 
 				if (last_general != tran.general_scale) 
 					tran.scale += tran.general_scale - last_general;
@@ -600,7 +601,8 @@ namespace mar {
 
 			static std::vector<const char*> cameras = { "Perspective", "Orthographic" };
 			static int32_t selected = !camcmp.Perspective;
-			static bool use_camera_editor = true; // should use Camera from editor or CameraComponent?
+			static char* input{ (char*)"empty" };
+			static bool use_camera_editor = m_scene->useEditorCamera; // should use Camera from editor or CameraComponent?
 			static bool last_set_value = !use_camera_editor;
 
 			last_set_value = use_camera_editor;
@@ -608,31 +610,41 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
 			ImGui::SameLine();
-			if (camcmp.id.find("main") == std::string::npos)
+			if (camcmp.id.find("main") == std::string::npos) {
 				if (ImGui::Button("Remove Camera")) {
-					
 					m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
 					m_scene->updatedCamera = true;
 					m_scene->useEditorCamera = true;
 					return;
 				}
+			}
+			else {
+				ImGui::SameLine();
+				ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
+			}
+			
+			ImGui::Text("WARNING: If you want to use this camera, make sure\nthat it is the only with \"main\" CameraID!");
 
-			ImGui::SameLine();
-			ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
+			input = (char*)camcmp.id.c_str();
+			ImGui::InputText("CameraID", input, 30);
+			camcmp.id = std::string(input);
 
-			ImGui::Text("CamID: ");
-			ImGui::SameLine();
-			ImGui::Text(camcmp.id.c_str());
 			ImGui::Combo("Camera Type", &selected, cameras.data(), 2);
 
 			if (selected == 0) camcmp.Perspective = true;
 			else camcmp.Perspective = false;
 			
 			if (camcmp.Perspective) {
-				ImGui::SliderFloat("FOV", &camcmp.p_fov, 1.f, 90.f);
-				ImGui::SliderFloat("AspectRatio", &camcmp.p_aspectRatio, 1.f, 10.f);
-				ImGui::SliderFloat("Near", &camcmp.p_near, 0.001f, 5.f);
-				ImGui::SliderFloat("Far", &camcmp.p_far, 5.001f, 150.f);
+				ImGui::DragFloat("AspectRatio", &camcmp.p_aspectRatio, 0.1f, 1.f, 10.f);
+				if (ImGui::Button("Set 16:9")) camcmp.p_aspectRatio = 16.f / 9.f;
+				ImGui::SameLine();
+				if (ImGui::Button("Set 8:5")) camcmp.p_aspectRatio = 8.f / 5.f;
+				ImGui::SameLine();
+				if (ImGui::Button("Set 4:3")) camcmp.p_aspectRatio = 4.f / 3.f;
+
+				ImGui::DragFloat("Field Of View", &camcmp.p_fov, 0.1f, 1.f, 90.f);
+				ImGui::DragFloat("Near", &camcmp.p_near, 0.01f, 0.001f, 150.f);
+				ImGui::DragFloat("Far", &camcmp.p_far, 0.1f, 0.001f, 150.f);
 				m_scene->scene_camera.projection = maths::mat4::perspective(
 					maths::Trig::toRadians(camcmp.p_fov),
 					camcmp.p_aspectRatio,
@@ -641,12 +653,12 @@ namespace mar {
 				);
 			} 
 			else {
-				ImGui::SliderFloat("Left", &camcmp.o_left, 0.001f, 10.f);
-				ImGui::SliderFloat("Right", &camcmp.o_right, 0.001f, 10.f);
-				ImGui::SliderFloat("Top", &camcmp.o_top, 0.001f, 10.f);
-				ImGui::SliderFloat("Bottom", &camcmp.o_bottom, 0.001f, 10.f);
-				ImGui::SliderFloat("Near", &camcmp.o_near, 0.001f, 5.f);
-				ImGui::SliderFloat("Far", &camcmp.o_far, 5.001f, 150.f);
+				ImGui::DragFloat("Left", &camcmp.o_left, 0.1f, -100.f, 100.f);
+				ImGui::DragFloat("Right", &camcmp.o_right, 0.1f, -100.f, 100.f);
+				ImGui::DragFloat("Top", &camcmp.o_top, 0.1f, -100.f, 100.f);
+				ImGui::DragFloat("Bottom", &camcmp.o_bottom, 0.1f, -100.f, 100.f);
+				ImGui::DragFloat("Near", &camcmp.o_near, 0.1f, 0.001f, 150.f);
+				ImGui::DragFloat("Far", &camcmp.o_far, 0.1f, 0.001f, 150.f);
 				m_scene->scene_camera.projection = maths::mat4::orthographic(
 					camcmp.o_left,
 					camcmp.o_right,
@@ -658,30 +670,15 @@ namespace mar {
 			}
 
 			if (last_set_value == use_camera_editor) {
+				m_scene->updatedCamera = false;
 				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component (returned because no change!)");
 				return;
 			}
 
-			if (use_camera_editor) {
-				m_scene->useEditorCamera = true;
-				m_scene->updatedCamera = true;
-			}
-			else {
-				auto& tran = m_scene->entities[m_indexEntity].getComponent<ecs::TransformComponent>();
-
-				m_scene->scene_camera.position = tran.center;
-
-				m_scene->scene_camera.view = maths::mat4::lookAt(
-					tran.center, 
-					{ 0.f, 0.f, -1.f },
-					{ 0.f, 1.0f, 0.f }
-				);
-
-				m_scene->scene_camera.model = maths::mat4::translation({0.f, 0.f, 0.f});
-
-				m_scene->useEditorCamera = false;
-				m_scene->updatedCamera = true;
-			}
+			if (use_camera_editor) m_scene->useEditorCamera = true;
+			else m_scene->useEditorCamera = false;
+			
+			m_scene->updatedCamera = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
@@ -720,14 +717,14 @@ namespace mar {
 
 			auto& light = m_scene->entities[m_indexEntity].getComponent<ecs::LightComponent>();
 
-			ImGui::SliderFloat3("Ambient Light", &light.ambient.x, 0.f, 1.f);
-			ImGui::SliderFloat3("Diffuse Light", &light.diffuse.x, 0.f, 1.f);
-			ImGui::SliderFloat3("Specular Light", &light.specular.x, 0.f, 1.f);
-
-			ImGui::SliderFloat("Constant", &light.constant, 0.f, 2.f);
-			ImGui::SliderFloat("Linear", &light.linear, 0.f, 0.5f);
-			ImGui::SliderFloat("Quadratic", &light.quadratic, 0.f, 0.1f);
-			ImGui::SliderFloat("Shininess", &light.shininess, 0.f, 256.f);
+			ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f);
+			ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f);
+			ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f);
+				   
+			ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f);
+			ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f);
+			ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f);
+			ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f);
 
 			if (window_focused)
 				m_scene->updatedLight = true;

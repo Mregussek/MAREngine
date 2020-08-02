@@ -281,17 +281,19 @@ namespace mar {
 				m_cameraModel = camdata.model;
 				m_cameraMVP = camdata.mvp;
 				m_cameraCenter = camdata.position;
-			}
-			else {
-				auto& camdata = scene->scene_camera;
 
-				m_cameraModel = camdata.model;
-				m_cameraMVP = camdata.projection * camdata.view * camdata.model;
-				m_cameraCenter = camdata.position;
-			}
-			
+				GRAPHICS_TRACE("RENDERERENTITY: updated camera (using Editor Camera)!");
 
-			GRAPHICS_TRACE("RENDERERENTITY: updated camera!");
+				return;
+			}
+
+			auto& camdata = scene->scene_camera;
+
+			m_cameraModel = camdata.model;
+			m_cameraMVP = camdata.projection * camdata.view * camdata.model;
+			m_cameraCenter = camdata.position;
+
+			GRAPHICS_TRACE("RENDERERENTITY: updated camera - used SceneCamera!");
 		}
 
 

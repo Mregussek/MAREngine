@@ -210,7 +210,10 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererColors.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RendererTextures.h">
+    <ClInclude Include="src\Core\graphics\Renderer\RendererTextures2D.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\Renderer\RendererCubemaps.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,18 +10,18 @@ namespace mar {
     namespace editor {
 
 
-		const float CameraSettings::YAW = -90.0f;
+		const float CameraSettings::YAW = 0.0f;
 		const float CameraSettings::PITCH = 0.0f;
 		const float CameraSettings::SPEED = 5.0f;
 		const float CameraSettings::SENSITIVITY = 0.1f;
 		const float CameraSettings::ZOOM = 55.0f;
-		const maths::vec3 CameraSettings::CAMERA_START{ 0.0f, 0.0f, 7.0f };
+		const maths::vec3 CameraSettings::CAMERA_START{ -1.0f, 2.0f, 0.0f };
 
 		CameraData Camera::s_cameraData;
 
 		Camera::Camera()
 			: m_position(CameraSettings::CAMERA_START),
-			m_front({ 0.0f, 0.0f, -1.0f }),
+			m_front({ -1.0f, 0.0f, 0.0f }),
 			m_worldUp({ 0.0f, 1.0f, 0.0f }),
 			m_movementSpeed(CameraSettings::SPEED),
 			m_mouseSensitivity(CameraSettings::SENSITIVITY),
