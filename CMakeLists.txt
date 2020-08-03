@@ -5,6 +5,43 @@
 
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(MAREngine)
+set(MARENGINE_NAME "MAREngine")
+
+# -------------------------------------------------------------
+# EditorMAR setup
+# -------------------------------------------------------------
+set(EDITORMAR_NAME "EditorMAR")
+file(GLOB_RECURSE EDITORMAR_SOURCE_FILES
+	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.c
+	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.cpp
+)
+
+file(GLOB_RECURSE EDITORMAR_HEADER_FILES 
+	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.h
+	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.hpp
+)
+
+set(MAIN_EDITORMAR_FILE ${CMAKE_SOURCE_DIR}/EditorMAR/main.cpp)
+
+set(EDITORMAR_FILES ${EDITORMAR_SOURCE_FILES} ${EDITORMAR_HEADER_FILES} ${MAIN_EDITORMAR_FILE}) 
+
+# -------------------------------------------------------------
+# SandboxMAR setup
+# -------------------------------------------------------------
+set(SANDBOXMAR_NAME "SandboxMAR")
+file(GLOB_RECURSE SANDBOXMAR_SOURCE_FILES
+	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.c
+	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.cpp
+)
+
+file(GLOB_RECURSE SANDBOXMAR_HEADER_FILES 
+	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.h
+	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.hpp
+)
+
+set(MAIN_SANDBOXMAR_FILE ${CMAKE_SOURCE_DIR}/SandboxMAR/main.cpp)
+
+set(SANDBOXMAR_FILES ${SANDBOXMAR_SOURCE_FILES} ${SANDBOXMAR_HEADER_FILES} ${MAIN_SANDBOXMAR_FILE}) 
 
 # -------------------------------------------------------------
 # MAREngine source files
@@ -17,8 +54,9 @@ file(GLOB_RECURSE HEADER_FILES
 	${CMAKE_SOURCE_DIR}/src/*.h
 	${CMAKE_SOURCE_DIR}/src/*.hpp)
 
-set(MAIN_MAR_ENGINE_FILE ${CMAKE_SOURCE_DIR}/main.cpp)
-set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES} ${MAIN_MAR_ENGINE_FILE})
+set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES})
+
+set(MARENGINE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 
 # -------------------------------------------------------------
 # Include statically other libs
@@ -153,6 +191,13 @@ set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
 message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
+# pybind11
+# -------------------------------------------------------------
+#message("Looking for: pybind11")
+#add_subdirectory(${CMAKE_SOURCE_DIR}/3rd_party/pybind11)
+#pybind11_add_module()
+
+# -------------------------------------------------------------
 # SerialPort
 # -------------------------------------------------------------
 message("Looking for: SerialPort")
@@ -174,6 +219,7 @@ include_directories(
 	${STB_IMAGE_INCLUDE_DIR}
 	${SPDLOG_INCLUDE_DIR}
 	${ENTT_INCLUDE_DIR}
+	${MARENGINE_INCLUDE_DIR}
 )
 
 # -------------------------------------------------------------
@@ -182,21 +228,38 @@ include_directories(
 link_directories(
     ${CMAKE_SOURCE_DIR}/3rd_party/GL/lib
     ${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
+	${CMAKE_SOURCE_DIR}/bin/Release/Win32/Engine
 )
 
 # -------------------------------------------------------------
 # Create executable
 # -------------------------------------------------------------
 message("Creating executable...")
-if(MSVC)
-	add_executable(${PROJECT_NAME} ${MAR_ENGINE_FILES} 
+
+set(ALL_INCLUDE_FILES_MARENGINE ${MAR_ENGINE_FILES} 
 		${IMGUI_FILES} ${IMGUIZMO_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${MAR_MATH_FILES} ${ENTT_FILES}
-	)
+)
+
+if(MSVC)
+	message("Creating ${MARENGINE_NAME} library...")
+	add_library(${MARENGINE_NAME} ${ALL_INCLUDE_FILES_MARENGINE})
 	
-	message("Linking libraries to MAREngine")
-	target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+	message("Linking libraries to ${MARENGINE_NAME}")
+	target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
 	set(MAR_OPENGL_IMPORT opengl32 glew32s glfw3)
-	target_link_libraries ( ${PROJECT_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
+	target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
+
+	message("Creating ${EDITORMAR_NAME} executable...")
+	add_executable(${EDITORMAR_NAME} ${ALL_INCLUDE_FILES_MARENGINE} ${EDITORMAR_FILES} ${MARENGINE_INCLUDE_DIR})
+	message("Linking libraries to ${EDITORMAR_NAME}")
+	target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
+	target_link_libraries ( ${EDITORMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
+
+	message("Creating ${SANDBOXMAR_NAME} executable...")
+	add_executable(${SANDBOXMAR_NAME} ${ALL_INCLUDE_FILES_MARENGINE} ${SANDBOXMAR_FILES} ${MARENGINE_INCLUDE_DIR})
+	message("Linking libraries to ${SANDBOXMAR_NAME}")
+	target_compile_features(${SANDBOXMAR_NAME} PRIVATE cxx_std_17)
+	target_link_libraries ( ${SANDBOXMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
 
 # -------------------------------------------------------------
 # Ignore dynamic linking

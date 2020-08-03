@@ -747,7 +747,7 @@ namespace mar {
 			auto& cubemap = m_scene->entities[m_indexEntity].getComponent<ecs::TextureCubemapComponent>();
 
 			ImGui::Separator();
-			ImGui::Text("Texture2DComponent\n");
+			ImGui::Text("CubemapComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);

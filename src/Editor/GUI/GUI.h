@@ -10,7 +10,7 @@
 #include "../EditorLogging.h"
 #include "../Camera/Camera.h"
 
-#include "../../MAREngine.h"
+#include "../../Engine.h"
 #include "../../Window/Window.h"
 
 #include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBuffer.h"

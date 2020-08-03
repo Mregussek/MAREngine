@@ -43,7 +43,23 @@ git clone --recurse-submodules https://github.com/mregussek/MAREngine.git
   <img width="382" height="50" src="img/x86.jpg">
 </p>
 
-4. Compile ;)
+4. Firstly you will have to compile *MAREngine* in order to create static library.
+
+<p align="center">
+  <img width="300" height="175" src="img/compile-library.jpg">
+</p>
+<p align="center">
+  <img width="350" height="50" src="img/compile-library-explicit.jpg">
+</p>
+
+5. If library is compiled succesfully you should find ${SolutionDir}/bin/Release/Engine/MAREngine.lib file. 
+Now you can compile either EditorMAR or SandboxMAR. Choose, which one you want to use with *Compile Again* option.
+
+<p align="center">
+  <img width="350" height="100" src="img/compile-again-editor.jpg">
+</p>
+
+6. Have fun! ;)
 
 ### #2 CMake on Windows
 
@@ -76,7 +92,9 @@ Examples:
 
 6. Press **Finish**. CMake will generate all needed files.
 7. Select **Open Project** button. You will be able to compile project.
-8. Select **MAREngine** as a starting project. Then project should be marked as bold.
+8. Select **EditorMAR** or **SandboxMAR** as a starting project. Then project should be marked as bold.
+EditorMAR and SandboxMAR are compiled for being executable files, MAREngine on the other hand is a library, so its
+compilation will create static library.
 
 <p align="center">
   <img width="300" height="175" src="img/starting.jpg">
