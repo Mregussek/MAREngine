@@ -30,16 +30,6 @@ namespace mar {
 			// Delete all existing textures
 			void shutdown();
 
-		private:
-			/*
-			Method generates new id for texture.
-
-				\param path - path to texture, which will be loaded
-				\return id - id for new loaded texture
-			*/
-			uint32_t genNewTexture(const char* path);
-
-		public:
 			/*
 			Load 2D texture and prescribe it to available index. If texture is loaded
 			it pushes its index again.
@@ -49,16 +39,6 @@ namespace mar {
 			*/
 			float loadTexture(const std::string& path);
 
-		private:
-			/*
-			Method generates new id for cubemap. Must be overloaded!
-
-				\param faces - paths to textures, which will be loaded
-				\return id - id for new loaded cubemap
-			*/
-			uint32_t genNewCubemap(const char* path);
-
-		public:
 			/*
 			Method loads Cube Map and prescribe it to available index.
 			Method must be overloaded!
@@ -75,13 +55,29 @@ namespace mar {
 			*/
 			void bind(const int32_t& texture_type, const uint32_t& unit, const uint32_t& texID) const;
 
-			// Set default texture for each shape
+			// Unbind texture
 			void unbind() const;
 
 			const uint32_t& getTexture(const std::string& key) const { return m_2d.at(key); }
 
 			const uint32_t& getCubemap(const std::string& key) const { return m_cubemaps.at(key); }
-		
+
+		private:
+			/*
+			Method generates new id for texture.
+
+				\param path - path to texture, which will be loaded
+				\return id - id for new loaded texture
+			*/
+			uint32_t genNewTexture(const char* path);
+
+			/*
+			Method generates new id for cubemap. Must be overloaded!
+
+				\param faces - paths to textures, which will be loaded
+				\return id - id for new loaded cubemap
+			*/
+			uint32_t genNewCubemap(const char* path);
 		};
 
 

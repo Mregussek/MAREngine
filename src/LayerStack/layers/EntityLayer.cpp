@@ -25,12 +25,13 @@ namespace mar {
 				m_scene = scene;
 			else
 				m_scene = new ecs::Scene("EmptyScene");
+
+			m_scene->initialize();
 		}
 
 		void EntityLayer::update() {
 			m_scene->update();
-			m_renderer->submit(m_scene);
-			m_renderer->update();
+			m_renderer->update(m_scene);
 		}
 
 		void EntityLayer::closeLayer() {

@@ -31,12 +31,6 @@ namespace mar {
 			m_shaderTextures2D.initialize(SHADER_ENTITY_TEXTURE2D);
 			m_shaderCubemaps.initialize(SHADER_ENTITY_CUBEMAP);
 
-			m_stride = 3 + 3 + 2 + 1;
-
-			m_lastSize = 0;
-
-			clear();
-
 			GRAPHICS_INFO("RENDERERENTITY: initialized!");
 		}
 
@@ -52,199 +46,67 @@ namespace mar {
 			GRAPHICS_INFO("RENDERERENTITY: closed!");
 		}
 
-		void RendererEntity::submit(ecs::Scene* scene) {
-			if (m_lastSize == scene->entities.size()) {
-				if (scene->updatedBuffers || scene->updatedTextures2D || scene->updatedTexturesCubemap)
-					goto resubmit_all;
+		void RendererEntity::update(ecs::Scene* scene) {
+			auto& colors = scene->getColorsStorage();
+			auto& cubemaps = scene->getCubemapStorage();
+			auto& textures = scene->getTexturesStorage();
 
-				if (scene->updatedTransforms)
-					updateTransforms(scene);
-
-				scene->updatedTransforms = false;
-
-				if (scene->updatedColors)
-					updateColors(scene);
-
-				scene->updatedColors = false;
-
-				if (scene->updatedLight)
-					updateLight(scene);
-				
-				scene->updatedLight = false;
-
-				updateCamera(scene);
-
-				m_lastSizeSet = false;
-				return;
-			}
-				
-		resubmit_all:
-
-			scene->updatedBuffers = false;
-			scene->updatedTextures2D = false;
-			scene->updatedTexturesCubemap = false;
-
-			m_lastSize = scene->entities.size();
-			m_lastSizeSet = true;
-
-			clear();
-
-			updateLight(scene);
-			updateCamera(scene);
-
-			for (auto& entity : scene->entities)
-				submitEntity(entity);
-
-			GRAPHICS_TRACE("RENDERERENTITY: submitted scene!");
-		}
-
-		void RendererEntity::submitEntity(ecs::Entity& entity) {
-			if (!entity.hasComponent<ecs::RenderableComponent>())
-				return;
-
-			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
-			auto& tran = entity.getComponent<ecs::TransformComponent>();
-
-			if (entity.hasComponent<ecs::ColorComponent>()) {
-				auto& color = entity.getComponent<ecs::ColorComponent>();
-
-				m_storageColor.transforms.push_back(tran.transform);
-				submitVerticesIndices(renderable, m_storageColor.vertices, m_storageColor.indices, m_storageColor.indicesMax, m_storageColor.counter, m_stride);
-
-				m_storageColor.samplers.push_back(color);
-				m_storageColor.counter++;
-
-				GRAPHICS_TRACE("RENDERERENTITY: during submition added ColorComponent!");
-			}
-			
-			if (entity.hasComponent<ecs::Texture2DComponent>()) {
-				auto& texture = entity.getComponent<ecs::Texture2DComponent>();
-
-				m_textures.push_back(texture.texture);
-
-				float id = m_texture.loadTexture(texture.texture);
-
-				m_storageTexture2D.transforms.push_back(tran.transform);
-				submitVerticesIndices(renderable, m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.indicesMax, m_storageTexture2D.counter, m_stride);
-
-				m_storageTexture2D.samplers.push_back(m_storageTexture2D.counter);
-				m_storageTexture2D.counter++;
-
-				GRAPHICS_TRACE("RENDERERENTITY: during submition added Texture2DComponent!");
+			if (!colors.vertices.empty()) {
+				draw(colors,
+					 scene->getRenderCamera(),
+					 scene->getLightStorage(),
+					 m_shaderColor
+				);
 			}
 
-			if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
-				auto& cubemap = entity.getComponent<ecs::TextureCubemapComponent>();
-
-				m_cubemaps.push_back(cubemap.cubemap);
-
-				float id = m_texture.loadCubemap(cubemap.cubemap);
-
-				m_storageCubemap.transforms.push_back(tran.transform);
-				submitVerticesIndices(renderable, m_storageCubemap.vertices, m_storageCubemap.indices, m_storageCubemap.indicesMax, m_storageCubemap.counter, m_stride);
-
-				m_storageCubemap.samplers.push_back(m_storageCubemap.counter);
-				m_storageCubemap.counter++;
-
-				GRAPHICS_TRACE("RENDERERENTITY: during submition added TextureCubemapComponent!");
+			if(!cubemaps.vertices.empty()) {
+				draw(cubemaps,
+					 scene->getRenderCamera(),
+					 scene->getLightStorage(), 
+					 scene->getTextureInstance(),
+					 m_shaderCubemaps, GL_TEXTURE_CUBE_MAP
+				);
 			}
 
-			GRAPHICS_TRACE("RENDERERENTITY: submitted Entity!");
-		}
-
-		void RendererEntity::submitVerticesIndices(ecs::RenderableComponent& ren, std::vector<float>& vertices, 
-			std::vector<uint32_t>& indices, uint32_t& indicesmax, int32_t& counter, uint32_t& stride)
-		{
-			std::vector<uint32_t> copy = ren.indices;
-
-			ShapeManipulator::extendShapeID(ren.vertices, stride, (float)counter);
-			ShapeManipulator::extendIndices(copy, indicesmax);
-
-			vertices.insert(vertices.end(), ren.vertices.begin(), ren.vertices.end());
-			indices.insert(indices.end(), copy.begin(), copy.end());
-
-			indicesmax += ren.vertices.size() / stride;
-		
-			GRAPHICS_TRACE("RENDERERENTITY: submitted renderable component!");
-		}
-
-		void RendererEntity::update() {
-			if (!m_storageColor.vertices.empty()) {
-				draw(m_storageColor.vertices, m_storageColor.indices, m_storageColor.transforms, m_storageColor.samplers, m_shaderColor);
-			}
-
-			if(!m_storageCubemap.vertices.empty()) {
-				draw(m_storageCubemap.vertices, m_storageCubemap.indices, m_storageCubemap.transforms, 
-					m_storageCubemap.samplers, m_shaderCubemaps, GL_TEXTURE_CUBE_MAP, m_cubemaps);
-			}
-
-			if (!m_storageTexture2D.vertices.empty()) {
-				draw(m_storageTexture2D.vertices, m_storageTexture2D.indices, m_storageTexture2D.transforms,
-					m_storageTexture2D.samplers, m_shaderTextures2D, GL_TEXTURE_2D, m_textures);
+			if (!textures.vertices.empty()) {
+				draw(textures,
+					 scene->getRenderCamera(),
+					 scene->getLightStorage(), 
+					 scene->getTextureInstance(),
+					 m_shaderTextures2D, GL_TEXTURE_2D
+				);
 			}
 
 			GRAPHICS_INFO("RENDERERENTITY: Draw calls finished for this scene!");
 		}
 
-		void RendererEntity::clear() {
-			if (!m_lastSizeSet)
-				return;
-
-			m_storageColor.vertices.clear();
-			m_storageColor.indices.clear();
-			m_storageColor.transforms.clear();
-			m_storageColor.samplers.clear();
-			m_storageColor.counter = 0;
-			m_storageColor.indicesMax = 0;
-
-			m_textures.clear();
-			m_storageTexture2D.vertices.clear();
-			m_storageTexture2D.indices.clear();
-			m_storageTexture2D.transforms.clear();
-			m_storageTexture2D.samplers.clear();
-			m_storageTexture2D.counter = 0;
-			m_storageTexture2D.indicesMax = 0;
-
-			m_cubemaps.clear();
-			m_storageCubemap.vertices.clear();
-			m_storageCubemap.indices.clear();
-			m_storageCubemap.transforms.clear();
-			m_storageCubemap.samplers.clear();
-			m_storageCubemap.counter = 0;
-			m_storageCubemap.indicesMax = 0;
-
-			GRAPHICS_TRACE("RENDERERENTITY: called clear method!");
-		}
-
-		void RendererEntity::draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
-			const std::vector<maths::mat4>& transforms, const std::vector<maths::vec3>& samplers, ShaderOpenGL& shader)
+		void RendererEntity::draw(
+			const ecs::SceneStorage<maths::vec3>& storage, const RenderCamera& camera,
+			const ecs::LightStorage& light, ShaderOpenGL& shader)
 		{
 			GRAPHICS_TRACE("RENDERER: is preparing to draw!");
-
-			s_stats.verticesCount += vertices.size();
-			s_stats.indicesCount += indices.size();
 
 			{ // SEND ALL DATA TO SHADERS
 				shader.bind();
 
-				passLightToShader(shader);
-				passCameraToShader(shader);
+				passLightToShader(shader, light);
+				passCameraToShader(shader, camera);
 
-				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
-				shader.setUniformVectorVec3("u_SeparateColor", samplers);
+				shader.setUniformVectorMat4("u_SeparateTransform", storage.transforms);
+				shader.setUniformVectorVec3("u_SeparateColor", storage.samplers);
 			}
 			
 			{ // BIND ALL NEEDED BUFFERS
 				m_vao.bind();
 
 				m_vbo.bind();
-				m_vbo.updateDynamically(vertices);
+				m_vbo.updateDynamically(storage.vertices);
 
 				m_ebo.bind();
-				m_ebo.update(indices);
+				m_ebo.update(storage.indices);
 			}
 			
-			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr) );
+			MAR_CORE_GL_FUNC( glDrawElements(GL_TRIANGLES, storage.indices.size(), GL_UNSIGNED_INT, nullptr) );
 
 			{ // UNBIND ALREADY DRAWN BUFFERS
 				m_vbo.resetBuffer();
@@ -256,6 +118,8 @@ namespace mar {
 				m_vao.unbind();
 			}
 
+			s_stats.verticesCount += storage.vertices.size();
+			s_stats.indicesCount += storage.indices.size();
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
 
@@ -263,42 +127,42 @@ namespace mar {
 			GRAPHICS_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
 		}
 
-		void RendererEntity::draw(const std::vector<float>& vertices, const std::vector<uint32_t>& indices,
-			const std::vector<maths::mat4>& transforms, const std::vector<int32_t>& samplers, 
-			ShaderOpenGL& shader, const int32_t& texture_type, const std::vector<std::string>& texture_names)
+		void RendererEntity::draw(const ecs::SceneStorage<int32_t>& storage, 
+			const RenderCamera& camera, const ecs::LightStorage& light, const TextureOpenGL& texture,
+			ShaderOpenGL& shader, const int32_t& texture_type)
 		{
 			GRAPHICS_TRACE("RENDERER: is preparing to draw!");
 
 			{ // BIND TEXTURES
 				if(texture_type == GL_TEXTURE_2D)
-					for (int32_t i = 0; i < samplers.size(); i++) 
-						m_texture.bind(texture_type, samplers[i], m_texture.getTexture(texture_names[i]));
+					for (int32_t i = 0; i < storage.samplers.size(); i++)
+						texture.bind(texture_type, storage.samplers[i], texture.getTexture(storage.paths[i]));
 				else if(texture_type == GL_TEXTURE_CUBE_MAP)
-					for (int32_t i = 0; i < samplers.size(); i++)
-						m_texture.bind(texture_type, samplers[i], m_texture.getCubemap(texture_names[i]));
+					for (int32_t i = 0; i < storage.samplers.size(); i++)
+						texture.bind(texture_type, storage.samplers[i], texture.getCubemap(storage.paths[i]));
 			}
 
 			{ // SEND ALL DATA TO SHADERS
 				shader.bind();
 
-				passLightToShader(shader);
-				passCameraToShader(shader);
+				passLightToShader(shader, light);
+				passCameraToShader(shader, camera);
 
-				shader.setUniformVectorMat4("u_SeparateTransform", transforms);
-				shader.setUniformSampler("u_SeparateColor", samplers);
+				shader.setUniformVectorMat4("u_SeparateTransform", storage.transforms);
+				shader.setUniformSampler("u_SeparateColor", storage.samplers);
 			}
 
 			{ // BIND ALL NEEDED BUFFERS
 				m_vao.bind();
 
 				m_vbo.bind();
-				m_vbo.updateDynamically(vertices);
+				m_vbo.updateDynamically(storage.vertices);
 
 				m_ebo.bind();
-				m_ebo.update(indices);
+				m_ebo.update(storage.indices);
 			}
 
-			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr));
+			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, storage.indices.size(), GL_UNSIGNED_INT, nullptr));
 
 			{ // UNBIND ALREADY DRAWN BUFFERS
 				m_vbo.resetBuffer();
@@ -310,8 +174,8 @@ namespace mar {
 				m_vao.unbind();
 			}
 
-			s_stats.verticesCount += vertices.size();
-			s_stats.indicesCount += indices.size();
+			s_stats.verticesCount += storage.vertices.size();
+			s_stats.indicesCount += storage.indices.size();
 
 			s_stats.drawCallsCount += 1;
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
@@ -320,34 +184,34 @@ namespace mar {
 			GRAPHICS_INFO("Draw Call: " + std::to_string(s_stats.drawCallsCount));
 		}
 
-		void RendererEntity::passLightToShader(ShaderOpenGL& shader) {
-			MAR_CORE_ASSERT(m_lightPositions.size() == m_lightComponents.size(), "Light positions are not equal to light components!");
+		void RendererEntity::passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light) {
+			MAR_CORE_ASSERT(light.positions.size() == light.components.size(), "Light positions are not equal to light components!");
 			
 			using namespace ShaderUniforms;
 
-			for (size_t i = 0; i < m_lightPositions.size(); i++) {
-				shader.setUniformVector3(u_material[i].lightPos, m_lightPositions[i]);
+			for (size_t i = 0; i < light.components.size(); i++) {
+				shader.setUniformVector3(u_material[i].lightPos, light.positions[i]);
 
-				shader.setUniformVector3(u_material[i].ambient, m_lightComponents[i].ambient);
-				shader.setUniformVector3(u_material[i].diffuse, m_lightComponents[i].diffuse);
-				shader.setUniformVector3(u_material[i].specular, m_lightComponents[i].specular);
+				shader.setUniformVector3(u_material[i].ambient, light.components[i].ambient);
+				shader.setUniformVector3(u_material[i].diffuse, light.components[i].diffuse);
+				shader.setUniformVector3(u_material[i].specular, light.components[i].specular);
 
-				shader.setUniform1f(u_material[i].shininess, m_lightComponents[i].shininess);
+				shader.setUniform1f(u_material[i].shininess, light.components[i].shininess);
 
-				shader.setUniform1f(u_material[i].constant, m_lightComponents[i].constant);
-				shader.setUniform1f(u_material[i].linear, m_lightComponents[i].linear);
-				shader.setUniform1f(u_material[i].quadratic, m_lightComponents[i].quadratic);
+				shader.setUniform1f(u_material[i].constant, light.components[i].constant);
+				shader.setUniform1f(u_material[i].linear, light.components[i].linear);
+				shader.setUniform1f(u_material[i].quadratic, light.components[i].quadratic);
 			}
 
-			shader.setUniform1i(u_materialSize, m_lightPositions.size());
+			shader.setUniform1i(u_materialSize, light.positions.size());
 
 			GRAPHICS_TRACE("RENDERERENTITY: passed light to shader!");
 		}
 
-		void RendererEntity::passCameraToShader(ShaderOpenGL& shader) {
-			shader.setUniformVector3("u_CameraPos", m_cameraCenter);
-			shader.setUniformMat4f("u_Model", m_cameraModel);
-			shader.setUniformMat4f("u_MVP", m_cameraMVP);
+		void RendererEntity::passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam) {
+			shader.setUniformVector3("u_CameraPos", cam.position);
+			shader.setUniformMat4f("u_Model", cam.model);
+			shader.setUniformMat4f("u_MVP", cam.mvp);
 			
 			GRAPHICS_TRACE("RENDERERENTITY: passed camera to shader (by values)!");
 		}
@@ -360,72 +224,6 @@ namespace mar {
 			s_stats.resetStatistics();
 
 			GRAPHICS_INFO("RENDERERENTITY: reseting renderer statistics!");
-		}
-
-		void RendererEntity::updateTransforms(ecs::Scene* scene) {
-			m_storageColor.transforms.clear();
-			m_storageTexture2D.transforms.clear();
-			m_storageCubemap.transforms.clear();
-
-			for (auto& entity : scene->entities) {
-				if (entity.hasComponent<ecs::ColorComponent>())
-					m_storageColor.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
-			
-				if (entity.hasComponent<ecs::Texture2DComponent>())
-					m_storageTexture2D.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
-			
-				if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
-					m_storageCubemap.transforms.push_back(entity.getComponent<ecs::TransformComponent>());
-				}
-			}
-
-			GRAPHICS_TRACE("RENDERINGENTITY: updating transforms");
-		}
-
-		void RendererEntity::updateColors(ecs::Scene* scene) {
-			m_storageColor.samplers.clear();
-
-			for (auto& entity : scene->entities)
-				if (entity.hasComponent<ecs::ColorComponent>())
-					m_storageColor.samplers.push_back(entity.getComponent<ecs::ColorComponent>());
-			
-			GRAPHICS_TRACE("RENDERERENTITY: updating colors");
-		}
-
-		void RendererEntity::updateLight(ecs::Scene* scene) {
-			m_lightPositions.clear();
-			m_lightComponents.clear();
-
-			for (auto& entity : scene->entities) {
-				if (entity.hasComponent<ecs::LightComponent>()) {
-					m_lightComponents.push_back(entity.getComponent<ecs::LightComponent>());
-					m_lightPositions.push_back(entity.getComponent<ecs::TransformComponent>().center);
-				}
-			}
-			
-			GRAPHICS_TRACE("RENDERERENTITY: updating light");
-		}
-
-		void RendererEntity::updateCamera(ecs::Scene* scene) {
-			if (scene->useEditorCamera) {
-				auto& camdata = editor::Camera::getCameraData();
-
-				m_cameraModel = camdata.model;
-				m_cameraMVP = camdata.mvp;
-				m_cameraCenter = camdata.position;
-
-				GRAPHICS_TRACE("RENDERERENTITY: updated camera (using Editor Camera)!");
-
-				return;
-			}
-
-			auto& camdata = scene->scene_camera;
-
-			m_cameraModel = camdata.model;
-			m_cameraMVP = camdata.projection * camdata.view * camdata.model;
-			m_cameraCenter = camdata.position;
-
-			GRAPHICS_TRACE("RENDERERENTITY: updated camera - used SceneCamera!");
 		}
 
 

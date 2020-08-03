@@ -29,45 +29,17 @@ namespace mar {
 
 
 		class RendererEntity {
-			// --- STORAGE --- //
-			template<typename T>
-			struct RendererStorage {
-				std::vector<float> vertices;
-				std::vector<uint32_t> indices;
-				std::vector<maths::mat4> transforms;
-				std::vector<T> samplers;
-				int32_t counter;
-				uint32_t indicesMax;
-			};
-
-			RendererStorage<maths::vec3> m_storageColor;
-			std::vector<std::string> m_textures;
-			RendererStorage<int32_t> m_storageTexture2D;
-			std::vector<std::string> m_cubemaps;
-			RendererStorage<int32_t> m_storageCubemap;
-
 			// --- BUFFERS --- //
 			VertexBufferOpenGL m_vbo;
 			VertexBufferLayoutOpenGL m_layout;
 			VertexArrayOpenGL m_vao;
 			ElementBufferOpenGL m_ebo;
-			TextureOpenGL m_texture;
 			ShaderOpenGL m_shaderColor;
 			ShaderOpenGL m_shaderTextures2D;
 			ShaderOpenGL m_shaderCubemaps;
 
 			// --- OTHER --- //
 
-			std::vector<maths::vec3> m_lightPositions;
-			std::vector<ecs::LightComponent> m_lightComponents;
-
-			maths::mat4 m_cameraModel;
-			maths::mat4 m_cameraMVP;
-			maths::vec3 m_cameraCenter;
-
-			uint32_t m_stride;
-			bool m_lastSizeSet;
-			uint32_t m_lastSize;
 			static RendererStatistics s_stats;
 
 		public:
@@ -75,12 +47,8 @@ namespace mar {
 			void initialize();
 
 			void close();
-
-			void submit(ecs::Scene* scene);
 			
-			void update();
-
-			void clear();
+			void update(ecs::Scene* scene);
 
 			// --- STATISTICS --- //
 			
@@ -91,43 +59,24 @@ namespace mar {
 			// --- DRAW METHODS --- //
 
 			void draw(
-				const std::vector<float>& vertices, 
-				const std::vector<uint32_t>& indices,
-				const std::vector<maths::mat4>& transforms, 
-				const std::vector<maths::vec3>& samplers, 
-				ShaderOpenGL& shader
-			);
+				const ecs::SceneStorage<maths::vec3>& storage, 
+				const RenderCamera& camera,
+				const ecs::LightStorage& light,
+				ShaderOpenGL& shader);
 
 			void draw(
-				const std::vector<float>& vertices,
-				const std::vector<uint32_t>& indices,
-				const std::vector<maths::mat4>& transforms,
-				const std::vector<int32_t>& samplers,
+				const ecs::SceneStorage<int32_t>& storage,
+				const RenderCamera& camera,
+				const ecs::LightStorage& light, 
+				const TextureOpenGL& texture,
 				ShaderOpenGL& shader,
-				const int32_t& texture_type,
-				const std::vector<std::string>& texture_names
+				const int32_t& texture_type
 			);
 		
 			// --- OTHER METHODS / HELPERS --- //
 
-			void submitEntity(ecs::Entity& entity);
-
-			static void submitVerticesIndices(
-				ecs::RenderableComponent& ren, 
-				std::vector<float>& vertices, 
-				std::vector<uint32_t>& indices, 
-				uint32_t& indicesmax, 
-				int32_t& counter, 
-				uint32_t& stride
-			);
-
-			void passLightToShader(ShaderOpenGL& shader);
-			void passCameraToShader(ShaderOpenGL& shader);
-		
-			void updateTransforms(ecs::Scene* scene);
-			void updateColors(ecs::Scene* scene);
-			void updateLight(ecs::Scene* scene);
-			void updateCamera(ecs::Scene* scene);
+			void passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light);
+			void passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam);
 		};
 
 

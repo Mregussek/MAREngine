@@ -19,6 +19,8 @@ namespace mar {
 			maths::mat4 view;
 			maths::mat4 model;
 
+			maths::mat4 mvp;
+
 			maths::vec3 position;
 		};
 

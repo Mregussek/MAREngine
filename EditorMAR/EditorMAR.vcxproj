@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
