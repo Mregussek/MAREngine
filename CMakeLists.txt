@@ -12,16 +12,16 @@ set(MARENGINE_NAME "MAREngine")
 # -------------------------------------------------------------
 set(EDITORMAR_NAME "EditorMAR")
 file(GLOB_RECURSE EDITORMAR_SOURCE_FILES
-	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.c
-	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.c
+	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.cpp
 )
 
 file(GLOB_RECURSE EDITORMAR_HEADER_FILES 
-	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.h
-	${CMAKE_SOURCE_DIR}/EditorMAR/src/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.hpp
 )
 
-set(MAIN_EDITORMAR_FILE ${CMAKE_SOURCE_DIR}/EditorMAR/main.cpp)
+set(MAIN_EDITORMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/main.cpp)
 
 set(EDITORMAR_FILES ${EDITORMAR_SOURCE_FILES} ${EDITORMAR_HEADER_FILES} ${MAIN_EDITORMAR_FILE}) 
 
@@ -30,16 +30,16 @@ set(EDITORMAR_FILES ${EDITORMAR_SOURCE_FILES} ${EDITORMAR_HEADER_FILES} ${MAIN_E
 # -------------------------------------------------------------
 set(SANDBOXMAR_NAME "SandboxMAR")
 file(GLOB_RECURSE SANDBOXMAR_SOURCE_FILES
-	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.c
-	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.c
+	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.cpp
 )
 
 file(GLOB_RECURSE SANDBOXMAR_HEADER_FILES 
-	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.h
-	${CMAKE_SOURCE_DIR}/SandboxMAR/src/*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.hpp
 )
 
-set(MAIN_SANDBOXMAR_FILE ${CMAKE_SOURCE_DIR}/SandboxMAR/main.cpp)
+set(MAIN_SANDBOXMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/main.cpp)
 
 set(SANDBOXMAR_FILES ${SANDBOXMAR_SOURCE_FILES} ${SANDBOXMAR_HEADER_FILES} ${MAIN_SANDBOXMAR_FILE}) 
 
@@ -47,16 +47,16 @@ set(SANDBOXMAR_FILES ${SANDBOXMAR_SOURCE_FILES} ${SANDBOXMAR_HEADER_FILES} ${MAI
 # MAREngine source files
 # -------------------------------------------------------------
 file(GLOB_RECURSE SOURCE_FILES 
-	${CMAKE_SOURCE_DIR}/src/*.c
-	${CMAKE_SOURCE_DIR}/src/*.cpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
+	${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 	
 file(GLOB_RECURSE HEADER_FILES 
-	${CMAKE_SOURCE_DIR}/src/*.h
-	${CMAKE_SOURCE_DIR}/src/*.hpp)
+	${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
 
 set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
-set(MARENGINE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
+set(MARENGINE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # -------------------------------------------------------------
 # Include statically other libs
@@ -105,7 +105,7 @@ find_package(GLFW3 REQUIRED)
 if(GLFW3_FOUND)
 	message(STATUS "GLFW_INDLUCE_DIR:= ${GLFW3_INCLUDE_DIR}")
 	message(STATUS "GLFW3_LIBRARY:= ${GLFW3_LIBRARY}")
-	set(MAR_GLFW_DIR "${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include")
+	set(MAR_GLFW_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GLFW/include")
 	message(STATUS "MAR_GLFW_DIR:= ${MAR_GLFW_DIR}")
 else()
 	message(STATUS "Error: Cannot find GLFW3!")
@@ -116,14 +116,32 @@ endif()
 # -------------------------------------------------------------
 message("Looking for: SPDLOG")
 add_subdirectory(3rd_party/spdlog)
-set(SPDLOG_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/spdlog/include")
+set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# MARMaths
+# -------------------------------------------------------------
+message("Looking for: MARMaths")
+set(MAR_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/MARMaths/include")
+set(MAR_MATH_INCLUDE_FILE ${MAR_MATH_INCLUDE_DIR}/MARMaths.h)
+set(MAR_MATH_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/MARMaths/src")
+file(GLOB_RECURSE MAR_MATH_LIB_SOURCE_FILES 
+	${MAR_MATH_DIRECTORY}/*.c
+	${MAR_MATH_DIRECTORY}/*.cpp
+)
+file(GLOB_RECURSE MAR_MATH_LIB_HEADER_FILES 
+	${MAR_MATH_DIRECTORY}/*.h
+	${MAR_MATH_DIRECTORY}/*.hpp
+)
+set(MAR_MATH_FILES ${MAR_MATH_LIB_SOURCE_FILES} ${MAR_MATH_LIB_HEADER_FILES} ${MAR_MATH_INCLUDE_FILE})
+message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # stb_image
 # -------------------------------------------------------------
 message("Looking for: stb_image")
-set(STB_IMAGE_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/stb_image/include")
+set(STB_IMAGE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/stb_image/include")
 set(STB_IMAGE_H "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.h")
 set(STB_IMAGE_SRC "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.cpp")
 set(STB_IMAGE_FILES ${STB_IMAGE_H} ${STB_IMAGE_SRC})
@@ -133,7 +151,7 @@ message(STATUS "STB_IMAGE_INCLUDE_DIR:= ${STB_IMAGE_INCLUDE_DIR}")
 # Dear ImGui
 # -------------------------------------------------------------
 message("Looking for: Dear ImGui")
-set(IMGUI_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/imgui")
+set(IMGUI_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/imgui")
 set(IMGUI_SOURCES
 	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.cpp
     ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.cpp
@@ -159,34 +177,17 @@ message(STATUS "IMGUI_INCLUDE_DIR:= ${IMGUI_INCLUDE_DIR}")
 # ImGuizmo
 # -------------------------------------------------------------
 message("Looking for: ImGuizmo")
-set(IMGUIZMO_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/ImGuizmo")
+set(IMGUIZMO_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/ImGuizmo")
 set(IMGUIZMO_HEADERS ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.h)
 set(IMGUIZMO_SOURCES ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.cpp)
 set(IMGUIZMO_FILES ${IMGUIZMO_HEADERS} ${IMGUIZMO_SOURCES})
 message(STATUS "IMGUIZMO_INCLUDE_DIR:= ${IMGUIZMO_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
-# MARMaths
-# -------------------------------------------------------------
-message("Looking for: MARMaths")
-set(MAR_MATH_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/MARMaths")
-file(GLOB_RECURSE SOURCE_MATH 
-	${MAR_MATH_INCLUDE_DIR}/src/*.c
-	${MAR_MATH_INCLUDE_DIR}/src/*.cpp)
-	
-file(GLOB_RECURSE HEADER_MATH 
-	${MAR_MATH_INCLUDE_DIR}/src/*.h
-	${MAR_MATH_INCLUDE_DIR}/src/*.hpp)
-	
-set(MAIN_MATH ${MAR_MATH_INCLUDE_DIR}/MARMaths.h)
-set(MAR_MATH_FILES ${SOURCE_MATH} ${HEADER_MATH} ${MAIN_MATH})
-message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
-
-# -------------------------------------------------------------
 # entt
 # -------------------------------------------------------------
 message("Looking for: entt")
-set(ENTT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/entt/include")
+set(ENTT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/entt/include")
 set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
 message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 
@@ -194,21 +195,21 @@ message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 # pybind11
 # -------------------------------------------------------------
 #message("Looking for: pybind11")
-#add_subdirectory(${CMAKE_SOURCE_DIR}/3rd_party/pybind11)
+#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/pybind11)
 #pybind11_add_module()
 
 # -------------------------------------------------------------
 # SerialPort
 # -------------------------------------------------------------
 message("Looking for: SerialPort")
-set(SERIALPORT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rd_party/serialport/include")
+set(SERIALPORT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/serialport/include")
 message(STATUS "SERIALPORT_INCLUDE_DIR:= ${SERIALPORT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # Set includes for MAREngine (mar_includes.h file)
 # -------------------------------------------------------------
 include_directories(
-	"${CMAKE_SOURCE_DIR}/src"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src"
 	${SERIALPORT_INCLUDE_DIR}
 	${IMGUI_INCLUDE_DIR}
 	${IMGUIZMO_INCLUDE_DIR}
@@ -226,9 +227,9 @@ include_directories(
 # link .lib files for MAREngine
 # -------------------------------------------------------------
 link_directories(
-    ${CMAKE_SOURCE_DIR}/3rd_party/GL/lib
-    ${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
-	${CMAKE_SOURCE_DIR}/bin/Release/Win32/Engine
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GL/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
+	${CMAKE_CURRENT_SOURCE_DIR}/bin/Release/Win32/Engine
 )
 
 # -------------------------------------------------------------
@@ -236,8 +237,8 @@ link_directories(
 # -------------------------------------------------------------
 message("Creating executable...")
 
-set(ALL_INCLUDE_FILES_MARENGINE ${MAR_ENGINE_FILES} 
-		${IMGUI_FILES} ${IMGUIZMO_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${MAR_MATH_FILES} ${ENTT_FILES}
+set(ALL_INCLUDE_FILES_MARENGINE 
+		${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES}
 )
 
 if(MSVC)
@@ -246,14 +247,14 @@ if(MSVC)
 	
 	message("Linking libraries to ${MARENGINE_NAME}")
 	target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
-	set(MAR_OPENGL_IMPORT opengl32 glew32s glfw3)
+	set(MAR_OPENGL_IMPORT ${OPENGL_gl_LIBRARY} ${GLEW_STATIC_LIBRARIES} ${GLFW3_LIBRARY})
 	target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
 
 	message("Creating ${EDITORMAR_NAME} executable...")
 	add_executable(${EDITORMAR_NAME} ${ALL_INCLUDE_FILES_MARENGINE} ${EDITORMAR_FILES} ${MARENGINE_INCLUDE_DIR})
 	message("Linking libraries to ${EDITORMAR_NAME}")
 	target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
-	target_link_libraries ( ${EDITORMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
+	target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
 
 	message("Creating ${SANDBOXMAR_NAME} executable...")
 	add_executable(${SANDBOXMAR_NAME} ${ALL_INCLUDE_FILES_MARENGINE} ${SANDBOXMAR_FILES} ${MARENGINE_INCLUDE_DIR})
