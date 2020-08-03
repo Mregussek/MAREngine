@@ -14,12 +14,16 @@ namespace mar {
 		Scene::Scene(std::string name)
 			: m_name(name),
 			updatedTransforms(false),
-			updatedColors(false),
-			updatedTextures2D(false),
-			updatedTexturesCubemap(false),
+			updatedRenColors(false),
+			updatedRenTextures2D(false),
+			updatedRenTexturesCubemap(false),
+			updatedSamplerColors(false),
+			updatedSamplerTextures2D(false),
+			updatedSamplerTexturesCubemap(false),
 			updatedLight(false),
-			updatedBuffers(false),
-			updatedCamera(false)
+			updatedCamera(false),
+			updatedRenderable(false),
+			where_modified(MODIFIED_NOT)
 		{
 			m_registry = entt::registry();
 
@@ -70,7 +74,7 @@ namespace mar {
 
 					m_colors.transforms.push_back(tran.transform);
 					submitVerticesIndices<maths::vec3>(ren, m_colors);
-					submitSampler<maths::vec3>(color.color, m_colors);
+					submitSampler<maths::vec3>(color.texture, m_colors);
 
 					ECS_TRACE("SCENE: initializing color entity!");
 				}
@@ -90,8 +94,8 @@ namespace mar {
 					auto& ren = entity.getComponent<RenderableComponent>();
 					auto& cubemap = entity.getComponent<TextureCubemapComponent>();
 
-					m_texture.loadCubemap(cubemap.cubemap);
-					m_cubemaps.paths.push_back(cubemap.cubemap);
+					m_texture.loadCubemap(cubemap.texture);
+					m_cubemaps.paths.push_back(cubemap.texture);
 					m_cubemaps.transforms.push_back(tran.transform);
 					submitVerticesIndices<int32_t>(ren, m_cubemaps);
 					submitSampler<int32_t>(m_cubemaps.counter, m_cubemaps);
@@ -114,78 +118,63 @@ namespace mar {
 					if (cam.id.find("main") == std::string::npos) 
 						continue;
 
-					maths::vec3 front{
-						trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x)),
-						trig::sine(trig::toRadians(tran.angles.x)),
-						trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x))
-					};
-
-					front = maths::vec3::normalize(front);
-
-					scene_camera.position = tran.center;
-					scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-					scene_camera.view = maths::mat4::lookAt(
-						tran.center, tran.center + front, { 0.f, 1.0f, 0.f }
-					);
-
-					if (cam.Perspective) {
-						scene_camera.projection = maths::mat4::perspective(
-							trig::toRadians(cam.p_fov), cam.p_aspectRatio, cam.p_near, cam.p_far
-						);
-					}
-					else {
-						scene_camera.projection = maths::mat4::orthographic(
-							cam.o_left, cam.o_right, cam.o_top, cam.o_bottom, cam.o_near, cam.o_far
-						);
-					}
+					calculateCameraTransforms(tran, cam, scene_camera);
 				}
-
-
 			}
 		}
 
 		void Scene::update() {
-			typedef maths::Trig trig;
-			static maths::vec3 front;
-
-			auto view = getView<CameraComponent>();
-			for (auto entity : view) {
-				auto& cam = getComponent<CameraComponent>(entity);
-
-				if (cam.id.find("main") == std::string::npos) 
-					continue;
-
-				auto& tran = getComponent<TransformComponent>(entity);
-
-				front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
-				front.y = trig::sine(trig::toRadians(tran.angles.x));
-				front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
-				front = maths::vec3::normalize(front);
-
-				scene_camera.position = tran.center;
-				scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-				scene_camera.view = maths::mat4::lookAt(
-					tran.center,
-					tran.center + front,
-					{ 0.f, 1.0f, 0.f }
-				);
-
-				if (cam.Perspective) {
-					scene_camera.projection = maths::mat4::perspective(
-						trig::toRadians(cam.p_fov), cam.p_aspectRatio, cam.p_near, cam.p_far
-					);
-				}
-				else {
-					scene_camera.projection = maths::mat4::orthographic(
-						cam.o_left, cam.o_right, cam.o_top, cam.o_bottom, cam.o_near, cam.o_far
-					);
-				}
-
-				scene_camera.mvp = scene_camera.projection * scene_camera.view * scene_camera.model;
+			if (useEditorCamera) {
+				auto& camdata = editor::Camera::getCameraData();
+				scene_camera.model = camdata.model;
+				scene_camera.view = camdata.view;
+				scene_camera.projection = camdata.projection;
+				scene_camera.mvp = camdata.mvp;
+				scene_camera.position = camdata.position;
 			}
-		
-		
-		
+			else {
+				auto view = getView<CameraComponent>();
+				for (auto entity : view) {
+					auto& cam = getComponent<CameraComponent>(entity);
+
+					if (cam.id.find("main") == std::string::npos) continue;
+
+					auto& tran = getComponent<TransformComponent>(entity);
+					calculateCameraTransforms(tran, cam, scene_camera);
+				}
+			}
+
+			if (updatedRenderable) {
+				if (where_modified == MODIFIED_COLORS) 
+					updateRenderable<ColorComponent, maths::vec3>(m_colors);
+				else if (where_modified == MODIFIED_TEXTURES) 
+					updateRenderable<Texture2DComponent, int32_t>(m_textures);
+				else if (where_modified == MODIFIED_CUBEMAPS) 
+					updateRenderable<TextureCubemapComponent, int32_t>(m_cubemaps);
+			}
+
+			if (updatedRenColors) {
+
+			}
+
+			if (updatedRenTextures2D) {
+				
+			}
+
+			if (updatedRenTexturesCubemap) {
+
+			}
+
+			if (updatedSamplerColors) 
+				updateSampler<ColorComponent>(m_colors);
+			
+			if (updatedSamplerTextures2D) 
+				updateSampler<Texture2DComponent>(m_textures);
+			
+			if (updatedSamplerTexturesCubemap) 
+				updateSampler<TextureCubemapComponent>(m_cubemaps);
+
+			allUpdated();
 		}
 
 		void Scene::resetStorages() {
@@ -234,6 +223,84 @@ namespace mar {
 			storage.counter++;
 
 			ECS_TRACE("SCENE: submitted sampler component!");
+		}
+
+		void Scene::calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam) {
+			typedef maths::Trig trig;
+			static maths::vec3 front;
+			front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
+			front.y = trig::sine(trig::toRadians(tran.angles.x));
+			front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
+			front = maths::vec3::normalize(front);
+
+			ren_cam.position = tran.center;
+			ren_cam.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
+			ren_cam.view = maths::mat4::lookAt(
+				tran.center,
+				tran.center + front,
+				{ 0.f, 1.0f, 0.f }
+			);
+
+			if (cam.Perspective) {
+				scene_camera.projection = maths::mat4::perspective(
+					trig::toRadians(cam.p_fov), cam.p_aspectRatio, cam.p_near, cam.p_far
+				);
+			}
+			else {
+				scene_camera.projection = maths::mat4::orthographic(
+					cam.o_left, cam.o_right, cam.o_top, cam.o_bottom, cam.o_near, cam.o_far
+				);
+			}
+
+			scene_camera.mvp = scene_camera.projection * scene_camera.view * scene_camera.model;
+		}
+
+		template<typename Component, typename T>
+		void Scene::updateRenderable(SceneStorage<T>& storage) {
+			storage.vertices.clear();
+			storage.indices.clear();
+			storage.indicesMax = 0;
+			storage.counter = 0;
+
+			for (auto& entity : entities)
+				if (entity.hasComponent<Component>() && entity.hasComponent<RenderableComponent>()) {
+					auto& ren = entity.getComponent<RenderableComponent>();
+					submitVerticesIndices<T>(ren, storage);
+				}
+		}
+
+		template<typename Component>
+		void Scene::updateSampler(SceneStorage<maths::vec3>& storage) {
+			storage.samplers.clear();
+			storage.counter = 0;
+
+			for (auto& entity : entities)
+				if (entity.hasComponent<Component>()) {
+					auto& cmp = entity.getComponent<Component>();
+					storage.samplers.push_back(cmp.texture);
+					storage.counter++;
+				}
+		}
+
+		template<typename Component>
+		void Scene::updateSampler(SceneStorage<int32_t>& storage) {
+			storage.paths.clear();
+			storage.samplers.clear();
+			storage.counter = 0;
+
+			for(auto& entity : entities) 
+				if (entity.hasComponent<Component>()) {
+					auto& cmp = entity.getComponent<Component>();
+
+					if (where_modified == MODIFIED_TEXTURES)
+						m_texture.loadTexture(cmp.texture);
+					else if (where_modified == MODIFIED_CUBEMAPS)
+						m_texture.loadCubemap(cmp.texture);
+
+					storage.paths.push_back(cmp.texture);
+					storage.samplers.push_back(storage.counter);
+					storage.counter++;
+				}
 		}
 
 

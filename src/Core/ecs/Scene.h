@@ -11,6 +11,7 @@
 #include "Systems.h"
 #include "ECSLogs.h"
 
+#include "../../Editor/Camera/Camera.h"
 #include "../graphics/Renderer/RenderCamera.h"
 #include "../graphics/Mesh/Manipulators/ShapeManipulator.h"
 #include "../graphics/Renderer/Texture/TextureOpenGL.h"
@@ -39,6 +40,15 @@ namespace mar {
 			std::vector<LightComponent> components;
 		};
 
+		enum class ModificationStorage {
+			NOT, COLORS, TEXTURES, CUBEMAPS
+		};
+
+#define MODIFIED_NOT ::mar::ecs::ModificationStorage::NOT
+#define MODIFIED_COLORS ::mar::ecs::ModificationStorage::COLORS
+#define MODIFIED_TEXTURES ::mar::ecs::ModificationStorage::TEXTURES
+#define MODIFIED_CUBEMAPS ::mar::ecs::ModificationStorage::CUBEMAPS
+
 		class Scene {
 			std::string m_name{ "Empty Scene" };
 			entt::registry m_registry;
@@ -53,16 +63,21 @@ namespace mar {
 			graphics::RenderCamera scene_camera;
 			std::vector<Entity> entities;
 
-			/* updated RenderableComponent in at least one entity / deleted Color/Texture Component!
-			(It means that, we should reload vertices in VertexBuffer and Indices in ElementBuffer)
-			(If no texture is bounded to entity, there is nothing to draw!) */
-			bool updatedBuffers;
 			bool updatedTransforms;
 			bool updatedCamera;
-			bool updatedColors;
-			bool updatedTextures2D;
-			bool updatedTexturesCubemap;
+			
 			bool updatedLight;
+
+			ModificationStorage where_modified;
+			bool updatedRenderable;
+
+			bool updatedRenColors;
+			bool updatedRenTextures2D;
+			bool updatedRenTexturesCubemap;
+
+			bool updatedSamplerColors;
+			bool updatedSamplerTextures2D;
+			bool updatedSamplerTexturesCubemap;
 
 			bool useEditorCamera;
 
@@ -100,6 +115,26 @@ namespace mar {
 			
 		private:
 
+			template<typename Component, typename T>
+			void updateRenderable(SceneStorage<T>& storage);
+
+			template<typename Component>
+			void updateSampler(SceneStorage<maths::vec3>& storage);
+
+			template<typename Component>
+			void updateSampler(SceneStorage<int32_t>& storage);
+
+			void allUpdated() {
+				where_modified = MODIFIED_NOT;
+				updatedRenderable = false;
+				updatedRenColors = false;
+				updatedRenTextures2D = false;
+				updatedRenTexturesCubemap = false;
+				updatedSamplerColors = false;
+				updatedSamplerTextures2D = false;
+				updatedSamplerTexturesCubemap = false;
+			}
+
 			template<typename T>
 			auto getView() ->decltype(m_registry.view<T>()) {
 				return m_registry.view<T>();
@@ -109,6 +144,8 @@ namespace mar {
 			T& getComponent(entt::entity& entity) {
 				return m_registry.get<T>(entity);
 			}
+
+			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
 
 			friend class Entity;
 		};

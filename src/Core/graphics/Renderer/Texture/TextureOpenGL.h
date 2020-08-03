@@ -72,10 +72,10 @@ namespace mar {
 			uint32_t genNewTexture(const char* path);
 
 			/*
-			Method generates new id for cubemap. Must be overloaded!
+			Method generates new id for texture. Must be overloaded!
 
 				\param faces - paths to textures, which will be loaded
-				\return id - id for new loaded cubemap
+				\return id - id for new loaded texture
 			*/
 			uint32_t genNewCubemap(const char* path);
 		};

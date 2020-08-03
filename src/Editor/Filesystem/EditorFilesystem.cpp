@@ -57,7 +57,7 @@ namespace mar {
 					}
 					else if (component == ECS_COLOR) {
 						auto& color = entity.getComponent<ecs::ColorComponent>();
-						ss << "#ColorComponent " << color.color.x << " " << color.color.y << " " << color.color.z << "\n";
+						ss << "#ColorComponent " << color.texture.x << " " << color.texture.y << " " << color.texture.z << "\n";
 					}
 					else if (component == ECS_TEXTURE2D) {
 						auto& tex = entity.getComponent<ecs::Texture2DComponent>();
@@ -65,7 +65,7 @@ namespace mar {
 					}
 					else if (component == ECS_CUBEMAP) {
 						auto& cube = entity.getComponent<ecs::TextureCubemapComponent>();
-						ss << "#TextureCubemapComponent " << cube.cubemap << "\n";
+						ss << "#TextureCubemapComponent " << cube.texture << "\n";
 					}
 					else if (component == ECS_LIGHT) {
 						auto& light = entity.getComponent<ecs::LightComponent>();
@@ -226,9 +226,9 @@ namespace mar {
 					is >> arr[0] >> arr[1] >> arr[2];
 
 					auto& color = currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR);
-					color.color.x = arr[0];
-					color.color.y = arr[1];
-					color.color.z = arr[2];
+					color.texture.x = arr[0];
+					color.texture.y = arr[1];
+					color.texture.z = arr[2];
 				}
 				else if (line.find("Texture2DComponent") != std::string::npos) {
 					std::istringstream iss(line.substr(19));
@@ -244,7 +244,7 @@ namespace mar {
 					iss >> tex;
 
 					auto& cubemap = currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-					cubemap.cubemap = tex;
+					cubemap.texture = tex;
 				}
 				else if (line.find("#LightComponent") != std::string::npos) {
 					auto& light = currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);

@@ -373,14 +373,20 @@ namespace mar {
 			if (entity.hasComponent<ecs::CameraComponent>())
 				Scene_Handle_CameraComponent(is_window_focused);
 			
-			if (entity.hasComponent<ecs::ColorComponent>())
+			if (entity.hasComponent<ecs::ColorComponent>()) {
+				m_scene->where_modified = MODIFIED_COLORS;
 				Scene_Handle_ColorComponent(is_window_focused);
+			}
 
-			if (entity.hasComponent<ecs::Texture2DComponent>())
+			if (entity.hasComponent<ecs::Texture2DComponent>()) {
+				m_scene->where_modified = MODIFIED_TEXTURES;
 				Scene_Handle_Texture2DComponent(is_window_focused);
+			}
 
-			if (entity.hasComponent<ecs::TextureCubemapComponent>())
+			if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
+				m_scene->where_modified = MODIFIED_CUBEMAPS;
 				Scene_Handle_TextureCubemapComponent(is_window_focused);
+			}
 
 			if (entity.hasComponent<ecs::LightComponent>())
 				Scene_Handle_LightComponent(is_window_focused);
@@ -492,36 +498,39 @@ namespace mar {
 		}
 
 		void GUI::Scene_Handle_RenderableComponent(bool& window_focused) {
-			static bool modify_renderable = false; // should display option to modify the whole RenderableComponent ?
-			static bool display_obj = false; // should display obj file loading to RenderableComponent ?
-			auto& renderable = m_scene->entities[m_indexEntity].getComponent<ecs::RenderableComponent>();
-
+			static bool GUI_modify_renderable = false; // should display option to modify the whole RenderableComponent ?
+			static bool GUI_display_obj = false; // should display obj file loading to RenderableComponent ?
+			auto& entity = m_scene->entities[m_indexEntity];
+			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
+			
 			ImGui::Separator();
 			ImGui::Text("RenderableComponent\n");
 			ImGui::SameLine();
-			if(!m_scene->entities[m_indexEntity].hasComponent<ecs::ColorComponent>())
+			if(!entity.hasComponent<ecs::ColorComponent>() || !entity.hasComponent<ecs::Texture2DComponent>() 
+				|| !entity.hasComponent<ecs::TextureCubemapComponent>())
 				if (ImGui::MenuItem("Remove Renderable")) {
-					m_scene->entities[m_indexEntity].removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					m_scene->updatedBuffers = true;
+					entity.removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					m_scene->updatedRenderable = true;
 					return;
 				}
 
 			ImGui::Text(renderable.id.c_str());
 
-			if (!m_scene->entities[m_indexEntity].hasComponent<ecs::ColorComponent>()) 
-				ImGui::Text("WARNING: Object will not be rendered until you will add ColorComponent!");
+			if (!entity.hasComponent<ecs::ColorComponent>() && !entity.hasComponent<ecs::Texture2DComponent>() 
+				&& !entity.hasComponent<ecs::TextureCubemapComponent>())
+				ImGui::Text("WARNING: Object will not be rendered until you will add Color or Texture!");
 
 			if(renderable.vertices.empty())
-				modify_renderable = true;
+				GUI_modify_renderable = true;
 
-			if (modify_renderable) {
+			if (GUI_modify_renderable) {
 				if (ImGui::Button("Cube")) {
 					renderable.id = "Cube";
 					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
 					renderable.indices = graphics::MeshCreator::Cube::getIndices();
-					m_scene->updatedBuffers = true;
-					modify_renderable = false;
-					display_obj = false;
+					m_scene->updatedRenderable = true;
+					GUI_modify_renderable = false;
+					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
@@ -530,9 +539,9 @@ namespace mar {
 					renderable.id = "Pyramid";
 					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
 					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
-					m_scene->updatedBuffers = true;
-					modify_renderable = false;
-					display_obj = false;
+					m_scene->updatedRenderable = true;
+					GUI_modify_renderable = false;
+					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
@@ -541,9 +550,9 @@ namespace mar {
 					renderable.id = "Wall";
 					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
 					renderable.indices = graphics::MeshCreator::Wall::getIndices();
-					m_scene->updatedBuffers = true;
-					modify_renderable = false;
-					display_obj = false;
+					m_scene->updatedRenderable = true;
+					GUI_modify_renderable = false;
+					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
@@ -552,17 +561,17 @@ namespace mar {
 					renderable.id = "Surface";
 					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
 					renderable.indices = graphics::MeshCreator::Surface::getIndices();
-					m_scene->updatedBuffers = true;
-					modify_renderable = false;
-					display_obj = false;
+					m_scene->updatedRenderable = true;
+					GUI_modify_renderable = false;
+					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (ImGui::Button("Load OBJ")) 
-					display_obj = true;
+					GUI_display_obj = true;
 
-				if(display_obj) {
+				if(GUI_display_obj) {
 					static char filename[30]{ "empty" };
 					ImGui::InputText(".obj", filename, 30);
 					static std::string load;
@@ -579,39 +588,30 @@ namespace mar {
 						renderable.id = graphics::MeshCreator::OBJ::vertices.empty() ? "empty" : load;
 						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
 						renderable.indices = graphics::MeshCreator::OBJ::indices;
-						m_scene->updatedBuffers = true;
-						modify_renderable = false;
-						display_obj = false;
+						m_scene->updatedRenderable = true;
+						GUI_modify_renderable = false;
+						GUI_display_obj = false;
 					}
 
 					ImGui::SameLine();
 				}
 
 				if (ImGui::Button("Do not modify")) {
-					display_obj = false;
-					modify_renderable = false;
-					m_scene->updatedBuffers = false;
+					GUI_display_obj = false;
+					GUI_modify_renderable = false;
 				}
 			}
 			else {
-				if (ImGui::Button("ModifyRenderable")) {
-					modify_renderable = true;
-				}
+				if (ImGui::Button("ModifyRenderable")) 
+					GUI_modify_renderable = true;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 		}
 
 		void GUI::Scene_Handle_CameraComponent(bool& window_focused) {
+			static char* GUI_input{ (char*)"empty" };
 			auto& camcmp = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
-
-			static std::vector<const char*> cameras = { "Perspective", "Orthographic" };
-			static int32_t selected = !camcmp.Perspective;
-			static char* input{ (char*)"empty" };
-			static bool use_camera_editor = m_scene->useEditorCamera; // should use Camera from editor or CameraComponent?
-			static bool last_set_value = !use_camera_editor;
-
-			last_set_value = use_camera_editor;
 			
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
@@ -619,26 +619,22 @@ namespace mar {
 			if (camcmp.id.find("main") == std::string::npos) {
 				if (ImGui::Button("Remove Camera")) {
 					m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
-					m_scene->updatedCamera = true;
 					m_scene->useEditorCamera = true;
 					return;
 				}
 			}
 			else {
 				ImGui::SameLine();
-				ImGui::Checkbox("UseCameraEditor", &use_camera_editor);
+				ImGui::Checkbox("UseCameraEditor", &m_scene->useEditorCamera);
 			}
 			
 			ImGui::Text("WARNING: If you want to use this camera, make sure\nthat it is the only with \"main\" CameraID!");
 
-			input = (char*)camcmp.id.c_str();
-			ImGui::InputText("CameraID", input, 30);
-			camcmp.id = std::string(input);
+			GUI_input = (char*)camcmp.id.c_str();
+			ImGui::InputText("CameraID", GUI_input, 30);
+			camcmp.id = std::string(GUI_input);
 
-			ImGui::Combo("Camera Type", &selected, cameras.data(), 2);
-
-			if (selected == 0) camcmp.Perspective = true;
-			else camcmp.Perspective = false;
+			ImGui::Checkbox("Perspective (TRUE) / Orthographic (FALSE)", &camcmp.Perspective);
 			
 			if (camcmp.Perspective) {
 				ImGui::DragFloat("AspectRatio", &camcmp.p_aspectRatio, 0.1f, 1.f, 10.f);
@@ -651,12 +647,6 @@ namespace mar {
 				ImGui::DragFloat("Field Of View", &camcmp.p_fov, 0.1f, 1.f, 90.f);
 				ImGui::DragFloat("Near", &camcmp.p_near, 0.01f, 0.001f, 150.f);
 				ImGui::DragFloat("Far", &camcmp.p_far, 0.1f, 0.001f, 150.f);
-				m_scene->scene_camera.projection = maths::mat4::perspective(
-					maths::Trig::toRadians(camcmp.p_fov),
-					camcmp.p_aspectRatio,
-					camcmp.p_near,
-					camcmp.p_far
-				);
 			} 
 			else {
 				ImGui::DragFloat("Left", &camcmp.o_left, 0.1f, -100.f, 100.f);
@@ -665,46 +655,33 @@ namespace mar {
 				ImGui::DragFloat("Bottom", &camcmp.o_bottom, 0.1f, -100.f, 100.f);
 				ImGui::DragFloat("Near", &camcmp.o_near, 0.1f, 0.001f, 150.f);
 				ImGui::DragFloat("Far", &camcmp.o_far, 0.1f, 0.001f, 150.f);
-				m_scene->scene_camera.projection = maths::mat4::orthographic(
-					camcmp.o_left,
-					camcmp.o_right,
-					camcmp.o_top, 
-					camcmp.o_bottom,
-					camcmp.o_near,
-					camcmp.o_far
-				);
 			}
-
-			if (last_set_value == use_camera_editor) {
-				m_scene->updatedCamera = false;
-				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component (returned because no change!)");
-				return;
-			}
-
-			if (use_camera_editor) m_scene->useEditorCamera = true;
-			else m_scene->useEditorCamera = false;
-			
-			m_scene->updatedCamera = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
 
 		void GUI::Scene_Handle_ColorComponent(bool& window_focused) {
+			/*
+			TODO: write bool updatedColor - to update only samplers, changed textures, colors and so on
+					write bool updatedRenColor - to update also renderable, because if there is no texture texture
+					there is nothing to draw!
+			*/
+
 			ImGui::Separator();
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Color")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::ColorComponent>(ECS_COLOR);
-				m_scene->updatedBuffers = true;
+				m_scene->updatedRenColors = true;
 				return;
 			}
 
 			auto& color = m_scene->entities[m_indexEntity].getComponent<ecs::ColorComponent>();
 		
-			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.color));
+			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture));
 
-			if(window_focused)
-				m_scene->updatedColors = true;
+			if (window_focused)
+				m_scene->updatedSamplerColors = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
@@ -717,7 +694,7 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-				m_scene->updatedTextures2D = true;
+				m_scene->updatedRenTextures2D = true;
 				return;
 			}
 
@@ -737,7 +714,7 @@ namespace mar {
 
 			if (ImGui::Button("Load Texture")) {
 				tex.texture = load;
-				m_scene->updatedTextures2D = true;
+				m_scene->updatedSamplerTextures2D = true;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
@@ -751,13 +728,13 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-				m_scene->updatedTexturesCubemap = true;
+				m_scene->updatedRenTexturesCubemap = true;
 				return;
 			}
 
 			ImGui::Text("Current Cubemap: ");
 			ImGui::SameLine();
-			ImGui::Text(cubemap.cubemap.c_str());
+			ImGui::Text(cubemap.texture.c_str());
 
 			static char filename[30]{ "empty" };
 			ImGui::InputText(" directory", filename, 30);
@@ -770,8 +747,8 @@ namespace mar {
 			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Cubemap")) {
-				cubemap.cubemap = load;
-				m_scene->updatedTexturesCubemap = true;
+				cubemap.texture = load;
+				m_scene->updatedSamplerTexturesCubemap = true;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");

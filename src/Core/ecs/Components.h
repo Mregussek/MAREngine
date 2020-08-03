@@ -100,16 +100,16 @@ namespace mar {
 		};
 
 		struct ColorComponent {
-			maths::vec3 color{ 0.5f, 0.5f, 0.5f };
+			maths::vec3 texture{ 0.5f, 0.5f, 0.5f };
 
 			ColorComponent() = default;
 			ColorComponent(const ColorComponent& cc) = default;
 			ColorComponent(const maths::vec3& col)
-				: color(col)
+				: texture(col)
 			{}
 
-			operator maths::vec3&() { return color; }
-			operator const maths::vec3&() const { return color; }
+			operator maths::vec3&() { return texture; }
+			operator const maths::vec3&() const { return texture; }
 		};
 
 		struct Texture2DComponent {
@@ -126,16 +126,16 @@ namespace mar {
 		};
 
 		struct TextureCubemapComponent {
-			std::string cubemap{ "empty" };
+			std::string texture{ "empty" };
 
 			TextureCubemapComponent() = default;
 			TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
 			TextureCubemapComponent(const std::string& cub)
-				: cubemap(cub)
+				: texture(cub)
 			{}
 
-			operator std::string&() { return cubemap; }
-			operator const std::string&() const { return cubemap; }
+			operator std::string&() { return texture; }
+			operator const std::string&() const { return texture; }
 		};
 
 		struct CameraComponent {

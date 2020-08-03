@@ -135,10 +135,10 @@ namespace mar {
 
 			{ // BIND TEXTURES
 				if(texture_type == GL_TEXTURE_2D)
-					for (int32_t i = 0; i < storage.samplers.size(); i++)
+					for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++)
 						texture.bind(texture_type, storage.samplers[i], texture.getTexture(storage.paths[i]));
 				else if(texture_type == GL_TEXTURE_CUBE_MAP)
-					for (int32_t i = 0; i < storage.samplers.size(); i++)
+					for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++)
 						texture.bind(texture_type, storage.samplers[i], texture.getCubemap(storage.paths[i]));
 			}
 

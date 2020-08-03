@@ -112,13 +112,15 @@ namespace mar {
 					break;
 				case ECS_COLOR:
 					addComponent<ecs::ColorComponent>(ECS_COLOR);
+					m_scene->updatedRenColors = true;
 					break;
-					
 				case ECS_TEXTURE2D:
 					addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+					m_scene->updatedRenTextures2D = true;
 					break;
 				case ECS_CUBEMAP:
 					addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+					m_scene->updatedRenTexturesCubemap = true;
 					break;
 				case ECS_LIGHT:
 					addComponent<ecs::LightComponent>(ECS_LIGHT);

@@ -54,10 +54,10 @@ namespace mar {
 			}
 
 			/*
-			Method should generate new id for cubemap. Must be overloaded!
+			Method should generate new id for texture. Must be overloaded!
 
 				\param faces - paths to textures, which will be loaded
-				\return id - id for new loaded cubemap
+				\return id - id for new loaded texture
 			*/
 			uint32_t genNewCubemap(const char* path) { 
 				return m_texture.genNewCubemap(path);
