@@ -120,6 +120,18 @@ set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
+# pybind11
+# -------------------------------------------------------------
+message("Looking for: pybind11 && python3.8.5")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/pybind11)
+set(PYBIND11_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/pybind11/include")
+set(PYTHON385_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/python3.8.5/include")
+set(PYTHON385_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/python3.8.5/libs")
+message(STATUS "PYBIND11_INCLUDE_DIR:= ${PYBIND11_INCLUDE_DIR}")
+message(STATUS "PYTHON385_INCLUDE_DIR:= ${PYTHON385_INCLUDE_DIR}")
+message(STATUS "PYTHON385_LIB_DIR:= ${PYTHON385_LIB_DIR}")
+
+# -------------------------------------------------------------
 # MARMaths
 # -------------------------------------------------------------
 message("Looking for: MARMaths")
@@ -192,13 +204,6 @@ set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
 message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
-# pybind11
-# -------------------------------------------------------------
-#message("Looking for: pybind11")
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/pybind11)
-#pybind11_add_module()
-
-# -------------------------------------------------------------
 # SerialPort
 # -------------------------------------------------------------
 message("Looking for: SerialPort")
@@ -221,6 +226,13 @@ include_directories(
 	${SPDLOG_INCLUDE_DIR}
 	${ENTT_INCLUDE_DIR}
 	${MARENGINE_INCLUDE_DIR}
+	${PYBIND11_INCLUDE_DIR}
+	${PYTHON385_INCLUDE_DIR}
+)
+
+set(ALL_INCLUDE_FILES_MARENGINE 
+	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
+	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES}
 )
 
 # -------------------------------------------------------------
@@ -230,16 +242,16 @@ link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GL/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
 	${CMAKE_CURRENT_SOURCE_DIR}/bin/Release/Win32/Engine
+	${PYTHON385_LIB_DIR}
 )
 
 # -------------------------------------------------------------
-# Create executable
+# Create MAREnginePythonModules
 # -------------------------------------------------------------
-message("Creating executable...")
-
-set(ALL_INCLUDE_FILES_MARENGINE 
-		${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} ${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES}
-)
+message("Creating MARMathPythonModule...")
+set(SCRIPT_MODULES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/scripting)
+pybind11_add_module(MARMathPythonModule ${SCRIPT_MODULES_PATH}/EmbedMaths.cpp ${MAR_MATH_FILES})
+target_include_directories(MARMathPythonModule PRIVATE ${SCRIPT_MODULES_PATH} ${MAR_MATH_FILES})
 
 if(MSVC)
 	message("Creating ${MARENGINE_NAME} library...")
@@ -247,7 +259,7 @@ if(MSVC)
 	
 	message("Linking libraries to ${MARENGINE_NAME}")
 	target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
-	set(MAR_OPENGL_IMPORT ${OPENGL_gl_LIBRARY} ${GLEW_STATIC_LIBRARIES} ${GLFW3_LIBRARY})
+	set(MAR_OPENGL_IMPORT ${OPENGL_gl_LIBRARY} ${GLEW_STATIC_LIBRARIES} ${GLFW3_LIBRARY} python38 pybind11::embed)
 	target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
 
 	message("Creating ${EDITORMAR_NAME} executable...")

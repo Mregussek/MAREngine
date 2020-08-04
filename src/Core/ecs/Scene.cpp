@@ -161,7 +161,8 @@ namespace mar {
 
 					ECS_TRACE("SCENE: initializing color entity!");
 				}
-				else if (entity.hasComponent<Texture2DComponent>()) {
+				
+				if (entity.hasComponent<Texture2DComponent>()) {
 					auto& ren = entity.getComponent<RenderableComponent>();
 					auto& texture = entity.getComponent<Texture2DComponent>();
 
@@ -173,7 +174,8 @@ namespace mar {
 
 					ECS_TRACE("SCENE: initializing texture2d entity!");
 				}
-				else if (entity.hasComponent<TextureCubemapComponent>()) {
+				
+				if (entity.hasComponent<TextureCubemapComponent>()) {
 					auto& ren = entity.getComponent<RenderableComponent>();
 					auto& cubemap = entity.getComponent<TextureCubemapComponent>();
 
