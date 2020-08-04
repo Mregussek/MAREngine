@@ -230,11 +230,6 @@ include_directories(
 	${PYTHON385_INCLUDE_DIR}
 )
 
-set(ALL_INCLUDE_FILES_MARENGINE 
-	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
-	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES}
-)
-
 # -------------------------------------------------------------
 # link .lib files for MAREngine
 # -------------------------------------------------------------
@@ -246,34 +241,49 @@ link_directories(
 )
 
 # -------------------------------------------------------------
-# Create MAREnginePythonModules
+# Imports setup
+# -------------------------------------------------------------
+set(ALL_INCLUDE_FILES_MARENGINE 
+	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
+	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES}
+)
+
+set(MAR_OPENGL_IMPORT 
+	${OPENGL_gl_LIBRARY} ${GLEW_STATIC_LIBRARIES} ${GLFW3_LIBRARY} python38 pybind11::embed
+)
+
+# -------------------------------------------------------------
+# Create Python Modules
 # -------------------------------------------------------------
 message("Creating MARMathPythonModule...")
 set(SCRIPT_MODULES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/scripting)
 pybind11_add_module(MARMathPythonModule ${SCRIPT_MODULES_PATH}/EmbedMaths.cpp ${MAR_MATH_FILES})
 target_include_directories(MARMathPythonModule PRIVATE ${SCRIPT_MODULES_PATH} ${MAR_MATH_FILES})
 
+# -------------------------------------------------------------
+# Create MAREngine library and Editor / Sandbox executables
+# -------------------------------------------------------------
+message("Creating ${MARENGINE_NAME} library...")
+add_library(${MARENGINE_NAME} ${ALL_INCLUDE_FILES_MARENGINE})
+
+message("Linking libraries to ${MARENGINE_NAME}")
+target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
+target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
+
+message("Creating ${EDITORMAR_NAME} executable...")
+add_executable(${EDITORMAR_NAME} ${EDITORMAR_FILES} ${ALL_INCLUDE_FILES_MARENGINE} ${MARENGINE_INCLUDE_DIR})
+
+message("Linking libraries to ${EDITORMAR_NAME}")
+target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
+target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
+
+message("Creating ${SANDBOXMAR_NAME} executable...")
+add_executable(${SANDBOXMAR_NAME} ${SANDBOXMAR_FILES} ${ALL_INCLUDE_FILES_MARENGINE} ${MARENGINE_INCLUDE_DIR})
+message("Linking libraries to ${SANDBOXMAR_NAME}")
+target_compile_features(${SANDBOXMAR_NAME} PRIVATE cxx_std_17)
+target_link_libraries ( ${SANDBOXMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
+
 if(MSVC)
-	message("Creating ${MARENGINE_NAME} library...")
-	add_library(${MARENGINE_NAME} ${ALL_INCLUDE_FILES_MARENGINE})
-	
-	message("Linking libraries to ${MARENGINE_NAME}")
-	target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
-	set(MAR_OPENGL_IMPORT ${OPENGL_gl_LIBRARY} ${GLEW_STATIC_LIBRARIES} ${GLFW3_LIBRARY} python38 pybind11::embed)
-	target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
-
-	message("Creating ${EDITORMAR_NAME} executable...")
-	add_executable(${EDITORMAR_NAME} ${ALL_INCLUDE_FILES_MARENGINE} ${EDITORMAR_FILES} ${MARENGINE_INCLUDE_DIR})
-	message("Linking libraries to ${EDITORMAR_NAME}")
-	target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
-	target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
-
-	message("Creating ${SANDBOXMAR_NAME} executable...")
-	add_executable(${SANDBOXMAR_NAME} ${ALL_INCLUDE_FILES_MARENGINE} ${SANDBOXMAR_FILES} ${MARENGINE_INCLUDE_DIR})
-	message("Linking libraries to ${SANDBOXMAR_NAME}")
-	target_compile_features(${SANDBOXMAR_NAME} PRIVATE cxx_std_17)
-	target_link_libraries ( ${SANDBOXMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
-
 # -------------------------------------------------------------
 # Ignore dynamic linking
 # -------------------------------------------------------------
