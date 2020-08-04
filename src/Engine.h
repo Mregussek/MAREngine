@@ -65,6 +65,9 @@ namespace mar {
 			
 			// --- LAYERS MANAGEMENT --- //
 
+			editor::GUI createGUI();
+			editor::Camera createGUICamera();
+
 			layers::LayerStack createLayerStack();
 			layers::EntityLayer* createEntityLayer();
 			layers::LayerGUI* createEditorLayer();
@@ -76,11 +79,6 @@ namespace mar {
 			// --- RENDERING MANAGEMENT --- //
 
 			void resetStatistics() { graphics::RendererEntity::clearStatistics(); }
-
-			// --- EDITOR MANAGEMENT --- //
-
-			graphics::FrameBuffer<graphics::FrameBufferOpenGL>& getFramebuffer(layers::LayerGUI* guilayer);
-			void submitSceneToGUI(layers::LayerGUI* gui_layer, ecs::Scene* scene);
 
 		};
 

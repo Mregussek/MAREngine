@@ -8,12 +8,13 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
-#include "../../Editor/Camera/Camera.h"
 #include "../../Window/Window.h"
 
 
+
 namespace mar {
-	namespace editor { class GUI; }
+	namespace editor { class Camera; class GUI; }
+
 
 	namespace layers {
 
@@ -27,8 +28,7 @@ namespace mar {
 			LayerGUI() = default;
 			LayerGUI(const char* name);
 
-			void initialize();
-			void mouseSetup();
+			void initialize(editor::GUI* gui, editor::Camera* cam);
 
 			// --- OVERLOADED METHODS --- // 
 
@@ -37,8 +37,8 @@ namespace mar {
 
 			// --- GET METHODS --- //
 
-			editor::GUI* getGUIInstance();
-			inline editor::Camera* getCamera() { return m_camera; }
+			inline editor::GUI* getGUIInstance();
+			inline editor::Camera* getCamera();
 		};
 
 

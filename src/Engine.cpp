@@ -37,6 +37,14 @@ namespace mar {
 			return window::Window::getInstance().shouldClose(); 
 		}
 
+		editor::GUI MAREngine::createGUI() {
+			return editor::GUI();
+		}
+
+		editor::Camera MAREngine::createGUICamera() {
+			return editor::Camera();
+		}
+
 		layers::LayerStack MAREngine::createLayerStack() {
 			return layers::LayerStack(); 
 		}
@@ -51,14 +59,6 @@ namespace mar {
 
 		ecs::Scene* MAREngine::loadSceneFromFile() {
 			return editor::Filesystem::openFile(m_pathLoad.c_str());
-		}
-
-		void MAREngine::submitSceneToGUI(layers::LayerGUI* gui_layer, ecs::Scene* scene) {
-			gui_layer->getGUIInstance()->submit(scene);
-		}
-
-		graphics::FrameBuffer<graphics::FrameBufferOpenGL>& MAREngine::getFramebuffer(layers::LayerGUI* guilayer) {
-			return guilayer->getGUIInstance()->getFramebuffer();
 		}
 
 

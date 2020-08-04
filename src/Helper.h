@@ -23,15 +23,17 @@ public:
 		auto entitylayer = engine->createEntityLayer();
 		auto guilayer = engine->createEditorLayer();
 		auto loaded_scene = engine->loadSceneFromFile();
+		auto gui = engine->createGUI();
+		auto gui_cam = engine->createGUICamera();
 
 		entitylayer->initialize(loaded_scene);
 		stack.pushLayer(entitylayer);
 
-		guilayer->initialize();
-		engine->submitSceneToGUI(guilayer, loaded_scene);
+		guilayer->initialize(&gui, &gui_cam);
+		gui.submit(loaded_scene);
 		stack.pushOverlay(guilayer);
 
-		auto& framebuffer = engine->getFramebuffer(guilayer);
+		auto& framebuffer = gui.getFramebuffer();
 
 		while (engine->shouldWindowClose() && !engine->shouldEngineRestart())
 		{

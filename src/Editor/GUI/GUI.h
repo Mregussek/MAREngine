@@ -31,7 +31,7 @@ namespace mar {
 			// --- Storage for scenes
 			ecs::Scene* m_scene;
 			// --- Viewport
-			graphics::FrameBuffer<graphics::FrameBufferOpenGL> m_framebuffer;
+			graphics::FrameBufferOpenGL m_framebuffer;
 			// --- Which entity should be displayed
 			int32_t m_indexEntity{ -1 };
 			// --- Dockspace
@@ -56,7 +56,7 @@ namespace mar {
 			// --- GET METHODS --- //
 			const float& getViewportWidth() const { return m_framebuffer.getSpecification().width; }
 			const float& getViewportHeight() const { return m_framebuffer.getSpecification().height; }
-			graphics::FrameBuffer<graphics::FrameBufferOpenGL>& getFramebuffer() { return m_framebuffer; }
+			graphics::FrameBufferOpenGL& getFramebuffer() { return m_framebuffer; }
 
 		private:
 			// --- DISPLAY --- //
