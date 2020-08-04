@@ -63,22 +63,6 @@ namespace mar {
 			graphics::RenderCamera scene_camera;
 			std::vector<Entity> entities;
 
-			bool updatedTransforms;
-			bool updatedCamera;
-			
-			bool updatedLight;
-
-			ModificationStorage where_modified;
-			bool updatedRenderable;
-
-			bool updatedRenColors;
-			bool updatedRenTextures2D;
-			bool updatedRenTexturesCubemap;
-
-			bool updatedSamplerColors;
-			bool updatedSamplerTextures2D;
-			bool updatedSamplerTexturesCubemap;
-
 			bool useEditorCamera;
 
 			Scene(std::string name);
@@ -114,26 +98,6 @@ namespace mar {
 			void setName(std::string name);
 			
 		private:
-
-			template<typename Component, typename T>
-			void updateRenderable(SceneStorage<T>& storage);
-
-			template<typename Component>
-			void updateSampler(SceneStorage<maths::vec3>& storage);
-
-			template<typename Component>
-			void updateSampler(SceneStorage<int32_t>& storage);
-
-			void allUpdated() {
-				where_modified = MODIFIED_NOT;
-				updatedRenderable = false;
-				updatedRenColors = false;
-				updatedRenTextures2D = false;
-				updatedRenTexturesCubemap = false;
-				updatedSamplerColors = false;
-				updatedSamplerTextures2D = false;
-				updatedSamplerTexturesCubemap = false;
-			}
 
 			template<typename T>
 			auto getView() ->decltype(m_registry.view<T>()) {

@@ -83,24 +83,12 @@ namespace mar {
 
 		uint32_t TextureOpenGL::genNewCubemap(const char* path) {
 			std::vector<std::string> faces(6);
-			int check = 0;
-
-			for (const auto& entry : std::filesystem::directory_iterator(path)) {
-				check++;
-			}
-
-			if (check == 6) {
-				faces[0] = std::string(path) + "/right.jpg";
-				faces[1] = std::string(path) + "/left.jpg";
-				faces[2] = std::string(path) + "/top.jpg";
-				faces[3] = std::string(path) + "/bottom.jpg";
-				faces[4] = std::string(path) + "/front.jpg";
-				faces[5] = std::string(path) + "/back.jpg";
-			}
-			else {
-				GRAPHICS_ERROR("TEXTURE_OPENGL: Cannot load 6 files for cubemap!");
-				return 0;
-			}
+			faces[0] = std::string(path) + "/right.jpg";
+			faces[1] = std::string(path) + "/left.jpg";
+			faces[2] = std::string(path) + "/top.jpg";
+			faces[3] = std::string(path) + "/bottom.jpg";
+			faces[4] = std::string(path) + "/front.jpg";
+			faces[5] = std::string(path) + "/back.jpg";
 
 			uint32_t id;
 			int width, height;

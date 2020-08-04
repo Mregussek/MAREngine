@@ -373,21 +373,15 @@ namespace mar {
 			if (entity.hasComponent<ecs::CameraComponent>())
 				Scene_Handle_CameraComponent(is_window_focused);
 			
-			if (entity.hasComponent<ecs::ColorComponent>()) {
-				m_scene->where_modified = MODIFIED_COLORS;
+			if (entity.hasComponent<ecs::ColorComponent>()) 
 				Scene_Handle_ColorComponent(is_window_focused);
-			}
 
-			if (entity.hasComponent<ecs::Texture2DComponent>()) {
-				m_scene->where_modified = MODIFIED_TEXTURES;
+			if (entity.hasComponent<ecs::Texture2DComponent>()) 
 				Scene_Handle_Texture2DComponent(is_window_focused);
-			}
-
-			if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
-				m_scene->where_modified = MODIFIED_CUBEMAPS;
+			
+			if (entity.hasComponent<ecs::TextureCubemapComponent>()) 
 				Scene_Handle_TextureCubemapComponent(is_window_focused);
-			}
-
+			
 			if (entity.hasComponent<ecs::LightComponent>())
 				Scene_Handle_LightComponent(is_window_focused);
 
@@ -421,16 +415,32 @@ namespace mar {
 					auto& entity = m_scene->entities[m_indexEntity];
 
 					if (ImGui::BeginMenu("Add Component")) {
-						auto& cmp = entity.getComponent<ecs::Components>();
+						if (!entity.hasComponent<ecs::RenderableComponent>())
+							if (ImGui::MenuItem("Add RenderableComponent"))
+								entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 
-						for (auto& existing : ecs::AllExistingComponents) {
-							
-							auto it = std::find(cmp.components.begin(), cmp.components.end(), existing.first);
-							if (it == cmp.components.end()) // if not found
-								if (ImGui::MenuItem(existing.second))
-									entity.addComponent(existing.first);
-							
+						if (!entity.hasComponent<ecs::ColorComponent>() && !entity.hasComponent<ecs::Texture2DComponent>()
+							&& !entity.hasComponent<ecs::TextureCubemapComponent>()) {
+							if (ImGui::BeginMenu("Add Color/Texture")) {
+
+								if (ImGui::MenuItem("Add Texture2DComponent"))
+									entity.addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+								if (ImGui::MenuItem("Add TextureCubemapComponent"))
+									entity.addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+								if (ImGui::MenuItem("Add ColorComponent"))
+									entity.addComponent<ecs::ColorComponent>(ECS_COLOR);
+
+								ImGui::EndMenu();
+							}
 						}
+
+						if (!entity.hasComponent<ecs::LightComponent>())
+							if (ImGui::MenuItem("Add LightComponent"))
+								entity.addComponent<ecs::LightComponent>(ECS_LIGHT);
+
+						if (!entity.hasComponent<ecs::CameraComponent>())
+							if (ImGui::MenuItem("Add CameraComponent"))
+								entity.addComponent<ecs::CameraComponent>(ECS_CAMERA);
 
 						ImGui::EndMenu();
 					}
@@ -491,7 +501,6 @@ namespace mar {
 
 			if (window_focused) {
 				ecs::System::handleTransformComponent(tran);
-				m_scene->updatedTransforms = true;
 			}
 				
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
@@ -510,7 +519,6 @@ namespace mar {
 				|| !entity.hasComponent<ecs::TextureCubemapComponent>())
 				if (ImGui::MenuItem("Remove Renderable")) {
 					entity.removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					m_scene->updatedRenderable = true;
 					return;
 				}
 
@@ -528,7 +536,6 @@ namespace mar {
 					renderable.id = "Cube";
 					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
 					renderable.indices = graphics::MeshCreator::Cube::getIndices();
-					m_scene->updatedRenderable = true;
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 				}
@@ -539,7 +546,6 @@ namespace mar {
 					renderable.id = "Pyramid";
 					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
 					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
-					m_scene->updatedRenderable = true;
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 				}
@@ -550,7 +556,6 @@ namespace mar {
 					renderable.id = "Wall";
 					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
 					renderable.indices = graphics::MeshCreator::Wall::getIndices();
-					m_scene->updatedRenderable = true;
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 				}
@@ -561,7 +566,6 @@ namespace mar {
 					renderable.id = "Surface";
 					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
 					renderable.indices = graphics::MeshCreator::Surface::getIndices();
-					m_scene->updatedRenderable = true;
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 				}
@@ -588,7 +592,6 @@ namespace mar {
 						renderable.id = graphics::MeshCreator::OBJ::vertices.empty() ? "empty" : load;
 						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
 						renderable.indices = graphics::MeshCreator::OBJ::indices;
-						m_scene->updatedRenderable = true;
 						GUI_modify_renderable = false;
 						GUI_display_obj = false;
 					}
@@ -661,27 +664,17 @@ namespace mar {
 		}
 
 		void GUI::Scene_Handle_ColorComponent(bool& window_focused) {
-			/*
-			TODO: write bool updatedColor - to update only samplers, changed textures, colors and so on
-					write bool updatedRenColor - to update also renderable, because if there is no texture texture
-					there is nothing to draw!
-			*/
-
 			ImGui::Separator();
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Color")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::ColorComponent>(ECS_COLOR);
-				m_scene->updatedRenColors = true;
 				return;
 			}
 
 			auto& color = m_scene->entities[m_indexEntity].getComponent<ecs::ColorComponent>();
 		
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture));
-
-			if (window_focused)
-				m_scene->updatedSamplerColors = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
@@ -694,7 +687,6 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-				m_scene->updatedRenTextures2D = true;
 				return;
 			}
 
@@ -714,7 +706,6 @@ namespace mar {
 
 			if (ImGui::Button("Load Texture")) {
 				tex.texture = load;
-				m_scene->updatedSamplerTextures2D = true;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
@@ -728,7 +719,6 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-				m_scene->updatedRenTexturesCubemap = true;
 				return;
 			}
 
@@ -748,7 +738,6 @@ namespace mar {
 
 			if (ImGui::Button("Load Cubemap")) {
 				cubemap.texture = load;
-				m_scene->updatedSamplerTexturesCubemap = true;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
@@ -762,7 +751,6 @@ namespace mar {
 			
 			if (ImGui::MenuItem("Remove Light")) {
 				m_scene->entities[m_indexEntity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
-				m_scene->updatedLight = true;
 				return;
 			}
 
@@ -776,9 +764,6 @@ namespace mar {
 			ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f);
 			ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f);
 			ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f);
-
-			if (window_focused)
-				m_scene->updatedLight = true;
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 		}

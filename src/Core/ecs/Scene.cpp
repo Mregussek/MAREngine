@@ -12,18 +12,7 @@ namespace mar {
 
 
 		Scene::Scene(std::string name)
-			: m_name(name),
-			updatedTransforms(false),
-			updatedRenColors(false),
-			updatedRenTextures2D(false),
-			updatedRenTexturesCubemap(false),
-			updatedSamplerColors(false),
-			updatedSamplerTextures2D(false),
-			updatedSamplerTexturesCubemap(false),
-			updatedLight(false),
-			updatedCamera(false),
-			updatedRenderable(false),
-			where_modified(MODIFIED_NOT)
+			: m_name(name)
 		{
 			m_registry = entt::registry();
 
@@ -68,6 +57,27 @@ namespace mar {
 			for (auto& entity : entities) {
 				auto& tran = entity.getComponent<TransformComponent>();
 
+				if (entity.hasComponent<LightComponent>()) {
+					auto& light = entity.getComponent<LightComponent>();
+
+					m_light.positions.push_back(tran.center);
+					m_light.components.push_back(light);
+				}
+
+				if (entity.hasComponent<CameraComponent>()) {
+					typedef maths::Trig trig;
+
+					auto& cam = entity.getComponent<CameraComponent>();
+
+					if (cam.id.find("main") == std::string::npos) 
+						continue;
+
+					calculateCameraTransforms(tran, cam, scene_camera);
+				}
+
+				if (!entity.hasComponent<RenderableComponent>())
+					continue;
+
 				if (entity.hasComponent<ColorComponent>()) {
 					auto& ren = entity.getComponent<RenderableComponent>();
 					auto& color = entity.getComponent<ColorComponent>();
@@ -102,24 +112,6 @@ namespace mar {
 
 					ECS_TRACE("SCENE: initializing cubemap entity!");
 				}
-
-				if (entity.hasComponent<LightComponent>()) {
-					auto& light = entity.getComponent<LightComponent>();
-
-					m_light.positions.push_back(tran.center);
-					m_light.components.push_back(light);
-				}
-
-				if (entity.hasComponent<CameraComponent>()) {
-					typedef maths::Trig trig;
-
-					auto& cam = entity.getComponent<CameraComponent>();
-
-					if (cam.id.find("main") == std::string::npos) 
-						continue;
-
-					calculateCameraTransforms(tran, cam, scene_camera);
-				}
 			}
 		}
 
@@ -144,37 +136,56 @@ namespace mar {
 				}
 			}
 
-			if (updatedRenderable) {
-				if (where_modified == MODIFIED_COLORS) 
-					updateRenderable<ColorComponent, maths::vec3>(m_colors);
-				else if (where_modified == MODIFIED_TEXTURES) 
-					updateRenderable<Texture2DComponent, int32_t>(m_textures);
-				else if (where_modified == MODIFIED_CUBEMAPS) 
-					updateRenderable<TextureCubemapComponent, int32_t>(m_cubemaps);
+			resetStorages();
+
+			for (auto& entity : entities) {
+				auto& tran = entity.getComponent<TransformComponent>();
+
+				if (entity.hasComponent<LightComponent>()) {
+					auto& light = entity.getComponent<LightComponent>();
+
+					m_light.positions.push_back(tran.center);
+					m_light.components.push_back(light);
+				}
+
+				if (!entity.hasComponent<RenderableComponent>())
+					continue;
+
+				if (entity.hasComponent<ColorComponent>()) {
+					auto& ren = entity.getComponent<RenderableComponent>();
+					auto& color = entity.getComponent<ColorComponent>();
+
+					m_colors.transforms.push_back(tran.transform);
+					submitVerticesIndices<maths::vec3>(ren, m_colors);
+					submitSampler<maths::vec3>(color.texture, m_colors);
+
+					ECS_TRACE("SCENE: initializing color entity!");
+				}
+				else if (entity.hasComponent<Texture2DComponent>()) {
+					auto& ren = entity.getComponent<RenderableComponent>();
+					auto& texture = entity.getComponent<Texture2DComponent>();
+
+					m_texture.loadTexture(texture.texture);
+					m_textures.paths.push_back(texture.texture);
+					m_textures.transforms.push_back(tran.transform);
+					submitVerticesIndices<int32_t>(ren, m_textures);
+					submitSampler<int32_t>(m_textures.counter, m_textures);
+
+					ECS_TRACE("SCENE: initializing texture2d entity!");
+				}
+				else if (entity.hasComponent<TextureCubemapComponent>()) {
+					auto& ren = entity.getComponent<RenderableComponent>();
+					auto& cubemap = entity.getComponent<TextureCubemapComponent>();
+
+					m_texture.loadCubemap(cubemap.texture);
+					m_cubemaps.paths.push_back(cubemap.texture);
+					m_cubemaps.transforms.push_back(tran.transform);
+					submitVerticesIndices<int32_t>(ren, m_cubemaps);
+					submitSampler<int32_t>(m_cubemaps.counter, m_cubemaps);
+
+					ECS_TRACE("SCENE: initializing cubemap entity!");
+				}
 			}
-
-			if (updatedRenColors) {
-
-			}
-
-			if (updatedRenTextures2D) {
-				
-			}
-
-			if (updatedRenTexturesCubemap) {
-
-			}
-
-			if (updatedSamplerColors) 
-				updateSampler<ColorComponent>(m_colors);
-			
-			if (updatedSamplerTextures2D) 
-				updateSampler<Texture2DComponent>(m_textures);
-			
-			if (updatedSamplerTexturesCubemap) 
-				updateSampler<TextureCubemapComponent>(m_cubemaps);
-
-			allUpdated();
 		}
 
 		void Scene::resetStorages() {
@@ -189,6 +200,7 @@ namespace mar {
 			m_textures.indices.clear();
 			m_textures.transforms.clear();
 			m_textures.samplers.clear();
+			m_textures.paths.clear();
 			m_textures.counter = 0;
 			m_textures.indicesMax = 0;
 
@@ -196,8 +208,12 @@ namespace mar {
 			m_cubemaps.indices.clear();
 			m_cubemaps.transforms.clear();
 			m_cubemaps.samplers.clear();
+			m_cubemaps.paths.clear();
 			m_cubemaps.counter = 0;
 			m_cubemaps.indicesMax = 0;
+
+			m_light.components.clear();
+			m_light.positions.clear();
 
 			ECS_TRACE("SCENE: called resetStorages method!");
 		}
@@ -253,54 +269,6 @@ namespace mar {
 			}
 
 			scene_camera.mvp = scene_camera.projection * scene_camera.view * scene_camera.model;
-		}
-
-		template<typename Component, typename T>
-		void Scene::updateRenderable(SceneStorage<T>& storage) {
-			storage.vertices.clear();
-			storage.indices.clear();
-			storage.indicesMax = 0;
-			storage.counter = 0;
-
-			for (auto& entity : entities)
-				if (entity.hasComponent<Component>() && entity.hasComponent<RenderableComponent>()) {
-					auto& ren = entity.getComponent<RenderableComponent>();
-					submitVerticesIndices<T>(ren, storage);
-				}
-		}
-
-		template<typename Component>
-		void Scene::updateSampler(SceneStorage<maths::vec3>& storage) {
-			storage.samplers.clear();
-			storage.counter = 0;
-
-			for (auto& entity : entities)
-				if (entity.hasComponent<Component>()) {
-					auto& cmp = entity.getComponent<Component>();
-					storage.samplers.push_back(cmp.texture);
-					storage.counter++;
-				}
-		}
-
-		template<typename Component>
-		void Scene::updateSampler(SceneStorage<int32_t>& storage) {
-			storage.paths.clear();
-			storage.samplers.clear();
-			storage.counter = 0;
-
-			for(auto& entity : entities) 
-				if (entity.hasComponent<Component>()) {
-					auto& cmp = entity.getComponent<Component>();
-
-					if (where_modified == MODIFIED_TEXTURES)
-						m_texture.loadTexture(cmp.texture);
-					else if (where_modified == MODIFIED_CUBEMAPS)
-						m_texture.loadCubemap(cmp.texture);
-
-					storage.paths.push_back(cmp.texture);
-					storage.samplers.push_back(storage.counter);
-					storage.counter++;
-				}
 		}
 
 
