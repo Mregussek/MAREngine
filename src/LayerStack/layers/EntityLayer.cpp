@@ -36,6 +36,7 @@ namespace mar {
 
 		void EntityLayer::closeLayer() {
 			m_renderer->close();
+			m_scene->shutdown();
 
 			delete m_scene;
 			delete m_renderer;

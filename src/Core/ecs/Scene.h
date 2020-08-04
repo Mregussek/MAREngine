@@ -66,7 +66,7 @@ namespace mar {
 			bool useEditorCamera;
 
 			Scene(std::string name);
-			~Scene();
+			void shutdown();
 
 			Entity& createEntity();
 			void destroyEntity(const int32_t& index);

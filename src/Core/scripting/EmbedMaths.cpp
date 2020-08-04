@@ -21,13 +21,29 @@
 	#error "MARMathPythonModule: Cannot import MARMaths.h!"
 #endif
 
+#if __has_include("entt/entt.hpp")
+	#include "entt/entt.hpp"
+	#define MAR_ENGINE_ENTT_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import entt/entt.hpp!"
+#endif
+
+#include "../ecs/Scene.h"
+#include "../ecs/Entity.h"
+#include "../ecs/Components.h"
+
 namespace py = pybind11;
 namespace math = mar::maths;
+namespace ecs = mar::ecs;
 
 
-PYBIND11_MODULE(MARMathPythonModule, m) {
+PYBIND11_MODULE(MAREnginePy, m) {
 
-	m.doc() = "MARMathPythonModule";
+	m.doc() = "MAREngine Python Module";
+
+	// -----------------------------------------------------------------------------------
+	// MATHS
+	// -----------------------------------------------------------------------------------
 
 	// --- VEC3 --- //
 	py::class_<math::vec3>(m, "vec3")
@@ -196,10 +212,10 @@ PYBIND11_MODULE(MARMathPythonModule, m) {
 		.def_static("identity",
 			&math::mat4::identity)
 		.def("multiply",
-			(math::mat4(math::mat4::*)(math::mat4& other))& math::mat4::multiply,
+			(math::mat4(math::mat4::*)(math::mat4 & other)) & math::mat4::multiply,
 			py::arg("other"))
 		.def("multiply",
-			(math::vec4(math::mat4::*)(math::vec4& other))& math::mat4::multiply,
+			(math::vec4(math::mat4::*)(math::vec4 & other)) & math::mat4::multiply,
 			py::arg("other"))
 		.def_static("orthographic",
 			&math::mat4::orthographic,
@@ -254,6 +270,87 @@ PYBIND11_MODULE(MARMathPythonModule, m) {
 		.def_static("cosine",
 			&math::Trig::cosine,
 			py::arg("radians"));
+
+	// -----------------------------------------------------------------------------------
+	// Entity Component System
+	// -----------------------------------------------------------------------------------
+
+	// --- COMPONENTS --- //
+	py::class_<ecs::TransformComponent>(m, "TransformComponent")
+		.def(py::init<>())
+		.def(py::init<const ecs::TransformComponent&>(), py::arg("tc"))
+		.def_readwrite("general_scale", &ecs::TransformComponent::general_scale)
+		.def_readwrite("center", &ecs::TransformComponent::center)
+		.def_readwrite("angles", &ecs::TransformComponent::scale)
+		.def_readwrite("transform", &ecs::TransformComponent::transform);
+
+	py::class_<ecs::ColorComponent>(m, "ColorComponent")
+		.def(py::init<>())
+		.def(py::init<const ecs::ColorComponent&>(), py::arg("cc"))
+		.def(py::init<const math::vec3&>(), py::arg("col"))
+		.def_readwrite("texture", &ecs::ColorComponent::texture);
+
+	py::class_<ecs::CameraComponent>(m, "CameraComponent")
+		.def(py::init<>())
+		.def(py::init<const ecs::CameraComponent&>(), py::arg("cam"))
+		.def_readwrite("id", &ecs::CameraComponent::id)
+		.def_readwrite("Perspective", &ecs::CameraComponent::Perspective)
+		.def_readwrite("p_fov", &ecs::CameraComponent::p_fov)
+		.def_readwrite("p_aspectRation", &ecs::CameraComponent::p_aspectRatio)
+		.def_readwrite("p_near", &ecs::CameraComponent::p_near)
+		.def_readwrite("p_far", &ecs::CameraComponent::p_far)
+		.def_readwrite("o_left", &ecs::CameraComponent::o_left)
+		.def_readwrite("o_right", &ecs::CameraComponent::o_right)
+		.def_readwrite("o_top", &ecs::CameraComponent::o_top)
+		.def_readwrite("o_bottom", &ecs::CameraComponent::o_bottom)
+		.def_readwrite("o_near", &ecs::CameraComponent::o_near)
+		.def_readwrite("o_far", &ecs::CameraComponent::o_far);
+
+	py::class_<ecs::LightComponent>(m, "LightComponent")
+		.def(py::init<>())
+		.def(py::init<const ecs::LightComponent&>(), py::arg("li"))
+		.def_readwrite("ambient", &ecs::LightComponent::ambient)
+		.def_readwrite("diffuse", &ecs::LightComponent::diffuse)
+		.def_readwrite("specular", &ecs::LightComponent::specular)
+		.def_readwrite("constant", &ecs::LightComponent::constant)
+		.def_readwrite("linear", &ecs::LightComponent::linear)
+		.def_readwrite("quadratic", &ecs::LightComponent::quadratic)
+		.def_readwrite("shininess", &ecs::LightComponent::shininess);
+
+	// ---- ENTITY ---- //
+	py::class_<ecs::Entity>(m, "Entity")
+		.def("getTransformComponent",
+			&ecs::Entity::getComponent<ecs::TransformComponent>)
+		.def("getLightComponent",
+			&ecs::Entity::getComponent<ecs::LightComponent>)
+		.def("getCameraComponent",
+			&ecs::Entity::getComponent<ecs::CameraComponent>)
+		.def("getColorComponent",
+			&ecs::Entity::getComponent<ecs::ColorComponent>);
+
+	// -----------------------------------------------------------------------------------
+	// Helper methods
+	// -----------------------------------------------------------------------------------
+
+	m.def("printf",
+		[](float f) {std::cout << f << "\n"; },
+		py::arg("f"));
+
+	m.def("print3",
+		[](math::vec3 v) { std::cout << v.x << " " << v.y << " " << v.z << "\n"; },
+		py::arg("v"));
+
+	m.def("print4",
+		[](math::vec4 v) { std::cout << v.x << " " << v.y << " " << v.z << " " << v.w << "\n"; },
+		py::arg("v"));
+	m.def("printm",
+		[](const math::mat4& matrix) {
+			std::cout << "mat4:"
+				<< " | " << matrix[0 + 0 * 4] << " " << matrix[0 + 1 * 4] << " " << matrix[0 + 2 * 4] << " " << matrix[0 + 3 * 4] << " |\n"
+				<< "      | " << matrix[1 + 0 * 4] << " " << matrix[1 + 1 * 4] << " " << matrix[1 + 2 * 4] << " " << matrix[1 + 3 * 4] << " |\n"
+				<< "      | " << matrix[2 + 0 * 4] << " " << matrix[2 + 1 * 4] << " " << matrix[2 + 2 * 4] << " " << matrix[2 + 3 * 4] << " |\n"
+				<< "      | " << matrix[3 + 0 * 4] << " " << matrix[3 + 1 * 4] << " " << matrix[3 + 2 * 4] << " " << matrix[3 + 3 * 4] << " |\n";
+		}, py::arg("matrix"));
 }
 
 

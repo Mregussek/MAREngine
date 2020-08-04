@@ -19,7 +19,8 @@ namespace mar {
 			ECS_INFO("SCENE: scene is created, with entt::registry! (called constructor)");
 		}
 
-		Scene::~Scene() {
+		void Scene::shutdown() {
+			m_texture.shutdown();
 			m_registry.clear();
 			
 			ECS_INFO("SCENE: registry is cleared! (called destructor)");

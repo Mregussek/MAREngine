@@ -153,15 +153,14 @@ namespace mar {
 		void GUI::Display_ViewPort() {
 			ImGui::Begin("ViewPort");
 
-			if (ImGui::IsWindowFocused()) {
-				window::Input::enableInput();
-			}
-			else {
-				window::Input::disableInput();
-			}
+			if (ImGui::IsWindowFocused()) window::Input::enableInput();
+			else window::Input::disableInput();
 
-			static graphics::FrameBufferSpecification spec = m_framebuffer.getSpecification();
-			static uint32_t id = m_framebuffer.getColorAttach();
+			static graphics::FrameBufferSpecification spec;
+			static uint32_t id;
+
+			spec = m_framebuffer.getSpecification();
+			id = m_framebuffer.getColorAttach();
 
 			ImVec2 size = ImGui::GetContentRegionAvail();
 			spec.width = size.x;
