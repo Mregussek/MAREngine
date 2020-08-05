@@ -5,6 +5,7 @@
 
 #include "Scene.h"
 #include "Entity.h"
+#include "../../Editor/Filesystem/EditorFilesystem.h"
 
 
 namespace mar {
@@ -12,7 +13,9 @@ namespace mar {
 
 
 		Scene::Scene(std::string name)
-			: m_name(name)
+			: m_name(name),
+			m_EditorMode(true),
+			m_PauseMode(false)
 		{
 			m_registry = entt::registry();
 
@@ -25,6 +28,10 @@ namespace mar {
 			
 			ECS_INFO("SCENE: registry is cleared! (called destructor)");
 		}
+
+		// -------------------------------------------------------------
+		// ENTITIES MANAGEMENT
+		// -------------------------------------------------------------
 
 		Entity& Scene::createEntity() {
 			Entity entity{ this };
@@ -48,12 +55,12 @@ namespace mar {
 			ECS_INFO("SCENE: destroyed entity!");
 		}
 
-		void Scene::setName(std::string name) {
-			m_name = name;
-		}
+		// -------------------------------------------------------------
+		// EDITOR MODE
+		// -------------------------------------------------------------
 
-		void Scene::initialize() {
-			resetStorages();
+		void Scene::initializeEditorMode() {
+			resetStorages(m_colors, m_textures, m_cubemaps, m_light);
 
 			for (auto& entity : entities) {
 				auto& tran = entity.getComponent<TransformComponent>();
@@ -74,6 +81,11 @@ namespace mar {
 						continue;
 
 					calculateCameraTransforms(tran, cam, scene_camera);
+				}
+
+				if (entity.hasComponent<ScriptComponent>()) {
+					auto& script = entity.getComponent<ScriptComponent>();
+					script.source = editor::Filesystem::loadPyScript(script.script.c_str());
 				}
 
 				if (!entity.hasComponent<RenderableComponent>())
@@ -116,7 +128,7 @@ namespace mar {
 			}
 		}
 
-		void Scene::update() {
+		void Scene::updateEditorMode() {
 			if (useEditorCamera) {
 				auto& camdata = editor::Camera::getCameraData();
 				scene_camera.model = camdata.model;
@@ -137,7 +149,7 @@ namespace mar {
 				}
 			}
 
-			resetStorages();
+			resetStorages(m_colors, m_textures, m_cubemaps, m_light);
 
 			for (auto& entity : entities) {
 				auto& tran = entity.getComponent<TransformComponent>();
@@ -191,32 +203,32 @@ namespace mar {
 			}
 		}
 
-		void Scene::resetStorages() {
-			m_colors.vertices.clear();
-			m_colors.indices.clear();
-			m_colors.transforms.clear();
-			m_colors.samplers.clear();
-			m_colors.counter = 0;
-			m_colors.indicesMax = 0;
+		void Scene::resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1) {
+			s1.vertices.clear();
+			s1.indices.clear();
+			s1.transforms.clear();
+			s1.samplers.clear();
+			s1.counter = 0;
+			s1.indicesMax = 0;
 
-			m_textures.vertices.clear();
-			m_textures.indices.clear();
-			m_textures.transforms.clear();
-			m_textures.samplers.clear();
-			m_textures.paths.clear();
-			m_textures.counter = 0;
-			m_textures.indicesMax = 0;
+			s2.vertices.clear();
+			s2.indices.clear();
+			s2.transforms.clear();
+			s2.samplers.clear();
+			s2.paths.clear();
+			s2.counter = 0;
+			s2.indicesMax = 0;
 
-			m_cubemaps.vertices.clear();
-			m_cubemaps.indices.clear();
-			m_cubemaps.transforms.clear();
-			m_cubemaps.samplers.clear();
-			m_cubemaps.paths.clear();
-			m_cubemaps.counter = 0;
-			m_cubemaps.indicesMax = 0;
+			s3.vertices.clear();
+			s3.indices.clear();
+			s3.transforms.clear();
+			s3.samplers.clear();
+			s3.paths.clear();
+			s3.counter = 0;
+			s3.indicesMax = 0;
 
-			m_light.components.clear();
-			m_light.positions.clear();
+			l1.components.clear();
+			l1.positions.clear();
 
 			ECS_TRACE("SCENE: called resetStorages method!");
 		}

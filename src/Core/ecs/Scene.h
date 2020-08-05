@@ -59,6 +59,14 @@ namespace mar {
 			SceneStorage<int32_t> m_cubemaps;
 			graphics::TextureOpenGL m_texture;
 
+			LightStorage play_light;
+			SceneStorage<maths::vec3> play_colors;
+			SceneStorage<int32_t> play_textures;
+			SceneStorage<int32_t> play_cubemaps;
+
+			bool m_EditorMode;
+			bool m_PauseMode;
+
 		public:
 			graphics::RenderCamera scene_camera;
 			std::vector<Entity> entities;
@@ -71,33 +79,80 @@ namespace mar {
 			Entity& createEntity();
 			void destroyEntity(const int32_t& index);
 
-			void initialize();
-			void update();
+			void initialize() {
+				if (m_EditorMode)
+					initializeEditorMode();
+				else
+					initializePlayMode();
+			}
 
-			void resetStorages();
-
-			template<typename T>
-			void submitVerticesIndices(RenderableComponent& ren, SceneStorage<T>& storage);
-
-			template<typename T>
-			void submitSampler(T& sampler, SceneStorage<T>& storage);
+			void update() {
+				if (m_EditorMode)
+					updateEditorMode();
+				else {
+					if(!m_PauseMode)
+						updatePlayMode();
+				}
+			}
 
 			// --- GET METHODS --- //
 
 			inline const std::string& getName() const { return m_name; }
 
-			inline const SceneStorage<maths::vec3>& getColorsStorage() const { return m_colors; }
-			inline const SceneStorage<int32_t>& getTexturesStorage() const { return m_textures; }
-			inline const SceneStorage<int32_t>& getCubemapStorage() const { return m_cubemaps; }
+			inline const SceneStorage<maths::vec3>& getColorsStorage() const { return m_EditorMode ? m_colors : play_colors; }
+			inline const SceneStorage<int32_t>& getTexturesStorage() const { return m_EditorMode ? m_textures : play_textures; }
+			inline const SceneStorage<int32_t>& getCubemapStorage() const { return m_EditorMode ? m_cubemaps : play_cubemaps; }
+			inline const LightStorage& getLightStorage() const { return m_EditorMode ? m_light : play_light; }
 			inline const graphics::RenderCamera& getRenderCamera() const { return scene_camera; }
-			inline const LightStorage& getLightStorage() const { return m_light; }
 			inline const graphics::TextureOpenGL& getTextureInstance() const { return m_texture; }
+
+			bool isEditorMode() { return m_EditorMode; }
+			bool isPlayMode() { return !m_EditorMode; }
+			bool isPauseMode() { return m_PauseMode; }
 
 			// --- SET METHODS --- //
 
-			void setName(std::string name);
+			void setName(std::string name) { m_name = name; }
+
+			void setPlayMode() { 
+				m_EditorMode = false; 
+				initializePlayMode();
+			}
+			void setPauseDuringPlay() { m_PauseMode = true; }
+			void setUnpauseDuringPlay() { m_PauseMode = false; }
+			void stopPlayMode() { setEditorMode(); }
+			void setEditorMode() { 
+				m_EditorMode = true; 
+				resetStorages(play_colors, play_textures, play_cubemaps, play_light);
+			}
 			
 		private:
+
+			void initializeEditorMode();
+			void updateEditorMode();
+
+			void initializePlayMode() {
+				play_colors = m_colors;
+				play_textures = m_textures;
+				play_cubemaps = m_cubemaps;
+				play_light = m_light;
+
+				auto view = getView<CameraComponent>();
+				for (auto entity : view) {
+					auto& cam = getComponent<CameraComponent>(entity);
+
+					if (cam.id.find("main") == std::string::npos) continue;
+
+					auto& tran = getComponent<TransformComponent>(entity);
+					calculateCameraTransforms(tran, cam, scene_camera);
+				}
+			}
+
+			void updatePlayMode() {
+				
+			}
+
+			void resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1);
 
 			template<typename T>
 			auto getView() ->decltype(m_registry.view<T>()) {
@@ -108,6 +163,12 @@ namespace mar {
 			T& getComponent(entt::entity& entity) {
 				return m_registry.get<T>(entity);
 			}
+
+			template<typename T>
+			void submitVerticesIndices(RenderableComponent& ren, SceneStorage<T>& storage);
+
+			template<typename T>
+			void submitSampler(T& sampler, SceneStorage<T>& storage);
 
 			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
 

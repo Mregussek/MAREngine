@@ -94,6 +94,9 @@ namespace mar {
 			// --- FILESYSTEM HANDLERS --- //
 			void Filesystem_SaveScene();
 			void Filesystem_LoadScene();
+
+			// --- TEXT EDITOR HANDLERS --- //
+			void Display_Text(const char* text);
 		};
 
 

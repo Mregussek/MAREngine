@@ -24,9 +24,9 @@ namespace mar {
 				std::string shininess;
 			};
 
-			static const std::string u_materialSize{ "u_materialSize" };
+			inline static const std::string u_materialSize{ "u_materialSize" };
 
-			static const std::vector<Material> u_material{
+			inline static const std::vector<Material> u_material{
 				{
 					"u_material[0].lightPos",
 					"u_material[0].ambient" ,

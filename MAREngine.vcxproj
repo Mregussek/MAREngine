@@ -197,10 +197,12 @@
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RendererColor.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\ecs\Components.h" />
     <ClInclude Include="src\Core\ecs\Entity.h" />
     <ClInclude Include="src\Core\ecs\Systems.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\Embedding.h" />
     <ClInclude Include="src\Core\scripting\EmbedMaths.cpp" />
@@ -255,7 +257,9 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RendererColor.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RendererTexture.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\helper.cpp" />

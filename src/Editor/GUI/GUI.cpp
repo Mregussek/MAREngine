@@ -166,6 +166,26 @@ namespace mar {
 			spec.width = size.x;
 			spec.height = size.y;
 
+			if (m_scene->isEditorMode()) {
+				if (ImGui::Button("PLAY"))
+					m_scene->setPlayMode();
+			}
+			else {
+				if (ImGui::Button("STOP"))
+					m_scene->setEditorMode();
+
+				ImGui::SameLine();
+
+				if (!m_scene->isPauseMode()) {
+					if (ImGui::Button("PAUSE"))
+						m_scene->setPauseDuringPlay();
+				}
+				else {
+					if (ImGui::Button("RESUME"))
+						m_scene->setUnpauseDuringPlay();
+				}	
+			}
+
 			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, 
 				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
@@ -346,6 +366,13 @@ namespace mar {
 
 		void GUI::Scene_Entity_Modify() {
 			ImGui::Begin("Entity Modification");
+
+			if (m_scene->isPlayMode()) {
+				ImGui::Text("Cannot modify entity during play mode!");
+				ImGui::End();
+				EDITOR_TRACE("GUI: scene_entity_modify end (PLAY MODE)");
+				return;
+			}
 
 			if (m_indexEntity == -1) {
 				ImGui::Text("No entity selected!");
@@ -529,6 +556,8 @@ namespace mar {
 
 			if (ImGui::Button("Load Script from file")) 
 				script.source = Filesystem::loadPyScript(script.script.c_str());
+
+			Display_Text(script.source.c_str());
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 		}
@@ -897,6 +926,17 @@ namespace mar {
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: filesystem_loadscene");
+		}
+
+		void GUI::Display_Text(const char* text) {
+			static const char* display{ "empty" };
+
+			ImGui::Begin("Script Editor");
+
+			display = text;
+			ImGui::Text(display);
+
+			ImGui::End();
 		}
 
 		void GUI::Setup_Theme() {
