@@ -22,6 +22,8 @@ namespace mar {
 			static void saveToFile(ecs::Scene* scene, const char* filename);
 			static ecs::Scene* openFile(const char* filename);
 
+			static std::string loadPyScript(const char* filename);
+
 		};
 
 

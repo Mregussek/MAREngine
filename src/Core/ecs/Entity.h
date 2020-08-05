@@ -108,31 +108,34 @@ namespace mar {
 
 				switch (entcmp) {
 				case ECS_RENDERABLE:
-					addComponent<ecs::RenderableComponent>(ECS_RENDERABLE, "empty");
+					addComponent<RenderableComponent>(ECS_RENDERABLE, "empty");
 					break;
 				case ECS_COLOR:
-					addComponent<ecs::ColorComponent>(ECS_COLOR);
+					addComponent<ColorComponent>(ECS_COLOR);
 					break;
 				case ECS_TEXTURE2D:
-					addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+					addComponent<Texture2DComponent>(ECS_TEXTURE2D);
 					break;
 				case ECS_CUBEMAP:
-					addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+					addComponent<TextureCubemapComponent>(ECS_CUBEMAP);
 					break;
 				case ECS_LIGHT:
-					addComponent<ecs::LightComponent>(ECS_LIGHT);
+					addComponent<LightComponent>(ECS_LIGHT);
 					break;
 				case ECS_CAMERA:
-					addComponent<ecs::CameraComponent>(ECS_CAMERA);
+					addComponent<CameraComponent>(ECS_CAMERA);
+					break;
+				case ECS_SCRIPT:
+					addComponent<ScriptComponent>(ECS_SCRIPT);
 					break;
 				case ECS_TRANSFORM:
-					addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
+					addComponent<TransformComponent>(ECS_TRANSFORM);
 					break;
 				case ECS_TAG:
-					addComponent<ecs::TagComponent>(ECS_TAG);
+					addComponent<TagComponent>(ECS_TAG);
 					break;
 				case ECS_DEFAULT:
-					addComponent<ecs::ColorComponent>(ECS_DEFAULT);
+					addComponent<ColorComponent>(ECS_DEFAULT);
 					break;
 				}
 			}

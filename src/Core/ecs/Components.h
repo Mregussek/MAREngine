@@ -22,7 +22,8 @@ namespace mar {
 			TAG,
 			TRANSFORM,
 			LIGHT,
-			CAMERA
+			CAMERA,
+			SCRIPT
 		};
 
 		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents {
@@ -34,7 +35,8 @@ namespace mar {
 				{ EntityComponents::TAG, "TagComponent" },
 				{ EntityComponents::TRANSFORM, "TransformComponent" },
 				{ EntityComponents::LIGHT, "LightComponent" },
-				{ EntityComponents::CAMERA, "CameraComponent" }
+				{ EntityComponents::CAMERA, "CameraComponent" },
+				{ EntityComponents::SCRIPT, "ScriptComponent" },
 		};
 
 		struct Components {
@@ -174,6 +176,20 @@ namespace mar {
 			LightComponent(const LightComponent& li) = default;
 		};
 
+		struct ScriptComponent {
+			std::string script{ "empty" };
+			std::string source{ "empty" };
+
+			ScriptComponent() = default;
+			ScriptComponent(const ScriptComponent& sc) = default;
+			ScriptComponent(std::string s)
+				: script(s)
+			{}
+
+			operator std::string& () { return script; }
+			operator const std::string& () const { return script; }
+		};
+
 
 } }
 
@@ -187,6 +203,7 @@ namespace mar {
 #define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
 #define ECS_LIGHT ::mar::ecs::EntityComponents::LIGHT
 #define ECS_CAMERA ::mar::ecs::EntityComponents::CAMERA
+#define ECS_SCRIPT ::mar::ecs::EntityComponents::SCRIPT
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_H

@@ -366,6 +366,9 @@ namespace mar {
 			if (entity.hasComponent<ecs::TransformComponent>())
 				Scene_Handle_TransformComponent(is_window_focused);
 
+			if (entity.hasComponent<ecs::ScriptComponent>())
+				Scene_Handle_ScriptComponent(is_window_focused);
+
 			if (entity.hasComponent<ecs::RenderableComponent>())
 				Scene_Handle_RenderableComponent(is_window_focused);
 			
@@ -441,6 +444,10 @@ namespace mar {
 							if (ImGui::MenuItem("Add CameraComponent"))
 								entity.addComponent<ecs::CameraComponent>(ECS_CAMERA);
 
+						if (!entity.hasComponent<ecs::ScriptComponent>())
+							if (ImGui::MenuItem("Add ScriptComponent"))
+								entity.addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+
 						ImGui::EndMenu();
 					}
 
@@ -464,9 +471,8 @@ namespace mar {
 
 			input = (char*)tag.tag.c_str();
 
-			ImGui::InputText("Tag", input, 25);
-
-			tag.tag = std::string(input);
+			if(ImGui::InputText("Tag", input, 25))
+				tag.tag = std::string(input);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 		}
@@ -503,6 +509,28 @@ namespace mar {
 			}
 				
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
+		}
+
+		void GUI::Scene_Handle_ScriptComponent(bool& window_focused) {
+			ImGui::Separator();
+			ImGui::Text("ScriptComponent\n");
+			ImGui::SameLine();
+			if (ImGui::MenuItem("Remove Script")) {
+				m_scene->entities[m_indexEntity].removeComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+				return;
+			}
+
+			auto& script = m_scene->entities[m_indexEntity].getComponent<ecs::ScriptComponent>();
+
+			static char input[50];
+			strcpy_s(input, script.script.c_str());
+			if (ImGui::InputText(" - script", input, 50))
+				script.script = std::string(input);
+
+			if (ImGui::Button("Load Script from file")) 
+				script.source = Filesystem::loadPyScript(script.script.c_str());
+
+			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 		}
 
 		void GUI::Scene_Handle_RenderableComponent(bool& window_focused) {
@@ -633,8 +661,8 @@ namespace mar {
 			ImGui::Text("WARNING: If you want to use this camera, make sure\nthat it is the only with \"main\" CameraID!");
 
 			GUI_input = (char*)camcmp.id.c_str();
-			ImGui::InputText("CameraID", GUI_input, 30);
-			camcmp.id = std::string(GUI_input);
+			if(ImGui::InputText("CameraID", GUI_input, 30))
+				camcmp.id = std::string(GUI_input);
 
 			ImGui::Checkbox("Perspective (TRUE) / Orthographic (FALSE)", &camcmp.Perspective);
 			
@@ -679,6 +707,7 @@ namespace mar {
 		}
 
 		void GUI::Scene_Handle_Texture2DComponent(bool& window_focused) {
+			static bool GUI_load_new_texture = false;
 			auto& tex = m_scene->entities[m_indexEntity].getComponent<ecs::Texture2DComponent>();
 
 			ImGui::Separator();
@@ -693,24 +722,44 @@ namespace mar {
 			ImGui::SameLine();
 			ImGui::Text(tex.texture.c_str());
 
-			static char filename[30]{ "empty" };
-			ImGui::InputText(" ex. .jpg / .png", filename, 30);
-			static std::string load;
-			load = "resources/textures/" + std::string(filename);
+			if (tex.texture != "empty") {
+				if (!GUI_load_new_texture) {
+					if (ImGui::Button("Load new Texture menu"))
+						GUI_load_new_texture = true;
+				}
+				else {
+					if (ImGui::Button("Close Texture Menu"))
+						GUI_load_new_texture = false;
+				}
+			}
+			else {
+				GUI_load_new_texture = true;
+			}
+				
+			if (!GUI_load_new_texture) {
+				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component (without loading new tex)");
+				return;
+			}
+
+			static char input[50];
+			strcpy_s(input, tex.texture.c_str());
+			if(ImGui::InputText(" ex. .jpg / .png", input, 50))
+				tex.texture = std::string(input);
 
 			ImGui::Text("Texture, which will be loaded: ");
 			ImGui::SameLine();
-			ImGui::Text(load.c_str());
+			ImGui::Text(tex.texture.c_str());
 			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Texture")) {
-				tex.texture = load;
+				GUI_load_new_texture = false;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
 		}
 
 		void GUI::Scene_Handle_TextureCubemapComponent(bool& window_focused) {
+			static bool GUI_load_new_cubemap = false;
 			auto& cubemap = m_scene->entities[m_indexEntity].getComponent<ecs::TextureCubemapComponent>();
 
 			ImGui::Separator();
@@ -725,18 +774,37 @@ namespace mar {
 			ImGui::SameLine();
 			ImGui::Text(cubemap.texture.c_str());
 
-			static char filename[30]{ "empty" };
-			ImGui::InputText(" directory", filename, 30);
-			static std::string load;
-			load = "resources/textures/" + std::string(filename);
+			if (cubemap.texture != "empty") {
+				if (!GUI_load_new_cubemap) {
+					if (ImGui::Button("Load new Texture menu"))
+						GUI_load_new_cubemap = true;
+				}
+				else {
+					if (ImGui::Button("Close Texture Menu"))
+						GUI_load_new_cubemap = false;
+				}
+			}
+			else {
+				GUI_load_new_cubemap = true;
+			}
+
+			if (!GUI_load_new_cubemap) {
+				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component (without loading new tex)");
+				return;
+			}
+
+			static char input[50];
+			strcpy_s(input, cubemap.texture.c_str());
+			if (ImGui::InputText(" ex. .jpg / .png", input, 50))
+				cubemap.texture = "resources/textures/" + std::string(input);
 
 			ImGui::Text("Cubemap, which will be loaded: ");
 			ImGui::SameLine();
-			ImGui::Text(load.c_str());
+			ImGui::Text(cubemap.texture.c_str());
 			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Cubemap")) {
-				cubemap.texture = load;
+				GUI_load_new_cubemap = false;
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");

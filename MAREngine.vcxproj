@@ -71,16 +71,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Engine</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Engine\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)\Engine\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Engine</OutDir>
-    <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Engine\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)\Engine\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -94,14 +94,19 @@
       <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\python3.8.5\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <CompileAsManaged>false</CompileAsManaged>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <ProgramDataBaseFileName>$(OutDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\python3.8.5\libs;$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>python38.lib;opengl32.lib;glew32s.lib;glfw3.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;msvcrtd.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -130,6 +135,11 @@
       <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\python3.8.5\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -138,8 +148,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\python3.8.5\libs;$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>python38.lib;opengl32.lib;glew32s.lib;glfw3.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;msvcrtd.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

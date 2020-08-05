@@ -249,3 +249,14 @@ MAREngine scene file
 #general_scale 0
 #Texture2DComponent resources/textures/grass_alpha.png
 #RenderableComponent Wall
+
+#Entity
+#TagComponent ScriptEntity
+#TransformComponent Begin
+#center 5.45 3.5 1.05
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#ScriptComponent resources/scripts/example.py
+#RenderableComponent Cube
+#ColorComponent 0 1 0.934524

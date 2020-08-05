@@ -106,6 +106,11 @@ namespace mar {
 						ss << "#near " << cam.o_far << "\n";
 						ss << "#far " << cam.o_far << "\n";
 					}
+					else if (component == ECS_SCRIPT) {
+						auto& script = entity.getComponent<ecs::ScriptComponent>();
+
+						ss << "#ScriptComponent " << script.script << "\n";
+					}
  				}
 			}
 
@@ -121,7 +126,7 @@ namespace mar {
 			std::ifstream file(filename);
 			if (!file.is_open()) {
 				MAR_CORE_ERROR("Cannot open file!");
-				return nullptr;
+				return new ecs::Scene("EmptyScene");
 			}
 
 			std::string line;
@@ -452,6 +457,13 @@ namespace mar {
 						scene->useEditorCamera = false;
 					}
 				}
+				else if (line.find("#ScriptComponent") != std::string::npos) {
+					auto& script = currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+					std::istringstream iss(line.substr(17));
+					std::string s;
+					iss >> s;
+					script.script = s;
+				}
 			}
 
 			file.close();
@@ -459,6 +471,26 @@ namespace mar {
 			MAR_CORE_INFO("FILESYSTEM: returning loaded scene");
 
 			return scene;
+		}
+
+		std::string Filesystem::loadPyScript(const char* filename) {
+			MAR_CORE_INFO("FILESYSTEM: going to load python script from:");
+			MAR_CORE_INFO(filename);
+
+			std::ifstream file(filename);
+			if (!file.is_open()) {
+				MAR_CORE_ERROR("Cannot open script file!");
+				return "empty";
+			}
+
+			std::string rtn{ "" };
+			std::string line;
+
+			while (std::getline(file, line)) {
+				rtn += line + "\n";
+			}
+
+			return rtn;
 		}
 
 
