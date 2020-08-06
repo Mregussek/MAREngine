@@ -9,7 +9,6 @@
 
 #if __has_include(<pybind11/pybind11.h>)
 	#include <pybind11/pybind11.h>
-	#define MARMathPythonModule_PYBIND11_IMPORTED
 #else
 	#error "MARMathPythonModule: Cannot import pybind11/pybind11.h!"
 #endif

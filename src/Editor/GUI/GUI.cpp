@@ -554,6 +554,9 @@ namespace mar {
 			if (ImGui::InputText(" - script", input, 50))
 				script.script = std::string(input);
 
+			ImGui::Text(ecs::System::changeSlashesToDots(script.script).c_str());
+			ImGui::Text(ecs::System::getModuleFromPath(script.script).c_str());
+
 			if (ImGui::Button("Load Script from file")) 
 				script.source = Filesystem::loadPyScript(script.script.c_str());
 
@@ -825,7 +828,7 @@ namespace mar {
 			static char input[50];
 			strcpy_s(input, cubemap.texture.c_str());
 			if (ImGui::InputText(" ex. .jpg / .png", input, 50))
-				cubemap.texture = "resources/textures/" + std::string(input);
+				cubemap.texture = std::string(input);
 
 			ImGui::Text("Cubemap, which will be loaded: ");
 			ImGui::SameLine();

@@ -257,6 +257,6 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 1
-#ScriptComponent resources/scripts/example.py
+#ScriptComponent resources/scripts/Example.py
 #RenderableComponent Cube
 #ColorComponent 0 1 0.934524

@@ -32,6 +32,21 @@ namespace mar {
 				ECS_TRACE("SYSTEM: calculated new TransformComponent!");
 			}
 
+			static std::string changeSlashesToDots(std::string str) {
+				size_t pos = str.find("/");
+
+				while (pos != std::string::npos) {
+					str.replace(pos, 1, ".");
+					pos = str.find("/", pos + 1);
+				}
+
+				return str.substr(0, str.size() - 3);
+			}
+
+			static std::string getModuleFromPath(std::string str) {
+				str = str.substr(str.find_last_of("/") + 1, str.size());
+				return str.substr(0, str.size() - 3);
+			}
 
 		};
 

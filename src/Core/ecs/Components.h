@@ -7,6 +7,7 @@
 #define MAR_ENGINE_ECS_COMPONENTS_H
 
 #include "../../mar.h"
+#include "../scripting/ScriptEmbedding.h"
 
 
 namespace mar {
@@ -179,6 +180,7 @@ namespace mar {
 		struct ScriptComponent {
 			std::string script{ "empty" };
 			std::string source{ "empty" };
+			scripting::ScriptEmbedding script_embed;
 
 			ScriptComponent() = default;
 			ScriptComponent(const ScriptComponent& sc) = default;

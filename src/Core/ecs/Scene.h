@@ -131,26 +131,8 @@ namespace mar {
 			void initializeEditorMode();
 			void updateEditorMode();
 
-			void initializePlayMode() {
-				play_colors = m_colors;
-				play_textures = m_textures;
-				play_cubemaps = m_cubemaps;
-				play_light = m_light;
-
-				auto view = getView<CameraComponent>();
-				for (auto entity : view) {
-					auto& cam = getComponent<CameraComponent>(entity);
-
-					if (cam.id.find("main") == std::string::npos) continue;
-
-					auto& tran = getComponent<TransformComponent>(entity);
-					calculateCameraTransforms(tran, cam, scene_camera);
-				}
-			}
-
-			void updatePlayMode() {
-				
-			}
+			void initializePlayMode();
+			void updatePlayMode();
 
 			void resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1);
 

@@ -8,6 +8,7 @@
 #include "../../Editor/Filesystem/EditorFilesystem.h"
 
 
+
 namespace mar {
 	namespace ecs {
 
@@ -201,6 +202,58 @@ namespace mar {
 					ECS_TRACE("SCENE: initializing cubemap entity!");
 				}
 			}
+		}
+
+		// -------------------------------------------------------------
+		// PLAY MODE
+		// -------------------------------------------------------------
+
+		void Scene::initializePlayMode() {
+			play_colors = m_colors;
+			play_textures = m_textures;
+			play_cubemaps = m_cubemaps;
+			play_light = m_light;
+
+			{
+				auto view = getView<CameraComponent>();
+				for (auto entity : view) {
+					auto& cam = getComponent<CameraComponent>(entity);
+
+					if (cam.id.find("main") == std::string::npos) continue;
+
+					auto& tran = getComponent<TransformComponent>(entity);
+					calculateCameraTransforms(tran, cam, scene_camera);
+				}
+			}
+			
+			{
+				namespace py = pybind11;
+				static py::scoped_interpreter guard{};
+
+				auto view = getView<ScriptComponent>();
+				for (auto entity : view) {
+					auto& sc = getComponent<ScriptComponent>(entity);
+					auto from = System::changeSlashesToDots(sc.script);
+					auto mod = System::getModuleFromPath(sc.script);
+
+					sc.script_embed.loadScript(from.c_str(), mod.c_str());
+					sc.script_embed.start();
+				}
+			}
+		}
+
+		void Scene::updatePlayMode() {
+			{
+				namespace py = pybind11;
+
+				auto view = getView<ScriptComponent>();
+				for (auto entity : view) {
+					auto& sc = getComponent<ScriptComponent>(entity);
+
+					sc.script_embed.update();
+				}
+			}
+
 		}
 
 		void Scene::resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1) {

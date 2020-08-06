@@ -4,6 +4,7 @@ build
 logs
 bin
 other
+python38.dll
 
 ### ---- Created By Visual Studio ---- ###
 ## Ignore Visual Studio temporary files, build results, and

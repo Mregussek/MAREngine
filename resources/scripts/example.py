@@ -4,6 +4,7 @@ class Example(object):
 	
 	def start(self):
 		self.a = 100
+		print("Init self.a = {}".format(self.a))
 		
 	def update(self):
 		print("Example self.a = {}".format(self.a))
