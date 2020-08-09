@@ -212,7 +212,8 @@
     <ClInclude Include="src\Core\ecs\Systems.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
-    <ClInclude Include="src\Core\scripting\ScriptEmbedding.h" />
+    <ClInclude Include="src\Core\scripting\EmbedEngineHelpers.h" />
+    <ClInclude Include="src\Core\scripting\PythonScript.h" />
     <ClInclude Include="src\Core\scripting\EmbedEngine.cpp" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
@@ -268,6 +269,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RendererColor.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererTexture.cpp" />
+    <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\helper.cpp" />

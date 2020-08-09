@@ -19,53 +19,6 @@ namespace mar {
 		enum class EntityComponents;
 		class Scene;
 
-		class PyEntity {
-		public:
-			entt::entity m_entityHandle{ entt::null };
-			Scene* m_scene{ nullptr };
-
-			PyEntity() = default;
-
-			virtual void start() { }
-			virtual void update() { }
-
-			TransformComponent& getTransform() {
-				return m_scene->m_registry.get<TransformComponent>(m_entityHandle);
-			}
-
-			LightComponent& getLight() {
-				return m_scene->m_registry.get<LightComponent>(m_entityHandle);
-			}
-
-			CameraComponent& getCamera() {
-				return m_scene->m_registry.get<CameraComponent>(m_entityHandle);
-			}
-
-			ColorComponent& getColor() {
-				return m_scene->m_registry.get<ColorComponent>(m_entityHandle);
-			}
-		};
-
-		class PyEntityTrampoline : public PyEntity {
-		public:
-			using PyEntity::PyEntity;
-
-			void start() override {
-				PYBIND11_OVERLOAD(
-					void,
-					PyEntity,
-					start,
-					);
-			}
-
-			void update() override {
-				PYBIND11_OVERLOAD(
-					void,
-					PyEntity,
-					update,
-					);
-			}
-		};
 
 		class Entity {
 			friend class Scene;
@@ -94,12 +47,12 @@ namespace mar {
 			}
 
 			template<typename T>
-			bool hasComponent() {
+			const bool hasComponent() const {
 				return m_scene->m_registry.has<T>(m_entityHandle);
 			}
 
 			template<typename T>
-			T& getComponent() {
+			T& getComponent() const {
 				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
 
 				ECS_TRACE("ENTITY: returning component");

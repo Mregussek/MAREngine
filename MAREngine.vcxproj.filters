@@ -219,10 +219,13 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\scripting\ScriptEmbedding.h">
+    <ClInclude Include="src\Core\scripting\EmbedEngine.cpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\scripting\EmbedEngine.cpp">
+    <ClInclude Include="src\Core\scripting\EmbedEngineHelpers.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\PythonScript.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -336,6 +339,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Renderer\RendererTexture.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\scripting\PythonScript.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

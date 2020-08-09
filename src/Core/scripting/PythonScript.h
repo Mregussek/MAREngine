@@ -11,19 +11,20 @@
 #include "../../mar.h"
 
 
-
 namespace mar {
+    namespace ecs { class Entity; }
+
 	namespace scripting {
         namespace py = pybind11;
         
 
-        class ScriptEmbedding {
+        class PythonScript {
             py::module scriptModule;
             py::object module;
             bool initialized;
 
         public:
-            ScriptEmbedding()
+            PythonScript()
                 : initialized(false)
             {}
 
@@ -40,19 +41,9 @@ namespace mar {
                 initialized = true;
             }
 
-            void start() {
-                if (!initialized)
-                    return;
+            void start(const ecs::Entity& e);
 
-                module.attr("start")();
-            }
-
-            void update() {
-                if (!initialized)
-                    return;
-
-                module.attr("update")();
-            }
+            void update(ecs::Entity& e);
 
             py::object& getModule() { return module; }
 

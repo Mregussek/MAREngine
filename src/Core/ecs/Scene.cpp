@@ -233,11 +233,8 @@ namespace mar {
 						auto from = System::changeSlashesToDots(sc.script);
 						auto mod = System::getModuleFromPath(sc.script);
 
-						sc.script_embed.loadScript(from.c_str(), mod.c_str());
-						auto& module = sc.script_embed.getModule();
-						module.attr("m_entityHandle") = pybind11::cast(entity.m_entityHandle);
-						module.attr("m_scene") = pybind11::cast(entity.m_scene);
-						module.attr("start")();
+						sc.ps.loadScript(from.c_str(), mod.c_str());
+						sc.ps.start(entity);
 					}
 				}
 			}
@@ -245,13 +242,44 @@ namespace mar {
 
 		void Scene::updatePlayMode() {
 			{
-				namespace py = pybind11;
-
 				for (auto entity : entities) {
 					if (entity.hasComponent<ScriptComponent>()) {
 						auto& sc = entity.getComponent<ScriptComponent>();
-						auto& module = sc.script_embed.getModule();
-						module.attr("update")();
+						sc.ps.update(entity);
+					}
+				}
+			}
+			{
+				auto view = getView<CameraComponent>();
+				for (auto entity : view) {
+					auto& cam = getComponent<CameraComponent>(entity);
+
+					if (cam.id.find("main") == std::string::npos) continue;
+
+					auto& tran = getComponent<TransformComponent>(entity);
+					calculateCameraTransforms(tran, cam, scene_camera);
+				}
+			}
+			{
+				play_light.components.clear();
+				play_light.positions.clear();
+				play_colors.samplers.clear();
+				play_colors.transforms.clear();
+
+				for (auto& entity : entities) {
+					auto& tran = entity.getComponent<TransformComponent>();
+
+					if (entity.hasComponent<LightComponent>()) {
+						auto& light = entity.getComponent<LightComponent>();
+						play_light.positions.push_back(tran.center);
+						play_light.components.push_back(light);
+					}
+
+					if (entity.hasComponent<ColorComponent>()) {
+						auto& color = entity.getComponent<ColorComponent>();
+						submitSampler<maths::vec3>(color.texture, play_colors);
+
+						play_colors.transforms.push_back(tran.transform);
 					}
 				}
 			}
