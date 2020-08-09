@@ -115,7 +115,8 @@ namespace mar {
 			void setName(std::string name) { m_name = name; }
 
 			void setPlayMode() { 
-				m_EditorMode = false; 
+				m_EditorMode = false;
+				pybind11::initialize_interpreter();
 				initializePlayMode();
 			}
 			void setPauseDuringPlay() { m_PauseMode = true; }
@@ -123,6 +124,7 @@ namespace mar {
 			void stopPlayMode() { setEditorMode(); }
 			void setEditorMode() { 
 				m_EditorMode = true; 
+				pybind11::finalize_interpreter();
 				resetStorages(play_colors, play_textures, play_cubemaps, play_light);
 			}
 			
@@ -155,6 +157,7 @@ namespace mar {
 			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
 
 			friend class Entity;
+			friend class PyEntity;
 		};
 
 

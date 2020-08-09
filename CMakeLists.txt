@@ -258,7 +258,7 @@ set(MAR_OPENGL_IMPORT
 message("Creating MAREnginePy...")
 set(SCRIPT_MODULES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/scripting)
 set(ECS_MODULES_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/Core/ecs)
-pybind11_add_module(MAREnginePy ${SCRIPT_MODULES_PATH}/EmbedMaths.cpp ${ALL_INCLUDE_FILES_MARENGINE})
+pybind11_add_module(MAREnginePy ${SCRIPT_MODULES_PATH}/EmbedEngine.cpp ${ALL_INCLUDE_FILES_MARENGINE})
 target_compile_features(MAREnginePy PRIVATE cxx_std_17)
 target_include_directories(MAREnginePy PRIVATE ${SCRIPT_MODULES_PATH} ${ECS_MODULES_PATH})
 target_link_libraries (MAREnginePy PRIVATE ${MAR_OPENGL_IMPORT})

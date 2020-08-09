@@ -7,22 +7,18 @@
 #ifndef MAR_ENGINE_SCRIPTING_EMBED_H
 #define MAR_ENGINE_SCRIPTING_EMBED_H
 
-#if __has_include(<pybind11/pybind11.h>)
-	#include <pybind11/pybind11.h>
-	#include <pybind11/embed.h>
-#else
-	#error "MARMathPythonModule: Cannot import pybind11/pybind11.h!"
-#endif
+
+#include "../../mar.h"
 
 
 
 namespace mar {
 	namespace scripting {
-
         namespace py = pybind11;
-
+        
 
         class ScriptEmbedding {
+            py::module scriptModule;
             py::object module;
             bool initialized;
 
@@ -32,7 +28,14 @@ namespace mar {
             {}
 
             void loadScript(const char* from, const char* what) {
-                module = py::module::import(from).attr(what);
+                auto os = py::module::import("os");
+                auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
+
+                auto sys = py::module::import("sys");
+                sys.attr("path").attr("insert")(0, path);
+
+                scriptModule = py::module::import(from);
+                module = scriptModule.attr(what)();
 
                 initialized = true;
             }
@@ -41,15 +44,17 @@ namespace mar {
                 if (!initialized)
                     return;
 
-                module.attr("start")(module);
+                module.attr("start")();
             }
 
             void update() {
                 if (!initialized)
                     return;
 
-                module.attr("update")(module);
+                module.attr("update")();
             }
+
+            py::object& getModule() { return module; }
 
         };
 

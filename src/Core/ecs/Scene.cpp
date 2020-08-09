@@ -227,17 +227,18 @@ namespace mar {
 			}
 			
 			{
-				namespace py = pybind11;
-				static py::scoped_interpreter guard{};
+				for (auto& entity : entities) {
+					if (entity.hasComponent<ecs::ScriptComponent>()) {
+						auto& sc = entity.getComponent<ScriptComponent>();
+						auto from = System::changeSlashesToDots(sc.script);
+						auto mod = System::getModuleFromPath(sc.script);
 
-				auto view = getView<ScriptComponent>();
-				for (auto entity : view) {
-					auto& sc = getComponent<ScriptComponent>(entity);
-					auto from = System::changeSlashesToDots(sc.script);
-					auto mod = System::getModuleFromPath(sc.script);
-
-					sc.script_embed.loadScript(from.c_str(), mod.c_str());
-					sc.script_embed.start();
+						sc.script_embed.loadScript(from.c_str(), mod.c_str());
+						auto& module = sc.script_embed.getModule();
+						module.attr("m_entityHandle") = pybind11::cast(entity.m_entityHandle);
+						module.attr("m_scene") = pybind11::cast(entity.m_scene);
+						module.attr("start")();
+					}
 				}
 			}
 		}
@@ -246,11 +247,12 @@ namespace mar {
 			{
 				namespace py = pybind11;
 
-				auto view = getView<ScriptComponent>();
-				for (auto entity : view) {
-					auto& sc = getComponent<ScriptComponent>(entity);
-
-					sc.script_embed.update();
+				for (auto entity : entities) {
+					if (entity.hasComponent<ScriptComponent>()) {
+						auto& sc = entity.getComponent<ScriptComponent>();
+						auto& module = sc.script_embed.getModule();
+						module.attr("update")();
+					}
 				}
 			}
 

@@ -27,6 +27,17 @@ namespace mar {
 			SCRIPT
 		};
 
+#define ECS_DEFAULT ::mar::ecs::EntityComponents::DEFAULT_COMPONENT
+#define ECS_RENDERABLE ::mar::ecs::EntityComponents::RENDERABLE
+#define ECS_COLOR ::mar::ecs::EntityComponents::COLOR
+#define ECS_TEXTURE2D ::mar::ecs::EntityComponents::TEXTURE2D
+#define ECS_CUBEMAP ::mar::ecs::EntityComponents::CUBEMAP
+#define ECS_TAG ::mar::ecs::EntityComponents::TAG
+#define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
+#define ECS_LIGHT ::mar::ecs::EntityComponents::LIGHT
+#define ECS_CAMERA ::mar::ecs::EntityComponents::CAMERA
+#define ECS_SCRIPT ::mar::ecs::EntityComponents::SCRIPT
+
 		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents {
 				{ EntityComponents::DEFAULT_COMPONENT, "DefaultComponent" },
 				{ EntityComponents::COLOR, "ColorComponent" },
@@ -180,7 +191,7 @@ namespace mar {
 		struct ScriptComponent {
 			std::string script{ "empty" };
 			std::string source{ "empty" };
-			scripting::ScriptEmbedding script_embed;
+			scripting::ScriptEmbedding script_embed{};
 
 			ScriptComponent() = default;
 			ScriptComponent(const ScriptComponent& sc) = default;
@@ -194,18 +205,6 @@ namespace mar {
 
 
 } }
-
-
-#define ECS_DEFAULT ::mar::ecs::EntityComponents::DEFAULT_COMPONENT
-#define ECS_RENDERABLE ::mar::ecs::EntityComponents::RENDERABLE
-#define ECS_COLOR ::mar::ecs::EntityComponents::COLOR
-#define ECS_TEXTURE2D ::mar::ecs::EntityComponents::TEXTURE2D
-#define ECS_CUBEMAP ::mar::ecs::EntityComponents::CUBEMAP
-#define ECS_TAG ::mar::ecs::EntityComponents::TAG
-#define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
-#define ECS_LIGHT ::mar::ecs::EntityComponents::LIGHT
-#define ECS_CAMERA ::mar::ecs::EntityComponents::CAMERA
-#define ECS_SCRIPT ::mar::ecs::EntityComponents::SCRIPT
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_H

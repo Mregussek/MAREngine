@@ -213,7 +213,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\ScriptEmbedding.h" />
-    <ClInclude Include="src\Core\scripting\EmbedMaths.cpp" />
+    <ClInclude Include="src\Core\scripting\EmbedEngine.cpp" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
     <ClInclude Include="src\Helper.h" />
@@ -310,6 +310,8 @@
     <None Include="resources\mar_files\pushed_to_meshes.marscene" />
     <None Include="resources\mar_files\test.marscene" />
     <None Include="resources\mar_files\to_load.marscene" />
+    <None Include="resources\scripts\Example.py" />
+    <None Include="MAREnginePy.cp38-win32.pyd" />
     <None Include="resources\shaders\basic.shader" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />
     <None Include="resources\shaders\cubemap.shader" />

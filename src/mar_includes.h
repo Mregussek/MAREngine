@@ -147,6 +147,13 @@ GRAPHICS_LOGS and EDITOR_LOGS, because ECS are the core of MAREngine. Entities &
 	#error "MAR ENGINE: Cannot import entt/entt.hpp!"
 #endif
 
+#if __has_include(<pybind11/pybind11.h>)
+	#include <pybind11/pybind11.h>
+	#include <pybind11/embed.h>
+#else
+	#error "MARMathPythonModule: Cannot import pybind11/pybind11.h!"
+#endif
+
 #pragma warning (pop)
 
 // --- Include MAR libraries --- //

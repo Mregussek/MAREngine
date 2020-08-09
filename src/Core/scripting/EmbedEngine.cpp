@@ -31,6 +31,7 @@
 #include "../ecs/Entity.h"
 #include "../ecs/Components.h"
 
+
 namespace py = pybind11;
 namespace math = mar::maths;
 namespace ecs = mar::ecs;
@@ -317,15 +318,22 @@ PYBIND11_MODULE(MAREnginePy, m) {
 		.def_readwrite("shininess", &ecs::LightComponent::shininess);
 
 	// ---- ENTITY ---- //
-	py::class_<ecs::Entity>(m, "Entity")
-		.def("getTransformComponent",
-			&ecs::Entity::getComponent<ecs::TransformComponent>)
-		.def("getLightComponent",
-			&ecs::Entity::getComponent<ecs::LightComponent>)
-		.def("getCameraComponent",
-			&ecs::Entity::getComponent<ecs::CameraComponent>)
-		.def("getColorComponent",
-			&ecs::Entity::getComponent<ecs::ColorComponent>);
+	py::class_<ecs::PyEntity, ecs::PyEntityTrampoline>(m, "Entity")
+		.def(py::init<>())
+		.def_readwrite("m_entityHandle", &ecs::PyEntity::m_entityHandle)
+		.def_readwrite("m_scene", &ecs::PyEntity::m_scene)
+		.def("start",
+			&ecs::PyEntity::start)
+		.def("update",
+			&ecs::PyEntity::update)
+		.def("getTransform",
+			&ecs::PyEntity::getTransform)
+		.def("getLight",
+			&ecs::PyEntity::getLight)
+		.def("getCamera",
+			&ecs::PyEntity::getCamera)
+		.def("getColor",
+			&ecs::PyEntity::getColor);
 
 	// -----------------------------------------------------------------------------------
 	// Helper methods

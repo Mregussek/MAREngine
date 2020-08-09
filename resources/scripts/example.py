@@ -1,12 +1,19 @@
-class Example(object):
+import MAREnginePy as mar
+
+class Example(mar.Entity):	
 	def __init__(self):
+		mar.Entity.__init__(self)
 		self.a = 5
 	
 	def start(self):
-		self.a = 100
-		print("Init self.a = {}".format(self.a))
+		self.a = 10
+		print("start_method = {}".format(self.a))
 		
 	def update(self):
-		print("Example self.a = {}".format(self.a))
+		transform = self.getTransform()
+		center = transform.center
+		center.y += 0.2
+		transform.center = center
 
-print("Python: Hello World!")
+	
+	

@@ -938,6 +938,7 @@ namespace mar {
 
 			display = text;
 			ImGui::Text(display);
+			//ImGui::InputText(".", (char*)display, 1000);
 
 			ImGui::End();
 		}
