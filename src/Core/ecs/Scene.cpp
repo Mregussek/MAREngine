@@ -242,10 +242,45 @@ namespace mar {
 
 		void Scene::updatePlayMode() {
 			{
+				play_light.components.clear();
+				play_light.positions.clear();
+				play_colors.samplers.clear();
+				play_colors.transforms.clear();
+				play_textures.counter = 0;
+				play_textures.samplers.clear();
+				play_textures.transforms.clear();
+				play_cubemaps.counter = 0;
+				play_cubemaps.samplers.clear();
+				play_cubemaps.transforms.clear();
+
 				for (auto entity : entities) {
 					if (entity.hasComponent<ScriptComponent>()) {
 						auto& sc = entity.getComponent<ScriptComponent>();
 						sc.ps.update(entity);
+					}
+
+					auto& tran = entity.getComponent<TransformComponent>();
+
+					if (entity.hasComponent<LightComponent>()) {
+						auto& light = entity.getComponent<LightComponent>();
+						play_light.positions.push_back(tran.center);
+						play_light.components.push_back(light);
+					}
+
+					if (entity.hasComponent<ColorComponent>()) {
+						auto& color = entity.getComponent<ColorComponent>();
+						submitSampler<maths::vec3>(color.texture, play_colors);
+						play_colors.transforms.push_back(tran.transform);
+					}
+
+					if (entity.hasComponent<Texture2DComponent>()) {
+						submitSampler<int32_t>(play_textures.counter, play_textures);
+						play_textures.transforms.push_back(tran.transform);
+					}
+
+					if (entity.hasComponent<TextureCubemapComponent>()) {
+						submitSampler<int32_t>(play_cubemaps.counter, play_cubemaps);
+						play_cubemaps.transforms.push_back(tran.transform);
 					}
 				}
 			}
@@ -260,30 +295,6 @@ namespace mar {
 					calculateCameraTransforms(tran, cam, scene_camera);
 				}
 			}
-			{
-				play_light.components.clear();
-				play_light.positions.clear();
-				play_colors.samplers.clear();
-				play_colors.transforms.clear();
-
-				for (auto& entity : entities) {
-					auto& tran = entity.getComponent<TransformComponent>();
-
-					if (entity.hasComponent<LightComponent>()) {
-						auto& light = entity.getComponent<LightComponent>();
-						play_light.positions.push_back(tran.center);
-						play_light.components.push_back(light);
-					}
-
-					if (entity.hasComponent<ColorComponent>()) {
-						auto& color = entity.getComponent<ColorComponent>();
-						submitSampler<maths::vec3>(color.texture, play_colors);
-
-						play_colors.transforms.push_back(tran.transform);
-					}
-				}
-			}
-
 		}
 
 		void Scene::resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1) {

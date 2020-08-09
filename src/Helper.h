@@ -19,6 +19,8 @@ public:
 	}
 
 	void run() {
+		static pybind11::scoped_interpreter guard{};
+
 		auto stack = engine->createLayerStack();
 		auto entitylayer = engine->createEntityLayer();
 		auto guilayer = engine->createEditorLayer();

@@ -166,13 +166,22 @@ namespace mar {
 			spec.width = size.x;
 			spec.height = size.y;
 
+			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, 
+				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+			ImGui::End();
+
+			ImGui::Begin("Manage Viewport");
+
 			if (m_scene->isEditorMode()) {
-				if (ImGui::Button("PLAY"))
+				if (ImGui::Button("PLAY")) {
 					m_scene->setPlayMode();
+				}
 			}
 			else {
-				if (ImGui::Button("STOP"))
+				if (ImGui::Button("STOP")) {
 					m_scene->setEditorMode();
+				}
 
 				ImGui::SameLine();
 
@@ -183,11 +192,8 @@ namespace mar {
 				else {
 					if (ImGui::Button("RESUME"))
 						m_scene->setUnpauseDuringPlay();
-				}	
+				}
 			}
-
-			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, 
-				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 			ImGui::End();
 

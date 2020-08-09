@@ -74,11 +74,11 @@ MAREngine scene file
 #Entity
 #TagComponent MonkeyOBJ
 #TransformComponent Begin
-#center 0.92321 0.54 -1.97
+#center -0.949972 0.54 -1.97
 #angles -102.5 4 -91
 #scale 1.6 1.6 1.6
 #general_scale 0
-#ColorComponent 0.831954 0.554844 0.554844
+#ColorComponent -0.586372 0.810042 0.810042
 #RenderableComponent resources/objects/monkey.obj
 #ScriptComponent resources/scripts/Foo.py
 
@@ -254,10 +254,21 @@ MAREngine scene file
 #Entity
 #TagComponent ScriptEntity
 #TransformComponent Begin
-#center 5.45 0.372738 1.05
+#center 5.45 -0.217616 1.05
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
 #ScriptComponent resources/scripts/Example.py
 #RenderableComponent Cube
-#ColorComponent 0.104383 0.456417 0.204165
+#ColorComponent 0.0561681 0.487381 -0.111625
+
+#Entity
+#TagComponent empty
+#TransformComponent Begin
+#center -0.949972 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent resources/objects/m4.obj
+#ColorComponent -0.586372 0.810042 0.810042
+#ScriptComponent resources/scripts/Foo.py
