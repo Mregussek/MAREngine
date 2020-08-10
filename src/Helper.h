@@ -16,11 +16,11 @@ public:
 	void initialize() {
 		engine->initWindow(m_height, m_width, m_name);
 		engine->setLoadPath(m_pathToScene);
+
+		static pybind11::scoped_interpreter guard{};
 	}
 
 	void run() {
-		static pybind11::scoped_interpreter guard{};
-
 		auto stack = engine->createLayerStack();
 		auto entitylayer = engine->createEntityLayer();
 		auto guilayer = engine->createEditorLayer();

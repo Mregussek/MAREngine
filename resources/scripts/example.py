@@ -3,17 +3,41 @@ import MAREnginePy as mar
 class Example(mar.Entity):	
 	def __init__(self):
 		mar.Entity.__init__(self)
-		self.a = 0
+		self.color_R_change = 0
+		self.color_G_change = 0
+		self.color_B_change = 0
+		self.center_change = 0
 	
 	def start(self):
-		self.a = 0.1
+		self.center_change = 0.1
+		self.color_R_change = 0.05
+		self.color_G_change = 0.05
+		self.color_B_change = 0.05
 		
 	def update(self):
-		self.color.texture.x = 0.5 * mar.trig.sine(mar.trig.toRadians(0.5 * self.a))
-		self.color.texture.y = 0.5 * mar.trig.cosine(mar.trig.toRadians(self.a))
-		self.color.texture.z = 0.5 * mar.trig.sine(mar.trig.toRadians(self.a))
-		self.transform.center.y = 0.5 * mar.trig.sine(mar.trig.toRadians(2.0 * self.a))
-		self.a += 0.5
+		self.transform.center.y += 0.01 * mar.trig.sine(self.center_change)
+		self.center_change += 0.02
+		
+		if self.color.texture.x >= 1:
+			self.color_R_change = -0.5
+		else:
+			self.color_R_change = 0.05
+			
+		if self.color.texture.y >= 1:
+			self.color_G_change = -0.5
+		else:
+			self.color_G_change = 0.05
+			
+		if self.color.texture.z >= 1:
+			self.color_B_change = -0.5
+		else:
+			self.color_B_change = 0.05
+			
+		self.color.texture.x += self.color_R_change
+		self.color.texture.y += self.color_G_change
+		self.color.texture.z += self.color_B_change
+		
+		
 
 	
 	
