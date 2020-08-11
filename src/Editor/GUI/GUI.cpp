@@ -180,19 +180,20 @@ namespace mar {
 			}
 			else {
 				if (ImGui::Button("STOP")) {
-					m_scene->setEditorMode();
+					m_scene->setExitPlayMode();
 				}
 
 				ImGui::SameLine();
 
 				if (!m_scene->isPauseMode()) {
 					if (ImGui::Button("PAUSE"))
-						m_scene->setPauseDuringPlay();
-				}
+						m_scene->setPauseMode();
+				}	
 				else {
 					if (ImGui::Button("RESUME"))
-						m_scene->setUnpauseDuringPlay();
+						m_scene->unsetPauseMode();
 				}
+					
 			}
 
 			ImGui::End();

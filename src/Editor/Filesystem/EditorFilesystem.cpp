@@ -425,8 +425,10 @@ namespace mar {
 					cam.o_far = var;
 
 					if (cam.id.find("main") != std::string::npos) {
+						auto& scene_camera = scene->getRenderCamera();
+
 						if (cam.Perspective) {
-							scene->scene_camera.projection = maths::mat4::perspective(
+							scene_camera.projection = maths::mat4::perspective(
 								maths::Trig::toRadians(cam.p_fov),
 								cam.p_aspectRatio,
 								cam.p_near,
@@ -434,7 +436,7 @@ namespace mar {
 							);
 						}
 						else {
-							scene->scene_camera.projection = maths::mat4::orthographic(
+							scene_camera.projection = maths::mat4::orthographic(
 								cam.o_left,
 								cam.o_right,
 								cam.o_top,
@@ -446,13 +448,13 @@ namespace mar {
 
 						auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
 
-						scene->scene_camera.view = maths::mat4::lookAt(
+						scene_camera.view = maths::mat4::lookAt(
 							tran.center,
 							{ 0.f, 0.f, -1.f },
 							{ 0.f, 1.0f, 0.f }
 						);
 
-						scene->scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
+						scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
 
 						scene->useEditorCamera = false;
 					}

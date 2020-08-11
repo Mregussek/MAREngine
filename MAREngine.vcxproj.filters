@@ -177,15 +177,6 @@
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\Components.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\ecs\Entity.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\ecs\Systems.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\Scene.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -226,6 +217,15 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\scripting\PythonScript.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ecs\ECS\Components.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ecs\ECS\Entity.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ecs\ECS\Systems.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -372,7 +372,6 @@
     <None Include="resources\shaders\entityColor.shader" />
     <None Include="resources\shaders\entityTexture2D.shader" />
     <None Include="resources\shaders\entityCubemap.shader" />
-    <None Include="resources\scripts\Example.py" />
     <None Include="MAREnginePy.cp38-win32.pyd" />
   </ItemGroup>
   <ItemGroup>

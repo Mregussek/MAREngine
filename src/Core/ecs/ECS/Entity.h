@@ -6,10 +6,10 @@
 #ifndef MAR_ENGINE_ECS_ENTITY_H
 #define MAR_ENGINE_ECS_ENTITY_H
 
-#include "../../mar.h"
-#include "ECSLogs.h"
+#include "../../../mar.h"
+#include "../ECSLogs.h"
 #include "Components.h"
-#include "Scene.h"
+#include "../Scene.h"
 
 
 namespace mar {

@@ -8,8 +8,8 @@
 
 #include "../../mar.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/Entity.h"
-#include "../../Core/ecs/Components.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/Components.h"
 
 
 namespace mar {

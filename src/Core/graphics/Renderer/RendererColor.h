@@ -8,8 +8,8 @@
 
 
 #include "../../../mar.h"
-#include "../../ecs/Entity.h"
-#include "../../ecs/Components.h"
+#include "../../ecs/ECS/Entity.h"
+#include "../../ecs/ECS/Components.h"
 #include "../../ecs/Scene.h"
 
 #include "../../../Editor/Camera/Camera.h"

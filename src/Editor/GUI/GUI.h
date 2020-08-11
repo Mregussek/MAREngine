@@ -18,9 +18,9 @@
 #include "../../Core/graphics/Renderer/RendererEntity.h"
 
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/Entity.h"
-#include "../../Core/ecs/Components.h"
-#include "../../Core/ecs/Systems.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/Systems.h"
 
 
 namespace mar {

@@ -5,14 +5,23 @@
 
 
 #include "PythonScript.h"
-#include "../ecs/Entity.h"
-#include "../ecs/Components.h"
-#include "../ecs/Systems.h"
+#include "../ecs/ECS/Entity.h"
+#include "../ecs/ECS/Components.h"
+#include "../ecs/ECS/Systems.h"
 
 
 namespace mar {
 	namespace scripting {
 
+
+        void PythonScript::loadScript(const char* from, const char* what) {
+            appendCurrentPath();
+
+            scriptModule = py::module::import(from);
+            module = scriptModule.attr(what)();
+
+            initialized = true;
+        }
 
 		void PythonScript::start(const ecs::Entity& e) {
             if (!initialized)
@@ -52,14 +61,6 @@ namespace mar {
                 module.attr("light").attr("linear") = light.linear;
                 module.attr("light").attr("quadratic") = light.quadratic;
                 module.attr("light").attr("shininess") = light.shininess;
-            }
-
-            if (e.hasComponent<ecs::CameraComponent>()) {
-                auto& cam = e.getComponent<ecs::CameraComponent>();
-                module.attr("camera").attr("p_fov") = cam.p_fov;
-                module.attr("camera").attr("p_aspectRatio") = cam.p_aspectRatio;
-                module.attr("camera").attr("p_near") = cam.p_near;
-                module.attr("camera").attr("p_far") = cam.p_far;
             }
 
             if (e.hasComponent<ecs::ColorComponent>()) {
@@ -114,14 +115,6 @@ namespace mar {
                 light.linear    = module.attr("light").attr("linear").cast<float>();
                 light.quadratic = module.attr("light").attr("quadratic").cast<float>();
                 light.shininess = module.attr("light").attr("shininess").cast<float>();
-            }
-
-            if (e.hasComponent<ecs::CameraComponent>()) {
-                auto& cam = e.getComponent<ecs::CameraComponent>();
-                cam.p_fov = module.attr("camera").attr("p_fov").cast<float>();
-                cam.p_aspectRatio = module.attr("camera").attr("p_aspectRatio").cast<float>();
-                cam.p_near = module.attr("camera").attr("p_near").cast<float>();
-                cam.p_far = module.attr("camera").attr("p_far").cast<float>();
             }
 
             if (e.hasComponent<ecs::ColorComponent>()) {

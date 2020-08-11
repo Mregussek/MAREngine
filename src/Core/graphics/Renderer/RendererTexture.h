@@ -8,13 +8,14 @@
 
 
 #include "../../../mar.h"
-#include "../../ecs/Entity.h"
-#include "../../ecs/Components.h"
+#include "../../ecs/ECS/Entity.h"
+#include "../../ecs/ECS/Components.h"
 #include "../../ecs/Scene.h"
 
 #include "../../../Editor/Camera/Camera.h"
 
 #include "Shader/ShaderOpenGL.h"
+#include "Texture/TextureOpenGL.h"
 #include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
 #include "Buffers/VertexArray/VertexArrayOpenGL.h"
 #include "Buffers/VertexBuffer/VertexBufferOpenGL.h"
@@ -32,6 +33,7 @@ namespace mar {
 			VertexArrayOpenGL m_vao;
 			ElementBufferOpenGL m_ebo;
 			ShaderOpenGL m_shader;
+			TextureOpenGL m_texture;
 			size_t m_lastVerticesSize;
 
 		public:
@@ -59,6 +61,7 @@ namespace mar {
 				m_ebo.close();
 
 				m_shader.shutdown();
+				m_texture.shutdown();
 
 				GRAPHICS_INFO("RENDERERENTITY_TEXTURE: closed!");
 			}
@@ -66,19 +69,26 @@ namespace mar {
 			void draw(
 				const ecs::SceneStorage<int32_t>& storage,
 				const RenderCamera& camera, 
-				const ecs::LightStorage& light, 
-				const TextureOpenGL& texture,
+				const ecs::LightStorage& light,
 				const int32_t& texture_type
 			) {
 				GRAPHICS_TRACE("RENDERERENTITY_TEXTURE: is preparing to draw!");
 
 				{ // BIND TEXTURES
-					if (texture_type == GL_TEXTURE_2D)
-						for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++)
-							texture.bind(texture_type, storage.samplers[i], texture.getTexture(storage.paths[i]));
-					else if (texture_type == GL_TEXTURE_CUBE_MAP)
-						for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++)
-							texture.bind(texture_type, storage.samplers[i], texture.getCubemap(storage.paths[i]));
+					if (texture_type == GL_TEXTURE_2D) {
+						uint32_t id;
+						for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++) {
+							id = (uint32_t)m_texture.loadTexture(storage.paths[i]);
+							m_texture.bind(texture_type, storage.samplers[i], id);
+						}
+					}
+					else if (texture_type == GL_TEXTURE_CUBE_MAP) {
+						uint32_t id;
+						for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++) {
+							id = (uint32_t)m_texture.loadCubemap(storage.paths[i]);
+							m_texture.bind(texture_type, storage.samplers[i], id);
+						}
+					}
 				}
 
 				{ // SEND ALL DATA TO SHADERS

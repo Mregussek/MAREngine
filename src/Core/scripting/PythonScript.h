@@ -28,18 +28,7 @@ namespace mar {
                 : initialized(false)
             {}
 
-            void loadScript(const char* from, const char* what) {
-                auto os = py::module::import("os");
-                auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
-
-                auto sys = py::module::import("sys");
-                sys.attr("path").attr("insert")(0, path);
-
-                scriptModule = py::module::import(from);
-                module = scriptModule.attr(what)();
-
-                initialized = true;
-            }
+            void loadScript(const char* from, const char* what);
 
             void start(const ecs::Entity& e);
 
@@ -47,6 +36,14 @@ namespace mar {
 
             py::object& getModule() { return module; }
 
+        private:
+            void appendCurrentPath() {
+                auto os = py::module::import("os");
+                auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
+
+                auto sys = py::module::import("sys");
+                sys.attr("path").attr("insert")(0, path);
+            }
         };
 
 

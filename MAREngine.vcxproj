@@ -207,9 +207,9 @@
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererColor.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h" />
-    <ClInclude Include="src\Core\ecs\Components.h" />
-    <ClInclude Include="src\Core\ecs\Entity.h" />
-    <ClInclude Include="src\Core\ecs\Systems.h" />
+    <ClInclude Include="src\Core\ecs\ECS\Components.h" />
+    <ClInclude Include="src\Core\ecs\ECS\Entity.h" />
+    <ClInclude Include="src\Core\ecs\ECS\Systems.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\EmbedEngineHelpers.h" />
@@ -312,7 +312,6 @@
     <None Include="resources\mar_files\pushed_to_meshes.marscene" />
     <None Include="resources\mar_files\test.marscene" />
     <None Include="resources\mar_files\to_load.marscene" />
-    <None Include="resources\scripts\Example.py" />
     <None Include="MAREnginePy.cp38-win32.pyd" />
     <None Include="resources\shaders\basic.shader" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />

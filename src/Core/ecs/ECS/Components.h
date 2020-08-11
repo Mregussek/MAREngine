@@ -6,8 +6,8 @@
 #ifndef MAR_ENGINE_ECS_COMPONENTS_H
 #define MAR_ENGINE_ECS_COMPONENTS_H
 
-#include "../../mar.h"
-#include "../scripting/PythonScript.h"
+#include "../../../mar.h"
+#include "../../scripting/PythonScript.h"
 
 
 namespace mar {

@@ -7,7 +7,7 @@
 #define MAR_ENGINE_SCRIPTING_EMBED_MATHS_H
 
 #include "../ecs/Scene.h"
-#include "../ecs/Entity.h"
+#include "../ecs/ECS/Entity.h"
 #include "EmbedEngineHelpers.h"
 
 

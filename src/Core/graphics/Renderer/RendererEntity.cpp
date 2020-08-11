@@ -48,8 +48,7 @@ namespace mar {
 
 				m_renCube.draw(cubemaps,
 					 scene->getRenderCamera(),
-					 scene->getLightStorage(), 
-					 scene->getTextureInstance(),
+					 scene->getLightStorage(),
 					 GL_TEXTURE_CUBE_MAP
 				);
 			}
@@ -59,8 +58,7 @@ namespace mar {
 
 				m_ren2D.draw(textures,
 					 scene->getRenderCamera(),
-					 scene->getLightStorage(), 
-					 scene->getTextureInstance(),
+					 scene->getLightStorage(),
 					 GL_TEXTURE_2D
 				);
 			}
