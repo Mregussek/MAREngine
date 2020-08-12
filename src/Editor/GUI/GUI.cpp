@@ -5,6 +5,10 @@
 
 #include "GUI.h"
 #include "../Filesystem/EditorFilesystem.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/Systems.h"
+
 
 
 namespace mar {

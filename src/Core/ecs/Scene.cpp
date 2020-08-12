@@ -70,12 +70,7 @@ namespace mar {
 
 				if (!useEditorCamera)
 					if (entity.hasComponent<CameraComponent>()) {
-						auto& cam = entity.getComponent<CameraComponent>();
-
-						if (cam.id.find("main") == std::string::npos)
-							continue;
-
-						calculateCameraTransforms(tran, cam, scene_camera);
+						submitCamera(entity, tran);
 					}
 
 				if (entity.hasComponent<ScriptComponent>()) {
@@ -83,41 +78,33 @@ namespace mar {
 					script.source = editor::Filesystem::loadPyScript(script.script.c_str());
 				}
 
-				if (!entity.hasComponent<RenderableComponent>())
+				if (!entity.hasComponent<RenderableComponent>()) // we wan't push any entities to draw, if there is not RenderableComponent
 					continue;
 
+				auto& ren = entity.getComponent<RenderableComponent>();
+
 				if (entity.hasComponent<ColorComponent>()) {
-					auto& ren = entity.getComponent<RenderableComponent>();
-					auto& color = entity.getComponent<ColorComponent>();
-
-					m_colors.transforms.push_back(tran.transform);
-					submitVerticesIndices<maths::vec3>(ren, m_colors);
-					submitSampler<maths::vec3>(color.texture, m_colors);
-
+					submitColorEntity(entity, tran, ren, m_colors);
 					ECS_TRACE("SCENE: initializing color entity!");
 				}
 				else if (entity.hasComponent<Texture2DComponent>()) {
-					auto& ren = entity.getComponent<RenderableComponent>();
-					auto& texture = entity.getComponent<Texture2DComponent>();
-
-					m_textures.paths.push_back(texture.texture);
-					m_textures.transforms.push_back(tran.transform);
-					submitVerticesIndices<int32_t>(ren, m_textures);
-					submitSampler<int32_t>(m_textures.counter, m_textures);
-
+					submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_textures);
 					ECS_TRACE("SCENE: initializing texture2d entity!");
 				}
 				else if (entity.hasComponent<TextureCubemapComponent>()) {
-					auto& ren = entity.getComponent<RenderableComponent>();
-					auto& cubemap = entity.getComponent<TextureCubemapComponent>();
-
-					m_cubemaps.paths.push_back(cubemap.texture);
-					m_cubemaps.transforms.push_back(tran.transform);
-					submitVerticesIndices<int32_t>(ren, m_cubemaps);
-					submitSampler<int32_t>(m_cubemaps.counter, m_cubemaps);
-
+					submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_cubemaps);
 					ECS_TRACE("SCENE: initializing cubemap entity!");
 				}
+			}
+		}
+
+		void Scene::update() {
+			if (m_EditorMode) {
+				updateEditorMode();
+			}
+			else { 
+				if (!m_PauseMode) 
+					updatePlayMode(); 
 			}
 		}
 
@@ -250,11 +237,7 @@ namespace mar {
 				}
 
 				if (entity.hasComponent<CameraComponent>()) {
-					auto& cam = entity.getComponent<CameraComponent>();
-
-					if (cam.id.find("main") == std::string::npos) continue;
-
-					calculateCameraTransforms(tran, cam, scene_camera);
+					submitCamera(entity, tran);
 				}
 			}
 		}
@@ -293,6 +276,24 @@ namespace mar {
 			ECS_TRACE("SCENE: called resetStorages method!");
 		}
 
+		void Scene::submitColorEntity(Entity& entity, TransformComponent& tran, RenderableComponent& ren, SceneStorage<maths::vec3>& storage) {
+			auto& color = entity.getComponent<ColorComponent>();
+
+			storage.transforms.push_back(tran.transform);
+			submitVerticesIndices<maths::vec3>(ren, storage);
+			submitSampler<maths::vec3>(color.texture, storage);
+		}
+
+		template<typename TextureType>
+		void Scene::submitTextureEntity(Entity& entity, TransformComponent& tran, RenderableComponent& ren, SceneStorage<int32_t>& storage) {
+			auto& texture = entity.getComponent<TextureType>();
+
+			storage.paths.push_back(texture.texture);
+			storage.transforms.push_back(tran.transform);
+			submitVerticesIndices<int32_t>(ren, storage);
+			submitSampler<int32_t>(storage.counter, storage);
+		}
+
 		template<typename T>
 		void Scene::submitVerticesIndices(RenderableComponent& ren, SceneStorage<T>& storage) {
 			std::vector<uint32_t> copy = ren.indices;
@@ -316,9 +317,19 @@ namespace mar {
 			ECS_TRACE("SCENE: submitted sampler component!");
 		}
 
+		void Scene::submitCamera(Entity& entity, TransformComponent& tran) {
+			auto& cam = entity.getComponent<CameraComponent>();
+
+			if (cam.id.find("main") == std::string::npos)
+				return;
+
+			calculateCameraTransforms(tran, cam, scene_camera);
+		}
+
 		void Scene::calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam) {
 			typedef maths::Trig trig;
 			static maths::vec3 front;
+
 			front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
 			front.y = trig::sine(trig::toRadians(tran.angles.x));
 			front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));

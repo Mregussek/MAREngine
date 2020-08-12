@@ -10,6 +10,7 @@
 #include "ECS/Components.h"
 #include "ECS/Systems.h"
 #include "ECSLogs.h"
+#include "Storages.h"
 
 #include "../../Editor/Camera/Camera.h"
 #include "../graphics/Renderer/RenderCamera.h"
@@ -20,30 +21,6 @@ namespace mar {
 	namespace ecs {
 
 		class Entity;
-
-
-		template<typename T>
-		struct SceneStorage {
-			std::vector<float> vertices;
-			std::vector<uint32_t> indices;
-			std::vector<maths::mat4> transforms;
-			std::vector<std::string> paths; // only for textures!
-			std::vector<T> samplers;
-			int32_t counter = 0;
-			uint32_t indicesMax = 0;
-			static const int32_t stride = 3 + 3 + 2 + 1;
-		};
-
-		struct LightStorage {
-			std::vector<maths::vec3> positions;
-			std::vector<LightComponent> components;
-		};
-
-		struct PlayStorage {
-			std::vector<TransformComponent> transforms;
-			std::vector<ColorComponent> colors;
-			std::vector<LightComponent> lights;
-		};
 
 
 		class Scene {
@@ -59,7 +36,7 @@ namespace mar {
 			void destroyEntity(const int32_t& index);
 
 			void initialize();
-			void update() { if (m_EditorMode) updateEditorMode(); else { if(!m_PauseMode) updatePlayMode(); } }
+			void update();
 
 			// --- GET METHODS --- //
 
@@ -104,11 +81,18 @@ namespace mar {
 
 			void resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1);
 
+			void submitColorEntity(Entity& entity, TransformComponent& tran, RenderableComponent& ren, SceneStorage<maths::vec3>& storage);
+
+			template<typename TextureType>
+			void submitTextureEntity(Entity& entity, TransformComponent& tran, RenderableComponent& ren, SceneStorage<int32_t>& storage);
+
 			template<typename T>
 			void submitVerticesIndices(RenderableComponent& ren, SceneStorage<T>& storage);
 
 			template<typename T>
 			void submitSampler(T& sampler, SceneStorage<T>& storage);
+
+			void submitCamera(Entity& entity, TransformComponent& tran);
 
 			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
 		

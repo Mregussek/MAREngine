@@ -27,16 +27,16 @@ namespace mar {
 			SCRIPT
 		};
 
-#define ECS_DEFAULT ::mar::ecs::EntityComponents::DEFAULT_COMPONENT
-#define ECS_RENDERABLE ::mar::ecs::EntityComponents::RENDERABLE
-#define ECS_COLOR ::mar::ecs::EntityComponents::COLOR
-#define ECS_TEXTURE2D ::mar::ecs::EntityComponents::TEXTURE2D
-#define ECS_CUBEMAP ::mar::ecs::EntityComponents::CUBEMAP
-#define ECS_TAG ::mar::ecs::EntityComponents::TAG
-#define ECS_TRANSFORM ::mar::ecs::EntityComponents::TRANSFORM
-#define ECS_LIGHT ::mar::ecs::EntityComponents::LIGHT
-#define ECS_CAMERA ::mar::ecs::EntityComponents::CAMERA
-#define ECS_SCRIPT ::mar::ecs::EntityComponents::SCRIPT
+#define ECS_DEFAULT		::mar::ecs::EntityComponents::DEFAULT_COMPONENT
+#define ECS_RENDERABLE	::mar::ecs::EntityComponents::RENDERABLE
+#define ECS_COLOR		::mar::ecs::EntityComponents::COLOR
+#define ECS_TEXTURE2D	::mar::ecs::EntityComponents::TEXTURE2D
+#define ECS_CUBEMAP		::mar::ecs::EntityComponents::CUBEMAP
+#define ECS_TAG			::mar::ecs::EntityComponents::TAG
+#define ECS_TRANSFORM	::mar::ecs::EntityComponents::TRANSFORM
+#define ECS_LIGHT		::mar::ecs::EntityComponents::LIGHT
+#define ECS_CAMERA		::mar::ecs::EntityComponents::CAMERA
+#define ECS_SCRIPT		::mar::ecs::EntityComponents::SCRIPT
 
 		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents {
 				{ EntityComponents::DEFAULT_COMPONENT, "DefaultComponent" },
