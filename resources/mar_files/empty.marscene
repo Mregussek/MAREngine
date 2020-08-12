@@ -12,6 +12,7 @@ MAREngine scene file
 #general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.2 0.5 0.2
+#ScriptComponent resources/scripts/RotateXY.py
 
 #Entity
 #TagComponent GreenPyramid
@@ -83,7 +84,7 @@ MAREngine scene file
 #ScriptComponent resources/scripts/Foo.py
 
 #Entity
-#TagComponent YellowWall
+#TagComponent RedBrickWall
 #TransformComponent Begin
 #center 30.76 -1.7 4.02
 #angles 0 0 -0.12
@@ -148,7 +149,7 @@ MAREngine scene file
 #Entity
 #TagComponent YellowTextureLight
 #TransformComponent Begin
-#center -4.9 -1.45 10.75
+#center -2.55 -1.45 0.55
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
@@ -162,6 +163,7 @@ MAREngine scene file
 #linear 0.015
 #quadratic 0.01
 #shininess 31.5
+#ScriptComponent resources/scripts/LightMover.py
 
 #Entity
 #TagComponent AlphaGrassPNG

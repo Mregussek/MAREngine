@@ -18,6 +18,7 @@ public:
 		engine->setLoadPath(m_pathToScene);
 
 		static pybind11::scoped_interpreter guard{};
+		scripting::PythonScript::appendCurrentPath();
 	}
 
 	void run() {

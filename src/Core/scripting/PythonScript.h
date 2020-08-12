@@ -36,8 +36,7 @@ namespace mar {
 
             py::object& getModule() { return module; }
 
-        private:
-            void appendCurrentPath() {
+            static void appendCurrentPath() {
                 auto os = py::module::import("os");
                 auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
 

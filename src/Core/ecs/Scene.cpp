@@ -172,6 +172,8 @@ namespace mar {
 				tran.angles = tran_store.angles;
 				tran.scale = tran_store.scale;
 
+				System::handleTransformComponent(tran);
+
 				pop_front(m_playstorage.transforms);
 
 				if (entity.hasComponent<LightComponent>()) {

@@ -15,9 +15,11 @@ namespace mar {
 
 
         void PythonScript::loadScript(const char* from, const char* what) {
-            appendCurrentPath();
+            if (initialized)
+                scriptModule.reload();
+            else 
+                scriptModule = py::module::import(from);
 
-            scriptModule = py::module::import(from);
             module = scriptModule.attr(what)();
 
             initialized = true;

@@ -14,56 +14,6 @@ namespace mar {
 	namespace ecs {
 
 
-		enum class EntityComponents {
-			DEFAULT_COMPONENT,
-			COLOR,
-			TEXTURE2D,
-			CUBEMAP,
-			RENDERABLE,
-			TAG,
-			TRANSFORM,
-			LIGHT,
-			CAMERA,
-			SCRIPT
-		};
-
-#define ECS_DEFAULT		::mar::ecs::EntityComponents::DEFAULT_COMPONENT
-#define ECS_RENDERABLE	::mar::ecs::EntityComponents::RENDERABLE
-#define ECS_COLOR		::mar::ecs::EntityComponents::COLOR
-#define ECS_TEXTURE2D	::mar::ecs::EntityComponents::TEXTURE2D
-#define ECS_CUBEMAP		::mar::ecs::EntityComponents::CUBEMAP
-#define ECS_TAG			::mar::ecs::EntityComponents::TAG
-#define ECS_TRANSFORM	::mar::ecs::EntityComponents::TRANSFORM
-#define ECS_LIGHT		::mar::ecs::EntityComponents::LIGHT
-#define ECS_CAMERA		::mar::ecs::EntityComponents::CAMERA
-#define ECS_SCRIPT		::mar::ecs::EntityComponents::SCRIPT
-
-		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents {
-				{ EntityComponents::DEFAULT_COMPONENT, "DefaultComponent" },
-				{ EntityComponents::COLOR, "ColorComponent" },
-				{ EntityComponents::TEXTURE2D, "Texture2DComponent" },
-				{ EntityComponents::CUBEMAP, "TextureCubemapComponent" },
-				{ EntityComponents::RENDERABLE, "RenderableComponent" },
-				{ EntityComponents::TAG, "TagComponent" },
-				{ EntityComponents::TRANSFORM, "TransformComponent" },
-				{ EntityComponents::LIGHT, "LightComponent" },
-				{ EntityComponents::CAMERA, "CameraComponent" },
-				{ EntityComponents::SCRIPT, "ScriptComponent" },
-		};
-
-		struct Components {
-			std::vector<EntityComponents> components;
-
-			Components() = default;
-			Components(const Components& com) = default;
-			Components(const std::vector<EntityComponents>& vec) 
-				: components(vec)
-			{}
-
-			operator std::vector<EntityComponents>&() { return components; }
-			operator const std::vector<EntityComponents>& () const { return components; }
-		};
-
 		struct TagComponent {
 			std::string tag{ "empty" };
 
@@ -203,8 +153,63 @@ namespace mar {
 			operator const std::string& () const { return script; }
 		};
 
+		// ----------------------------------------------------
+		// BRIEF OVERVIEW OF ALL COMPONENTS
+		// ----------------------------------------------------
+
+		enum class EntityComponents {
+			DEFAULT_COMPONENT,
+			COLOR,
+			TEXTURE2D,
+			CUBEMAP,
+			RENDERABLE,
+			TAG,
+			TRANSFORM,
+			LIGHT,
+			CAMERA,
+			SCRIPT
+		};
+
+		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents{
+				{ EntityComponents::DEFAULT_COMPONENT, "DefaultComponent" },
+				{ EntityComponents::COLOR, "ColorComponent" },
+				{ EntityComponents::TEXTURE2D, "Texture2DComponent" },
+				{ EntityComponents::CUBEMAP, "TextureCubemapComponent" },
+				{ EntityComponents::RENDERABLE, "RenderableComponent" },
+				{ EntityComponents::TAG, "TagComponent" },
+				{ EntityComponents::TRANSFORM, "TransformComponent" },
+				{ EntityComponents::LIGHT, "LightComponent" },
+				{ EntityComponents::CAMERA, "CameraComponent" },
+				{ EntityComponents::SCRIPT, "ScriptComponent" },
+		};
+
+		struct Components {
+			std::vector<EntityComponents> components;
+
+			Components() = default;
+			Components(const Components& com) = default;
+			Components(const std::vector<EntityComponents>& vec)
+				: components(vec)
+			{}
+
+			operator std::vector<EntityComponents>& () { return components; }
+			operator const std::vector<EntityComponents>& () const { return components; }
+		};
+
 
 } }
+
+
+#define ECS_DEFAULT		::mar::ecs::EntityComponents::DEFAULT_COMPONENT
+#define ECS_RENDERABLE	::mar::ecs::EntityComponents::RENDERABLE
+#define ECS_COLOR		::mar::ecs::EntityComponents::COLOR
+#define ECS_TEXTURE2D	::mar::ecs::EntityComponents::TEXTURE2D
+#define ECS_CUBEMAP		::mar::ecs::EntityComponents::CUBEMAP
+#define ECS_TAG			::mar::ecs::EntityComponents::TAG
+#define ECS_TRANSFORM	::mar::ecs::EntityComponents::TRANSFORM
+#define ECS_LIGHT		::mar::ecs::EntityComponents::LIGHT
+#define ECS_CAMERA		::mar::ecs::EntityComponents::CAMERA
+#define ECS_SCRIPT		::mar::ecs::EntityComponents::SCRIPT
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_H

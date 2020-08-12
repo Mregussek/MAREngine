@@ -19,8 +19,9 @@ namespace mar {
 
 
 		class Entity {
-			entt::entity m_entityHandle{ entt::null };
-			Scene* m_scene{ nullptr };
+			// ----------------------------------------------------
+			// ENTITY PUBLIC METHODS
+			// ----------------------------------------------------
 
 		public:
 			Entity() = default;
@@ -34,6 +35,15 @@ namespace mar {
 
 			void addComponent(EntityComponents entcmp);
 
+			template<typename T>
+			const bool hasComponent() const;
+
+			void destroyYourself();
+
+			// ----------------------------------------------------
+			// ENTITY COMPONENT METHODS, THAT NEED TO BE HERE (cannot move them to Entity.cpp)
+			// ----------------------------------------------------
+
 			template<typename T, typename... Args>
 			T& addComponent(EntityComponents entcmp, Args&&... args) {
 				MAR_CORE_ASSERT(!hasComponent<T>(), "Entity already has this component!");
@@ -45,9 +55,6 @@ namespace mar {
 
 				return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 			}
-
-			template<typename T>
-			const bool hasComponent() const;
 
 			template<typename T>
 			T& getComponent() const {
@@ -72,7 +79,13 @@ namespace mar {
 				ECS_TRACE("ENTITY: removing component");
 			}
 
-			void destroyYourself();
+			// ----------------------------------------------------
+			// ENTITY MEMBERS
+			// ----------------------------------------------------
+
+		private:
+			entt::entity m_entityHandle{ entt::null };
+			Scene* m_scene{ nullptr };
 		};
 
 

@@ -24,9 +24,9 @@ namespace mar {
 
 				tran.transform =
 					mat4::translation(tran.center) *
-					mat4::rotation(maths::Trig::toRadians(tran.angles.x), { 1.f, 0.f, 0.f }) *
-					mat4::rotation(maths::Trig::toRadians(tran.angles.y), { 0.f, 1.f, 0.f }) *
-					mat4::rotation(maths::Trig::toRadians(tran.angles.z), { 0.f, 0.f, 1.f }) *
+					mat4::rotation(Trig::toRadians(tran.angles.x), { 1.f, 0.f, 0.f }) *
+					mat4::rotation(Trig::toRadians(tran.angles.y), { 0.f, 1.f, 0.f }) *
+					mat4::rotation(Trig::toRadians(tran.angles.z), { 0.f, 0.f, 1.f }) *
 					mat4::scale(tran.scale);
 
 				ECS_TRACE("SYSTEM: calculated new TransformComponent!");
