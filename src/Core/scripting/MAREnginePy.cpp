@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_SCRIPTING_EMBED_MATHS_H
-#define MAR_ENGINE_SCRIPTING_EMBED_MATHS_H
+#ifndef MAR_ENGINE_SCRIPTING_EMBED_MARENGINE_H
+#define MAR_ENGINE_SCRIPTING_EMBED_MARENGINE_H
 
 #include "../ecs/Scene.h"
 #include "../ecs/ECS/Entity.h"
@@ -17,7 +17,7 @@ namespace ecs = mar::ecs;
 namespace scripting = mar::scripting;
 
 
-PYBIND11_MODULE(MAREnginePy, m) {
+PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 
 	m.doc() = "MAREngine Python Module";
 
@@ -255,51 +255,50 @@ PYBIND11_MODULE(MAREnginePy, m) {
 	// Entity Component System
 	// -----------------------------------------------------------------------------------
 
-	// --- COMPONENTS --- //
-	py::class_<scripting::Transform>(m, "Transform")
+	py::class_<ecs::TransformComponent>(m, "Transform")
 		.def(py::init<>())
-		.def_readwrite("scale", &scripting::Transform::scale)
-		.def_readwrite("center", &scripting::Transform::center)
-		.def_readwrite("angles", &scripting::Transform::angles);
+		.def_readwrite("scale", &ecs::TransformComponent::scale)
+		.def_readwrite("center", &ecs::TransformComponent::center)
+		.def_readwrite("angles", &ecs::TransformComponent::angles)
+		.def_readwrite("general_scale", &ecs::TransformComponent::general_scale)
+		.def_readwrite("transform", &ecs::TransformComponent::transform);
 
-	py::class_<scripting::Color>(m, "Color")
+	py::class_<ecs::ColorComponent>(m, "Color")
 		.def(py::init<>())
-		.def_readwrite("texture", &scripting::Color::texture);
+		.def_readwrite("texture", &ecs::ColorComponent::texture);
 
-	py::class_<scripting::Camera>(m, "Camera")
+	py::class_<ecs::CameraComponent>(m, "Camera")
 		.def(py::init<>())
-		.def_readwrite("p_fov", &scripting::Camera::p_fov)
-		.def_readwrite("p_aspectRation", &scripting::Camera::p_aspectRatio)
-		.def_readwrite("p_near", &scripting::Camera::p_near)
-		.def_readwrite("p_far", &scripting::Camera::p_far)
-		.def_readwrite("o_left", &scripting::Camera::o_left)
-		.def_readwrite("o_right", &scripting::Camera::o_right)
-		.def_readwrite("o_top", &scripting::Camera::o_top)
-		.def_readwrite("o_bottom", &scripting::Camera::o_bottom)
-		.def_readwrite("o_near", &scripting::Camera::o_near)
-		.def_readwrite("o_far", &scripting::Camera::o_far);
+		.def_readwrite("p_fov",				&ecs::CameraComponent::p_fov)
+		.def_readwrite("p_aspectRation",	&ecs::CameraComponent::p_aspectRatio)
+		.def_readwrite("p_near",			&ecs::CameraComponent::p_near)
+		.def_readwrite("p_far",				&ecs::CameraComponent::p_far)
+		.def_readwrite("o_left",			&ecs::CameraComponent::o_left)
+		.def_readwrite("o_right",			&ecs::CameraComponent::o_right)
+		.def_readwrite("o_top",				&ecs::CameraComponent::o_top)
+		.def_readwrite("o_bottom",			&ecs::CameraComponent::o_bottom)
+		.def_readwrite("o_near",			&ecs::CameraComponent::o_near)
+		.def_readwrite("o_far",				&ecs::CameraComponent::o_far);
 
-	py::class_<scripting::Light>(m, "Light")
+	py::class_<ecs::LightComponent>(m, "Light")
 		.def(py::init<>())
-		.def_readwrite("ambient", &scripting::Light::ambient)
-		.def_readwrite("diffuse", &scripting::Light::diffuse)
-		.def_readwrite("specular", &scripting::Light::specular)
-		.def_readwrite("constant", &scripting::Light::constant)
-		.def_readwrite("linear", &scripting::Light::linear)
-		.def_readwrite("quadratic", &scripting::Light::quadratic)
-		.def_readwrite("shininess", &scripting::Light::shininess);
+		.def_readwrite("ambient",	&ecs::LightComponent::ambient)
+		.def_readwrite("diffuse",	&ecs::LightComponent::diffuse)
+		.def_readwrite("specular",	&ecs::LightComponent::specular)
+		.def_readwrite("constant",	&ecs::LightComponent::constant)
+		.def_readwrite("linear",	&ecs::LightComponent::linear)
+		.def_readwrite("quadratic", &ecs::LightComponent::quadratic)
+		.def_readwrite("shininess", &ecs::LightComponent::shininess);
 
 	// ---- ENTITY ---- //
 	py::class_<scripting::PyEntity, scripting::PyTrampoline>(m, "Entity")
 		.def(py::init<>())
+		.def("start",				&scripting::PyEntity::start)
+		.def("update",				&scripting::PyEntity::update)
 		.def_readwrite("transform", &scripting::PyEntity::transform)
-		.def_readwrite("light", &scripting::PyEntity::light)
-		.def_readwrite("camera", &scripting::PyEntity::camera)
-		.def_readwrite("color", &scripting::PyEntity::color)
-		.def("start",
-			&scripting::PyEntity::start)
-		.def("update",
-			&scripting::PyEntity::update);
+		.def_readwrite("light",		&scripting::PyEntity::light)
+		.def_readwrite("camera",	&scripting::PyEntity::camera)
+		.def_readwrite("color",		&scripting::PyEntity::color);
 
 	// -----------------------------------------------------------------------------------
 	// Helper methods
@@ -330,4 +329,4 @@ PYBIND11_MODULE(MAREnginePy, m) {
 }
 
 
-#endif // !MAR_ENGINE_SCRIPTING_EMBED_MATHS_H
+#endif // !MAR_ENGINE_SCRIPTING_EMBED_MARENGINE_H

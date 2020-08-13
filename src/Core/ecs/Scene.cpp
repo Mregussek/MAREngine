@@ -203,39 +203,46 @@ namespace mar {
 		}
 
 		void Scene::updatePlayMode() {
-			m_light.components.clear();
-			m_light.positions.clear();
-			m_colors.samplers.clear();
-			m_colors.transforms.clear();
-			m_textures.transforms.clear();
-			m_cubemaps.transforms.clear();
+			static size_t counter_color;
+			static size_t counter_texture;
+			static size_t counter_cubemap;
+			static size_t counter_light;
+
+			counter_color = 0;
+			counter_texture = 0;
+			counter_cubemap = 0;
+			counter_light = 0;
 
 			for (auto entity : entities) {
+				auto& tran = entity.getComponent<TransformComponent>();
+
 				if (entity.hasComponent<ScriptComponent>()) {
 					auto& sc = entity.getComponent<ScriptComponent>();
 					sc.ps.update(entity);
 				}
 
-				auto& tran = entity.getComponent<TransformComponent>();
-
-				if (entity.hasComponent<LightComponent>()) {
-					auto& light = entity.getComponent<LightComponent>();
-					m_light.positions.push_back(tran.center);
-					m_light.components.push_back(light);
-				}
-
 				if (entity.hasComponent<ColorComponent>()) {
 					auto& color = entity.getComponent<ColorComponent>();
-					submitSampler<maths::vec3>(color.texture, m_colors);
-					m_colors.transforms.push_back(tran.transform);
+					m_colors.samplers[counter_color] = color.texture;
+					m_colors.transforms[counter_color] = tran.transform;
+					counter_color++;
 				}
 
 				if (entity.hasComponent<Texture2DComponent>()) {
-					m_textures.transforms.push_back(tran.transform);
+					m_textures.transforms[counter_texture] = tran.transform;
+					counter_texture++;
 				}
 
 				if (entity.hasComponent<TextureCubemapComponent>()) {
-					m_cubemaps.transforms.push_back(tran.transform);
+					m_cubemaps.transforms[counter_cubemap] = tran.transform;
+					counter_cubemap++;
+				}
+
+				if (entity.hasComponent<LightComponent>()) {
+					auto& light = entity.getComponent<LightComponent>();
+					m_light.positions[counter_light] = tran.center;
+					m_light.components[counter_light] = light;
+					counter_light++;
 				}
 
 				if (entity.hasComponent<CameraComponent>()) {

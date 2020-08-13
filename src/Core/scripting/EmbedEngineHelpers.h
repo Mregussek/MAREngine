@@ -9,59 +9,19 @@
 
 
 #include "../../mar.h"
-
+#include "../ecs/ECS/Components.h"
+#include "../ecs/ECS/Entity.h"
 
 namespace mar {
 	namespace scripting {
 
 
-		class Transform {
-		public:
-			maths::vec3 center;
-			maths::vec3 scale;
-			maths::vec3 angles;
-		};
-
-		class Light {
-		public:
-			maths::vec3 ambient;
-			maths::vec3 diffuse;
-			maths::vec3 specular;
-
-			float constant;
-			float linear;
-			float quadratic;
-
-			float shininess;
-		};
-
-		class Camera {
-		public:
-			float p_fov;
-			float p_aspectRatio;
-			float p_near;
-			float p_far;
-
-			float o_left;
-			float o_right;
-			float o_top;
-			float o_bottom;
-			float o_near;
-			float o_far;
-		};
-
-		class Color {
-		public:
-			maths::vec3 texture;
-		};
-
-
 		class PyEntity {
 		public:
-			Transform transform;
-			Light light;
-			Camera camera;
-			Color color;
+			ecs::TransformComponent transform;
+			ecs::LightComponent light;
+			ecs::CameraComponent camera;
+			ecs::ColorComponent color;
 
 			virtual void start() { }
 			virtual void update() { }
@@ -69,6 +29,8 @@ namespace mar {
 
 		class PyTrampoline : public PyEntity {
 		public:
+			using PyEntity::PyEntity;
+
 			void start() override {
 				PYBIND11_OVERLOAD(
 					void,

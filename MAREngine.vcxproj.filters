@@ -210,9 +210,6 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\scripting\EmbedEngine.cpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\scripting\EmbedEngineHelpers.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -229,6 +226,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\Storages.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\MAREnginePy.cpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -378,7 +378,6 @@
     <None Include="resources\shaders\entityColor.shader" />
     <None Include="resources\shaders\entityTexture2D.shader" />
     <None Include="resources\shaders\entityCubemap.shader" />
-    <None Include="MAREnginePy.cp38-win32.pyd" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">
