@@ -22,6 +22,7 @@ namespace mar {
 
 		struct GUI_EntityManagement {
 			static ecs::Entity* currentEntity;
+			static int32_t currentIndex;
 
 			static void Scene_Entity_Modify(bool is_play_mode);
 			static void Scene_Entity_Modify_PopUp();

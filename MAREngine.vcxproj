@@ -99,11 +99,13 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ProgramDataBaseFileName>$(OutDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
       <SupportJustMyCode>false</SupportJustMyCode>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -111,6 +113,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\python3.8.5\libs;$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>python38.lib;opengl32.lib;glew32s.lib;glfw3.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;msvcrtd.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <LinkStatus>true</LinkStatus>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -147,7 +150,11 @@
       <CompileAsManaged>false</CompileAsManaged>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <MinimalRebuild>false</MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +164,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\python3.8.5\libs;$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>python38.lib;opengl32.lib;glew32s.lib;glfw3.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;msvcrtd.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <LinkStatus>true</LinkStatus>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -207,6 +215,7 @@
     <ClInclude Include="include\MAREngine\MAREngine.h" />
     <ClInclude Include="src\Core\assets\AssetsManager.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
+    <ClInclude Include="src\Core\ecs\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\SceneStorage.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
@@ -278,6 +287,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\ecs\ECS\Entity.cpp" />
+    <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatchTexture.cpp" />

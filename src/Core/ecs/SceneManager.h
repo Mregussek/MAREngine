@@ -16,6 +16,8 @@
 namespace mar {
 	namespace ecs {
 
+		class SceneEvents;
+
 
 		class SceneManager {
 		// -------------------------------------------------------------
@@ -75,6 +77,8 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		private:
+			friend class SceneEvents;
+
 			SceneStorage m_sceneStorage;
 			Scene* m_scene;
 

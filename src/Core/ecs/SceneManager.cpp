@@ -11,6 +11,7 @@
 #include "../../Editor/Camera/Camera.h"
 #include "ECS/Systems.h"
 #include "../graphics/Mesh/Manipulators/ShapeManipulator.h"
+#include "SceneEvents.h"
 
 
 namespace mar {
@@ -22,7 +23,9 @@ namespace mar {
 			m_EditorMode(true),
 			m_PauseMode(false),
 			m_scene(nullptr)
-		{}
+		{
+			SceneEvents::scene_manager = this;
+		}
 
 		void SceneManager::initialize() {
 			m_sceneStorage.resetAll();
@@ -32,7 +35,6 @@ namespace mar {
 
 				if (entity.hasComponent<LightComponent>()) {
 					auto& light = entity.getComponent<LightComponent>();
-
 					m_sceneStorage.pushLight(tran.center, light);
 				}
 
@@ -40,11 +42,6 @@ namespace mar {
 					if (entity.hasComponent<CameraComponent>()) {
 						submitCamera(entity, tran);
 					}
-
-				if (entity.hasComponent<ScriptComponent>()) {
-					auto& script = entity.getComponent<ScriptComponent>();
-					script.source = editor::Filesystem::loadPyScript(script.script.c_str());
-				}
 
 				if (!entity.hasComponent<RenderableComponent>()) // we wan't push any entities to draw, if there is not RenderableComponent
 					continue;
@@ -93,8 +90,6 @@ namespace mar {
 
 				ECS_TRACE("SCENE: initializing editor camera on scene");
 			}
-
-			initialize();
 		}
 
 		// -------------------------------------------------------------
@@ -167,6 +162,8 @@ namespace mar {
 					pop_front(m_sceneStorage.play_storage.colors);
 				}
 			}
+
+			initialize();
 		}
 
 		void SceneManager::updatePlayMode() {
@@ -186,30 +183,36 @@ namespace mar {
 				if (entity.hasComponent<ScriptComponent>()) {
 					auto& sc = entity.getComponent<ScriptComponent>();
 					sc.ps.update(entity);
-				}
 
-				if (entity.hasComponent<ColorComponent>()) {
-					auto& color = entity.getComponent<ColorComponent>();
-					m_sceneStorage.colors_storage.samplers[counter_color] = color.texture;
-					m_sceneStorage.colors_storage.transforms[counter_color] = tran.transform;
-					counter_color++;
-				}
+					if (entity.hasComponent<ColorComponent>()) {
+						auto& color = entity.getComponent<ColorComponent>();
+						m_sceneStorage.colors_storage.samplers[counter_color] = color.texture;
+						m_sceneStorage.colors_storage.transforms[counter_color] = tran.transform;
+						counter_color++;
+					}
 
-				if (entity.hasComponent<Texture2DComponent>()) {
-					m_sceneStorage.texture_storage.transforms[counter_texture] = tran.transform;
-					counter_texture++;
-				}
+					if (entity.hasComponent<Texture2DComponent>()) {
+						m_sceneStorage.texture_storage.transforms[counter_texture] = tran.transform;
+						counter_texture++;
+					}
 
-				if (entity.hasComponent<TextureCubemapComponent>()) {
-					m_sceneStorage.cubemap_storage.transforms[counter_cubemap] = tran.transform;
-					counter_cubemap++;
-				}
+					if (entity.hasComponent<TextureCubemapComponent>()) {
+						m_sceneStorage.cubemap_storage.transforms[counter_cubemap] = tran.transform;
+						counter_cubemap++;
+					}
 
-				if (entity.hasComponent<LightComponent>()) {
-					auto& light = entity.getComponent<LightComponent>();
-					m_sceneStorage.light_storage.positions[counter_light] = tran.center;
-					m_sceneStorage.light_storage.components[counter_light] = light;
-					counter_light++;
+					if (entity.hasComponent<LightComponent>()) {
+						auto& light = entity.getComponent<LightComponent>();
+						m_sceneStorage.light_storage.positions[counter_light] = tran.center;
+						m_sceneStorage.light_storage.components[counter_light] = light;
+						counter_light++;
+					}
+				}
+				else {
+					if (entity.hasComponent<ColorComponent>()) counter_color++;
+					if (entity.hasComponent<Texture2DComponent>()) counter_texture++;
+					if (entity.hasComponent<TextureCubemapComponent>()) counter_cubemap++;
+					if (entity.hasComponent<LightComponent>()) counter_light++;
 				}
 
 				if (entity.hasComponent<CameraComponent>()) {

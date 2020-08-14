@@ -289,6 +289,7 @@ namespace mar {
 					m_indexEntity = i;
 					m_currentEntity = &m_sceneManager->getScene()->getEntity(m_indexEntity);
 					GUI_EntityManagement::currentEntity = m_currentEntity;
+					GUI_EntityManagement::currentIndex = m_indexEntity;
 				}
 			}
 
@@ -319,6 +320,7 @@ namespace mar {
 					m_currentEntity->addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					m_indexEntity = m_sceneManager->getScene()->getEntities().size() - 1;
 					GUI_EntityManagement::currentEntity = m_currentEntity;
+					GUI_EntityManagement::currentIndex = m_indexEntity;
 				}
 
 				if(m_currentEntity)
@@ -327,6 +329,7 @@ namespace mar {
 						m_indexEntity = -1;
 						m_currentEntity = nullptr;
 						GUI_EntityManagement::currentEntity = nullptr;
+						GUI_EntityManagement::currentIndex = -1;
 					}
 
 				ImGui::EndPopup();

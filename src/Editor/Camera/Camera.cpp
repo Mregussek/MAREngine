@@ -58,7 +58,7 @@ namespace mar {
 			if (window::Input::isKeyPressed(MAR_KEY_D))
 				processCameraMovement(CameraMovement::RIGHT);
 
-			if (window::Input::isKeyPressed(MAR_KEY_Q)) {
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_3)) {
 				if (m_enableMouse) m_enableMouse = false;
 				else m_enableMouse = true;
 

@@ -21,6 +21,7 @@ namespace mar {
 				scene = new ecs::Scene("EmptyScene");
 
 			m_sceneManager.setScene(scene);
+			m_sceneManager.initialize();
 		}
 
 		void EntityLayer::update() {

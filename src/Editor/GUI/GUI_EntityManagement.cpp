@@ -4,12 +4,14 @@
  */
 
 #include "GUI_EntityManagement.h"
+#include "../../Core/ecs/SceneEvents.h"
 
 
 namespace mar {
 	namespace editor {
 
 		ecs::Entity* GUI_EntityManagement::currentEntity{ nullptr };
+		int32_t GUI_EntityManagement::currentIndex{ -1 };
 
 		void GUI_EntityManagement::Scene_Entity_Modify(bool is_play_mode) {
 			ImGui::Begin("Entity Modification");
@@ -150,13 +152,16 @@ namespace mar {
 
 			// Sliders
 			{
+				static bool updated_transform;
+				updated_transform = false;
+
 				static float last_general;
 				last_general = tran.general_scale;
 
-				ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -100.0f, 100.0f, "%.2f", 1.f);
-				ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f);
-				ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.01f, 0.f, 2.0f, "%.2f", 1.f);
-				ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 2.f, "%.3f", 1.f);
+				if (ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -200.0f, 200.0f, "%.2f", 1.f) ) updated_transform = true;
+				if (ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f)	 ) updated_transform = true;
+				if (ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.01f, 0.f, 20.0f, "%.2f", 1.f)			 ) updated_transform = true;
+				if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)							 ) updated_transform = true;
 
 				if (last_general != tran.general_scale)
 					tran.scale += tran.general_scale - last_general;
@@ -166,11 +171,12 @@ namespace mar {
 					tran.scale.x = 1.f;
 					tran.scale.y = 1.f;
 					tran.scale.z = 1.f;
+					updated_transform = true;
 				}
-			}
 
-			if (window_focused) {
-				ecs::System::handleTransformComponent(tran);
+				if (updated_transform) 
+					ecs::SceneEvents::updateTransform(currentEntity, currentIndex);
+				
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
@@ -191,9 +197,6 @@ namespace mar {
 			strcpy_s(input, script.script.c_str());
 			if (ImGui::InputText(" - script", input, 50))
 				script.script = std::string(input);
-
-			ImGui::Text(ecs::System::changeSlashesToDots(script.script).c_str());
-			ImGui::Text(ecs::System::getModuleFromPath(script.script).c_str());
 
 			if (ImGui::Button("Load Script from file"))
 				script.source = Filesystem::loadPyScript(script.script.c_str());
@@ -216,17 +219,27 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("RenderableComponent\n");
 			ImGui::SameLine();
-			if (!currentEntity->hasComponent<ecs::ColorComponent>() || !currentEntity->hasComponent<ecs::Texture2DComponent>()
-				|| !currentEntity->hasComponent<ecs::TextureCubemapComponent>())
+
+			static bool color_texture_OR;
+			color_texture_OR = !currentEntity->hasComponent<ecs::ColorComponent>() 
+				|| !currentEntity->hasComponent<ecs::Texture2DComponent>()
+				|| !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
+
+			if (color_texture_OR)
 				if (ImGui::MenuItem("Remove Renderable")) {
 					currentEntity->removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
 					return;
 				}
 
 			ImGui::Text(renderable.id.c_str());
 
-			if (!currentEntity->hasComponent<ecs::ColorComponent>() && !currentEntity->hasComponent<ecs::Texture2DComponent>()
-				&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>())
+			static bool color_texture_AND;
+			color_texture_AND = !currentEntity->hasComponent<ecs::ColorComponent>() 
+				&& !currentEntity->hasComponent<ecs::Texture2DComponent>()
+				&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
+
+			if (color_texture_AND)
 				ImGui::Text("WARNING: Object will not be rendered until you will add Color or Texture!");
 
 			if (renderable.vertices.empty())
@@ -239,6 +252,8 @@ namespace mar {
 					renderable.indices = graphics::MeshCreator::Cube::getIndices();
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
+
+					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -249,6 +264,8 @@ namespace mar {
 					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
+
+					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -259,6 +276,8 @@ namespace mar {
 					renderable.indices = graphics::MeshCreator::Wall::getIndices();
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
+
+					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -269,6 +288,8 @@ namespace mar {
 					renderable.indices = graphics::MeshCreator::Surface::getIndices();
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
+
+					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -295,6 +316,8 @@ namespace mar {
 						renderable.indices = graphics::MeshCreator::OBJ::indices;
 						GUI_modify_renderable = false;
 						GUI_display_obj = false;
+
+						ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
 					}
 
 					ImGui::SameLine();
@@ -335,26 +358,32 @@ namespace mar {
 
 			ImGui::Checkbox("Perspective (TRUE) / Orthographic (FALSE)", &camcmp.Perspective);
 
+			static bool updated_camera;
+			updated_camera = false;
+
 			if (camcmp.Perspective) {
-				ImGui::DragFloat("AspectRatio", &camcmp.p_aspectRatio, 0.1f, 1.f, 10.f);
+				if (ImGui::DragFloat("AspectRatio", &camcmp.p_aspectRatio, 0.1f, 1.f, 10.f)) updated_camera = true;
 				if (ImGui::Button("Set 16:9")) camcmp.p_aspectRatio = 16.f / 9.f;
 				ImGui::SameLine();
 				if (ImGui::Button("Set 8:5")) camcmp.p_aspectRatio = 8.f / 5.f;
 				ImGui::SameLine();
 				if (ImGui::Button("Set 4:3")) camcmp.p_aspectRatio = 4.f / 3.f;
 
-				ImGui::DragFloat("Field Of View", &camcmp.p_fov, 0.1f, 1.f, 90.f);
-				ImGui::DragFloat("Near", &camcmp.p_near, 0.01f, 0.001f, 150.f);
-				ImGui::DragFloat("Far", &camcmp.p_far, 0.1f, 0.001f, 150.f);
+				if (ImGui::DragFloat("Field Of View", &camcmp.p_fov, 0.1f, 1.f, 90.f) ) updated_camera = true;
+				if (ImGui::DragFloat("Near", &camcmp.p_near, 0.01f, 0.001f, 150.f)	  ) updated_camera = true;
+				if (ImGui::DragFloat("Far", &camcmp.p_far, 0.1f, 0.001f, 150.f)		  ) updated_camera = true;
 			}
 			else {
-				ImGui::DragFloat("Left", &camcmp.o_left, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Right", &camcmp.o_right, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Top", &camcmp.o_top, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Bottom", &camcmp.o_bottom, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Near", &camcmp.o_near, 0.1f, 0.001f, 150.f);
-				ImGui::DragFloat("Far", &camcmp.o_far, 0.1f, 0.001f, 150.f);
+				if (ImGui::DragFloat("Left", &camcmp.o_left, 0.1f, -100.f, 100.f)		) updated_camera = true;
+				if (ImGui::DragFloat("Right", &camcmp.o_right, 0.1f, -100.f, 100.f)		) updated_camera = true;
+				if (ImGui::DragFloat("Top", &camcmp.o_top, 0.1f, -100.f, 100.f)			) updated_camera = true;
+				if (ImGui::DragFloat("Bottom", &camcmp.o_bottom, 0.1f, -100.f, 100.f)	) updated_camera = true;
+				if (ImGui::DragFloat("Near", &camcmp.o_near, 0.1f, 0.001f, 150.f)		) updated_camera = true;
+				if (ImGui::DragFloat("Far", &camcmp.o_far, 0.1f, 0.001f, 150.f)			) updated_camera = true;
 			}
+
+			if (updated_camera)
+				ecs::SceneEvents::updatedCamera(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
@@ -370,7 +399,8 @@ namespace mar {
 
 			auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
-			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture));
+			if (ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture)))
+				ecs::SceneEvents::updatedColor(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
@@ -384,6 +414,7 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				currentEntity->removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+				ecs::SceneEvents::updatedTexture2D(currentEntity, currentIndex);
 				return;
 			}
 
@@ -421,6 +452,7 @@ namespace mar {
 			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Texture")) {
+				ecs::SceneEvents::updatedTexture2D(currentEntity, currentIndex);
 				GUI_load_new_texture = false;
 			}
 
@@ -436,6 +468,7 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				currentEntity->removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+				ecs::SceneEvents::updatedCubemap(currentEntity, currentIndex);
 				return;
 			}
 
@@ -473,6 +506,7 @@ namespace mar {
 			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Cubemap")) {
+				ecs::SceneEvents::updatedCubemap(currentEntity, currentIndex);
 				GUI_load_new_cubemap = false;
 			}
 
@@ -487,19 +521,26 @@ namespace mar {
 
 			if (ImGui::MenuItem("Remove Light")) {
 				currentEntity->removeComponent<ecs::LightComponent>(ECS_LIGHT);
+				ecs::SceneEvents::updatedLight(currentEntity, currentIndex);
 				return;
 			}
 
 			auto& light = currentEntity->getComponent<ecs::LightComponent>();
 
-			ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f);
-			ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f);
-			ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f);
+			static bool updated_light;
+			updated_light = false;
 
-			ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f);
-			ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f);
-			ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f);
-			ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f);
+			if (ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f)	) updated_light = true;
+			if (ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f)	) updated_light = true;
+			if (ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f)	) updated_light = true;
+																					
+			if (ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f)			) updated_light = true;
+			if (ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f)			) updated_light = true;
+			if (ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f)		) updated_light = true;
+			if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) updated_light = true;
+
+			if(updated_light)
+				ecs::SceneEvents::updatedLight(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 		}
