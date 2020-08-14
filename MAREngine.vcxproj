@@ -201,12 +201,14 @@
     <ClInclude Include="3rd_party\serialport\include\SerialPort.hpp" />
     <ClInclude Include="3rd_party\stb_image\include\stb_image\stb_image.h" />
     <ClInclude Include="include\MAREngine\MAREngine.h" />
+    <ClInclude Include="src\Core\assets\AssetsManager.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\SceneStorage.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RendererBatchTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererColor.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\ecs\ECS\Components.h" />
@@ -214,7 +216,7 @@
     <ClInclude Include="src\Core\ecs\ECS\Systems.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
-    <ClInclude Include="src\Core\scripting\EmbedEngineHelpers.h" />
+    <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h" />
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
@@ -274,6 +276,7 @@
     <ClCompile Include="src\Core\ecs\ECS\Entity.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RendererBatchTexture.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererColor.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererTexture.cpp" />

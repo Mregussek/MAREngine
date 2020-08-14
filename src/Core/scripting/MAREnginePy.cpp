@@ -8,7 +8,7 @@
 
 #include "../ecs/Scene.h"
 #include "../ecs/ECS/Entity.h"
-#include "EmbedEngineHelpers.h"
+#include "MAREnginePy_Trampoline.h"
 
 
 namespace py = pybind11;

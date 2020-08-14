@@ -24,6 +24,8 @@ namespace mar {
 				break;
 			case ShaderType::ENTITY_CUBEMAP: m_shaderPath = "resources/shaders/entityCubemap.shader";
 				break;
+			case ShaderType::BATCH_TEXTURE: m_shaderPath = "resources/shaders/BatchTexture.shader";
+				break;
 			}
 
 			m_id = 0;

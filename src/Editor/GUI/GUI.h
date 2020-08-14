@@ -50,9 +50,9 @@ namespace mar {
 			void updateFrame();
 			void endFrame();
 
-			void Display_ViewPort();
-			
 			void Menu_MainMenuBar();
+
+			void Display_ViewPort();
 			
 			// --- SCENE HANDLERS --- //
 			void Scene_Properties();
