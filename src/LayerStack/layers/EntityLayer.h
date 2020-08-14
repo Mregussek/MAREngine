@@ -9,6 +9,7 @@
 #include "../../mar.h"
 #include "../Layer.h"
 #include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneManager.h"
 
 
 namespace mar {
@@ -19,7 +20,7 @@ namespace mar {
 
 		class EntityLayer : public Layer {
 			const char* m_debugName;
-			ecs::Scene* m_scene;
+			ecs::SceneManager m_sceneManager;
 			graphics::RendererEntity* m_renderer;
 
 		public:
@@ -36,7 +37,7 @@ namespace mar {
 			// --- GET METHODS --- //
 
 			graphics::RendererEntity* getRenderer();
-			ecs::Scene* getScene();
+			ecs::SceneManager* getSceneManager();
 		};
 
 

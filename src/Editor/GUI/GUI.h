@@ -18,6 +18,7 @@
 #include "../../Core/graphics/Renderer/RendererEntity.h"
 
 #include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneManager.h"
 
 
 namespace mar {
@@ -26,7 +27,7 @@ namespace mar {
 
 		class GUI {
 			// --- Storage for scenes
-			ecs::Scene* m_scene;
+			ecs::SceneManager* m_sceneManager;
 			// --- Viewport
 			graphics::FrameBufferOpenGL m_framebuffer;
 			// --- Which entity should be displayed
@@ -46,7 +47,7 @@ namespace mar {
 			void initialize(const char* glsl_version);
 			void shutdown();
 
-			void submit(ecs::Scene* scene);
+			void submit(ecs::SceneManager* scene);
 
 			void display();
 

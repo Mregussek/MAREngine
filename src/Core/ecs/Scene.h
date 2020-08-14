@@ -3,18 +3,14 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_SCENE_H
-#define MAR_ENGINE_SCENE_H
+#ifndef MAR_ENGINE_ECS_SCENE_H
+#define MAR_ENGINE_ECS_SCENE_H
 
 #include "../../mar.h"
 #include "ECS/Components.h"
-#include "ECS/Systems.h"
 #include "ECSLogs.h"
-#include "Storages.h"
 
-#include "../../Editor/Camera/Camera.h"
 #include "../graphics/Renderer/RenderCamera.h"
-#include "../graphics/Mesh/Manipulators/ShapeManipulator.h"
 
 
 namespace mar {
@@ -35,43 +31,7 @@ namespace mar {
 			Entity& createEntity();
 			void destroyEntity(const int32_t& index);
 
-			void initialize();
-			void update();
-
 			// --- GET METHODS --- //
-
-			inline const std::string& getName() const { return m_name; }
-
-			inline const SceneStorage<maths::vec3>& getColorsStorage() const { return m_colors; }
-			inline const SceneStorage<int32_t>& getTexturesStorage() const { return m_textures; }
-			inline const SceneStorage<int32_t>& getCubemapStorage() const { return m_cubemaps; }
-			inline const LightStorage& getLightStorage() const { return m_light; }
-			inline graphics::RenderCamera& getRenderCamera() { return scene_camera; }
-
-			bool isEditorMode() { return m_EditorMode; }
-			bool isPlayMode() { return !m_EditorMode; }
-			bool isPauseMode() { return m_PauseMode; }
-
-			// --- SET METHODS --- //
-
-			void setName(std::string name) { m_name = name; }
-			void setEditorMode() { m_EditorMode = true; }
-			void setPlayMode() { m_EditorMode = false; initPlayMode(); }
-			void setExitPlayMode() { m_EditorMode = true; unsetPauseMode(); exitPlayMode(); }
-			void setPauseMode() { m_PauseMode = true; }
-			void unsetPauseMode() { m_PauseMode = false; }
-			
-			// ----------------------------------------------------
-			// SCENE PRIVATE METHODS
-			// ----------------------------------------------------
-
-		private:
-
-			void initPlayMode();
-			void exitPlayMode();
-
-			void updateEditorMode();
-			void updatePlayMode();
 
 			template<typename T>
 			auto getView() ->decltype(entt::registry::view<T>()) { return m_registry.view<T>(); }
@@ -79,52 +39,33 @@ namespace mar {
 			template<typename T>
 			T& getComponent(entt::entity& entity) { return m_registry.get<T>(entity); }
 
-			void resetStorages(SceneStorage<maths::vec3>& s1, SceneStorage<int32_t>& s2, SceneStorage<int32_t>& s3, LightStorage& l1);
+			inline const std::string& getName() const { return m_name; }
+			inline graphics::RenderCamera& getRenderCamera() { return scene_camera; }
 
-			void submitColorEntity(Entity& entity, TransformComponent& tran, RenderableComponent& ren, SceneStorage<maths::vec3>& storage);
+			// --- SET METHODS --- //
 
-			template<typename TextureType>
-			void submitTextureEntity(Entity& entity, TransformComponent& tran, RenderableComponent& ren, SceneStorage<int32_t>& storage);
+			void setName(std::string name) { m_name = name; }
+			
+			// --- GET METHODS --- //
 
-			template<typename T>
-			void submitVerticesIndices(RenderableComponent& ren, SceneStorage<T>& storage);
+			const std::vector<Entity>& getEntities() const { return entities; }
+			Entity& getEntity(size_t index) { return entities[index]; }
 
-			template<typename T>
-			void submitSampler(T& sampler, SceneStorage<T>& storage);
-
-			void submitCamera(Entity& entity, TransformComponent& tran);
-
-			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
-		
 			// ----------------------------------------------------
 			// SCENE MEMBERS
 			// ----------------------------------------------------
-
-		public:
-			std::vector<Entity> entities;
-			bool useEditorCamera;
-
+			
 		private:
 			friend class Entity;
 
 			std::string m_name{ "Empty Scene" };
-
 			entt::registry m_registry;
-
-			LightStorage m_light;
-			SceneStorage<maths::vec3> m_colors;
-			SceneStorage<int32_t> m_textures;
-			SceneStorage<int32_t> m_cubemaps;
-			PlayStorage m_playstorage;
-
+			std::vector<Entity> entities;
 			graphics::RenderCamera scene_camera;
-
-			bool m_EditorMode;
-			bool m_PauseMode;
 		};
 
 
 } }
 
 
-#endif // !MAR_ENGINE_SCENE_H
+#endif // !MAR_ENGINE_ECS_SCENE_H

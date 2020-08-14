@@ -31,6 +31,7 @@
 #include "Shader/ShaderOpenGL.h"
 
 #include "../../ecs/Scene.h"
+#include "../../ecs/SceneManager.h"
 
 
 

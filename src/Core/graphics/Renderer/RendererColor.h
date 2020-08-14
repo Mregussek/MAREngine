@@ -11,6 +11,7 @@
 #include "../../ecs/ECS/Entity.h"
 #include "../../ecs/ECS/Components.h"
 #include "../../ecs/Scene.h"
+#include "../../ecs/SceneManager.h"
 
 #include "../../../Editor/Camera/Camera.h"
 
@@ -64,7 +65,7 @@ namespace mar {
 			}
 
 			void draw(
-				const ecs::SceneStorage<maths::vec3>& storage, 
+				const ecs::BufferStorage<maths::vec3>& storage, 
 				const RenderCamera& camera,
 				const ecs::LightStorage& light
 			) {

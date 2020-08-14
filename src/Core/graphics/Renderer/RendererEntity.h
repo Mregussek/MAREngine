@@ -36,7 +36,7 @@ namespace mar {
 
 			void close();
 			
-			void update(ecs::Scene* scene);
+			void update(ecs::SceneManager* scene);
 
 			// --- STATISTICS --- //
 			

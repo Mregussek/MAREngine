@@ -225,10 +225,13 @@
     <ClInclude Include="src\Core\ecs\ECS\Systems.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\Storages.h">
+    <ClInclude Include="src\Core\scripting\MAREnginePy.cpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\scripting\MAREnginePy.cpp">
+    <ClInclude Include="src\Core\ecs\SceneManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ecs\SceneStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -350,6 +353,9 @@
     <ClCompile Include="src\Core\ecs\ECS\Entity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\ecs\SceneManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -378,6 +384,7 @@
     <None Include="resources\shaders\entityColor.shader" />
     <None Include="resources\shaders\entityTexture2D.shader" />
     <None Include="resources\shaders\entityCubemap.shader" />
+    <None Include="resources\shaders\BatchTexture.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">

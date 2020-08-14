@@ -9,10 +9,13 @@ layout(location = 3) in float shapeIndex;
 out vec3 v_Position;
 out vec3 v_lightNormal;
 out float v_shapeIndex;
+out vec2 v_texCoords;
+out int v_TextureType;
 
 uniform mat4 u_Model;
 uniform mat4 u_MVP;
 uniform mat4 u_SeparateTransform[32];
+uniform int u_TextureType[32];
 
 void main() {
 	// Calculate all transformations
@@ -24,6 +27,13 @@ void main() {
 	v_shapeIndex = shapeIndex;
 	v_lightNormal = mat3(u_Model) * lightNormal;
 	v_Position = vec4(u_Model * verter_transformed).xyz;
+
+	if(u_TextureType[index] == 2) // textureCubemap
+		v_texCoords = position.xyz;
+	else // 0 - default color, 1 - texture2D, others are wrong
+		v_texCoords = texCoord;
+
+	v_TextureType = u_TextureType[index];
 };
 
 #shader fragment
@@ -34,6 +44,8 @@ layout(location = 0) out vec4 color;
 in vec3 v_Position;
 in vec3 v_lightNormal;
 in float v_shapeIndex;
+in vec2 v_texCoords;
+int int v_TextureType;
 
 uniform struct Material {
 	vec3 lightPos;
@@ -49,19 +61,31 @@ uniform struct Material {
 
 uniform int u_materialSize;
 uniform vec3 u_CameraPos;
-uniform vec3 u_SeparateColor[32];
+uniform sampler2D u_SeparateTexture2D[32];
+uniform samplerCube u_SeparateCube[32];
 
+vec4 chooseTextureType();
 vec4 calculateLight(Material passed_material, vec3 passed_color_light);
 vec4 computeAllLights(vec4 batchColor);
 
 void main() {
 	int index = int(v_shapeIndex);
 
-	vec4 batchColor = vec4(u_SeparateColor[index], 1.0f);
+	vec4 batchColor = chooseTextureType();
 	vec4 lightColor = computeAllLights(batchColor);
 
 	color = batchColor * lightColor;
 };
+
+vec4 chooseTextureType() {
+	vec4 batchColor;
+
+	if (v_TextureType == 2) batchColor = texture(u_SeparateCube[index], v_texCoords);
+	else if (v_TextureType == 1) batchColor = texture(u_SeparateTexture2D[index], v_texCoords);
+	else batchColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+
+	return batchColor;
+}
 
 vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
 	// AMBIENT
@@ -87,7 +111,7 @@ vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
 	diffuse *= attenuation;
 	specular *= attenuation;
 
-	return( vec4(ambient + diffuse + specular, 1.0f) );
+	return(vec4(ambient + diffuse + specular, 1.0f));
 }
 
 vec4 computeAllLights(vec4 batchColor) {

@@ -33,7 +33,7 @@ public:
 		stack.pushLayer(entitylayer);
 
 		guilayer->initialize(&gui, &gui_cam);
-		gui.submit(loaded_scene);
+		gui.submit(entitylayer->getSceneManager());
 		stack.pushOverlay(guilayer);
 
 		auto& framebuffer = gui.getFramebuffer();

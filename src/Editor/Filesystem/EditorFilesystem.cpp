@@ -4,6 +4,7 @@
  */
 
 #include "EditorFilesystem.h"
+#include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../Debug/Log.h"
 
@@ -32,7 +33,7 @@ namespace mar {
 			ss << "#Scene\n";
 			ss << "#Scene_Name " << name << "\n";
 
-			for (auto& entity : scene->entities) {
+			for (auto& entity : scene->getEntities()) {
 				ss << "\n#Entity\n";
 
 				auto& com = entity.getComponent<ecs::Components>();
@@ -455,8 +456,6 @@ namespace mar {
 						);
 
 						scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-
-						scene->useEditorCamera = false;
 					}
 				}
 				else if (line.find("#ScriptComponent") != std::string::npos) {

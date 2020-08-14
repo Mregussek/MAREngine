@@ -29,42 +29,46 @@ namespace mar {
 			GRAPHICS_INFO("RENDERERENTITY: closed!");
 		}
 
-		void RendererEntity::update(ecs::Scene* scene) {
-			auto& colors = scene->getColorsStorage();
-			auto& cubemaps = scene->getCubemapStorage();
-			auto& textures = scene->getTexturesStorage();
+		void RendererEntity::update(ecs::SceneManager* scene) {
+			auto& storage = scene->getStorage();
 
-			if (!colors.vertices.empty()) {
+			if (!storage.colors_storage.vertices.empty()) {
 				s_stats.drawCallsCount += 1;
 
-				m_renColor.draw(colors,
-					 scene->getRenderCamera(),
-					 scene->getLightStorage()
+				m_renColor.draw(storage.colors_storage,
+					 scene->getScene()->getRenderCamera(),
+					 storage.light_storage
 				);
 			}
 
-			if(!cubemaps.vertices.empty()) {
+			if(!storage.cubemap_storage.vertices.empty()) {
 				s_stats.drawCallsCount += 1;
 
-				m_renCube.draw(cubemaps,
-					 scene->getRenderCamera(),
-					 scene->getLightStorage(),
-					 GL_TEXTURE_CUBE_MAP
+				m_renCube.draw(storage.cubemap_storage,
+					scene->getScene()->getRenderCamera(),
+					storage.light_storage,
+					GL_TEXTURE_CUBE_MAP
 				);
 			}
 
-			if (!textures.vertices.empty()) {
+			if (!storage.texture_storage.vertices.empty()) {
 				s_stats.drawCallsCount += 1;
 
-				m_ren2D.draw(textures,
-					 scene->getRenderCamera(),
-					 scene->getLightStorage(),
-					 GL_TEXTURE_2D
+				m_ren2D.draw(storage.texture_storage,
+					scene->getScene()->getRenderCamera(),
+					storage.light_storage,
+					GL_TEXTURE_2D
 				);
 			}
 
-			s_stats.verticesCount += colors.vertices.size() + cubemaps.vertices.size() + textures.vertices.size();
-			s_stats.indicesCount += colors.indices.size() + cubemaps.indices.size() + textures.indices.size();
+			s_stats.verticesCount += 
+				storage.colors_storage.vertices.size() +
+				storage.cubemap_storage.vertices.size() +
+				storage.texture_storage.vertices.size();
+			s_stats.indicesCount += 
+				storage.colors_storage.indices.size() +
+				storage.cubemap_storage.indices.size() +
+				storage.texture_storage.indices.size();
 
 			s_stats.trianglesCount = s_stats.indicesCount / 3;
 

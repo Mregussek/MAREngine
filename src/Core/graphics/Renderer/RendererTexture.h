@@ -11,6 +11,7 @@
 #include "../../ecs/ECS/Entity.h"
 #include "../../ecs/ECS/Components.h"
 #include "../../ecs/Scene.h"
+#include "../../ecs/SceneManager.h"
 
 #include "../../../Editor/Camera/Camera.h"
 
@@ -67,7 +68,7 @@ namespace mar {
 			}
 
 			void draw(
-				const ecs::SceneStorage<int32_t>& storage,
+				const ecs::BufferStorage<int32_t>& storage,
 				const RenderCamera& camera, 
 				const ecs::LightStorage& light,
 				const int32_t& texture_type
@@ -77,14 +78,14 @@ namespace mar {
 				{ // BIND TEXTURES
 					if (texture_type == GL_TEXTURE_2D) {
 						uint32_t id;
-						for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++) {
+						for (int32_t i = 0; i < (int32_t)storage.paths.size(); i++) {
 							id = (uint32_t)m_texture.loadTexture(storage.paths[i]);
 							m_texture.bind(texture_type, storage.samplers[i], id);
 						}
 					}
 					else if (texture_type == GL_TEXTURE_CUBE_MAP) {
 						uint32_t id;
-						for (int32_t i = 0; i < (int32_t)storage.samplers.size(); i++) {
+						for (int32_t i = 0; i < (int32_t)storage.paths.size(); i++) {
 							id = (uint32_t)m_texture.loadCubemap(storage.paths[i]);
 							m_texture.bind(texture_type, storage.samplers[i], id);
 						}

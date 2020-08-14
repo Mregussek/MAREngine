@@ -13,32 +13,28 @@ namespace mar {
 
 		EntityLayer::EntityLayer(const char* debugname)
 			: m_debugName(debugname),
-			m_renderer(nullptr),
-			m_scene(nullptr)
+			m_renderer(nullptr)
 		{}
 
 		void EntityLayer::initialize(ecs::Scene* scene) {
 			m_renderer = new graphics::RendererEntity();
 			m_renderer->initialize();
 		
-			if (scene)
-				m_scene = scene;
-			else
-				m_scene = new ecs::Scene("EmptyScene");
+			if (!scene)
+				scene = new ecs::Scene("EmptyScene");
 
-			m_scene->initialize();
+			m_sceneManager.setScene(scene);
 		}
 
 		void EntityLayer::update() {
-			m_scene->update();
-			m_renderer->update(m_scene);
+			m_sceneManager.update();
+			m_renderer->update(&m_sceneManager);
 		}
 
 		void EntityLayer::closeLayer() {
 			m_renderer->close();
-			m_scene->shutdown();
+			m_sceneManager.shutdown();
 
-			delete m_scene;
 			delete m_renderer;
 		}
 
@@ -46,8 +42,8 @@ namespace mar {
 			return m_renderer;
 		}
 
-		ecs::Scene* EntityLayer::getScene() {
-			return m_scene; 
+		ecs::SceneManager* EntityLayer::getSceneManager() {
+			return &m_sceneManager; 
 		}
 
 

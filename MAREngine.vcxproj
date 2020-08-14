@@ -202,7 +202,8 @@
     <ClInclude Include="3rd_party\stb_image\include\stb_image\stb_image.h" />
     <ClInclude Include="include\MAREngine\MAREngine.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
-    <ClInclude Include="src\Core\ecs\Storages.h" />
+    <ClInclude Include="src\Core\ecs\SceneManager.h" />
+    <ClInclude Include="src\Core\ecs\SceneStorage.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
@@ -267,6 +268,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\ecs\ECS\Entity.cpp" />
+    <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererColor.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
@@ -316,6 +318,7 @@
     <None Include="resources\mar_files\to_load.marscene" />
     <None Include="resources\shaders\basic.shader" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />
+    <None Include="resources\shaders\BatchTexture.shader" />
     <None Include="resources\shaders\cubemap.shader" />
     <None Include="resources\shaders\cubemapWithoutGUI.shader" />
     <None Include="resources\shaders\entityColor.shader" />

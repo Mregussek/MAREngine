@@ -55,17 +55,13 @@ uniform vec3 u_CameraPos;
 uniform samplerCube u_SeparateColor[32];
 
 vec4 calculateLight(Material passed_material, vec3 passed_color_light);
+vec4 computeAllLights(vec4 batchColor);
 
 void main() {
 	int index = int(v_shapeIndex);
 
 	vec4 batchColor = texture(u_SeparateColor[index], v_texCoords);
-	vec4 lightColor = calculateLight(u_material[0], batchColor.xyz);
-
-	for (int i = 1; i < 15; i++) {
-		if (i >= u_materialSize) break;
-		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
-	}
+	vec4 lightColor = computeAllLights(batchColor);
 
 	color = batchColor * lightColor;
 };
@@ -95,4 +91,15 @@ vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
 	specular *= attenuation;
 
 	return(vec4(ambient + diffuse + specular, 1.0f));
+}
+
+vec4 computeAllLights(vec4 batchColor) {
+	vec4 lightColor = calculateLight(u_material[0], batchColor.xyz);
+
+	for (int i = 1; i < 15; i++) {
+		if (i >= u_materialSize) break;
+		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
+	}
+
+	return lightColor;
 }

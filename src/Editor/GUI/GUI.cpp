@@ -177,25 +177,25 @@ namespace mar {
 
 			ImGui::Begin("Manage Viewport");
 
-			if (m_scene->isEditorMode()) {
+			if (m_sceneManager->isEditorMode()) {
 				if (ImGui::Button("PLAY")) {
-					m_scene->setPlayMode();
+					m_sceneManager->setPlayMode();
 				}
 			}
 			else {
 				if (ImGui::Button("STOP")) {
-					m_scene->setExitPlayMode();
+					m_sceneManager->setExitPlayMode();
 				}
 
 				ImGui::SameLine();
 
-				if (!m_scene->isPauseMode()) {
+				if (!m_sceneManager->isPauseMode()) {
 					if (ImGui::Button("PAUSE"))
-						m_scene->setPauseMode();
+						m_sceneManager->setPauseMode();
 				}	
 				else {
 					if (ImGui::Button("RESUME"))
-						m_scene->unsetPauseMode();
+						m_sceneManager->unsetPauseMode();
 				}
 					
 			}
@@ -320,9 +320,9 @@ namespace mar {
 			EDITOR_TRACE("GUI: menu_instruction");
 		}
 
-		void GUI::submit(ecs::Scene* scene) {
-			m_scene = scene;
-			m_scene->useEditorCamera = true;
+		void GUI::submit(ecs::SceneManager* scene) {
+			m_sceneManager = scene;
+			m_sceneManager->useEditorCamera = true;
 
 			EDITOR_INFO("GUI: scene has been submitted!");
 		}
@@ -332,10 +332,12 @@ namespace mar {
 
 			ImGui::Text(" - ");
 			ImGui::SameLine();
-			ImGui::Text(m_scene->getName().c_str());
+			ImGui::Text(m_sceneManager->getScene()->getName().c_str());
 
-			for (int32_t i = 0; i < (int32_t)m_scene->entities.size(); i++) {
-				std::string s = m_scene->entities[i].getComponent<ecs::TagComponent>();
+			auto& entities = m_sceneManager->getScene()->getEntities();
+
+			for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
+				std::string s = entities[i].getComponent<ecs::TagComponent>();
 				if (ImGui::MenuItem(s.c_str())) {
 					m_indexEntity = i;
 				}
@@ -364,9 +366,9 @@ namespace mar {
 
 			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 				if (ImGui::MenuItem("Add Entity to scene")) {
-					auto& entity = m_scene->createEntity();
+					auto& entity = m_sceneManager->getScene()->createEntity();
 					entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					m_indexEntity = m_scene->entities.size() - 1;
+					m_indexEntity = m_sceneManager->getScene()->getEntities().size() - 1;
 				}
 
 				ImGui::EndPopup();
@@ -378,7 +380,7 @@ namespace mar {
 		void GUI::Scene_Entity_Modify() {
 			ImGui::Begin("Entity Modification");
 
-			if (m_scene->isPlayMode()) {
+			if (m_sceneManager->isPlayMode()) {
 				ImGui::Text("Cannot modify entity during play mode!");
 				ImGui::End();
 				EDITOR_TRACE("GUI: scene_entity_modify end (PLAY MODE)");
@@ -391,7 +393,7 @@ namespace mar {
 				return;
 			}
 			
-			auto& entity = m_scene->entities[m_indexEntity];
+			auto& entity = m_sceneManager->getScene()->getEntity(m_indexEntity);
 
 			static bool is_window_focused = false;
 
@@ -451,9 +453,9 @@ namespace mar {
 			
 			// Actual PopUp menu
 			{
-				if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
-					auto& entity = m_scene->entities[m_indexEntity];
+				auto& entity = m_sceneManager->getScene()->getEntity(m_indexEntity);
 
+				if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
 					if (ImGui::BeginMenu("Add Component")) {
 						if (!entity.hasComponent<ecs::RenderableComponent>())
 							if (ImGui::MenuItem("Add RenderableComponent"))
@@ -490,7 +492,7 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Delete Entity from Scene")) {
-						m_scene->destroyEntity(m_indexEntity);
+						m_sceneManager->getScene()->destroyEntity(m_indexEntity);
 						m_indexEntity = -1;
 					}
 				
@@ -505,7 +507,7 @@ namespace mar {
 			ImGui::Text("TagComponent\n");
 
 			static char* input;
-			auto& tag = m_scene->entities[m_indexEntity].getComponent<ecs::TagComponent>();
+			auto& tag = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::TagComponent>();
 
 			input = (char*)tag.tag.c_str();
 
@@ -519,7 +521,7 @@ namespace mar {
 			ImGui::Separator();
 			ImGui::Text("TransformComponent\n");
 
-			auto& tran = m_scene->entities[m_indexEntity].getComponent<ecs::TransformComponent>();
+			auto& tran = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::TransformComponent>();
 
 			// Sliders
 			{
@@ -554,11 +556,11 @@ namespace mar {
 			ImGui::Text("ScriptComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Script")) {
-				m_scene->entities[m_indexEntity].removeComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::ScriptComponent>(ECS_SCRIPT);
 				return;
 			}
 
-			auto& script = m_scene->entities[m_indexEntity].getComponent<ecs::ScriptComponent>();
+			auto& script = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::ScriptComponent>();
 
 			static char input[50];
 			strcpy_s(input, script.script.c_str());
@@ -579,7 +581,7 @@ namespace mar {
 		void GUI::Scene_Handle_RenderableComponent(bool& window_focused) {
 			static bool GUI_modify_renderable = false; // should display option to modify the whole RenderableComponent ?
 			static bool GUI_display_obj = false; // should display obj file loading to RenderableComponent ?
-			auto& entity = m_scene->entities[m_indexEntity];
+			auto& entity = m_sceneManager->getScene()->getEntity(m_indexEntity);
 			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 			
 			ImGui::Separator();
@@ -684,21 +686,21 @@ namespace mar {
 
 		void GUI::Scene_Handle_CameraComponent(bool& window_focused) {
 			static char* GUI_input{ (char*)"empty" };
-			auto& camcmp = m_scene->entities[m_indexEntity].getComponent<ecs::CameraComponent>();
+			auto& camcmp = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::CameraComponent>();
 			
 			ImGui::Separator();
 			ImGui::Text("CameraComponent\n");
 			ImGui::SameLine();
 			if (camcmp.id.find("main") == std::string::npos) {
 				if (ImGui::Button("Remove Camera")) {
-					m_scene->entities[m_indexEntity].removeComponent<ecs::CameraComponent>(ECS_CAMERA);
-					m_scene->useEditorCamera = true;
+					m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::CameraComponent>(ECS_CAMERA);
+					m_sceneManager->useEditorCamera = true;
 					return;
 				}
 			}
 			else {
 				ImGui::SameLine();
-				ImGui::Checkbox("UseCameraEditor", &m_scene->useEditorCamera);
+				ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
 			}
 			
 			ImGui::Text("WARNING: If you want to use this camera, make sure\nthat it is the only with \"main\" CameraID!");
@@ -738,11 +740,11 @@ namespace mar {
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Color")) {
-				m_scene->entities[m_indexEntity].removeComponent<ecs::ColorComponent>(ECS_COLOR);
+				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::ColorComponent>(ECS_COLOR);
 				return;
 			}
 
-			auto& color = m_scene->entities[m_indexEntity].getComponent<ecs::ColorComponent>();
+			auto& color = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::ColorComponent>();
 		
 			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture));
 
@@ -751,13 +753,13 @@ namespace mar {
 
 		void GUI::Scene_Handle_Texture2DComponent(bool& window_focused) {
 			static bool GUI_load_new_texture = false;
-			auto& tex = m_scene->entities[m_indexEntity].getComponent<ecs::Texture2DComponent>();
+			auto& tex = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::Texture2DComponent>();
 
 			ImGui::Separator();
 			ImGui::Text("Texture2DComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
-				m_scene->entities[m_indexEntity].removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
 				return;
 			}
 
@@ -803,13 +805,13 @@ namespace mar {
 
 		void GUI::Scene_Handle_TextureCubemapComponent(bool& window_focused) {
 			static bool GUI_load_new_cubemap = false;
-			auto& cubemap = m_scene->entities[m_indexEntity].getComponent<ecs::TextureCubemapComponent>();
+			auto& cubemap = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::TextureCubemapComponent>();
 
 			ImGui::Separator();
 			ImGui::Text("CubemapComponent\n");
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
-				m_scene->entities[m_indexEntity].removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
 				return;
 			}
 
@@ -860,11 +862,11 @@ namespace mar {
 			ImGui::SameLine();
 			
 			if (ImGui::MenuItem("Remove Light")) {
-				m_scene->entities[m_indexEntity].removeComponent<ecs::LightComponent>(ECS_LIGHT);
+				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::LightComponent>(ECS_LIGHT);
 				return;
 			}
 
-			auto& light = m_scene->entities[m_indexEntity].getComponent<ecs::LightComponent>();
+			auto& light = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::LightComponent>();
 
 			ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f);
 			ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f);
@@ -896,7 +898,7 @@ namespace mar {
 			ImGui::Separator();
 
 			if (ImGui::Button("Save to selected name"))
-				Filesystem::saveToFile(m_scene, save.c_str());
+				Filesystem::saveToFile(m_sceneManager->getScene(), save.c_str());
 
 			ImGui::SameLine();
 
