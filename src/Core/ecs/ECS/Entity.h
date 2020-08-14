@@ -84,6 +84,8 @@ namespace mar {
 			// ----------------------------------------------------
 
 		private:
+			friend class Scene;
+
 			entt::entity m_entityHandle{ entt::null };
 			Scene* m_scene{ nullptr };
 		};

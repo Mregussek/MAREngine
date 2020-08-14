@@ -104,10 +104,10 @@ MAREngine scene file
 #id main
 #used perspective
 #type perspective
-#fov 44.807
-#aspectratio 1.368
-#near 0.001
-#far 101.197
+#fov 45
+#aspectratio 1.77778
+#near 0.1
+#far 50
 #type orthographic
 #left -31.1
 #right 29.8

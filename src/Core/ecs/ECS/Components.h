@@ -105,10 +105,10 @@ namespace mar {
 		struct CameraComponent {
 			std::string id{ "secondary" };
 
-			bool Perspective; // true - perspective | false - orthographic
+			bool Perspective{ true }; // true - perspective | false - orthographic
 
 			float p_fov{ 45.f };
-			float p_aspectRatio{ 800.f / 600.f };
+			float p_aspectRatio{ 4.f / 3.f };
 			float p_near{ 0.01f };
 			float p_far{ 100.0f };
 			

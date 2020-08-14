@@ -4,7 +4,6 @@
  */
 
 #include "EntityLayer.h"
-#include "../../Core/graphics/Renderer/RendererEntity.h"
 
 
 namespace mar {
@@ -12,13 +11,11 @@ namespace mar {
 
 
 		EntityLayer::EntityLayer(const char* debugname)
-			: m_debugName(debugname),
-			m_renderer(nullptr)
+			: m_debugName(debugname)
 		{}
 
 		void EntityLayer::initialize(ecs::Scene* scene) {
-			m_renderer = new graphics::RendererEntity();
-			m_renderer->initialize();
+			m_renderer.initialize();
 		
 			if (!scene)
 				scene = new ecs::Scene("EmptyScene");
@@ -28,18 +25,16 @@ namespace mar {
 
 		void EntityLayer::update() {
 			m_sceneManager.update();
-			m_renderer->update(&m_sceneManager);
+			m_renderer.update(&m_sceneManager);
 		}
 
 		void EntityLayer::closeLayer() {
-			m_renderer->close();
+			m_renderer.close();
 			m_sceneManager.shutdown();
-
-			delete m_renderer;
 		}
 
 		graphics::RendererEntity* EntityLayer::getRenderer() {
-			return m_renderer;
+			return &m_renderer;
 		}
 
 		ecs::SceneManager* EntityLayer::getSceneManager() {

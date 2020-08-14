@@ -36,7 +36,7 @@ namespace mar {
 			// --- GET METHODS
 			const uint32_t& getColorAttach() const { return m_colorAttachment; }
 			const uint32_t& getDepthAttach() const { return m_depthAttanchment; }
-			const FrameBufferSpecification& getSpecification() const { return m_specification; }
+			FrameBufferSpecification& getSpecification() { return m_specification; }
 		};
 
 

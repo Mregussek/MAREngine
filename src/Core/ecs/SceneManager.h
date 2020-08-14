@@ -18,13 +18,12 @@ namespace mar {
 
 
 		class SceneManager {
+		// -------------------------------------------------------------
+		// SCENE MANAGER PUBLIC METHODS
+		// -------------------------------------------------------------
+
 		public:
-			SceneManager()
-				: useEditorCamera(true),
-				m_EditorMode(true),
-				m_PauseMode(false),
-				m_scene(nullptr)
-			{}
+			SceneManager();
 
 			void shutdown() { m_scene->shutdown(); }
 
@@ -44,6 +43,10 @@ namespace mar {
 			void setExitPlayMode() { m_EditorMode = true; unsetPauseMode(); exitPlayMode(); }
 			void setPauseMode() { m_PauseMode = true; }
 			void unsetPauseMode() { m_PauseMode = false; }
+
+		// -------------------------------------------------------------
+		// SCENE MANAGER PRIVATE METHODS
+		// -------------------------------------------------------------
 
 		private:
 			void initPlayMode();
@@ -67,13 +70,18 @@ namespace mar {
 
 			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
 
-		public:
-			bool useEditorCamera;
+		// -------------------------------------------------------------
+		// SCENE MANAGER MEMBERS
+		// -------------------------------------------------------------
 
 		private:
 			SceneStorage m_sceneStorage;
 			Scene* m_scene;
-		
+
+		public:
+			bool useEditorCamera;
+
+		private:
 			bool m_EditorMode;
 			bool m_PauseMode;
 		}; 

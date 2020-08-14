@@ -31,25 +31,18 @@ namespace mar {
 			Entity& createEntity();
 			void destroyEntity(const int32_t& index);
 
-			// --- GET METHODS --- //
-
-			template<typename T>
-			auto getView() ->decltype(entt::registry::view<T>()) { return m_registry.view<T>(); }
-
-			template<typename T>
-			T& getComponent(entt::entity& entity) { return m_registry.get<T>(entity); }
-
-			inline const std::string& getName() const { return m_name; }
-			inline graphics::RenderCamera& getRenderCamera() { return scene_camera; }
-
 			// --- SET METHODS --- //
 
 			void setName(std::string name) { m_name = name; }
 			
 			// --- GET METHODS --- //
 
+			inline const std::string& getName() const { return m_name; }
+
 			const std::vector<Entity>& getEntities() const { return entities; }
 			Entity& getEntity(size_t index) { return entities[index]; }
+
+			inline graphics::RenderCamera& getRenderCamera() { return scene_camera; }
 
 			// ----------------------------------------------------
 			// SCENE MEMBERS

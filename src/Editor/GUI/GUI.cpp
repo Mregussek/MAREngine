@@ -10,7 +10,6 @@
 #include "../../Core/ecs/ECS/Systems.h"
 
 
-
 namespace mar {
 	namespace editor {
 
@@ -21,7 +20,7 @@ namespace mar {
 
 		void GUI::initialize(const char* glsl_version) {
 			ImGui::CreateContext();
-			Setup_Theme();
+			GUI_Theme::Setup_Theme();
 			ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().getWindow(), true);
 			ImGui_ImplOpenGL3_Init(glsl_version);
 
@@ -30,13 +29,13 @@ namespace mar {
 			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-			m_framebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
+			m_viewportFramebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
 
 			EDITOR_INFO("GUI: initialized properly!");
 		}
 
 		void GUI::shutdown() {
-			m_framebuffer.close();
+			m_viewportFramebuffer.close();
 
 			ImGui_ImplOpenGL3_Shutdown();
 			ImGui_ImplGlfw_Shutdown();
@@ -59,7 +58,7 @@ namespace mar {
 			ImGui::NewFrame();
 			ImGuizmo::BeginFrame();
 
-			m_framebuffer.unbind();
+			m_viewportFramebuffer.unbind();
 
 			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
@@ -97,15 +96,24 @@ namespace mar {
 		void GUI::updateFrame() {
 			Menu_MainMenuBar();
 
+			Scene_Properties();
 			Scene_Hierarchy();
-			Scene_Entity_Modify();
-
 			Scene_Statistics();
 
-			if (m_loadSceneWindow) { Filesystem_LoadScene(); }
-			if (m_saveSceneWindow) { Filesystem_SaveScene(); }
-			if (m_infoWindow) { Menu_Info(); }
-			if (m_instructionWindow) { Menu_Instruction(); }
+			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
+
+			if (m_loadSceneWindow) { 
+				GUI_Filesystem::Filesystem_LoadScene(m_loadSceneWindow); 
+			}
+			if (m_saveSceneWindow) { 
+				GUI_Filesystem::Filesystem_SaveScene(m_saveSceneWindow, m_sceneManager->getScene()); 
+			}
+			if (m_infoWindow) { 
+				GUI_Info::Menu_Info(m_infoWindow); 
+			}
+			if (m_instructionWindow) { 
+				GUI_Info::Menu_Instruction(m_instructionWindow); 
+			}
 
 			Display_ViewPort();
 
@@ -160,18 +168,16 @@ namespace mar {
 			if (ImGui::IsWindowFocused()) window::Input::enableInput();
 			else window::Input::disableInput();
 
-			static graphics::FrameBufferSpecification spec;
 			static uint32_t id;
 
-			spec = m_framebuffer.getSpecification();
-			id = m_framebuffer.getColorAttach();
+			auto& spec = m_viewportFramebuffer.getSpecification();
+			id = m_viewportFramebuffer.getColorAttach();
 
 			ImVec2 size = ImGui::GetContentRegionAvail();
 			spec.width = size.x;
 			spec.height = size.y;
 
-			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, 
-				ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 			ImGui::End();
 
@@ -253,78 +259,19 @@ namespace mar {
 			EDITOR_TRACE("GUI: scene_statistics");
 		}
 
-		void GUI::Menu_Info() {
-			ImGui::Begin("About");
-
-			const char* aboutEngine = "MAREngine is a AR engine for abstracting 3D models in real world.";
-			const char* aboutAuthor = "Mateusz Rzeczyca is C++ / Python programmer and ethusiast of Augmented Reality && Machine Learning.\nHe is a student of Eletronics and Telecommunications at AGH University of Science and Technology";
-
-			ImGui::Text("About Engine");
-			ImGui::Text(aboutEngine);
-
-			ImGui::Separator();
-
-			ImGui::Text("About Author");
-			ImGui::Text(aboutAuthor);
-
-			if (ImGui::Button("Close")) {
-				m_infoWindow = false;
-				m_instructionWindow = false;
-			}
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: menu_info");
-		}
-
-		void GUI::Menu_Instruction() {
-			ImGui::Begin("Instructions");
-
-			const char* fileManage = "File Management";
-			const char* aboutFileManageSave = "Save Method:\nYou have to give the name of file, where you want to write current scene.\nIf file exists, it will be truncated and new scene will be put there.";
-			const char* aboutFileManageOpen = "Open Method:\nMethod searches all files in directory resources/mar_files and gets all scenes.\nYou have to click reload button in order to see current state of directory.\nThen you choose one path, which will be loaded into MAREngine.";
-
-			ImGui::Text(fileManage);
-			ImGui::Text(aboutFileManageSave);
-			ImGui::Text(aboutFileManageOpen);
-			ImGui::Separator();
-
-			const char* keyboardSettings = "Keyboard Settings";
-			const char* aboutKeySettings = "If Viewport window is selected you can move in scene using WASD keys.\nIf you click Q key, then mouse usage will be enabled! Press it again to disable mouse!";
-
-			ImGui::Text(keyboardSettings);
-			ImGui::Text(aboutKeySettings);
-			ImGui::Separator();
-
-			const char* mouseSettings = "Mouse Settings";
-			const char* aboutMouseSettings = "If you have clicked Q key, you can move around with mouse. Scroll is also available to see things.";
-
-			ImGui::Text(mouseSettings);
-			ImGui::Text(aboutMouseSettings);
-			ImGui::Separator();
-
-			const char* addShape = "Adding Shapes to Scene";
-			const char* aboutAddShape = "In order to add shape to scene, you need to give center of the object. Next point is to select texture.\nIf empty is chosen, shape will be rendered with its default color!";
-
-			ImGui::Text(addShape);
-			ImGui::Text(aboutAddShape);
-			ImGui::Separator();
-
-			if (ImGui::Button("Close")) {
-				m_infoWindow = false;
-				m_instructionWindow = false;
-			}
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: menu_instruction");
-		}
-
 		void GUI::submit(ecs::SceneManager* scene) {
 			m_sceneManager = scene;
 			m_sceneManager->useEditorCamera = true;
 
 			EDITOR_INFO("GUI: scene has been submitted!");
+		}
+
+		void GUI::Scene_Properties() {
+			ImGui::Begin("Scene Properties");
+
+			ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
+
+			ImGui::End();
 		}
 
 		void GUI::Scene_Hierarchy() {
@@ -337,9 +284,11 @@ namespace mar {
 			auto& entities = m_sceneManager->getScene()->getEntities();
 
 			for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
-				std::string s = entities[i].getComponent<ecs::TagComponent>();
+				std::string& s = entities[i].getComponent<ecs::TagComponent>();
 				if (ImGui::MenuItem(s.c_str())) {
 					m_indexEntity = i;
+					m_currentEntity = &m_sceneManager->getScene()->getEntity(m_indexEntity);
+					GUI_EntityManagement::currentEntity = m_currentEntity;
 				}
 			}
 
@@ -366,652 +315,27 @@ namespace mar {
 
 			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 				if (ImGui::MenuItem("Add Entity to scene")) {
-					auto& entity = m_sceneManager->getScene()->createEntity();
-					entity.addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
+					m_currentEntity = &m_sceneManager->getScene()->createEntity();
+					m_currentEntity->addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
 					m_indexEntity = m_sceneManager->getScene()->getEntities().size() - 1;
+					GUI_EntityManagement::currentEntity = m_currentEntity;
 				}
+
+				if(m_currentEntity)
+					if (ImGui::MenuItem("Delete Selected Entity from Scene")) {
+						m_sceneManager->getScene()->destroyEntity(m_indexEntity);
+						m_indexEntity = -1;
+						m_currentEntity = nullptr;
+						GUI_EntityManagement::currentEntity = nullptr;
+					}
 
 				ImGui::EndPopup();
 			}
 
 			EDITOR_TRACE("GUI: scene_hierarchy_popup");
 		}
-
-		void GUI::Scene_Entity_Modify() {
-			ImGui::Begin("Entity Modification");
-
-			if (m_sceneManager->isPlayMode()) {
-				ImGui::Text("Cannot modify entity during play mode!");
-				ImGui::End();
-				EDITOR_TRACE("GUI: scene_entity_modify end (PLAY MODE)");
-				return;
-			}
-
-			if (m_indexEntity == -1) {
-				ImGui::Text("No entity selected!");
-				ImGui::End();
-				return;
-			}
-			
-			auto& entity = m_sceneManager->getScene()->getEntity(m_indexEntity);
-
-			static bool is_window_focused = false;
-
-			if (ImGui::IsWindowFocused()) is_window_focused = true;
-			else is_window_focused = false;
-
-			if (entity.hasComponent<ecs::TagComponent>())
-				Scene_Handle_TagComponent(is_window_focused);
-
-			if (entity.hasComponent<ecs::TransformComponent>())
-				Scene_Handle_TransformComponent(is_window_focused);
-
-			if (entity.hasComponent<ecs::ScriptComponent>())
-				Scene_Handle_ScriptComponent(is_window_focused);
-
-			if (entity.hasComponent<ecs::RenderableComponent>())
-				Scene_Handle_RenderableComponent(is_window_focused);
-			
-			if (entity.hasComponent<ecs::CameraComponent>())
-				Scene_Handle_CameraComponent(is_window_focused);
-			
-			if (entity.hasComponent<ecs::ColorComponent>()) 
-				Scene_Handle_ColorComponent(is_window_focused);
-
-			if (entity.hasComponent<ecs::Texture2DComponent>()) 
-				Scene_Handle_Texture2DComponent(is_window_focused);
-			
-			if (entity.hasComponent<ecs::TextureCubemapComponent>()) 
-				Scene_Handle_TextureCubemapComponent(is_window_focused);
-			
-			if (entity.hasComponent<ecs::LightComponent>())
-				Scene_Handle_LightComponent(is_window_focused);
-
-			Scene_Entity_Modify_PopUp();
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: scene_entity_modify");
-		}
-
-		void GUI::Scene_Entity_Modify_PopUp() {
-			static bool b = false;
-
-			// PopMenu should be opened?
-			{
-				if (ImGui::IsWindowFocused())
-					b = window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_2);
-				else
-					b = false;
-
-				if (b) {
-					ImGui::OpenPopup("SceneEntityModifyPopUp");
-					if (window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_1))
-						b = false;
-				}
-			}
-			
-			// Actual PopUp menu
-			{
-				auto& entity = m_sceneManager->getScene()->getEntity(m_indexEntity);
-
-				if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
-					if (ImGui::BeginMenu("Add Component")) {
-						if (!entity.hasComponent<ecs::RenderableComponent>())
-							if (ImGui::MenuItem("Add RenderableComponent"))
-								entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-
-						if (!entity.hasComponent<ecs::ColorComponent>() && !entity.hasComponent<ecs::Texture2DComponent>()
-							&& !entity.hasComponent<ecs::TextureCubemapComponent>()) {
-							if (ImGui::BeginMenu("Add Color/Texture")) {
-
-								if (ImGui::MenuItem("Add Texture2DComponent"))
-									entity.addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-								if (ImGui::MenuItem("Add TextureCubemapComponent"))
-									entity.addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-								if (ImGui::MenuItem("Add ColorComponent"))
-									entity.addComponent<ecs::ColorComponent>(ECS_COLOR);
-
-								ImGui::EndMenu();
-							}
-						}
-
-						if (!entity.hasComponent<ecs::LightComponent>())
-							if (ImGui::MenuItem("Add LightComponent"))
-								entity.addComponent<ecs::LightComponent>(ECS_LIGHT);
-
-						if (!entity.hasComponent<ecs::CameraComponent>())
-							if (ImGui::MenuItem("Add CameraComponent"))
-								entity.addComponent<ecs::CameraComponent>(ECS_CAMERA);
-
-						if (!entity.hasComponent<ecs::ScriptComponent>())
-							if (ImGui::MenuItem("Add ScriptComponent"))
-								entity.addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::MenuItem("Delete Entity from Scene")) {
-						m_sceneManager->getScene()->destroyEntity(m_indexEntity);
-						m_indexEntity = -1;
-					}
-				
-					ImGui::EndPopup();
-				}
-			}
-			
-			EDITOR_TRACE("GUI: scene_entity_modify_popup");
-		}
-
-		void GUI::Scene_Handle_TagComponent(bool& window_focused) {
-			ImGui::Text("TagComponent\n");
-
-			static char* input;
-			auto& tag = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::TagComponent>();
-
-			input = (char*)tag.tag.c_str();
-
-			if(ImGui::InputText("Tag", input, 25))
-				tag.tag = std::string(input);
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
-		}
-
-		void GUI::Scene_Handle_TransformComponent(bool& window_focused) {
-			ImGui::Separator();
-			ImGui::Text("TransformComponent\n");
-
-			auto& tran = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::TransformComponent>();
-
-			// Sliders
-			{
-				static float last_general;
-				last_general = tran.general_scale;
-
-				ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -100.0f, 100.0f, "%.2f", 1.f);
-				ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f);
-				ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.01f, 0.f, 2.0f, "%.2f", 1.f);
-				ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 2.f, "%.3f", 1.f);
-
-				if (last_general != tran.general_scale) 
-					tran.scale += tran.general_scale - last_general;
-
-				if (ImGui::Button("Reset to default scale")) {
-					tran.general_scale = 1.f;
-					tran.scale.x = 1.f;
-					tran.scale.y = 1.f;
-					tran.scale.z = 1.f;
-				}
-			}
-
-			if (window_focused) {
-				ecs::System::handleTransformComponent(tran);
-			}
-				
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
-		}
-
-		void GUI::Scene_Handle_ScriptComponent(bool& window_focused) {
-			ImGui::Separator();
-			ImGui::Text("ScriptComponent\n");
-			ImGui::SameLine();
-			if (ImGui::MenuItem("Remove Script")) {
-				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::ScriptComponent>(ECS_SCRIPT);
-				return;
-			}
-
-			auto& script = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::ScriptComponent>();
-
-			static char input[50];
-			strcpy_s(input, script.script.c_str());
-			if (ImGui::InputText(" - script", input, 50))
-				script.script = std::string(input);
-
-			ImGui::Text(ecs::System::changeSlashesToDots(script.script).c_str());
-			ImGui::Text(ecs::System::getModuleFromPath(script.script).c_str());
-
-			if (ImGui::Button("Load Script from file")) 
-				script.source = Filesystem::loadPyScript(script.script.c_str());
-
-			Display_Text(script.source.c_str());
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
-		}
-
-		void GUI::Scene_Handle_RenderableComponent(bool& window_focused) {
-			static bool GUI_modify_renderable = false; // should display option to modify the whole RenderableComponent ?
-			static bool GUI_display_obj = false; // should display obj file loading to RenderableComponent ?
-			auto& entity = m_sceneManager->getScene()->getEntity(m_indexEntity);
-			auto& renderable = entity.getComponent<ecs::RenderableComponent>();
-			
-			ImGui::Separator();
-			ImGui::Text("RenderableComponent\n");
-			ImGui::SameLine();
-			if(!entity.hasComponent<ecs::ColorComponent>() || !entity.hasComponent<ecs::Texture2DComponent>() 
-				|| !entity.hasComponent<ecs::TextureCubemapComponent>())
-				if (ImGui::MenuItem("Remove Renderable")) {
-					entity.removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					return;
-				}
-
-			ImGui::Text(renderable.id.c_str());
-
-			if (!entity.hasComponent<ecs::ColorComponent>() && !entity.hasComponent<ecs::Texture2DComponent>() 
-				&& !entity.hasComponent<ecs::TextureCubemapComponent>())
-				ImGui::Text("WARNING: Object will not be rendered until you will add Color or Texture!");
-
-			if(renderable.vertices.empty())
-				GUI_modify_renderable = true;
-
-			if (GUI_modify_renderable) {
-				if (ImGui::Button("Cube")) {
-					renderable.id = "Cube";
-					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
-					renderable.indices = graphics::MeshCreator::Cube::getIndices();
-					GUI_modify_renderable = false;
-					GUI_display_obj = false;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Pyramid")) {
-					renderable.id = "Pyramid";
-					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
-					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
-					GUI_modify_renderable = false;
-					GUI_display_obj = false;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Wall")) {
-					renderable.id = "Wall";
-					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
-					renderable.indices = graphics::MeshCreator::Wall::getIndices();
-					GUI_modify_renderable = false;
-					GUI_display_obj = false;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Surface")) {
-					renderable.id = "Surface";
-					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
-					renderable.indices = graphics::MeshCreator::Surface::getIndices();
-					GUI_modify_renderable = false;
-					GUI_display_obj = false;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Load OBJ")) 
-					GUI_display_obj = true;
-
-				if(GUI_display_obj) {
-					static char filename[30]{ "empty" };
-					ImGui::InputText(".obj", filename, 30);
-					static std::string load;
-					load = "resources/objects/" + std::string(filename) + ".obj";
-
-					ImGui::Text(".obj file, which will be loaded: ");
-					ImGui::SameLine();
-					ImGui::Text(load.c_str());
-					ImGui::Text("WARNING: if .obj file do not exist, no renderable will be assigned!");
-
-					if (ImGui::Button("Load")) {
-						graphics::MeshCreator::OBJ::loadOBJ(load.c_str());
-
-						renderable.id = graphics::MeshCreator::OBJ::vertices.empty() ? "empty" : load;
-						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
-						renderable.indices = graphics::MeshCreator::OBJ::indices;
-						GUI_modify_renderable = false;
-						GUI_display_obj = false;
-					}
-
-					ImGui::SameLine();
-				}
-
-				if (ImGui::Button("Do not modify")) {
-					GUI_display_obj = false;
-					GUI_modify_renderable = false;
-				}
-			}
-			else {
-				if (ImGui::Button("ModifyRenderable")) 
-					GUI_modify_renderable = true;
-			}
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
-		}
-
-		void GUI::Scene_Handle_CameraComponent(bool& window_focused) {
-			static char* GUI_input{ (char*)"empty" };
-			auto& camcmp = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::CameraComponent>();
-			
-			ImGui::Separator();
-			ImGui::Text("CameraComponent\n");
-			ImGui::SameLine();
-			if (camcmp.id.find("main") == std::string::npos) {
-				if (ImGui::Button("Remove Camera")) {
-					m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::CameraComponent>(ECS_CAMERA);
-					m_sceneManager->useEditorCamera = true;
-					return;
-				}
-			}
-			else {
-				ImGui::SameLine();
-				ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
-			}
-			
-			ImGui::Text("WARNING: If you want to use this camera, make sure\nthat it is the only with \"main\" CameraID!");
-
-			GUI_input = (char*)camcmp.id.c_str();
-			if(ImGui::InputText("CameraID", GUI_input, 30))
-				camcmp.id = std::string(GUI_input);
-
-			ImGui::Checkbox("Perspective (TRUE) / Orthographic (FALSE)", &camcmp.Perspective);
-			
-			if (camcmp.Perspective) {
-				ImGui::DragFloat("AspectRatio", &camcmp.p_aspectRatio, 0.1f, 1.f, 10.f);
-				if (ImGui::Button("Set 16:9")) camcmp.p_aspectRatio = 16.f / 9.f;
-				ImGui::SameLine();
-				if (ImGui::Button("Set 8:5")) camcmp.p_aspectRatio = 8.f / 5.f;
-				ImGui::SameLine();
-				if (ImGui::Button("Set 4:3")) camcmp.p_aspectRatio = 4.f / 3.f;
-
-				ImGui::DragFloat("Field Of View", &camcmp.p_fov, 0.1f, 1.f, 90.f);
-				ImGui::DragFloat("Near", &camcmp.p_near, 0.01f, 0.001f, 150.f);
-				ImGui::DragFloat("Far", &camcmp.p_far, 0.1f, 0.001f, 150.f);
-			} 
-			else {
-				ImGui::DragFloat("Left", &camcmp.o_left, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Right", &camcmp.o_right, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Top", &camcmp.o_top, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Bottom", &camcmp.o_bottom, 0.1f, -100.f, 100.f);
-				ImGui::DragFloat("Near", &camcmp.o_near, 0.1f, 0.001f, 150.f);
-				ImGui::DragFloat("Far", &camcmp.o_far, 0.1f, 0.001f, 150.f);
-			}
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
-		}
-
-		void GUI::Scene_Handle_ColorComponent(bool& window_focused) {
-			ImGui::Separator();
-			ImGui::Text("ColorComponent\n");
-			ImGui::SameLine();
-			if (ImGui::MenuItem("Remove Color")) {
-				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::ColorComponent>(ECS_COLOR);
-				return;
-			}
-
-			auto& color = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::ColorComponent>();
 		
-			ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture));
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
-		}
-
-		void GUI::Scene_Handle_Texture2DComponent(bool& window_focused) {
-			static bool GUI_load_new_texture = false;
-			auto& tex = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::Texture2DComponent>();
-
-			ImGui::Separator();
-			ImGui::Text("Texture2DComponent\n");
-			ImGui::SameLine();
-			if (ImGui::MenuItem("Remove Texture")) {
-				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-				return;
-			}
-
-			ImGui::Text("Current Texture: ");
-			ImGui::SameLine();
-			ImGui::Text(tex.texture.c_str());
-
-			if (tex.texture != "empty") {
-				if (!GUI_load_new_texture) {
-					if (ImGui::Button("Load new Texture menu"))
-						GUI_load_new_texture = true;
-				}
-				else {
-					if (ImGui::Button("Close Texture Menu"))
-						GUI_load_new_texture = false;
-				}
-			}
-			else {
-				GUI_load_new_texture = true;
-			}
-				
-			if (!GUI_load_new_texture) {
-				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component (without loading new tex)");
-				return;
-			}
-
-			static char input[50];
-			strcpy_s(input, tex.texture.c_str());
-			if(ImGui::InputText(" ex. .jpg / .png", input, 50))
-				tex.texture = std::string(input);
-
-			ImGui::Text("Texture, which will be loaded: ");
-			ImGui::SameLine();
-			ImGui::Text(tex.texture.c_str());
-			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
-
-			if (ImGui::Button("Load Texture")) {
-				GUI_load_new_texture = false;
-			}
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
-		}
-
-		void GUI::Scene_Handle_TextureCubemapComponent(bool& window_focused) {
-			static bool GUI_load_new_cubemap = false;
-			auto& cubemap = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::TextureCubemapComponent>();
-
-			ImGui::Separator();
-			ImGui::Text("CubemapComponent\n");
-			ImGui::SameLine();
-			if (ImGui::MenuItem("Remove Texture")) {
-				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-				return;
-			}
-
-			ImGui::Text("Current Cubemap: ");
-			ImGui::SameLine();
-			ImGui::Text(cubemap.texture.c_str());
-
-			if (cubemap.texture != "empty") {
-				if (!GUI_load_new_cubemap) {
-					if (ImGui::Button("Load new Texture menu"))
-						GUI_load_new_cubemap = true;
-				}
-				else {
-					if (ImGui::Button("Close Texture Menu"))
-						GUI_load_new_cubemap = false;
-				}
-			}
-			else {
-				GUI_load_new_cubemap = true;
-			}
-
-			if (!GUI_load_new_cubemap) {
-				EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component (without loading new tex)");
-				return;
-			}
-
-			static char input[50];
-			strcpy_s(input, cubemap.texture.c_str());
-			if (ImGui::InputText(" ex. .jpg / .png", input, 50))
-				cubemap.texture = std::string(input);
-
-			ImGui::Text("Cubemap, which will be loaded: ");
-			ImGui::SameLine();
-			ImGui::Text(cubemap.texture.c_str());
-			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
-
-			if (ImGui::Button("Load Cubemap")) {
-				GUI_load_new_cubemap = false;
-			}
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
-		}
-
-		void GUI::Scene_Handle_LightComponent(bool& window_focused) {
-			ImGui::Separator();
-			ImGui::Text("LightComponent\n");
-			
-			ImGui::SameLine();
-			
-			if (ImGui::MenuItem("Remove Light")) {
-				m_sceneManager->getScene()->getEntity(m_indexEntity).removeComponent<ecs::LightComponent>(ECS_LIGHT);
-				return;
-			}
-
-			auto& light = m_sceneManager->getScene()->getEntity(m_indexEntity).getComponent<ecs::LightComponent>();
-
-			ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f);
-			ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f);
-			ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f);
-				   
-			ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f);
-			ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f);
-			ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f);
-			ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f);
-
-			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
-		}
 		
-		void GUI::Filesystem_SaveScene() {
-			ImGui::Begin("Save File");
-
-			static char filename[30]{ "empty" };
-
-			ImGui::InputText(".marscene", filename, 30);
-
-			ImGui::Separator();
-
-			static std::string save;
-			save = "resources/mar_files/" + std::string(filename) + ".marscene";
-
-			ImGui::Text("Saving to: ");
-			ImGui::Text(save.c_str());
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Save to selected name"))
-				Filesystem::saveToFile(m_sceneManager->getScene(), save.c_str());
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Close"))
-				m_saveSceneWindow = false;
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: filesystem_savescene");
-		}
-
-		void GUI::Filesystem_LoadScene() {
-			ImGui::Begin("Open File");
-
-			ImGui::Text("Select file, which you want to be opened:");
-
-			static char input[30];
-			ImGui::InputText(".marscene", input, 30);
-
-			ImGui::Separator();
-
-			static std::string will_open;
-			will_open = "resources/mar_files/" + std::string(input) + ".marscene";
-
-			ImGui::Text("File, which is going to be opened:");
-			ImGui::SameLine();
-			ImGui::Text(will_open.c_str());
-
-			ImGui::Text("PLEASE MAKE SURE PATH IS CORRECT!");
-
-			if (ImGui::Button("Open Selected File")) {
-				engine::MAREngine::getEngine()->setLoadPath(will_open);
-				engine::MAREngine::getEngine()->setRestart();
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Close"))
-				m_loadSceneWindow = false;
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: filesystem_loadscene");
-		}
-
-		void GUI::Display_Text(const char* text) {
-			static const char* display{ "empty" };
-
-			ImGui::Begin("Script Editor");
-
-			display = text;
-			ImGui::Text(display);
-			//ImGui::InputText(".", (char*)display, 1000);
-
-			ImGui::End();
-		}
-
-		void GUI::Setup_Theme() {
-			auto& io = ImGui::GetIO();
-			io.Fonts->AddFontFromFileTTF("resources/fonts/Ruda-Bold.ttf", 15.0f);
-
-			ImGuiStyle* style = &ImGui::GetStyle();
-
-			style->WindowPadding = ImVec2(15, 15);
-			style->WindowRounding = 5.0f;
-			style->FramePadding = ImVec2(5, 5);
-			style->FrameRounding = 4.0f;
-			style->ItemSpacing = ImVec2(12, 8);
-			style->ItemInnerSpacing = ImVec2(8, 6);
-			style->IndentSpacing = 25.0f;
-			style->ScrollbarSize = 15.0f;
-			style->ScrollbarRounding = 9.0f;
-			style->GrabMinSize = 5.0f;
-			style->GrabRounding = 3.0f;
-
-			style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
-			style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-			style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-			style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-			style->Colors[ImGuiCol_Border] = ImVec4(0.80f, 0.80f, 0.83f, 0.88f);
-			style->Colors[ImGuiCol_BorderShadow] = ImVec4(0.92f, 0.91f, 0.88f, 0.00f);
-			style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-			style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-			style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-			style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-			style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(1.00f, 0.98f, 0.95f, 0.75f);
-			style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-			style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-			style->Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-			style->Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-			style->Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-			style->Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-			style->Colors[ImGuiCol_CheckMark] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-			style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
-			style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-			style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-			style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-			style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-			style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-			style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-			style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-			style->Colors[ImGuiCol_ResizeGrip] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-			style->Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.56f, 0.56f, 0.58f, 1.00f);
-			style->Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.00f);
-			style->Colors[ImGuiCol_PlotLines] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-			style->Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-			style->Colors[ImGuiCol_PlotHistogram] = ImVec4(0.40f, 0.39f, 0.38f, 0.63f);
-			style->Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.25f, 1.00f, 0.00f, 1.00f);
-			style->Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.25f, 1.00f, 0.00f, 0.43f);
-			style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
-
-			EDITOR_INFO("GUI: default theme has been loaded!");
-		}
 
 
 } }

@@ -17,6 +17,13 @@ namespace mar {
 	namespace ecs {
 
 
+		SceneManager::SceneManager()
+			: useEditorCamera(true),
+			m_EditorMode(true),
+			m_PauseMode(false),
+			m_scene(nullptr)
+		{}
+
 		void SceneManager::initialize() {
 			m_sceneStorage.resetAll();
 
