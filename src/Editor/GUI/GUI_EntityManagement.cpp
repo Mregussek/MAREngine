@@ -13,6 +13,7 @@ namespace mar {
 		ecs::Entity* GUI_EntityManagement::currentEntity{ nullptr };
 		int32_t GUI_EntityManagement::currentIndex{ -1 };
 
+
 		void GUI_EntityManagement::Scene_Entity_Modify(bool is_play_mode) {
 			ImGui::Begin("Entity Modification");
 
@@ -93,32 +94,49 @@ namespace mar {
 							if (ImGui::MenuItem("Add RenderableComponent"))
 								currentEntity->addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 
-						if (!currentEntity->hasComponent<ecs::ColorComponent>() && !currentEntity->hasComponent<ecs::Texture2DComponent>()
-							&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>()) {
-							if (ImGui::BeginMenu("Add Color/Texture")) {
+						static bool has_color_texture;
+						has_color_texture = !currentEntity->hasComponent<ecs::ColorComponent>() 
+							&& !currentEntity->hasComponent<ecs::Texture2DComponent>()
+							&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
 
-								if (ImGui::MenuItem("Add Texture2DComponent"))
+						if (has_color_texture) {
+							if (ImGui::BeginMenu("Add Color/Texture")) {
+								if (ImGui::MenuItem("Add Texture2DComponent")) {
 									currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-								if (ImGui::MenuItem("Add TextureCubemapComponent"))
+									ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
+								}
+									
+								if (ImGui::MenuItem("Add TextureCubemapComponent")) {
 									currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-								if (ImGui::MenuItem("Add ColorComponent"))
+									ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
+								}
+									
+								if (ImGui::MenuItem("Add ColorComponent")) {
 									currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR);
+									ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
+								}
 
 								ImGui::EndMenu();
 							}
 						}
 
 						if (!currentEntity->hasComponent<ecs::LightComponent>())
-							if (ImGui::MenuItem("Add LightComponent"))
+							if (ImGui::MenuItem("Add LightComponent")) {
 								currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
+								ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
+							}
 
 						if (!currentEntity->hasComponent<ecs::CameraComponent>())
-							if (ImGui::MenuItem("Add CameraComponent"))
+							if (ImGui::MenuItem("Add CameraComponent")) {
 								currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
+								ecs::SceneEvents::Instance().updatedCamera(currentEntity, currentIndex);
+							}
 
 						if (!currentEntity->hasComponent<ecs::ScriptComponent>())
-							if (ImGui::MenuItem("Add ScriptComponent"))
+							if (ImGui::MenuItem("Add ScriptComponent")) {
 								currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+								ecs::SceneEvents::Instance().updatedScript(currentEntity, currentIndex);
+							}
 
 						ImGui::EndMenu();
 					}
@@ -174,9 +192,10 @@ namespace mar {
 					updated_transform = true;
 				}
 
-				if (updated_transform) 
-					ecs::SceneEvents::updateTransform(currentEntity, currentIndex);
-				
+				if (updated_transform) {
+					ecs::System::handleTransformComponent(tran);
+					ecs::SceneEvents::Instance().updateTransform(currentEntity, currentIndex);
+				}
 			}
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
@@ -201,12 +220,6 @@ namespace mar {
 			if (ImGui::Button("Load Script from file"))
 				script.source = Filesystem::loadPyScript(script.script.c_str());
 
-			ImGui::Begin("Script Editor");
-			static const char* display{ "empty" };
-			display = script.source.c_str();
-			ImGui::Text(display);
-			ImGui::End();
-
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 		}
 
@@ -228,7 +241,7 @@ namespace mar {
 			if (color_texture_OR)
 				if (ImGui::MenuItem("Remove Renderable")) {
 					currentEntity->removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 					return;
 				}
 
@@ -253,7 +266,7 @@ namespace mar {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 
-					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -265,7 +278,7 @@ namespace mar {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 
-					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -277,7 +290,7 @@ namespace mar {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 
-					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -289,7 +302,7 @@ namespace mar {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
 
-					ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -317,7 +330,7 @@ namespace mar {
 						GUI_modify_renderable = false;
 						GUI_display_obj = false;
 
-						ecs::SceneEvents::updateRenderables(currentEntity, currentIndex);
+						ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 					}
 
 					ImGui::SameLine();
@@ -383,7 +396,7 @@ namespace mar {
 			}
 
 			if (updated_camera)
-				ecs::SceneEvents::updatedCamera(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedCamera(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
@@ -394,13 +407,14 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Color")) {
 				currentEntity->removeComponent<ecs::ColorComponent>(ECS_COLOR);
+				ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
 				return;
 			}
 
 			auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
 			if (ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture)))
-				ecs::SceneEvents::updatedColor(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
@@ -414,7 +428,7 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				currentEntity->removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-				ecs::SceneEvents::updatedTexture2D(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
 				return;
 			}
 
@@ -452,7 +466,7 @@ namespace mar {
 			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Texture")) {
-				ecs::SceneEvents::updatedTexture2D(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
 				GUI_load_new_texture = false;
 			}
 
@@ -468,7 +482,7 @@ namespace mar {
 			ImGui::SameLine();
 			if (ImGui::MenuItem("Remove Texture")) {
 				currentEntity->removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-				ecs::SceneEvents::updatedCubemap(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
 				return;
 			}
 
@@ -506,7 +520,7 @@ namespace mar {
 			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Cubemap")) {
-				ecs::SceneEvents::updatedCubemap(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
 				GUI_load_new_cubemap = false;
 			}
 
@@ -521,7 +535,7 @@ namespace mar {
 
 			if (ImGui::MenuItem("Remove Light")) {
 				currentEntity->removeComponent<ecs::LightComponent>(ECS_LIGHT);
-				ecs::SceneEvents::updatedLight(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
 				return;
 			}
 
@@ -540,7 +554,7 @@ namespace mar {
 			if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) updated_light = true;
 
 			if(updated_light)
-				ecs::SceneEvents::updatedLight(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 		}

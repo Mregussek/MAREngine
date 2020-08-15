@@ -24,7 +24,7 @@ namespace mar {
 			m_PauseMode(false),
 			m_scene(nullptr)
 		{
-			SceneEvents::scene_manager = this;
+			SceneEvents::Instance().scene_manager = this;
 		}
 
 		void SceneManager::initialize() {
@@ -52,13 +52,15 @@ namespace mar {
 					submitColorEntity(entity, tran, ren, m_sceneStorage.colors_storage);
 					ECS_TRACE("SCENE: initializing color entity!");
 				}
-				else if (entity.hasComponent<Texture2DComponent>()) {
-					submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_sceneStorage.texture_storage);
-					ECS_TRACE("SCENE: initializing texture2d entity!");
-				}
 				else if (entity.hasComponent<TextureCubemapComponent>()) {
-					submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_sceneStorage.cubemap_storage);
+					submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_sceneStorage.cubemap_storage, 2);
+					//submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_sceneStorage.batch_storage, 2);
 					ECS_TRACE("SCENE: initializing cubemap entity!");
+				}
+				else if (entity.hasComponent<Texture2DComponent>()) {
+					submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_sceneStorage.texture_storage, 1);
+					//submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_sceneStorage.batch_storage, 1);
+					ECS_TRACE("SCENE: initializing texture2d entity!");
 				}
 			}
 		}
@@ -170,11 +172,13 @@ namespace mar {
 			static size_t counter_color;
 			static size_t counter_texture;
 			static size_t counter_cubemap;
+			static size_t counter_batch;
 			static size_t counter_light;
 
 			counter_color = 0;
 			counter_texture = 0;
 			counter_cubemap = 0;
+			counter_batch = 0;
 			counter_light = 0;
 
 			for (auto entity : m_scene->getEntities()) {
@@ -200,6 +204,13 @@ namespace mar {
 						m_sceneStorage.cubemap_storage.transforms[counter_cubemap] = tran.transform;
 						counter_cubemap++;
 					}
+					
+					/*
+					if (entity.hasComponent<Texture2DComponent>() || entity.hasComponent<TextureCubemapComponent>()) {
+						m_sceneStorage.batch_storage.transforms[counter_batch] = tran.transform;
+						counter_batch++;
+					}
+					*/
 
 					if (entity.hasComponent<LightComponent>()) {
 						auto& light = entity.getComponent<LightComponent>();
@@ -212,6 +223,7 @@ namespace mar {
 					if (entity.hasComponent<ColorComponent>()) counter_color++;
 					if (entity.hasComponent<Texture2DComponent>()) counter_texture++;
 					if (entity.hasComponent<TextureCubemapComponent>()) counter_cubemap++;
+					if (entity.hasComponent<Texture2DComponent>() || entity.hasComponent<TextureCubemapComponent>()) counter_batch++;
 					if (entity.hasComponent<LightComponent>()) counter_light++;
 				}
 
@@ -234,10 +246,11 @@ namespace mar {
 		}
 
 		template<typename TextureType>
-		void SceneManager::submitTextureEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<int32_t>& storage) {
+		void SceneManager::submitTextureEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<int32_t>& storage, int32_t i) {
 			auto& texture = entity.getComponent<TextureType>();
 
 			storage.paths.push_back(texture.texture);
+			storage.textureType.push_back(i);
 			storage.transforms.push_back(tran.transform);
 			submitVerticesIndices<int32_t>(ren, storage);
 			submitSampler<int32_t>(storage.counter, storage);
@@ -261,6 +274,7 @@ namespace mar {
 		template<typename T>
 		void SceneManager::submitSampler(T& sampler, BufferStorage<T>& storage) {
 			storage.samplers.push_back(sampler);
+	
 			storage.counter++;
 
 			ECS_TRACE("SCENE: submitted sampler component!");

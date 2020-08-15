@@ -21,53 +21,68 @@ namespace mar {
 
 
 		class SceneEvents {
+			static SceneEvents instance;
+
 		public:
 
-			static SceneManager* scene_manager;
+			SceneEvents() = default;
 
-			static void updateTransform(Entity* e, int32_t i) {
-				auto& tran = e->getComponent<TransformComponent>();
-				System::handleTransformComponent(tran);
+			SceneManager* scene_manager{ nullptr };
 
+			inline static SceneEvents& Instance() { return instance; }
+
+			void updateTransform(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updateTransform!");
 			}
 
-			static void updateRenderables(Entity* e, int32_t i) {
+			void updateRenderables(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updateRenderables!");
 			}
 
-			static void updatedCamera(Entity* e, int32_t i) {
+			void updatedCamera(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updatedCamera!");
 			}
 
-			static void updatedColor(Entity* e, int32_t i) {
+			void updatedColor(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updatedColor!");
 			}
 
-			static void updatedTexture2D(Entity* e, int32_t i) {
+			void updatedTexture2D(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
 			}
 
-			static void updatedCubemap(Entity* e, int32_t i) {
+			void updatedCubemap(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
 			}
 
-			static void updatedLight(Entity* e, int32_t i) {
+			void updatedLight(Entity* e, int32_t i) {
 				scene_manager->initialize();
 
 				ECS_TRACE("SCENE_EVENTS: updatedLight!");
+			}
+
+			void updatedScript(Entity* e, int32_t i) {
+				scene_manager->initialize();
+
+				ECS_TRACE("SCENE_EVENTS: updatedScript!");
+			}
+
+			void onEntityRemove() {
+				scene_manager->initialize();
+
+				ECS_TRACE("SCENE_EVENTS: onEntityRemove");
 			}
 
 

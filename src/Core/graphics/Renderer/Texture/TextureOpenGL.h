@@ -53,7 +53,7 @@ namespace mar {
 				\param shapeId - id of shape
 				\param texID - id of texture
 			*/
-			void bind(const int32_t& texture_type, const uint32_t& unit, const uint32_t& texID) const;
+			void bind(int32_t texture_type, uint32_t unit, uint32_t texID) const;
 
 			// Unbind texture
 			void unbind() const;

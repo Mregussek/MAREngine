@@ -139,7 +139,7 @@ namespace mar {
 			return (float) new_id;
 		}
 
-		void TextureOpenGL::bind(const int32_t& texture_type, const uint32_t& unit, const uint32_t& texID) const {
+		void TextureOpenGL::bind(int32_t texture_type, uint32_t unit, uint32_t texID) const {
 			if (texID == 0) return;
 
 			MAR_CORE_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );

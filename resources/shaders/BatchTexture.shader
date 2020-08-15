@@ -9,8 +9,8 @@ layout(location = 3) in float shapeIndex;
 out vec3 v_Position;
 out vec3 v_lightNormal;
 out float v_shapeIndex;
-out vec2 v_texCoords;
-out int v_TextureType;
+out vec3 v_texCoords;
+flat out int v_TextureType;
 
 uniform mat4 u_Model;
 uniform mat4 u_MVP;
@@ -28,11 +28,13 @@ void main() {
 	v_lightNormal = mat3(u_Model) * lightNormal;
 	v_Position = vec4(u_Model * verter_transformed).xyz;
 
-	if(u_TextureType[index] == 2) // textureCubemap
+	if (u_TextureType[index] == 1) {
+		v_texCoords = vec3(texCoord, 1.0f);
+	}
+	else if (u_TextureType[index] == 2) {
 		v_texCoords = position.xyz;
-	else // 0 - default color, 1 - texture2D, others are wrong
-		v_texCoords = texCoord;
-
+	}
+	
 	v_TextureType = u_TextureType[index];
 };
 
@@ -44,8 +46,8 @@ layout(location = 0) out vec4 color;
 in vec3 v_Position;
 in vec3 v_lightNormal;
 in float v_shapeIndex;
-in vec2 v_texCoords;
-int int v_TextureType;
+in vec3 v_texCoords;
+flat in int v_TextureType;
 
 uniform struct Material {
 	vec3 lightPos;
@@ -61,16 +63,14 @@ uniform struct Material {
 
 uniform int u_materialSize;
 uniform vec3 u_CameraPos;
-uniform sampler2D u_SeparateTexture2D[32];
-uniform samplerCube u_SeparateCube[32];
+uniform sampler2D u_SamplersTexture2D[32];
+uniform samplerCube u_SamplersCubemap[32];
 
 vec4 chooseTextureType();
 vec4 calculateLight(Material passed_material, vec3 passed_color_light);
 vec4 computeAllLights(vec4 batchColor);
 
 void main() {
-	int index = int(v_shapeIndex);
-
 	vec4 batchColor = chooseTextureType();
 	vec4 lightColor = computeAllLights(batchColor);
 
@@ -79,10 +79,17 @@ void main() {
 
 vec4 chooseTextureType() {
 	vec4 batchColor;
+	int index = int(v_shapeIndex);
 
-	if (v_TextureType == 2) batchColor = texture(u_SeparateCube[index], v_texCoords);
-	else if (v_TextureType == 1) batchColor = texture(u_SeparateTexture2D[index], v_texCoords);
-	else batchColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	if (v_TextureType == 0) {
+		batchColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	}
+	if (v_TextureType == 1) {
+		batchColor = texture2D(u_SamplersTexture2D[index], v_texCoords.xy);
+	}
+	if (v_TextureType == 2) {
+		batchColor = textureCube(u_SamplersCubemap[index], v_texCoords);
+	}
 
 	return batchColor;
 }

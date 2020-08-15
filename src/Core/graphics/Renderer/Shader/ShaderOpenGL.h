@@ -31,6 +31,7 @@ namespace mar {
 			void unbind() const;
 
 			// --- SET METHODS --- //
+			void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
 			void setUniformSampler(const std::string& name, const std::vector<int>& sampler);
 			void setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec);
 			void setUniformVectorMat4(const std::string& name, const std::vector<maths::mat4>& matrices);

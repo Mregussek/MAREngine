@@ -78,7 +78,7 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Engine\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)\Engine\</IntDir>
   </PropertyGroup>
@@ -95,11 +95,11 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ProgramDataBaseFileName>$(OutDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <SupportJustMyCode>false</SupportJustMyCode>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
@@ -146,11 +146,11 @@
       <AdditionalIncludeDirectories>$(SolutionDir)3rd_party\python3.8.5\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <DebugInformationFormat>None</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <ExceptionHandling>Sync</ExceptionHandling>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MinimalRebuild>false</MinimalRebuild>
       <Optimization>MaxSpeed</Optimization>

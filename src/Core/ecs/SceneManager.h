@@ -60,7 +60,7 @@ namespace mar {
 			void submitColorEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<maths::vec3>& storage);
 
 			template<typename TextureType>
-			void submitTextureEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<int32_t>& storage);
+			void submitTextureEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<int32_t>& storage, int32_t i);
 
 			template<typename T>
 			void submitVerticesIndices(RenderableComponent& ren, BufferStorage<T>& storage);

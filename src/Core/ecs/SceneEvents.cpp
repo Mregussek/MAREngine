@@ -9,7 +9,7 @@
 namespace mar {
 	namespace ecs {
 
-		SceneManager* SceneEvents::scene_manager{ nullptr };
+		SceneEvents SceneEvents::instance;
 
 
 } }

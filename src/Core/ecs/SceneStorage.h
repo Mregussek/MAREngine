@@ -20,6 +20,7 @@ namespace mar {
 			std::vector<uint32_t> indices;
 			std::vector<maths::mat4> transforms;
 			std::vector<std::string> paths; // only for textures!
+			std::vector<int32_t> textureType;
 			std::vector<T> samplers;
 			int32_t counter = 0;
 			uint32_t indicesMax = 0;
@@ -63,6 +64,7 @@ namespace mar {
 				storage.indices.clear();
 				storage.transforms.clear();
 				storage.paths.clear();
+				storage.textureType.clear();
 				storage.samplers.clear();
 				storage.counter = 0;
 				storage.indicesMax = 0;

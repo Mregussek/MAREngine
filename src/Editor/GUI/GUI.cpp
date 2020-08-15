@@ -8,6 +8,7 @@
 #include "../../Core/ecs/ECS/Entity.h"
 #include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
+#include "../../Core/ecs/SceneEvents.h"
 
 
 namespace mar {
@@ -301,6 +302,12 @@ namespace mar {
 		}
 
 		void GUI::Scene_Hierarchy_PopUp() {
+			if (m_sceneManager->isPlayMode()) {
+				EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
+				
+				return;
+			}
+
 			static bool b = false;
 
 			if (ImGui::IsWindowFocused())
@@ -330,6 +337,7 @@ namespace mar {
 						m_currentEntity = nullptr;
 						GUI_EntityManagement::currentEntity = nullptr;
 						GUI_EntityManagement::currentIndex = -1;
+						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 
 				ImGui::EndPopup();
