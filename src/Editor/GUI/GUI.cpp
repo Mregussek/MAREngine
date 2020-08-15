@@ -95,9 +95,9 @@ namespace mar {
 		}
 
 		void GUI::updateFrame() {
-			Menu_MainMenuBar();
+			Editor_MainMenuBar();
 
-			Scene_Properties();
+			Editor_Properties();
 			Scene_Hierarchy();
 			Scene_Statistics();
 
@@ -116,7 +116,7 @@ namespace mar {
 				GUI_Info::Menu_Instruction(m_instructionWindow); 
 			}
 
-			Display_ViewPort();
+			Editor_ViewPort();
 
 			EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 		}
@@ -130,7 +130,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: ending frame! (rendering gathered data)");
 		}
 
-		void GUI::Menu_MainMenuBar() {
+		void GUI::Editor_MainMenuBar() {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if (ImGui::MenuItem("Open")) {
@@ -163,7 +163,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: pushing main menu bar");
 		}
 
-		void GUI::Display_ViewPort() {
+		void GUI::Editor_ViewPort() {
 			ImGui::Begin("ViewPort");
 
 			if (ImGui::IsWindowFocused()) window::Input::enableInput();
@@ -210,6 +210,22 @@ namespace mar {
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: Displaying viewport");
+		}
+
+		void GUI::Editor_Properties() {
+			ImGui::Begin("Editor Properties");
+
+			ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
+
+			auto& scene_background = m_sceneManager->getScene()->getBackground();
+
+			if (ImGui::ColorEdit3("Scene Background Color", maths::vec3::value_ptr_nonconst(scene_background))) {
+				auto& spec = m_viewportFramebuffer.getSpecification();
+				spec.backgroundColor = scene_background;
+				window::Window::getInstance().updateBackgroundColor(scene_background);
+			}
+
+			ImGui::End();
 		}
 
 		void GUI::Scene_Statistics() {
@@ -265,14 +281,6 @@ namespace mar {
 			m_sceneManager->useEditorCamera = true;
 
 			EDITOR_INFO("GUI: scene has been submitted!");
-		}
-
-		void GUI::Scene_Properties() {
-			ImGui::Begin("Scene Properties");
-
-			ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
-
-			ImGui::End();
 		}
 
 		void GUI::Scene_Hierarchy() {

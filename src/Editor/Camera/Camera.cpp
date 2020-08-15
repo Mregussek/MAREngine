@@ -17,7 +17,8 @@ namespace mar {
 		const float CameraSettings::ZOOM = 55.0f;
 		const maths::vec3 CameraSettings::CAMERA_START{ -10.0f, 2.0f, 0.0f };
 
-		CameraData Camera::s_cameraData;
+		graphics::RenderCamera Camera::s_cameraData;
+
 
 		Camera::Camera()
 			: m_position(CameraSettings::CAMERA_START),

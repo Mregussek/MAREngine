@@ -2,16 +2,7 @@ MAREngine scene file
 
 #Scene
 #Scene_Name empty.marscene
-
-#Entity
-#TagComponent DarkGreenCube
-#TransformComponent Begin
-#center 23.41 0.54 4.55
-#angles 65 0 0
-#scale 1 1 1
-#general_scale 0
-#RenderableComponent Cube
-#ColorComponent 0.2 0.5 0.2
+#Scene_Background 0.982362 1 0.706767
 
 #Entity
 #TagComponent GreenPyramid
@@ -47,7 +38,7 @@ MAREngine scene file
 #TagComponent LightCube
 #RenderableComponent Cube
 #TransformComponent Begin
-#center 17.69 0.72 7.7
+#center 29.99 5.22 7.7
 #angles 0 0 0
 #scale 0.750999 1.5 0.750999
 #general_scale 0
@@ -62,28 +53,18 @@ MAREngine scene file
 #shininess 64
 
 #Entity
-#TagComponent FlyingGrayRectangle
-#TransformComponent Begin
-#center 20.93 3.23 -3.7
-#angles 265.85 210.46 0
-#scale 1 2 1
-#general_scale 0
-#ColorComponent 0.5 0.5 0.5
-#RenderableComponent Cube
-
-#Entity
 #TagComponent MonkeyOBJ
 #TransformComponent Begin
-#center -0.949972 0.54 -1.97
+#center 4.62 0.54 5.23
 #angles -102.5 4 -91
 #scale 1.6 1.6 1.6
 #general_scale 0
-#ColorComponent -0.586372 0.810042 0.810042
+#ColorComponent 0.537594 0.396122 0.396122
 #RenderableComponent resources/objects/monkey.obj
 #ScriptComponent resources/scripts/Foo.py
 
 #Entity
-#TagComponent YellowWall
+#TagComponent RedBrickWall
 #TransformComponent Begin
 #center 30.76 -1.7 4.02
 #angles 0 0 -0.12
@@ -103,10 +84,10 @@ MAREngine scene file
 #id main
 #used perspective
 #type perspective
-#fov 44.807
-#aspectratio 1.368
-#near 0.001
-#far 101.197
+#fov 45
+#aspectratio 1.77778
+#near 0.1
+#far 50
 #type orthographic
 #left -31.1
 #right 29.8
@@ -114,16 +95,6 @@ MAREngine scene file
 #bottom -20
 #near 80.501
 #far 80.501
-
-#Entity
-#TagComponent MRtextureFirst
-#TransformComponent Begin
-#center 16.65 -1.5 -5.4
-#angles 1 -62.5 -5.5
-#scale 1 1 1
-#general_scale 0
-#Texture2DComponent resources/textures/mr.jpg
-#RenderableComponent Cube
 
 #Entity
 #TagComponent WallTexture
@@ -148,8 +119,8 @@ MAREngine scene file
 #Entity
 #TagComponent YellowTextureLight
 #TransformComponent Begin
-#center -4.9 -1.45 10.75
-#angles 0 0 0
+#center -2.55 -1.45 0.55
+#angles 0 109.5 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
@@ -162,26 +133,17 @@ MAREngine scene file
 #linear 0.015
 #quadratic 0.01
 #shininess 31.5
+#ScriptComponent resources/scripts/LightMover.py
 
 #Entity
 #TagComponent AlphaGrassPNG
 #TransformComponent Begin
-#center 2.45 -1.2 0.6
+#center 2.35 -1.3 -6.4
 #angles 90 0 0
 #scale 0.02 2 0.15
 #general_scale 0
 #RenderableComponent Wall
 #Texture2DComponent resources/textures/grass_alpha.png
-
-#Entity
-#TagComponent DirtMinecraft1
-#TransformComponent Begin
-#center 8 -1.8 7.75
-#angles 0 0 0
-#scale 1 1 1
-#general_scale 0
-#RenderableComponent Cube
-#TextureCubemapComponent resources/textures/dirt
 
 #Entity
 #TagComponent GrassMinecraft1
@@ -224,24 +186,6 @@ MAREngine scene file
 #RenderableComponent Cube
 
 #Entity
-#TagComponent DiamondLight
-#TransformComponent Begin
-#center 8 -1.8 11.7
-#angles 0 0 0
-#scale 1 1 1
-#general_scale 0
-#RenderableComponent Cube
-#TextureCubemapComponent resources/textures/diamond
-#LightComponent Begin
-#ambientlight 0.06 0.06 0.06
-#diffuselight 0.12 0.07 0.49
-#specularlight 0 0 1
-#constant 0.061
-#linear 0.023
-#quadratic 0.1
-#shininess 118
-
-#Entity
 #TagComponent GrassOnGrassXD
 #TransformComponent Begin
 #center 8.6 3.65 9.15
@@ -254,21 +198,49 @@ MAREngine scene file
 #Entity
 #TagComponent ScriptEntity
 #TransformComponent Begin
-#center 5.45 -0.217616 1.05
+#center 5.45 0.372738 1.05
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#ScriptComponent resources/scripts/Example.py
+#ScriptComponent resources/scripts/Examples.py
 #RenderableComponent Cube
-#ColorComponent 0.0561681 0.487381 -0.111625
+#ColorComponent 0.104383 0.456417 0.204165
 
 #Entity
-#TagComponent empty
+#TagComponent DesertEagle
 #TransformComponent Begin
-#center -0.949972 0 0
+#center -3.05 1.95 1.65
+#angles 0 -63 0
+#scale 0.29 0.29 0.29
+#general_scale 0
+#RenderableComponent resources/objects/deagle.obj
+#Texture2DComponent resources/textures/red-texture.jpg
+
+#Entity
+#TagComponent M4
+#TransformComponent Begin
+#center 12.15 -2.2 -6.2
+#angles 0 -35.5 0
+#scale 0.5 0.5 0.5
+#general_scale 0
+#ColorComponent 1 0 0.947369
+#RenderableComponent resources/objects/m4.obj
+
+#Entity
+#TagComponent Diamond
+#TransformComponent Begin
+#center 8 -1.85 7.8
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
-#RenderableComponent resources/objects/m4.obj
-#ColorComponent -0.586372 0.810042 0.810042
-#ScriptComponent resources/scripts/Foo.py
+#general_scale 0
+#RenderableComponent Cube
+#TextureCubemapComponent resources/textures/diamond
+#LightComponent Begin
+#ambientlight 0.8 0.8 0.8
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.46 0 0.5
+#constant 0.476
+#linear 0.497
+#quadratic 0.1
+#shininess 63
+#ScriptComponent resources/scripts/Diamond.py

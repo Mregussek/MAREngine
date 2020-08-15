@@ -65,6 +65,9 @@ namespace mar {
 
 			const bool shouldWindowClose();
 			
+			void updateBackground(editor::GUI* gui, ecs::Scene* scene);
+			void updateBackground(ecs::Scene* scene);
+
 			// --- LAYERS MANAGEMENT --- //
 
 			editor::GUI createGUI();

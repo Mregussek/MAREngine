@@ -21,20 +21,36 @@ namespace mar {
 			window::Input::enableInput();
 		}
 
-		void MAREngine::closeWindow() { 
+		void MAREngine::closeWindow() {
 			window::Window::getInstance().shutdown(); 
 		}
 
-		void MAREngine::clearWindowScreen() { 
+		void MAREngine::clearWindowScreen() {
 			window::Window::getInstance().clearScreen(); 
 		}
 
-		void MAREngine::swapWindowBuffers() { 
+		void MAREngine::swapWindowBuffers() {
 			window::Window::getInstance().swapBuffers(); 
 		}
 
 		const bool MAREngine::shouldWindowClose() { 
 			return window::Window::getInstance().shouldClose(); 
+		}
+
+		void MAREngine::updateBackground(editor::GUI* gui, ecs::Scene* scene) {
+			auto& back = scene->getBackground();
+			window::Window::getInstance().updateBackgroundColor(back);
+
+			if (gui) {
+				auto& frame = gui->getFramebuffer();
+				auto& spec = frame.getSpecification();
+				spec.backgroundColor = back;
+			}
+		}
+
+		void MAREngine::updateBackground(ecs::Scene* scene) {
+			auto& back = scene->getBackground();
+			window::Window::getInstance().updateBackgroundColor(back);
 		}
 
 		editor::GUI MAREngine::createGUI() {

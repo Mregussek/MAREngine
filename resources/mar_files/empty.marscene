@@ -2,6 +2,7 @@ MAREngine scene file
 
 #Scene
 #Scene_Name empty.marscene
+#Scene_Background 1 0.894737 0.894737
 
 #Entity
 #TagComponent DarkGreenCube

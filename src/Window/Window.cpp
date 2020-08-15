@@ -88,7 +88,7 @@ namespace mar {
 		}
 
 		void Window::clearScreen() {
-			MAR_CORE_GL_FUNC( glClearColor(0.22f, 0.69f, 0.87f, 1.0f) );
+			MAR_CORE_GL_FUNC( glClearColor(m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, 1.0f) );
 			MAR_CORE_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 		}
 

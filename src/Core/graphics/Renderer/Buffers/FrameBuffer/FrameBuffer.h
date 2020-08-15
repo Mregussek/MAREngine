@@ -15,6 +15,7 @@ namespace mar {
 
 
 		struct FrameBufferSpecification {
+			maths::vec3 backgroundColor{ 0.22f, 0.69f, 0.87f };
 			float width{ 0.f };
 			float height{ 0.f };
 			uint32_t samples = 1;

@@ -8,6 +8,7 @@
 
 #include "../../mar.h"
 #include "../../Window/Input.h"
+#include "../../Core/graphics/Renderer/RenderCamera.h"
 
 
 namespace mar {
@@ -40,16 +41,6 @@ namespace mar {
 			const static maths::vec3 CAMERA_START;
 		};
 
-		struct CameraData {
-			maths::mat4 projection;
-			maths::mat4 view;
-			maths::mat4 model;
-			maths::mat4 mvp;
-			maths::vec3 position;
-
-			CameraData() = default;
-		};
-
 		class Camera {
 			// --- Window Attributes
 			const float* m_windowWidth;
@@ -80,7 +71,7 @@ namespace mar {
 			const float* m_scrollCallX;
 			const float* m_scrollCallY;
 			// --- Data for renderer
-			static CameraData s_cameraData;
+			static graphics::RenderCamera s_cameraData;
 
 		public:
 			Camera();
@@ -118,7 +109,7 @@ namespace mar {
 			}
 
 			// --- GET METHODS --- //
-			inline static CameraData& getCameraData() { return s_cameraData; }
+			inline static graphics::RenderCamera& getCameraData() { return s_cameraData; }
 
 			inline const maths::vec3& getCameraPosition() const { return m_position; }
 			inline const float& getZoom() const { return m_zoom; }

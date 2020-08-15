@@ -20,6 +20,7 @@ namespace mar {
 			static Window s_window;
 			GLFWwindow* m_window;
 			const char* m_windowName;
+			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
 			// --- Window Size Callback
 			int m_width;
 			int m_height;
@@ -42,6 +43,7 @@ namespace mar {
 			static void windowErrorCallback(int error, const char* description) 
 			{ MAR_CORE_ERROR("GLFW Error: " + std::string(description)); }
 				
+			void updateBackgroundColor(const maths::vec3& new_background) { m_backgroundColor = new_background; }
 
 			// --- GET METHODS --- //
 			inline static Window& getInstance() { return s_window; }
@@ -54,6 +56,8 @@ namespace mar {
 
 			const float& getScrollX() const { return m_scrollX; }
 			const float& getScrollY() const { return m_scrollY; }
+
+			maths::vec3& getBackground() { return m_backgroundColor; }
 
 			const bool shouldClose() const { return !glfwWindowShouldClose(m_window); }
 		

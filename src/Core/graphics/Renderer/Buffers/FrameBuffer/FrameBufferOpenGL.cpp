@@ -51,7 +51,7 @@ namespace mar {
 
 		void FrameBufferOpenGL::clear() const {
 			MAR_CORE_GL_FUNC( glViewport(0, 0, (const size_t)m_specification.width, (const size_t)m_specification.height) );
-			MAR_CORE_GL_FUNC( glClearColor(0.22f, 0.69f, 0.87f, 1.0f) );
+			MAR_CORE_GL_FUNC( glClearColor(m_specification.backgroundColor.x, m_specification.backgroundColor.y, m_specification.backgroundColor.z, 1.0f) );
 			MAR_CORE_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 
 			GRAPHICS_TRACE("FRAMEBUFFER_OPENGL: clearing!");

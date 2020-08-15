@@ -33,16 +33,18 @@ namespace mar {
 
 			// --- SET METHODS --- //
 
-			void setName(std::string name) { m_name = name; }
+			void setName(std::string name) { m_name = std::move(name); }
+			void setBackground(maths::vec3 v) { m_backgroundColor = std::move(v); }
 			
 			// --- GET METHODS --- //
 
 			inline const std::string& getName() const { return m_name; }
+			inline maths::vec3& getBackground() { return m_backgroundColor; }
 
-			const std::vector<Entity>& getEntities() const { return entities; }
-			Entity& getEntity(size_t index) { return entities[index]; }
+			const std::vector<Entity>& getEntities() const { return m_entities; }
+			Entity& getEntity(size_t index) { return m_entities[index]; }
 
-			inline graphics::RenderCamera& getRenderCamera() { return scene_camera; }
+			inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
 			// ----------------------------------------------------
 			// SCENE MEMBERS
@@ -53,8 +55,9 @@ namespace mar {
 
 			std::string m_name{ "Empty Scene" };
 			entt::registry m_registry;
-			std::vector<Entity> entities;
-			graphics::RenderCamera scene_camera;
+			std::vector<Entity> m_entities;
+			graphics::RenderCamera m_sceneCamera;
+			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
 		};
 
 

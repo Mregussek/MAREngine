@@ -50,13 +50,12 @@ namespace mar {
 			void updateFrame();
 			void endFrame();
 
-			void Menu_MainMenuBar();
-
-			void Display_ViewPort();
+			// --- EDITOR --- //
+			void Editor_MainMenuBar();
+			void Editor_ViewPort();
+			void Editor_Properties();
 			
 			// --- SCENE HANDLERS --- //
-			void Scene_Properties();
-
 			void Scene_Hierarchy();
 			void Scene_Hierarchy_PopUp();
 		

@@ -30,8 +30,11 @@ namespace mar {
 
 			ss << "MAREngine scene file\n\n";
 
+			auto& back = scene->getBackground();
+
 			ss << "#Scene\n";
 			ss << "#Scene_Name " << name << "\n";
+			ss << "#Scene_Background " << back.x << " " << back.y << " " << back.z << "\n";
 
 			for (auto& entity : scene->getEntities()) {
 				ss << "\n#Entity\n";
@@ -139,6 +142,14 @@ namespace mar {
 					std::string new_scene_name;
 					is >> new_scene_name;
 					scene = new ecs::Scene(new_scene_name);
+
+					// #Scene_Background - 19
+					float arr[3];
+					std::getline(file, line);
+					is.clear();
+					is = std::istringstream(line.substr(19));
+					is >> arr[0] >> arr[1] >> arr[2];
+					scene->setBackground({ arr[0], arr[1], arr[2] });
 				}
 				else if (line.find("#Entity") != std::string::npos) {
 					currentEntity = &scene->createEntity();

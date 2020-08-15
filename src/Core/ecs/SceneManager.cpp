@@ -12,6 +12,7 @@
 #include "ECS/Systems.h"
 #include "../graphics/Mesh/Manipulators/ShapeManipulator.h"
 #include "SceneEvents.h"
+#include "../../Window/Window.h"
 
 
 namespace mar {
@@ -54,12 +55,10 @@ namespace mar {
 				}
 				else if (entity.hasComponent<TextureCubemapComponent>()) {
 					submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_sceneStorage.cubemap_storage, 2);
-					//submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_sceneStorage.batch_storage, 2);
 					ECS_TRACE("SCENE: initializing cubemap entity!");
 				}
 				else if (entity.hasComponent<Texture2DComponent>()) {
 					submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_sceneStorage.texture_storage, 1);
-					//submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_sceneStorage.batch_storage, 1);
 					ECS_TRACE("SCENE: initializing texture2d entity!");
 				}
 			}
@@ -84,13 +83,23 @@ namespace mar {
 				auto& camdata = editor::Camera::getCameraData();
 				auto& cam = m_scene->getRenderCamera();
 
-				cam.model = camdata.model;
-				cam.view = camdata.view;
-				cam.projection = camdata.projection;
-				cam.mvp = camdata.mvp;
-				cam.position = camdata.position;
+				cam = camdata;
 
 				ECS_TRACE("SCENE: initializing editor camera on scene");
+			}
+			else {
+				for (auto& entity : m_scene->getEntities()) {
+					if (entity.hasComponent<CameraComponent>()) {
+						auto& cam = entity.getComponent<CameraComponent>();
+
+						if (cam.id.find("main") == std::string::npos)
+							continue;
+						
+						auto& tran = entity.getComponent<TransformComponent>();
+
+						calculateCameraTransforms(tran, cam, m_scene->getRenderCamera());
+					}
+				}
 			}
 		}
 
@@ -172,13 +181,11 @@ namespace mar {
 			static size_t counter_color;
 			static size_t counter_texture;
 			static size_t counter_cubemap;
-			static size_t counter_batch;
 			static size_t counter_light;
 
 			counter_color = 0;
 			counter_texture = 0;
 			counter_cubemap = 0;
-			counter_batch = 0;
 			counter_light = 0;
 
 			for (auto entity : m_scene->getEntities()) {
@@ -204,13 +211,6 @@ namespace mar {
 						m_sceneStorage.cubemap_storage.transforms[counter_cubemap] = tran.transform;
 						counter_cubemap++;
 					}
-					
-					/*
-					if (entity.hasComponent<Texture2DComponent>() || entity.hasComponent<TextureCubemapComponent>()) {
-						m_sceneStorage.batch_storage.transforms[counter_batch] = tran.transform;
-						counter_batch++;
-					}
-					*/
 
 					if (entity.hasComponent<LightComponent>()) {
 						auto& light = entity.getComponent<LightComponent>();
@@ -223,7 +223,6 @@ namespace mar {
 					if (entity.hasComponent<ColorComponent>()) counter_color++;
 					if (entity.hasComponent<Texture2DComponent>()) counter_texture++;
 					if (entity.hasComponent<TextureCubemapComponent>()) counter_cubemap++;
-					if (entity.hasComponent<Texture2DComponent>() || entity.hasComponent<TextureCubemapComponent>()) counter_batch++;
 					if (entity.hasComponent<LightComponent>()) counter_light++;
 				}
 

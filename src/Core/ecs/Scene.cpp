@@ -14,7 +14,7 @@ namespace mar {
 
 
 		Scene::Scene(std::string name)
-			: m_name(name)
+			: m_name(std::move(name))
 		{
 			m_registry = entt::registry();
 
@@ -37,17 +37,17 @@ namespace mar {
 			entity.addDefault();
 			entity.addComponent<TagComponent>(ECS_TAG);
 
-			entities.push_back(entity);
+			m_entities.push_back(entity);
 
 			ECS_INFO("SCENE: created entity!");
 
-			return entities[entities.size() - 1];
+			return m_entities[m_entities.size() - 1];
 		}
 
 		void Scene::destroyEntity(const int32_t& index) {
-			if (entities[index].isValid()) {
-				entities[index].destroyYourself();
-				entities.erase(entities.begin() + index);
+			if (m_entities[index].isValid()) {
+				m_entities[index].destroyYourself();
+				m_entities.erase(m_entities.begin() + index);
 			}
 
 			ECS_INFO("SCENE: destroyed entity!");
