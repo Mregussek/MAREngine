@@ -221,7 +221,6 @@
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\RendererBatchTexture.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererColor.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h" />
     <ClInclude Include="src\Core\ecs\ECS\Components.h" />
@@ -290,7 +289,6 @@
     <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\RendererBatchTexture.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererColor.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererTexture.cpp" />
@@ -342,7 +340,6 @@
     <None Include="resources\mar_files\to_load.marscene" />
     <None Include="resources\shaders\basic.shader" />
     <None Include="resources\shaders\basicWithoutGUI.shader" />
-    <None Include="resources\shaders\BatchTexture.shader" />
     <None Include="resources\shaders\cubemap.shader" />
     <None Include="resources\shaders\cubemapWithoutGUI.shader" />
     <None Include="resources\shaders\entityColor.shader" />

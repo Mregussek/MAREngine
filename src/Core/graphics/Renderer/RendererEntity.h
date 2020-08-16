@@ -10,7 +10,6 @@
 
 #include "RendererColor.h"
 #include "RendererTexture.h"
-#include "RendererBatchTexture.h"
 #include "Renderer.h"
 
 
@@ -24,7 +23,6 @@ namespace mar {
 			// --- SPECIFIC RENDERERS --- //
 			
 			RendererColor m_renColor;
-			//RendererBatchTexture m_renTex;
 			RendererTexture m_ren2D;
 			RendererTexture m_renCube;
 

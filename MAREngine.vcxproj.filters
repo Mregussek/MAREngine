@@ -246,9 +246,6 @@
     <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RendererBatchTexture.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\assets\AssetsManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -386,9 +383,6 @@
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\graphics\Renderer\RendererBatchTexture.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\SceneEvents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -420,7 +414,6 @@
     <None Include="resources\shaders\entityColor.shader" />
     <None Include="resources\shaders\entityTexture2D.shader" />
     <None Include="resources\shaders\entityCubemap.shader" />
-    <None Include="resources\shaders\BatchTexture.shader" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">
