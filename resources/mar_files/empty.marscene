@@ -97,8 +97,8 @@ MAREngine scene file
 #Entity
 #TagComponent CameraSavedFile
 #TransformComponent Begin
-#center -22.55 7.41 4.95
-#angles -8.54 -0.38 0
+#center -17.55 7.41 19.1
+#angles -8.54 -26.88 0
 #scale 1 1 1
 #general_scale 0
 #CameraComponent Begin
@@ -106,7 +106,7 @@ MAREngine scene file
 #used perspective
 #type perspective
 #fov 45
-#aspectratio 1.77778
+#aspectratio 1.33333
 #near 0.1
 #far 50
 #type orthographic
@@ -271,7 +271,7 @@ MAREngine scene file
 #center 14.55 4.9 -8.6
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Pyramid
 #ColorComponent 1 0.917293 0.917293
 #LightComponent Begin
@@ -283,3 +283,14 @@ MAREngine scene file
 #quadratic 0.0075
 #shininess 64
 #ScriptComponent resources/scripts/NewScript.py
+
+#Entity
+#TagComponent OtherMRtexEntity
+#TransformComponent Begin
+#center 5.5 -1.4 5.4
+#angles 0 -55.5 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Cube
+#ScriptComponent resources/scripts/Examples.py
+#Texture2DComponent resources/textures/mr.jpg

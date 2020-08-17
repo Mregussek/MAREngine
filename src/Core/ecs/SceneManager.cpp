@@ -71,6 +71,8 @@ namespace mar {
 			else {
 				if (!m_PauseMode)
 					updatePlayMode();
+				else
+					updatePauseMode();
 			}
 		}
 
@@ -90,14 +92,7 @@ namespace mar {
 			else {
 				for (auto& entity : m_scene->getEntities()) {
 					if (entity.hasComponent<CameraComponent>()) {
-						auto& cam = entity.getComponent<CameraComponent>();
-
-						if (cam.id.find("main") == std::string::npos)
-							continue;
-						
-						auto& tran = entity.getComponent<TransformComponent>();
-
-						calculateCameraTransforms(tran, cam, m_scene->getRenderCamera());
+						submitCamera(entity, entity.getComponent<TransformComponent>());
 					}
 				}
 			}
@@ -224,6 +219,50 @@ namespace mar {
 					if (entity.hasComponent<Texture2DComponent>()) counter_texture++;
 					if (entity.hasComponent<TextureCubemapComponent>()) counter_cubemap++;
 					if (entity.hasComponent<LightComponent>()) counter_light++;
+				}
+
+				if (entity.hasComponent<CameraComponent>()) {
+					submitCamera(entity, tran);
+				}
+			}
+		}
+
+		void SceneManager::updatePauseMode() {
+			static size_t counter_color;
+			static size_t counter_texture;
+			static size_t counter_cubemap;
+			static size_t counter_light;
+
+			counter_color = 0;
+			counter_texture = 0;
+			counter_cubemap = 0;
+			counter_light = 0;
+
+			for (auto entity : m_scene->getEntities()) {
+				auto& tran = entity.getComponent<TransformComponent>();
+
+				if (entity.hasComponent<ColorComponent>()) {
+					auto& color = entity.getComponent<ColorComponent>();
+					m_sceneStorage.colors_storage.samplers[counter_color] = color.texture;
+					m_sceneStorage.colors_storage.transforms[counter_color] = tran.transform;
+					counter_color++;
+				}
+
+				if (entity.hasComponent<Texture2DComponent>()) {
+					m_sceneStorage.texture_storage.transforms[counter_texture] = tran.transform;
+					counter_texture++;
+				}
+
+				if (entity.hasComponent<TextureCubemapComponent>()) {
+					m_sceneStorage.cubemap_storage.transforms[counter_cubemap] = tran.transform;
+					counter_cubemap++;
+				}
+
+				if (entity.hasComponent<LightComponent>()) {
+					auto& light = entity.getComponent<LightComponent>();
+					m_sceneStorage.light_storage.positions[counter_light] = tran.center;
+					m_sceneStorage.light_storage.components[counter_light] = light;
+					counter_light++;
 				}
 
 				if (entity.hasComponent<CameraComponent>()) {

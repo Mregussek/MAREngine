@@ -54,6 +54,23 @@ namespace mar {
             if (!initialized)
                 return;
 
+            module.attr("transform") = e.getComponent<ecs::TransformComponent>();
+
+            if (e.hasComponent<ecs::LightComponent>()) {
+                auto& light = e.getComponent<ecs::LightComponent>();
+                module.attr("light") = light;
+            }
+
+            if (e.hasComponent<ecs::CameraComponent>()) {
+                auto& camera = e.getComponent<ecs::CameraComponent>();
+                module.attr("camera") = camera;
+            }
+
+            if (e.hasComponent<ecs::ColorComponent>()) {
+                auto& color = e.getComponent<ecs::ColorComponent>();
+                module.attr("color") = color;
+            }
+
             module.attr("update")();
 
             auto& tran = e.getComponent<ecs::TransformComponent>();

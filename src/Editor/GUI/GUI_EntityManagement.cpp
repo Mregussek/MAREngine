@@ -30,10 +30,19 @@ namespace mar {
 			else is_window_focused = false;
 
 			if (is_play_mode) {
-				ImGui::Text("Cannot modify entity parameters other\nthan Transform during play mode!");
+				ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
 
 				if (currentEntity->hasComponent<ecs::TransformComponent>())
 					Scene_Handle_TransformComponent(is_window_focused, is_play_mode);
+
+				if (currentEntity->hasComponent<ecs::CameraComponent>())
+					Scene_Handle_CameraComponent(is_window_focused, is_play_mode);
+
+				if (currentEntity->hasComponent<ecs::ColorComponent>())
+					Scene_Handle_ColorComponent(is_window_focused, is_play_mode);
+
+				if (currentEntity->hasComponent<ecs::LightComponent>())
+					Scene_Handle_LightComponent(is_window_focused, is_play_mode);
 
 				ImGui::End();
 
@@ -54,10 +63,10 @@ namespace mar {
 				Scene_Handle_RenderableComponent(is_window_focused);
 
 			if (currentEntity->hasComponent<ecs::CameraComponent>())
-				Scene_Handle_CameraComponent(is_window_focused);
+				Scene_Handle_CameraComponent(is_window_focused, is_play_mode);
 
 			if (currentEntity->hasComponent<ecs::ColorComponent>())
-				Scene_Handle_ColorComponent(is_window_focused);
+				Scene_Handle_ColorComponent(is_window_focused, is_play_mode);
 
 			if (currentEntity->hasComponent<ecs::Texture2DComponent>())
 				Scene_Handle_Texture2DComponent(is_window_focused);
@@ -66,7 +75,7 @@ namespace mar {
 				Scene_Handle_TextureCubemapComponent(is_window_focused);
 
 			if (currentEntity->hasComponent<ecs::LightComponent>())
-				Scene_Handle_LightComponent(is_window_focused);
+				Scene_Handle_LightComponent(is_window_focused, is_play_mode);
 
 			Scene_Entity_Modify_PopUp();
 
@@ -200,8 +209,7 @@ namespace mar {
 
 				if (updated_transform) {
 					ecs::System::handleTransformComponent(tran);
-					if(!is_play_mode)
-						ecs::SceneEvents::Instance().updateTransform(currentEntity, currentIndex);
+					if(!is_play_mode) ecs::SceneEvents::Instance().updateTransform(currentEntity, currentIndex);
 				}
 			}
 
@@ -366,7 +374,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_CameraComponent(bool window_focused) {
+		void GUI_EntityManagement::Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode) {
 			static char* GUI_input{ (char*)"empty" };
 			auto& camcmp = currentEntity->getComponent<ecs::CameraComponent>();
 
@@ -413,12 +421,12 @@ namespace mar {
 			}
 
 			if (updated_camera)
-				ecs::SceneEvents::Instance().updatedCamera(currentEntity, currentIndex);
+				if(!is_play_mode) ecs::SceneEvents::Instance().updatedCamera(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_ColorComponent(bool window_focused) {
+		void GUI_EntityManagement::Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode) {
 			ImGui::Separator();
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
@@ -431,7 +439,7 @@ namespace mar {
 			auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
 			if (ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture)))
-				ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
+				if(!is_play_mode) ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
@@ -544,7 +552,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_LightComponent(bool window_focused) {
+		void GUI_EntityManagement::Scene_Handle_LightComponent(bool window_focused, bool is_play_mode) {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
 
@@ -571,7 +579,7 @@ namespace mar {
 			if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) updated_light = true;
 
 			if(updated_light)
-				ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
+				if(!is_play_mode) ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 		}

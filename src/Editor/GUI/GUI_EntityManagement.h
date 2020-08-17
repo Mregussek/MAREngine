@@ -31,11 +31,11 @@ namespace mar {
 			static void Scene_Handle_RenderableComponent(bool window_focused);
 			static void Scene_Handle_TransformComponent(bool window_focused, bool is_play_mode);
 			static void Scene_Handle_ScriptComponent(bool window_focused);
-			static void Scene_Handle_CameraComponent(bool window_focused);
-			static void Scene_Handle_ColorComponent(bool window_focused);
+			static void Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode);
+			static void Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode);
 			static void Scene_Handle_Texture2DComponent(bool window_focused);
 			static void Scene_Handle_TextureCubemapComponent(bool window_focused);
-			static void Scene_Handle_LightComponent(bool window_focused);
+			static void Scene_Handle_LightComponent(bool window_focused, bool is_play_mode);
 
 		};
 

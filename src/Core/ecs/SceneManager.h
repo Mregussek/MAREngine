@@ -56,6 +56,7 @@ namespace mar {
 
 			void updateEditorMode();
 			void updatePlayMode();
+			void updatePauseMode();
 
 			void submitColorEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<maths::vec3>& storage);
 
