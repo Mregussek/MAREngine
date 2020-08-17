@@ -17,14 +17,12 @@ namespace mar {
 
 		void RendererEntity::initialize() {
 			m_renColor.initialize();
-			//m_renTex.initialize(SHADER_BATCH_TEXTURE);
 			m_ren2D.initialize(SHADER_ENTITY_TEXTURE2D);
 			m_renCube.initialize(SHADER_ENTITY_CUBEMAP);
 		}
 
 		void RendererEntity::close() {
 			m_renColor.close();
-			//m_renTex.close();
 			m_ren2D.close();
 			m_renCube.close();
 
@@ -42,26 +40,6 @@ namespace mar {
 					 storage.light_storage
 				);
 			}
-			
-			/*
-			if (!storage.batch_storage.vertices.empty()) {
-				s_stats.drawCallsCount += 1;
-
-				m_renTex.draw(storage.batch_storage,
-					scene->getScene()->getRenderCamera(),
-					storage.light_storage);
-			}
-
-			s_stats.shapesCount +=
-				storage.colors_storage.transforms.size() +
-				storage.batch_storage.transforms.size();
-			s_stats.verticesCount +=
-				storage.colors_storage.vertices.size() +
-				storage.batch_storage.vertices.size();
-			s_stats.indicesCount +=
-				storage.colors_storage.indices.size() +
-				storage.batch_storage.indices.size();
-			*/
 			
 			if(!storage.cubemap_storage.vertices.empty()) {
 				s_stats.drawCallsCount += 1;

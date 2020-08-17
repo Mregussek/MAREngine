@@ -1,6 +1,6 @@
 import MAREnginePy as mar
 
-class Examples(mar.Entity):	
+class Examples(mar.Entity):
 	def __init__(self):
 		mar.Entity.__init__(self)
 		self.color_R_change = 0
@@ -41,3 +41,4 @@ class Examples(mar.Entity):
 
 	
 	
+

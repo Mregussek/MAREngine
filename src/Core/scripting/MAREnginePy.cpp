@@ -270,7 +270,7 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 	py::class_<ecs::CameraComponent>(m, "Camera")
 		.def(py::init<>())
 		.def_readwrite("p_fov",				&ecs::CameraComponent::p_fov)
-		.def_readwrite("p_aspectRation",	&ecs::CameraComponent::p_aspectRatio)
+		.def_readwrite("p_aspectRatio",	&ecs::CameraComponent::p_aspectRatio)
 		.def_readwrite("p_near",			&ecs::CameraComponent::p_near)
 		.def_readwrite("p_far",				&ecs::CameraComponent::p_far)
 		.def_readwrite("o_left",			&ecs::CameraComponent::o_left)

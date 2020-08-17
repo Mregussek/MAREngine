@@ -24,6 +24,7 @@ namespace mar {
 			save = "resources/mar_files/" + std::string(filename) + ".marscene";
 
 			ImGui::Text("Saving to: ");
+			ImGui::SameLine();
 			ImGui::Text(save.c_str());
 
 			ImGui::Separator();
@@ -31,14 +32,14 @@ namespace mar {
 			if (ImGui::Button("Save to selected name"))
 				Filesystem::saveToFile(scene_to_save, save.c_str());
 
-				ImGui::SameLine();
+			ImGui::SameLine();
 
-				if (ImGui::Button("Close"))
-					should_be_opened = false;
+			if (ImGui::Button("Close"))
+				should_be_opened = false;
 
-				ImGui::End();
+			ImGui::End();
 
-				EDITOR_TRACE("GUI: filesystem_savescene");
+			EDITOR_TRACE("GUI: filesystem_savescene");
 		}
 
 		void GUI_Filesystem::Filesystem_LoadScene(bool& should_be_opened) {

@@ -1,6 +1,6 @@
 import MAREnginePy as mar
 
-class Diamond(mar.Entity):	
+class NewScript(mar.Entity):	
 	def __init__(self):
 		mar.Entity.__init__(self)
 		self.light_changer = 0.0

@@ -505,5 +505,24 @@ namespace mar {
 			return rtn;
 		}
 
+		void Filesystem::savePyScript(const char* filename, std::string source) {
+			MAR_CORE_INFO("FILESYSTEM: going to save PyScript at:");
+			MAR_CORE_INFO(filename);
+
+			std::ofstream ss(filename, std::ios::out | std::ios::trunc);
+
+			if (!ss.is_open()) {
+				MAR_CORE_ERROR("Cannot open file and save scene!");
+				return;
+			}
+
+			ss << std::move(source);
+
+			ss.close();
+
+			MAR_CORE_INFO("FILESYSTEM: saved PyScript at:");
+			MAR_CORE_INFO(filename);
+		}
+
 
 } }

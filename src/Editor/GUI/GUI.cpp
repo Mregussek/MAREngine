@@ -9,6 +9,7 @@
 #include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
+#include "GUI_TextEditor.h"
 
 
 namespace mar {
@@ -31,6 +32,8 @@ namespace mar {
 			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
 			m_viewportFramebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
+
+			GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
 
 			EDITOR_INFO("GUI: initialized properly!");
 		}
@@ -115,6 +118,8 @@ namespace mar {
 			if (m_instructionWindow) { 
 				GUI_Info::Menu_Instruction(m_instructionWindow); 
 			}
+
+			GUI_TextEditor::Instance().update();
 
 			Editor_ViewPort();
 
@@ -345,6 +350,8 @@ namespace mar {
 						m_currentEntity = nullptr;
 						GUI_EntityManagement::currentEntity = nullptr;
 						GUI_EntityManagement::currentIndex = -1;
+						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
+						GUI_TextEditor::Instance().setEditorTitle("Empty");
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 

@@ -88,17 +88,18 @@ GRAPHICS_LOGS and EDITOR_LOGS, because ECS are the core of MAREngine. Entities &
 
 // --- Include other third-party libraries --- //
 #pragma warning( push )
-#pragma warning( disable : 26439 )
-#pragma warning( disable : 26495) 
-#pragma warning( disable : 26812) 
-#pragma warning( disable : 26451) 
-#pragma warning( disable : 6385) 
-#pragma warning( disable : 6011) 
-#pragma warning( disable : 6262) 
-#pragma warning( disable : 6308) 
-#pragma warning( disable : 4005) 
-#pragma warning( disable : 4286) 
-#pragma warning( disable : 4099) 
+#pragma warning( disable : 26439	)
+#pragma warning( disable : 26495	) 
+#pragma warning( disable : 26812	) 
+#pragma warning( disable : 26451	) 
+#pragma warning( disable : 6385		) 
+#pragma warning( disable : 6011		) 
+#pragma warning( disable : 6262		) 
+#pragma warning( disable : 6308		) 
+#pragma warning( disable : 4005		) 
+#pragma warning( disable : 4018		)
+#pragma warning( disable : 4286		) 
+#pragma warning( disable : 4099		) 
 
 #if __has_include("stb_image/stb_image.h")
 	#include "stb_image/stb_image.h"
@@ -122,6 +123,13 @@ GRAPHICS_LOGS and EDITOR_LOGS, because ECS are the core of MAREngine. Entities &
 	#define MAR_ENGINE_IMGUIZMO_LIB
 #else
 	#error "MAR ENGINE: Cannot import ImGuizmo.h!"
+#endif
+
+#if __has_include("TextEditor.h")
+	#include "TextEditor.h"
+	#define MAR_ENGINE_IMGUI_COLOR_TEXT_EDIT_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import ImGuiColorTextEdit lib : TextEditor.h !"
 #endif
 
 #if __has_include("SerialPort.hpp")

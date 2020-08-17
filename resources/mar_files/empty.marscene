@@ -2,12 +2,12 @@ MAREngine scene file
 
 #Scene
 #Scene_Name empty.marscene
-#Scene_Background 1 0.894737 0.894737
+#Scene_Background 0.894737 0.894737 2.8026e-44
 
 #Entity
 #TagComponent DarkGreenCube
 #TransformComponent Begin
-#center 23.41 0.54 4.55
+#center 22.06 0.54 4.55
 #angles 65 0 0
 #scale 1 1 1
 #general_scale 0
@@ -257,10 +257,29 @@ MAREngine scene file
 #Entity
 #TagComponent ScriptEntity
 #TransformComponent Begin
-#center 5.45 0.372738 1.05
+#center 11.55 0.372738 1.05
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
 #ScriptComponent resources/scripts/Examples.py
 #RenderableComponent Cube
 #ColorComponent 0.104383 0.456417 0.204165
+
+#Entity
+#TagComponent NewScript
+#TransformComponent Begin
+#center 14.55 4.9 -8.6
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Pyramid
+#ColorComponent 1 0.917293 0.917293
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
+#ScriptComponent resources/scripts/NewScript.py
