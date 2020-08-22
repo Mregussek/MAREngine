@@ -59,15 +59,41 @@ namespace mar {
 			if (window::Input::isKeyPressed(MAR_KEY_D))
 				processCameraMovement(CameraMovement::RIGHT);
 
-			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_3)) {
-				if (m_enableMouse) m_enableMouse = false;
-				else m_enableMouse = true;
-
-				m_firstMouse = true;
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1) 
+				&& window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) 
+			{
+				moveCameraWithMouse();
 			}
 
 			mouseCallback(*m_mouseCallX, *m_mouseCallY);
 			processMouseScroll(*m_scrollCallY);
+		}
+
+		void Camera::moveCameraWithMouse() {
+			static float last_X;
+			static float last_Y;
+			static bool first_time = true;
+
+			if (first_time) {
+				last_X = *m_mouseCallX;
+				last_Y = *m_mouseCallY;
+				first_time = false;
+				return;
+			}
+
+			static float offset_x;
+			static float offset_y;
+
+			offset_x = last_X - *m_mouseCallX;
+			offset_y = last_Y - *m_mouseCallY;
+
+			last_X = *m_mouseCallX;
+			last_Y = *m_mouseCallY;
+
+			if(offset_x < 0)
+				processCameraMovement(CameraMovement::RIGHT);
+			else
+				processCameraMovement(CameraMovement::LEFT);
 		}
 
 		void Camera::updateData() {
@@ -99,19 +125,6 @@ namespace mar {
 			case CameraMovement::DOWN:
 				m_position -= m_up * velocity;		break;
 			}
-		}
-
-		void Camera::mouseButtonCallback(float xpos, float ypos) {
-			static float xoffset;
-			static float yoffset;
-
-			xoffset = xpos - m_lastX;
-			yoffset = m_lastY - ypos;
-
-			m_lastX = xpos;
-			m_lastY = ypos;
-
-			processMouseMovement(xoffset, yoffset);
 		}
 
 		void Camera::mouseCallback(float xpos, float ypos) {

@@ -80,8 +80,8 @@ namespace mar {
 		}
 
 		void Window::swapBuffers() {
-			glfwSwapBuffers(m_window);
 			glfwPollEvents();
+			glfwSwapBuffers(m_window);
 
 			if (Input::isKeyPressed(MAR_KEY_ESCAPE))
 				closeWindow();

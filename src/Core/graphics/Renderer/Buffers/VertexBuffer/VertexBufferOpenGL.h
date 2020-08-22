@@ -61,7 +61,7 @@ namespace mar {
 
 				\return size - returns size allocated on GPU
 			*/
-			uint32_t getSize() const;
+			int32_t getSize() const;
 		};
 
 

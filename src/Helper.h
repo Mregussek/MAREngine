@@ -15,8 +15,7 @@ public:
 
 	void initialize() {
 		std::string name = m_pathToScene + " --- " + m_name;
-
-		engine->initWindow(m_height, m_width, name.c_str());
+				engine->initWindow(m_height, m_width, name.c_str());
 		engine->setLoadPath(m_pathToScene);
 
 		static pybind11::scoped_interpreter guard{};

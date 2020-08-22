@@ -35,7 +35,7 @@ namespace mar {
 				GRAPHICS_ERROR("FRAMEBUFFER_OPENGL: Cannot load framebuffer!");
 			}
 			else {
-				GRAPHICS_INFO("FRAMEBUFFER_OPENGL: loaded successfully!");
+				GRAPHICS_INFO("FRAMEBUFFER_OPENGL: loaded successfully - {}!", m_id);
 			}
 
 			MAR_CORE_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, 0) );
@@ -43,10 +43,14 @@ namespace mar {
 
 		void FrameBufferOpenGL::bind() const {
 			MAR_CORE_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, m_id) );
+
+			GRAPHICS_TRACE("FRAMEBUFFER_OPENGL: Binding - {}!", m_id);
 		}
 
 		void FrameBufferOpenGL::unbind() const {
 			MAR_CORE_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, 0) );
+
+			GRAPHICS_TRACE("FRAMEBUFFER_OPENGL: Unbinding FBO");
 		}
 
 		void FrameBufferOpenGL::clear() const {
@@ -58,11 +62,11 @@ namespace mar {
 		}
 
 		void FrameBufferOpenGL::close() {
+			GRAPHICS_TRACE("FRAMEBUFFER_OPENGL: deleting {}!", m_id);
+
 			MAR_CORE_GL_FUNC( glDeleteFramebuffers(1, &m_id) );
 			MAR_CORE_GL_FUNC( glDeleteTextures(1, &m_colorAttachment) );
 			MAR_CORE_GL_FUNC( glDeleteTextures(1, &m_depthAttanchment) );
-
-			GRAPHICS_TRACE("FRAMEBUFFER_OPENGL: closed!");
 		}
 
 

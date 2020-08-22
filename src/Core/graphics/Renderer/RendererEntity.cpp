@@ -16,12 +16,18 @@ namespace mar {
 		RendererStatistics RendererEntity::s_stats;
 
 		void RendererEntity::initialize() {
+			GRAPHICS_INFO("RENDERERENTITY: Going to initialize!");
+
 			m_renColor.initialize();
 			m_ren2D.initialize(SHADER_ENTITY_TEXTURE2D);
 			m_renCube.initialize(SHADER_ENTITY_CUBEMAP);
+
+			GRAPHICS_INFO("RENDERERENTITY: initialized!");
 		}
 
 		void RendererEntity::close() {
+			GRAPHICS_INFO("RENDERERENTITY: Going to close!");
+
 			m_renColor.close();
 			m_ren2D.close();
 			m_renCube.close();
@@ -30,6 +36,8 @@ namespace mar {
 		}
 
 		void RendererEntity::update(ecs::SceneManager* scene) {
+			GRAPHICS_INFO("RENDERERENTITY: Started updating frame method!");
+
 			auto& storage = scene->getStorage();
 
 			if (!storage.colors_storage.vertices.empty()) {

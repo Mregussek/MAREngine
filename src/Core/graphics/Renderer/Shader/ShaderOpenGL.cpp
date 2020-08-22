@@ -13,20 +13,23 @@ namespace mar {
 
 		void ShaderOpenGL::initialize(ShaderType shadertype) {
 			if (m_initialized) {
-				GRAPHICS_TRACE("SHADER_OPENGL: Cannot re-initialize once compiled shader!");
+				GRAPHICS_TRACE("SHADER_OPENGL: Cannot re-initialize once compiled shader! LoadedShader - {}", m_shaderPath);
 				return;
 			}
 
 			switch(shadertype) {
-			case ShaderType::ENTITY_COLOR: m_shaderPath = "resources/shaders/entityColor.shader";
+			case ShaderType::ENTITY_COLOR: m_shaderPath = "resources/shaders/entityColor.shader.glsl";
 				break;
-			case ShaderType::ENTITY_TEXTURE2D: m_shaderPath = "resources/shaders/entityTexture2D.shader";
+			case ShaderType::ENTITY_TEXTURE2D: m_shaderPath = "resources/shaders/entityTexture2D.shader.glsl";
 				break;
-			case ShaderType::ENTITY_CUBEMAP: m_shaderPath = "resources/shaders/entityCubemap.shader";
+			case ShaderType::ENTITY_CUBEMAP: m_shaderPath = "resources/shaders/entityCubemap.shader.glsl";
 				break;
-			case ShaderType::BATCH_TEXTURE: m_shaderPath = "resources/shaders/BatchTexture.shader";
-				break;
+			default:
+				GRAPHICS_ERROR("SHADER_OPENGL: Cannot find selected shader!");
+				return;
 			}
+
+			GRAPHICS_TRACE("SHADER_OPENGL: Going to load shader from {}", m_shaderPath);
 
 			m_id = 0;
 			m_programSource = parseShader();
@@ -35,15 +38,21 @@ namespace mar {
 		}
 
 		void ShaderOpenGL::shutdown() {
-			MAR_CORE_GL_FUNC(glDeleteProgram(m_id));
+			GRAPHICS_TRACE("SHADER_OPENGL: Deleting shader {} - {}", m_id, m_shaderPath);
+
+			MAR_CORE_GL_FUNC( glDeleteProgram(m_id) );
 		}
 
 		void ShaderOpenGL::bind() const {
-			MAR_CORE_GL_FUNC(glUseProgram(m_id));
+			MAR_CORE_GL_FUNC( glUseProgram(m_id) );
+
+			GRAPHICS_TRACE("SHADER_OPENGL: Binding shader {} - {}", m_id, m_shaderPath);
 		}
 
 		void ShaderOpenGL::unbind() const {
-			MAR_CORE_GL_FUNC(glUseProgram(0));
+			MAR_CORE_GL_FUNC( glUseProgram(0) );
+
+			GRAPHICS_TRACE("SHADER_OPENGL: Unbind shader");
 		}
 
 		void ShaderOpenGL::setUniformInt(const std::string& name, const std::vector<int32_t>& ints) {
@@ -92,7 +101,7 @@ namespace mar {
 
 			int location = glGetUniformLocation(m_id, name.c_str());
 			if (location == -1)
-				std::cout << "Warning: Uniform " << name << " does not exist!\n";
+				GRAPHICS_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
 
 			return location;
 		}
@@ -112,7 +121,7 @@ namespace mar {
 				}
 				else vector[(int)type] += line + "\n";
 
-			GRAPHICS_TRACE("SHADER_OPENGL: Shader loaded successfully from source file!");
+			GRAPHICS_TRACE("SHADER_OPENGL: Loaded source file successfully from {}!", m_shaderPath);
 
 			return { vector[0], vector[1] };
 		}
@@ -130,16 +139,14 @@ namespace mar {
 				int length = 100;
 				char message[100];
 				glGetShaderInfoLog(id, length, &length, message);
-				std::string shadertype = (type == GL_VERTEX_SHADER ? "vertex" : "fragment");
-				std::string s = "Failed to compile shader: " + shadertype + message;
 
-				GRAPHICS_ERROR(s);
+				GRAPHICS_ERROR("SHADER_OPENGL: Failed to compile shader: {} - {} - {}", m_shaderPath, (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), message);
 
 				glDeleteShader(id);
 				return 0;
 			}
 
-			GRAPHICS_TRACE("SHADER_OPENGL: Shader compiled successfully!");
+			GRAPHICS_TRACE("SHADER_OPENGL: {} - {} - {} compiled successfully!", (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), id, m_shaderPath);
 
 			return id;
 		}
@@ -160,9 +167,9 @@ namespace mar {
 				int length = 100;
 				char message[100];
 				glGetProgramInfoLog(shaderProgramId, length, &length, message);
-				std::string s = "Failed to load shader: " + std::string(message);
 
-				GRAPHICS_ERROR(s);
+				GRAPHICS_ERROR("SHADER_OPENGL: Failed to load shader: {} - {}", m_shaderPath, message);
+
 				return 0;
 			}
 
@@ -171,7 +178,7 @@ namespace mar {
 			glDeleteShader(vs);
 			glDeleteShader(fs);
 
-			GRAPHICS_TRACE("SHADER_OPENGL: Shader created successfully!");
+			GRAPHICS_TRACE("SHADER_OPENGL: {} - {} created successfully!", m_shaderPath, shaderProgramId);
 
 			return shaderProgramId;
 		}

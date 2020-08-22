@@ -37,7 +37,7 @@ namespace mar {
 				\param path - path to texture, which will be loaded
 				\return id - id for new loaded texture
 			*/
-			float loadTexture(const std::string& path);
+			uint32_t loadTexture(const std::string& path);
 
 			/*
 			Method loads Cube Map and prescribe it to available index.
@@ -45,7 +45,7 @@ namespace mar {
 
 				\param faces - paths to textures, which will be loaded
 			*/
-			float loadCubemap(const std::string& path);
+			uint32_t loadCubemap(const std::string& path);
 
 			/*
 			Bind texture with texID to selected shape with shapeId.
@@ -53,14 +53,14 @@ namespace mar {
 				\param shapeId - id of shape
 				\param texID - id of texture
 			*/
-			void bind(int32_t texture_type, uint32_t unit, uint32_t texID) const;
+			void bind(uint32_t texture_type, uint32_t unit, uint32_t texID) const;
 
 			// Unbind texture
 			void unbind() const;
 
-			const uint32_t& getTexture(const std::string& key) const { return m_2d.at(key); }
+			uint32_t getTexture(const std::string& key) const { return m_2d.at(key); }
 
-			const uint32_t& getCubemap(const std::string& key) const { return m_cubemaps.at(key); }
+			uint32_t getCubemap(const std::string& key) const { return m_cubemaps.at(key); }
 
 		private:
 			/*

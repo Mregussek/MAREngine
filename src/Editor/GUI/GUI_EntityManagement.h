@@ -21,10 +21,13 @@ namespace mar {
 
 
 		struct GUI_EntityManagement {
+			static graphics::RenderCamera* render_cam;
 			static ecs::Entity* currentEntity;
 			static int32_t currentIndex;
 
 			static void Scene_Entity_Modify(bool is_play_mode);
+
+		private:
 			static void Scene_Entity_Modify_PopUp();
 
 			static void Scene_Handle_TagComponent(bool window_focused);
@@ -36,7 +39,6 @@ namespace mar {
 			static void Scene_Handle_Texture2DComponent(bool window_focused);
 			static void Scene_Handle_TextureCubemapComponent(bool window_focused);
 			static void Scene_Handle_LightComponent(bool window_focused, bool is_play_mode);
-
 		};
 
 

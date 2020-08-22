@@ -81,7 +81,6 @@ namespace mar {
 			void processInput();
 			void updateData();
 
-			void mouseButtonCallback(float xpos, float ypos);
 			void mouseCallback(float xpos, float ypos);
 			void scrollCallback(float ypos);
 
@@ -90,6 +89,8 @@ namespace mar {
 			void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 			void processMouseScroll(float yoffset);
 			void updateCameraVectors();
+
+			void moveCameraWithMouse();
 
 		public:
 			// --- SET METHODS --- //

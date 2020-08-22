@@ -57,12 +57,12 @@ namespace mar {
 		}
 
 		void GUI::prepareNewFrame() {
+			m_viewportFramebuffer.unbind();
+
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 			ImGuizmo::BeginFrame();
-
-			m_viewportFramebuffer.unbind();
 
 			static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
@@ -169,10 +169,36 @@ namespace mar {
 		}
 
 		void GUI::Editor_ViewPort() {
-			ImGui::Begin("ViewPort");
+			ImGui::Begin("ViewPort", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
 
 			if (ImGui::IsWindowFocused()) window::Input::enableInput();
 			else window::Input::disableInput();
+
+			if (ImGui::BeginMenuBar()) {
+				if (m_sceneManager->isEditorMode()) {
+					if (ImGui::Button("PLAY")) {
+						m_sceneManager->setPlayMode();
+					}
+				}
+				else {
+					if (ImGui::Button("STOP")) {
+						m_sceneManager->setExitPlayMode();
+					}
+
+					ImGui::SameLine();
+
+					if (!m_sceneManager->isPauseMode()) {
+						if (ImGui::Button("PAUSE"))
+							m_sceneManager->setPauseMode();
+					}
+					else {
+						if (ImGui::Button("RESUME"))
+							m_sceneManager->unsetPauseMode();
+					}
+				}
+
+				ImGui::EndMenuBar();
+			}
 
 			static uint32_t id;
 
@@ -184,33 +210,6 @@ namespace mar {
 			spec.height = size.y;
 
 			ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-			ImGui::End();
-
-			ImGui::Begin("Manage Viewport");
-
-			if (m_sceneManager->isEditorMode()) {
-				if (ImGui::Button("PLAY")) {
-					m_sceneManager->setPlayMode();
-				}
-			}
-			else {
-				if (ImGui::Button("STOP")) {
-					m_sceneManager->setExitPlayMode();
-				}
-
-				ImGui::SameLine();
-
-				if (!m_sceneManager->isPauseMode()) {
-					if (ImGui::Button("PAUSE"))
-						m_sceneManager->setPauseMode();
-				}	
-				else {
-					if (ImGui::Button("RESUME"))
-						m_sceneManager->unsetPauseMode();
-				}
-					
-			}
 
 			ImGui::End();
 
@@ -284,6 +283,7 @@ namespace mar {
 		void GUI::submit(ecs::SceneManager* scene) {
 			m_sceneManager = scene;
 			m_sceneManager->useEditorCamera = true;
+			GUI_EntityManagement::render_cam = &m_sceneManager->getScene()->getRenderCamera();
 
 			EDITOR_INFO("GUI: scene has been submitted!");
 		}

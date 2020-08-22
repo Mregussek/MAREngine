@@ -62,8 +62,8 @@ namespace mar {
                 return true;
             }
 
-			inline static Ref<spdlog::logger>& getCoreLogger() { return s_CoreLogger; }
-			inline static Ref<spdlog::logger>& getClientLogger() { return s_ClientLogger; }
+			inline static spdlog::logger* getCoreLogger() { return s_CoreLogger.get(); }
+			inline static spdlog::logger* getClientLogger() { return s_ClientLogger.get(); }
 		};
 
 		

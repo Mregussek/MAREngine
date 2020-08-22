@@ -20,8 +20,7 @@ namespace mar {
 		enum class ShaderType {
 			ENTITY_COLOR,
 			ENTITY_TEXTURE2D,
-			ENTITY_CUBEMAP,
-			BATCH_TEXTURE
+			ENTITY_CUBEMAP
 		};
 
 		template<typename SHADER>
@@ -93,6 +92,5 @@ namespace mar {
 #define SHADER_ENTITY_COLOR ::mar::graphics::ShaderType::ENTITY_COLOR
 #define SHADER_ENTITY_TEXTURE2D ::mar::graphics::ShaderType::ENTITY_TEXTURE2D
 #define SHADER_ENTITY_CUBEMAP ::mar::graphics::ShaderType::ENTITY_CUBEMAP
-#define SHADER_BATCH_TEXTURE ::mar::graphics::ShaderType::BATCH_TEXTURE
 
 #endif // MAR_ENGINE_SHADER_H

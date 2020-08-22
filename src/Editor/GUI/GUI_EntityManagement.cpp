@@ -11,6 +11,7 @@
 namespace mar {
 	namespace editor {
 
+		graphics::RenderCamera* GUI_EntityManagement::render_cam{ nullptr };
 		ecs::Entity* GUI_EntityManagement::currentEntity{ nullptr };
 		int32_t GUI_EntityManagement::currentIndex{ -1 };
 

@@ -423,9 +423,9 @@
     <None Include="cmake\FindPackageHandleStandardArgs.cmake" />
     <None Include="cmake\FindPackageMessage.cmake" />
     <None Include="cmake\SelectLibraryConfigurations.cmake" />
-    <None Include="resources\shaders\entityColor.shader" />
-    <None Include="resources\shaders\entityTexture2D.shader" />
-    <None Include="resources\shaders\entityCubemap.shader" />
+    <None Include="resources\shaders\entityColor.shader.glsl" />
+    <None Include="resources\shaders\entityCubemap.shader.glsl" />
+    <None Include="resources\shaders\entityTexture2D.shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg">
