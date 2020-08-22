@@ -14,26 +14,34 @@ namespace mar {
 		Entity::Entity(Scene* scene)
 			: m_scene(scene),
 			m_entityHandle(scene->m_registry.create())
-		{ }
+		{ 
+			ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
+		}
 
 		Entity::Entity(const Entity& other)
 			: m_entityHandle(other.m_entityHandle),
 			m_scene(other.m_scene)
-		{}
+		{
+			ECS_TRACE("ENTITY: {} is copied!", m_entityHandle);
+		}
 
 		void Entity::addDefault() {
 			auto& com = m_scene->m_registry.emplace<Components>(m_entityHandle);
 			com.components.push_back(ECS_DEFAULT);
 
-			ECS_TRACE("ENTITY: Adding default component");
+			ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
 		}
 
 		template<typename T>
 		const bool Entity::hasComponent() const {
+			ECS_TRACE("ENTITY: {} checking if has component on board!", m_entityHandle);
+
 			return m_scene->m_registry.has<T>(m_entityHandle);
 		}
 
 		const bool Entity::isValid() const {
+			ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
+
 			return m_scene->m_registry.valid(m_entityHandle);
 		}
 
@@ -42,7 +50,7 @@ namespace mar {
 		}
 
 		void Entity::addComponent(EntityComponents entcmp) {
-			ECS_TRACE("ENTITY: adding component implicitly!");
+			ECS_TRACE("ENTITY: {} adding component implicitly!", m_entityHandle);
 
 			switch (entcmp) {
 			case ECS_RENDERABLE:
@@ -79,6 +87,8 @@ namespace mar {
 		}
 
 		void Entity::destroyYourself() {
+			ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
+
 			m_scene->m_registry.destroy(m_entityHandle);
 
 			ECS_INFO("ENTITY: destroyed yourself!");

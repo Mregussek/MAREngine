@@ -11,6 +11,8 @@
 
 namespace mar {
 	namespace callbacks {
+
+
 		// Inline Variables and Methods, for solving linker problems
 		static inline GLFWwindow* window;
 
@@ -32,6 +34,7 @@ namespace mar {
 		inline void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 		inline void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 		inline void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+
 		void setWindowSize(int* height, int* width);
 		void setMouse(float* x, float* y);
 		void setScroll(float* x, float* y);
@@ -39,7 +42,6 @@ namespace mar {
 		void setUseInput(const bool* use);
 		void setCallbacks(GLFWwindow* wind);
 
-	
 	
 } }
 

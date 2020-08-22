@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "ECS/Components.h"
+#include "ECSLogs.h"
 
 
 namespace mar {
@@ -51,15 +52,21 @@ namespace mar {
 			PlayStorage play_storage;
 
 			void resetAll() {
+				ECS_TRACE("SCENE_STORAGE: going to clear all storages!");
+
 				reset(colors_storage);
 				reset(texture_storage);
 				reset(cubemap_storage);
 				reset(light_storage);
 				reset(play_storage);
+
+				ECS_INFO("SCENE_STORAGE: All storages are cleared");
 			}
 
 			template<typename T>
 			void reset(BufferStorage<T>& storage) {
+				ECS_TRACE("SCENE_STORAGE: resseting buffer storage");
+
 				storage.vertices.clear();
 				storage.indices.clear();
 				storage.transforms.clear();
@@ -68,17 +75,27 @@ namespace mar {
 				storage.samplers.clear();
 				storage.counter = 0;
 				storage.indicesMax = 0;
+
+				ECS_TRACE("SCENE_STORAGE: buffer storage is cleared!");
 			}
 
 			void reset(LightStorage& light) {
+				ECS_TRACE("SCENE_STORAGE: resseting light storage");
+
 				light.components.clear();
 				light.positions.clear();
+
+				ECS_TRACE("SCENE_STORAGE: light storage is cleared!");
 			}
 
 			void reset(PlayStorage& play) {
+				ECS_TRACE("SCENE_STORAGE: resseting play storage");
+
 				play.transforms.clear();
 				play.colors.clear();
 				play.lights.clear();
+
+				ECS_TRACE("SCENE_STORAGE: play storage is cleared!");
 			}
 
 			void pushLight(maths::vec3& center, LightComponent& light) {

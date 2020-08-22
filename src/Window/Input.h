@@ -10,7 +10,6 @@
 #include "../mar.h"
 #include "buttons_def.h"
 #include "Window.h"
-#include "../Debug/Log.h"
 
 
 namespace mar {
@@ -29,32 +28,13 @@ namespace mar {
 
 		public:
 
-			static void initialize(GLFWwindow* window) {
-				s_nativewindow = window;
+			static void initialize(GLFWwindow* window);
 
-				MAR_CORE_INFO("Native window is set for Input!");
-			}
+			static bool isKeyPressed(int key);
+			static bool isKeyPressed_NotViewport(int key);
 
-			static bool isKeyPressed(int key) {
-				if (s_useInput) {
-					return glfwGetKey(s_nativewindow, key) == MAR_KEY_PRESS ||
-						glfwGetKey(s_nativewindow, key) == MAR_KEY_REPEAT;
-				}
-				else return false;
-			}
-
-			static bool isMousePressed(int key) {
-				if (s_useInput) {
-					return glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_PRESS ||
-						glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_REPEAT;
-				}
-				else return false;
-			}
-
-			static bool isMousePressed_NotViewport(int key) {
-				return glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_PRESS ||
-						glfwGetMouseButton(s_nativewindow, key) == MAR_KEY_REPEAT;
-			}
+			static bool isMousePressed(int key);
+			static bool isMousePressed_NotViewport(int key);
 
 			// --- GET METHODS --- //
 			static const bool& getUseInput() { return s_useInput; }
@@ -63,14 +43,8 @@ namespace mar {
 			static int& getMouseAction() { return s_clickedAction; }
 
 			// --- SET METHODS --- //
-			static void enableInput() { 
-				s_useInput = true; 
-				MAR_CORE_INFO("INPUT: enabled!");
-			}
-			static void disableInput() { 
-				s_useInput = false; 
-				MAR_CORE_INFO("INPUT: disabled!");
-			}
+			static void enableInput();
+			static void disableInput();
 		};
 
 

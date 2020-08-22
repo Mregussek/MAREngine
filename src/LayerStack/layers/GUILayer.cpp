@@ -4,7 +4,7 @@
  */
 
 #include "GUILayer.h"
-#include "../../Debug/Log.h"
+#include "../LayerLogs.h"
 #include "../../Editor/GUI/GUI.h"
 #include "../../Editor/Camera/Camera.h"
 
@@ -18,6 +18,8 @@ namespace mar {
 		{ }
 
 		void LayerGUI::initialize(editor::GUI* gui, editor::Camera* cam) {
+			LAYER_TRACE("GUI_LAYER: {} going to initialize", m_debugName);
+
 			m_gui = gui;
 			m_camera = cam;
 
@@ -29,26 +31,30 @@ namespace mar {
 			m_camera->setWindowSize(&m_gui->getViewportWidth(), &m_gui->getViewportHeight());
 
 			/* MOUSE SETUP */
-			auto win = window::Window::getInstance();
+			const auto& win = window::Window::getInstance();
 			m_camera->setMouseCall(&win.getMouseX(), &win.getMouseY());
 			m_camera->setScrollCall(&win.getScrollX(), &win.getScrollY());
 
-			MAR_CORE_INFO("GUI_LAYER: initialized");
+			LAYER_INFO("GUI_LAYER: {} initialized", m_debugName);
 		}
 
 		void LayerGUI::update() {
+			LAYER_TRACE("GUI_LAYER: {} going to display frame", m_debugName);
+
 			m_camera->processInput();
 			m_camera->updateData();
 
 			m_gui->display();
 
-			MAR_CORE_TRACE("GUI_LAYER: displaying frame");
+			LAYER_INFO("GUI_LAYER: {} displayed frame", m_debugName);
 		}
 
 		void LayerGUI::closeLayer() {
+			LAYER_TRACE("GUI_LAYER: {} going to close!", m_debugName);
+
 			m_gui->shutdown();
 
-			MAR_CORE_INFO("GUI_LAYER: closed!");
+			LAYER_INFO("GUI_LAYER: {} closed!", m_debugName);
 		}
 
 		editor::GUI* LayerGUI::getGUIInstance() { 

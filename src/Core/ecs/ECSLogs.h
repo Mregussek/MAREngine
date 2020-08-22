@@ -10,10 +10,10 @@
 
 #ifdef MAR_ENGINE_ECS_LOGS
 
-#define ECS_TRACE(x) MAR_CORE_TRACE(x)
-#define ECS_INFO(x) MAR_CORE_INFO(x)
-#define ECS_ERROR(x) MAR_CORE_ERROR(x)
-#define ECS_WARN(x) MAR_CORE_WARN(x)
+#define ECS_TRACE(...) MAR_CORE_TRACE(__VA_ARGS__)
+#define ECS_INFO(...) MAR_CORE_INFO(__VA_ARGS__)
+#define ECS_ERROR(...) MAR_CORE_ERROR(__VA_ARGS__)
+#define ECS_WARN(...) MAR_CORE_WARN(__VA_ARGS__)
 
 #else
 

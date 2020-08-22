@@ -4,7 +4,7 @@
  */
 
 #include "callbacks.h"
-
+#include "WindowLogs.h"
 
 namespace mar {
 	namespace callbacks {

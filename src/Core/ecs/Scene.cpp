@@ -32,6 +32,8 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		Entity& Scene::createEntity() {
+			ECS_INFO("SCENE: going to create entity!");
+
 			Entity entity{ this };
 
 			entity.addDefault();
@@ -45,12 +47,18 @@ namespace mar {
 		}
 
 		void Scene::destroyEntity(const int32_t& index) {
+			ECS_INFO("SCENE: going to destroy entity!");
+
 			if (m_entities[index].isValid()) {
 				m_entities[index].destroyYourself();
 				m_entities.erase(m_entities.begin() + index);
-			}
 
-			ECS_INFO("SCENE: destroyed entity!");
+				ECS_INFO("SCENE: destroyed entity!");
+				return;
+			}
+			else {
+				ECS_INFO("SCENE: entity is not valid, so it cannot be destroyed!");
+			}
 		}
 
 

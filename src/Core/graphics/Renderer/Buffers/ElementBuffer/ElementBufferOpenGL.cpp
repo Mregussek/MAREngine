@@ -33,7 +33,7 @@ namespace mar {
 		void ElementBufferOpenGL::update(const std::vector<uint32_t>& data) const {
 			MAR_CORE_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, data.size() * sizeof(uint32_t), data.data()) );
 
-			GRAPHICS_TRACE("ELEMENTBUFFER_OPENGL: updating data in EBO - {}! Num of indices: {}, Memory: ", _id, data.size(), data.size() * sizeof(uint32_t));
+			GRAPHICS_TRACE("ELEMENTBUFFER_OPENGL: updating data in EBO - {}! Num of indices: {}, Memory: {}", _id, data.size(), data.size() * sizeof(uint32_t));
 		}
 
 		void ElementBufferOpenGL::resetBuffer() {

@@ -242,6 +242,7 @@
     <ClInclude Include="src\Editor\GUI\GUI_TextEditor.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Theme.h" />
     <ClInclude Include="src\Helper.h" />
+    <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Window\callbacks.h" />
@@ -275,6 +276,7 @@
     <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Texture\TextureOpenGL.h" />
+    <ClInclude Include="src\Window\WindowLogs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3rd_party\ImGuiColorTextEdit\TextEditor.cpp" />

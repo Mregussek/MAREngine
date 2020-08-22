@@ -65,7 +65,7 @@ namespace mar {
 
 				stbi_image_free(localBuffer);
 
-				GRAPHICS_TRACE("TEXTURE_OPENGL: {} 2D texture loaded successfully - assigned to: {0:d}!", path, id);
+				GRAPHICS_TRACE("TEXTURE_OPENGL: {} 2D texture loaded successfully - assigned to: {}!", path, id);
 
 				return id;
 			}
@@ -115,7 +115,7 @@ namespace mar {
 					stbi_image_free(localBuffer);
 				}
 				else {
-					GRAPHICS_ERROR("TEXTURE_OPENGL: Cubemap texture failed to load! Path: {}, Face: {0:d}", path, faces[i]);
+					GRAPHICS_ERROR("TEXTURE_OPENGL: Cubemap texture failed to load! Path: {}, Face: {}", path, faces[i]);
 
 					stbi_image_free(localBuffer);
 				}
@@ -128,7 +128,7 @@ namespace mar {
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-			GRAPHICS_TRACE("TEXTURE_OPENGL: {} cubemap loaded successfully and assigned to: {0:d}!", path, id);
+			GRAPHICS_TRACE("TEXTURE_OPENGL: {} cubemap loaded successfully and assigned to: {}!", path, id);
 
 			return id;
 		}

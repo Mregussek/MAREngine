@@ -14,6 +14,8 @@
 namespace mar {
 	namespace layers {
 
+		class LayerStack;
+
 
 		class Layer {
 		public:
@@ -25,6 +27,8 @@ namespace mar {
 			virtual void closeLayer() { }
 
 		protected:
+			friend class LayerStack;
+
 			const char* m_debugName;
 		};
 

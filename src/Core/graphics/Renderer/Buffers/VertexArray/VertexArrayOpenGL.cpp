@@ -44,7 +44,7 @@ namespace mar {
 		void VertexArrayOpenGL::bind() const {
 			MAR_CORE_GL_FUNC( glBindVertexArray(_rendererId) );
 
-			GRAPHICS_TRACE("VERTEXARRAY_OPENGL: binding EBO {}!", _rendererId);
+			GRAPHICS_TRACE("VERTEXARRAY_OPENGL: binding VAO {}!", _rendererId);
 		}
 
 		void VertexArrayOpenGL::unbind() const {

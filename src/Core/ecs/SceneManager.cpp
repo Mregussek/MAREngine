@@ -26,9 +26,13 @@ namespace mar {
 			m_scene(nullptr)
 		{
 			SceneEvents::Instance().scene_manager = this;
+
+			ECS_INFO("SCENE_MANAGER: called constructor");
 		}
 
 		void SceneManager::initialize() {
+			ECS_TRACE("SCENE_MANAGER: going to initialize!");
+
 			m_sceneStorage.resetAll();
 
 			for (auto& entity : m_scene->getEntities()) {
@@ -51,20 +55,21 @@ namespace mar {
 
 				if (entity.hasComponent<ColorComponent>()) {
 					submitColorEntity(entity, tran, ren, m_sceneStorage.colors_storage);
-					ECS_TRACE("SCENE: initializing color entity!");
 				}
 				else if (entity.hasComponent<TextureCubemapComponent>()) {
 					submitTextureEntity<TextureCubemapComponent>(entity, tran, ren, m_sceneStorage.cubemap_storage, 2);
-					ECS_TRACE("SCENE: initializing cubemap entity!");
 				}
 				else if (entity.hasComponent<Texture2DComponent>()) {
 					submitTextureEntity<Texture2DComponent>(entity, tran, ren, m_sceneStorage.texture_storage, 1);
-					ECS_TRACE("SCENE: initializing texture2d entity!");
 				}
 			}
+
+			ECS_INFO("SCENE_MANAGER: initialized!");
 		}
 
 		void SceneManager::update() {
+			ECS_TRACE("SCENE_MANAGER: going to update");
+
 			if (m_EditorMode) {
 				updateEditorMode();
 			}
@@ -74,6 +79,8 @@ namespace mar {
 				else
 					updatePauseMode();
 			}
+
+			ECS_INFO("SCENE_MANAGER: updated!");
 		}
 
 		// -------------------------------------------------------------
@@ -81,6 +88,8 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		void SceneManager::updateEditorMode() {
+			ECS_TRACE("SCENE_MANAGER: updating editor mode");
+
 			if (useEditorCamera) {
 				auto& camdata = editor::Camera::getCameraData();
 				auto& cam = m_scene->getRenderCamera();
@@ -96,6 +105,8 @@ namespace mar {
 					}
 				}
 			}
+
+			ECS_INFO("SCENE_MANAGER: updated editor mode!");
 		}
 
 		// -------------------------------------------------------------
@@ -103,6 +114,8 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		void SceneManager::initPlayMode() {
+			ECS_TRACE("SCENE_MANAGER: going to initialize play mode");
+
 			m_sceneStorage.reset(m_sceneStorage.play_storage);
 
 			for (auto& entity : m_scene->getEntities()) {
@@ -123,6 +136,8 @@ namespace mar {
 					sc.ps.start(entity);
 				}
 			}
+
+			ECS_INFO("SCENE_MANAGER: initialized play mode!");
 		}
 
 		template<typename T>
@@ -132,6 +147,8 @@ namespace mar {
 		}
 
 		void SceneManager::exitPlayMode() {
+			ECS_TRACE("SCENE_MANAGER: going to exit play mode");
+
 			for (auto& entity : m_scene->getEntities()) {
 				auto& tran = entity.getComponent<TransformComponent>();
 				auto& tran_store = m_sceneStorage.play_storage.transforms.front();
@@ -170,9 +187,13 @@ namespace mar {
 			}
 
 			initialize();
+
+			ECS_INFO("SCENE_MANAGER: exited play mode!");
 		}
 
 		void SceneManager::updatePlayMode() {
+			ECS_TRACE("SCENE_MANAGER: going to update play mode");
+
 			static size_t counter_color;
 			static size_t counter_texture;
 			static size_t counter_cubemap;
@@ -225,9 +246,13 @@ namespace mar {
 					submitCamera(entity, tran);
 				}
 			}
+
+			ECS_INFO("SCENE_MANAGER: updated play mode");
 		}
 
 		void SceneManager::updatePauseMode() {
+			ECS_TRACE("SCENE_MANAGER: going to update pause mode");
+
 			static size_t counter_color;
 			static size_t counter_texture;
 			static size_t counter_cubemap;
@@ -269,6 +294,8 @@ namespace mar {
 					submitCamera(entity, tran);
 				}
 			}
+
+			ECS_INFO("SCENE_MANAGER: updated pause mode");
 		}
 
 		// -------------------------------------------------------------
@@ -276,15 +303,21 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		void SceneManager::submitColorEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<maths::vec3>& storage) {
+			ECS_TRACE("SCENE_MANAGER: going to submit color entity");
+			
 			auto& color = entity.getComponent<ColorComponent>();
 
 			storage.transforms.push_back(tran.transform);
 			submitVerticesIndices<maths::vec3>(ren, storage);
 			submitSampler<maths::vec3>(color.texture, storage);
+
+			ECS_TRACE("SCENE_MANAGER: submitted color entity!");
 		}
 
 		template<typename TextureType>
 		void SceneManager::submitTextureEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<int32_t>& storage, int32_t i) {
+			ECS_TRACE("SCENE_MANAGER: going to submit texture entity");
+			
 			auto& texture = entity.getComponent<TextureType>();
 
 			storage.paths.push_back(texture.texture);
@@ -292,10 +325,14 @@ namespace mar {
 			storage.transforms.push_back(tran.transform);
 			submitVerticesIndices<int32_t>(ren, storage);
 			submitSampler<int32_t>(storage.counter, storage);
+
+			ECS_TRACE("SCENE_MANAGER: submitted texture entity!");
 		}
 
 		template<typename T>
 		void SceneManager::submitVerticesIndices(RenderableComponent& ren, BufferStorage<T>& storage) {
+			ECS_TRACE("SCENE_MANAGER: going to submit renderable component (vertices / indices) - {}", ren.id);
+
 			std::vector<uint32_t> copy = ren.indices;
 
 			graphics::ShapeManipulator::extendShapeID(ren.vertices, storage.stride, (float)storage.counter);
@@ -306,25 +343,30 @@ namespace mar {
 
 			storage.indicesMax += ren.vertices.size() / storage.stride;
 
-			ECS_TRACE("SCENE: submitted renderable component!");
+			ECS_TRACE("SCENE: submitted renderable component - {}!", ren.id);
 		}
 
 		template<typename T>
 		void SceneManager::submitSampler(T& sampler, BufferStorage<T>& storage) {
+			ECS_TRACE("SCENE_MANAGER: going to submit sampler");
+
 			storage.samplers.push_back(sampler);
-	
 			storage.counter++;
 
-			ECS_TRACE("SCENE: submitted sampler component!");
+			ECS_TRACE("SCENE_MANAGER: submitted sampler component!");
 		}
 
 		void SceneManager::submitCamera(const Entity& entity, TransformComponent& tran) {
+			ECS_TRACE("SCENE_MANAGER: going to submit camera");
+
 			auto& cam = entity.getComponent<CameraComponent>();
 
 			if (cam.id.find("main") == std::string::npos)
 				return;
 
 			calculateCameraTransforms(tran, cam, m_scene->getRenderCamera());
+
+			ECS_TRACE("SCENE_MANAGER: submitted camera");
 		}
 
 		void SceneManager::calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam) {
@@ -356,6 +398,8 @@ namespace mar {
 			}
 
 			ren_cam.mvp = ren_cam.projection * ren_cam.view * ren_cam.model;
+		
+			ECS_TRACE("SCENE_MANAGER: calculated camera transform!");
 		}
 
 

@@ -51,7 +51,7 @@ namespace mar {
 				auto& com = getComponent<Components>();
 				com.components.push_back(entcmp);
 
-				ECS_TRACE("ENTITY: adding component explicitly!");
+				ECS_TRACE("ENTITY: {} adding component explicitly - {}!", m_entityHandle, entcmp);
 
 				return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 			}
@@ -60,14 +60,16 @@ namespace mar {
 			T& getComponent() const {
 				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
 
-				ECS_TRACE("ENTITY: returning component");
+				ECS_TRACE("ENTITY: {} returning component", m_entityHandle);
 
 				return m_scene->m_registry.get<T>(m_entityHandle);
 			}
 
 			template<typename T>
 			void removeComponent(EntityComponents entcmp) {
-				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
+				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
+
+				ECS_INFO("ENTITY: {} going to remove component {}", m_entityHandle, entcmp);
 
 				auto& com = getComponent<Components>();
 				auto it = std::find(com.components.begin(), com.components.end(), entcmp);
@@ -76,7 +78,7 @@ namespace mar {
 
 				m_scene->m_registry.remove<T>(m_entityHandle);
 
-				ECS_TRACE("ENTITY: removing component");
+				ECS_TRACE("ENTITY: {} removing component", m_entityHandle);
 			}
 
 			// ----------------------------------------------------

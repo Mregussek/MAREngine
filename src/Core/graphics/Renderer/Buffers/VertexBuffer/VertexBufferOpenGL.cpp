@@ -34,7 +34,7 @@ namespace mar {
 		void VertexBufferOpenGL::updateDynamically(const std::vector<float>& vertices) const {
 			MAR_CORE_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), vertices.data()) );
 
-			GRAPHICS_TRACE("VERTEXBUFFER_OPENGL: updating data in VBO - {}! Num of vertices: {}, Memory: ", _id, vertices.size(), vertices.size() * sizeof(float));
+			GRAPHICS_TRACE("VERTEXBUFFER_OPENGL: updating data in VBO - {}! Num of vertices: {}, Memory: {}", _id, vertices.size(), vertices.size() * sizeof(float));
 		}
 
 		void VertexBufferOpenGL::resetBuffer() {

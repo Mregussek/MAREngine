@@ -158,16 +158,16 @@ namespace mar {
 		// ----------------------------------------------------
 
 		enum class EntityComponents {
-			DEFAULT_COMPONENT,
-			COLOR,
-			TEXTURE2D,
-			CUBEMAP,
-			RENDERABLE,
-			TAG,
-			TRANSFORM,
-			LIGHT,
-			CAMERA,
-			SCRIPT
+			DEFAULT_COMPONENT,		// 0
+			COLOR,					// 1
+			TEXTURE2D,				// 2
+			CUBEMAP,				// 3
+			RENDERABLE,				// 4
+			TAG,					// 5
+			TRANSFORM,				// 6
+			LIGHT,					// 7
+			CAMERA,					// 8
+			SCRIPT					// 9
 		};
 
 		inline static const std::vector<std::pair<EntityComponents, const char*>> AllExistingComponents{

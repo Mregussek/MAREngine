@@ -26,6 +26,8 @@ Normally MAREngine was developed with printed on terminal logs, in order to catc
 Also it is needed to store somewhere loggings (let's say in release mode). I saw that, logging to file was not 
 affecting actual perfomance of engine so much, so I created another option here. Leave uncommented in order to see
 every log on terminal.
+
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_TERMINAL_LOGS will not affect anything.
 */
 #define MAR_ENGINE_TERMINAL_LOGS
 
@@ -35,6 +37,8 @@ every log on terminal.
 
 Uncommenting this macro will create ability to see logs from code, such as GUI editor, managing the whole things,
 saving scene to file, load scene from file and others. In summary all things associated to Editor Layer.
+
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_EDITOR_LOGS will not affect anything.
 */
 //#define MAR_ENGINE_EDITOR_LOGS
 
@@ -44,20 +48,43 @@ saving scene to file, load scene from file and others. In summary all things ass
 
 Uncommenting this macro will create ability to see logs from code, such as Renderer API, the whole EBO, VBO stuff,
 what happens during rendering, calling shaders, mesh creation and others.
+
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_GRAPHICS_LOGS will not affect anything.
 */
 #define MAR_ENGINE_GRAPHICS_LOGS
 
 
-// 
 /*
 !!! Uncomment to see Entity Component System logs
 
 Uncommenting this macro will create ability to see logs from code, such as Entity Component System stuff. Specifically
 entity creation, adding components to it, when components are called. In order to see it proper way, you should add 
 GRAPHICS_LOGS and EDITOR_LOGS, because ECS are the core of MAREngine. Entities && Components are called wherever needed.
-*/
-//#define MAR_ENGINE_ECS_LOGS
 
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_ECS_LOGS will not affect anything.
+*/
+#define MAR_ENGINE_ECS_LOGS
+
+
+/*
+!!! Uncomment to see Layer Logs
+
+MAREngine is updating the whole frame with LayerStack, where each layer calls its overrided update() method. Sometimes
+it is usefull to see, if at which point each layer is.
+
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_LAYER_LOGS will not affect anything.
+*/
+#define MAR_ENGINE_LAYER_LOGS
+
+/*
+!!! Uncomment to see Window Logs
+
+Everything is displayed on window, so logging from window itself might be helpful. Uncommenting this macro
+will let you catch, when input is enabled, which key is pressed or operations on window like cleaning, swapping buffers.
+
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_WINDOW_LOGS will not affect anything.
+*/
+#define MAR_ENGINE_WINDOW_LOGS
 
 // ----------------------------------------------
 // MAR_ENGINE_INCLUDE_LIBRARIES

@@ -7,9 +7,7 @@
 #define WINDOW_H
 
 #include "../mar.h"
-#include "../Debug/Log.h"
 #include "Input.h"
-#include "callbacks.h"
 
 
 namespace mar {
@@ -40,9 +38,6 @@ namespace mar {
 			void swapBuffers();
 			void clearScreen();
 
-			static void windowErrorCallback(int error, const char* description) 
-			{ MAR_CORE_ERROR("GLFW Error: " + std::string(description)); }
-				
 			void updateBackgroundColor(const maths::vec3& new_background) { m_backgroundColor = new_background; }
 
 			// --- GET METHODS --- //

@@ -9,7 +9,7 @@
 
 #include "../mar.h"
 #include "Layer.h"
-#include "../Debug/Log.h"
+#include "LayerLogs.h"
 
 
 namespace mar {
@@ -21,66 +21,76 @@ namespace mar {
 			uint32_t m_layerInsert{ 0 };
 
 		public:
-			LayerStack() {
-				MAR_CORE_INFO("Initialized Layer Stack!");
-			}
+			LayerStack() { LAYER_INFO("LAYER_STACK: initialized (called default constructor)!"); }
 
 			Layer* operator[](const uint32_t& index) { return m_layers[index]; }
 
 			void close() {
+				LAYER_TRACE("LAYER_STACK: going to delete all layers!");
+
 				for (auto& layer : m_layers) {
 					layer->closeLayer();
 					delete layer;
 				}
 
-				MAR_CORE_INFO("Closed Layer Stack!");
+				LAYER_INFO("LAYER_STACK: closed deleted all layers!");
 			}
 
 			void update() { 
-				MAR_CORE_TRACE("STACK: updating frame");
+				LAYER_TRACE("LAYER_STACK: going to call update() on layers");
 
 				for (auto& layer : m_layers) 
 					layer->update();
+
+				LAYER_INFO("LAYER_STACK: updated layers");
 			}
 
 			void pushLayer(Layer* layer) {
+				LAYER_TRACE("LAYER_STACK: Going to push layer at {}!", m_layerInsert);
+
 				m_layers.emplace(m_layers.begin() + m_layerInsert, layer);
 				m_layerInsert++;
 
-				MAR_CORE_INFO("Pushed layer to stack!");
+				LAYER_INFO("LAYER_STACK: Pushed layer to stack at {}!", m_layerInsert);
 			}
 
 			void pushOverlay(Layer* overlay) {
 				m_layers.emplace_back(overlay);
 
-				MAR_CORE_INFO("Pushed Overlay to stack!");
+				LAYER_TRACE("LAYER_STACK: Pushed Overlay to stack!");
 			}
 
 			void popLayer(Layer* layer) {
+				LAYER_TRACE("LAYER_STACK: going to pop layer from stack - {}", layer->m_debugName);
+
 				auto it = std::find(m_layers.begin(), m_layers.begin() + m_layerInsert, layer);
 				if (it != m_layers.begin() + m_layerInsert) {
+					delete *it;
+					
 					m_layers.erase(it);
 					m_layerInsert--;
 
-					MAR_CORE_INFO("Popped layer from stack");
+					LAYER_INFO("LAYER_STACK: Popped layer from stack!");
 
 					return;
 				}
 
-				MAR_CORE_ERROR("Cannot pop layer from stack");
+				LAYER_ERROR("LAYER_STACK: cannot find layer on the stack, so it cannot be deleted - {}!", layer->m_debugName);
 			}
 
 			void popOverlay(Layer* overlay) {
+				LAYER_TRACE("LAYER_STACK: going to pop overlay from stack - {}", overlay->m_debugName);
+
 				auto it = std::find(m_layers.begin() + m_layerInsert, m_layers.end(), overlay);
 				if (it != m_layers.end()) {
 					m_layers.erase(it);
 
-					MAR_CORE_INFO("Popped overlay from stack!");
+					LAYER_INFO("LAYER_STACK: Popped overlay from stack!");
 
 					return;
 				}
 
-				MAR_CORE_ERROR("Cannot pop overlay from stack!");
+				LAYER_ERROR("LAYER_STACK: cannot find overlay on the stack, so it cannot be deleted - {}!", overlay->m_debugName);
 			}
 
 		};
