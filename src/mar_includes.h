@@ -17,7 +17,7 @@ by actual line of code. Commenting MAR_ENGINE_DEBUG_MODE means all those macro's
 
 Logging is damaging perfomance, so it will be wise to comment it (Of course if you don't need logging).
 */
-#define MAR_ENGINE_DEBUG_MODE
+//#define MAR_ENGINE_DEBUG_MODE
 
 /* 
 !!! Comment if logs should be in logs/log.txt file instead of printed on the terminal

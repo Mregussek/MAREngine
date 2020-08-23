@@ -32,13 +32,6 @@ namespace mar {
 			ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
 		}
 
-		template<typename T>
-		const bool Entity::hasComponent() const {
-			ECS_TRACE("ENTITY: {} checking if has component on board!", m_entityHandle);
-
-			return m_scene->m_registry.has<T>(m_entityHandle);
-		}
-
 		const bool Entity::isValid() const {
 			ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
 

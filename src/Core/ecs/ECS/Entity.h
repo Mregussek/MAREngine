@@ -35,14 +35,19 @@ namespace mar {
 
 			void addComponent(EntityComponents entcmp);
 
-			template<typename T>
-			const bool hasComponent() const;
-
 			void destroyYourself();
 
 			// ----------------------------------------------------
 			// ENTITY COMPONENT METHODS, THAT NEED TO BE HERE (cannot move them to Entity.cpp)
 			// ----------------------------------------------------
+
+			template<typename T>
+			const bool hasComponent() const {
+				ECS_TRACE("ENTITY: {} checking if has component on board!", m_entityHandle);
+
+				return m_scene->m_registry.has<T>(m_entityHandle);
+			}
+
 
 			template<typename T, typename... Args>
 			T& addComponent(EntityComponents entcmp, Args&&... args) {

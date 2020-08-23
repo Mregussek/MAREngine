@@ -33,7 +33,7 @@ namespace mar {
 
 			void updateTransform(Entity* e, int32_t i) {
 				scene_manager->initialize();
-
+				
 				ECS_TRACE("SCENE_EVENTS: updateTransform!");
 			}
 
