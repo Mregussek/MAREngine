@@ -11,7 +11,14 @@ namespace mar {
 	namespace editor {
 
 
-		void GUI_Filesystem::Filesystem_SaveScene(bool& should_be_opened, ecs::Scene* scene_to_save) {
+		void GUI_Filesystem::Filesystem_NewScene() {
+			engine::MAREngine::getEngine()->setLoadPath("|");
+			engine::MAREngine::getEngine()->setRestart();
+
+			EDITOR_TRACE("GUI: Filesystem_NewScene");
+		}
+
+		bool GUI_Filesystem::Filesystem_SaveScene(bool should_be_opened, ecs::Scene* scene_to_save) {
 			ImGui::Begin("Save File");
 
 			static char filename[30]{ "empty" };
@@ -40,9 +47,11 @@ namespace mar {
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: filesystem_savescene");
+
+			return should_be_opened;
 		}
 
-		void GUI_Filesystem::Filesystem_LoadScene(bool& should_be_opened) {
+		bool GUI_Filesystem::Filesystem_LoadScene(bool should_be_opened) {
 			ImGui::Begin("Open File");
 
 			ImGui::Text("Select file, which you want to be opened:");
@@ -74,6 +83,8 @@ namespace mar {
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: filesystem_loadscene");
+
+			return should_be_opened;
 		}
 
 

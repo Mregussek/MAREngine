@@ -120,13 +120,18 @@ namespace mar {
 			MAR_CORE_INFO("FILESYSTEM: scene has been saved!");
 		}
 
-		ecs::Scene* Filesystem::openFile(const char* filename) {
+		ecs::Scene* Filesystem::openFile(std::string filename) {
 			EDITOR_INFO("FILESYSTEM: going to load scene from: {}", filename);
 
 			std::ifstream file(filename);
 			if (!file.is_open()) {
-				EDITOR_ERROR("Cannot open file {}, returning empty scene!", filename);
-				return new ecs::Scene("EmptyScene");
+				if (filename == "BrandNewScene") {
+					return new ecs::Scene(filename);
+				}
+				else {
+					EDITOR_ERROR("Cannot open file {}, returning empty scene!", filename);
+					return new ecs::Scene("EmptyScene");
+				}
 			}
 
 			std::string line;

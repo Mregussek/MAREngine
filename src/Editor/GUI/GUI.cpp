@@ -107,10 +107,10 @@ namespace mar {
 			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
 
 			if (m_loadSceneWindow) {
-				GUI_Filesystem::Filesystem_LoadScene(m_loadSceneWindow); 
+				m_loadSceneWindow = GUI_Filesystem::Filesystem_LoadScene(m_loadSceneWindow);
 			}
 			if (m_saveSceneWindow) { 
-				GUI_Filesystem::Filesystem_SaveScene(m_saveSceneWindow, m_sceneManager->getScene()); 
+				m_saveSceneWindow = GUI_Filesystem::Filesystem_SaveScene(m_saveSceneWindow, m_sceneManager->getScene());
 			}
 			if (m_infoWindow) { 
 				GUI_Info::Menu_Info(m_infoWindow); 
@@ -138,6 +138,15 @@ namespace mar {
 		void GUI::Editor_MainMenuBar() {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
+					if(ImGui::MenuItem("New")) {
+						GUI_EntityManagement::currentEntity = nullptr;
+						GUI_EntityManagement::currentIndex = -1;
+						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
+						GUI_TextEditor::Instance().setEditorTitle("Empty");
+
+						GUI_Filesystem::Filesystem_NewScene();
+					}
+
 					if (ImGui::MenuItem("Open")) {
 						GUI_EntityManagement::currentEntity = nullptr;
 						GUI_EntityManagement::currentIndex = -1;

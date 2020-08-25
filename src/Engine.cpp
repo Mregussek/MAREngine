@@ -74,7 +74,7 @@ namespace mar {
 		}
 
 		ecs::Scene* MAREngine::loadSceneFromFile() {
-			return editor::Filesystem::openFile(m_pathLoad.c_str());
+			return editor::Filesystem::openFile(m_pathLoad);
 		}
 
 

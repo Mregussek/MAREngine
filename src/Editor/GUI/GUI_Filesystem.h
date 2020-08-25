@@ -20,8 +20,9 @@ namespace mar {
 
 		struct GUI_Filesystem {
 
-			static void Filesystem_SaveScene(bool& should_be_opened, ecs::Scene* scene_to_save);
-			static void Filesystem_LoadScene(bool& should_be_opened);
+			static void Filesystem_NewScene();
+			static bool Filesystem_SaveScene(bool should_be_opened, ecs::Scene* scene_to_save);
+			static bool Filesystem_LoadScene(bool should_be_opened);
 
 		};
 
