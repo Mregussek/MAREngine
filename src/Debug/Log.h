@@ -15,9 +15,7 @@ namespace mar {
 
 		class Log {
 			static bool s_initialized;
-            static Ref<spdlog::sinks::basic_file_sink_mt> s_file;
 			static Ref<spdlog::logger> s_CoreLogger;
-			static Ref<spdlog::logger> s_ClientLogger;
 
 		public:
 			static void init();
@@ -63,7 +61,6 @@ namespace mar {
             }
 
 			inline static spdlog::logger* getCoreLogger() { return s_CoreLogger.get(); }
-			inline static spdlog::logger* getClientLogger() { return s_ClientLogger.get(); }
 		};
 
 		
@@ -78,11 +75,6 @@ namespace mar {
     #define MAR_CORE_ERROR(...) ::mar::debug::Log::getCoreLogger()->error(__VA_ARGS__)
     
     #define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::CheckGLError(__FILE__, __LINE__) 
-    
-    #define MAR_TRACE(...) ::mar::debug::Log::getClientLogger()->trace(__VA_ARGS__)
-    #define MAR_INFO(...)  ::mar::debug::Log::getClientLogger()->info(__VA_ARGS__)
-    #define MAR_WARN(...)  ::mar::debug::Log::getClientLogger()->warn(__VA_ARGS__)
-    #define MAR_ERROR(...) ::mar::debug::Log::getClientLogger()->error(__VA_ARGS__)
 
     #define ASSERT(x, msg) if(!(x)) MAR_CORE_ERROR(msg);\
                            if(!(x)) __debugbreak()
@@ -106,11 +98,6 @@ namespace mar {
     #define MAR_CORE_ERROR(...) 
     
     #define MAR_CORE_CHECK_FOR_ERROR()  
-    
-    #define MAR_TRACE(...) 
-    #define MAR_INFO(...)  
-    #define MAR_WARN(...)  
-    #define MAR_ERROR(...) 
     
     #define MAR_CORE_GL_FUNC(x) x;
 

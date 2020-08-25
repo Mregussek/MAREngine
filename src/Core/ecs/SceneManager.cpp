@@ -30,6 +30,12 @@ namespace mar {
 			ECS_INFO("SCENE_MANAGER: called constructor");
 		}
 
+		SceneManager::~SceneManager() {
+			delete m_scene;
+
+			ECS_INFO("SCENE_MANAGER: called destructor");
+		}
+
 		void SceneManager::initialize() {
 			ECS_TRACE("SCENE_MANAGER: going to initialize!");
 

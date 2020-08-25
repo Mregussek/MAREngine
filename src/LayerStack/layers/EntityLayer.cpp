@@ -19,9 +19,6 @@ namespace mar {
 			LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
 			m_renderer.initialize();
-		
-			if (!scene)
-				scene = new ecs::Scene("EmptyScene");
 
 			m_sceneManager.setScene(scene);
 			m_sceneManager.initialize();

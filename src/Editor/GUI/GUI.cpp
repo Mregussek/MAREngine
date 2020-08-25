@@ -106,7 +106,7 @@ namespace mar {
 
 			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
 
-			if (m_loadSceneWindow) { 
+			if (m_loadSceneWindow) {
 				GUI_Filesystem::Filesystem_LoadScene(m_loadSceneWindow); 
 			}
 			if (m_saveSceneWindow) { 
@@ -139,6 +139,11 @@ namespace mar {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if (ImGui::MenuItem("Open")) {
+						GUI_EntityManagement::currentEntity = nullptr;
+						GUI_EntityManagement::currentIndex = -1;
+						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
+						GUI_TextEditor::Instance().setEditorTitle("Empty");
+
 						m_loadSceneWindow = true;
 					}
 

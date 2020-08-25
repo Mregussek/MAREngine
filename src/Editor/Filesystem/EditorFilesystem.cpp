@@ -6,7 +6,7 @@
 #include "EditorFilesystem.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../Debug/Log.h"
+#include "../EditorLogging.h"
 
 
 namespace mar {
@@ -14,13 +14,12 @@ namespace mar {
 
 
 		void Filesystem::saveToFile(ecs::Scene* scene, const char* filename) {
-			MAR_CORE_INFO("FILESYSTEM: going to save scene at:");
-			MAR_CORE_INFO(filename);
+			EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", scene->getName(), filename);
 
 			std::ofstream ss(filename, std::ios::out | std::ios::trunc);
 
 			if (!ss.is_open()) {
-				MAR_CORE_ERROR("Cannot open file and save scene!");
+				EDITOR_ERROR("Cannot open file {} and save scene at {}!", scene->getName(), filename);
 				return;
 			}
 
@@ -122,18 +121,16 @@ namespace mar {
 		}
 
 		ecs::Scene* Filesystem::openFile(const char* filename) {
-			MAR_CORE_INFO("FILESYSTEM: going to load scene from:");
-			MAR_CORE_INFO(filename);
-
-			ecs::Scene* scene = nullptr;
+			EDITOR_INFO("FILESYSTEM: going to load scene from: {}", filename);
 
 			std::ifstream file(filename);
 			if (!file.is_open()) {
-				MAR_CORE_ERROR("Cannot open file!");
+				EDITOR_ERROR("Cannot open file {}, returning empty scene!", filename);
 				return new ecs::Scene("EmptyScene");
 			}
 
 			std::string line;
+			ecs::Scene* scene{ nullptr };
 			ecs::Entity* currentEntity{ nullptr };
 
 			while (std::getline(file, line)) {
@@ -480,19 +477,18 @@ namespace mar {
 
 			file.close();
 
-			MAR_CORE_INFO("FILESYSTEM: returning loaded scene");
+			EDITOR_INFO("FILESYSTEM: returning loaded scene {} from file {}", scene->getName(), filename);
 
 			return scene;
 		}
 
 		std::string Filesystem::loadPyScript(const char* filename) {
-			MAR_CORE_INFO("FILESYSTEM: going to load python script from:");
-			MAR_CORE_INFO(filename);
+			EDITOR_INFO("FILESYSTEM: going to load python script from: {}", filename);
 
 			std::ifstream file(filename);
 			if (!file.is_open()) {
-				MAR_CORE_ERROR("Cannot open script file!");
-				return "empty";
+				EDITOR_ERROR("Cannot open script file {}, returning empty string!", filename);
+				return "";
 			}
 
 			std::string rtn{ "" };
@@ -506,13 +502,12 @@ namespace mar {
 		}
 
 		void Filesystem::savePyScript(const char* filename, std::string source) {
-			MAR_CORE_INFO("FILESYSTEM: going to save PyScript at:");
-			MAR_CORE_INFO(filename);
+			EDITOR_INFO("FILESYSTEM: going to save PyScript at: {}", filename);
 
 			std::ofstream ss(filename, std::ios::out | std::ios::trunc);
 
 			if (!ss.is_open()) {
-				MAR_CORE_ERROR("Cannot open file and save scene!");
+				EDITOR_ERROR("FILESYSTEM: Cannot save python script - {}!", filename);
 				return;
 			}
 
@@ -520,8 +515,7 @@ namespace mar {
 
 			ss.close();
 
-			MAR_CORE_INFO("FILESYSTEM: saved PyScript at:");
-			MAR_CORE_INFO(filename);
+			EDITOR_INFO("FILESYSTEM: saved PyScript at: {}", filename);
 		}
 
 

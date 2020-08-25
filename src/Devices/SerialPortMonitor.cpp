@@ -28,7 +28,7 @@ namespace mar {
 
 		void SerialPortMonitor::start() {
 			int checkTries{ 0 };
-			MAR_INFO("Searching for device on " + std::string(_port) + " in progress");
+			MAR_CORE_INFO("Searching for device on " + std::string(_port) + " in progress");
 
 			while (!_arduino->isConnected()) {
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -36,12 +36,12 @@ namespace mar {
 				_arduino = new SerialPort(_port);
 
 				if (_connectTries < ++checkTries) {
-					MAR_INFO("Cannot connect to SP, playing without SerialPort\n");
+					MAR_CORE_INFO("Cannot connect to SP, playing without SerialPort\n");
 					return;
 				}
 			}
 
-			if (_arduino->isConnected()) MAR_INFO("Connection established!");
+			if (_arduino->isConnected()) MAR_CORE_INFO("Connection established!");
 
 				_thread = std::thread([this] {
 					while (_arduino->isConnected()) receive();
@@ -77,28 +77,28 @@ namespace mar {
 				_z = std::stof(_recvData.substr(zBegin, zEnd));
 			}
 			catch (std::exception& e) {
-				MAR_ERROR("Found error during parsing serial port: " + std::string(e.what()));
+				MAR_CORE_ERROR("Found error during parsing serial port: " + std::string(e.what()));
 			}
 		}
 
 		const float& SerialPortMonitor::getX() const {
 			static std::mutex _io_mutex;
 			std::lock_guard<std::mutex> lg(_io_mutex);
-			MAR_TRACE("SPM _x: " + std::to_string(_x));
+			MAR_CORE_TRACE("SPM _x: " + std::to_string(_x));
 			return _x;
 		}
 
 		const float& SerialPortMonitor::getY() const {
 			static std::mutex _io_mutex;
 			std::lock_guard<std::mutex> lg(_io_mutex);
-			MAR_TRACE("SPM _y: " + std::to_string(_y));
+			MAR_CORE_TRACE("SPM _y: " + std::to_string(_y));
 			return _y;
 		}
 
 		const float& SerialPortMonitor::getZ() const {
 			static std::mutex _io_mutex;
 			std::lock_guard<std::mutex> lg(_io_mutex);
-			MAR_TRACE("SPM _z: " + std::to_string(_z));
+			MAR_CORE_TRACE("SPM _z: " + std::to_string(_z));
 			return _z;
 		}
 

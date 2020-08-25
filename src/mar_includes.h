@@ -8,7 +8,7 @@
 // MAR_ENGINE_COMPILE_SETUP
 // ----------------------------------------------
 
-/* 
+/*
 !!! Comment if release mode 
 
 Release Mode means here, that all code responsible for logging will not exist.
@@ -17,9 +17,15 @@ by actual line of code. Commenting MAR_ENGINE_DEBUG_MODE means all those macro's
 
 Logging is damaging perfomance, so it will be wise to comment it (Of course if you don't need logging).
 */
-//#define MAR_ENGINE_DEBUG_MODE
+#define MAR_ENGINE_DEBUG_MODE
 
-/* 
+// set logging level
+#define MAR_ENGINE_LOGS_LEVEL_TRACE
+//#define MAR_ENGINE_LOGS_LEVEL_INFO
+//#define MAR_ENGINE_LOGS_LEVEL_WARN
+//#define MAR_ENGINE_LOGS_LEVEL_ERROR
+
+/*
 !!! Comment if logs should be in logs/log.txt file instead of printed on the terminal
 
 Normally MAREngine was developed with printed on terminal logs, in order to catch something red (such errors).
@@ -74,7 +80,7 @@ it is usefull to see, if at which point each layer is.
 
 If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_LAYER_LOGS will not affect anything.
 */
-#define MAR_ENGINE_LAYER_LOGS
+//#define MAR_ENGINE_LAYER_LOGS
 
 /*
 !!! Uncomment to see Window Logs
@@ -84,7 +90,7 @@ will let you catch, when input is enabled, which key is pressed or operations on
 
 If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_WINDOW_LOGS will not affect anything.
 */
-#define MAR_ENGINE_WINDOW_LOGS
+//#define MAR_ENGINE_WINDOW_LOGS
 
 // ----------------------------------------------
 // MAR_ENGINE_INCLUDE_LIBRARIES
@@ -169,6 +175,7 @@ If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_WINDOW_LOGS will not affect an
 #if __has_include("spdlog/spdlog.h")
 	#include "spdlog/spdlog.h"
 	#include "spdlog/sinks/stdout_color_sinks.h"
+	#include "spdlog/sinks/rotating_file_sink.h"
 	#include "spdlog/sinks/basic_file_sink.h"
 	#define MAR_ENGINE_SPDLOG_LIB_IMPORTED
 #else

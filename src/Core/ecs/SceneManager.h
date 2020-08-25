@@ -26,6 +26,7 @@ namespace mar {
 
 		public:
 			SceneManager();
+			~SceneManager();
 
 			void shutdown() { m_scene->shutdown(); }
 

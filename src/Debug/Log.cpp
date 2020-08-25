@@ -11,10 +11,7 @@ namespace mar {
 	namespace debug {
 
 		bool Log::s_initialized{ false };
-		Ref<spdlog::sinks::basic_file_sink_mt> Log::s_file;
 		Ref<spdlog::logger> Log::s_CoreLogger;
-		Ref<spdlog::logger> Log::s_ClientLogger;
-
 
 		void Log::init() {
 			if (s_initialized) {
@@ -34,15 +31,23 @@ namespace mar {
 				std::to_string(ltm.tm_hour) + std::to_string(1 + ltm.tm_min) + std::to_string(1 + ltm.tm_sec) +
 				".txt";
 
-			s_file = PointerFactory<spdlog::sinks::basic_file_sink_mt>::makeRef(filename);
-			s_CoreLogger = PointerFactory<spdlog::logger>::makeRef("MAR ENGINE", s_file);
+			auto max_size = 1048576 * 35;
+			auto max_files = 10;
+
+			s_CoreLogger = spdlog::rotating_logger_mt("MAR ENGINE", filename, max_size, max_files);
 #else
 			s_CoreLogger = spdlog::stdout_color_mt("MAR ENGINE");
 #endif
-			s_CoreLogger->set_level(spdlog::level::trace);
 
-			//s_ClientLogger = PointerFactory<spdlog::logger>::makeRef("APPLICATION", s_file);
-			//s_ClientLogger->set_level(spdlog::level::trace);
+#if defined(MAR_ENGINE_LOGS_LEVEL_TRACE)
+			s_CoreLogger->set_level(spdlog::level::trace);
+#elif defined(MAR_ENGINE_LOGS_LEVEL_INFO)
+			s_CoreLogger->set_level(spdlog::level::info);
+#elif defined(MAR_ENGINE_LOGS_LEVEL_WARN)
+			s_CoreLogger->set_level(spdlog::level::warn);
+#elif defined(MAR_ENGINE_LOGS_LEVEL_ERROR)
+			s_CoreLogger->set_level(spdlog::level::err);
+#endif
 
 			s_initialized = true;
 		}
