@@ -460,13 +460,12 @@ namespace mar {
 				return;
 			}
 
-			ImGui::Columns(2);
-
-			if(graphics::TextureOpenGL::hasTexture(tex.texture))
+			if (graphics::TextureOpenGL::hasTexture(tex.texture)) {
 				ImGui::Image((void*)graphics::TextureOpenGL::getTexture(tex.texture), ImVec2{ 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			}
 
-			ImGui::NextColumn();
 			ImGui::Text("Current Texture:");
+			ImGui::SameLine();
 			ImGui::Text(tex.texture.c_str());
 
 			if (tex.texture != "empty") {
@@ -488,19 +487,29 @@ namespace mar {
 				return;
 			}
 
-			ImGui::Columns(1);
-
+			static int32_t last_index = currentIndex;
+			static bool first_init = true;
 			static char input[50];
-			strcpy_s(input, tex.texture.c_str());
-			if (ImGui::InputText(" ex. .jpg / .png", input, 50)) 
-				tex.texture = std::string(input);
+
+			if (first_init) { 
+				strcpy_s(input, tex.texture.c_str()); 
+				first_init = false; 
+			}
+
+			if (last_index != currentIndex) {
+				strcpy_s(input, tex.texture.c_str());
+				last_index = currentIndex;
+			}
+
+			ImGui::InputText(" ex. .jpg / .png", input, 50);
 
 			ImGui::Text("Texture, which will be loaded: ");
 			ImGui::SameLine();
-			ImGui::Text(tex.texture.c_str());
+			ImGui::Text(input);
 			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Texture")) {
+				tex.texture = std::string(input);
 				ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
 				GUI_load_new_texture = false;
 			}
@@ -544,10 +553,21 @@ namespace mar {
 				return;
 			}
 
+			static int32_t last_index = currentIndex;
+			static bool first_init = true;
 			static char input[50];
-			strcpy_s(input, cubemap.texture.c_str());
-			if (ImGui::InputText(" ex. .jpg / .png", input, 50))
-				cubemap.texture = std::string(input);
+
+			if (first_init) {
+				strcpy_s(input, cubemap.texture.c_str());
+				first_init = false;
+			}
+
+			if (last_index != currentIndex) {
+				strcpy_s(input, cubemap.texture.c_str());
+				last_index = currentIndex;
+			}
+
+			ImGui::InputText(" ex. .jpg / .png", input, 50);
 
 			ImGui::Text("Cubemap, which will be loaded: ");
 			ImGui::SameLine();
@@ -555,6 +575,7 @@ namespace mar {
 			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Cubemap")) {
+				cubemap.texture = std::string(input);
 				ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
 				GUI_load_new_cubemap = false;
 			}

@@ -66,42 +66,39 @@ void main() {
 };
 
 vec4 setProperTexture(float index) {
-	vec4 color;
-
-	if      (index <= 0.0f) color = texture(u_SeparateColor[0], v_texCoords);
-	else if (index <= 1.0f) color = texture(u_SeparateColor[1], v_texCoords);
-	else if (index <= 2.0f) color = texture(u_SeparateColor[2], v_texCoords);
-	else if (index <= 3.0f) color = texture(u_SeparateColor[3], v_texCoords);
-	else if (index <= 4.0f) color = texture(u_SeparateColor[4], v_texCoords);
-	else if (index <= 5.0f) color = texture(u_SeparateColor[5], v_texCoords);
-	else if (index <= 6.0f) color = texture(u_SeparateColor[6], v_texCoords);
-	else if (index <= 7.0f) color = texture(u_SeparateColor[7], v_texCoords);
-	else if (index <= 8.0f) color = texture(u_SeparateColor[8], v_texCoords);
-	else if (index <= 9.0f) color = texture(u_SeparateColor[9], v_texCoords);
-	else if (index <= 10.0f) color = texture(u_SeparateColor[10], v_texCoords);
-	else if (index <= 11.0f) color = texture(u_SeparateColor[11], v_texCoords);
-	else if (index <= 12.0f) color = texture(u_SeparateColor[12], v_texCoords);
-	else if (index <= 13.0f) color = texture(u_SeparateColor[13], v_texCoords);
-	else if (index <= 14.0f) color = texture(u_SeparateColor[14], v_texCoords);
-	else if (index <= 15.0f) color = texture(u_SeparateColor[15], v_texCoords);
-	else if (index <= 16.0f) color = texture(u_SeparateColor[16], v_texCoords);
-	else if (index <= 17.0f) color = texture(u_SeparateColor[17], v_texCoords);
-	else if (index <= 18.0f) color = texture(u_SeparateColor[18], v_texCoords);
-	else if (index <= 19.0f) color = texture(u_SeparateColor[19], v_texCoords);
-	else if (index <= 20.0f) color = texture(u_SeparateColor[20], v_texCoords);
-	else if (index <= 21.0f) color = texture(u_SeparateColor[21], v_texCoords);
-	else if (index <= 22.0f) color = texture(u_SeparateColor[22], v_texCoords);
-	else if (index <= 23.0f) color = texture(u_SeparateColor[23], v_texCoords);
-	else if (index <= 24.0f) color = texture(u_SeparateColor[24], v_texCoords);
-	else if (index <= 25.0f) color = texture(u_SeparateColor[25], v_texCoords);
-	else if (index <= 26.0f) color = texture(u_SeparateColor[26], v_texCoords);
-	else if (index <= 27.0f) color = texture(u_SeparateColor[27], v_texCoords);
-	else if (index <= 28.0f) color = texture(u_SeparateColor[28], v_texCoords);
-	else if (index <= 29.0f) color = texture(u_SeparateColor[29], v_texCoords);
-	else if (index <= 30.0f) color = texture(u_SeparateColor[30], v_texCoords);
-	else if (index <= 31.0f) color = texture(u_SeparateColor[31], v_texCoords);
-				 
-	return color;
+	if      (index <= 0.0f)  return texture(u_SeparateColor[0], v_texCoords);
+	else if (index <= 1.0f)  return texture(u_SeparateColor[1], v_texCoords);
+	else if (index <= 2.0f)  return texture(u_SeparateColor[2], v_texCoords);
+	else if (index <= 3.0f)  return texture(u_SeparateColor[3], v_texCoords);
+	else if (index <= 4.0f)  return texture(u_SeparateColor[4], v_texCoords);
+	else if (index <= 5.0f)  return texture(u_SeparateColor[5], v_texCoords);
+	else if (index <= 6.0f)  return texture(u_SeparateColor[6], v_texCoords);
+	else if (index <= 7.0f)  return texture(u_SeparateColor[7], v_texCoords);
+	else if (index <= 8.0f)  return texture(u_SeparateColor[8], v_texCoords);
+	else if (index <= 9.0f)  return texture(u_SeparateColor[9], v_texCoords);
+	else if (index <= 10.0f) return texture(u_SeparateColor[10], v_texCoords);
+	else if (index <= 11.0f) return texture(u_SeparateColor[11], v_texCoords);
+	else if (index <= 12.0f) return texture(u_SeparateColor[12], v_texCoords);
+	else if (index <= 13.0f) return texture(u_SeparateColor[13], v_texCoords);
+	else if (index <= 14.0f) return texture(u_SeparateColor[14], v_texCoords);
+	else if (index <= 15.0f) return texture(u_SeparateColor[15], v_texCoords);
+	else if (index <= 16.0f) return texture(u_SeparateColor[16], v_texCoords);
+	else if (index <= 17.0f) return texture(u_SeparateColor[17], v_texCoords);
+	else if (index <= 18.0f) return texture(u_SeparateColor[18], v_texCoords);
+	else if (index <= 19.0f) return texture(u_SeparateColor[19], v_texCoords);
+	else if (index <= 20.0f) return texture(u_SeparateColor[20], v_texCoords);
+	else if (index <= 21.0f) return texture(u_SeparateColor[21], v_texCoords);
+	else if (index <= 22.0f) return texture(u_SeparateColor[22], v_texCoords);
+	else if (index <= 23.0f) return texture(u_SeparateColor[23], v_texCoords);
+	else if (index <= 24.0f) return texture(u_SeparateColor[24], v_texCoords);
+	else if (index <= 25.0f) return texture(u_SeparateColor[25], v_texCoords);
+	else if (index <= 26.0f) return texture(u_SeparateColor[26], v_texCoords);
+	else if (index <= 27.0f) return texture(u_SeparateColor[27], v_texCoords);
+	else if (index <= 28.0f) return texture(u_SeparateColor[28], v_texCoords);
+	else if (index <= 29.0f) return texture(u_SeparateColor[29], v_texCoords);
+	else if (index <= 30.0f) return texture(u_SeparateColor[30], v_texCoords);
+	else if (index <= 31.0f) return texture(u_SeparateColor[31], v_texCoords);
+	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
 }				 					
 
 vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
