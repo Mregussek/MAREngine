@@ -59,7 +59,11 @@ namespace mar {
 			MAR_CORE_GL_FUNC( glUniform1iv(getUniformLocation(name), ints.size(), ints.data()) );
 		}
 
-		void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int>& sampler) {
+		void ShaderOpenGL::setUniformSampler(const std::string& name, int32_t sampler) {
+			MAR_CORE_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
+		}
+
+		void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) {
 			MAR_CORE_GL_FUNC( glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()) );
 		}
 
@@ -79,7 +83,7 @@ namespace mar {
 			MAR_CORE_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, maths::vec3::value_ptr(vector3)) );
 		}
 
-		void ShaderOpenGL::setUniform1i(const std::string& name, int value) {
+		void ShaderOpenGL::setUniform1i(const std::string& name, int32_t value) {
 			MAR_CORE_GL_FUNC( glUniform1i(getUniformLocation(name), value) );
 		}
 

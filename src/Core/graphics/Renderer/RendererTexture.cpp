@@ -49,31 +49,14 @@ namespace mar {
 		) {
 			GRAPHICS_TRACE("RENDERERENTITY_TEXTURE: is preparing to draw!");
 
-			{ // BIND TEXTURES
-				if (texture_type == GL_TEXTURE_2D) {
-					uint32_t id;
-					for (size_t i = 0; i < storage.paths.size(); i++) {
-						id = (uint32_t)m_texture.loadTexture(storage.paths[i]);
-						m_texture.bind(texture_type, storage.samplers[i], id);
-					}
-				}
-				else if (texture_type == GL_TEXTURE_CUBE_MAP) {
-					uint32_t id;
-					for (size_t i = 0; i < storage.paths.size(); i++) {
-						id = (uint32_t)m_texture.loadCubemap(storage.paths[i]);
-						m_texture.bind(texture_type, storage.samplers[i], id);
-					}
-				}
-			}
-
 			{ // SEND ALL DATA TO SHADERS
 				m_shader.bind();
 
+				passTexturesToShader(m_shader, texture_type, storage.paths, storage.samplers);
 				passLightToShader(m_shader, light);
 				passCameraToShader(m_shader, camera);
 
 				m_shader.setUniformVectorMat4("u_SeparateTransform", storage.transforms);
-				m_shader.setUniformSampler("u_SeparateColor", storage.samplers);
 			}
 
 			{ // BIND ALL NEEDED BUFFERS
@@ -81,23 +64,51 @@ namespace mar {
 				m_vbo.bind();
 				m_ebo.bind();
 
-				if (m_lastVerticesSize != storage.vertices.size()) {
-					m_vbo.updateDynamically(storage.vertices);
-					m_ebo.update(storage.indices);
-
-					m_lastVerticesSize = storage.vertices.size();
-				}
+				m_vbo.update(storage.vertices);
+				m_ebo.update(storage.indices);
 			}
 
 			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, storage.indices.size(), GL_UNSIGNED_INT, nullptr));
 
 			{ // CLEAR AFTER DRAW CALL
-				for (int32_t i = 0; i < (int32_t)storage.paths.size(); i++) {
+				m_vbo.resetBuffer();
+				m_ebo.resetBuffer();
+
+				m_vbo.unbind();
+				m_ebo.unbind();
+				m_vao.unbind();
+
+				for (int32_t i = 0; i < (int32_t)storage.paths.size(); i++) 
 					m_texture.bind(texture_type, storage.samplers[i], 0);
-				}
 			}
 
 			GRAPHICS_INFO("RENDERERENTITY_TEXTURE: has drawn the scene!");
+		}
+
+		void RendererTexture::passTexturesToShader(
+			ShaderOpenGL& shader, uint32_t texture_type, 
+			const std::vector<std::string>& paths, const std::vector<int32_t>& samplers)
+		{
+			MAR_CORE_ASSERT(paths.size() == samplers.size(), "Samplers size are not equal to paths size!");
+
+			{ // BIND TEXTURES
+				if (texture_type == GL_TEXTURE_2D) {
+
+					for (size_t i = 0; i < paths.size(); i++) {
+						m_texture.bind(texture_type, samplers[i], m_texture.loadTexture(paths[i]));
+						shader.setUniformSampler(ShaderUniforms::u_SeparateColor[i], samplers[i]);
+					}
+
+				}
+				else if (texture_type == GL_TEXTURE_CUBE_MAP) {
+
+					for (size_t i = 0; i < paths.size(); i++) {
+						m_texture.bind(texture_type, samplers[i], m_texture.loadCubemap(paths[i]));
+						shader.setUniformSampler(ShaderUniforms::u_SeparateColor[i], samplers[i]);
+					}
+
+				}
+			}
 		}
 
 		void RendererTexture::passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light) {

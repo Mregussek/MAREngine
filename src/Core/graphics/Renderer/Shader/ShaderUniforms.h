@@ -186,21 +186,46 @@ namespace mar {
 					"u_material[15].linear" ,
 					"u_material[15].quadratic" ,
 					"u_material[15].shininess"
-				},
-
+				}
 			};
 
-
-
-
-
-
-
+			inline static const std::vector<std::string> u_SeparateColor = {
+				"u_SeparateColor[0]",
+				"u_SeparateColor[1]",
+				"u_SeparateColor[2]",
+				"u_SeparateColor[3]",
+				"u_SeparateColor[4]",
+				"u_SeparateColor[5]",
+				"u_SeparateColor[6]",
+				"u_SeparateColor[7]",
+				"u_SeparateColor[8]",
+				"u_SeparateColor[9]",
+				"u_SeparateColor[10]",
+				"u_SeparateColor[11]",
+				"u_SeparateColor[12]",
+				"u_SeparateColor[13]",
+				"u_SeparateColor[14]",
+				"u_SeparateColor[15]",
+				"u_SeparateColor[16]",
+				"u_SeparateColor[17]",
+				"u_SeparateColor[18]",
+				"u_SeparateColor[19]",
+				"u_SeparateColor[20]",
+				"u_SeparateColor[21]",
+				"u_SeparateColor[22]",
+				"u_SeparateColor[23]",
+				"u_SeparateColor[24]",
+				"u_SeparateColor[25]",
+				"u_SeparateColor[26]",
+				"u_SeparateColor[27]",
+				"u_SeparateColor[28]",
+				"u_SeparateColor[29]",
+				"u_SeparateColor[30]",
+				"u_SeparateColor[31]",
+				"u_SeparateColor[32]"
+			};
 
 		};
-
-
-
 
 
 } }

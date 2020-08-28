@@ -32,12 +32,13 @@ namespace mar {
 
 			// --- SET METHODS --- //
 			void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
-			void setUniformSampler(const std::string& name, const std::vector<int>& sampler);
+			void setUniformSampler(const std::string& name, int32_t sampler);
+			void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler);
 			void setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec);
 			void setUniformVectorMat4(const std::string& name, const std::vector<maths::mat4>& matrices);
 			void setUniformMat4f(const std::string& name, const maths::mat4& matrix4x4);
 			void setUniformVector3(const std::string& name, const maths::vec3& vector3);
-			void setUniform1i(const std::string& name, int value);
+			void setUniform1i(const std::string& name, int32_t value);
 			void setUniform1f(const std::string& name, float value);
 			void setUniform4f(const std::string& name, float red, float green, float blue, float alpha);
 			void setUniform4fv(const std::string& name, const float* floats4);

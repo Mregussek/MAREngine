@@ -45,6 +45,8 @@ namespace mar {
 				const ecs::LightStorage& light, uint32_t texture_type
 			);
 
+			void passTexturesToShader(ShaderOpenGL& shader, uint32_t texture_type, const std::vector<std::string>& paths, const std::vector<int32_t>& samplers);
+
 			void passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light);
 
 			void passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam);

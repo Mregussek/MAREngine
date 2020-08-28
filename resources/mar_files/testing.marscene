@@ -1,0 +1,84 @@
+MAREngine scene file
+
+#Scene
+#Scene_Name BrandNewScene
+#Scene_Background 0.22 0.69 0.87
+
+#Entity
+#TagComponent Camera
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#CameraComponent Begin
+#id secondary
+#used perspective
+#type perspective
+#fov 45
+#aspectratio 1.33333
+#near 0.01
+#far 100
+#type orthographic
+#left -10
+#right 10
+#top 10
+#bottom -10
+#near 100
+#far 100
+
+#Entity
+#TagComponent Light
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
+
+#Entity
+#TagComponent RedCube
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Cube
+#ColorComponent 1 0 0
+
+#Entity
+#TagComponent WhitePyramid
+#TransformComponent Begin
+#center 3.5 0.45 3.25
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Pyramid
+#ColorComponent 1 0.99999 0.99999
+
+#Entity
+#TagComponent BlueCube
+#TransformComponent Begin
+#center 2.7 2.55 1.25
+#angles 0 25 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Cube
+#ColorComponent 0.0171798 0 0.962406
+
+#Entity
+#TagComponent YellowPyramid
+#TransformComponent Begin
+#center 3 0 5.4
+#angles 0 18 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Pyramid
+#ColorComponent 0.882787 0.988722 0

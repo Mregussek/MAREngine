@@ -45,7 +45,7 @@ namespace mar {
 
 				\param vertices - object, which will replace data stored in GPU
 			*/
-			void updateDynamically(const std::vector<float>& vertices) const;
+			void update(const std::vector<float>& vertices) const;
 
 			//! Method resets buffer.
 			void resetBuffer();

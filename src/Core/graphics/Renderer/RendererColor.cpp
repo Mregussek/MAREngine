@@ -25,8 +25,6 @@ namespace mar {
 
 			m_shader.initialize(SHADER_ENTITY_COLOR);
 
-			m_lastVerticesSize = 0;
-
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: initialized!");
 		}
 
@@ -62,15 +60,20 @@ namespace mar {
 				m_vbo.bind();
 				m_ebo.bind();
 
-				if (m_lastVerticesSize != storage.vertices.size()) {
-					m_vbo.updateDynamically(storage.vertices);
-					m_ebo.update(storage.indices);
-
-					m_lastVerticesSize = storage.vertices.size();
-				}
+				m_vbo.update(storage.vertices);
+				m_ebo.update(storage.indices);
 			}
 
 			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, storage.indices.size(), GL_UNSIGNED_INT, nullptr));
+
+			{ // CLEAR AFTER DRAW CALL
+				m_vbo.resetBuffer();
+				m_ebo.resetBuffer();
+
+				m_vbo.unbind();
+				m_ebo.unbind();
+				m_vao.unbind();
+			}
 
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: has drawn the scene!");
 		}

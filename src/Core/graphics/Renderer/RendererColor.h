@@ -31,7 +31,6 @@ namespace mar {
 			VertexArrayOpenGL m_vao;
 			ElementBufferOpenGL m_ebo;
 			ShaderOpenGL m_shader;
-			size_t m_lastVerticesSize;
 
 		public:
 			void initialize();
