@@ -22,8 +22,8 @@ namespace mar {
 			solutions to specified problems using OpenGL.
 		*/
 		class TextureOpenGL {
-			std::unordered_map<std::string, uint32_t> m_2d;
-			std::unordered_map<std::string, uint32_t> m_cubemaps;
+			static std::unordered_map<std::string, uint32_t> s_2d;
+			static std::unordered_map<std::string, uint32_t> s_cubemaps;
 
 		public:
 
@@ -58,9 +58,11 @@ namespace mar {
 			// Unbind texture
 			void unbind() const;
 
-			uint32_t getTexture(const std::string& key) const { return m_2d.at(key); }
+			static bool hasTexture(const std::string& key);
 
-			uint32_t getCubemap(const std::string& key) const { return m_cubemaps.at(key); }
+			static uint32_t getTexture(const std::string& key) { return s_2d.at(key); }
+
+			static uint32_t getCubemap(const std::string& key) { return s_cubemaps.at(key); }
 
 		private:
 			/*

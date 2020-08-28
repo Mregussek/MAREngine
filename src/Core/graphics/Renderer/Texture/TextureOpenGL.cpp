@@ -10,11 +10,15 @@ namespace mar {
 	namespace graphics {
 
 
+		std::unordered_map<std::string, uint32_t> TextureOpenGL::s_2d;
+		std::unordered_map<std::string, uint32_t> TextureOpenGL::s_cubemaps;
+
+
 		void TextureOpenGL::shutdown() {
-			for (auto& tex : m_2d) {
+			for (auto& tex : s_2d) {
 				MAR_CORE_GL_FUNC( glDeleteTextures(1, &tex.second) );
 			}
-			for (auto& tex : m_cubemaps) {
+			for (auto& tex : s_cubemaps) {
 				MAR_CORE_GL_FUNC( glDeleteTextures(1, &tex.second) );
 			}
 
@@ -76,15 +80,15 @@ namespace mar {
 		}
 
 		uint32_t TextureOpenGL::loadTexture(const std::string& path) {
-			auto search = m_2d.find(path);
+			auto search = s_2d.find(path);
 
-			if (search != m_2d.end()) { 
+			if (search != s_2d.end()) {
 				GRAPHICS_TRACE("TEXTURE_OPENGL: Assigning loaded 2D texture {} - {}!", search->first, search->second);
 				return search->second;
 			}
 
 			uint32_t new_id = genNewTexture(path.c_str());
-			m_2d.insert({ path, new_id });
+			s_2d.insert({ path, new_id });
 			return new_id;
 		}
 
@@ -134,17 +138,25 @@ namespace mar {
 		}
 
 		uint32_t TextureOpenGL::loadCubemap(const std::string& path) {
-			auto search = m_cubemaps.find(path);
+			auto search = s_cubemaps.find(path);
 
-			if (search != m_cubemaps.end()) {
+			if (search != s_cubemaps.end()) {
 				GRAPHICS_TRACE("TEXTURE_OPENGL: Assigning loaded cubemap {} - {}!", search->first, search->second);
 				return search->second;
 			}
 
 			uint32_t new_id = genNewCubemap(path.c_str());
-			m_cubemaps.insert({ path, new_id });
+			s_cubemaps.insert({ path, new_id });
 
 			return new_id;
+		}
+
+		bool TextureOpenGL::hasTexture(const std::string& key) {
+			auto search = s_2d.find(key);
+			if (search != s_2d.end()) 
+				return true;
+
+			return false;
 		}
 
 		void TextureOpenGL::bind(uint32_t texture_type, uint32_t unit, uint32_t texID) const {

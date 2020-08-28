@@ -54,12 +54,6 @@ namespace mar {
 			void Editor_MainMenuBar();
 			void Editor_ViewPort();
 			void Editor_Properties();
-			
-			// --- SCENE HANDLERS --- //
-			void Scene_Hierarchy();
-			void Scene_Hierarchy_PopUp();
-		
-			void Scene_Statistics();
 
 		private:
 			// --- Storage for scenes

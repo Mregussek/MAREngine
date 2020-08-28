@@ -10,6 +10,7 @@
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "GUI_TextEditor.h"
+#include "GUI_SceneHierarchy.h"
 
 
 namespace mar {
@@ -101,8 +102,8 @@ namespace mar {
 			Editor_MainMenuBar();
 
 			Editor_Properties();
-			Scene_Hierarchy();
-			Scene_Statistics();
+			GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager, m_currentEntity, m_indexEntity);
+			GUI_SceneHierarchy::Scene_Statistics();
 
 			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
 
@@ -246,54 +247,6 @@ namespace mar {
 			ImGui::End();
 		}
 
-		void GUI::Scene_Statistics() {
-			ImGui::Begin("Statistics Menu");
-
-			using stats = graphics::RendererEntity;
-
-			auto drawcalls = "Draw Calls: " + std::to_string(stats::getStatistics().drawCallsCount);
-			auto shapescount = "Shapes Count: " + std::to_string(stats::getStatistics().shapesCount);
-			auto vertices = "Vertices: " + std::to_string(stats::getStatistics().verticesCount);
-			auto indices = "Indices: " + std::to_string(stats::getStatistics().indicesCount);
-			auto triangles = "Triangles: " + std::to_string(stats::getStatistics().trianglesCount);
-
-			ImGui::Text(drawcalls.c_str());
-			ImGui::Text(shapescount.c_str());
-			ImGui::Text(vertices.c_str());
-			ImGui::Text(indices.c_str());
-			ImGui::Text(triangles.c_str());
-
-			ImGui::Separator();
-
-			static double lasttime = GetTickCount() * 0.001;
-			static double currenttime;
-			static double fps = 0.0;
-			static int frames = 0;
-
-			currenttime = GetTickCount() * 0.001;
-			frames++;
-
-			if (currenttime - lasttime > 1.0) {
-				fps = frames / (currenttime - lasttime);
-				frames = 0;
-				lasttime = currenttime;
-			}
-
-			ImGui::Text("My FPS: %f ms/frame", fps);
-
-			ImGui::Separator();
-
-			std::string fpsinfo = "FPS: " + std::to_string(ImGui::GetIO().Framerate);
-			std::string msframe = "ms/frame: " + std::to_string(1000.0f / ImGui::GetIO().Framerate);
-
-			ImGui::Text(fpsinfo.c_str());
-			ImGui::Text(msframe.c_str());
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: scene_statistics");
-		}
-
 		void GUI::submit(ecs::SceneManager* scene) {
 			m_sceneManager = scene;
 			m_sceneManager->useEditorCamera = true;
@@ -301,81 +254,6 @@ namespace mar {
 
 			EDITOR_INFO("GUI: scene has been submitted!");
 		}
-
-		void GUI::Scene_Hierarchy() {
-			ImGui::Begin("Scene Hierarchy");
-
-			ImGui::Text(" - ");
-			ImGui::SameLine();
-			ImGui::Text(m_sceneManager->getScene()->getName().c_str());
-
-			auto& entities = m_sceneManager->getScene()->getEntities();
-
-			for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
-				std::string& s = entities[i].getComponent<ecs::TagComponent>();
-				if (ImGui::MenuItem(s.c_str())) {
-					m_indexEntity = i;
-					m_currentEntity = &m_sceneManager->getScene()->getEntity(m_indexEntity);
-					GUI_EntityManagement::currentEntity = m_currentEntity;
-					GUI_EntityManagement::currentIndex = m_indexEntity;
-				}
-			}
-
-			Scene_Hierarchy_PopUp();
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: scene_hierarchy");
-		}
-
-		void GUI::Scene_Hierarchy_PopUp() {
-			if (m_sceneManager->isPlayMode()) {
-				EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
-				
-				return;
-			}
-
-			static bool b = false;
-
-			if (ImGui::IsWindowFocused())
-				b = window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_2);
-			else
-				b = false;
-
-			if (b) {
-				ImGui::OpenPopup("SceneHierarchyPopUp");
-				if (window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_1))
-					b = false;
-			}
-
-			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
-				if (ImGui::MenuItem("Add Entity to scene")) {
-					m_currentEntity = &m_sceneManager->getScene()->createEntity();
-					m_currentEntity->addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
-					m_indexEntity = m_sceneManager->getScene()->getEntities().size() - 1;
-					GUI_EntityManagement::currentEntity = m_currentEntity;
-					GUI_EntityManagement::currentIndex = m_indexEntity;
-				}
-
-				if(m_currentEntity)
-					if (ImGui::MenuItem("Delete Selected Entity from Scene")) {
-						m_sceneManager->getScene()->destroyEntity(m_indexEntity);
-						m_indexEntity = -1;
-						m_currentEntity = nullptr;
-						GUI_EntityManagement::currentEntity = nullptr;
-						GUI_EntityManagement::currentIndex = -1;
-						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
-						GUI_TextEditor::Instance().setEditorTitle("Empty");
-						ecs::SceneEvents::Instance().onEntityRemove();
-					}
-
-				ImGui::EndPopup();
-			}
-
-			EDITOR_TRACE("GUI: scene_hierarchy_popup");
-		}
-		
-		
 
 
 } }

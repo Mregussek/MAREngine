@@ -28,6 +28,8 @@ namespace mar {
 			Scene(std::string name);
 			void shutdown();
 
+			static Scene* createEmptyScene(std::string name);
+
 			Entity& createEntity();
 			void destroyEntity(const int32_t& index);
 

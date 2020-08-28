@@ -27,6 +27,27 @@ namespace mar {
 			ECS_INFO("SCENE: registry is cleared! (called destructor)");
 		}
 
+		Scene* Scene::createEmptyScene(std::string name) {
+			Scene* scene = new Scene(std::move(name));
+
+			{
+				auto& entity = scene->createEntity();
+				entity.addComponent<CameraComponent>(ECS_CAMERA);
+
+				auto& cam = entity.getComponent<TagComponent>();
+				cam.tag = "Camera";
+			}
+			{
+				auto& entity = scene->createEntity();
+				entity.addComponent<LightComponent>(ECS_LIGHT);
+
+				auto& light = entity.getComponent<TagComponent>();
+				light.tag = "Light";
+			}
+
+			return scene;
+		}
+
 		// -------------------------------------------------------------
 		// ENTITIES MANAGEMENT
 		// -------------------------------------------------------------
@@ -38,6 +59,7 @@ namespace mar {
 
 			entity.addDefault();
 			entity.addComponent<TagComponent>(ECS_TAG);
+			entity.addComponent<TransformComponent>(ECS_TRANSFORM);
 
 			m_entities.push_back(entity);
 

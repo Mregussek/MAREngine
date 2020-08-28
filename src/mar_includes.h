@@ -20,9 +20,9 @@ Logging is damaging perfomance, so it will be wise to comment it (Of course if y
 #define MAR_ENGINE_DEBUG_MODE
 
 // set logging level
-#define MAR_ENGINE_LOGS_LEVEL_TRACE
+//#define MAR_ENGINE_LOGS_LEVEL_TRACE
 //#define MAR_ENGINE_LOGS_LEVEL_INFO
-//#define MAR_ENGINE_LOGS_LEVEL_WARN
+#define MAR_ENGINE_LOGS_LEVEL_WARN
 //#define MAR_ENGINE_LOGS_LEVEL_ERROR
 
 /*

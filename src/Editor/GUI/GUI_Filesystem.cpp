@@ -12,7 +12,7 @@ namespace mar {
 
 
 		void GUI_Filesystem::Filesystem_NewScene() {
-			engine::MAREngine::getEngine()->setLoadPath("|");
+			engine::MAREngine::getEngine()->setLoadPath("BrandNewScene");
 			engine::MAREngine::getEngine()->setRestart();
 
 			EDITOR_TRACE("GUI: Filesystem_NewScene");

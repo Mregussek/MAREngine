@@ -12,7 +12,6 @@
 #include "Scene.h"
 
 
-
 namespace mar {
 	namespace ecs {
 

@@ -239,6 +239,7 @@
     <ClInclude Include="src\Editor\GUI\GUI_EntityManagement.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Filesystem.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Info.h" />
+    <ClInclude Include="src\Editor\GUI\GUI_SceneHierarchy.h" />
     <ClInclude Include="src\Editor\GUI\GUI_TextEditor.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Theme.h" />
     <ClInclude Include="src\Helper.h" />
@@ -305,6 +306,7 @@
     <ClCompile Include="src\Editor\GUI\GUI_EntityManagement.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Info.cpp" />
+    <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
     <ClCompile Include="src\helper.cpp" />
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />

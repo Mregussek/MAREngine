@@ -126,11 +126,11 @@ namespace mar {
 			std::ifstream file(filename);
 			if (!file.is_open()) {
 				if (filename == "BrandNewScene") {
-					return new ecs::Scene(filename);
+					return ecs::Scene::createEmptyScene("BrandNewScene");
 				}
 				else {
 					EDITOR_ERROR("Cannot open file {}, returning empty scene!", filename);
-					return new ecs::Scene("EmptyScene");
+					return ecs::Scene::createEmptyScene("EmptySceneNotLoaded");
 				}
 			}
 
@@ -164,7 +164,7 @@ namespace mar {
 					tag.tag = new_tag;
 				}
 				else if (line.find("#TransformComponent") != std::string::npos) {
-					auto& tran = currentEntity->addComponent<ecs::TransformComponent>(ECS_TRANSFORM);
+					auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
 					
 					// #center - 7 letters
 					std::getline(file, line);

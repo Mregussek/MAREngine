@@ -5,6 +5,7 @@
 
 #include "GUI_EntityManagement.h"
 #include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/graphics/Renderer/Texture/TextureOpenGL.h"
 #include "GUI_TextEditor.h"
 
 
@@ -368,7 +369,8 @@ namespace mar {
 				}
 			}
 			else {
-				if (ImGui::Button("ModifyRenderable"))
+				ImGui::SameLine();
+				if (ImGui::MenuItem(" --- Modify Renderable"))
 					GUI_modify_renderable = true;
 			}
 
@@ -458,8 +460,13 @@ namespace mar {
 				return;
 			}
 
-			ImGui::Text("Current Texture: ");
-			ImGui::SameLine();
+			ImGui::Columns(2);
+
+			if(graphics::TextureOpenGL::hasTexture(tex.texture))
+				ImGui::Image((void*)graphics::TextureOpenGL::getTexture(tex.texture), ImVec2{ 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+			ImGui::NextColumn();
+			ImGui::Text("Current Texture:");
 			ImGui::Text(tex.texture.c_str());
 
 			if (tex.texture != "empty") {
@@ -481,9 +488,11 @@ namespace mar {
 				return;
 			}
 
+			ImGui::Columns(1);
+
 			static char input[50];
 			strcpy_s(input, tex.texture.c_str());
-			if (ImGui::InputText(" ex. .jpg / .png", input, 50))
+			if (ImGui::InputText(" ex. .jpg / .png", input, 50)) 
 				tex.texture = std::string(input);
 
 			ImGui::Text("Texture, which will be loaded: ");
