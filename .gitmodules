@@ -1,0 +1,21 @@
+[submodule "MAREngine/3rd_party/imgui"]
+	path = MAREngine/3rd_party/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "MAREngine/3rd_party/ImGuiColorTextEdit"]
+	path = MAREngine/3rd_party/ImGuiColorTextEdit
+	url = https://github.com/BalazsJako/ImGuiColorTextEdit.git
+[submodule "MAREngine/3rd_party/ImGuizmo"]
+	path = MAREngine/3rd_party/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "MAREngine/3rd_party/MARMaths"]
+	path = MAREngine/3rd_party/MARMaths
+	url = https://github.com/Mregussek/MARMaths.git
+[submodule "MAREngine/3rd_party/pybind11"]
+	path = MAREngine/3rd_party/pybind11
+	url = https://github.com/pybind/pybind11.git
+[submodule "MAREngine/3rd_party/SerialPort"]
+	path = MAREngine/3rd_party/SerialPort
+	url = https://github.com/Mregussek/SerialPort.git
+[submodule "MAREngine/3rd_party/spdlog"]
+	path = MAREngine/3rd_party/spdlog
+	url = https://github.com/gabime/spdlog.git
