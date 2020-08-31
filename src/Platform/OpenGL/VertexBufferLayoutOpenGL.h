@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_VERTEXBUFFERLAYOUT_OPENGL_H
-#define MAR_ENGINE_VERTEXBUFFERLAYOUT_OPENGL_H
+#ifndef MAR_ENGINE_PLATFORMS_VERTEXBUFFERLAYOUT_OPENGL_H
+#define MAR_ENGINE_PLATFORMS_VERTEXBUFFERLAYOUT_OPENGL_H
 
 #include "../../mar.h"
 #include "../PlatformLogs.h"

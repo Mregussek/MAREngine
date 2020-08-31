@@ -3,11 +3,9 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_RENDERER_INCLUDE_H
-#define MAR_ENGINE_RENDERER_INCLUDE_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_INCLUDE_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_INCLUDE_H
 
-#include "../Mesh/Manipulators/ShapeManipulator.h"
-#include "../Mesh/MeshCreator.h"
 
 #include "../../../Platform/OpenGL/ElementBufferOpenGL.h"
 #include "../../../Platform/OpenGL/VertexArrayOpenGL.h"
@@ -20,6 +18,7 @@
 #include "../../ecs/Scene.h"
 #include "../../ecs/SceneManager.h"
 
+#include "../GraphicsLogs.h"
 
 
 namespace mar {

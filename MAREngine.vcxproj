@@ -258,7 +258,7 @@
     <ClInclude Include="src\Window\buttons_def.h" />
     <ClInclude Include="src\Platform\OpenGL\FrameBufferOpenGL.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h" />
-    <ClInclude Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\ShapeManipulator.h" />
     <ClInclude Include="src\Editor\GUI\GUI.h" />
     <ClInclude Include="src\Editor\Camera\Camera.h" />
     <ClInclude Include="src\Engine.h" />
@@ -308,7 +308,7 @@
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp" />
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
-    <ClCompile Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.cpp" />
+    <ClCompile Include="src\Core\graphics\Mesh\ShapeManipulator.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\Engine.cpp" />

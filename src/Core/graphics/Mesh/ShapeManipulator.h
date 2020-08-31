@@ -3,11 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_SHAPEMANIPULATOR_H
-#define MAR_ENGINE_SHAPEMANIPULATOR_H
+#ifndef MAR_ENGINE_GRAPHICS_SHAPEMANIPULATOR_H
+#define MAR_ENGINE_GRAPHICS_SHAPEMANIPULATOR_H
 
-#include "../../../../mar.h"
-#include "../../GraphicsLogs.h"
+#include "../../../mar.h"
+#include "../GraphicsLogs.h"
 
 namespace mar {
     namespace graphics {

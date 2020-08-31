@@ -4,8 +4,8 @@
  */
 
 
-#ifndef MAR_ENGINE_RENDER_CAMERA_H
-#define MAR_ENGINE_RENDER_CAMERA_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDER_CAMERA_H
+#define MAR_ENGINE_GRAPHICS_RENDER_CAMERA_H
 
 #include "../../../mar.h"
 

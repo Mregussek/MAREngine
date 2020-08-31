@@ -10,7 +10,7 @@
 #include "../graphics/Renderer/RenderCamera.h"
 #include "../../Editor/Camera/Camera.h"
 #include "ECS/Systems.h"
-#include "../graphics/Mesh/Manipulators/ShapeManipulator.h"
+#include "../graphics/Mesh/ShapeManipulator.h"
 #include "SceneEvents.h"
 #include "../../Window/Window.h"
 

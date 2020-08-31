@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_RENDERER_ENTITY_H
-#define MAR_ENGINE_RENDERER_ENTITY_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_ENTITY_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_ENTITY_H
 
 #include "../../../mar.h"
 

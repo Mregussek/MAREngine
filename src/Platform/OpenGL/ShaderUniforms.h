@@ -3,6 +3,11 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+
+#ifndef MAR_ENGINE_PLATFORMS_SHADER_UNIFORMS_H
+#define MAR_ENGINE_PLATFORMS_SHADER_UNIFORMS_H
+
+
 #include "../../mar.h"
 #include "../PlatformLogs.h"
 
@@ -230,3 +235,6 @@ namespace mar {
 
 
 } }
+
+
+#endif // !MAR_ENGINE_PLATFORMS_SHADER_UNIFORMS_H

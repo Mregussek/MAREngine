@@ -3,6 +3,9 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+#ifndef MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H
+#define MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H
+
 #include "../../mar.h"
 #include "../../Core/ecs/ECS/Systems.h"
 
@@ -48,3 +51,5 @@ namespace mar {
 
 
 } }
+
+#endif // !MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H

@@ -126,9 +126,6 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererEntity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -162,9 +159,6 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\scripting\PythonScript.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\ECS\Components.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -172,9 +166,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\ECS\Systems.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\scripting\MAREnginePy.cpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\SceneManager.h">
@@ -193,9 +184,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\GUI\GUI_Filesystem.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\assets\AssetsManager.h">
@@ -246,10 +234,22 @@
     <ClInclude Include="src\Platform\PlatformLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\scripting\ScriptingLogs.h">
+    <ClInclude Include="src\mar_logging.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\mar_logging.h">
+    <ClInclude Include="src\Core\graphics\Mesh\ShapeManipulator.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\MAREnginePy.cpp">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\PythonScript.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\ScriptingLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -323,9 +323,6 @@
     <ClCompile Include="src\Core\graphics\Renderer\RendererEntity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\Scene.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -345,9 +342,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Renderer\RendererTexture.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\scripting\PythonScript.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\ECS\Entity.cpp">
@@ -393,6 +387,12 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\Mesh\ShapeManipulator.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\scripting\PythonScript.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

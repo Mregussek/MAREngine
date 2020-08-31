@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_CAMERA_H
-#define MAR_ENGINE_CAMERA_H
+#ifndef MAR_ENGINE_EDITOR_CAMERA_H
+#define MAR_ENGINE_EDITOR_CAMERA_H
 
 #include "../../mar.h"
 #include "../../Window/Input.h"

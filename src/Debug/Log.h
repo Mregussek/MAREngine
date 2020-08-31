@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_LOG_H
-#define MAR_ENGINE_LOG_H
+#ifndef MAR_ENGINE_DEBUG_LOG_H
+#define MAR_ENGINE_DEBUG_LOG_H
 
 #include "../mar.h"
 
@@ -103,4 +103,4 @@ namespace mar {
 
 #endif
 
-#endif // !MAR_ENGINE_LOG_H
+#endif // !MAR_ENGINE_DEBUG_LOG_H

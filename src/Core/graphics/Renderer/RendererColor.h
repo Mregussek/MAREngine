@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_RENDERER_ENTITY_COLOR_H
-#define MAR_ENGINE_RENDERER_ENTITY_COLOR_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_ENTITY_COLOR_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_ENTITY_COLOR_H
 
 
 #include "../../../mar.h"

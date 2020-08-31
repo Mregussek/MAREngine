@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_GUI_H
-#define MAR_ENGINE_GUI_H
+#ifndef MAR_ENGINE_EDITOR_GUI_H
+#define MAR_ENGINE_EDITOR_GUI_H
 
 #include "../../mar.h"
 #include "../EditorLogging.h"

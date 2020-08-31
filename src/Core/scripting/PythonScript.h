@@ -4,8 +4,8 @@
  */
 
 
-#ifndef MAR_ENGINE_SCRIPTING_EMBED_H
-#define MAR_ENGINE_SCRIPTING_EMBED_H
+#ifndef MAR_ENGINE_SCRIPTING_PYTHON_SCRIPT_H
+#define MAR_ENGINE_SCRIPTING_PYTHON_SCRIPT_H
 
 
 #include "../../mar.h"
@@ -42,4 +42,4 @@ namespace mar {
 } }
 
 
-#endif // !MAR_ENGINE_SCRIPTING_EMBED_H
+#endif // !MAR_ENGINE_SCRIPTING_PYTHON_SCRIPT_H
