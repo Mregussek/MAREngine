@@ -19,9 +19,9 @@ set( _glfw3_HEADER_SEARCH_DIRS
     "/usr/local/include"
     "${CMAKE_SOURCE_DIR}/include"
     "C:/Program Files (x86)/glfw/include" 
-    "${CMAKE_SOURCE_DIR}/3rd_party"
-	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW"
-	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/include"
+    "${CMAKE_SOURCE_DIR}/MAREngine/3rd_party"
+	"${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/GLFW"
+	"${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/GLFW/include"
 )
 
 set( _glfw3_LIB_SEARCH_DIRS
@@ -29,9 +29,9 @@ set( _glfw3_LIB_SEARCH_DIRS
     "/usr/local/lib"
     "${CMAKE_SOURCE_DIR}/lib"
     "C:/Program Files (x86)/glfw/lib-msvc110" 
-    "${CMAKE_SOURCE_DIR}/3rd_party"
-	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW"
-	"${CMAKE_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019"
+    "${CMAKE_SOURCE_DIR}/MAREngine/3rd_party"
+	"${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/GLFW"
+	"${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/GLFW/lib-vc2019"
 )
 
 # Check environment for root search directory

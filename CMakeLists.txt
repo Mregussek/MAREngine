@@ -10,53 +10,56 @@ set(MARENGINE_NAME "MAREngine")
 # -------------------------------------------------------------
 # EditorMAR setup
 # -------------------------------------------------------------
+set(EDITORMAR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR)
 set(EDITORMAR_NAME "EditorMAR")
 file(GLOB_RECURSE EDITORMAR_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.cpp
+	${EDITORMAR_PATH}/src/*.c
+	${EDITORMAR_PATH}/src/*.cpp
 )
 
 file(GLOB_RECURSE EDITORMAR_HEADER_FILES 
-	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/src/*.hpp
+	${EDITORMAR_PATH}/src/*.h
+	${EDITORMAR_PATH}/src/*.hpp
 )
 
-set(MAIN_EDITORMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR/main.cpp)
+set(MAIN_EDITORMAR_FILE ${EDITORMAR_PATH}/main.cpp)
 
 set(EDITORMAR_FILES ${EDITORMAR_SOURCE_FILES} ${EDITORMAR_HEADER_FILES} ${MAIN_EDITORMAR_FILE}) 
 
 # -------------------------------------------------------------
 # SandboxMAR setup
 # -------------------------------------------------------------
+set(SANDBOXMAR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR)
 set(SANDBOXMAR_NAME "SandboxMAR")
 file(GLOB_RECURSE SANDBOXMAR_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.cpp
+	${SANDBOXMAR_PATH}/src/*.c
+	${SANDBOXMAR_PATH}/src/*.cpp
 )
 
 file(GLOB_RECURSE SANDBOXMAR_HEADER_FILES 
-	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/src/*.hpp
+	${SANDBOXMAR_PATH}/src/*.h
+	${SANDBOXMAR_PATH}/src/*.hpp
 )
 
-set(MAIN_SANDBOXMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR/main.cpp)
+set(MAIN_SANDBOXMAR_FILE ${SANDBOXMAR_PATH}/main.cpp)
 
 set(SANDBOXMAR_FILES ${SANDBOXMAR_SOURCE_FILES} ${SANDBOXMAR_HEADER_FILES} ${MAIN_SANDBOXMAR_FILE}) 
 
 # -------------------------------------------------------------
 # MAREngine source files
 # -------------------------------------------------------------
+set(MARENGINE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/MAREngine)
 file(GLOB_RECURSE SOURCE_FILES 
-	${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
-	${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+	${MARENGINE_PATH}/src/*.c
+	${MARENGINE_PATH}/src/*.cpp)
 	
 file(GLOB_RECURSE HEADER_FILES 
-	${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
-	${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp)
+	${MARENGINE_PATH}/src/*.h
+	${MARENGINE_PATH}/src/*.hpp)
 
 set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES})
 
-set(MARENGINE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(MARENGINE_INCLUDE_DIR "${MARENGINE_PATH}/include")
 
 # -------------------------------------------------------------
 # Include statically other libs
@@ -84,7 +87,7 @@ endif()
 # -------------------------------------------------------------
 message("Looking for: GLEW")
 add_definitions(-DGLEW_STATIC)
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/3rd_party/GL")
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GL")
 find_package(GLEW REQUIRED)
 if (GLEW_FOUND)
 	message(STATUS "GLEW_INCLUDE_DIRS:= ${GLEW_INCLUDE_DIRS}")
@@ -105,7 +108,7 @@ find_package(GLFW3 REQUIRED)
 if(GLFW3_FOUND)
 	message(STATUS "GLFW_INDLUCE_DIR:= ${GLFW3_INCLUDE_DIR}")
 	message(STATUS "GLFW3_LIBRARY:= ${GLFW3_LIBRARY}")
-	set(MAR_GLFW_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GLFW/include")
+	set(MAR_GLFW_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/include")
 	message(STATUS "MAR_GLFW_DIR:= ${MAR_GLFW_DIR}")
 else()
 	message(STATUS "Error: Cannot find GLFW3!")
@@ -115,18 +118,18 @@ endif()
 # spdlog
 # -------------------------------------------------------------
 message("Looking for: SPDLOG")
-add_subdirectory(3rd_party/spdlog)
-set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/spdlog/include")
+add_subdirectory(MAREngine/3rd_party/spdlog)
+set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # pybind11
 # -------------------------------------------------------------
 message("Looking for: pybind11 && python3.8.5")
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/pybind11)
-set(PYBIND11_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/pybind11/include")
-set(PYTHON385_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/python3.8.5/include")
-set(PYTHON385_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/python3.8.5/libs")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11)
+set(PYBIND11_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11/include")
+set(PYTHON385_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/include")
+set(PYTHON385_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs")
 message(STATUS "PYBIND11_INCLUDE_DIR:= ${PYBIND11_INCLUDE_DIR}")
 message(STATUS "PYTHON385_INCLUDE_DIR:= ${PYTHON385_INCLUDE_DIR}")
 message(STATUS "PYTHON385_LIB_DIR:= ${PYTHON385_LIB_DIR}")
@@ -135,9 +138,9 @@ message(STATUS "PYTHON385_LIB_DIR:= ${PYTHON385_LIB_DIR}")
 # MARMaths
 # -------------------------------------------------------------
 message("Looking for: MARMaths")
-set(MAR_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/MARMaths/include")
+set(MAR_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/MARMaths/include")
 set(MAR_MATH_INCLUDE_FILE ${MAR_MATH_INCLUDE_DIR}/MARMaths.h)
-set(MAR_MATH_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/MARMaths/src")
+set(MAR_MATH_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/MARMaths/src")
 file(GLOB_RECURSE MAR_MATH_LIB_SOURCE_FILES 
 	${MAR_MATH_DIRECTORY}/*.c
 	${MAR_MATH_DIRECTORY}/*.cpp
@@ -153,7 +156,7 @@ message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
 # stb_image
 # -------------------------------------------------------------
 message("Looking for: stb_image")
-set(STB_IMAGE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/stb_image/include")
+set(STB_IMAGE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/stb_image/include")
 set(STB_IMAGE_H "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.h")
 set(STB_IMAGE_SRC "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.cpp")
 set(STB_IMAGE_FILES ${STB_IMAGE_H} ${STB_IMAGE_SRC})
@@ -163,7 +166,7 @@ message(STATUS "STB_IMAGE_INCLUDE_DIR:= ${STB_IMAGE_INCLUDE_DIR}")
 # Dear ImGui
 # -------------------------------------------------------------
 message("Looking for: Dear ImGui")
-set(IMGUI_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/imgui")
+set(IMGUI_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/imgui")
 set(IMGUI_SOURCES
 	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.cpp
     ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.cpp
@@ -189,17 +192,27 @@ message(STATUS "IMGUI_INCLUDE_DIR:= ${IMGUI_INCLUDE_DIR}")
 # ImGuizmo
 # -------------------------------------------------------------
 message("Looking for: ImGuizmo")
-set(IMGUIZMO_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/ImGuizmo")
+set(IMGUIZMO_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuizmo")
 set(IMGUIZMO_HEADERS ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.h)
 set(IMGUIZMO_SOURCES ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.cpp)
 set(IMGUIZMO_FILES ${IMGUIZMO_HEADERS} ${IMGUIZMO_SOURCES})
 message(STATUS "IMGUIZMO_INCLUDE_DIR:= ${IMGUIZMO_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
+# ImGuiColorTextEdit
+# -------------------------------------------------------------
+message("Looking for: ImGuiColorTextEdit")
+set(IMGUICOLORTEXTEDIT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiColorTextEdit")
+set(IMGUICOLORTEXTEDIT_HEADERS ${IMGUICOLORTEXTEDIT_INCLUDE_DIR}/TextEditor.h)
+set(IMGUICOLORTEXTEDIT_SOURCES ${IMGUICOLORTEXTEDIT_INCLUDE_DIR}/TextEditor.cpp)
+set(IMGUICOLORTEXTEDIT_FILES ${IMGUICOLORTEXTEDIT_HEADERS} ${IMGUICOLORTEXTEDIT_SOURCES})
+message(STATUS "IMGUICOLORTEXTEDIT_INCLUDE_DIR:= ${IMGUICOLORTEXTEDIT_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
 # entt
 # -------------------------------------------------------------
 message("Looking for: entt")
-set(ENTT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/entt/include")
+set(ENTT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/entt/include")
 set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
 message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 
@@ -207,17 +220,18 @@ message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 # SerialPort
 # -------------------------------------------------------------
 message("Looking for: SerialPort")
-set(SERIALPORT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/serialport/include")
+set(SERIALPORT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/SerialPort/include")
 message(STATUS "SERIALPORT_INCLUDE_DIR:= ${SERIALPORT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # Set includes for MAREngine (mar_includes.h file)
 # -------------------------------------------------------------
 include_directories(
-	"${CMAKE_CURRENT_SOURCE_DIR}/src"
+	"${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/src"
 	${SERIALPORT_INCLUDE_DIR}
 	${IMGUI_INCLUDE_DIR}
 	${IMGUIZMO_INCLUDE_DIR}
+	${IMGUICOLORTEXTEDIT_INCLUDE_DIR}
 	${MAR_MATH_INCLUDE_DIR}
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
@@ -234,8 +248,8 @@ include_directories(
 # link .lib files for MAREngine
 # -------------------------------------------------------------
 link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GL/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rd_party/GLFW/lib-vc2019
+    ${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GL/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/lib-vc2019
 	${CMAKE_CURRENT_SOURCE_DIR}/bin/Release/Win32/Engine
 	${PYTHON385_LIB_DIR}
 )
@@ -245,7 +259,7 @@ link_directories(
 # -------------------------------------------------------------
 set(ALL_INCLUDE_FILES_MARENGINE 
 	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
-	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES}
+	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES} ${IMGUICOLORTEXTEDIT_FILES}
 )
 
 set(MAR_OPENGL_IMPORT 
@@ -263,17 +277,17 @@ target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
 target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
 
 message("Creating ${EDITORMAR_NAME} executable...")
-add_executable(${EDITORMAR_NAME} ${EDITORMAR_FILES} ${ALL_INCLUDE_FILES_MARENGINE} ${MARENGINE_INCLUDE_DIR})
+add_executable(${EDITORMAR_NAME} ${EDITORMAR_FILES} ${MARENGINE_INCLUDE_DIR})
 
 message("Linking libraries to ${EDITORMAR_NAME}")
 target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
-target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
+target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MARENGINE_NAME})
 
 message("Creating ${SANDBOXMAR_NAME} executable...")
-add_executable(${SANDBOXMAR_NAME} ${SANDBOXMAR_FILES} ${ALL_INCLUDE_FILES_MARENGINE} ${MARENGINE_INCLUDE_DIR})
+add_executable(${SANDBOXMAR_NAME} ${SANDBOXMAR_FILES} ${MARENGINE_INCLUDE_DIR})
 message("Linking libraries to ${SANDBOXMAR_NAME}")
 target_compile_features(${SANDBOXMAR_NAME} PRIVATE cxx_std_17)
-target_link_libraries ( ${SANDBOXMAR_NAME} PRIVATE ${MAR_OPENGL_IMPORT} ${MARENGINE_NAME})
+target_link_libraries ( ${SANDBOXMAR_NAME} PRIVATE ${MARENGINE_NAME})
 
 if(MSVC)
 # -------------------------------------------------------------
@@ -342,6 +356,10 @@ if(MSVC)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/imgui.ini"
 		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs/python38.dll"
+		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 		
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources"
@@ -349,5 +367,9 @@ if(MSVC)
 
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/imgui.ini"
+		"${CMAKE_SOURCE_DIR}/build")
+
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs/python38.dll"
 		"${CMAKE_SOURCE_DIR}/build")
 endif()
