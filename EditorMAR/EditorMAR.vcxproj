@@ -92,14 +92,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)3rd_party\ImGuiColorTextEdit;$(SolutionDir)3rd_party\python3.8.5\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\include;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\serialport\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\python3.8.5\libs;$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;$(SolutionDir)bin\Debug\Win32\Engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)MAREngine\3rd_party\python3.8.5\libs;$(SolutionDir)MAREngine\3rd_party\GLFW\lib-vc2019;$(SolutionDir)MAREngine\3rd_party\GL\lib;$(SolutionDir)bin\Debug\Win32\Engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>MAREngine.lib;python38.lib;opengl32.lib;glew32s.lib;glfw3.lib;msvcrtd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)3rd_party\ImGuiColorTextEdit;$(SolutionDir)3rd_party\python3.8.5\include;$(SolutionDir)3rd_party\stb_image\include;$(SolutionDir)3rd_party\spdlog\include;$(SolutionDir)3rd_party\serialport\include;$(SolutionDir)3rd_party\pybind11\include;$(SolutionDir)3rd_party\MARMaths\include;$(SolutionDir)3rd_party\ImGuizmo;$(SolutionDir)3rd_party\imgui;$(SolutionDir)3rd_party\GLFW\include;$(SolutionDir)3rd_party\GL\include;$(SolutionDir)3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\include;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\serialport\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -120,7 +120,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rd_party\python3.8.5\libs;$(SolutionDir)3rd_party\GLFW\lib-vc2019;$(SolutionDir)3rd_party\GL\lib;$(SolutionDir)bin\Release\Win32\Engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)MAREngine\3rd_party\python3.8.5\libs;$(SolutionDir)MAREngine\3rd_party\GLFW\lib-vc2019;$(SolutionDir)MAREngine\3rd_party\GL\lib;$(SolutionDir)bin\Release\Win32\Engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>MAREngine.lib;python38.lib;opengl32.lib;glew32s.lib;glfw3.lib;msvcrt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
