@@ -20,11 +20,11 @@ namespace mar {
 
 
 		class RendererColor {
-			VertexBufferOpenGL m_vbo;
-			VertexBufferLayoutOpenGL m_layout;
-			VertexArrayOpenGL m_vao;
-			ElementBufferOpenGL m_ebo;
-			ShaderOpenGL m_shader;
+			platforms::VertexBufferOpenGL m_vbo;
+			platforms::VertexBufferLayoutOpenGL m_layout;
+			platforms::VertexArrayOpenGL m_vao;
+			platforms::ElementBufferOpenGL m_ebo;
+			platforms::ShaderOpenGL m_shader;
 
 		public:
 			void initialize();
@@ -34,9 +34,9 @@ namespace mar {
 			void draw(const ecs::BufferStorage<maths::vec3>& storage, 
 				const RenderCamera& camera, const ecs::LightStorage& light);
 
-			void passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam);
+			void passCameraToShader(platforms::ShaderOpenGL& shader, const RenderCamera& cam);
 
-			void passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light);
+			void passLightToShader(platforms::ShaderOpenGL& shader, const ecs::LightStorage& light);
 
 		};
 

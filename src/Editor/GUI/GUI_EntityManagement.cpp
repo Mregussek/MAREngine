@@ -460,8 +460,8 @@ namespace mar {
 				return;
 			}
 
-			if (graphics::TextureOpenGL::hasTexture(tex.texture)) {
-				ImGui::Image((void*)graphics::TextureOpenGL::getTexture(tex.texture), ImVec2{ 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			if (platforms::TextureOpenGL::hasTexture(tex.texture)) {
+				ImGui::Image((void*)platforms::TextureOpenGL::getTexture(tex.texture), ImVec2{ 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			}
 
 			ImGui::Text("Current Texture:");

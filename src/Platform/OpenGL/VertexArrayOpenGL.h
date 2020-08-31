@@ -12,7 +12,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		/*!

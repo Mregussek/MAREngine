@@ -41,7 +41,7 @@ namespace mar {
 			// --- GET METHODS --- //
 			float& getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
 			float& getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
-			graphics::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
+			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
 
 		private:
 			// --- DISPLAY --- //
@@ -59,7 +59,7 @@ namespace mar {
 			ecs::SceneManager* m_sceneManager;
 			ecs::Entity* m_currentEntity;
 			// --- Viewport
-			graphics::FrameBufferOpenGL m_viewportFramebuffer;
+			platforms::FrameBufferOpenGL m_viewportFramebuffer;
 			// --- Which entity should be displayed
 			int32_t m_indexEntity{ -1 };
 			// --- Dockspace

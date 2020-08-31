@@ -11,7 +11,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		/*!
@@ -99,5 +99,9 @@ namespace mar {
 
 
 } }
+
+#define PUSH_BUFFER_FLOAT ::mar::platforms::PushBuffer::PUSH_FLOAT
+#define PUSH_BUFFER_UNSIGNED_INT ::mar::platforms::PushBuffer::PUSH_UNSIGNED_INT
+#define PUSH_BUFFER_UNSIGNED_BYTE ::mar::platforms::PushBuffer::PUSH_UNSIGNED_BYTE
 
 #endif // !MAR_ENGINE_VERTEXBUFFERLAYOUT_OPENGL_H

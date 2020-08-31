@@ -7,7 +7,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		void ShaderOpenGL::initialize(ShaderType shadertype) {

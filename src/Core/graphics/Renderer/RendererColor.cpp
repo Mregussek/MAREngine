@@ -16,7 +16,7 @@ namespace mar {
 			const std::vector<uint32_t> layout{ 3, 3, 2, 1 };
 
 			for (size_t i = 0; i < layout.size(); i++)
-				m_layout.push(layout[i], PushBuffer::PUSH_FLOAT);
+				m_layout.push(layout[i], PUSH_BUFFER_FLOAT);
 
 			m_ebo.initialize(constants::maxIndexCount);
 			m_vao.initialize();
@@ -78,7 +78,7 @@ namespace mar {
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: has drawn the scene!");
 		}
 
-		void RendererColor::passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam) {
+		void RendererColor::passCameraToShader(platforms::ShaderOpenGL& shader, const RenderCamera& cam) {
 			shader.setUniformVector3("u_CameraPos", cam.position);
 			shader.setUniformMat4f("u_Model", cam.model);
 			shader.setUniformMat4f("u_MVP", cam.mvp);
@@ -86,10 +86,10 @@ namespace mar {
 			GRAPHICS_TRACE("RENDERERENTITY_COLOR: passed camera to shader (by values)!");
 		}
 
-		void RendererColor::passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light) {
+		void RendererColor::passLightToShader(platforms::ShaderOpenGL& shader, const ecs::LightStorage& light) {
 			MAR_CORE_ASSERT(light.positions.size() == light.components.size(), "Light positions are not equal to light components!");
 
-			using namespace ShaderUniforms;
+			using namespace platforms::ShaderUniforms;
 
 			for (size_t i = 0; i < light.components.size(); i++) {
 				shader.setUniformVector3(u_material[i].lightPos, light.positions[i]);

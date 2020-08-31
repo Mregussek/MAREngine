@@ -10,13 +10,13 @@ namespace mar {
 	namespace graphics {
 
 
-		void  RendererTexture::initialize(ShaderType st) {
+		void  RendererTexture::initialize(platforms::ShaderType st) {
 			GRAPHICS_INFO("RENDERERENTITY_TEXTURE: Going to initialize!");
 
 			const std::vector<uint32_t> layout{ 3, 3, 2, 1 };
 
 			for (size_t i = 0; i < layout.size(); i++)
-				m_layout.push(layout[i], PushBuffer::PUSH_FLOAT);
+				m_layout.push(layout[i], PUSH_BUFFER_FLOAT);
 
 			m_ebo.initialize(constants::maxIndexCount);
 			m_vao.initialize();
@@ -24,8 +24,6 @@ namespace mar {
 			m_vao.addBuffer(m_layout);
 
 			m_shader.initialize(st);
-
-			m_lastVerticesSize = 0;
 
 			GRAPHICS_INFO("RENDERERENTITY_TEXTURE: initialized!");
 		}
@@ -78,25 +76,26 @@ namespace mar {
 				m_ebo.unbind();
 				m_vao.unbind();
 
-				for (int32_t i = 0; i < (int32_t)storage.paths.size(); i++) 
-					m_texture.bind(texture_type, storage.samplers[i], 0);
+				m_texture.unbind();
 			}
 
 			GRAPHICS_INFO("RENDERERENTITY_TEXTURE: has drawn the scene!");
 		}
 
 		void RendererTexture::passTexturesToShader(
-			ShaderOpenGL& shader, uint32_t texture_type, 
+			platforms::ShaderOpenGL& shader, uint32_t texture_type,
 			const std::vector<std::string>& paths, const std::vector<int32_t>& samplers)
 		{
 			MAR_CORE_ASSERT(paths.size() == samplers.size(), "Samplers size are not equal to paths size!");
 
 			{ // BIND TEXTURES
+				using namespace platforms::ShaderUniforms;
+
 				if (texture_type == GL_TEXTURE_2D) {
 
 					for (size_t i = 0; i < paths.size(); i++) {
 						m_texture.bind(texture_type, samplers[i], m_texture.loadTexture(paths[i]));
-						shader.setUniformSampler(ShaderUniforms::u_SeparateColor[i], samplers[i]);
+						shader.setUniformSampler(u_SeparateColor[i], samplers[i]);
 					}
 
 				}
@@ -104,17 +103,17 @@ namespace mar {
 
 					for (size_t i = 0; i < paths.size(); i++) {
 						m_texture.bind(texture_type, samplers[i], m_texture.loadCubemap(paths[i]));
-						shader.setUniformSampler(ShaderUniforms::u_SeparateColor[i], samplers[i]);
+						shader.setUniformSampler(u_SeparateColor[i], samplers[i]);
 					}
 
 				}
 			}
 		}
 
-		void RendererTexture::passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light) {
+		void RendererTexture::passLightToShader(platforms::ShaderOpenGL& shader, const ecs::LightStorage& light) {
 			MAR_CORE_ASSERT(light.positions.size() == light.components.size(), "Light positions are not equal to light components!");
 
-			using namespace ShaderUniforms;
+			using namespace platforms::ShaderUniforms;
 
 			for (size_t i = 0; i < light.components.size(); i++) {
 				shader.setUniformVector3(u_material[i].lightPos, light.positions[i]);
@@ -135,7 +134,7 @@ namespace mar {
 			GRAPHICS_TRACE("RENDERERENTITY_COLOR: passed light to shader!");
 		}
 
-		void RendererTexture::passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam) {
+		void RendererTexture::passCameraToShader(platforms::ShaderOpenGL& shader, const RenderCamera& cam) {
 			shader.setUniformVector3("u_CameraPos", cam.position);
 			shader.setUniformMat4f("u_Model", cam.model);
 			shader.setUniformMat4f("u_MVP", cam.mvp);

@@ -7,7 +7,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		void VertexBufferOpenGL::initialize(uint32_t allocationMemory) {

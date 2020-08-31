@@ -10,7 +10,7 @@
 #include "../PlatformLogs.h"
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		/*!

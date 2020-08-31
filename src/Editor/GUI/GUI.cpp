@@ -32,7 +32,7 @@ namespace mar {
 			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 			io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-			m_viewportFramebuffer.initialize(graphics::FrameBufferSpecification(800.f, 600.f));
+			m_viewportFramebuffer.initialize(platforms::FrameBufferSpecification(800.f, 600.f));
 
 			GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
 

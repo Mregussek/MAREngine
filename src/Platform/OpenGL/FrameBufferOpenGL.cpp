@@ -8,7 +8,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		void FrameBufferOpenGL::initialize(const FrameBufferSpecification& spec) {

@@ -7,7 +7,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		void ElementBufferOpenGL::initialize(const uint32_t allocationMemory) {

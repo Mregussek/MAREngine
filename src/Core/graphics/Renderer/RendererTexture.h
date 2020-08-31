@@ -21,16 +21,15 @@ namespace mar {
 
 
 		class RendererTexture {
-			VertexBufferOpenGL m_vbo;
-			VertexBufferLayoutOpenGL m_layout;
-			VertexArrayOpenGL m_vao;
-			ElementBufferOpenGL m_ebo;
-			ShaderOpenGL m_shader;
-			TextureOpenGL m_texture;
-			size_t m_lastVerticesSize;
+			platforms::VertexBufferOpenGL m_vbo;
+			platforms::VertexBufferLayoutOpenGL m_layout;
+			platforms::VertexArrayOpenGL m_vao;
+			platforms::ElementBufferOpenGL m_ebo;
+			platforms::ShaderOpenGL m_shader;
+			platforms::TextureOpenGL m_texture;
 
 		public:
-			void initialize(ShaderType st);
+			void initialize(platforms::ShaderType st);
 
 			void close();
 
@@ -39,12 +38,12 @@ namespace mar {
 				const ecs::LightStorage& light, uint32_t texture_type
 			);
 
-			void passTexturesToShader(ShaderOpenGL& shader, uint32_t texture_type, 
+			void passTexturesToShader(platforms::ShaderOpenGL& shader, uint32_t texture_type,
 				const std::vector<std::string>& paths, const std::vector<int32_t>& samplers);
 
-			void passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light);
+			void passLightToShader(platforms::ShaderOpenGL& shader, const ecs::LightStorage& light);
 
-			void passCameraToShader(ShaderOpenGL& shader, const RenderCamera& cam);
+			void passCameraToShader(platforms::ShaderOpenGL& shader, const RenderCamera& cam);
 
 
 

@@ -7,7 +7,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		void VertexArrayOpenGL::initialize() {

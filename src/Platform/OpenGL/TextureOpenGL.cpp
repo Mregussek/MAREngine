@@ -7,7 +7,7 @@
 
 
 namespace mar {
-	namespace graphics {
+	namespace platforms {
 
 
 		std::unordered_map<std::string, uint32_t> TextureOpenGL::s_2d;
