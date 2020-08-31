@@ -11,8 +11,7 @@
 
 #include "../../Window/Window.h"
 
-#include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBuffer.h"
-#include "../../Core/graphics/Renderer/Buffers/FrameBuffer/FrameBufferOpenGL.h"
+#include "../../Platform/OpenGL/FrameBufferOpenGL.h"
 #include "../../Core/graphics/Renderer/RendererEntity.h"
 
 #include "../../Core/ecs/Scene.h"

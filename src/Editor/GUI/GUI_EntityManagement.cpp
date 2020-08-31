@@ -5,7 +5,7 @@
 
 #include "GUI_EntityManagement.h"
 #include "../../Core/ecs/SceneEvents.h"
-#include "../../Core/graphics/Renderer/Texture/TextureOpenGL.h"
+#include "../../Platform/OpenGL/TextureOpenGL.h"
 #include "GUI_TextEditor.h"
 
 

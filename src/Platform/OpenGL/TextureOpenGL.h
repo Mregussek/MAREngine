@@ -6,8 +6,8 @@
 #ifndef MAR_ENGINE_TEXTURE_OPENGL_H
 #define MAR_ENGINE_TEXTURE_OPENGL_H
 
-#include "Texture.h"
-#include "../../GraphicsLogs.h"
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {
@@ -37,7 +37,7 @@ namespace mar {
 				\param path - path to texture, which will be loaded
 				\return id - id for new loaded texture
 			*/
-			uint32_t loadTexture(const std::string& path);
+			uint32_t loadTexture(std::string path);
 
 			/*
 			Method loads Cube Map and prescribe it to available index.
@@ -45,7 +45,7 @@ namespace mar {
 
 				\param faces - paths to textures, which will be loaded
 			*/
-			uint32_t loadCubemap(const std::string& path);
+			uint32_t loadCubemap(std::string path);
 
 			/*
 			Bind texture with texID to selected shape with shapeId.
@@ -58,11 +58,11 @@ namespace mar {
 			// Unbind texture
 			void unbind() const;
 
-			static bool hasTexture(const std::string& key);
+			static bool hasTexture(std::string key);
 
-			static uint32_t getTexture(const std::string& key) { return s_2d.at(key); }
+			static uint32_t getTexture(std::string key) { return s_2d.at(key); }
 
-			static uint32_t getCubemap(const std::string& key) { return s_cubemaps.at(key); }
+			static uint32_t getCubemap(std::string key) { return s_cubemaps.at(key); }
 
 		private:
 			/*

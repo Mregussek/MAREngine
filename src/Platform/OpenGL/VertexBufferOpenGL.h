@@ -6,8 +6,8 @@
 #ifndef MAR_ENGINE_VERTEXBUFFER_OPENGL_H
 #define MAR_ENGINE_VERTEXBUFFER_OPENGL_H
 
-#include "VertexBuffer.h"
-
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 namespace mar {
 	namespace graphics {

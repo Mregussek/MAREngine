@@ -6,8 +6,9 @@
 #ifndef MAR_ENGINE_VERTEXARRAY_OPENGL_H
 #define MAR_ENGINE_VERTEXARRAY_OPENGL_H
 
-#include "../../../../../mar.h"
-#include "VertexArray.h"
+#include "../../mar.h"
+#include "VertexBufferLayoutOpenGL.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {

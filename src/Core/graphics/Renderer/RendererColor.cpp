@@ -3,7 +3,7 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "Shader/ShaderUniforms.h"
+#include "../../../Platform/OpenGL/ShaderUniforms.h"
 #include "RendererColor.h"
 
 namespace mar {

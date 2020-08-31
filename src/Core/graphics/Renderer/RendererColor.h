@@ -12,13 +12,7 @@
 #include "../../ecs/ECS/Components.h"
 #include "../../ecs/Scene.h"
 #include "../../ecs/SceneManager.h"
-
-#include "Shader/ShaderOpenGL.h"
-#include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
-#include "Buffers/VertexArray/VertexArrayOpenGL.h"
-#include "Buffers/VertexBuffer/VertexBufferOpenGL.h"
-#include "Buffers/VertexBuffer/VertexBufferLayoutOpenGL.h"
-
+#include "Renderer.h"
 
 
 namespace mar {

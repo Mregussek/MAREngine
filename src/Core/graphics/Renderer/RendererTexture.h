@@ -12,13 +12,7 @@
 #include "../../ecs/ECS/Components.h"
 #include "../../ecs/Scene.h"
 #include "../../ecs/SceneManager.h"
-
-#include "Shader/ShaderOpenGL.h"
-#include "Texture/TextureOpenGL.h"
-#include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
-#include "Buffers/VertexArray/VertexArrayOpenGL.h"
-#include "Buffers/VertexBuffer/VertexBufferOpenGL.h"
-#include "Buffers/VertexBuffer/VertexBufferLayoutOpenGL.h"
+#include "Renderer.h"
 
 
 
@@ -45,7 +39,8 @@ namespace mar {
 				const ecs::LightStorage& light, uint32_t texture_type
 			);
 
-			void passTexturesToShader(ShaderOpenGL& shader, uint32_t texture_type, const std::vector<std::string>& paths, const std::vector<int32_t>& samplers);
+			void passTexturesToShader(ShaderOpenGL& shader, uint32_t texture_type, 
+				const std::vector<std::string>& paths, const std::vector<int32_t>& samplers);
 
 			void passLightToShader(ShaderOpenGL& shader, const ecs::LightStorage& light);
 

@@ -230,7 +230,7 @@
     <ClInclude Include="src\Core\ecs\ECS\Entity.h" />
     <ClInclude Include="src\Core\ecs\ECS\Systems.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderUniforms.h" />
+    <ClInclude Include="src\Platform\OpenGL\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h" />
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp" />
@@ -246,6 +246,7 @@
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
+    <ClInclude Include="src\Platform\PlatformLogs.h" />
     <ClInclude Include="src\Window\callbacks.h" />
     <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\LayerStack\layers\GUILayer.h" />
@@ -253,30 +254,22 @@
     <ClInclude Include="src\LayerStack\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Window\buttons_def.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\FrameBuffer\FrameBuffer.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\FrameBuffer\FrameBufferOpenGL.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\ElementBuffer\ElementBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\FrameBufferOpenGL.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Texture\Texture.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Texture\TexturePaths.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexArray\VertexArray.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexBuffer\VertexBuffer.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexBuffer\VertexBufferLayout.h" />
     <ClInclude Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.h" />
     <ClInclude Include="src\Editor\GUI\GUI.h" />
     <ClInclude Include="src\Editor\Camera\Camera.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Core\ecs\Scene.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Shader\Shader.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Shader\ShaderOpenGL.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\ElementBufferOpenGL.h" />
     <ClInclude Include="src\mar.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexArray\VertexArrayOpenGL.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Buffers\VertexBuffer\VertexBufferLayoutOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\VertexBufferOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\VertexArrayOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\VertexBufferLayoutOpenGL.h" />
     <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Window\Window.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Texture\TextureOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h" />
     <ClInclude Include="src\Window\WindowLogs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -311,7 +304,7 @@
     <ClCompile Include="src\helper.cpp" />
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\Buffers\FrameBuffer\FrameBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp" />
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\Manipulators\ShapeManipulator.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
@@ -319,14 +312,14 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\Shader\ShaderOpenGL.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\Buffers\ElementBuffer\ElementBufferOpenGL.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\Buffers\VertexBuffer\VertexBufferOpenGL.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\Buffers\VertexArray\VertexArrayOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ElementBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\VertexBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\VertexArrayOpenGL.cpp" />
     <ClCompile Include="src\Window\callbacks.cpp" />
     <ClCompile Include="src\Window\Input.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\Texture\TextureOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />

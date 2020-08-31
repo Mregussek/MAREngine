@@ -6,12 +6,37 @@
 #ifndef MAR_ENGINE_VERTEXBUFFERLAYOUT_OPENGL_H
 #define MAR_ENGINE_VERTEXBUFFERLAYOUT_OPENGL_H
 
-#include "VertexBufferLayout.h"
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {
 	namespace graphics {
 
+
+		/*!
+		VertexBufferElement
+
+			VertexBufferElement stores data, which will be put in GPU. Helps set up
+			VertexAttribPointer.
+		*/
+		struct VertexBufferElement {
+			uint32_t _type;
+			uint32_t _count;
+			unsigned char _normalized;
+		};
+
+		/*!
+		PushBuffer
+
+			PushBuffer helps in deciding what type of value
+			we are pushing to buffer.
+		*/
+		enum class PushBuffer {
+			PUSH_FLOAT,
+			PUSH_UNSIGNED_INT,
+			PUSH_UNSIGNED_BYTE
+		};
 
 		/*!
 		VertexBufferLayoutOpenGL
@@ -66,7 +91,7 @@ namespace mar {
 					_stride += count * sizeof(GL_UNSIGNED_BYTE);
 				}
 				else {
-					GRAPHICS_ERROR("VertexBufferLayout_OpenGL: Trying to push wrong element");
+					PLATFORM_ERROR("VertexBufferLayout_OpenGL: Trying to push wrong element");
 					return;
 				}
 			}

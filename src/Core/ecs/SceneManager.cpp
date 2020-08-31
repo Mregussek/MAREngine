@@ -327,7 +327,6 @@ namespace mar {
 			auto& texture = entity.getComponent<TextureType>();
 
 			storage.paths.push_back(texture.texture);
-			storage.textureType.push_back(i);
 			storage.transforms.push_back(tran.transform);
 			submitVerticesIndices<int32_t>(ren, storage);
 			submitSampler<int32_t>(storage.counter, storage);

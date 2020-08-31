@@ -9,26 +9,13 @@
 #include "../Mesh/Manipulators/ShapeManipulator.h"
 #include "../Mesh/MeshCreator.h"
 
-#include "Buffers/ElementBuffer/ElementBuffer.h"
-#include "Buffers/ElementBuffer/ElementBufferOpenGL.h"
-
-#include "Buffers/VertexArray/VertexArray.h"
-#include "Buffers/VertexArray/VertexArrayOpenGL.h"
-
-#include "Buffers/VertexBuffer/VertexBuffer.h"
-#include "Buffers/VertexBuffer/VertexBufferOpenGL.h"
-
-#include "Buffers/VertexBuffer/VertexBufferLayout.h"
-#include "Buffers/VertexBuffer/VertexBufferLayoutOpenGL.h"
-
-#include "Buffers/FrameBuffer/FrameBuffer.h"
-#include "Buffers/FrameBuffer/FrameBufferOpenGL.h"
-
-#include "Texture/Texture.h"
-#include "Texture/TextureOpenGL.h"
-
-#include "Shader/Shader.h"
-#include "Shader/ShaderOpenGL.h"
+#include "../../../Platform/OpenGL/ElementBufferOpenGL.h"
+#include "../../../Platform/OpenGL/VertexArrayOpenGL.h"
+#include "../../../Platform/OpenGL/VertexBufferOpenGL.h"
+#include "../../../Platform/OpenGL/VertexBufferLayoutOpenGL.h"
+#include "../../../Platform/OpenGL/FrameBufferOpenGL.h"
+#include "../../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../../Platform/OpenGL/ShaderOpenGL.h"
 
 #include "../../ecs/Scene.h"
 #include "../../ecs/SceneManager.h"

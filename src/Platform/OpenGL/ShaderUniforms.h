@@ -3,7 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "../../../../mar.h"
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {

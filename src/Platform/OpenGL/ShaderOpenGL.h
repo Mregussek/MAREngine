@@ -6,12 +6,24 @@
 #ifndef MAR_ENGINE_SHADER_OPENGL_H
 #define MAR_ENGINE_SHADER_OPENGL_H
 
-#include "Shader.h"
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {
 	namespace graphics {
 
+
+		struct ShaderProgramSource {
+			std::string _vertexSource;
+			std::string _fragmentSource;
+		};
+
+		enum class ShaderType {
+			ENTITY_COLOR,
+			ENTITY_TEXTURE2D,
+			ENTITY_CUBEMAP
+		};
 
 		class ShaderOpenGL {
 			bool m_initialized{false};
@@ -53,5 +65,11 @@ namespace mar {
     
     
 } }
+
+
+#define SHADER_ENTITY_COLOR ::mar::graphics::ShaderType::ENTITY_COLOR
+#define SHADER_ENTITY_TEXTURE2D ::mar::graphics::ShaderType::ENTITY_TEXTURE2D
+#define SHADER_ENTITY_CUBEMAP ::mar::graphics::ShaderType::ENTITY_CUBEMAP
+
 
 #endif // !MAR_ENGINE_SHADER_OPENGL_H

@@ -6,12 +6,25 @@
 #ifndef MAR_ENGINE_FRAME_BUFFER_OPENGL_H
 #define MAR_ENGINE_FRAME_BUFFER_OPENGL_H
 
-#include "../../../../../mar.h"
-#include "FrameBuffer.h"
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {
 	namespace graphics {
+
+
+		struct FrameBufferSpecification {
+			maths::vec3 backgroundColor{ 0.22f, 0.69f, 0.87f };
+			float width{ 0.f };
+			float height{ 0.f };
+			uint32_t samples = 1;
+
+			bool swapChainTarget = false;
+
+			FrameBufferSpecification() = default;
+			FrameBufferSpecification(float w, float h) : width(w), height(h) { }
+		};
 
 
 		class FrameBufferOpenGL {

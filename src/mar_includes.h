@@ -92,6 +92,11 @@ If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_WINDOW_LOGS will not affect an
 */
 //#define MAR_ENGINE_WINDOW_LOGS
 
+/*
+!!! Uncomment to see Platform Logs
+*/
+#define MAR_ENGINE_PLATFORM_LOGS
+
 // ----------------------------------------------
 // MAR_ENGINE_INCLUDE_LIBRARIES
 // ----------------------------------------------

@@ -6,7 +6,8 @@
 #ifndef ELEMENTBUFFER_OPENGL_H
 #define ELEMENTBUFFER_OPENGL_H
 
-#include "ElementBuffer.h"
+#include "../../mar.h"
+#include "../PlatformLogs.h"
 
 
 namespace mar {
