@@ -5,6 +5,7 @@
 
 
 #include "mar_includes.h"
+#include "mar_logging.h"
 
 /*!
 	mar is a main namespace for MAREngine
@@ -42,7 +43,7 @@ namespace mar {
 
 	namespace settings {
 		inline const char name[10] = "MAREngine";
-		inline const int width{ 1700 };
+		inline const int width{ 1600 };
 		inline const int height{ 900 };
 		inline const char portName[10] = "\\\\.\\COM7";
 		inline const char* glsl_version = "#version 330";

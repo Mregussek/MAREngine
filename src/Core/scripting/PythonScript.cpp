@@ -15,6 +15,10 @@ namespace mar {
 	namespace scripting {
 
 
+        PythonScript::PythonScript()
+            : initialized(false)
+        {}
+
         void PythonScript::loadScript(const char* from, const char* what) {
             if (initialized)
                 scriptModule.reload();
@@ -24,6 +28,8 @@ namespace mar {
             module = scriptModule.attr(what)();
 
             initialized = true;
+
+            SCRIPTING_INFO("PYTHON_SCRIPT: Loaded script {} from {}", what, from);
         }
 
 		void PythonScript::start(const ecs::Entity& e) {
@@ -48,6 +54,8 @@ namespace mar {
             }
 
             module.attr("start")();
+
+            SCRIPTING_TRACE("PYTHON_SCRIPT: Calling start method at python script");
         }
 
         void PythonScript::update(ecs::Entity& e) {
@@ -91,9 +99,19 @@ namespace mar {
                 auto& color = e.getComponent<ecs::ColorComponent>();
                 color = module.attr("color").cast<ecs::ColorComponent>();
             }
+
+            SCRIPTING_TRACE("PYTHON_SCRIPT: Calling update method at python script");
         }
 
+        void PythonScript::appendCurrentPath() {
+            auto os = py::module::import("os");
+            auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
 
+            auto sys = py::module::import("sys");
+            sys.attr("path").attr("insert")(0, path);
+
+            SCRIPTING_TRACE("PYTHON_SCRIPT: Appending current path to PyInterpreter");
+        }
 
 
 } }

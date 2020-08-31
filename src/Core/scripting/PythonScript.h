@@ -9,6 +9,7 @@
 
 
 #include "../../mar.h"
+#include "ScriptingLogs.h"
 
 
 namespace mar {
@@ -24,9 +25,7 @@ namespace mar {
             bool initialized;
 
         public:
-            PythonScript()
-                : initialized(false)
-            {}
+            PythonScript();
 
             void loadScript(const char* from, const char* what);
 
@@ -36,13 +35,7 @@ namespace mar {
 
             py::object& getModule() { return module; }
 
-            static void appendCurrentPath() {
-                auto os = py::module::import("os");
-                auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
-
-                auto sys = py::module::import("sys");
-                sys.attr("path").attr("insert")(0, path);
-            }
+            static void appendCurrentPath();
         };
 
 

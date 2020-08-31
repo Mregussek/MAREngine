@@ -230,6 +230,8 @@
     <ClInclude Include="src\Core\ecs\ECS\Entity.h" />
     <ClInclude Include="src\Core\ecs\ECS\Systems.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
+    <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
+    <ClInclude Include="src\mar_logging.h" />
     <ClInclude Include="src\Platform\OpenGL\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h" />
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
