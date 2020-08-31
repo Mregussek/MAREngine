@@ -16,6 +16,8 @@
 // Rendering 
 #include "../../src/Core/ecs/Scene.h"
 #include "../../src/Core/graphics/Renderer/RendererEntity.h"
+// Scripting
+#include "../src/Core/scripting/PythonScript.h"
 // Window && Input
 #include "../../src/Window/Input.h"
 #include "../../src/Window/Window.h"

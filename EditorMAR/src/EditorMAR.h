@@ -6,7 +6,7 @@ using namespace mar;
 class EditorMAR {
 	const int m_width = 1600;
 	const int m_height = 900;
-	const char* m_name = "Editor MAREngine";
+	std::string m_name = "Editor MAREngine";
 	std::string m_pathToScene = "resources/mar_files/empty.marscene";
 	engine::MAREngine* engine{ engine::MAREngine::getEngine() };
 
@@ -14,8 +14,11 @@ public:
 	EditorMAR() = default;
 
 	void initialize() {
-		engine->initWindow(m_height, m_width, m_name);
+		std::string name = m_pathToScene + " --- " + m_name;
+		engine->initWindow(m_height, m_width, name.c_str());
 		engine->setLoadPath(m_pathToScene);
+
+		scripting::PythonScript::appendCurrentPath();
 	}
 
 	void run() {
@@ -23,15 +26,19 @@ public:
 		auto entitylayer = engine->createEntityLayer();
 		auto guilayer = engine->createEditorLayer();
 		auto loaded_scene = engine->loadSceneFromFile();
+		auto gui = engine->createGUI();
+		auto gui_cam = engine->createGUICamera();
+
+		engine->updateBackground(&gui, loaded_scene);
 
 		entitylayer->initialize(loaded_scene);
 		stack.pushLayer(entitylayer);
 
-		guilayer->initialize();
-		engine->submitSceneToGUI(guilayer, loaded_scene);
+		guilayer->initialize(&gui, &gui_cam);
+		gui.submit(entitylayer->getSceneManager());
 		stack.pushOverlay(guilayer);
 
-		auto& framebuffer = engine->getFramebuffer(guilayer);
+		auto& framebuffer = gui.getFramebuffer();
 
 		while (engine->shouldWindowClose() && !engine->shouldEngineRestart())
 		{

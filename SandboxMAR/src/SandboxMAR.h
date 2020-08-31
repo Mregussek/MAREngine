@@ -14,8 +14,11 @@ public:
 	SandboxMAR() = default;
 
 	void initialize() {
-		engine->initWindow(m_height, m_width, m_name);
+		std::string name = m_pathToScene + " --- " + m_name;
+		engine->initWindow(m_height, m_width, name.c_str());
 		engine->setLoadPath(m_pathToScene);
+
+		scripting::PythonScript::appendCurrentPath();
 	}
 
 	void run() {
@@ -25,6 +28,8 @@ public:
 
 		entitylayer->initialize(loaded_scene);
 		stack.pushLayer(entitylayer);
+
+		entitylayer->getSceneManager()->setPlayMode();
 
 		while (engine->shouldWindowClose() && !engine->shouldEngineRestart())
 		{

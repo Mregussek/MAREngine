@@ -9,11 +9,12 @@ layout(location = 3) in float shapeIndex;
 out vec3 v_Position;
 out vec3 v_lightNormal;
 out float v_shapeIndex;
-out vec2 v_texCoords;
+out vec3 v_Color;
 
 uniform mat4 u_Model;
 uniform mat4 u_MVP;
 uniform mat4 u_SeparateTransform[32];
+uniform vec3 u_SeparateColor[32];
 
 void main() {
 	// Calculate all transformations
@@ -25,18 +26,16 @@ void main() {
 	v_shapeIndex = shapeIndex;
 	v_lightNormal = mat3(u_Model) * lightNormal;
 	v_Position = vec4(u_Model * verter_transformed).xyz;
-	v_texCoords = texCoord;
+	v_Color = u_SeparateColor[index];
 };
 
 #shader fragment
 #version 330 core
 
-layout(location = 0) out vec4 color;
-
 in vec3 v_Position;
 in vec3 v_lightNormal;
 in float v_shapeIndex;
-in vec2 v_texCoords;
+in vec3 v_Color;
 
 uniform struct Material {
 	vec3 lightPos;
@@ -52,22 +51,17 @@ uniform struct Material {
 
 uniform int u_materialSize;
 uniform vec3 u_CameraPos;
-uniform sampler2D u_SeparateColor[32];
 
 vec4 calculateLight(Material passed_material, vec3 passed_color_light);
+vec4 computeAllLights(vec4 batchColor);
 
 void main() {
 	int index = int(v_shapeIndex);
 
-	vec4 batchColor = texture(u_SeparateColor[index], v_texCoords);
-	vec4 lightColor = calculateLight(u_material[0], batchColor.xyz);
+	vec4 batchColor = vec4(v_Color, 1.0f);
+	vec4 lightColor = computeAllLights(batchColor);
 
-	for (int i = 1; i < 15; i++) {
-		if (i >= u_materialSize) break;
-		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
-	}
-
-	color = batchColor * lightColor;
+	gl_FragColor = batchColor * lightColor;
 };
 
 vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
@@ -94,5 +88,16 @@ vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
 	diffuse *= attenuation;
 	specular *= attenuation;
 
-	return(vec4(ambient + diffuse + specular, 1.0f));
+	return( vec4(ambient + diffuse + specular, 1.0f) );
+}
+
+vec4 computeAllLights(vec4 batchColor) {
+	vec4 lightColor = calculateLight(u_material[0], batchColor.xyz);
+
+	for (int i = 1; i < 15; i++) {
+		if (i >= u_materialSize) break;
+		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
+	}
+
+	return lightColor;
 }

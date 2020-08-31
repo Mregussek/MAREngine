@@ -2,16 +2,18 @@ MAREngine scene file
 
 #Scene
 #Scene_Name empty.marscene
+#Scene_Background 0.894737 0.894737 2.8026e-44
 
 #Entity
 #TagComponent DarkGreenCube
 #TransformComponent Begin
-#center 23.41 0.54 4.55
+#center 22.06 0.54 4.55
 #angles 65 0 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.2 0.5 0.2
+#ScriptComponent resources/scripts/RotateXY.py
 
 #Entity
 #TagComponent GreenPyramid
@@ -74,15 +76,16 @@ MAREngine scene file
 #Entity
 #TagComponent MonkeyOBJ
 #TransformComponent Begin
-#center 15.83 0.54 -1.97
+#center 0.92321 0.54 -1.97
 #angles -102.5 4 -91
 #scale 1.6 1.6 1.6
 #general_scale 0
-#ColorComponent 1 0.99999 0.99999
+#ColorComponent 0.831954 0.554844 0.554844
 #RenderableComponent resources/objects/monkey.obj
+#ScriptComponent resources/scripts/Foo.py
 
 #Entity
-#TagComponent YellowWall
+#TagComponent RedBrickWall
 #TransformComponent Begin
 #center 30.76 -1.7 4.02
 #angles 0 0 -0.12
@@ -94,18 +97,18 @@ MAREngine scene file
 #Entity
 #TagComponent CameraSavedFile
 #TransformComponent Begin
-#center -22.55 7.41 4.95
-#angles -8.54 -0.38 0
+#center -17.55 7.41 19.1
+#angles -8.54 -26.88 0
 #scale 1 1 1
 #general_scale 0
 #CameraComponent Begin
 #id main
 #used perspective
 #type perspective
-#fov 44.807
-#aspectratio 1.368
-#near 0.001
-#far 101.197
+#fov 45
+#aspectratio 1.33333
+#near 0.1
+#far 50
 #type orthographic
 #left -31.1
 #right 29.8
@@ -147,7 +150,7 @@ MAREngine scene file
 #Entity
 #TagComponent YellowTextureLight
 #TransformComponent Begin
-#center -4.9 -1.45 10.75
+#center -2.55 -1.45 0.55
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
@@ -161,11 +164,12 @@ MAREngine scene file
 #linear 0.015
 #quadratic 0.01
 #shininess 31.5
+#ScriptComponent resources/scripts/LightMover.py
 
 #Entity
 #TagComponent AlphaGrassPNG
 #TransformComponent Begin
-#center 2.45 -1.2 0.6
+#center 2.35 -1.3 -6.4
 #angles 90 0 0
 #scale 0.02 2 0.15
 #general_scale 0
@@ -249,3 +253,44 @@ MAREngine scene file
 #general_scale 0
 #Texture2DComponent resources/textures/grass_alpha.png
 #RenderableComponent Wall
+
+#Entity
+#TagComponent ScriptEntity
+#TransformComponent Begin
+#center 11.55 0.372738 1.05
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#ScriptComponent resources/scripts/Examples.py
+#RenderableComponent Cube
+#ColorComponent 0.104383 0.456417 0.204165
+
+#Entity
+#TagComponent NewScript
+#TransformComponent Begin
+#center 14.55 4.9 -8.6
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Pyramid
+#ColorComponent 1 0.917293 0.917293
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
+#ScriptComponent resources/scripts/NewScript.py
+
+#Entity
+#TagComponent OtherMRtexEntity
+#TransformComponent Begin
+#center 5.5 -1.4 5.4
+#angles 0 -55.5 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Cube
+#ScriptComponent resources/scripts/Examples.py
+#Texture2DComponent resources/textures/mr.jpg

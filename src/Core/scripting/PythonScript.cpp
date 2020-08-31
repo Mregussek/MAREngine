@@ -104,6 +104,8 @@ namespace mar {
         }
 
         void PythonScript::appendCurrentPath() {
+            static pybind11::scoped_interpreter guard{};
+
             auto os = py::module::import("os");
             auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
 
