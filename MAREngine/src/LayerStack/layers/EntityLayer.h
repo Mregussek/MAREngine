@@ -6,15 +6,17 @@
 #ifndef MAR_ENGINE_ENTITY_LAYER_H
 #define MAR_ENGINE_ENTITY_LAYER_H
 
+
 #include "../../mar.h"
 #include "../Layer.h"
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneManager.h"
-#include "../../Core/graphics/Renderer/RendererEntity.h"
+#include "../../Core/graphics/Renderer/RendererBatch.h"
+#include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar {
-	namespace graphics { class RendererEntity; }
+	namespace graphics { class RendererBatch; }
 
 	namespace layers {
 
@@ -22,7 +24,7 @@ namespace mar {
 		class EntityLayer : public Layer {
 			const char* m_debugName;
 			ecs::SceneManager m_sceneManager;
-			graphics::RendererEntity m_renderer;
+			graphics::RendererBatch m_renderer;
 
 		public:
 			EntityLayer(const char* debugname);
@@ -37,7 +39,7 @@ namespace mar {
 
 			// --- GET METHODS --- //
 
-			graphics::RendererEntity* getRenderer();
+			graphics::RendererBatch* getRenderer();
 			ecs::SceneManager* getSceneManager();
 		};
 

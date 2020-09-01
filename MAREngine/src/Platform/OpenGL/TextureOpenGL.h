@@ -50,10 +50,15 @@ namespace mar {
 			/*
 			Bind texture with texID to selected shape with shapeId.
 
-				\param shapeId - id of shape
+				\param texture_type - type ex. GL_TEXTURE_2D / GL_TEXTURE_CUBE_MAP
+				\param unit - id of shape
 				\param texID - id of texture
 			*/
 			void bind(uint32_t texture_type, uint32_t unit, uint32_t texID) const;
+
+			void bind2D(uint32_t unit, uint32_t tex_id) const;
+
+			void bindCube(uint32_t unit, uint32_t cube_id) const;
 
 			// Unbind texture
 			void unbind() const;

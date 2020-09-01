@@ -22,7 +22,8 @@ namespace mar {
 		enum class ShaderType {
 			ENTITY_COLOR,
 			ENTITY_TEXTURE2D,
-			ENTITY_CUBEMAP
+			ENTITY_CUBEMAP,
+			ENTITY_BATCHER
 		};
 
 		class ShaderOpenGL {
@@ -44,6 +45,7 @@ namespace mar {
 
 			// --- SET METHODS --- //
 			void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
+			void setUniformFloat(const std::string& name, const std::vector<float>& floats);
 			void setUniformSampler(const std::string& name, int32_t sampler);
 			void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler);
 			void setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec);
@@ -70,6 +72,7 @@ namespace mar {
 #define SHADER_ENTITY_COLOR ::mar::platforms::ShaderType::ENTITY_COLOR
 #define SHADER_ENTITY_TEXTURE2D ::mar::platforms::ShaderType::ENTITY_TEXTURE2D
 #define SHADER_ENTITY_CUBEMAP ::mar::platforms::ShaderType::ENTITY_CUBEMAP
+#define SHADER_ENTITY_BATCHER ::mar::platforms::ShaderType::ENTITY_BATCHER
 
 
 #endif // !MAR_ENGINE_SHADER_OPENGL_H

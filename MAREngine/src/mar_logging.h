@@ -14,9 +14,9 @@ Logging is damaging perfomance, so it will be wise to comment it (Of course if y
 #define MAR_ENGINE_DEBUG_MODE
 
 // set logging level
-//#define MAR_ENGINE_LOGS_LEVEL_TRACE
+#define MAR_ENGINE_LOGS_LEVEL_TRACE
 //#define MAR_ENGINE_LOGS_LEVEL_INFO
-#define MAR_ENGINE_LOGS_LEVEL_WARN
+//#define MAR_ENGINE_LOGS_LEVEL_WARN
 //#define MAR_ENGINE_LOGS_LEVEL_ERROR
 
 /*
@@ -44,12 +44,6 @@ If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_EDITOR_LOGS will not affect an
 
 
 /*
- *	Mateusz Rzeczyca
- *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- */
-
-
-/*
 !!! Uncomment to see Graphics logs
 
 Uncommenting this macro will create ability to see logs from code, such as Renderer API, the whole EBO, VBO stuff,
@@ -69,7 +63,7 @@ GRAPHICS_LOGS and EDITOR_LOGS, because ECS are the core of MAREngine. Entities &
 
 If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_ECS_LOGS will not affect anything.
 */
-#define MAR_ENGINE_ECS_LOGS
+//#define MAR_ENGINE_ECS_LOGS
 
 /*
 !!! Uncomment to see Platform Logs

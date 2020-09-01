@@ -29,9 +29,9 @@ namespace mar {
 
             void loadScript(const char* from, const char* what);
 
-            void start(const ecs::Entity& e);
+            void start(const ecs::Entity* e);
 
-            void update(ecs::Entity& e);
+            void update(ecs::Entity* e);
 
             py::object& getModule() { return module; }
 

@@ -3,11 +3,10 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+
 #include "Scene.h"
+#include "ECS/Components.h"
 #include "ECS/Entity.h"
-#include "../../Editor/Filesystem/EditorFilesystem.h"
-
-
 
 namespace mar {
 	namespace ecs {
@@ -23,7 +22,7 @@ namespace mar {
 
 		void Scene::shutdown() {
 			m_registry.clear();
-			
+
 			ECS_INFO("SCENE: registry is cleared! (called destructor)");
 		}
 
@@ -68,7 +67,7 @@ namespace mar {
 			return m_entities[m_entities.size() - 1];
 		}
 
-		void Scene::destroyEntity(const int32_t& index) {
+		void Scene::destroyEntity(int32_t index) {
 			ECS_INFO("SCENE: going to destroy entity!");
 
 			if (m_entities[index].isValid()) {
@@ -82,6 +81,9 @@ namespace mar {
 				ECS_INFO("SCENE: entity is not valid, so it cannot be destroyed!");
 			}
 		}
+
+		const std::vector<Entity>& Scene::getEntities() const { return m_entities; }
+		Entity& Scene::getEntity(size_t index) { return m_entities[index]; }
 
 
 } }

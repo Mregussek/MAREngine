@@ -7,7 +7,6 @@
 #define MAR_ENGINE_EDITOR_GUI_ENTITY_MANAGEMENT_H
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/Entity.h"
 #include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../Filesystem/EditorFilesystem.h"
@@ -17,6 +16,8 @@
 
 
 namespace mar {
+	namespace ecs { class Entity; }
+
 	namespace editor {
 
 

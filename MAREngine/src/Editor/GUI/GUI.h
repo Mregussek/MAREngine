@@ -12,7 +12,7 @@
 #include "../../Window/Window.h"
 
 #include "../../Platform/OpenGL/FrameBufferOpenGL.h"
-#include "../../Core/graphics/Renderer/RendererEntity.h"
+#include "../../Core/graphics/Renderer/RendererBatch.h"
 
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneManager.h"

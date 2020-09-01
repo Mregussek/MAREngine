@@ -4,11 +4,12 @@
  */
 
 #include "GUI_SceneHierarchy.h"
-#include "../../Core/graphics/Renderer/RendererEntity.h"
-#include "../EditorLogging.h"
+
 #include "GUI_EntityManagement.h"
 #include "GUI_TextEditor.h"
 
+#include "../../Core/graphics/Renderer/RendererBatch.h"
+#include "../EditorLogging.h"
 
 namespace mar {
 	namespace editor {
@@ -88,13 +89,13 @@ namespace mar {
 		void GUI_SceneHierarchy::Scene_Statistics() {
 			ImGui::Begin("Statistics Menu");
 
-			using stats = graphics::RendererEntity;
+			auto& stats = graphics::RenderPipeline::getInstance().getStatistics();
 
-			auto drawcalls = "Draw Calls: " + std::to_string(stats::getStatistics().drawCallsCount);
-			auto shapescount = "Shapes Count: " + std::to_string(stats::getStatistics().shapesCount);
-			auto vertices = "Vertices: " + std::to_string(stats::getStatistics().verticesCount);
-			auto indices = "Indices: " + std::to_string(stats::getStatistics().indicesCount);
-			auto triangles = "Triangles: " + std::to_string(stats::getStatistics().trianglesCount);
+			auto drawcalls = "Draw Calls: " + std::to_string(stats.drawCallsCount);
+			auto shapescount = "Shapes Count: " + std::to_string(stats.shapesCount);
+			auto vertices = "Vertices: " + std::to_string(stats.verticesCount);
+			auto indices = "Indices: " + std::to_string(stats.indicesCount);
+			auto triangles = "Triangles: " + std::to_string(stats.trianglesCount);
 
 			ImGui::Text(drawcalls.c_str());
 			ImGui::Text(shapescount.c_str());

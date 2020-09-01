@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\EditorMAR.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorMAR.h" />

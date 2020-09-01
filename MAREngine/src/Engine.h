@@ -18,7 +18,7 @@
 #include "LayerStack/layers/EntityLayer.h"
 // Rendering
 #include "Core/ecs/Scene.h"
-#include "Core/graphics/Renderer/RendererEntity.h"
+#include "Core/graphics/Renderer/RendererBatch.h"
 // Scripting
 #include "Core/scripting/PythonScript.h"
 // Window && Input
@@ -83,7 +83,7 @@ namespace mar {
 
 			// --- RENDERING MANAGEMENT --- //
 
-			void resetStatistics() { graphics::RendererEntity::clearStatistics(); }
+			void resetStatistics() { graphics::RenderPipeline::getInstance().clearStatistics(); }
 
 			// --- SCRIPTING MANAGEMENT --- //
 

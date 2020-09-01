@@ -24,21 +24,86 @@ namespace mar {
 			// ----------------------------------------------------
 
 		public:
-			Entity() = default;
-			Entity(Scene* scene);
-			Entity(const Entity& other);
+			Entity() = delete;
 
-			const bool isValid() const;
-			operator bool() const;
+			Entity(Scene* scene)
+				: m_scene(scene),
+				m_entityHandle(scene->m_registry.create())
+			{
+				ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
+			}
 
-			void addDefault();
+			Entity(const Entity& other)
+				: m_entityHandle(other.m_entityHandle),
+				m_scene(other.m_scene)
+			{
+				ECS_TRACE("ENTITY: {} is copied!", m_entityHandle);
+			}
 
-			void addComponent(EntityComponents entcmp);
+			void addDefault() {
+				auto& com = m_scene->m_registry.emplace<Components>(m_entityHandle);
+				com.components.push_back(ECS_DEFAULT);
 
-			void destroyYourself();
+				ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
+			}
+
+			const bool isValid() const {
+				ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
+
+				return m_scene->m_registry.valid(m_entityHandle);
+			}
+
+			operator bool() const {
+				return isValid();
+			}
+
+			void addComponent(EntityComponents entcmp) {
+				ECS_TRACE("ENTITY: {} adding component implicitly!", m_entityHandle);
+
+				switch (entcmp) {
+				case ECS_RENDERABLE:
+					addComponent<RenderableComponent>(ECS_RENDERABLE, "empty");
+					break;
+				case ECS_COLOR:
+					addComponent<ColorComponent>(ECS_COLOR);
+					break;
+				case ECS_TEXTURE2D:
+					addComponent<Texture2DComponent>(ECS_TEXTURE2D);
+					break;
+				case ECS_CUBEMAP:
+					addComponent<TextureCubemapComponent>(ECS_CUBEMAP);
+					break;
+				case ECS_LIGHT:
+					addComponent<LightComponent>(ECS_LIGHT);
+					break;
+				case ECS_CAMERA:
+					addComponent<CameraComponent>(ECS_CAMERA);
+					break;
+				case ECS_SCRIPT:
+					addComponent<ScriptComponent>(ECS_SCRIPT);
+					break;
+				case ECS_TRANSFORM:
+					addComponent<TransformComponent>(ECS_TRANSFORM);
+					break;
+				case ECS_TAG:
+					addComponent<TagComponent>(ECS_TAG);
+					break;
+				case ECS_DEFAULT:
+					addComponent<ColorComponent>(ECS_DEFAULT);
+					break;
+				}
+			}
+
+			void destroyYourself() {
+				ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
+
+				m_scene->m_registry.destroy(m_entityHandle);
+
+				ECS_INFO("ENTITY: destroyed yourself!");
+			}
 
 			// ----------------------------------------------------
-			// ENTITY COMPONENT METHODS, THAT NEED TO BE HERE (cannot move them to Entity.cpp)
+			// ENTITY COMPONENT METHODS
 			// ----------------------------------------------------
 
 			template<typename T>
@@ -47,7 +112,6 @@ namespace mar {
 
 				return m_scene->m_registry.has<T>(m_entityHandle);
 			}
-
 
 			template<typename T, typename... Args>
 			T& addComponent(EntityComponents entcmp, Args&&... args) {

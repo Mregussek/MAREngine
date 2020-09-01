@@ -166,6 +166,20 @@ namespace mar {
 			PLATFORM_TRACE("TEXTURE_OPENGL: Binding - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture({}, {})", unit, (texture_type == GL_TEXTURE_2D ? "Texture2D" : "Cubemap"), texID);
 		}
 
+		void TextureOpenGL::bind2D(uint32_t unit, uint32_t tex_id) const {
+			PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
+			PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, tex_id) );
+
+			PLATFORM_TRACE("TEXTURE_OPENGL: Binding2D - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_2D, {})", unit, tex_id);
+		}
+
+		void TextureOpenGL::bindCube(uint32_t unit, uint32_t cube_id) const {
+			PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
+			PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP , cube_id));
+
+			PLATFORM_TRACE("TEXTURE_OPENGL: BindingCube - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_CUBE_MAP, {})", unit, cube_id);
+		}
+
 		void TextureOpenGL::unbind() const {
 			PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, 0) );
 

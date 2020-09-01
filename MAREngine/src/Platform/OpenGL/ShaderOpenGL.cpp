@@ -23,6 +23,8 @@ namespace mar {
 				break;
 			case ShaderType::ENTITY_CUBEMAP: m_shaderPath = "resources/shaders/entityCubemap.shader.glsl";
 				break;
+			case ShaderType::ENTITY_BATCHER: m_shaderPath = "resources/shaders/batcher.shader.glsl";
+				break;
 			default:
 				PLATFORM_ERROR("SHADER_OPENGL: Cannot find selected shader!");
 				return;
@@ -58,12 +60,18 @@ namespace mar {
 			PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), ints.size(), ints.data()) );
 		}
 
+		void ShaderOpenGL::setUniformFloat(const std::string& name, const std::vector<float>& floats) {
+			PLATFORM_GL_FUNC( glUniform1fv(getUniformLocation(name), floats.size(), floats.data()) );
+		}
+
 		void ShaderOpenGL::setUniformSampler(const std::string& name, int32_t sampler) {
 			PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
+
+			PLATFORM_TRACE("SHADER_OPENGL: setting sampler {} with int {}", name, sampler);
 		}
 
 		void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) {
-			PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()) );
+			PLATFORM_GL_FUNC(glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()));
 		}
 
 		void ShaderOpenGL::setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec) {

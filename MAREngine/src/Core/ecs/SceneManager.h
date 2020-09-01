@@ -8,7 +8,7 @@
 
 
 #include "../../mar.h"
-#include "SceneStorage.h"
+#include "ECS/Components.h"
 #include "Scene.h"
 
 
@@ -34,7 +34,6 @@ namespace mar {
 
 			void setScene(Scene* scene) { m_scene = scene; }
 			Scene* getScene() { return m_scene; }
-			inline const SceneStorage& getStorage() const { return m_sceneStorage; }
 
 			bool isEditorMode() { return m_EditorMode; }
 			bool isPlayMode() { return !m_EditorMode; }
@@ -58,20 +57,8 @@ namespace mar {
 			void updatePlayMode();
 			void updatePauseMode();
 
-			void submitColorEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<maths::vec3>& storage);
-
-			template<typename TextureType>
-			void submitTextureEntity(const Entity& entity, TransformComponent& tran, RenderableComponent& ren, BufferStorage<int32_t>& storage, int32_t i);
-
-			template<typename T>
-			void submitVerticesIndices(RenderableComponent& ren, BufferStorage<T>& storage);
-
-			template<typename T>
-			void submitSampler(T& sampler, BufferStorage<T>& storage);
-
-			void submitCamera(const Entity& entity, TransformComponent& tran);
-
-			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam, graphics::RenderCamera& ren_cam);
+			void submitCamera(TransformComponent& tran, CameraComponent& cam);
+			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam);
 
 		// -------------------------------------------------------------
 		// SCENE MANAGER MEMBERS
@@ -79,8 +66,6 @@ namespace mar {
 
 		private:
 			friend class SceneEvents;
-
-			SceneStorage m_sceneStorage;
 			Scene* m_scene;
 
 		public:

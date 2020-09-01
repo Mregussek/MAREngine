@@ -31,26 +31,7 @@ namespace mar {
                 \param vertices - vector of vertices
                 \param newid - m_id value for shape
             */
-            static void extendShapeID(std::vector<float>& vertices, const uint32_t& stride, const float& newid);
-
-            /*
-            Method changes the Texture ID value in verticesVector of any shape. It works every time, when ID
-            is on the next to last position of data.
-
-                \param stride - stride to find texture id in vertices
-                \param vertices - vector of vertices
-                \param newid - new texture id
-            */
-            static void extendTextureID(std::vector<float>& vertices, const uint32_t& stride, const float& newid);
-
-            /*
-            Method changes both ids in vertices vector - shape id and texture id.
-
-                \param stride - stride to find texture id in vertices
-                \param vertices - vector of vertices
-                \param newid - new texture id
-            */
-            static void extendBothIDs(std::vector<float>& vertices, const uint32_t& stride, const float& newid);
+            static void extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid);
 
             /*
             Method extends indices, in order to batch render things.
@@ -58,21 +39,18 @@ namespace mar {
                 \param indices - indices which will be extended
                 \param extension - factor for increasing indices
             */
-            static void extendIndices(std::vector<uint32_t>& indices, const uint32_t& extension);
+            static void extendIndices(std::vector<uint32_t>& indices, uint32_t extension);
 
             /*
-            If we want batch rendering, we need to change indices values for every shape. Default ones begin with 0.
-            There is need to change begin value to new, in case of proper work of batch renderer.
-            
-                \param size - size of indicesVector
-                \param max_value - max value of indices in current indices vector of renderer
-                \param passedValue - passed indicesVector, its values are gonna be used to calculate new ones
-                \return returnValue - vector containing new, extended, indices
+            Method extends indices, in order to batch render things.
+
+                \param indices - indices which will be extended
+                \param start - from which indice should we start
+                \param end - at which indice should extension end
+                \param extension - factor for increasing indices
             */
-            static std::vector<uint32_t> changeIndicesFormat(const uint32_t& size, int& max_value,
-                const std::vector<uint32_t>& passedValue);
-        
-        
+            static void extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension);
+
             /*
             Calculates vertex normals for set of vertices. Make sure that mesh is triangulated (indices.size() divisible by 3!).
             Also correct stride is needed, in order for correct calculation! (If wrong there will be seg fault!)

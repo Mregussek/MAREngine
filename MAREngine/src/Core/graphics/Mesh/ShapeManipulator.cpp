@@ -9,44 +9,30 @@ namespace mar {
     namespace graphics {
 
 
-		void ShapeManipulator::extendShapeID(std::vector<float>& vertices, const uint32_t& stride, const float& newid) {
-			for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) {
+		void ShapeManipulator::extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid) {
+			for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) 
 				vertices[i * stride - 1] = newid;
-			}
+			
+			GRAPHICS_TRACE("SHAPE_MANIPULATOR: extendShapeID(vert.size() = {}, stride = {}, newid = {})", vertices.size(), stride, newid);
 		}
 
-		void ShapeManipulator::extendTextureID(std::vector<float>& vertices, const uint32_t& stride, const float& newid) {
-			for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) {
-				vertices[i * stride - 2] = newid;
-			}
-		}
-
-		void ShapeManipulator::extendBothIDs(std::vector<float>& vertices, const uint32_t& stride, const float& newid) {
-			for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) {
-				vertices[i * stride - 1] = newid;
-				vertices[i * stride - 2] = newid;
-			}
-		}
-
-		void ShapeManipulator::extendIndices(std::vector<uint32_t>& indices, const uint32_t& extension) {
+		void ShapeManipulator::extendIndices(std::vector<uint32_t>& indices, uint32_t extension) {
 			for (uint32_t i = 0; i < indices.size(); i++)
 				indices[i] += extension;
 		}
 
-		std::vector<uint32_t> ShapeManipulator::changeIndicesFormat(const uint32_t& size, int& max_value,
-			const std::vector<uint32_t>& passedValue) {
+		void ShapeManipulator::extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension) {
+			for (uint32_t i = start; i < end; i++)
+				indices[i] += extension;
 
-			std::vector<uint32_t> returnValue(passedValue.size());
-
-			for (uint32_t i = 0; i < size; i++)
-				returnValue[i] = passedValue[i] + max_value;
-
-			return returnValue;
+			GRAPHICS_TRACE("SHAPE_MANIPULATOR: extendIndices(indices.size() = {}, start = {}, end = {}, extension = {})", indices.size(), start, end, extension);
 		}
 
 		void ShapeManipulator::calculateNormals(std::vector<float>& vertices, const std::vector<uint32_t>& indices, const int32_t stride) {
 			if (indices.size() % 3 != 0)
 				GRAPHICS_ERROR("SHAPEMANIPULATOR: indices.size() is not divisible by 3!!!");
+
+			GRAPHICS_TRACE("SHAPE_MANIPULATOR: going to calculate vertex normals");
 
 			int32_t index[3];
 			for (size_t i = 0; i < indices.size(); i += 3) {
@@ -71,6 +57,8 @@ namespace mar {
 					vertices[index[j] + 5] += cr.z;
 				}
 			}
+
+			GRAPHICS_INFO("SHAPE_MANIPULATOR: calculated vertex normals");
 		}
 
 

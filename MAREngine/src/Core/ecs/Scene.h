@@ -7,9 +7,7 @@
 #define MAR_ENGINE_ECS_SCENE_H
 
 #include "../../mar.h"
-#include "ECS/Components.h"
 #include "ECSLogs.h"
-
 #include "../graphics/Renderer/RenderCamera.h"
 
 
@@ -26,12 +24,13 @@ namespace mar {
 
 		public:
 			Scene(std::string name);
+
 			void shutdown();
 
 			static Scene* createEmptyScene(std::string name);
 
 			Entity& createEntity();
-			void destroyEntity(const int32_t& index);
+			void destroyEntity(int32_t index);
 
 			// --- SET METHODS --- //
 
@@ -43,8 +42,8 @@ namespace mar {
 			inline const std::string& getName() const { return m_name; }
 			inline maths::vec3& getBackground() { return m_backgroundColor; }
 
-			const std::vector<Entity>& getEntities() const { return m_entities; }
-			Entity& getEntity(size_t index) { return m_entities[index]; }
+			const std::vector<Entity>& getEntities() const;
+			Entity& getEntity(size_t index);
 
 			inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 

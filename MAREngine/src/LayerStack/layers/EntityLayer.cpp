@@ -30,7 +30,7 @@ namespace mar {
 			LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
 
 			m_sceneManager.update();
-			m_renderer.update(&m_sceneManager);
+			m_renderer.draw(graphics::RenderPipeline::getInstance());
 
 			LAYER_INFO("ENTITY_LAYER: {} updated!", m_debugName);
 		}
@@ -44,7 +44,7 @@ namespace mar {
 			LAYER_INFO("ENTITY_LAYER: {} closed!", m_debugName);
 		}
 
-		graphics::RendererEntity* EntityLayer::getRenderer() {
+		graphics::RendererBatch* EntityLayer::getRenderer() {
 			return &m_renderer;
 		}
 
