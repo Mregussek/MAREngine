@@ -41,20 +41,5 @@ namespace mar {
 		}
 	};
 
-	namespace settings {
-		inline const char name[10] = "MAREngine";
-		inline const int width{ 1600 };
-		inline const int height{ 900 };
-		inline const char portName[10] = "\\\\.\\COM7";
-		inline const char* glsl_version = "#version 330";
-	}
-
-	namespace constants {
-		inline const size_t maxCount = 100000;
-		inline const size_t maxVertexCount = maxCount * 50;
-		inline const size_t maxIndexCount = maxCount * 50;
-		inline const size_t maxObjectsInScene = 32;
-	}
-
 #endif // !MAR_ENGINE_SETTINGS
 }

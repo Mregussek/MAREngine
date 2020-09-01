@@ -15,7 +15,10 @@ namespace mar {
 		void RendererBatch::initialize() {
 			GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
 
-			m_buffers.initialize(constants::maxVertexCount, constants::maxIndexCount);
+			uint32_t max_vertex_count = 500000;
+			uint32_t max_index_count = 500000 / 2;
+
+			m_buffers.initialize(max_vertex_count, max_index_count);
 			m_buffers.processLayout();
 
 			m_shader.initialize(SHADER_ENTITY_BATCHER);
@@ -52,7 +55,7 @@ namespace mar {
 				m_buffers.resetBuffers();
 				m_buffers.unbind();
 
-				m_texture.unbind();
+				m_texture.unbind(render_pip.m_samplerTypes);
 			}
 
 			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");

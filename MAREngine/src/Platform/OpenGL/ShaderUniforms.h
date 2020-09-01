@@ -195,42 +195,6 @@ namespace mar {
 				}
 			};
 
-			inline static const std::vector<std::string> u_SeparateColor = {
-				"u_SeparateColor[0]",
-				"u_SeparateColor[1]",
-				"u_SeparateColor[2]",
-				"u_SeparateColor[3]",
-				"u_SeparateColor[4]",
-				"u_SeparateColor[5]",
-				"u_SeparateColor[6]",
-				"u_SeparateColor[7]",
-				"u_SeparateColor[8]",
-				"u_SeparateColor[9]",
-				"u_SeparateColor[10]",
-				"u_SeparateColor[11]",
-				"u_SeparateColor[12]",
-				"u_SeparateColor[13]",
-				"u_SeparateColor[14]",
-				"u_SeparateColor[15]",
-				"u_SeparateColor[16]",
-				"u_SeparateColor[17]",
-				"u_SeparateColor[18]",
-				"u_SeparateColor[19]",
-				"u_SeparateColor[20]",
-				"u_SeparateColor[21]",
-				"u_SeparateColor[22]",
-				"u_SeparateColor[23]",
-				"u_SeparateColor[24]",
-				"u_SeparateColor[25]",
-				"u_SeparateColor[26]",
-				"u_SeparateColor[27]",
-				"u_SeparateColor[28]",
-				"u_SeparateColor[29]",
-				"u_SeparateColor[30]",
-				"u_SeparateColor[31]",
-				"u_SeparateColor[32]"
-			};
-
 			inline static const std::vector<std::string> u_SamplersColor = {
 				"u_SamplersColor[0]",
 				"u_SamplersColor[1]",
@@ -263,8 +227,7 @@ namespace mar {
 				"u_SamplersColor[28]",
 				"u_SamplersColor[29]",
 				"u_SamplersColor[30]",
-				"u_SamplersColor[31]",
-				"u_SamplersColor[32]"
+				"u_SamplersColor[31]"
 			};
 
 			inline static const std::vector<std::string> u_Samplers2D = {
@@ -299,8 +262,7 @@ namespace mar {
 				"u_Samplers2D[28]",
 				"u_Samplers2D[29]",
 				"u_Samplers2D[30]",
-				"u_Samplers2D[31]",
-				"u_Samplers2D[32]"
+				"u_Samplers2D[31]"
 			};
 
 			inline static const std::vector<std::string> u_SamplersCube = {
@@ -335,8 +297,7 @@ namespace mar {
 				"u_SamplersCube[28]",
 				"u_SamplersCube[29]",
 				"u_SamplersCube[30]",
-				"u_SamplersCube[31]",
-				"u_SamplersCube[32]"
+				"u_SamplersCube[31]"
 			};
 
 		};

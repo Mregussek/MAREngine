@@ -61,7 +61,7 @@ namespace mar {
 			void bindCube(uint32_t unit, uint32_t cube_id) const;
 
 			// Unbind texture
-			void unbind() const;
+			void unbind(const std::vector<float>& texture_types) const;
 
 			static bool hasTexture(std::string key);
 

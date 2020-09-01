@@ -180,8 +180,17 @@ namespace mar {
 			PLATFORM_TRACE("TEXTURE_OPENGL: BindingCube - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_CUBE_MAP, {})", unit, cube_id);
 		}
 
-		void TextureOpenGL::unbind() const {
-			PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, 0) );
+		void TextureOpenGL::unbind(const std::vector<float>& texture_types) const {
+			for (uint32_t i = 0; i < texture_types.size(); i++) {
+				PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + i) );
+
+				if (texture_types[i] == 1.0f) {
+					PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, 0) );
+				}
+				else if (texture_types[i] == 2.0f) {
+					PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP, 0) );
+				}
+			}
 
 			PLATFORM_TRACE("TEXTURE_OPENGL: Unbinding texture");
 		}
