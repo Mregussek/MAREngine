@@ -56,17 +56,51 @@ namespace mar {
 			*/
 			void bind(uint32_t texture_type, uint32_t unit, uint32_t texID) const;
 
+			/*
+			Bind tex_id of GL_TEXTURE_2D to selected unit
+
+				\param unit - sampler
+				\param tex_id - id of texture2D
+			*/
 			void bind2D(uint32_t unit, uint32_t tex_id) const;
 
+			/*
+			Bind cube_id of GL_TEXTURE_CUBE_MAP to selected unit
+
+				\param unit - sampler
+				\param cube_id - id of Texture Cubemap
+			*/
 			void bindCube(uint32_t unit, uint32_t cube_id) const;
 
-			// Unbind texture
+			/*
+			Unbinds everething, given vector informs, if texture2d or cubemap should be unbinded from unit
+
+				\param texture_types - 1.0f for Texture2D, 2.0f for Cubemap
+			*/
 			void unbind(const std::vector<float>& texture_types) const;
 
+			/*
+			Checks, if instance has loaded given key (which is path to texture)
+
+				\param key - selected texture, which will be checked
+				\returns bool - true, if it is loaded, false otherwise
+			*/
 			static bool hasTexture(std::string key);
 
+			/*
+			Returns if id of given texture2D (path to it)
+				
+				\param key - selected texture2D
+				\returns uint32_t - id of selected texture2D
+			*/
 			static uint32_t getTexture(std::string key) { return s_2d.at(key); }
 
+			/*
+			Returns if id of given Cubemap (path to it)
+
+				\param key - selected Cubemap
+				\returns uint32_t - id of selected Cubemap
+			*/
 			static uint32_t getCubemap(std::string key) { return s_cubemaps.at(key); }
 
 		private:

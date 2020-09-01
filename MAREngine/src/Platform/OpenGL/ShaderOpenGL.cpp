@@ -10,25 +10,13 @@ namespace mar {
 	namespace platforms {
 
 
-		void ShaderOpenGL::initialize(ShaderType shadertype) {
+		void ShaderOpenGL::initialize() {
 			if (m_initialized) {
 				PLATFORM_TRACE("SHADER_OPENGL: Cannot re-initialize once compiled shader! LoadedShader - {}", m_shaderPath);
 				return;
 			}
 
-			switch(shadertype) {
-			case ShaderType::ENTITY_COLOR: m_shaderPath = "resources/shaders/entityColor.shader.glsl";
-				break;
-			case ShaderType::ENTITY_TEXTURE2D: m_shaderPath = "resources/shaders/entityTexture2D.shader.glsl";
-				break;
-			case ShaderType::ENTITY_CUBEMAP: m_shaderPath = "resources/shaders/entityCubemap.shader.glsl";
-				break;
-			case ShaderType::ENTITY_BATCHER: m_shaderPath = "resources/shaders/batcher.shader.glsl";
-				break;
-			default:
-				PLATFORM_ERROR("SHADER_OPENGL: Cannot find selected shader!");
-				return;
-			}
+			m_shaderPath = "resources/shaders/batcher.shader.glsl";
 
 			PLATFORM_TRACE("SHADER_OPENGL: Going to load shader from {}", m_shaderPath);
 

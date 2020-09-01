@@ -23,7 +23,7 @@ namespace mar {
 			m_gui = gui;
 			m_camera = cam;
 
-			m_gui->initialize("#version 420");
+			m_gui->initialize("#version 330");
 
 			m_camera->initialize();
 

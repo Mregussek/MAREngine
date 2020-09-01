@@ -21,7 +21,7 @@ namespace mar {
 			m_buffers.initialize(max_vertex_count, max_index_count);
 			m_buffers.processLayout();
 
-			m_shader.initialize(SHADER_ENTITY_BATCHER);
+			m_shader.initialize();
 		
 			GRAPHICS_INFO("RENDERER_BATCH: initialized!");
 		}

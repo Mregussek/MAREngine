@@ -251,6 +251,7 @@
     <ClInclude Include="src\Core\ecs\ECS\Components.h" />
     <ClInclude Include="src\Core\ecs\ECS\Entity.h" />
     <ClInclude Include="src\Core\ecs\ECS\Systems.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
     <ClInclude Include="src\mar_logging.h" />
@@ -316,6 +317,7 @@
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />

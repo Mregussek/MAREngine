@@ -6,6 +6,7 @@
 #include "GUI_EntityManagement.h"
 #include "../../Core/ecs/ECS/Entity.h"
 #include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/graphics/Renderer/RenderEvents.h"
 #include "../../Platform/OpenGL/TextureOpenGL.h"
 #include "GUI_TextEditor.h"
 

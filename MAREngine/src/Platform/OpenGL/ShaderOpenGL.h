@@ -19,12 +19,6 @@ namespace mar {
 			std::string _fragmentSource;
 		};
 
-		enum class ShaderType {
-			ENTITY_COLOR,
-			ENTITY_TEXTURE2D,
-			ENTITY_CUBEMAP,
-			ENTITY_BATCHER
-		};
 
 		class ShaderOpenGL {
 			bool m_initialized{false};
@@ -37,7 +31,7 @@ namespace mar {
 		public:
 			ShaderOpenGL() = default;
 
-			void initialize(ShaderType shadertype);
+			void initialize();
 			void shutdown();
 
 			void bind() const;
@@ -67,12 +61,6 @@ namespace mar {
     
     
 } }
-
-
-#define SHADER_ENTITY_COLOR ::mar::platforms::ShaderType::ENTITY_COLOR
-#define SHADER_ENTITY_TEXTURE2D ::mar::platforms::ShaderType::ENTITY_TEXTURE2D
-#define SHADER_ENTITY_CUBEMAP ::mar::platforms::ShaderType::ENTITY_CUBEMAP
-#define SHADER_ENTITY_BATCHER ::mar::platforms::ShaderType::ENTITY_BATCHER
 
 
 #endif // !MAR_ENGINE_SHADER_OPENGL_H
