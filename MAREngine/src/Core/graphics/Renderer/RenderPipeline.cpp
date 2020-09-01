@@ -26,6 +26,8 @@ namespace mar {
 			m_indices.insert(m_indices.end(), ren_comp.indices.begin(), ren_comp.indices.end());
 			ShapeManipulator::extendIndices(m_indices, start_extension, end_extension, m_indicesMax);
 
+			ren_comp.shader_id = m_shapeID;
+
 			m_indicesMax += ren_comp.vertices.size() / m_stride;
 			m_shapeID++;
 
@@ -74,6 +76,8 @@ namespace mar {
 			m_indices.clear();
 			m_shapeID = 0.f;
 			m_indicesMax = 0;
+
+			m_transforms.clear();
 
 			m_colors.clear();
 			m_tex2D.clear();

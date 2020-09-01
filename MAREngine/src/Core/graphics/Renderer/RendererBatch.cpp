@@ -68,11 +68,15 @@ namespace mar {
 
 			m_shader.setUniformFloat("u_samplerTypes", ren.m_samplerTypes);
 
-			for (size_t i = 0; i < ren.m_colors.size(); i++) 
-				m_shader.setUniformVector3(u_SamplersColor[(size_t)ren.m_colors[i].first], ren.m_colors[i].second);
-			
 			static uint32_t tex_id = 0;
 			static uint32_t sampler = 0;
+
+			for (size_t i = 0; i < ren.m_colors.size(); i++) {
+				sampler = (uint32_t)ren.m_colors[i].first;
+				m_shader.setUniformVector3(u_SamplersColor[sampler], ren.m_colors[i].second);
+			}
+				
+			GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
 
 			for (size_t i = 0; i < ren.m_tex2D.size(); i++) {
 				tex_id = m_texture.loadTexture(ren.m_tex2D[i].second);
@@ -81,7 +85,9 @@ namespace mar {
 				m_texture.bind2D(sampler, tex_id);
 				m_shader.setUniformSampler(u_Samplers2D[sampler], sampler);
 			}
-				
+			
+			GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
+
 			for (size_t i = 0; i < ren.m_cubes.size(); i++) {
 				tex_id = m_texture.loadCubemap(ren.m_cubes[i].second);
 				sampler = (size_t)ren.m_cubes[i].first;
@@ -90,7 +96,7 @@ namespace mar {
 				m_shader.setUniformSampler(u_SamplersCube[sampler], sampler);
 			}
 
-			GRAPHICS_INFO("RENDERER_BATCH: passed textures to shader!");
+			GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
 		}
 
 		void RendererBatch::passLightToShader(RenderPipeline& ren) {

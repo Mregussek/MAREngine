@@ -66,15 +66,15 @@ namespace mar {
 
 					if (entity.hasComponent<ColorComponent>()) {
 						auto& color = entity.getComponent<ColorComponent>();
-						render_pipeline.submitColor((float)i, color);
+						render_pipeline.submitColor(ren.shader_id, color);
 					}
 					else if (entity.hasComponent<Texture2DComponent>()) {
 						auto& tex = entity.getComponent<Texture2DComponent>();
-						render_pipeline.submitTexture2D((float)i, tex);
+						render_pipeline.submitTexture2D(ren.shader_id, tex);
 					}
 					else if (entity.hasComponent<TextureCubemapComponent>()) {
 						auto& cube = entity.getComponent<TextureCubemapComponent>();
-						render_pipeline.submitCubemap((float)i, cube);
+						render_pipeline.submitCubemap(ren.shader_id, cube);
 					}
 				}
 

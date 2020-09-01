@@ -58,6 +58,8 @@ namespace mar {
 
 			void reset();
 
+			float getCurrentShapeID() { return m_shapeID; }
+
 			RendererStatistics& getStatistics() { return s_statistics; }
 			void clearStatistics() { s_statistics.resetStatistics(); }
 

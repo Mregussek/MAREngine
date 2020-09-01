@@ -28,7 +28,8 @@ namespace mar {
 		};
 
 		struct RenderableComponent {
-			std::string id;
+			std::string id{ "empty" };
+			float shader_id{ 0.f };
 			std::vector<float> vertices;
 			std::vector<uint32_t> indices;
 
