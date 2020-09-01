@@ -20,10 +20,7 @@ namespace mar {
 
 
 		class RendererColor {
-			platforms::VertexBufferOpenGL m_vbo;
-			platforms::VertexBufferLayoutOpenGL m_layout;
-			platforms::VertexArrayOpenGL m_vao;
-			platforms::ElementBufferOpenGL m_ebo;
+			platforms::PipelineOpenGL m_pipeline;
 			platforms::ShaderOpenGL m_shader;
 
 		public:

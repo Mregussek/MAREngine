@@ -85,6 +85,10 @@ namespace mar {
 
 			void resetStatistics() { graphics::RendererEntity::clearStatistics(); }
 
+			// --- SCRIPTING MANAGEMENT --- //
+
+			void initializeScripting() { scripting::PythonScript::appendCurrentPath(); }
+
 		};
 
 

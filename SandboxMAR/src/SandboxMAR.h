@@ -18,7 +18,7 @@ public:
 		engine->initWindow(m_height, m_width, name.c_str());
 		engine->setLoadPath(m_pathToScene);
 
-		scripting::PythonScript::appendCurrentPath();
+		engine->initializeScripting();
 	}
 
 	void run() {

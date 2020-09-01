@@ -13,15 +13,8 @@ namespace mar {
 		void RendererColor::initialize() {
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: Going to initialize!");
 
-			const std::vector<uint32_t> layout{ 3, 3, 2, 1 };
-
-			for (size_t i = 0; i < layout.size(); i++)
-				m_layout.push(layout[i], PUSH_BUFFER_FLOAT);
-
-			m_ebo.initialize(constants::maxIndexCount);
-			m_vao.initialize();
-			m_vbo.initialize(constants::maxVertexCount);
-			m_vao.addBuffer(m_layout);
+			m_pipeline.initialize(constants::maxVertexCount, constants::maxIndexCount);
+			m_pipeline.processLayout();
 
 			m_shader.initialize(SHADER_ENTITY_COLOR);
 
@@ -31,10 +24,7 @@ namespace mar {
 		void RendererColor::close() {
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: Going to close!");
 
-			m_vao.close();
-			m_vbo.close();
-			m_ebo.close();
-
+			m_pipeline.close();
 			m_shader.shutdown();
 
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: closed!");
@@ -56,23 +46,15 @@ namespace mar {
 			}
 
 			{ // BIND ALL NEEDED BUFFERS
-				m_vao.bind();
-				m_vbo.bind();
-				m_ebo.bind();
-
-				m_vbo.update(storage.vertices);
-				m_ebo.update(storage.indices);
+				m_pipeline.bind();
+				m_pipeline.updateBuffers(storage.vertices, storage.indices);
 			}
 
 			MAR_CORE_GL_FUNC(glDrawElements(GL_TRIANGLES, storage.indices.size(), GL_UNSIGNED_INT, nullptr));
 
 			{ // CLEAR AFTER DRAW CALL
-				m_vbo.resetBuffer();
-				m_ebo.resetBuffer();
-
-				m_vbo.unbind();
-				m_ebo.unbind();
-				m_vao.unbind();
+				m_pipeline.resetBuffers();
+				m_pipeline.unbind();
 			}
 
 			GRAPHICS_INFO("RENDERERENTITY_COLOR: has drawn the scene!");

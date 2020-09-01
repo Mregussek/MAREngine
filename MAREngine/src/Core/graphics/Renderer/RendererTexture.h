@@ -21,10 +21,7 @@ namespace mar {
 
 
 		class RendererTexture {
-			platforms::VertexBufferOpenGL m_vbo;
-			platforms::VertexBufferLayoutOpenGL m_layout;
-			platforms::VertexArrayOpenGL m_vao;
-			platforms::ElementBufferOpenGL m_ebo;
+			platforms::PipelineOpenGL m_pipeline;
 			platforms::ShaderOpenGL m_shader;
 			platforms::TextureOpenGL m_texture;
 

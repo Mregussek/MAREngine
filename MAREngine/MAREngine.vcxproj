@@ -256,6 +256,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererTexture.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
     <ClInclude Include="src\mar_logging.h" />
+    <ClInclude Include="src\Platform\OpenGL\PipelineOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h" />
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ElementBufferOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\VertexBufferOpenGL.cpp" />

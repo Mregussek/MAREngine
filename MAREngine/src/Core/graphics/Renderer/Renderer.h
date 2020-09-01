@@ -7,13 +7,10 @@
 #define MAR_ENGINE_GRAPHICS_RENDERER_INCLUDE_H
 
 
-#include "../../../Platform/OpenGL/ElementBufferOpenGL.h"
-#include "../../../Platform/OpenGL/VertexArrayOpenGL.h"
-#include "../../../Platform/OpenGL/VertexBufferOpenGL.h"
-#include "../../../Platform/OpenGL/VertexBufferLayoutOpenGL.h"
 #include "../../../Platform/OpenGL/FrameBufferOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
+#include "../../../Platform/OpenGL/PipelineOpenGL.h"
 
 #include "../../ecs/Scene.h"
 #include "../../ecs/SceneManager.h"
