@@ -5,7 +5,7 @@
 
 #include "EntityLayer.h"
 #include "../LayerLogs.h"
-
+#include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 namespace mar {
 	namespace layers {
@@ -17,6 +17,9 @@ namespace mar {
 
 		void EntityLayer::initialize(ecs::Scene* scene) {
 			LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
+
+			auto& ren = graphics::RenderPipeline::getInstance();
+			ren = graphics::RenderPipeline();
 
 			m_renderer.initialize();
 
@@ -37,6 +40,8 @@ namespace mar {
 
 		void EntityLayer::closeLayer() {
 			LAYER_TRACE("ENTITY_LAYER: {} going to close", m_debugName);
+
+			graphics::RenderPipeline::getInstance().reset();
 
 			m_renderer.close();
 			m_sceneManager.shutdown();

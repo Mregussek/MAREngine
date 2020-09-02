@@ -254,6 +254,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
+    <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
     <ClInclude Include="src\mar_logging.h" />
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\PipelineOpenGL.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_EntityManagement.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp" />
+    <ClCompile Include="src\Editor\GUI\GUI_Graphics.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Info.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />

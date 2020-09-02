@@ -12,6 +12,7 @@
 #include "../Filesystem/EditorFilesystem.h"
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../Window/Input.h"
+#include "../../Core/ecs/SceneEvents.h"
 #include "../EditorLogging.h"
 
 
@@ -40,6 +41,41 @@ namespace mar {
 			static void Scene_Handle_Texture2DComponent(bool window_focused);
 			static void Scene_Handle_TextureCubemapComponent(bool window_focused);
 			static void Scene_Handle_LightComponent(bool window_focused, bool is_play_mode);
+
+			// --------------------------------------------
+			// TEMPLATES TO WRITE MORE REUSABLE CODE
+			// --------------------------------------------
+
+			template<typename T>
+			static bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) {
+				if (ImGui::Button(buttonName)) {
+					renderable.id = T::getID();
+					renderable.vertices = T::getVertices();
+					renderable.indices = T::getIndices();
+
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
+
+					return true;
+				}
+
+				return false;
+			}
+
+			static bool Button_LoadObj(ecs::RenderableComponent& renderable, const char* buttonName, const char* path) {
+				if (ImGui::Button(buttonName)) {
+					graphics::MeshCreator::OBJ::loadOBJ(path);
+
+					renderable.id = graphics::MeshCreator::OBJ::getID();
+					renderable.vertices = graphics::MeshCreator::OBJ::vertices;
+					renderable.indices = graphics::MeshCreator::OBJ::indices;
+
+					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
+
+					return true;
+				}
+
+				return false;
+			}
 		};
 
 

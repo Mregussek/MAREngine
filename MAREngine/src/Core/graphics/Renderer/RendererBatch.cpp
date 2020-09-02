@@ -58,6 +58,12 @@ namespace mar {
 				m_texture.unbind(render_pip.m_samplerTypes);
 			}
 
+			render_pip.s_statistics.drawCallsCount += 1;
+			render_pip.s_statistics.shapesCount += render_pip.m_transforms.size();
+			render_pip.s_statistics.verticesCount += render_pip.m_vertices.size();
+			render_pip.s_statistics.indicesCount += render_pip.m_indices.size();
+			render_pip.s_statistics.trianglesCount += render_pip.m_indices.size() / 3;
+
 			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 		}
 

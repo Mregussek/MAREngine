@@ -5,7 +5,6 @@
 
 #include "GUI_EntityManagement.h"
 #include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/SceneEvents.h"
 #include "../../Core/graphics/Renderer/RenderEvents.h"
 #include "../../Platform/OpenGL/TextureOpenGL.h"
 #include "GUI_TextEditor.h"
@@ -274,7 +273,7 @@ namespace mar {
 					return;
 				}
 
-			ImGui::Text(renderable.id.c_str());
+			ImGui::Text("Type: %s", renderable.id.c_str());
 
 			static bool color_texture_AND;
 			color_texture_AND = !currentEntity->hasComponent<ecs::ColorComponent>() 
@@ -288,50 +287,30 @@ namespace mar {
 				GUI_modify_renderable = true;
 
 			if (GUI_modify_renderable) {
-				if (ImGui::Button("Cube")) {
-					renderable.id = "Cube";
-					renderable.vertices = graphics::MeshCreator::Cube::getVertices();
-					renderable.indices = graphics::MeshCreator::Cube::getIndices();
+				if (Button_ChooseRenderable<graphics::MeshCreator::Cube>(renderable, "Cube")) {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
-
-					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
 
-				if (ImGui::Button("Pyramid")) {
-					renderable.id = "Pyramid";
-					renderable.vertices = graphics::MeshCreator::Pyramid::getVertices();
-					renderable.indices = graphics::MeshCreator::Pyramid::getIndices();
+				if (Button_ChooseRenderable<graphics::MeshCreator::Pyramid>(renderable, "Pyramid")) {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
-
-					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
 
-				if (ImGui::Button("Wall")) {
-					renderable.id = "Wall";
-					renderable.vertices = graphics::MeshCreator::Wall::getVertices();
-					renderable.indices = graphics::MeshCreator::Wall::getIndices();
+				if (Button_ChooseRenderable<graphics::MeshCreator::Wall>(renderable, "Wall")) {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
-
-					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
 
-				if (ImGui::Button("Surface")) {
-					renderable.id = "Surface";
-					renderable.vertices = graphics::MeshCreator::Surface::getVertices();
-					renderable.indices = graphics::MeshCreator::Surface::getIndices();
+				if (Button_ChooseRenderable<graphics::MeshCreator::Surface>(renderable, "Surface")) {
 					GUI_modify_renderable = false;
 					GUI_display_obj = false;
-
-					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 				}
 
 				ImGui::SameLine();
@@ -345,21 +324,12 @@ namespace mar {
 					static std::string load;
 					load = "resources/objects/" + std::string(filename) + ".obj";
 
-					ImGui::Text(".obj file, which will be loaded: ");
-					ImGui::SameLine();
-					ImGui::Text(load.c_str());
+					ImGui::Text(".obj file, which will be loaded: %s", load.c_str());
 					ImGui::Text("WARNING: if .obj file do not exist, no renderable will be assigned!");
 
-					if (ImGui::Button("Load")) {
-						graphics::MeshCreator::OBJ::loadOBJ(load.c_str());
-
-						renderable.id = graphics::MeshCreator::OBJ::vertices.empty() ? "empty" : load;
-						renderable.vertices = graphics::MeshCreator::OBJ::vertices;
-						renderable.indices = graphics::MeshCreator::OBJ::indices;
+					if (Button_LoadObj(renderable, "Load", load.c_str())) {
 						GUI_modify_renderable = false;
 						GUI_display_obj = false;
-
-						ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
 					}
 
 					ImGui::SameLine();
@@ -466,9 +436,7 @@ namespace mar {
 				ImGui::Image((void*)platforms::TextureOpenGL::getTexture(tex.texture), ImVec2{ 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 			}
 
-			ImGui::Text("Current Texture:");
-			ImGui::SameLine();
-			ImGui::Text(tex.texture.c_str());
+			ImGui::Text("Current Texture: %s", tex.texture.c_str());
 
 			if (tex.texture != "empty") {
 				if (!GUI_load_new_texture) {
@@ -505,9 +473,7 @@ namespace mar {
 
 			ImGui::InputText(" ex. .jpg / .png", input, 50);
 
-			ImGui::Text("Texture, which will be loaded: ");
-			ImGui::SameLine();
-			ImGui::Text(input);
+			ImGui::Text("Texture, which will be loaded: %s", input);
 			ImGui::Text("WARNING: if texture do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Texture")) {
@@ -532,9 +498,7 @@ namespace mar {
 				return;
 			}
 
-			ImGui::Text("Current Cubemap: ");
-			ImGui::SameLine();
-			ImGui::Text(cubemap.texture.c_str());
+			ImGui::Text("Current Cubemap: %s", cubemap.texture.c_str());
 
 			if (cubemap.texture != "empty") {
 				if (!GUI_load_new_cubemap) {
@@ -571,9 +535,7 @@ namespace mar {
 
 			ImGui::InputText(" ex. .jpg / .png", input, 50);
 
-			ImGui::Text("Cubemap, which will be loaded: ");
-			ImGui::SameLine();
-			ImGui::Text(cubemap.texture.c_str());
+			ImGui::Text("Cubemap, which will be loaded: %s", cubemap.texture.c_str());
 			ImGui::Text("WARNING: if cubemap do not exist, no shape will appear!");
 
 			if (ImGui::Button("Load Cubemap")) {

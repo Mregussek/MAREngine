@@ -10,6 +10,7 @@
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "GUI_TextEditor.h"
+#include "GUI_Graphics.h"
 #include "GUI_SceneHierarchy.h"
 
 

@@ -300,6 +300,41 @@ namespace mar {
 				"u_SamplersCube[31]"
 			};
 
+			inline static const std::vector<std::string> u_SeparateTransform = {
+				"u_SeparateTransform[0]",
+				"u_SeparateTransform[1]",
+				"u_SeparateTransform[2]",
+				"u_SeparateTransform[3]",
+				"u_SeparateTransform[4]",
+				"u_SeparateTransform[5]",
+				"u_SeparateTransform[6]",
+				"u_SeparateTransform[7]",
+				"u_SeparateTransform[8]",
+				"u_SeparateTransform[9]",
+				"u_SeparateTransform[10]",
+				"u_SeparateTransform[11]",
+				"u_SeparateTransform[12]",
+				"u_SeparateTransform[13]",
+				"u_SeparateTransform[14]",
+				"u_SeparateTransform[15]",
+				"u_SeparateTransform[16]",
+				"u_SeparateTransform[17]",
+				"u_SeparateTransform[18]",
+				"u_SeparateTransform[19]",
+				"u_SeparateTransform[20]",
+				"u_SeparateTransform[21]",
+				"u_SeparateTransform[22]",
+				"u_SeparateTransform[23]",
+				"u_SeparateTransform[24]",
+				"u_SeparateTransform[25]",
+				"u_SeparateTransform[26]",
+				"u_SeparateTransform[27]",
+				"u_SeparateTransform[28]",
+				"u_SeparateTransform[29]",
+				"u_SeparateTransform[30]",
+				"u_SeparateTransform[31]"
+			};
+
 		};
 
 

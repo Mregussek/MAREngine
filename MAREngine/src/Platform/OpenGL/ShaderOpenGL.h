@@ -31,7 +31,7 @@ namespace mar {
 		public:
 			ShaderOpenGL() = default;
 
-			void initialize();
+			void initialize(std::string shader = "resources/shaders/batcher.shader.glsl");
 			void shutdown();
 
 			void bind() const;

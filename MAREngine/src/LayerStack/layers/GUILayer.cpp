@@ -6,6 +6,7 @@
 #include "GUILayer.h"
 #include "../LayerLogs.h"
 #include "../../Editor/GUI/GUI.h"
+#include "../../Editor/GUI/GUI_Graphics.h"
 #include "../../Editor/Camera/Camera.h"
 
 
@@ -35,11 +36,16 @@ namespace mar {
 			m_camera->setMouseCall(&win.getMouseX(), &win.getMouseY());
 			m_camera->setScrollCall(&win.getScrollX(), &win.getScrollY());
 
+			/* SETUP RENDERING GUIZMO / LINE LOOPS */
+			editor::GUI_Graphics::getInstance().initialize();
+
 			LAYER_INFO("GUI_LAYER: {} initialized", m_debugName);
 		}
 
 		void LayerGUI::update() {
 			LAYER_TRACE("GUI_LAYER: {} going to display frame", m_debugName);
+
+			editor::GUI_Graphics::getInstance().passToDrawEntity(m_gui->getCurrentEntity(), m_gui->canDrawLines());
 
 			m_camera->processInput();
 			m_camera->updateData();
@@ -53,6 +59,8 @@ namespace mar {
 			LAYER_TRACE("GUI_LAYER: {} going to close!", m_debugName);
 
 			m_gui->shutdown();
+
+			editor::GUI_Graphics::getInstance().close();
 
 			LAYER_INFO("GUI_LAYER: {} closed!", m_debugName);
 		}

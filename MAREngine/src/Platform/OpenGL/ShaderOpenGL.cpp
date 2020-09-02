@@ -10,13 +10,13 @@ namespace mar {
 	namespace platforms {
 
 
-		void ShaderOpenGL::initialize() {
+		void ShaderOpenGL::initialize(std::string shader /* = "resources/shaders/batcher.shader.glsl" */) {
 			if (m_initialized) {
 				PLATFORM_TRACE("SHADER_OPENGL: Cannot re-initialize once compiled shader! LoadedShader - {}", m_shaderPath);
 				return;
 			}
 
-			m_shaderPath = "resources/shaders/batcher.shader.glsl";
+			m_shaderPath = shader;
 
 			PLATFORM_TRACE("SHADER_OPENGL: Going to load shader from {}", m_shaderPath);
 

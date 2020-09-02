@@ -24,6 +24,11 @@ namespace mar {
 				PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 			}
 
+			static void drawLineLoops(size_t indices_count) {
+				PLATFORM_GL_FUNC(glDrawElements(GL_LINE_LOOP, indices_count, GL_UNSIGNED_INT, nullptr));
+
+				PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
+			}
 
 
 		};

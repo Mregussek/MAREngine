@@ -104,12 +104,15 @@ namespace mar {
             };
         }
 
+		std::string MeshCreator::OBJ::id;
 		std::vector<float> MeshCreator::OBJ::vertices;
 		std::vector<uint32_t> MeshCreator::OBJ::indices;
 
 		void MeshCreator::OBJ::loadOBJ(const char* filename) {
 			vertices.clear();
 			indices.clear();
+
+			id = std::string(filename);
 
 			std::vector<maths::vec3> method_vertices;
 			std::vector<maths::vec2> method_vertices_texcoords;

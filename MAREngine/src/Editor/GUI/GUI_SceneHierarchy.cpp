@@ -91,17 +91,11 @@ namespace mar {
 
 			auto& stats = graphics::RenderPipeline::getInstance().getStatistics();
 
-			auto drawcalls = "Draw Calls: " + std::to_string(stats.drawCallsCount);
-			auto shapescount = "Shapes Count: " + std::to_string(stats.shapesCount);
-			auto vertices = "Vertices: " + std::to_string(stats.verticesCount);
-			auto indices = "Indices: " + std::to_string(stats.indicesCount);
-			auto triangles = "Triangles: " + std::to_string(stats.trianglesCount);
-
-			ImGui::Text(drawcalls.c_str());
-			ImGui::Text(shapescount.c_str());
-			ImGui::Text(vertices.c_str());
-			ImGui::Text(indices.c_str());
-			ImGui::Text(triangles.c_str());
+			ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
+			ImGui::Text("Entities Count (with Renderable): %d", stats.shapesCount);
+			ImGui::Text("Vertices: %d" , stats.verticesCount);
+			ImGui::Text("Indices: %d", stats.indicesCount);
+			ImGui::Text("Triangles: %d", stats.trianglesCount);
 
 			ImGui::Separator();
 
@@ -123,11 +117,8 @@ namespace mar {
 
 			ImGui::Separator();
 
-			std::string fpsinfo = "FPS: " + std::to_string(ImGui::GetIO().Framerate);
-			std::string msframe = "ms/frame: " + std::to_string(1000.0f / ImGui::GetIO().Framerate);
-
-			ImGui::Text(fpsinfo.c_str());
-			ImGui::Text(msframe.c_str());
+			ImGui::Text("FPS: %f", ImGui::GetIO().Framerate);
+			ImGui::Text("ms/frame: %f", 1000.0f / ImGui::GetIO().Framerate);
 
 			ImGui::End();
 

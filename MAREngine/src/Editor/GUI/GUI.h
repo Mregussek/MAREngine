@@ -41,6 +41,10 @@ namespace mar {
 			// --- GET METHODS --- //
 			float& getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
 			float& getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
+			ecs::Entity* getCurrentEntity() { 
+				return m_currentEntity; 
+			}
+			bool canDrawLines() { return m_sceneManager->isEditorMode(); }
 			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
 
 		private:
