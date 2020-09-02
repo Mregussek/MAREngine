@@ -21,7 +21,6 @@ namespace mar {
 		
 		class GUI_Graphics {
 			static GUI_Graphics s_instance;
-			bool m_canDraw;
 
 			platforms::PipelineOpenGL m_pipeline;
 			platforms::ShaderOpenGL m_shader;
@@ -29,7 +28,6 @@ namespace mar {
 		public:
 
 			static GUI_Graphics& getInstance() { return s_instance; }
-			void setDrawingAbility(bool ability) { m_canDraw = ability; }
 
 			void initialize();
 			void close();

@@ -21,8 +21,8 @@ namespace mar {
 		class GUI_SceneHierarchy {
 		public:
 
-			static void Scene_Hierarchy(ecs::SceneManager* manager, ecs::Entity* entity, int32_t& index);
-			static void Scene_Hierarchy_PopUp(ecs::SceneManager* manager, ecs::Entity* entity, int32_t& index);
+			static void Scene_Hierarchy(ecs::SceneManager* manager);
+			static void Scene_Hierarchy_PopUp(ecs::SceneManager* manager);
 
 			static void Scene_Statistics();
 		};

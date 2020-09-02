@@ -112,7 +112,7 @@ namespace mar {
 			ECS_TRACE("SCENE_MANAGER: updating editor mode");
 
 			if (useEditorCamera) {
-				auto& camdata = editor::Camera::getCameraData();
+				auto camdata = editor::Camera::getCameraData();
 				auto& cam = m_scene->getRenderCamera();
 
 				cam = camdata;

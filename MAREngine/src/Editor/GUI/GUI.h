@@ -41,11 +41,9 @@ namespace mar {
 			// --- GET METHODS --- //
 			float& getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
 			float& getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
-			ecs::Entity* getCurrentEntity() { 
-				return m_currentEntity; 
-			}
-			bool canDrawLines() { return m_sceneManager->isEditorMode(); }
 			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
+			ecs::Entity* getCurrentEntity();
+			bool canDrawLines() { return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; }
 
 		private:
 			// --- DISPLAY --- //
@@ -61,11 +59,8 @@ namespace mar {
 		private:
 			// --- Storage for scenes
 			ecs::SceneManager* m_sceneManager;
-			ecs::Entity* m_currentEntity;
 			// --- Viewport
 			platforms::FrameBufferOpenGL m_viewportFramebuffer;
-			// --- Which entity should be displayed
-			int32_t m_indexEntity{ -1 };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;

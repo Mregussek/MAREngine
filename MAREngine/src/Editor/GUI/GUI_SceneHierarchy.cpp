@@ -15,7 +15,7 @@ namespace mar {
 	namespace editor {
 
 
-		void GUI_SceneHierarchy::Scene_Hierarchy(ecs::SceneManager* manager, ecs::Entity* entity, int32_t& index) {
+		void GUI_SceneHierarchy::Scene_Hierarchy(ecs::SceneManager* manager) {
 			ImGui::Begin("Scene Hierarchy");
 
 			ImGui::Text(" - ");
@@ -27,21 +27,19 @@ namespace mar {
 			for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
 				std::string& s = entities[i].getComponent<ecs::TagComponent>();
 				if (ImGui::MenuItem(s.c_str())) {
-					index = i;
-					entity = &manager->getScene()->getEntity(index);
-					GUI_EntityManagement::currentEntity = entity;
-					GUI_EntityManagement::currentIndex = index;
+					GUI_EntityManagement::currentEntity = &manager->getScene()->getEntity(i);
+					GUI_EntityManagement::currentIndex = i;
 				}
 			}
 
-			Scene_Hierarchy_PopUp(manager, entity, index);
+			Scene_Hierarchy_PopUp(manager);
 
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: scene_hierarchy");
 		}
 
-		void GUI_SceneHierarchy::Scene_Hierarchy_PopUp(ecs::SceneManager* manager, ecs::Entity* entity, int32_t& index) {
+		void GUI_SceneHierarchy::Scene_Hierarchy_PopUp(ecs::SceneManager* manager) {
 			if (manager->isPlayMode()) {
 				EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
 				return;
@@ -62,19 +60,15 @@ namespace mar {
 
 			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 				if (ImGui::MenuItem("Add Entity to scene")) {
-					entity = &manager->getScene()->createEntity();
-					index = manager->getScene()->getEntities().size() - 1;
-					GUI_EntityManagement::currentEntity = entity;
-					GUI_EntityManagement::currentIndex = index;
+					GUI_EntityManagement::currentEntity = &manager->getScene()->createEntity();
+					GUI_EntityManagement::currentIndex = manager->getScene()->getEntities().size() - 1;
 				}
 
-				if (entity)
+				if (GUI_EntityManagement::currentEntity)
 					if (ImGui::MenuItem("Delete Selected Entity from Scene")) {
-						manager->getScene()->destroyEntity(index);
-						index = -1;
-						entity = nullptr;
-						GUI_EntityManagement::currentEntity = entity;
-						GUI_EntityManagement::currentIndex = index;
+						manager->getScene()->destroyEntity(GUI_EntityManagement::currentIndex);
+						GUI_EntityManagement::currentIndex = -1;
+						GUI_EntityManagement::currentEntity = nullptr;
 						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
 						GUI_TextEditor::Instance().setEditorTitle("Empty");
 						ecs::SceneEvents::Instance().onEntityRemove();

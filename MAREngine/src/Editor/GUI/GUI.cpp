@@ -10,7 +10,6 @@
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "GUI_TextEditor.h"
-#include "GUI_Graphics.h"
 #include "GUI_SceneHierarchy.h"
 
 
@@ -103,7 +102,7 @@ namespace mar {
 			Editor_MainMenuBar();
 
 			Editor_Properties();
-			GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager, m_currentEntity, m_indexEntity);
+			GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager);
 			GUI_SceneHierarchy::Scene_Statistics();
 
 			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
@@ -254,6 +253,10 @@ namespace mar {
 			GUI_EntityManagement::render_cam = &m_sceneManager->getScene()->getRenderCamera();
 
 			EDITOR_INFO("GUI: scene has been submitted!");
+		}
+
+		ecs::Entity* GUI::getCurrentEntity() {
+			return GUI_EntityManagement::currentEntity;
 		}
 
 

@@ -6,6 +6,7 @@
 #include "GUI_Graphics.h"
 #include "../../Platform/OpenGL/ShaderUniforms.h"
 #include "../Camera/Camera.h"
+#include "../../Core/ecs/ECS/Systems.h"
 
 
 namespace mar {
@@ -31,13 +32,16 @@ namespace mar {
 			m_shader.shutdown();
 		}
 
-
 		void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
-			if (!m_canDraw)
-				return;
+			static size_t index;
+			static maths::vec3 scale;
+			index = (size_t)ren.shader_id;
+			scale = tran.scale + 0.15f;
+			maths::mat4 better_outline = ecs::System::handleTransformComponent(tran.center, tran.angles, scale);
 
+			m_shader.bind();
 			m_shader.setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
-			m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[(size_t)ren.shader_id], tran.transform);
+			m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
 
 			m_pipeline.bind();
 			m_pipeline.updateBuffers(ren.vertices, ren.indices);
@@ -49,12 +53,11 @@ namespace mar {
 		}
 
 		void GUI_Graphics::passToDrawEntity(ecs::Entity* e, bool ability_to_draw) {
-			if (e) {
-				editor::GUI_Graphics::getInstance().setDrawingAbility(ability_to_draw);
-				editor::GUI_Graphics::getInstance().drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
-			}
-			else {
-				editor::GUI_Graphics::getInstance().setDrawingAbility(false);
+			if (e && ability_to_draw) {
+
+				if (e->hasComponent<ecs::RenderableComponent>())
+					editor::GUI_Graphics::getInstance().drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
+				
 			}
 		}
 

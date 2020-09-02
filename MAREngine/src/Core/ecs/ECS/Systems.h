@@ -32,6 +32,18 @@ namespace mar {
 				ECS_TRACE("SYSTEM: calculated new TransformComponent!");
 			}
 
+			static maths::mat4 handleTransformComponent(maths::vec3& center, maths::vec3& angles, maths::vec3& scale) {
+				using namespace maths;
+
+				return	mat4::translation(center) *
+						mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
+						mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
+						mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
+						mat4::scale(scale);
+
+				ECS_TRACE("SYSTEM: calculated new TransformComponent!");
+			}
+
 			static std::string changeSlashesToDots(std::string str) {
 				size_t pos = str.find("/");
 
