@@ -30,23 +30,30 @@ namespace mar {
 
 			m_pipeline.close();
 			m_shader.shutdown();
+		
 		}
 
 		void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
 			static size_t index;
 			static maths::vec3 scale;
 			index = (size_t)ren.shader_id;
-			scale = tran.scale + 0.15f;
+			scale = tran.scale + 0.05f;
 			maths::mat4 better_outline = ecs::System::handleTransformComponent(tran.center, tran.angles, scale);
-
-			m_shader.bind();
-			m_shader.setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
-			m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
 
 			m_pipeline.bind();
 			m_pipeline.updateBuffers(ren.vertices, ren.indices);
 
-			platforms::DrawingOpenGL::drawLineLoops(ren.indices.size());
+			m_shader.bind();
+			m_shader.setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
+
+			m_pipeline.bind();
+			m_pipeline.updateBuffers(ren.vertices, ren.indices);
+
+			//m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], tran.transform);
+			//platforms::DrawingOpenGL::drawToStencil(ren.indices.size());
+
+			m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
+			platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 
 			m_pipeline.resetBuffers();
 			m_pipeline.unbind();

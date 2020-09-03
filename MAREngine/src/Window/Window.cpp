@@ -77,6 +77,8 @@ namespace mar {
 			glfwSwapInterval(1);
 			/// Enable DEPTH, in other words 3D
 			MAR_CORE_GL_FUNC( glEnable(GL_DEPTH_TEST) );
+			/// Enable STENCIL, outliner
+			MAR_CORE_GL_FUNC( glEnable(GL_STENCIL_TEST) );
 			/// Enable loading PNG files and transparency
 			MAR_CORE_GL_FUNC( glEnable(GL_BLEND) );
 			MAR_CORE_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
@@ -104,7 +106,7 @@ namespace mar {
 
 		void Window::clearScreen() {
 			MAR_CORE_GL_FUNC( glClearColor(m_backgroundColor.x, m_backgroundColor.y, m_backgroundColor.z, 1.0f) );
-			MAR_CORE_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
+			MAR_CORE_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) );
 
 			WINDOW_TRACE("WINDOW: cleared screen!");
 		}

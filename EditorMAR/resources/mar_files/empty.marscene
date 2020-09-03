@@ -17,42 +17,42 @@ MAREngine scene file
 
 #Entity
 #TagComponent GreenPyramid
-#RenderableComponent Pyramid
 #TransformComponent Begin
 #center 21.05 0.7 2
 #angles 0 25 0
 #scale 3 3.5 3
 #general_scale 0
+#RenderableComponent Pyramid
 #ColorComponent 0.5 0.9 0.25
 
 #Entity
 #TagComponent SurfacePurple
-#RenderableComponent Surface
 #TransformComponent Begin
 #center 21.3 -1.85 0
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
+#RenderableComponent Surface
 #ColorComponent 0.5 0.2 0.9
 
 #Entity
 #TagComponent RedWall
-#RenderableComponent Wall
 #TransformComponent Begin
 #center 21.8 -2.15 -7.83
 #angles 0 -99.69 0
 #scale 1 1 1
 #general_scale 0
+#RenderableComponent Wall
 #ColorComponent 0.9 0.2 0.3
 
 #Entity
 #TagComponent LightCube
-#RenderableComponent Cube
 #TransformComponent Begin
 #center 17.69 0.72 7.7
 #angles 0 0 0
 #scale 0.750999 1.5 0.750999
 #general_scale 0
+#RenderableComponent Cube
 #ColorComponent 1 1 1
 #LightComponent Begin
 #ambientlight 0.5 0.5 0.5
@@ -268,7 +268,7 @@ MAREngine scene file
 #Entity
 #TagComponent NewScript
 #TransformComponent Begin
-#center 14.55 4.9 -8.6
+#center 29.75 4.9 -8.6
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
@@ -290,7 +290,17 @@ MAREngine scene file
 #center 5.5 -1.4 5.4
 #angles 0 -55.5 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cube
 #ScriptComponent resources/scripts/Examples.py
 #Texture2DComponent resources/textures/mr.jpg
+
+#Entity
+#TagComponent LegoHuman
+#TransformComponent Begin
+#center 42.65 -3.3 0
+#angles -80.5 -5 -187
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent resources/objects/lego-human.obj
+#ColorComponent 0.954887 0.520521 0.520521
