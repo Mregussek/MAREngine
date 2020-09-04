@@ -7,7 +7,7 @@
 #define MAR_ENGINE_EDITOR_GUI_ENTITY_MANAGEMENT_H
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/ComponentsEntity.h"
+#include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
 

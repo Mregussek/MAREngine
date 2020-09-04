@@ -12,7 +12,7 @@
 #include "GUI_TextEditor.h"
 #include "../../Core/ecs/ECS/EntityCollection.h"
 #include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/ComponentsEntity.h"
+#include "../../Core/ecs/ECS/Components.h"
 
 
 namespace mar {
@@ -32,7 +32,7 @@ namespace mar {
 					return;
 				}
 				
-				auto& tag = currentCollection->getComponent<ecs::CollectionTagComponent>();
+				auto& tag = currentCollection->getComponent<ecs::TagComponent>();
 
 				ImGui::Text("ENTITYCOLLECTION --- %s", tag.tag.c_str());
 				ImGui::Separator();

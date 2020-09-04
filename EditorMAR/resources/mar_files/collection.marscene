@@ -355,4 +355,57 @@ MAREngine scene file
 
 #EntityEnd
 
+#EntityCollectionStart
+#CollectionTagComponent FirstCollection
+
+#EntityStart
+#TagComponent CollectionCube
+#TransformComponent Begin
+#center 7.5 3.25 -8.7
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Cube
+#ColorComponent 0.455949 0.924812 0.30943
+
+#EntityEnd
+
+#EntityStart
+#TagComponent CollectionPyramid
+#TransformComponent Begin
+#center 7.65 5.45 -10.6
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Pyramid
+#Texture2DComponent resources/textures/red-brick.jpg
+
+#EntityEnd
+
+#EntityStart
+#TagComponent SurfaceHigher
+#TransformComponent Begin
+#center 28.8 8.3 -2.45
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Surface
+#ColorComponent 0.189652 0.415181 0.800752
+
+#EntityEnd
+
+#EntityStart
+#TagComponent CubemapCollection
+#TransformComponent Begin
+#center 4.45 6.05 -5.55
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Cube
+#TextureCubemapComponent resources/textures/dirt
+
+#EntityEnd
+
+#EntityCollectionEnd
+
 #SceneEnd

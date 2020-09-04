@@ -36,7 +36,7 @@ namespace mar {
 		public:
 			static Window& getInstance() { return s_instance; }
 			
-			void updateBackgroundColor(maths::vec3& new_back) { m_background = new_back; }
+			void updateBackgroundColor(maths::vec3 new_back) { m_background = new_back; }
 
 			void initialize(int32_t width, int32_t height, const char* name) {
 				m_width = width;

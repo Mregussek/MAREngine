@@ -36,7 +36,7 @@ namespace mar {
 		}
 
 		void MAREngine::updateBackground(editor::GUI* gui, ecs::Scene* scene) {
-			auto& back = scene->getBackground();
+			auto back = scene->getBackground();
 			window::Window::getInstance().updateBackgroundColor(back);
 
 			if (gui) {

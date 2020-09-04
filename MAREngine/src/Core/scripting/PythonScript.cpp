@@ -7,7 +7,7 @@
 #include "PythonScript.h"
 #include "MAREnginePy.cpp"
 #include "../ecs/ECS/Entity.h"
-#include "../ecs/ECS/ComponentsEntity.h"
+#include "../ecs/ECS/Components.h"
 #include "../ecs/ECS/Systems.h"
 
 

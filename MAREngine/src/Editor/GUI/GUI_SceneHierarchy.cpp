@@ -43,7 +43,7 @@ namespace mar {
 			ImGui::Separator();
 
 			for (int32_t i = 0; i < (int32_t)collections.size(); i++) {
-				if (ImGui::MenuItem(collections[i].getComponent<ecs::CollectionTagComponent>().tag.c_str())) {
+				if (ImGui::MenuItem(collections[i].getComponent<ecs::TagComponent>().tag.c_str())) {
 					GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->getCollection(i);
 					GUI_EntityCollectionPanel::currentIndex = i;
 				}
@@ -89,7 +89,7 @@ namespace mar {
 				}
 
 				if (GUI_EntityCollectionPanel::currentCollection) {
-					const char* collection_tag = GUI_EntityCollectionPanel::currentCollection->getComponent<ecs::CollectionTagComponent>().tag.c_str();
+					const char* collection_tag = GUI_EntityCollectionPanel::currentCollection->getComponent<ecs::TagComponent>().tag.c_str();
 
 					if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
 						GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();

@@ -243,7 +243,6 @@
     <ClInclude Include="include\MAREngine\MAREngine.h" />
     <ClInclude Include="src\Core\assets\AssetsManager.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
-    <ClInclude Include="src\Core\ecs\ECS\ComponentsCollection.h" />
     <ClInclude Include="src\Core\ecs\ECS\EntityCollection.h" />
     <ClInclude Include="src\Core\ecs\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
@@ -251,13 +250,14 @@
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
-    <ClInclude Include="src\Core\ecs\ECS\ComponentsEntity.h" />
+    <ClInclude Include="src\Core\ecs\ECS\Components.h" />
     <ClInclude Include="src\Core\ecs\ECS\Entity.h" />
     <ClInclude Include="src\Core\ecs\ECS\Systems.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
-    <ClInclude Include="src\Editor\Filesystem\Filesystem_SaveFile.h" />
+    <ClInclude Include="src\Editor\Filesystem\Filesystem_Loading.h" />
+    <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\GUI\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
     <ClInclude Include="src\mar_logging.h" />
@@ -332,7 +332,8 @@
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
-    <ClCompile Include="src\Editor\Filesystem\Filesystem_SaveFile.cpp" />
+    <ClCompile Include="src\Editor\Filesystem\Filesystem_Loading.cpp" />
+    <ClCompile Include="src\Editor\Filesystem\Filesystem_Saving.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_EntityCollectionPanel.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_EntityPanel.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp" />

@@ -3,97 +3,55 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "EditorFilesystem.h"
-#include "../../Core/ecs/ECS/Systems.h"
-#include "../../Core/graphics/Mesh/MeshCreator.h"
-#include "../EditorLogging.h"
-#include "Filesystem_Saving.h"
+
 #include "Filesystem_Loading.h"
+#include "../../Core/graphics/Mesh/MeshCreator.h"
+#include "../../Core/ecs/ECS/Systems.h"
 
 
 namespace mar {
 	namespace editor {
 
 
-		void Filesystem::saveToFile(ecs::Scene* scene, const char* filename) {
-			EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", scene->getName(), filename);
+		void Filesystem_Loading::loadScene(std::ifstream& file, ecs::Scene* scene) {
+			std::string line;
 
-			std::ofstream ss(filename, std::ios::out | std::ios::trunc);
-
-			if (!ss.is_open()) {
-				EDITOR_ERROR("Cannot open file {} and save scene at {}!", scene->getName(), filename);
-				return;
+			while (std::getline(file, line)) {
+				if (line.find("#EntityStart") != std::string::npos) {
+					ecs::Entity* currentEntity = &scene->createEntity();
+					Filesystem_Loading::loadEntity(file, scene, currentEntity);
+					currentEntity = nullptr;
+				}
+				else if (line.find("#EntityCollectionStart") != std::string::npos) {
+					ecs::EntityCollection* currentCollection = &scene->createCollection();
+					Filesystem_Loading::loadCollection(file, scene, currentCollection);
+					currentCollection = nullptr;
+				}
+				else if (line.find("#SceneEnd") != std::string::npos) {
+					return;
+				}
 			}
-
-			std::string name = scene->getName();
-			if (name == "EmptyScene")
-				name = std::string(filename);
-
-			ss << "MAREngine scene file\n";
-
-			auto& back = scene->getBackground();
-
-			Filesystem_Saving::saveScene(ss, scene);
-
-			MAR_CORE_INFO("FILESYSTEM: scene has been saved!");
 		}
 
-		ecs::Scene* Filesystem::openFile(std::string filename) {
-			EDITOR_INFO("FILESYSTEM: going to load scene from: {}", filename);
-
-			std::ifstream file(filename);
-			if (!file.is_open()) {
-				if (filename == "BrandNewScene") {
-					return ecs::Scene::createEmptyScene("BrandNewScene");
-				}
-				else {
-					EDITOR_ERROR("Cannot open file {}, returning empty scene!", filename);
-					return ecs::Scene::createEmptyScene("EmptySceneNotLoaded");
-				}
-			}
-
+		void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, ecs::EntityCollection* collection) {
 			std::string line;
-			ecs::Scene* scene{ nullptr };
 
 			while (std::getline(file, line)) {
-				if (line.find("#SceneStart") != std::string::npos) {
-					std::getline(file, line); // next line should be #Scene_Name -- 11
-					std::istringstream is(line.substr(11));
-					std::string name;
-					is >> name;
-					scene = new ecs::Scene(name);
-					
-					std::getline(file, line); // next line should be #Scene_Background -- 18
-					float arr[3];
-					is.clear();
-					is = std::istringstream(line.substr(18));
-					is >> arr[0] >> arr[1] >> arr[2];
-					scene->setBackground({ arr[0], arr[1], arr[2] });
-
-					Filesystem_Loading::loadScene(file, scene);
+				if (line.find("#EntityStart") != std::string::npos) {
+					ecs::Entity* entity = &collection->createEntity();
+					loadEntity(file, scene, entity);
+				}
+				else if (line.find("#EntityCollectionEnd") != std::string::npos) {
+					return;
 				}
 			}
+		}
 
-			/*
+		void Filesystem_Loading::loadEntity(std::ifstream& file, ecs::Scene* scene, ecs::Entity* currentEntity) {
+			std::string line;
+
 			while (std::getline(file, line)) {
-				if (line.find("#SceneName") != std::string::npos) {
-					std::istringstream is(line.substr(11));
-					std::string new_scene_name;
-					is >> new_scene_name;
-					scene = new ecs::Scene(new_scene_name);
-
-					// #SceneBackground - 18
-					float arr[3];
-					std::getline(file, line);
-					is.clear();
-					is = std::istringstream(line.substr(18));
-					is >> arr[0] >> arr[1] >> arr[2];
-					scene->setBackground({ arr[0], arr[1], arr[2] });
-				}
-				else if (line.find("#Entity") != std::string::npos) {
-					currentEntity = &scene->createEntity();
-				}
-				else if (line.find("#TagComponent") != std::string::npos) {
+				if (line.find("#TagComponent") != std::string::npos) {
 					std::istringstream is(line.substr(14));
 					std::string new_tag;
 					is >> new_tag;
@@ -102,7 +60,7 @@ namespace mar {
 				}
 				else if (line.find("#TransformComponent") != std::string::npos) {
 					auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
-					
+
 					// #center - 7 letters
 					std::getline(file, line);
 					std::istringstream is(line.substr(7));
@@ -149,22 +107,22 @@ namespace mar {
 					if (line.find("Cube") != std::string::npos) {
 						ren.id = "Cube";
 						ren.vertices = graphics::MeshCreator::Cube::getVertices();
-						ren.indices =  graphics::MeshCreator::Cube::getIndices();
+						ren.indices = graphics::MeshCreator::Cube::getIndices();
 					}
 					else if (line.find("Surface") != std::string::npos) {
 						ren.id = "Surface";
 						ren.vertices = graphics::MeshCreator::Surface::getVertices();
-						ren.indices =  graphics::MeshCreator::Surface::getIndices();
+						ren.indices = graphics::MeshCreator::Surface::getIndices();
 					}
 					else if (line.find("Wall") != std::string::npos) {
 						ren.id = "Wall";
 						ren.vertices = graphics::MeshCreator::Wall::getVertices();
-						ren.indices =  graphics::MeshCreator::Wall::getIndices();
+						ren.indices = graphics::MeshCreator::Wall::getIndices();
 					}
 					else if (line.find("Pyramid") != std::string::npos) {
 						ren.id = "Pyramid";
 						ren.vertices = graphics::MeshCreator::Pyramid::getVertices();
-						ren.indices =  graphics::MeshCreator::Pyramid::getIndices();
+						ren.indices = graphics::MeshCreator::Pyramid::getIndices();
 					}
 					else if (line.find(".obj") != std::string::npos) {
 						std::istringstream iss(line.substr(21));
@@ -242,7 +200,7 @@ namespace mar {
 					is >> arr[0];
 
 					light.constant = arr[0];
-				
+
 					// #linear - 7
 					std::getline(file, line);
 					is.clear();
@@ -323,7 +281,7 @@ namespace mar {
 					iss >> var;
 
 					cam.p_far = var;
-					
+
 					// #type - 5
 					std::getline(file, line);
 
@@ -415,49 +373,10 @@ namespace mar {
 					iss >> s;
 					script.script = s;
 				}
+				else if (line.find("#EntityEnd") != std::string::npos) {
+					return;
+				}
 			}
-			*/
-			file.close();
-
-			EDITOR_INFO("FILESYSTEM: returning loaded scene {} from file {}", scene->getName(), filename);
-
-			return scene;
-		}
-
-		std::string Filesystem::loadPyScript(const char* filename) {
-			EDITOR_INFO("FILESYSTEM: going to load python script from: {}", filename);
-
-			std::ifstream file(filename);
-			if (!file.is_open()) {
-				EDITOR_ERROR("Cannot open script file {}, returning empty string!", filename);
-				return "";
-			}
-
-			std::string rtn{ "" };
-			std::string line;
-
-			while (std::getline(file, line)) {
-				rtn += line + "\n";
-			}
-
-			return rtn;
-		}
-
-		void Filesystem::savePyScript(const char* filename, std::string source) {
-			EDITOR_INFO("FILESYSTEM: going to save PyScript at: {}", filename);
-
-			std::ofstream ss(filename, std::ios::out | std::ios::trunc);
-
-			if (!ss.is_open()) {
-				EDITOR_ERROR("FILESYSTEM: Cannot save python script - {}!", filename);
-				return;
-			}
-
-			ss << std::move(source);
-
-			ss.close();
-
-			EDITOR_INFO("FILESYSTEM: saved PyScript at: {}", filename);
 		}
 
 

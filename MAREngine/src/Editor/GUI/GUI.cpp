@@ -6,7 +6,7 @@
 #include "GUI.h"
 #include "../Filesystem/EditorFilesystem.h"
 #include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/ComponentsEntity.h"
+#include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "../../Window/Input.h"

@@ -4,26 +4,46 @@
  */
 
 
-#include "Filesystem_SaveFile.h"
+#include "Filesystem_Saving.h"
 
 
 namespace mar {
 	namespace editor {
 
 
-		void Filesystem_SaveFile::saveCollection(std::ofstream& ss, const ecs::EntityCollection& collection) {
-			auto& tag = collection.getComponent<ecs::CollectionTagComponent>();
+		void Filesystem_Saving::saveScene(std::ofstream& ss, ecs::Scene* scene) {
+			auto& back = scene->getBackground();
+			
+			ss << "\n#SceneStart\n";
+			ss << "#Scene_Name " << scene->getName() << "\n";
+			ss << "#Scene_Background " << back.x << " " << back.y << " " << back.z << "\n";
 
-			ss << "\n#EntityCollection\n";
+			for (auto& entity : scene->getEntities()) {
+				Filesystem_Saving::saveEntity(ss, entity);
+			}
+
+			for (auto& collection : scene->getCollections()) {
+				Filesystem_Saving::saveCollection(ss, collection);
+			}
+
+			ss << "\n#SceneEnd\n";
+		}
+
+		void Filesystem_Saving::saveCollection(std::ofstream& ss, const ecs::EntityCollection& collection) {
+			auto& tag = collection.getComponent<ecs::TagComponent>();
+
+			ss << "\n#EntityCollectionStart\n";
 			ss << "#CollectionTagComponent " << tag.tag << "\n";
 
 			for (auto& entity : collection.getEntities()) {
 				saveEntity(ss, entity);
 			}
+
+			ss << "\n#EntityCollectionEnd\n";
 		}
 
-		void Filesystem_SaveFile::saveEntity(std::ofstream& ss, const ecs::Entity& entity) {
-			ss << "\n#Entity\n";
+		void Filesystem_Saving::saveEntity(std::ofstream& ss, const ecs::Entity& entity) {
+			ss << "\n#EntityStart\n";
 
 			auto& com = entity.getComponent<ecs::Components>();
 
@@ -102,6 +122,8 @@ namespace mar {
 					ss << "#ScriptComponent " << script.script << "\n";
 				}
 			}
+
+			ss << "\n#EntityEnd\n";
 		}
 
 

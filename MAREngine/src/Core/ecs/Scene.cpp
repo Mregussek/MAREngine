@@ -5,8 +5,7 @@
 
 
 #include "Scene.h"
-#include "ECS/ComponentsEntity.h"
-#include "ECS/ComponentsCollection.h"
+#include "ECS/Components.h"
 #include "ECS/Entity.h"
 #include "ECS/EntityCollection.h"
 
@@ -105,7 +104,8 @@ namespace mar {
 
 			EntityCollection collection{ this };
 
-			collection.addComponent<CollectionTagComponent>("DefaultName");
+			collection.addComponent<TagComponent>("DefaultName");
+			collection.addComponent<TransformComponent>();
 
 			m_collections.push_back(collection);
 

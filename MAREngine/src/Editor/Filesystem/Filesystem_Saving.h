@@ -10,17 +10,17 @@
 
 #include "../../mar.h"
 #include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/ComponentsEntity.h"
+#include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/EntityCollection.h"
-#include "../../Core/ecs/ECS/ComponentsCollection.h"
 
 
 namespace mar {
 	namespace editor {
 
 
-		class Filesystem_SaveFile {
+		class Filesystem_Saving {
 		public:
+			static void saveScene(std::ofstream& ss, ecs::Scene* scene);
 			static void saveCollection(std::ofstream& ss, const ecs::EntityCollection& collection);
 			static void saveEntity(std::ofstream& ss, const ecs::Entity& entity);
 		};
