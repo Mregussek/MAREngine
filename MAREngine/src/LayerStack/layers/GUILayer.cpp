@@ -16,7 +16,9 @@ namespace mar {
 
 
 		LayerGUI::LayerGUI(const char* name)
-			: m_debugName(name)
+			: m_debugName(name),
+			m_gui(nullptr),
+			m_camera(nullptr)
 		{ }
 
 		void LayerGUI::initialize(editor::GUI* gui, editor::Camera* cam) {

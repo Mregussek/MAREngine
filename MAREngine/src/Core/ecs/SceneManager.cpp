@@ -7,6 +7,7 @@
 
 #include "SceneEvents.h"
 
+#include "ECS/EntityCollection.h"
 #include "ECS/Entity.h"
 #include "ECS/Systems.h"
 
@@ -48,11 +49,21 @@ namespace mar {
 
 			render_pipeline.reset();
 
-			for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
-				auto& entity = m_scene->getEntity(i);
+			init(m_scene->getEntities(), render_pipeline);
+
+			for (size_t i = 0; i < m_scene->getCollections().size(); i++) {
+				init(m_scene->getCollection(i).getEntities(), render_pipeline);
+			}
+
+			ECS_INFO("SCENE_MANAGER: initialized!");
+		}
+
+		void SceneManager::init(const std::vector<Entity>& entities, graphics::RenderPipeline& render_pipeline) {
+			for (size_t i = 0; i < entities.size(); i++) {
+				auto& entity = entities[i];
 
 				auto& tran = entity.getComponent<TransformComponent>();
-				
+
 				if (entity.hasComponent<LightComponent>()) {
 					auto& light = entity.getComponent<LightComponent>();
 					render_pipeline.submitLight(tran.center, light);
@@ -84,8 +95,6 @@ namespace mar {
 					}
 				}
 			}
-
-			ECS_INFO("SCENE_MANAGER: initialized!");
 		}
 
 		void SceneManager::update() {

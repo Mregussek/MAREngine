@@ -8,11 +8,13 @@
 
 
 #include "../../mar.h"
-#include "ECS/Components.h"
+#include "ECS/ComponentsEntity.h"
 #include "Scene.h"
 
 
 namespace mar {
+	namespace graphics { class RenderPipeline; }
+
 	namespace ecs {
 
 		class SceneEvents;
@@ -50,6 +52,8 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		private:
+			void init(const std::vector<Entity>& entities, graphics::RenderPipeline& render_pipeline);
+
 			void initPlayMode();
 			void exitPlayMode();
 

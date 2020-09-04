@@ -29,7 +29,7 @@ namespace mar {
 		protected:
 			friend class LayerStack;
 
-			const char* m_debugName;
+			const char* m_debugName{ "Default_Debug_Name" };
 		};
 
 

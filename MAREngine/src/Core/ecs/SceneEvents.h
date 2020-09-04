@@ -85,6 +85,12 @@ namespace mar {
 				ECS_TRACE("SCENE_EVENTS: onEntityRemove");
 			}
 
+			void onCollectionRemove() {
+				scene_manager->initialize();
+
+				ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
+			}
+
 
 		};
 

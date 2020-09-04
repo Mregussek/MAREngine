@@ -3,8 +3,8 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef MAR_ENGINE_ECS_COMPONENTS_H
-#define MAR_ENGINE_ECS_COMPONENTS_H
+#ifndef MAR_ENGINE_ECS_COMPONENTS_ENTITY_H
+#define MAR_ENGINE_ECS_COMPONENTS_ENTITY_H
 
 #include "../../../mar.h"
 #include "../../scripting/PythonScript.h"
@@ -213,4 +213,4 @@ namespace mar {
 #define ECS_SCRIPT		::mar::ecs::EntityComponents::SCRIPT
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_H
+#endif // !MAR_ENGINE_ECS_COMPONENTS_ENTITY_H

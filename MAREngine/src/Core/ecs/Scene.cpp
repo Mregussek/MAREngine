@@ -5,8 +5,11 @@
 
 
 #include "Scene.h"
-#include "ECS/Components.h"
+#include "ECS/ComponentsEntity.h"
+#include "ECS/ComponentsCollection.h"
 #include "ECS/Entity.h"
+#include "ECS/EntityCollection.h"
+
 
 namespace mar {
 	namespace ecs {
@@ -68,22 +71,56 @@ namespace mar {
 		}
 
 		void Scene::destroyEntity(int32_t index) {
-			ECS_INFO("SCENE: going to destroy entity!");
+			ECS_INFO("SCENE: going to destroy entity at {}!", index);
 
 			if (m_entities[index].isValid()) {
 				m_entities[index].destroyYourself();
 				m_entities.erase(m_entities.begin() + index);
 
-				ECS_INFO("SCENE: destroyed entity!");
+				ECS_INFO("SCENE: destroyed entity at {}!", index);
 				return;
 			}
 			else {
-				ECS_INFO("SCENE: entity is not valid, so it cannot be destroyed!");
+				ECS_INFO("SCENE: entity at {} is not valid, so it cannot be destroyed!", index);
 			}
 		}
 
 		const std::vector<Entity>& Scene::getEntities() const { return m_entities; }
 		Entity& Scene::getEntity(size_t index) { return m_entities[index]; }
+
+		// -------------------------------------------------------------
+		// ENTITIES COLLECTIONS MANAGEMENT
+		// -------------------------------------------------------------
+
+		EntityCollection& Scene::createCollection() {
+			ECS_INFO("SCENE: going to create entity collection!");
+
+			EntityCollection collection{ this };
+
+			collection.addComponent<CollectionTagComponent>("DefaultName");
+
+			m_collections.push_back(collection);
+
+			return m_collections[m_collections.size() - 1];
+		}
+
+		void Scene::destroyCollection(int32_t index) {
+			ECS_INFO("SCENE: going to destroy collection at {}", index);
+
+			m_collections[index].destroyYourself();
+			m_collections.erase(m_collections.begin() + index);
+
+			ECS_INFO("SCENE: collection at {} is deleted properly!", index);
+		}
+
+		void Scene::destroyEntityAtCollection(int32_t collection_index, int32_t entity_index) {
+			m_collections[collection_index].destroyEntity(entity_index);
+
+			ECS_INFO("SCENE: called destroyEntity({}) at collection {}", entity_index, collection_index);
+		}
+
+		const std::vector<EntityCollection>& Scene::getCollections() const { return m_collections; }
+		EntityCollection& Scene::getCollection(size_t index) { return m_collections[index]; }
 
 
 } }

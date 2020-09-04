@@ -17,7 +17,8 @@
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneManager.h"
 
-#include "GUI_EntityManagement.h"
+#include "GUI_EntityPanel.h"
+#include "GUI_EntityCollectionPanel.h"
 #include "GUI_Filesystem.h"
 #include "GUI_Info.h"
 #include "GUI_Theme.h"

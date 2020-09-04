@@ -3,7 +3,7 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#include "GUI_EntityManagement.h"
+#include "GUI_EntityPanel.h"
 #include "../../Core/ecs/ECS/Entity.h"
 #include "../../Core/graphics/Renderer/RenderEvents.h"
 #include "../../Platform/OpenGL/TextureOpenGL.h"
@@ -13,12 +13,12 @@
 namespace mar {
 	namespace editor {
 
-		graphics::RenderCamera* GUI_EntityManagement::render_cam{ nullptr };
-		ecs::Entity* GUI_EntityManagement::currentEntity{ nullptr };
-		int32_t GUI_EntityManagement::currentIndex{ -1 };
+		graphics::RenderCamera* GUI_EntityPanel::render_cam{ nullptr };
+		ecs::Entity* GUI_EntityPanel::currentEntity{ nullptr };
+		int32_t GUI_EntityPanel::currentIndex{ -1 };
 
 
-		void GUI_EntityManagement::Scene_Entity_Modify(bool is_play_mode) {
+		void GUI_EntityPanel::Scene_Entity_Modify(bool is_play_mode) {
 			ImGui::Begin("Entity Modification");
 
 			if (!currentEntity) {
@@ -87,7 +87,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: scene_entity_modify");
 		}
 
-		void GUI_EntityManagement::Scene_Entity_Modify_PopUp() {
+		void GUI_EntityPanel::Scene_Entity_Modify_PopUp() {
 			static bool b = false;
 
 			// PopMenu should be opened?
@@ -166,7 +166,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: scene_entity_modify_popup");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_TagComponent(bool window_focused) {
+		void GUI_EntityPanel::Scene_Handle_TagComponent(bool window_focused) {
 			ImGui::Text("TagComponent\n");
 
 			static char* input;
@@ -180,7 +180,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_TransformComponent(bool window_focused, bool is_play_mode) {
+		void GUI_EntityPanel::Scene_Handle_TransformComponent(bool window_focused, bool is_play_mode) {
 			ImGui::Separator();
 			ImGui::Text("TransformComponent\n");
 
@@ -219,7 +219,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_ScriptComponent(bool window_focused) {
+		void GUI_EntityPanel::Scene_Handle_ScriptComponent(bool window_focused) {
 			ImGui::Separator();
 			ImGui::Text("ScriptComponent\n");
 			ImGui::SameLine();
@@ -251,7 +251,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_RenderableComponent(bool window_focused) {
+		void GUI_EntityPanel::Scene_Handle_RenderableComponent(bool window_focused) {
 			static bool GUI_modify_renderable = false; // should display option to modify the whole RenderableComponent ?
 			static bool GUI_display_obj = false; // should display obj file loading to RenderableComponent ?
 
@@ -349,7 +349,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode) {
+		void GUI_EntityPanel::Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode) {
 			static char* GUI_input{ (char*)"empty" };
 			auto& camcmp = currentEntity->getComponent<ecs::CameraComponent>();
 
@@ -401,7 +401,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode) {
+		void GUI_EntityPanel::Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode) {
 			ImGui::Separator();
 			ImGui::Text("ColorComponent\n");
 			ImGui::SameLine();
@@ -419,7 +419,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_Texture2DComponent(bool window_focused) {
+		void GUI_EntityPanel::Scene_Handle_Texture2DComponent(bool window_focused) {
 			static bool GUI_load_new_texture = false;
 			auto& tex = currentEntity->getComponent<ecs::Texture2DComponent>();
 
@@ -485,7 +485,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_TextureCubemapComponent(bool window_focused) {
+		void GUI_EntityPanel::Scene_Handle_TextureCubemapComponent(bool window_focused) {
 			static bool GUI_load_new_cubemap = false;
 			auto& cubemap = currentEntity->getComponent<ecs::TextureCubemapComponent>();
 
@@ -547,7 +547,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
 		}
 
-		void GUI_EntityManagement::Scene_Handle_LightComponent(bool window_focused, bool is_play_mode) {
+		void GUI_EntityPanel::Scene_Handle_LightComponent(bool window_focused, bool is_play_mode) {
 			ImGui::Separator();
 			ImGui::Text("LightComponent\n");
 

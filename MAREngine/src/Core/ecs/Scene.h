@@ -15,6 +15,7 @@ namespace mar {
 	namespace ecs {
 
 		class Entity;
+		class EntityCollection;
 
 
 		class Scene {
@@ -32,6 +33,10 @@ namespace mar {
 			Entity& createEntity();
 			void destroyEntity(int32_t index);
 
+			EntityCollection& createCollection();
+			void destroyCollection(int32_t index);
+			void destroyEntityAtCollection(int32_t collection_index, int32_t entity_index);
+
 			// --- SET METHODS --- //
 
 			void setName(std::string name) { m_name = std::move(name); }
@@ -45,6 +50,9 @@ namespace mar {
 			const std::vector<Entity>& getEntities() const;
 			Entity& getEntity(size_t index);
 
+			const std::vector<EntityCollection>& getCollections() const;
+			EntityCollection& getCollection(size_t index);
+
 			inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
 			// ----------------------------------------------------
@@ -53,10 +61,12 @@ namespace mar {
 			
 		private:
 			friend class Entity;
+			friend class EntityCollection;
 
 			std::string m_name{ "Empty Scene" };
 			entt::registry m_registry;
 			std::vector<Entity> m_entities;
+			std::vector<EntityCollection> m_collections;
 			graphics::RenderCamera m_sceneCamera;
 			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
 		};

@@ -7,12 +7,15 @@
 #define MAR_ENGINE_EDITOR_GUI_ENTITY_MANAGEMENT_H
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/ComponentsEntity.h"
 #include "../../Core/ecs/ECS/Systems.h"
+#include "../../Core/ecs/SceneEvents.h"
+
 #include "../Filesystem/EditorFilesystem.h"
+
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../Window/Input.h"
-#include "../../Core/ecs/SceneEvents.h"
+
 #include "../EditorLogging.h"
 
 
@@ -22,12 +25,17 @@ namespace mar {
 	namespace editor {
 
 
-		struct GUI_EntityManagement {
+		struct GUI_EntityPanel {
 			static graphics::RenderCamera* render_cam;
 			static ecs::Entity* currentEntity;
 			static int32_t currentIndex;
 
 			static void Scene_Entity_Modify(bool is_play_mode);
+
+			static void reset() {
+				currentEntity = nullptr;
+				currentIndex = -1;
+			}
 
 		private:
 			static void Scene_Entity_Modify_PopUp();

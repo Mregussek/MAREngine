@@ -37,6 +37,11 @@ namespace mar {
 			void setEditorText(std::string s) { editor.SetText(std::move(s)); }
 			void setEditorTitle(std::string new_title) { m_title = std::move(new_title); }
 
+			void reset() {
+				setEditorText("def main():\n\tpass\n");
+				setEditorTitle("Empty");
+			}
+
 		private:
 
 			void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);

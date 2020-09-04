@@ -9,7 +9,7 @@
 #include "../../../mar.h"
 #include "../ECSLogs.h"
 #include "../Scene.h"
-#include "Components.h"
+#include "ComponentsEntity.h"
 
 
 namespace mar {

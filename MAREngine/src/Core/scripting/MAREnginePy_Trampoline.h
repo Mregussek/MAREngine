@@ -9,7 +9,7 @@
 
 
 #include "../../mar.h"
-#include "../ecs/ECS/Components.h"
+#include "../ecs/ECS/ComponentsEntity.h"
 #include "../ecs/ECS/Entity.h"
 
 namespace mar {

@@ -5,7 +5,8 @@
 
 #include "GUI_SceneHierarchy.h"
 
-#include "GUI_EntityManagement.h"
+#include "GUI_EntityCollectionPanel.h"
+#include "GUI_EntityPanel.h"
 #include "GUI_TextEditor.h"
 
 #include "../../Core/graphics/Renderer/RendererBatch.h"
@@ -18,17 +19,33 @@ namespace mar {
 		void GUI_SceneHierarchy::Scene_Hierarchy(ecs::SceneManager* manager) {
 			ImGui::Begin("Scene Hierarchy");
 
-			ImGui::Text(" - ");
-			ImGui::SameLine();
-			ImGui::Text(manager->getScene()->getName().c_str());
+			ImGui::Text("SCENE - %s", manager->getScene()->getName().c_str());
+			ImGui::Separator();
 
 			auto& entities = manager->getScene()->getEntities();
 
+			ImGui::Text("ENTITIES --- %d", entities.size());
+			ImGui::Separator();
+
 			for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
-				std::string& s = entities[i].getComponent<ecs::TagComponent>();
-				if (ImGui::MenuItem(s.c_str())) {
-					GUI_EntityManagement::currentEntity = &manager->getScene()->getEntity(i);
-					GUI_EntityManagement::currentIndex = i;
+				if (ImGui::MenuItem(entities[i].getComponent<ecs::TagComponent>().tag.c_str())) {
+					GUI_EntityCollectionPanel::reset();
+					GUI_EntityPanel::currentEntity = &manager->getScene()->getEntity(i);
+					GUI_EntityPanel::currentIndex = i;
+				}
+			}
+
+			ImGui::Separator();
+
+			auto& collections = manager->getScene()->getCollections();
+
+			ImGui::Text("Collections --- %d", collections.size());
+			ImGui::Separator();
+
+			for (int32_t i = 0; i < (int32_t)collections.size(); i++) {
+				if (ImGui::MenuItem(collections[i].getComponent<ecs::CollectionTagComponent>().tag.c_str())) {
+					GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->getCollection(i);
+					GUI_EntityCollectionPanel::currentIndex = i;
 				}
 			}
 
@@ -59,18 +76,44 @@ namespace mar {
 			}
 
 			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
-				if (ImGui::MenuItem("Add Entity to scene")) {
-					GUI_EntityManagement::currentEntity = &manager->getScene()->createEntity();
-					GUI_EntityManagement::currentIndex = manager->getScene()->getEntities().size() - 1;
+				if (ImGui::MenuItem("Add EntityCollection to scene")) {
+					GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->createCollection();
+					GUI_EntityCollectionPanel::currentIndex = manager->getScene()->getCollections().size() - 1;
 				}
 
-				if (GUI_EntityManagement::currentEntity)
+				if (ImGui::MenuItem("Add Entity to scene")) {
+					GUI_EntityCollectionPanel::reset();
+					GUI_EntityPanel::currentEntity = &manager->getScene()->createEntity();
+					GUI_EntityPanel::currentIndex = manager->getScene()->getEntities().size() - 1;
+				}
+
+				if (GUI_EntityCollectionPanel::currentCollection) {
+					if (ImGui::MenuItem("Add Entity to selected Collection")) {
+						GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();
+						GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
+					}
+
+					if (ImGui::MenuItem("Deleted Selected EntityCollection from Scene")) {
+						manager->getScene()->destroyCollection(GUI_EntityCollectionPanel::currentIndex);
+						GUI_EntityCollectionPanel::reset();
+						GUI_EntityPanel::reset();
+						GUI_TextEditor::Instance().reset();
+						ecs::SceneEvents::Instance().onCollectionRemove();
+					}
+
+					if (GUI_EntityPanel::currentEntity)
+						if (ImGui::MenuItem("Delete Selected Entity from selected collection")) {
+							manager->getScene()->destroyEntityAtCollection(GUI_EntityCollectionPanel::currentIndex, GUI_EntityPanel::currentIndex);
+							GUI_EntityPanel::reset();
+							GUI_TextEditor::Instance().reset();
+							ecs::SceneEvents::Instance().onEntityRemove();
+						}
+				}	
+				else if (GUI_EntityPanel::currentEntity)
 					if (ImGui::MenuItem("Delete Selected Entity from Scene")) {
-						manager->getScene()->destroyEntity(GUI_EntityManagement::currentIndex);
-						GUI_EntityManagement::currentIndex = -1;
-						GUI_EntityManagement::currentEntity = nullptr;
-						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
-						GUI_TextEditor::Instance().setEditorTitle("Empty");
+						manager->getScene()->destroyEntity(GUI_EntityPanel::currentIndex);
+						GUI_EntityPanel::reset();
+						GUI_TextEditor::Instance().reset();
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 
@@ -86,7 +129,6 @@ namespace mar {
 			auto& stats = graphics::RenderPipeline::getInstance().getStatistics();
 
 			ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
-			ImGui::Text("Entities Count (with Renderable): %d", stats.shapesCount);
 			ImGui::Text("Vertices: %d" , stats.verticesCount);
 			ImGui::Text("Indices: %d", stats.indicesCount);
 			ImGui::Text("Triangles: %d", stats.trianglesCount);

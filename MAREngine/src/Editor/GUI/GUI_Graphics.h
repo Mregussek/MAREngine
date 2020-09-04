@@ -8,7 +8,7 @@
 
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/ComponentsEntity.h"
 #include "../../Core/ecs/ECS/Entity.h"
 #include "../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../Platform/OpenGL/PipelineOpenGL.h"

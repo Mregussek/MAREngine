@@ -6,7 +6,7 @@
 #include "GUI.h"
 #include "../Filesystem/EditorFilesystem.h"
 #include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/ComponentsEntity.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "../../Window/Input.h"
@@ -109,7 +109,8 @@ namespace mar {
 			Editor_ViewPort();
 			Editor_Properties();
 
-			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
+			GUI_EntityPanel::Scene_Entity_Modify(m_sceneManager->isPlayMode());
+			GUI_EntityCollectionPanel::Scene_EntityCollection_Modify();
 
 			if (m_loadSceneWindow) {
 				m_loadSceneWindow = GUI_Filesystem::Filesystem_LoadScene(m_loadSceneWindow);
@@ -140,19 +141,17 @@ namespace mar {
 			if (ImGui::BeginMainMenuBar()) {
 				if (ImGui::BeginMenu("File")) {
 					if(ImGui::MenuItem("New")) {
-						GUI_EntityManagement::currentEntity = nullptr;
-						GUI_EntityManagement::currentIndex = -1;
-						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
-						GUI_TextEditor::Instance().setEditorTitle("Empty");
+						GUI_EntityCollectionPanel::reset();
+						GUI_EntityPanel::reset();
+						GUI_TextEditor::Instance().reset();
 
 						GUI_Filesystem::Filesystem_NewScene();
 					}
 
 					if (ImGui::MenuItem("Open")) {
-						GUI_EntityManagement::currentEntity = nullptr;
-						GUI_EntityManagement::currentIndex = -1;
-						GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
-						GUI_TextEditor::Instance().setEditorTitle("Empty");
+						GUI_EntityCollectionPanel::reset();
+						GUI_EntityPanel::reset();
+						GUI_TextEditor::Instance().reset();
 
 						m_loadSceneWindow = true;
 					}
@@ -258,13 +257,13 @@ namespace mar {
 		void GUI::submit(ecs::SceneManager* scene) {
 			m_sceneManager = scene;
 			m_sceneManager->useEditorCamera = true;
-			GUI_EntityManagement::render_cam = &m_sceneManager->getScene()->getRenderCamera();
+			GUI_EntityPanel::render_cam = &m_sceneManager->getScene()->getRenderCamera();
 
 			EDITOR_INFO("GUI: scene has been submitted!");
 		}
 
 		ecs::Entity* GUI::getCurrentEntity() {
-			return GUI_EntityManagement::currentEntity;
+			return GUI_EntityPanel::currentEntity;
 		}
 
 
