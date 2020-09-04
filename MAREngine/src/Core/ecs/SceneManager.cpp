@@ -36,12 +36,6 @@ namespace mar {
 			ECS_INFO("SCENE_MANAGER: called constructor");
 		}
 
-		SceneManager::~SceneManager() {
-			delete m_scene;
-
-			ECS_INFO("SCENE_MANAGER: called destructor");
-		}
-
 		void SceneManager::initialize() {
 			ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
@@ -56,6 +50,13 @@ namespace mar {
 			}
 
 			ECS_INFO("SCENE_MANAGER: initialized!");
+		}
+
+		void SceneManager::shutdown() { 
+			m_scene->shutdown(); 
+			delete m_scene;
+
+			ECS_INFO("SCENE_MANAGER: called shutdown method");
 		}
 
 		void SceneManager::init(const std::vector<Entity>& entities, graphics::RenderPipeline& render_pipeline) {

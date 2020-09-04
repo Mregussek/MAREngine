@@ -24,6 +24,14 @@ namespace mar {
 		}
 
 		void Scene::shutdown() {
+			for (size_t i = 0; i < m_entities.size(); i++) {
+				destroyEntity(i);
+			}
+
+			for (size_t i = 0; i < m_collections.size(); i++) {
+				destroyCollection(i);
+			}
+
 			m_registry.clear();
 
 			ECS_INFO("SCENE: registry is cleared! (called destructor)");

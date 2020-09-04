@@ -62,18 +62,19 @@ namespace mar {
 				return;
 			}
 
+			// SHOULD POP BE OPEN? 
+
 			static bool b = false;
 
-			if (ImGui::IsWindowFocused())
-				b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
-			else
-				b = false;
+			if (ImGui::IsWindowFocused()) b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
+			else b = false;
 
 			if (b) {
 				ImGui::OpenPopup("SceneHierarchyPopUp");
-				if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1))
-					b = false;
+				if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1)) b = false;
 			}
+
+			// ACTUAL POP UP
 
 			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 				if (ImGui::MenuItem("Add EntityCollection to scene")) {
@@ -88,12 +89,14 @@ namespace mar {
 				}
 
 				if (GUI_EntityCollectionPanel::currentCollection) {
-					if (ImGui::MenuItem("Add Entity to selected Collection")) {
+					const char* collection_tag = GUI_EntityCollectionPanel::currentCollection->getComponent<ecs::CollectionTagComponent>().tag.c_str();
+
+					if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
 						GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();
 						GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
 					}
 
-					if (ImGui::MenuItem("Deleted Selected EntityCollection from Scene")) {
+					if (ImGui::MenuItem("Deleted selected collection from Scene", collection_tag)) {
 						manager->getScene()->destroyCollection(GUI_EntityCollectionPanel::currentIndex);
 						GUI_EntityCollectionPanel::reset();
 						GUI_EntityPanel::reset();
@@ -101,22 +104,26 @@ namespace mar {
 						ecs::SceneEvents::Instance().onCollectionRemove();
 					}
 
-					if (GUI_EntityPanel::currentEntity)
-						if (ImGui::MenuItem("Delete Selected Entity from selected collection")) {
+					if (GUI_EntityPanel::currentEntity) {
+						std::string delete_message = "Delete entity " + GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag + " from selected collection";
+						if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 							manager->getScene()->destroyEntityAtCollection(GUI_EntityCollectionPanel::currentIndex, GUI_EntityPanel::currentIndex);
 							GUI_EntityPanel::reset();
 							GUI_TextEditor::Instance().reset();
 							ecs::SceneEvents::Instance().onEntityRemove();
 						}
-				}	
-				else if (GUI_EntityPanel::currentEntity)
-					if (ImGui::MenuItem("Delete Selected Entity from Scene")) {
+					}
+				}
+				else if (GUI_EntityPanel::currentEntity) {
+					const char* entity_tag = GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag.c_str();
+					if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
 						manager->getScene()->destroyEntity(GUI_EntityPanel::currentIndex);
 						GUI_EntityPanel::reset();
 						GUI_TextEditor::Instance().reset();
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
-
+				}
+					
 				ImGui::EndPopup();
 			}
 

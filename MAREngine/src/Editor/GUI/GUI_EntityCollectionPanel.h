@@ -54,7 +54,7 @@ namespace mar {
 					}
 				}
 
-				Scene_EntityCollection_PopUp();
+				Scene_EntityCollection_PopUp(tag.tag.c_str());
 
 				ImGui::End();
 			}
@@ -66,7 +66,7 @@ namespace mar {
 
 		private:
 
-			static void Scene_EntityCollection_PopUp() {
+			static void Scene_EntityCollection_PopUp(const char* collection_tag) {
 				static bool b = false;
 
 				if (ImGui::IsWindowFocused())
@@ -81,18 +81,20 @@ namespace mar {
 				}
 
 				if (ImGui::BeginPopup("EntityCollectionPopUp")) {
-					if (ImGui::MenuItem("Add Entity to selected Collection")) {
-						GUI_EntityPanel::currentEntity = &currentCollection->createEntity();
-						GUI_EntityPanel::currentIndex = currentCollection->getEntities().size() - 1;
+					if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
+						GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();
+						GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
 					}
 
-					if (GUI_EntityPanel::currentEntity)
-						if (ImGui::MenuItem("Delete Selected Entity from selected collection")) {
+					if (GUI_EntityPanel::currentEntity) {
+						std::string delete_message = "Delete entity " + GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag + " from selected collection";
+						if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 							currentCollection->destroyEntity(GUI_EntityPanel::currentIndex);
 							GUI_EntityPanel::reset();
 							GUI_TextEditor::Instance().reset();
 							ecs::SceneEvents::Instance().onEntityRemove();
 						}
+					}
 
 					ImGui::EndPopup();
 				}

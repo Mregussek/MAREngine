@@ -27,11 +27,9 @@ namespace mar {
 
 		public:
 			SceneManager();
-			~SceneManager();
-
-			void shutdown() { m_scene->shutdown(); }
-
+	
 			void initialize();
+			void shutdown();
 			void update();
 
 			void setScene(Scene* scene) { m_scene = scene; }
