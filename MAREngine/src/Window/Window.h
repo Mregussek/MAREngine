@@ -3,64 +3,95 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
-#ifndef WINDOW_H
-#define WINDOW_H
+
+#ifndef MAR_ENGINE_WINDOW_WINDOW_H
+#define MAR_ENGINE_WINDOW_WINDOW_H
+
 
 #include "../mar.h"
-#include "Input.h"
+#include "WindowLogs.h"
+#include "../Platform/GLFW/WindowGLFW.h"
+#include "../Platform/OpenGL/SetupOpenGL.h"
 
 
 namespace mar {
+	namespace editor { class GUI; }
+
 	namespace window {
+	
+		class Input;
 
 
 		class Window {
-			static Window s_window;
-			GLFWwindow* m_window;
-			const char* m_windowName;
-			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
-			// --- Window Size Callback
-			int m_width;
-			int m_height;
-			// --- Mouse Callback
-			float m_mouseX;
-			float m_mouseY;
-			// --- Scroll Callback
-			float m_scrollX;
-			float m_scrollY;
+			friend class Input;
+			friend class editor::GUI;
+
+			static Window s_instance;
+
+			platforms::WindowGLFW m_window;
+			uint32_t m_width;
+			uint32_t m_height;
+			maths::vec3 m_background;
 
 		public:
-			Window() = default;
+			static Window& getInstance() { return s_instance; }
+			
+			void updateBackgroundColor(maths::vec3& new_back) { m_background = new_back; }
 
-			void initialize(const int& H, const int& W, const char* wN);
-			void shutdown();
+			void initialize(int32_t width, int32_t height, const char* name) {
+				m_width = width;
+				m_height = height;
 
-			void swapBuffers();
-			void clearScreen();
+				bool is_glfw_fine = m_window.initialize(width, height, name);
+				if (!is_glfw_fine) {
+					WINDOW_ERROR("WINDOW: Cannot initialize GLFW window!");
+					char c = getchar();
+					exit(0);
+				}
 
-			void updateBackgroundColor(const maths::vec3& new_background) { m_backgroundColor = new_background; }
+				WINDOW_INFO("WINDOW: initialized window!");
 
-			// --- GET METHODS --- //
-			inline static Window& getInstance() { return s_window; }
-			GLFWwindow* getWindow() const { return m_window; }
-			const int& getWidth() const { return m_width; }
-			const int& getHeight() const { return m_height; }
+				bool is_opengl_fine = platforms::SetupOpenGL::init();
+				if (!is_opengl_fine) {
+					WINDOW_ERROR("WINDOW: Cannot initialize OpenGL!");
+					char c = getchar();
+					exit(0);
+				}
 
-			const float& getMouseX() const { return m_mouseX; }
-			const float& getMouseY() const { return m_mouseY; }
+				WINDOW_INFO("WINDOW: initialized OpenGL!");
+			}
 
-			const float& getScrollX() const { return m_scrollX; }
-			const float& getScrollY() const { return m_scrollY; }
+			void shutdown() {
+				m_window.terminate();
 
-			maths::vec3& getBackground() { return m_backgroundColor; }
+				WINDOW_INFO("WINDOW: closed Window!");
+			}
 
-			const bool shouldClose() const { return !glfwWindowShouldClose(m_window); }
-		
-			// --- SET METHODS --- //
-			void closeWindow() { glfwSetWindowShouldClose(m_window, true); }
+			void clear() {
+				platforms::SetupOpenGL::clearScreen(m_background);
+
+				WINDOW_TRACE("WINDOW: is clearing screen");
+			}
+
+			void update() {
+				m_window.swapBuffers();
+
+				WINDOW_TRACE("WINDOW: updating buffers and callbacks");
+			}
+
+			bool isGoingToClose() {
+				return m_window.isGoingToClose();
+			}
+
+			void endRenderLoop() {
+				m_window.close();
+
+				WINDOW_INFO("WINDOW: ending render loop");
+			}
 		};
 
 
 } }
 
-#endif // !WINDOW_H
+
+#endif // !MAR_ENGINE_WINDOW_WINDOW_H

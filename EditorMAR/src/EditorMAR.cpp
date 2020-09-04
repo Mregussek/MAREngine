@@ -31,7 +31,7 @@ void EditorMAR::run() {
 
 	auto& framebuffer = gui.getFramebuffer();
 
-	while (engine->shouldWindowClose() && !engine->shouldEngineRestart())
+	while (!engine->shouldWindowClose() && !engine->shouldEngineRestart())
 	{
 		engine->clearWindowScreen();
 

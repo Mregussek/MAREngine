@@ -8,6 +8,7 @@
 #include "../../Editor/GUI/GUI.h"
 #include "../../Editor/GUI/GUI_Graphics.h"
 #include "../../Editor/Camera/Camera.h"
+#include "../../Window/Input.h"
 
 
 namespace mar {
@@ -26,17 +27,11 @@ namespace mar {
 
 			m_gui->initialize("#version 330");
 
+			m_camera->aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
+
 			m_camera->initialize();
+			m_camera->updateData();
 
-			/* VIEWPORT SETUP */
-			m_camera->setWindowSize(&m_gui->getViewportWidth(), &m_gui->getViewportHeight());
-
-			/* MOUSE SETUP */
-			const auto& win = window::Window::getInstance();
-			m_camera->setMouseCall(&win.getMouseX(), &win.getMouseY());
-			m_camera->setScrollCall(&win.getScrollX(), &win.getScrollY());
-
-			/* SETUP RENDERING GUIZMO / LINE LOOPS */
 			editor::GUI_Graphics::getInstance().initialize();
 
 			LAYER_INFO("GUI_LAYER: {} initialized", m_debugName);
@@ -47,7 +42,18 @@ namespace mar {
 
 			editor::GUI_Graphics::getInstance().passToDrawEntity(m_gui->getCurrentEntity(), m_gui->canDrawLines());
 
-			m_camera->processInput();
+			static bool last_input_state = m_gui->isViewportInputEnabled();
+
+			if (m_gui->isViewportInputEnabled()) {
+				bool firstMouse = last_input_state != m_gui->isViewportInputEnabled() ? false : true;
+				last_input_state = m_gui->isViewportInputEnabled();
+
+				m_camera->processInput();
+				//m_camera->ProcessMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
+				//m_camera->ProcessMouseScroll(window::Input::getScrollY());
+			}
+
+			m_camera->aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
 			m_camera->updateData();
 
 			m_gui->display();

@@ -48,13 +48,13 @@ namespace mar {
 			static bool b = false;
 
 			if (ImGui::IsWindowFocused())
-				b = window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_2);
+				b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
 			else
 				b = false;
 
 			if (b) {
 				ImGui::OpenPopup("SceneHierarchyPopUp");
-				if (window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_1))
+				if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1))
 					b = false;
 			}
 

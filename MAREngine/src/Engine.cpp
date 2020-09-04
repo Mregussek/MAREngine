@@ -13,28 +13,26 @@ namespace mar {
 		MAREngine MAREngine::s_instance;
 
 
-		void MAREngine::initWindow(const int& height, const int& width, const char* name) {
+		void MAREngine::initWindow(int32_t height, int32_t width, const char* name) {
 			MAR_LOG_INIT();
 
 			window::Window::getInstance().initialize(height, width, name);
-			window::Input::initialize(window::Window::getInstance().getWindow());
-			window::Input::enableInput();
 		}
 
 		void MAREngine::closeWindow() {
-			window::Window::getInstance().shutdown(); 
+			window::Window::getInstance().endRenderLoop(); 
 		}
 
 		void MAREngine::clearWindowScreen() {
-			window::Window::getInstance().clearScreen(); 
+			window::Window::getInstance().clear(); 
 		}
 
 		void MAREngine::swapWindowBuffers() {
-			window::Window::getInstance().swapBuffers(); 
+			window::Window::getInstance().update(); 
 		}
 
 		const bool MAREngine::shouldWindowClose() { 
-			return window::Window::getInstance().shouldClose(); 
+			return window::Window::getInstance().isGoingToClose(); 
 		}
 
 		void MAREngine::updateBackground(editor::GUI* gui, ecs::Scene* scene) {

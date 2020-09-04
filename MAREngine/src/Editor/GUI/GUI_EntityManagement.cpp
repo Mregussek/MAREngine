@@ -93,13 +93,13 @@ namespace mar {
 			// PopMenu should be opened?
 			{
 				if (ImGui::IsWindowFocused())
-					b = window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_2);
+					b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
 				else
 					b = false;
 
 				if (b) {
 					ImGui::OpenPopup("SceneEntityModifyPopUp");
-					if (window::Input::isMousePressed_NotViewport(MAR_MOUSE_BUTTON_1))
+					if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1))
 						b = false;
 				}
 			}
@@ -327,10 +327,10 @@ namespace mar {
 					ImGui::Text(".obj file, which will be loaded: %s", load.c_str());
 					ImGui::Text("WARNING: if .obj file do not exist, no renderable will be assigned!");
 
-					if (Button_LoadObj(renderable, "Load", load.c_str())) {
-						GUI_modify_renderable = false;
-						GUI_display_obj = false;
-					}
+					//if (Button_LoadObj(renderable, "Load", load.c_str())) {
+					//	GUI_modify_renderable = false;
+					//	GUI_display_obj = false;
+					//}
 
 					ImGui::SameLine();
 				}

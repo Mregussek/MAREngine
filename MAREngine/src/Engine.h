@@ -57,7 +57,7 @@ namespace mar {
 
 			// --- WINDOW MANAGEMENT --- //
 
-			void initWindow(const int& height, const int& width, const char* name);
+			void initWindow(int32_t height, int32_t width, const char* name);
 			void closeWindow();
 
 			void clearWindowScreen();

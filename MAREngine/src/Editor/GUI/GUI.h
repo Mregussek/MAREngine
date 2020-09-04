@@ -39,8 +39,11 @@ namespace mar {
 			void display();
 
 			// --- GET METHODS --- //
-			float& getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
-			float& getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
+			float getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
+			float getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
+			float getMouseViewportPosX() { return m_mouseViewportX; }
+			float getMouseViewportPosY() { return m_mouseViewportY; }
+			bool isViewportInputEnabled() { return m_enableViewportInput; }
 			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
 			ecs::Entity* getCurrentEntity();
 			bool canDrawLines() { return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; }
@@ -61,6 +64,9 @@ namespace mar {
 			ecs::SceneManager* m_sceneManager;
 			// --- Viewport
 			platforms::FrameBufferOpenGL m_viewportFramebuffer;
+			float m_mouseViewportX{ 0.f };
+			float m_mouseViewportY{ 0.f };
+			bool m_enableViewportInput{ false };
 			// --- Dockspace
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;

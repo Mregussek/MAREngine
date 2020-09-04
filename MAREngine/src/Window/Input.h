@@ -3,53 +3,51 @@
  *	Copyright (C) 2020 Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  */
 
+
 #ifndef MAR_ENGINE_WINDOW_INPUT_H
 #define MAR_ENGINE_WINDOW_INPUT_H
 
 
 #include "../mar.h"
-#include "buttons_def.h"
 #include "Window.h"
+#include "WindowLogs.h"
+#include "buttons_def.h"
 
 
 namespace mar {
 	namespace window {
 
-		class Window;
 
 		class Input {
-			// --- Pointer to native window
-			static GLFWwindow* s_nativewindow;
-			// --- Mouse Button Callback
-			static int s_clickedButton;
-			static int s_clickedAction;
-			// --- Run-time Attributes
-			static bool s_useInput;
-
 		public:
+			static bool isKeyPressed(int32_t key) {
+				return Window::getInstance().m_window.isKeyPressed(key);
+			}
 
-			static void initialize(GLFWwindow* window);
+			static bool isMousePressed(int32_t key) {
+				return Window::getInstance().m_window.isMousePressed(key);
+			}
 
-			static bool isKeyPressed(int key);
-			static bool isKeyPressed_NotViewport(int key);
+			static float getMousePositionX() {
+				return (float)platforms::callbacks::mouse_xpos;
+			}
 
-			static bool isMousePressed(int key);
-			static bool isMousePressed_NotViewport(int key);
+			static float getMousePositionY() {
+				return (float)platforms::callbacks::mouse_ypos;
+			}
 
-			// --- GET METHODS --- //
-			static const bool& getUseInput() { return s_useInput; }
+			static float getScrollX() {
+				return (float)platforms::callbacks::scroll_x;
+			}
 
-			static int& getMouseButton() { return s_clickedButton; }
-			static int& getMouseAction() { return s_clickedAction; }
-
-			// --- SET METHODS --- //
-			static void enableInput();
-			static void disableInput();
+			static float getScrollY() {
+				return (float)platforms::callbacks::scroll_y;
+			}
 		};
+
 
 
 } }
 
 
 #endif // !MAR_ENGINE_WINDOW_INPUT_H
-

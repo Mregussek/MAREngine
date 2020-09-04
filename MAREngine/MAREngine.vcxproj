@@ -242,6 +242,7 @@
     <ClInclude Include="include\MAREngine\MAREngine.h" />
     <ClInclude Include="src\Core\assets\AssetsManager.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
+    <ClInclude Include="src\Core\ecs\ECS\EntityCollection.h" />
     <ClInclude Include="src\Core\ecs\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
@@ -256,7 +257,10 @@
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
     <ClInclude Include="src\mar_logging.h" />
+    <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h" />
+    <ClInclude Include="src\Platform\GLFW\WindowGLFW.h" />
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\SetupOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\PipelineOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h" />
@@ -274,8 +278,6 @@
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Platform\PlatformLogs.h" />
-    <ClInclude Include="src\Window\callbacks.h" />
-    <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\LayerStack\layers\GUILayer.h" />
     <ClInclude Include="src\LayerStack\Layer.h" />
     <ClInclude Include="src\LayerStack\LayerStack.h" />
@@ -295,8 +297,9 @@
     <ClInclude Include="src\Platform\OpenGL\VertexArrayOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\VertexBufferLayoutOpenGL.h" />
     <ClInclude Include="src\Devices\SerialPortMonitor.h" />
-    <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h" />
+    <ClInclude Include="src\Window\Input.h" />
+    <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="src\Window\WindowLogs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -322,6 +325,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
+    <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_EntityManagement.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp" />
@@ -331,22 +335,20 @@
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
+    <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp" />
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\ShapeManipulator.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ElementBufferOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\VertexBufferOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\VertexArrayOpenGL.cpp" />
-    <ClCompile Include="src\Window\callbacks.cpp" />
-    <ClCompile Include="src\Window\Input.cpp" />
-    <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
+    <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cmake\FindGLEW.cmake" />

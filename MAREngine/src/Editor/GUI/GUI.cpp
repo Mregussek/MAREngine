@@ -9,6 +9,7 @@
 #include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/ecs/SceneEvents.h"
+#include "../../Window/Input.h"
 #include "GUI_TextEditor.h"
 #include "GUI_SceneHierarchy.h"
 
@@ -24,7 +25,7 @@ namespace mar {
 		void GUI::initialize(const char* glsl_version) {
 			ImGui::CreateContext();
 			GUI_Theme::Setup_Theme();
-			ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().getWindow(), true);
+			ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().m_window.m_window, true);
 			ImGui_ImplOpenGL3_Init(glsl_version);
 
 			ImGuiIO& io = ImGui::GetIO();
@@ -99,11 +100,14 @@ namespace mar {
 		}
 
 		void GUI::updateFrame() {
-			Editor_MainMenuBar();
-
-			Editor_Properties();
 			GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager);
 			GUI_SceneHierarchy::Scene_Statistics();
+
+			GUI_TextEditor::Instance().update();
+
+			Editor_MainMenuBar();
+			Editor_ViewPort();
+			Editor_Properties();
 
 			GUI_EntityManagement::Scene_Entity_Modify(m_sceneManager->isPlayMode());
 
@@ -119,10 +123,6 @@ namespace mar {
 			if (m_instructionWindow) { 
 				GUI_Info::Menu_Instruction(m_instructionWindow); 
 			}
-
-			GUI_TextEditor::Instance().update();
-
-			Editor_ViewPort();
 
 			EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 		}
@@ -162,7 +162,7 @@ namespace mar {
 					}
 
 					if (ImGui::MenuItem("Exit")) {
-						window::Window::getInstance().closeWindow();
+						window::Window::getInstance().endRenderLoop();
 					}
 
 					ImGui::EndMenu();
@@ -174,7 +174,7 @@ namespace mar {
 				}
 
 				if (ImGui::MenuItem("Exit")) {
-					window::Window::getInstance().closeWindow();
+					window::Window::getInstance().endRenderLoop();
 				}
 
 				ImGui::EndMainMenuBar();
@@ -186,8 +186,16 @@ namespace mar {
 		void GUI::Editor_ViewPort() {
 			ImGui::Begin("ViewPort", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
 
-			if (ImGui::IsWindowFocused()) window::Input::enableInput();
-			else window::Input::disableInput();
+			if (ImGui::IsWindowFocused()) {
+				m_mouseViewportX = window::Input::getMousePositionX();
+				m_mouseViewportY = window::Input::getMousePositionY();
+				m_enableViewportInput = true;
+			}
+			else {
+				m_mouseViewportX = 0.f;
+				m_mouseViewportY = 0.f;
+				m_enableViewportInput = false;
+			}
 
 			if (ImGui::BeginMenuBar()) {
 				if (m_sceneManager->isEditorMode()) {
