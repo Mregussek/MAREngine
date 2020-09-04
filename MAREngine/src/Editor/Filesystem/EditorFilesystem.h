@@ -24,7 +24,6 @@ namespace mar {
 
 			static std::string loadPyScript(const char* filename);
 			static void savePyScript(const char* filename, std::string source);
-
 		};
 
 

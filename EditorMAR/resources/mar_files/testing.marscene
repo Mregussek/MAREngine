@@ -7,12 +7,12 @@ MAREngine scene file
 #Entity
 #TagComponent Camera
 #TransformComponent Begin
-#center 0 0 0
+#center -9.15 2.5 -2.15
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
 #CameraComponent Begin
-#id secondary
+#id main
 #used perspective
 #type perspective
 #fov 45
@@ -79,6 +79,60 @@ MAREngine scene file
 #center 3 0 5.4
 #angles 0 18 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Pyramid
 #ColorComponent 0.882787 0.988722 0
+
+#EntityCollection
+#CollectionTagComponent FirstCollection
+
+#Entity
+#TagComponent RedCubeInCollection
+#TransformComponent Begin
+#center 2.15 0 -3.55
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Cube
+#ColorComponent 0.917293 0.1138 0.1138
+
+#Entity
+#TagComponent GreenPyramidOnIt
+#TransformComponent Begin
+#center 2.15 2 -3.55
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Pyramid
+#ColorComponent 0.220238 1 0
+
+#EntityCollection
+#CollectionTagComponent SomeOBJloaded
+
+#Entity
+#TagComponent SurfaceFromCollection
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent Surface
+#ColorComponent 0.781955 0.293968 0.767432
+
+#Entity
+#TagComponent BlueLightedWall
+#TransformComponent Begin
+#center 11.9 0.2 -6.85
+#angles 0 -143 0
+#scale 1 1 1
+#general_scale 1
+#ColorComponent 1 0.99999 0.99999
+#RenderableComponent Wall
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.6
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
