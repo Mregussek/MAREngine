@@ -72,6 +72,7 @@ namespace mar {
 			static bool s_dockspaceOpen;
 			static bool s_fullscreenPersisant;
 			// --- Should Window Be Opened ?
+			bool m_newSceneWindow{ false };
 			bool m_saveSceneWindow{ false };
 			bool m_loadSceneWindow{ false };
 			bool m_infoWindow{ false };

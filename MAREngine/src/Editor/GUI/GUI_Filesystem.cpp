@@ -6,85 +6,55 @@
 
 #include "GUI_Filesystem.h"
 
+#include "GUI_TextEditor.h"
+#include "GUI_EntityPanel.h"
+#include "GUI_EntityCollectionPanel.h"
+
 
 namespace mar {
 	namespace editor {
 
 
-		void GUI_Filesystem::Filesystem_NewScene() {
-			engine::MAREngine::getEngine()->setLoadPath("BrandNewScene");
-			engine::MAREngine::getEngine()->setRestart();
+		imgui_addons::ImGuiFileBrowser GUI_Filesystem::s_fileDialog;
+
+
+		void GUI_Filesystem::Filesystem_NewScene(const char* name) {
+			if (s_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1000, 510), ".marscene,.mrsc")) {
+				GUI_EntityCollectionPanel::reset();
+				GUI_EntityPanel::reset();
+				GUI_TextEditor::Instance().reset();
+				
+				engine::MAREngine::getEngine()->setLoadPath("BrandNewScene");
+				engine::MAREngine::getEngine()->setRestart();
+			}
 
 			EDITOR_TRACE("GUI: Filesystem_NewScene");
 		}
 
-		bool GUI_Filesystem::Filesystem_SaveScene(bool should_be_opened, ecs::Scene* scene_to_save) {
-			ImGui::Begin("Save File");
-
-			static char filename[30]{ "empty" };
-
-			ImGui::InputText(".marscene", filename, 30);
-
-			ImGui::Separator();
-
-			static std::string save;
-			save = "resources/mar_files/" + std::string(filename) + ".marscene";
-
-			ImGui::Text("Saving to: ");
-			ImGui::SameLine();
-			ImGui::Text(save.c_str());
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Save to selected name"))
-				Filesystem::saveToFile(scene_to_save, save.c_str());
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Close"))
-				should_be_opened = false;
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: filesystem_savescene");
-
-			return should_be_opened;
+		void GUI_Filesystem::Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save) {
+			if (s_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1000, 510), ".marscene,.mrsc")) {
+				if (s_fileDialog.selected_path.find(".marscene") != std::string::npos) {
+					Filesystem::saveToFile(scene_to_save, s_fileDialog.selected_path.c_str());
+				}
+				else if (s_fileDialog.selected_path.find(".mrsc") != std::string::npos) {
+					Filesystem::saveToFile(scene_to_save, s_fileDialog.selected_path.c_str());
+				}
+				else {
+					EDITOR_ERROR("GUI_FILESYSTEM: given path {} has no correct extension, expected ones are .marscene and .mrsc!", s_fileDialog.selected_path)
+				}
+			}
 		}
 
-		bool GUI_Filesystem::Filesystem_LoadScene(bool should_be_opened) {
-			ImGui::Begin("Open File");
+		void GUI_Filesystem::Filesystem_LoadScene(const char* name) {
+			if (s_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1000, 510), ".marscene,.mrsc")) {
+				engine::MAREngine::getEngine()->setLoadPath(s_fileDialog.selected_path);
 
-			ImGui::Text("Select file, which you want to be opened:");
+				GUI_EntityCollectionPanel::reset();
+				GUI_EntityPanel::reset();
+				GUI_TextEditor::Instance().reset();
 
-			static char input[30];
-			ImGui::InputText(".marscene", input, 30);
-
-			ImGui::Separator();
-
-			static std::string will_open;
-			will_open = "resources/mar_files/" + std::string(input) + ".marscene";
-
-			ImGui::Text("File, which is going to be opened:");
-			ImGui::SameLine();
-			ImGui::Text(will_open.c_str());
-
-			ImGui::Text("PLEASE MAKE SURE PATH IS CORRECT!");
-
-			if (ImGui::Button("Open Selected File")) {
-				engine::MAREngine::getEngine()->setLoadPath(will_open);
 				engine::MAREngine::getEngine()->setRestart();
 			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Close"))
-				should_be_opened = false;
-
-			ImGui::End();
-
-			EDITOR_TRACE("GUI: filesystem_loadscene");
-
-			return should_be_opened;
 		}
 
 

@@ -19,10 +19,13 @@ namespace mar {
 
 
 		struct GUI_Filesystem {
+		private:
+			static imgui_addons::ImGuiFileBrowser s_fileDialog;
 
-			static void Filesystem_NewScene();
-			static bool Filesystem_SaveScene(bool should_be_opened, ecs::Scene* scene_to_save);
-			static bool Filesystem_LoadScene(bool should_be_opened);
+		public:
+			static void Filesystem_NewScene(const char* name);
+			static void Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save);
+			static void Filesystem_LoadScene(const char* name);
 
 		};
 

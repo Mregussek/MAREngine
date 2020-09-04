@@ -77,6 +77,13 @@
 	#error "MAR ENGINE: Cannot import ImGuiColorTextEdit lib : TextEditor.h !"
 #endif
 
+#if __has_include("FileBrowser/ImGuiFileBrowser.h")
+	#include "FileBrowser/ImGuiFileBrowser.h"
+	#define MAR_ENGINE_IMGUI_ADDONS_FILE_BROWSER_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import ImGui-Addons lib : FileBrowser/ImGuiFileBrowser.h !"
+#endif
+
 #if __has_include("SerialPort.hpp")
 	#include "SerialPort.hpp"
 	#define MAR_ENGINE_SERIAL_PORT_LIB_IMPORTED

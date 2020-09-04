@@ -112,12 +112,31 @@ namespace mar {
 			GUI_EntityPanel::Scene_Entity_Modify(m_sceneManager->isPlayMode());
 			GUI_EntityCollectionPanel::Scene_EntityCollection_Modify();
 
-			if (m_loadSceneWindow) {
-				m_loadSceneWindow = GUI_Filesystem::Filesystem_LoadScene(m_loadSceneWindow);
+			{
+				const char* new_file = "New Scene";
+				if (m_newSceneWindow) {
+					ImGui::OpenPopup(new_file);
+					m_newSceneWindow = false;
+				}
+				GUI_Filesystem::Filesystem_NewScene(new_file);
 			}
-			if (m_saveSceneWindow) { 
-				m_saveSceneWindow = GUI_Filesystem::Filesystem_SaveScene(m_saveSceneWindow, m_sceneManager->getScene());
+			{
+				const char* open_file = "Open Scene";
+				if (m_loadSceneWindow) {
+					ImGui::OpenPopup(open_file);
+					m_loadSceneWindow = false;
+				}
+				GUI_Filesystem::Filesystem_LoadScene(open_file);
 			}
+			{
+				const char* save_file = "Save Scene";
+				if (m_saveSceneWindow) {
+					ImGui::OpenPopup(save_file);
+					m_saveSceneWindow = false;
+				}
+				GUI_Filesystem::Filesystem_SaveScene(save_file, m_sceneManager->getScene());
+			}
+			
 			if (m_infoWindow) { 
 				GUI_Info::Menu_Info(m_infoWindow); 
 			}
@@ -139,24 +158,16 @@ namespace mar {
 
 		void GUI::Editor_MainMenuBar() {
 			if (ImGui::BeginMainMenuBar()) {
-				if (ImGui::BeginMenu("File")) {
-					if(ImGui::MenuItem("New")) {
-						GUI_EntityCollectionPanel::reset();
-						GUI_EntityPanel::reset();
-						GUI_TextEditor::Instance().reset();
-
-						GUI_Filesystem::Filesystem_NewScene();
+				if (ImGui::BeginMenu("Scene")) {
+					if(ImGui::MenuItem("New Scene")) {
+						m_newSceneWindow = true;
 					}
 
-					if (ImGui::MenuItem("Open")) {
-						GUI_EntityCollectionPanel::reset();
-						GUI_EntityPanel::reset();
-						GUI_TextEditor::Instance().reset();
-
+					if (ImGui::MenuItem("Open Scene")) {
 						m_loadSceneWindow = true;
 					}
 
-					if (ImGui::MenuItem("Save")) {
+					if (ImGui::MenuItem("Save Scene")) {
 						m_saveSceneWindow = true;
 					}
 

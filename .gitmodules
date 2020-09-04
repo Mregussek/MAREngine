@@ -19,3 +19,6 @@
 [submodule "MAREngine/3rd_party/spdlog"]
 	path = MAREngine/3rd_party/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "MAREngine/3rd_party/ImGui-Addons"]
+	path = MAREngine/3rd_party/ImGui-Addons
+	url = https://github.com/gallickgunner/ImGui-Addons.git

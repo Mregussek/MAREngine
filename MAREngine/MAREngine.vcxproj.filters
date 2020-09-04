@@ -345,6 +345,9 @@
     <ClInclude Include="src\Editor\Filesystem\Filesystem_SaveFile.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp">
@@ -489,6 +492,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Filesystem\Filesystem_SaveFile.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
