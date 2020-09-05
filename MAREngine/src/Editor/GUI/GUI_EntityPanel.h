@@ -68,22 +68,6 @@ namespace mar {
 
 				return false;
 			}
-
-			static bool Button_LoadObj(ecs::RenderableComponent& renderable, const char* buttonName, const char* path) {
-				if (ImGui::Button(buttonName)) {
-					graphics::MeshCreator::OBJ::loadOBJ(path);
-
-					renderable.id = graphics::MeshCreator::OBJ::getID();
-					renderable.vertices = graphics::MeshCreator::OBJ::vertices;
-					renderable.indices = graphics::MeshCreator::OBJ::indices;
-
-					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
-
-					return true;
-				}
-
-				return false;
-			}
 		};
 
 

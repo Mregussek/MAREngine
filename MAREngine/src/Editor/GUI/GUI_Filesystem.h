@@ -27,6 +27,8 @@ namespace mar {
 			static void Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save);
 			static void Filesystem_LoadScene(const char* name);
 
+			static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
+
 		};
 
 

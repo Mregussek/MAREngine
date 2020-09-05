@@ -75,6 +75,7 @@ namespace mar {
 			bool m_newSceneWindow{ false };
 			bool m_saveSceneWindow{ false };
 			bool m_loadSceneWindow{ false };
+			bool m_loadOBJfileWindow{ false };
 			bool m_infoWindow{ false };
 			bool m_instructionWindow{ false };
 		};

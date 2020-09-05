@@ -104,112 +104,42 @@ namespace mar {
             };
         }
 
-		std::string MeshCreator::OBJ::id;
-		std::vector<float> MeshCreator::OBJ::vertices;
-		std::vector<uint32_t> MeshCreator::OBJ::indices;
+        void MeshCreator::loadOBJ(std::string filename, std::string path, ecs::EntityCollection& collection) {
+            objl::Loader Loader;
+            bool loadout = Loader.LoadFile(path);
+            if (loadout) {
+                for (size_t i = 0; i < Loader.LoadedMeshes.size(); i++) {
+                    auto& entity = collection.createEntity();
+                    auto& tag = entity.getComponent<ecs::TagComponent>();
+                    auto& renderable = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
 
-		void MeshCreator::OBJ::loadOBJ(const char* filename) {
-			vertices.clear();
-			indices.clear();
+                    objl::Mesh curMesh = Loader.LoadedMeshes[i];
 
-			id = std::string(filename);
+                    if (curMesh.MeshName.empty()) {
+                        tag.tag = filename;
+                        renderable.id = filename;
+                    }
+                    else {
+                        tag.tag = curMesh.MeshName;
+                        renderable.id = curMesh.MeshName;
+                    }
 
-			std::vector<maths::vec3> method_vertices;
-			std::vector<maths::vec2> method_vertices_texcoords;
+                    for (size_t j = 0; j < curMesh.Vertices.size(); j++) {
+                        renderable.vertices.push_back(curMesh.Vertices[j].Position.X);
+                        renderable.vertices.push_back(curMesh.Vertices[j].Position.Y);
+                        renderable.vertices.push_back(curMesh.Vertices[j].Position.Z);
+                        renderable.vertices.push_back(curMesh.Vertices[j].Normal.X);
+                        renderable.vertices.push_back(curMesh.Vertices[j].Normal.Y);
+                        renderable.vertices.push_back(curMesh.Vertices[j].Normal.Z);
+                        renderable.vertices.push_back(curMesh.Vertices[j].TextureCoordinate.X);
+                        renderable.vertices.push_back(curMesh.Vertices[j].TextureCoordinate.Y);
+                        renderable.vertices.push_back(0.0f);
+                    }
 
-			float input[3];
-
-			std::ifstream stream(filename, std::ios::in);
-			std::string line;
-
-			if (!stream.is_open()) {
-				GRAPHICS_ERROR("Cannot open object path!");
-				return;
-			}
-
-			while (std::getline(stream, line)) {
-				// VERTEX TEXTURE COORDINATES
-				if (line.substr(0, 2) == "vt") {
-					std::istringstream ss(line.substr(3));
-					ss >> input[0] >> input[1];
-					method_vertices_texcoords.push_back({ input[0] , input[1] });
-				}
-				// VERTICES
-				else if (line[0] == 'v') {
-					std::istringstream ss(line.substr(2));
-					ss >> input[0] >> input[1] >> input[2];
-					method_vertices.push_back({ input[0] , input[1] , input[2] });
-				}
-				// INDICES
-				else if (line[0] == 'f') {
-					std::istringstream ss(line.substr(2));
-
-					while (!ss.eof()) {
-						uint32_t indice;
-						ss >> indice >> std::ws;
-						indices.push_back(indice - 1);
-
-						if (ss.peek() == '/') {
-							ss.get();
-
-							if (ss.peek() == '/') {
-								ss.get();
-								uint32_t normal_indice;
-								ss >> normal_indice >> std::ws;
-							}
-							else {
-								uint32_t tex_indice;
-								ss >> tex_indice >> std::ws;
-
-								if (ss.peek() == '/') {
-									ss.get();
-									uint32_t normal_indice;
-									ss >> normal_indice >> std::ws;
-								}
-							}
-						}
-					}
-				}
-				else {}
-			} 
-
-			float light_normal{ 0.0f };
-			float tex_coords[]{ 0.0f, 0.0f };
-
-			for (uint32_t i = 0; i < method_vertices.size(); i++) {
-				vertices.push_back(method_vertices[i].x);
-				vertices.push_back(method_vertices[i].y);
-				vertices.push_back(method_vertices[i].z);
-
-				vertices.push_back(light_normal);
-				vertices.push_back(light_normal);
-				vertices.push_back(light_normal);
-				
-				if (i < method_vertices_texcoords.size()) {
-					vertices.push_back(method_vertices_texcoords[i].x);
-					vertices.push_back(method_vertices_texcoords[i].y);
-				}
-				else {
-					vertices.push_back(tex_coords[0]);
-					vertices.push_back(tex_coords[1]);
-				}
-
-				vertices.push_back(0.f);
-			}
-
-			ShapeManipulator::calculateNormals(vertices, indices, 3 + 3 + 2 + 1);
-
-			GRAPHICS_TRACE("ObjectLoader has been set!");
-		} 
-		
-		std::vector<float> MeshCreator::OBJ::getVertices() {
-			return vertices;
-		}
-
-		std::vector<uint32_t> MeshCreator::OBJ::getIndices() {
-			return indices;
-		}
-
+                    renderable.indices = curMesh.Indices;
+                }
+            }
+        }
 
 
 } }

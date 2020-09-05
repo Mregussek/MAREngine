@@ -135,6 +135,14 @@ namespace mar {
 					m_saveSceneWindow = false;
 				}
 				GUI_Filesystem::Filesystem_SaveScene(save_file, m_sceneManager->getScene());
+			} 
+			{
+				const char* load_obj = "OBJ Loader";
+				if (m_loadOBJfileWindow) {
+					ImGui::OpenPopup(load_obj);
+					m_loadOBJfileWindow = false;
+				}
+				GUI_Filesystem::Filesystem_LoadOBJfile(load_obj, m_sceneManager->getScene());
 			}
 			
 			if (m_infoWindow) { 
@@ -173,6 +181,14 @@ namespace mar {
 
 					if (ImGui::MenuItem("Exit")) {
 						window::Window::getInstance().endRenderLoop();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::BeginMenu("Entities")) {
+					if (ImGui::MenuItem("Load external .obj file")) {
+						m_loadOBJfileWindow = true;
 					}
 
 					ImGui::EndMenu();

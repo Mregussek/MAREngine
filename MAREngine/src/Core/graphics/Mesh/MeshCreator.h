@@ -10,6 +10,9 @@
 #include "../../../mar.h"
 #include "../GraphicsLogs.h"
 #include "ShapeManipulator.h"
+#include "../../ecs/ECS/EntityCollection.h"
+#include "../../ecs/ECS/Entity.h"
+#include "../../ecs/ECS/Components.h"
 
 
 namespace mar {
@@ -43,18 +46,7 @@ namespace mar {
                 static std::vector<uint32_t> getIndices();
             };
 
-            struct OBJ {
-                static std::string id;
-                static std::vector<float> vertices;
-                static std::vector<uint32_t> indices;
-
-                static void loadOBJ(const char* filename);
-
-                static std::string getID() { return id; }
-                static std::vector<float> getVertices();
-                static std::vector<uint32_t> getIndices();
-            };
-
+            static void loadOBJ(std::string filename, std::string path, ecs::EntityCollection& collection);
         };
 
 

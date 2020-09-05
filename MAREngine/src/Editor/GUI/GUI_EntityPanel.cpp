@@ -253,7 +253,6 @@ namespace mar {
 
 		void GUI_EntityPanel::Scene_Handle_RenderableComponent(bool window_focused) {
 			static bool GUI_modify_renderable = false; // should display option to modify the whole RenderableComponent ?
-			static bool GUI_display_obj = false; // should display obj file loading to RenderableComponent ?
 
 			auto& renderable = currentEntity->getComponent<ecs::RenderableComponent>();
 
@@ -289,54 +288,27 @@ namespace mar {
 			if (GUI_modify_renderable) {
 				if (Button_ChooseRenderable<graphics::MeshCreator::Cube>(renderable, "Cube")) {
 					GUI_modify_renderable = false;
-					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (Button_ChooseRenderable<graphics::MeshCreator::Pyramid>(renderable, "Pyramid")) {
 					GUI_modify_renderable = false;
-					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (Button_ChooseRenderable<graphics::MeshCreator::Wall>(renderable, "Wall")) {
 					GUI_modify_renderable = false;
-					GUI_display_obj = false;
 				}
 
 				ImGui::SameLine();
 
 				if (Button_ChooseRenderable<graphics::MeshCreator::Surface>(renderable, "Surface")) {
 					GUI_modify_renderable = false;
-					GUI_display_obj = false;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Load OBJ"))
-					GUI_display_obj = true;
-
-				if (GUI_display_obj) {
-					static char filename[30]{ "empty" };
-					ImGui::InputText(".obj", filename, 30);
-					static std::string load;
-					load = "resources/objects/" + std::string(filename) + ".obj";
-
-					ImGui::Text(".obj file, which will be loaded: %s", load.c_str());
-					ImGui::Text("WARNING: if .obj file do not exist, no renderable will be assigned!");
-
-					//if (Button_LoadObj(renderable, "Load", load.c_str())) {
-					//	GUI_modify_renderable = false;
-					//	GUI_display_obj = false;
-					//}
-
-					ImGui::SameLine();
 				}
 
 				if (ImGui::Button("Do not modify")) {
-					GUI_display_obj = false;
 					GUI_modify_renderable = false;
 				}
 			}

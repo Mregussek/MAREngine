@@ -124,15 +124,6 @@ namespace mar {
 						ren.vertices = graphics::MeshCreator::Pyramid::getVertices();
 						ren.indices = graphics::MeshCreator::Pyramid::getIndices();
 					}
-					else if (line.find(".obj") != std::string::npos) {
-						std::istringstream iss(line.substr(21));
-						std::string name;
-						iss >> name;
-						ren.id = name;
-						graphics::MeshCreator::OBJ::loadOBJ(name.c_str());
-						ren.vertices = graphics::MeshCreator::OBJ::vertices;
-						ren.indices = graphics::MeshCreator::OBJ::indices;
-					}
 				}
 				else if (line.find("#ColorComponent") != std::string::npos) {
 					std::istringstream is(line.substr(16));

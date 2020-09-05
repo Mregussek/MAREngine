@@ -57,6 +57,17 @@ namespace mar {
 			}
 		}
 
+		void GUI_Filesystem::Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene) {
+			if (s_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1000, 510), ".obj")) {
+				auto& collection = scene->createCollection();
+				auto& tag = collection.getComponent<ecs::TagComponent>();
+				tag.tag = s_fileDialog.selected_fn;
+				
+				graphics::MeshCreator::loadOBJ(s_fileDialog.selected_fn, s_fileDialog.selected_path, collection);
+				ecs::SceneEvents::Instance().onCollectionOBJloaded(collection);
+			}
+		}
+
 
 
 } }
