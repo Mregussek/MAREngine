@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\serialport\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\serialport\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
@@ -144,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\serialport\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\serialport\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -215,6 +215,7 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\attr.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\buffer_info.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\cast.h" />
@@ -301,7 +302,6 @@
     <ClInclude Include="src\Platform\OpenGL\VertexBufferOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\VertexArrayOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\VertexBufferLayoutOpenGL.h" />
-    <ClInclude Include="src\Devices\SerialPortMonitor.h" />
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h" />
     <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\Window\Window.h" />
@@ -321,6 +321,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />
@@ -347,7 +348,6 @@
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp" />
-    <ClCompile Include="src\Devices\SerialPortMonitor.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\ShapeManipulator.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />

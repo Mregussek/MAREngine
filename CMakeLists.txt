@@ -217,11 +217,20 @@ set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
 message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
-# SerialPort
+# OBJ-Loader
 # -------------------------------------------------------------
-message("Looking for: SerialPort")
-set(SERIALPORT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/SerialPort/include")
-message(STATUS "SERIALPORT_INCLUDE_DIR:= ${SERIALPORT_INCLUDE_DIR}")
+message("Looking for: OBJ-Loader")
+set(OBJ_LOADER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/OBJ-Loader")
+set(OBJ_LOADER_FILES ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.h)
+message(STATUS "OBJ_LOADER_INCLUDE_DIR:= ${OBJ_LOADER_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# ImGui-Addons
+# -------------------------------------------------------------
+message("Looking for: ImGui-Addons")
+set(IMGUI_ADDONS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGui-Addons")
+set(IMGUI_ADDONS_FILES ${IMGUI_ADDONS_INCLUDE_DIR}/FileBrowser/ImGuiFileBrowser.h ${IMGUI_ADDONS_INCLUDE_DIR}/FileBrowser/ImGuiFileBrowser.cpp)
+message(STATUS "IMGUI_ADDONS_INCLUDE_DIR:= ${IMGUI_ADDONS_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # Set includes for MAREngine (mar_includes.h file)
@@ -236,6 +245,8 @@ include_directories(
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
 	${MAR_GLFW_DIR}
+	${IMGUI_ADDONS_INCLUDE_DIR}
+	${OBJ_LOADER_INCLUDE_DIR}
 	${STB_IMAGE_INCLUDE_DIR}
 	${SPDLOG_INCLUDE_DIR}
 	${ENTT_INCLUDE_DIR}
@@ -259,7 +270,8 @@ link_directories(
 # -------------------------------------------------------------
 set(ALL_INCLUDE_FILES_MARENGINE 
 	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
-	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES} ${IMGUICOLORTEXTEDIT_FILES}
+	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES} ${IMGUI_ADDONS_FILES}
+	${IMGUICOLORTEXTEDIT_FILES} ${OBJ_LOADER_FILES}
 )
 
 set(MAR_OPENGL_IMPORT 

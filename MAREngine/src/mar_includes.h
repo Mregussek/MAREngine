@@ -44,6 +44,7 @@
 #pragma warning( disable : 4005		) 
 #pragma warning( disable : 4018		)
 #pragma warning( disable : 4286		) 
+#pragma warning( disable : 4244		) 
 #pragma warning( disable : 4099		) 
 
 #if __has_include("stb_image/stb_image.h")
@@ -84,13 +85,6 @@
 	#error "MAR ENGINE: Cannot import ImGui-Addons lib : FileBrowser/ImGuiFileBrowser.h !"
 #endif
 
-#if __has_include("SerialPort.hpp")
-	#include "SerialPort.hpp"
-	#define MAR_ENGINE_SERIAL_PORT_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import SerialPort.hpp!"
-#endif
-
 #if __has_include("spdlog/spdlog.h")
 	#include "spdlog/spdlog.h"
 	#include "spdlog/sinks/stdout_color_sinks.h"
@@ -99,6 +93,13 @@
 	#define MAR_ENGINE_SPDLOG_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import spdlog/spdlog.h!"
+#endif
+
+#if __has_include("Source/OBJ_Loader.h")
+	#include "Source/OBJ_Loader.h"
+	#define MAR_ENGINE_OBJ_LOADER_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import OBJ_Loader lib - Source/OBJ_Loader.h!"
 #endif
 
 #if __has_include("entt/entt.hpp")

@@ -22,3 +22,6 @@
 [submodule "MAREngine/3rd_party/ImGui-Addons"]
 	path = MAREngine/3rd_party/ImGui-Addons
 	url = https://github.com/gallickgunner/ImGui-Addons.git
+[submodule "MAREngine/3rd_party/OBJ-Loader"]
+	path = MAREngine/3rd_party/OBJ-Loader
+	url = https://github.com/Mregussek/OBJ-Loader.git
