@@ -1,5 +1,5 @@
 /**
- *				MAREngine - open source 3D game engine
+ *           MAREngine - open source 3D game engine
  * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
  * All rights reserved.
  *
