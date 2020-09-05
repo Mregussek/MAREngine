@@ -10,6 +10,7 @@
 #include "../../mar.h"
 #include "ECS/Components.h"
 #include "Scene.h"
+#include "ScenePlayStorage.h"
 
 
 namespace mar {
@@ -69,6 +70,7 @@ namespace mar {
 		private:
 			friend class SceneEvents;
 			Scene* m_scene;
+			ScenePlayStorage m_playStorage;
 
 		public:
 			bool useEditorCamera;

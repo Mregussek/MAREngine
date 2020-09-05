@@ -53,6 +53,8 @@ namespace mar {
 		}
 
 		void SceneManager::shutdown() { 
+			ECS_TRACE("SCENE_MANAGER: going to shutdown scene manager");
+
 			m_scene->shutdown(); 
 			delete m_scene;
 
@@ -60,6 +62,8 @@ namespace mar {
 		}
 
 		void SceneManager::init(const std::vector<Entity>& entities, graphics::RenderPipeline& render_pipeline) {
+			ECS_TRACE("SCENE_MANAGER: going to push entities into render_pipeline, init() method!");
+
 			for (size_t i = 0; i < entities.size(); i++) {
 				auto& entity = entities[i];
 
@@ -96,6 +100,8 @@ namespace mar {
 					}
 				}
 			}
+
+			ECS_TRACE("SCENE_MANAGER: pushed entities into render_pipeline, init() method!");
 		}
 
 		void SceneManager::update() {
@@ -149,7 +155,35 @@ namespace mar {
 		void SceneManager::initPlayMode() {
 			ECS_TRACE("SCENE_MANAGER: going to initialize play mode");
 
-			
+			m_playStorage.clear();
+
+			for (auto& entity : m_scene->getEntities()) {
+				m_playStorage.pushEntityToStorage(m_playStorage.entity_storage, entity);
+
+				if (entity.hasComponent<ScriptComponent>()) {
+					auto& sc = entity.getComponent<ScriptComponent>();
+					std::string from = System::changeSlashesToDots(sc.script);
+					std::string what = System::getModuleFromPath(sc.script);
+
+					sc.ps.loadScript(from.c_str(), what.c_str());
+					sc.ps.start(&entity);
+				}
+			}
+
+			for (auto& collection : m_scene->getCollections()) {
+				m_playStorage.pushCollectionToStorage(m_playStorage.collection_storage, collection);
+
+				for (auto& entity : collection.getEntities()) {
+					if (entity.hasComponent<ScriptComponent>()) {
+						auto& sc = entity.getComponent<ScriptComponent>();
+						std::string from = System::changeSlashesToDots(sc.script);
+						std::string what = System::getModuleFromPath(sc.script);
+
+						sc.ps.loadScript(from.c_str(), what.c_str());
+						sc.ps.start(&entity);
+					}
+				}
+			}
 
 			ECS_INFO("SCENE_MANAGER: initialized play mode!");
 		}
@@ -157,6 +191,15 @@ namespace mar {
 		void SceneManager::exitPlayMode() {
 			ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
+			for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
+				m_playStorage.loadEntityFromStorage(m_playStorage.entity_storage, m_scene->getEntity(i));
+			}
+
+			for (size_t i = 0; i < m_scene->getCollections().size(); i++) {
+				m_playStorage.loadCollectionFromStorage(m_playStorage.collection_storage, m_scene->getCollection(i));
+			}
+
+			initialize();
 
 			ECS_INFO("SCENE_MANAGER: exited play mode!");
 		}
@@ -164,7 +207,56 @@ namespace mar {
 		void SceneManager::updatePlayMode() {
 			ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-			
+			static int32_t transform_counter = 0;
+			static int32_t light_counter = 0;
+			static int32_t color_counter = 0;
+
+			transform_counter = 0;
+			light_counter = 0;
+			color_counter = 0;
+
+			auto& render_pipeline = graphics::RenderPipeline::getInstance();
+
+			for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
+				auto& entity = m_scene->getEntity(i);
+				auto& tran = entity.getComponent<TransformComponent>();
+
+				if (entity.hasComponent<ScriptComponent>()) {
+					auto& sc = entity.getComponent<ScriptComponent>();
+					sc.ps.update(&entity);
+
+					if (entity.hasComponent<RenderableComponent>()) {
+						render_pipeline.modifyTransform(tran, transform_counter);
+						transform_counter++;
+					}
+
+					if (entity.hasComponent<LightComponent>()) {
+						auto& light = entity.getComponent<LightComponent>();
+						render_pipeline.modifyLight(tran.center, light, light_counter);
+						light_counter++;
+					}
+
+					if (entity.hasComponent<ColorComponent>()) {
+						auto& color = entity.getComponent<ColorComponent>();
+						render_pipeline.modifyColor(color, color_counter);
+						color_counter++;
+					}
+				}
+				else {
+					if (entity.hasComponent<RenderableComponent>()) { transform_counter++; }
+					if (entity.hasComponent<LightComponent>()) { light_counter++; }
+					if (entity.hasComponent<ColorComponent>()) { color_counter++; }
+				}
+
+				if (entity.hasComponent<CameraComponent>()) {
+					auto& cam = entity.getComponent<CameraComponent>();
+					submitCamera(tran, cam);
+				}
+			}
+
+			for (auto& collection : m_scene->getCollections()) {
+				/// TODO: add support for collection scripting
+			}
 
 			ECS_INFO("SCENE_MANAGER: updated play mode");
 		}

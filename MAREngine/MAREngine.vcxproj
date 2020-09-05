@@ -246,6 +246,7 @@
     <ClInclude Include="src\Core\ecs\ECS\EntityCollection.h" />
     <ClInclude Include="src\Core\ecs\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
+    <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
+    <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />

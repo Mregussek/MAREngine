@@ -56,6 +56,10 @@ namespace mar {
 			void submitLight(maths::vec3& position, ecs::LightComponent& light);
 			void submitCamera(RenderCamera* cam);
 
+			void modifyTransform(ecs::TransformComponent& tran, int32_t index);
+			void modifyLight(maths::vec3& position, ecs::LightComponent& light, int32_t index);
+			void modifyColor(ecs::ColorComponent& color, int32_t index);
+
 			void reset();
 
 			float getCurrentShapeID() { return m_shapeID; }

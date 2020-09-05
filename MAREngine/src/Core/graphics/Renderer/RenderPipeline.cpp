@@ -71,6 +71,25 @@ namespace mar {
 			m_camera = cam;
 		}
 
+		void RenderPipeline::modifyTransform(ecs::TransformComponent& tran, int32_t index) {
+			m_transforms[index] = tran;
+
+			GRAPHICS_TRACE("RENDER_PIPELINE: modified transform component at index {}", index);
+		}
+
+		void RenderPipeline::modifyLight(maths::vec3& position, ecs::LightComponent& light, int32_t index) {
+			m_lights[index].first = position;
+			m_lights[index].second = light;
+
+			GRAPHICS_TRACE("RENDER_PIPELINE: modified light component at index {}", index);
+		}
+
+		void RenderPipeline::modifyColor(ecs::ColorComponent& color, int32_t index) {
+			m_colors[index].second = color.texture;
+
+			GRAPHICS_TRACE("RENDER_PIPELINE: modified color component at index {}", index);
+		}
+
 		void RenderPipeline::reset() {
 			m_vertices.clear();
 			m_indices.clear();

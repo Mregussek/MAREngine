@@ -348,6 +348,9 @@
     <ClInclude Include="src\Core\ecs\ECS\Components.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\ecs\ScenePlayStorage.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Devices\SerialPortMonitor.cpp">
@@ -498,6 +501,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Loading.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
