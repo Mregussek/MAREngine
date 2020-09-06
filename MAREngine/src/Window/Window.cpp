@@ -24,7 +24,7 @@
 namespace mar {
 	namespace window {
 
-		Window Window::s_instance;
+		Window* Window::s_instance{ nullptr };
 
 
 

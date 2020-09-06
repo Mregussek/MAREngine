@@ -18,45 +18,15 @@
 **/
 
 
-#ifndef MAR_ENGINE_PLATFORMS_GLFW_WINDOW_GLFW_H
-#define MAR_ENGINE_PLATFORMS_GLFW_WINDOW_GLFW_H
-
-
-#include "../../mar.h"
-#include "WindowCallbacks.h"
-#include "../PlatformLogs.h"
+#include "ProjectSelectionGUI.h"
 
 
 namespace mar {
-	namespace editor { class GUI; class ProjectSelectionGUI; }
-
-	namespace platforms {
+	namespace editor {
 
 
-		class WindowGLFW {
-			friend class editor::GUI;
-			friend class editor::ProjectSelectionGUI;
-
-			GLFWwindow* m_window;
-
-		public:
-			bool initialize(int32_t height, int32_t width, const char* name);
-			static void terminate();
-
-			bool isGoingToClose() { return glfwWindowShouldClose(m_window); }
-			void close() { glfwSetWindowShouldClose(m_window, true); }
-
-			void swapBuffers();
-
-			void setVSync(int32_t set);
-
-			bool isKeyPressed(int32_t key);
-			bool isMousePressed(int32_t key);
-		};
+		bool ProjectSelectionGUI::s_dockspaceOpen{ true };
+		bool ProjectSelectionGUI::s_fullscreenPersisant{ true };
 
 
-	}
-}
-
-
-#endif // !MAR_ENGINE_PLATFORMS_GLFW_WINDOW_GLFW_H
+} }

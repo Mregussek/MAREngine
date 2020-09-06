@@ -37,6 +37,9 @@ namespace mar {
 				PLATFORM_GL_FUNC( glDeleteTextures(1, &tex.second) );
 			}
 
+			s_2d.clear();
+			s_cubemaps.clear();
+
 			PLATFORM_INFO("TEXTURE_OPENGL: deleting all textures");
 		}
 

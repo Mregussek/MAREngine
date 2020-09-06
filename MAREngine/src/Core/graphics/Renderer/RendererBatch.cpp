@@ -45,6 +45,7 @@ namespace mar {
 
 			m_buffers.close();
 			m_shader.shutdown();
+			m_texture.shutdown();
 
 			GRAPHICS_INFO("RENDERER_BATCH: closed!");
 		}

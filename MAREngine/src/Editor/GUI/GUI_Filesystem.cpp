@@ -47,7 +47,7 @@ namespace mar {
 
 		void GUI_Filesystem::SetOpenLoadScene(const char* name) {
 			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", name, ".marscene", ".");
-			igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9));
+			igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 		}
 
 		void GUI_Filesystem::Filesystem_LoadScene(const char* name) {

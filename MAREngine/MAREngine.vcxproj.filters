@@ -354,6 +354,9 @@
     <ClInclude Include="3rd_party\ImGuiFileDialog\ImGuiFileDialog\ImGuiFileDialogConfig.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -507,6 +510,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="3rd_party\ImGuiFileDialog\ImGuiFileDialog\ImGuiFileDialog.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

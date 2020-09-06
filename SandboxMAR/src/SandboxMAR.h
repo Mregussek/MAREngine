@@ -24,49 +24,51 @@
 using namespace mar;
 
 class SandboxMAR {
-	const int m_width = 1600;
-	const int m_height = 900;
-	const char* m_name = "Sandbox MAREngine";
-	std::string m_pathToScene = "resources/mar_files/empty.marscene";
-	engine::MAREngine* engine{ engine::MAREngine::getEngine() };
+	mar::engine::MAREngine engine;
 
 public:
 	SandboxMAR() = default;
 
 	void initialize() {
-		std::string name = m_pathToScene + " --- " + m_name;
-		engine->initWindow(m_height, m_width, name.c_str());
-		engine->setLoadPath(m_pathToScene);
+		engine = engine::MAREngine();
 
-		engine->initializeScripting();
+		engine.initialize();
 	}
 
 	void run() {
-		auto stack = engine->createLayerStack();
-		auto entitylayer = engine->createEntityLayer();
-		auto loaded_scene = engine->loadSceneFromFile();
+		window::Window window = window::Window();
+		window.initialize(1600, 900, engine.getName());
 
-		entitylayer->initialize(loaded_scene);
-		stack.pushLayer(entitylayer);
+		auto stack = layers::LayerStack();
+		auto entitylayer = new layers::EntityLayer("Entity Layer");
+		auto loaded_scene = editor::Filesystem::openFile(engine.getPathToLoad());
+
+		{ // Entity Layer Setup
+			entitylayer->initialize(loaded_scene);
+			stack.pushLayer(entitylayer);
+		}
+
+		auto& back = entitylayer->getSceneManager()->getScene()->getBackground();
+		window.updateBackgroundColor(back);
 
 		entitylayer->getSceneManager()->setPlayMode();
 
-		while (engine->shouldWindowClose() && !engine->shouldEngineRestart())
+		while (!window.isGoingToClose() && !engine.shouldEngineRestart())
 		{
-			engine->clearWindowScreen();
+			window.clear();
 
 			stack.update();
 
-			engine->resetStatistics();
-
-			engine->swapWindowBuffers();
+			engine.resetStatistics();
+			window.update();
 		}
 
 		stack.close();
+		window.terminate();
 	}
 
 	void shutdown() {
-		engine->closeWindow();
+
 	}
 
 

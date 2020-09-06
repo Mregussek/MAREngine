@@ -35,14 +35,10 @@ namespace mar {
 
 		
 		class GUI_Graphics {
-			static GUI_Graphics s_instance;
-
 			platforms::PipelineOpenGL m_pipeline;
 			platforms::ShaderOpenGL m_shader;
 
 		public:
-
-			static GUI_Graphics& getInstance() { return s_instance; }
 
 			void initialize();
 			void close();

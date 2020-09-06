@@ -21,8 +21,6 @@
 #include "GUILayer.h"
 #include "../LayerLogs.h"
 #include "../../Editor/GUI/GUI.h"
-#include "../../Editor/GUI/GUI_Graphics.h"
-#include "../../Editor/Camera/Camera.h"
 #include "../../Window/Input.h"
 
 
@@ -32,24 +30,25 @@ namespace mar {
 
 		LayerGUI::LayerGUI(const char* name)
 			: m_debugName(name),
-			m_gui(nullptr),
-			m_camera(nullptr)
+			m_gui(nullptr)
 		{ }
 
-		void LayerGUI::initialize(editor::GUI* gui, editor::Camera* cam) {
+		void LayerGUI::initialize(editor::GUI* gui, maths::vec3 backgroundcolor) {
 			LAYER_TRACE("GUI_LAYER: {} going to initialize", m_debugName);
 
 			m_gui = gui;
-			m_camera = cam;
 
 			m_gui->initialize("#version 330");
 
-			m_camera->aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
+			auto& spec = m_gui->getFramebuffer().getSpecification();
+			spec.backgroundColor = backgroundcolor;
 
-			m_camera->initialize();
-			m_camera->updateData();
+			m_camera.aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
 
-			editor::GUI_Graphics::getInstance().initialize();
+			m_camera.initialize();
+			m_camera.updateData();
+
+			m_guiGraphics.initialize();
 
 			LAYER_INFO("GUI_LAYER: {} initialized", m_debugName);
 		}
@@ -57,7 +56,7 @@ namespace mar {
 		void LayerGUI::update() {
 			LAYER_TRACE("GUI_LAYER: {} going to display frame", m_debugName);
 
-			editor::GUI_Graphics::getInstance().passToDrawEntity(m_gui->getCurrentEntity(), m_gui->canDrawLines());
+			m_guiGraphics.passToDrawEntity(m_gui->getCurrentEntity(), m_gui->canDrawLines());
 
 			static bool last_input_state = m_gui->isViewportInputEnabled();
 
@@ -65,13 +64,13 @@ namespace mar {
 				bool firstMouse = last_input_state != m_gui->isViewportInputEnabled() ? false : true;
 				last_input_state = m_gui->isViewportInputEnabled();
 
-				m_camera->processInput();
+				m_camera.processInput();
 				//m_camera->ProcessMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
 				//m_camera->ProcessMouseScroll(window::Input::getScrollY());
 			}
 
-			m_camera->aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
-			m_camera->updateData();
+			m_camera.aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
+			m_camera.updateData();
 
 			m_gui->display();
 
@@ -83,18 +82,17 @@ namespace mar {
 
 			m_gui->shutdown();
 
-			editor::GUI_Graphics::getInstance().close();
+			m_guiGraphics.close();
 
 			LAYER_INFO("GUI_LAYER: {} closed!", m_debugName);
 		}
 
-		editor::GUI* LayerGUI::getGUIInstance() { 
-			return m_gui; 
+		void LayerGUI::renderToViewport() {
+			m_gui->bind();
 		}
 
-		editor::Camera* LayerGUI::getCamera() {
-			return m_camera; 
+		void LayerGUI::submit(ecs::SceneManager* manager) {
+			m_gui->submit(manager);
 		}
-
 
 } }

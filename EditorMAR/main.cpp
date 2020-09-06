@@ -24,6 +24,6 @@ int main() {
 	EditorMAR editor;
 
 	editor.initialize();
-	editor.run();
+	editor.runProjectOnEngine();
 	editor.shutdown();
 }

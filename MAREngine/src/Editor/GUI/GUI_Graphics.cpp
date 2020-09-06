@@ -28,9 +28,6 @@ namespace mar {
 	namespace editor {
 
 
-		GUI_Graphics GUI_Graphics::s_instance;
-
-
 		void GUI_Graphics::initialize() {
 			uint32_t max_vertex_count = 500000;
 			uint32_t max_index_count = 500000 / 2;
@@ -42,10 +39,8 @@ namespace mar {
 		}
 
 		void GUI_Graphics::close() { 
-
 			m_pipeline.close();
 			m_shader.shutdown();
-		
 		}
 
 		void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
@@ -78,7 +73,7 @@ namespace mar {
 			if (e && ability_to_draw) {
 
 				if (e->hasComponent<ecs::RenderableComponent>())
-					editor::GUI_Graphics::getInstance().drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
+					drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
 				
 			}
 		}

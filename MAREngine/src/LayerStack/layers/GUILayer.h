@@ -25,10 +25,13 @@
 #include "../../mar.h"
 #include "../Layer.h"
 #include "../../Window/Window.h"
+#include "../../Editor/Camera/Camera.h"
+#include "../../Editor/GUI/GUI_Graphics.h"
 
 
 namespace mar {
-	namespace editor { class Camera; class GUI; }
+	namespace platforms { class FrameBufferOpenGL; }
+	namespace ecs { class SceneManager; }
 
 	namespace layers {
 
@@ -36,23 +39,23 @@ namespace mar {
 		class LayerGUI : public Layer {
 			const char* m_debugName;
 			editor::GUI* m_gui;
-			editor::Camera* m_camera;
+			editor::GUI_Graphics m_guiGraphics;
+			editor::Camera m_camera;
 
 		public:
 			LayerGUI() = default;
 			LayerGUI(const char* name);
 
-			void initialize(editor::GUI* gui, editor::Camera* cam);
+			void initialize(editor::GUI* gui, maths::vec3 backgroundcolor);
 
 			// --- OVERLOADED METHODS --- // 
 
 			void update() override;
 			void closeLayer() override;
 
-			// --- GET METHODS --- //
-
-			inline editor::GUI* getGUIInstance();
-			inline editor::Camera* getCamera();
+			// --- HELPERS --- //
+			void submit(ecs::SceneManager* manager);
+			void renderToViewport();
 		};
 
 

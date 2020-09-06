@@ -53,6 +53,11 @@ namespace mar {
 
 			void submit(ecs::SceneManager* scene);
 
+			void bind() {
+				m_viewportFramebuffer.bind();
+				m_viewportFramebuffer.clear();
+			}
+
 			void display();
 
 			// --- GET METHODS --- //

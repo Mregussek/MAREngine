@@ -263,6 +263,7 @@
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\GUI\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
+    <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
     <ClInclude Include="src\mar_logging.h" />
     <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h" />
     <ClInclude Include="src\Platform\GLFW\WindowGLFW.h" />
@@ -345,6 +346,7 @@
     <ClCompile Include="src\Editor\GUI\GUI_Info.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
+    <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp" />
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />

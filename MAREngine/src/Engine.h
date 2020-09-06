@@ -25,6 +25,7 @@
 // Log && Filesystem
 #include "Debug/Log.h"
 #include "Editor/GUI/GUI.h"
+#include "Editor/ProjectSelectionGUI/ProjectSelectionGUI.h"
 #include "Editor/Filesystem/EditorFilesystem.h"
 #include "Editor/Camera/Camera.h"
 // Layers
@@ -46,17 +47,20 @@ namespace mar {
 
 
 		class MAREngine {
-			static MAREngine s_instance;
-
 			std::string m_pathLoad{ "resources/mar_files/empty.marscene" };
+			std::string m_editorName{ "EditorMAR" };
 			bool m_shouldRestart{ false };
+
+			static MAREngine* main_instance;
 
 		public:
 			MAREngine() = default;
 
 			// --- GET METHODS --- //
 
-			static MAREngine* getEngine() { return &s_instance; }
+			static MAREngine* getEngine() { return main_instance; }
+			const char* getName() { return m_editorName.c_str(); }
+			std::string getPathToLoad() { return m_pathLoad; }
 
 			// -----------------------------------------
 			// END-USER METHODS
@@ -69,39 +73,13 @@ namespace mar {
 			const bool shouldEngineRestart() { return m_shouldRestart; }
 			void setLoadPath(std::string path) { m_pathLoad = path; }
 
-			// --- WINDOW MANAGEMENT --- //
-
-			void initWindow(int32_t height, int32_t width, const char* name);
-			void closeWindow();
-
-			void clearWindowScreen();
-			void swapWindowBuffers();
-
-			const bool shouldWindowClose();
+			void initialize();
 			
-			void updateBackground(editor::GUI* gui, ecs::Scene* scene);
-			void updateBackground(ecs::Scene* scene);
-
-			// --- LAYERS MANAGEMENT --- //
-
-			editor::GUI createGUI();
-			editor::Camera createGUICamera();
-
-			layers::LayerStack createLayerStack();
-			layers::EntityLayer* createEntityLayer();
-			layers::LayerGUI* createEditorLayer();
-
-			// --- SCENE MANAGEMENT --- //
-
-			ecs::Scene* loadSceneFromFile();
+			void connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer);
 
 			// --- RENDERING MANAGEMENT --- //
 
 			void resetStatistics() { graphics::RenderPipeline::getInstance().clearStatistics(); }
-
-			// --- SCRIPTING MANAGEMENT --- //
-
-			void initializeScripting() { scripting::PythonScript::appendCurrentPath(); }
 
 		};
 

@@ -29,7 +29,7 @@
 
 
 namespace mar {
-	namespace editor { class GUI; }
+	namespace editor { class GUI; class ProjectSelectionGUI; }
 
 	namespace window {
 	
@@ -39,8 +39,9 @@ namespace mar {
 		class Window {
 			friend class Input;
 			friend class editor::GUI;
+			friend class editor::ProjectSelectionGUI;
 
-			static Window s_instance;
+			static Window* s_instance;
 
 			platforms::WindowGLFW m_window;
 			uint32_t m_width;
@@ -48,15 +49,17 @@ namespace mar {
 			maths::vec3 m_background;
 
 		public:
-			static Window& getInstance() { return s_instance; }
+			static Window& getInstance() { return *s_instance; }
 			
 			void updateBackgroundColor(maths::vec3 new_back) { m_background = new_back; }
 
 			void initialize(int32_t width, int32_t height, const char* name) {
+				s_instance = this;
+
 				m_width = width;
 				m_height = height;
 
-				bool is_glfw_fine = m_window.initialize(width, height, name);
+				bool is_glfw_fine = m_window.initialize(m_height, m_width, name);
 				if (!is_glfw_fine) {
 					WINDOW_ERROR("WINDOW: Cannot initialize GLFW window!");
 					char c = getchar();
@@ -75,8 +78,8 @@ namespace mar {
 				WINDOW_INFO("WINDOW: initialized OpenGL!");
 			}
 
-			void shutdown() {
-				m_window.terminate();
+			static void terminate() {
+				platforms::WindowGLFW::terminate();
 
 				WINDOW_INFO("WINDOW: closed Window!");
 			}

@@ -19,62 +19,82 @@
 
 
 #include "EditorMAR.h"
-#include "MAREngine/MAREngine.h"
 
+using namespace mar;
 
 void EditorMAR::initialize() {
-	engine = mar::engine::MAREngine::getEngine();
+	engine = engine::MAREngine();
 
-	std::string name = m_pathToScene + " --- " + m_name;
-	engine->initWindow(m_height, m_width, name.c_str());
-	engine->setLoadPath(m_pathToScene);
+	engine.initialize();
 
-	engine->initializeScripting();
+	projectSelectionWindow();
 }
 
-void EditorMAR::run() {
-	auto stack = engine->createLayerStack();
-	auto entitylayer = engine->createEntityLayer();
-	auto guilayer = engine->createEditorLayer();
-	auto loaded_scene = engine->loadSceneFromFile();
-	auto gui = engine->createGUI();
-	auto gui_cam = engine->createGUICamera();
+void EditorMAR::projectSelectionWindow() {
+	window::Window window = window::Window();
+	window.initialize(1000, 500, "MAREngine - Select Project");
 
-	engine->updateBackground(&gui, loaded_scene);
+	editor::ProjectSelectionGUI gui;
 
-	entitylayer->initialize(loaded_scene);
-	stack.pushLayer(entitylayer);
+	gui.initialize("#version 330");
 
-	guilayer->initialize(&gui, &gui_cam);
-	gui.submit(entitylayer->getSceneManager());
-	stack.pushOverlay(guilayer);
-
-	auto& framebuffer = gui.getFramebuffer();
-
-	while (!engine->shouldWindowClose() && !engine->shouldEngineRestart())
+	while (!window.isGoingToClose())
 	{
-		engine->clearWindowScreen();
+		window.clear();
 
-		framebuffer.bind();
-		framebuffer.clear();
+		gui.prepare();
+		gui.update();
+		gui.render();
+
+		window.update();
+	}
+
+	gui.shutdown();
+	window.terminate();
+}
+
+void EditorMAR::runProjectOnEngine() {
+	window::Window window = window::Window();
+	window.initialize(1600, 900, engine.getName());
+
+	auto stack = layers::LayerStack();
+	auto entitylayer = new layers::EntityLayer("Entity Layer");
+	auto guilayer = new layers::LayerGUI("Default GUI Layer");
+	auto gui = editor::GUI();
+	auto loaded_scene = editor::Filesystem::openFile(engine.getPathToLoad());
+
+	{ // Entity Layer Setup
+		entitylayer->initialize(loaded_scene);
+		stack.pushLayer(entitylayer);
+	}
+	
+	{ // Editor Layer Setup
+		guilayer->initialize(&gui, loaded_scene->getBackground());
+		engine.connectEntityLayerToGui(guilayer, entitylayer);
+		stack.pushOverlay(guilayer);
+	}
+
+	while (!window.isGoingToClose() && !engine.shouldEngineRestart())
+	{
+		window.clear();
+
+		guilayer->renderToViewport();
 
 		stack.update();
 
-		engine->resetStatistics();
-
-		engine->swapWindowBuffers();
+		engine.resetStatistics();
+		window.update();
 	}
 
 	stack.close();
+	window.terminate();
 }
 
 void EditorMAR::shutdown() {
 start_again:
-	if (engine->shouldEngineRestart()) {
-		engine->setNoRestart();
-		run();
+	if (engine.shouldEngineRestart()) {
+		engine.setNoRestart();
+		runProjectOnEngine();
 		goto start_again;
 	}
-
-	engine->closeWindow();
 }
