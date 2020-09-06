@@ -92,11 +92,11 @@
 	#error "MAR ENGINE: Cannot import ImGuiColorTextEdit lib : TextEditor.h !"
 #endif
 
-#if __has_include("FileBrowser/ImGuiFileBrowser.h")
-	#include "FileBrowser/ImGuiFileBrowser.h"
-	#define MAR_ENGINE_IMGUI_ADDONS_FILE_BROWSER_LIB_IMPORTED
+#if __has_include("ImGuiFileDialog/ImGuiFileDialog.h")
+	#include "ImGuiFileDialog/ImGuiFileDialog.h"
+	#define MAR_ENGINE_IMGUI_FILE_DIALOG_BROWSER_LIB_IMPORTED
 #else
-	#error "MAR ENGINE: Cannot import ImGui-Addons lib : FileBrowser/ImGuiFileBrowser.h !"
+	#error "MAR ENGINE: Cannot import ImGuiFileDialog lib : ImGuiFileDialog/ImGuiFileDialog.h.h !"
 #endif
 
 #if __has_include("spdlog/spdlog.h")

@@ -34,15 +34,17 @@ namespace mar {
 
 
 		struct GUI_Filesystem {
-		private:
-			static imgui_addons::ImGuiFileBrowser s_fileDialog;
-			static imgui_addons::ImGuiFileBrowser s_windowDialog;
 
-		public:
+			static void SetOpenNewScene(const char* name);
 			static void Filesystem_NewScene(const char* name);
+
+			static void SetOpenSaveScene(const char* name);
 			static void Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save);
+
+			static void SetOpenLoadScene(const char* name);
 			static void Filesystem_LoadScene(const char* name);
 
+			static void SetOpenLoadOBJfile(const char* name);
 			static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
 
 			static void Filesystem_AssetManager(const char* name);

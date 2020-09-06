@@ -22,6 +22,9 @@
 [submodule "MAREngine/3rd_party/OBJ-Loader"]
 	path = MAREngine/3rd_party/OBJ-Loader
 	url = https://github.com/Mregussek/OBJ-Loader.git
-[submodule "MAREngine/3rd_party/ImGui-Addons"]
-	path = MAREngine/3rd_party/ImGui-Addons
-	url = https://github.com/Mregussek/ImGui-Addons.git
+[submodule "MAREngine/3rd_party/ImGuiFileDialog"]
+	path = MAREngine/3rd_party/ImGuiFileDialog
+	url = https://github.com/aiekick/ImGuiFileDialog.git
+[submodule "MAREngine/3rd_party/dirent"]
+	path = MAREngine/3rd_party/dirent
+	url = https://github.com/tronkko/dirent

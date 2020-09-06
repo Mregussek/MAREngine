@@ -130,7 +130,7 @@ namespace mar {
 			{
 				const char* new_file = "New Scene";
 				if (m_newSceneWindow) {
-					ImGui::OpenPopup(new_file);
+					GUI_Filesystem::SetOpenNewScene(new_file);
 					m_newSceneWindow = false;
 				}
 				GUI_Filesystem::Filesystem_NewScene(new_file);
@@ -138,7 +138,7 @@ namespace mar {
 			{
 				const char* open_file = "Open Scene";
 				if (m_loadSceneWindow) {
-					ImGui::OpenPopup(open_file);
+					GUI_Filesystem::SetOpenLoadScene(open_file);
 					m_loadSceneWindow = false;
 				}
 				GUI_Filesystem::Filesystem_LoadScene(open_file);
@@ -146,7 +146,7 @@ namespace mar {
 			{
 				const char* save_file = "Save Scene";
 				if (m_saveSceneWindow) {
-					ImGui::OpenPopup(save_file);
+					GUI_Filesystem::SetOpenSaveScene(save_file);
 					m_saveSceneWindow = false;
 				}
 				GUI_Filesystem::Filesystem_SaveScene(save_file, m_sceneManager->getScene());
@@ -154,7 +154,7 @@ namespace mar {
 			{
 				const char* load_obj = "OBJ Loader";
 				if (m_loadOBJfileWindow) {
-					ImGui::OpenPopup(load_obj);
+					GUI_Filesystem::SetOpenLoadOBJfile(load_obj);
 					m_loadOBJfileWindow = false;
 				}
 				GUI_Filesystem::Filesystem_LoadOBJfile(load_obj, m_sceneManager->getScene());
