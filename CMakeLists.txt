@@ -221,7 +221,7 @@ message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
 # -------------------------------------------------------------
 message("Looking for: OBJ-Loader")
 set(OBJ_LOADER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/OBJ-Loader")
-set(OBJ_LOADER_FILES ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.h)
+set(OBJ_LOADER_FILES ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.h ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.cpp)
 message(STATUS "OBJ_LOADER_INCLUDE_DIR:= ${OBJ_LOADER_INCLUDE_DIR}")
 
 # -------------------------------------------------------------

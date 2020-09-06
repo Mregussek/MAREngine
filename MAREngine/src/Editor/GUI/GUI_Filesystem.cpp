@@ -30,6 +30,7 @@ namespace mar {
 
 
 		imgui_addons::ImGuiFileBrowser GUI_Filesystem::s_fileDialog;
+		imgui_addons::ImGuiFileBrowser GUI_Filesystem::s_windowDialog;
 
 
 		void GUI_Filesystem::Filesystem_NewScene(const char* name) {
@@ -80,6 +81,10 @@ namespace mar {
 				graphics::MeshCreator::loadOBJ(s_fileDialog.selected_fn, s_fileDialog.selected_path, collection);
 				ecs::SceneEvents::Instance().onCollectionOBJloaded(collection);
 			}
+		}
+
+		void GUI_Filesystem::Filesystem_AssetManager(const char* name) {
+			s_windowDialog.showFileWindow(name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(500, 250), ".obj,.jpg,.png");
 		}
 
 

@@ -159,6 +159,8 @@ namespace mar {
 				}
 				GUI_Filesystem::Filesystem_LoadOBJfile(load_obj, m_sceneManager->getScene());
 			}
+
+			GUI_Filesystem::Filesystem_AssetManager("AssetManager");
 			
 			if (m_infoWindow) { 
 				GUI_Info::Menu_Info(m_infoWindow); 

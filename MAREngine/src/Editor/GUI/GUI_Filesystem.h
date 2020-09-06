@@ -36,6 +36,7 @@ namespace mar {
 		struct GUI_Filesystem {
 		private:
 			static imgui_addons::ImGuiFileBrowser s_fileDialog;
+			static imgui_addons::ImGuiFileBrowser s_windowDialog;
 
 		public:
 			static void Filesystem_NewScene(const char* name);
@@ -43,6 +44,8 @@ namespace mar {
 			static void Filesystem_LoadScene(const char* name);
 
 			static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
+
+			static void Filesystem_AssetManager(const char* name);
 
 		};
 
