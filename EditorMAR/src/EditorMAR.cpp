@@ -32,7 +32,7 @@ void EditorMAR::initialize() {
 
 void EditorMAR::projectSelectionWindow() {
 	window::Window window = window::Window();
-	window.initialize(1000, 500, "MAREngine - Select Project");
+	window.initialize(1200, 700, "MAREngine - Project Manager - (C) 2020-present Mateusz Rzeczyca");
 
 	editor::ProjectSelectionGUI gui;
 

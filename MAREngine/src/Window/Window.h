@@ -47,10 +47,13 @@ namespace mar {
 			uint32_t m_width;
 			uint32_t m_height;
 			maths::vec3 m_background;
+			bool m_closeAfterTerminate{ false };
 
 		public:
 			static Window& getInstance() { return *s_instance; }
 			
+			Window() = default;
+
 			void updateBackgroundColor(maths::vec3 new_back) { m_background = new_back; }
 
 			void initialize(int32_t width, int32_t height, const char* name) {
@@ -78,10 +81,14 @@ namespace mar {
 				WINDOW_INFO("WINDOW: initialized OpenGL!");
 			}
 
-			static void terminate() {
+			void terminate() {
 				platforms::WindowGLFW::terminate();
 
 				WINDOW_INFO("WINDOW: closed Window!");
+
+				if (m_closeAfterTerminate) {
+					exit(0);
+				}
 			}
 
 			void clear() {
@@ -104,6 +111,13 @@ namespace mar {
 				m_window.close();
 
 				WINDOW_INFO("WINDOW: ending render loop");
+			}
+
+			void exitApp() {
+				m_window.close();
+				m_closeAfterTerminate = true;
+
+				WINDOW_INFO("WINDOW: exiting application after this frame!")
 			}
 		};
 

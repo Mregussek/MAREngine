@@ -18,37 +18,25 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_PROJECT_SELECTION_GUI_H
-#define MAR_ENGINE_EDITOR_PROJECT_SELECTION_GUI_H
-
-
 #include "../../mar.h"
 #include "../../Window/Window.h"
-#include "../GUI/GUI_Theme.h"
 
 
 namespace mar {
 	namespace editor {
 
 
-		class ProjectSelectionGUI {
-			static bool s_dockspaceOpen;
-			static bool s_fullscreenPersisant;
-
+		class ProjectTemplatesWindow {
 		public:
-			void initialize(const char* glsl_version);
 
-			void shutdown();
+			static void display() {
+				ImGui::Begin("Templates");
 
-			void prepare();
-
-			void update();
-
-			void render();
+				ImGui::End();
+			}
 		};
 
 
-} }
-
-
-#endif // !MAR_ENGINE_EDITOR_PROJECT_SELECTION_GUI_H
+	}
+}
+#pragma once

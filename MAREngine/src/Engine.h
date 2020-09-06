@@ -47,6 +47,8 @@ namespace mar {
 
 
 		class MAREngine {
+			std::string m_projectName{ "" };
+			std::string m_projectPath{ "" };
 			std::string m_pathLoad{ "resources/mar_files/empty.marscene" };
 			std::string m_editorName{ "EditorMAR" };
 			bool m_shouldRestart{ false };
@@ -72,6 +74,8 @@ namespace mar {
 			void setNoRestart() { m_shouldRestart = false; }
 			const bool shouldEngineRestart() { return m_shouldRestart; }
 			void setLoadPath(std::string path) { m_pathLoad = path; }
+			void setProjectName(std::string name) { m_projectName = name; }
+			void setProjectPath(std::string path) { m_projectPath = path; }
 
 			void initialize();
 			
