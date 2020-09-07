@@ -32,13 +32,13 @@ namespace mar {
 
 
 		void ProjectSelectionFilesystem::openWindowNewProject(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseDirDlgKey", name, 0, ".");
+			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
 		}
 
-		void ProjectSelectionFilesystem::windowNewProject() {
+		void ProjectSelectionFilesystem::windowNewProject(const char* name) {
 			static bool should_popup_be_opened = false;
 
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseDirDlgKey")) {
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 #ifdef _WIN32 
@@ -47,55 +47,54 @@ namespace mar {
 #ifdef linux
 					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
 #endif
-					ImGui::OpenPopup("Select Project Name");
 					should_popup_be_opened = true;
-
 				}
 
-				igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseDirDlgKey");
+				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 			}
 
 			if (should_popup_be_opened) {
-				if (ImGui::BeginPopupModal("Select Project Name")) {
+				ImGui::Begin("Select New Project Name");
 
-					ImGui::Text("Project will be created at: %s", projectPath.c_str());
+				ImGui::Text("Project will be created at: %s", projectPath.c_str());
 
-					static char name[100];
-					ImGui::InputText("ProjectName: ", name, 100);
+				static char name[100];
+				ImGui::InputText("ProjectName: ", name, 100);
 
-					if (ImGui::Button("Create")) {
-						projectName = std::string(name);
-						projectPath += projectName;
-						new_project_name_selected = true;
-						should_popup_be_opened = false;
+				if (ImGui::Button("Create")) {
+					projectName = std::string(name);
+					projectPath += projectName;
+					new_project_name_selected = true;
+					should_popup_be_opened = false;
 
-						ImGui::CloseCurrentPopup();
-					}
-
-					ImGui::SameLine();
-
-					if (ImGui::Button("Cancel")) {
-						projectPath = "";
-						projectName = "";
-						new_project_name_selected = false;
-						should_popup_be_opened = false;
-
-						ImGui::CloseCurrentPopup();
-					}
-
-					ImGui::EndPopup();
+					ImGui::End();
+					return;
 				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Cancel")) {
+					projectPath = "";
+					projectName = "";
+					new_project_name_selected = false;
+					should_popup_be_opened = false;
+
+					ImGui::End();
+					return;
+				}
+
+				ImGui::End();
 			}
 		}
 
 		void ProjectSelectionFilesystem::openWindowOpenProject(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseDirDlgKey", name, 0, ".");
+			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
 		}
 
-		void ProjectSelectionFilesystem::windowOpenProject() {
+		void ProjectSelectionFilesystem::windowOpenProject(const char* name) {
 			static bool should_popup_be_opened = false;
 
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseDirDlgKey")) {
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 #ifdef _WIN32 
@@ -105,40 +104,38 @@ namespace mar {
 					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
 #endif
 					projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
-					ImGui::OpenPopup("Are you sure it is correct path");
 					should_popup_be_opened = true;
 				}
 
-				igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseDirDlgKey");
+				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 			}
 
 			if (should_popup_be_opened) {
-				if (ImGui::BeginPopupModal("Are you sure it is correct path")) {
+				ImGui::Begin("Open Project Manager");
 
-					ImGui::Text("MAREngine will look for project at: %s", projectPath.c_str());
+				ImGui::Text("MAREngine will look for project at: %s", projectPath.c_str());
 
-					if (ImGui::Button("Open")) {
-						std::cout << projectPath << std::endl;
-						std::cout << projectName << std::endl;
-						open_existing_project = true;
-						should_popup_be_opened = false;
+				if (ImGui::Button("Open")) {
+					open_existing_project = true;
+					should_popup_be_opened = false;
 
-						ImGui::CloseCurrentPopup();
-					}
-
-					ImGui::SameLine();
-
-					if (ImGui::Button("Cancel")) {
-						projectPath = "";
-						projectName = "";
-						open_existing_project = false;
-						should_popup_be_opened = false;
-
-						ImGui::CloseCurrentPopup();
-					}
-
-					ImGui::EndPopup();
+					ImGui::End();
+					return;
 				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Cancel")) {
+					projectPath = "";
+					projectName = "";
+					open_existing_project = false;
+					should_popup_be_opened = false;
+
+					ImGui::End();
+					return;
+				}
+
+				ImGui::End();
 			}
 		}
 

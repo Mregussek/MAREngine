@@ -49,10 +49,10 @@ namespace mar {
 			// ----------------------------------------------
 
 			static void openWindowNewProject(const char* name);
-			static void windowNewProject();
+			static void windowNewProject(const char* name);
 
 			static void openWindowOpenProject(const char* name);
-			static void windowOpenProject();
+			static void windowOpenProject(const char* name);
 
 			// ----------------------------------------------
 			// STATE CHECKS
@@ -87,6 +87,17 @@ namespace mar {
 				}
 
 				if (open_existing_project) {
+#ifdef _WIN32
+					std::string scene_to_load = projectPath + "\\Scenes\\" + projectName + ".marscene";
+#endif
+#ifdef linux
+					std::string scene_to_load = projectPath + "/Scenes/" + projectName + ".marscene";
+#endif
+
+					engine::MAREngine::getEngine()->setProjectPath(projectPath);
+					engine::MAREngine::getEngine()->setProjectName(projectName);
+					engine::MAREngine::getEngine()->setLoadPath(scene_to_load);
+					window::Window::getInstance().endRenderLoop();
 
 					open_existing_project = false;
 				}

@@ -48,19 +48,35 @@ namespace mar {
 				static char input[100];
 				ImGui::InputText("Search", input, 100);
 
+				ImGui::Text("\n\n");
+
 				ImGui::Separator();
 
-				if (ImGui::Button("New Project")) {
-					ProjectSelectionFilesystem::openWindowNewProject("Create New Project");
+				const char* open_default = "Open Default Project";
+				if (ImGui::Button("Open Default Project")) {
+					engine::MAREngine::getEngine()->setProjectName("DefaultProject");
+					engine::MAREngine::getEngine()->setProjectPath("DefaultProject");
+					engine::MAREngine::getEngine()->setProjectPath("DefaultProject");
+					engine::MAREngine::getEngine()->setProjectPath("DefaultProject");
+					engine::MAREngine::getEngine()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
+					window::Window::getInstance().endRenderLoop();
 				}
-				ProjectSelectionFilesystem::windowNewProject();
 
 				ImGui::SameLine();
 
-				if (ImGui::Button("Open Project")) {
-					ProjectSelectionFilesystem::openWindowOpenProject("Open Project Window");
+				const char* new_project_name = "Create New Project";
+				if (ImGui::Button("New Project")) {
+					ProjectSelectionFilesystem::openWindowNewProject(new_project_name);
 				}
-				ProjectSelectionFilesystem::windowOpenProject();
+				ProjectSelectionFilesystem::windowNewProject(new_project_name);
+
+				ImGui::SameLine();
+
+				const char* open_project_name = "Open Project Window";
+				if (ImGui::Button("Open Project")) {
+					ProjectSelectionFilesystem::openWindowOpenProject(open_project_name);
+				}
+				ProjectSelectionFilesystem::windowOpenProject(open_project_name);
 
 				ImGui::SameLine();
 

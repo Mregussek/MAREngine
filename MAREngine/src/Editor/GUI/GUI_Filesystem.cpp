@@ -30,27 +30,31 @@ namespace mar {
 
 
 		void GUI_Filesystem::SetOpenNewScene(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", name, ".marscene", ".");
+			std::string scenesPath = engine::MAREngine::getEngine()->getProjectPath() + "/Scenes";
+			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
 			igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 		}
 
 		void GUI_Filesystem::Filesystem_NewScene(const char* name) {
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseFileDlgKey")) {
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
+
+
 
 				}
 
-				igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseFileDlgKey");
+				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 			}
 		}
 
 		void GUI_Filesystem::SetOpenSaveScene(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", name, ".marscene", ".");
+			std::string scenesPath = engine::MAREngine::getEngine()->getProjectPath() + "/Scenes";
+			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
 			igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 		}
 
 		void GUI_Filesystem::Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save) {
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseFileDlgKey")) {
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 					std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
@@ -58,17 +62,18 @@ namespace mar {
 
 				}
 
-				igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseFileDlgKey");
+				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 			}
 		}
 
 		void GUI_Filesystem::SetOpenLoadScene(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", name, ".marscene", ".");
+			std::string scenesPath = engine::MAREngine::getEngine()->getProjectPath() + "/Scenes";
+			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
 			igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 		}
 
 		void GUI_Filesystem::Filesystem_LoadScene(const char* name) {
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseFileDlgKey")) {
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 					engine::MAREngine::getEngine()->setLoadPath(igfd::ImGuiFileDialog::Instance()->GetFilePathName());
@@ -81,17 +86,18 @@ namespace mar {
 
 				}
 
-				igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseFileDlgKey");
+				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 			}
 		}
 
 		void GUI_Filesystem::SetOpenLoadOBJfile(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", name, ".obj", ".");
+			std::string assetsPath = engine::MAREngine::getEngine()->getProjectPath() + "/Assets";
+			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".obj", assetsPath);
 			igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".obj", ImVec4(0, 1, 0, 0.9f));
 		}
 
 		void GUI_Filesystem::Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene) {
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog("ChooseFileDlgKey")) {
+			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 					std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
@@ -106,7 +112,7 @@ namespace mar {
 
 				}
 
-				igfd::ImGuiFileDialog::Instance()->CloseDialog("ChooseFileDlgKey");
+				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 			}	
 		}
 

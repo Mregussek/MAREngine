@@ -69,7 +69,7 @@ namespace mar {
 			prepareNewFrame();
 			updateFrame();
 			endFrame();
-
+			
 			EDITOR_INFO("GUI: displayed frame!");
 		}
 
