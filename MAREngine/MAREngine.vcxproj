@@ -302,11 +302,7 @@
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Core\ecs\Scene.h" />
     <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h" />
-    <ClInclude Include="src\Platform\OpenGL\ElementBufferOpenGL.h" />
     <ClInclude Include="src\mar.h" />
-    <ClInclude Include="src\Platform\OpenGL\VertexBufferOpenGL.h" />
-    <ClInclude Include="src\Platform\OpenGL\VertexArrayOpenGL.h" />
-    <ClInclude Include="src\Platform\OpenGL\VertexBufferLayoutOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h" />
     <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\Window\Window.h" />
@@ -361,9 +357,6 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\ElementBufferOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\VertexBufferOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\VertexArrayOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>

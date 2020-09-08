@@ -120,19 +120,7 @@
     <ClInclude Include="src\Editor\GUI\GUI_SceneHierarchy.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\ElementBufferOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\FrameBufferOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\VertexArrayOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\VertexBufferLayoutOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\VertexBufferOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h">
@@ -413,16 +401,7 @@
     <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\ElementBufferOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\VertexArrayOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\VertexBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp">

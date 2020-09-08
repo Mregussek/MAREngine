@@ -1,8 +1,8 @@
 MAREngine scene file
 
 #SceneStart
-#Scene_Name empty.marscene
-#Scene_Background 0.894737 0.894737 2.8026e-44
+#Scene_Name DefaultScene
+#Scene_Background 0.386681 0.677349 0.714286
 
 #EntityStart
 #TagComponent DarkGreenCube

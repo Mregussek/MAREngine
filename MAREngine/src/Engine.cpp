@@ -42,12 +42,5 @@ namespace mar {
 			guilayer->submit(entitylayer->getSceneManager());
 		}
 
-		/*
-		void MAREngine::updateBackground(ecs::Scene* scene) {
-			auto& back = scene->getBackground();
-			window::Window::getInstance().updateBackgroundColor(back);
-		}
-		*/
-
 
 } }
