@@ -11,12 +11,16 @@
 <a href="https://github.com/mregussek/MAREngine"><img src="https://img.shields.io/badge/build-cmake-green?style=flat-square"/></a>
 <a href="https://trello.com/b/fdw2MeFf"><img src="https://img.shields.io/badge/board-trello-blue.svg?style=flat-square"/></a>
 <a href="https://github.com/mregussek/MAREngine"><img src="https://img.shields.io/github/labels/mregussek/MAREngine/help-wanted?style=flat-square"/></a>
-<!-- soon! [![Documentation]()]() -->
+<a href="https://marengine-docs.readthedocs.io/"><img src="https://readthedocs.org/projects/pip/badge/?version=latest&style=flat-square"/></a>
 </p>
 
 ## 3D Free and Open Source Game Engine
 
 MAREngine is an educational 3D game engine written in modern C++. It is created with a dream of easy and intuitive interface for everyone. You can download MAREngine completely freely and release your creativity - create games you imagine.
+
+## Documentation
+
+You can learn everything about the engine at the [documentation page](https://marengine-docs.readthedocs.io/).
 
 ## Get MAREngine
 
