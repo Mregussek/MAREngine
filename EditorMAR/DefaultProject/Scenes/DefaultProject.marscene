@@ -13,7 +13,7 @@ MAREngine scene file
 #general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.2 0.5 0.2
-#ScriptComponent DefaultProject/Assets/scripts/RotateXY.py
+#ScriptComponent scripts/RotateXY.py
 
 #EntityEnd
 
@@ -93,7 +93,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Wall
-#Texture2DComponent DefaultProject/Assets/textures/red-brick.jpg
+#Texture2DComponent textures/red-brick.jpg
 
 #EntityEnd
 
@@ -129,7 +129,7 @@ MAREngine scene file
 #angles 1 -62.5 -5.5
 #scale 1 1 1
 #general_scale 0
-#Texture2DComponent DefaultProject/Assets/textures/mr.jpg
+#Texture2DComponent textures/mr.jpg
 #RenderableComponent Cube
 
 #EntityEnd
@@ -142,7 +142,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Pyramid
-#Texture2DComponent DefaultProject/Assets/textures/wall.jpg
+#Texture2DComponent textures/wall.jpg
 
 #EntityEnd
 
@@ -153,7 +153,7 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#Texture2DComponent DefaultProject/Assets/textures/grass-texture.jpg
+#Texture2DComponent textures/grass-texture.jpg
 #RenderableComponent Surface
 
 #EntityEnd
@@ -166,7 +166,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#Texture2DComponent DefaultProject/Assets/textures/yellow-texture.jpg
+#Texture2DComponent textures/yellow-texture.jpg
 #LightComponent Begin
 #ambientlight 0.5 0.61 0.68
 #diffuselight 0.63 0.9 0.9
@@ -175,7 +175,7 @@ MAREngine scene file
 #linear 0.015
 #quadratic 0.01
 #shininess 31.5
-#ScriptComponent DefaultProject/Assets/scripts/LightMover.py
+#ScriptComponent scripts/LightMover.py
 
 #EntityEnd
 
@@ -187,7 +187,7 @@ MAREngine scene file
 #scale 0.02 2 0.15
 #general_scale 0
 #RenderableComponent Wall
-#Texture2DComponent DefaultProject/Assets/textures/grass_alpha.png
+#Texture2DComponent textures/grass_alpha.png
 
 #EntityEnd
 
@@ -199,7 +199,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#TextureCubemapComponent DefaultProject/Assets/textures/dirt
+#TextureCubemapComponent textures/dirt
 
 #EntityEnd
 
@@ -211,7 +211,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#TextureCubemapComponent DefaultProject/Assets/textures/grass
+#TextureCubemapComponent textures/grass
 
 #EntityEnd
 
@@ -222,7 +222,7 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#TextureCubemapComponent DefaultProject/Assets/textures/dirt
+#TextureCubemapComponent textures/dirt
 #RenderableComponent Cube
 
 #EntityEnd
@@ -235,7 +235,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#TextureCubemapComponent DefaultProject/Assets/textures/cobble
+#TextureCubemapComponent textures/cobble
 
 #EntityEnd
 
@@ -246,7 +246,7 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#TextureCubemapComponent DefaultProject/Assets/textures/grass
+#TextureCubemapComponent textures/grass
 #RenderableComponent Cube
 
 #EntityEnd
@@ -259,7 +259,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#TextureCubemapComponent DefaultProject/Assets/textures/diamond
+#TextureCubemapComponent textures/diamond
 #LightComponent Begin
 #ambientlight 0.06 0.06 0.06
 #diffuselight 0.12 0.07 0.49
@@ -278,7 +278,7 @@ MAREngine scene file
 #angles 90 0 44.5
 #scale 0.01 0.35 0.04
 #general_scale 0
-#Texture2DComponent DefaultProject/Assets/textures/grass_alpha.png
+#Texture2DComponent textures/grass_alpha.png
 #RenderableComponent Wall
 
 #EntityEnd
@@ -290,7 +290,7 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#ScriptComponent DefaultProject/Assets/scripts/Examples.py
+#ScriptComponent scripts/Examples.py
 #RenderableComponent Cube
 #ColorComponent 0.104383 0.456417 0.204165
 
@@ -313,7 +313,7 @@ MAREngine scene file
 #linear 0.045
 #quadratic 0.0075
 #shininess 64
-#ScriptComponent DefaultProject/Assets/scripts/NewScript.py
+#ScriptComponent scripts/NewScript.py
 
 #EntityEnd
 
@@ -325,8 +325,8 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ScriptComponent DefaultProject/Assets/scripts/Examples.py
-#Texture2DComponent DefaultProject/Assets/textures/mr.jpg
+#ScriptComponent scripts/Examples.py
+#Texture2DComponent textures/mr.jpg
 
 #EntityEnd
 
@@ -353,7 +353,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Pyramid
-#Texture2DComponent DefaultProject/Assets/textures/red-brick.jpg
+#Texture2DComponent textures/red-brick.jpg
 
 #EntityEnd
 
@@ -377,7 +377,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#TextureCubemapComponent DefaultProject/Assets/textures/dirt
+#TextureCubemapComponent textures/dirt
 
 #EntityEnd
 

@@ -60,16 +60,9 @@ namespace mar {
 
 			static void checkState() {
 				if (new_project_name_selected) {
-#ifdef _WIN32
-					std::string Assets = projectPath + "\\Assets";
-					std::string Scenes = projectPath + "\\Scenes";
-					std::string EmptySceneName = Scenes + "\\" + projectName + ".marscene";
-#endif
-#ifdef linux
 					std::string Assets = projectPath + "/Assets";
 					std::string Scenes = projectPath + "/Scenes";
 					std::string EmptySceneName = Scenes + "/" + projectName + ".marscene";
-#endif
 
 					std::filesystem::create_directories(Assets);
 					std::filesystem::create_directories(Scenes);
@@ -87,12 +80,7 @@ namespace mar {
 				}
 
 				if (open_existing_project) {
-#ifdef _WIN32
-					std::string scene_to_load = projectPath + "\\Scenes\\" + projectName + ".marscene";
-#endif
-#ifdef linux
 					std::string scene_to_load = projectPath + "/Scenes/" + projectName + ".marscene";
-#endif
 
 					engine::MAREngine::getEngine()->setProjectPath(projectPath);
 					engine::MAREngine::getEngine()->setProjectName(projectName);

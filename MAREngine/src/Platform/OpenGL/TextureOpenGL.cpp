@@ -19,6 +19,7 @@
 
 
 #include "TextureOpenGL.h"
+#include "../../Engine.h"
 
 
 namespace mar {
@@ -105,7 +106,8 @@ namespace mar {
 				return search->second;
 			}
 
-			uint32_t new_id = genNewTexture(path.c_str());
+			std::string assets_texture = engine::MAREngine::getEngine()->getAssetsPath() + path;
+			uint32_t new_id = genNewTexture(assets_texture.c_str());
 			s_2d.insert({ path, new_id });
 			return new_id;
 		}
@@ -163,7 +165,8 @@ namespace mar {
 				return search->second;
 			}
 
-			uint32_t new_id = genNewCubemap(path.c_str());
+			std::string assets_texture = engine::MAREngine::getEngine()->getAssetsPath() + path;
+			uint32_t new_id = genNewCubemap(assets_texture.c_str());
 			s_cubemaps.insert({ path, new_id });
 
 			return new_id;

@@ -55,9 +55,7 @@ namespace mar {
 				const char* open_default = "Open Default Project";
 				if (ImGui::Button("Open Default Project")) {
 					engine::MAREngine::getEngine()->setProjectName("DefaultProject");
-					engine::MAREngine::getEngine()->setProjectPath("DefaultProject");
-					engine::MAREngine::getEngine()->setProjectPath("DefaultProject");
-					engine::MAREngine::getEngine()->setProjectPath("DefaultProject");
+					engine::MAREngine::getEngine()->setProjectPath("DefaultProject/");
 					engine::MAREngine::getEngine()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
 					window::Window::getInstance().endRenderLoop();
 				}

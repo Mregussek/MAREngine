@@ -40,13 +40,8 @@ namespace mar {
 
 			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-
-#ifdef _WIN32 
-					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "\\";
-#endif
-#ifdef linux
 					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
-#endif
+					projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
 					should_popup_be_opened = true;
 				}
 
@@ -96,13 +91,7 @@ namespace mar {
 
 			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-
-#ifdef _WIN32 
-					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "\\";
-#endif
-#ifdef linux
 					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
-#endif
 					projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
 					should_popup_be_opened = true;
 				}
