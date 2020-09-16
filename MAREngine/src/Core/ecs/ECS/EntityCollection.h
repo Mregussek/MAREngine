@@ -106,6 +106,11 @@ namespace mar {
 			}
 
 			template<typename T>
+			bool hasComponent() const {
+				return m_scene->m_registry.has<T>(m_entityHandle);
+			}
+
+			template<typename T>
 			T& getComponent() const {
 				MAR_CORE_ASSERT(m_scene->m_registry.has<T>(m_entityHandle), "ENTITY_COLLECTION: does not have this component!");
 
@@ -114,6 +119,7 @@ namespace mar {
 
 			const std::vector<Entity>& getEntities() const { return m_entities; }
 			Entity& getEntity(size_t index) { return m_entities[index]; }
+			size_t getEntitiesCount() { return m_entities.size(); }
 		};
 
 

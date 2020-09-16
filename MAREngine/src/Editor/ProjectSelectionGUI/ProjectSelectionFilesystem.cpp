@@ -87,44 +87,14 @@ namespace mar {
 		}
 
 		void ProjectSelectionFilesystem::windowOpenProject(const char* name) {
-			static bool should_popup_be_opened = false;
-
 			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
 					projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
-					should_popup_be_opened = true;
+					open_existing_project = true;
 				}
 
 				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
-			}
-
-			if (should_popup_be_opened) {
-				ImGui::Begin("Open Project Manager");
-
-				ImGui::Text("MAREngine will look for project at: %s", projectPath.c_str());
-
-				if (ImGui::Button("Open")) {
-					open_existing_project = true;
-					should_popup_be_opened = false;
-
-					ImGui::End();
-					return;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Cancel")) {
-					projectPath = "";
-					projectName = "";
-					open_existing_project = false;
-					should_popup_be_opened = false;
-
-					ImGui::End();
-					return;
-				}
-
-				ImGui::End();
 			}
 		}
 

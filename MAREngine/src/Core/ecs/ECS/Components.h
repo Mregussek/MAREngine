@@ -65,6 +65,19 @@ namespace mar {
 			operator const std::vector<uint32_t>&() const { return indices; }
 		};
 
+		struct CollectionRenderableComponent {
+			std::string id{ "empty" };
+
+			CollectionRenderableComponent() = default;
+			CollectionRenderableComponent(const CollectionRenderableComponent& crc) = default;
+			CollectionRenderableComponent(std::string i)
+				: id(i)
+			{}
+			
+			operator std::string& () { return id; }
+			operator const std::string& () const { return id; }
+		};
+
 		struct TransformComponent {
 			float general_scale{ 1.f };
 			maths::vec3 center{ 0.f, 0.f, 0.f };

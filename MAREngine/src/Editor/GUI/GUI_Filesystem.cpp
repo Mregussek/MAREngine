@@ -105,7 +105,10 @@ namespace mar {
 
 					auto& collection = scene->createCollection();
 					auto& tag = collection.getComponent<ecs::TagComponent>();
+					auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
+
 					tag.tag = filename;
+					crc = filePathName;
 
 					graphics::MeshCreator::loadOBJ(filename, filePathName, collection);
 					ecs::SceneEvents::Instance().onCollectionOBJloaded(collection);

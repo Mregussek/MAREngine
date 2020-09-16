@@ -55,6 +55,33 @@ namespace mar {
 					ecs::Entity* entity = &collection->createEntity();
 					loadEntity(file, scene, entity);
 				}
+				else if (line.find("#CollectionTagComponent") != std::string::npos) {
+					std::istringstream is(line.substr(24));
+					std::string new_tag;
+					is >> new_tag;
+					auto& tag = collection->getComponent<ecs::TagComponent>();
+					tag = new_tag;
+				}
+				else if (line.find("#CollectionRenderableComponent") != std::string::npos) {
+					std::istringstream is(line.substr(31));
+					std::string path_to_load_obj;
+					is >> path_to_load_obj;
+
+					auto& crc = collection->addComponent<ecs::CollectionRenderableComponent>();
+					crc.id = path_to_load_obj;
+
+					graphics::MeshCreator::loadOBJ("CannotFindOBJname", path_to_load_obj, *collection);
+
+					auto size_after_loading = collection->getEntitiesCount();
+					for (size_t i = 0; i < size_after_loading; ) {
+						std::getline(file, line);
+						if (line.find("#EntityStart") != std::string::npos) {
+							ecs::Entity* entity = &collection->getEntity(i);
+							loadEntity(file, scene, entity);
+							i++;
+						}
+					}
+				}
 				else if (line.find("#EntityCollectionEnd") != std::string::npos) {
 					return;
 				}
@@ -116,7 +143,9 @@ namespace mar {
 					ecs::System::handleTransformComponent(tran);
 				}
 				else if (line.find("#RenderableComponent") != std::string::npos) {
-					auto& ren = currentEntity->addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+					auto& ren = !currentEntity->hasComponent<ecs::RenderableComponent>() ?
+						currentEntity->addComponent<ecs::RenderableComponent>(ECS_RENDERABLE) :
+						currentEntity->getComponent<ecs::RenderableComponent>();
 
 					if (line.find("Cube") != std::string::npos) {
 						ren.id = "Cube";
@@ -144,7 +173,10 @@ namespace mar {
 					float arr[3];
 					is >> arr[0] >> arr[1] >> arr[2];
 
-					auto& color = currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR);
+					auto& color = !currentEntity->hasComponent<ecs::ColorComponent>() ?
+						currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR) :
+						currentEntity->getComponent<ecs::ColorComponent>();
+
 					color.texture.x = arr[0];
 					color.texture.y = arr[1];
 					color.texture.z = arr[2];
@@ -154,7 +186,10 @@ namespace mar {
 					std::string tex;
 					iss >> tex;
 
-					auto& texture = currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+					auto& texture = !currentEntity->hasComponent<ecs::Texture2DComponent>() ?
+						currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D) :
+						currentEntity->getComponent<ecs::Texture2DComponent>();
+
 					texture.texture = tex;
 				}
 				else if (line.find("#TextureCubemapComponent") != std::string::npos) {
@@ -162,11 +197,16 @@ namespace mar {
 					std::string tex;
 					iss >> tex;
 
-					auto& cubemap = currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+					auto& cubemap = !currentEntity->hasComponent<ecs::TextureCubemapComponent>() ?
+						currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP) :
+						currentEntity->getComponent<ecs::TextureCubemapComponent>();
+
 					cubemap.texture = tex;
 				}
 				else if (line.find("#LightComponent") != std::string::npos) {
-					auto& light = currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
+					auto& light = !currentEntity->hasComponent<ecs::LightComponent>() ?
+						currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT) :
+						currentEntity->getComponent<ecs::LightComponent>();
 
 					// #ambientlight - 13
 					std::getline(file, line);
@@ -231,7 +271,10 @@ namespace mar {
 					light.shininess = arr[0];
 				}
 				else if (line.find("#CameraComponent") != std::string::npos) {
-					auto& cam = currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
+					auto& cam = !currentEntity->hasComponent<ecs::CameraComponent>() ?
+						currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA) :
+						currentEntity->getComponent<ecs::CameraComponent>();
+
 					std::string type;
 					float var;
 
@@ -372,7 +415,10 @@ namespace mar {
 					}
 				}
 				else if (line.find("#ScriptComponent") != std::string::npos) {
-					auto& script = currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+					auto& script = !currentEntity->hasComponent<ecs::ScriptComponent>() ?
+						currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT) :
+						currentEntity->getComponent<ecs::ScriptComponent>();
+
 					std::istringstream iss(line.substr(17));
 					std::string s;
 					iss >> s;

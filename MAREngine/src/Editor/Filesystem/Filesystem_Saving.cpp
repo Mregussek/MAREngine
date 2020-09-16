@@ -47,12 +47,14 @@ namespace mar {
 			auto& tag = collection.getComponent<ecs::TagComponent>();
 
 			ss << "\n#EntityCollectionStart\n";
-			ss << "#CollectionTagComponent " << tag.tag << "\n";
 
-			for (auto& entity : collection.getEntities()) {
+			if (collection.hasComponent<ecs::CollectionRenderableComponent>())
+				ss << "#CollectionRenderableComponent " << collection.getComponent<ecs::CollectionRenderableComponent>().id << "\n";
+
+			for (auto& entity : collection.getEntities()) 
 				saveEntity(ss, entity);
-			}
 
+			ss << "#CollectionTagComponent " << tag.tag << "\n";
 			ss << "\n#EntityCollectionEnd\n";
 		}
 

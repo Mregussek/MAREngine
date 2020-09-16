@@ -62,19 +62,23 @@ namespace mar {
 
 				ImGui::SameLine();
 
-				const char* new_project_name = "Create New Project";
-				if (ImGui::Button("New Project")) {
-					ProjectSelectionFilesystem::openWindowNewProject(new_project_name);
+				{
+					const char* new_project_name = "Create New Project";
+					if (ImGui::Button("New Project")) {
+						ProjectSelectionFilesystem::openWindowNewProject(new_project_name);
+					}
+					ProjectSelectionFilesystem::windowNewProject(new_project_name);
 				}
-				ProjectSelectionFilesystem::windowNewProject(new_project_name);
-
+				
 				ImGui::SameLine();
 
-				const char* open_project_name = "Open Project Window";
-				if (ImGui::Button("Open Project")) {
-					ProjectSelectionFilesystem::openWindowOpenProject(open_project_name);
+				{
+					const char* open_project_name = "Open Project Window";
+					if (ImGui::Button("Open Project")) {
+						ProjectSelectionFilesystem::openWindowOpenProject(open_project_name);
+					}
+					ProjectSelectionFilesystem::windowOpenProject(open_project_name);
 				}
-				ProjectSelectionFilesystem::windowOpenProject(open_project_name);
 
 				ImGui::SameLine();
 
