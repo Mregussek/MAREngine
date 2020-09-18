@@ -82,6 +82,59 @@ namespace mar {
 						}
 					}
 				}
+				else if (line.find("#CollectionTransformComponent") != std::string::npos) {
+					auto& tran = collection->getComponent<ecs::TransformComponent>();
+
+					// #center - 7 letters
+					std::getline(file, line);
+					std::istringstream is(line.substr(7));
+					float arr[3];
+					is >> arr[0] >> arr[1] >> arr[2];
+
+					tran.center.x = arr[0];
+					tran.center.y = arr[1];
+					tran.center.z = arr[2];
+
+					// #angles - 6 letters
+					std::getline(file, line);
+					is.clear();
+					is = std::istringstream(line.substr(7));
+					is >> arr[0] >> arr[1] >> arr[2];
+
+					tran.angles.x = arr[0];
+					tran.angles.y = arr[1];
+					tran.angles.z = arr[2];
+
+					// #scale - 6  letters
+					std::getline(file, line);
+					is.clear();
+					is = std::istringstream(line.substr(6));
+					is >> arr[0] >> arr[1] >> arr[2];
+
+					tran.scale.x = arr[0];
+					tran.scale.y = arr[1];
+					tran.scale.z = arr[2];
+
+					// #general_scale - 12 letters
+					std::getline(file, line);
+					is.clear();
+					is = std::istringstream(line.substr(12));
+					is >> arr[0];
+
+					tran.general_scale = arr[0];
+
+					for (size_t i = 0; i < collection->getEntitiesCount(); i++) {
+						auto& entity = collection->getEntity(i);
+						auto& transform = entity.getComponent<ecs::TransformComponent>();
+
+						transform.center += (transform.center - tran.center);
+						transform.angles += (transform.angles - tran.angles);
+						transform.scale += (transform.scale - tran.scale);
+						transform.general_scale += (transform.general_scale - tran.general_scale);
+
+						ecs::System::handleTransformComponent(transform);
+					}
+				}
 				else if (line.find("#EntityCollectionEnd") != std::string::npos) {
 					return;
 				}

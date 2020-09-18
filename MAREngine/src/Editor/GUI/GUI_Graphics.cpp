@@ -69,13 +69,13 @@ namespace mar {
 			m_pipeline.unbind();
 		}
 
-		void GUI_Graphics::passToDrawEntity(ecs::Entity* e, bool ability_to_draw) {
-			if (e && ability_to_draw) {
+		void GUI_Graphics::passToDrawCollection(ecs::EntityCollection* c) {
+			
+		}
 
-				if (e->hasComponent<ecs::RenderableComponent>())
-					drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
-				
-			}
+		void GUI_Graphics::passToDrawEntity(ecs::Entity* e) {
+			if (e->hasComponent<ecs::RenderableComponent>())
+				drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
 		}
 
 

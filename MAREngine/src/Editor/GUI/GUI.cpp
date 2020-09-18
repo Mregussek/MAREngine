@@ -310,5 +310,9 @@ namespace mar {
 			return GUI_EntityPanel::currentEntity;
 		}
 
+		ecs::EntityCollection* GUI::getCurrentCollection() {
+			return GUI_EntityCollectionPanel::currentCollection;
+		}
+
 
 } }

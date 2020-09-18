@@ -60,6 +60,7 @@ namespace mar {
 
 			for (int32_t i = 0; i < (int32_t)collections.size(); i++) {
 				if (ImGui::MenuItem(collections[i].getComponent<ecs::TagComponent>().tag.c_str())) {
+					GUI_EntityPanel::reset();
 					GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->getCollection(i);
 					GUI_EntityCollectionPanel::currentIndex = i;
 				}
@@ -94,6 +95,7 @@ namespace mar {
 
 			if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 				if (ImGui::MenuItem("Add EntityCollection to scene")) {
+					GUI_EntityPanel::reset();
 					GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->createCollection();
 					GUI_EntityCollectionPanel::currentIndex = manager->getScene()->getCollections().size() - 1;
 				}
@@ -112,11 +114,10 @@ namespace mar {
 						GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
 					}
 
-					if (ImGui::MenuItem("Deleted selected collection from Scene", collection_tag)) {
+					if (ImGui::MenuItem("Delete selected collection from Scene", collection_tag)) {
 						manager->getScene()->destroyCollection(GUI_EntityCollectionPanel::currentIndex);
 						GUI_EntityCollectionPanel::reset();
 						GUI_EntityPanel::reset();
-						GUI_TextEditor::Instance().reset();
 						ecs::SceneEvents::Instance().onCollectionRemove();
 					}
 
@@ -125,7 +126,6 @@ namespace mar {
 						if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 							manager->getScene()->destroyEntityAtCollection(GUI_EntityCollectionPanel::currentIndex, GUI_EntityPanel::currentIndex);
 							GUI_EntityPanel::reset();
-							GUI_TextEditor::Instance().reset();
 							ecs::SceneEvents::Instance().onEntityRemove();
 						}
 					}
@@ -135,7 +135,6 @@ namespace mar {
 					if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
 						manager->getScene()->destroyEntity(GUI_EntityPanel::currentIndex);
 						GUI_EntityPanel::reset();
-						GUI_TextEditor::Instance().reset();
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 				}

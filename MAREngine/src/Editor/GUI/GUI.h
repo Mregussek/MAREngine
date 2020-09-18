@@ -68,6 +68,7 @@ namespace mar {
 			bool isViewportInputEnabled() { return m_enableViewportInput; }
 			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
 			ecs::Entity* getCurrentEntity();
+			ecs::EntityCollection* getCurrentCollection();
 			bool canDrawLines() { return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; }
 
 		private:

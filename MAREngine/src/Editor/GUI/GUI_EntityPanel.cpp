@@ -22,6 +22,7 @@
 #include "../../Core/ecs/ECS/Entity.h"
 #include "../../Core/graphics/Renderer/RenderEvents.h"
 #include "../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../Engine.h"
 #include "GUI_TextEditor.h"
 
 
@@ -258,7 +259,8 @@ namespace mar {
 			ImGui::SameLine();
 
 			if (ImGui::Button("Load Script from file")) {
-				script.source = Filesystem::loadPyScript(script.script.c_str());
+				std::string script_path = engine::MAREngine::getEngine()->getAssetsPath() + script.script;
+				script.source = Filesystem::loadPyScript(script_path.c_str());
 				GUI_TextEditor::Instance().setEditorText(script.source);
 				GUI_TextEditor::Instance().setEditorTitle(script.script.c_str());
 			}

@@ -48,12 +48,25 @@ namespace mar {
 
 			ss << "\n#EntityCollectionStart\n";
 
-			if (collection.hasComponent<ecs::CollectionRenderableComponent>())
-				ss << "#CollectionRenderableComponent " << collection.getComponent<ecs::CollectionRenderableComponent>().id << "\n";
+			{ // Save OBJ file path, if user added it
+				if (collection.hasComponent<ecs::CollectionRenderableComponent>())
+					ss << "#CollectionRenderableComponent " << collection.getComponent<ecs::CollectionRenderableComponent>().id << "\n";
+			}
+			
+			{ // Save entities that are in that collection
+				for (auto& entity : collection.getEntities())
+					saveEntity(ss, entity);
+			}
 
-			for (auto& entity : collection.getEntities()) 
-				saveEntity(ss, entity);
-
+			{ // Save collection trasform component
+				auto& transform = collection.getComponent<ecs::TransformComponent>();
+				ss << "\n#CollectionTransformComponent Begin\n";
+				ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
+				ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";
+				ss << "#scale " << transform.scale.x << " " << transform.scale.y << " " << transform.scale.z << "\n";
+				ss << "#general_scale " << transform.general_scale << "\n";
+			}
+			
 			ss << "#CollectionTagComponent " << tag.tag << "\n";
 			ss << "\n#EntityCollectionEnd\n";
 		}

@@ -55,9 +55,12 @@ namespace mar {
 
 		void LayerGUI::update() {
 			LAYER_TRACE("GUI_LAYER: {} going to display frame", m_debugName);
-
-			m_guiGraphics.passToDrawEntity(m_gui->getCurrentEntity(), m_gui->canDrawLines());
-
+			
+			if (m_gui->canDrawLines()) {
+				//if (m_gui->getCurrentCollection() && !m_gui->getCurrentEntity()) m_guiGraphics.passToDrawCollection(m_gui->getCurrentCollection());
+				if (m_gui->getCurrentEntity()) m_guiGraphics.passToDrawEntity(m_gui->getCurrentEntity());
+			}
+			
 			static bool last_input_state = m_gui->isViewportInputEnabled();
 
 			if (m_gui->isViewportInputEnabled()) {

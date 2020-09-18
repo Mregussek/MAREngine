@@ -38,41 +38,7 @@ namespace mar {
 			static ecs::EntityCollection* currentCollection;
 			static int32_t currentIndex;
 
-			static void Scene_EntityCollection_Modify() {
-				ImGui::Begin("EntityCollection Panel");
-
-				if (!currentCollection) {
-					ImGui::Text("No collection selected!");
-					ImGui::End();
-					return;
-				}
-				
-				auto& tag = currentCollection->getComponent<ecs::TagComponent>();
-
-				ImGui::Text("ENTITYCOLLECTION --- %s", tag.tag.c_str());
-				ImGui::Separator();
-
-				static char* input;
-				input = (char*)tag.tag.c_str();
-
-				if (ImGui::InputText("Tag", input, 25))
-					tag.tag = std::string(input);
-
-				ImGui::Separator();
-
-				auto& entities = currentCollection->getEntities();
-
-				for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
-					if (ImGui::MenuItem(entities[i].getComponent<ecs::TagComponent>().tag.c_str())) {
-						GUI_EntityPanel::currentEntity = &currentCollection->getEntity(i);
-						GUI_EntityPanel::currentIndex = i;
-					}
-				}
-
-				Scene_EntityCollection_PopUp(tag.tag.c_str());
-
-				ImGui::End();
-			}
+			static void Scene_EntityCollection_Modify();
 
 			static void reset() {
 				currentCollection = nullptr;
@@ -81,39 +47,9 @@ namespace mar {
 
 		private:
 
-			static void Scene_EntityCollection_PopUp(const char* collection_tag) {
-				static bool b = false;
-
-				if (ImGui::IsWindowFocused())
-					b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
-				else
-					b = false;
-
-				if (b) {
-					ImGui::OpenPopup("EntityCollectionPopUp");
-					if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1))
-						b = false;
-				}
-
-				if (ImGui::BeginPopup("EntityCollectionPopUp")) {
-					if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
-						GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();
-						GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
-					}
-
-					if (GUI_EntityPanel::currentEntity) {
-						std::string delete_message = "Delete entity " + GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag + " from selected collection";
-						if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
-							currentCollection->destroyEntity(GUI_EntityPanel::currentIndex);
-							GUI_EntityPanel::reset();
-							GUI_TextEditor::Instance().reset();
-							ecs::SceneEvents::Instance().onEntityRemove();
-						}
-					}
-
-					ImGui::EndPopup();
-				}
-			}
+			static void Scene_EntityCollection_PopUp(const char* collection_tag);
+			static void Handle_TagComponent(ecs::TagComponent& tag);
+			static void Handle_TransformComponent();
 
 		};
 

@@ -331,55 +331,80 @@ MAREngine scene file
 #EntityEnd
 
 #EntityCollectionStart
-#CollectionTagComponent DefaultName
+#CollectionRenderableComponent D:\Projects_VisualStudio\MAREngine\EditorMAR\DefaultProject\Assets\objects\monkey.obj
 
 #EntityStart
-#TagComponent CollectionCube
+#TagComponent Suzanne
 #TransformComponent Begin
-#center 7.5 3.25 -8.7
+#center 4.05 1.1 0
+#angles -102 4 -81
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent Suzanne
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+#CollectionTransformComponent Begin
+#center 0 0 0
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
+#CollectionTagComponent BlenderMonkey
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+
+#EntityStart
+#TagComponent YellowCube
+#TransformComponent Begin
+#center 17.95 5.95 0
+#angles 0 43 0
+#scale 1 1 1
+#general_scale 1
 #RenderableComponent Cube
-#ColorComponent 0.455949 0.924812 0.30943
+#ColorComponent 0.871021 0.909774 0.441206
 
 #EntityEnd
 
 #EntityStart
-#TagComponent CollectionPyramid
+#TagComponent GrassPyramid
 #TransformComponent Begin
-#center 7.65 5.45 -10.6
-#angles 0 0 0
+#center 5.2 -1.75 12.8
+#angles 0 -6 0
 #scale 1 1 1
-#general_scale 0
+#general_scale 1
 #RenderableComponent Pyramid
-#Texture2DComponent textures/red-brick.jpg
+#Texture2DComponent textures/grass-texture.jpg
+#ScriptComponent scripts/Examples.py
 
 #EntityEnd
 
 #EntityStart
-#TagComponent SurfaceHigher
+#TagComponent SkyboxSurface
 #TransformComponent Begin
-#center 28.8 8.3 -2.45
-#angles 0 0 0
-#scale 1 1 1
-#general_scale 0
+#center 39.3 4.3 1.2
+#angles 0 178 88.5
+#scale 1 0 1.99
+#general_scale 1
 #RenderableComponent Surface
-#ColorComponent 0.189652 0.415181 0.800752
+#Texture2DComponent textures/skybox/front.jpg
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
 
 #EntityEnd
-
-#EntityStart
-#TagComponent CubemapCollection
-#TransformComponent Begin
-#center 4.45 6.05 -5.55
-#angles 0 0 0
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 -1.5 0
 #scale 1 1 1
-#general_scale 0
-#RenderableComponent Cube
-#TextureCubemapComponent textures/dirt
-
-#EntityEnd
+#general_scale 1
+#CollectionTagComponent FirstCollectionEver
 
 #EntityCollectionEnd
 
