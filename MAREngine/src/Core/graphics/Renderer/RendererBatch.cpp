@@ -19,6 +19,10 @@
 
 
 #include "RendererBatch.h"
+#include "RenderPipeline.h"
+#include "RenderCamera.h"
+#include "../GraphicsLogs.h"
+#include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderUniforms.h"
 
 

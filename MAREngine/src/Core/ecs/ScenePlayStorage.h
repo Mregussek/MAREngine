@@ -23,14 +23,13 @@
 
 
 #include "../../mar.h"
-#include "ECS/Entity.h"
 #include "ECS/Components.h"
-#include "ECS/EntityCollection.h"
-#include "ECS/Systems.h"
 
 
 namespace mar {
 	namespace ecs {
+
+		class Entity; class EntityCollection;
 
 
 		struct EntityStorage {

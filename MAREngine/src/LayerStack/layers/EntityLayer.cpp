@@ -20,6 +20,7 @@
 
 #include "EntityLayer.h"
 #include "../LayerLogs.h"
+#include "../../Core/ecs/Scene.h"
 #include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 

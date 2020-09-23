@@ -18,8 +18,11 @@
 **/
 
 
+#ifndef MAR_ENGINE_EDITOR_PROJECT_TEMPLATES_WINDOW_H
+#define MAR_ENGINE_EDITOR_PROJECT_TEMPLATES_WINDOW_H
+
+
 #include "../../mar.h"
-#include "../../Window/Window.h"
 
 
 namespace mar {
@@ -39,4 +42,5 @@ namespace mar {
 
 	}
 }
-#pragma once
+
+#endif // !MAR_ENGINE_EDITOR_PROJECT_TEMPLATES_WINDOW_H

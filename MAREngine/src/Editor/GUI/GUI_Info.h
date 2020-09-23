@@ -23,7 +23,6 @@
 
 
 #include "../../mar.h"
-#include "../EditorLogging.h"
 
 
 namespace mar {

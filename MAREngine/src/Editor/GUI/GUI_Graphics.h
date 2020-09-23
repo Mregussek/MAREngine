@@ -23,15 +23,13 @@
 
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
-#include "../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../Platform/OpenGL/PipelineOpenGL.h"
 #include "../../Platform/OpenGL/ShaderOpenGL.h"
 
 
 namespace mar {
+	namespace ecs { class Entity; class EntityCollection; struct TransformComponent; struct RenderableComponent; }
+
 	namespace editor {
 
 		

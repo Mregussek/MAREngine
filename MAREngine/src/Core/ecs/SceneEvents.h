@@ -23,15 +23,12 @@
 
 
 #include "../../mar.h"
-#include "SceneManager.h"
-#include "ECS/Systems.h"
-#include "ECS/Entity.h"
-#include "ECSLogs.h"
-
 
 
 namespace mar {
 	namespace ecs {
+
+		class Entity; class SceneManager; class EntityCollection;
 
 
 		class SceneEvents {
@@ -45,77 +42,29 @@ namespace mar {
 
 			inline static SceneEvents& Instance() { return instance; }
 
-			void updateTransform(Entity* e, int32_t i) {
-				scene_manager->initialize();
-				
-				ECS_TRACE("SCENE_EVENTS: updateTransform!");
-			}
+			void updateTransform(Entity* e, int32_t i);
 
-			void updateRenderables(Entity* e, int32_t i) {
-				scene_manager->initialize();
+			void updateRenderables(Entity* e, int32_t i);
 
-				ECS_TRACE("SCENE_EVENTS: updateRenderables!");
-			}
+			void updatedCamera(Entity* e, int32_t i);
 
-			void updatedCamera(Entity* e, int32_t i) {
-				scene_manager->initialize();
+			void updatedColor(Entity* e, int32_t i);
 
-				ECS_TRACE("SCENE_EVENTS: updatedCamera!");
-			}
+			void updatedTexture2D(Entity* e, int32_t i);
 
-			void updatedColor(Entity* e, int32_t i) {
-				scene_manager->initialize();
+			void updatedCubemap(Entity* e, int32_t i);
 
-				ECS_TRACE("SCENE_EVENTS: updatedColor!");
-			}
+			void updatedLight(Entity* e, int32_t i);
 
-			void updatedTexture2D(Entity* e, int32_t i) {
-				scene_manager->initialize();
+			void updatedScript(Entity* e, int32_t i);
 
-				ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
-			}
+			void onEntityRemove();
 
-			void updatedCubemap(Entity* e, int32_t i) {
-				scene_manager->initialize();
+			void onCollectionTransformUpdate();
 
-				ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
-			}
+			void onCollectionRemove();
 
-			void updatedLight(Entity* e, int32_t i) {
-				scene_manager->initialize();
-
-				ECS_TRACE("SCENE_EVENTS: updatedLight!");
-			}
-
-			void updatedScript(Entity* e, int32_t i) {
-				scene_manager->initialize();
-
-				ECS_TRACE("SCENE_EVENTS: updatedScript!");
-			}
-
-			void onEntityRemove() {
-				scene_manager->initialize();
-
-				ECS_TRACE("SCENE_EVENTS: onEntityRemove");
-			}
-
-			void onCollectionTransformUpdate() {
-				scene_manager->initialize();
-
-				ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
-			}
-
-			void onCollectionRemove() {
-				scene_manager->initialize();
-
-				ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
-			}
-
-			void onCollectionOBJloaded(EntityCollection& collection) {
-				scene_manager->initialize();
-
-				ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
-			}
+			void onCollectionOBJloaded(EntityCollection& collection);
 
 
 		};

@@ -23,9 +23,6 @@
 
 
 #include "../../mar.h"
-#include "../../Window/Window.h"
-#include "../../Engine.h"
-#include "../Filesystem/EditorFilesystem.h"
 
 
 namespace mar {
@@ -58,38 +55,7 @@ namespace mar {
 			// STATE CHECKS
 			// ----------------------------------------------
 
-			static void checkState() {
-				if (new_project_name_selected) {
-					std::string Assets = projectPath + "/Assets";
-					std::string Scenes = projectPath + "/Scenes";
-					std::string EmptySceneName = Scenes + "/" + projectName + ".marscene";
-
-					std::filesystem::create_directories(Assets);
-					std::filesystem::create_directories(Scenes);
-
-					auto scene = ecs::Scene::createEmptyScene(projectName);
-					Filesystem::saveToFile(scene, EmptySceneName.c_str());
-					delete scene;
-
-					engine::MAREngine::getEngine()->setProjectPath(projectPath);
-					engine::MAREngine::getEngine()->setProjectName(projectName);
-					engine::MAREngine::getEngine()->setLoadPath(EmptySceneName);
-					window::Window::getInstance().endRenderLoop();
-
-					new_project_name_selected = false;
-				}
-
-				if (open_existing_project) {
-					std::string scene_to_load = projectPath + "/Scenes/" + projectName + ".marscene";
-
-					engine::MAREngine::getEngine()->setProjectPath(projectPath);
-					engine::MAREngine::getEngine()->setProjectName(projectName);
-					engine::MAREngine::getEngine()->setLoadPath(scene_to_load);
-					window::Window::getInstance().endRenderLoop();
-
-					open_existing_project = false;
-				}
-			}
+			static void checkState();
 
 		};
 

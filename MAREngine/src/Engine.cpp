@@ -19,6 +19,11 @@
 
 
 #include "Engine.h"
+#include "Debug/Log.h"
+#include "Core/scripting/PythonScript.h"
+#include "LayerStack/layers/EntityLayer.h"
+#include "LayerStack/layers/GUILayer.h"
+#include "Core/graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar {
@@ -40,6 +45,10 @@ namespace mar {
 
 		void MAREngine::connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer) {
 			guilayer->submit(entitylayer->getSceneManager());
+		}
+
+		void MAREngine::resetStatistics() {
+			graphics::RenderPipeline::getInstance().clearStatistics(); 
 		}
 
 

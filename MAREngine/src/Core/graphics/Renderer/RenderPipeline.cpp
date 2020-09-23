@@ -19,6 +19,8 @@
 
 
 #include "RenderPipeline.h"
+#include "RenderCamera.h"
+#include "../GraphicsLogs.h"
 #include "../Mesh/ShapeManipulator.h"
 
 

@@ -19,11 +19,23 @@
 
 
 #include "GUI_EntityPanel.h"
+#include "GUI_TextEditor.h"
+
+#include "../EditorLogging.h"
+
+#include "../../Core/graphics/Mesh/MeshCreator.h"
+
 #include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/graphics/Renderer/RenderEvents.h"
+#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/Systems.h"
+#include "../../Core/ecs/SceneEvents.h"
+
 #include "../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../Engine.h"
-#include "GUI_TextEditor.h"
+
+#include "../Filesystem/EditorFilesystem.h"
+#include "../../Window/Input.h"
+
 
 
 namespace mar {
@@ -33,6 +45,11 @@ namespace mar {
 		ecs::Entity* GUI_EntityPanel::currentEntity{ nullptr };
 		int32_t GUI_EntityPanel::currentIndex{ -1 };
 
+
+		void GUI_EntityPanel::reset() {
+			currentEntity = nullptr;
+			currentIndex = -1;
+		}
 
 		void GUI_EntityPanel::Scene_Entity_Modify(bool is_play_mode) {
 			ImGui::Begin("Entity Modification");
@@ -566,6 +583,25 @@ namespace mar {
 				if(!is_play_mode) ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
 
 			EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
+		}
+
+		// --------------------------------------------
+		// TEMPLATES TO WRITE MORE REUSABLE CODE
+		// --------------------------------------------
+
+		template<typename T>
+		bool GUI_EntityPanel::Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) {
+			if (ImGui::Button(buttonName)) {
+				renderable.id = T::getID();
+				renderable.vertices = T::getVertices();
+				renderable.indices = T::getIndices();
+
+				ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
+
+				return true;
+			}
+
+			return false;
 		}
 
 

@@ -23,12 +23,11 @@
 
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
 
 
 namespace mar {
+	namespace ecs { class Scene; class EntityCollection; class Entity;	/* forward declarations */ }
+
 	namespace editor {
 
 

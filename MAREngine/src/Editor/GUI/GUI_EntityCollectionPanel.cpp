@@ -19,6 +19,17 @@
 
 
 #include "GUI_EntityCollectionPanel.h"
+#include "GUI_EntityPanel.h"
+#include "GUI_TextEditor.h"
+#include "../EditorLogging.h"
+
+#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/Systems.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/EntityCollection.h"
+#include "../../Core/ecs/SceneEvents.h"
+
+#include "../../Window/Input.h"
 
 
 namespace mar {
@@ -27,6 +38,11 @@ namespace mar {
 
 		ecs::EntityCollection* GUI_EntityCollectionPanel::currentCollection{ nullptr };
 		int32_t GUI_EntityCollectionPanel::currentIndex{ -1 };
+
+		void GUI_EntityCollectionPanel::reset() {
+			currentCollection = nullptr;
+			currentIndex = -1;
+		}
 
 		void GUI_EntityCollectionPanel::Scene_EntityCollection_Modify() {
 			ImGui::Begin("EntityCollection Panel");

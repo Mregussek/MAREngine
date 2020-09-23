@@ -20,8 +20,9 @@
 
 #include "GUILayer.h"
 #include "../LayerLogs.h"
-#include "../../Editor/GUI/GUI.h"
+#include "../../Window/Window.h"
 #include "../../Window/Input.h"
+#include "../../Editor/GUI/GUI.h"
 
 
 namespace mar {
@@ -69,7 +70,7 @@ namespace mar {
 
 				m_camera.processInput();
 				//m_camera->ProcessMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
-				//m_camera->ProcessMouseScroll(window::Input::getScrollY());
+				m_camera.ProcessMouseScroll(window::Input::getScrollY());
 			}
 
 			m_camera.aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();

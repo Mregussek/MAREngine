@@ -19,10 +19,19 @@
 
 
 #include "GUI_Filesystem.h"
-
 #include "GUI_TextEditor.h"
 #include "GUI_EntityPanel.h"
 #include "GUI_EntityCollectionPanel.h"
+
+#include "../EditorLogging.h"
+
+#include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneEvents.h"
+
+#include "../../Core/graphics/Mesh/MeshCreator.h"
+
+#include "../Filesystem/EditorFilesystem.h"
+#include "../../Engine.h"
 
 
 namespace mar {

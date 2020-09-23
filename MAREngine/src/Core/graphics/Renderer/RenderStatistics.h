@@ -22,35 +22,21 @@
 #define MAR_ENGINE_GRAPHICS_RENDERER_INCLUDE_H
 
 
-#include "../../../Platform/OpenGL/FrameBufferOpenGL.h"
-#include "../../../Platform/OpenGL/TextureOpenGL.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
-
-#include "../../ecs/Scene.h"
-#include "../../ecs/SceneManager.h"
-
-#include "../GraphicsLogs.h"
+#include "../../../mar.h"
 
 
 namespace mar {
 	namespace graphics {
 
 
-		struct RendererStatistics {
-			uint32_t drawCallsCount;
-			uint32_t verticesCount;
-			uint32_t indicesCount;
-			uint32_t shapesCount;
-			uint32_t trianglesCount;
+		struct RenderStatistics {
+			uint32_t drawCallsCount{ 0 };
+			uint32_t verticesCount{ 0 };
+			uint32_t indicesCount{ 0 };
+			uint32_t shapesCount{ 0 };
+			uint32_t trianglesCount{ 0 };
 
-			RendererStatistics()
-				: drawCallsCount(0),
-				verticesCount(0),
-				indicesCount(0),
-				shapesCount(0),
-				trianglesCount(0)
-			{}
+			RenderStatistics() = default;
 
 			void resetStatistics() {
 				drawCallsCount = 0;

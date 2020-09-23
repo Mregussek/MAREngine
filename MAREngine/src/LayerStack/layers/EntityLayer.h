@@ -24,14 +24,12 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
-#include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneManager.h"
 #include "../../Core/graphics/Renderer/RendererBatch.h"
-#include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar {
-	namespace graphics { class RendererBatch; }
+	namespace ecs { class Scene; }
 
 	namespace layers {
 

@@ -23,14 +23,11 @@
 
 
 #include "../../mar.h"
-#include "GUI_EntityPanel.h"
-#include "GUI_TextEditor.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/Components.h"
 
 
 namespace mar {
+	namespace ecs { class EntityCollection; struct TagComponent; /* forward declarations */ }
+
 	namespace editor {
 
 
@@ -40,10 +37,7 @@ namespace mar {
 
 			static void Scene_EntityCollection_Modify();
 
-			static void reset() {
-				currentCollection = nullptr;
-				currentIndex = -1;
-			}
+			static void reset();
 
 		private:
 

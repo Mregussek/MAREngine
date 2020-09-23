@@ -19,6 +19,10 @@
 
 
 #include "Filesystem_Saving.h"
+#include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/EntityCollection.h"
 
 
 namespace mar {

@@ -22,6 +22,7 @@
 #include "ECS/Components.h"
 #include "ECS/Entity.h"
 #include "ECS/EntityCollection.h"
+#include "ECSLogs.h"
 
 
 namespace mar {
@@ -106,8 +107,13 @@ namespace mar {
 			}
 		}
 
-		const std::vector<Entity>& Scene::getEntities() const { return m_entities; }
-		Entity& Scene::getEntity(size_t index) { return m_entities[index]; }
+		const std::vector<Entity>& Scene::getEntities() const { 
+			return m_entities; 
+		}
+
+		Entity& Scene::getEntity(size_t index) { 
+			return m_entities[index]; 
+		}
 
 		// -------------------------------------------------------------
 		// ENTITIES COLLECTIONS MANAGEMENT

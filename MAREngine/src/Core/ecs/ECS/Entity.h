@@ -21,6 +21,7 @@
 #ifndef MAR_ENGINE_ECS_ENTITY_H
 #define MAR_ENGINE_ECS_ENTITY_H
 
+
 #include "../../../mar.h"
 #include "../ECSLogs.h"
 #include "../Scene.h"
@@ -118,7 +119,7 @@ namespace mar {
 			}
 
 			// ----------------------------------------------------
-			// ENTITY COMPONENT METHODS
+			// ENTITY COMPONENT METHODS (definitions must be here, because of linker errors)
 			// ----------------------------------------------------
 
 			template<typename T>

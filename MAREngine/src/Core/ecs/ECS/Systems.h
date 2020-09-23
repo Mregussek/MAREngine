@@ -21,13 +21,14 @@
 #ifndef MAR_ENGINE_ECS_SYSTEMS_H
 #define MAR_ENGINE_ECS_SYSTEMS_H
 
+
 #include "../../../mar.h"
-#include "../ECSLogs.h"
-#include "Components.h"
 
 
 namespace mar {
 	namespace ecs {
+
+		struct TransformComponent;
 
 
 		class System {

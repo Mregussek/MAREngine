@@ -23,20 +23,11 @@
 
 
 #include "../../mar.h"
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/Systems.h"
-#include "../../Core/ecs/SceneEvents.h"
-
-#include "../Filesystem/EditorFilesystem.h"
-
-#include "../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../Window/Input.h"
-
-#include "../EditorLogging.h"
 
 
 namespace mar {
-	namespace ecs { class Entity; }
+	namespace ecs { class Entity; struct RenderableComponent; /* forward declarations */ }
+	namespace graphics { struct RenderCamera; /* forward declarations */ }
 
 	namespace editor {
 
@@ -47,11 +38,7 @@ namespace mar {
 			static int32_t currentIndex;
 
 			static void Scene_Entity_Modify(bool is_play_mode);
-
-			static void reset() {
-				currentEntity = nullptr;
-				currentIndex = -1;
-			}
+			static void reset();
 
 		private:
 			static void Scene_Entity_Modify_PopUp();
@@ -71,19 +58,7 @@ namespace mar {
 			// --------------------------------------------
 
 			template<typename T>
-			static bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) {
-				if (ImGui::Button(buttonName)) {
-					renderable.id = T::getID();
-					renderable.vertices = T::getVertices();
-					renderable.indices = T::getIndices();
-
-					ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
-
-					return true;
-				}
-
-				return false;
-			}
+			static bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName);
 		};
 
 

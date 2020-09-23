@@ -19,6 +19,9 @@
 
 
 #include "ScenePlayStorage.h"
+#include "ECS/Entity.h"
+#include "ECS/EntityCollection.h"
+#include "ECS/Systems.h"
 
 
 namespace mar {

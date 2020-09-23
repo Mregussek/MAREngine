@@ -23,8 +23,6 @@
 
 
 #include "../../mar.h"
-#include "../../Window/Window.h"
-#include "../GUI/GUI_Theme.h"
 
 
 namespace mar {

@@ -251,7 +251,7 @@
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
     <ClInclude Include="src\Core\ecs\ECS\Components.h" />
     <ClInclude Include="src\Core\ecs\ECS\Entity.h" />
@@ -346,8 +346,10 @@
     <ClCompile Include="src\Editor\GUI\GUI_Info.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
+    <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp" />
+    <ClCompile Include="src\LayerStack\LayerStack.cpp" />
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
@@ -359,6 +361,7 @@
     <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
+    <ClCompile Include="src\Window\Input.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -21,8 +21,9 @@
 #ifndef MAR_ENGINE_GRAPHICS_SHAPEMANIPULATOR_H
 #define MAR_ENGINE_GRAPHICS_SHAPEMANIPULATOR_H
 
+
 #include "../../../mar.h"
-#include "../GraphicsLogs.h"
+
 
 namespace mar {
     namespace graphics {

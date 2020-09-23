@@ -23,7 +23,7 @@
 
 
 #include "../../../mar.h"
-#include "Renderer.h"
+#include "RenderStatistics.h"
 #include "../../ecs/ECS/Components.h"
 
 
@@ -31,7 +31,7 @@ namespace mar {
 	namespace graphics {
 
 		class RendererBatch;
-
+		struct RenderCamera;
 
 
 		class RenderPipeline {
@@ -39,7 +39,7 @@ namespace mar {
 
 			static RenderPipeline s_instance;
 
-			RendererStatistics s_statistics;
+			RenderStatistics s_statistics;
 
 			std::vector<float> m_vertices;
 			std::vector<uint32_t> m_indices;
@@ -78,7 +78,7 @@ namespace mar {
 
 			float getCurrentShapeID() { return m_shapeID; }
 
-			RendererStatistics& getStatistics() { return s_statistics; }
+			RenderStatistics& getStatistics() { return s_statistics; }
 			void clearStatistics() { s_statistics.resetStatistics(); }
 
 			static RenderPipeline& getInstance() { return s_instance; }

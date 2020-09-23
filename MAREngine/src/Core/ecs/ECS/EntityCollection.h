@@ -44,7 +44,8 @@ namespace mar {
 			Scene* m_scene{ nullptr };
 
 		public:
-			EntityCollection() = default;
+			EntityCollection() = delete;
+
 			EntityCollection(Scene* scene)
 				: m_scene(scene),
 				m_entityHandle(scene->m_registry.create())
@@ -98,6 +99,18 @@ namespace mar {
 				}
 			}
 
+			const std::vector<Entity>& getEntities() const {
+				return m_entities;
+			}
+
+			Entity& getEntity(size_t index) {
+				return m_entities[index];
+			}
+
+			size_t getEntitiesCount() {
+				return m_entities.size();
+			}
+
 			template<typename T, typename... Args>
 			T& addComponent(Args&&... args) {
 				MAR_CORE_ASSERT(!m_scene->m_registry.has<T>(m_entityHandle), "ENTITY_COLLECTION: already has CollectionTagComponent!");
@@ -116,10 +129,6 @@ namespace mar {
 
 				return m_scene->m_registry.get<T>(m_entityHandle);
 			}
-
-			const std::vector<Entity>& getEntities() const { return m_entities; }
-			Entity& getEntity(size_t index) { return m_entities[index]; }
-			size_t getEntitiesCount() { return m_entities.size(); }
 		};
 
 

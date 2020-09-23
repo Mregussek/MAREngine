@@ -22,8 +22,6 @@
 #define MAR_ENGINE_SCRIPTING_EMBED_MARENGINE_H
 
 
-#include "../ecs/Scene.h"
-#include "../ecs/ECS/Entity.h"
 #include "MAREnginePy_Trampoline.h"
 
 

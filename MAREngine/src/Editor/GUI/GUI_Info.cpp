@@ -19,6 +19,7 @@
 
 
 #include "GUI_Info.h"
+#include "../EditorLogging.h"
 
 
 namespace mar {

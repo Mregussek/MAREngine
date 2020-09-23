@@ -19,9 +19,16 @@
 
 
 #include "GUI_Graphics.h"
+
 #include "../../Platform/OpenGL/ShaderUniforms.h"
-#include "../Camera/Camera.h"
+#include "../../Platform/OpenGL/DrawingOpenGL.h"
+
+#include "../../Core/ecs/ECS/Components.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/EntityCollection.h"
+
 #include "../../Core/ecs/ECS/Systems.h"
+#include "../Camera/Camera.h"
 
 
 namespace mar {

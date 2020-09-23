@@ -19,12 +19,19 @@
 
 
 #include "GUI_SceneHierarchy.h"
-
 #include "GUI_EntityCollectionPanel.h"
 #include "GUI_EntityPanel.h"
 #include "GUI_TextEditor.h"
 
-#include "../../Core/graphics/Renderer/RendererBatch.h"
+#include "../../Core/ecs/ECS/Entity.h"
+#include "../../Core/ecs/ECS/EntityCollection.h"
+#include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/ecs/SceneManager.h"
+
+#include "../../Window/Input.h"
+#include "../../Core/graphics/Renderer/RenderPipeline.h"
+
 #include "../EditorLogging.h"
 
 

@@ -23,13 +23,11 @@
 
 
 #include "../../mar.h"
-#include "../EditorLogging.h"
-#include "../Filesystem/EditorFilesystem.h"
-#include "../../Core/ecs/Scene.h"
-#include "../../Engine.h"
 
 
 namespace mar {
+	namespace ecs { class Scene; }
+
 	namespace editor {
 
 

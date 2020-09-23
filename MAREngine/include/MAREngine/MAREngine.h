@@ -18,25 +18,39 @@
 **/
 
 
+// MAR 
 #include "../../src/mar.h"
-// Log && Filesystem
+
+// Log
 #include "../../src/Debug/Log.h"
+
+// Editor
 #include "../../src/Editor/GUI/GUI.h"
 #include "../../src/Editor/ProjectSelectionGUI/ProjectSelectionGUI.h"
 #include "../../src/Editor/Filesystem/EditorFilesystem.h"
 #include "../../src/Editor/Camera/Camera.h"
+
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"
 #include "../../src/LayerStack/layers/GUILayer.h"
 #include "../../src/LayerStack/layers/EntityLayer.h"
-// Rendering 
+
+// Entity Component System
 #include "../../src/Core/ecs/Scene.h"
+#include "../../src/Core/ecs/ECS/Entity.h"
+#include "../../src/Core/ecs/ECS/EntityCollection.h"
+#include "../../src/Core/ecs/ECS/Components.h"
+
+// Rendering 
 #include "../../src/Core/graphics/Renderer/RenderPipeline.h"
 #include "../../src/Core/graphics/Renderer/RendererBatch.h"
+
 // Scripting
 #include "../../src/Core/scripting/PythonScript.h"
+
 // Window && Input
 #include "../../src/Window/Input.h"
 #include "../../src/Window/Window.h"
+
 // Engine	 
 #include "../../src/Engine.h"

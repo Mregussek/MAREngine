@@ -57,9 +57,6 @@
     <ClInclude Include="src\Editor\EditorLogging.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\Renderer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -354,6 +351,9 @@
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -507,6 +507,15 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\ECS\Systems.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LayerStack\LayerStack.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\Input.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

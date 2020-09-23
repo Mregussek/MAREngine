@@ -23,13 +23,15 @@
 
 
 #include "../../../mar.h"
-#include "Renderer.h"
-#include "RenderPipeline.h"
-#include "../../../Platform/OpenGL/DrawingOpenGL.h"
+#include "../../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../../Platform/OpenGL/ShaderOpenGL.h"
+#include "../../../Platform/OpenGL/PipelineOpenGL.h"
 
 
 namespace mar {
 	namespace graphics {
+
+		class RenderPipeline;
 
 
 		class RendererBatch {

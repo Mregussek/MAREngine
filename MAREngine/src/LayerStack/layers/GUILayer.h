@@ -24,14 +24,13 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
-#include "../../Window/Window.h"
 #include "../../Editor/Camera/Camera.h"
 #include "../../Editor/GUI/GUI_Graphics.h"
 
 
 namespace mar {
-	namespace platforms { class FrameBufferOpenGL; }
 	namespace ecs { class SceneManager; }
+	namespace editor { class GUI; }
 
 	namespace layers {
 

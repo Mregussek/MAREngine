@@ -20,6 +20,8 @@
 
 #include "Systems.h"
 #include "../../../Engine.h"
+#include "../ECSLogs.h"
+#include "Components.h"
 
 
 namespace mar {

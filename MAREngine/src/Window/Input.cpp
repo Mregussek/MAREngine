@@ -18,37 +18,37 @@
 **/
 
 
-#ifndef MAR_ENGINE_LAYER_H
-#define MAR_ENGINE_LAYER_H
-
-
-#include "../mar.h"
-#include "LayerLogs.h"
+#include "Input.h"
+#include "Window.h"
+#include "WindowLogs.h"
 
 
 namespace mar {
-	namespace layers {
-
-		class LayerStack;
+	namespace window {
 
 
-		class Layer {
-		public:
-			Layer() = default;
-			Layer(const char* name) : m_debugName(name) { }
+		bool Input::isKeyPressed(int32_t key) {
+			return Window::getInstance().m_window.isKeyPressed(key);
+		}
 
-			virtual void update() { }
+		bool Input::isMousePressed(int32_t key) {
+			return Window::getInstance().m_window.isMousePressed(key);
+		}
 
-			virtual void closeLayer() { }
+		float Input::getMousePositionX() {
+			return (float)platforms::callbacks::mouse_xpos;
+		}
 
-		protected:
-			friend class LayerStack;
+		float Input::getMousePositionY() {
+			return (float)platforms::callbacks::mouse_ypos;
+		}
 
-			const char* m_debugName{ "Default_Debug_Name" };
-		};
+		float Input::getScrollX() {
+			return (float)platforms::callbacks::scroll_x;
+		}
 
+		float Input::getScrollY() {
+			return (float)platforms::callbacks::scroll_y;
+		}
 
 } }
-
-
-#endif // !MAR_ENGINE_LAYER_H

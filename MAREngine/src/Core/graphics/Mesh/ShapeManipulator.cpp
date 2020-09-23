@@ -19,6 +19,8 @@
 
 
 #include "ShapeManipulator.h"
+#include "../GraphicsLogs.h"
+
 
 namespace mar {
     namespace graphics {

@@ -21,8 +21,8 @@
 #ifndef MAR_ENGINE_ECS_SCENE_H
 #define MAR_ENGINE_ECS_SCENE_H
 
+
 #include "../../mar.h"
-#include "ECSLogs.h"
 #include "../graphics/Renderer/RenderCamera.h"
 
 
@@ -80,8 +80,10 @@ namespace mar {
 
 			std::string m_name{ "Empty Scene" };
 			entt::registry m_registry;
+
 			std::vector<Entity> m_entities;
 			std::vector<EntityCollection> m_collections;
+
 			graphics::RenderCamera m_sceneCamera;
 			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
 		};

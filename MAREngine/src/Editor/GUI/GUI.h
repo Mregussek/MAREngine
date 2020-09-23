@@ -23,24 +23,12 @@
 
 
 #include "../../mar.h"
-#include "../EditorLogging.h"
-
-#include "../../Window/Window.h"
-
 #include "../../Platform/OpenGL/FrameBufferOpenGL.h"
-#include "../../Core/graphics/Renderer/RendererBatch.h"
-
-#include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneManager.h"
-
-#include "GUI_EntityPanel.h"
-#include "GUI_EntityCollectionPanel.h"
-#include "GUI_Filesystem.h"
-#include "GUI_Info.h"
-#include "GUI_Theme.h"
 
 
 namespace mar {
+	namespace ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
+
 	namespace editor {
 
 
@@ -69,7 +57,7 @@ namespace mar {
 			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
 			ecs::Entity* getCurrentEntity();
 			ecs::EntityCollection* getCurrentCollection();
-			bool canDrawLines() { return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; }
+			bool canDrawLines();
 
 		private:
 			// --- DISPLAY --- //
@@ -105,4 +93,4 @@ namespace mar {
 
 } }
 
-#endif // !MAR_ENGINE_GUI_H
+#endif // !MAR_ENGINE_EDITOR_GUI_H

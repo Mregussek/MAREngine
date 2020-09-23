@@ -19,14 +19,26 @@
 
 
 #include "GUI.h"
+
+#include "../EditorLogging.h"
 #include "../Filesystem/EditorFilesystem.h"
+
 #include "../../Core/ecs/ECS/Entity.h"
 #include "../../Core/ecs/ECS/Components.h"
 #include "../../Core/ecs/ECS/Systems.h"
-#include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneManager.h"
+
+#include "../../Window/Window.h"
 #include "../../Window/Input.h"
+
 #include "GUI_TextEditor.h"
 #include "GUI_SceneHierarchy.h"
+#include "GUI_EntityPanel.h"
+#include "GUI_EntityCollectionPanel.h"
+#include "GUI_Filesystem.h"
+#include "GUI_Info.h"
+#include "GUI_Theme.h"
 
 
 namespace mar {
@@ -314,5 +326,8 @@ namespace mar {
 			return GUI_EntityCollectionPanel::currentCollection;
 		}
 
+		bool GUI::canDrawLines() {
+			return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; 
+		}
 
 } }

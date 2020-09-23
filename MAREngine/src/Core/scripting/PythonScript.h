@@ -23,7 +23,6 @@
 
 
 #include "../../mar.h"
-#include "ScriptingLogs.h"
 
 
 namespace mar {

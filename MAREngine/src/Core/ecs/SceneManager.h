@@ -24,7 +24,6 @@
 
 #include "../../mar.h"
 #include "ECS/Components.h"
-#include "Scene.h"
 #include "ScenePlayStorage.h"
 
 
@@ -34,6 +33,7 @@ namespace mar {
 	namespace ecs {
 
 		class SceneEvents;
+		class Scene;
 
 
 		class SceneManager {
@@ -48,8 +48,8 @@ namespace mar {
 			void shutdown();
 			void update();
 
-			void setScene(Scene* scene) { m_scene = scene; }
-			Scene* getScene() { return m_scene; }
+			void setScene(Scene* scene);
+			Scene* getScene();
 
 			bool isEditorMode() { return m_EditorMode; }
 			bool isPlayMode() { return !m_EditorMode; }

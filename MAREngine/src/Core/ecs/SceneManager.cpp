@@ -20,20 +20,18 @@
 
 #include "SceneManager.h"
 
+#include "ECSLogs.h"
 #include "SceneEvents.h"
+#include "Scene.h"
 
 #include "ECS/EntityCollection.h"
 #include "ECS/Entity.h"
 #include "ECS/Systems.h"
 
-#include "../../Editor/Filesystem/EditorFilesystem.h"
 #include "../../Editor/Camera/Camera.h"
 
 #include "../graphics/Renderer/RenderCamera.h"
-#include "../graphics/Mesh/ShapeManipulator.h"
 #include "../graphics/Renderer/RenderPipeline.h"
-
-#include "../../Window/Window.h"
 
 
 namespace mar {
@@ -331,7 +329,17 @@ namespace mar {
 			ECS_TRACE("SCENE_MANAGER: calculated camera transform!");
 		}
 
+		// -------------------------------------------------------------
+		// GET / SET
+		// -------------------------------------------------------------
 
+		void SceneManager::setScene(Scene* scene) { 
+			m_scene = scene; 
+		}
+
+		Scene* SceneManager::getScene() { 
+			return m_scene; 
+		}
 
 
 } }

@@ -23,14 +23,11 @@
 
 
 #include "../../../mar.h"
-#include "../GraphicsLogs.h"
-#include "ShapeManipulator.h"
-#include "../../ecs/ECS/EntityCollection.h"
-#include "../../ecs/ECS/Entity.h"
-#include "../../ecs/ECS/Components.h"
 
 
 namespace mar {
+    namespace ecs { class EntityCollection; }
+
     namespace graphics {
 
 

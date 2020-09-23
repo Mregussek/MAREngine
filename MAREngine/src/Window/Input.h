@@ -23,8 +23,6 @@
 
 
 #include "../mar.h"
-#include "Window.h"
-#include "WindowLogs.h"
 #include "buttons_def.h"
 
 
@@ -34,29 +32,17 @@ namespace mar {
 
 		class Input {
 		public:
-			static bool isKeyPressed(int32_t key) {
-				return Window::getInstance().m_window.isKeyPressed(key);
-			}
+			static bool isKeyPressed(int32_t key);
 
-			static bool isMousePressed(int32_t key) {
-				return Window::getInstance().m_window.isMousePressed(key);
-			}
+			static bool isMousePressed(int32_t key);
 
-			static float getMousePositionX() {
-				return (float)platforms::callbacks::mouse_xpos;
-			}
+			static float getMousePositionX();
 
-			static float getMousePositionY() {
-				return (float)platforms::callbacks::mouse_ypos;
-			}
+			static float getMousePositionY();
 
-			static float getScrollX() {
-				return (float)platforms::callbacks::scroll_x;
-			}
+			static float getScrollX();
 
-			static float getScrollY() {
-				return (float)platforms::callbacks::scroll_y;
-			}
+			static float getScrollY();
 		};
 
 
