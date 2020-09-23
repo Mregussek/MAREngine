@@ -24,14 +24,12 @@
 
 #include "../../../mar.h"
 #include "../ECSLogs.h"
-#include "../Scene.h"
+#include "../SceneRegistry.h"
 #include "Components.h"
 
 
 namespace mar {
 	namespace ecs {
-
-		class Scene;
 
 
 		class Entity {
@@ -42,7 +40,7 @@ namespace mar {
 		public:
 			Entity() = delete;
 
-			Entity(Scene* scene)
+			Entity(SceneRegistry* scene)
 				: m_scene(scene),
 				m_entityHandle(scene->m_registry.create())
 			{
@@ -124,7 +122,7 @@ namespace mar {
 
 			template<typename T>
 			const bool hasComponent() const {
-				ECS_TRACE("ENTITY: {} checking if has component on board!", m_entityHandle);
+				ECS_TRACE("ENTITY: {} - checking if entity {} has component!", typeid(T).name(), m_entityHandle);
 
 				return m_scene->m_registry.has<T>(m_entityHandle);
 			}
@@ -145,7 +143,7 @@ namespace mar {
 			T& getComponent() const {
 				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
 
-				ECS_TRACE("ENTITY: {} returning component", m_entityHandle);
+				ECS_TRACE("ENTITY: {} - returning component from {}!", typeid(T).name(), m_entityHandle);
 
 				return m_scene->m_registry.get<T>(m_entityHandle);
 			}
@@ -174,7 +172,7 @@ namespace mar {
 			friend class Scene;
 
 			entt::entity m_entityHandle{ entt::null };
-			Scene* m_scene{ nullptr };
+			SceneRegistry* m_scene{ nullptr };
 		};
 
 

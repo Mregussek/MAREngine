@@ -18,39 +18,32 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
-#define MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+#ifndef MAR_ENGINE_ECS_ENTITY_CONTAINER_H
+#define MAR_ENGINE_ECS_ENTITY_CONTAINER_H
 
 
 #include "../../../mar.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "Entity.h"
+#include "EntityCollection.h"
 
 
 namespace mar {
-	namespace graphics {
+	namespace ecs {
 
-		class RenderPipeline;
+		class Scene;
 
 
-		class RendererBatch {
+		class EntityContainer {
+			std::vector<Entity> m_entities;
+			std::vector<EntityCollection> m_collections;
+
+			friend class Scene;
+
 		public:
 
-			void initialize();
-			void close();
-			void draw(RenderPipeline& render_pip);
-
-		private:
-
-			void passTexturesToShader(RenderPipeline& ren);
-			void passLightToShader(RenderPipeline& ren);
-			void passCameraToShader(RenderPipeline& ren);
-
-			platforms::PipelineOpenGL m_buffers;
-			platforms::ShaderOpenGL m_shader;
 		};
 
 
 } }
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+#endif // !MAR_ENGINE_ECS_ENTITY_CONTAINER_H

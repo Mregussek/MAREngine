@@ -24,8 +24,8 @@
 
 #include "../../../mar.h"
 #include "../ECSLogs.h"
-#include "../Scene.h"
 #include "Entity.h"
+#include "../SceneRegistry.h"
 #include "Components.h"
 
 
@@ -33,7 +33,6 @@ namespace mar {
 	namespace ecs {
 
 		class Entity;
-		class Scene;
 
 
 		class EntityCollection {
@@ -41,12 +40,12 @@ namespace mar {
 
 			std::vector<Entity> m_entities;
 			entt::entity m_entityHandle{ entt::null };
-			Scene* m_scene{ nullptr };
+			SceneRegistry* m_scene{ nullptr };
 
 		public:
 			EntityCollection() = delete;
 
-			EntityCollection(Scene* scene)
+			EntityCollection(SceneRegistry* scene)
 				: m_scene(scene),
 				m_entityHandle(scene->m_registry.create())
 			{}
@@ -63,10 +62,10 @@ namespace mar {
 						m_entities[i].destroyYourself();
 						m_entities.erase(m_entities.begin() + i);
 
-						ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is deleted!", index, i);
+						ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is deleted!", i);
 					}
 					else {
-						ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is not valid, so it is not deleted!!", index, i);
+						ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is not valid, so it is not deleted!!", i);
 					}
 				}
 			}

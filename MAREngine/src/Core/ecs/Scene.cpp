@@ -32,21 +32,21 @@ namespace mar {
 		Scene::Scene(std::string name)
 			: m_name(std::move(name))
 		{
-			m_registry = entt::registry();
+			m_sceneRegistry = SceneRegistry();
 
 			ECS_INFO("SCENE: scene is created, with entt::registry! (called constructor)");
 		}
 
 		void Scene::shutdown() {
-			for (size_t i = 0; i < m_entities.size(); i++) {
+			for (size_t i = 0; i < m_container.m_entities.size(); i++) {
 				destroyEntity(i);
 			}
 
-			for (size_t i = 0; i < m_collections.size(); i++) {
+			for (size_t i = 0; i < m_container.m_collections.size(); i++) {
 				destroyCollection(i);
 			}
 
-			m_registry.clear();
+			m_sceneRegistry.cleanup();
 
 			ECS_INFO("SCENE: registry is cleared! (called destructor)");
 		}
@@ -79,25 +79,25 @@ namespace mar {
 		Entity& Scene::createEntity() {
 			ECS_INFO("SCENE: going to create entity!");
 
-			Entity entity{ this };
+			Entity entity{ &m_sceneRegistry };
 
 			entity.addDefault();
 			entity.addComponent<TagComponent>(ECS_TAG);
 			entity.addComponent<TransformComponent>(ECS_TRANSFORM);
 
-			m_entities.push_back(entity);
+			m_container.m_entities.push_back(entity);
 
 			ECS_INFO("SCENE: created entity!");
 
-			return m_entities[m_entities.size() - 1];
+			return m_container.m_entities[m_container.m_entities.size() - 1];
 		}
 
 		void Scene::destroyEntity(int32_t index) {
 			ECS_INFO("SCENE: going to destroy entity at {}!", index);
 
-			if (m_entities[index].isValid()) {
-				m_entities[index].destroyYourself();
-				m_entities.erase(m_entities.begin() + index);
+			if (m_container.m_entities[index].isValid()) {
+				m_container.m_entities[index].destroyYourself();
+				m_container.m_entities.erase(m_container.m_entities.begin() + index);
 
 				ECS_INFO("SCENE: destroyed entity at {}!", index);
 				return;
@@ -108,11 +108,11 @@ namespace mar {
 		}
 
 		const std::vector<Entity>& Scene::getEntities() const { 
-			return m_entities; 
+			return m_container.m_entities;
 		}
 
 		Entity& Scene::getEntity(size_t index) { 
-			return m_entities[index]; 
+			return m_container.m_entities[index];
 		}
 
 		// -------------------------------------------------------------
@@ -122,33 +122,38 @@ namespace mar {
 		EntityCollection& Scene::createCollection() {
 			ECS_INFO("SCENE: going to create entity collection!");
 
-			EntityCollection collection{ this };
+			EntityCollection collection{ &m_sceneRegistry };
 
 			collection.addComponent<TagComponent>("DefaultName");
 			collection.addComponent<TransformComponent>();
 
-			m_collections.push_back(collection);
+			m_container.m_collections.push_back(collection);
 
-			return m_collections[m_collections.size() - 1];
+			return m_container.m_collections[m_container.m_collections.size() - 1];
 		}
 
 		void Scene::destroyCollection(int32_t index) {
 			ECS_INFO("SCENE: going to destroy collection at {}", index);
 
-			m_collections[index].destroyYourself();
-			m_collections.erase(m_collections.begin() + index);
+			m_container.m_collections[index].destroyYourself();
+			m_container.m_collections.erase(m_container.m_collections.begin() + index);
 
 			ECS_INFO("SCENE: collection at {} is deleted properly!", index);
 		}
 
 		void Scene::destroyEntityAtCollection(int32_t collection_index, int32_t entity_index) {
-			m_collections[collection_index].destroyEntity(entity_index);
+			m_container.m_collections[collection_index].destroyEntity(entity_index);
 
 			ECS_INFO("SCENE: called destroyEntity({}) at collection {}", entity_index, collection_index);
 		}
 
-		const std::vector<EntityCollection>& Scene::getCollections() const { return m_collections; }
-		EntityCollection& Scene::getCollection(size_t index) { return m_collections[index]; }
+		const std::vector<EntityCollection>& Scene::getCollections() const { 
+			return m_container.m_collections;
+		}
+
+		EntityCollection& Scene::getCollection(size_t index) { 
+			return m_container.m_collections[index];
+		}
 
 
 } }

@@ -46,8 +46,7 @@ namespace mar {
 		}
 
 		void ShapeManipulator::calculateNormals(std::vector<float>& vertices, const std::vector<uint32_t>& indices, const int32_t stride) {
-			if (indices.size() % 3 != 0)
-				GRAPHICS_ERROR("SHAPEMANIPULATOR: indices.size() is not divisible by 3!!!");
+			MAR_CORE_ASSERT(indices.size() % 3 == 0, "SHAPEMANIPULATOR: indices.size() is not divisible by 3!!!");
 
 			GRAPHICS_TRACE("SHAPE_MANIPULATOR: going to calculate vertex normals");
 

@@ -34,9 +34,9 @@ Logging is damaging perfomance, so it will be wise to comment it (Of course if y
 #define MAR_ENGINE_DEBUG_MODE
 
 // set logging level
-//#define MAR_ENGINE_LOGS_LEVEL_TRACE
+#define MAR_ENGINE_LOGS_LEVEL_TRACE
 //#define MAR_ENGINE_LOGS_LEVEL_INFO
-#define MAR_ENGINE_LOGS_LEVEL_WARN
+//#define MAR_ENGINE_LOGS_LEVEL_WARN
 //#define MAR_ENGINE_LOGS_LEVEL_ERROR
 
 /*
@@ -71,7 +71,7 @@ what happens during rendering, calling shaders, mesh creation and others.
 
 If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_GRAPHICS_LOGS will not affect anything.
 */
-#define MAR_ENGINE_GRAPHICS_LOGS
+//#define MAR_ENGINE_GRAPHICS_LOGS
 
 
 /*
@@ -83,7 +83,7 @@ GRAPHICS_LOGS and EDITOR_LOGS, because ECS are the core of MAREngine. Entities &
 
 If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_ECS_LOGS will not affect anything.
 */
-//#define MAR_ENGINE_ECS_LOGS
+#define MAR_ENGINE_ECS_LOGS
 
 /*
 !!! Uncomment to see Platform Logs

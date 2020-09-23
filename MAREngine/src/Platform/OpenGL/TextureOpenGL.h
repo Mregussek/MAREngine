@@ -21,6 +21,7 @@
 #ifndef MAR_ENGINE_PLATFORMS_TEXTURE_OPENGL_H
 #define MAR_ENGINE_PLATFORMS_TEXTURE_OPENGL_H
 
+
 #include "../../mar.h"
 #include "../PlatformLogs.h"
 
@@ -39,8 +40,11 @@ namespace mar {
 		class TextureOpenGL {
 			static std::unordered_map<std::string, uint32_t> s_2d;
 			static std::unordered_map<std::string, uint32_t> s_cubemaps;
+			static TextureOpenGL* s_instance;
 
 		public:
+
+			static TextureOpenGL* Instance() { return s_instance; }
 
 			// Delete all existing textures
 			void shutdown();

@@ -24,6 +24,7 @@
 #include "../GraphicsLogs.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderUniforms.h"
+#include "../../../Platform/OpenGL/TextureOpenGL.h"
 
 
 namespace mar {
@@ -49,7 +50,7 @@ namespace mar {
 
 			m_buffers.close();
 			m_shader.shutdown();
-			m_texture.shutdown();
+			platforms::TextureOpenGL::Instance()->shutdown();
 
 			GRAPHICS_INFO("RENDERER_BATCH: closed!");
 		}
@@ -74,7 +75,7 @@ namespace mar {
 				m_buffers.resetBuffers();
 				m_buffers.unbind();
 
-				m_texture.unbind(render_pip.m_samplerTypes);
+				platforms::TextureOpenGL::Instance()->unbind(render_pip.m_samplerTypes);
 			}
 
 			render_pip.s_statistics.drawCallsCount += 1;
@@ -90,6 +91,7 @@ namespace mar {
 			GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
 
 			using namespace platforms::ShaderUniforms;
+			typedef platforms::TextureOpenGL TextureGL;
 
 			m_shader.setUniformFloat("u_samplerTypes", ren.m_samplerTypes);
 
@@ -104,20 +106,20 @@ namespace mar {
 			GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
 
 			for (size_t i = 0; i < ren.m_tex2D.size(); i++) {
-				tex_id = m_texture.loadTexture(ren.m_tex2D[i].second);
+				tex_id = TextureGL::Instance()->loadTexture(ren.m_tex2D[i].second);
 				sampler = (uint32_t)ren.m_tex2D[i].first;
 
-				m_texture.bind2D(sampler, tex_id);
+				TextureGL::Instance()->bind2D(sampler, tex_id);
 				m_shader.setUniformSampler(u_Samplers2D[sampler], sampler);
 			}
 			
 			GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 
 			for (size_t i = 0; i < ren.m_cubes.size(); i++) {
-				tex_id = m_texture.loadCubemap(ren.m_cubes[i].second);
+				tex_id = TextureGL::Instance()->loadCubemap(ren.m_cubes[i].second);
 				sampler = (size_t)ren.m_cubes[i].first;
 
-				m_texture.bindCube(sampler, tex_id);
+				TextureGL::Instance()->bindCube(sampler, tex_id);
 				m_shader.setUniformSampler(u_SamplersCube[sampler], sampler);
 			}
 

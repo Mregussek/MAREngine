@@ -28,6 +28,7 @@ namespace mar {
 
 		std::unordered_map<std::string, uint32_t> TextureOpenGL::s_2d;
 		std::unordered_map<std::string, uint32_t> TextureOpenGL::s_cubemaps;
+		TextureOpenGL* TextureOpenGL::s_instance{ nullptr };
 
 
 		void TextureOpenGL::shutdown() {

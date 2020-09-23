@@ -24,13 +24,11 @@
 
 #include "../../mar.h"
 #include "../graphics/Renderer/RenderCamera.h"
+#include "ECS/EntityContainer.h"
 
 
 namespace mar {
 	namespace ecs {
-
-		class Entity;
-		class EntityCollection;
 
 
 		class Scene {
@@ -79,10 +77,9 @@ namespace mar {
 			friend class EntityCollection;
 
 			std::string m_name{ "Empty Scene" };
-			entt::registry m_registry;
+			SceneRegistry m_sceneRegistry;
 
-			std::vector<Entity> m_entities;
-			std::vector<EntityCollection> m_collections;
+			EntityContainer m_container;
 
 			graphics::RenderCamera m_sceneCamera;
 			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };

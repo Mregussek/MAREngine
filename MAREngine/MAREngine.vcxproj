@@ -246,9 +246,11 @@
     <ClInclude Include="src\Core\assets\AssetsManager.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
     <ClInclude Include="src\Core\ecs\ECS\EntityCollection.h" />
+    <ClInclude Include="src\Core\ecs\ECS\EntityContainer.h" />
     <ClInclude Include="src\Core\ecs\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
+    <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h" />
@@ -324,6 +326,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\Core\ecs\ECS\EntityCollection-impl.cpp" />
     <ClCompile Include="src\Core\ecs\ECS\Systems.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />

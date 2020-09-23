@@ -18,39 +18,42 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
-#define MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+#ifndef MAR_ENGINE_ECS_SCENE_REGISTRY_H
+#define MAR_ENGINE_ECS_SCENE_REGISTRY_H
 
 
-#include "../../../mar.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "../../mar.h"
+#include "ECSLogs.h"
 
 
 namespace mar {
-	namespace graphics {
+	namespace ecs {
 
-		class RenderPipeline;
+		class Entity;
+		class EntityCollection;
+		
 
+		class SceneRegistry {
+			friend class Entity;
+			friend class EntityCollection;
 
-		class RendererBatch {
+			entt::registry m_registry;
+
 		public:
+			SceneRegistry() {
+				m_registry = entt::registry();
+				
+				ECS_TRACE("SCENE_REGISTRY: created!");
+			}
 
-			void initialize();
-			void close();
-			void draw(RenderPipeline& render_pip);
+			void cleanup() {
+				m_registry.clear();
 
-		private:
-
-			void passTexturesToShader(RenderPipeline& ren);
-			void passLightToShader(RenderPipeline& ren);
-			void passCameraToShader(RenderPipeline& ren);
-
-			platforms::PipelineOpenGL m_buffers;
-			platforms::ShaderOpenGL m_shader;
+				ECS_TRACE("SCENE_REGISTRY: cleanup!");
+			}
 		};
 
 
 } }
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+#endif // !MAR_ENGINE_ECS_SCENE_REGISTRY_H
