@@ -23,11 +23,10 @@
 #include "../../Platform/OpenGL/ShaderUniforms.h"
 #include "../../Platform/OpenGL/DrawingOpenGL.h"
 
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
+#include "../../Core/ecs/Components/Components.h"
+#include "../../Core/ecs/Entity/Entity.h"
+#include "../../Core/ecs/Entity/EntityCollection.h"
 
-#include "../../Core/ecs/ECS/Systems.h"
 #include "../Camera/Camera.h"
 
 
@@ -55,7 +54,7 @@ namespace mar {
 			static maths::vec3 scale;
 			index = (size_t)ren.shader_id;
 			scale = tran.scale + 0.05f;
-			maths::mat4 better_outline = ecs::System::handleTransformComponent(tran.center, tran.angles, scale);
+			maths::mat4 better_outline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
 
 			m_pipeline.bind();
 			m_pipeline.updateBuffers(ren.vertices, ren.indices);

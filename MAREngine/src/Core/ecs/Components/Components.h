@@ -18,30 +18,15 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_H
+#ifndef MAR_ENGINE_ECS_COMPONENTS_H
+#define MAR_ENGINE_ECS_COMPONENTS_H
 
 
-#include "../../mar.h"
-#include "../../Core/ecs/Scene.h"
+#include "DefaultComponents.h"
+#include "TextureComponents.h"
+#include "ScriptingComponents.h"
+#include "CameraComponents.h"
+#include "LightComponents.h"
 
 
-namespace mar {
-	namespace editor {
-
-
-		class Filesystem {
-		public:
-
-			static void saveToFile(ecs::Scene* scene, const char* filename);
-			static ecs::Scene* openFile(std::string filename);
-
-			static std::string loadPyScript(const char* filename);
-			static void savePyScript(const char* filename, std::string source);
-		};
-
-
-} }
-
-
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_H
+#endif // !MAR_ENGINE_ECS_COMPONENTS_H

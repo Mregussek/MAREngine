@@ -18,30 +18,34 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_H
+#ifndef MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
+#define MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
 
 
-#include "../../mar.h"
-#include "../../Core/ecs/Scene.h"
+#include "../../../mar.h"
 
 
 namespace mar {
-	namespace editor {
+	namespace ecs {
 
 
-		class Filesystem {
-		public:
+		struct LightComponent {
+			maths::vec3 ambient{ 0.5f, 0.5f, 0.5f };
+			maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
+			maths::vec3 specular{ 0.5f, 0.5f, 0.5f };
 
-			static void saveToFile(ecs::Scene* scene, const char* filename);
-			static ecs::Scene* openFile(std::string filename);
+			float constant{ 1.0f };
+			float linear{ 0.045f };
+			float quadratic{ 0.0075f };
 
-			static std::string loadPyScript(const char* filename);
-			static void savePyScript(const char* filename, std::string source);
+			float shininess{ 64.0f };
+
+			LightComponent() = default;
+			LightComponent(const LightComponent& li) = default;
 		};
 
 
 } }
 
 
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_H
+#endif // !MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H

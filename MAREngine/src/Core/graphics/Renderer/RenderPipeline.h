@@ -24,7 +24,7 @@
 
 #include "../../../mar.h"
 #include "RenderStatistics.h"
-#include "../../ecs/ECS/Components.h"
+#include "../../ecs/Components/Components.h"
 
 
 namespace mar {

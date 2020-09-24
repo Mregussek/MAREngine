@@ -21,9 +21,8 @@
 #include "PythonScript.h"
 #include "MAREnginePy.cpp"
 #include "ScriptingLogs.h"
-#include "../ecs/ECS/Entity.h"
-#include "../ecs/ECS/Components.h"
-#include "../ecs/ECS/Systems.h"
+#include "../ecs/Entity/Entity.h"
+#include "../ecs/Components/Components.h"
 
 
 namespace mar {
@@ -98,7 +97,7 @@ namespace mar {
 
             auto& tran = e->getComponent<ecs::TransformComponent>();
             tran = module.attr("transform").cast<ecs::TransformComponent>();
-            ecs::System::handleTransformComponent(tran);
+            tran.recalculate();
 
             if (e->hasComponent<ecs::LightComponent>()) {
                 auto& light = e->getComponent<ecs::LightComponent>();

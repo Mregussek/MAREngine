@@ -18,53 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_SCRIPTING_ENGINE_TRAMPOLINE_H
-#define MAR_ENGINE_SCRIPTING_ENGINE_TRAMPOLINE_H
-
-
-#include "../../mar.h"
-#include "../ecs/Components/Components.h"
-#include "../ecs/Entity/Entity.h"
+#include "ScriptingComponents.h"
+#include "../../../Engine.h"
+#include "../ECSLogs.h"
 
 
 namespace mar {
-	namespace scripting {
+	namespace ecs {
 
 
-		class PyEntity {
-		public:
-			ecs::TransformComponent transform;
-			ecs::LightComponent light;
-			ecs::CameraComponent camera;
-			ecs::ColorComponent color;
+		std::string ScriptComponent::changeSlashesToDots(std::string str) {
+			str = engine::MAREngine::getEngine()->getAssetsPath() + str;
 
-			virtual void start() { }
-			virtual void update() { }
-		};
+			size_t pos = str.find("/");
 
-		class PyTrampoline : public PyEntity {
-		public:
-			using PyEntity::PyEntity;
-
-			void start() override {
-				PYBIND11_OVERLOAD(
-					void,
-					PyEntity,
-					start
-				);
+			while (pos != std::string::npos) {
+				str.replace(pos, 1, ".");
+				pos = str.find("/", pos + 1);
 			}
 
-			void update() override {
-				PYBIND11_OVERLOAD(
-					void,
-					PyEntity,
-					update
-				);
-			}
-		};
+			std::string rtn = str.substr(0, str.size() - 3);
+
+			ECS_TRACE("SCRIPT_COMPONENT: changing slashes {} to dots {}", str, rtn);
+
+			return rtn;
+		}
+
+		std::string ScriptComponent::getModuleFromPath(std::string str) {
+			str = str.substr(str.find_last_of("/") + 1, str.size());
+			std::string rtn = str.substr(0, str.size() - 3);
+
+			ECS_TRACE("SCRIPT_COMPONENT: returning module {} from path {}", str, rtn);
+
+			return rtn;
+		}
 
 
 } }
-
-
-#endif // !MAR_ENGINE_SCRIPTING_ENGINE_EMBED_HELPERS_H

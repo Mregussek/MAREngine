@@ -19,7 +19,6 @@
 
 
 #include "EditorFilesystem.h"
-#include "../../Core/ecs/ECS/Systems.h"
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../EditorLogging.h"
 #include "Filesystem_Saving.h"

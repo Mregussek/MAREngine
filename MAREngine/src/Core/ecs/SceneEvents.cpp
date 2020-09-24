@@ -20,8 +20,8 @@
 
 #include "SceneEvents.h"
 #include "SceneManager.h"
-#include "ECS/Entity.h"
-#include "ECS/EntityCollection.h"
+#include "Entity/Entity.h"
+#include "Entity/EntityCollection.h"
 #include "ECSLogs.h"
 
 

@@ -20,9 +20,9 @@
 
 #include "MeshCreator.h"
 #include "../GraphicsLogs.h"
-#include "../../ecs/ECS/EntityCollection.h"
-#include "../../ecs/ECS/Entity.h"
-#include "../../ecs/ECS/Components.h"
+#include "../../ecs/Entity/EntityCollection.h"
+#include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Components/Components.h"
 
 
 namespace mar {

@@ -19,9 +19,8 @@
 
 
 #include "ScenePlayStorage.h"
-#include "ECS/Entity.h"
-#include "ECS/EntityCollection.h"
-#include "ECS/Systems.h"
+#include "Entity/Entity.h"
+#include "Entity/EntityCollection.h"
 
 
 namespace mar {
@@ -74,7 +73,7 @@ namespace mar {
 			tran.angles = storage.transform.angles;
 			tran.scale = storage.transform.scale;
 
-			System::handleTransformComponent(tran);
+			tran.recalculate();
 
 			if (entity.hasComponent<LightComponent>()) {
 				auto& light = entity.getComponent<LightComponent>();

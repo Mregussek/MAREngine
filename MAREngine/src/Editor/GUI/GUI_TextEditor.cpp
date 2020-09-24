@@ -19,8 +19,8 @@
 
 
 #include "GUI_TextEditor.h"
-#include "../../Core/ecs/ECS/Systems.h"
 #include "../Filesystem/EditorFilesystem.h"
+#include "../../Core/ecs/Components/ScriptingComponents.h"
 
 
 namespace mar {
@@ -177,7 +177,7 @@ namespace mar {
 
 			if (ImGui::Button("Create")) {
 				std::string s = DEFAULT_SCRIPT;
-				std::string repl = ecs::System::getModuleFromPath(save);
+				std::string repl = ecs::ScriptComponent::getModuleFromPath(save);
 				ReplaceStringInPlace(s, "<put here name>", repl);
 				Filesystem::savePyScript(save.c_str(), s);
 				setEditorTitle(save.c_str());
@@ -244,7 +244,7 @@ namespace mar {
 			// TODO: make sure that scriptPath is a PythonScript ex. resources/Script.py
 
 			std::string s = DEFAULT_SCRIPT;
-			std::string repl = ecs::System::getModuleFromPath(scriptPath);
+			std::string repl = ecs::ScriptComponent::getModuleFromPath(scriptPath);
 			ReplaceStringInPlace(s, "<put here name>", repl);
 
 			setEditorTitle(scriptPath.c_str());

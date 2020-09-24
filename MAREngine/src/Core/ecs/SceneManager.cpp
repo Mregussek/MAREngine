@@ -24,9 +24,8 @@
 #include "SceneEvents.h"
 #include "Scene.h"
 
-#include "ECS/EntityCollection.h"
-#include "ECS/Entity.h"
-#include "ECS/Systems.h"
+#include "Entity/EntityCollection.h"
+#include "Entity/Entity.h"
 
 #include "../../Editor/Camera/Camera.h"
 
@@ -175,8 +174,8 @@ namespace mar {
 
 				if (entity.hasComponent<ScriptComponent>()) {
 					auto& sc = entity.getComponent<ScriptComponent>();
-					std::string from = System::changeSlashesToDots(sc.script);
-					std::string what = System::getModuleFromPath(sc.script);
+					std::string from = ScriptComponent::changeSlashesToDots(sc.script);
+					std::string what = ScriptComponent::getModuleFromPath(sc.script);
 
 					sc.ps.loadScript(from.c_str(), what.c_str());
 					sc.ps.start(&entity);
@@ -189,8 +188,8 @@ namespace mar {
 				for (auto& entity : collection.getEntities()) {
 					if (entity.hasComponent<ScriptComponent>()) {
 						auto& sc = entity.getComponent<ScriptComponent>();
-						std::string from = System::changeSlashesToDots(sc.script);
-						std::string what = System::getModuleFromPath(sc.script);
+						std::string from = ScriptComponent::changeSlashesToDots(sc.script);
+						std::string what = ScriptComponent::getModuleFromPath(sc.script);
 
 						sc.ps.loadScript(from.c_str(), what.c_str());
 						sc.ps.start(&entity);

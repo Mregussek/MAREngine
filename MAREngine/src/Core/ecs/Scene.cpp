@@ -19,9 +19,9 @@
 
 
 #include "Scene.h"
-#include "ECS/Components.h"
-#include "ECS/Entity.h"
-#include "ECS/EntityCollection.h"
+#include "Components/Components.h"
+#include "Entity/Entity.h"
+#include "Entity/EntityCollection.h"
 #include "ECSLogs.h"
 
 

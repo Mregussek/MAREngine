@@ -23,8 +23,8 @@
 #include "GUI_EntityPanel.h"
 #include "GUI_TextEditor.h"
 
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
+#include "../../Core/ecs/Entity/Entity.h"
+#include "../../Core/ecs/Entity/EntityCollection.h"
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "../../Core/ecs/SceneManager.h"

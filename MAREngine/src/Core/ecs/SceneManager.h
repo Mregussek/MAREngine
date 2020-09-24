@@ -23,7 +23,7 @@
 
 
 #include "../../mar.h"
-#include "ECS/Components.h"
+#include "Components/Components.h"
 #include "ScenePlayStorage.h"
 
 

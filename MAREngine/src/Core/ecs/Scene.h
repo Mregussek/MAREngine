@@ -24,7 +24,7 @@
 
 #include "../../mar.h"
 #include "../graphics/Renderer/RenderCamera.h"
-#include "ECS/EntityContainer.h"
+#include "Entity/EntityContainer.h"
 
 
 namespace mar {

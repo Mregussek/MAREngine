@@ -25,9 +25,8 @@
 
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/Systems.h"
+#include "../../Core/ecs/Entity/Entity.h"
+#include "../../Core/ecs/Components/Components.h"
 #include "../../Core/ecs/SceneEvents.h"
 
 #include "../../Platform/OpenGL/TextureOpenGL.h"
@@ -244,7 +243,7 @@ namespace mar {
 				}
 
 				if (updated_transform) {
-					ecs::System::handleTransformComponent(tran);
+					tran.recalculate();
 					if(!is_play_mode) ecs::SceneEvents::Instance().updateTransform(currentEntity, currentIndex);
 				}
 			}

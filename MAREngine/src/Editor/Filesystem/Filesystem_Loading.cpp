@@ -21,10 +21,9 @@
 #include "Filesystem_Loading.h"
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/ECS/Systems.h"
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
+#include "../../Core/ecs/Entity/Entity.h"
+#include "../../Core/ecs/Entity/EntityCollection.h"
+#include "../../Core/ecs/Components/Components.h"
 
 
 namespace mar {
@@ -136,7 +135,7 @@ namespace mar {
 						transform.scale += (transform.scale - tran.scale);
 						transform.general_scale += (transform.general_scale - tran.general_scale);
 
-						ecs::System::handleTransformComponent(transform);
+						transform.recalculate();
 					}
 				}
 				else if (line.find("#EntityCollectionEnd") != std::string::npos) {
@@ -197,7 +196,7 @@ namespace mar {
 
 					tran.general_scale = arr[0];
 
-					ecs::System::handleTransformComponent(tran);
+					tran.recalculate();
 				}
 				else if (line.find("#RenderableComponent") != std::string::npos) {
 					auto& ren = !currentEntity->hasComponent<ecs::RenderableComponent>() ?

@@ -23,10 +23,9 @@
 #include "GUI_TextEditor.h"
 #include "../EditorLogging.h"
 
-#include "../../Core/ecs/ECS/Components.h"
-#include "../../Core/ecs/ECS/Systems.h"
-#include "../../Core/ecs/ECS/Entity.h"
-#include "../../Core/ecs/ECS/EntityCollection.h"
+#include "../../Core/ecs/Components/Components.h"
+#include "../../Core/ecs/Entity/Entity.h"
+#include "../../Core/ecs/Entity/EntityCollection.h"
 #include "../../Core/ecs/SceneEvents.h"
 
 #include "../../Window/Input.h"
@@ -136,7 +135,7 @@ namespace mar {
 						transform.scale += diff_scale;
 						transform.general_scale += diff_generalscale;
 
-						ecs::System::handleTransformComponent(transform);
+						transform.recalculate();
 					}
 
 					ecs::SceneEvents::Instance().onCollectionTransformUpdate();
@@ -154,7 +153,7 @@ namespace mar {
 						transform.scale = tran.scale;
 						transform.general_scale = tran.general_scale;
 
-						ecs::System::handleTransformComponent(transform);
+						transform.recalculate();
 					}
 
 					ecs::SceneEvents::Instance().onCollectionTransformUpdate();

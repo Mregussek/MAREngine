@@ -26,7 +26,7 @@
 #include "../ECSLogs.h"
 #include "Entity.h"
 #include "../SceneRegistry.h"
-#include "Components.h"
+#include "../Components/Components.h"
 
 
 namespace mar {

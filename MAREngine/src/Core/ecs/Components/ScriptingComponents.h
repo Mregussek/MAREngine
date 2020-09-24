@@ -18,30 +18,38 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_H
+#ifndef MAR_ENGINE_ECS_COMPONENTS_SCRIPTING_COMPONENTS_H
+#define MAR_ENGINE_ECS_COMPONENTS_SCRIPTING_COMPONENTS_H
 
 
-#include "../../mar.h"
-#include "../../Core/ecs/Scene.h"
+#include "../../../mar.h"
+#include "../../scripting/PythonScript.h"
 
 
 namespace mar {
-	namespace editor {
+	namespace ecs {
 
 
-		class Filesystem {
-		public:
+		struct ScriptComponent {
+			std::string script{ "empty" };
+			std::string source{ "empty" };
+			scripting::PythonScript ps;
 
-			static void saveToFile(ecs::Scene* scene, const char* filename);
-			static ecs::Scene* openFile(std::string filename);
+			ScriptComponent() = default;
+			ScriptComponent(const ScriptComponent& sc) = default;
+			ScriptComponent(std::string s)
+				: script(s)
+			{}
 
-			static std::string loadPyScript(const char* filename);
-			static void savePyScript(const char* filename, std::string source);
+			operator std::string& () { return script; }
+			operator const std::string& () const { return script; }
+
+			static std::string changeSlashesToDots(std::string str);
+			static std::string getModuleFromPath(std::string str);
 		};
 
 
 } }
 
 
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_H
+#endif // !MAR_ENGINE_ECS_COMPONENTS_SCRIPTING_COMPONENTS_H
