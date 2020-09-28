@@ -253,6 +253,7 @@
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityCollection.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h" />
+    <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h" />
     <ClInclude Include="src\Core\ecs\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
@@ -269,6 +270,7 @@
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\GUI\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
+    <ClInclude Include="src\Editor\GUI\GUI_MainMenuBar.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
@@ -333,6 +335,7 @@
     <ClCompile Include="src\Core\ecs\Components\DefaultComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Components\ScriptingComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\EntityCollection-impl.cpp" />
+    <ClCompile Include="src\Core\ecs\Entity\EntityOperation.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
@@ -352,6 +355,7 @@
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Graphics.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_Info.cpp" />
+    <ClCompile Include="src\Editor\GUI\GUI_MainMenuBar.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />

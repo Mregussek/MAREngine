@@ -58,6 +58,8 @@ namespace mar {
 
 			void updatedScript(Entity* e, int32_t i);
 
+			void onEntityCopy();
+
 			void onEntityRemove();
 
 			void onCollectionTransformUpdate();

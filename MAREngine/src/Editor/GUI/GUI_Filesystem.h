@@ -45,8 +45,6 @@ namespace mar {
 			static void SetOpenLoadOBJfile(const char* name);
 			static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
 
-			static void Filesystem_AssetManager(const char* name);
-
 		};
 
 

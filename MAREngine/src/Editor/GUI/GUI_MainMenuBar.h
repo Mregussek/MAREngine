@@ -18,38 +18,44 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_COMPONENTS_H
-#define MAR_ENGINE_ECS_COMPONENTS_H
+#ifndef MAR_ENGINE_EDITOR_GUI_MAIN_MENU_BAR_H
+#define MAR_ENGINE_EDITOR_GUI_MAIN_MENU_BAR_H
 
 
-#include "DefaultComponents.h"
-#include "TextureComponents.h"
-#include "ScriptingComponents.h"
-#include "CameraComponents.h"
-#include "LightComponents.h"
+#include "../../mar.h"
 
 
 namespace mar {
-	namespace ecs {
+	namespace ecs { class SceneManager; /* forward declaration */ }
+
+	namespace editor {
 
 
-		typedef std::variant<
-			Components,
-			TagComponent,
-			TransformComponent,
-			RenderableComponent,
-			CollectionRenderableComponent,
-			CameraComponent,
-			LightComponent,
-			ColorComponent,
-			Texture2DComponent,
-			TextureCubemapComponent,
-			ScriptComponent
-		> variant_components;
+		class GUI_MainMenuBar {
+			bool m_newSceneWindow{ false };
+			bool m_loadSceneWindow{ false };
+			bool m_saveSceneWindow{ false };
+			bool m_loadOBJfileWindow{ false };
+			bool m_infoWindow{ false };
+			bool m_instructionWindow{ false };
 
+			ecs::SceneManager* m_sceneManager;
+
+		public:
+
+			GUI_MainMenuBar() = default;
+
+			void setSceneManager(ecs::SceneManager* manager);
+			void display();
+
+		private:
+
+			void display_mainMenuBar();
+
+		};
 
 
 } }
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_H
+#endif // !MAR_ENGINE_EDITOR_GUI_MAIN_MENU_BAR_H

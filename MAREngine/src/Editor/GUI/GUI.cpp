@@ -21,31 +21,21 @@
 #include "GUI.h"
 
 #include "../EditorLogging.h"
-#include "../Filesystem/EditorFilesystem.h"
 
-#include "../../Core/ecs/Entity/Entity.h"
-#include "../../Core/ecs/Components/Components.h"
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneManager.h"
 
 #include "../../Window/Window.h"
-#include "../../Window/Input.h"
 
 #include "GUI_TextEditor.h"
 #include "GUI_SceneHierarchy.h"
 #include "GUI_EntityPanel.h"
 #include "GUI_EntityCollectionPanel.h"
-#include "GUI_Filesystem.h"
-#include "GUI_Info.h"
 #include "GUI_Theme.h"
 
 
 namespace mar {
 	namespace editor {
-
-
-		bool GUI::s_dockspaceOpen{ true };
-		bool GUI::s_fullscreenPersisant{ true };
 
 
 		void GUI::initialize(const char* glsl_version) {
@@ -131,54 +121,12 @@ namespace mar {
 
 			GUI_TextEditor::Instance().update();
 
-			Editor_MainMenuBar();
+			m_mainMenuBar.display();
 			Editor_ViewPort();
 			Editor_Properties();
 
 			GUI_EntityPanel::Scene_Entity_Modify(m_sceneManager->isPlayMode());
 			GUI_EntityCollectionPanel::Scene_EntityCollection_Modify();
-
-			{
-				const char* new_file = "New Scene";
-				if (m_newSceneWindow) {
-					GUI_Filesystem::SetOpenNewScene(new_file);
-					m_newSceneWindow = false;
-				}
-				GUI_Filesystem::Filesystem_NewScene(new_file);
-			}
-			{
-				const char* open_file = "Open Scene";
-				if (m_loadSceneWindow) {
-					GUI_Filesystem::SetOpenLoadScene(open_file);
-					m_loadSceneWindow = false;
-				}
-				GUI_Filesystem::Filesystem_LoadScene(open_file);
-			}
-			{
-				const char* save_file = "Save Scene";
-				if (m_saveSceneWindow) {
-					GUI_Filesystem::SetOpenSaveScene(save_file);
-					m_saveSceneWindow = false;
-				}
-				GUI_Filesystem::Filesystem_SaveScene(save_file, m_sceneManager->getScene());
-			} 
-			{
-				const char* load_obj = "OBJ Loader";
-				if (m_loadOBJfileWindow) {
-					GUI_Filesystem::SetOpenLoadOBJfile(load_obj);
-					m_loadOBJfileWindow = false;
-				}
-				GUI_Filesystem::Filesystem_LoadOBJfile(load_obj, m_sceneManager->getScene());
-			}
-
-			GUI_Filesystem::Filesystem_AssetManager("AssetManager");
-			
-			if (m_infoWindow) { 
-				GUI_Info::Menu_Info(m_infoWindow); 
-			}
-			if (m_instructionWindow) { 
-				GUI_Info::Menu_Instruction(m_instructionWindow); 
-			}
 
 			EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 		}
@@ -192,64 +140,8 @@ namespace mar {
 			EDITOR_TRACE("GUI: ending frame! (rendering gathered data)");
 		}
 
-		void GUI::Editor_MainMenuBar() {
-			if (ImGui::BeginMainMenuBar()) {
-				if (ImGui::BeginMenu("Scene")) {
-					if(ImGui::MenuItem("New Scene")) {
-						m_newSceneWindow = true;
-					}
-
-					if (ImGui::MenuItem("Open Scene")) {
-						m_loadSceneWindow = true;
-					}
-
-					if (ImGui::MenuItem("Save Scene")) {
-						m_saveSceneWindow = true;
-					}
-
-					if (ImGui::MenuItem("Exit")) {
-						window::Window::getInstance().endRenderLoop();
-					}
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::BeginMenu("Entities")) {
-					if (ImGui::MenuItem("Load external .obj file")) {
-						m_loadOBJfileWindow = true;
-					}
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::MenuItem("About")) {
-					m_infoWindow = true;
-					m_instructionWindow = true;
-				}
-
-				if (ImGui::MenuItem("Exit")) {
-					window::Window::getInstance().endRenderLoop();
-				}
-
-				ImGui::EndMainMenuBar();
-			}
-
-			EDITOR_TRACE("GUI: pushing main menu bar");
-		}
-
 		void GUI::Editor_ViewPort() {
 			ImGui::Begin("ViewPort", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
-
-			if (ImGui::IsWindowFocused()) {
-				m_mouseViewportX = window::Input::getMousePositionX();
-				m_mouseViewportY = window::Input::getMousePositionY();
-				m_enableViewportInput = true;
-			}
-			else {
-				m_mouseViewportX = 0.f;
-				m_mouseViewportY = 0.f;
-				m_enableViewportInput = false;
-			}
 
 			if (ImGui::BeginMenuBar()) {
 				if (m_sceneManager->isEditorMode()) {
@@ -313,6 +205,7 @@ namespace mar {
 			m_sceneManager = scene;
 			m_sceneManager->useEditorCamera = true;
 			GUI_EntityPanel::render_cam = &m_sceneManager->getScene()->getRenderCamera();
+			m_mainMenuBar.setSceneManager(m_sceneManager);
 
 			EDITOR_INFO("GUI: scene has been submitted!");
 		}

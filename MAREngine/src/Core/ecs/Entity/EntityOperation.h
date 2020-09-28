@@ -18,38 +18,37 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_COMPONENTS_H
-#define MAR_ENGINE_ECS_COMPONENTS_H
+#ifndef MAR_ENGINE_ECS_ENTITY_OPERATION_H
+#define MAR_ENGINE_ECS_ENTITY_OPERATION_H
 
 
-#include "DefaultComponents.h"
-#include "TextureComponents.h"
-#include "ScriptingComponents.h"
-#include "CameraComponents.h"
-#include "LightComponents.h"
+#include "../../../mar.h"
+#include "../Components/Components.h"
 
 
 namespace mar {
 	namespace ecs {
 
+		class Entity; class EntityCollection;
 
-		typedef std::variant<
-			Components,
-			TagComponent,
-			TransformComponent,
-			RenderableComponent,
-			CollectionRenderableComponent,
-			CameraComponent,
-			LightComponent,
-			ColorComponent,
-			Texture2DComponent,
-			TextureCubemapComponent,
-			ScriptComponent
-		> variant_components;
 
+		class EntityOperation {
+		public:
+
+			static void copyEntity(Entity* src, Entity* dst);
+			static void copyCollection(EntityCollection* src, EntityCollection* dst);
+
+		private:
+
+			template<typename T>
+			static void copyComponent(EntityComponents entcmp, Entity* src, Entity* dst);
+
+			template<typename T>
+			static void copyComponent(EntityCollection* src, EntityCollection* dst);
+		};
 
 
 } }
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_H
+#endif // !MAR_ENGINE_ECS_ENTITY_OPERATION_H

@@ -79,17 +79,15 @@ namespace mar {
 		Entity& Scene::createEntity() {
 			ECS_INFO("SCENE: going to create entity!");
 
-			Entity entity{ &m_sceneRegistry };
+			auto& entity = m_container.m_entities.emplace_back(&m_sceneRegistry);
 
 			entity.addDefault();
 			entity.addComponent<TagComponent>(ECS_TAG);
 			entity.addComponent<TransformComponent>(ECS_TRANSFORM);
 
-			m_container.m_entities.push_back(entity);
+			ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
 
-			ECS_INFO("SCENE: created entity!");
-
-			return m_container.m_entities[m_container.m_entities.size() - 1];
+			return entity;
 		}
 
 		void Scene::destroyEntity(int32_t index) {
@@ -122,14 +120,14 @@ namespace mar {
 		EntityCollection& Scene::createCollection() {
 			ECS_INFO("SCENE: going to create entity collection!");
 
-			EntityCollection collection{ &m_sceneRegistry };
+			auto& collection = m_container.m_collections.emplace_back(&m_sceneRegistry);
 
 			collection.addComponent<TagComponent>("DefaultName");
 			collection.addComponent<TransformComponent>();
 
-			m_container.m_collections.push_back(collection);
+			ECS_TRACE("SCENE: create collection {} at scene {}", collection.m_collectionHandle, m_name);
 
-			return m_container.m_collections[m_container.m_collections.size() - 1];
+			return collection;
 		}
 
 		void Scene::destroyCollection(int32_t index) {
@@ -144,7 +142,7 @@ namespace mar {
 		void Scene::destroyEntityAtCollection(int32_t collection_index, int32_t entity_index) {
 			m_container.m_collections[collection_index].destroyEntity(entity_index);
 
-			ECS_INFO("SCENE: called destroyEntity({}) at collection {}", entity_index, collection_index);
+			ECS_INFO("SCENE: called destroyEntity({}) at collection {}, scene - ", entity_index, collection_index, m_name);
 		}
 
 		const std::vector<EntityCollection>& Scene::getCollections() const { 

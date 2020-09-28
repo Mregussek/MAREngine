@@ -56,7 +56,7 @@ namespace mar {
 
 			std::vector<std::pair<maths::vec3, ecs::LightComponent>> m_lights;
 
-			RenderCamera* m_camera;
+			RenderCamera* m_camera{ nullptr };
 
 		public:
 

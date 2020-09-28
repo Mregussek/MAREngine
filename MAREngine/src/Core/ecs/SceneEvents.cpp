@@ -79,6 +79,12 @@ namespace mar {
 			ECS_TRACE("SCENE_EVENTS: updatedScript!");
 		}
 
+		void SceneEvents::onEntityCopy() {
+			scene_manager->initialize();
+
+			ECS_TRACE("SCENE_EVENTS: onEntityCopy");
+		}
+
 		void SceneEvents::onEntityRemove() {
 			scene_manager->initialize();
 

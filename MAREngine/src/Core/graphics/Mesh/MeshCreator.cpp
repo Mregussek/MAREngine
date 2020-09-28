@@ -126,6 +126,7 @@ namespace mar {
         void MeshCreator::loadOBJ(std::string filename, std::string path, ecs::EntityCollection& collection) {
             objl::Loader Loader;
             bool loadout = Loader.LoadFile(path);
+
             if (loadout) {
                 for (size_t i = 0; i < Loader.LoadedMeshes.size(); i++) {
                     auto& entity = collection.createEntity();
@@ -157,6 +158,9 @@ namespace mar {
 
                     renderable.indices = curMesh.Indices;
                 }
+            }
+            else {
+                GRAPHICS_ERROR("MESH_CREATOR: could not load .obj file {}", path);
             }
         }
 

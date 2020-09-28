@@ -71,39 +71,39 @@ namespace mar {
 				return isValid();
 			}
 
-			void addComponent(EntityComponents entcmp) {
+			variant_components addComponent(EntityComponents entcmp) {
 				ECS_TRACE("ENTITY: {} adding component implicitly!", m_entityHandle);
 
 				switch (entcmp) {
 				case ECS_RENDERABLE:
-					addComponent<RenderableComponent>(ECS_RENDERABLE, "empty");
+					return addComponent<RenderableComponent>(ECS_RENDERABLE, "empty");
 					break;
 				case ECS_COLOR:
-					addComponent<ColorComponent>(ECS_COLOR);
+					return addComponent<ColorComponent>(ECS_COLOR);
 					break;
 				case ECS_TEXTURE2D:
-					addComponent<Texture2DComponent>(ECS_TEXTURE2D);
+					return addComponent<Texture2DComponent>(ECS_TEXTURE2D);
 					break;
 				case ECS_CUBEMAP:
-					addComponent<TextureCubemapComponent>(ECS_CUBEMAP);
+					return addComponent<TextureCubemapComponent>(ECS_CUBEMAP);
 					break;
 				case ECS_LIGHT:
-					addComponent<LightComponent>(ECS_LIGHT);
+					return addComponent<LightComponent>(ECS_LIGHT);
 					break;
 				case ECS_CAMERA:
-					addComponent<CameraComponent>(ECS_CAMERA);
+					return addComponent<CameraComponent>(ECS_CAMERA);
 					break;
 				case ECS_SCRIPT:
-					addComponent<ScriptComponent>(ECS_SCRIPT);
+					return addComponent<ScriptComponent>(ECS_SCRIPT);
 					break;
 				case ECS_TRANSFORM:
-					addComponent<TransformComponent>(ECS_TRANSFORM);
+					return addComponent<TransformComponent>(ECS_TRANSFORM);
 					break;
 				case ECS_TAG:
-					addComponent<TagComponent>(ECS_TAG);
+					return addComponent<TagComponent>(ECS_TAG);
 					break;
 				case ECS_DEFAULT:
-					addComponent<ColorComponent>(ECS_DEFAULT);
+					return addComponent<Components>(ECS_DEFAULT);
 					break;
 				}
 			}
@@ -169,6 +169,7 @@ namespace mar {
 			// ----------------------------------------------------
 
 		private:
+			friend class EntityCollection;
 			friend class Scene;
 
 			entt::entity m_entityHandle{ entt::null };

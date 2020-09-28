@@ -129,10 +129,5 @@ namespace mar {
 			}	
 		}
 
-		void GUI_Filesystem::Filesystem_AssetManager(const char* name) {
-
-		}
-
-
 
 } }

@@ -23,6 +23,7 @@
 
 
 #include "../../mar.h"
+#include "GUI_MainMenuBar.h"
 #include "../../Platform/OpenGL/FrameBufferOpenGL.h"
 
 
@@ -66,7 +67,6 @@ namespace mar {
 			void endFrame();
 
 			// --- EDITOR --- //
-			void Editor_MainMenuBar();
 			void Editor_ViewPort();
 			void Editor_Properties();
 
@@ -78,16 +78,11 @@ namespace mar {
 			float m_mouseViewportX{ 0.f };
 			float m_mouseViewportY{ 0.f };
 			bool m_enableViewportInput{ false };
+			// --- MainMenuBar
+			GUI_MainMenuBar m_mainMenuBar;
 			// --- Dockspace
-			static bool s_dockspaceOpen;
-			static bool s_fullscreenPersisant;
-			// --- Should Window Be Opened ?
-			bool m_newSceneWindow{ false };
-			bool m_saveSceneWindow{ false };
-			bool m_loadSceneWindow{ false };
-			bool m_loadOBJfileWindow{ false };
-			bool m_infoWindow{ false };
-			bool m_instructionWindow{ false };
+			bool s_dockspaceOpen{ true };
+			bool s_fullscreenPersisant{ true };
 		};
 
 

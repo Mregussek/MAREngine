@@ -39,7 +39,7 @@ namespace mar {
 			friend class Scene;
 
 			std::vector<Entity> m_entities;
-			entt::entity m_entityHandle{ entt::null };
+			entt::entity m_collectionHandle{ entt::null };
 			SceneRegistry* m_scene{ nullptr };
 
 		public:
@@ -47,12 +47,12 @@ namespace mar {
 
 			EntityCollection(SceneRegistry* scene)
 				: m_scene(scene),
-				m_entityHandle(scene->m_registry.create())
+				m_collectionHandle(scene->m_registry.create())
 			{}
 
 			EntityCollection(const EntityCollection& other)
 				: m_scene(other.m_scene),
-				m_entityHandle(other.m_entityHandle),
+				m_collectionHandle(other.m_collectionHandle),
 				m_entities(other.m_entities)
 			{}
 
@@ -73,17 +73,15 @@ namespace mar {
 			Entity& createEntity() {
 				ECS_INFO("ENTITY_COLLECTION: going to create entity!");
 
-				Entity entity{ m_scene };
+				auto& entity = m_entities.emplace_back(m_scene);
 
 				entity.addDefault();
 				entity.addComponent<TagComponent>(ECS_TAG);
 				entity.addComponent<TransformComponent>(ECS_TRANSFORM);
 
-				m_entities.push_back(entity);
+				ECS_INFO("EntityCollection: created entity {} at collection {}!", entity.m_entityHandle, m_collectionHandle);
 
-				ECS_INFO("EntityCollection: created entity!");
-
-				return m_entities[m_entities.size() - 1];
+				return entity;
 			}
 
 			void destroyEntity(int32_t entity_index) {
@@ -110,23 +108,23 @@ namespace mar {
 				return m_entities.size();
 			}
 
-			template<typename T, typename... Args>
-			T& addComponent(Args&&... args) {
-				MAR_CORE_ASSERT(!m_scene->m_registry.has<T>(m_entityHandle), "ENTITY_COLLECTION: already has CollectionTagComponent!");
-
-				return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
-			}
-
 			template<typename T>
 			bool hasComponent() const {
-				return m_scene->m_registry.has<T>(m_entityHandle);
+				return m_scene->m_registry.has<T>(m_collectionHandle);
+			}
+
+			template<typename T, typename... Args>
+			T& addComponent(Args&&... args) {
+				MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY_COLLECTION: already has CollectionTagComponent!");
+
+				return m_scene->m_registry.emplace<T>(m_collectionHandle, std::forward<Args>(args)...);
 			}
 
 			template<typename T>
 			T& getComponent() const {
-				MAR_CORE_ASSERT(m_scene->m_registry.has<T>(m_entityHandle), "ENTITY_COLLECTION: does not have this component!");
+				MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: does not have this component!");
 
-				return m_scene->m_registry.get<T>(m_entityHandle);
+				return m_scene->m_registry.get<T>(m_collectionHandle);
 			}
 		};
 
