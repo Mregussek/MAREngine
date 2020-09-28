@@ -18,24 +18,38 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_INFO_H
-#define MAR_ENGINE_EDITOR_GUI_INFO_H
+#ifndef MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
+#define MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
 
 
-#include "../../mar.h"
+#include "../../../mar.h"
 
 
 namespace mar {
+	namespace ecs { class EntityCollection; struct TagComponent; /* forward declarations */ }
+
 	namespace editor {
 
 
-		struct GUI_Info {
-			static void Menu_Info(bool& should_be_open);
-			static void Menu_Instruction(bool& should_be_open);
+		struct GUI_EntityCollectionPanel {
+			static ecs::EntityCollection* currentCollection;
+			static int32_t currentIndex;
+
+			static void Scene_EntityCollection_Modify();
+
+			static void reset();
+
+		private:
+
+			static void Scene_EntityCollection_PopUp(const char* collection_tag);
+			static void Handle_TagComponent(ecs::TagComponent& tag);
+			static void Handle_TransformComponent();
+
 		};
 
 
 } }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_INFO_H
+
+#endif // !MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H

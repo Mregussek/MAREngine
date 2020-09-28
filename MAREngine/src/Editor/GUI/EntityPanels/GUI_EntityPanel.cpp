@@ -19,21 +19,21 @@
 
 
 #include "GUI_EntityPanel.h"
-#include "GUI_TextEditor.h"
+#include "../GUI_TextEditor.h"
 
-#include "../EditorLogging.h"
+#include "../../EditorLogging.h"
 
-#include "../../Core/graphics/Mesh/MeshCreator.h"
+#include "../../../Core/graphics/Mesh/MeshCreator.h"
 
-#include "../../Core/ecs/Entity/Entity.h"
-#include "../../Core/ecs/Components/Components.h"
-#include "../../Core/ecs/SceneEvents.h"
+#include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/Components/Components.h"
+#include "../../../Core/ecs/SceneEvents.h"
 
-#include "../../Platform/OpenGL/TextureOpenGL.h"
-#include "../../Engine.h"
+#include "../../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../../Engine.h"
 
-#include "../Filesystem/EditorFilesystem.h"
-#include "../../Window/Input.h"
+#include "../../Filesystem/EditorFilesystem.h"
+#include "../../../Window/Input.h"
 
 
 

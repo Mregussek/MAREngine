@@ -31,10 +31,10 @@
 #include "../../Core/ecs/SceneManager.h"
 #include "../../Core/ecs/Scene.h"
 
-#include "GUI_EntityCollectionPanel.h"
-#include "GUI_Info.h"
+#include "EntityPanels/GUI_EntityCollectionPanel.h"
+#include "EntityPanels/GUI_EntityPanel.h"
+#include "Other/GUI_Info.h"
 #include "GUI_Filesystem.h"
-#include "GUI_EntityPanel.h"
 
 
 namespace mar {
@@ -118,6 +118,8 @@ namespace mar {
 						if (ImGui::MenuItem("Copy selected entity", shortcut)) {
 							auto& entity = m_sceneManager->getScene()->createEntity();
 							ecs::EntityOperation::copyEntity(GUI_EntityPanel::currentEntity, &entity);
+							GUI_EntityPanel::currentEntity = &entity;
+							GUI_EntityPanel::currentIndex = m_sceneManager->getScene()->getEntities().size() - 1;
 						}
 					}
 

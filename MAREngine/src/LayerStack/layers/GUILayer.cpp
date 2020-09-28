@@ -62,16 +62,9 @@ namespace mar {
 				if (m_gui->getCurrentEntity()) m_guiGraphics.passToDrawEntity(m_gui->getCurrentEntity());
 			}
 			
-			static bool last_input_state = m_gui->isViewportInputEnabled();
-
-			if (m_gui->isViewportInputEnabled()) {
-				bool firstMouse = last_input_state != m_gui->isViewportInputEnabled() ? false : true;
-				last_input_state = m_gui->isViewportInputEnabled();
-
-				m_camera.processInput();
-				//m_camera->ProcessMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
-				m_camera.ProcessMouseScroll(window::Input::getScrollY());
-			}
+			m_camera.processInput();
+			//m_camera->ProcessMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
+			m_camera.ProcessMouseScroll(window::Input::getScrollY());
 
 			m_camera.aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
 			m_camera.updateData();

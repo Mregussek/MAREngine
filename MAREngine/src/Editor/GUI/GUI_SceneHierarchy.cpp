@@ -19,8 +19,8 @@
 
 
 #include "GUI_SceneHierarchy.h"
-#include "GUI_EntityCollectionPanel.h"
-#include "GUI_EntityPanel.h"
+#include "EntityPanels/GUI_EntityCollectionPanel.h"
+#include "EntityPanels/GUI_EntityPanel.h"
 #include "GUI_TextEditor.h"
 
 #include "../../Core/ecs/Entity/Entity.h"

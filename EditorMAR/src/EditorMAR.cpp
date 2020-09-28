@@ -27,7 +27,7 @@ void EditorMAR::initialize() {
 
 	engine.initialize();
 
-	projectSelectionWindow();
+	//projectSelectionWindow();
 }
 
 void EditorMAR::projectSelectionWindow() {

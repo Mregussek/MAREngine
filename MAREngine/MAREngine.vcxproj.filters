@@ -84,12 +84,6 @@
     <ClInclude Include="src\Core\ecs\SceneManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\GUI\GUI_Info.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\GUI\GUI_Theme.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\GUI\GUI_Filesystem.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -303,12 +297,6 @@
     <ClInclude Include="src\Window\Input.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\GUI\GUI_EntityPanel.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\GUI\GUI_EntityCollectionPanel.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Loading.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -378,6 +366,18 @@
     <ClInclude Include="src\Editor\GUI\GUI_MainMenuBar.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_EntityPanel.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_EntityCollectionPanel.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\Other\GUI_Info.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\Other\GUI_Theme.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -408,9 +408,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\SceneManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\GUI\GUI_Info.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp">
@@ -503,12 +500,6 @@
     <ClCompile Include="src\Editor\Camera\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\GUI\GUI_EntityPanel.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\GUI\GUI_EntityCollectionPanel.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Saving.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -552,6 +543,18 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUI\GUI_MainMenuBar.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_EntityPanel.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_EntityCollectionPanel.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\Other\GUI_Info.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\Other\GUI_Theme.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

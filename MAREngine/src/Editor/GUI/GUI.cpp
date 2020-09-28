@@ -29,9 +29,9 @@
 
 #include "GUI_TextEditor.h"
 #include "GUI_SceneHierarchy.h"
-#include "GUI_EntityPanel.h"
-#include "GUI_EntityCollectionPanel.h"
-#include "GUI_Theme.h"
+#include "EntityPanels/GUI_EntityPanel.h"
+#include "EntityPanels/GUI_EntityCollectionPanel.h"
+#include "Other/GUI_Theme.h"
 
 
 namespace mar {

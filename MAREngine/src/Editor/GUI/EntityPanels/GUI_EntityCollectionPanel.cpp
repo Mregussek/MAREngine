@@ -20,15 +20,15 @@
 
 #include "GUI_EntityCollectionPanel.h"
 #include "GUI_EntityPanel.h"
-#include "GUI_TextEditor.h"
-#include "../EditorLogging.h"
+#include "../GUI_TextEditor.h"
+#include "../../EditorLogging.h"
 
-#include "../../Core/ecs/Components/Components.h"
-#include "../../Core/ecs/Entity/Entity.h"
-#include "../../Core/ecs/Entity/EntityCollection.h"
-#include "../../Core/ecs/SceneEvents.h"
+#include "../../../Core/ecs/Components/Components.h"
+#include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/Entity/EntityCollection.h"
+#include "../../../Core/ecs/SceneEvents.h"
 
-#include "../../Window/Input.h"
+#include "../../../Window/Input.h"
 
 
 namespace mar {

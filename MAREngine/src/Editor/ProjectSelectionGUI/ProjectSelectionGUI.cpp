@@ -22,7 +22,7 @@
 #include "ProjectTemplatesWindow.h"
 #include "ProjectListWindow.h"
 #include "../../Window/Window.h"
-#include "../GUI/GUI_Theme.h"
+#include "../GUI/Other/GUI_Theme.h"
 
 
 namespace mar {
