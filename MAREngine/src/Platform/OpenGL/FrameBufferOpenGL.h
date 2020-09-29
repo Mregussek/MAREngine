@@ -60,7 +60,11 @@ namespace mar {
 			const uint32_t& getColorAttach() const { return m_colorAttachment; }
 			const uint32_t& getDepthAttach() const { return m_depthAttanchment; }
 			FrameBufferSpecification& getSpecification() { return m_specification; }
+			
+			// --- SET METHODS --- //
 
+			void setBackgroundColor(maths::vec3 background_color) { m_specification.backgroundColor = background_color; }
+			
 		private:
 
 			void createColorAttachment();

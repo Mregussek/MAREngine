@@ -38,16 +38,10 @@ namespace mar {
 			LAYER_TRACE("GUI_LAYER: {} going to initialize", m_debugName);
 
 			m_gui = gui;
-
 			m_gui->initialize("#version 330");
+			m_gui->getFramebuffer().setBackgroundColor(backgroundcolor);
 
-			auto& spec = m_gui->getFramebuffer().getSpecification();
-			spec.backgroundColor = backgroundcolor;
-
-			m_camera.aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
-
-			m_camera.initialize();
-			m_camera.updateData();
+			m_camera.initialize(m_gui->getViewportWidth() / m_gui->getViewportHeight());
 
 			m_guiGraphics.initialize();
 
@@ -62,13 +56,7 @@ namespace mar {
 				if (m_gui->getCurrentEntity()) m_guiGraphics.passToDrawEntity(m_gui->getCurrentEntity());
 			}
 			
-			m_camera.processInput();
-			//m_camera->ProcessMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
-			m_camera.ProcessMouseScroll(window::Input::getScrollY());
-
-			m_camera.aspectRatio = m_gui->getViewportWidth() / m_gui->getViewportHeight();
-			m_camera.updateData();
-
+			m_camera.update(m_gui->getViewportWidth() / m_gui->getViewportHeight());
 			m_gui->display();
 
 			LAYER_INFO("GUI_LAYER: {} displayed frame", m_debugName);

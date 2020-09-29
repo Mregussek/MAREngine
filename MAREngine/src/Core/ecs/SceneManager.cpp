@@ -52,7 +52,6 @@ namespace mar {
 			ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
 			auto& render_pipeline = graphics::RenderPipeline::getInstance();
-
 			render_pipeline.reset();
 
 			init(m_scene->getEntities(), render_pipeline);
