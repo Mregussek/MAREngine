@@ -22,7 +22,7 @@
 #define MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
 
 
-#include "../../mar.h"
+#include "../../../mar.h"
 
 
 namespace mar {

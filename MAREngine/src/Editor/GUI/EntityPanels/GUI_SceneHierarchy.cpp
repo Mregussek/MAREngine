@@ -19,20 +19,20 @@
 
 
 #include "GUI_SceneHierarchy.h"
-#include "EntityPanels/GUI_EntityCollectionPanel.h"
-#include "EntityPanels/GUI_EntityPanel.h"
-#include "GUI_TextEditor.h"
+#include "GUI_EntityCollectionPanel.h"
+#include "GUI_EntityPanel.h"
+#include "../GUI_TextEditor.h"
 
-#include "../../Core/ecs/Entity/Entity.h"
-#include "../../Core/ecs/Entity/EntityCollection.h"
-#include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneEvents.h"
-#include "../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/Entity/EntityCollection.h"
+#include "../../../Core/ecs/Scene.h"
+#include "../../../Core/ecs/SceneEvents.h"
+#include "../../../Core/ecs/SceneManager.h"
 
-#include "../../Window/Input.h"
-#include "../../Core/graphics/Renderer/RenderPipeline.h"
+#include "../../../Window/Input.h"
+#include "../../../Core/graphics/Renderer/RenderPipeline.h"
 
-#include "../EditorLogging.h"
+#include "../../EditorLogging.h"
 
 
 namespace mar {

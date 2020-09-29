@@ -28,7 +28,7 @@
 #include "../../Window/Window.h"
 
 #include "GUI_TextEditor.h"
-#include "GUI_SceneHierarchy.h"
+#include "EntityPanels/GUI_SceneHierarchy.h"
 #include "EntityPanels/GUI_EntityPanel.h"
 #include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "Other/GUI_Theme.h"

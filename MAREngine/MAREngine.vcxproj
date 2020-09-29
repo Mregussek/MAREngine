@@ -290,7 +290,7 @@
     <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_EntityPanel.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Filesystem.h" />
     <ClInclude Include="src\Editor\GUI\Other\GUI_Info.h" />
-    <ClInclude Include="src\Editor\GUI\GUI_SceneHierarchy.h" />
+    <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_SceneHierarchy.h" />
     <ClInclude Include="src\Editor\GUI\GUI_TextEditor.h" />
     <ClInclude Include="src\Editor\GUI\Other\GUI_Theme.h" />
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
@@ -356,7 +356,7 @@
     <ClCompile Include="src\Editor\GUI\GUI_Graphics.cpp" />
     <ClCompile Include="src\Editor\GUI\Other\GUI_Info.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_MainMenuBar.cpp" />
-    <ClCompile Include="src\Editor\GUI\GUI_SceneHierarchy.cpp" />
+    <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
     <ClCompile Include="src\Editor\GUI\Other\GUI_Theme.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />
