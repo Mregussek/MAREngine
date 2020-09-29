@@ -33,7 +33,7 @@ namespace mar {
 		struct ScriptComponent {
 			std::string script{ "empty" };
 			std::string source{ "empty" };
-			scripting::PythonScript ps;
+			scripting::PythonScript pythonScript;
 
 			ScriptComponent() = default;
 			ScriptComponent(const ScriptComponent& sc) = default;
@@ -43,9 +43,6 @@ namespace mar {
 
 			operator std::string& () { return script; }
 			operator const std::string& () const { return script; }
-
-			static std::string changeSlashesToDots(std::string str);
-			static std::string getModuleFromPath(std::string str);
 		};
 
 

@@ -177,7 +177,7 @@ namespace mar {
 
 			if (ImGui::Button("Create")) {
 				std::string s = DEFAULT_SCRIPT;
-				std::string repl = ecs::ScriptComponent::getModuleFromPath(save);
+				std::string repl = scripting::PythonScript::getModuleFromPath(save);
 				ReplaceStringInPlace(s, "<put here name>", repl);
 				Filesystem::savePyScript(save.c_str(), s);
 				setEditorTitle(save.c_str());
@@ -244,7 +244,7 @@ namespace mar {
 			// TODO: make sure that scriptPath is a PythonScript ex. resources/Script.py
 
 			std::string s = DEFAULT_SCRIPT;
-			std::string repl = ecs::ScriptComponent::getModuleFromPath(scriptPath);
+			std::string repl = scripting::PythonScript::getModuleFromPath(scriptPath);
 			ReplaceStringInPlace(s, "<put here name>", repl);
 
 			setEditorTitle(scriptPath.c_str());

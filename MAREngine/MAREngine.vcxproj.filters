@@ -527,9 +527,6 @@
     <ClCompile Include="src\Core\ecs\Entity\EntityCollection-impl.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\ecs\Components\ScriptingComponents.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\Components\DefaultComponents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>

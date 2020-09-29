@@ -21,6 +21,7 @@
 #include "PythonScript.h"
 #include "MAREnginePy.cpp"
 #include "ScriptingLogs.h"
+#include "../../Engine.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Components/Components.h"
 
@@ -30,88 +31,90 @@ namespace mar {
 
 
         PythonScript::PythonScript()
-            : initialized(false)
+            : m_initialized(false)
         {}
 
-        void PythonScript::loadScript(const char* from, const char* what) {
-            if (initialized)
-                scriptModule.reload();
-            else 
-                scriptModule = py::module::import(from);
+        void PythonScript::loadScript(std::string path_to_script) {
+            std::string from = changeSlashesToDots(path_to_script);
+            std::string what = getModuleFromPath(path_to_script);
 
-            module = scriptModule.attr(what)();
+            if (m_initialized) { m_scriptModule.reload(); }
+            else { 
+                m_scriptModule = py::module::import(from.c_str()); 
+                m_initialized = true;
+            }
 
-            initialized = true;
+            m_module = m_scriptModule.attr(what.c_str())();
 
             SCRIPTING_INFO("PYTHON_SCRIPT: Loaded script {} from {}", what, from);
         }
 
 		void PythonScript::start(const ecs::Entity* e) {
-            if (!initialized)
+            if (!m_initialized)
                 return;
 
-            module.attr("transform") = e->getComponent<ecs::TransformComponent>();
+            m_module.attr("transform") = e->getComponent<ecs::TransformComponent>();
 
             if (e->hasComponent<ecs::LightComponent>()) {
                 auto& light = e->getComponent<ecs::LightComponent>();
-                module.attr("light") = light;
+                m_module.attr("light") = light;
             }
 
             if (e->hasComponent<ecs::CameraComponent>()) {
                 auto& camera = e->getComponent<ecs::CameraComponent>();
-                module.attr("camera") = camera;
+                m_module.attr("camera") = camera;
             }
 
             if (e->hasComponent<ecs::ColorComponent>()) {
                 auto& color = e->getComponent<ecs::ColorComponent>();
-                module.attr("color") = color;
+                m_module.attr("color") = color;
             }
 
-            module.attr("start")();
+            m_module.attr("start")();
 
             SCRIPTING_TRACE("PYTHON_SCRIPT: Calling start method at python script");
         }
 
         void PythonScript::update(ecs::Entity* e) {
-            if (!initialized)
+            if (!m_initialized)
                 return;
 
-            module.attr("transform") = e->getComponent<ecs::TransformComponent>();
+            m_module.attr("transform") = e->getComponent<ecs::TransformComponent>();
 
             if (e->hasComponent<ecs::LightComponent>()) {
                 auto& light = e->getComponent<ecs::LightComponent>();
-                module.attr("light") = light;
+                m_module.attr("light") = light;
             }
 
             if (e->hasComponent<ecs::CameraComponent>()) {
                 auto& camera = e->getComponent<ecs::CameraComponent>();
-                module.attr("camera") = camera;
+                m_module.attr("camera") = camera;
             }
 
             if (e->hasComponent<ecs::ColorComponent>()) {
                 auto& color = e->getComponent<ecs::ColorComponent>();
-                module.attr("color") = color;
+                m_module.attr("color") = color;
             }
 
-            module.attr("update")();
+            m_module.attr("update")();
 
             auto& tran = e->getComponent<ecs::TransformComponent>();
-            tran = module.attr("transform").cast<ecs::TransformComponent>();
+            tran = m_module.attr("transform").cast<ecs::TransformComponent>();
             tran.recalculate();
 
             if (e->hasComponent<ecs::LightComponent>()) {
                 auto& light = e->getComponent<ecs::LightComponent>();
-                light = module.attr("light").cast<ecs::LightComponent>();
+                light = m_module.attr("light").cast<ecs::LightComponent>();
             }
 
             if (e->hasComponent<ecs::CameraComponent>()) {
                 auto& camera = e->getComponent<ecs::CameraComponent>();
-                camera = module.attr("camera").cast<ecs::CameraComponent>();
+                camera = m_module.attr("camera").cast<ecs::CameraComponent>();
             }
 
             if (e->hasComponent<ecs::ColorComponent>()) {
                 auto& color = e->getComponent<ecs::ColorComponent>();
-                color = module.attr("color").cast<ecs::ColorComponent>();
+                color = m_module.attr("color").cast<ecs::ColorComponent>();
             }
 
             SCRIPTING_TRACE("PYTHON_SCRIPT: Calling update method at python script");
@@ -127,6 +130,32 @@ namespace mar {
             sys.attr("path").attr("insert")(0, path);
 
             SCRIPTING_TRACE("PYTHON_SCRIPT: Appending current path to PyInterpreter");
+        }
+
+        std::string PythonScript::changeSlashesToDots(std::string script) {
+            std::string rtn = engine::MAREngine::getEngine()->getAssetsPath() + script;
+
+            size_t pos = rtn.find("/");
+
+            while (pos != std::string::npos) {
+                rtn.replace(pos, 1, ".");
+                pos = rtn.find("/", pos + 1);
+            }
+
+            rtn = rtn.substr(0, rtn.size() - 3);
+
+            ECS_TRACE("SCRIPT_COMPONENT: changing slashes {} to dots {}", script, rtn);
+
+            return rtn;
+        }
+
+        std::string PythonScript::getModuleFromPath(std::string script) {
+            std::string rtn = script.substr(script.find_last_of("/") + 1, script.size());
+            rtn = rtn.substr(0, rtn.size() - 3);
+
+            ECS_TRACE("SCRIPT_COMPONENT: returning module {} from path {}", script, rtn);
+
+            return rtn;
         }
 
 

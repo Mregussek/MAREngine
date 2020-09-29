@@ -69,8 +69,8 @@ namespace mar {
 
 			bool m_initialized{ false };
 
-			uint32_t m_id;
-			std::string m_shaderPath;
+			uint32_t m_id{ 0 };
+			std::string m_shaderPath{ "" };
 			std::unordered_map<std::string, int> m_uniformLocation;
 			ShaderProgramSource m_programSource;
 		};

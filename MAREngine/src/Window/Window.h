@@ -42,8 +42,8 @@ namespace mar {
 			static Window* s_instance;
 
 			platforms::WindowGLFW m_window;
-			uint32_t m_width;
-			uint32_t m_height;
+			uint32_t m_width{ 0 };
+			uint32_t m_height{ 0 };
 			maths::vec3 m_background;
 			bool m_closeAfterTerminate{ false };
 

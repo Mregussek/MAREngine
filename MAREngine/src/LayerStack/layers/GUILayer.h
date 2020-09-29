@@ -36,25 +36,27 @@ namespace mar {
 
 
 		class LayerGUI : public Layer {
+		public:
+
+			LayerGUI() = default;
+			LayerGUI(const char* name);
+
+			void initialize(editor::GUI* gui, maths::vec3 backgroundcolor);
+			void submit(ecs::SceneManager* manager);
+			void renderToViewport();
+
+			// --- OVERRIDED METHODS --- // 
+
+			void update() override;
+			void closeLayer() override;
+
+		private:
+
 			const char* m_debugName;
 			editor::GUI* m_gui;
 			editor::GUI_Graphics m_guiGraphics;
 			editor::Camera m_camera;
 
-		public:
-			LayerGUI() = default;
-			LayerGUI(const char* name);
-
-			void initialize(editor::GUI* gui, maths::vec3 backgroundcolor);
-
-			// --- OVERLOADED METHODS --- // 
-
-			void update() override;
-			void closeLayer() override;
-
-			// --- HELPERS --- //
-			void submit(ecs::SceneManager* manager);
-			void renderToViewport();
 		};
 
 

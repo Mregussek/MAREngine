@@ -66,10 +66,6 @@ namespace mar {
 			LAYER_INFO("ENTITY_LAYER: {} closed!", m_debugName);
 		}
 
-		graphics::RendererBatch* EntityLayer::getRenderer() {
-			return &m_renderer;
-		}
-
 		ecs::SceneManager* EntityLayer::getSceneManager() {
 			return &m_sceneManager; 
 		}

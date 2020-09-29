@@ -35,25 +35,23 @@ namespace mar {
 
 
 		class EntityLayer : public Layer {
-			const char* m_debugName;
-			ecs::SceneManager m_sceneManager;
-			graphics::RendererBatch m_renderer;
-
 		public:
 			EntityLayer(const char* debugname);
 
 			void initialize(ecs::Scene* scene = nullptr);
+			ecs::SceneManager* getSceneManager();
 
-			// --- OVERLOADED METHODS --- //
+			// --- OVERRIDED METHODS --- //
 
 			void update() override;
-
 			void closeLayer() override;
 
-			// --- GET METHODS --- //
+		private:
 
-			graphics::RendererBatch* getRenderer();
-			ecs::SceneManager* getSceneManager();
+			const char* m_debugName;
+			ecs::SceneManager m_sceneManager;
+			graphics::RendererBatch m_renderer;
+
 		};
 
 

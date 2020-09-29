@@ -118,14 +118,10 @@ namespace mar {
 		void SceneManager::update() {
 			ECS_TRACE("SCENE_MANAGER: going to update");
 
-			if (m_EditorMode) {
-				updateEditorMode();
-			}
+			if (m_EditorMode) { updateEditorMode(); }
 			else {
-				if (!m_PauseMode)
-					updatePlayMode();
-				else
-					updatePauseMode();
+				if (!m_PauseMode) { updatePlayMode(); }
+				else { updatePauseMode(); }	
 			}
 
 			ECS_INFO("SCENE_MANAGER: updated!");
@@ -173,11 +169,8 @@ namespace mar {
 
 				if (entity.hasComponent<ScriptComponent>()) {
 					auto& sc = entity.getComponent<ScriptComponent>();
-					std::string from = ScriptComponent::changeSlashesToDots(sc.script);
-					std::string what = ScriptComponent::getModuleFromPath(sc.script);
-
-					sc.ps.loadScript(from.c_str(), what.c_str());
-					sc.ps.start(&entity);
+					sc.pythonScript.loadScript(sc.script);
+					sc.pythonScript.start(&entity);
 				}
 			}
 
@@ -187,11 +180,8 @@ namespace mar {
 				for (auto& entity : collection.getEntities()) {
 					if (entity.hasComponent<ScriptComponent>()) {
 						auto& sc = entity.getComponent<ScriptComponent>();
-						std::string from = ScriptComponent::changeSlashesToDots(sc.script);
-						std::string what = ScriptComponent::getModuleFromPath(sc.script);
-
-						sc.ps.loadScript(from.c_str(), what.c_str());
-						sc.ps.start(&entity);
+						sc.pythonScript.loadScript(sc.script);
+						sc.pythonScript.start(&entity);
 					}
 				}
 			}
@@ -234,7 +224,7 @@ namespace mar {
 
 				if (entity.hasComponent<ScriptComponent>()) {
 					auto& sc = entity.getComponent<ScriptComponent>();
-					sc.ps.update(&entity);
+					sc.pythonScript.update(&entity);
 
 					if (entity.hasComponent<RenderableComponent>()) {
 						render_pipeline.modifyTransform(tran, transform_counter);
@@ -284,8 +274,7 @@ namespace mar {
 		// -------------------------------------------------------------
 
 		void SceneManager::submitCamera(TransformComponent& tran, CameraComponent& cam) {
-			if (cam.id.find("main") == std::string::npos)
-				return;
+			if (cam.id.find("main") == std::string::npos) return;
 
 			calculateCameraTransforms(tran, cam);
 

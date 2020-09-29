@@ -39,7 +39,7 @@ namespace mar {
 			bool m_infoWindow{ false };
 			bool m_instructionWindow{ false };
 
-			ecs::SceneManager* m_sceneManager;
+			ecs::SceneManager* m_sceneManager{ nullptr };
 
 		public:
 

@@ -72,9 +72,9 @@ namespace mar {
 			void createFramebuffer();
 			void checkCreationStatus();
 
-			uint32_t m_id;
-			uint32_t m_colorAttachment;
-			uint32_t m_depthAttanchment;
+			uint32_t m_id{ 0 };
+			uint32_t m_colorAttachment{ 0 };
+			uint32_t m_depthAttanchment{ 0 };
 
 			FrameBufferSpecification m_specification;
 		};

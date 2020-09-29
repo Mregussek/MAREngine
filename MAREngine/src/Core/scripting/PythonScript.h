@@ -33,22 +33,28 @@ namespace mar {
         
 
         class PythonScript {
-            py::module scriptModule;
-            py::object module;
-            bool initialized;
-
         public:
+
             PythonScript();
 
-            void loadScript(const char* from, const char* what);
+            void loadScript(std::string path_to_script);
 
             void start(const ecs::Entity* e);
 
             void update(ecs::Entity* e);
 
-            py::object& getModule() { return module; }
+            py::object& getModule() { return m_module; }
 
             static void appendCurrentPath();
+
+            static std::string changeSlashesToDots(std::string script);
+            static std::string getModuleFromPath(std::string script);
+
+        private:
+
+            py::module m_scriptModule;
+            py::object m_module;
+            bool m_initialized;
         };
 
 
