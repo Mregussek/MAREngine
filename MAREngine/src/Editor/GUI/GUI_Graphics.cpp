@@ -39,8 +39,6 @@ namespace mar {
 			uint32_t max_index_count = 500000 / 2;
 
 			m_pipeline.initialize(max_vertex_count, max_index_count);
-			m_pipeline.processLayout();
-
 			m_shader.initialize("resources/shaders/lineloops.shader.glsl");
 		}
 
@@ -57,21 +55,15 @@ namespace mar {
 			maths::mat4 better_outline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
 
 			m_pipeline.bind();
-			m_pipeline.updateBuffers(ren.vertices, ren.indices);
+			m_pipeline.update(ren.vertices, ren.indices);
 
 			m_shader.bind();
 			m_shader.setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
-
-			m_pipeline.bind();
-			m_pipeline.updateBuffers(ren.vertices, ren.indices);
-
-			//m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], tran.transform);
-			//platforms::DrawingOpenGL::drawToStencil(ren.indices.size());
-
 			m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
+			
 			platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 
-			m_pipeline.resetBuffers();
+			m_pipeline.reset();
 			m_pipeline.unbind();
 		}
 

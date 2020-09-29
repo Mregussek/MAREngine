@@ -31,29 +31,40 @@ namespace mar {
 
 
 		class PipelineOpenGL {
-			uint32_t m_vao;
-			uint32_t m_vbo;
-			uint32_t m_ebo;
-			
-			uint32_t m_vboAllocMemory;
-			uint32_t m_eboAllocMemory;
-
-			bool m_initialized;
-
 		public:
 
-			PipelineOpenGL();
+			PipelineOpenGL() = default;
 
 			void initialize(uint32_t vbo_memory, uint32_t ebo_memory);
 			void close();
 
-			void processLayout();
+			void update(const std::vector<float>& vertices, const std::vector<uint32_t>& indices) const;
+			void reset() const;
 
-			void updateBuffers(const std::vector<float>& vertices, const std::vector<uint32_t>& indices);
-			void resetBuffers();
+			void bind() const;
+			void unbind() const;
 
-			void bind();
-			void unbind();
+		private:
+
+			void createVAO();
+			void destroyVAO();
+
+			void createVBO(uint32_t memory);
+			void destroyVBO();
+
+			void createEBO(uint32_t memory);
+			void destroyEBO();
+
+			void processLayout() const;
+
+			uint32_t m_vao{ 0 };
+			uint32_t m_vbo{ 0 };
+			uint32_t m_ebo{ 0 };
+
+			uint32_t m_vboAllocMemory{ 0 };
+			uint32_t m_eboAllocMemory{ 0 };
+
+			bool m_initialized{ false };
 		};	
 
 

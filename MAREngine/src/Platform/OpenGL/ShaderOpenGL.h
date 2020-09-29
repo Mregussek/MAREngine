@@ -21,6 +21,7 @@
 #ifndef MAR_ENGINE_PLATFORMS_SHADER_OPENGL_H
 #define MAR_ENGINE_PLATFORMS_SHADER_OPENGL_H
 
+
 #include "../../mar.h"
 #include "../PlatformLogs.h"
 
@@ -52,7 +53,6 @@ namespace mar {
 			void bind() const;
 			void unbind() const;
 
-			// --- SET METHODS --- //
 			void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
 			void setUniformFloat(const std::string& name, const std::vector<float>& floats);
 			void setUniformSampler(const std::string& name, int32_t sampler);

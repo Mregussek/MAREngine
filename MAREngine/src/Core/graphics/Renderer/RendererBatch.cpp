@@ -38,8 +38,6 @@ namespace mar {
 			uint32_t max_index_count = 500000 / 2;
 
 			m_buffers.initialize(max_vertex_count, max_index_count);
-			m_buffers.processLayout();
-
 			m_shader.initialize();
 		
 			GRAPHICS_INFO("RENDERER_BATCH: initialized!");
@@ -68,11 +66,11 @@ namespace mar {
 			
 			{
 				m_buffers.bind();
-				m_buffers.updateBuffers(render_pip.m_vertices, render_pip.m_indices);
+				m_buffers.update(render_pip.m_vertices, render_pip.m_indices);
 			
 				platforms::DrawingOpenGL::drawTriangles(render_pip.m_indices.size());
 			
-				m_buffers.resetBuffers();
+				m_buffers.reset();
 				m_buffers.unbind();
 
 				platforms::TextureOpenGL::Instance()->unbind(render_pip.m_samplerTypes);

@@ -44,28 +44,35 @@ namespace mar {
 
 
 		class FrameBufferOpenGL {
-			uint32_t m_id;
-			uint32_t m_colorAttachment;
-			uint32_t m_depthAttanchment;
-			FrameBufferSpecification m_specification;
-		
 		public:
 			FrameBufferOpenGL() = default;
 
 			void initialize(const FrameBufferSpecification& spec);
+			void close();
 
 			void bind() const;
-
 			void unbind() const;
 
 			void clear() const;
 
-			void close();
+			// --- GET METHODS --- // 
 
-			// --- GET METHODS
 			const uint32_t& getColorAttach() const { return m_colorAttachment; }
 			const uint32_t& getDepthAttach() const { return m_depthAttanchment; }
 			FrameBufferSpecification& getSpecification() { return m_specification; }
+
+		private:
+
+			void createColorAttachment();
+			void createDepthAttachment();
+			void createFramebuffer();
+			void checkCreationStatus();
+
+			uint32_t m_id;
+			uint32_t m_colorAttachment;
+			uint32_t m_depthAttanchment;
+
+			FrameBufferSpecification m_specification;
 		};
 
 

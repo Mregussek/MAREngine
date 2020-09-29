@@ -25,33 +25,25 @@ namespace mar {
 	namespace platforms {
 
 
+		// ---- PUBLIC METHODS ---- //
+
 		void FrameBufferOpenGL::initialize(const FrameBufferSpecification& spec) {
 			m_specification = spec;
 
-			PLATFORM_GL_FUNC( glGenTextures(1, &m_colorAttachment) );
-			PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, m_colorAttachment) );
-			PLATFORM_GL_FUNC( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_specification.width, (size_t)m_specification.height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0) );
-			PLATFORM_GL_FUNC( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
-			PLATFORM_GL_FUNC( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
-							  
-			PLATFORM_GL_FUNC( glGenRenderbuffers(1, &m_depthAttanchment) );
-			PLATFORM_GL_FUNC( glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttanchment) );
-			PLATFORM_GL_FUNC( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (size_t)m_specification.width, (size_t)m_specification.height) );
-			PLATFORM_GL_FUNC( glBindRenderbuffer(GL_RENDERBUFFER, 0) );
-							  
-			PLATFORM_GL_FUNC( glGenFramebuffers(1, &m_id) );
-			PLATFORM_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, m_id) );
-			PLATFORM_GL_FUNC( glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorAttachment, 0) );
-			PLATFORM_GL_FUNC( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthAttanchment) );
-			
-			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-				PLATFORM_ERROR("FRAMEBUFFER_OPENGL: Cannot load framebuffer!");
-			}
-			else {
-				PLATFORM_INFO("FRAMEBUFFER_OPENGL: loaded successfully - {}!", m_id);
-			}
+			createColorAttachment();
+			createDepthAttachment();
+			createFramebuffer();		 
+			checkCreationStatus();
 
-			PLATFORM_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, 0) );
+			unbind();
+		}
+
+		void FrameBufferOpenGL::close() {
+			PLATFORM_TRACE("FRAMEBUFFER_OPENGL: deleting {}!", m_id);
+
+			PLATFORM_GL_FUNC(glDeleteFramebuffers(1, &m_id));
+			PLATFORM_GL_FUNC(glDeleteTextures(1, &m_colorAttachment));
+			PLATFORM_GL_FUNC(glDeleteTextures(1, &m_depthAttanchment));
 		}
 
 		void FrameBufferOpenGL::bind() const {
@@ -74,12 +66,45 @@ namespace mar {
 			PLATFORM_TRACE("FRAMEBUFFER_OPENGL: clearing!");
 		}
 
-		void FrameBufferOpenGL::close() {
-			PLATFORM_TRACE("FRAMEBUFFER_OPENGL: deleting {}!", m_id);
+		// ---- PRIVATE METHODS ---- //
 
-			PLATFORM_GL_FUNC( glDeleteFramebuffers(1, &m_id) );
-			PLATFORM_GL_FUNC( glDeleteTextures(1, &m_colorAttachment) );
-			PLATFORM_GL_FUNC( glDeleteTextures(1, &m_depthAttanchment) );
+		void FrameBufferOpenGL::createColorAttachment() {
+			PLATFORM_GL_FUNC(glGenTextures(1, &m_colorAttachment));
+			PLATFORM_GL_FUNC(glBindTexture(GL_TEXTURE_2D, m_colorAttachment));
+			PLATFORM_GL_FUNC(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_specification.width, (size_t)m_specification.height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0));
+			PLATFORM_GL_FUNC(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+			PLATFORM_GL_FUNC(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+
+			PLATFORM_TRACE("FRAMEBUFFER_OPENGL: created color attachment {}", m_colorAttachment);
+		}
+
+		void FrameBufferOpenGL::createDepthAttachment() {
+			PLATFORM_GL_FUNC(glGenRenderbuffers(1, &m_depthAttanchment));
+			PLATFORM_GL_FUNC(glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttanchment));
+			PLATFORM_GL_FUNC(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (size_t)m_specification.width, (size_t)m_specification.height));
+			PLATFORM_GL_FUNC(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+
+			PLATFORM_TRACE("FRAMEBUFFER_OPENGL: created depth attachment {}", m_depthAttanchment);
+		}
+
+		void FrameBufferOpenGL::createFramebuffer() {
+			PLATFORM_GL_FUNC(glGenFramebuffers(1, &m_id));
+			PLATFORM_GL_FUNC(glBindFramebuffer(GL_FRAMEBUFFER, m_id));
+			PLATFORM_GL_FUNC(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorAttachment, 0));
+			PLATFORM_GL_FUNC(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthAttanchment));
+
+			PLATFORM_TRACE("FRAMEBUFFER_OPENGL: created framebuffer {} with color {} depth {}", m_id, m_colorAttachment, m_depthAttanchment);
+		}
+
+		void FrameBufferOpenGL::checkCreationStatus() {
+			auto framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+			if (framebuffer_status != GL_FRAMEBUFFER_COMPLETE) {
+				PLATFORM_ERROR("FRAMEBUFFER_OPENGL: Cannot load framebuffer!");
+			}
+			else {
+				PLATFORM_INFO("FRAMEBUFFER_OPENGL: loaded successfully - {}!", m_id);
+			}
 		}
 
 
