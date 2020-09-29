@@ -58,8 +58,8 @@ namespace mar {
 			m_pipeline.update(ren.vertices, ren.indices);
 
 			m_shader.bind();
-			m_shader.setUniformMat4f("u_MVP", Camera::getCameraData().mvp);
-			m_shader.setUniformMat4f(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
+			m_shader.setUniformMat4("u_MVP", Camera::getCameraData().mvp);
+			m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
 			
 			platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 

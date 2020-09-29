@@ -58,12 +58,11 @@ namespace mar {
 			{
 				m_shader.bind();
 
-				m_shader.setUniformVectorMat4("u_SeparateTransform", render_pip.m_transforms);
+				m_shader.setUniformMat4("u_SeparateTransform", render_pip.m_transforms);
 				passTexturesToShader(render_pip);
 				passLightToShader(render_pip);
 				passCameraToShader(render_pip);
 			}
-			
 			{
 				m_buffers.bind();
 				m_buffers.update(render_pip.m_vertices, render_pip.m_indices);
@@ -98,7 +97,7 @@ namespace mar {
 
 			for (size_t i = 0; i < ren.m_colors.size(); i++) {
 				sampler = (uint32_t)ren.m_colors[i].first;
-				m_shader.setUniformVector3(u_SamplersColor[sampler], ren.m_colors[i].second);
+				m_shader.setUniformVec3(u_SamplersColor[sampler], ren.m_colors[i].second);
 			}
 				
 			GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
@@ -130,20 +129,20 @@ namespace mar {
 			using namespace platforms::ShaderUniforms;
 
 			for (size_t i = 0; i < ren.m_lights.size(); i++) {
-				m_shader.setUniformVector3(u_material[i].lightPos, ren.m_lights[i].first);
+				m_shader.setUniformVec3(u_material[i].lightPos, ren.m_lights[i].first);
 		
-				m_shader.setUniformVector3(u_material[i].ambient, ren.m_lights[i].second.ambient);
-				m_shader.setUniformVector3(u_material[i].diffuse, ren.m_lights[i].second.diffuse);
-				m_shader.setUniformVector3(u_material[i].specular, ren.m_lights[i].second.specular);
+				m_shader.setUniformVec3(u_material[i].ambient, ren.m_lights[i].second.ambient);
+				m_shader.setUniformVec3(u_material[i].diffuse, ren.m_lights[i].second.diffuse);
+				m_shader.setUniformVec3(u_material[i].specular, ren.m_lights[i].second.specular);
 		
-				m_shader.setUniform1f(u_material[i].shininess, ren.m_lights[i].second.shininess);
+				m_shader.setUniformFloat(u_material[i].shininess, ren.m_lights[i].second.shininess);
 	
-				m_shader.setUniform1f(u_material[i].constant, ren.m_lights[i].second.constant);
-				m_shader.setUniform1f(u_material[i].linear, ren.m_lights[i].second.linear);
-				m_shader.setUniform1f(u_material[i].quadratic, ren.m_lights[i].second.quadratic);
+				m_shader.setUniformFloat(u_material[i].constant, ren.m_lights[i].second.constant);
+				m_shader.setUniformFloat(u_material[i].linear, ren.m_lights[i].second.linear);
+				m_shader.setUniformFloat(u_material[i].quadratic, ren.m_lights[i].second.quadratic);
 			}
 
-			m_shader.setUniform1i(u_materialSize, ren.m_lights.size());
+			m_shader.setUniformInt(u_materialSize, ren.m_lights.size());
 
 			GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 		}
@@ -151,9 +150,9 @@ namespace mar {
 		void RendererBatch::passCameraToShader(RenderPipeline& ren) {
 			GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
 
-			m_shader.setUniformVector3("u_CameraPos", ren.m_camera->position);
-			m_shader.setUniformMat4f("u_Model", ren.m_camera->model);
-			m_shader.setUniformMat4f("u_MVP", ren.m_camera->mvp);
+			m_shader.setUniformVec3("u_CameraPos", ren.m_camera->position);
+			m_shader.setUniformMat4("u_Model", ren.m_camera->model);
+			m_shader.setUniformMat4("u_MVP", ren.m_camera->mvp);
 
 			GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 		}

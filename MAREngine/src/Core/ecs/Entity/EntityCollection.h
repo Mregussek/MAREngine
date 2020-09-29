@@ -32,17 +32,12 @@
 namespace mar {
 	namespace ecs {
 
-		class Entity;
-
 
 		class EntityCollection {
 			friend class Scene;
 
-			std::vector<Entity> m_entities;
-			entt::entity m_collectionHandle{ entt::null };
-			SceneRegistry* m_scene{ nullptr };
-
 		public:
+
 			EntityCollection() = delete;
 
 			EntityCollection(SceneRegistry* scene)
@@ -126,6 +121,13 @@ namespace mar {
 
 				return m_scene->m_registry.get<T>(m_collectionHandle);
 			}
+
+		private:
+
+			std::vector<Entity> m_entities;
+			entt::entity m_collectionHandle{ entt::null };
+			SceneRegistry* m_scene{ nullptr };
+
 		};
 
 

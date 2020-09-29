@@ -366,12 +366,14 @@
     <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\DrawingOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\ShapeManipulator.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
     <ClCompile Include="src\Window\Input.cpp" />

@@ -37,14 +37,8 @@ namespace mar {
 
 
 		class ShaderOpenGL {
-			bool m_initialized{false};
-
-			uint32_t m_id;
-			std::string m_shaderPath;
-			std::unordered_map<std::string, int> m_uniformLocation;
-			ShaderProgramSource m_programSource;
-
 		public:
+
 			ShaderOpenGL() = default;
 
 			void initialize(std::string shader = "resources/shaders/batcher.shader.glsl");
@@ -53,25 +47,32 @@ namespace mar {
 			void bind() const;
 			void unbind() const;
 
-			void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
+			void setUniformFloat(const std::string& name, float f);
 			void setUniformFloat(const std::string& name, const std::vector<float>& floats);
+			void setUniformInt(const std::string& name, int32_t i);
+			void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
 			void setUniformSampler(const std::string& name, int32_t sampler);
 			void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler);
-			void setUniformVectorVec3(const std::string& name, const std::vector<maths::vec3>& vec);
-			void setUniformVectorMat4(const std::string& name, const std::vector<maths::mat4>& matrices);
-			void setUniformMat4f(const std::string& name, const maths::mat4& matrix4x4);
-			void setUniformVector3(const std::string& name, const maths::vec3& vector3);
-			void setUniform1i(const std::string& name, int32_t value);
-			void setUniform1f(const std::string& name, float value);
-			void setUniform4f(const std::string& name, float red, float green, float blue, float alpha);
-			void setUniform4fv(const std::string& name, const float* floats4);
+			void setUniformVec3(const std::string& name, maths::vec3 vector3);
+			void setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec);
+			void setUniformMat4(const std::string& name, const maths::mat4& matrix4x4);
+			void setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices);
 
 		private:
+
 			int getUniformLocation(const std::string& name);
 
 			ShaderProgramSource parseShader();
 			uint32_t compileShader(uint32_t type, const std::string& sourceCode);
 			uint32_t createShader();
+
+
+			bool m_initialized{ false };
+
+			uint32_t m_id;
+			std::string m_shaderPath;
+			std::unordered_map<std::string, int> m_uniformLocation;
+			ShaderProgramSource m_programSource;
 		};
     
     

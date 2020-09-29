@@ -30,16 +30,13 @@
 namespace mar {
 	namespace ecs {
 
-		class Scene;
-
 
 		class EntityContainer {
-			std::vector<Entity> m_entities;
-			std::vector<EntityCollection> m_collections;
-
 			friend class Scene;
 
-		public:
+
+			std::vector<Entity> m_entities;
+			std::vector<EntityCollection> m_collections;
 
 		};
 

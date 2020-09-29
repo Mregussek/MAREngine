@@ -33,9 +33,8 @@ namespace mar {
 
 
 		class Entity {
-			// ----------------------------------------------------
-			// ENTITY PUBLIC METHODS
-			// ----------------------------------------------------
+			friend class EntityCollection;
+			friend class Scene;
 
 		public:
 			Entity() = delete;
@@ -164,16 +163,11 @@ namespace mar {
 				ECS_TRACE("ENTITY: {} removing component", m_entityHandle);
 			}
 
-			// ----------------------------------------------------
-			// ENTITY MEMBERS
-			// ----------------------------------------------------
-
 		private:
-			friend class EntityCollection;
-			friend class Scene;
-
+			
 			entt::entity m_entityHandle{ entt::null };
 			SceneRegistry* m_scene{ nullptr };
+
 		};
 
 
