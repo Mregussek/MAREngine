@@ -87,9 +87,6 @@
     <ClInclude Include="src\Editor\GUI\GUI_Filesystem.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\assets\AssetsManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\SceneEvents.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>

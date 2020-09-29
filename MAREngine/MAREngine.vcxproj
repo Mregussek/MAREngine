@@ -243,7 +243,6 @@
     <ClInclude Include="3rd_party\pybind11\include\pybind11\stl_bind.h" />
     <ClInclude Include="3rd_party\stb_image\include\stb_image\stb_image.h" />
     <ClInclude Include="include\MAREngine\MAREngine.h" />
-    <ClInclude Include="src\Core\assets\AssetsManager.h" />
     <ClInclude Include="src\Core\ecs\Components\CameraComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\Components.h" />
     <ClInclude Include="src\Core\ecs\Components\DefaultComponents.h" />
