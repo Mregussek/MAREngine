@@ -117,7 +117,6 @@ namespace mar {
 
 		void GUI::updateFrame() {
 			GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager);
-			GUI_SceneHierarchy::Scene_Statistics();
 
 			GUI_TextEditor::Instance().update();
 

@@ -35,9 +35,11 @@ namespace mar {
 		public:
 
 			static void Scene_Hierarchy(ecs::SceneManager* manager);
-			static void Scene_Hierarchy_PopUp(ecs::SceneManager* manager);
+			
+		private:
 
-			static void Scene_Statistics();
+			static void Scene_Hierarchy_PopUp(ecs::SceneManager* manager);
+			static void Scene_Statistics(ecs::SceneManager* manager);
 		};
 
 

@@ -74,7 +74,8 @@ namespace mar {
 			}
 
 			Scene_Hierarchy_PopUp(manager);
-
+			Scene_Statistics(manager);
+			
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: scene_hierarchy");
@@ -152,7 +153,7 @@ namespace mar {
 			EDITOR_TRACE("GUI: scene_hierarchy_popup");
 		}
 
-		void GUI_SceneHierarchy::Scene_Statistics() {
+		void GUI_SceneHierarchy::Scene_Statistics(ecs::SceneManager* manager) {
 			ImGui::Begin("Statistics Menu");
 
 			auto& render_pip = graphics::RenderPipeline::getInstance();
@@ -162,11 +163,21 @@ namespace mar {
 			stats.verticesCount += render_pip.getVertices().size();
 			stats.indicesCount += render_pip.getIndicesCount();
 			stats.trianglesCount += render_pip.getIndicesCount() / 3;
+			stats.entitiesCount += manager->getScene()->getEntities().size();
+			stats.entityCollectionsCount += manager->getScene()->getCollections().size();
+
+			stats.allEntitiesCount += stats.entitiesCount;
+			for (auto& collection : manager->getScene()->getCollections()) {
+				stats.allEntitiesCount += collection.getEntities().size();
+			}
 
 			ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
 			ImGui::Text("Vertices: %d" , stats.verticesCount);
 			ImGui::Text("Indices: %d", stats.indicesCount);
 			ImGui::Text("Triangles: %d", stats.trianglesCount);
+			ImGui::Text("Entities: %d", stats.entitiesCount);
+			ImGui::Text("EntityCollections: %d", stats.entityCollectionsCount);
+			ImGui::Text("All Entities: %d", stats.allEntitiesCount);
 
 			ImGui::Separator();
 
