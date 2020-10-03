@@ -171,6 +171,16 @@ namespace mar {
 				stats.allEntitiesCount += collection.getEntities().size();
 			}
 
+			uint32_t renderables_count = 0;
+			for(auto& entity : manager->getScene()->getEntities()) { 
+				if (entity.hasComponent<ecs::RenderableComponent>()) { renderables_count++; }
+			}
+			for (auto& collection : manager->getScene()->getCollections()) {
+				for (auto& entity : collection.getEntities()) {
+					if (entity.hasComponent<ecs::RenderableComponent>()) { renderables_count++; }
+				}
+			}
+
 			ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
 			ImGui::Text("Vertices: %d" , stats.verticesCount);
 			ImGui::Text("Indices: %d", stats.indicesCount);
@@ -178,6 +188,7 @@ namespace mar {
 			ImGui::Text("Entities: %d", stats.entitiesCount);
 			ImGui::Text("EntityCollections: %d", stats.entityCollectionsCount);
 			ImGui::Text("All Entities: %d", stats.allEntitiesCount);
+			ImGui::Text("All Entities with Renderable: %d", renderables_count);
 
 			ImGui::Separator();
 
