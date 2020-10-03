@@ -77,7 +77,6 @@ namespace mar {
 
 			for (size_t i = 0; i < entities.size(); i++) {
 				auto& entity = entities[i];
-
 				auto& tran = entity.getComponent<TransformComponent>();
 
 				if (entity.hasComponent<LightComponent>()) {
@@ -86,10 +85,9 @@ namespace mar {
 				}
 
 				if (entity.hasComponent<RenderableComponent>()) {
-					render_pipeline.submitTransform(tran);
-
 					auto& ren = entity.getComponent<RenderableComponent>();
-					render_pipeline.submitRenderable(ren);
+					render_pipeline.setAvailableContainerRenderable(ren.vertices.size(), ren.indices.size());
+					render_pipeline.submitRenderable(ren, tran);
 
 					if (entity.hasComponent<ColorComponent>()) {
 						auto& color = entity.getComponent<ColorComponent>();

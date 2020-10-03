@@ -31,6 +31,8 @@ namespace mar {
 	namespace graphics {
 
 		class RenderPipeline;
+		class RenderContainer;
+		struct RenderCamera;
 
 
 		class RendererBatch {
@@ -42,9 +44,11 @@ namespace mar {
 
 		private:
 
-			void passTexturesToShader(RenderPipeline& ren);
-			void passLightToShader(RenderPipeline& ren);
-			void passCameraToShader(RenderPipeline& ren);
+			void drawContainer(const RenderContainer& container);
+
+			void passTexturesToShader(const RenderContainer& ren);
+			void passLightToShader(const RenderContainer& ren);
+			void passCameraToShader(const RenderCamera* camera);
 
 			platforms::PipelineOpenGL m_buffers;
 			platforms::ShaderOpenGL m_shader;

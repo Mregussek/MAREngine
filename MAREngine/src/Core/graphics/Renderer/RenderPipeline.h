@@ -39,8 +39,12 @@ namespace mar {
 
 			RenderPipeline() = default;
 
-			void submitRenderable(ecs::RenderableComponent& ren_comp);
-			void submitTransform(ecs::TransformComponent& tran);
+			void initialize();
+			void reset();
+
+			void setAvailableContainerRenderable(size_t vert_to_push, size_t ind_to_push);
+
+			void submitRenderable(ecs::RenderableComponent& ren_comp, ecs::TransformComponent& tran);
 			void submitColor(float entity_index, ecs::ColorComponent& color);
 			void submitTexture2D(float entity_index, ecs::Texture2DComponent& tex);
 			void submitCubemap(float entity_index, ecs::TextureCubemapComponent& cube);
@@ -51,8 +55,6 @@ namespace mar {
 			void modifyLight(maths::vec3& position, ecs::LightComponent& light, int32_t index);
 			void modifyColor(ecs::ColorComponent& color, int32_t index);
 
-			void reset();
-
 			RenderStatistics& getStatistics() { return s_statistics; }
 			void clearStatistics() { s_statistics.resetStatistics(); }
 
@@ -60,18 +62,7 @@ namespace mar {
 
 			// ---- GETTERS for container ---- //
 
-			const std::vector<std::pair<maths::vec3, ecs::LightComponent>>& getLights() const { return m_container.m_lights; }
-			const std::vector<std::pair<float, maths::vec3>>& getColors() const { return m_container.m_colors; }
-			const std::vector<std::pair<float, std::string>>& getTextures2D() const { return m_container.m_tex2D; }
-			const std::vector<std::pair<float, std::string>>& getTexturesCubemap() const { return m_container.m_cubes; }
-			const std::vector<float> getSamplerTypes() const { return m_container.m_samplerTypes; }
-
-			const std::vector<float> getVertices() const { return m_container.m_vertices; }
-			const std::vector<uint32_t> getIndices() const { return m_container.m_indices; }
-			size_t getIndicesCount() { return m_container.m_indices.size(); }
-			const std::vector<maths::mat4> getTransforms() const { return m_container.m_transforms; }
-			float getCurrentShapeID() { return m_container.m_shapeID; }
-
+			const std::vector<RenderContainer>& getContainers() const { return m_containers; }
 			const RenderCamera* getCamera() const { return m_camera; }
 
 		private:
@@ -79,7 +70,8 @@ namespace mar {
 			static RenderPipeline s_instance;
 
 			RenderStatistics s_statistics;
-			RenderContainer m_container;
+			std::vector<RenderContainer> m_containers;
+			RenderContainer* m_availableContainer{ nullptr };
 
 			RenderCamera* m_camera{ nullptr };
 

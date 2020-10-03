@@ -35,10 +35,7 @@ namespace mar {
 		void RendererBatch::initialize() {
 			GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
 
-			uint32_t max_vertex_count = 500000;
-			uint32_t max_index_count = 500000 / 2;
-
-			m_buffers.initialize(max_vertex_count, max_index_count);
+			m_buffers.initialize(settings::maxVerticesCount, settings::maxIndicesCount);
 			m_shader.initialize();
 		
 			GRAPHICS_INFO("RENDERER_BATCH: initialized!");
@@ -56,46 +53,54 @@ namespace mar {
 
 		void RendererBatch::draw(RenderPipeline& render_pip) {
 			GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
-			{
+			
+			for (const auto& container : render_pip.getContainers()) {
 				m_shader.bind();
+				passCameraToShader(render_pip.getCamera());
+				drawContainer(container);
+				RenderEvents::onDrawCall(&render_pip);
+			}
+			
+			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
+		}
 
-				m_shader.setUniformMat4("u_SeparateTransform", render_pip.getTransforms());
-				passTexturesToShader(render_pip);
-				passLightToShader(render_pip);
-				passCameraToShader(render_pip);
+		void RendererBatch::drawContainer(const RenderContainer& container) {
+			GRAPHICS_TRACE("RENDERER_BATCH: going to draw render container!");
+			{
+				m_shader.setUniformMat4("u_SeparateTransform", container.getTransforms());
+				passTexturesToShader(container);
+				passLightToShader(container);
 			}
 			{
 				m_buffers.bind();
-				m_buffers.update(render_pip.getVertices(), render_pip.getIndices());
-			
-				platforms::DrawingOpenGL::drawTriangles(render_pip.getIndicesCount());
-				RenderEvents::onDrawCall(&render_pip);
+				m_buffers.update(container.getVertices(), container.getIndices());
+
+				platforms::DrawingOpenGL::drawTriangles(container.getIndices().size());
 
 				m_buffers.reset();
 				m_buffers.unbind();
 
-				platforms::TextureOpenGL::Instance()->unbind(render_pip.getSamplerTypes());
+				platforms::TextureOpenGL::Instance()->unbind(container.getSamplerTypes());
 			}
 
-			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
+			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render container!");
 		}
 
-		void RendererBatch::passTexturesToShader(RenderPipeline& ren) {
+		void RendererBatch::passTexturesToShader(const RenderContainer& container) {
 			GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
 
 			using namespace platforms::ShaderUniforms;
 			typedef platforms::TextureOpenGL TextureGL;
 
-			auto& samplerTypes = ren.getSamplerTypes();
-			auto& colors = ren.getColors();
-			auto& tex2D = ren.getTextures2D();
-			auto& cubes = ren.getTexturesCubemap();
+			auto& samplerTypes = container.getSamplerTypes();
+			auto& colors = container.getColors();
+			auto& tex2D = container.getTexture2D();
+			auto& cubes = container.getTextureCubemap();
 
 			m_shader.setUniformFloat("u_samplerTypes", samplerTypes);
 
 			static uint32_t tex_id = 0;
 			static uint32_t sampler = 0;
-
 
 			for (size_t i = 0; i < colors.size(); i++) {
 				sampler = (uint32_t)colors[i].first;
@@ -125,7 +130,7 @@ namespace mar {
 			GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
 		}
 
-		void RendererBatch::passLightToShader(RenderPipeline& ren) {
+		void RendererBatch::passLightToShader(const RenderContainer& ren) {
 			GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
 
 			using namespace platforms::ShaderUniforms;
@@ -151,9 +156,8 @@ namespace mar {
 			GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 		}
 
-		void RendererBatch::passCameraToShader(RenderPipeline& ren) {
+		void RendererBatch::passCameraToShader(const RenderCamera* camera) {
 			GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
-			auto* camera = ren.getCamera();
 
 			m_shader.setUniformVec3("u_CameraPos", camera->position);
 			m_shader.setUniformMat4("u_Model", camera->model);

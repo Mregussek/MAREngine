@@ -37,6 +37,7 @@ namespace mar {
 
 			auto& ren = graphics::RenderPipeline::getInstance();
 			ren = graphics::RenderPipeline();
+			ren.initialize();
 
 			m_renderer.initialize();
 

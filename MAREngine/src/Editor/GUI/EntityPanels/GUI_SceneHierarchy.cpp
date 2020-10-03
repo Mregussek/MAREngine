@@ -159,10 +159,13 @@ namespace mar {
 			auto& render_pip = graphics::RenderPipeline::getInstance();
 			auto& stats = render_pip.getStatistics();
 
-			stats.shapesCount += render_pip.getTransforms().size();
-			stats.verticesCount += render_pip.getVertices().size();
-			stats.indicesCount += render_pip.getIndicesCount();
-			stats.trianglesCount += render_pip.getIndicesCount() / 3;
+			for (const auto& container : render_pip.getContainers()) {
+				stats.shapesCount += container.getTransforms().size();
+				stats.verticesCount += container.getVertices().size();
+				stats.indicesCount += container.getIndices().size();
+				stats.trianglesCount += container.getIndices().size() / 3;
+			}
+			
 			stats.entitiesCount += manager->getScene()->getEntities().size();
 			stats.entityCollectionsCount += manager->getScene()->getCollections().size();
 
