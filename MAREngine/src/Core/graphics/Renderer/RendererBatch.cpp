@@ -58,28 +58,30 @@ namespace mar {
 			{
 				m_shader.bind();
 
-				m_shader.setUniformMat4("u_SeparateTransform", render_pip.m_transforms);
+				m_shader.setUniformMat4("u_SeparateTransform", render_pip.getTransforms());
 				passTexturesToShader(render_pip);
 				passLightToShader(render_pip);
 				passCameraToShader(render_pip);
 			}
 			{
 				m_buffers.bind();
-				m_buffers.update(render_pip.m_vertices, render_pip.m_indices);
+				m_buffers.update(render_pip.getVertices(), render_pip.getIndices());
 			
-				platforms::DrawingOpenGL::drawTriangles(render_pip.m_indices.size());
+				platforms::DrawingOpenGL::drawTriangles(render_pip.getIndicesCount());
 			
 				m_buffers.reset();
 				m_buffers.unbind();
 
-				platforms::TextureOpenGL::Instance()->unbind(render_pip.m_samplerTypes);
+				platforms::TextureOpenGL::Instance()->unbind(render_pip.getSamplerTypes());
 			}
 
-			render_pip.s_statistics.drawCallsCount += 1;
-			render_pip.s_statistics.shapesCount += render_pip.m_transforms.size();
-			render_pip.s_statistics.verticesCount += render_pip.m_vertices.size();
-			render_pip.s_statistics.indicesCount += render_pip.m_indices.size();
-			render_pip.s_statistics.trianglesCount += render_pip.m_indices.size() / 3;
+			auto& statistics = render_pip.getStatistics();
+
+			statistics.drawCallsCount += 1;
+			statistics.shapesCount += render_pip.getTransforms().size();
+			statistics.verticesCount += render_pip.getVertices().size();
+			statistics.indicesCount += render_pip.getIndicesCount();
+			statistics.trianglesCount += render_pip.getIndicesCount() / 3;
 
 			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 		}
@@ -90,21 +92,27 @@ namespace mar {
 			using namespace platforms::ShaderUniforms;
 			typedef platforms::TextureOpenGL TextureGL;
 
-			m_shader.setUniformFloat("u_samplerTypes", ren.m_samplerTypes);
+			auto& samplerTypes = ren.getSamplerTypes();
+			auto& colors = ren.getColors();
+			auto& tex2D = ren.getTextures2D();
+			auto& cubes = ren.getTexturesCubemap();
+
+			m_shader.setUniformFloat("u_samplerTypes", samplerTypes);
 
 			static uint32_t tex_id = 0;
 			static uint32_t sampler = 0;
 
-			for (size_t i = 0; i < ren.m_colors.size(); i++) {
-				sampler = (uint32_t)ren.m_colors[i].first;
-				m_shader.setUniformVec3(u_SamplersColor[sampler], ren.m_colors[i].second);
+
+			for (size_t i = 0; i < colors.size(); i++) {
+				sampler = (uint32_t)colors[i].first;
+				m_shader.setUniformVec3(u_SamplersColor[sampler], colors[i].second);
 			}
 				
 			GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
 
-			for (size_t i = 0; i < ren.m_tex2D.size(); i++) {
-				tex_id = TextureGL::Instance()->loadTexture(ren.m_tex2D[i].second);
-				sampler = (uint32_t)ren.m_tex2D[i].first;
+			for (size_t i = 0; i < tex2D.size(); i++) {
+				tex_id = TextureGL::Instance()->loadTexture(tex2D[i].second);
+				sampler = (uint32_t)tex2D[i].first;
 
 				TextureGL::Instance()->bind2D(sampler, tex_id);
 				m_shader.setUniformSampler(u_Samplers2D[sampler], sampler);
@@ -112,9 +120,9 @@ namespace mar {
 			
 			GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 
-			for (size_t i = 0; i < ren.m_cubes.size(); i++) {
-				tex_id = TextureGL::Instance()->loadCubemap(ren.m_cubes[i].second);
-				sampler = (size_t)ren.m_cubes[i].first;
+			for (size_t i = 0; i < cubes.size(); i++) {
+				tex_id = TextureGL::Instance()->loadCubemap(cubes[i].second);
+				sampler = (size_t)cubes[i].first;
 
 				TextureGL::Instance()->bindCube(sampler, tex_id);
 				m_shader.setUniformSampler(u_SamplersCube[sampler], sampler);
@@ -128,31 +136,34 @@ namespace mar {
 
 			using namespace platforms::ShaderUniforms;
 
-			for (size_t i = 0; i < ren.m_lights.size(); i++) {
-				m_shader.setUniformVec3(u_material[i].lightPos, ren.m_lights[i].first);
+			auto& lights = ren.getLights();
+
+			for (size_t i = 0; i < lights.size(); i++) {
+				m_shader.setUniformVec3(u_material[i].lightPos, lights[i].first);
 		
-				m_shader.setUniformVec3(u_material[i].ambient, ren.m_lights[i].second.ambient);
-				m_shader.setUniformVec3(u_material[i].diffuse, ren.m_lights[i].second.diffuse);
-				m_shader.setUniformVec3(u_material[i].specular, ren.m_lights[i].second.specular);
+				m_shader.setUniformVec3(u_material[i].ambient, lights[i].second.ambient);
+				m_shader.setUniformVec3(u_material[i].diffuse, lights[i].second.diffuse);
+				m_shader.setUniformVec3(u_material[i].specular, lights[i].second.specular);
 		
-				m_shader.setUniformFloat(u_material[i].shininess, ren.m_lights[i].second.shininess);
+				m_shader.setUniformFloat(u_material[i].shininess, lights[i].second.shininess);
 	
-				m_shader.setUniformFloat(u_material[i].constant, ren.m_lights[i].second.constant);
-				m_shader.setUniformFloat(u_material[i].linear, ren.m_lights[i].second.linear);
-				m_shader.setUniformFloat(u_material[i].quadratic, ren.m_lights[i].second.quadratic);
+				m_shader.setUniformFloat(u_material[i].constant, lights[i].second.constant);
+				m_shader.setUniformFloat(u_material[i].linear, lights[i].second.linear);
+				m_shader.setUniformFloat(u_material[i].quadratic, lights[i].second.quadratic);
 			}
 
-			m_shader.setUniformInt(u_materialSize, ren.m_lights.size());
+			m_shader.setUniformInt(u_materialSize, lights.size());
 
 			GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 		}
 
 		void RendererBatch::passCameraToShader(RenderPipeline& ren) {
 			GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
+			auto* camera = ren.getCamera();
 
-			m_shader.setUniformVec3("u_CameraPos", ren.m_camera->position);
-			m_shader.setUniformMat4("u_Model", ren.m_camera->model);
-			m_shader.setUniformMat4("u_MVP", ren.m_camera->mvp);
+			m_shader.setUniformVec3("u_CameraPos", camera->position);
+			m_shader.setUniformMat4("u_Model", camera->model);
+			m_shader.setUniformMat4("u_MVP", camera->mvp);
 
 			GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 		}

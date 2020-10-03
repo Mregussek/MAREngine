@@ -30,34 +30,10 @@
 namespace mar {
 	namespace graphics {
 
-		class RendererBatch;
 		struct RenderCamera;
 
 
 		class RenderPipeline {
-			friend class RendererBatch;
-
-			static RenderPipeline s_instance;
-
-			RenderStatistics s_statistics;
-
-			std::vector<float> m_vertices;
-			std::vector<uint32_t> m_indices;
-			float m_shapeID{ 0.f };
-			uint32_t m_indicesMax{ 0 };
-			static const uint32_t m_stride{ 3 + 3 + 2 + 1 };
-
-			std::vector<maths::mat4> m_transforms;
-
-			std::vector<std::pair<float, maths::vec3>> m_colors;
-			std::vector<std::pair<float, std::string>> m_tex2D;
-			std::vector<std::pair<float, std::string>> m_cubes;
-			std::vector<float> m_samplerTypes;
-
-			std::vector<std::pair<maths::vec3, ecs::LightComponent>> m_lights;
-
-			RenderCamera* m_camera{ nullptr };
-
 		public:
 
 			RenderPipeline() = default;
@@ -82,6 +58,42 @@ namespace mar {
 			void clearStatistics() { s_statistics.resetStatistics(); }
 
 			static RenderPipeline& getInstance() { return s_instance; }
+
+			const std::vector<std::pair<maths::vec3, ecs::LightComponent>>& getLights() const { return m_lights; }
+			const std::vector<std::pair<float, maths::vec3>>& getColors() const { return m_colors; }
+			const std::vector<std::pair<float, std::string>>& getTextures2D() const { return m_tex2D; }
+			const std::vector<std::pair<float, std::string>>& getTexturesCubemap() const { return m_cubes; }
+			const std::vector<float> getSamplerTypes() const { return m_samplerTypes; }
+			const RenderCamera* getCamera() const { return m_camera; }
+
+			const std::vector<float> getVertices() const { return m_vertices; }
+			const std::vector<uint32_t> getIndices() const { return m_indices; }
+			size_t getIndicesCount() { return m_indices.size(); }
+			const std::vector<maths::mat4> getTransforms() const { return m_transforms; }
+
+		private:
+
+			static RenderPipeline s_instance;
+
+			RenderStatistics s_statistics;
+
+			std::vector<float> m_vertices;
+			std::vector<uint32_t> m_indices;
+			float m_shapeID{ 0.f };
+			uint32_t m_indicesMax{ 0 };
+			static const uint32_t m_stride{ 3 + 3 + 2 + 1 };
+
+			std::vector<maths::mat4> m_transforms;
+
+			std::vector<std::pair<float, maths::vec3>> m_colors;
+			std::vector<std::pair<float, std::string>> m_tex2D;
+			std::vector<std::pair<float, std::string>> m_cubes;
+			std::vector<float> m_samplerTypes;
+
+			std::vector<std::pair<maths::vec3, ecs::LightComponent>> m_lights;
+
+			RenderCamera* m_camera{ nullptr };
+
 		};
 
 

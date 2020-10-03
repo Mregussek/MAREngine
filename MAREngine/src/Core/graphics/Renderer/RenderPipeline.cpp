@@ -47,7 +47,8 @@ namespace mar {
 			m_indicesMax += ren_comp.vertices.size() / m_stride;
 			m_shapeID++;
 
-			GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shapeID = {}", ren_comp.id, m_vertices.size(), m_indices.size(), m_indicesMax, m_shapeID);
+			GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shapeID = {}", 
+				ren_comp.id, m_vertices.size(), m_indices.size(), m_indicesMax, m_shapeID);
 		}
 
 		void RenderPipeline::submitTransform(ecs::TransformComponent& tran) {
