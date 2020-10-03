@@ -34,54 +34,57 @@ namespace mar {
 		void RenderPipeline::submitRenderable(ecs::RenderableComponent& ren_comp) {
 			GRAPHICS_INFO("RENDER_PIPELINE: submitting renderable component");
 
-			ShapeManipulator::extendShapeID(ren_comp.vertices, m_stride, m_shapeID);
-			m_vertices.insert(m_vertices.end(), ren_comp.vertices.begin(), ren_comp.vertices.end());
+			ShapeManipulator::extendShapeID(ren_comp.vertices, m_container.m_stride, m_container.m_shapeID);
+			m_container.m_vertices.insert(m_container.m_vertices.end(), ren_comp.vertices.begin(), ren_comp.vertices.end());
 
-			uint32_t start_extension = m_indices.size();
-			uint32_t end_extension = m_indices.size() + ren_comp.indices.size();
-			m_indices.insert(m_indices.end(), ren_comp.indices.begin(), ren_comp.indices.end());
-			ShapeManipulator::extendIndices(m_indices, start_extension, end_extension, m_indicesMax);
+			uint32_t start_extension = m_container.m_indices.size();
+			uint32_t end_extension = m_container.m_indices.size() + ren_comp.indices.size();
+			m_container.m_indices.insert(m_container.m_indices.end(), ren_comp.indices.begin(), ren_comp.indices.end());
+			ShapeManipulator::extendIndices(m_container.m_indices, start_extension, end_extension, m_container.m_indicesMax);
 
-			ren_comp.shader_id = m_shapeID;
+			ren_comp.shader_id = m_container.m_shapeID;
 
-			m_indicesMax += ren_comp.vertices.size() / m_stride;
-			m_shapeID++;
+			m_container.m_indicesMax += ren_comp.vertices.size() / m_container.m_stride;
+			m_container.m_shapeID++;
 
 			GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shapeID = {}", 
-				ren_comp.id, m_vertices.size(), m_indices.size(), m_indicesMax, m_shapeID);
+				ren_comp.id, m_container.m_vertices.size(), m_container.m_indices.size(), m_container.m_indicesMax, m_container.m_shapeID);
 		}
 
 		void RenderPipeline::submitTransform(ecs::TransformComponent& tran) {
-			m_transforms.push_back(tran.transform);
+			m_container.m_transforms.push_back(tran.transform);
 			
-			GRAPHICS_TRACE("RENDER_PIPELINE: submitted transform component, current size = {}", m_transforms.size());
+			GRAPHICS_TRACE("RENDER_PIPELINE: submitted transform component, current size = {}", m_container.m_transforms.size());
 		}
 
 		void RenderPipeline::submitColor(float entity_index, ecs::ColorComponent& color) {
-			m_colors.push_back({ entity_index, color.texture });
-			m_samplerTypes.push_back(0.0f);
+			m_container.m_colors.push_back({ entity_index, color.texture });
+			m_container.m_samplerTypes.push_back(0.0f);
 
-			GRAPHICS_TRACE("RENDER_PIPELINE: submitted color component, current size = {}, entity_index = {}", m_colors.size(), entity_index);
+			GRAPHICS_TRACE("RENDER_PIPELINE: submitted color component, current size = {}, entity_index = {}",
+				m_container.m_colors.size(), entity_index);
 		}
 
 		void RenderPipeline::submitTexture2D(float entity_index, ecs::Texture2DComponent& tex) {
-			m_tex2D.push_back({ entity_index, tex.texture });
-			m_samplerTypes.push_back(1.0f);
+			m_container.m_tex2D.push_back({ entity_index, tex.texture });
+			m_container.m_samplerTypes.push_back(1.0f);
 
-			GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture2d component, current size = {}, entity_index = {}, texture2D = {}", m_tex2D.size(), entity_index, tex.texture);
+			GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture2d component, current size = {}, entity_index = {}, texture2D = {}", 
+				m_container.m_tex2D.size(), entity_index, tex.texture);
 		}
 
 		void RenderPipeline::submitCubemap(float entity_index, ecs::TextureCubemapComponent& cube) {
-			m_cubes.push_back({ entity_index, cube.texture });
-			m_samplerTypes.push_back(2.0f);
+			m_container.m_cubes.push_back({ entity_index, cube.texture });
+			m_container.m_samplerTypes.push_back(2.0f);
 
-			GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", m_cubes.size(), entity_index, cube.texture);
+			GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", 
+				m_container.m_cubes.size(), entity_index, cube.texture);
 		}
 
 		void RenderPipeline::submitLight(maths::vec3& position, ecs::LightComponent& light) {
-			m_lights.push_back({ position, light });
+			m_container.m_lights.push_back({ position, light });
 
-			GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center");
+			GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", m_container.m_lights.size());
 		}
 
 		void RenderPipeline::submitCamera(RenderCamera* cam) {
@@ -89,38 +92,26 @@ namespace mar {
 		}
 
 		void RenderPipeline::modifyTransform(ecs::TransformComponent& tran, int32_t index) {
-			m_transforms[index] = tran;
+			m_container.m_transforms[index] = tran;
 
 			GRAPHICS_TRACE("RENDER_PIPELINE: modified transform component at index {}", index);
 		}
 
 		void RenderPipeline::modifyLight(maths::vec3& position, ecs::LightComponent& light, int32_t index) {
-			m_lights[index].first = position;
-			m_lights[index].second = light;
+			m_container.m_lights[index].first = position;
+			m_container.m_lights[index].second = light;
 
 			GRAPHICS_TRACE("RENDER_PIPELINE: modified light component at index {}", index);
 		}
 
 		void RenderPipeline::modifyColor(ecs::ColorComponent& color, int32_t index) {
-			m_colors[index].second = color.texture;
+			m_container.m_colors[index].second = color.texture;
 
 			GRAPHICS_TRACE("RENDER_PIPELINE: modified color component at index {}", index);
 		}
 
 		void RenderPipeline::reset() {
-			m_vertices.clear();
-			m_indices.clear();
-			m_shapeID = 0.f;
-			m_indicesMax = 0;
-
-			m_transforms.clear();
-
-			m_colors.clear();
-			m_tex2D.clear();
-			m_cubes.clear();
-			m_samplerTypes.clear();
-
-			m_lights.clear();
+			m_container.reset();
 
 			GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 		}
