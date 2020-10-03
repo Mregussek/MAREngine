@@ -21,6 +21,7 @@
 #include "RendererBatch.h"
 #include "RenderPipeline.h"
 #include "RenderCamera.h"
+#include "RenderEvents.h"
 #include "../GraphicsLogs.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderUniforms.h"
@@ -68,20 +69,13 @@ namespace mar {
 				m_buffers.update(render_pip.getVertices(), render_pip.getIndices());
 			
 				platforms::DrawingOpenGL::drawTriangles(render_pip.getIndicesCount());
-			
+				RenderEvents::onDrawCall(&render_pip);
+
 				m_buffers.reset();
 				m_buffers.unbind();
 
 				platforms::TextureOpenGL::Instance()->unbind(render_pip.getSamplerTypes());
 			}
-
-			auto& statistics = render_pip.getStatistics();
-
-			statistics.drawCallsCount += 1;
-			statistics.shapesCount += render_pip.getTransforms().size();
-			statistics.verticesCount += render_pip.getVertices().size();
-			statistics.indicesCount += render_pip.getIndicesCount();
-			statistics.trianglesCount += render_pip.getIndicesCount() / 3;
 
 			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 		}

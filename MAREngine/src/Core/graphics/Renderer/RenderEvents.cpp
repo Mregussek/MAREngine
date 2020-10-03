@@ -19,11 +19,20 @@
 
 
 #include "RenderEvents.h"
+#include "RenderPipeline.h"
+#include "../GraphicsLogs.h"
 
 
 namespace mar {
 	namespace graphics {
 
-		bool RenderEvents::updatedRenderables{ false };
+
+		void RenderEvents::onDrawCall(RenderPipeline* render_pipeline) {
+			auto& stats = render_pipeline->getStatistics();
+			stats.drawCallsCount += 1;
+
+			GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
+		}
 	
+
 } }

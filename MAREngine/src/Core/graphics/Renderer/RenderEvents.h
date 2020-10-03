@@ -28,9 +28,13 @@
 namespace mar {
 	namespace graphics {
 
+		class RenderPipeline;
 
-		struct RenderEvents {
-			static bool updatedRenderables;
+
+		class RenderEvents {
+		public:
+
+			static void onDrawCall(RenderPipeline* render_pipeline);
 		};
 
 

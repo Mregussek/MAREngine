@@ -155,7 +155,13 @@ namespace mar {
 		void GUI_SceneHierarchy::Scene_Statistics() {
 			ImGui::Begin("Statistics Menu");
 
-			auto& stats = graphics::RenderPipeline::getInstance().getStatistics();
+			auto& render_pip = graphics::RenderPipeline::getInstance();
+			auto& stats = render_pip.getStatistics();
+
+			stats.shapesCount += render_pip.getTransforms().size();
+			stats.verticesCount += render_pip.getVertices().size();
+			stats.indicesCount += render_pip.getIndicesCount();
+			stats.trianglesCount += render_pip.getIndicesCount() / 3;
 
 			ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
 			ImGui::Text("Vertices: %d" , stats.verticesCount);
