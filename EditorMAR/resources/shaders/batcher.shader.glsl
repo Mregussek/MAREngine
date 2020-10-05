@@ -55,7 +55,7 @@ uniform struct Material {
 	float linear;
 	float quadratic;
 	float shininess;
-} u_material[15];
+} u_material[32];
 
 uniform int u_materialSize;
 uniform vec3 u_CameraPos;

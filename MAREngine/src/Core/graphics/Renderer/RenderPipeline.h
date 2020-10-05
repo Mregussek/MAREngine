@@ -42,18 +42,19 @@ namespace mar {
 			void initialize();
 			void reset();
 
-			void setAvailableContainerRenderable(size_t vert_to_push, size_t ind_to_push);
+			void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push);
+			void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
 
-			void submitRenderable(ecs::RenderableComponent& ren_comp, ecs::TransformComponent& tran);
-			void submitColor(float entity_index, ecs::ColorComponent& color);
-			void submitTexture2D(float entity_index, ecs::Texture2DComponent& tex);
-			void submitCubemap(float entity_index, ecs::TextureCubemapComponent& cube);
-			void submitLight(maths::vec3& position, ecs::LightComponent& light);
+			size_t submitRenderable(ecs::RenderableComponent& ren_comp, ecs::TransformComponent& tran);
+			size_t submitColor(float entity_index, ecs::ColorComponent& color);
+			size_t submitTexture2D(float entity_index, ecs::Texture2DComponent& tex);
+			size_t submitCubemap(float entity_index, ecs::TextureCubemapComponent& cube);
+			size_t submitLight(maths::vec3& position, ecs::LightComponent& light);
 			void submitCamera(RenderCamera* cam);
 
-			void modifyTransform(ecs::TransformComponent& tran, int32_t index);
-			void modifyLight(maths::vec3& position, ecs::LightComponent& light, int32_t index);
-			void modifyColor(ecs::ColorComponent& color, int32_t index);
+			void modifyTransform(ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
+			void modifyLight(maths::vec3& position, ecs::LightComponent& light, size_t container_index, size_t light_index);
+			void modifyColor(ecs::ColorComponent& color, size_t container_index, size_t color_index);
 
 			RenderStatistics& getStatistics() { return s_statistics; }
 			void clearStatistics() { s_statistics.resetStatistics(); }
@@ -64,6 +65,7 @@ namespace mar {
 
 			const std::vector<RenderContainer>& getContainers() const { return m_containers; }
 			const RenderCamera* getCamera() const { return m_camera; }
+			const size_t getAvailableContainerIndex() const { return m_availableContainerIndex; }
 
 		private:
 
@@ -71,7 +73,7 @@ namespace mar {
 
 			RenderStatistics s_statistics;
 			std::vector<RenderContainer> m_containers;
-			RenderContainer* m_availableContainer{ nullptr };
+			size_t m_availableContainerIndex{ 0 };
 
 			RenderCamera* m_camera{ nullptr };
 

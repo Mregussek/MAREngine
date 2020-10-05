@@ -73,11 +73,10 @@ namespace mar {
 				case ECS_TAG:
 					copyComponent<TagComponent>(component, src, dst);
 					break;
-				case ECS_DEFAULT:
-					copyComponent<Components>(component, src, dst);
-					break;
 				}
 			}
+
+			src->copyDefault(dst);
 		}
 
 		template<typename T>

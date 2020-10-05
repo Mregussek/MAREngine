@@ -206,6 +206,166 @@ namespace mar {
 					"u_material[15].linear" ,
 					"u_material[15].quadratic" ,
 					"u_material[15].shininess"
+				},
+				{
+					"u_material[16].lightPos",
+					"u_material[16].ambient" ,
+					"u_material[16].diffuse" ,
+					"u_material[16].specular" ,
+					"u_material[16].constant" ,
+					"u_material[16].linear" ,
+					"u_material[16].quadratic" ,
+					"u_material[16].shininess"
+				},
+				{
+					"u_material[17].lightPos",
+					"u_material[17].ambient" ,
+					"u_material[17].diffuse" ,
+					"u_material[17].specular" ,
+					"u_material[17].constant" ,
+					"u_material[17].linear" ,
+					"u_material[17].quadratic" ,
+					"u_material[17].shininess"
+				},
+				{
+					"u_material[18].lightPos",
+					"u_material[18].ambient" ,
+					"u_material[18].diffuse" ,
+					"u_material[18].specular" ,
+					"u_material[18].constant" ,
+					"u_material[18].linear" ,
+					"u_material[18].quadratic" ,
+					"u_material[18].shininess"
+				},
+				{
+					"u_material[19].lightPos",
+					"u_material[19].ambient" ,
+					"u_material[19].diffuse" ,
+					"u_material[19].specular" ,
+					"u_material[19].constant" ,
+					"u_material[19].linear" ,
+					"u_material[19].quadratic" ,
+					"u_material[19].shininess"
+				},
+				{
+					"u_material[20].lightPos",
+					"u_material[20].ambient" ,
+					"u_material[20].diffuse" ,
+					"u_material[20].specular" ,
+					"u_material[20].constant" ,
+					"u_material[20].linear" ,
+					"u_material[20].quadratic" ,
+					"u_material[20].shininess"
+				},
+				{
+					"u_material[21].lightPos",
+					"u_material[21].ambient" ,
+					"u_material[21].diffuse" ,
+					"u_material[21].specular" ,
+					"u_material[21].constant" ,
+					"u_material[21].linear" ,
+					"u_material[21].quadratic" ,
+					"u_material[21].shininess"
+				},
+				{
+					"u_material[22].lightPos",
+					"u_material[22].ambient" ,
+					"u_material[22].diffuse" ,
+					"u_material[22].specular" ,
+					"u_material[22].constant" ,
+					"u_material[22].linear" ,
+					"u_material[22].quadratic" ,
+					"u_material[22].shininess"
+				},
+				{
+					"u_material[23].lightPos",
+					"u_material[23].ambient" ,
+					"u_material[23].diffuse" ,
+					"u_material[23].specular" ,
+					"u_material[23].constant" ,
+					"u_material[23].linear" ,
+					"u_material[23].quadratic" ,
+					"u_material[23].shininess"
+				},
+				{
+					"u_material[24].lightPos",
+					"u_material[24].ambient" ,
+					"u_material[24].diffuse" ,
+					"u_material[24].specular" ,
+					"u_material[24].constant" ,
+					"u_material[24].linear" ,
+					"u_material[24].quadratic" ,
+					"u_material[24].shininess"
+				},
+				{
+					"u_material[25].lightPos",
+					"u_material[25].ambient" ,
+					"u_material[25].diffuse" ,
+					"u_material[25].specular" ,
+					"u_material[25].constant" ,
+					"u_material[25].linear" ,
+					"u_material[25].quadratic" ,
+					"u_material[25].shininess"
+				},
+				{
+					"u_material[26].lightPos",
+					"u_material[26].ambient" ,
+					"u_material[26].diffuse" ,
+					"u_material[26].specular" ,
+					"u_material[26].constant" ,
+					"u_material[26].linear" ,
+					"u_material[26].quadratic" ,
+					"u_material[26].shininess"
+				},
+				{
+					"u_material[27].lightPos",
+					"u_material[27].ambient" ,
+					"u_material[27].diffuse" ,
+					"u_material[27].specular" ,
+					"u_material[27].constant" ,
+					"u_material[27].linear" ,
+					"u_material[27].quadratic" ,
+					"u_material[27].shininess"
+				},
+				{
+					"u_material[28].lightPos",
+					"u_material[28].ambient" ,
+					"u_material[28].diffuse" ,
+					"u_material[28].specular" ,
+					"u_material[28].constant" ,
+					"u_material[28].linear" ,
+					"u_material[28].quadratic" ,
+					"u_material[28].shininess"
+				},
+				{
+					"u_material[29].lightPos",
+					"u_material[29].ambient" ,
+					"u_material[29].diffuse" ,
+					"u_material[29].specular" ,
+					"u_material[29].constant" ,
+					"u_material[29].linear" ,
+					"u_material[29].quadratic" ,
+					"u_material[29].shininess"
+				},
+				{
+					"u_material[30].lightPos",
+					"u_material[30].ambient" ,
+					"u_material[30].diffuse" ,
+					"u_material[30].specular" ,
+					"u_material[30].constant" ,
+					"u_material[30].linear" ,
+					"u_material[30].quadratic" ,
+					"u_material[30].shininess"
+				},
+				{
+					"u_material[31].lightPos",
+					"u_material[31].ambient" ,
+					"u_material[31].diffuse" ,
+					"u_material[31].specular" ,
+					"u_material[31].constant" ,
+					"u_material[31].linear" ,
+					"u_material[31].quadratic" ,
+					"u_material[31].shininess"
 				}
 			};
 

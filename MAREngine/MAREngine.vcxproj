@@ -246,6 +246,7 @@
     <ClInclude Include="src\Core\ecs\Components\CameraComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\Components.h" />
     <ClInclude Include="src\Core\ecs\Components\DefaultComponents.h" />
+    <ClInclude Include="src\Core\ecs\Components\EngineOnlyComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\LightComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\ScriptingComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\TextureComponents.h" />

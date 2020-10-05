@@ -81,25 +81,30 @@ namespace mar {
 
 				if (entity.hasComponent<LightComponent>()) {
 					auto& light = entity.getComponent<LightComponent>();
-					render_pipeline.submitLight(tran.center, light);
+					auto& rpc = entity.getComponent<RenderPipelineComponent>();
+
+					render_pipeline.setAvailableContainerLight(rpc);
+					rpc.light_index = render_pipeline.submitLight(tran.center, light);
 				}
 
 				if (entity.hasComponent<RenderableComponent>()) {
 					auto& ren = entity.getComponent<RenderableComponent>();
-					render_pipeline.setAvailableContainerRenderable(ren.vertices.size(), ren.indices.size());
-					render_pipeline.submitRenderable(ren, tran);
+					auto& rpc = entity.getComponent<RenderPipelineComponent>();
+
+					render_pipeline.setAvailableContainerRenderable(rpc, ren.vertices.size(), ren.indices.size());
+					rpc.transform_index = render_pipeline.submitRenderable(ren, tran);
 
 					if (entity.hasComponent<ColorComponent>()) {
 						auto& color = entity.getComponent<ColorComponent>();
-						render_pipeline.submitColor(ren.shader_id, color);
+						rpc.color_index = render_pipeline.submitColor(ren.shader_id, color);
 					}
 					else if (entity.hasComponent<Texture2DComponent>()) {
 						auto& tex = entity.getComponent<Texture2DComponent>();
-						render_pipeline.submitTexture2D(ren.shader_id, tex);
+						rpc.color_index = render_pipeline.submitTexture2D(ren.shader_id, tex);
 					}
 					else if (entity.hasComponent<TextureCubemapComponent>()) {
 						auto& cube = entity.getComponent<TextureCubemapComponent>();
-						render_pipeline.submitCubemap(ren.shader_id, cube);
+						rpc.color_index = render_pipeline.submitCubemap(ren.shader_id, cube);
 					}
 				}
 
@@ -206,14 +211,6 @@ namespace mar {
 		void SceneManager::updatePlayMode() {
 			ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-			static int32_t transform_counter = 0;
-			static int32_t light_counter = 0;
-			static int32_t color_counter = 0;
-
-			transform_counter = 0;
-			light_counter = 0;
-			color_counter = 0;
-
 			auto& render_pipeline = graphics::RenderPipeline::getInstance();
 
 			for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
@@ -221,30 +218,24 @@ namespace mar {
 				auto& tran = entity.getComponent<TransformComponent>();
 
 				if (entity.hasComponent<ScriptComponent>()) {
+					auto& rpc = entity.getComponent<RenderPipelineComponent>();
 					auto& sc = entity.getComponent<ScriptComponent>();
 					sc.pythonScript.update(&entity);
 
 					if (entity.hasComponent<RenderableComponent>()) {
-						render_pipeline.modifyTransform(tran, transform_counter);
-						transform_counter++;
+						
+						render_pipeline.modifyTransform(tran, rpc.container_index, rpc.transform_index);
 					}
 
 					if (entity.hasComponent<LightComponent>()) {
 						auto& light = entity.getComponent<LightComponent>();
-						render_pipeline.modifyLight(tran.center, light, light_counter);
-						light_counter++;
+						render_pipeline.modifyLight(tran.center, light, rpc.container_light_index, rpc.light_index);
 					}
 
 					if (entity.hasComponent<ColorComponent>()) {
 						auto& color = entity.getComponent<ColorComponent>();
-						render_pipeline.modifyColor(color, color_counter);
-						color_counter++;
+						render_pipeline.modifyColor(color, rpc.container_index, rpc.color_index);
 					}
-				}
-				else {
-					if (entity.hasComponent<RenderableComponent>()) { transform_counter++; }
-					if (entity.hasComponent<LightComponent>()) { light_counter++; }
-					if (entity.hasComponent<ColorComponent>()) { color_counter++; }
 				}
 
 				if (entity.hasComponent<CameraComponent>()) {

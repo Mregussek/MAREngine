@@ -27,6 +27,7 @@
 #include "ScriptingComponents.h"
 #include "CameraComponents.h"
 #include "LightComponents.h"
+#include "EngineOnlyComponents.h"
 
 
 namespace mar {
