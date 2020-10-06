@@ -55,11 +55,15 @@ namespace mar {
 			GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
 			
 			for (const auto& container : render_pip.getContainers()) {
-				m_shader.bind();
-				passCameraToShader(render_pip.getCamera());
-				passLightToShader(container);
-				drawContainer(container);
-				RenderEvents::onDrawCall(&render_pip);
+				for (const auto& container_light : render_pip.getContainers()) {
+					if (!container_light.getLights().empty()) {
+						m_shader.bind();
+						passCameraToShader(render_pip.getCamera());
+						passLightToShader(container_light);
+						drawContainer(container);
+						RenderEvents::onDrawCall(&render_pip);
+					}
+				}
 			}
 			
 			GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
