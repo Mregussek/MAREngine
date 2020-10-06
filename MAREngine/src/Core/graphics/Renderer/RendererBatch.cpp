@@ -57,6 +57,7 @@ namespace mar {
 			for (const auto& container : render_pip.getContainers()) {
 				m_shader.bind();
 				passCameraToShader(render_pip.getCamera());
+				passLightToShader(container);
 				drawContainer(container);
 				RenderEvents::onDrawCall(&render_pip);
 			}
@@ -67,9 +68,10 @@ namespace mar {
 		void RendererBatch::drawContainer(const RenderContainer& container) {
 			GRAPHICS_TRACE("RENDERER_BATCH: going to draw render container!");
 			{
-				m_shader.setUniformMat4("u_SeparateTransform", container.getTransforms());
+				using namespace platforms::ShaderUniforms;
+
+				m_shader.setUniformMat4(u_separateTransform, container.getTransforms());
 				passTexturesToShader(container);
-				passLightToShader(container);
 			}
 			{
 				m_buffers.bind();
@@ -97,7 +99,7 @@ namespace mar {
 			auto& tex2D = container.getTexture2D();
 			auto& cubes = container.getTextureCubemap();
 
-			m_shader.setUniformFloat("u_samplerTypes", samplerTypes);
+			m_shader.setUniformFloat(u_samplerTypes, samplerTypes);
 
 			static uint32_t tex_id = 0;
 			static uint32_t sampler = 0;
@@ -159,9 +161,11 @@ namespace mar {
 		void RendererBatch::passCameraToShader(const RenderCamera* camera) {
 			GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
 
-			m_shader.setUniformVec3("u_CameraPos", camera->position);
-			m_shader.setUniformMat4("u_Model", camera->model);
-			m_shader.setUniformMat4("u_MVP", camera->mvp);
+			using namespace platforms::ShaderUniforms;
+
+			m_shader.setUniformVec3(u_CameraPos, camera->position);
+			m_shader.setUniformMat4(u_Model, camera->model);
+			m_shader.setUniformMat4(u_MVP, camera->mvp);
 
 			GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 		}
