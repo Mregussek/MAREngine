@@ -21,6 +21,7 @@
 #include "EntityLayer.h"
 #include "../LayerLogs.h"
 #include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneEvents.h"
 #include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 
@@ -41,6 +42,7 @@ namespace mar {
 
 			m_renderer.initialize();
 
+			ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
 			m_sceneManager.setScene(scene);
 			m_sceneManager.initialize();
 
@@ -49,7 +51,8 @@ namespace mar {
 
 		void EntityLayer::update() {
 			LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
-
+			
+			ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
 			m_sceneManager.update();
 			m_renderer.draw(graphics::RenderPipeline::getInstance());
 

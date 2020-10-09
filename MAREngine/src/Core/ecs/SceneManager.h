@@ -37,9 +37,10 @@ namespace mar {
 
 		class SceneManager {
 			friend class SceneEvents;
+			typedef graphics::RenderPipeline RenderPipeline;
 
 		public:
-			SceneManager();
+			SceneManager() = default;
 	
 			// PUBLIC METHODS
 

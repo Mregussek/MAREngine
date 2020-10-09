@@ -51,6 +51,16 @@ namespace mar {
 				m_entities(other.m_entities)
 			{}
 
+			const bool isValid() const {
+				ECS_TRACE("ENTITY: {} checking if is valid!", m_collectionHandle);
+
+				return m_scene->m_registry.valid(m_collectionHandle);
+			}
+
+			operator const bool() const {
+				return isValid();
+			}
+
 			void destroyYourself() {
 				for (size_t i = 0; i < m_entities.size(); i++) {
 					if (m_entities[i].isValid()) {

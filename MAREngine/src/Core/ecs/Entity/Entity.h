@@ -46,8 +46,8 @@ namespace mar {
 				ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
 			}
 
-			Entity(const Entity& other)
-				: m_entityHandle(other.m_entityHandle),
+			Entity(const Entity& other) :
+				m_entityHandle(other.m_entityHandle),
 				m_scene(other.m_scene)
 			{
 				ECS_TRACE("ENTITY: {} is copied!", m_entityHandle);
@@ -76,7 +76,7 @@ namespace mar {
 				return m_scene->m_registry.valid(m_entityHandle);
 			}
 
-			operator bool() const {
+			operator const bool() const {
 				return isValid();
 			}
 
@@ -100,7 +100,7 @@ namespace mar {
 			}
 
 			template<typename T, typename... Args>
-			T& addComponent(EntityComponents entcmp, Args&&... args) {
+			T& addComponent(EntityComponents entcmp, Args&&... args) const {
 				MAR_CORE_ASSERT(!hasComponent<T>(), "Entity already has this component!");
 
 				auto& com = getComponent<Components>();
@@ -121,7 +121,7 @@ namespace mar {
 			}
 
 			template<typename T>
-			void removeComponent(EntityComponents entcmp) {
+			void removeComponent(EntityComponents entcmp) const {
 				MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
 
 				ECS_INFO("ENTITY: {} going to remove component {}", m_entityHandle, entcmp);

@@ -61,9 +61,11 @@ namespace mar {
 			inline maths::vec3& getBackground() { return m_backgroundColor; }
 
 			const std::vector<Entity>& getEntities() const;
+			std::vector<Entity>& getEntities();
 			Entity& getEntity(size_t index);
 
 			const std::vector<EntityCollection>& getCollections() const;
+			std::vector<EntityCollection>& getCollections();
 			EntityCollection& getCollection(size_t index);
 
 			inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }

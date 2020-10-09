@@ -109,6 +109,10 @@ namespace mar {
 			return m_container.m_entities;
 		}
 
+		std::vector<Entity>& Scene::getEntities() {
+			return m_container.m_entities;
+		}
+
 		Entity& Scene::getEntity(size_t index) { 
 			return m_container.m_entities[index];
 		}
@@ -133,10 +137,16 @@ namespace mar {
 		void Scene::destroyCollection(int32_t index) {
 			ECS_INFO("SCENE: going to destroy collection at {}", index);
 
-			m_container.m_collections[index].destroyYourself();
-			m_container.m_collections.erase(m_container.m_collections.begin() + index);
+			if (m_container.m_collections[index].isValid()) {
+				m_container.m_collections[index].destroyYourself();
+				m_container.m_collections.erase(m_container.m_collections.begin() + index);
 
-			ECS_INFO("SCENE: collection at {} is deleted properly!", index);
+				ECS_INFO("SCENE: destroyed collection at {}!", index);
+				return;
+			}
+			else {
+				ECS_INFO("SCENE: collection at {} is not valid, so it cannot be destroyed!", index);
+			}
 		}
 
 		void Scene::destroyEntityAtCollection(int32_t collection_index, int32_t entity_index) {
@@ -146,6 +156,10 @@ namespace mar {
 		}
 
 		const std::vector<EntityCollection>& Scene::getCollections() const { 
+			return m_container.m_collections;
+		}
+
+		std::vector<EntityCollection>& Scene::getCollections() {
 			return m_container.m_collections;
 		}
 

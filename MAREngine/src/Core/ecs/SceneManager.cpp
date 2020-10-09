@@ -37,16 +37,10 @@ namespace mar {
 	namespace ecs {
 
 
-		SceneManager::SceneManager() {
-			SceneEvents::Instance().scene_manager = this;
-
-			ECS_INFO("SCENE_MANAGER: called constructor");
-		}
-
 		void SceneManager::initialize() const {
 			ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
-			auto& render_pipeline = graphics::RenderPipeline::getInstance();
+			auto& render_pipeline = RenderPipeline::getInstance();
 			render_pipeline.reset();
 
 			const auto& entitiesVector = m_scene->getEntities();
@@ -125,27 +119,27 @@ namespace mar {
 
 			m_playStorage.clear();
 
-			for (auto& entity : m_scene->getEntities()) {
-				m_playStorage.pushEntityToStorage(m_playStorage.entity_storage, entity);
+			const auto& entitiesVector = m_scene->getEntities();
+			const auto& collectionsVector = m_scene->getCollections();
 
+			auto inititializeScriptModule = [](const Entity& entity) {
 				if (entity.hasComponent<ScriptComponent>()) {
 					auto& sc = entity.getComponent<ScriptComponent>();
 					sc.pythonScript.loadScript(sc.script);
 					sc.pythonScript.start(&entity);
 				}
-			}
+			};
 
-			for (auto& collection : m_scene->getCollections()) {
-				m_playStorage.pushCollectionToStorage(m_playStorage.collection_storage, collection);
+			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const Entity& entity) {
+				playStorage.pushEntityToStorage(playStorage.entity_storage, entity);
+				inititializeScriptModule(entity);
+			});
 
-				for (auto& entity : collection.getEntities()) {
-					if (entity.hasComponent<ScriptComponent>()) {
-						auto& sc = entity.getComponent<ScriptComponent>();
-						sc.pythonScript.loadScript(sc.script);
-						sc.pythonScript.start(&entity);
-					}
-				}
-			}
+			std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const EntityCollection& collection) {
+				playStorage.pushCollectionToStorage(playStorage.collection_storage, collection);
+				const auto& entitiesVector = collection.getEntities();
+				std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), inititializeScriptModule);
+			});
 
 			ECS_INFO("SCENE_MANAGER: initialized play mode!");
 		}
@@ -153,13 +147,16 @@ namespace mar {
 		void SceneManager::exitPlayMode() {
 			ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
-			for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
-				m_playStorage.loadEntityFromStorage(m_playStorage.entity_storage, m_scene->getEntity(i));
-			}
+			auto& entitiesVector = m_scene->getEntities();
+			auto& collectionsVector = m_scene->getCollections();
 
-			for (size_t i = 0; i < m_scene->getCollections().size(); i++) {
-				m_playStorage.loadCollectionFromStorage(m_playStorage.collection_storage, m_scene->getCollection(i));
-			}
+			std::for_each(entitiesVector.begin(), entitiesVector.end(), [&playStorage = m_playStorage](Entity& entity) {
+				playStorage.loadEntityFromStorage(playStorage.entity_storage, entity);
+			});
+
+			std::for_each(collectionsVector.begin(), collectionsVector.end(), [&playStorage = m_playStorage](EntityCollection& collection) {
+				playStorage.loadCollectionFromStorage(playStorage.collection_storage, collection);
+			});
 
 			initialize();
 
