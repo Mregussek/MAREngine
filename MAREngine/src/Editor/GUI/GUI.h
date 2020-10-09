@@ -27,65 +27,64 @@
 #include "../../Platform/OpenGL/FrameBufferOpenGL.h"
 
 
-namespace mar {
-	namespace ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
-
-	namespace editor {
+namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
+namespace mar::editor {
 
 
-		class GUI {
-		public:
-			GUI() = default;
+	class GUI {
+	public:
+		GUI() = default;
 
-			void initialize(const char* glsl_version);
-			void shutdown();
+		void initialize(const char* glsl_version);
+		void shutdown();
 
-			void submit(ecs::SceneManager* scene);
+		void submit(ecs::SceneManager* scene);
 
-			void bind() {
-				m_viewportFramebuffer.bind();
-				m_viewportFramebuffer.clear();
-			}
+		void bind() {
+			m_viewportFramebuffer.bind();
+			m_viewportFramebuffer.clear();
+		}
 
-			void display();
+		void display();
 
-			// --- GET METHODS --- //
-			float getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
-			float getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
-			float getMouseViewportPosX() { return m_mouseViewportX; }
-			float getMouseViewportPosY() { return m_mouseViewportY; }
-			bool isViewportInputEnabled() { return m_enableViewportInput; }
-			platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
-			ecs::Entity* getCurrentEntity();
-			ecs::EntityCollection* getCurrentCollection();
-			bool canDrawLines();
+		// --- GET METHODS --- //
+		float getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
+		float getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
+		float getMouseViewportPosX() { return m_mouseViewportX; }
+		float getMouseViewportPosY() { return m_mouseViewportY; }
+		bool isViewportInputEnabled() { return m_enableViewportInput; }
+		platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
+		ecs::Entity* getCurrentEntity();
+		ecs::EntityCollection* getCurrentCollection();
+		bool canDrawLines();
 
-		private:
-			// --- DISPLAY --- //
-			void prepareNewFrame();
-			void updateFrame();
-			void endFrame();
+	private:
+		// --- DISPLAY --- //
+		void prepareNewFrame();
+		void updateFrame();
+		void endFrame();
 
-			// --- EDITOR --- //
-			void Editor_ViewPort();
-			void Editor_Properties();
+		// --- EDITOR --- //
+		void Editor_ViewPort();
+		void Editor_Properties();
 
-		private:
-			// --- Storage for scenes
-			ecs::SceneManager* m_sceneManager;
-			// --- Viewport
-			platforms::FrameBufferOpenGL m_viewportFramebuffer;
-			float m_mouseViewportX{ 0.f };
-			float m_mouseViewportY{ 0.f };
-			bool m_enableViewportInput{ false };
-			// --- MainMenuBar
-			GUI_MainMenuBar m_mainMenuBar;
-			// --- Dockspace
-			bool s_dockspaceOpen{ true };
-			bool s_fullscreenPersisant{ true };
-		};
+	private:
+		// --- Storage for scenes
+		ecs::SceneManager* m_sceneManager;
+		// --- Viewport
+		platforms::FrameBufferOpenGL m_viewportFramebuffer;
+		float m_mouseViewportX{ 0.f };
+		float m_mouseViewportY{ 0.f };
+		bool m_enableViewportInput{ false };
+		// --- MainMenuBar
+		GUI_MainMenuBar m_mainMenuBar;
+		// --- Dockspace
+		bool s_dockspaceOpen{ true };
+		bool s_fullscreenPersisant{ true };
+	};
 
 
-} }
+}
+
 
 #endif // !MAR_ENGINE_EDITOR_GUI_H

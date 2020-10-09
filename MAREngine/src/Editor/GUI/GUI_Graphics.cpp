@@ -30,51 +30,50 @@
 #include "../Camera/Camera.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		void GUI_Graphics::initialize() {
-			uint32_t max_vertex_count = 500000;
-			uint32_t max_index_count = 500000 / 2;
+	void GUI_Graphics::initialize() {
+		uint32_t max_vertex_count = 500000;
+		uint32_t max_index_count = 500000 / 2;
 
-			m_pipeline.initialize(max_vertex_count, max_index_count);
-			m_shader.initialize("resources/shaders/lineloops.shader.glsl");
-		}
+		m_pipeline.initialize(max_vertex_count, max_index_count);
+		m_shader.initialize("resources/shaders/lineloops.shader.glsl");
+	}
 
-		void GUI_Graphics::close() { 
-			m_pipeline.close();
-			m_shader.shutdown();
-		}
+	void GUI_Graphics::close() { 
+		m_pipeline.close();
+		m_shader.shutdown();
+	}
 
-		void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
-			static size_t index;
-			static maths::vec3 scale;
-			index = (size_t)ren.shader_id;
-			scale = tran.scale + 0.05f;
-			maths::mat4 better_outline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
+	void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
+		static size_t index;
+		static maths::vec3 scale;
+		index = (size_t)ren.shader_id;
+		scale = tran.scale + 0.05f;
+		maths::mat4 better_outline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
 
-			m_pipeline.bind();
-			m_pipeline.update(ren.vertices, ren.indices);
+		m_pipeline.bind();
+		m_pipeline.update(ren.vertices, ren.indices);
 
-			m_shader.bind();
-			m_shader.setUniformMat4("u_MVP", Camera::getCameraData().mvp);
-			m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
-			
-			platforms::DrawingOpenGL::drawOutline(ren.indices.size());
+		m_shader.bind();
+		m_shader.setUniformMat4("u_MVP", Camera::getCameraData().mvp);
+		m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
+		
+		platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 
-			m_pipeline.reset();
-			m_pipeline.unbind();
-		}
+		m_pipeline.reset();
+		m_pipeline.unbind();
+	}
 
-		void GUI_Graphics::passToDrawCollection(ecs::EntityCollection* c) {
-			
-		}
+	void GUI_Graphics::passToDrawCollection(ecs::EntityCollection* c) {
+		
+	}
 
-		void GUI_Graphics::passToDrawEntity(ecs::Entity* e) {
-			if (e->hasComponent<ecs::RenderableComponent>())
-				drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
-		}
+	void GUI_Graphics::passToDrawEntity(ecs::Entity* e) {
+		if (e->hasComponent<ecs::RenderableComponent>())
+			drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
+	}
 
 
-} }
+}

@@ -27,29 +27,27 @@
 #include "../../Platform/OpenGL/ShaderOpenGL.h"
 
 
-namespace mar {
-	namespace ecs { class Entity; class EntityCollection; struct TransformComponent; struct RenderableComponent; }
-
-	namespace editor {
+namespace mar::ecs { class Entity; class EntityCollection; struct TransformComponent; struct RenderableComponent; }
+namespace mar::editor {
 
 		
-		class GUI_Graphics {
-			platforms::PipelineOpenGL m_pipeline;
-			platforms::ShaderOpenGL m_shader;
+	class GUI_Graphics {
+		platforms::PipelineOpenGL m_pipeline;
+		platforms::ShaderOpenGL m_shader;
 
-		public:
+	public:
 
-			void initialize();
-			void close();
+		void initialize();
+		void close();
 
-			void drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran);
+		void drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran);
 
-			void passToDrawCollection(ecs::EntityCollection* c);
-			void passToDrawEntity(ecs::Entity* e);
-		};
+		void passToDrawCollection(ecs::EntityCollection* c);
+		void passToDrawEntity(ecs::Entity* e);
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_GUI_GRAPHICS_H

@@ -25,37 +25,35 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace ecs { class SceneManager; /* forward declaration */ }
-
-	namespace editor {
+namespace mar::ecs { class SceneManager; /* forward declaration */ }
+namespace mar::editor {
 
 
-		class GUI_MainMenuBar {
-			bool m_newSceneWindow{ false };
-			bool m_loadSceneWindow{ false };
-			bool m_saveSceneWindow{ false };
-			bool m_loadOBJfileWindow{ false };
-			bool m_infoWindow{ false };
-			bool m_instructionWindow{ false };
+	class GUI_MainMenuBar {
+		bool m_newSceneWindow{ false };
+		bool m_loadSceneWindow{ false };
+		bool m_saveSceneWindow{ false };
+		bool m_loadOBJfileWindow{ false };
+		bool m_infoWindow{ false };
+		bool m_instructionWindow{ false };
 
-			ecs::SceneManager* m_sceneManager{ nullptr };
+		ecs::SceneManager* m_sceneManager{ nullptr };
 
-		public:
+	public:
 
-			GUI_MainMenuBar() = default;
+		GUI_MainMenuBar() = default;
 
-			void setSceneManager(ecs::SceneManager* manager);
-			void display();
+		void setSceneManager(ecs::SceneManager* manager);
+		void display();
 
-		private:
+	private:
 
-			void display_mainMenuBar();
+		void display_mainMenuBar();
 
-		};
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_GUI_MAIN_MENU_BAR_H

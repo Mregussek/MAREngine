@@ -25,52 +25,51 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		class GUI_TextEditor {
-			static GUI_TextEditor s_Instance;
-			TextEditor editor;
-			std::string m_title{ "Empty" };
-			std::string m_pathToSave;
-			bool m_createNewScriptWindow;
-			bool m_openScriptWindow;
+	class GUI_TextEditor {
+		static GUI_TextEditor s_Instance;
+		TextEditor editor;
+		std::string m_title{ "Empty" };
+		std::string m_pathToSave;
+		bool m_createNewScriptWindow;
+		bool m_openScriptWindow;
 
-		public:
-			static std::string DEFAULT_SCRIPT;
+	public:
+		static std::string DEFAULT_SCRIPT;
 
-			GUI_TextEditor();
+		GUI_TextEditor();
 
-			static GUI_TextEditor& Instance() { return s_Instance; }
+		static GUI_TextEditor& Instance() { return s_Instance; }
 
-			void startup();
-			void update();
+		void startup();
+		void update();
 
-			void createNewFile(std::string scriptPath);
+		void createNewFile(std::string scriptPath);
 
-			void setPathToSave(std::string s) { m_pathToSave = std::move(s); }
-			void setEditorText(std::string s) { editor.SetText(std::move(s)); }
-			void setEditorTitle(std::string new_title) { m_title = std::move(new_title); }
+		void setPathToSave(std::string s) { m_pathToSave = std::move(s); }
+		void setEditorText(std::string s) { editor.SetText(std::move(s)); }
+		void setEditorTitle(std::string new_title) { m_title = std::move(new_title); }
 
-			void reset() {
-				setEditorText("def main():\n\tpass\n");
-				setEditorTitle("Empty");
-			}
+		void reset() {
+			setEditorText("def main():\n\tpass\n");
+			setEditorTitle("Empty");
+		}
 
-		private:
+	private:
 
-			void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);
+		void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);
 
-			void TextEditor_CreateNewScriptWindow();
-			void TextEditor_OpenScriptWindow();
-			void TextEditor_MenuBar();
-			void TextEditor_Render();
+		void TextEditor_CreateNewScriptWindow();
+		void TextEditor_OpenScriptWindow();
+		void TextEditor_MenuBar();
+		void TextEditor_Render();
 
-			const TextEditor::LanguageDefinition& TextEditorLanguageDefinition_Python();
-		};
+		const TextEditor::LanguageDefinition& TextEditorLanguageDefinition_Python();
+	};
 
 
-} }
+}
 
 #endif // !MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H

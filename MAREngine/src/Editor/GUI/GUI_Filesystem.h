@@ -25,30 +25,28 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace ecs { class Scene; }
-
-	namespace editor {
+namespace mar::ecs { class Scene; }
+namespace mar::editor {
 
 
-		struct GUI_Filesystem {
+	struct GUI_Filesystem {
 
-			static void SetOpenNewScene(const char* name);
-			static void Filesystem_NewScene(const char* name);
+		static void SetOpenNewScene(const char* name);
+		static void Filesystem_NewScene(const char* name);
 
-			static void SetOpenSaveScene(const char* name);
-			static void Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save);
+		static void SetOpenSaveScene(const char* name);
+		static void Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save);
 
-			static void SetOpenLoadScene(const char* name);
-			static void Filesystem_LoadScene(const char* name);
+		static void SetOpenLoadScene(const char* name);
+		static void Filesystem_LoadScene(const char* name);
 
-			static void SetOpenLoadOBJfile(const char* name);
-			static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
+		static void SetOpenLoadOBJfile(const char* name);
+		static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
 
-		};
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_GUI_FILESYSTEM_H

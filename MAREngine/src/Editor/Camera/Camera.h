@@ -26,51 +26,50 @@
 #include "../../Core/graphics/Renderer/RenderCamera.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-        class Camera {
-        public:
+    class Camera {
+    public:
 
-            Camera();
+        Camera();
 
-            void initialize(float aspectRatio);
-            void update(float aspectRatio);
+        void initialize(float aspectRatio);
+        void update(float aspectRatio);
 
-            static graphics::RenderCamera& getCameraData() { return s_instance->m_renderCamera; }
+        static graphics::RenderCamera& getCameraData() { return s_instance->m_renderCamera; }
 
-        private:
+    private:
 
-            void processInput();
-            void processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse);
-            void processMouseScroll(float yoffset);
-            void updateCameraVectors();
+        void processInput();
+        void processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse);
+        void processMouseScroll(float yoffset);
+        void updateCameraVectors();
 
-            void updateData();
+        void updateData();
 
-            maths::vec3 m_position;
-            maths::vec3 m_front;
-            maths::vec3 m_up;
-            maths::vec3 m_right;
-            maths::vec3 m_worldUp;
+        maths::vec3 m_position;
+        maths::vec3 m_front;
+        maths::vec3 m_up;
+        maths::vec3 m_right;
+        maths::vec3 m_worldUp;
 
-            float m_yaw;
-            float m_pitch;
+        float m_yaw;
+        float m_pitch;
 
-            float m_movementSpeed;
-            float m_mouseSensitivity;
-            float m_zoom;
+        float m_movementSpeed;
+        float m_mouseSensitivity;
+        float m_zoom;
 
-            float m_aspectRatio;
+        float m_aspectRatio;
 
-            graphics::RenderCamera m_renderCamera;
+        graphics::RenderCamera m_renderCamera;
 
-            static Camera* s_instance;
-        };
+        static Camera* s_instance;
+    };
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_CAMERA_H

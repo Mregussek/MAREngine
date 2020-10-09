@@ -26,22 +26,21 @@
 #include "../../Core/ecs/Scene.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		class Filesystem {
-		public:
+	class Filesystem {
+	public:
 
-			static void saveToFile(ecs::Scene* scene, const char* filename);
-			static ecs::Scene* openFile(std::string filename);
+		static void saveToFile(ecs::Scene* scene, const char* filename);
+		static ecs::Scene* openFile(std::string filename);
 
-			static std::string loadPyScript(const char* filename);
-			static void savePyScript(const char* filename, std::string source);
-		};
+		static std::string loadPyScript(const char* filename);
+		static void savePyScript(const char* filename, std::string source);
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_FILESYSTEM_H

@@ -25,31 +25,30 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace ecs { class EntityCollection; struct TagComponent; /* forward declarations */ }
-
-	namespace editor {
-
-
-		struct GUI_EntityCollectionPanel {
-			static ecs::EntityCollection* currentCollection;
-			static int32_t currentIndex;
-
-			static void Scene_EntityCollection_Modify();
-
-			static void reset();
-
-		private:
-
-			static void Scene_EntityCollection_PopUp(const char* collection_tag);
-			static void Handle_TagComponent(ecs::TagComponent& tag);
-			static void Handle_TransformComponent();
-
-		};
+namespace mar::ecs { 
+	class EntityCollection; struct TagComponent; /* forward declarations */ 
+}
+namespace mar::editor {
 
 
-} }
+	struct GUI_EntityCollectionPanel {
+		static ecs::EntityCollection* currentCollection;
+		static int32_t currentIndex;
 
+		static void Scene_EntityCollection_Modify();
+
+		static void reset();
+
+	private:
+
+		static void Scene_EntityCollection_PopUp(const char* collection_tag);
+		static void Handle_TagComponent(ecs::TagComponent& tag);
+		static void Handle_TransformComponent();
+
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H

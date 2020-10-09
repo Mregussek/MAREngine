@@ -24,115 +24,114 @@
 #include "../Filesystem/EditorFilesystem.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		std::string ProjectSelectionFilesystem::projectPath{ "" };
-		std::string ProjectSelectionFilesystem::projectName{ "" };
-		bool ProjectSelectionFilesystem::new_project_name_selected{ false };
-		bool ProjectSelectionFilesystem::open_existing_project{ false };
+	std::string ProjectSelectionFilesystem::projectPath{ "" };
+	std::string ProjectSelectionFilesystem::projectName{ "" };
+	bool ProjectSelectionFilesystem::new_project_name_selected{ false };
+	bool ProjectSelectionFilesystem::open_existing_project{ false };
 
 
-		void ProjectSelectionFilesystem::openWindowNewProject(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
-		}
+	void ProjectSelectionFilesystem::openWindowNewProject(const char* name) {
+		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
+	}
 
-		void ProjectSelectionFilesystem::windowNewProject(const char* name) {
-			static bool should_popup_be_opened = false;
+	void ProjectSelectionFilesystem::windowNewProject(const char* name) {
+		static bool should_popup_be_opened = false;
 
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
-				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
-					projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
-					should_popup_be_opened = true;
-				}
-
-				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
+			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
+				projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
+				projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
+				should_popup_be_opened = true;
 			}
 
-			if (should_popup_be_opened) {
-				ImGui::Begin("Select New Project Name");
+			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+		}
 
-				ImGui::Text("Project will be created at: %s", projectPath.c_str());
+		if (should_popup_be_opened) {
+			ImGui::Begin("Select New Project Name");
 
-				static char name[100];
-				ImGui::InputText("ProjectName: ", name, 100);
+			ImGui::Text("Project will be created at: %s", projectPath.c_str());
 
-				if (ImGui::Button("Create")) {
-					projectName = std::string(name);
-					projectPath += projectName;
-					new_project_name_selected = true;
-					should_popup_be_opened = false;
+			static char name[100];
+			ImGui::InputText("ProjectName: ", name, 100);
 
-					ImGui::End();
-					return;
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Cancel")) {
-					projectPath = "";
-					projectName = "";
-					new_project_name_selected = false;
-					should_popup_be_opened = false;
-
-					ImGui::End();
-					return;
-				}
+			if (ImGui::Button("Create")) {
+				projectName = std::string(name);
+				projectPath += projectName;
+				new_project_name_selected = true;
+				should_popup_be_opened = false;
 
 				ImGui::End();
+				return;
 			}
-		}
 
-		void ProjectSelectionFilesystem::openWindowOpenProject(const char* name) {
-			igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
-		}
+			ImGui::SameLine();
 
-		void ProjectSelectionFilesystem::windowOpenProject(const char* name) {
-			if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
-				if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-					projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
-					projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
-					open_existing_project = true;
-				}
-
-				igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
-			}
-		}
-
-		void ProjectSelectionFilesystem::checkState() {
-			if (new_project_name_selected) {
-				std::string Assets = projectPath + "/Assets";
-				std::string Scenes = projectPath + "/Scenes";
-				std::string EmptySceneName = Scenes + "/" + projectName + ".marscene";
-
-				std::filesystem::create_directories(Assets);
-				std::filesystem::create_directories(Scenes);
-
-				auto scene = ecs::Scene::createEmptyScene(projectName);
-				Filesystem::saveToFile(scene, EmptySceneName.c_str());
-				delete scene;
-
-				engine::MAREngine::getEngine()->setProjectPath(projectPath);
-				engine::MAREngine::getEngine()->setProjectName(projectName);
-				engine::MAREngine::getEngine()->setLoadPath(EmptySceneName);
-				window::Window::getInstance().endRenderLoop();
-
+			if (ImGui::Button("Cancel")) {
+				projectPath = "";
+				projectName = "";
 				new_project_name_selected = false;
+				should_popup_be_opened = false;
+
+				ImGui::End();
+				return;
 			}
 
-			if (open_existing_project) {
-				std::string scene_to_load = projectPath + "/Scenes/" + projectName + ".marscene";
+			ImGui::End();
+		}
+	}
 
-				engine::MAREngine::getEngine()->setProjectPath(projectPath);
-				engine::MAREngine::getEngine()->setProjectName(projectName);
-				engine::MAREngine::getEngine()->setLoadPath(scene_to_load);
-				window::Window::getInstance().endRenderLoop();
+	void ProjectSelectionFilesystem::openWindowOpenProject(const char* name) {
+		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
+	}
 
-				open_existing_project = false;
+	void ProjectSelectionFilesystem::windowOpenProject(const char* name) {
+		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
+			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
+				projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
+				projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
+				open_existing_project = true;
 			}
+
+			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+		}
+	}
+
+	void ProjectSelectionFilesystem::checkState() {
+		if (new_project_name_selected) {
+			std::string Assets = projectPath + "/Assets";
+			std::string Scenes = projectPath + "/Scenes";
+			std::string EmptySceneName = Scenes + "/" + projectName + ".marscene";
+
+			std::filesystem::create_directories(Assets);
+			std::filesystem::create_directories(Scenes);
+
+			auto scene = ecs::Scene::createEmptyScene(projectName);
+			Filesystem::saveToFile(scene, EmptySceneName.c_str());
+			delete scene;
+
+			engine::MAREngine::getEngine()->setProjectPath(projectPath);
+			engine::MAREngine::getEngine()->setProjectName(projectName);
+			engine::MAREngine::getEngine()->setLoadPath(EmptySceneName);
+			window::Window::getInstance().endRenderLoop();
+
+			new_project_name_selected = false;
 		}
 
+		if (open_existing_project) {
+			std::string scene_to_load = projectPath + "/Scenes/" + projectName + ".marscene";
 
-} }
+			engine::MAREngine::getEngine()->setProjectPath(projectPath);
+			engine::MAREngine::getEngine()->setProjectName(projectName);
+			engine::MAREngine::getEngine()->setLoadPath(scene_to_load);
+			window::Window::getInstance().endRenderLoop();
+
+			open_existing_project = false;
+		}
+	}
+
+
+}

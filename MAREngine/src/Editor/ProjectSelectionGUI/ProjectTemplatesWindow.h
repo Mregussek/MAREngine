@@ -25,22 +25,20 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		class ProjectTemplatesWindow {
-		public:
+	class ProjectTemplatesWindow {
+	public:
 
-			static void display() {
-				ImGui::Begin("Templates");
+		static void display() {
+			ImGui::Begin("Templates");
 
-				ImGui::End();
-			}
-		};
+			ImGui::End();
+		}
+	};
 
 
-	}
 }
 
 #endif // !MAR_ENGINE_EDITOR_PROJECT_TEMPLATES_WINDOW_H

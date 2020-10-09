@@ -25,42 +25,41 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		class ProjectSelectionFilesystem {
-		public:
-			
-			// ----------------------------------------------
-			// STATIC VARIABLES
-			// ----------------------------------------------
+	class ProjectSelectionFilesystem {
+	public:
+		
+		// ----------------------------------------------
+		// STATIC VARIABLES
+		// ----------------------------------------------
 
-			static std::string projectPath;
-			static std::string projectName;
-			static bool new_project_name_selected;
-			static bool open_existing_project;
+		static std::string projectPath;
+		static std::string projectName;
+		static bool new_project_name_selected;
+		static bool open_existing_project;
 
-			// ----------------------------------------------
-			// METHODS FOR PROJECT MANAGEMENT
-			// ----------------------------------------------
+		// ----------------------------------------------
+		// METHODS FOR PROJECT MANAGEMENT
+		// ----------------------------------------------
 
-			static void openWindowNewProject(const char* name);
-			static void windowNewProject(const char* name);
+		static void openWindowNewProject(const char* name);
+		static void windowNewProject(const char* name);
 
-			static void openWindowOpenProject(const char* name);
-			static void windowOpenProject(const char* name);
+		static void openWindowOpenProject(const char* name);
+		static void windowOpenProject(const char* name);
 
-			// ----------------------------------------------
-			// STATE CHECKS
-			// ----------------------------------------------
+		// ----------------------------------------------
+		// STATE CHECKS
+		// ----------------------------------------------
 
-			static void checkState();
+		static void checkState();
 
-		};
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_PROJECT_SELECTION_FILESYSTEM_H

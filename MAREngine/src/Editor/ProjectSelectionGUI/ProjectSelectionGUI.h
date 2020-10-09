@@ -25,28 +25,27 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		class ProjectSelectionGUI {
-			static bool s_dockspaceOpen;
-			static bool s_fullscreenPersisant;
+	class ProjectSelectionGUI {
+		static bool s_dockspaceOpen;
+		static bool s_fullscreenPersisant;
 
-		public:
-			void initialize(const char* glsl_version);
+	public:
+		void initialize(const char* glsl_version);
 
-			void shutdown();
+		void shutdown();
 
-			void prepare();
+		void prepare();
 
-			void update();
+		void update();
 
-			void render();
-		};
+		void render();
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_EDITOR_PROJECT_SELECTION_GUI_H

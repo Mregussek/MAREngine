@@ -143,7 +143,7 @@ namespace mar::scripting {
     
         rtn = rtn.substr(0, rtn.size() - 3);
     
-        ECS_TRACE("SCRIPT_COMPONENT: changing slashes {} to dots {}", script, rtn);
+        SCRIPTING_TRACE("PYTHON_SCRIPT: changing slashes {} to dots {}", script, rtn);
     
         return rtn;
     }
@@ -152,7 +152,7 @@ namespace mar::scripting {
         std::string rtn = script.substr(script.find_last_of("/") + 1, script.size());
         rtn = rtn.substr(0, rtn.size() - 3);
     
-        ECS_TRACE("SCRIPT_COMPONENT: returning module {} from path {}", script, rtn);
+        SCRIPTING_TRACE("PYTHON_SCRIPT: returning module {} from path {}", script, rtn);
     
         return rtn;
     }

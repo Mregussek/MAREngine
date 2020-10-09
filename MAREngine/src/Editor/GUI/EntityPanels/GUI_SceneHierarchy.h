@@ -25,25 +25,23 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace ecs { class SceneManager; }
-
-	namespace editor {
+namespace mar::ecs { class SceneManager; }
+namespace mar::editor {
 
 
-		class GUI_SceneHierarchy {
-		public:
+	class GUI_SceneHierarchy {
+	public:
 
-			static void Scene_Hierarchy(ecs::SceneManager* manager);
-			
-		private:
+		static void Scene_Hierarchy(ecs::SceneManager* manager);
+		
+	private:
 
-			static void Scene_Hierarchy_PopUp(ecs::SceneManager* manager);
-			static void Scene_Statistics(ecs::SceneManager* manager);
-		};
+		static void Scene_Hierarchy_PopUp(ecs::SceneManager* manager);
+		static void Scene_Statistics(ecs::SceneManager* manager);
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H

@@ -25,17 +25,16 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace editor {
+namespace mar::editor {
 
 
-		class ProjectListWindow {
-		public:
+	class ProjectListWindow {
+	public:
 
-			static void display();
-		};
+		static void display();
+	};
 
 
-} }
+}
 
 #endif // !MAR_ENGINE_EDITOR_PROJECT_LIST_WINDOW_H
