@@ -43,7 +43,7 @@ namespace mar {
 	
 			// PUBLIC METHODS
 
-			void initialize();
+			void initialize() const;
 			void shutdown();
 			void update();
 

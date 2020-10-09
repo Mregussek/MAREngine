@@ -43,34 +43,26 @@ namespace mar {
 			ECS_INFO("SCENE_MANAGER: called constructor");
 		}
 
-		void SceneManager::initialize() {
+		void SceneManager::initialize() const {
 			ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
 			auto& render_pipeline = graphics::RenderPipeline::getInstance();
 			render_pipeline.reset();
 
-			auto pushEntities = [this, &render_pipeline](const std::vector<Entity>& entitiesVector) {
-				for (const auto& entity : entitiesVector) {
-					auto& tran = entity.getComponent<TransformComponent>();
+			const auto& entitiesVector = m_scene->getEntities();
+			const auto& collectionsVector = m_scene->getCollections();
 
-					render_pipeline.pushEntityToPipeline(entity);
-
-					if (!useEditorCamera) {
-						if (entity.hasComponent<CameraComponent>()) {
-							submitCamera(tran, entity.getComponent<CameraComponent>());
-						}
-					}
-				}
+			auto pushEntityToPipeline = [&render_pipeline](const Entity& entity) {
+				render_pipeline.submitEntity(entity);
 			};
 
-			auto pushCollections = [this, &render_pipeline, &pushEntities]() {
-				for (const auto& collection : m_scene->getCollections()) {
-					pushEntities(collection.getEntities());
-				}
+			auto pushCollectionToPipeline = [&render_pipeline, &pushEntityToPipeline](const EntityCollection& collection) {
+				const auto& entitiesVector = collection.getEntities();
+				std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
 			};
 
-			pushEntities(m_scene->getEntities());
-			pushCollections();
+			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
+			std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), pushCollectionToPipeline);
 
 			ECS_INFO("SCENE_MANAGER: initialized!");
 		}

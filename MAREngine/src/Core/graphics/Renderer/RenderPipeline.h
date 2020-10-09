@@ -43,7 +43,7 @@ namespace mar {
 			void initialize();
 			void reset();
 
-			void pushEntityToPipeline(const ecs::Entity& entity);
+			void submitEntity(const ecs::Entity& entity);
 
 			void submitCamera(RenderCamera* cam);
 

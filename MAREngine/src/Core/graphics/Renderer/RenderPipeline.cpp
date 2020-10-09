@@ -50,7 +50,7 @@ namespace mar {
 			GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 		}
 
-		void RenderPipeline::pushEntityToPipeline(const ecs::Entity& entity) {
+		void RenderPipeline::submitEntity(const ecs::Entity& entity) {
 			using namespace ecs;
 
 			auto& tran = entity.getComponent<TransformComponent>();
