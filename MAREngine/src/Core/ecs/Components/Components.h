@@ -30,27 +30,26 @@
 #include "EngineOnlyComponents.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		typedef std::variant<
-			Components,
-			TagComponent,
-			TransformComponent,
-			RenderableComponent,
-			CollectionRenderableComponent,
-			CameraComponent,
-			LightComponent,
-			ColorComponent,
-			Texture2DComponent,
-			TextureCubemapComponent,
-			ScriptComponent
-		> variant_components;
+	typedef std::variant<
+		Components,
+		TagComponent,
+		TransformComponent,
+		RenderableComponent,
+		CollectionRenderableComponent,
+		CameraComponent,
+		LightComponent,
+		ColorComponent,
+		Texture2DComponent,
+		TextureCubemapComponent,
+		ScriptComponent
+	> variant_components;
 
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_H

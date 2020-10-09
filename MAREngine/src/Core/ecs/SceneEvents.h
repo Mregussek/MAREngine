@@ -25,54 +25,55 @@
 #include "../../mar.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
-		class Entity; class SceneManager; class EntityCollection;
-
-
-		class SceneEvents {
-			static SceneEvents instance;
-
-		public:
-
-			SceneEvents() = default;
-
-			SceneManager* scene_manager{ nullptr };
-
-			inline static SceneEvents& Instance() { return instance; }
-
-			void updateTransform(Entity* e, int32_t i);
-
-			void updateRenderables(Entity* e, int32_t i);
-
-			void updatedCamera(Entity* e, int32_t i);
-
-			void updatedColor(Entity* e, int32_t i);
-
-			void updatedTexture2D(Entity* e, int32_t i);
-
-			void updatedCubemap(Entity* e, int32_t i);
-
-			void updatedLight(Entity* e, int32_t i);
-
-			void updatedScript(Entity* e, int32_t i);
-
-			void onEntityCopy();
-
-			void onEntityRemove();
-
-			void onCollectionTransformUpdate();
-
-			void onCollectionRemove();
-
-			void onCollectionOBJloaded(EntityCollection& collection);
+	class Entity; 
+	class EntityCollection;
+	class SceneManager;
 
 
-		};
+	class SceneEvents {
+		static SceneEvents instance;
+
+	public:
+
+		SceneEvents() = default;
+
+		SceneManager* scene_manager{ nullptr };
+
+		inline static SceneEvents& Instance() { return instance; }
+
+		void updateTransform(Entity* e, int32_t i);
+
+		void updateRenderables(Entity* e, int32_t i);
+
+		void updatedCamera(Entity* e, int32_t i);
+
+		void updatedColor(Entity* e, int32_t i);
+
+		void updatedTexture2D(Entity* e, int32_t i);
+
+		void updatedCubemap(Entity* e, int32_t i);
+
+		void updatedLight(Entity* e, int32_t i);
+
+		void updatedScript(Entity* e, int32_t i);
+
+		void onEntityCopy();
+
+		void onEntityRemove();
+
+		void onCollectionTransformUpdate();
+
+		void onCollectionRemove();
+
+		void onCollectionOBJloaded(EntityCollection& collection);
 
 
-} }
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_ECS_SCENE_EVENTS_H

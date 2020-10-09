@@ -33,243 +33,242 @@
 #include "../graphics/Renderer/RenderPipeline.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		void SceneManager::initialize() const {
-			ECS_TRACE("SCENE_MANAGER: going to initialize!");
+	void SceneManager::initialize() const {
+		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
-			auto& render_pipeline = RenderPipeline::getInstance();
-			render_pipeline.reset();
+		auto& render_pipeline = RenderPipeline::getInstance();
+		render_pipeline.reset();
 
-			const auto& entitiesVector = m_scene->getEntities();
-			const auto& collectionsVector = m_scene->getCollections();
+		const auto& entitiesVector = m_scene->getEntities();
+		const auto& collectionsVector = m_scene->getCollections();
 
-			auto pushEntityToPipeline = [&render_pipeline](const Entity& entity) {
-				render_pipeline.submitEntity(entity);
-			};
+		auto pushEntityToPipeline = [&render_pipeline](const Entity& entity) {
+			render_pipeline.submitEntity(entity);
+		};
 
-			auto pushCollectionToPipeline = [&render_pipeline, &pushEntityToPipeline](const EntityCollection& collection) {
-				const auto& entitiesVector = collection.getEntities();
-				std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
-			};
-
+		auto pushCollectionToPipeline = [&render_pipeline, &pushEntityToPipeline](const EntityCollection& collection) {
+			const auto& entitiesVector = collection.getEntities();
 			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
-			std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), pushCollectionToPipeline);
+		};
 
-			ECS_INFO("SCENE_MANAGER: initialized!");
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
+		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), pushCollectionToPipeline);
+
+		ECS_INFO("SCENE_MANAGER: initialized!");
+	}
+
+	void SceneManager::shutdown() { 
+		ECS_TRACE("SCENE_MANAGER: going to shutdown scene manager");
+
+		m_scene->shutdown(); 
+		delete m_scene;
+
+		ECS_INFO("SCENE_MANAGER: called shutdown method");
+	}
+
+	void SceneManager::update() {
+		ECS_TRACE("SCENE_MANAGER: going to update");
+
+		if (m_EditorMode) { updateEditorMode(); }
+		else {
+			if (!m_PauseMode) { updatePlayMode(); }
+			else { updatePauseMode(); }	
 		}
 
-		void SceneManager::shutdown() { 
-			ECS_TRACE("SCENE_MANAGER: going to shutdown scene manager");
+		ECS_INFO("SCENE_MANAGER: updated!");
+	}
 
-			m_scene->shutdown(); 
-			delete m_scene;
+	// -------------------------------------------------------------
+	// EDITOR MODE
+	// -------------------------------------------------------------
 
-			ECS_INFO("SCENE_MANAGER: called shutdown method");
+	void SceneManager::updateEditorMode() {
+		ECS_TRACE("SCENE_MANAGER: updating editor mode");
+
+		if (useEditorCamera) {
+			auto camdata = editor::Camera::getCameraData();
+			auto& cam = m_scene->getRenderCamera();
+
+			cam = camdata;
+
+			ECS_TRACE("SCENE: initializing editor camera on scene");
 		}
-
-		void SceneManager::update() {
-			ECS_TRACE("SCENE_MANAGER: going to update");
-
-			if (m_EditorMode) { updateEditorMode(); }
-			else {
-				if (!m_PauseMode) { updatePlayMode(); }
-				else { updatePauseMode(); }	
-			}
-
-			ECS_INFO("SCENE_MANAGER: updated!");
-		}
-
-		// -------------------------------------------------------------
-		// EDITOR MODE
-		// -------------------------------------------------------------
-
-		void SceneManager::updateEditorMode() {
-			ECS_TRACE("SCENE_MANAGER: updating editor mode");
-
-			if (useEditorCamera) {
-				auto camdata = editor::Camera::getCameraData();
-				auto& cam = m_scene->getRenderCamera();
-
-				cam = camdata;
-
-				ECS_TRACE("SCENE: initializing editor camera on scene");
-			}
-			else {
-				for (auto& entity : m_scene->getEntities()) {
-					if (entity.hasComponent<CameraComponent>()) {
-						submitCamera(entity.getComponent<TransformComponent>(), entity.getComponent<CameraComponent>());
-					}
-				}
-			}
-
-			graphics::RenderPipeline::getInstance().submitCamera(&m_scene->getRenderCamera());
-
-			ECS_INFO("SCENE_MANAGER: updated editor mode!");
-		}
-
-		// -------------------------------------------------------------
-		// PLAY MODE
-		// -------------------------------------------------------------
-
-		void SceneManager::initPlayMode() {
-			ECS_TRACE("SCENE_MANAGER: going to initialize play mode");
-
-			m_playStorage.clear();
-
-			const auto& entitiesVector = m_scene->getEntities();
-			const auto& collectionsVector = m_scene->getCollections();
-
-			auto inititializeScriptModule = [](const Entity& entity) {
-				if (entity.hasComponent<ScriptComponent>()) {
-					auto& sc = entity.getComponent<ScriptComponent>();
-					sc.pythonScript.loadScript(sc.script);
-					sc.pythonScript.start(&entity);
-				}
-			};
-
-			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const Entity& entity) {
-				playStorage.pushEntityToStorage(playStorage.entity_storage, entity);
-				inititializeScriptModule(entity);
-			});
-
-			std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const EntityCollection& collection) {
-				playStorage.pushCollectionToStorage(playStorage.collection_storage, collection);
-				const auto& entitiesVector = collection.getEntities();
-				std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), inititializeScriptModule);
-			});
-
-			ECS_INFO("SCENE_MANAGER: initialized play mode!");
-		}
-
-		void SceneManager::exitPlayMode() {
-			ECS_TRACE("SCENE_MANAGER: going to exit play mode");
-
-			auto& entitiesVector = m_scene->getEntities();
-			auto& collectionsVector = m_scene->getCollections();
-
-			std::for_each(entitiesVector.begin(), entitiesVector.end(), [&playStorage = m_playStorage](Entity& entity) {
-				playStorage.loadEntityFromStorage(playStorage.entity_storage, entity);
-			});
-
-			std::for_each(collectionsVector.begin(), collectionsVector.end(), [&playStorage = m_playStorage](EntityCollection& collection) {
-				playStorage.loadCollectionFromStorage(playStorage.collection_storage, collection);
-			});
-
-			initialize();
-
-			ECS_INFO("SCENE_MANAGER: exited play mode!");
-		}
-
-		void SceneManager::updatePlayMode() {
-			ECS_TRACE("SCENE_MANAGER: going to update play mode");
-
-			auto& render_pipeline = graphics::RenderPipeline::getInstance();
-
-			for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
-				auto& entity = m_scene->getEntity(i);
-				auto& tran = entity.getComponent<TransformComponent>();
-
-				if (entity.hasComponent<ScriptComponent>()) {
-					auto& rpc = entity.getComponent<RenderPipelineComponent>();
-					auto& sc = entity.getComponent<ScriptComponent>();
-					sc.pythonScript.update(&entity);
-
-					if (entity.hasComponent<RenderableComponent>()) {
-						render_pipeline.modifyTransform(tran, rpc.container_index, rpc.transform_index);
-					}
-
-					if (entity.hasComponent<LightComponent>()) {
-						auto& light = entity.getComponent<LightComponent>();
-						render_pipeline.modifyLight(tran.center, light, rpc.container_light_index, rpc.light_index);
-					}
-
-					if (entity.hasComponent<ColorComponent>()) {
-						auto& color = entity.getComponent<ColorComponent>();
-						render_pipeline.modifyColor(color, rpc.container_index, rpc.color_index);
-					}
-				}
-
+		else {
+			for (auto& entity : m_scene->getEntities()) {
 				if (entity.hasComponent<CameraComponent>()) {
-					auto& cam = entity.getComponent<CameraComponent>();
-					submitCamera(tran, cam);
+					submitCamera(entity.getComponent<TransformComponent>(), entity.getComponent<CameraComponent>());
+				}
+			}
+		}
+
+		graphics::RenderPipeline::getInstance().submitCamera(&m_scene->getRenderCamera());
+
+		ECS_INFO("SCENE_MANAGER: updated editor mode!");
+	}
+
+	// -------------------------------------------------------------
+	// PLAY MODE
+	// -------------------------------------------------------------
+
+	void SceneManager::initPlayMode() {
+		ECS_TRACE("SCENE_MANAGER: going to initialize play mode");
+
+		m_playStorage.clear();
+
+		const auto& entitiesVector = m_scene->getEntities();
+		const auto& collectionsVector = m_scene->getCollections();
+
+		auto inititializeScriptModule = [](const Entity& entity) {
+			if (entity.hasComponent<ScriptComponent>()) {
+				auto& sc = entity.getComponent<ScriptComponent>();
+				sc.pythonScript.loadScript(sc.script);
+				sc.pythonScript.start(&entity);
+			}
+		};
+
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const Entity& entity) {
+			playStorage.pushEntityToStorage(playStorage.entity_storage, entity);
+			inititializeScriptModule(entity);
+		});
+
+		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const EntityCollection& collection) {
+			playStorage.pushCollectionToStorage(playStorage.collection_storage, collection);
+			const auto& entitiesVector = collection.getEntities();
+			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), inititializeScriptModule);
+		});
+
+		ECS_INFO("SCENE_MANAGER: initialized play mode!");
+	}
+
+	void SceneManager::exitPlayMode() {
+		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
+
+		auto& entitiesVector = m_scene->getEntities();
+		auto& collectionsVector = m_scene->getCollections();
+
+		std::for_each(entitiesVector.begin(), entitiesVector.end(), [&playStorage = m_playStorage](Entity& entity) {
+			playStorage.loadEntityFromStorage(playStorage.entity_storage, entity);
+		});
+
+		std::for_each(collectionsVector.begin(), collectionsVector.end(), [&playStorage = m_playStorage](EntityCollection& collection) {
+			playStorage.loadCollectionFromStorage(playStorage.collection_storage, collection);
+		});
+
+		initialize();
+
+		ECS_INFO("SCENE_MANAGER: exited play mode!");
+	}
+
+	void SceneManager::updatePlayMode() {
+		ECS_TRACE("SCENE_MANAGER: going to update play mode");
+
+		auto& render_pipeline = graphics::RenderPipeline::getInstance();
+
+		for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
+			auto& entity = m_scene->getEntity(i);
+			auto& tran = entity.getComponent<TransformComponent>();
+
+			if (entity.hasComponent<ScriptComponent>()) {
+				auto& rpc = entity.getComponent<RenderPipelineComponent>();
+				auto& sc = entity.getComponent<ScriptComponent>();
+				sc.pythonScript.update(&entity);
+
+				if (entity.hasComponent<RenderableComponent>()) {
+					render_pipeline.modifyTransform(tran, rpc.container_index, rpc.transform_index);
+				}
+
+				if (entity.hasComponent<LightComponent>()) {
+					auto& light = entity.getComponent<LightComponent>();
+					render_pipeline.modifyLight(tran.center, light, rpc.container_light_index, rpc.light_index);
+				}
+
+				if (entity.hasComponent<ColorComponent>()) {
+					auto& color = entity.getComponent<ColorComponent>();
+					render_pipeline.modifyColor(color, rpc.container_index, rpc.color_index);
 				}
 			}
 
-			for (auto& collection : m_scene->getCollections()) {
-				/// TODO: add support for collection scripting
+			if (entity.hasComponent<CameraComponent>()) {
+				auto& cam = entity.getComponent<CameraComponent>();
+				submitCamera(tran, cam);
 			}
-
-			ECS_INFO("SCENE_MANAGER: updated play mode");
 		}
 
-		void SceneManager::updatePauseMode() {
-			ECS_TRACE("SCENE_MANAGER: going to update pause mode");
-
-			
-			ECS_INFO("SCENE_MANAGER: updated pause mode");
+		for (auto& collection : m_scene->getCollections()) {
+			/// TODO: add support for collection scripting
 		}
 
-		// -------------------------------------------------------------
-		// CAMERA STUFF
-		// -------------------------------------------------------------
+		ECS_INFO("SCENE_MANAGER: updated play mode");
+	}
 
-		void SceneManager::submitCamera(TransformComponent& tran, CameraComponent& cam) {
-			if (cam.id.find("main") == std::string::npos) return;
+	void SceneManager::updatePauseMode() {
+		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
-			calculateCameraTransforms(tran, cam);
-
-			ECS_TRACE("SCENE_MANAGER: submitted camera");
-		}
-
-		void SceneManager::calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam) {
-			typedef maths::Trig trig;
-			static maths::vec3 front;
-
-			front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
-			front.y = trig::sine(trig::toRadians(tran.angles.x));
-			front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
-			front = maths::vec3::normalize(front);
-
-			auto& ren_cam = m_scene->getRenderCamera();
-
-			ren_cam.position = tran.center;
-			ren_cam.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-			ren_cam.view = maths::mat4::lookAt(
-				tran.center,
-				tran.center + front,
-				{ 0.f, 1.0f, 0.f }
-			);
-
-			if (cam.Perspective) {
-				ren_cam.projection = maths::mat4::perspective(
-					trig::toRadians(cam.p_fov), cam.p_aspectRatio, cam.p_near, cam.p_far
-				);
-			}
-			else {
-				ren_cam.projection = maths::mat4::orthographic(
-					cam.o_left, cam.o_right, cam.o_top, cam.o_bottom, cam.o_near, cam.o_far
-				);
-			}
-
-			ren_cam.mvp = ren_cam.projection * ren_cam.view * ren_cam.model;
 		
-			ECS_TRACE("SCENE_MANAGER: calculated camera transform!");
+		ECS_INFO("SCENE_MANAGER: updated pause mode");
+	}
+
+	// -------------------------------------------------------------
+	// CAMERA STUFF
+	// -------------------------------------------------------------
+
+	void SceneManager::submitCamera(TransformComponent& tran, CameraComponent& cam) {
+		if (cam.id.find("main") == std::string::npos) return;
+
+		calculateCameraTransforms(tran, cam);
+
+		ECS_TRACE("SCENE_MANAGER: submitted camera");
+	}
+
+	void SceneManager::calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam) {
+		typedef maths::Trig trig;
+		static maths::vec3 front;
+
+		front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
+		front.y = trig::sine(trig::toRadians(tran.angles.x));
+		front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
+		front = maths::vec3::normalize(front);
+
+		auto& ren_cam = m_scene->getRenderCamera();
+
+		ren_cam.position = tran.center;
+		ren_cam.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
+		ren_cam.view = maths::mat4::lookAt(
+			tran.center,
+			tran.center + front,
+			{ 0.f, 1.0f, 0.f }
+		);
+
+		if (cam.Perspective) {
+			ren_cam.projection = maths::mat4::perspective(
+				trig::toRadians(cam.p_fov), cam.p_aspectRatio, cam.p_near, cam.p_far
+			);
+		}
+		else {
+			ren_cam.projection = maths::mat4::orthographic(
+				cam.o_left, cam.o_right, cam.o_top, cam.o_bottom, cam.o_near, cam.o_far
+			);
 		}
 
-		// -------------------------------------------------------------
-		// GET / SET
-		// -------------------------------------------------------------
+		ren_cam.mvp = ren_cam.projection * ren_cam.view * ren_cam.model;
+	
+		ECS_TRACE("SCENE_MANAGER: calculated camera transform!");
+	}
 
-		void SceneManager::setScene(Scene* scene) { 
-			m_scene = scene; 
-		}
+	// -------------------------------------------------------------
+	// GET / SET
+	// -------------------------------------------------------------
 
-		Scene* SceneManager::getScene() { 
-			return m_scene; 
-		}
+	void SceneManager::setScene(Scene* scene) { 
+		m_scene = scene; 
+	}
+
+	Scene* SceneManager::getScene() { 
+		return m_scene; 
+	}
 
 
-} }
+}

@@ -21,10 +21,10 @@
 #include "EntityCollection.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
-		template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;
-		template CollectionRenderableComponent& EntityCollection::getComponent<CollectionRenderableComponent>() const;
 
-} }
+	template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;
+	template CollectionRenderableComponent& EntityCollection::getComponent<CollectionRenderableComponent>() const;
+
+} 

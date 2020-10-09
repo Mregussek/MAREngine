@@ -23,77 +23,76 @@
 #include "EntityCollection.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		void EntityOperation::copyCollection(EntityCollection* src, EntityCollection* dst) {
-			copyComponent<TagComponent>(src, dst);
-			copyComponent<TransformComponent>(src, dst);
-			if (src->hasComponent<CollectionRenderableComponent>()) {
-				copyComponent<CollectionRenderableComponent>(src, dst);
+	void EntityOperation::copyCollection(EntityCollection* src, EntityCollection* dst) {
+		copyComponent<TagComponent>(src, dst);
+		copyComponent<TransformComponent>(src, dst);
+		if (src->hasComponent<CollectionRenderableComponent>()) {
+			copyComponent<CollectionRenderableComponent>(src, dst);
+		}
+
+		for (size_t i = 0; i < src->getEntitiesCount(); i++) {
+			auto& entity = src->getEntity(i);
+			auto& dst_entity = dst->createEntity();
+			copyEntity(&entity, &dst_entity);
+		}
+	}
+
+	void EntityOperation::copyEntity(Entity* src, Entity* dst) {
+		auto& components = src->getComponent<Components>();
+
+		for (auto component : components.components) {
+			switch (component) {
+			case ECS_RENDERABLE:
+				copyComponent<RenderableComponent>(component, src, dst);
+				break;
+			case ECS_COLOR:
+				copyComponent<ColorComponent>(component, src, dst);
+				break;
+			case ECS_TEXTURE2D:
+				copyComponent<Texture2DComponent>(component, src, dst);
+				break;
+			case ECS_CUBEMAP:
+				copyComponent<TextureCubemapComponent>(component, src, dst);
+				break;
+			case ECS_LIGHT:
+				copyComponent<LightComponent>(component, src, dst);
+				break;
+			case ECS_CAMERA:
+				copyComponent<CameraComponent>(component, src, dst);
+				break;
+			case ECS_SCRIPT:
+				copyComponent<ScriptComponent>(component, src, dst);
+				break;
+			case ECS_TRANSFORM:
+				copyComponent<TransformComponent>(component, src, dst);
+				break;
+			case ECS_TAG:
+				copyComponent<TagComponent>(component, src, dst);
+				break;
 			}
-
-			for (size_t i = 0; i < src->getEntitiesCount(); i++) {
-				auto& entity = src->getEntity(i);
-				auto& dst_entity = dst->createEntity();
-				copyEntity(&entity, &dst_entity);
-			}
 		}
 
-		void EntityOperation::copyEntity(Entity* src, Entity* dst) {
-			auto& components = src->getComponent<Components>();
+		src->copyDefault(dst);
+	}
 
-			for (auto component : components.components) {
-				switch (component) {
-				case ECS_RENDERABLE:
-					copyComponent<RenderableComponent>(component, src, dst);
-					break;
-				case ECS_COLOR:
-					copyComponent<ColorComponent>(component, src, dst);
-					break;
-				case ECS_TEXTURE2D:
-					copyComponent<Texture2DComponent>(component, src, dst);
-					break;
-				case ECS_CUBEMAP:
-					copyComponent<TextureCubemapComponent>(component, src, dst);
-					break;
-				case ECS_LIGHT:
-					copyComponent<LightComponent>(component, src, dst);
-					break;
-				case ECS_CAMERA:
-					copyComponent<CameraComponent>(component, src, dst);
-					break;
-				case ECS_SCRIPT:
-					copyComponent<ScriptComponent>(component, src, dst);
-					break;
-				case ECS_TRANSFORM:
-					copyComponent<TransformComponent>(component, src, dst);
-					break;
-				case ECS_TAG:
-					copyComponent<TagComponent>(component, src, dst);
-					break;
-				}
-			}
+	template<typename T>
+	void EntityOperation::copyComponent(EntityComponents entcmp, Entity* src, Entity* dst) {
+		T com = src->getComponent<T>();
+		T& dst_com = dst->hasComponent<T>() ? dst->getComponent<T>() : dst->addComponent<T>(entcmp);
 
-			src->copyDefault(dst);
-		}
+		dst_com = com;
+	}
 
-		template<typename T>
-		void EntityOperation::copyComponent(EntityComponents entcmp, Entity* src, Entity* dst) {
-			T com = src->getComponent<T>();
-			T& dst_com = dst->hasComponent<T>() ? dst->getComponent<T>() : dst->addComponent<T>(entcmp);
+	template<typename T>
+	void EntityOperation::copyComponent(EntityCollection* src, EntityCollection* dst) {
+		T com = src->getComponent<T>();
+		T& dst_com = dst->hasComponent<T>() ? dst->getComponent<T>() : dst->addComponent<T>();
 
-			dst_com = com;
-		}
-
-		template<typename T>
-		void EntityOperation::copyComponent(EntityCollection* src, EntityCollection* dst) {
-			T com = src->getComponent<T>();
-			T& dst_com = dst->hasComponent<T>() ? dst->getComponent<T>() : dst->addComponent<T>();
-
-			dst_com = com;
-		}
+		dst_com = com;
+	}
 		
 
-} }
+}

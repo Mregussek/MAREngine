@@ -26,34 +26,33 @@
 #include "ECSLogs.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
-		class Entity;
-		class EntityCollection;
-		
+	class Entity;
+	class EntityCollection;
+	
 
-		class SceneRegistry {
-			friend class Entity;
-			friend class EntityCollection;
+	class SceneRegistry {
+		friend class Entity;
+		friend class EntityCollection;
 
-			entt::registry m_registry;
+		entt::registry m_registry;
 
-		public:
-			SceneRegistry() {
-				m_registry = entt::registry();
-				
-				ECS_TRACE("SCENE_REGISTRY: created!");
-			}
+	public:
+		SceneRegistry() {
+			m_registry = entt::registry();
+			
+			ECS_TRACE("SCENE_REGISTRY: created!");
+		}
 
-			void cleanup() {
-				m_registry.clear();
+		void cleanup() {
+			m_registry.clear();
 
-				ECS_TRACE("SCENE_REGISTRY: cleanup!");
-			}
-		};
+			ECS_TRACE("SCENE_REGISTRY: cleanup!");
+		}
+	};
 
 
-} }
+}
 
 #endif // !MAR_ENGINE_ECS_SCENE_REGISTRY_H

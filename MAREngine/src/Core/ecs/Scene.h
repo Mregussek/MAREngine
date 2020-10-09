@@ -27,68 +27,62 @@
 #include "Entity/EntityContainer.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		class Scene {
-			// ----------------------------------------------------
-			// SCENE PUBLIC METHODS
-			// ----------------------------------------------------
+	class Scene {
+		
+		friend class Entity;
+		friend class EntityCollection;
 
-		public:
-			Scene(std::string name);
+	public:
 
-			void shutdown();
+		Scene(std::string name);
 
-			static Scene* createEmptyScene(std::string name);
+		void shutdown();
 
-			Entity& createEntity();
-			void destroyEntity(int32_t index);
+		static Scene* createEmptyScene(std::string name);
 
-			EntityCollection& createCollection();
-			void destroyCollection(int32_t index);
-			void destroyEntityAtCollection(int32_t collection_index, int32_t entity_index);
+		Entity& createEntity();
+		void destroyEntity(int32_t index);
 
-			// --- SET METHODS --- //
+		EntityCollection& createCollection();
+		void destroyCollection(int32_t index);
+		void destroyEntityAtCollection(int32_t collection_index, int32_t entity_index);
 
-			void setName(std::string name) { m_name = std::move(name); }
-			void setBackground(maths::vec3 v) { m_backgroundColor = std::move(v); }
-			
-			// --- GET METHODS --- //
+		// --- SET METHODS --- //
 
-			inline const std::string& getName() const { return m_name; }
-			inline maths::vec3& getBackground() { return m_backgroundColor; }
+		void setName(std::string name) { m_name = std::move(name); }
+		void setBackground(maths::vec3 v) { m_backgroundColor = std::move(v); }
+		
+		// --- GET METHODS --- //
 
-			const std::vector<Entity>& getEntities() const;
-			std::vector<Entity>& getEntities();
-			Entity& getEntity(size_t index);
+		inline const std::string& getName() const { return m_name; }
+		inline maths::vec3& getBackground() { return m_backgroundColor; }
 
-			const std::vector<EntityCollection>& getCollections() const;
-			std::vector<EntityCollection>& getCollections();
-			EntityCollection& getCollection(size_t index);
+		const std::vector<Entity>& getEntities() const;
+		std::vector<Entity>& getEntities();
+		Entity& getEntity(size_t index);
 
-			inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
+		const std::vector<EntityCollection>& getCollections() const;
+		std::vector<EntityCollection>& getCollections();
+		EntityCollection& getCollection(size_t index);
 
-			// ----------------------------------------------------
-			// SCENE MEMBERS
-			// ----------------------------------------------------
-			
-		private:
-			friend class Entity;
-			friend class EntityCollection;
+		inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
-			std::string m_name{ "Empty Scene" };
-			SceneRegistry m_sceneRegistry;
+	private:
 
-			EntityContainer m_container;
+		std::string m_name{ "Empty Scene" };
+		SceneRegistry m_sceneRegistry;
 
-			graphics::RenderCamera m_sceneCamera;
-			maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
-		};
+		EntityContainer m_container;
+
+		graphics::RenderCamera m_sceneCamera;
+		maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_SCENE_H

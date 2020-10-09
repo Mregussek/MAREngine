@@ -26,27 +26,26 @@
 #include "../../scripting/PythonScript.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		struct ScriptComponent {
-			std::string script{ "empty" };
-			std::string source{ "empty" };
-			scripting::PythonScript pythonScript;
+	struct ScriptComponent {
+		std::string script{ "empty" };
+		std::string source{ "empty" };
+		scripting::PythonScript pythonScript;
 
-			ScriptComponent() = default;
-			ScriptComponent(const ScriptComponent& sc) = default;
-			ScriptComponent(std::string s)
-				: script(s)
-			{}
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent& sc) = default;
+		ScriptComponent(std::string s)
+			: script(s)
+		{}
 
-			operator std::string& () { return script; }
-			operator const std::string& () const { return script; }
-		};
+		operator std::string& () { return script; }
+		operator const std::string& () const { return script; }
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_SCRIPTING_COMPONENTS_H

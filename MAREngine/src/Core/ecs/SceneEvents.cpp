@@ -25,89 +25,88 @@
 #include "ECSLogs.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
-		SceneEvents SceneEvents::instance;
-
-
-		void SceneEvents::updateTransform(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updateTransform!");
-		}
-
-		void SceneEvents::updateRenderables(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updateRenderables!");
-		}
-
-		void SceneEvents::updatedCamera(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updatedCamera!");
-		}
-
-		void SceneEvents::updatedColor(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updatedColor!");
-		}
-
-		void SceneEvents::updatedTexture2D(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
-		}
-
-		void SceneEvents::updatedCubemap(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
-		}
-
-		void SceneEvents::updatedLight(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updatedLight!");
-		}
-
-		void SceneEvents::updatedScript(Entity* e, int32_t i) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: updatedScript!");
-		}
-
-		void SceneEvents::onEntityCopy() {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: onEntityCopy");
-		}
-
-		void SceneEvents::onEntityRemove() {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: onEntityRemove");
-		}
-
-		void SceneEvents::onCollectionTransformUpdate() {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
-		}
-
-		void SceneEvents::onCollectionRemove() {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
-		}
-
-		void SceneEvents::onCollectionOBJloaded(EntityCollection& collection) {
-			scene_manager->initialize();
-
-			ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
-		}
+	SceneEvents SceneEvents::instance;
 
 
-} }
+	void SceneEvents::updateTransform(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updateTransform!");
+	}
+
+	void SceneEvents::updateRenderables(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updateRenderables!");
+	}
+
+	void SceneEvents::updatedCamera(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updatedCamera!");
+	}
+
+	void SceneEvents::updatedColor(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updatedColor!");
+	}
+
+	void SceneEvents::updatedTexture2D(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
+	}
+
+	void SceneEvents::updatedCubemap(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
+	}
+
+	void SceneEvents::updatedLight(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updatedLight!");
+	}
+
+	void SceneEvents::updatedScript(Entity* e, int32_t i) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: updatedScript!");
+	}
+
+	void SceneEvents::onEntityCopy() {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: onEntityCopy");
+	}
+
+	void SceneEvents::onEntityRemove() {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: onEntityRemove");
+	}
+
+	void SceneEvents::onCollectionTransformUpdate() {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
+	}
+
+	void SceneEvents::onCollectionRemove() {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
+	}
+
+	void SceneEvents::onCollectionOBJloaded(EntityCollection& collection) {
+		scene_manager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
+	}
+
+
+}

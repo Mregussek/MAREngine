@@ -22,34 +22,33 @@
 #include "../ECSLogs.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		void TransformComponent::recalculate() {
-			using namespace maths;
+	void TransformComponent::recalculate() {
+		using namespace maths;
 
-			transform =
-				mat4::translation(center) *
-				mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
-				mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
-				mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
-				mat4::scale(scale);
+		transform =
+			mat4::translation(center) *
+			mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
+			mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
+			mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
+			mat4::scale(scale);
 
-			ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent!");
-		}
+		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent!");
+	}
 
-		maths::mat4 TransformComponent::calculate(maths::vec3& center, maths::vec3& angles, maths::vec3& scale) {
-			using namespace maths;
+	maths::mat4 TransformComponent::calculate(maths::vec3& center, maths::vec3& angles, maths::vec3& scale) {
+		using namespace maths;
 
-			return	mat4::translation(center) *
-				mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
-				mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
-				mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
-				mat4::scale(scale);
+		return	mat4::translation(center) *
+			mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
+			mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
+			mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
+			mat4::scale(scale);
 
-			ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent (static call)!");
-		}
+		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent (static call)!");
+	}
 
 
-} }
+}

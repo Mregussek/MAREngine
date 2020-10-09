@@ -27,20 +27,19 @@
 #include "EntityCollection.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		class EntityContainer {
-			friend class Scene;
+	class EntityContainer {
+		friend class Scene;
 
 
-			std::vector<Entity> m_entities;
-			std::vector<EntityCollection> m_collections;
+		std::vector<Entity> m_entities;
+		std::vector<EntityCollection> m_collections;
 
-		};
+	};
 
 
-} }
+}
 
 #endif // !MAR_ENGINE_ECS_ENTITY_CONTAINER_H

@@ -25,33 +25,32 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		struct CameraComponent {
-			std::string id{ "secondary" };
+	struct CameraComponent {
+		std::string id{ "secondary" };
 
-			bool Perspective{ true }; // true - perspective | false - orthographic
+		bool Perspective{ true }; // true - perspective | false - orthographic
 
-			float p_fov{ 45.f };
-			float p_aspectRatio{ 4.f / 3.f };
-			float p_near{ 0.01f };
-			float p_far{ 100.0f };
+		float p_fov{ 45.f };
+		float p_aspectRatio{ 4.f / 3.f };
+		float p_near{ 0.01f };
+		float p_far{ 100.0f };
 
-			float o_left{ -10.f };
-			float o_right{ 10.f };
-			float o_top{ 10.f };
-			float o_bottom{ -10.f };
-			float o_near{ 0.01f };
-			float o_far{ 100.0f };
+		float o_left{ -10.f };
+		float o_right{ 10.f };
+		float o_top{ 10.f };
+		float o_bottom{ -10.f };
+		float o_near{ 0.01f };
+		float o_far{ 100.0f };
 
-			CameraComponent() = default;
-			CameraComponent(const CameraComponent& cam) = default;
-		};
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent& cam) = default;
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_CAMERA_COMPONENTS_H

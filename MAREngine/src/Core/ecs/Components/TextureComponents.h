@@ -25,51 +25,50 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		struct ColorComponent {
-			maths::vec3 texture{ 0.5f, 0.5f, 0.5f };
+	struct ColorComponent {
+		maths::vec3 texture{ 0.5f, 0.5f, 0.5f };
 
-			ColorComponent() = default;
-			ColorComponent(const ColorComponent& cc) = default;
-			ColorComponent(const maths::vec3& col)
-				: texture(col)
-			{}
+		ColorComponent() = default;
+		ColorComponent(const ColorComponent& cc) = default;
+		ColorComponent(const maths::vec3& col)
+			: texture(col)
+		{}
 
-			operator maths::vec3& () { return texture; }
-			operator const maths::vec3& () const { return texture; }
-		};
+		operator maths::vec3& () { return texture; }
+		operator const maths::vec3& () const { return texture; }
+	};
 
-		struct Texture2DComponent {
-			std::string texture{ "empty" };
+	struct Texture2DComponent {
+		std::string texture{ "empty" };
 
-			Texture2DComponent() = default;
-			Texture2DComponent(const Texture2DComponent& tex) = default;
-			Texture2DComponent(const std::string& tex)
-				: texture(tex)
-			{}
+		Texture2DComponent() = default;
+		Texture2DComponent(const Texture2DComponent& tex) = default;
+		Texture2DComponent(const std::string& tex)
+			: texture(tex)
+		{}
 
-			operator std::string& () { return texture; }
-			operator const std::string& () const { return texture; }
-		};
+		operator std::string& () { return texture; }
+		operator const std::string& () const { return texture; }
+	};
 
-		struct TextureCubemapComponent {
-			std::string texture{ "empty" };
+	struct TextureCubemapComponent {
+		std::string texture{ "empty" };
 
-			TextureCubemapComponent() = default;
-			TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
-			TextureCubemapComponent(const std::string& cub)
-				: texture(cub)
-			{}
+		TextureCubemapComponent() = default;
+		TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
+		TextureCubemapComponent(const std::string& cub)
+			: texture(cub)
+		{}
 
-			operator std::string& () { return texture; }
-			operator const std::string& () const { return texture; }
-		};
+		operator std::string& () { return texture; }
+		operator const std::string& () const { return texture; }
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_TEXTURE_COMPONENTS_H

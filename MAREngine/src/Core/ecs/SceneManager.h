@@ -27,69 +27,70 @@
 #include "ScenePlayStorage.h"
 
 
-namespace mar {
-	namespace graphics { class RenderPipeline; }
-	namespace ecs {
+namespace mar::graphics { class RenderPipeline; } // forward declaration
 
-		class SceneEvents;
-		class Scene;
+namespace mar::ecs {
+
+	class SceneEvents;
+	class Scene;
 
 
-		class SceneManager {
-			friend class SceneEvents;
-			typedef graphics::RenderPipeline RenderPipeline;
+	class SceneManager {
 
-		public:
-			SceneManager() = default;
+		friend class SceneEvents;
+		typedef graphics::RenderPipeline RenderPipeline;
+
+	public:
+		SceneManager() = default;
 	
-			// PUBLIC METHODS
+		// PUBLIC METHODS
 
-			void initialize() const;
-			void shutdown();
-			void update();
+		void initialize() const;
+		void shutdown();
+		void update();
 
-			void setScene(Scene* scene);
-			Scene* getScene();
+		void setScene(Scene* scene);
+		Scene* getScene();
 
-			bool isEditorMode() { return m_EditorMode; }
-			bool isPlayMode() { return !m_EditorMode; }
-			bool isPauseMode() { return m_PauseMode; }
+		bool isEditorMode() { return m_EditorMode; }
+		bool isPlayMode() { return !m_EditorMode; }
+		bool isPauseMode() { return m_PauseMode; }
 
-			void setEditorMode() { m_EditorMode = true; }
-			void setPlayMode() { m_EditorMode = false; initPlayMode(); }
-			void setExitPlayMode() { m_EditorMode = true; unsetPauseMode(); exitPlayMode(); }
-			void setPauseMode() { m_PauseMode = true; }
-			void unsetPauseMode() { m_PauseMode = false; }
+		void setEditorMode() { m_EditorMode = true; }
+		void setPlayMode() { m_EditorMode = false; initPlayMode(); }
+		void setExitPlayMode() { m_EditorMode = true; unsetPauseMode(); exitPlayMode(); }
+		void setPauseMode() { m_PauseMode = true; }
+		void unsetPauseMode() { m_PauseMode = false; }
 
-			// PUBLIC MEMBERS
+		// PUBLIC MEMBERS
 
-			bool useEditorCamera{ true };
+		bool useEditorCamera{ true };
 
-		private:
+	private:
 
-			// PRIVATE METHODS
+		// PRIVATE METHODS
 
-			void initPlayMode();
-			void exitPlayMode();
+		void initPlayMode();
+		void exitPlayMode();
 
-			void updateEditorMode();
-			void updatePlayMode();
-			void updatePauseMode();
+		void updateEditorMode();
+		void updatePlayMode();
+		void updatePauseMode();
 
-			void submitCamera(TransformComponent& tran, CameraComponent& cam);
-			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam);
+		void submitCamera(TransformComponent& tran, CameraComponent& cam);
+		void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam);
 
-			// PRIVATE MEMBERS
+		// PRIVATE MEMBERS
 
-			Scene* m_scene{ nullptr };
-			ScenePlayStorage m_playStorage;
+		Scene* m_scene{ nullptr };
+		ScenePlayStorage m_playStorage;
 
-			bool m_EditorMode{ true };
-			bool m_PauseMode{ false };
-		}; 
+		bool m_EditorMode{ true };
+		bool m_PauseMode{ false };
+	}; 
 
 
-} }
+}
 
 
 #endif //!MAR_ENGINE_ECS_SCENE_MANAGER_H

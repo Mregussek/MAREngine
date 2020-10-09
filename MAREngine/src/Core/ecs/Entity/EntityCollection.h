@@ -29,119 +29,118 @@
 #include "../Components/Components.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		class EntityCollection {
-			friend class Scene;
+	class EntityCollection {
+		friend class Scene;
 
-		public:
+	public:
 
-			EntityCollection() = delete;
+		EntityCollection() = delete;
 
-			EntityCollection(SceneRegistry* scene)
-				: m_scene(scene),
-				m_collectionHandle(scene->m_registry.create())
-			{}
+		EntityCollection(SceneRegistry* scene)
+			: m_scene(scene),
+			m_collectionHandle(scene->m_registry.create())
+		{}
 
-			EntityCollection(const EntityCollection& other)
-				: m_scene(other.m_scene),
-				m_collectionHandle(other.m_collectionHandle),
-				m_entities(other.m_entities)
-			{}
+		EntityCollection(const EntityCollection& other)
+			: m_scene(other.m_scene),
+			m_collectionHandle(other.m_collectionHandle),
+			m_entities(other.m_entities)
+		{}
 
-			const bool isValid() const {
-				ECS_TRACE("ENTITY: {} checking if is valid!", m_collectionHandle);
+		const bool isValid() const {
+			ECS_TRACE("ENTITY: {} checking if is valid!", m_collectionHandle);
 
-				return m_scene->m_registry.valid(m_collectionHandle);
-			}
+			return m_scene->m_registry.valid(m_collectionHandle);
+		}
 
-			operator const bool() const {
-				return isValid();
-			}
+		operator const bool() const {
+			return isValid();
+		}
 
-			void destroyYourself() {
-				for (size_t i = 0; i < m_entities.size(); i++) {
-					if (m_entities[i].isValid()) {
-						m_entities[i].destroyYourself();
-						m_entities.erase(m_entities.begin() + i);
+		void destroyYourself() {
+			for (size_t i = 0; i < m_entities.size(); i++) {
+				if (m_entities[i].isValid()) {
+					m_entities[i].destroyYourself();
+					m_entities.erase(m_entities.begin() + i);
 
-						ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is deleted!", i);
-					}
-					else {
-						ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is not valid, so it is not deleted!!", i);
-					}
-				}
-			}
-
-			Entity& createEntity() {
-				ECS_INFO("ENTITY_COLLECTION: going to create entity!");
-
-				auto& entity = m_entities.emplace_back(m_scene);
-
-				entity.addDefault();
-				entity.addComponent<TagComponent>(ECS_TAG);
-				entity.addComponent<TransformComponent>(ECS_TRANSFORM);
-
-				ECS_INFO("EntityCollection: created entity {} at collection {}!", entity.m_entityHandle, m_collectionHandle);
-
-				return entity;
-			}
-
-			void destroyEntity(int32_t entity_index) {
-				if (m_entities[entity_index].isValid()) {
-					m_entities[entity_index].destroyYourself();
-					m_entities.erase(m_entities.begin() + entity_index);
-
-					ECS_INFO("ENTITY_COLLECTION: destroyed entity {} at collection!", entity_index);
+					ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is deleted!", i);
 				}
 				else {
-					ECS_INFO("ENTITY_COLLECTION: entity {} at collection is not valid, so it cannot be destroyed!", entity_index);
+					ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is not valid, so it is not deleted!!", i);
 				}
 			}
+		}
 
-			const std::vector<Entity>& getEntities() const {
-				return m_entities;
+		Entity& createEntity() {
+			ECS_INFO("ENTITY_COLLECTION: going to create entity!");
+
+			auto& entity = m_entities.emplace_back(m_scene);
+
+			entity.addDefault();
+			entity.addComponent<TagComponent>(ECS_TAG);
+			entity.addComponent<TransformComponent>(ECS_TRANSFORM);
+
+			ECS_INFO("EntityCollection: created entity {} at collection {}!", entity.m_entityHandle, m_collectionHandle);
+
+			return entity;
+		}
+
+		void destroyEntity(int32_t entity_index) {
+			if (m_entities[entity_index].isValid()) {
+				m_entities[entity_index].destroyYourself();
+				m_entities.erase(m_entities.begin() + entity_index);
+
+				ECS_INFO("ENTITY_COLLECTION: destroyed entity {} at collection!", entity_index);
 			}
-
-			Entity& getEntity(size_t index) {
-				return m_entities[index];
+			else {
+				ECS_INFO("ENTITY_COLLECTION: entity {} at collection is not valid, so it cannot be destroyed!", entity_index);
 			}
+		}
 
-			size_t getEntitiesCount() {
-				return m_entities.size();
-			}
+		const std::vector<Entity>& getEntities() const {
+			return m_entities;
+		}
 
-			template<typename T>
-			bool hasComponent() const {
-				return m_scene->m_registry.has<T>(m_collectionHandle);
-			}
+		Entity& getEntity(size_t index) {
+			return m_entities[index];
+		}
 
-			template<typename T, typename... Args>
-			T& addComponent(Args&&... args) {
-				MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY_COLLECTION: already has CollectionTagComponent!");
+		size_t getEntitiesCount() {
+			return m_entities.size();
+		}
 
-				return m_scene->m_registry.emplace<T>(m_collectionHandle, std::forward<Args>(args)...);
-			}
+		template<typename T>
+		bool hasComponent() const {
+			return m_scene->m_registry.has<T>(m_collectionHandle);
+		}
 
-			template<typename T>
-			T& getComponent() const {
-				MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: does not have this component!");
+		template<typename T, typename... Args>
+		T& addComponent(Args&&... args) {
+			MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY_COLLECTION: already has CollectionTagComponent!");
 
-				return m_scene->m_registry.get<T>(m_collectionHandle);
-			}
+			return m_scene->m_registry.emplace<T>(m_collectionHandle, std::forward<Args>(args)...);
+		}
 
-		private:
+		template<typename T>
+		T& getComponent() const {
+			MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: does not have this component!");
 
-			std::vector<Entity> m_entities;
-			entt::entity m_collectionHandle{ entt::null };
-			SceneRegistry* m_scene{ nullptr };
+			return m_scene->m_registry.get<T>(m_collectionHandle);
+		}
 
-		};
+	private:
+
+		std::vector<Entity> m_entities;
+		entt::entity m_collectionHandle{ entt::null };
+		SceneRegistry* m_scene{ nullptr };
+
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_ENTITY_COLLECTION_H

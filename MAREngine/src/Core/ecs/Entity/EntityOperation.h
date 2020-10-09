@@ -26,29 +26,28 @@
 #include "../Components/Components.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
-		class Entity; class EntityCollection;
-
-
-		class EntityOperation {
-		public:
-
-			static void copyEntity(Entity* src, Entity* dst);
-			static void copyCollection(EntityCollection* src, EntityCollection* dst);
-
-		private:
-
-			template<typename T>
-			static void copyComponent(EntityComponents entcmp, Entity* src, Entity* dst);
-
-			template<typename T>
-			static void copyComponent(EntityCollection* src, EntityCollection* dst);
-		};
+	class Entity; class EntityCollection;
 
 
-} }
+	class EntityOperation {
+	public:
+
+		static void copyEntity(Entity* src, Entity* dst);
+		static void copyCollection(EntityCollection* src, EntityCollection* dst);
+
+	private:
+
+		template<typename T>
+		static void copyComponent(EntityComponents entcmp, Entity* src, Entity* dst);
+
+		template<typename T>
+		static void copyComponent(EntityCollection* src, EntityCollection* dst);
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_ECS_ENTITY_OPERATION_H

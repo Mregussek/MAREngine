@@ -25,27 +25,26 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace ecs {
+namespace mar::ecs {
 
 
-		struct LightComponent {
-			maths::vec3 ambient{ 0.5f, 0.5f, 0.5f };
-			maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
-			maths::vec3 specular{ 0.5f, 0.5f, 0.5f };
+	struct LightComponent {
+		maths::vec3 ambient{ 0.5f, 0.5f, 0.5f };
+		maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
+		maths::vec3 specular{ 0.5f, 0.5f, 0.5f };
 
-			float constant{ 1.0f };
-			float linear{ 0.045f };
-			float quadratic{ 0.0075f };
+		float constant{ 1.0f };
+		float linear{ 0.045f };
+		float quadratic{ 0.0075f };
 
-			float shininess{ 64.0f };
+		float shininess{ 64.0f };
 
-			LightComponent() = default;
-			LightComponent(const LightComponent& li) = default;
-		};
+		LightComponent() = default;
+		LightComponent(const LightComponent& li) = default;
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
