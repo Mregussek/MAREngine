@@ -27,34 +27,33 @@
 #include "../../../Platform/OpenGL/PipelineOpenGL.h"
 
 
-namespace mar {
-	namespace graphics {
+namespace mar::graphics {
 
-		class RenderPipeline;
-		class RenderContainer;
-		struct RenderCamera;
-
-
-		class RendererBatch {
-		public:
-
-			void initialize();
-			void close();
-			void draw(RenderPipeline& render_pip);
-
-		private:
-
-			void drawContainer(const RenderContainer& container);
-
-			void passTexturesToShader(const RenderContainer& ren);
-			void passLightToShader(const RenderContainer& ren);
-			void passCameraToShader(const RenderCamera* camera);
-
-			platforms::PipelineOpenGL m_buffers;
-			platforms::ShaderOpenGL m_shader;
-		};
+	class RenderPipeline;
+	class RenderContainer;
+	struct RenderCamera;
 
 
-} }
+	class RendererBatch {
+	public:
+
+		void initialize();
+		void close();
+		void draw(RenderPipeline& render_pip);
+
+	private:
+
+		void drawContainer(const RenderContainer& container);
+
+		void passTexturesToShader(const RenderContainer& ren);
+		void passLightToShader(const RenderContainer& ren);
+		void passCameraToShader(const RenderCamera* camera);
+
+		platforms::PipelineOpenGL m_buffers;
+		platforms::ShaderOpenGL m_shader;
+	};
+
+
+}
 
 #endif // !MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H

@@ -24,41 +24,41 @@
 
 #include "../../mar.h"
 
+namespace mar::ecs {
+    class Entity;
+}
+namespace mar::scripting {
 
-namespace mar {
-    namespace ecs { class Entity; }
+    namespace py = pybind11;
+    
 
-	namespace scripting {
-        namespace py = pybind11;
-        
+    class PythonScript {
+    public:
 
-        class PythonScript {
-        public:
+        PythonScript();
 
-            PythonScript();
+        void loadScript(std::string path_to_script);
 
-            void loadScript(std::string path_to_script);
+        void start(const ecs::Entity* e);
 
-            void start(const ecs::Entity* e);
+        void update(ecs::Entity* e);
 
-            void update(ecs::Entity* e);
+        py::object& getModule() { return m_module; }
 
-            py::object& getModule() { return m_module; }
+        static void appendCurrentPath();
 
-            static void appendCurrentPath();
+        static std::string changeSlashesToDots(std::string script);
+        static std::string getModuleFromPath(std::string script);
 
-            static std::string changeSlashesToDots(std::string script);
-            static std::string getModuleFromPath(std::string script);
+    private:
 
-        private:
-
-            py::module m_scriptModule;
-            py::object m_module;
-            bool m_initialized;
-        };
+        py::module m_scriptModule;
+        py::object m_module;
+        bool m_initialized;
+    };
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_SCRIPTING_PYTHON_SCRIPT_H

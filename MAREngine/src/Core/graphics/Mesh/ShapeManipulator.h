@@ -25,23 +25,22 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-    namespace graphics {
+namespace mar:: graphics {
 
 
-        class ShapeManipulator {
-        public:
+    class ShapeManipulator {
+    public:
+    
+        static void extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid);
+    
+        static void extendIndices(std::vector<uint32_t>& indices, uint32_t extension);
+        static void extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension);
+    
+        static void calculateNormals(std::vector<float>& vertices, const std::vector<uint32_t>& indices, const int32_t stride);
+    
+    };
 
-            static void extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid);
-  
-            static void extendIndices(std::vector<uint32_t>& indices, uint32_t extension);
-            static void extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension);
 
-            static void calculateNormals(std::vector<float>& vertices, const std::vector<uint32_t>& indices, const int32_t stride);
-        
-        };
-
-
-} }
+}
 
 #endif // !MAR_ENGINE_SHAPEMANIPULATOR_H

@@ -25,35 +25,34 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace graphics {
+namespace mar::graphics {
 
 
-		struct RenderStatistics {
-			uint32_t drawCallsCount{ 0 };
-			uint32_t verticesCount{ 0 };
-			uint32_t indicesCount{ 0 };
-			uint32_t shapesCount{ 0 };
-			uint32_t trianglesCount{ 0 };
-			uint32_t entitiesCount{ 0 };
-			uint32_t entityCollectionsCount{ 0 };
-			uint32_t allEntitiesCount{ 0 };
+	struct RenderStatistics {
+		uint32_t drawCallsCount{ 0 };
+		uint32_t verticesCount{ 0 };
+		uint32_t indicesCount{ 0 };
+		uint32_t shapesCount{ 0 };
+		uint32_t trianglesCount{ 0 };
+		uint32_t entitiesCount{ 0 };
+		uint32_t entityCollectionsCount{ 0 };
+		uint32_t allEntitiesCount{ 0 };
 
-			RenderStatistics() = default;
+		RenderStatistics() = default;
 
-			void resetStatistics() {
-				drawCallsCount = 0;
-				indicesCount = 0;
-				shapesCount = 0;
-				verticesCount = 0;
-				trianglesCount = 0;
-				entitiesCount = 0;
-				entityCollectionsCount = 0;
-				allEntitiesCount = 0;
-			}
-		};
+		void resetStatistics() {
+			drawCallsCount = 0;
+			indicesCount = 0;
+			shapesCount = 0;
+			verticesCount = 0;
+			trianglesCount = 0;
+			entitiesCount = 0;
+			entityCollectionsCount = 0;
+			allEntitiesCount = 0;
+		}
+	};
 
 
-} }
+}
 
 #endif // !MAR_ENGINE_RENDERER_INCLUDE_H

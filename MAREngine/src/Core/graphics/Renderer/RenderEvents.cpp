@@ -23,16 +23,15 @@
 #include "../GraphicsLogs.h"
 
 
-namespace mar {
-	namespace graphics {
+namespace mar::graphics {
 
 
-		void RenderEvents::onDrawCall(RenderPipeline* render_pipeline) {
-			auto& stats = render_pipeline->getStatistics();
-			stats.drawCallsCount += 1;
-
-			GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
-		}
+	void RenderEvents::onDrawCall(RenderPipeline* render_pipeline) {
+		auto& stats = render_pipeline->getStatistics();
+		stats.drawCallsCount += 1;
+	
+		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
+	}
 	
 
-} }
+}

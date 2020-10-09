@@ -25,20 +25,19 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	namespace graphics {
+namespace mar::graphics {
 
-		class RenderPipeline;
-
-
-		class RenderEvents {
-		public:
-
-			static void onDrawCall(RenderPipeline* render_pipeline);
-		};
+	class RenderPipeline;
 
 
-} }
+	class RenderEvents {
+	public:
+
+		static void onDrawCall(RenderPipeline* render_pipeline);
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_GRAPHICS_RENDER_EVENTS_H

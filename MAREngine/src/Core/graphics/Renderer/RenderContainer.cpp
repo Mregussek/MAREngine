@@ -21,25 +21,24 @@
 #include "RenderContainer.h"
 
 
-namespace mar {
-	namespace graphics {
+namespace mar::graphics {
 
 
-		void RenderContainer::reset() {
-			m_vertices.clear();
-			m_indices.clear();
-			m_shapeID = 0.f;
-			m_indicesMax = 0;
+	void RenderContainer::reset() {
+		m_vertices.clear();
+		m_indices.clear();
+		m_shapeID = 0.f;
+		m_indicesMax = 0;
 
-			m_transforms.clear();
+		m_transforms.clear();
 
-			m_colors.clear();
-			m_tex2D.clear();
-			m_cubes.clear();
-			m_samplerTypes.clear();
+		m_colors.clear();
+		m_tex2D.clear();
+		m_cubes.clear();
+		m_samplerTypes.clear();
 
-			m_lights.clear();
-		}
+		m_lights.clear();
+	}
 
 
-} }
+}

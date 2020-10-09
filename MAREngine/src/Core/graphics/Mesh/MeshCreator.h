@@ -25,44 +25,45 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-    namespace ecs { class EntityCollection; }
+namespace mar::ecs {
+    class EntityCollection;
+}
 
-    namespace graphics {
+namespace mar::graphics {
 
 
-        class MeshCreator {
-        public:
-
-            struct Cube {
-                static std::string getID() { return "Cube"; }
-                static std::vector<float> getVertices();
-                static std::vector<uint32_t> getIndices();
-            };
-
-            struct Pyramid {
-                static std::string getID() { return "Pyramid"; }
-                static std::vector<float> getVertices();
-                static std::vector<uint32_t> getIndices();
-            };
-
-            struct Wall {
-                static std::string getID() { return "Wall"; }
-                static std::vector<float> getVertices();
-                static std::vector<uint32_t> getIndices();
-            }; 
-
-            struct Surface {
-                static std::string getID() { return "Surface"; }
-                static std::vector<float> getVertices();
-                static std::vector<uint32_t> getIndices();
-            };
-
-            static void loadOBJ(std::string filename, std::string path, ecs::EntityCollection& collection);
+    class MeshCreator {
+    public:
+    
+        struct Cube {
+            static std::string getID() { return "Cube"; }
+            static std::vector<float> getVertices();
+            static std::vector<uint32_t> getIndices();
         };
+    
+        struct Pyramid {
+            static std::string getID() { return "Pyramid"; }
+            static std::vector<float> getVertices();
+            static std::vector<uint32_t> getIndices();
+        };
+    
+        struct Wall {
+            static std::string getID() { return "Wall"; }
+            static std::vector<float> getVertices();
+            static std::vector<uint32_t> getIndices();
+        }; 
+    
+        struct Surface {
+            static std::string getID() { return "Surface"; }
+            static std::vector<float> getVertices();
+            static std::vector<uint32_t> getIndices();
+        };
+    
+        static void loadOBJ(std::string filename, std::string path, ecs::EntityCollection& collection);
+    };
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_MESH_CREATOR_H

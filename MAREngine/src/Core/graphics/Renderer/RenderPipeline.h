@@ -28,63 +28,64 @@
 #include "../../ecs/Components/Components.h"
 
 
-namespace mar {
-	namespace ecs { class Entity; }
-	namespace graphics {
+namespace mar::ecs { 
+	class Entity; 
+}
 
-		struct RenderCamera;
+namespace mar::graphics {
+
+	struct RenderCamera;
 
 
-		class RenderPipeline {
-		public:
+	class RenderPipeline {
+	public:
 
-			RenderPipeline() = default;
+		RenderPipeline() = default;
 
-			void initialize();
-			void reset();
+		void initialize();
+		void reset();
 
-			void submitEntity(const ecs::Entity& entity);
+		void submitEntity(const ecs::Entity& entity);
 
-			void submitCamera(RenderCamera* cam);
+		void submitCamera(RenderCamera* cam);
 
-			void modifyTransform(ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
-			void modifyLight(maths::vec3& position, ecs::LightComponent& light, size_t container_index, size_t light_index);
-			void modifyColor(ecs::ColorComponent& color, size_t container_index, size_t color_index);
+		void modifyTransform(ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
+		void modifyLight(maths::vec3& position, ecs::LightComponent& light, size_t container_index, size_t light_index);
+		void modifyColor(ecs::ColorComponent& color, size_t container_index, size_t color_index);
 
-			RenderStatistics& getStatistics() { return m_statistics; }
-			void clearStatistics() { m_statistics.resetStatistics(); }
+		RenderStatistics& getStatistics() { return m_statistics; }
+		void clearStatistics() { m_statistics.resetStatistics(); }
 
-			static RenderPipeline& getInstance() { return s_instance; }
+		static RenderPipeline& getInstance() { return s_instance; }
 
-			// ---- GETTERS for container ---- //
+		// ---- GETTERS for container ---- //
 	
-			const std::vector<RenderContainer>& getContainers() const { return m_containers; }
-			const RenderCamera* getCamera() const { return m_camera; }
-			const size_t getAvailableContainerIndex() const { return m_availableContainerIndex; }
+		const std::vector<RenderContainer>& getContainers() const { return m_containers; }
+		const RenderCamera* getCamera() const { return m_camera; }
+		const size_t getAvailableContainerIndex() const { return m_availableContainerIndex; }
 
-		private:
+	private:
 
-			void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push);
-			void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
+		void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push);
+		void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
 
-			size_t submitRenderable(ecs::RenderableComponent& ren_comp, const ecs::TransformComponent& tran);
-			size_t submitColor(float entity_index, const ecs::ColorComponent& color);
-			size_t submitTexture2D(float entity_index, const ecs::Texture2DComponent& tex);
-			size_t submitCubemap(float entity_index, const ecs::TextureCubemapComponent& cube);
-			size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
+		size_t submitRenderable(ecs::RenderableComponent& ren_comp, const ecs::TransformComponent& tran);
+		size_t submitColor(float entity_index, const ecs::ColorComponent& color);
+		size_t submitTexture2D(float entity_index, const ecs::Texture2DComponent& tex);
+		size_t submitCubemap(float entity_index, const ecs::TextureCubemapComponent& cube);
+		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
-			static RenderPipeline s_instance;
+		static RenderPipeline s_instance;
 
-			RenderStatistics m_statistics;
-			std::vector<RenderContainer> m_containers;
-			size_t m_availableContainerIndex{ 0 };
+		RenderStatistics m_statistics;
+		std::vector<RenderContainer> m_containers;
+		size_t m_availableContainerIndex{ 0 };
 
-			RenderCamera* m_camera{ nullptr };
+		RenderCamera* m_camera{ nullptr };
 
-		};
+	};
 
 
-	}
 }
 
 #endif // !MAR_ENGINE_GRAPHICS_RENDER_PIPELINE_H
