@@ -27,15 +27,19 @@ namespace mar {
 
 
 		void ShapeManipulator::extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid) {
-			for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) 
+			for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) {
 				vertices[i * stride - 1] = newid;
-			
+			}
+				
 			GRAPHICS_TRACE("SHAPE_MANIPULATOR: extendShapeID(vert.size() = {}, stride = {}, newid = {})", vertices.size(), stride, newid);
 		}
 
 		void ShapeManipulator::extendIndices(std::vector<uint32_t>& indices, uint32_t extension) {
-			for (uint32_t i = 0; i < indices.size(); i++)
-				indices[i] += extension;
+			for (uint32_t i = 0; i < indices.size(); i++) { 
+				indices[i] += extension; 
+			}
+			
+			GRAPHICS_TRACE("SHAPE_MANIPULATOR: extendIndices(indices.size() = {}, extension = {})", indices.size(), extension);
 		}
 
 		void ShapeManipulator::extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension) {

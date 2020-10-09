@@ -29,6 +29,7 @@
 
 
 namespace mar {
+	namespace ecs { class Entity; }
 	namespace graphics {
 
 		struct RenderCamera;
@@ -42,36 +43,39 @@ namespace mar {
 			void initialize();
 			void reset();
 
-			void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push);
-			void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
+			void pushEntityToPipeline(const ecs::Entity& entity);
 
-			size_t submitRenderable(ecs::RenderableComponent& ren_comp, ecs::TransformComponent& tran);
-			size_t submitColor(float entity_index, ecs::ColorComponent& color);
-			size_t submitTexture2D(float entity_index, ecs::Texture2DComponent& tex);
-			size_t submitCubemap(float entity_index, ecs::TextureCubemapComponent& cube);
-			size_t submitLight(maths::vec3& position, ecs::LightComponent& light);
 			void submitCamera(RenderCamera* cam);
 
 			void modifyTransform(ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
 			void modifyLight(maths::vec3& position, ecs::LightComponent& light, size_t container_index, size_t light_index);
 			void modifyColor(ecs::ColorComponent& color, size_t container_index, size_t color_index);
 
-			RenderStatistics& getStatistics() { return s_statistics; }
-			void clearStatistics() { s_statistics.resetStatistics(); }
+			RenderStatistics& getStatistics() { return m_statistics; }
+			void clearStatistics() { m_statistics.resetStatistics(); }
 
 			static RenderPipeline& getInstance() { return s_instance; }
 
 			// ---- GETTERS for container ---- //
-
+	
 			const std::vector<RenderContainer>& getContainers() const { return m_containers; }
 			const RenderCamera* getCamera() const { return m_camera; }
 			const size_t getAvailableContainerIndex() const { return m_availableContainerIndex; }
 
 		private:
 
+			void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push);
+			void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
+
+			size_t submitRenderable(ecs::RenderableComponent& ren_comp, const ecs::TransformComponent& tran);
+			size_t submitColor(float entity_index, const ecs::ColorComponent& color);
+			size_t submitTexture2D(float entity_index, const ecs::Texture2DComponent& tex);
+			size_t submitCubemap(float entity_index, const ecs::TextureCubemapComponent& cube);
+			size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
+
 			static RenderPipeline s_instance;
 
-			RenderStatistics s_statistics;
+			RenderStatistics m_statistics;
 			std::vector<RenderContainer> m_containers;
 			size_t m_availableContainerIndex{ 0 };
 

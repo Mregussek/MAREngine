@@ -33,8 +33,7 @@ namespace mar {
         public:
 
             static void extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid);
-
-   
+  
             static void extendIndices(std::vector<uint32_t>& indices, uint32_t extension);
             static void extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension);
 

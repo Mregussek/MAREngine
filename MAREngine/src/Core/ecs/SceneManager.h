@@ -29,7 +29,6 @@
 
 namespace mar {
 	namespace graphics { class RenderPipeline; }
-
 	namespace ecs {
 
 		class SceneEvents;
@@ -37,13 +36,13 @@ namespace mar {
 
 
 		class SceneManager {
-		// -------------------------------------------------------------
-		// SCENE MANAGER PUBLIC METHODS
-		// -------------------------------------------------------------
+			friend class SceneEvents;
 
 		public:
 			SceneManager();
 	
+			// PUBLIC METHODS
+
 			void initialize();
 			void shutdown();
 			void update();
@@ -61,12 +60,13 @@ namespace mar {
 			void setPauseMode() { m_PauseMode = true; }
 			void unsetPauseMode() { m_PauseMode = false; }
 
-		// -------------------------------------------------------------
-		// SCENE MANAGER PRIVATE METHODS
-		// -------------------------------------------------------------
+			// PUBLIC MEMBERS
+
+			bool useEditorCamera{ true };
 
 		private:
-			void init(const std::vector<Entity>& entities, graphics::RenderPipeline& render_pipeline);
+
+			// PRIVATE METHODS
 
 			void initPlayMode();
 			void exitPlayMode();
@@ -78,21 +78,13 @@ namespace mar {
 			void submitCamera(TransformComponent& tran, CameraComponent& cam);
 			void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam);
 
-		// -------------------------------------------------------------
-		// SCENE MANAGER MEMBERS
-		// -------------------------------------------------------------
+			// PRIVATE MEMBERS
 
-		private:
-			friend class SceneEvents;
-			Scene* m_scene;
+			Scene* m_scene{ nullptr };
 			ScenePlayStorage m_playStorage;
 
-		public:
-			bool useEditorCamera;
-
-		private:
-			bool m_EditorMode;
-			bool m_PauseMode;
+			bool m_EditorMode{ true };
+			bool m_PauseMode{ false };
 		}; 
 
 

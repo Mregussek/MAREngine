@@ -22,6 +22,7 @@
 #include "RenderCamera.h"
 #include "../GraphicsLogs.h"
 #include "../Mesh/ShapeManipulator.h"
+#include "../../ecs/Entity/Entity.h"
 
 
 namespace mar {
@@ -47,6 +48,41 @@ namespace mar {
 			initialize();
 
 			GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
+		}
+
+		void RenderPipeline::pushEntityToPipeline(const ecs::Entity& entity) {
+			using namespace ecs;
+
+			auto& tran = entity.getComponent<TransformComponent>();
+
+			if (entity.hasComponent<LightComponent>()) {
+				auto& light = entity.getComponent<LightComponent>();
+				auto& rpc = entity.getComponent<RenderPipelineComponent>();
+
+				setAvailableContainerLight(rpc);
+				rpc.light_index = submitLight(tran.center, light);
+			}
+
+			if (entity.hasComponent<RenderableComponent>()) {
+				auto& ren = entity.getComponent<RenderableComponent>();
+				auto& rpc = entity.getComponent<RenderPipelineComponent>();
+
+				setAvailableContainerRenderable(rpc, ren.vertices.size(), ren.indices.size());
+				rpc.transform_index = submitRenderable(ren, tran);
+
+				if (entity.hasComponent<ColorComponent>()) {
+					auto& color = entity.getComponent<ColorComponent>();
+					rpc.color_index = submitColor(ren.shader_id, color);
+				}
+				else if (entity.hasComponent<Texture2DComponent>()) {
+					auto& tex = entity.getComponent<Texture2DComponent>();
+					rpc.color_index = submitTexture2D(ren.shader_id, tex);
+				}
+				else if (entity.hasComponent<TextureCubemapComponent>()) {
+					auto& cube = entity.getComponent<TextureCubemapComponent>();
+					rpc.color_index = submitCubemap(ren.shader_id, cube);
+				}
+			}
 		}
 
 		void RenderPipeline::setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push) {
@@ -100,17 +136,17 @@ namespace mar {
 			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container (for light), current size {}", m_containers.size());
 		}
 
-		size_t RenderPipeline::submitRenderable(ecs::RenderableComponent& ren_comp, ecs::TransformComponent& tran) {
+		size_t RenderPipeline::submitRenderable(ecs::RenderableComponent& ren_comp, const ecs::TransformComponent& tran) {
 			GRAPHICS_INFO("RENDER_PIPELINE: submitting renderable component");
 			RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 
 			ShapeManipulator::extendShapeID(ren_comp.vertices, availableContainer->m_stride, availableContainer->m_shapeID);
 			availableContainer->m_vertices.insert(availableContainer->m_vertices.end(), ren_comp.vertices.begin(), ren_comp.vertices.end());
 
-			uint32_t start_extension = availableContainer->m_indices.size();
-			uint32_t end_extension = availableContainer->m_indices.size() + ren_comp.indices.size();
+			const uint32_t startExtensionIndices = availableContainer->m_indices.size();
+			const uint32_t endExtensionIndices = availableContainer->m_indices.size() + ren_comp.indices.size();
 			availableContainer->m_indices.insert(availableContainer->m_indices.end(), ren_comp.indices.begin(), ren_comp.indices.end());
-			ShapeManipulator::extendIndices(availableContainer->m_indices, start_extension, end_extension, availableContainer->m_indicesMax);
+			ShapeManipulator::extendIndices(availableContainer->m_indices, startExtensionIndices, endExtensionIndices, availableContainer->m_indicesMax);
 
 			ren_comp.shader_id = availableContainer->m_shapeID;
 
@@ -125,7 +161,7 @@ namespace mar {
 			return availableContainer->m_transforms.size() - 1;
 		}
 
-		size_t RenderPipeline::submitColor(float entity_index, ecs::ColorComponent& color) {
+		size_t RenderPipeline::submitColor(float entity_index, const ecs::ColorComponent& color) {
 			RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 			availableContainer->m_colors.push_back({ entity_index, color.texture });
 			availableContainer->m_samplerTypes.push_back(0.0f);
@@ -136,7 +172,7 @@ namespace mar {
 			return availableContainer->m_colors.size() - 1;
 		}
 
-		size_t RenderPipeline::submitTexture2D(float entity_index, ecs::Texture2DComponent& tex) {
+		size_t RenderPipeline::submitTexture2D(float entity_index, const ecs::Texture2DComponent& tex) {
 			RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 			availableContainer->m_tex2D.push_back({ entity_index, tex.texture });
 			availableContainer->m_samplerTypes.push_back(1.0f);
@@ -147,7 +183,7 @@ namespace mar {
 			return availableContainer->m_tex2D.size() - 1;
 		}
 
-		size_t RenderPipeline::submitCubemap(float entity_index, ecs::TextureCubemapComponent& cube) {
+		size_t RenderPipeline::submitCubemap(float entity_index, const ecs::TextureCubemapComponent& cube) {
 			RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 			availableContainer->m_cubes.push_back({ entity_index, cube.texture });
 			availableContainer->m_samplerTypes.push_back(2.0f);
@@ -158,7 +194,7 @@ namespace mar {
 			return availableContainer->m_cubes.size() - 1;
 		}
 
-		size_t RenderPipeline::submitLight(maths::vec3& position, ecs::LightComponent& light) {
+		size_t RenderPipeline::submitLight(const maths::vec3& position, const ecs::LightComponent& light) {
 			RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 			availableContainer->m_lights.push_back({ position, light });
 

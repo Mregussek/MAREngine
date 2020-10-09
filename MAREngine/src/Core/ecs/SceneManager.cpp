@@ -37,12 +37,7 @@ namespace mar {
 	namespace ecs {
 
 
-		SceneManager::SceneManager()
-			: useEditorCamera(true),
-			m_EditorMode(true),
-			m_PauseMode(false),
-			m_scene(nullptr)
-		{
+		SceneManager::SceneManager() {
 			SceneEvents::Instance().scene_manager = this;
 
 			ECS_INFO("SCENE_MANAGER: called constructor");
@@ -54,11 +49,28 @@ namespace mar {
 			auto& render_pipeline = graphics::RenderPipeline::getInstance();
 			render_pipeline.reset();
 
-			init(m_scene->getEntities(), render_pipeline);
+			auto pushEntities = [this, &render_pipeline](const std::vector<Entity>& entitiesVector) {
+				for (const auto& entity : entitiesVector) {
+					auto& tran = entity.getComponent<TransformComponent>();
 
-			for (size_t i = 0; i < m_scene->getCollections().size(); i++) {
-				init(m_scene->getCollection(i).getEntities(), render_pipeline);
-			}
+					render_pipeline.pushEntityToPipeline(entity);
+
+					if (!useEditorCamera) {
+						if (entity.hasComponent<CameraComponent>()) {
+							submitCamera(tran, entity.getComponent<CameraComponent>());
+						}
+					}
+				}
+			};
+
+			auto pushCollections = [this, &render_pipeline, &pushEntities]() {
+				for (const auto& collection : m_scene->getCollections()) {
+					pushEntities(collection.getEntities());
+				}
+			};
+
+			pushEntities(m_scene->getEntities());
+			pushCollections();
 
 			ECS_INFO("SCENE_MANAGER: initialized!");
 		}
@@ -70,52 +82,6 @@ namespace mar {
 			delete m_scene;
 
 			ECS_INFO("SCENE_MANAGER: called shutdown method");
-		}
-
-		void SceneManager::init(const std::vector<Entity>& entities, graphics::RenderPipeline& render_pipeline) {
-			ECS_TRACE("SCENE_MANAGER: going to push entities into render_pipeline, init() method!");
-
-			for (size_t i = 0; i < entities.size(); i++) {
-				auto& entity = entities[i];
-				auto& tran = entity.getComponent<TransformComponent>();
-
-				if (entity.hasComponent<LightComponent>()) {
-					auto& light = entity.getComponent<LightComponent>();
-					auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
-					render_pipeline.setAvailableContainerLight(rpc);
-					rpc.light_index = render_pipeline.submitLight(tran.center, light);
-				}
-
-				if (entity.hasComponent<RenderableComponent>()) {
-					auto& ren = entity.getComponent<RenderableComponent>();
-					auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
-					render_pipeline.setAvailableContainerRenderable(rpc, ren.vertices.size(), ren.indices.size());
-					rpc.transform_index = render_pipeline.submitRenderable(ren, tran);
-
-					if (entity.hasComponent<ColorComponent>()) {
-						auto& color = entity.getComponent<ColorComponent>();
-						rpc.color_index = render_pipeline.submitColor(ren.shader_id, color);
-					}
-					else if (entity.hasComponent<Texture2DComponent>()) {
-						auto& tex = entity.getComponent<Texture2DComponent>();
-						rpc.color_index = render_pipeline.submitTexture2D(ren.shader_id, tex);
-					}
-					else if (entity.hasComponent<TextureCubemapComponent>()) {
-						auto& cube = entity.getComponent<TextureCubemapComponent>();
-						rpc.color_index = render_pipeline.submitCubemap(ren.shader_id, cube);
-					}
-				}
-
-				if (!useEditorCamera) {
-					if (entity.hasComponent<CameraComponent>()) {
-						submitCamera(tran, entity.getComponent<CameraComponent>());
-					}
-				}
-			}
-
-			ECS_TRACE("SCENE_MANAGER: pushed entities into render_pipeline, init() method!");
 		}
 
 		void SceneManager::update() {
@@ -223,7 +189,6 @@ namespace mar {
 					sc.pythonScript.update(&entity);
 
 					if (entity.hasComponent<RenderableComponent>()) {
-						
 						render_pipeline.modifyTransform(tran, rpc.container_index, rpc.transform_index);
 					}
 
