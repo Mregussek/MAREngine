@@ -23,32 +23,32 @@
 #include "WindowLogs.h"
 
 
-namespace mar {
-	namespace window {
+namespace mar::window {
 
 
-		bool Input::isKeyPressed(int32_t key) {
-			return Window::getInstance().m_window.isKeyPressed(key);
-		}
+	bool Input::isKeyPressed(int32_t key) {
+		return Window::getInstance().m_window.isKeyPressed(key);
+	}
 
-		bool Input::isMousePressed(int32_t key) {
-			return Window::getInstance().m_window.isMousePressed(key);
-		}
+	bool Input::isMousePressed(int32_t key) {
+		return Window::getInstance().m_window.isMousePressed(key);
+	}
 
-		float Input::getMousePositionX() {
-			return (float)platforms::callbacks::mouse_xpos;
-		}
+	float Input::getMousePositionX() {
+		return (float)platforms::callbacks::mouse_xpos;
+	}
 
-		float Input::getMousePositionY() {
-			return (float)platforms::callbacks::mouse_ypos;
-		}
+	float Input::getMousePositionY() {
+		return (float)platforms::callbacks::mouse_ypos;
+	}
 
-		float Input::getScrollX() {
-			return (float)platforms::callbacks::scroll_x;
-		}
+	float Input::getScrollX() {
+		return (float)platforms::callbacks::scroll_x;
+	}
 
-		float Input::getScrollY() {
-			return (float)platforms::callbacks::scroll_y;
-		}
+	float Input::getScrollY() {
+		return (float)platforms::callbacks::scroll_y;
+	}
 
-} }
+}
+

@@ -28,35 +28,32 @@
 #include "../../Core/graphics/Renderer/RendererBatch.h"
 
 
-namespace mar {
-	namespace ecs { class Scene; }
-
-	namespace layers {
+namespace mar::ecs { class Scene; }
+namespace mar::layers {
 
 
-		class EntityLayer : public Layer {
-		public:
-			EntityLayer(const char* debugname);
+	class EntityLayer : public Layer {
+	public:
 
-			void initialize(ecs::Scene* scene = nullptr);
-			ecs::SceneManager* getSceneManager();
+		EntityLayer(const char* debugname);
 
-			// --- OVERRIDED METHODS --- //
+		void initialize(ecs::Scene* scene = nullptr);
+		ecs::SceneManager* getSceneManager();
 
-			void update() override;
-			void closeLayer() override;
+		// --- OVERRIDED METHODS --- //
 
-		private:
+		void update() override;
+		void closeLayer() override;
 
-			const char* m_debugName;
-			ecs::SceneManager m_sceneManager;
-			graphics::RendererBatch m_renderer;
+	private:
 
-		};
+		ecs::SceneManager m_sceneManager;
+		graphics::RendererBatch m_renderer;
+
+	};
 
 
-
-} }
+}
 
 
 #endif // !MAR_ENGINE_ENTITY_LAYER_H

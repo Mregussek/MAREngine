@@ -26,28 +26,26 @@
 #include "buttons_def.h"
 
 
-namespace mar {
-	namespace window {
+namespace mar::window {
 
 
-		class Input {
-		public:
-			static bool isKeyPressed(int32_t key);
+	class Input {
+	public:
+		static bool isKeyPressed(int32_t key);
 
-			static bool isMousePressed(int32_t key);
+		static bool isMousePressed(int32_t key);
 
-			static float getMousePositionX();
+		static float getMousePositionX();
 
-			static float getMousePositionY();
+		static float getMousePositionY();
 
-			static float getScrollX();
+		static float getScrollX();
 
-			static float getScrollY();
-		};
+		static float getScrollY();
+	};
 
 
-
-} }
+}
 
 
 #endif // !MAR_ENGINE_WINDOW_INPUT_H

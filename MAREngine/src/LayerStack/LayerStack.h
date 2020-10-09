@@ -25,37 +25,36 @@
 #include "../mar.h"
 
 
-namespace mar {
-	namespace layers {
+namespace mar::layers {
 
-		class Layer;
-
-
-		class LayerStack {
-			std::vector<Layer*> m_layers;
-			uint32_t m_layerInsert{ 0 };
-
-		public:
-			LayerStack();
-
-			Layer* operator[](const uint32_t& index);
-
-			void close();
-
-			void update();
-
-			void pushLayer(Layer* layer);
-
-			void pushOverlay(Layer* overlay);
-
-			void popLayer(Layer* layer);
-
-			void popOverlay(Layer* overlay);
-
-		};
+	class Layer;
 
 
-} }
+	class LayerStack {
+		std::vector<Layer*> m_layers;
+		uint32_t m_layerInsert{ 0 };
+
+	public:
+		LayerStack();
+
+		Layer* operator[](const uint32_t& index);
+
+		void close();
+
+		void update();
+
+		void pushLayer(Layer* layer);
+
+		void pushOverlay(Layer* overlay);
+
+		void popLayer(Layer* layer);
+
+		void popOverlay(Layer* overlay);
+
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_LAYER_STACK_H

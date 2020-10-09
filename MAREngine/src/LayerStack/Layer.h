@@ -26,29 +26,30 @@
 #include "LayerLogs.h"
 
 
-namespace mar {
-	namespace layers {
+namespace mar::layers {
 
-		class LayerStack;
-
-
-		class Layer {
-		public:
-			Layer() = default;
-			Layer(const char* name) : m_debugName(name) { }
-
-			virtual void update() { }
-
-			virtual void closeLayer() { }
-
-		protected:
-			friend class LayerStack;
-
-			const char* m_debugName{ "Default_Debug_Name" };
-		};
+	class LayerStack;
 
 
-} }
+	class Layer {
+		friend class LayerStack;
+
+	public:
+		Layer() = default;
+		Layer(const char* name) : p_debugName(name) { }
+
+		virtual void update() { }
+
+		virtual void closeLayer() { }
+
+	protected:
+		
+		const char* p_debugName{ "Default_Debug_Name" };
+
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_LAYER_H

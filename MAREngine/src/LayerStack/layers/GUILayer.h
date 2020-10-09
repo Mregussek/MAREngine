@@ -31,36 +31,35 @@
 namespace mar {
 	namespace ecs { class SceneManager; }
 	namespace editor { class GUI; }
-
-	namespace layers {
-
-
-		class LayerGUI : public Layer {
-		public:
-
-			LayerGUI() = default;
-			LayerGUI(const char* name);
-
-			void initialize(editor::GUI* gui, maths::vec3 backgroundcolor);
-			void submit(ecs::SceneManager* manager);
-			void renderToViewport();
-
-			// --- OVERRIDED METHODS --- // 
-
-			void update() override;
-			void closeLayer() override;
-
-		private:
-
-			const char* m_debugName;
-			editor::GUI* m_gui;
-			editor::GUI_Graphics m_guiGraphics;
-			editor::Camera m_camera;
-
-		};
+}
+namespace mar::layers {
 
 
-} }
+	class LayerGUI : public Layer {
+	public:
+
+		LayerGUI() = default;
+		LayerGUI(const char* name);
+
+		void initialize(editor::GUI* gui, maths::vec3 backgroundcolor);
+		void submit(ecs::SceneManager* manager);
+		void renderToViewport();
+
+		// --- OVERRIDED METHODS --- // 
+
+		void update() override;
+		void closeLayer() override;
+
+	private:
+
+		editor::GUI* m_gui{ nullptr };
+		editor::GUI_Graphics m_guiGraphics;
+		editor::Camera m_camera;
+
+	};
+
+
+}
 
 
 #endif // !MAR_ENGINE_GUI_LAYER_H

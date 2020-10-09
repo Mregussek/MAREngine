@@ -25,54 +25,53 @@
 #include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 
-namespace mar {
-	namespace layers {
+namespace mar::layers {
 
 
-		EntityLayer::EntityLayer(const char* debugname)
-			: m_debugName(debugname)
-		{}
+	EntityLayer::EntityLayer(const char* debugname) {
+		p_debugName = debugname;
+	}
 
-		void EntityLayer::initialize(ecs::Scene* scene) {
-			LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
+	void EntityLayer::initialize(ecs::Scene* scene) {
+		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
-			auto& ren = graphics::RenderPipeline::getInstance();
-			ren = graphics::RenderPipeline();
-			ren.initialize();
+		auto& ren = graphics::RenderPipeline::getInstance();
+		ren = graphics::RenderPipeline();
+		ren.initialize();
 
-			m_renderer.initialize();
+		m_renderer.initialize();
 
-			ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
-			m_sceneManager.setScene(scene);
-			m_sceneManager.initialize();
+		ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
+		m_sceneManager.setScene(scene);
+		m_sceneManager.initialize();
 
-			LAYER_INFO("ENTITY_LAYER: {} initialized!", m_debugName);
-		}
+		LAYER_INFO("ENTITY_LAYER: {} initialized!", m_debugName);
+	}
 
-		void EntityLayer::update() {
-			LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
-			
-			ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
-			m_sceneManager.update();
-			m_renderer.draw(graphics::RenderPipeline::getInstance());
+	void EntityLayer::update() {
+		LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
+		
+		ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
+		m_sceneManager.update();
+		m_renderer.draw(graphics::RenderPipeline::getInstance());
 
-			LAYER_INFO("ENTITY_LAYER: {} updated!", m_debugName);
-		}
+		LAYER_INFO("ENTITY_LAYER: {} updated!", m_debugName);
+	}
 
-		void EntityLayer::closeLayer() {
-			LAYER_TRACE("ENTITY_LAYER: {} going to close", m_debugName);
+	void EntityLayer::closeLayer() {
+		LAYER_TRACE("ENTITY_LAYER: {} going to close", m_debugName);
 
-			graphics::RenderPipeline::getInstance().reset();
+		graphics::RenderPipeline::getInstance().reset();
 
-			m_renderer.close();
-			m_sceneManager.shutdown();
+		m_renderer.close();
+		m_sceneManager.shutdown();
 
-			LAYER_INFO("ENTITY_LAYER: {} closed!", m_debugName);
-		}
+		LAYER_INFO("ENTITY_LAYER: {} closed!", m_debugName);
+	}
 
-		ecs::SceneManager* EntityLayer::getSceneManager() {
-			return &m_sceneManager; 
-		}
+	ecs::SceneManager* EntityLayer::getSceneManager() {
+		return &m_sceneManager; 
+	}
 
 
-} }
+}

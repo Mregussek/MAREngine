@@ -26,51 +26,49 @@
 #include "../Platform/GLFW/WindowGLFW.h"
 
 
-namespace mar {
-	namespace editor { class GUI; class ProjectSelectionGUI; }
-
-	namespace window {
+namespace mar::editor { class GUI; class ProjectSelectionGUI; }
+namespace mar::window {
 	
-		class Input;
+	class Input;
 
 
-		class Window {
-			friend class Input;
-			friend class editor::GUI;
-			friend class editor::ProjectSelectionGUI;
+	class Window {
+		friend class Input;
+		friend class editor::GUI;
+		friend class editor::ProjectSelectionGUI;
 
-			static Window* s_instance;
+		static Window* s_instance;
 
-			platforms::WindowGLFW m_window;
-			uint32_t m_width{ 0 };
-			uint32_t m_height{ 0 };
-			maths::vec3 m_background;
-			bool m_closeAfterTerminate{ false };
+		platforms::WindowGLFW m_window;
+		uint32_t m_width{ 0 };
+		uint32_t m_height{ 0 };
+		maths::vec3 m_background;
+		bool m_closeAfterTerminate{ false };
 
-		public:
-			static Window& getInstance() { return *s_instance; }
-			
-			Window() = default;
+	public:
+		static Window& getInstance() { return *s_instance; }
+		
+		Window() = default;
 
-			void updateBackgroundColor(maths::vec3 new_back) { m_background = new_back; }
+		void updateBackgroundColor(maths::vec3 new_back) { m_background = new_back; }
 
-			void initialize(int32_t width, int32_t height, const char* name);
+		void initialize(int32_t width, int32_t height, const char* name);
 
-			void terminate();
+		void terminate();
 
-			void clear();
+		void clear();
 
-			void update();
+		void update();
 
-			bool isGoingToClose();
+		bool isGoingToClose();
 
-			void endRenderLoop();
+		void endRenderLoop();
 
-			void exitApp();
-		};
+		void exitApp();
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_WINDOW_WINDOW_H

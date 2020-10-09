@@ -23,75 +23,74 @@
 #include "WindowLogs.h"
 
 
-namespace mar {
-	namespace window {
+namespace mar::window {
 
-		Window* Window::s_instance{ nullptr };
+	Window* Window::s_instance{ nullptr };
 
 
-		void Window::initialize(int32_t width, int32_t height, const char* name) {
-			s_instance = this;
+	void Window::initialize(int32_t width, int32_t height, const char* name) {
+		s_instance = this;
 
-			m_width = width;
-			m_height = height;
+		m_width = width;
+		m_height = height;
 
-			bool is_glfw_fine = m_window.initialize(m_height, m_width, name);
-			if (!is_glfw_fine) {
-				WINDOW_ERROR("WINDOW: Cannot initialize GLFW window!");
-				char c = getchar();
-				exit(0);
-			}
-
-			WINDOW_INFO("WINDOW: initialized window!");
-
-			bool is_opengl_fine = platforms::SetupOpenGL::init();
-			if (!is_opengl_fine) {
-				WINDOW_ERROR("WINDOW: Cannot initialize OpenGL!");
-				char c = getchar();
-				exit(0);
-			}
-
-			WINDOW_INFO("WINDOW: initialized OpenGL!");
+		bool is_glfw_fine = m_window.initialize(m_height, m_width, name);
+		if (!is_glfw_fine) {
+			WINDOW_ERROR("WINDOW: Cannot initialize GLFW window!");
+			char c = getchar();
+			exit(0);
 		}
 
-		void Window::terminate() {
-			platforms::WindowGLFW::terminate();
+		WINDOW_INFO("WINDOW: initialized window!");
 
-			WINDOW_INFO("WINDOW: closed Window!");
-
-			if (m_closeAfterTerminate) {
-				exit(0);
-			}
+		bool is_opengl_fine = platforms::SetupOpenGL::init();
+		if (!is_opengl_fine) {
+			WINDOW_ERROR("WINDOW: Cannot initialize OpenGL!");
+			char c = getchar();
+			exit(0);
 		}
 
-		void Window::clear() {
-			platforms::SetupOpenGL::clearScreen(m_background);
+		WINDOW_INFO("WINDOW: initialized OpenGL!");
+	}
 
-			WINDOW_TRACE("WINDOW: is clearing screen");
+	void Window::terminate() {
+		platforms::WindowGLFW::terminate();
+
+		WINDOW_INFO("WINDOW: closed Window!");
+
+		if (m_closeAfterTerminate) {
+			exit(0);
 		}
+	}
 
-		void Window::update() {
-			m_window.swapBuffers();
+	void Window::clear() {
+		platforms::SetupOpenGL::clearScreen(m_background);
 
-			WINDOW_TRACE("WINDOW: updating buffers and callbacks");
-		}
+		WINDOW_TRACE("WINDOW: is clearing screen");
+	}
 
-		bool Window::isGoingToClose() {
-			return m_window.isGoingToClose();
-		}
+	void Window::update() {
+		m_window.swapBuffers();
 
-		void Window::endRenderLoop() {
-			m_window.close();
+		WINDOW_TRACE("WINDOW: updating buffers and callbacks");
+	}
 
-			WINDOW_INFO("WINDOW: ending render loop");
-		}
+	bool Window::isGoingToClose() {
+		return m_window.isGoingToClose();
+	}
 
-		void Window::exitApp() {
-			m_window.close();
-			m_closeAfterTerminate = true;
+	void Window::endRenderLoop() {
+		m_window.close();
 
-			WINDOW_INFO("WINDOW: exiting application after this frame!")
-		}
+		WINDOW_INFO("WINDOW: ending render loop");
+	}
+
+	void Window::exitApp() {
+		m_window.close();
+		m_closeAfterTerminate = true;
+
+		WINDOW_INFO("WINDOW: exiting application after this frame!")
+	}
 
 
-} }
+}
