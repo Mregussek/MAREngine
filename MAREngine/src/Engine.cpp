@@ -26,30 +26,29 @@
 #include "Core/graphics/Renderer/RenderPipeline.h"
 
 
-namespace mar {
-    namespace engine {
+namespace mar::engine {
 
 		
-		MAREngine* MAREngine::main_instance{ nullptr };
+	MAREngine* MAREngine::main_instance{ nullptr };
 
 
-		void MAREngine::initialize() {
-			main_instance = this;
+	void MAREngine::initialize() {
+		main_instance = this;
 
-			MAR_LOG_INIT();
+		MAR_LOG_INIT();
 
-			scripting::PythonScript::appendCurrentPath();
+		scripting::PythonScript::appendCurrentPath();
 
-			m_editorName = m_pathLoad + " --- MAREngine";
-		}
+		m_editorName = m_pathLoad + " --- MAREngine";
+	}
 
-		void MAREngine::connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer) {
-			guilayer->submit(entitylayer->getSceneManager());
-		}
+	void MAREngine::connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer) {
+		guilayer->submit(entitylayer->getSceneManager());
+	}
 
-		void MAREngine::resetStatistics() {
-			graphics::RenderPipeline::getInstance().clearStatistics(); 
-		}
+	void MAREngine::resetStatistics() {
+		graphics::RenderPipeline::getInstance().clearStatistics(); 
+	}
 
 
-} }
+}

@@ -26,23 +26,21 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar {
-	namespace platforms {
+namespace mar::platforms {
 
 
-		class DrawingOpenGL {
-		public:
+	class DrawingOpenGL {
+	public:
 
-			static void drawTriangles(size_t indices_count);
+		static void drawTriangles(size_t indices_count);
 
-			static void drawLineLoops(size_t indices_count, float line_width);
+		static void drawLineLoops(size_t indices_count, float line_width);
 
-			static void drawOutline(size_t indices_count);
+		static void drawOutline(size_t indices_count);
 
-		};
+	};
 
 
-
-} }
+}
 
 #endif // !MAR_ENGINE_PLATFORMS_OPENGL_DRAWING_H

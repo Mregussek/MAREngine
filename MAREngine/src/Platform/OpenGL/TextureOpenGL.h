@@ -26,40 +26,40 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar {
-	namespace platforms {
+namespace mar::platforms {
 
 
-		class TextureOpenGL {
-			static std::unordered_map<std::string, uint32_t> s_2d;
-			static std::unordered_map<std::string, uint32_t> s_cubemaps;
-			static TextureOpenGL* s_instance;
+	class TextureOpenGL {
+		static std::unordered_map<std::string, uint32_t> s_2d;
+		static std::unordered_map<std::string, uint32_t> s_cubemaps;
+		static TextureOpenGL* s_instance;
 
-		public:
+	public:
 
-			static TextureOpenGL* Instance() { return s_instance; }
+		static TextureOpenGL* Instance() { return s_instance; }
 
-			void shutdown();
+		void shutdown();
 
-			uint32_t loadTexture(std::string path);
-			uint32_t loadCubemap(std::string path);
+		uint32_t loadTexture(std::string path);
+		uint32_t loadCubemap(std::string path);
 
-			void bind2D(uint32_t unit, uint32_t tex_id) const;
-			void bindCube(uint32_t unit, uint32_t cube_id) const;
-			void unbind(const std::vector<float>& texture_types) const;
+		void bind2D(uint32_t unit, uint32_t tex_id) const;
+		void bindCube(uint32_t unit, uint32_t cube_id) const;
+		void unbind(const std::vector<float>& texture_types) const;
 
-			static bool hasTexture(std::string key);
+		static bool hasTexture(std::string key);
 
-			static uint32_t getTexture(std::string key) { return s_2d.at(key); }
-			static uint32_t getCubemap(std::string key) { return s_cubemaps.at(key); }
+		static uint32_t getTexture(std::string key) { return s_2d.at(key); }
+		static uint32_t getCubemap(std::string key) { return s_cubemaps.at(key); }
 
-		private:
+	private:
 
-			uint32_t genNewTexture(const char* path);
-			uint32_t genNewCubemap(const char* path);
-		};
+		uint32_t genNewTexture(const char* path);
+		uint32_t genNewCubemap(const char* path);
+	};
 
 
-} }
+}
+
 
 #endif // !MAR_ENGINE_TEXTURE_OPENGL_H

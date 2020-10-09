@@ -26,61 +26,59 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar {
-	namespace platforms {
+namespace mar::platforms {
 
 
-		struct FrameBufferSpecification {
-			maths::vec3 backgroundColor{ 0.22f, 0.69f, 0.87f };
-			float width{ 0.f };
-			float height{ 0.f };
-			uint32_t samples = 1;
+	struct FrameBufferSpecification {
+		maths::vec3 backgroundColor{ 0.22f, 0.69f, 0.87f };
+		float width{ 0.f };
+		float height{ 0.f };
+		uint32_t samples = 1;
 
-			bool swapChainTarget = false;
+		bool swapChainTarget = false;
 
-			FrameBufferSpecification() = default;
-			FrameBufferSpecification(float w, float h) : width(w), height(h) { }
-		};
-
-
-		class FrameBufferOpenGL {
-		public:
-			FrameBufferOpenGL() = default;
-
-			void initialize(const FrameBufferSpecification& spec);
-			void close();
-
-			void bind() const;
-			void unbind() const;
-
-			void clear() const;
-
-			// --- GET METHODS --- // 
-
-			const uint32_t& getColorAttach() const { return m_colorAttachment; }
-			const uint32_t& getDepthAttach() const { return m_depthAttanchment; }
-			FrameBufferSpecification& getSpecification() { return m_specification; }
-			
-			// --- SET METHODS --- //
-
-			void setBackgroundColor(maths::vec3 background_color) { m_specification.backgroundColor = background_color; }
-			
-		private:
-
-			void createColorAttachment();
-			void createDepthAttachment();
-			void createFramebuffer();
-			void checkCreationStatus();
-
-			uint32_t m_id{ 0 };
-			uint32_t m_colorAttachment{ 0 };
-			uint32_t m_depthAttanchment{ 0 };
-
-			FrameBufferSpecification m_specification;
-		};
+		FrameBufferSpecification() = default;
+		FrameBufferSpecification(float w, float h) : width(w), height(h) { }
+	};
 
 
-	}
+	class FrameBufferOpenGL {
+	public:
+		FrameBufferOpenGL() = default;
+
+		void initialize(const FrameBufferSpecification& spec);
+		void close();
+
+		void bind() const;
+		void unbind() const;
+
+		void clear() const;
+
+		// --- GET METHODS --- // 
+
+		const uint32_t& getColorAttach() const { return m_colorAttachment; }
+		const uint32_t& getDepthAttach() const { return m_depthAttanchment; }
+		FrameBufferSpecification& getSpecification() { return m_specification; }
+		
+		// --- SET METHODS --- //
+
+		void setBackgroundColor(maths::vec3 background_color) { m_specification.backgroundColor = background_color; }
+		
+	private:
+
+		void createColorAttachment();
+		void createDepthAttachment();
+		void createFramebuffer();
+		void checkCreationStatus();
+
+		uint32_t m_id{ 0 };
+		uint32_t m_colorAttachment{ 0 };
+		uint32_t m_depthAttanchment{ 0 };
+
+		FrameBufferSpecification m_specification;
+	};
+
+
 }
 
 

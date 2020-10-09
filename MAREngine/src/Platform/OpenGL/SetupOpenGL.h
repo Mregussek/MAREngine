@@ -26,21 +26,20 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar {
-	namespace platforms {
+namespace mar::platforms {
 
 
-		class SetupOpenGL {
-		public:
+	class SetupOpenGL {
+	public:
 
-			static bool init();
+		static bool init();
 
-			static void clearScreen(maths::vec3 background);
+		static void clearScreen(maths::vec3 background);
 
-		};
+	};
 
 
-} }
+}
 
 
 #endif // !MAR_ENGINE_PLATFORMS_OPENGL_INITIALIZATION_H

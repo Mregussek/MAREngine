@@ -27,38 +27,35 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar {
-	namespace editor { class GUI; class ProjectSelectionGUI; }
-
-	namespace platforms {
+namespace mar::editor { class GUI; class ProjectSelectionGUI; }
+namespace mar::platforms {
 
 
-		class WindowGLFW {
-			friend class editor::GUI;
-			friend class editor::ProjectSelectionGUI;
+	class WindowGLFW {
+		friend class editor::GUI;
+		friend class editor::ProjectSelectionGUI;
 
-		public:
+	public:
 
-			bool initialize(int32_t height, int32_t width, const char* name);
-			static void terminate();
+		bool initialize(int32_t height, int32_t width, const char* name);
+		static void terminate();
 
-			bool isGoingToClose() { return glfwWindowShouldClose(m_window); }
-			void close() { glfwSetWindowShouldClose(m_window, true); }
+		bool isGoingToClose() { return glfwWindowShouldClose(m_window); }
+		void close() { glfwSetWindowShouldClose(m_window, true); }
 
-			void swapBuffers();
+		void swapBuffers();
 
-			void setVSync(int32_t set);
+		void setVSync(int32_t set);
 
-			bool isKeyPressed(int32_t key);
-			bool isMousePressed(int32_t key);
+		bool isKeyPressed(int32_t key);
+		bool isMousePressed(int32_t key);
 
-		private:
+	private:
 
-			GLFWwindow* m_window;
-		};
+		GLFWwindow* m_window;
+	};
 
 
-	}
 }
 
 
