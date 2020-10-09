@@ -146,7 +146,7 @@ namespace mar {
 
 			if (result == GL_FALSE) {
 				int length = 100;
-				char message[100];
+				char message[256];
 				glGetShaderInfoLog(id, length, &length, message);
 
 				PLATFORM_ERROR("SHADER_OPENGL: Failed to compile shader: {} - {} - {}", m_shaderPath, (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), message);
@@ -174,7 +174,7 @@ namespace mar {
 			glGetProgramiv(shaderProgramId, GL_LINK_STATUS, &result);
 			if (result == GL_FALSE) {
 				int length = 100;
-				char message[100];
+				char message[256];
 				glGetProgramInfoLog(shaderProgramId, length, &length, message);
 
 				PLATFORM_ERROR("SHADER_OPENGL: Failed to load shader: {} - {}", m_shaderPath, message);

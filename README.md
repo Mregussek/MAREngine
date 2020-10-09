@@ -10,7 +10,6 @@
 <a href="https://github.com/mregussek/MAREngine/blob/master/LICENSE.md"><img alt="license" src="https://img.shields.io/github/license/mregussek/MAREngine?style=flat-square"/></a>
 <a href="https://github.com/mregussek/MAREngine"><img src="https://img.shields.io/badge/build-cmake-green?style=flat-square"/></a>
 <a href="https://trello.com/b/fdw2MeFf"><img src="https://img.shields.io/badge/board-trello-blue.svg?style=flat-square"/></a>
-<a href="https://github.com/mregussek/MAREngine"><img src="https://img.shields.io/github/labels/mregussek/MAREngine/help-wanted?style=flat-square"/></a>
 <a href="https://marengine-docs.readthedocs.io/"><img src="https://readthedocs.org/projects/pip/badge/?version=latest&style=flat-square"/></a>
 </p>
 

@@ -225,12 +225,26 @@ set(OBJ_LOADER_FILES ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.h ${OBJ_LOADER_
 message(STATUS "OBJ_LOADER_INCLUDE_DIR:= ${OBJ_LOADER_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
-# ImGui-Addons
+# ImGuiFileDialog
 # -------------------------------------------------------------
-message("Looking for: ImGui-Addons")
-set(IMGUI_ADDONS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGui-Addons")
-set(IMGUI_ADDONS_FILES ${IMGUI_ADDONS_INCLUDE_DIR}/FileBrowser/ImGuiFileBrowser.h ${IMGUI_ADDONS_INCLUDE_DIR}/FileBrowser/ImGuiFileBrowser.cpp)
-message(STATUS "IMGUI_ADDONS_INCLUDE_DIR:= ${IMGUI_ADDONS_INCLUDE_DIR}")
+message("Looking for: ImGuiFileDialog")
+set(IMGUI_FILE_DIALOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiFileDialog")
+set(IMGUI_FILE_DIALOG_FILES )
+file(GLOB_RECURSE IMGUI_FILE_DIALOG_FILES 
+	${IMGUI_FILE_DIALOG_INCLUDE_DIR}/ImGuiFileDialog/*.h
+	${IMGUI_FILE_DIALOG_INCLUDE_DIR}/ImGuiFileDialog/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiFileDialog/CustomFont.h
+	${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiFileDialog/CustomFont.cpp
+)
+message(STATUS "IMGUI_FILE_DIALOG_INCLUDE_DIR:= ${IMGUI_FILE_DIALOG_INCLUDE_DIR}")
+
+# -------------------------------------------------------------
+# dirent
+# -------------------------------------------------------------
+message("Looking for: dirent")
+add_subdirectory(MAREngine/3rd_party/dirent)
+set(DIRENT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/dirent/include")
+message(STATUS "DIRENT_INCLUDE_DIR:= ${DIRENT_INCLUDE_DIR}")
 
 # -------------------------------------------------------------
 # Set includes for MAREngine (mar_includes.h file)
@@ -245,7 +259,7 @@ include_directories(
 	${GLEW_INCLUDE_DIRS}
 	${GLFW_INDLUCE_DIR}
 	${MAR_GLFW_DIR}
-	${IMGUI_ADDONS_INCLUDE_DIR}
+	${IMGUI_FILE_DIALOG_INCLUDE_DIR}
 	${OBJ_LOADER_INCLUDE_DIR}
 	${STB_IMAGE_INCLUDE_DIR}
 	${SPDLOG_INCLUDE_DIR}
@@ -253,6 +267,7 @@ include_directories(
 	${MARENGINE_INCLUDE_DIR}
 	${PYBIND11_INCLUDE_DIR}
 	${PYTHON385_INCLUDE_DIR}
+	${DIRENT_INCLUDE_DIR}
 )
 
 # -------------------------------------------------------------
@@ -270,7 +285,7 @@ link_directories(
 # -------------------------------------------------------------
 set(ALL_INCLUDE_FILES_MARENGINE 
 	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
-	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES} ${IMGUI_ADDONS_FILES}
+	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES} ${IMGUI_FILE_DIALOG_FILES}
 	${IMGUICOLORTEXTEDIT_FILES} ${OBJ_LOADER_FILES}
 )
 
@@ -358,30 +373,4 @@ if(MSVC)
 	# Run macro
 	GroupSources(src)
 	
-# -------------------------------------------------------------
-# Copy imgui.ini and /resources to build dir's
-# -------------------------------------------------------------
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources"
-		"$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
-
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/imgui.ini"
-		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
-
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs/python38.dll"
-		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
-		
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_directory "${PROJECT_SOURCE_DIR}/resources"
-		"${CMAKE_SOURCE_DIR}/build/resources")
-
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/imgui.ini"
-		"${CMAKE_SOURCE_DIR}/build")
-
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs/python38.dll"
-		"${CMAKE_SOURCE_DIR}/build")
 endif()

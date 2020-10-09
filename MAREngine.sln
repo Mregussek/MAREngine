@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SandboxMAR", "SandboxMAR\Sa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MAREngine", "MAREngine\MAREngine.vcxproj", "{BB677FAE-7D61-46AA-ABC0-AB0BD75AA33B}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MAREngine-setup", "..\MAREngine-setup\MAREngine-setup.vdproj", "{40D28B40-E33C-4E6D-96EF-A2E06305FD5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,10 @@ Global
 		{BB677FAE-7D61-46AA-ABC0-AB0BD75AA33B}.Release|x64.Build.0 = Release|x64
 		{BB677FAE-7D61-46AA-ABC0-AB0BD75AA33B}.Release|x86.ActiveCfg = Release|Win32
 		{BB677FAE-7D61-46AA-ABC0-AB0BD75AA33B}.Release|x86.Build.0 = Release|Win32
+		{40D28B40-E33C-4E6D-96EF-A2E06305FD5B}.Debug|x64.ActiveCfg = Debug
+		{40D28B40-E33C-4E6D-96EF-A2E06305FD5B}.Debug|x86.ActiveCfg = Debug
+		{40D28B40-E33C-4E6D-96EF-A2E06305FD5B}.Release|x64.ActiveCfg = Release
+		{40D28B40-E33C-4E6D-96EF-A2E06305FD5B}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

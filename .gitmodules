@@ -13,9 +13,6 @@
 [submodule "MAREngine/3rd_party/pybind11"]
 	path = MAREngine/3rd_party/pybind11
 	url = https://github.com/pybind/pybind11.git
-[submodule "MAREngine/3rd_party/SerialPort"]
-	path = MAREngine/3rd_party/SerialPort
-	url = https://github.com/Mregussek/SerialPort.git
 [submodule "MAREngine/3rd_party/spdlog"]
 	path = MAREngine/3rd_party/spdlog
 	url = https://github.com/gabime/spdlog.git
