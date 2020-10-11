@@ -39,9 +39,9 @@ namespace mar::scripting {
 
         void loadScript(std::string path_to_script);
 
-        void start(const ecs::Entity* e);
+        void start(const ecs::Entity& entity) const;
 
-        void update(ecs::Entity* e);
+        void update(const ecs::Entity& entity) const;
 
         py::object& getModule() { return m_module; }
 

@@ -125,7 +125,7 @@ namespace mar::ecs {
 			if (entity.hasComponent<ScriptComponent>()) {
 				auto& sc = entity.getComponent<ScriptComponent>();
 				sc.pythonScript.loadScript(sc.script);
-				sc.pythonScript.start(&entity);
+				sc.pythonScript.start(entity);
 			}
 		};
 
@@ -165,41 +165,41 @@ namespace mar::ecs {
 	void SceneManager::updatePlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-		auto& render_pipeline = graphics::RenderPipeline::getInstance();
+		auto& renderPipeline = graphics::RenderPipeline::getInstance();
+		const auto& entitiesVector = m_scene->getEntities();
 
-		for (size_t i = 0; i < m_scene->getEntities().size(); i++) {
-			auto& entity = m_scene->getEntity(i);
-			auto& tran = entity.getComponent<TransformComponent>();
+		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
+			const auto& transform = entity.getComponent<TransformComponent>();
 
 			if (entity.hasComponent<ScriptComponent>()) {
-				auto& rpc = entity.getComponent<RenderPipelineComponent>();
-				auto& sc = entity.getComponent<ScriptComponent>();
-				sc.pythonScript.update(&entity);
+				const auto& rpc = entity.getComponent<RenderPipelineComponent>();
+				const auto& script = entity.getComponent<ScriptComponent>();
+				script.pythonScript.update(entity);
 
 				if (entity.hasComponent<RenderableComponent>()) {
-					render_pipeline.modifyTransform(tran, rpc.container_index, rpc.transform_index);
+					renderPipeline.modifyTransform(transform, rpc.container_index, rpc.transform_index);
 				}
 
 				if (entity.hasComponent<LightComponent>()) {
-					auto& light = entity.getComponent<LightComponent>();
-					render_pipeline.modifyLight(tran.center, light, rpc.container_light_index, rpc.light_index);
+					const auto& light = entity.getComponent<LightComponent>();
+					renderPipeline.modifyLight(transform.center, light, rpc.container_light_index, rpc.light_index);
 				}
 
 				if (entity.hasComponent<ColorComponent>()) {
-					auto& color = entity.getComponent<ColorComponent>();
-					render_pipeline.modifyColor(color, rpc.container_index, rpc.color_index);
+					const auto& color = entity.getComponent<ColorComponent>();
+					renderPipeline.modifyColor(color, rpc.container_index, rpc.color_index);
 				}
 			}
 
 			if (entity.hasComponent<CameraComponent>()) {
-				auto& cam = entity.getComponent<CameraComponent>();
-				submitCamera(tran, cam);
+				const auto& cam = entity.getComponent<CameraComponent>();
+				submitCamera(transform, cam);
 			}
-		}
+		};
 
-		for (auto& collection : m_scene->getCollections()) {
-			/// TODO: add support for collection scripting
-		}
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
+
+		/// TODO: add support for collection scripting
 
 		ECS_INFO("SCENE_MANAGER: updated play mode");
 	}
@@ -207,6 +207,36 @@ namespace mar::ecs {
 	void SceneManager::updatePauseMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
+		auto& renderPipeline = graphics::RenderPipeline::getInstance();
+		const auto& entitiesVector = m_scene->getEntities();
+
+		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
+			const auto& transform = entity.getComponent<TransformComponent>();
+			const auto& rpc = entity.getComponent<RenderPipelineComponent>();
+
+			if (entity.hasComponent<RenderableComponent>()) {
+				renderPipeline.modifyTransform(transform, rpc.container_index, rpc.transform_index);
+			}
+
+			if (entity.hasComponent<LightComponent>()) {
+				const auto& light = entity.getComponent<LightComponent>();
+				renderPipeline.modifyLight(transform.center, light, rpc.container_light_index, rpc.light_index);
+			}
+
+			if (entity.hasComponent<ColorComponent>()) {
+				const auto& color = entity.getComponent<ColorComponent>();
+				renderPipeline.modifyColor(color, rpc.container_index, rpc.color_index);
+			}
+
+			if (entity.hasComponent<CameraComponent>()) {
+				const auto& cam = entity.getComponent<CameraComponent>();
+				submitCamera(transform, cam);
+			}
+		};
+
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
+
+		/// TODO: add support for collection
 		
 		ECS_INFO("SCENE_MANAGER: updated pause mode");
 	}
@@ -215,15 +245,15 @@ namespace mar::ecs {
 	// CAMERA STUFF
 	// -------------------------------------------------------------
 
-	void SceneManager::submitCamera(TransformComponent& tran, CameraComponent& cam) {
-		if (cam.id.find("main") == std::string::npos) return;
+	void SceneManager::submitCamera(const TransformComponent& transform, const CameraComponent& camera) {
+		if (camera.id.find("main") == std::string::npos) return;
 
-		calculateCameraTransforms(tran, cam);
+		calculateCameraTransforms(transform, camera);
 
 		ECS_TRACE("SCENE_MANAGER: submitted camera");
 	}
 
-	void SceneManager::calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam) {
+	void SceneManager::calculateCameraTransforms(const TransformComponent& tran, const CameraComponent& cam) {
 		typedef maths::Trig trig;
 		static maths::vec3 front;
 

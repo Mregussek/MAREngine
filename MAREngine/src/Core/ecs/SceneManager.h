@@ -77,8 +77,8 @@ namespace mar::ecs {
 		void updatePlayMode();
 		void updatePauseMode();
 
-		void submitCamera(TransformComponent& tran, CameraComponent& cam);
-		void calculateCameraTransforms(TransformComponent& tran, CameraComponent& cam);
+		void submitCamera(const TransformComponent& transform, const CameraComponent& camera);
+		void calculateCameraTransforms(const TransformComponent& tran, const CameraComponent& cam);
 
 		// PRIVATE MEMBERS
 

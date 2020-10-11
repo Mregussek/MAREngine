@@ -48,24 +48,25 @@ namespace mar::scripting {
         SCRIPTING_INFO("PYTHON_SCRIPT: Loaded script {} from {}", what, from);
     }
     
-    void PythonScript::start(const ecs::Entity* e) {
+    void PythonScript::start(const ecs::Entity& entity) const {
         if (!m_initialized)
             return;
     
-        m_module.attr("transform") = e->getComponent<ecs::TransformComponent>();
+        const auto& transform = entity.getComponent<ecs::TransformComponent>();
+        m_module.attr("transform") = transform;
     
-        if (e->hasComponent<ecs::LightComponent>()) {
-            auto& light = e->getComponent<ecs::LightComponent>();
+        if (entity.hasComponent<ecs::LightComponent>()) {
+            const auto& light = entity.getComponent<ecs::LightComponent>();
             m_module.attr("light") = light;
         }
     
-        if (e->hasComponent<ecs::CameraComponent>()) {
-            auto& camera = e->getComponent<ecs::CameraComponent>();
+        if (entity.hasComponent<ecs::CameraComponent>()) {
+            const auto& camera = entity.getComponent<ecs::CameraComponent>();
             m_module.attr("camera") = camera;
         }
     
-        if (e->hasComponent<ecs::ColorComponent>()) {
-            auto& color = e->getComponent<ecs::ColorComponent>();
+        if (entity.hasComponent<ecs::ColorComponent>()) {
+            const auto& color = entity.getComponent<ecs::ColorComponent>();
             m_module.attr("color") = color;
         }
     
@@ -74,45 +75,45 @@ namespace mar::scripting {
         SCRIPTING_TRACE("PYTHON_SCRIPT: Calling start method at python script");
     }
     
-    void PythonScript::update(ecs::Entity* e) {
+    void PythonScript::update(const ecs::Entity& entity) const {
         if (!m_initialized)
             return;
+        
+        auto& transform = entity.getComponent<ecs::TransformComponent>();
+        m_module.attr("transform") = transform;
     
-        m_module.attr("transform") = e->getComponent<ecs::TransformComponent>();
-    
-        if (e->hasComponent<ecs::LightComponent>()) {
-            auto& light = e->getComponent<ecs::LightComponent>();
+        if (entity.hasComponent<ecs::LightComponent>()) {
+            const auto& light = entity.getComponent<ecs::LightComponent>();
             m_module.attr("light") = light;
         }
     
-        if (e->hasComponent<ecs::CameraComponent>()) {
-            auto& camera = e->getComponent<ecs::CameraComponent>();
+        if (entity.hasComponent<ecs::CameraComponent>()) {
+            const auto& camera = entity.getComponent<ecs::CameraComponent>();
             m_module.attr("camera") = camera;
         }
     
-        if (e->hasComponent<ecs::ColorComponent>()) {
-            auto& color = e->getComponent<ecs::ColorComponent>();
+        if (entity.hasComponent<ecs::ColorComponent>()) {
+            const auto& color = entity.getComponent<ecs::ColorComponent>();
             m_module.attr("color") = color;
         }
     
         m_module.attr("update")();
     
-        auto& tran = e->getComponent<ecs::TransformComponent>();
-        tran = m_module.attr("transform").cast<ecs::TransformComponent>();
-        tran.recalculate();
+        transform = m_module.attr("transform").cast<ecs::TransformComponent>();
+        transform.recalculate();
     
-        if (e->hasComponent<ecs::LightComponent>()) {
-            auto& light = e->getComponent<ecs::LightComponent>();
+        if (entity.hasComponent<ecs::LightComponent>()) {
+            auto& light = entity.getComponent<ecs::LightComponent>();
             light = m_module.attr("light").cast<ecs::LightComponent>();
         }
     
-        if (e->hasComponent<ecs::CameraComponent>()) {
-            auto& camera = e->getComponent<ecs::CameraComponent>();
+        if (entity.hasComponent<ecs::CameraComponent>()) {
+            auto& camera = entity.getComponent<ecs::CameraComponent>();
             camera = m_module.attr("camera").cast<ecs::CameraComponent>();
         }
     
-        if (e->hasComponent<ecs::ColorComponent>()) {
-            auto& color = e->getComponent<ecs::ColorComponent>();
+        if (entity.hasComponent<ecs::ColorComponent>()) {
+            auto& color = entity.getComponent<ecs::ColorComponent>();
             color = m_module.attr("color").cast<ecs::ColorComponent>();
         }
     

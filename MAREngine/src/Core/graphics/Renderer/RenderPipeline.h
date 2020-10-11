@@ -49,9 +49,9 @@ namespace mar::graphics {
 
 		void submitCamera(RenderCamera* cam);
 
-		void modifyTransform(ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
-		void modifyLight(maths::vec3& position, ecs::LightComponent& light, size_t container_index, size_t light_index);
-		void modifyColor(ecs::ColorComponent& color, size_t container_index, size_t color_index);
+		void modifyTransform(const ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
+		void modifyLight(const maths::vec3& position, const ecs::LightComponent& light, size_t container_index, size_t light_index);
+		void modifyColor(const ecs::ColorComponent& color, size_t container_index, size_t color_index);
 
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }
