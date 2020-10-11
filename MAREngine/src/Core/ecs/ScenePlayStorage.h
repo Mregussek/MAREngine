@@ -43,17 +43,29 @@ namespace mar::ecs {
 		void clear() { entities.clear(); }
 	};
 
-	struct ScenePlayStorage {
-		std::vector<EntityStorage> entity_storage;
-		std::vector<CollectionStorage> collection_storage;
+	class ScenePlayStorage {
+	public:
 
-		void pushCollectionToStorage(std::vector<CollectionStorage>& vector_storage, const EntityCollection& collection);
-		void pushEntityToStorage(std::vector<EntityStorage>& vector_storage, const Entity& entity);
+		ScenePlayStorage() = default;
 
-		void loadCollectionFromStorage(std::vector<CollectionStorage>& vector_storage, EntityCollection& collection);
-		void loadEntityFromStorage(std::vector<EntityStorage>& vector_storage, Entity& entity);
+		void pushEntityToStorage(const Entity& entity);
+		void pushCollectionToStorage(const EntityCollection& collection);
+
+		void loadEntityFromStorage(const Entity& entity);
+		void loadCollectionFromStorage(const EntityCollection& collection);
 
 		void clear();
+
+	private:
+
+		void pushEntityToStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
+		void loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
+
+		void loadOperation(const EntityStorage& storage, const Entity& entity);
+
+		std::vector<EntityStorage> m_entityStorage;
+		std::vector<CollectionStorage> m_collectionStorage;
+
 	};
 
 

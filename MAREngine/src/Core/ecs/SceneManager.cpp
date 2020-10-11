@@ -123,19 +123,19 @@ namespace mar::ecs {
 
 		auto inititializeScriptModule = [](const Entity& entity) {
 			if (entity.hasComponent<ScriptComponent>()) {
-				auto& sc = entity.getComponent<ScriptComponent>();
-				sc.pythonScript.loadScript(sc.script);
-				sc.pythonScript.start(entity);
+				auto& script = entity.getComponent<ScriptComponent>();
+				script.pythonScript.loadScript(script.script);
+				script.pythonScript.start(entity);
 			}
 		};
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const Entity& entity) {
-			playStorage.pushEntityToStorage(playStorage.entity_storage, entity);
+			playStorage.pushEntityToStorage(entity);
 			inititializeScriptModule(entity);
 		});
 
 		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const EntityCollection& collection) {
-			playStorage.pushCollectionToStorage(playStorage.collection_storage, collection);
+			playStorage.pushCollectionToStorage(collection);
 			const auto& entitiesVector = collection.getEntities();
 			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), inititializeScriptModule);
 		});
@@ -150,11 +150,11 @@ namespace mar::ecs {
 		auto& collectionsVector = m_scene->getCollections();
 
 		std::for_each(entitiesVector.begin(), entitiesVector.end(), [&playStorage = m_playStorage](Entity& entity) {
-			playStorage.loadEntityFromStorage(playStorage.entity_storage, entity);
+			playStorage.loadEntityFromStorage(entity);
 		});
 
 		std::for_each(collectionsVector.begin(), collectionsVector.end(), [&playStorage = m_playStorage](EntityCollection& collection) {
-			playStorage.loadCollectionFromStorage(playStorage.collection_storage, collection);
+			playStorage.loadCollectionFromStorage(collection);
 		});
 
 		initialize();

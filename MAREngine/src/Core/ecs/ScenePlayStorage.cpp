@@ -32,40 +32,71 @@ namespace mar::ecs {
 		vec.erase(vec.begin());
 	}
 
-	void ScenePlayStorage::pushCollectionToStorage(std::vector<CollectionStorage>& vector_storage, const EntityCollection& collection) {
+	void ScenePlayStorage::pushCollectionToStorage(const EntityCollection& collection) {
 		CollectionStorage storage;
 
-		for (auto& entity : collection.getEntities())
+		for (const auto& entity : collection.getEntities()) {
 			pushEntityToStorage(storage.entities, entity);
+		}
 
-		vector_storage.push_back(storage);
+		m_collectionStorage.push_back(storage);
 	}
 
-	void ScenePlayStorage::pushEntityToStorage(std::vector<EntityStorage>& vector_storage, const Entity& entity) {
+	void ScenePlayStorage::pushEntityToStorage(const Entity& entity) {
 		EntityStorage storage;
 
 		storage.transform = entity.getComponent<TransformComponent>();
-		if (entity.hasComponent<LightComponent>())
+		if (entity.hasComponent<LightComponent>()) {
 			storage.light = entity.getComponent<LightComponent>();
-		if (entity.hasComponent<ColorComponent>())
+		}
+		if (entity.hasComponent<ColorComponent>()) {
 			storage.color = entity.getComponent<ColorComponent>();
-
-		vector_storage.push_back(storage);
-	}
-
-	void ScenePlayStorage::loadCollectionFromStorage(std::vector<CollectionStorage>& vector_storage, EntityCollection& collection) {
-		auto& storage = vector_storage.front();
-
-		for (size_t i = 0; i < collection.getEntities().size(); i++) {
-			loadEntityFromStorage(storage.entities, collection.getEntity(i));
 		}
 
-		pop_front(vector_storage);
+		m_entityStorage.push_back(storage);
 	}
 
-	void ScenePlayStorage::loadEntityFromStorage(std::vector<EntityStorage>& vector_storage, Entity& entity) {
-		auto& storage = vector_storage.front();
+	void ScenePlayStorage::pushEntityToStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity) {
+		EntityStorage storage;
 
+		storage.transform = entity.getComponent<TransformComponent>();
+		if (entity.hasComponent<LightComponent>()) {
+			storage.light = entity.getComponent<LightComponent>();
+		}
+		if (entity.hasComponent<ColorComponent>()) {
+			storage.color = entity.getComponent<ColorComponent>();
+		}
+
+		vectorStorage.push_back(storage);
+	}
+
+	void ScenePlayStorage::loadCollectionFromStorage(const EntityCollection& collection) {
+		auto& storage = m_collectionStorage.front();
+
+		for (const auto& entity : collection.getEntities()) {
+			loadEntityFromStorage(storage.entities, entity);
+		}
+
+		pop_front(m_collectionStorage);
+	}
+
+	void ScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
+		auto& storage = m_entityStorage.front();
+
+		loadOperation(storage, entity);
+
+		pop_front(m_entityStorage);
+	}
+
+	void ScenePlayStorage::loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity) {
+		const auto& storage = vectorStorage.front();
+
+		loadOperation(storage, entity);
+
+		pop_front(vectorStorage);
+	}
+
+	void ScenePlayStorage::loadOperation(const EntityStorage& storage, const Entity& entity) {
 		auto& tran = entity.getComponent<TransformComponent>();
 
 		tran.center = storage.transform.center;
@@ -88,17 +119,14 @@ namespace mar::ecs {
 
 		if (entity.hasComponent<ColorComponent>()) {
 			auto& color = entity.getComponent<ColorComponent>();
-
 			color.texture = storage.color.texture;
 		}
-
-		pop_front(vector_storage);
 	}
 
 	void ScenePlayStorage::clear() {
-		entity_storage.clear();
-		for (auto& collection : collection_storage)
-			collection.clear();
+		m_entityStorage.clear();
+
+		for (auto& collection : m_collectionStorage) { collection.clear(); }
 	}
 
 
