@@ -34,7 +34,7 @@ namespace mar::ecs {
 
 namespace mar::graphics {
 
-	struct RenderCamera;
+	class RenderCamera;
 
 
 	class RenderPipeline {

@@ -437,36 +437,10 @@ namespace mar::editor {
 				cam.o_far = var;
 
 				if (cam.id.find("main") != std::string::npos) {
-					auto& scene_camera = scene->getRenderCamera();
-
-					if (cam.Perspective) {
-						scene_camera.projection = maths::mat4::perspective(
-							maths::Trig::toRadians(cam.p_fov),
-							cam.p_aspectRatio,
-							cam.p_near,
-							cam.p_far
-						);
-					}
-					else {
-						scene_camera.projection = maths::mat4::orthographic(
-							cam.o_left,
-							cam.o_right,
-							cam.o_top,
-							cam.o_bottom,
-							cam.o_near,
-							cam.o_far
-						);
-					}
-
+					auto& renderCamera = scene->getRenderCamera();
 					auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
 
-					scene_camera.view = maths::mat4::lookAt(
-						tran.center,
-						{ 0.f, 0.f, -1.f },
-						{ 0.f, 1.0f, 0.f }
-					);
-
-					scene_camera.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
+					renderCamera.calculateCameraTransforms(tran, cam);
 				}
 			}
 			else if (line.find("#ScriptComponent") != std::string::npos) {

@@ -33,32 +33,23 @@ namespace mar::ecs {
 	}
 
 	void ScenePlayStorage::pushCollectionToStorage(const EntityCollection& collection) {
-		CollectionStorage storage;
-
+		auto& storage = m_collectionStorage.emplace_back();
 		for (const auto& entity : collection.getEntities()) {
 			pushEntityToStorage(storage.entities, entity);
 		}
-
-		m_collectionStorage.push_back(storage);
 	}
 
 	void ScenePlayStorage::pushEntityToStorage(const Entity& entity) {
-		EntityStorage storage;
-
-		storage.transform = entity.getComponent<TransformComponent>();
-		if (entity.hasComponent<LightComponent>()) {
-			storage.light = entity.getComponent<LightComponent>();
-		}
-		if (entity.hasComponent<ColorComponent>()) {
-			storage.color = entity.getComponent<ColorComponent>();
-		}
-
-		m_entityStorage.push_back(storage);
+		auto& storage = m_entityStorage.emplace_back();
+		pushOperation(storage, entity);
 	}
 
 	void ScenePlayStorage::pushEntityToStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity) {
-		EntityStorage storage;
+		auto& storage = vectorStorage.emplace_back();
+		pushOperation(storage, entity);
+	}
 
+	void ScenePlayStorage::pushOperation(EntityStorage& storage, const Entity& entity) {
 		storage.transform = entity.getComponent<TransformComponent>();
 		if (entity.hasComponent<LightComponent>()) {
 			storage.light = entity.getComponent<LightComponent>();
@@ -66,8 +57,6 @@ namespace mar::ecs {
 		if (entity.hasComponent<ColorComponent>()) {
 			storage.color = entity.getComponent<ColorComponent>();
 		}
-
-		vectorStorage.push_back(storage);
 	}
 
 	void ScenePlayStorage::loadCollectionFromStorage(const EntityCollection& collection) {

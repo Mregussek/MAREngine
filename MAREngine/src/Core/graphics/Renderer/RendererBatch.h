@@ -31,7 +31,7 @@ namespace mar::graphics {
 
 	class RenderPipeline;
 	class RenderContainer;
-	struct RenderCamera;
+	class RenderCamera;
 
 
 	class RendererBatch {

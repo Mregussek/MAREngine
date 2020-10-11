@@ -28,7 +28,7 @@
 namespace mar {
 	/* forward declarations */
 	namespace ecs { class Entity; struct RenderableComponent; }
-	namespace graphics { struct RenderCamera; }
+	namespace graphics { class RenderCamera; }
 }
 namespace mar::editor {
 

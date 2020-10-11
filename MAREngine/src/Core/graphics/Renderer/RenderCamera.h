@@ -25,17 +25,40 @@
 #include "../../../mar.h"
 
 
+namespace mar::ecs {
+	struct TransformComponent;
+	struct CameraComponent;
+}
 namespace mar::graphics {
 
 
-	struct RenderCamera {
-		maths::mat4 projection;
-		maths::mat4 view;
-		maths::mat4 model;
+	class RenderCamera{
 
-		maths::mat4 mvp;
+		typedef maths::Trig trig;
+		typedef maths::vec3 vec3;
+		typedef maths::mat4 mat4;
 
-		maths::vec3 position;
+	public:
+		
+		RenderCamera() = default;
+
+		void calculateCameraTransforms(const ecs::TransformComponent& transform, const ecs::CameraComponent& camera);
+
+		const maths::mat4& getProjection() const { return m_projection; }
+		const maths::mat4& getView() const { return m_view; }
+		const maths::mat4& getModel() const { return m_model; }
+		const maths::mat4& getMVP() const { return m_mvp; }
+		const maths::vec3& getPosition() const { return m_position; }
+
+	private:
+
+		maths::mat4 m_model;
+		maths::mat4 m_view;
+		maths::mat4 m_projection;
+		
+		maths::mat4 m_mvp;
+
+		maths::vec3 m_position;
 	};
 
 

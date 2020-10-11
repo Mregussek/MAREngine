@@ -98,9 +98,7 @@ namespace mar::ecs {
 		}
 		else {
 			for (auto& entity : m_scene->getEntities()) {
-				if (entity.hasComponent<CameraComponent>()) {
-					submitCamera(entity.getComponent<TransformComponent>(), entity.getComponent<CameraComponent>());
-				}
+				submitCameraIfPossible(entity);
 			}
 		}
 
@@ -169,32 +167,13 @@ namespace mar::ecs {
 		const auto& entitiesVector = m_scene->getEntities();
 
 		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
-			const auto& transform = entity.getComponent<TransformComponent>();
-
 			if (entity.hasComponent<ScriptComponent>()) {
-				const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 				const auto& script = entity.getComponent<ScriptComponent>();
 				script.pythonScript.update(entity);
-
-				if (entity.hasComponent<RenderableComponent>()) {
-					renderPipeline.modifyTransform(transform, rpc.container_index, rpc.transform_index);
-				}
-
-				if (entity.hasComponent<LightComponent>()) {
-					const auto& light = entity.getComponent<LightComponent>();
-					renderPipeline.modifyLight(transform.center, light, rpc.container_light_index, rpc.light_index);
-				}
-
-				if (entity.hasComponent<ColorComponent>()) {
-					const auto& color = entity.getComponent<ColorComponent>();
-					renderPipeline.modifyColor(color, rpc.container_index, rpc.color_index);
-				}
+				updateEntityInPlaymode(entity, renderPipeline);
 			}
 
-			if (entity.hasComponent<CameraComponent>()) {
-				const auto& cam = entity.getComponent<CameraComponent>();
-				submitCamera(transform, cam);
-			}
+			submitCameraIfPossible(entity);
 		};
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
@@ -211,27 +190,8 @@ namespace mar::ecs {
 		const auto& entitiesVector = m_scene->getEntities();
 
 		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
-			const auto& transform = entity.getComponent<TransformComponent>();
-			const auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
-			if (entity.hasComponent<RenderableComponent>()) {
-				renderPipeline.modifyTransform(transform, rpc.container_index, rpc.transform_index);
-			}
-
-			if (entity.hasComponent<LightComponent>()) {
-				const auto& light = entity.getComponent<LightComponent>();
-				renderPipeline.modifyLight(transform.center, light, rpc.container_light_index, rpc.light_index);
-			}
-
-			if (entity.hasComponent<ColorComponent>()) {
-				const auto& color = entity.getComponent<ColorComponent>();
-				renderPipeline.modifyColor(color, rpc.container_index, rpc.color_index);
-			}
-
-			if (entity.hasComponent<CameraComponent>()) {
-				const auto& cam = entity.getComponent<CameraComponent>();
-				submitCamera(transform, cam);
-			}
+			updateEntityInPlaymode(entity, renderPipeline);
+			submitCameraIfPossible(entity);
 		};
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
@@ -241,51 +201,43 @@ namespace mar::ecs {
 		ECS_INFO("SCENE_MANAGER: updated pause mode");
 	}
 
+	void SceneManager::updateEntityInPlaymode(const Entity& entity, RenderPipeline& renderPipeline) {
+		const auto& transform = entity.getComponent<TransformComponent>();
+		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
+
+		if (entity.hasComponent<RenderableComponent>()) {
+			renderPipeline.modifyTransform(transform, rpc.container_index, rpc.transform_index);
+		}
+
+		if (entity.hasComponent<LightComponent>()) {
+			const auto& light = entity.getComponent<LightComponent>();
+			renderPipeline.modifyLight(transform.center, light, rpc.container_light_index, rpc.light_index);
+		}
+
+		if (entity.hasComponent<ColorComponent>()) {
+			const auto& color = entity.getComponent<ColorComponent>();
+			renderPipeline.modifyColor(color, rpc.container_index, rpc.color_index);
+		}
+	}
+
 	// -------------------------------------------------------------
 	// CAMERA STUFF
 	// -------------------------------------------------------------
 
-	void SceneManager::submitCamera(const TransformComponent& transform, const CameraComponent& camera) {
-		if (camera.id.find("main") == std::string::npos) return;
+	void SceneManager::submitCameraIfPossible(const Entity& entity) {
+		if (entity.hasComponent<CameraComponent>()) {
+			const auto& cam = entity.getComponent<CameraComponent>();
+			const auto& transform = entity.getComponent<TransformComponent>();
 
-		calculateCameraTransforms(transform, camera);
+			if (cam.id.find("main") == std::string::npos) { 
+				return; 
+			}
 
-		ECS_TRACE("SCENE_MANAGER: submitted camera");
-	}
+			auto& renderCamera = m_scene->getRenderCamera();
+			renderCamera.calculateCameraTransforms(transform, cam);
 
-	void SceneManager::calculateCameraTransforms(const TransformComponent& tran, const CameraComponent& cam) {
-		typedef maths::Trig trig;
-		static maths::vec3 front;
-
-		front.x = trig::cosine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
-		front.y = trig::sine(trig::toRadians(tran.angles.x));
-		front.z = trig::sine(trig::toRadians(tran.angles.y)) * trig::cosine(trig::toRadians(tran.angles.x));
-		front = maths::vec3::normalize(front);
-
-		auto& ren_cam = m_scene->getRenderCamera();
-
-		ren_cam.position = tran.center;
-		ren_cam.model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-		ren_cam.view = maths::mat4::lookAt(
-			tran.center,
-			tran.center + front,
-			{ 0.f, 1.0f, 0.f }
-		);
-
-		if (cam.Perspective) {
-			ren_cam.projection = maths::mat4::perspective(
-				trig::toRadians(cam.p_fov), cam.p_aspectRatio, cam.p_near, cam.p_far
-			);
+			ECS_TRACE("SCENE_MANAGER: submitted camera");
 		}
-		else {
-			ren_cam.projection = maths::mat4::orthographic(
-				cam.o_left, cam.o_right, cam.o_top, cam.o_bottom, cam.o_near, cam.o_far
-			);
-		}
-
-		ren_cam.mvp = ren_cam.projection * ren_cam.view * ren_cam.model;
-	
-		ECS_TRACE("SCENE_MANAGER: calculated camera transform!");
 	}
 
 	// -------------------------------------------------------------

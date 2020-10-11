@@ -166,9 +166,9 @@ namespace mar::graphics {
 
 		using namespace platforms::ShaderUniforms;
 
-		m_shader.setUniformVec3(u_CameraPos, camera->position);
-		m_shader.setUniformMat4(u_Model, camera->model);
-		m_shader.setUniformMat4(u_MVP, camera->mvp);
+		m_shader.setUniformVec3(u_CameraPos, camera->getPosition());
+		m_shader.setUniformMat4(u_Model, camera->getModel());
+		m_shader.setUniformMat4(u_MVP, camera->getMVP());
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 	}

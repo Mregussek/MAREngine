@@ -341,6 +341,7 @@
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RenderCamera.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderContainer.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />

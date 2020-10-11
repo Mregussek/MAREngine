@@ -59,8 +59,9 @@ namespace mar::ecs {
 	private:
 
 		void pushEntityToStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
-		void loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
+		void pushOperation(EntityStorage& storage, const Entity& entity);
 
+		void loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
 		void loadOperation(const EntityStorage& storage, const Entity& entity);
 
 		std::vector<EntityStorage> m_entityStorage;
