@@ -34,16 +34,16 @@ namespace mar::ecs {
 	class EntityOperation {
 	public:
 
-		static void copyEntity(Entity* src, Entity* dst);
-		static void copyCollection(EntityCollection* src, EntityCollection* dst);
+		static void copyEntity(const Entity& src, const Entity& dst);
+		static void copyCollection(const EntityCollection& src, EntityCollection& dst);
 
 	private:
 
 		template<typename T>
-		static void copyComponent(EntityComponents entcmp, Entity* src, Entity* dst);
+		static void copyComponent(EntityComponents entcmp, const Entity& src, const Entity& dst);
 
 		template<typename T>
-		static void copyComponent(EntityCollection* src, EntityCollection* dst);
+		static void copyComponent(const EntityCollection& src, const EntityCollection& dst);
 	};
 
 

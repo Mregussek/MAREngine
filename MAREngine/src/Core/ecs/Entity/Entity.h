@@ -37,6 +37,7 @@ namespace mar::ecs {
 
 	public:
 		Entity() = delete;
+		Entity(const Entity& other) = default;
 
 		Entity(SceneRegistry* scene)
 			: m_scene(scene),
@@ -45,28 +46,21 @@ namespace mar::ecs {
 			ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
 		}
 
-		Entity(const Entity& other) :
-			m_entityHandle(other.m_entityHandle),
-			m_scene(other.m_scene)
-		{
-			ECS_TRACE("ENTITY: {} is copied!", m_entityHandle);
-		}
-
-		void addDefault() {
+		void addDefault() const {
 			auto& com = m_scene->m_registry.emplace<Components>(m_entityHandle);
 			auto& rpc = m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle);
 
 			ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
 		}
 
-		void copyDefault(Entity* other) {
+		void copyDefault(const Entity& other) const {
 			auto com = m_scene->m_registry.get<Components>(m_entityHandle);
 			auto rpc = m_scene->m_registry.get<RenderPipelineComponent>(m_entityHandle);
 
-			m_scene->m_registry.replace<Components>(other->m_entityHandle, com);
-			m_scene->m_registry.replace<RenderPipelineComponent>(other->m_entityHandle, rpc);
+			m_scene->m_registry.replace<Components>(other.m_entityHandle, com);
+			m_scene->m_registry.replace<RenderPipelineComponent>(other.m_entityHandle, rpc);
 
-			ECS_TRACE("ENTITY: copying default components from {} to {}", m_entityHandle, other->m_entityHandle);
+			ECS_TRACE("ENTITY: copying default components from {} to {}", m_entityHandle, other.m_entityHandle);
 		}
 
 		const bool isValid() const {
@@ -79,7 +73,7 @@ namespace mar::ecs {
 			return isValid();
 		}
 
-		void destroyYourself() {
+		void destroyYourself() const {
 			ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
 
 			m_scene->m_registry.destroy(m_entityHandle);
@@ -117,6 +111,16 @@ namespace mar::ecs {
 			ECS_TRACE("ENTITY: {} - returning component from {}!", typeid(T).name(), m_entityHandle);
 
 			return m_scene->m_registry.get<T>(m_entityHandle);
+		}
+
+		template<typename T>
+		T& replaceComponent(const Entity& other) const {
+			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
+			MAR_CORE_ASSERT(other.hasComponent<T>(), "Entity does not have this component!");
+
+			ECS_TRACE("ENTITY: {} - replacing component from {} to {}", typeid(T).name(), other.m_entityHandle, m_entityHandle);
+			
+			return m_scene->m_registry.replace<T>(m_entityHandle, other.getComponent<T>());
 		}
 
 		template<typename T>

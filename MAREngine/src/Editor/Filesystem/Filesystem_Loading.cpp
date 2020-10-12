@@ -34,14 +34,12 @@ namespace mar::editor {
 
 		while (std::getline(file, line)) {
 			if (line.find("#EntityStart") != std::string::npos) {
-				ecs::Entity* currentEntity = &scene->createEntity();
-				Filesystem_Loading::loadEntity(file, scene, currentEntity);
-				currentEntity = nullptr;
+				const auto& entity = scene->createEntity();
+				Filesystem_Loading::loadEntity(file, scene, entity);
 			}
 			else if (line.find("#EntityCollectionStart") != std::string::npos) {
-				ecs::EntityCollection* currentCollection = &scene->createCollection();
-				Filesystem_Loading::loadCollection(file, scene, currentCollection);
-				currentCollection = nullptr;
+				auto& collection = scene->createCollection();
+				Filesystem_Loading::loadCollection(file, scene, collection);
 			}
 			else if (line.find("#SceneEnd") != std::string::npos) {
 				return;
@@ -49,19 +47,19 @@ namespace mar::editor {
 		}
 	}
 
-	void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, ecs::EntityCollection* collection) {
+	void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, ecs::EntityCollection& collection) {
 		std::string line;
 
 		while (std::getline(file, line)) {
 			if (line.find("#EntityStart") != std::string::npos) {
-				ecs::Entity* entity = &collection->createEntity();
+				const auto& entity = collection.createEntity();
 				loadEntity(file, scene, entity);
 			}
 			else if (line.find("#CollectionTagComponent") != std::string::npos) {
 				std::istringstream is(line.substr(24));
 				std::string new_tag;
 				is >> new_tag;
-				auto& tag = collection->getComponent<ecs::TagComponent>();
+				auto& tag = collection.getComponent<ecs::TagComponent>();
 				tag = new_tag;
 			}
 			else if (line.find("#CollectionRenderableComponent") != std::string::npos) {
@@ -69,23 +67,23 @@ namespace mar::editor {
 				std::string path_to_load_obj;
 				is >> path_to_load_obj;
 
-				auto& crc = collection->addComponent<ecs::CollectionRenderableComponent>();
+				auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
 				crc.id = path_to_load_obj;
 
-				graphics::MeshCreator::loadOBJ("CannotFindOBJname", path_to_load_obj, *collection);
+				graphics::MeshCreator::loadOBJ("CannotFindOBJname", path_to_load_obj, collection);
 
-				auto size_after_loading = collection->getEntitiesCount();
+				auto size_after_loading = collection.getEntitiesCount();
 				for (size_t i = 0; i < size_after_loading; ) {
 					std::getline(file, line);
 					if (line.find("#EntityStart") != std::string::npos) {
-						ecs::Entity* entity = &collection->getEntity(i);
+						const auto& entity = collection.getEntity(i);
 						loadEntity(file, scene, entity);
 						i++;
 					}
 				}
 			}
 			else if (line.find("#CollectionTransformComponent") != std::string::npos) {
-				auto& tran = collection->getComponent<ecs::TransformComponent>();
+				auto& tran = collection.getComponent<ecs::TransformComponent>();
 
 				// #center - 7 letters
 				std::getline(file, line);
@@ -125,8 +123,8 @@ namespace mar::editor {
 
 				tran.general_scale = arr[0];
 
-				for (size_t i = 0; i < collection->getEntitiesCount(); i++) {
-					auto& entity = collection->getEntity(i);
+				for (size_t i = 0; i < collection.getEntitiesCount(); i++) {
+					auto& entity = collection.getEntity(i);
 					auto& transform = entity.getComponent<ecs::TransformComponent>();
 
 					transform.center += (transform.center - tran.center);
@@ -143,7 +141,7 @@ namespace mar::editor {
 		}
 	}
 
-	void Filesystem_Loading::loadEntity(std::ifstream& file, ecs::Scene* scene, ecs::Entity* currentEntity) {
+	void Filesystem_Loading::loadEntity(std::ifstream& file, ecs::Scene* scene, const ecs::Entity& entity) {
 		std::string line;
 
 		while (std::getline(file, line)) {
@@ -151,11 +149,11 @@ namespace mar::editor {
 				std::istringstream is(line.substr(14));
 				std::string new_tag;
 				is >> new_tag;
-				auto& tag = currentEntity->getComponent<ecs::TagComponent>();
+				auto& tag = entity.getComponent<ecs::TagComponent>();
 				tag.tag = new_tag;
 			}
 			else if (line.find("#TransformComponent") != std::string::npos) {
-				auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
+				auto& tran = entity.getComponent<ecs::TransformComponent>();
 
 				// #center - 7 letters
 				std::getline(file, line);
@@ -198,9 +196,9 @@ namespace mar::editor {
 				tran.recalculate();
 			}
 			else if (line.find("#RenderableComponent") != std::string::npos) {
-				auto& ren = !currentEntity->hasComponent<ecs::RenderableComponent>() ?
-					currentEntity->addComponent<ecs::RenderableComponent>(ECS_RENDERABLE) :
-					currentEntity->getComponent<ecs::RenderableComponent>();
+				auto& ren = !entity.hasComponent<ecs::RenderableComponent>() ?
+					entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE) :
+					entity.getComponent<ecs::RenderableComponent>();
 
 				if (line.find("Cube") != std::string::npos) {
 					ren.id = "Cube";
@@ -228,9 +226,9 @@ namespace mar::editor {
 				float arr[3];
 				is >> arr[0] >> arr[1] >> arr[2];
 
-				auto& color = !currentEntity->hasComponent<ecs::ColorComponent>() ?
-					currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR) :
-					currentEntity->getComponent<ecs::ColorComponent>();
+				auto& color = !entity.hasComponent<ecs::ColorComponent>() ?
+					entity.addComponent<ecs::ColorComponent>(ECS_COLOR) :
+					entity.getComponent<ecs::ColorComponent>();
 
 				color.texture.x = arr[0];
 				color.texture.y = arr[1];
@@ -241,9 +239,9 @@ namespace mar::editor {
 				std::string tex;
 				iss >> tex;
 
-				auto& texture = !currentEntity->hasComponent<ecs::Texture2DComponent>() ?
-					currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D) :
-					currentEntity->getComponent<ecs::Texture2DComponent>();
+				auto& texture = !entity.hasComponent<ecs::Texture2DComponent>() ?
+					entity.addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D) :
+					entity.getComponent<ecs::Texture2DComponent>();
 
 				texture.texture = tex;
 			}
@@ -252,16 +250,16 @@ namespace mar::editor {
 				std::string tex;
 				iss >> tex;
 
-				auto& cubemap = !currentEntity->hasComponent<ecs::TextureCubemapComponent>() ?
-					currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP) :
-					currentEntity->getComponent<ecs::TextureCubemapComponent>();
+				auto& cubemap = !entity.hasComponent<ecs::TextureCubemapComponent>() ?
+					entity.addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP) :
+					entity.getComponent<ecs::TextureCubemapComponent>();
 
 				cubemap.texture = tex;
 			}
 			else if (line.find("#LightComponent") != std::string::npos) {
-				auto& light = !currentEntity->hasComponent<ecs::LightComponent>() ?
-					currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT) :
-					currentEntity->getComponent<ecs::LightComponent>();
+				auto& light = !entity.hasComponent<ecs::LightComponent>() ?
+					entity.addComponent<ecs::LightComponent>(ECS_LIGHT) :
+					entity.getComponent<ecs::LightComponent>();
 
 				// #ambientlight - 13
 				std::getline(file, line);
@@ -326,9 +324,9 @@ namespace mar::editor {
 				light.shininess = arr[0];
 			}
 			else if (line.find("#CameraComponent") != std::string::npos) {
-				auto& cam = !currentEntity->hasComponent<ecs::CameraComponent>() ?
-					currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA) :
-					currentEntity->getComponent<ecs::CameraComponent>();
+				auto& cam = !entity.hasComponent<ecs::CameraComponent>() ?
+					entity.addComponent<ecs::CameraComponent>(ECS_CAMERA) :
+					entity.getComponent<ecs::CameraComponent>();
 
 				std::string type;
 				float var;
@@ -438,15 +436,15 @@ namespace mar::editor {
 
 				if (cam.id.find("main") != std::string::npos) {
 					auto& renderCamera = scene->getRenderCamera();
-					auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
+					auto& tran = entity.getComponent<ecs::TransformComponent>();
 
 					renderCamera.calculateCameraTransforms(tran, cam);
 				}
 			}
 			else if (line.find("#ScriptComponent") != std::string::npos) {
-				auto& script = !currentEntity->hasComponent<ecs::ScriptComponent>() ?
-					currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT) :
-					currentEntity->getComponent<ecs::ScriptComponent>();
+				auto& script = !entity.hasComponent<ecs::ScriptComponent>() ?
+					entity.addComponent<ecs::ScriptComponent>(ECS_SCRIPT) :
+					entity.getComponent<ecs::ScriptComponent>();
 
 				std::istringstream iss(line.substr(17));
 				std::string s;

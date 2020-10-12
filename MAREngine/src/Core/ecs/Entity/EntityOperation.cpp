@@ -26,24 +26,26 @@
 namespace mar::ecs {
 
 
-	void EntityOperation::copyCollection(EntityCollection* src, EntityCollection* dst) {
+	void EntityOperation::copyCollection(const EntityCollection& src, EntityCollection& dst) {
 		copyComponent<TagComponent>(src, dst);
 		copyComponent<TransformComponent>(src, dst);
-		if (src->hasComponent<CollectionRenderableComponent>()) {
+
+		if (src.hasComponent<CollectionRenderableComponent>()) { 
 			copyComponent<CollectionRenderableComponent>(src, dst);
 		}
 
-		for (size_t i = 0; i < src->getEntitiesCount(); i++) {
-			auto& entity = src->getEntity(i);
-			auto& dst_entity = dst->createEntity();
-			copyEntity(&entity, &dst_entity);
-		}
+		const auto& entities = src.getEntities();
+
+		std::for_each(entities.cbegin(), entities.cend(), [&dst](const Entity& entity) {
+			const auto& entityDst = dst.createEntity();
+			copyEntity(entity, entityDst);
+		});
 	}
 
-	void EntityOperation::copyEntity(Entity* src, Entity* dst) {
-		auto& components = src->getComponent<Components>();
+	void EntityOperation::copyEntity(const Entity& src, const Entity& dst) {
+		const auto& components = src.getComponent<Components>();
 
-		for (auto component : components.components) {
+		for (const auto component : components.components) {
 			switch (component) {
 			case ECS_RENDERABLE:
 				copyComponent<RenderableComponent>(component, src, dst);
@@ -75,23 +77,27 @@ namespace mar::ecs {
 			}
 		}
 
-		src->copyDefault(dst);
+		src.copyDefault(dst);
 	}
 
 	template<typename T>
-	void EntityOperation::copyComponent(EntityComponents entcmp, Entity* src, Entity* dst) {
-		T com = src->getComponent<T>();
-		T& dst_com = dst->hasComponent<T>() ? dst->getComponent<T>() : dst->addComponent<T>(entcmp);
-
-		dst_com = com;
+	void EntityOperation::copyComponent(EntityComponents entcmp, const Entity& src, const Entity& dst) {
+		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
+		else {
+			const auto com = src.getComponent<T>();
+			auto& component = dst.addComponent<T>(entcmp);
+			component = com;
+		}
 	}
 
 	template<typename T>
-	void EntityOperation::copyComponent(EntityCollection* src, EntityCollection* dst) {
-		T com = src->getComponent<T>();
-		T& dst_com = dst->hasComponent<T>() ? dst->getComponent<T>() : dst->addComponent<T>();
-
-		dst_com = com;
+	void EntityOperation::copyComponent(const EntityCollection& src, const EntityCollection& dst) {
+		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
+		else {
+			const auto com = src.getComponent<T>();
+			auto& component = dst.addComponent<T>();
+			component = com;
+		}
 	}
 		
 

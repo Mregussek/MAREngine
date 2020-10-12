@@ -38,16 +38,11 @@ namespace mar::ecs {
 	public:
 
 		EntityCollection() = delete;
+		EntityCollection(const EntityCollection& other) = default;
 
 		EntityCollection(SceneRegistry* scene)
 			: m_scene(scene),
 			m_collectionHandle(scene->m_registry.create())
-		{}
-
-		EntityCollection(const EntityCollection& other)
-			: m_scene(other.m_scene),
-			m_collectionHandle(other.m_collectionHandle),
-			m_entities(other.m_entities)
 		{}
 
 		const bool isValid() const {
@@ -108,7 +103,7 @@ namespace mar::ecs {
 			return m_entities[index];
 		}
 
-		size_t getEntitiesCount() {
+		size_t getEntitiesCount() const {
 			return m_entities.size();
 		}
 
@@ -118,7 +113,7 @@ namespace mar::ecs {
 		}
 
 		template<typename T, typename... Args>
-		T& addComponent(Args&&... args) {
+		T& addComponent(Args&&... args) const {
 			MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY_COLLECTION: already has CollectionTagComponent!");
 
 			return m_scene->m_registry.emplace<T>(m_collectionHandle, std::forward<Args>(args)...);
@@ -129,6 +124,25 @@ namespace mar::ecs {
 			MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: does not have this component!");
 
 			return m_scene->m_registry.get<T>(m_collectionHandle);
+		}
+
+		template<typename T>
+		T& replaceComponent(const EntityCollection& other) const {
+			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
+			MAR_CORE_ASSERT(other.hasComponent<T>(), "Entity does not have this component!");
+
+			ECS_TRACE("ENTITY_COLLECTION: {} - replacing component from {} to {}", typeid(T).name(), m_collectionHandle, other.m_collectionHandle);
+
+			return m_scene->m_registry.replace<T>(other.m_collectionHandle, getComponent<T>());
+		}
+
+		template<typename T>
+		void removeComponent() const {
+			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
+
+			ECS_INFO("ENTITY_COLLECTION: {} going to remove component {}", m_collectionHandle, typeid(T).name());
+
+			m_scene->m_registry.remove<T>(m_collectionHandle);
 		}
 
 	private:
