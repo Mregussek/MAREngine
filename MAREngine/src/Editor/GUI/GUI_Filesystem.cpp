@@ -87,8 +87,8 @@ namespace mar::editor {
 
 				engine::MAREngine::getEngine()->setLoadPath(igfd::ImGuiFileDialog::Instance()->GetFilePathName());
 
-				GUI_EntityCollectionPanel::reset();
-				GUI_EntityPanel::reset();
+				GUI_EntityCollectionPanel::Instance()->reset();
+				GUI_EntityPanel::Instance()->reset();
 				GUI_TextEditor::Instance().reset();
 
 				engine::MAREngine::getEngine()->setRestart();
@@ -112,7 +112,7 @@ namespace mar::editor {
 				std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
 				std::string filename = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
 
-				auto& collection = scene->createCollection();
+				const auto& collection = scene->createCollection();
 				auto& tag = collection.getComponent<ecs::TagComponent>();
 				auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
 

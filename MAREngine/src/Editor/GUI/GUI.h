@@ -25,6 +25,9 @@
 #include "../../mar.h"
 #include "GUI_MainMenuBar.h"
 #include "../../Platform/OpenGL/FrameBufferOpenGL.h"
+#include "EntityPanels/GUI_EntityPanel.h"
+#include "EntityPanels/GUI_EntityCollectionPanel.h"
+#include "EntityPanels/GUI_SceneHierarchy.h"
 
 
 namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
@@ -54,8 +57,8 @@ namespace mar::editor {
 		float getMouseViewportPosY() { return m_mouseViewportY; }
 		bool isViewportInputEnabled() { return m_enableViewportInput; }
 		platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
-		ecs::Entity* getCurrentEntity();
-		ecs::EntityCollection* getCurrentCollection();
+		const ecs::Entity& getCurrentEntity();
+		const ecs::EntityCollection& getCurrentCollection();
 		bool canDrawLines();
 
 	private:
@@ -78,6 +81,9 @@ namespace mar::editor {
 		bool m_enableViewportInput{ false };
 		// --- MainMenuBar
 		GUI_MainMenuBar m_mainMenuBar;
+		GUI_EntityPanel m_entityPanel;
+		GUI_EntityCollectionPanel m_collectionPanel;
+		GUI_SceneHierarchy m_sceneHierarchyPanel;
 		// --- Dockspace
 		bool s_dockspaceOpen{ true };
 		bool s_fullscreenPersisant{ true };

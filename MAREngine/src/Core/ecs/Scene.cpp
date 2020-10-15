@@ -75,10 +75,10 @@ namespace mar::ecs {
 	// ENTITIES MANAGEMENT
 	// -------------------------------------------------------------
 
-	Entity& Scene::createEntity() {
+	const Entity& Scene::createEntity() {
 		ECS_INFO("SCENE: going to create entity!");
 
-		auto& entity = m_container.m_entities.emplace_back(&m_sceneRegistry);
+		const auto& entity = m_container.m_entities.emplace_back(&m_sceneRegistry);
 
 		entity.addDefault();
 		entity.addComponent<TagComponent>(ECS_TAG);
@@ -108,23 +108,16 @@ namespace mar::ecs {
 		return m_container.m_entities;
 	}
 
-	std::vector<Entity>& Scene::getEntities() {
-		return m_container.m_entities;
-	}
-
-	Entity& Scene::getEntity(size_t index) { 
-		return m_container.m_entities[index];
-	}
-
 	// -------------------------------------------------------------
 	// ENTITIES COLLECTIONS MANAGEMENT
 	// -------------------------------------------------------------
 
-	EntityCollection& Scene::createCollection() {
+	const EntityCollection& Scene::createCollection() {
 		ECS_INFO("SCENE: going to create entity collection!");
 
 		auto& collection = m_container.m_collections.emplace_back(&m_sceneRegistry);
 
+		collection.addComponent<EntityCollectionComponent>();
 		collection.addComponent<TagComponent>("DefaultName");
 		collection.addComponent<TransformComponent>();
 
@@ -156,14 +149,6 @@ namespace mar::ecs {
 
 	const std::vector<EntityCollection>& Scene::getCollections() const { 
 		return m_container.m_collections;
-	}
-
-	std::vector<EntityCollection>& Scene::getCollections() {
-		return m_container.m_collections;
-	}
-
-	EntityCollection& Scene::getCollection(size_t index) { 
-		return m_container.m_collections[index];
 	}
 
 

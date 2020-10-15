@@ -31,19 +31,35 @@ namespace mar::ecs {
 namespace mar::editor {
 
 
-	struct GUI_EntityCollectionPanel {
-		static ecs::EntityCollection* currentCollection;
-		static int32_t currentIndex;
+	class GUI_EntityCollectionPanel {
+	public:
 
-		static void Scene_EntityCollection_Modify();
+		static GUI_EntityCollectionPanel* Instance() { return s_instance; }
 
-		static void reset();
+		void initialize() {
+			if (m_initialized) { return; }
+
+			s_instance = this;
+			m_initialized = true;
+		}
+
+		void Scene_EntityCollection_Modify();
+
+		void reset();
+
+		void setCurrentCollection(const ecs::EntityCollection& collection) { currentCollection = &collection; }
+		const ecs::EntityCollection& getCurrentCollection() const { return *currentCollection; }
 
 	private:
 
-		static void Scene_EntityCollection_PopUp(const char* collection_tag);
-		static void Handle_TagComponent(ecs::TagComponent& tag);
-		static void Handle_TransformComponent();
+		void Scene_EntityCollection_PopUp(const char* collection_tag);
+		void Handle_TagComponent(ecs::TagComponent& tag);
+		void Handle_TransformComponent();
+
+		static GUI_EntityCollectionPanel* s_instance;
+
+		const ecs::EntityCollection* currentCollection;
+		bool m_initialized{ false };
 
 	};
 

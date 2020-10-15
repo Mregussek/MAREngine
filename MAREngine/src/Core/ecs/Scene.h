@@ -37,16 +37,17 @@ namespace mar::ecs {
 
 	public:
 
+		Scene() = default;
 		Scene(std::string name);
 
 		void shutdown();
 
 		static Scene* createEmptyScene(std::string name);
 
-		Entity& createEntity();
+		const Entity& createEntity();
 		void destroyEntity(int32_t index);
 
-		EntityCollection& createCollection();
+		const EntityCollection& createCollection();
 		void destroyCollection(int32_t index);
 		void destroyEntityAtCollection(int32_t collection_index, int32_t entity_index);
 
@@ -57,18 +58,12 @@ namespace mar::ecs {
 		
 		// --- GET METHODS --- //
 
-		inline const std::string& getName() const { return m_name; }
-		inline maths::vec3& getBackground() { return m_backgroundColor; }
+		const std::string& getName() const { return m_name; }
+		maths::vec3& getBackground() { return m_backgroundColor; }
 
 		const std::vector<Entity>& getEntities() const;
-		std::vector<Entity>& getEntities();
-		Entity& getEntity(size_t index);
-
 		const std::vector<EntityCollection>& getCollections() const;
-		std::vector<EntityCollection>& getCollections();
-		EntityCollection& getCollection(size_t index);
-
-		inline graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
+		graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
 	private:
 
@@ -79,6 +74,7 @@ namespace mar::ecs {
 
 		graphics::RenderCamera m_sceneCamera;
 		maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
+
 	};
 
 

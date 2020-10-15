@@ -30,49 +30,49 @@ namespace mar::ecs {
 	SceneEvents SceneEvents::instance;
 
 
-	void SceneEvents::updateTransform(Entity* e, int32_t i) {
+	void SceneEvents::updateTransform(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updateTransform!");
 	}
 
-	void SceneEvents::updateRenderables(Entity* e, int32_t i) {
+	void SceneEvents::updateRenderables(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updateRenderables!");
 	}
 
-	void SceneEvents::updatedCamera(Entity* e, int32_t i) {
+	void SceneEvents::updatedCamera(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCamera!");
 	}
 
-	void SceneEvents::updatedColor(Entity* e, int32_t i) {
+	void SceneEvents::updatedColor(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedColor!");
 	}
 
-	void SceneEvents::updatedTexture2D(Entity* e, int32_t i) {
+	void SceneEvents::updatedTexture2D(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
 	}
 
-	void SceneEvents::updatedCubemap(Entity* e, int32_t i) {
+	void SceneEvents::updatedCubemap(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
 	}
 
-	void SceneEvents::updatedLight(Entity* e, int32_t i) {
+	void SceneEvents::updatedLight(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedLight!");
 	}
 
-	void SceneEvents::updatedScript(Entity* e, int32_t i) {
+	void SceneEvents::updatedScript(const Entity* e) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedScript!");
@@ -102,7 +102,7 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
 	}
 
-	void SceneEvents::onCollectionOBJloaded(EntityCollection& collection) {
+	void SceneEvents::onCollectionOBJloaded(const EntityCollection& collection) {
 		scene_manager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");

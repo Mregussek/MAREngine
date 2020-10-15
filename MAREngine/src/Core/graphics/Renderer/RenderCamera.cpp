@@ -34,14 +34,34 @@ namespace mar::graphics {
 
 		const vec3 eyeToCenter = transform.center + vec3::normalize(front);
 
-		m_position = transform.center;
-		m_model = maths::mat4::translation({ 0.f, 0.f, 0.f });
-		m_view = mat4::lookAt(transform.center, eyeToCenter, { 0.f, 1.0f, 0.f });
-		m_projection = camera.Perspective ?
-				mat4::perspective(trig::toRadians(camera.p_fov), camera.p_aspectRatio, camera.p_near, camera.p_far) :
-				mat4::orthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far);
+		calculateModel({ 0.f, 0.f, 0.f });
+		calculateView(transform.center, eyeToCenter, { 0.f, 1.0f, 0.f });
+		if (camera.Perspective) { calculatePerspective(camera.p_fov, camera.p_aspectRatio, camera.p_near, camera.p_far); }
+		else { calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far); }
 
-		m_mvp = m_projection * m_view * m_model;
+		recalculateMVP();
+	}
+
+	void RenderCamera::calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane) {
+		m_projection = mat4::perspective(trig::toRadians(zoom), aspectRatio, nearPlane, farPlane);
+	}
+
+	void RenderCamera::calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane) {
+		m_projection = mat4::orthographic(left, right, top, bottom, nearPlane, farPlane);
+	}
+
+	void RenderCamera::calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up) {
+		m_position = position;
+
+		m_view = mat4::lookAt(position, lookAt, up);
+	}
+
+	void RenderCamera::calculateModel(maths::vec3 arg) {
+		m_model = mat4::translation(arg);
+	}
+
+	void RenderCamera::recalculateMVP() {
+		m_mvp = m_projection * m_view;
 	}
 
 

@@ -22,10 +22,6 @@
 
 #include "ECSLogs.h"
 #include "SceneEvents.h"
-#include "Scene.h"
-
-#include "Entity/EntityCollection.h"
-#include "Entity/Entity.h"
 
 #include "../../Editor/Camera/Camera.h"
 
@@ -144,14 +140,14 @@ namespace mar::ecs {
 	void SceneManager::exitPlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
-		auto& entitiesVector = m_scene->getEntities();
-		auto& collectionsVector = m_scene->getCollections();
+		const auto& entitiesVector = m_scene->getEntities();
+		const auto& collectionsVector = m_scene->getCollections();
 
-		std::for_each(entitiesVector.begin(), entitiesVector.end(), [&playStorage = m_playStorage](Entity& entity) {
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage](const Entity& entity) {
 			playStorage.loadEntityFromStorage(entity);
 		});
 
-		std::for_each(collectionsVector.begin(), collectionsVector.end(), [&playStorage = m_playStorage](EntityCollection& collection) {
+		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage](const EntityCollection& collection) {
 			playStorage.loadCollectionFromStorage(collection);
 		});
 

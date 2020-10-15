@@ -38,14 +38,12 @@
 
 namespace mar::editor {
 
-	graphics::RenderCamera* GUI_EntityPanel::render_cam{ nullptr };
-	ecs::Entity* GUI_EntityPanel::currentEntity{ nullptr };
-	int32_t GUI_EntityPanel::currentIndex{ -1 };
+
+	GUI_EntityPanel* GUI_EntityPanel::s_instance{ nullptr };
 
 
 	void GUI_EntityPanel::reset() {
 		currentEntity = nullptr;
-		currentIndex = -1;
 	}
 
 	void GUI_EntityPanel::Scene_Entity_Modify(bool is_play_mode) {
@@ -151,17 +149,17 @@ namespace mar::editor {
 						if (ImGui::BeginMenu("Add Color/Texture")) {
 							if (ImGui::MenuItem("Add Texture2DComponent")) {
 								currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-								ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
+								ecs::SceneEvents::Instance().updatedTexture2D(currentEntity);
 							}
 								
 							if (ImGui::MenuItem("Add TextureCubemapComponent")) {
 								currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-								ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
+								ecs::SceneEvents::Instance().updatedCubemap(currentEntity);
 							}
 								
 							if (ImGui::MenuItem("Add ColorComponent")) {
 								currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR);
-								ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
+								ecs::SceneEvents::Instance().updatedColor(currentEntity);
 							}
 
 							ImGui::EndMenu();
@@ -171,19 +169,19 @@ namespace mar::editor {
 					if (!currentEntity->hasComponent<ecs::LightComponent>())
 						if (ImGui::MenuItem("Add LightComponent")) {
 							currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
-							ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
+							ecs::SceneEvents::Instance().updatedLight(currentEntity);
 						}
 
 					if (!currentEntity->hasComponent<ecs::CameraComponent>())
 						if (ImGui::MenuItem("Add CameraComponent")) {
 							currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
-							ecs::SceneEvents::Instance().updatedCamera(currentEntity, currentIndex);
+							ecs::SceneEvents::Instance().updatedCamera(currentEntity);
 						}
 
 					if (!currentEntity->hasComponent<ecs::ScriptComponent>())
 						if (ImGui::MenuItem("Add ScriptComponent")) {
 							currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
-							ecs::SceneEvents::Instance().updatedScript(currentEntity, currentIndex);
+							ecs::SceneEvents::Instance().updatedScript(currentEntity);
 						}
 
 					ImGui::EndMenu();
@@ -242,7 +240,7 @@ namespace mar::editor {
 
 			if (updated_transform) {
 				tran.recalculate();
-				if(!is_play_mode) ecs::SceneEvents::Instance().updateTransform(currentEntity, currentIndex);
+				if(!is_play_mode) ecs::SceneEvents::Instance().updateTransform(currentEntity);
 			}
 		}
 
@@ -299,7 +297,7 @@ namespace mar::editor {
 		if (color_texture_OR)
 			if (ImGui::MenuItem("Remove Renderable")) {
 				currentEntity->removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-				ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
+				ecs::SceneEvents::Instance().updateRenderables(currentEntity);
 				return;
 			}
 
@@ -399,7 +397,7 @@ namespace mar::editor {
 		}
 
 		if (updated_camera)
-			if(!is_play_mode) ecs::SceneEvents::Instance().updatedCamera(currentEntity, currentIndex);
+			if(!is_play_mode) ecs::SceneEvents::Instance().updatedCamera(currentEntity);
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 	}
@@ -410,14 +408,14 @@ namespace mar::editor {
 		ImGui::SameLine();
 		if (ImGui::MenuItem("Remove Color")) {
 			currentEntity->removeComponent<ecs::ColorComponent>(ECS_COLOR);
-			ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updatedColor(currentEntity);
 			return;
 		}
 
 		auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
 		if (ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture)))
-			if(!is_play_mode) ecs::SceneEvents::Instance().updatedColor(currentEntity, currentIndex);
+			if(!is_play_mode) ecs::SceneEvents::Instance().updatedColor(currentEntity);
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 	}
@@ -431,7 +429,7 @@ namespace mar::editor {
 		ImGui::SameLine();
 		if (ImGui::MenuItem("Remove Texture")) {
 			currentEntity->removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
-			ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updatedTexture2D(currentEntity);
 			return;
 		}
 
@@ -460,18 +458,12 @@ namespace mar::editor {
 			return;
 		}
 
-		static int32_t last_index = currentIndex;
 		static bool first_init = true;
 		static char input[50];
 
 		if (first_init) { 
 			strcpy_s(input, tex.texture.c_str()); 
 			first_init = false; 
-		}
-
-		if (last_index != currentIndex) {
-			strcpy_s(input, tex.texture.c_str());
-			last_index = currentIndex;
 		}
 
 		ImGui::InputText(" ex. .jpg / .png", input, 50);
@@ -481,7 +473,7 @@ namespace mar::editor {
 
 		if (ImGui::Button("Load Texture")) {
 			tex.texture = std::string(input);
-			ecs::SceneEvents::Instance().updatedTexture2D(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updatedTexture2D(currentEntity);
 			GUI_load_new_texture = false;
 		}
 
@@ -497,7 +489,7 @@ namespace mar::editor {
 		ImGui::SameLine();
 		if (ImGui::MenuItem("Remove Texture")) {
 			currentEntity->removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
-			ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updatedCubemap(currentEntity);
 			return;
 		}
 
@@ -522,18 +514,12 @@ namespace mar::editor {
 			return;
 		}
 
-		static int32_t last_index = currentIndex;
 		static bool first_init = true;
 		static char input[50];
 
 		if (first_init) {
 			strcpy_s(input, cubemap.texture.c_str());
 			first_init = false;
-		}
-
-		if (last_index != currentIndex) {
-			strcpy_s(input, cubemap.texture.c_str());
-			last_index = currentIndex;
 		}
 
 		ImGui::InputText(" ex. .jpg / .png", input, 50);
@@ -543,7 +529,7 @@ namespace mar::editor {
 
 		if (ImGui::Button("Load Cubemap")) {
 			cubemap.texture = std::string(input);
-			ecs::SceneEvents::Instance().updatedCubemap(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updatedCubemap(currentEntity);
 			GUI_load_new_cubemap = false;
 		}
 
@@ -558,7 +544,7 @@ namespace mar::editor {
 
 		if (ImGui::MenuItem("Remove Light")) {
 			currentEntity->removeComponent<ecs::LightComponent>(ECS_LIGHT);
-			ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updatedLight(currentEntity);
 			return;
 		}
 
@@ -577,7 +563,7 @@ namespace mar::editor {
 		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) updated_light = true;
 
 		if(updated_light)
-			if(!is_play_mode) ecs::SceneEvents::Instance().updatedLight(currentEntity, currentIndex);
+			if(!is_play_mode) ecs::SceneEvents::Instance().updatedLight(currentEntity);
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 	}
@@ -593,7 +579,7 @@ namespace mar::editor {
 			renderable.vertices = T::getVertices();
 			renderable.indices = T::getIndices();
 
-			ecs::SceneEvents::Instance().updateRenderables(currentEntity, currentIndex);
+			ecs::SceneEvents::Instance().updateRenderables(currentEntity);
 
 			return true;
 		}

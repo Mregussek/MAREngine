@@ -33,33 +33,47 @@ namespace mar {
 namespace mar::editor {
 
 
-	struct GUI_EntityPanel {
-		static graphics::RenderCamera* render_cam;
-		static ecs::Entity* currentEntity;
-		static int32_t currentIndex;
+	class GUI_EntityPanel {
+	public:
 
-		static void Scene_Entity_Modify(bool is_play_mode);
-		static void reset();
+		static GUI_EntityPanel* Instance() { return s_instance; }
+
+		void initialize() {
+			if (m_initialized) { return; }
+
+			s_instance = this;
+			m_initialized = true;
+		}
+
+		void Scene_Entity_Modify(bool is_play_mode);
+		void reset();
+
+		void setRenderCam(graphics::RenderCamera* renderCam) { render_cam = renderCam; }
+		void setCurrentEntity(const ecs::Entity& entity) { currentEntity = &entity; }
+		const ecs::Entity& getCurrentEntity() const { return *currentEntity; }
 
 	private:
-		static void Scene_Entity_Modify_PopUp();
+		void Scene_Entity_Modify_PopUp();
 
-		static void Scene_Handle_TagComponent(bool window_focused);
-		static void Scene_Handle_RenderableComponent(bool window_focused);
-		static void Scene_Handle_TransformComponent(bool window_focused, bool is_play_mode);
-		static void Scene_Handle_ScriptComponent(bool window_focused);
-		static void Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode);
-		static void Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode);
-		static void Scene_Handle_Texture2DComponent(bool window_focused);
-		static void Scene_Handle_TextureCubemapComponent(bool window_focused);
-		static void Scene_Handle_LightComponent(bool window_focused, bool is_play_mode);
-
-		// --------------------------------------------
-		// TEMPLATES TO WRITE MORE REUSABLE CODE
-		// --------------------------------------------
+		void Scene_Handle_TagComponent(bool window_focused);
+		void Scene_Handle_RenderableComponent(bool window_focused);
+		void Scene_Handle_TransformComponent(bool window_focused, bool is_play_mode);
+		void Scene_Handle_ScriptComponent(bool window_focused);
+		void Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode);
+		void Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode);
+		void Scene_Handle_Texture2DComponent(bool window_focused);
+		void Scene_Handle_TextureCubemapComponent(bool window_focused);
+		void Scene_Handle_LightComponent(bool window_focused, bool is_play_mode);
 
 		template<typename T>
-		static bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName);
+		bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName);
+
+		static GUI_EntityPanel* s_instance;
+
+		graphics::RenderCamera* render_cam{ nullptr };
+		const ecs::Entity* currentEntity;
+		bool m_initialized{ false };
+
 	};
 
 

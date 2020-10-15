@@ -42,6 +42,12 @@ namespace mar::graphics {
 		
 		RenderCamera() = default;
 
+		void calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane);
+		void calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane);
+		void calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up);
+		void calculateModel(maths::vec3 arg);
+		void recalculateMVP();
+
 		void calculateCameraTransforms(const ecs::TransformComponent& transform, const ecs::CameraComponent& camera);
 
 		const maths::mat4& getProjection() const { return m_projection; }

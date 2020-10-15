@@ -51,7 +51,7 @@ namespace mar::layers {
 		
 		if (m_gui->canDrawLines()) {
 			//if (m_gui->getCurrentCollection() && !m_gui->getCurrentEntity()) m_guiGraphics.passToDrawCollection(m_gui->getCurrentCollection());
-			if (m_gui->getCurrentEntity()) m_guiGraphics.passToDrawEntity(m_gui->getCurrentEntity());
+			m_guiGraphics.passToDrawEntity(&m_gui->getCurrentEntity());
 		}
 		
 		m_camera.update(m_gui->getViewportWidth() / m_gui->getViewportHeight());

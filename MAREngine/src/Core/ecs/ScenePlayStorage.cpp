@@ -27,7 +27,7 @@ namespace mar::ecs {
 
 
 	template<typename T>
-	void pop_front(std::vector<T>& vec) {
+	static void popFront(std::vector<T>& vec) {
 		MAR_CORE_ASSERT(!vec.empty(), "Cannot pop front, vec is empty!");
 		vec.erase(vec.begin());
 	}
@@ -66,7 +66,7 @@ namespace mar::ecs {
 			loadEntityFromStorage(storage.entities, entity);
 		}
 
-		pop_front(m_collectionStorage);
+		popFront(m_collectionStorage);
 	}
 
 	void ScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
@@ -74,7 +74,7 @@ namespace mar::ecs {
 
 		loadOperation(storage, entity);
 
-		pop_front(m_entityStorage);
+		popFront(m_entityStorage);
 	}
 
 	void ScenePlayStorage::loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity) {
@@ -82,7 +82,7 @@ namespace mar::ecs {
 
 		loadOperation(storage, entity);
 
-		pop_front(vectorStorage);
+		popFront(vectorStorage);
 	}
 
 	void ScenePlayStorage::loadOperation(const EntityStorage& storage, const Entity& entity) {

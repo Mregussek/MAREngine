@@ -43,31 +43,19 @@ namespace mar::ecs {
 
 		inline static SceneEvents& Instance() { return instance; }
 
-		void updateTransform(Entity* e, int32_t i);
-
-		void updateRenderables(Entity* e, int32_t i);
-
-		void updatedCamera(Entity* e, int32_t i);
-
-		void updatedColor(Entity* e, int32_t i);
-
-		void updatedTexture2D(Entity* e, int32_t i);
-
-		void updatedCubemap(Entity* e, int32_t i);
-
-		void updatedLight(Entity* e, int32_t i);
-
-		void updatedScript(Entity* e, int32_t i);
-
+		void updateTransform(const Entity* e);
+		void updateRenderables(const Entity* e);
+		void updatedCamera(const Entity* e);
+		void updatedColor(const Entity* e);
+		void updatedTexture2D(const Entity* e);
+		void updatedCubemap(const Entity* e);
+		void updatedLight(const Entity* e);
+		void updatedScript(const Entity* e);
 		void onEntityCopy();
-
 		void onEntityRemove();
-
 		void onCollectionTransformUpdate();
-
 		void onCollectionRemove();
-
-		void onCollectionOBJloaded(EntityCollection& collection);
+		void onCollectionOBJloaded(const EntityCollection& collection);
 
 
 	};

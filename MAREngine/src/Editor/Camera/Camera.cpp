@@ -123,16 +123,12 @@ namespace mar::editor {
     }
     
     void Camera::updateData() {
-        typedef maths::mat4 m4;
-        typedef maths::Trig tri;
-    
-        m_renderCamera.projection = m4::perspective(tri::toRadians(m_zoom), m_aspectRatio, 0.01f, 100.0f);
-        m_renderCamera.view = m4::lookAt(m_position, m_position + m_front, m_up);
-        m_renderCamera.model = m4::translation({ 0.0f, 0.0f, 0.0f });
-    
-        m_renderCamera.mvp = m_renderCamera.projection * m_renderCamera.view;
-    
-        m_renderCamera.position = m_position;
+
+        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
+        m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
+        m_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
+        m_renderCamera.recalculateMVP();
+ 
     }
     
     void Camera::updateCameraVectors() {

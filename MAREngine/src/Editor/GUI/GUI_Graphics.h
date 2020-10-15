@@ -43,7 +43,7 @@ namespace mar::editor {
 		void drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran);
 
 		void passToDrawCollection(ecs::EntityCollection* c);
-		void passToDrawEntity(ecs::Entity* e);
+		void passToDrawEntity(const ecs::Entity* e);
 	};
 
 

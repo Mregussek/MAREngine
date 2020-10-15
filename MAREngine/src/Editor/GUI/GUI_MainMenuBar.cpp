@@ -112,13 +112,13 @@ namespace mar::editor {
 					m_loadOBJfileWindow = true;
 				}
 
+				/*
 				if (GUI_EntityPanel::currentEntity) {
 					const char* shortcut = GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
 						auto& entity = m_sceneManager->getScene()->createEntity();
 						ecs::EntityOperation::copyEntity(*GUI_EntityPanel::currentEntity, entity);
 						GUI_EntityPanel::currentEntity = &entity;
-						GUI_EntityPanel::currentIndex = m_sceneManager->getScene()->getEntities().size() - 1;
 					}
 				}
 
@@ -128,10 +128,9 @@ namespace mar::editor {
 						auto& collection = m_sceneManager->getScene()->createCollection();
 						ecs::EntityOperation::copyCollection(*GUI_EntityCollectionPanel::currentCollection, collection);
 						GUI_EntityCollectionPanel::currentCollection = &collection;
-						GUI_EntityCollectionPanel::currentIndex = m_sceneManager->getScene()->getCollections().size() - 1;
 					}
 				}
-
+				*/
 				ImGui::EndMenu();
 			}
 

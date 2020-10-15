@@ -70,9 +70,12 @@ namespace mar::editor {
 		
 	}
 
-	void GUI_Graphics::passToDrawEntity(ecs::Entity* e) {
-		if (e->hasComponent<ecs::RenderableComponent>())
+	void GUI_Graphics::passToDrawEntity(const ecs::Entity* e) {
+		if (!e) { return; }
+
+		if (e->hasComponent<ecs::RenderableComponent>()) {
 			drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
+		}		
 	}
 
 

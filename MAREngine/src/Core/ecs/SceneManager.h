@@ -25,6 +25,9 @@
 #include "../../mar.h"
 #include "Components/Components.h"
 #include "ScenePlayStorage.h"
+#include "Entity/EntityCollection.h"
+#include "Entity/Entity.h"
+#include "Scene.h"
 
 
 namespace mar::graphics { class RenderPipeline; } // forward declaration
@@ -32,7 +35,6 @@ namespace mar::graphics { class RenderPipeline; } // forward declaration
 namespace mar::ecs {
 
 	class SceneEvents;
-	class Scene;
 
 
 	class SceneManager {

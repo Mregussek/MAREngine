@@ -44,32 +44,38 @@ namespace mar::editor {
 		ImGui::Text("SCENE - %s", manager->getScene()->getName().c_str());
 		ImGui::Separator();
 
-		auto& entities = manager->getScene()->getEntities();
+		const auto& entities = manager->getScene()->getEntities();
 
 		ImGui::Text("ENTITIES --- %d", entities.size());
 		ImGui::Separator();
 
-		for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
-			if (ImGui::MenuItem(entities[i].getComponent<ecs::TagComponent>().tag.c_str())) {
-				GUI_EntityCollectionPanel::reset();
-				GUI_EntityPanel::currentEntity = &manager->getScene()->getEntity(i);
-				GUI_EntityPanel::currentIndex = i;
-			}
+		auto userSelectedEntity = [](const ecs::Entity& entity) {
+			return ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str());
+		};
+
+		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
+		if (itEntity != entities.cend()) {
+			const auto& entity = *itEntity;
+			GUI_EntityCollectionPanel::Instance()->reset();
+			GUI_EntityPanel::Instance()->setCurrentEntity(entity);
 		}
 
 		ImGui::Separator();
 
-		auto& collections = manager->getScene()->getCollections();
+		const auto& collections = manager->getScene()->getCollections();
 
 		ImGui::Text("Collections --- %d", collections.size());
 		ImGui::Separator();
 
-		for (int32_t i = 0; i < (int32_t)collections.size(); i++) {
-			if (ImGui::MenuItem(collections[i].getComponent<ecs::TagComponent>().tag.c_str())) {
-				GUI_EntityPanel::reset();
-				GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->getCollection(i);
-				GUI_EntityCollectionPanel::currentIndex = i;
-			}
+		auto userSelectedCollection = [](const ecs::EntityCollection& collection) {
+			return ImGui::MenuItem(collection.getComponent<ecs::TagComponent>().tag.c_str());
+		};
+
+		const auto itCollection = std::find_if(collections.cbegin(), collections.cend(), userSelectedCollection);
+		if (itCollection != collections.cend()) {
+			const auto& collection = *itCollection;
+			GUI_EntityPanel::Instance()->reset();
+			GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
 		}
 
 		Scene_Hierarchy_PopUp(manager);
@@ -102,17 +108,15 @@ namespace mar::editor {
 
 		if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 			if (ImGui::MenuItem("Add EntityCollection to scene")) {
-				GUI_EntityPanel::reset();
-				GUI_EntityCollectionPanel::currentCollection = &manager->getScene()->createCollection();
-				GUI_EntityCollectionPanel::currentIndex = manager->getScene()->getCollections().size() - 1;
+				GUI_EntityPanel::Instance()->reset();
+				GUI_EntityCollectionPanel::Instance()->setCurrentCollection(manager->getScene()->createCollection());
 			}
 
 			if (ImGui::MenuItem("Add Entity to scene")) {
-				GUI_EntityCollectionPanel::reset();
-				GUI_EntityPanel::currentEntity = &manager->getScene()->createEntity();
-				GUI_EntityPanel::currentIndex = manager->getScene()->getEntities().size() - 1;
+				GUI_EntityCollectionPanel::Instance()->reset();
+				GUI_EntityPanel::Instance()->setCurrentEntity(manager->getScene()->createEntity());
 			}
-
+			/*
 			if (GUI_EntityCollectionPanel::currentCollection) {
 				const char* collection_tag = GUI_EntityCollectionPanel::currentCollection->getComponent<ecs::TagComponent>().tag.c_str();
 
@@ -145,7 +149,7 @@ namespace mar::editor {
 					ecs::SceneEvents::Instance().onEntityRemove();
 				}
 			}
-				
+			*/
 			ImGui::EndPopup();
 		}
 

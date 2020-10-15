@@ -34,12 +34,10 @@
 namespace mar::editor {
 
 
-	ecs::EntityCollection* GUI_EntityCollectionPanel::currentCollection{ nullptr };
-	int32_t GUI_EntityCollectionPanel::currentIndex{ -1 };
+	GUI_EntityCollectionPanel* GUI_EntityCollectionPanel::s_instance{ nullptr };
 
 	void GUI_EntityCollectionPanel::reset() {
 		currentCollection = nullptr;
-		currentIndex = -1;
 	}
 
 	void GUI_EntityCollectionPanel::Scene_EntityCollection_Modify() {
@@ -68,8 +66,7 @@ namespace mar::editor {
 
 		for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
 			if (ImGui::MenuItem(entities[i].getComponent<ecs::TagComponent>().tag.c_str())) {
-				GUI_EntityPanel::currentEntity = &currentCollection->getEntity(i);
-				GUI_EntityPanel::currentIndex = i;
+				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->getEntity(i));
 			}
 		}
 
@@ -176,20 +173,20 @@ namespace mar::editor {
 
 		if (ImGui::BeginPopup("EntityCollectionPopUp")) {
 			if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
-				GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();
-				GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
+				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->createEntity());
 			}
 
+			/*
 			if (GUI_EntityPanel::currentEntity) {
 				std::string delete_message = "Delete entity " + GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag + " from selected collection";
 				if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 					currentCollection->destroyEntity(GUI_EntityPanel::currentIndex);
-					GUI_EntityPanel::reset();
+					GUI_EntityPanel::Instance()->reset();
 					GUI_TextEditor::Instance().reset();
 					ecs::SceneEvents::Instance().onEntityRemove();
 				}
 			}
-
+			*/
 			ImGui::EndPopup();
 		}
 	}

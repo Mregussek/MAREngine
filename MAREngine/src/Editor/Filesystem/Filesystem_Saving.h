@@ -24,8 +24,9 @@
 
 #include "../../mar.h"
 
+
 namespace mar::ecs { 
-	class Scene; class EntityCollection; class Entity;	/* forward declarations */ 
+	class Scene; class EntityCollection; class Entity;	/* forward declarations */
 }
 namespace mar::editor {
 

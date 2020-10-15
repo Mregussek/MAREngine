@@ -122,7 +122,7 @@ namespace mar::graphics {
         };
     }
     
-    void MeshCreator::loadOBJ(std::string filename, std::string path, ecs::EntityCollection& collection) {
+    void MeshCreator::loadOBJ(std::string filename, std::string path, const ecs::EntityCollection& collection) {
         objl::Loader Loader;
         bool loadout = Loader.LoadFile(path);
     

@@ -24,6 +24,7 @@
 
 #include "../../mar.h"
 
+
 namespace mar::ecs {
 	class Scene; class EntityCollection; class Entity;	/* forward declarations */
 }
@@ -36,7 +37,7 @@ namespace mar::editor {
 
 		static void loadScene(std::ifstream& file, ecs::Scene* scene);
 		static void loadEntity(std::ifstream& file, ecs::Scene* scene, const ecs::Entity& entity);
-		static void loadCollection(std::ifstream& file, ecs::Scene* scene, ecs::EntityCollection& collection);
+		static void loadCollection(std::ifstream& file, ecs::Scene* scene, const ecs::EntityCollection& collection);
 
 	};
 

@@ -28,9 +28,6 @@
 #include "../../Window/Window.h"
 
 #include "GUI_TextEditor.h"
-#include "EntityPanels/GUI_SceneHierarchy.h"
-#include "EntityPanels/GUI_EntityPanel.h"
-#include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "Other/GUI_Theme.h"
 
 
@@ -51,6 +48,9 @@ namespace mar::editor {
 		m_viewportFramebuffer.initialize(platforms::FrameBufferSpecification(800.f, 600.f));
 
 		GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
+
+		m_entityPanel.initialize();
+		m_collectionPanel.initialize();
 
 		EDITOR_INFO("GUI: initialized properly!");
 	}
@@ -123,8 +123,8 @@ namespace mar::editor {
 		Editor_ViewPort();
 		Editor_Properties();
 
-		GUI_EntityPanel::Scene_Entity_Modify(m_sceneManager->isPlayMode());
-		GUI_EntityCollectionPanel::Scene_EntityCollection_Modify();
+		m_entityPanel.Scene_Entity_Modify(m_sceneManager->isPlayMode());
+		m_collectionPanel.Scene_EntityCollection_Modify();
 
 		EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 	}
@@ -202,18 +202,18 @@ namespace mar::editor {
 	void GUI::submit(ecs::SceneManager* scene) {
 		m_sceneManager = scene;
 		m_sceneManager->useEditorCamera = true;
-		GUI_EntityPanel::render_cam = &m_sceneManager->getScene()->getRenderCamera();
+		m_entityPanel.setRenderCam(&m_sceneManager->getScene()->getRenderCamera());
 		m_mainMenuBar.setSceneManager(m_sceneManager);
 
 		EDITOR_INFO("GUI: scene has been submitted!");
 	}
 
-	ecs::Entity* GUI::getCurrentEntity() {
-		return GUI_EntityPanel::currentEntity;
+	const ecs::Entity& GUI::getCurrentEntity() {
+		return m_entityPanel.getCurrentEntity();
 	}
 
-	ecs::EntityCollection* GUI::getCurrentCollection() {
-		return GUI_EntityCollectionPanel::currentCollection;
+	const ecs::EntityCollection& GUI::getCurrentCollection() {
+		return m_collectionPanel.getCurrentCollection();
 	}
 
 	bool GUI::canDrawLines() {

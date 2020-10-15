@@ -32,6 +32,16 @@
 namespace mar::ecs {
 
 
+	struct EntityCollectionComponent {
+		std::vector<Entity> entities;
+
+		EntityCollectionComponent() = default;
+		EntityCollectionComponent(const EntityCollectionComponent& ecc) = default;
+
+		operator std::vector<Entity>& () { return entities; }
+		operator const std::vector<Entity>& () const { return entities; }
+	};
+
 	class EntityCollection {
 		friend class Scene;
 
@@ -56,10 +66,12 @@ namespace mar::ecs {
 		}
 
 		void destroyYourself() {
-			for (size_t i = 0; i < m_entities.size(); i++) {
-				if (m_entities[i].isValid()) {
-					m_entities[i].destroyYourself();
-					m_entities.erase(m_entities.begin() + i);
+			auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
+
+			for (size_t i = 0; i < entitiesVector.size(); i++) {
+				if (entitiesVector[i].isValid()) {
+					entitiesVector[i].destroyYourself();
+					entitiesVector.erase(entitiesVector.begin() + i);
 
 					ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is deleted!", i);
 				}
@@ -69,10 +81,12 @@ namespace mar::ecs {
 			}
 		}
 
-		Entity& createEntity() {
+		Entity& createEntity() const {
 			ECS_INFO("ENTITY_COLLECTION: going to create entity!");
 
-			auto& entity = m_entities.emplace_back(m_scene);
+			auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
+
+			auto& entity = entitiesVector.emplace_back(m_scene);
 
 			entity.addDefault();
 			entity.addComponent<TagComponent>(ECS_TAG);
@@ -83,10 +97,12 @@ namespace mar::ecs {
 			return entity;
 		}
 
-		void destroyEntity(int32_t entity_index) {
-			if (m_entities[entity_index].isValid()) {
-				m_entities[entity_index].destroyYourself();
-				m_entities.erase(m_entities.begin() + entity_index);
+		void destroyEntity(int32_t entity_index) const {
+			auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
+
+			if (entitiesVector[entity_index].isValid()) {
+				entitiesVector[entity_index].destroyYourself();
+				entitiesVector.erase(entitiesVector.begin() + entity_index);
 
 				ECS_INFO("ENTITY_COLLECTION: destroyed entity {} at collection!", entity_index);
 			}
@@ -96,15 +112,15 @@ namespace mar::ecs {
 		}
 
 		const std::vector<Entity>& getEntities() const {
-			return m_entities;
+			return getComponent<EntityCollectionComponent>().entities;
 		}
 
-		Entity& getEntity(size_t index) {
-			return m_entities[index];
+		const Entity& getEntity(size_t index) const {
+			return getComponent<EntityCollectionComponent>().entities[index];
 		}
 
 		size_t getEntitiesCount() const {
-			return m_entities.size();
+			return getComponent<EntityCollectionComponent>().entities.size();
 		}
 
 		template<typename T>
@@ -147,7 +163,6 @@ namespace mar::ecs {
 
 	private:
 
-		std::vector<Entity> m_entities;
 		entt::entity m_collectionHandle{ entt::null };
 		SceneRegistry* m_scene{ nullptr };
 

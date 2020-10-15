@@ -38,7 +38,7 @@ namespace mar::editor {
 				Filesystem_Loading::loadEntity(file, scene, entity);
 			}
 			else if (line.find("#EntityCollectionStart") != std::string::npos) {
-				auto& collection = scene->createCollection();
+				const auto& collection = scene->createCollection();
 				Filesystem_Loading::loadCollection(file, scene, collection);
 			}
 			else if (line.find("#SceneEnd") != std::string::npos) {
@@ -47,7 +47,7 @@ namespace mar::editor {
 		}
 	}
 
-	void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, ecs::EntityCollection& collection) {
+	void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, const ecs::EntityCollection& collection) {
 		std::string line;
 
 		while (std::getline(file, line)) {
@@ -124,7 +124,7 @@ namespace mar::editor {
 				tran.general_scale = arr[0];
 
 				for (size_t i = 0; i < collection.getEntitiesCount(); i++) {
-					auto& entity = collection.getEntity(i);
+					const auto& entity = collection.getEntity(i);
 					auto& transform = entity.getComponent<ecs::TransformComponent>();
 
 					transform.center += (transform.center - tran.center);

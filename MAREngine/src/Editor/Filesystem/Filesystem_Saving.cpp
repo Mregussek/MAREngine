@@ -35,11 +35,11 @@ namespace mar::editor {
 		ss << "#Scene_Name " << scene->getName() << "\n";
 		ss << "#Scene_Background " << back.x << " " << back.y << " " << back.z << "\n";
 
-		for (auto& entity : scene->getEntities()) {
+		for (const auto& entity : scene->getEntities()) {
 			Filesystem_Saving::saveEntity(ss, entity);
 		}
 
-		for (auto& collection : scene->getCollections()) {
+		for (const auto& collection : scene->getCollections()) {
 			Filesystem_Saving::saveCollection(ss, collection);
 		}
 
