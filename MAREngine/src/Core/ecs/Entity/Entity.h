@@ -32,54 +32,24 @@ namespace mar::ecs {
 
 
 	class Entity {
+
 		friend class EntityCollection;
 		friend class Scene;
 
 	public:
+
 		Entity() = delete;
 		Entity(const Entity& other) = default;
 
-		Entity(SceneRegistry* scene)
-			: m_scene(scene),
-			m_entityHandle(scene->m_registry.create())
-		{
-			ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
-		}
+		Entity(SceneRegistry* scene);
 
-		void addDefault() const {
-			auto& com = m_scene->m_registry.emplace<Components>(m_entityHandle);
-			auto& rpc = m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle);
+		void destroyYourself() const;
 
-			ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
-		}
+		void addDefault() const;
+		void copyDefault(const Entity& other) const;
 
-		void copyDefault(const Entity& other) const {
-			auto com = m_scene->m_registry.get<Components>(m_entityHandle);
-			auto rpc = m_scene->m_registry.get<RenderPipelineComponent>(m_entityHandle);
-
-			m_scene->m_registry.replace<Components>(other.m_entityHandle, com);
-			m_scene->m_registry.replace<RenderPipelineComponent>(other.m_entityHandle, rpc);
-
-			ECS_TRACE("ENTITY: copying default components from {} to {}", m_entityHandle, other.m_entityHandle);
-		}
-
-		const bool isValid() const {
-			ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
-
-			return m_scene->m_registry.valid(m_entityHandle);
-		}
-
-		operator const bool() const {
-			return isValid();
-		}
-
-		void destroyYourself() const {
-			ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
-
-			m_scene->m_registry.destroy(m_entityHandle);
-
-			ECS_INFO("ENTITY: destroyed yourself!");
-		}
+		const bool isValid() const;
+		operator const bool() const;
 
 		// ----------------------------------------------------
 		// ENTITY COMPONENT METHODS (definitions must be here, because of linker errors)

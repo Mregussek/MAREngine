@@ -50,78 +50,23 @@ namespace mar::ecs {
 		EntityCollection() = delete;
 		EntityCollection(const EntityCollection& other) = default;
 
-		EntityCollection(SceneRegistry* scene)
-			: m_scene(scene),
-			m_collectionHandle(scene->m_registry.create())
-		{}
+		EntityCollection(SceneRegistry* scene);
 
-		const bool isValid() const {
-			ECS_TRACE("ENTITY: {} checking if is valid!", m_collectionHandle);
+		void destroyYourself();
 
-			return m_scene->m_registry.valid(m_collectionHandle);
-		}
+		const bool isValid() const;
+		operator const bool() const;
 
-		operator const bool() const {
-			return isValid();
-		}
+		const Entity& createEntity() const;
+		void destroyEntity(int32_t entity_index) const;
 
-		void destroyYourself() {
-			auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
+		const std::vector<Entity>& getEntities() const;
+		const Entity& getEntity(size_t index) const;
+		size_t getEntitiesCount() const;
 
-			for (size_t i = 0; i < entitiesVector.size(); i++) {
-				if (entitiesVector[i].isValid()) {
-					entitiesVector[i].destroyYourself();
-					entitiesVector.erase(entitiesVector.begin() + i);
-
-					ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is deleted!", i);
-				}
-				else {
-					ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is not valid, so it is not deleted!!", i);
-				}
-			}
-		}
-
-		Entity& createEntity() const {
-			ECS_INFO("ENTITY_COLLECTION: going to create entity!");
-
-			auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
-
-			auto& entity = entitiesVector.emplace_back(m_scene);
-
-			entity.addDefault();
-			entity.addComponent<TagComponent>(ECS_TAG);
-			entity.addComponent<TransformComponent>(ECS_TRANSFORM);
-
-			ECS_INFO("EntityCollection: created entity {} at collection {}!", entity.m_entityHandle, m_collectionHandle);
-
-			return entity;
-		}
-
-		void destroyEntity(int32_t entity_index) const {
-			auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
-
-			if (entitiesVector[entity_index].isValid()) {
-				entitiesVector[entity_index].destroyYourself();
-				entitiesVector.erase(entitiesVector.begin() + entity_index);
-
-				ECS_INFO("ENTITY_COLLECTION: destroyed entity {} at collection!", entity_index);
-			}
-			else {
-				ECS_INFO("ENTITY_COLLECTION: entity {} at collection is not valid, so it cannot be destroyed!", entity_index);
-			}
-		}
-
-		const std::vector<Entity>& getEntities() const {
-			return getComponent<EntityCollectionComponent>().entities;
-		}
-
-		const Entity& getEntity(size_t index) const {
-			return getComponent<EntityCollectionComponent>().entities[index];
-		}
-
-		size_t getEntitiesCount() const {
-			return getComponent<EntityCollectionComponent>().entities.size();
-		}
+		// ----------------------------------------------------
+		// COLLECTION COMPONENT METHODS (definitions must be here, because of linker errors)
+		// ----------------------------------------------------
 
 		template<typename T>
 		bool hasComponent() const {
