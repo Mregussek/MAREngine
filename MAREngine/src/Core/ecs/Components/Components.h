@@ -33,22 +33,6 @@
 namespace mar::ecs {
 
 
-	typedef std::variant<
-		Components,
-		TagComponent,
-		TransformComponent,
-		RenderableComponent,
-		CollectionRenderableComponent,
-		CameraComponent,
-		LightComponent,
-		ColorComponent,
-		Texture2DComponent,
-		TextureCubemapComponent,
-		ScriptComponent
-	> variant_components;
-
-
-
 }
 
 

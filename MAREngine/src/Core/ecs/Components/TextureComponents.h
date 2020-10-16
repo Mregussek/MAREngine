@@ -46,8 +46,8 @@ namespace mar::ecs {
 
 		Texture2DComponent() = default;
 		Texture2DComponent(const Texture2DComponent& tex) = default;
-		Texture2DComponent(const std::string& tex)
-			: texture(tex)
+		Texture2DComponent(std::string tex)
+			: texture(std::move(tex))
 		{}
 
 		operator std::string& () { return texture; }
@@ -59,8 +59,8 @@ namespace mar::ecs {
 
 		TextureCubemapComponent() = default;
 		TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
-		TextureCubemapComponent(const std::string& cub)
-			: texture(cub)
+		TextureCubemapComponent(std::string cub)
+			: texture(std::move(cub))
 		{}
 
 		operator std::string& () { return texture; }

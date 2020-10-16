@@ -61,8 +61,6 @@ namespace mar::ecs {
 		void destroyEntity(int32_t entity_index) const;
 
 		const std::vector<Entity>& getEntities() const;
-		const Entity& getEntity(size_t index) const;
-		size_t getEntitiesCount() const;
 
 		// ----------------------------------------------------
 		// COLLECTION COMPONENT METHODS (definitions must be here, because of linker errors)

@@ -34,7 +34,7 @@ namespace mar::ecs {
 		TagComponent() = default;
 		TagComponent(const TagComponent& id) = default;
 		TagComponent(std::string t)
-			: tag(t)
+			: tag(std::move(t))
 		{}
 
 		operator std::string& () { return tag; }
@@ -50,10 +50,10 @@ namespace mar::ecs {
 		RenderableComponent() = default;
 		RenderableComponent(const RenderableComponent& ren) = default;
 		RenderableComponent(std::string i)
-			: id(i)
+			: id(std::move(i))
 		{}
 		RenderableComponent(std::string i, const std::vector<float>& ver, const std::vector<uint32_t>& ind)
-			: id(i),
+			: id(std::move(i)),
 			vertices(ver),
 			indices(ind)
 		{}
@@ -69,7 +69,7 @@ namespace mar::ecs {
 		CollectionRenderableComponent() = default;
 		CollectionRenderableComponent(const CollectionRenderableComponent& crc) = default;
 		CollectionRenderableComponent(std::string i)
-			: id(i)
+			: id(std::move(i))
 		{}
 
 		operator std::string& () { return id; }

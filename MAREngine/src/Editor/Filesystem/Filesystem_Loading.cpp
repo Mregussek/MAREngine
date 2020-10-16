@@ -72,11 +72,11 @@ namespace mar::editor {
 
 				graphics::MeshCreator::loadOBJ("CannotFindOBJname", path_to_load_obj, collection);
 
-				auto size_after_loading = collection.getEntitiesCount();
+				auto size_after_loading = collection.getEntities().size();
 				for (size_t i = 0; i < size_after_loading; ) {
 					std::getline(file, line);
 					if (line.find("#EntityStart") != std::string::npos) {
-						const auto& entity = collection.getEntity(i);
+						const auto& entity = collection.getEntities()[i];
 						loadEntity(file, scene, entity);
 						i++;
 					}
@@ -123,8 +123,8 @@ namespace mar::editor {
 
 				tran.general_scale = arr[0];
 
-				for (size_t i = 0; i < collection.getEntitiesCount(); i++) {
-					const auto& entity = collection.getEntity(i);
+				const auto& entities = collection.getEntities();
+				std::for_each(entities.begin(), entities.end(), [&tran](const ecs::Entity& entity) {
 					auto& transform = entity.getComponent<ecs::TransformComponent>();
 
 					transform.center += (transform.center - tran.center);
@@ -133,7 +133,7 @@ namespace mar::editor {
 					transform.general_scale += (transform.general_scale - tran.general_scale);
 
 					transform.recalculate();
-				}
+				});
 			}
 			else if (line.find("#EntityCollectionEnd") != std::string::npos) {
 				return;

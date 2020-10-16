@@ -93,9 +93,7 @@ namespace mar::ecs {
 			ECS_TRACE("SCENE: initializing editor camera on scene");
 		}
 		else {
-			for (auto& entity : m_scene->getEntities()) {
-				submitCameraIfPossible(entity);
-			}
+			submitCameraIfPossible();
 		}
 
 		graphics::RenderPipeline::Instance().submitCamera(&m_scene->getRenderCamera());
@@ -168,9 +166,9 @@ namespace mar::ecs {
 				script.pythonScript.update(entity);
 				updateEntityInPlaymode(entity, renderPipeline);
 			}
-
-			submitCameraIfPossible(entity);
 		};
+
+		submitCameraIfPossible();
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
 
@@ -187,8 +185,9 @@ namespace mar::ecs {
 
 		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
 			updateEntityInPlaymode(entity, renderPipeline);
-			submitCameraIfPossible(entity);
 		};
+
+		submitCameraIfPossible();
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
 
@@ -220,20 +219,20 @@ namespace mar::ecs {
 	// CAMERA STUFF
 	// -------------------------------------------------------------
 
-	void SceneManager::submitCameraIfPossible(const Entity& entity) {
-		if (entity.hasComponent<CameraComponent>()) {
-			const auto& cam = entity.getComponent<CameraComponent>();
-			const auto& transform = entity.getComponent<TransformComponent>();
+	void SceneManager::submitCameraIfPossible() {
+		auto view = m_scene->getView<CameraComponent>();
 
-			if (cam.id.find("main") == std::string::npos) { 
-				return; 
+		auto checkIfHasMainCamera = [&scene = std::as_const(m_scene)](entt::entity entity) {
+			const auto& cam = scene->getComponent<CameraComponent>(entity);
+
+			if (cam.id.find("main") != std::string::npos) {
+				const auto& transform = scene->getComponent<TransformComponent>(entity);
+				auto& renderCamera = scene->getRenderCamera();
+				renderCamera.calculateCameraTransforms(transform, cam);
 			}
+		};
 
-			auto& renderCamera = m_scene->getRenderCamera();
-			renderCamera.calculateCameraTransforms(transform, cam);
-
-			ECS_TRACE("SCENE_MANAGER: submitted camera");
-		}
+		std::for_each(view.begin(), view.end(), checkIfHasMainCamera);
 	}
 
 	// -------------------------------------------------------------

@@ -24,8 +24,8 @@
 namespace mar::ecs {
 
 
-	EntityCollection::EntityCollection(SceneRegistry* scene)
-		: m_scene(scene),
+	EntityCollection::EntityCollection(SceneRegistry* scene) :
+		m_scene(scene),
 		m_collectionHandle(scene->m_registry.create())
 	{}
 
@@ -60,7 +60,7 @@ namespace mar::ecs {
 
 		auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
 
-		auto& entity = entitiesVector.emplace_back(m_scene);
+		const auto& entity = entitiesVector.emplace_back(m_scene);
 
 		entity.addDefault();
 		entity.addComponent<TagComponent>(ECS_TAG);
@@ -87,14 +87,6 @@ namespace mar::ecs {
 
 	const std::vector<Entity>& EntityCollection::getEntities() const {
 		return getComponent<EntityCollectionComponent>().entities;
-	}
-
-	const Entity& EntityCollection::getEntity(size_t index) const {
-		return getComponent<EntityCollectionComponent>().entities[index];
-	}
-
-	size_t EntityCollection::getEntitiesCount() const {
-		return getComponent<EntityCollectionComponent>().entities.size();
 	}
 
 

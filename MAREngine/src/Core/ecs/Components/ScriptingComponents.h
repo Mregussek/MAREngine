@@ -37,7 +37,7 @@ namespace mar::ecs {
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent& sc) = default;
 		ScriptComponent(std::string s)
-			: script(s)
+			: script(std::move(s))
 		{}
 
 		operator std::string& () { return script; }

@@ -24,16 +24,16 @@
 namespace mar::ecs {
 
 
-	Entity::Entity(SceneRegistry* scene)
-		: m_scene(scene),
+	Entity::Entity(SceneRegistry* scene) :
+		m_scene(scene),
 		m_entityHandle(scene->m_registry.create())
 	{
 		ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
 	}
 
 	void Entity::addDefault() const {
-		auto& com = m_scene->m_registry.emplace<Components>(m_entityHandle);
-		auto& rpc = m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle);
+		m_scene->m_registry.emplace<Components>(m_entityHandle);
+		m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle);
 
 		ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
 	}

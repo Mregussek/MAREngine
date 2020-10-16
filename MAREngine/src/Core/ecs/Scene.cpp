@@ -50,18 +50,18 @@ namespace mar::ecs {
 		ECS_INFO("SCENE: registry is cleared! (called destructor)");
 	}
 
-	Scene* Scene::createEmptyScene(std::string name) {
+	Scene* Scene::createEmptyScene(std::string name) const {
 		Scene* scene = new Scene(std::move(name));
 
-		{
-			auto& entity = scene->createEntity();
+		{ // create Camera entity
+			const auto& entity = scene->createEntity();
 			entity.addComponent<CameraComponent>(ECS_CAMERA);
 
 			auto& cam = entity.getComponent<TagComponent>();
 			cam.tag = "Camera";
 		}
-		{
-			auto& entity = scene->createEntity();
+		{ // create Light Entity
+			const auto& entity = scene->createEntity();
 			entity.addComponent<LightComponent>(ECS_LIGHT);
 
 			auto& light = entity.getComponent<TagComponent>();
@@ -115,7 +115,7 @@ namespace mar::ecs {
 	const EntityCollection& Scene::createCollection() {
 		ECS_INFO("SCENE: going to create entity collection!");
 
-		auto& collection = m_container.m_collections.emplace_back(&m_sceneRegistry);
+		const auto& collection = m_container.m_collections.emplace_back(&m_sceneRegistry);
 
 		collection.addComponent<EntityCollectionComponent>();
 		collection.addComponent<TagComponent>("DefaultName");

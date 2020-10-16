@@ -135,12 +135,12 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
 	}
 
-	void RendererBatch::passLightToShader(const RenderContainer& ren) {
+	void RendererBatch::passLightToShader(const RenderContainer& container) {
 		GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
 
 		using namespace platforms::ShaderUniforms;
 
-		auto& lights = ren.getLights();
+		const auto& lights = container.getLights();
 
 		for (size_t i = 0; i < lights.size(); i++) {
 			m_shader.setUniformVec3(u_material[i].lightPos, lights[i].first);

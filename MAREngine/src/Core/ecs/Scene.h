@@ -42,7 +42,7 @@ namespace mar::ecs {
 
 		void shutdown();
 
-		static Scene* createEmptyScene(std::string name);
+		static Scene* createEmptyScene(std::string name) const;
 
 		const Entity& createEntity();
 		void destroyEntity(int32_t index);
@@ -66,12 +66,12 @@ namespace mar::ecs {
 		graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
 		template<typename T>
-		auto getView() const {
+		auto getView() {
 			return m_sceneRegistry.m_registry.view<T>();
 		}
 
 		template<typename T>
-		const T& getComponent(entt::entity entity) const {
+		T& getComponent(entt::entity entity) {
 			MAR_CORE_ASSERT(m_sceneRegistry.m_registry.has<T>(entity), "Passed entity does not have component");
 			return m_sceneRegistry.m_registry.get<T>(entity);
 		}

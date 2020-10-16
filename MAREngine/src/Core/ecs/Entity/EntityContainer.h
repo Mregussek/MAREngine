@@ -31,8 +31,8 @@ namespace mar::ecs {
 
 
 	class EntityContainer {
-		friend class Scene;
 
+		friend class Scene;
 
 		std::vector<Entity> m_entities;
 		std::vector<EntityCollection> m_collections;

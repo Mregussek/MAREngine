@@ -62,13 +62,14 @@ namespace mar::editor {
 
 		ImGui::Separator();
 
-		auto& entities = currentCollection->getEntities();
-
-		for (int32_t i = 0; i < (int32_t)entities.size(); i++) {
-			if (ImGui::MenuItem(entities[i].getComponent<ecs::TagComponent>().tag.c_str())) {
-				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->getEntity(i));
+		const auto& entities = currentCollection->getEntities();
+		auto menuItemClicked = [entityPanel = GUI_EntityPanel::Instance()](const ecs::Entity& entity) {
+			if (ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str())) {
+				entityPanel->setCurrentEntity(entity);
 			}
-		}
+		};
+
+		std::for_each(entities.begin(), entities.end(), menuItemClicked);
 
 		Scene_EntityCollection_PopUp(tag.tag.c_str());
 
@@ -122,8 +123,8 @@ namespace mar::editor {
 				maths::vec3 diff_scale = last_scale != tran.scale ? tran.scale - last_scale : maths::vec3{ 0.f, 0.f, 0.f };
 				float diff_generalscale = last_general != tran.general_scale ? tran.general_scale - last_general : 0.f;
 
-				for (size_t i = 0; i < currentCollection->getEntitiesCount(); i++) {
-					auto& entity = currentCollection->getEntity(i);
+				const auto& entities = currentCollection->getEntities();
+				std::for_each(entities.begin(), entities.end(), [&diff_center, &diff_angles, &diff_scale, diff_generalscale](const ecs::Entity& entity) {
 					auto& transform = entity.getComponent<ecs::TransformComponent>();
 
 					transform.center += diff_center;
@@ -132,7 +133,7 @@ namespace mar::editor {
 					transform.general_scale += diff_generalscale;
 
 					transform.recalculate();
-				}
+				});
 
 				ecs::SceneEvents::Instance().onCollectionTransformUpdate();
 			}
@@ -140,8 +141,8 @@ namespace mar::editor {
 
 		{ // Reset to entities 
 			if (ImGui::Button("Reset all entities to collection transform")) {
-				for (size_t i = 0; i < currentCollection->getEntitiesCount(); i++) {
-					auto& entity = currentCollection->getEntity(i);
+				const auto& entities = currentCollection->getEntities();
+				std::for_each(entities.begin(), entities.end(), [&tran](const ecs::Entity& entity) {
 					auto& transform = entity.getComponent<ecs::TransformComponent>();
 
 					transform.center = tran.center;
@@ -150,7 +151,7 @@ namespace mar::editor {
 					transform.general_scale = tran.general_scale;
 
 					transform.recalculate();
-				}
+				});
 
 				ecs::SceneEvents::Instance().onCollectionTransformUpdate();
 			}
