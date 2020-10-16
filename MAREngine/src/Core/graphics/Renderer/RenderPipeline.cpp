@@ -28,9 +28,11 @@
 namespace mar::graphics {
 
 
-	RenderPipeline RenderPipeline::s_instance;
+	RenderPipeline* RenderPipeline::s_instance{ nullptr };
 
 	void RenderPipeline::initialize() {
+		setCurrentPipeline();
+
 		m_containers.emplace_back();
 		m_availableContainerIndex = m_containers.size() - 1;
 

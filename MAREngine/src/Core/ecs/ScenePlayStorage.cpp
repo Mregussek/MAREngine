@@ -34,9 +34,11 @@ namespace mar::ecs {
 
 	void ScenePlayStorage::pushCollectionToStorage(const EntityCollection& collection) {
 		auto& storage = m_collectionStorage.emplace_back();
-		for (const auto& entity : collection.getEntities()) {
-			pushEntityToStorage(storage.entities, entity);
-		}
+		const auto& entities = collection.getEntities();
+
+		std::for_each(entities.cbegin(), entities.cend(), [&entitiesStorage = storage.entities, this](const Entity& entity) {
+			pushEntityToStorage(entitiesStorage, entity);
+		});
 	}
 
 	void ScenePlayStorage::pushEntityToStorage(const Entity& entity) {
@@ -61,10 +63,11 @@ namespace mar::ecs {
 
 	void ScenePlayStorage::loadCollectionFromStorage(const EntityCollection& collection) {
 		auto& storage = m_collectionStorage.front();
+		const auto& entities = collection.getEntities();
 
-		for (const auto& entity : collection.getEntities()) {
-			loadEntityFromStorage(storage.entities, entity);
-		}
+		std::for_each(entities.cbegin(), entities.cend(), [&entitiesStorage = storage.entities, this](const Entity& entity) {
+			pushEntityToStorage(entitiesStorage, entity);
+		});
 
 		popFront(m_collectionStorage);
 	}

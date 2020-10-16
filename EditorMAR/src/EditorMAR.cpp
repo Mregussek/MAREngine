@@ -82,7 +82,6 @@ void EditorMAR::runProjectOnEngine() {
 
 		stack.update();
 
-		engine.resetStatistics();
 		window.update();
 	}
 

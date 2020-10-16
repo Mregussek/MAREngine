@@ -35,13 +35,11 @@ namespace mar::layers {
 	void EntityLayer::initialize(ecs::Scene* scene) {
 		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
-		auto& ren = graphics::RenderPipeline::getInstance();
-		ren = graphics::RenderPipeline();
-		ren.initialize();
-
+		m_renderPipeline.initialize();
 		m_renderer.initialize();
 
-		ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
+		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
+
 		m_sceneManager.setScene(scene);
 		m_sceneManager.initialize();
 
@@ -51,9 +49,11 @@ namespace mar::layers {
 	void EntityLayer::update() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
 		
-		ecs::SceneEvents::Instance().scene_manager = &m_sceneManager;
+		m_renderPipeline.setCurrentPipeline();
+		m_renderPipeline.getStatistics().resetStatistics();
+		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
 		m_sceneManager.update();
-		m_renderer.draw(graphics::RenderPipeline::getInstance());
+		m_renderer.draw(m_renderPipeline);
 
 		LAYER_INFO("ENTITY_LAYER: {} updated!", m_debugName);
 	}
@@ -61,8 +61,8 @@ namespace mar::layers {
 	void EntityLayer::closeLayer() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to close", m_debugName);
 
-		graphics::RenderPipeline::getInstance().reset();
-
+		m_renderPipeline.setCurrentPipeline();
+		m_renderPipeline.reset();
 		m_renderer.close();
 		m_sceneManager.shutdown();
 

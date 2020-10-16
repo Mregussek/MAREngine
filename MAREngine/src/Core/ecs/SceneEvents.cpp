@@ -27,83 +27,83 @@
 
 namespace mar::ecs {
 
-	SceneEvents SceneEvents::instance;
+	SceneEvents SceneEvents::s_instance;
 
 
 	void SceneEvents::updateTransform(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updateTransform!");
 	}
 
 	void SceneEvents::updateRenderables(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updateRenderables!");
 	}
 
 	void SceneEvents::updatedCamera(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCamera!");
 	}
 
 	void SceneEvents::updatedColor(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedColor!");
 	}
 
 	void SceneEvents::updatedTexture2D(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
 	}
 
 	void SceneEvents::updatedCubemap(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
 	}
 
 	void SceneEvents::updatedLight(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedLight!");
 	}
 
 	void SceneEvents::updatedScript(const Entity* e) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedScript!");
 	}
 
 	void SceneEvents::onEntityCopy() {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onEntityCopy");
 	}
 
 	void SceneEvents::onEntityRemove() {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onEntityRemove");
 	}
 
 	void SceneEvents::onCollectionTransformUpdate() {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
 	}
 
 	void SceneEvents::onCollectionRemove() {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
 	}
 
 	void SceneEvents::onCollectionOBJloaded(const EntityCollection& collection) {
-		scene_manager->initialize();
+		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
 	}

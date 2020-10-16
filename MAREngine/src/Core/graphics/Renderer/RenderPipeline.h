@@ -56,13 +56,17 @@ namespace mar::graphics {
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }
 
-		static RenderPipeline& getInstance() { return s_instance; }
+		static RenderPipeline& Instance() { return *s_instance; }
 
 		// ---- GETTERS for container ---- //
 	
 		const std::vector<RenderContainer>& getContainers() const { return m_containers; }
 		const RenderCamera* getCamera() const { return m_camera; }
 		const size_t getAvailableContainerIndex() const { return m_availableContainerIndex; }
+
+		// --- SETTERS --- //
+
+		void setCurrentPipeline() { s_instance = this; }
 
 	private:
 
@@ -75,7 +79,7 @@ namespace mar::graphics {
 		size_t submitCubemap(float entity_index, const ecs::TextureCubemapComponent& cube);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
-		static RenderPipeline s_instance;
+		static RenderPipeline* s_instance;
 
 		RenderStatistics m_statistics;
 		std::vector<RenderContainer> m_containers;

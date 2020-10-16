@@ -159,7 +159,7 @@ namespace mar::editor {
 	void GUI_SceneHierarchy::Scene_Statistics(ecs::SceneManager* manager) {
 		ImGui::Begin("Statistics Menu");
 
-		auto& render_pip = graphics::RenderPipeline::getInstance();
+		auto& render_pip = graphics::RenderPipeline::Instance();
 		auto& stats = render_pip.getStatistics();
 
 		for (const auto& container : render_pip.getContainers()) {

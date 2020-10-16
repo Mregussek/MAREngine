@@ -18,36 +18,24 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_SCENE_REGISTRY_H
-#define MAR_ENGINE_ECS_SCENE_REGISTRY_H
-
-
-#include "../../mar.h"
-#include "ECSLogs.h"
+#include "SceneRegistry.h"
 
 
 namespace mar::ecs {
 
 
-	class SceneRegistry {
+	SceneRegistry::SceneRegistry() {
+		m_registry = entt::registry();
 
-		friend class Scene;
-		friend class Entity;
-		friend class EntityCollection;
+		ECS_TRACE("SCENE_REGISTRY: created!");
+	}
 
-	public:
+	void SceneRegistry::cleanup() {
+		m_registry.clear();
 
-		SceneRegistry();
+		ECS_TRACE("SCENE_REGISTRY: cleanup!");
+	}
 
-		void cleanup();
-
-	private:
-
-		entt::registry m_registry;
-
-	};
 
 
 }
-
-#endif // !MAR_ENGINE_ECS_SCENE_REGISTRY_H

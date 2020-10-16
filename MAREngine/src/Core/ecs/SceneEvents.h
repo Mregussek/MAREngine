@@ -33,15 +33,12 @@ namespace mar::ecs {
 
 
 	class SceneEvents {
-		static SceneEvents instance;
-
 	public:
 
 		SceneEvents() = default;
 
-		SceneManager* scene_manager{ nullptr };
-
-		inline static SceneEvents& Instance() { return instance; }
+		static SceneEvents& Instance() { return s_instance; }
+		void setSceneManager(SceneManager& manager) { m_sceneManager = &manager; }
 
 		void updateTransform(const Entity* e);
 		void updateRenderables(const Entity* e);
@@ -57,6 +54,10 @@ namespace mar::ecs {
 		void onCollectionRemove();
 		void onCollectionOBJloaded(const EntityCollection& collection);
 
+	private:
+
+		static SceneEvents s_instance;
+		SceneManager* m_sceneManager{ nullptr };
 
 	};
 

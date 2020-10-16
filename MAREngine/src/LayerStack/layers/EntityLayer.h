@@ -26,6 +26,7 @@
 #include "../Layer.h"
 #include "../../Core/ecs/SceneManager.h"
 #include "../../Core/graphics/Renderer/RendererBatch.h"
+#include "../../Core/graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar::ecs { class Scene; }
@@ -49,6 +50,7 @@ namespace mar::layers {
 
 		ecs::SceneManager m_sceneManager;
 		graphics::RendererBatch m_renderer;
+		graphics::RenderPipeline m_renderPipeline;
 
 	};
 

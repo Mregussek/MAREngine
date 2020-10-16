@@ -65,6 +65,17 @@ namespace mar::ecs {
 		const std::vector<EntityCollection>& getCollections() const;
 		graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
+		template<typename T>
+		auto getView() const {
+			return m_sceneRegistry.m_registry.view<T>();
+		}
+
+		template<typename T>
+		const T& getComponent(entt::entity entity) const {
+			MAR_CORE_ASSERT(m_sceneRegistry.m_registry.has<T>(entity), "Passed entity does not have component");
+			return m_sceneRegistry.m_registry.get<T>(entity);
+		}
+
 	private:
 
 		std::string m_name{ "Empty Scene" };

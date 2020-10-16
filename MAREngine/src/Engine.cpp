@@ -46,9 +46,5 @@ namespace mar::engine {
 		guilayer->submit(entitylayer->getSceneManager());
 	}
 
-	void MAREngine::resetStatistics() {
-		graphics::RenderPipeline::getInstance().clearStatistics(); 
-	}
-
 
 }

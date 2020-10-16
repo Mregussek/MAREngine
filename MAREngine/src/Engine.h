@@ -76,8 +76,6 @@ namespace mar::engine {
 		
 		void connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer);
 
-		void resetStatistics();
-
 	};
 
 

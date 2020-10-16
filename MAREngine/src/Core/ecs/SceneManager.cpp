@@ -35,17 +35,17 @@ namespace mar::ecs {
 	void SceneManager::initialize() const {
 		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
-		auto& render_pipeline = RenderPipeline::getInstance();
-		render_pipeline.reset();
+		auto& renderPipeline = RenderPipeline::Instance();
+		renderPipeline.reset();
 
 		const auto& entitiesVector = m_scene->getEntities();
 		const auto& collectionsVector = m_scene->getCollections();
 
-		auto pushEntityToPipeline = [&render_pipeline](const Entity& entity) {
-			render_pipeline.submitEntity(entity);
+		auto pushEntityToPipeline = [&renderPipeline](const Entity& entity) {
+			renderPipeline.submitEntity(entity);
 		};
 
-		auto pushCollectionToPipeline = [&render_pipeline, &pushEntityToPipeline](const EntityCollection& collection) {
+		auto pushCollectionToPipeline = [&renderPipeline, &pushEntityToPipeline](const EntityCollection& collection) {
 			const auto& entitiesVector = collection.getEntities();
 			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
 		};
@@ -98,7 +98,7 @@ namespace mar::ecs {
 			}
 		}
 
-		graphics::RenderPipeline::getInstance().submitCamera(&m_scene->getRenderCamera());
+		graphics::RenderPipeline::Instance().submitCamera(&m_scene->getRenderCamera());
 
 		ECS_INFO("SCENE_MANAGER: updated editor mode!");
 	}
@@ -159,7 +159,7 @@ namespace mar::ecs {
 	void SceneManager::updatePlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-		auto& renderPipeline = graphics::RenderPipeline::getInstance();
+		auto& renderPipeline = graphics::RenderPipeline::Instance();
 		const auto& entitiesVector = m_scene->getEntities();
 
 		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
@@ -182,7 +182,7 @@ namespace mar::ecs {
 	void SceneManager::updatePauseMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
-		auto& renderPipeline = graphics::RenderPipeline::getInstance();
+		auto& renderPipeline = graphics::RenderPipeline::Instance();
 		const auto& entitiesVector = m_scene->getEntities();
 
 		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
