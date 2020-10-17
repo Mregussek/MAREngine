@@ -18,20 +18,22 @@
 **/
 
 
-#include "RenderEvents.h"
-#include "RenderPipeline.h"
-#include "../GraphicsLogs.h"
+#include "RenderStatistics.h"
 
 
 namespace mar::graphics {
 
 
-	void RenderEvents::onDrawCall(RenderPipeline& renderPipeline) {
-		auto& stats = renderPipeline.getStatistics();
-		stats.drawCallsCount += 1;
-	
-		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
+	void RenderStatistics::resetStatistics() {
+		drawCallsCount = 0;
+		indicesCount = 0;
+		shapesCount = 0;
+		verticesCount = 0;
+		trianglesCount = 0;
+		entitiesCount = 0;
+		entityCollectionsCount = 0;
+		allEntitiesCount = 0;
 	}
-	
+
 
 }

@@ -19,6 +19,7 @@
 
 
 #include "RenderContainer.h"
+#include "../GraphicsLogs.h"
 
 
 namespace mar::graphics {
@@ -38,6 +39,8 @@ namespace mar::graphics {
 		m_samplerTypes.clear();
 
 		m_lights.clear();
+	
+		GRAPHICS_TRACE("RENDER_CONTAINER: resetting container");
 	}
 
 

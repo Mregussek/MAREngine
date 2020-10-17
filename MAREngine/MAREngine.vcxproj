@@ -349,6 +349,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RenderStatistics.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />

@@ -50,7 +50,7 @@ namespace mar::ecs {
 		ECS_INFO("SCENE: registry is cleared! (called destructor)");
 	}
 
-	Scene* Scene::createEmptyScene(std::string name) const {
+	Scene* Scene::createEmptyScene(std::string name) {
 		Scene* scene = new Scene(std::move(name));
 
 		{ // create Camera entity

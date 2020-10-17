@@ -33,7 +33,8 @@ namespace mar::graphics {
 	class RenderEvents {
 	public:
 
-		static void onDrawCall(RenderPipeline* render_pipeline);
+		static void onDrawCall(RenderPipeline& renderPipeline);
+
 	};
 
 

@@ -44,6 +44,7 @@ namespace mar::platforms {
 
 	class FrameBufferOpenGL {
 	public:
+
 		FrameBufferOpenGL() = default;
 
 		void initialize(const FrameBufferSpecification& spec);

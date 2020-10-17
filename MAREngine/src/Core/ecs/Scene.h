@@ -42,7 +42,7 @@ namespace mar::ecs {
 
 		void shutdown();
 
-		static Scene* createEmptyScene(std::string name) const;
+		static Scene* createEmptyScene(std::string name);
 
 		const Entity& createEntity();
 		void destroyEntity(int32_t index);

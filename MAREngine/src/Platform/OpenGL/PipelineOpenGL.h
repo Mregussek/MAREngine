@@ -34,7 +34,7 @@ namespace mar::platforms {
 
 		PipelineOpenGL() = default;
 
-		void initialize(uint32_t vbo_memory, uint32_t ebo_memory);
+		void initialize(uint32_t memoryVBO, uint32_t memoryEBO);
 		void close();
 
 		void update(const std::vector<float>& vertices, const std::vector<uint32_t>& indices) const;
@@ -48,10 +48,10 @@ namespace mar::platforms {
 		void createVAO();
 		void destroyVAO();
 
-		void createVBO(uint32_t memory);
+		void createVBO();
 		void destroyVBO();
 
-		void createEBO(uint32_t memory);
+		void createEBO();
 		void destroyEBO();
 
 		void processLayout() const;

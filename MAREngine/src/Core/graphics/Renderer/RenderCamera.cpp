@@ -21,12 +21,15 @@
 #include "RenderCamera.h"
 #include "../../ecs/Components/DefaultComponents.h"
 #include "../../ecs/Components/CameraComponents.h"
+#include "../GraphicsLogs.h"
 
 
 namespace mar::graphics {
 
 
 	void RenderCamera::calculateCameraTransforms(const ecs::TransformComponent& transform, const ecs::CameraComponent& camera) {
+		GRAPHICS_TRACE("RENDER_CAMERA: going to calculate camera transform");
+
 		const float x = trig::cosine(trig::toRadians(transform.angles.y)) * trig::cosine(trig::toRadians(transform.angles.x));
 		const float y = trig::sine(trig::toRadians(transform.angles.x));
 		const float z = trig::sine(trig::toRadians(transform.angles.y)) * trig::cosine(trig::toRadians(transform.angles.x));
@@ -45,28 +48,39 @@ namespace mar::graphics {
 		}
 
 		recalculateMVP();
+	
+		GRAPHICS_INFO("RENDER_CAMERA: calculated new camera transfroms");
 	}
 
 	void RenderCamera::calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane) {
 		m_projection = mat4::perspective(trig::toRadians(zoom), aspectRatio, nearPlane, farPlane);
+
+		GRAPHICS_TRACE("RENDER_CAMERA: calculated new projection matrix : perspective");
 	}
 
 	void RenderCamera::calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane) {
 		m_projection = mat4::orthographic(left, right, top, bottom, nearPlane, farPlane);
+
+		GRAPHICS_TRACE("RENDER_CAMERA: calculated new projection matrix : orthographic");
 	}
 
 	void RenderCamera::calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up) {
 		m_position = position;
-
 		m_view = mat4::lookAt(position, lookAt, up);
+
+		GRAPHICS_TRACE("RENDER_CAMERA: calculated new view transform, lookAt matrix");
 	}
 
 	void RenderCamera::calculateModel(maths::vec3 arg) {
 		m_model = mat4::translation(arg);
+
+		GRAPHICS_TRACE("RENDER_CAMERA: calculated new model transform");
 	}
 
 	void RenderCamera::recalculateMVP() {
 		m_mvp = m_projection * m_view;
+
+		GRAPHICS_TRACE("RENDER_CAMERA: recalculated Model-View-Projection Matrix!");
 	}
 
 

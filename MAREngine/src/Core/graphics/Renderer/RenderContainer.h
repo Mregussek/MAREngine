@@ -29,15 +29,21 @@
 namespace mar::graphics {
 
 
-	class RenderContainer {
-		friend class RenderPipeline;
+	typedef std::pair<float, maths::vec3> ColorPair;
+	typedef std::pair<float, std::string> TexturePair;
+	typedef std::pair<maths::vec3, ecs::LightComponent> LightPair;
 
-		typedef std::vector<float> FloatVector;
-		typedef std::vector<uint32_t> UintVector;
-		typedef std::vector<maths::mat4> Mat4Vector;
-		typedef std::vector<std::pair<float, maths::vec3>> ColorVector;
-		typedef std::vector<std::pair<float, std::string>> TextureVector;
-		typedef std::vector<std::pair<maths::vec3, ecs::LightComponent>> LightVector;
+	typedef std::vector<float> FloatVector;
+	typedef std::vector<uint32_t> UintVector;
+	typedef std::vector<maths::mat4> Mat4Vector;
+	typedef std::vector<ColorPair> ColorVector;
+	typedef std::vector<TexturePair> TextureVector;
+	typedef std::vector<LightPair> LightVector;
+
+
+	class RenderContainer {
+
+		friend class RenderPipeline;
 
 	public:
 
@@ -47,14 +53,14 @@ namespace mar::graphics {
 
 		// ---- GETTERS ---- //
 
-		const FloatVector getVertices() const { return m_vertices; }
-		const UintVector getIndices() const { return m_indices; }
-		const Mat4Vector getTransforms() const { return m_transforms; }
-		const ColorVector getColors() const { return m_colors; }
-		const TextureVector getTexture2D() const { return m_tex2D; }
-		const TextureVector getTextureCubemap() const { return m_cubes; }
-		const LightVector getLights() const { return m_lights; }
-		const FloatVector getSamplerTypes() const { return m_samplerTypes; }
+		const FloatVector& getVertices() const { return m_vertices; }
+		const UintVector& getIndices() const { return m_indices; }
+		const Mat4Vector& getTransforms() const { return m_transforms; }
+		const ColorVector& getColors() const { return m_colors; }
+		const TextureVector& getTexture2D() const { return m_tex2D; }
+		const TextureVector& getTextureCubemap() const { return m_cubes; }
+		const LightVector& getLights() const { return m_lights; }
+		const FloatVector& getSamplerTypes() const { return m_samplerTypes; }
 
 	private:
 

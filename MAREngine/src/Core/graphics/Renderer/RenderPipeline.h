@@ -49,9 +49,9 @@ namespace mar::graphics {
 
 		void submitCamera(RenderCamera* cam);
 
-		void modifyTransform(const ecs::TransformComponent& tran, size_t container_index, size_t transform_index);
-		void modifyLight(const maths::vec3& position, const ecs::LightComponent& light, size_t container_index, size_t light_index);
-		void modifyColor(const ecs::ColorComponent& color, size_t container_index, size_t color_index);
+		void modifyTransform(const ecs::TransformComponent& tran, size_t containerIndex, size_t transformIndex);
+		void modifyLight(const maths::vec3& position, const ecs::LightComponent& light, size_t containerIndex, size_t lightIndex);
+		void modifyColor(const ecs::ColorComponent& color, size_t containerIndex, size_t colorIndex);
 
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }
@@ -70,13 +70,13 @@ namespace mar::graphics {
 
 	private:
 
-		void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t vert_to_push, size_t ind_to_push);
+		void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
 		void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
 
-		size_t submitRenderable(ecs::RenderableComponent& ren_comp, const ecs::TransformComponent& tran);
-		size_t submitColor(float entity_index, const ecs::ColorComponent& color);
-		size_t submitTexture2D(float entity_index, const ecs::Texture2DComponent& tex);
-		size_t submitCubemap(float entity_index, const ecs::TextureCubemapComponent& cube);
+		size_t submitRenderable(ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
+		size_t submitColor(float entityIndex, const ecs::ColorComponent& color);
+		size_t submitTexture2D(float entityIndex, const ecs::Texture2DComponent& texture);
+		size_t submitCubemap(float entityIndex, const ecs::TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
 		static RenderPipeline* s_instance;

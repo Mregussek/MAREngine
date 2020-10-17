@@ -30,8 +30,8 @@ namespace mar::platforms {
 
 
 	struct ShaderProgramSource {
-		std::string _vertexSource;
-		std::string _fragmentSource;
+		std::string vertexSource;
+		std::string fragmentSource;
 	};
 
 
@@ -41,37 +41,37 @@ namespace mar::platforms {
 		ShaderOpenGL() = default;
 
 		void initialize(std::string shader = "resources/shaders/batcher.shader.glsl");
-		void shutdown();
+		void shutdown() const;
 
 		void bind() const;
 		void unbind() const;
 
-		void setUniformFloat(const std::string& name, float f);
-		void setUniformFloat(const std::string& name, const std::vector<float>& floats);
-		void setUniformInt(const std::string& name, int32_t i);
-		void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
-		void setUniformSampler(const std::string& name, int32_t sampler);
-		void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler);
-		void setUniformVec3(const std::string& name, maths::vec3 vector3);
-		void setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec);
-		void setUniformMat4(const std::string& name, const maths::mat4& matrix4x4);
-		void setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices);
+		void setUniformFloat(const std::string& name, float f) const;
+		void setUniformFloat(const std::string& name, const std::vector<float>& floats) const;
+		void setUniformInt(const std::string& name, int32_t i) const;
+		void setUniformInt(const std::string& name, const std::vector<int32_t>& ints) const;
+		void setUniformSampler(const std::string& name, int32_t sampler) const;
+		void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) const;
+		void setUniformVec3(const std::string& name, maths::vec3 vector3) const;
+		void setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec) const;
+		void setUniformMat4(const std::string& name, const maths::mat4& matrix4x4) const;
+		void setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices) const;
 
 	private:
 
-		int getUniformLocation(const std::string& name);
+		int32_t getUniformLocation(const std::string& name) const;
 
-		ShaderProgramSource parseShader();
-		uint32_t compileShader(uint32_t type, const std::string& sourceCode);
-		uint32_t createShader();
-
+		ShaderProgramSource parseShader() const;
+		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
+		uint32_t createShader() const;
 
 		bool m_initialized{ false };
 
 		uint32_t m_id{ 0 };
 		std::string m_shaderPath{ "" };
-		std::unordered_map<std::string, int> m_uniformLocation;
+		std::unordered_map<std::string, int32_t> m_uniformLocation;
 		ShaderProgramSource m_programSource;
+
 	};
     
     

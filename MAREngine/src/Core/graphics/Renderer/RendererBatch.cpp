@@ -60,7 +60,7 @@ namespace mar::graphics {
 					passCameraToShader(render_pip.getCamera());
 					passLightToShader(container_light);
 					drawContainer(container);
-					RenderEvents::onDrawCall(&render_pip);
+					RenderEvents::onDrawCall(render_pip);
 				}
 			}
 		}
@@ -68,8 +68,9 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
 
-	void RendererBatch::drawContainer(const RenderContainer& container) {
+	void RendererBatch::drawContainer(const RenderContainer& container) const {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render container!");
+		
 		{
 			using namespace platforms::ShaderUniforms;
 
@@ -91,51 +92,48 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render container!");
 	}
 
-	void RendererBatch::passTexturesToShader(const RenderContainer& container) {
+	void RendererBatch::passTexturesToShader(const RenderContainer& container) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
 
 		using namespace platforms::ShaderUniforms;
 		typedef platforms::TextureOpenGL TextureGL;
 
-		auto& samplerTypes = container.getSamplerTypes();
-		auto& colors = container.getColors();
-		auto& tex2D = container.getTexture2D();
-		auto& cubes = container.getTextureCubemap();
+		const auto& samplerTypes = container.getSamplerTypes();
+		const auto& colors = container.getColors();
+		const auto& textures = container.getTexture2D();
+		const auto& cubemaps = container.getTextureCubemap();
 
 		m_shader.setUniformFloat(u_samplerTypes, samplerTypes);
 
-		static uint32_t tex_id = 0;
-		static uint32_t sampler = 0;
-
-		for (size_t i = 0; i < colors.size(); i++) {
-			sampler = (uint32_t)colors[i].first;
-			m_shader.setUniformVec3(u_SamplersColor[sampler], colors[i].second);
-		}
+		std::for_each(colors.begin(), colors.end(), [&shader = std::as_const(m_shader)](const ColorPair& color) {
+			const uint32_t sampler = (uint32_t)color.first;
+			shader.setUniformVec3(u_SamplersColor[sampler], color.second);
+		});
 			
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
 
-		for (size_t i = 0; i < tex2D.size(); i++) {
-			tex_id = TextureGL::Instance()->loadTexture(tex2D[i].second);
-			sampler = (uint32_t)tex2D[i].first;
+		std::for_each(textures.begin(), textures.end(), [&shader = std::as_const(m_shader)](const TexturePair& texture) {
+			const uint32_t textureID = TextureGL::Instance()->loadTexture(texture.second);
+			const uint32_t sampler = (uint32_t)texture.first;
 
-			TextureGL::Instance()->bind2D(sampler, tex_id);
-			m_shader.setUniformSampler(u_Samplers2D[sampler], sampler);
-		}
+			TextureGL::Instance()->bind2D(sampler, textureID);
+			shader.setUniformSampler(u_Samplers2D[sampler], sampler);
+		});
 		
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 
-		for (size_t i = 0; i < cubes.size(); i++) {
-			tex_id = TextureGL::Instance()->loadCubemap(cubes[i].second);
-			sampler = (size_t)cubes[i].first;
+		std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = std::as_const(m_shader)](const TexturePair& texture) {
+			const uint32_t textureID = TextureGL::Instance()->loadCubemap(texture.second);
+			const uint32_t sampler = (uint32_t)texture.first;
 
-			TextureGL::Instance()->bindCube(sampler, tex_id);
-			m_shader.setUniformSampler(u_SamplersCube[sampler], sampler);
-		}
+			TextureGL::Instance()->bindCube(sampler, textureID);
+			shader.setUniformSampler(u_Samplers2D[sampler], sampler);
+		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
 	}
 
-	void RendererBatch::passLightToShader(const RenderContainer& container) {
+	void RendererBatch::passLightToShader(const RenderContainer& container) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
 
 		using namespace platforms::ShaderUniforms;
@@ -161,7 +159,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}
 
-	void RendererBatch::passCameraToShader(const RenderCamera* camera) {
+	void RendererBatch::passCameraToShader(const RenderCamera* camera) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
 
 		using namespace platforms::ShaderUniforms;

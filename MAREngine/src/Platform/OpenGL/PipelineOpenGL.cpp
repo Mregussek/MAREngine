@@ -26,15 +26,18 @@ namespace mar::platforms {
 
 	// ---- PUBLIC METHODS ---- //
 
-	void PipelineOpenGL::initialize(uint32_t vbo_memory, uint32_t ebo_memory) {
+	void PipelineOpenGL::initialize(uint32_t memoryVBO, uint32_t memoryEBO) {
 		if (m_initialized) {
 			PLATFORM_WARN("PIPELINE_OPENGL: is already initialized with VAO {} EBO {} VBO {}!", m_vao, m_ebo, m_vbo);
 			return;
 		}
 
-		createEBO(ebo_memory);
+		m_vboAllocMemory = memoryVBO;
+		m_eboAllocMemory = memoryEBO;
+
+		createEBO();
 		createVAO();
-		createVBO(vbo_memory);
+		createVBO();
 		processLayout();
 		
 		m_initialized = true;
@@ -58,8 +61,8 @@ namespace mar::platforms {
 	}
 
 	void PipelineOpenGL::update(const std::vector<float>& vertices, const std::vector<uint32_t>& indices) const {
-		uint32_t vert_size = vertices.size() * sizeof(float);
-		uint32_t indi_size = indices.size() * sizeof(uint32_t);
+		const uint32_t vert_size = vertices.size() * sizeof(float);
+		const uint32_t indi_size = indices.size() * sizeof(uint32_t);
 
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vert_size, vertices.data()) );
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indi_size, indices.data()) );
@@ -104,8 +107,7 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC(glDeleteVertexArrays(1, &m_vao));
 	}
 
-	void PipelineOpenGL::createVBO(uint32_t memory) {
-		m_vboAllocMemory = memory;
+	void PipelineOpenGL::createVBO() {
 		PLATFORM_GL_FUNC(glGenBuffers(1, &m_vbo));
 		PLATFORM_GL_FUNC(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 		PLATFORM_GL_FUNC(glBufferData(GL_ARRAY_BUFFER, m_vboAllocMemory, nullptr, GL_DYNAMIC_DRAW));
@@ -118,8 +120,7 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC(glDeleteBuffers(1, &m_vbo));
 	}
 
-	void PipelineOpenGL::createEBO(uint32_t memory) {
-		m_eboAllocMemory = memory;
+	void PipelineOpenGL::createEBO() {
 		PLATFORM_GL_FUNC(glGenBuffers(1, &m_ebo));
 		PLATFORM_GL_FUNC(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
 		PLATFORM_GL_FUNC(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_eboAllocMemory, nullptr, GL_DYNAMIC_DRAW));
