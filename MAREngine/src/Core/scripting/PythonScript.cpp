@@ -28,14 +28,10 @@
 
 namespace mar::scripting {
 
-
-    PythonScript::PythonScript()
-        : m_initialized(false)
-    {}
     
     void PythonScript::loadScript(std::string path_to_script) {
-        std::string from = changeSlashesToDots(path_to_script);
-        std::string what = getModuleFromPath(path_to_script);
+        const std::string from = changeSlashesToDots(path_to_script);
+        const std::string what = getModuleFromPath(path_to_script);
     
         if (m_initialized) { m_scriptModule.reload(); }
         else { 
@@ -150,8 +146,7 @@ namespace mar::scripting {
     }
     
     std::string PythonScript::getModuleFromPath(std::string script) {
-        std::string rtn = script.substr(script.find_last_of("/") + 1, script.size());
-        rtn = rtn.substr(0, rtn.size() - 3);
+        const std::string rtn = script.substr(script.find_last_of("/") + 1, script.size()).substr(0, rtn.size() - 3);
     
         SCRIPTING_TRACE("PYTHON_SCRIPT: returning module {} from path {}", script, rtn);
     

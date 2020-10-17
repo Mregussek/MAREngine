@@ -35,7 +35,7 @@ namespace mar::scripting {
     class PythonScript {
     public:
 
-        PythonScript();
+        PythonScript() = default;
 
         void loadScript(std::string path_to_script);
 
@@ -54,7 +54,8 @@ namespace mar::scripting {
 
         py::module m_scriptModule;
         py::object m_module;
-        bool m_initialized;
+        bool m_initialized{ false };
+
     };
 
 
