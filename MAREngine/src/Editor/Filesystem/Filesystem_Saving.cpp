@@ -87,7 +87,7 @@ namespace mar::editor {
 			}
 			else if (component == ECS_RENDERABLE) {
 				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
-				ss << "#RenderableComponent " << renderable.id << "\n";
+				ss << "#RenderableComponent " << renderable.name << "\n";
 			}
 			else if (component == ECS_TRANSFORM) {
 				auto& transform = entity.getComponent<ecs::TransformComponent>();
