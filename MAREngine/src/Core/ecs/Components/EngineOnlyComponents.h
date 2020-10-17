@@ -66,20 +66,15 @@ namespace mar::ecs {
 	};
 
 	struct RenderPipelineComponent {
-		size_t container_index{ 0 };
-		size_t transform_index{ 0 };
-		size_t color_index{ 0 };
-		size_t container_light_index{ 0 };
-		size_t light_index{ 0 };
+		size_t containerIndex{ 0 };
+		size_t transformIndex{ 0 };
+		size_t colorIndex{ 0 };
+
+		size_t containerLightIndex{ 0 };
+		size_t lightIndex{ 0 };
 
 		RenderPipelineComponent() = default;
-		RenderPipelineComponent(const RenderPipelineComponent& rpc)
-			: container_index(rpc.container_index),
-			transform_index(rpc.transform_index),
-			color_index(rpc.color_index),
-			container_light_index(rpc.container_light_index),
-			light_index(rpc.light_index)
-		{}
+		RenderPipelineComponent(const RenderPipelineComponent& rpc) = default;
 	};
 
 

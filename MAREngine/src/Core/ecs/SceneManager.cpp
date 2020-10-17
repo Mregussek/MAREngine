@@ -201,17 +201,17 @@ namespace mar::ecs {
 		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
 		if (entity.hasComponent<RenderableComponent>()) {
-			renderPipeline.modifyTransform(transform, rpc.container_index, rpc.transform_index);
+			renderPipeline.modifyTransform(transform, rpc.containerIndex, rpc.transformIndex);
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
 			const auto& light = entity.getComponent<LightComponent>();
-			renderPipeline.modifyLight(transform.center, light, rpc.container_light_index, rpc.light_index);
+			renderPipeline.modifyLight(transform.center, light, rpc.containerLightIndex, rpc.lightIndex);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
 			const auto& color = entity.getComponent<ColorComponent>();
-			renderPipeline.modifyColor(color, rpc.container_index, rpc.color_index);
+			renderPipeline.modifyColor(color, rpc.containerIndex, rpc.colorIndex);
 		}
 	}
 

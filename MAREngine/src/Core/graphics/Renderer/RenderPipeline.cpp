@@ -62,7 +62,7 @@ namespace mar::graphics {
 			const auto& light = entity.getComponent<LightComponent>();
 
 			setAvailableContainerLight(rpc);
-			rpc.light_index = submitLight(tran.center, light);
+			rpc.lightIndex = submitLight(tran.center, light);
 		}
 
 		if (entity.hasComponent<RenderableComponent>()) {
@@ -72,19 +72,19 @@ namespace mar::graphics {
 			const size_t index = submitRenderable(renderable, tran);
 
 			renderable.shaderID = index;
-			rpc.transform_index = index;
+			rpc.transformIndex = index;
 
 			if (entity.hasComponent<ColorComponent>()) {
 				const auto& color = entity.getComponent<ColorComponent>();
-				rpc.color_index = submitColor((int32_t)renderable.shaderID, color);
+				rpc.colorIndex = submitColor((int32_t)renderable.shaderID, color);
 			}
 			else if (entity.hasComponent<Texture2DComponent>()) {
 				const auto& tex = entity.getComponent<Texture2DComponent>();
-				rpc.color_index = submitTexture2D((int32_t)renderable.shaderID, tex);
+				rpc.colorIndex = submitTexture2D((int32_t)renderable.shaderID, tex);
 			}
 			else if (entity.hasComponent<TextureCubemapComponent>()) {
 				const auto& cube = entity.getComponent<TextureCubemapComponent>();
-				rpc.color_index = submitCubemap((int32_t)renderable.shaderID, cube);
+				rpc.colorIndex = submitCubemap((int32_t)renderable.shaderID, cube);
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace mar::graphics {
 			}
 			else {
 				m_availableContainerIndex = i;
-				rpc.container_index = m_availableContainerIndex;
+				rpc.containerIndex = m_availableContainerIndex;
 				GRAPHICS_TRACE("RENDER_PIPELINE: available container is at index {}, returning...", i);
 				return;
 			}
@@ -113,7 +113,7 @@ namespace mar::graphics {
 
 		m_containers.emplace_back();
 		m_availableContainerIndex = m_containers.size() - 1;
-		rpc.container_index = m_availableContainerIndex;
+		rpc.containerIndex = m_availableContainerIndex;
 
 		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container, current size {}", m_containers.size());
 	}
@@ -125,7 +125,7 @@ namespace mar::graphics {
 			if (currentLightSize + 1 >= 32) { continue; }
 			else {
 				m_availableContainerIndex = i;
-				rpc.container_light_index = m_availableContainerIndex;
+				rpc.containerLightIndex = m_availableContainerIndex;
 				GRAPHICS_TRACE("RENDER_PIPELINE: available container for light is at {}, returning...", i);
 				return;
 			}
@@ -133,7 +133,7 @@ namespace mar::graphics {
 		
 		m_containers.emplace_back();
 		m_availableContainerIndex = m_containers.size() - 1;
-		rpc.container_light_index = m_availableContainerIndex;
+		rpc.containerLightIndex = m_availableContainerIndex;
 
 		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container (for light), current size {}", m_containers.size());
 	}

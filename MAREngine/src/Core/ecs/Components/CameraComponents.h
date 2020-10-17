@@ -28,6 +28,7 @@
 namespace mar::ecs {
 
 
+	// p_... stands for perspective parameters, o_... orthographic
 	struct CameraComponent {
 		std::string id{ "secondary" };
 
