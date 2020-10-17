@@ -18,30 +18,24 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_SHAPEMANIPULATOR_H
-#define MAR_ENGINE_GRAPHICS_SHAPEMANIPULATOR_H
+#ifndef MAR_ENGINE_GRAPHICS_MESH_VERTEX_H
+#define MAR_ENGINE_GRAPHICS_MESH_VERTEX_H
 
 
 #include "../../../mar.h"
-#include "Vertex.h"
 
 
-namespace mar:: graphics {
+namespace mar::graphics {
 
 
-    class ShapeManipulator {
-    public:
-    
-        static void extendShapeID(std::vector<Vertex>& vertices, uint32_t stride, float newid);
-    
-        static void extendIndices(std::vector<uint32_t>& indices, uint32_t extension);
-        static void extendIndices(std::vector<uint32_t>& indices, uint32_t start, uint32_t end, uint32_t extension);
-    
-        //static void calculateNormals(std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const int32_t stride);
-    
-    };
+	struct Vertex {
+		maths::vec3 position;
+		maths::vec3 lightNormal;
+		maths::vec2 textureCoordinates;
+		float shapeID;
+	};
 
 
 }
 
-#endif // !MAR_ENGINE_SHAPEMANIPULATOR_H
+#endif // !MAR_ENGINE_GRAPHICS_MESH_VERTEX_H

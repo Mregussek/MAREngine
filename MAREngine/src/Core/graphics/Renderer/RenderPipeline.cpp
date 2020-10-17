@@ -91,7 +91,7 @@ namespace mar::graphics {
 
 	void RenderPipeline::setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
 		for (size_t i = 0; i < m_containers.size(); i++) {
-			const size_t currentVerticesSize = m_containers[i].getVertices().size();
+			const size_t currentVerticesSize = m_containers[i].getVertices().size() + sizeof(Vertex) / 4;
 			const size_t currentIndicesSize = m_containers[i].getIndices().size();
 			const size_t currentTransformSize = m_containers[i].getTransforms().size();
 
@@ -140,18 +140,22 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: submitting renderable component");
 		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 
-		// TODO: make it similar to extendIndices
-		ShapeManipulator::extendShapeID(renderable.vertices, availableContainer->m_stride, availableContainer->m_shapeID);
-		availableContainer->m_vertices.insert(availableContainer->m_vertices.end(), renderable.vertices.begin(), renderable.vertices.end());
+		{
+			// TODO: make it similar to extendIndices
+			ShapeManipulator::extendShapeID(renderable.vertices, availableContainer->m_stride, availableContainer->m_shapeID);
+			availableContainer->m_vertices.insert(availableContainer->m_vertices.end(), renderable.vertices.begin(), renderable.vertices.end());
+		}
 
-		const uint32_t startExtensionIndices = availableContainer->m_indices.size();
-		const uint32_t endExtensionIndices = availableContainer->m_indices.size() + renderable.indices.size();
-		availableContainer->m_indices.insert(availableContainer->m_indices.end(), renderable.indices.begin(), renderable.indices.end());
-		ShapeManipulator::extendIndices(availableContainer->m_indices, startExtensionIndices, endExtensionIndices, availableContainer->m_indicesMax);
-
+		{
+			const uint32_t startExtensionIndices = availableContainer->m_indices.size();
+			const uint32_t endExtensionIndices = startExtensionIndices + renderable.indices.size();
+			availableContainer->m_indices.insert(availableContainer->m_indices.end(), renderable.indices.begin(), renderable.indices.end());
+			ShapeManipulator::extendIndices(availableContainer->m_indices, startExtensionIndices, endExtensionIndices, availableContainer->m_indicesMax);
+		}
+		
 		renderable.shader_id = availableContainer->m_shapeID;
 
-		availableContainer->m_indicesMax += renderable.vertices.size() / availableContainer->m_stride;
+		availableContainer->m_indicesMax += (renderable.vertices.size() * sizeof(Vertex) / 4) / availableContainer->m_stride;
 		availableContainer->m_shapeID++;
 
 		availableContainer->m_transforms.push_back(transform.transform);

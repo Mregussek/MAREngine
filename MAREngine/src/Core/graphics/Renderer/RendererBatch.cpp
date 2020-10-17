@@ -127,7 +127,7 @@ namespace mar::graphics {
 			const uint32_t sampler = (uint32_t)texture.first;
 
 			TextureGL::Instance()->bindCube(sampler, textureID);
-			shader.setUniformSampler(u_Samplers2D[sampler], sampler);
+			shader.setUniformSampler(u_SamplersCube[sampler], sampler);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");

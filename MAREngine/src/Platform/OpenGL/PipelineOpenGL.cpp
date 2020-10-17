@@ -60,8 +60,8 @@ namespace mar::platforms {
 		PLATFORM_INFO("PIPELINE_OPENGL: pipeline is closed!");
 	}
 
-	void PipelineOpenGL::update(const std::vector<float>& vertices, const std::vector<uint32_t>& indices) const {
-		const uint32_t vert_size = vertices.size() * sizeof(float);
+	void PipelineOpenGL::update(const std::vector<graphics::Vertex>& vertices, const std::vector<uint32_t>& indices) const {
+		const uint32_t vert_size = sizeof(graphics::Vertex) * vertices.size();
 		const uint32_t indi_size = indices.size() * sizeof(uint32_t);
 
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vert_size, vertices.data()) );

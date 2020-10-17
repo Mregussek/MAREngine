@@ -23,6 +23,7 @@
 
 
 #include "../../../mar.h"
+#include "Vertex.h"
 
 
 namespace mar::ecs {
@@ -37,25 +38,25 @@ namespace mar::graphics {
     
         struct Cube {
             static std::string getID() { return "Cube"; }
-            static std::vector<float> getVertices();
+            static std::vector<Vertex> getVertices();
             static std::vector<uint32_t> getIndices();
         };
     
         struct Pyramid {
             static std::string getID() { return "Pyramid"; }
-            static std::vector<float> getVertices();
+            static std::vector<Vertex> getVertices();
             static std::vector<uint32_t> getIndices();
         };
     
         struct Wall {
             static std::string getID() { return "Wall"; }
-            static std::vector<float> getVertices();
+            static std::vector<Vertex> getVertices();
             static std::vector<uint32_t> getIndices();
         }; 
     
         struct Surface {
             static std::string getID() { return "Surface"; }
-            static std::vector<float> getVertices();
+            static std::vector<Vertex> getVertices();
             static std::vector<uint32_t> getIndices();
         };
     

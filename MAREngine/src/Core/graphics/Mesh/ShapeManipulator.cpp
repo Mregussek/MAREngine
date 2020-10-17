@@ -25,9 +25,9 @@
 namespace mar::graphics {
 
 
-	void ShapeManipulator::extendShapeID(std::vector<float>& vertices, uint32_t stride, float newid) {
-		for (uint32_t i = 1; i < vertices.size() / stride + 1; i++) {
-			vertices[i * stride - 1] = newid;
+	void ShapeManipulator::extendShapeID(std::vector<Vertex>& vertices, uint32_t stride, float newid) {
+		for (auto& vertex : vertices) {
+			vertex.shapeID = newid;
 		}
 			
 		GRAPHICS_TRACE("SHAPE_MANIPULATOR: extendShapeID(vert.size() = {}, stride = {}, newid = {})", vertices.size(), stride, newid);
@@ -48,7 +48,8 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("SHAPE_MANIPULATOR: extendIndices(indices.size() = {}, start = {}, end = {}, extension = {})", indices.size(), start, end, extension);
 	}
 
-	void ShapeManipulator::calculateNormals(std::vector<float>& vertices, const std::vector<uint32_t>& indices, const int32_t stride) {
+	/*
+	void ShapeManipulator::calculateNormals(std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices, const int32_t stride) {
 		MAR_CORE_ASSERT(indices.size() % 3 == 0, "SHAPEMANIPULATOR: indices.size() is not divisible by 3!!!");
 
 		GRAPHICS_TRACE("SHAPE_MANIPULATOR: going to calculate vertex normals");
@@ -79,6 +80,7 @@ namespace mar::graphics {
 
 		GRAPHICS_INFO("SHAPE_MANIPULATOR: calculated vertex normals");
 	}
+	*/
 
 
 }

@@ -28,18 +28,18 @@
 namespace mar::graphics {
 
 
-    std::vector<float> MeshCreator::Cube::getVertices() {
+    std::vector<Vertex> MeshCreator::Cube::getVertices() {
         return {
-            //  front (x, y, z)		// LightNormal			// Texture		// ShapeIndex
-            -1.0f, -1.0f,  1.0f,	-1.0f, -1.0f,  2.0f,		0.0f, 0.0f,		0.0f, // 0
-             1.0f, -1.0f,  1.0f,	 2.0f, -2.0f,  1.0f,		1.0f, 0.0f,		0.0f, // 1
-             1.0f,  1.0f,  1.0f,	 1.0f,  1.0f,  2.0f,		1.0f, 1.0f,		0.0f, // 2
-            -1.0f,  1.0f,  1.0f,	-2.0f,  2.0f,  1.0f,		0.0f, 1.0f,		0.0f, // 3
-            //  back 							
-            -1.0f, -1.0f, -1.0f,	-2.0f, -2.0f, -1.0f,		0.0f, 0.0f,		0.0f, // 4
-             1.0f, -1.0f, -1.0f,	 1.0f, -1.0f, -2.0f,		1.0f, 0.0f,		0.0f, // 5
-             1.0f,  1.0f, -1.0f,	 2.0f,  2.0f, -1.0f,		1.0f, 1.0f,		0.0f, // 6
-            -1.0f,  1.0f, -1.0f,	-1.0f,  1.0f, -2.0f,		0.0f, 1.0f,		0.0f  // 7
+            //  front (x, y, z)		    // LightNormal			    // Texture		    // ShapeIndex
+            { { -1.0f, -1.0f,  1.0f },	{ -1.0f, -1.0f,  2.0f },	{ 0.0f, 0.0f },		0.0f }, // 0
+            { {  1.0f, -1.0f,  1.0f },	{  2.0f, -2.0f,  1.0f },	{ 1.0f, 0.0f },		0.0f }, // 1
+            { {  1.0f,  1.0f,  1.0f },	{  1.0f,  1.0f,  2.0f },	{ 1.0f, 1.0f },		0.0f }, // 2
+            { { -1.0f,  1.0f,  1.0f },	{ -2.0f,  2.0f,  1.0f },	{ 0.0f, 1.0f },		0.0f }, // 3
+            //  back 				 	                                                        
+            { { -1.0f, -1.0f, -1.0f },	{ -2.0f, -2.0f, -1.0f },	{ 0.0f, 0.0f },		0.0f }, // 4
+            { {  1.0f, -1.0f, -1.0f },	{  1.0f, -1.0f, -2.0f },	{ 1.0f, 0.0f },		0.0f }, // 5
+            { {  1.0f,  1.0f, -1.0f },	{  2.0f,  2.0f, -1.0f },	{ 1.0f, 1.0f },		0.0f }, // 6
+            { { -1.0f,  1.0f, -1.0f },	{ -1.0f,  1.0f, -2.0f },	{ 0.0f, 1.0f },		0.0f }  // 7
         };
     }
     
@@ -57,18 +57,18 @@ namespace mar::graphics {
         };
     }
     
-    std::vector<float> MeshCreator::Wall::getVertices() {
+    std::vector<Vertex> MeshCreator::Wall::getVertices() {
         return {
-            //  front (x, y, z)			// LightNormal			// Texture		// ShapeIndex
-            -0.2f, -1.0f,  10.0f,		-1.f, -1.f,  3.f,		0.0f, 0.0f,		0.0f, // 0
-             0.2f, -1.0f,  10.0f,		 2.f, -2.f,  2.f,		0.0f, 0.0f,		0.0f, // 1
-             0.2f,  5.0f,  10.0f,		 1.f,  1.f,  3.f,		1.0f, 0.0f,		0.0f, // 2
-            -0.2f,  5.0f,  10.0f,		-2.f,  2.f,  2.f,		1.0f, 0.0f,		0.0f, // 3
-            //  back 								
-            -0.2f, -1.0f, -10.0f,		-2.f, -2.f,  0.f,		0.0f, 1.0f,		0.0f, // 4
-             0.2f, -1.0f, -10.0f,		 1.f, -1.f, -1.f,		0.0f, 1.0f,		0.0f, // 5
-             0.2f,  5.0f, -10.0f,		 2.f,  2.f,  0.f,		1.0f, 1.0f,		0.0f, // 6
-            -0.2f,  5.0f, -10.0f,		-1.f,  1.f, -1.f,		1.0f, 1.0f,		0.0f  // 7
+            //  front (x, y, z)			    // LightNormal			    // Texture		    // ShapeIndex
+            { { -0.2f, -1.0f,  10.0f },		{ -1.f, -1.f,  3.f },		{ 0.0f, 0.0f },		0.0f }, // 0
+            { {  0.2f, -1.0f,  10.0f },		{  2.f, -2.f,  2.f },		{ 0.0f, 0.0f },		0.0f }, // 1
+            { {  0.2f,  5.0f,  10.0f },		{  1.f,  1.f,  3.f },		{ 1.0f, 0.0f },		0.0f }, // 2
+            { { -0.2f,  5.0f,  10.0f },		{ -2.f,  2.f,  2.f },		{ 1.0f, 0.0f },		0.0f }, // 3
+            //  back 			 					                                             
+            { { -0.2f, -1.0f, -10.0f },		{ -2.f, -2.f,  0.f },		{ 0.0f, 1.0f },		0.0f }, // 4
+            { {  0.2f, -1.0f, -10.0f },		{  1.f, -1.f, -1.f },		{ 0.0f, 1.0f },		0.0f }, // 5
+            { {  0.2f,  5.0f, -10.0f },		{  2.f,  2.f,  0.f },		{ 1.0f, 1.0f },		0.0f }, // 6
+            { { -0.2f,  5.0f, -10.0f },		{ -1.f,  1.f, -1.f },		{ 1.0f, 1.0f },		0.0f }  // 7
         };
     }
     
@@ -86,13 +86,13 @@ namespace mar::graphics {
         };
     }
     
-    std::vector<float> MeshCreator::Surface::getVertices() {
+    std::vector<Vertex> MeshCreator::Surface::getVertices() {
         return {
-            // (x, y, z)			// LightNormal			// TextureCoords	// ShapeIndex
-            -15.0f, -1.0f,  15.0f,	0.f, 2.f, 1.f,		0.0f, 0.0f,			0.0f, // 0
-             15.0f, -1.0f,  15.0f,	0.f, 1.f, 1.f,		0.0f, 1.0f,			0.0f, // 1
-             15.0f, -1.0f, -15.0f,	0.f, 2.f, 1.f,		1.0f, 1.0f,			0.0f, // 2
-            -15.0f, -1.0f, -15.0f,	0.f, 1.f, 1.f,		1.0f, 0.0f,			0.0f  // 3
+            // (x, y, z)			        // LightNormal			// TextureCoords	    // ShapeIndex
+            { { -15.0f, -1.0f,  15.0f },	{ 0.f, 2.f, 1.f },		{ 0.0f, 0.0f },			0.0f }, // 0
+            { {  15.0f, -1.0f,  15.0f },	{ 0.f, 1.f, 1.f },		{ 0.0f, 1.0f },			0.0f }, // 1
+            { {  15.0f, -1.0f, -15.0f },	{ 0.f, 2.f, 1.f },		{ 1.0f, 1.0f },			0.0f }, // 2
+            { { -15.0f, -1.0f, -15.0f },	{ 0.f, 1.f, 1.f },		{ 1.0f, 0.0f },			0.0f }  // 3
         };
     }
     
@@ -103,14 +103,14 @@ namespace mar::graphics {
         };
     }
     
-    std::vector<float> MeshCreator::Pyramid::getVertices() {
+    std::vector<Vertex> MeshCreator::Pyramid::getVertices() {
         return {
-            // (x, y, z)			// LightNormal			// TextureCoords // ShapeIndex
-            -1.0f, -1.0f,  1.0f,	-0.894427f, 2.89443f, 1.89443f,		0.0f, 0.0f,		 0.0f,
-             1.0f, -1.0f,  1.0f,	 0.894427f, 1.89443f, 1.89443f,		0.0f, 1.0f,		 0.0f,
-             1.0f, -1.0f, -1.0f,	 0.894427f, 2.89443f, 0.105573f,	0.0f, 0.0f,		 0.0f,
-            -1.0f, -1.0f, -1.0f,	-0.894427f, 1.89443f, 0.105573f,	0.0f, 1.0f,		 0.0f,
-             0.0f,  1.0f,  0.0f,	 0.f,		1.78885f, 1.f,			0.5f, 0.5f,		 0.0f
+            // (x, y, z)			    // LightNormal			                // TextureCoords     // ShapeIndex
+            { {-1.0f, -1.0f,  1.0f},	{-0.894427f, 2.89443f, 1.89443f  },		{ 0.0f, 0.0f },		 0.0f },
+            { { 1.0f, -1.0f,  1.0f},	{ 0.894427f, 1.89443f, 1.89443f  },		{ 0.0f, 1.0f },		 0.0f },
+            { { 1.0f, -1.0f, -1.0f},	{ 0.894427f, 2.89443f, 0.105573f },	    { 0.0f, 0.0f },		 0.0f },
+            { {-1.0f, -1.0f, -1.0f},	{-0.894427f, 1.89443f, 0.105573f },	    { 0.0f, 1.0f },		 0.0f },
+            { { 0.0f,  1.0f,  0.0f},	{ 0.f,		1.78885f, 1.f        },		{ 0.5f, 0.5f },		 0.0f }
         };
     }
     
@@ -144,15 +144,12 @@ namespace mar::graphics {
                 }
     
                 for (size_t j = 0; j < curMesh.Vertices.size(); j++) {
-                    renderable.vertices.push_back(curMesh.Vertices[j].Position.X);
-                    renderable.vertices.push_back(curMesh.Vertices[j].Position.Y);
-                    renderable.vertices.push_back(curMesh.Vertices[j].Position.Z);
-                    renderable.vertices.push_back(curMesh.Vertices[j].Normal.X);
-                    renderable.vertices.push_back(curMesh.Vertices[j].Normal.Y);
-                    renderable.vertices.push_back(curMesh.Vertices[j].Normal.Z);
-                    renderable.vertices.push_back(curMesh.Vertices[j].TextureCoordinate.X);
-                    renderable.vertices.push_back(curMesh.Vertices[j].TextureCoordinate.Y);
-                    renderable.vertices.push_back(0.0f);
+                    renderable.vertices.push_back(Vertex{
+                        {curMesh.Vertices[j].Position.X, curMesh.Vertices[j].Position.Y, curMesh.Vertices[j].Position.Z},
+                        {curMesh.Vertices[j].Normal.X, curMesh.Vertices[j].Normal.Y, curMesh.Vertices[j].Normal.Z},
+                        {curMesh.Vertices[j].TextureCoordinate.X, curMesh.Vertices[j].TextureCoordinate.Y},
+                        {0.0f}
+                    });
                 }
     
                 renderable.indices = curMesh.Indices;

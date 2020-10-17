@@ -24,6 +24,7 @@
 
 #include "../../../mar.h"
 #include "../../ecs/Components/LightComponents.h"
+#include "../Mesh/Vertex.h"
 
 
 namespace mar::graphics {
@@ -33,12 +34,13 @@ namespace mar::graphics {
 	typedef std::pair<float, std::string> TexturePair;
 	typedef std::pair<maths::vec3, ecs::LightComponent> LightPair;
 
-	typedef std::vector<float> FloatVector;
-	typedef std::vector<uint32_t> UintVector;
+	typedef std::vector<Vertex> VertexVector;
+	typedef std::vector<uint32_t> IndicesVector;
 	typedef std::vector<maths::mat4> Mat4Vector;
 	typedef std::vector<ColorPair> ColorVector;
 	typedef std::vector<TexturePair> TextureVector;
 	typedef std::vector<LightPair> LightVector;
+	typedef std::vector<float> FloatVector;
 
 
 	class RenderContainer {
@@ -53,8 +55,8 @@ namespace mar::graphics {
 
 		// ---- GETTERS ---- //
 
-		const FloatVector& getVertices() const { return m_vertices; }
-		const UintVector& getIndices() const { return m_indices; }
+		const VertexVector& getVertices() const { return m_vertices; }
+		const IndicesVector& getIndices() const { return m_indices; }
 		const Mat4Vector& getTransforms() const { return m_transforms; }
 		const ColorVector& getColors() const { return m_colors; }
 		const TextureVector& getTexture2D() const { return m_tex2D; }
@@ -64,8 +66,8 @@ namespace mar::graphics {
 
 	private:
 
-		FloatVector m_vertices;
-		UintVector m_indices;
+		VertexVector m_vertices;
+		IndicesVector m_indices;
 		float m_shapeID{ 0.f };
 		uint32_t m_indicesMax{ 0 };
 		static const uint32_t m_stride{ 3 + 3 + 2 + 1 };
