@@ -301,7 +301,7 @@ namespace mar::editor {
 				return;
 			}
 
-		ImGui::Text("Type: %s", renderable.id.c_str());
+		ImGui::Text("Type: %s", renderable.name.c_str());
 
 		static bool color_texture_AND;
 		color_texture_AND = !currentEntity->hasComponent<ecs::ColorComponent>() 
@@ -575,7 +575,7 @@ namespace mar::editor {
 	template<typename T>
 	bool GUI_EntityPanel::Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) {
 		if (ImGui::Button(buttonName)) {
-			renderable.id = T::getID();
+			renderable.name = T::getID();
 			renderable.vertices = T::getVertices();
 			renderable.indices = T::getIndices();
 

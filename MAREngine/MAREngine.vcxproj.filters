@@ -117,9 +117,6 @@
     <ClInclude Include="src\mar_logging.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Mesh\ShapeManipulator.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -432,9 +429,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\graphics\Mesh\ShapeManipulator.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\scripting\PythonScript.cpp">

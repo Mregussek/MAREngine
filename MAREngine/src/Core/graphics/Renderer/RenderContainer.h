@@ -30,8 +30,8 @@
 namespace mar::graphics {
 
 
-	typedef std::pair<float, maths::vec3> ColorPair;
-	typedef std::pair<float, std::string> TexturePair;
+	typedef std::pair<int32_t, maths::vec3> ColorPair;
+	typedef std::pair<int32_t, std::string> TexturePair;
 	typedef std::pair<maths::vec3, ecs::LightComponent> LightPair;
 
 	typedef std::vector<Vertex> VertexVector;
@@ -63,6 +63,8 @@ namespace mar::graphics {
 		const TextureVector& getTextureCubemap() const { return m_cubes; }
 		const LightVector& getLights() const { return m_lights; }
 		const FloatVector& getSamplerTypes() const { return m_samplerTypes; }
+
+		static uint32_t getStride() { return m_stride; }
 
 	private:
 

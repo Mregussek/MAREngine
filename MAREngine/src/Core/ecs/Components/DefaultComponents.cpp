@@ -38,7 +38,7 @@ namespace mar::ecs {
 		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent!");
 	}
 
-	maths::mat4 TransformComponent::calculate(maths::vec3& center, maths::vec3& angles, maths::vec3& scale) {
+	maths::mat4 TransformComponent::calculate(const maths::vec3& center, const maths::vec3& angles, const maths::vec3& scale) {
 		using namespace maths;
 
 		return	mat4::translation(center) *

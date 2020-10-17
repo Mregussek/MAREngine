@@ -201,22 +201,22 @@ namespace mar::editor {
 					entity.getComponent<ecs::RenderableComponent>();
 
 				if (line.find("Cube") != std::string::npos) {
-					ren.id = "Cube";
+					ren.name = "Cube";
 					ren.vertices = graphics::MeshCreator::Cube::getVertices();
 					ren.indices = graphics::MeshCreator::Cube::getIndices();
 				}
 				else if (line.find("Surface") != std::string::npos) {
-					ren.id = "Surface";
+					ren.name = "Surface";
 					ren.vertices = graphics::MeshCreator::Surface::getVertices();
 					ren.indices = graphics::MeshCreator::Surface::getIndices();
 				}
 				else if (line.find("Wall") != std::string::npos) {
-					ren.id = "Wall";
+					ren.name = "Wall";
 					ren.vertices = graphics::MeshCreator::Wall::getVertices();
 					ren.indices = graphics::MeshCreator::Wall::getIndices();
 				}
 				else if (line.find("Pyramid") != std::string::npos) {
-					ren.id = "Pyramid";
+					ren.name = "Pyramid";
 					ren.vertices = graphics::MeshCreator::Pyramid::getVertices();
 					ren.indices = graphics::MeshCreator::Pyramid::getIndices();
 				}

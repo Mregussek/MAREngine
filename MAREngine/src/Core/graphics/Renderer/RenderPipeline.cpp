@@ -21,7 +21,6 @@
 #include "RenderPipeline.h"
 #include "RenderCamera.h"
 #include "../GraphicsLogs.h"
-#include "../Mesh/ShapeManipulator.h"
 #include "../../ecs/Entity/Entity.h"
 
 
@@ -56,7 +55,7 @@ namespace mar::graphics {
 
 		using namespace ecs;
 
-		auto& tran = entity.getComponent<TransformComponent>();
+		const auto& tran = entity.getComponent<TransformComponent>();
 		auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
 		if (entity.hasComponent<LightComponent>()) {
@@ -70,19 +69,22 @@ namespace mar::graphics {
 			auto& renderable = entity.getComponent<RenderableComponent>();
 
 			setAvailableContainerRenderable(rpc, renderable.vertices.size(), renderable.indices.size());
-			rpc.transform_index = submitRenderable(renderable, tran);
+			const size_t index = submitRenderable(renderable, tran);
+
+			renderable.shaderID = index;
+			rpc.transform_index = index;
 
 			if (entity.hasComponent<ColorComponent>()) {
 				const auto& color = entity.getComponent<ColorComponent>();
-				rpc.color_index = submitColor(renderable.shader_id, color);
+				rpc.color_index = submitColor((int32_t)renderable.shaderID, color);
 			}
 			else if (entity.hasComponent<Texture2DComponent>()) {
 				const auto& tex = entity.getComponent<Texture2DComponent>();
-				rpc.color_index = submitTexture2D(renderable.shader_id, tex);
+				rpc.color_index = submitTexture2D((int32_t)renderable.shaderID, tex);
 			}
 			else if (entity.hasComponent<TextureCubemapComponent>()) {
 				const auto& cube = entity.getComponent<TextureCubemapComponent>();
-				rpc.color_index = submitCubemap(renderable.shader_id, cube);
+				rpc.color_index = submitCubemap((int32_t)renderable.shaderID, cube);
 			}
 		}
 
@@ -136,37 +138,49 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container (for light), current size {}", m_containers.size());
 	}
 
-	size_t RenderPipeline::submitRenderable(ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform) {
+	size_t RenderPipeline::submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform) {
 		GRAPHICS_INFO("RENDER_PIPELINE: submitting renderable component");
-		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 
-		{
-			// TODO: make it similar to extendIndices
-			ShapeManipulator::extendShapeID(renderable.vertices, availableContainer->m_stride, availableContainer->m_shapeID);
-			availableContainer->m_vertices.insert(availableContainer->m_vertices.end(), renderable.vertices.begin(), renderable.vertices.end());
+		auto& indicesMax = m_containers[m_availableContainerIndex].m_indicesMax;
+		auto& shapeID = m_containers[m_availableContainerIndex].m_shapeID;
+		auto& transforms = m_containers[m_availableContainerIndex].m_transforms;
+
+		{ // set shapeID on every vertex for batch renderer
+			auto& vertices = m_containers[m_availableContainerIndex].m_vertices;
+
+			vertices.insert(vertices.end(), renderable.vertices.begin(), renderable.vertices.end());
+			auto itBegin = vertices.end() - renderable.vertices.size();
+			auto itEnd = vertices.end();
+			std::for_each(itBegin, itEnd, [newShapeID = shapeID](Vertex& vertex) {
+				vertex.shapeID = newShapeID;
+			});
 		}
 
-		{
-			const uint32_t startExtensionIndices = availableContainer->m_indices.size();
-			const uint32_t endExtensionIndices = startExtensionIndices + renderable.indices.size();
-			availableContainer->m_indices.insert(availableContainer->m_indices.end(), renderable.indices.begin(), renderable.indices.end());
-			ShapeManipulator::extendIndices(availableContainer->m_indices, startExtensionIndices, endExtensionIndices, availableContainer->m_indicesMax);
+		{ // increase indices for every vertex (batch renderer)
+			auto& indices = m_containers[m_availableContainerIndex].m_indices;
+
+			indices.insert(indices.end(), renderable.indices.begin(), renderable.indices.end());
+			auto itBegin = indices.end() - renderable.indices.size();
+			auto itEnd = indices.end();
+			std::for_each(itBegin, itEnd, [extension = indicesMax](uint32_t& indice) {
+				indice += extension;
+			});
 		}
+
+		indicesMax += (renderable.vertices.size() * sizeof(Vertex) / 4) / RenderContainer::getStride();
+		shapeID++;
+
+		transforms.push_back(transform.transform);
+
+		MAR_CORE_ASSERT(transforms.size() == shapeID, "transform.size() and shapeID are not equal!");
+
+		GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shaderID = {}", 
+			renderable.name, renderable.vertices.size(), renderable.indices.size(), indicesMax, renderable.shaderID);
 		
-		renderable.shader_id = availableContainer->m_shapeID;
-
-		availableContainer->m_indicesMax += (renderable.vertices.size() * sizeof(Vertex) / 4) / availableContainer->m_stride;
-		availableContainer->m_shapeID++;
-
-		availableContainer->m_transforms.push_back(transform.transform);
-
-		GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shapeID = {}", 
-			renderable.id, availableContainer->m_vertices.size(), availableContainer->m_indices.size(), availableContainer->m_indicesMax, availableContainer->m_shapeID);
-		
-		return availableContainer->m_transforms.size() - 1;
+		return transforms.size() - 1;
 	}
 
-	size_t RenderPipeline::submitColor(float entityIndex, const ecs::ColorComponent& color) {
+	size_t RenderPipeline::submitColor(int32_t entityIndex, const ecs::ColorComponent& color) {
 		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 		availableContainer->m_colors.push_back({ entityIndex, color.texture });
 		availableContainer->m_samplerTypes.push_back(0.0f);
@@ -177,7 +191,7 @@ namespace mar::graphics {
 		return availableContainer->m_colors.size() - 1;
 	}
 
-	size_t RenderPipeline::submitTexture2D(float entityIndex, const ecs::Texture2DComponent& texture) {
+	size_t RenderPipeline::submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture) {
 		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 		availableContainer->m_tex2D.push_back({ entityIndex, texture.texture });
 		availableContainer->m_samplerTypes.push_back(1.0f);
@@ -188,7 +202,7 @@ namespace mar::graphics {
 		return availableContainer->m_tex2D.size() - 1;
 	}
 
-	size_t RenderPipeline::submitCubemap(float entityIndex, const ecs::TextureCubemapComponent& cubemap) {
+	size_t RenderPipeline::submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap) {
 		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 		availableContainer->m_cubes.push_back({ entityIndex, cubemap.texture });
 		availableContainer->m_samplerTypes.push_back(2.0f);

@@ -34,10 +34,7 @@ namespace mar::editor {
 
 
 	void GUI_Graphics::initialize() {
-		uint32_t max_vertex_count = 500000;
-		uint32_t max_index_count = 500000 / 2;
-
-		m_pipeline.initialize(max_vertex_count, max_index_count);
+		m_pipeline.initialize(settings::maxVerticesCount, settings::maxIndicesCount);
 		m_shader.initialize("resources/shaders/lineloops.shader.glsl");
 	}
 
@@ -47,18 +44,16 @@ namespace mar::editor {
 	}
 
 	void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
-		static size_t index;
-		static maths::vec3 scale;
-		index = (size_t)ren.shader_id;
-		scale = tran.scale + 0.05f;
-		maths::mat4 better_outline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
+		const size_t index = 0;
+		const maths::vec3 scale = tran.scale + 0.05f;
+		const maths::mat4 betterOutline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
 
 		m_pipeline.bind();
 		m_pipeline.update(ren.vertices, ren.indices);
 
 		m_shader.bind();
 		m_shader.setUniformMat4("u_MVP", Camera::getCameraData().getMVP());
-		m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], better_outline);
+		m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], betterOutline);
 		
 		platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 

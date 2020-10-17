@@ -136,11 +136,11 @@ namespace mar::graphics {
     
                 if (curMesh.MeshName.empty()) {
                     tag.tag = filename;
-                    renderable.id = filename;
+                    renderable.name = filename;
                 }
                 else {
                     tag.tag = curMesh.MeshName;
-                    renderable.id = curMesh.MeshName;
+                    renderable.name = curMesh.MeshName;
                 }
     
                 for (size_t j = 0; j < curMesh.Vertices.size(); j++) {

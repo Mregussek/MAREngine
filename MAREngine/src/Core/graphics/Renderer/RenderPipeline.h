@@ -73,10 +73,10 @@ namespace mar::graphics {
 		void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
 		void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
 
-		size_t submitRenderable(ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
-		size_t submitColor(float entityIndex, const ecs::ColorComponent& color);
-		size_t submitTexture2D(float entityIndex, const ecs::Texture2DComponent& texture);
-		size_t submitCubemap(float entityIndex, const ecs::TextureCubemapComponent& cubemap);
+		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
+		size_t submitColor(int32_t entityIndex, const ecs::ColorComponent& color);
+		size_t submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture);
+		size_t submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
 		static RenderPipeline* s_instance;

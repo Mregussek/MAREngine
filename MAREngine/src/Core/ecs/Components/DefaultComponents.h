@@ -43,23 +43,23 @@ namespace mar::ecs {
 	};
 
 	struct RenderableComponent {
-		std::string id{ "empty" };
-		float shader_id{ 0.f };
+		std::string name{ "empty" };
+		size_t shaderID{ 0 };
 		std::vector<graphics::Vertex> vertices;
 		std::vector<uint32_t> indices;
 
 		RenderableComponent() = default;
 		RenderableComponent(const RenderableComponent& ren) = default;
 		RenderableComponent(std::string i)
-			: id(std::move(i))
+			: name(std::move(i))
 		{}
 		RenderableComponent(std::string i, const std::vector<graphics::Vertex>& ver, const std::vector<uint32_t>& ind)
-			: id(std::move(i)),
+			: name(std::move(i)),
 			vertices(ver),
 			indices(ind)
 		{}
 
-		operator const std::string& () const { return id; }
+		operator const std::string& () const { return name; }
 		operator const std::vector<graphics::Vertex>& () const { return vertices; }
 		operator const std::vector<uint32_t>& () const { return indices; }
 	};
@@ -92,7 +92,7 @@ namespace mar::ecs {
 		operator const maths::mat4& () const { return transform; }
 
 		void recalculate();
-		static maths::mat4 calculate(maths::vec3& center, maths::vec3& angles, maths::vec3& scale);
+		static maths::mat4 calculate(const maths::vec3& center, const maths::vec3& angles, const maths::vec3& scale);
 	};
 
 
