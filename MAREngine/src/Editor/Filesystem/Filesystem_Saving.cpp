@@ -29,40 +29,43 @@ namespace mar::editor {
 
 
 	void Filesystem_Saving::saveScene(std::ofstream& ss, ecs::Scene* scene) {
-		auto& back = scene->getBackground();
+		const auto& back = scene->getBackground();
 		
 		ss << "\n#SceneStart\n";
 		ss << "#Scene_Name " << scene->getName() << "\n";
 		ss << "#Scene_Background " << back.x << " " << back.y << " " << back.z << "\n";
 
 		for (const auto& entity : scene->getEntities()) {
-			Filesystem_Saving::saveEntity(ss, entity);
+			saveEntity(ss, entity);
 		}
 
 		for (const auto& collection : scene->getCollections()) {
-			Filesystem_Saving::saveCollection(ss, collection);
+			saveCollection(ss, collection);
 		}
 
 		ss << "\n#SceneEnd\n";
 	}
 
 	void Filesystem_Saving::saveCollection(std::ofstream& ss, const ecs::EntityCollection& collection) {
-		auto& tag = collection.getComponent<ecs::TagComponent>();
+		const auto& tag = collection.getComponent<ecs::TagComponent>();
 
 		ss << "\n#EntityCollectionStart\n";
 
 		{ // Save OBJ file path, if user added it
-			if (collection.hasComponent<ecs::CollectionRenderableComponent>())
+			if (collection.hasComponent<ecs::CollectionRenderableComponent>()) {
 				ss << "#CollectionRenderableComponent " << collection.getComponent<ecs::CollectionRenderableComponent>().id << "\n";
+			}
 		}
 		
 		{ // Save entities that are in that collection
-			for (auto& entity : collection.getEntities())
+			const auto& entities = collection.getEntities();
+			std::for_each(entities.cbegin(), entities.cend(), [&ss](const ecs::Entity& entity) {
 				saveEntity(ss, entity);
+			});
 		}
 
 		{ // Save collection trasform component
-			auto& transform = collection.getComponent<ecs::TransformComponent>();
+			const auto& transform = collection.getComponent<ecs::TransformComponent>();
 			ss << "\n#CollectionTransformComponent Begin\n";
 			ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
 			ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";

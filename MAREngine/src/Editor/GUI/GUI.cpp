@@ -34,18 +34,18 @@
 namespace mar::editor {
 
 
-	void GUI::initialize(const char* glsl_version) {
+	void GUI::initialize(const char* glslVersion) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
 		ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().m_window.m_window, true);
-		ImGui_ImplOpenGL3_Init(glsl_version);
+		ImGui_ImplOpenGL3_Init(glslVersion);
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-		m_viewportFramebuffer.initialize(platforms::FrameBufferSpecification(800.f, 600.f));
+		m_viewportFramebuffer.initialize(800.f, 600.f);
 
 		GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
 
@@ -65,6 +65,20 @@ namespace mar::editor {
 		EDITOR_INFO("GUI: closed properly!");
 	}
 
+	void GUI::submit(ecs::SceneManager* scene) {
+		m_sceneManager = scene;
+		m_sceneManager->useEditorCamera = true;
+		m_entityPanel.setRenderCam(&m_sceneManager->getScene()->getRenderCamera());
+		m_mainMenuBar.setSceneManager(m_sceneManager);
+
+		EDITOR_INFO("GUI: scene has been submitted!");
+	}
+
+	void GUI::bind() const {
+		m_viewportFramebuffer.bind();
+		m_viewportFramebuffer.clear();
+	}
+
 	void GUI::display() {
 		prepareNewFrame();
 		updateFrame();
@@ -81,34 +95,36 @@ namespace mar::editor {
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 
-		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		const ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-		if (s_fullscreenPersisant) {
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		if (m_fullscreenPersisant) {
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->GetWorkPos());
 			ImGui::SetNextWindowSize(viewport->GetWorkSize());
 			ImGui::SetNextWindowViewport(viewport->ID);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+			windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
 
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
+		if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
+			windowFlags |= ImGuiWindowFlags_NoBackground;
+		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("MAREngineDockspace", &s_dockspaceOpen, window_flags);
+		ImGui::Begin("MAREngineDockspace", &m_dockspaceOpen, windowFlags);
 		ImGui::PopStyleVar();
 
-		if (s_fullscreenPersisant)
+		if (m_fullscreenPersisant) {
 			ImGui::PopStyleVar(2);
-
+		}
+			
 		ImGuiIO& io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
 			ImGuiID dockspace_id = ImGui::GetID("MARDockspace");
-			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspaceFlags);
 		}
 
 		EDITOR_TRACE("GUI: prepared frame (render, dockspace, other...)");
@@ -129,7 +145,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 	}
 
-	void GUI::endFrame() {
+	void GUI::endFrame() const {
 		ImGui::End();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -167,16 +183,12 @@ namespace mar::editor {
 			ImGui::EndMenuBar();
 		}
 
-		static uint32_t id;
+		const uint32_t id = m_viewportFramebuffer.getColorAttach();
 
-		auto& spec = m_viewportFramebuffer.getSpecification();
-		id = m_viewportFramebuffer.getColorAttach();
+		const ImVec2 size = ImGui::GetContentRegionAvail();
+		m_viewportFramebuffer.setSpecificationSize(size.x, size.y);
 
-		ImVec2 size = ImGui::GetContentRegionAvail();
-		spec.width = size.x;
-		spec.height = size.y;
-
-		ImGui::Image((void*)id, ImVec2{ spec.width, spec.height }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((ImTextureID)id, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();
 
@@ -188,35 +200,29 @@ namespace mar::editor {
 
 		ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
 
-		auto& scene_background = m_sceneManager->getScene()->getBackground();
+		auto& sceneBackground = m_sceneManager->getScene()->getBackground();
 
-		if (ImGui::ColorEdit3("Scene Background Color", maths::vec3::value_ptr_nonconst(scene_background))) {
-			auto& spec = m_viewportFramebuffer.getSpecification();
-			spec.backgroundColor = scene_background;
-			window::Window::getInstance().updateBackgroundColor(scene_background);
+		if (ImGui::ColorEdit3("Scene Background Color", maths::vec3::value_ptr_nonconst(sceneBackground))) {
+			m_viewportFramebuffer.setBackgroundColor(sceneBackground);
+			window::Window::getInstance().updateBackgroundColor(sceneBackground);
 		}
 
 		ImGui::End();
 	}
 
-	void GUI::submit(ecs::SceneManager* scene) {
-		m_sceneManager = scene;
-		m_sceneManager->useEditorCamera = true;
-		m_entityPanel.setRenderCam(&m_sceneManager->getScene()->getRenderCamera());
-		m_mainMenuBar.setSceneManager(m_sceneManager);
-
-		EDITOR_INFO("GUI: scene has been submitted!");
+	platforms::FramebufferOpenGL& GUI::getFramebuffer() { 
+		return m_viewportFramebuffer; 
 	}
 
-	const ecs::Entity& GUI::getCurrentEntity() {
+	const ecs::Entity& GUI::getCurrentEntity() const {
 		return m_entityPanel.getCurrentEntity();
 	}
 
-	const ecs::EntityCollection& GUI::getCurrentCollection() {
+	const ecs::EntityCollection& GUI::getCurrentCollection() const {
 		return m_collectionPanel.getCurrentCollection();
 	}
 
-	bool GUI::canDrawLines() {
+	bool GUI::canDrawLines() const {
 		return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; 
 	}
 

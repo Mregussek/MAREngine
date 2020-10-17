@@ -39,7 +39,7 @@ namespace mar::editor {
 
 
 	void GUI_Filesystem::SetOpenNewScene(const char* name) {
-		std::string scenesPath = engine::MAREngine::getEngine()->getProjectPath() + "/Scenes";
+		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
 		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 	}
@@ -57,7 +57,7 @@ namespace mar::editor {
 	}
 
 	void GUI_Filesystem::SetOpenSaveScene(const char* name) {
-		std::string scenesPath = engine::MAREngine::getEngine()->getProjectPath() + "/Scenes";
+		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
 		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 	}
@@ -66,7 +66,7 @@ namespace mar::editor {
 		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
-				std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
+				const std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
 				Filesystem::saveToFile(scene_to_save, filePathName.c_str());
 
 			}
@@ -76,7 +76,7 @@ namespace mar::editor {
 	}
 
 	void GUI_Filesystem::SetOpenLoadScene(const char* name) {
-		std::string scenesPath = engine::MAREngine::getEngine()->getProjectPath() + "/Scenes";
+		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
 		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 	}
@@ -100,7 +100,7 @@ namespace mar::editor {
 	}
 
 	void GUI_Filesystem::SetOpenLoadOBJfile(const char* name) {
-		std::string assetsPath = engine::MAREngine::getEngine()->getProjectPath() + "/Assets";
+		const auto& assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
 		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".obj", assetsPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".obj", ImVec4(0, 1, 0, 0.9f));
 	}
@@ -109,8 +109,8 @@ namespace mar::editor {
 		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
-				std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
-				std::string filename = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
+				const std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
+				const std::string filename = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
 
 				const auto& collection = scene->createCollection();
 				auto& tag = collection.getComponent<ecs::TagComponent>();

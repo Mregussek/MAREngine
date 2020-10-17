@@ -304,7 +304,7 @@
     <ClInclude Include="src\LayerStack\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Window\buttons_def.h" />
-    <ClInclude Include="src\Platform\OpenGL\FrameBufferOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\FramebufferOpenGL.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h" />
     <ClInclude Include="src\Editor\GUI\GUI.h" />
     <ClInclude Include="src\Editor\Camera\Camera.h" />
@@ -373,7 +373,7 @@
     <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
     <ClCompile Include="src\Platform\OpenGL\DrawingOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\Engine.cpp" />

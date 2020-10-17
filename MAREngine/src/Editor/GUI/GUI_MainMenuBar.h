@@ -30,15 +30,6 @@ namespace mar::editor {
 
 
 	class GUI_MainMenuBar {
-		bool m_newSceneWindow{ false };
-		bool m_loadSceneWindow{ false };
-		bool m_saveSceneWindow{ false };
-		bool m_loadOBJfileWindow{ false };
-		bool m_infoWindow{ false };
-		bool m_instructionWindow{ false };
-
-		ecs::SceneManager* m_sceneManager{ nullptr };
-
 	public:
 
 		GUI_MainMenuBar() = default;
@@ -49,6 +40,15 @@ namespace mar::editor {
 	private:
 
 		void display_mainMenuBar();
+
+		bool m_newSceneWindow{ false };
+		bool m_loadSceneWindow{ false };
+		bool m_saveSceneWindow{ false };
+		bool m_loadOBJfileWindow{ false };
+		bool m_infoWindow{ false };
+		bool m_instructionWindow{ false };
+
+		ecs::SceneManager* m_sceneManager{ nullptr };
 
 	};
 

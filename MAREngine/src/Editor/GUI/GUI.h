@@ -23,8 +23,8 @@
 
 
 #include "../../mar.h"
+#include "../../Platform/OpenGL/FramebufferOpenGL.h"
 #include "GUI_MainMenuBar.h"
-#include "../../Platform/OpenGL/FrameBufferOpenGL.h"
 #include "EntityPanels/GUI_EntityPanel.h"
 #include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "EntityPanels/GUI_SceneHierarchy.h"
@@ -36,6 +36,7 @@ namespace mar::editor {
 
 	class GUI {
 	public:
+
 		GUI() = default;
 
 		void initialize(const char* glsl_version);
@@ -43,10 +44,7 @@ namespace mar::editor {
 
 		void submit(ecs::SceneManager* scene);
 
-		void bind() {
-			m_viewportFramebuffer.bind();
-			m_viewportFramebuffer.clear();
-		}
+		void bind() const;
 
 		void display();
 
@@ -56,37 +54,37 @@ namespace mar::editor {
 		float getMouseViewportPosX() { return m_mouseViewportX; }
 		float getMouseViewportPosY() { return m_mouseViewportY; }
 		bool isViewportInputEnabled() { return m_enableViewportInput; }
-		platforms::FrameBufferOpenGL& getFramebuffer() { return m_viewportFramebuffer; }
-		const ecs::Entity& getCurrentEntity();
-		const ecs::EntityCollection& getCurrentCollection();
-		bool canDrawLines();
+		platforms::FramebufferOpenGL& getFramebuffer();
+		const ecs::Entity& getCurrentEntity() const;
+		const ecs::EntityCollection& getCurrentCollection() const;
+		bool canDrawLines() const;
 
 	private:
-		// --- DISPLAY --- //
+
 		void prepareNewFrame();
 		void updateFrame();
-		void endFrame();
+		void endFrame() const;
 
-		// --- EDITOR --- //
 		void Editor_ViewPort();
 		void Editor_Properties();
 
 	private:
-		// --- Storage for scenes
+
 		ecs::SceneManager* m_sceneManager;
-		// --- Viewport
-		platforms::FrameBufferOpenGL m_viewportFramebuffer;
+
+		platforms::FramebufferOpenGL m_viewportFramebuffer;
 		float m_mouseViewportX{ 0.f };
 		float m_mouseViewportY{ 0.f };
 		bool m_enableViewportInput{ false };
-		// --- MainMenuBar
+
 		GUI_MainMenuBar m_mainMenuBar;
 		GUI_EntityPanel m_entityPanel;
 		GUI_EntityCollectionPanel m_collectionPanel;
 		GUI_SceneHierarchy m_sceneHierarchyPanel;
-		// --- Dockspace
-		bool s_dockspaceOpen{ true };
-		bool s_fullscreenPersisant{ true };
+
+		bool m_dockspaceOpen{ true };
+		static const bool m_fullscreenPersisant{ true };
+
 	};
 
 

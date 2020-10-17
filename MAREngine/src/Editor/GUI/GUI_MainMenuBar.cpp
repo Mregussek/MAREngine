@@ -44,36 +44,36 @@ namespace mar::editor {
 		display_mainMenuBar();
 
 		{
-			const char* new_file = "New Scene";
+			const char* windowName = "New Scene";
 			if (m_newSceneWindow) {
-				GUI_Filesystem::SetOpenNewScene(new_file);
+				GUI_Filesystem::SetOpenNewScene(windowName);
 				m_newSceneWindow = false;
 			}
-			GUI_Filesystem::Filesystem_NewScene(new_file);
+			GUI_Filesystem::Filesystem_NewScene(windowName);
 		}
 		{
-			const char* open_file = "Open Scene";
+			const char* windowName = "Open Scene";
 			if (m_loadSceneWindow) {
-				GUI_Filesystem::SetOpenLoadScene(open_file);
+				GUI_Filesystem::SetOpenLoadScene(windowName);
 				m_loadSceneWindow = false;
 			}
-			GUI_Filesystem::Filesystem_LoadScene(open_file);
+			GUI_Filesystem::Filesystem_LoadScene(windowName);
 		}
 		{
-			const char* save_file = "Save Scene";
+			const char* windowName = "Save Scene";
 			if (m_saveSceneWindow) {
-				GUI_Filesystem::SetOpenSaveScene(save_file);
+				GUI_Filesystem::SetOpenSaveScene(windowName);
 				m_saveSceneWindow = false;
 			}
-			GUI_Filesystem::Filesystem_SaveScene(save_file, m_sceneManager->getScene());
+			GUI_Filesystem::Filesystem_SaveScene(windowName, m_sceneManager->getScene());
 		}
 		{
-			const char* load_obj = "OBJ Loader";
+			const char* windowName = "OBJ Loader";
 			if (m_loadOBJfileWindow) {
-				GUI_Filesystem::SetOpenLoadOBJfile(load_obj);
+				GUI_Filesystem::SetOpenLoadOBJfile(windowName);
 				m_loadOBJfileWindow = false;
 			}
-			GUI_Filesystem::Filesystem_LoadOBJfile(load_obj, m_sceneManager->getScene());
+			GUI_Filesystem::Filesystem_LoadOBJfile(windowName, m_sceneManager->getScene());
 		}
 		{
 			if (m_infoWindow) {
@@ -88,18 +88,9 @@ namespace mar::editor {
 	void GUI_MainMenuBar::display_mainMenuBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("Scene")) {
-				if (ImGui::MenuItem("New Scene")) {
-					m_newSceneWindow = true;
-				}
-
-				if (ImGui::MenuItem("Open Scene")) {
-					m_loadSceneWindow = true;
-				}
-
-				if (ImGui::MenuItem("Save Scene")) {
-					m_saveSceneWindow = true;
-				}
-
+				if (ImGui::MenuItem("New Scene")) { m_newSceneWindow = true; }
+				if (ImGui::MenuItem("Open Scene")) { m_loadSceneWindow = true; }
+				if (ImGui::MenuItem("Save Scene")) { m_saveSceneWindow = true; }
 				if (ImGui::MenuItem("Exit")) {
 					window::Window::getInstance().endRenderLoop();
 				}
@@ -108,9 +99,7 @@ namespace mar::editor {
 			}
 
 			if (ImGui::BeginMenu("Entities")) {
-				if (ImGui::MenuItem("Load external .obj file")) {
-					m_loadOBJfileWindow = true;
-				}
+				if (ImGui::MenuItem("Load external .obj file")) { m_loadOBJfileWindow = true; }
 
 				/*
 				if (GUI_EntityPanel::currentEntity) {

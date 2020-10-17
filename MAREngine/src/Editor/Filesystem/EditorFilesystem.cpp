@@ -29,22 +29,18 @@ namespace mar::editor {
 
 
 	void Filesystem::saveToFile(ecs::Scene* scene, const char* filename) {
-		EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", scene->getName(), filename);
+		const std::string name = scene->getName();
+
+		EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", name, filename);
 
 		std::ofstream ss(filename, std::ios::out | std::ios::trunc);
 
 		if (!ss.is_open()) {
-			EDITOR_ERROR("Cannot open file {} and save scene at {}!", scene->getName(), filename);
+			EDITOR_ERROR("Cannot open file {} and save scene at {}!", name, filename);
 			return;
 		}
 
-		std::string name = scene->getName();
-		if (name == "EmptyScene")
-			name = std::string(filename);
-
 		ss << "MAREngine scene file\n";
-
-		auto& back = scene->getBackground();
 
 		Filesystem_Saving::saveScene(ss, scene);
 
@@ -55,6 +51,7 @@ namespace mar::editor {
 		EDITOR_INFO("FILESYSTEM: going to load scene from: {}", filename);
 
 		std::ifstream file(filename);
+
 		if (!file.is_open()) {
 			if (filename == "BrandNewScene") {
 				return ecs::Scene::createEmptyScene("BrandNewScene");
@@ -98,6 +95,7 @@ namespace mar::editor {
 		EDITOR_INFO("FILESYSTEM: going to load python script from: {}", filename);
 
 		std::ifstream file(filename);
+
 		if (!file.is_open()) {
 			EDITOR_ERROR("Cannot open script file {}, returning empty string!", filename);
 			return "";

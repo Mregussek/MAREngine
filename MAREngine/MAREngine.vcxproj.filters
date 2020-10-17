@@ -99,9 +99,6 @@
     <ClInclude Include="src\Window\WindowLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\FrameBufferOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -381,6 +378,9 @@
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\FramebufferOpenGL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -420,9 +420,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\FrameBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp">
@@ -576,6 +573,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Renderer\RenderStatistics.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

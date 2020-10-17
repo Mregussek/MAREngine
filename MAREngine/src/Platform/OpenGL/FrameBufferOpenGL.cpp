@@ -26,8 +26,8 @@ namespace mar::platforms {
 
 	// ---- PUBLIC METHODS ---- //
 
-	void FrameBufferOpenGL::initialize(const FrameBufferSpecification& spec) {
-		m_specification = spec;
+	void FramebufferOpenGL::initialize(float width, float height) {
+		m_specification = FramebufferSpecification(width, height);
 
 		createColorAttachment();
 		createDepthAttachment();
@@ -37,7 +37,7 @@ namespace mar::platforms {
 		unbind();
 	}
 
-	void FrameBufferOpenGL::close() {
+	void FramebufferOpenGL::close() {
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: deleting {}!", m_id);
 
 		PLATFORM_GL_FUNC(glDeleteFramebuffers(1, &m_id));
@@ -45,19 +45,19 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC(glDeleteTextures(1, &m_depthAttanchment));
 	}
 
-	void FrameBufferOpenGL::bind() const {
+	void FramebufferOpenGL::bind() const {
 		PLATFORM_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, m_id) );
 
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: Binding - {}!", m_id);
 	}
 
-	void FrameBufferOpenGL::unbind() const {
+	void FramebufferOpenGL::unbind() const {
 		PLATFORM_GL_FUNC( glBindFramebuffer(GL_FRAMEBUFFER, 0) );
 
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: Unbinding FBO");
 	}
 
-	void FrameBufferOpenGL::clear() const {
+	void FramebufferOpenGL::clear() const {
 		PLATFORM_GL_FUNC( glViewport(0, 0, (const size_t)m_specification.width, (const size_t)m_specification.height) );
 		PLATFORM_GL_FUNC( glClearColor(m_specification.backgroundColor.x, m_specification.backgroundColor.y, m_specification.backgroundColor.z, 1.0f) );
 		PLATFORM_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) );
@@ -65,9 +65,14 @@ namespace mar::platforms {
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: clearing!");
 	}
 
+	void FramebufferOpenGL::setSpecificationSize(float width, float height) {
+		m_specification.width = width;
+		m_specification.height = height;
+	}
+
 	// ---- PRIVATE METHODS ---- //
 
-	void FrameBufferOpenGL::createColorAttachment() {
+	void FramebufferOpenGL::createColorAttachment() {
 		PLATFORM_GL_FUNC(glGenTextures(1, &m_colorAttachment));
 		PLATFORM_GL_FUNC(glBindTexture(GL_TEXTURE_2D, m_colorAttachment));
 		PLATFORM_GL_FUNC(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_specification.width, (size_t)m_specification.height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0));
@@ -77,7 +82,7 @@ namespace mar::platforms {
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: created color attachment {}", m_colorAttachment);
 	}
 
-	void FrameBufferOpenGL::createDepthAttachment() {
+	void FramebufferOpenGL::createDepthAttachment() {
 		PLATFORM_GL_FUNC(glGenRenderbuffers(1, &m_depthAttanchment));
 		PLATFORM_GL_FUNC(glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttanchment));
 		PLATFORM_GL_FUNC(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (size_t)m_specification.width, (size_t)m_specification.height));
@@ -86,7 +91,7 @@ namespace mar::platforms {
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: created depth attachment {}", m_depthAttanchment);
 	}
 
-	void FrameBufferOpenGL::createFramebuffer() {
+	void FramebufferOpenGL::createFramebuffer() {
 		PLATFORM_GL_FUNC(glGenFramebuffers(1, &m_id));
 		PLATFORM_GL_FUNC(glBindFramebuffer(GL_FRAMEBUFFER, m_id));
 		PLATFORM_GL_FUNC(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorAttachment, 0));
@@ -95,7 +100,7 @@ namespace mar::platforms {
 		PLATFORM_TRACE("FRAMEBUFFER_OPENGL: created framebuffer {} with color {} depth {}", m_id, m_colorAttachment, m_depthAttanchment);
 	}
 
-	void FrameBufferOpenGL::checkCreationStatus() {
+	void FramebufferOpenGL::checkCreationStatus() {
 		auto framebuffer_status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
 		if (framebuffer_status != GL_FRAMEBUFFER_COMPLETE) {
