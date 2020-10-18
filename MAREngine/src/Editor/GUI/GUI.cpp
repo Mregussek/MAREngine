@@ -48,6 +48,7 @@ namespace mar::editor {
 
 		m_textEditor.initialize();
 
+		m_mainMenuBar.initialize();
 		m_entityPanel.initialize();
 		m_collectionPanel.initialize();
 

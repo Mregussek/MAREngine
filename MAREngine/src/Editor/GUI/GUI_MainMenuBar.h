@@ -36,6 +36,8 @@ namespace mar::editor {
 		GUI_MainMenuBar() = default;
 
 		void setSceneManager(ecs::SceneManager* manager);
+		
+		void initialize();
 		void display();
 
 	private:

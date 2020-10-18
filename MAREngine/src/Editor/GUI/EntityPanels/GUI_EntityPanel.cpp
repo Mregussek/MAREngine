@@ -261,6 +261,9 @@ namespace mar::editor {
 			return;
 		}
 
+		const auto& script = currentEntity->getComponent<ecs::ScriptComponent>();
+		ImGui::Text("Current script: %s", script.script);
+
 		if (ImGui::Button("Create new script")) { GUI_TextEditor::Instance()->setCreatingNewScript(); }
 		
 		ImGui::SameLine();
@@ -269,8 +272,8 @@ namespace mar::editor {
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Assign script to entity")) { GUI_Filesystem::openAssigningScriptWindow(); }
-		GUI_Filesystem::displayAssigningScriptWindow(currentEntity);
+		if (ImGui::Button("Assign script to entity")) { GUI_Filesystem::Instance()->openAssigningScriptWindow(); }
+		GUI_Filesystem::Instance()->displayAssigningScriptWindow(currentEntity);
 		
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}

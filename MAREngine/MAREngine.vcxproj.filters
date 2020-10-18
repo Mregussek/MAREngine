@@ -297,12 +297,6 @@
     <ClInclude Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\ImGuiFileDialog\ImGuiFileDialog\ImGuiFileDialog.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="3rd_party\ImGuiFileDialog\ImGuiFileDialog\ImGuiFileDialogConfig.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -379,6 +373,12 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\FramebufferOpenGL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\Dirent\dirent.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -506,9 +506,6 @@
     <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="3rd_party\ImGuiFileDialog\ImGuiFileDialog\ImGuiFileDialog.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -576,6 +573,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

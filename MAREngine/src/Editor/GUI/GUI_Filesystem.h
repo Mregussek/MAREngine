@@ -32,6 +32,10 @@ namespace mar::editor {
 	class GUI_Filesystem {
 	public:
 
+		static GUI_Filesystem* Instance() { return s_instance; }
+
+		void initialize();
+
 		void openNewSceneWindow();
 		void displayNewSceneWindow();
 
@@ -44,15 +48,20 @@ namespace mar::editor {
 		void openLoadOBJWindow();
 		void displayLoadOBJWindow(ecs::Scene* scene);
 
-		static void openAssigningScriptWindow();
-		static void displayAssigningScriptWindow(const ecs::Entity* entity);
+		void openAssigningScriptWindow();
+		void displayAssigningScriptWindow(const ecs::Entity* entity);
 
 	private:
+
+		imgui_addons::ImGuiFileBrowser m_fileDialog;
+
+		static GUI_Filesystem* s_instance;
 
 		const char* m_nameNewScene{ "New Scene" };
 		const char* m_nameOpenScene{ "Open Scene" };
 		const char* m_nameSaveScene{ "Save Scene" };
 		const char* m_nameLoadOBJ{ "Load .obj file" };
+		const char* m_nameAssignScript{ "Assign Script" };
 
 	};
 

@@ -40,6 +40,10 @@
 namespace mar::editor {
 
 
+	void GUI_MainMenuBar::initialize() {
+		m_guiFilesystem.initialize();
+	}
+
 	void GUI_MainMenuBar::display() {
 		display_mainMenuBar();
 

@@ -34,12 +34,13 @@ namespace mar::editor {
 
 
 	void ProjectSelectionFilesystem::openWindowNewProject(const char* name) {
-		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
+		//igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
 	}
 
 	void ProjectSelectionFilesystem::windowNewProject(const char* name) {
 		static bool should_popup_be_opened = false;
 
+		/*
 		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 				projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
@@ -49,6 +50,7 @@ namespace mar::editor {
 
 			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 		}
+		*/
 
 		if (should_popup_be_opened) {
 			ImGui::Begin("Select New Project Name");
@@ -85,10 +87,11 @@ namespace mar::editor {
 	}
 
 	void ProjectSelectionFilesystem::openWindowOpenProject(const char* name) {
-		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
+		//igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
 	}
 
 	void ProjectSelectionFilesystem::windowOpenProject(const char* name) {
+		/*
 		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 				projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
@@ -98,6 +101,7 @@ namespace mar::editor {
 
 			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 		}
+		*/
 	}
 
 	void ProjectSelectionFilesystem::checkState() {

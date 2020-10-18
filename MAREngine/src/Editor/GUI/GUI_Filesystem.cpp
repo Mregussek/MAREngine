@@ -38,102 +38,78 @@
 namespace mar::editor {
 
 
+	GUI_Filesystem* GUI_Filesystem::s_instance{ nullptr };
+
+
+	void GUI_Filesystem::initialize() {
+		s_instance = this;
+	}
+
 	void GUI_Filesystem::openNewSceneWindow() {
-		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameNewScene, ".marscene", scenesPath);
-		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
+		ImGui::OpenPopup(m_nameNewScene);
 	}
 
 	void GUI_Filesystem::displayNewSceneWindow() {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameNewScene)) {
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-
-
-
-			}
-
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameNewScene);
+		if (m_fileDialog.showFileDialog(m_nameNewScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {
+			std::cout << m_fileDialog.selected_fn << "\n";
+			std::cout << m_fileDialog.selected_path << "\n";
+			std::cout << m_fileDialog.ext << "\n";
 		}
 	}
 
 	void GUI_Filesystem::openSaveSceneWindow() {
-		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameSaveScene, ".marscene", scenesPath);
-		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
+		ImGui::OpenPopup(m_nameSaveScene);
 	}
 
 	void GUI_Filesystem::displaySaveSceneWindow(ecs::Scene* scene) {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameSaveScene)) {
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-
-				const std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
-				Filesystem::saveToFile(scene, filePathName.c_str());
-
-			}
-
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameSaveScene);
+		if (m_fileDialog.showFileDialog(m_nameSaveScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {
+			Filesystem::saveToFile(scene, m_fileDialog.selected_path.c_str());
 		}
 	}
 
 	void GUI_Filesystem::openLoadSceneWindow() {
-		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameOpenScene, ".marscene", scenesPath);
-		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
+		ImGui::OpenPopup(m_nameOpenScene);
 	}
 
 	void GUI_Filesystem::displayLoadSceneWindow() {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameOpenScene)) {
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
+		if (m_fileDialog.showFileDialog(m_nameOpenScene, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".marscene")) {
+			engine::MAREngine::getEngine()->setLoadPath(m_fileDialog.selected_path);
 
-				engine::MAREngine::getEngine()->setLoadPath(igfd::ImGuiFileDialog::Instance()->GetFilePathName());
+			GUI_EntityCollectionPanel::Instance()->reset();
+			GUI_EntityPanel::Instance()->reset();
+			GUI_TextEditor::Instance()->reset();
 
-				GUI_EntityCollectionPanel::Instance()->reset();
-				GUI_EntityPanel::Instance()->reset();
-				GUI_TextEditor::Instance()->reset();
-
-				engine::MAREngine::getEngine()->setRestart();
-
-			}
-
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameOpenScene);
+			engine::MAREngine::getEngine()->setRestart();
 		}
 	}
 
 	void GUI_Filesystem::openLoadOBJWindow() {
-		const auto& assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameLoadOBJ, ".obj", assetsPath);
-		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".obj", ImVec4(0, 1, 0, 0.9f));
+		ImGui::OpenPopup(m_nameLoadOBJ);
 	}
 
 	void GUI_Filesystem::displayLoadOBJWindow(ecs::Scene* scene) {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameLoadOBJ)) {
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
+		if (m_fileDialog.showFileDialog(m_nameLoadOBJ, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".obj")) {
+			const auto& collection = scene->createCollection();
+			auto& tag = collection.getComponent<ecs::TagComponent>();
+			auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
 
-				const std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
-				const std::string filename = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
+			tag.tag = m_fileDialog.selected_fn;
+			crc.id = m_fileDialog.selected_path;
 
-				const auto& collection = scene->createCollection();
-				auto& tag = collection.getComponent<ecs::TagComponent>();
-				auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
-
-				tag.tag = filename;
-				crc = filePathName;
-
-				graphics::MeshCreator::loadOBJ(filename, filePathName, collection);
-				ecs::SceneEvents::Instance().onCollectionOBJloaded(collection);
-
-			}
-
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameLoadOBJ);
-		}	
+			graphics::MeshCreator::loadOBJ(tag.tag, crc.id, collection);
+			ecs::SceneEvents::Instance().onCollectionOBJloaded(collection);
+		}
 	}
 
 	void GUI_Filesystem::openAssigningScriptWindow() {
-
+		ImGui::OpenPopup(m_nameAssignScript);
 	}
 
 	void GUI_Filesystem::displayAssigningScriptWindow(const ecs::Entity* entity) {
-
+		if (m_fileDialog.showFileDialog(m_nameAssignScript, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".py")) {
+			auto& script = entity->getComponent<ecs::ScriptComponent>();
+			script.script = std::string(m_fileDialog.selected_path);
+		}
 	}
 
 
