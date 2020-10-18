@@ -261,21 +261,15 @@ namespace mar::editor {
 			return;
 		}
 
-		if (ImGui::Button("Create new script")) { 
-			GUI_TextEditor::Instance()->setCreatingNewScript();
-		}
+		if (ImGui::Button("Create new script")) { GUI_TextEditor::Instance()->setCreatingNewScript(); }
 		
 		ImGui::SameLine();
 
-		if (ImGui::Button("Load from file")) {
-			GUI_TextEditor::Instance()->setLoadingScript();
-		}
+		if (ImGui::Button("Load from file")) { GUI_TextEditor::Instance()->setLoadingScript(); }
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Assign script to entity")) {
-			GUI_Filesystem::openAssigningScriptWindow();
-		}
+		if (ImGui::Button("Assign script to entity")) { GUI_Filesystem::openAssigningScriptWindow(); }
 		GUI_Filesystem::displayAssigningScriptWindow(currentEntity);
 		
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
