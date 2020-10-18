@@ -35,7 +35,7 @@ namespace mar::ecs {
 	public:
 
 		static void copyEntity(const Entity& src, const Entity& dst);
-		static void copyCollection(const EntityCollection& src, EntityCollection& dst);
+		static void copyCollection(const EntityCollection& src, const EntityCollection& dst);
 
 	private:
 

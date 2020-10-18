@@ -26,7 +26,7 @@
 namespace mar::ecs {
 
 
-	void EntityOperation::copyCollection(const EntityCollection& src, EntityCollection& dst) {
+	void EntityOperation::copyCollection(const EntityCollection& src, const EntityCollection& dst) {
 		copyComponent<TagComponent>(src, dst);
 		copyComponent<TransformComponent>(src, dst);
 

@@ -44,28 +44,28 @@ namespace mar::editor {
 		display_mainMenuBar();
 
 		if (m_newSceneWindow) {
-			m_guiFilesystem.SetOpenNewScene();
+			m_guiFilesystem.openNewSceneWindow();
 			m_newSceneWindow = false;
 		}
-		m_guiFilesystem.Filesystem_NewScene();
-
-		if (m_loadSceneWindow) {
-			m_guiFilesystem.SetOpenLoadScene();
-			m_loadSceneWindow = false;
-		}
-		m_guiFilesystem.Filesystem_LoadScene();
+		m_guiFilesystem.displayNewSceneWindow();
 
 		if (m_saveSceneWindow) {
-			m_guiFilesystem.SetOpenSaveScene();
+			m_guiFilesystem.openSaveSceneWindow();
 			m_saveSceneWindow = false;
 		}
-		m_guiFilesystem.Filesystem_SaveScene(m_sceneManager->getScene());
+		m_guiFilesystem.displaySaveSceneWindow(m_sceneManager->getScene());
+
+		if (m_loadSceneWindow) {
+			m_guiFilesystem.openLoadSceneWindow();
+			m_loadSceneWindow = false;
+		}
+		m_guiFilesystem.displayLoadSceneWindow();
 
 		if (m_loadOBJfileWindow) {
-			m_guiFilesystem.SetOpenLoadOBJfile();
+			m_guiFilesystem.openLoadOBJWindow();
 			m_loadOBJfileWindow = false;
 		}
-		m_guiFilesystem.Filesystem_LoadOBJfile(m_sceneManager->getScene());
+		m_guiFilesystem.displayLoadOBJWindow(m_sceneManager->getScene());
 
 		if (m_infoWindow) {
 			GUI_Info::Menu_Info(m_infoWindow);
@@ -91,25 +91,29 @@ namespace mar::editor {
 			if (ImGui::BeginMenu("Entities")) {
 				if (ImGui::MenuItem("Load external .obj file")) { m_loadOBJfileWindow = true; }
 
-				/*
-				if (GUI_EntityPanel::currentEntity) {
-					const char* shortcut = GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag.c_str();
+				const auto& currentEntity = GUI_EntityPanel::Instance()->getCurrentEntity();
+				const bool entityExists = &currentEntity != nullptr;
+
+				if (entityExists) {
+					const char* shortcut = currentEntity.getComponent<ecs::TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
-						auto& entity = m_sceneManager->getScene()->createEntity();
-						ecs::EntityOperation::copyEntity(*GUI_EntityPanel::currentEntity, entity);
-						GUI_EntityPanel::currentEntity = &entity;
+						const auto& entity = m_sceneManager->getScene()->createEntity();
+						ecs::EntityOperation::copyEntity(currentEntity, entity);
+						GUI_EntityPanel::Instance()->setCurrentEntity(entity);
 					}
 				}
 
-				if (GUI_EntityCollectionPanel::currentCollection && !GUI_EntityPanel::currentEntity) {
-					const char* shortcut = GUI_EntityCollectionPanel::currentCollection->getComponent<ecs::TagComponent>().tag.c_str();
+				const auto& currentCollection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
+				const bool collectionExists = &currentCollection != nullptr;
+				if (collectionExists && !(entityExists)) {
+					const char* shortcut = currentCollection.getComponent<ecs::TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
-						auto& collection = m_sceneManager->getScene()->createCollection();
-						ecs::EntityOperation::copyCollection(*GUI_EntityCollectionPanel::currentCollection, collection);
-						GUI_EntityCollectionPanel::currentCollection = &collection;
+						const auto& collection = m_sceneManager->getScene()->createCollection();
+						ecs::EntityOperation::copyCollection(currentCollection, collection);
+						GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
 					}
 				}
-				*/
+				
 				ImGui::EndMenu();
 			}
 

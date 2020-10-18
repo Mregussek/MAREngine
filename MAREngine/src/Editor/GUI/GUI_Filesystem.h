@@ -32,17 +32,17 @@ namespace mar::editor {
 	class GUI_Filesystem {
 	public:
 
-		void SetOpenNewScene();
-		void Filesystem_NewScene();
+		void openNewSceneWindow();
+		void displayNewSceneWindow();
 
-		void SetOpenSaveScene();
-		void Filesystem_SaveScene(ecs::Scene* scene_to_save);
+		void openSaveSceneWindow();
+		void displaySaveSceneWindow(ecs::Scene* scene);
 
-		void SetOpenLoadScene();
-		void Filesystem_LoadScene();
+		void openLoadSceneWindow();
+		void displayLoadSceneWindow();
 
-		void SetOpenLoadOBJfile();
-		void Filesystem_LoadOBJfile(ecs::Scene* scene);
+		void openLoadOBJWindow();
+		void displayLoadOBJWindow(ecs::Scene* scene);
 
 
 	private:
