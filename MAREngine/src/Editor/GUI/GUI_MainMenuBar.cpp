@@ -43,45 +43,35 @@ namespace mar::editor {
 	void GUI_MainMenuBar::display() {
 		display_mainMenuBar();
 
-		{
-			const char* windowName = "New Scene";
-			if (m_newSceneWindow) {
-				GUI_Filesystem::SetOpenNewScene(windowName);
-				m_newSceneWindow = false;
-			}
-			GUI_Filesystem::Filesystem_NewScene(windowName);
+		if (m_newSceneWindow) {
+			m_guiFilesystem.SetOpenNewScene();
+			m_newSceneWindow = false;
 		}
-		{
-			const char* windowName = "Open Scene";
-			if (m_loadSceneWindow) {
-				GUI_Filesystem::SetOpenLoadScene(windowName);
-				m_loadSceneWindow = false;
-			}
-			GUI_Filesystem::Filesystem_LoadScene(windowName);
+		m_guiFilesystem.Filesystem_NewScene();
+
+		if (m_loadSceneWindow) {
+			m_guiFilesystem.SetOpenLoadScene();
+			m_loadSceneWindow = false;
 		}
-		{
-			const char* windowName = "Save Scene";
-			if (m_saveSceneWindow) {
-				GUI_Filesystem::SetOpenSaveScene(windowName);
-				m_saveSceneWindow = false;
-			}
-			GUI_Filesystem::Filesystem_SaveScene(windowName, m_sceneManager->getScene());
+		m_guiFilesystem.Filesystem_LoadScene();
+
+		if (m_saveSceneWindow) {
+			m_guiFilesystem.SetOpenSaveScene();
+			m_saveSceneWindow = false;
 		}
-		{
-			const char* windowName = "OBJ Loader";
-			if (m_loadOBJfileWindow) {
-				GUI_Filesystem::SetOpenLoadOBJfile(windowName);
-				m_loadOBJfileWindow = false;
-			}
-			GUI_Filesystem::Filesystem_LoadOBJfile(windowName, m_sceneManager->getScene());
+		m_guiFilesystem.Filesystem_SaveScene(m_sceneManager->getScene());
+
+		if (m_loadOBJfileWindow) {
+			m_guiFilesystem.SetOpenLoadOBJfile();
+			m_loadOBJfileWindow = false;
 		}
-		{
-			if (m_infoWindow) {
-				GUI_Info::Menu_Info(m_infoWindow);
-			}
-			if (m_instructionWindow) {
-				GUI_Info::Menu_Instruction(m_instructionWindow);
-			}
+		m_guiFilesystem.Filesystem_LoadOBJfile(m_sceneManager->getScene());
+
+		if (m_infoWindow) {
+			GUI_Info::Menu_Info(m_infoWindow);
+		}
+		if (m_instructionWindow) {
+			GUI_Info::Menu_Instruction(m_instructionWindow);
 		}
 	}
 

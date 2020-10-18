@@ -146,11 +146,12 @@ namespace mar::scripting {
     }
     
     std::string PythonScript::getModuleFromPath(std::string script) {
-        const std::string rtn = script.substr(script.find_last_of("/") + 1, script.size()).substr(0, rtn.size() - 3);
+        const std::string filename = script.substr(script.find_last_of("/") + 1, script.size());
+        const std::string deletedDotPyFromPath = filename.substr(0, filename.size() - 3);
     
         SCRIPTING_TRACE("PYTHON_SCRIPT: returning module {} from path {}", script, rtn);
     
-        return rtn;
+        return deletedDotPyFromPath;
     }
 
 

@@ -29,19 +29,28 @@ namespace mar::ecs { class Scene; }
 namespace mar::editor {
 
 
-	struct GUI_Filesystem {
+	class GUI_Filesystem {
+	public:
 
-		static void SetOpenNewScene(const char* name);
-		static void Filesystem_NewScene(const char* name);
+		void SetOpenNewScene();
+		void Filesystem_NewScene();
 
-		static void SetOpenSaveScene(const char* name);
-		static void Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save);
+		void SetOpenSaveScene();
+		void Filesystem_SaveScene(ecs::Scene* scene_to_save);
 
-		static void SetOpenLoadScene(const char* name);
-		static void Filesystem_LoadScene(const char* name);
+		void SetOpenLoadScene();
+		void Filesystem_LoadScene();
 
-		static void SetOpenLoadOBJfile(const char* name);
-		static void Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene);
+		void SetOpenLoadOBJfile();
+		void Filesystem_LoadOBJfile(ecs::Scene* scene);
+
+
+	private:
+
+		const char* m_nameNewScene{ "New Scene" };
+		const char* m_nameOpenScene{ "Open Scene" };
+		const char* m_nameSaveScene{ "Save Scene" };
+		const char* m_nameLoadOBJ{ "Load .obj file" };
 
 	};
 

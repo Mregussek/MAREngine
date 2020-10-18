@@ -23,6 +23,7 @@
 
 
 #include "../../mar.h"
+#include "GUI_Filesystem.h"
 
 
 namespace mar::ecs { class SceneManager; /* forward declaration */ }
@@ -41,14 +42,15 @@ namespace mar::editor {
 
 		void display_mainMenuBar();
 
+		ecs::SceneManager* m_sceneManager{ nullptr };
+		GUI_Filesystem m_guiFilesystem;
+
 		bool m_newSceneWindow{ false };
 		bool m_loadSceneWindow{ false };
 		bool m_saveSceneWindow{ false };
 		bool m_loadOBJfileWindow{ false };
 		bool m_infoWindow{ false };
 		bool m_instructionWindow{ false };
-
-		ecs::SceneManager* m_sceneManager{ nullptr };
 
 	};
 

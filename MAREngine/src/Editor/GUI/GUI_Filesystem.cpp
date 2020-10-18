@@ -38,32 +38,32 @@
 namespace mar::editor {
 
 
-	void GUI_Filesystem::SetOpenNewScene(const char* name) {
+	void GUI_Filesystem::SetOpenNewScene() {
 		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
+		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameNewScene, ".marscene", scenesPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 	}
 
-	void GUI_Filesystem::Filesystem_NewScene(const char* name) {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
+	void GUI_Filesystem::Filesystem_NewScene() {
+		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameNewScene)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 
 
 			}
 
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameNewScene);
 		}
 	}
 
-	void GUI_Filesystem::SetOpenSaveScene(const char* name) {
+	void GUI_Filesystem::SetOpenSaveScene() {
 		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
+		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameSaveScene, ".marscene", scenesPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 	}
 
-	void GUI_Filesystem::Filesystem_SaveScene(const char* name, ecs::Scene* scene_to_save) {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
+	void GUI_Filesystem::Filesystem_SaveScene(ecs::Scene* scene_to_save) {
+		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameSaveScene)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 				const std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
@@ -71,18 +71,18 @@ namespace mar::editor {
 
 			}
 
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameSaveScene);
 		}
 	}
 
-	void GUI_Filesystem::SetOpenLoadScene(const char* name) {
+	void GUI_Filesystem::SetOpenLoadScene() {
 		const auto& scenesPath = engine::MAREngine::getEngine()->getScenesPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".marscene", scenesPath);
+		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameOpenScene, ".marscene", scenesPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".marscene", ImVec4(0, 1, 0, 0.9f));
 	}
 
-	void GUI_Filesystem::Filesystem_LoadScene(const char* name) {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
+	void GUI_Filesystem::Filesystem_LoadScene() {
+		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameOpenScene)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 				engine::MAREngine::getEngine()->setLoadPath(igfd::ImGuiFileDialog::Instance()->GetFilePathName());
@@ -95,18 +95,18 @@ namespace mar::editor {
 
 			}
 
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameOpenScene);
 		}
 	}
 
-	void GUI_Filesystem::SetOpenLoadOBJfile(const char* name) {
+	void GUI_Filesystem::SetOpenLoadOBJfile() {
 		const auto& assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
-		igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, ".obj", assetsPath);
+		igfd::ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", m_nameLoadOBJ, ".obj", assetsPath);
 		igfd::ImGuiFileDialog::Instance()->SetExtentionInfos(".obj", ImVec4(0, 1, 0, 0.9f));
 	}
 
-	void GUI_Filesystem::Filesystem_LoadOBJfile(const char* name, ecs::Scene* scene) {
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
+	void GUI_Filesystem::Filesystem_LoadOBJfile(ecs::Scene* scene) {
+		if (igfd::ImGuiFileDialog::Instance()->FileDialog(m_nameLoadOBJ)) {
 			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
 
 				const std::string filePathName = igfd::ImGuiFileDialog::Instance()->GetFilePathName();
@@ -124,7 +124,7 @@ namespace mar::editor {
 
 			}
 
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
+			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameLoadOBJ);
 		}	
 	}
 
