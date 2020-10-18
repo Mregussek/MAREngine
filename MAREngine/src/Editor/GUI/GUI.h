@@ -28,6 +28,7 @@
 #include "EntityPanels/GUI_EntityPanel.h"
 #include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "EntityPanels/GUI_SceneHierarchy.h"
+#include "GUI_TextEditor.h"
 
 
 namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
@@ -81,6 +82,7 @@ namespace mar::editor {
 		GUI_EntityPanel m_entityPanel;
 		GUI_EntityCollectionPanel m_collectionPanel;
 		GUI_SceneHierarchy m_sceneHierarchyPanel;
+		GUI_TextEditor m_textEditor;
 
 		bool m_dockspaceOpen{ true };
 		static const bool m_fullscreenPersisant{ true };

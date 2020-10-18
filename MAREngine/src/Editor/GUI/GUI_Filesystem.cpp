@@ -89,7 +89,7 @@ namespace mar::editor {
 
 				GUI_EntityCollectionPanel::Instance()->reset();
 				GUI_EntityPanel::Instance()->reset();
-				GUI_TextEditor::Instance().reset();
+				GUI_TextEditor::Instance()->reset();
 
 				engine::MAREngine::getEngine()->setRestart();
 
@@ -126,6 +126,14 @@ namespace mar::editor {
 
 			igfd::ImGuiFileDialog::Instance()->CloseDialog(m_nameLoadOBJ);
 		}	
+	}
+
+	void GUI_Filesystem::openAssigningScriptWindow() {
+
+	}
+
+	void GUI_Filesystem::displayAssigningScriptWindow(const ecs::Entity* entity) {
+
 	}
 
 

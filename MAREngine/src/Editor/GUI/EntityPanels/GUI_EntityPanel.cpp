@@ -20,6 +20,7 @@
 
 #include "GUI_EntityPanel.h"
 #include "../GUI_TextEditor.h"
+#include "../GUI_Filesystem.h"
 
 #include "../../EditorLogging.h"
 
@@ -249,34 +250,34 @@ namespace mar::editor {
 
 	void GUI_EntityPanel::Scene_Handle_ScriptComponent(bool window_focused) {
 		ImGui::Separator();
+
 		ImGui::Text("ScriptComponent\n");
+
 		ImGui::SameLine();
+
 		if (ImGui::MenuItem("Remove Script")) {
 			currentEntity->removeComponent<ecs::ScriptComponent>(ECS_SCRIPT);
-			GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
-			GUI_TextEditor::Instance().setEditorTitle("Empty");
+			GUI_TextEditor::Instance()->reset();
 			return;
 		}
 
-		auto& script = currentEntity->getComponent<ecs::ScriptComponent>();
+		if (ImGui::Button("Create new script")) { 
+			GUI_TextEditor::Instance()->setCreatingNewScript();
+		}
+		
+		ImGui::SameLine();
 
-		static char input[50];
-		strcpy_s(input, script.script.c_str());
-		if (ImGui::InputText(" - script", input, 50))
-			script.script = std::string(input);
-
-		if (ImGui::Button("Create new script")) 
-			GUI_TextEditor::Instance().createNewFile(script.script);
+		if (ImGui::Button("Load from file")) {
+			GUI_TextEditor::Instance()->setLoadingScript();
+		}
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Load Script from file")) {
-			std::string script_path = engine::MAREngine::getEngine()->getAssetsPath() + script.script;
-			script.source = Filesystem::loadPyScript(script_path.c_str());
-			GUI_TextEditor::Instance().setEditorText(script.source);
-			GUI_TextEditor::Instance().setEditorTitle(script.script.c_str());
+		if (ImGui::Button("Assign script to entity")) {
+			GUI_Filesystem::openAssigningScriptWindow();
 		}
-			
+		GUI_Filesystem::displayAssigningScriptWindow(currentEntity);
+		
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}
 

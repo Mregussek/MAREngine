@@ -23,50 +23,65 @@
 
 
 #include "../../mar.h"
+#include "../../Core/ecs/Entity/Entity.h"
 
 
 namespace mar::editor {
 
 
 	class GUI_TextEditor {
-		static GUI_TextEditor s_Instance;
-		TextEditor editor;
-		std::string m_title{ "Empty" };
-		std::string m_pathToSave;
-		bool m_createNewScriptWindow;
-		bool m_openScriptWindow;
-
 	public:
-		static std::string DEFAULT_SCRIPT;
+		
+		// --- public methods --- //
 
-		GUI_TextEditor();
+		GUI_TextEditor() = default;
 
-		static GUI_TextEditor& Instance() { return s_Instance; }
+		static GUI_TextEditor* Instance() { return s_instance; }
 
-		void startup();
+		void initialize();
 		void update();
+		void reset();
 
-		void createNewFile(std::string scriptPath);
+		void setPathToSave(std::string s);
+		void setEditorText(std::string s);
+		void setEditorTitle(std::string new_title);
 
-		void setPathToSave(std::string s) { m_pathToSave = std::move(s); }
-		void setEditorText(std::string s) { editor.SetText(std::move(s)); }
-		void setEditorTitle(std::string new_title) { m_title = std::move(new_title); }
-
-		void reset() {
-			setEditorText("def main():\n\tpass\n");
-			setEditorTitle("Empty");
-		}
+		void setCreatingNewScript() { m_createNewScriptWindow = true;  }
+		void setLoadingScript() { m_openScriptWindow = true; }
 
 	private:
 
-		void ReplaceStringInPlace(std::string& subject, const std::string& search, const std::string& replace);
+		// --- private methods --- //
 
-		void TextEditor_CreateNewScriptWindow();
-		void TextEditor_OpenScriptWindow();
-		void TextEditor_MenuBar();
-		void TextEditor_Render();
+		std::string replaceOcurrences(std::string str, const std::string& from, const std::string& to);
+		
+		void createNewScriptWindow();
+		void openScriptWindow();
+		void displayMainMenuBar();
+		void editorRender();
 
-		const TextEditor::LanguageDefinition& TextEditorLanguageDefinition_Python();
+		void createNewFile(const std::string& scriptPath, const std::string& moduleName);
+		void openFile(const std::string& scriptPath, const std::string& moduleName);
+
+		void definePythonLanguage();
+
+		// --- members --- //
+
+		static GUI_TextEditor* s_instance;
+
+		TextEditor::LanguageDefinition m_languageDefinition;
+
+		TextEditor editor;
+
+		std::string m_title{ defaultTitle };
+		std::string m_pathToSave;
+
+		bool m_createNewScriptWindow{ false };
+		bool m_openScriptWindow{ false };
+
+		static const std::string defaultScript;
+		static const std::string defaultTitle;
+
 	};
 
 

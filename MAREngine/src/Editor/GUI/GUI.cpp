@@ -27,7 +27,6 @@
 
 #include "../../Window/Window.h"
 
-#include "GUI_TextEditor.h"
 #include "Other/GUI_Theme.h"
 
 
@@ -47,7 +46,7 @@ namespace mar::editor {
 
 		m_viewportFramebuffer.initialize(800.f, 600.f);
 
-		GUI_TextEditor::Instance().setEditorText("def main():\n\tpass\n");
+		m_textEditor.initialize();
 
 		m_entityPanel.initialize();
 		m_collectionPanel.initialize();
@@ -95,7 +94,7 @@ namespace mar::editor {
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 
-		const ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
+		constexpr ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
 		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 		if (m_fullscreenPersisant) {
@@ -109,17 +108,13 @@ namespace mar::editor {
 			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
 
-		if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
-			windowFlags |= ImGuiWindowFlags_NoBackground;
-		}
+		if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) { windowFlags |= ImGuiWindowFlags_NoBackground; }
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		ImGui::Begin("MAREngineDockspace", &m_dockspaceOpen, windowFlags);
 		ImGui::PopStyleVar();
 
-		if (m_fullscreenPersisant) {
-			ImGui::PopStyleVar(2);
-		}
+		if (m_fullscreenPersisant) { ImGui::PopStyleVar(2); }
 			
 		ImGuiIO& io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
@@ -133,7 +128,7 @@ namespace mar::editor {
 	void GUI::updateFrame() {
 		GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager);
 
-		GUI_TextEditor::Instance().update();
+		m_textEditor.update();
 
 		m_mainMenuBar.display();
 		Editor_ViewPort();
