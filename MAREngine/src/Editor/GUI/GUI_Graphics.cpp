@@ -22,6 +22,7 @@
 
 #include "../../Platform/OpenGL/ShaderUniforms.h"
 #include "../../Platform/OpenGL/DrawingOpenGL.h"
+#include "../../Core/graphics/Renderer/RenderContainer.h"
 
 #include "../../Core/ecs/Components/Components.h"
 #include "../../Core/ecs/Entity/Entity.h"
@@ -43,7 +44,20 @@ namespace mar::editor {
 		m_shader.shutdown();
 	}
 
-	void GUI_Graphics::drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran) {
+	void GUI_Graphics::passToDrawCollection(const ecs::EntityCollection& collection) {
+
+	}
+
+	void GUI_Graphics::passToDrawEntity(const ecs::Entity& entity) {
+		if (entity.hasComponent<ecs::RenderableComponent>()) {
+			const auto& renderable = entity.getComponent<ecs::RenderableComponent>();
+			const auto& transform = entity.getComponent<ecs::TransformComponent>();
+
+			drawSelectedEntity(renderable, transform);
+		}		
+	}
+
+	void GUI_Graphics::drawSelectedEntity(const ecs::RenderableComponent& ren, const ecs::TransformComponent& tran) {
 		const size_t index = 0;
 		const maths::vec3 scale = tran.scale + 0.05f;
 		const maths::mat4 betterOutline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
@@ -54,23 +68,11 @@ namespace mar::editor {
 		m_shader.bind();
 		m_shader.setUniformMat4("u_MVP", Camera::getCameraData().getMVP());
 		m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], betterOutline);
-		
+
 		platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 
 		m_pipeline.reset();
 		m_pipeline.unbind();
-	}
-
-	void GUI_Graphics::passToDrawCollection(ecs::EntityCollection* c) {
-		
-	}
-
-	void GUI_Graphics::passToDrawEntity(const ecs::Entity* e) {
-		if (!e) { return; }
-
-		if (e->hasComponent<ecs::RenderableComponent>()) {
-			drawSelectedEntity(e->getComponent<ecs::RenderableComponent>(), e->getComponent<ecs::TransformComponent>());
-		}		
 	}
 
 

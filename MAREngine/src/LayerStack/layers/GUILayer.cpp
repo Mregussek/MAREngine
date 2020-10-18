@@ -33,7 +33,7 @@ namespace mar::layers {
 	}
 
 	void LayerGUI::initialize(editor::GUI* gui, maths::vec3 backgroundcolor) {
-		LAYER_TRACE("GUI_LAYER: {} going to initialize", m_debugName);
+		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
 		m_gui = gui;
 		m_gui->initialize("#version 330");
@@ -43,31 +43,41 @@ namespace mar::layers {
 
 		m_guiGraphics.initialize();
 
-		LAYER_INFO("GUI_LAYER: {} initialized", m_debugName);
+		LAYER_INFO("GUI_LAYER: {} initialized", p_debugName);
 	}
 
 	void LayerGUI::update() {
-		LAYER_TRACE("GUI_LAYER: {} going to display frame", m_debugName);
+		LAYER_TRACE("GUI_LAYER: {} going to display frame", p_debugName);
 		
 		if (m_gui->canDrawLines()) {
-			//if (m_gui->getCurrentCollection() && !m_gui->getCurrentEntity()) m_guiGraphics.passToDrawCollection(m_gui->getCurrentCollection());
-			m_guiGraphics.passToDrawEntity(&m_gui->getCurrentEntity());
+			const auto& currentEntity = m_gui->getCurrentEntity();
+			const bool userHasSelectedEntity = &currentEntity != nullptr;
+
+			const auto& currentCollection = m_gui->getCurrentCollection();
+			const bool userHasSelectedCollection = &currentCollection != nullptr;
+
+			if (userHasSelectedCollection && !userHasSelectedEntity) {
+				m_guiGraphics.passToDrawCollection(currentCollection);
+			}
+			else if (userHasSelectedEntity) {
+				m_guiGraphics.passToDrawEntity(currentEntity);
+			}
 		}
 		
 		m_camera.update(m_gui->getViewportWidth() / m_gui->getViewportHeight());
 		m_gui->display();
 
-		LAYER_INFO("GUI_LAYER: {} displayed frame", m_debugName);
+		LAYER_INFO("GUI_LAYER: {} displayed frame", p_debugName);
 	}
 
 	void LayerGUI::closeLayer() {
-		LAYER_TRACE("GUI_LAYER: {} going to close!", m_debugName);
+		LAYER_TRACE("GUI_LAYER: {} going to close!", p_debugName);
 
 		m_gui->shutdown();
 
 		m_guiGraphics.close();
 
-		LAYER_INFO("GUI_LAYER: {} closed!", m_debugName);
+		LAYER_INFO("GUI_LAYER: {} closed!", p_debugName);
 	}
 
 	void LayerGUI::renderToViewport() {

@@ -68,10 +68,10 @@ namespace mar::editor {
 		m_guiFilesystem.displayLoadOBJWindow(m_sceneManager->getScene());
 
 		if (m_infoWindow) {
-			GUI_Info::Menu_Info(m_infoWindow);
+			m_infoWindow = GUI_Info::InfoWindow();
 		}
 		if (m_instructionWindow) {
-			GUI_Info::Menu_Instruction(m_instructionWindow);
+			m_instructionWindow = GUI_Info::InstructionWindow();
 		}
 	}
 
@@ -105,7 +105,8 @@ namespace mar::editor {
 
 				const auto& currentCollection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
 				const bool collectionExists = &currentCollection != nullptr;
-				if (collectionExists && !(entityExists)) {
+
+				if (collectionExists && !entityExists) {
 					const char* shortcut = currentCollection.getComponent<ecs::TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
 						const auto& collection = m_sceneManager->getScene()->createCollection();
@@ -117,9 +118,11 @@ namespace mar::editor {
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::MenuItem("About")) {
-				m_infoWindow = true;
-				m_instructionWindow = true;
+			if (ImGui::BeginMenu("About")) {
+				if (ImGui::MenuItem("About Engine")) { m_infoWindow = true; }
+				if (ImGui::MenuItem("Instruction")) { m_instructionWindow = true; }
+
+				ImGui::EndMenu();
 			}
 
 			if (ImGui::MenuItem("Exit")) {

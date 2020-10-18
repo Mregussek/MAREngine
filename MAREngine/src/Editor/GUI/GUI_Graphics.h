@@ -25,6 +25,7 @@
 #include "../../mar.h"
 #include "../../Platform/OpenGL/PipelineOpenGL.h"
 #include "../../Platform/OpenGL/ShaderOpenGL.h"
+#include "../../Core/graphics/Mesh/Vertex.h"
 
 
 namespace mar::ecs { class Entity; class EntityCollection; struct TransformComponent; struct RenderableComponent; }
@@ -32,18 +33,21 @@ namespace mar::editor {
 
 		
 	class GUI_Graphics {
-		platforms::PipelineOpenGL m_pipeline;
-		platforms::ShaderOpenGL m_shader;
-
 	public:
 
 		void initialize();
 		void close();
 
-		void drawSelectedEntity(ecs::RenderableComponent& ren, ecs::TransformComponent& tran);
+		void passToDrawCollection(const ecs::EntityCollection& c);
+		void passToDrawEntity(const ecs::Entity& e);
+	
+	private:
 
-		void passToDrawCollection(ecs::EntityCollection* c);
-		void passToDrawEntity(const ecs::Entity* e);
+		void drawSelectedEntity(const ecs::RenderableComponent& ren, const ecs::TransformComponent& tran);
+
+		platforms::PipelineOpenGL m_pipeline;
+		platforms::ShaderOpenGL m_shader;
+
 	};
 
 
