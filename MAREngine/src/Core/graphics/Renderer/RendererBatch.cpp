@@ -34,7 +34,7 @@ namespace mar::graphics {
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
 
-		m_buffers.initialize(settings::maxVerticesCount, settings::maxIndicesCount);
+		m_buffers.initialize(settings::maxVerticesCount * sizeof(Vertex), settings::maxIndicesCount * sizeof(uint32_t));
 		m_shader.initialize();
 	
 		GRAPHICS_INFO("RENDERER_BATCH: initialized!");
