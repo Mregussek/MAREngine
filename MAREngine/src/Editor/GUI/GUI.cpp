@@ -135,7 +135,7 @@ namespace mar::editor {
 		Editor_ViewPort();
 		Editor_Properties();
 
-		m_entityPanel.Scene_Entity_Modify(m_sceneManager->isPlayMode());
+		m_entityPanel.update(m_sceneManager->isPlayMode());
 		m_collectionPanel.Scene_EntityCollection_Modify();
 
 		EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
@@ -155,24 +155,18 @@ namespace mar::editor {
 
 		if (ImGui::BeginMenuBar()) {
 			if (m_sceneManager->isEditorMode()) {
-				if (ImGui::Button("PLAY")) {
-					m_sceneManager->setPlayMode();
-				}
+				if (ImGui::Button("PLAY")) { m_sceneManager->setPlayMode(); }
 			}
 			else {
-				if (ImGui::Button("STOP")) {
-					m_sceneManager->setExitPlayMode();
-				}
+				if (ImGui::Button("STOP")) { m_sceneManager->setExitPlayMode(); }
 
 				ImGui::SameLine();
 
 				if (!m_sceneManager->isPauseMode()) {
-					if (ImGui::Button("PAUSE"))
-						m_sceneManager->setPauseMode();
+					if (ImGui::Button("PAUSE")) { m_sceneManager->setPauseMode(); }
 				}
 				else {
-					if (ImGui::Button("RESUME"))
-						m_sceneManager->unsetPauseMode();
+					if (ImGui::Button("RESUME")) { m_sceneManager->unsetPauseMode(); }
 				}
 			}
 
@@ -198,7 +192,7 @@ namespace mar::editor {
 
 		auto& sceneBackground = m_sceneManager->getScene()->getBackground();
 
-		if (ImGui::ColorEdit3("Scene Background Color", maths::vec3::value_ptr_nonconst(sceneBackground))) {
+		if (ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x)) {
 			m_viewportFramebuffer.setBackgroundColor(sceneBackground);
 			window::Window::getInstance().updateBackgroundColor(sceneBackground);
 		}

@@ -159,17 +159,10 @@ namespace mar::editor {
 	}
 
 	void GUI_EntityCollectionPanel::Scene_EntityCollection_PopUp(const char* collection_tag) {
-		static bool b = false;
-
-		if (ImGui::IsWindowFocused())
-			b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
-		else
-			b = false;
-
-		if (b) {
-			ImGui::OpenPopup("EntityCollectionPopUp");
-			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1))
-				b = false;
+		if (ImGui::IsWindowFocused()) {
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+				ImGui::OpenPopup("SceneEntityModifyPopUp");
+			}
 		}
 
 		if (ImGui::BeginPopup("EntityCollectionPopUp")) {

@@ -92,16 +92,10 @@ namespace mar::editor {
 			return;
 		}
 
-		// SHOULD POP BE OPEN? 
-
-		static bool b = false;
-
-		if (ImGui::IsWindowFocused()) b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
-		else b = false;
-
-		if (b) {
-			ImGui::OpenPopup("SceneHierarchyPopUp");
-			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1)) b = false;
+		if (ImGui::IsWindowFocused()) {
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+				ImGui::OpenPopup("SceneEntityModifyPopUp");
+			}
 		}
 
 		// ACTUAL POP UP

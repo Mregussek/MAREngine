@@ -43,11 +43,30 @@ namespace mar::editor {
 	GUI_EntityPanel* GUI_EntityPanel::s_instance{ nullptr };
 
 
+	void GUI_EntityPanel::initialize() {
+		if (m_initialized) { return; }
+
+		s_instance = this;
+		m_initialized = true;
+	}
+
 	void GUI_EntityPanel::reset() {
 		currentEntity = nullptr;
 	}
 
-	void GUI_EntityPanel::Scene_Entity_Modify(bool is_play_mode) {
+	void GUI_EntityPanel::setRenderCam(graphics::RenderCamera* renderCam) {
+		render_cam = renderCam;
+	}
+
+	void GUI_EntityPanel::setCurrentEntity(const ecs::Entity& entity) { 
+		currentEntity = &entity; 
+	}
+
+	const ecs::Entity& GUI_EntityPanel::getCurrentEntity() const { 
+		return *currentEntity;
+	}
+
+	void GUI_EntityPanel::update(bool isPlayMode) {
 		ImGui::Begin("Entity Modification");
 
 		if (!currentEntity) {
@@ -56,97 +75,101 @@ namespace mar::editor {
 			return;
 		}
 
-		static bool is_window_focused = false;
-
-		if (ImGui::IsWindowFocused()) is_window_focused = true;
-		else is_window_focused = false;
-
-		if (is_play_mode) {
-			ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
-
-			if (currentEntity->hasComponent<ecs::TransformComponent>())
-				Scene_Handle_TransformComponent(is_window_focused, is_play_mode);
-
-			if (currentEntity->hasComponent<ecs::CameraComponent>())
-				Scene_Handle_CameraComponent(is_window_focused, is_play_mode);
-
-			if (currentEntity->hasComponent<ecs::ColorComponent>())
-				Scene_Handle_ColorComponent(is_window_focused, is_play_mode);
-
-			if (currentEntity->hasComponent<ecs::LightComponent>())
-				Scene_Handle_LightComponent(is_window_focused, is_play_mode);
-
+		if (isPlayMode) {
+			displayPlayMode(isPlayMode);
 			ImGui::End();
 
 			EDITOR_TRACE("GUI: scene_entity_modify end (PLAY MODE)");
 			return;
 		}
 
-		if (currentEntity->hasComponent<ecs::TagComponent>())
-			Scene_Handle_TagComponent(is_window_focused);
-
-		if (currentEntity->hasComponent<ecs::TransformComponent>())
-			Scene_Handle_TransformComponent(is_window_focused, is_play_mode);
-
-		if (currentEntity->hasComponent<ecs::ScriptComponent>())
-			Scene_Handle_ScriptComponent(is_window_focused);
-
-		if (currentEntity->hasComponent<ecs::RenderableComponent>())
-			Scene_Handle_RenderableComponent(is_window_focused);
-
-		if (currentEntity->hasComponent<ecs::CameraComponent>())
-			Scene_Handle_CameraComponent(is_window_focused, is_play_mode);
-
-		if (currentEntity->hasComponent<ecs::ColorComponent>())
-			Scene_Handle_ColorComponent(is_window_focused, is_play_mode);
-
-		if (currentEntity->hasComponent<ecs::Texture2DComponent>())
-			Scene_Handle_Texture2DComponent(is_window_focused);
-
-		if (currentEntity->hasComponent<ecs::TextureCubemapComponent>())
-			Scene_Handle_TextureCubemapComponent(is_window_focused);
-
-		if (currentEntity->hasComponent<ecs::LightComponent>())
-			Scene_Handle_LightComponent(is_window_focused, is_play_mode);
-
-		Scene_Entity_Modify_PopUp();
-
+		displayEditorMode(isPlayMode);
 		ImGui::End();
 
 		EDITOR_TRACE("GUI: scene_entity_modify");
 	}
 
+	void GUI_EntityPanel::displayEditorMode(bool is_play_mode) {
+		if (currentEntity->hasComponent<ecs::TagComponent>()) {
+			Scene_Handle_TagComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::TransformComponent>()) {
+			Scene_Handle_TransformComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::ScriptComponent>()) {
+			Scene_Handle_ScriptComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::RenderableComponent>()) {
+			Scene_Handle_RenderableComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::CameraComponent>()) {
+			Scene_Handle_CameraComponent(is_play_mode);
+		}
+
+		if (currentEntity->hasComponent<ecs::ColorComponent>()) {
+			Scene_Handle_ColorComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::Texture2DComponent>()) {
+			Scene_Handle_Texture2DComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::TextureCubemapComponent>()) {
+			Scene_Handle_TextureCubemapComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::LightComponent>()) {
+			Scene_Handle_LightComponent();
+		}
+			
+		Scene_Entity_Modify_PopUp();
+	}
+
+	void GUI_EntityPanel::displayPlayMode(bool is_play_mode) {
+		ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
+
+		if (currentEntity->hasComponent<ecs::TransformComponent>()) {
+			Scene_Handle_TransformComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::CameraComponent>())
+			Scene_Handle_CameraComponent(is_play_mode);
+
+		if (currentEntity->hasComponent<ecs::ColorComponent>()) {
+			Scene_Handle_ColorComponent();
+		}
+
+		if (currentEntity->hasComponent<ecs::LightComponent>()) {
+			Scene_Handle_LightComponent();
+		}
+	}
+
 	void GUI_EntityPanel::Scene_Entity_Modify_PopUp() {
-		static bool b = false;
-
-		// PopMenu should be opened?
-		{
-			if (ImGui::IsWindowFocused())
-				b = window::Input::isMousePressed(MAR_MOUSE_BUTTON_2);
-			else
-				b = false;
-
-			if (b) {
+		if (ImGui::IsWindowFocused()) {
+			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneEntityModifyPopUp");
-				if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_1))
-					b = false;
 			}
 		}
 
 		// Actual PopUp menu
 		{
+			const bool hasNotColorOrTexture = !currentEntity->hasComponent<ecs::ColorComponent>()
+				&& !currentEntity->hasComponent<ecs::Texture2DComponent>()
+				&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
+
 			if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
 				if (ImGui::BeginMenu("Add Component")) {
-					if (!currentEntity->hasComponent<ecs::RenderableComponent>())
-						if (ImGui::MenuItem("Add RenderableComponent"))
+					if (!currentEntity->hasComponent<ecs::RenderableComponent>()) {
+						if (ImGui::MenuItem("Add RenderableComponent")) {
 							currentEntity->addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
-
-					static bool has_color_texture;
-					has_color_texture = !currentEntity->hasComponent<ecs::ColorComponent>() 
-						&& !currentEntity->hasComponent<ecs::Texture2DComponent>()
-						&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
-
-					if (has_color_texture) {
+						}
+					}
+						
+					if (hasNotColorOrTexture) {
 						if (ImGui::BeginMenu("Add Color/Texture")) {
 							if (ImGui::MenuItem("Add Texture2DComponent")) {
 								currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
@@ -167,23 +190,26 @@ namespace mar::editor {
 						}
 					}
 
-					if (!currentEntity->hasComponent<ecs::LightComponent>())
+					if (!currentEntity->hasComponent<ecs::LightComponent>()) {
 						if (ImGui::MenuItem("Add LightComponent")) {
 							currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
 							ecs::SceneEvents::Instance().updatedLight(currentEntity);
 						}
+					}
 
-					if (!currentEntity->hasComponent<ecs::CameraComponent>())
+					if (!currentEntity->hasComponent<ecs::CameraComponent>()) {
 						if (ImGui::MenuItem("Add CameraComponent")) {
 							currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
 							ecs::SceneEvents::Instance().updatedCamera(currentEntity);
 						}
+					}
 
-					if (!currentEntity->hasComponent<ecs::ScriptComponent>())
+					if (!currentEntity->hasComponent<ecs::ScriptComponent>()) {
 						if (ImGui::MenuItem("Add ScriptComponent")) {
 							currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
 							ecs::SceneEvents::Instance().updatedScript(currentEntity);
 						}
+					}
 
 					ImGui::EndMenu();
 				}
@@ -195,21 +221,22 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: scene_entity_modify_popup");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_TagComponent(bool window_focused) {
+	void GUI_EntityPanel::Scene_Handle_TagComponent() {
 		ImGui::Text("TagComponent\n");
 
-		static char* input;
 		auto& tag = currentEntity->getComponent<ecs::TagComponent>();
+		static char entityName[50]{ "" };
 
-		input = (char*)tag.tag.c_str();
+		std::copy(tag.tag.begin(), tag.tag.end(), entityName);
 
-		if (ImGui::InputText("Tag", input, 25))
-			tag.tag = std::string(input);
+		if (ImGui::InputText(" - tag", entityName, 50)) {
+			tag.tag = std::string(entityName);
+		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_TransformComponent(bool window_focused, bool is_play_mode) {
+	void GUI_EntityPanel::Scene_Handle_TransformComponent() {
 		ImGui::Separator();
 		ImGui::Text("TransformComponent\n");
 
@@ -217,38 +244,36 @@ namespace mar::editor {
 
 		// Sliders
 		{
-			static bool updated_transform;
-			updated_transform = false;
+			bool updatedTransform = false;
 
-			static float last_general;
-			last_general = tran.general_scale;
+			static float lastGeneral;
+			lastGeneral = tran.general_scale;
 
-			if (ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -200.0f, 200.0f, "%.2f", 1.f) ) updated_transform = true;
-			if (ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f)	 ) updated_transform = true;
-			if (ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.01f, 0.f, 20.0f, "%.2f", 1.f)			 ) updated_transform = true;
-			if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)							 ) updated_transform = true;
+			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)) { updatedTransform = true; }
 
-			if (last_general != tran.general_scale)
-				tran.scale += tran.general_scale - last_general;
+			if (lastGeneral != tran.general_scale) { tran.scale += tran.general_scale - lastGeneral; }
 
 			if (ImGui::Button("Reset to default scale")) {
 				tran.general_scale = 1.f;
 				tran.scale.x = 1.f;
 				tran.scale.y = 1.f;
 				tran.scale.z = 1.f;
-				updated_transform = true;
+				updatedTransform = true;
 			}
 
-			if (updated_transform) {
+			if (updatedTransform) {
 				tran.recalculate();
-				if(!is_play_mode) ecs::SceneEvents::Instance().updateTransform(currentEntity);
+				ecs::SceneEvents::Instance().updateTransform(currentEntity);
 			}
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_ScriptComponent(bool window_focused) {
+	void GUI_EntityPanel::Scene_Handle_ScriptComponent() {
 		ImGui::Separator();
 
 		ImGui::Text("ScriptComponent\n");
@@ -273,12 +298,13 @@ namespace mar::editor {
 		ImGui::SameLine();
 
 		if (ImGui::Button("Assign script to entity")) { GUI_Filesystem::Instance()->openAssigningScriptWindow(); }
+
 		GUI_Filesystem::Instance()->displayAssigningScriptWindow(currentEntity);
-		
+
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_RenderableComponent(bool window_focused) {
+	void GUI_EntityPanel::Scene_Handle_RenderableComponent() {
 		static bool GUI_modify_renderable = false; // should display option to modify the whole RenderableComponent ?
 
 		auto& renderable = currentEntity->getComponent<ecs::RenderableComponent>();
@@ -348,7 +374,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_CameraComponent(bool window_focused, bool is_play_mode) {
+	void GUI_EntityPanel::Scene_Handle_CameraComponent(bool is_play_mode) {
 		static char* GUI_input{ (char*)"empty" };
 		auto& camcmp = currentEntity->getComponent<ecs::CameraComponent>();
 
@@ -400,10 +426,12 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_ColorComponent(bool window_focused, bool is_play_mode) {
+	void GUI_EntityPanel::Scene_Handle_ColorComponent() {
 		ImGui::Separator();
 		ImGui::Text("ColorComponent\n");
+
 		ImGui::SameLine();
+
 		if (ImGui::MenuItem("Remove Color")) {
 			currentEntity->removeComponent<ecs::ColorComponent>(ECS_COLOR);
 			ecs::SceneEvents::Instance().updatedColor(currentEntity);
@@ -412,13 +440,14 @@ namespace mar::editor {
 
 		auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
-		if (ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture)))
-			if(!is_play_mode) ecs::SceneEvents::Instance().updatedColor(currentEntity);
-
+		if (ImGui::ColorEdit3("- color", maths::vec3::value_ptr_nonconst(color.texture))) {
+			ecs::SceneEvents::Instance().updatedColor(currentEntity);
+		}
+			
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_Texture2DComponent(bool window_focused) {
+	void GUI_EntityPanel::Scene_Handle_Texture2DComponent() {
 		static bool GUI_load_new_texture = false;
 		auto& tex = currentEntity->getComponent<ecs::Texture2DComponent>();
 
@@ -478,7 +507,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_TextureCubemapComponent(bool window_focused) {
+	void GUI_EntityPanel::Scene_Handle_TextureCubemapComponent() {
 		static bool GUI_load_new_cubemap = false;
 		auto& cubemap = currentEntity->getComponent<ecs::TextureCubemapComponent>();
 
@@ -534,8 +563,9 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
 	}
 
-	void GUI_EntityPanel::Scene_Handle_LightComponent(bool window_focused, bool is_play_mode) {
+	void GUI_EntityPanel::Scene_Handle_LightComponent() {
 		ImGui::Separator();
+
 		ImGui::Text("LightComponent\n");
 
 		ImGui::SameLine();
@@ -547,21 +577,20 @@ namespace mar::editor {
 		}
 
 		auto& light = currentEntity->getComponent<ecs::LightComponent>();
+		bool updatedLight = false;
 
-		static bool updated_light;
-		updated_light = false;
+		if (ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
+		if (ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
+		if (ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
+																					  						  
+		if (ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f)			) { updatedLight = true; }
+		if (ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f)			) { updatedLight = true; }
+		if (ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f)		) { updatedLight = true; }
+		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) { updatedLight = true; }
 
-		if (ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f)	) updated_light = true;
-		if (ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f)	) updated_light = true;
-		if (ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f)	) updated_light = true;
-																				
-		if (ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f)			) updated_light = true;
-		if (ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f)			) updated_light = true;
-		if (ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f)		) updated_light = true;
-		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) updated_light = true;
-
-		if(updated_light)
-			if(!is_play_mode) ecs::SceneEvents::Instance().updatedLight(currentEntity);
+		if (updatedLight) {
+			ecs::SceneEvents::Instance().updatedLight(currentEntity);
+		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
 	}

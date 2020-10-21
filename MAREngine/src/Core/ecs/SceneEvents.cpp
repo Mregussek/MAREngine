@@ -23,6 +23,7 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityCollection.h"
 #include "ECSLogs.h"
+#include "../graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar::ecs {
@@ -31,7 +32,10 @@ namespace mar::ecs {
 
 
 	void SceneEvents::updateTransform(const Entity* e) {
-		m_sceneManager->initialize();
+		const auto& transform = e->getComponent<TransformComponent>();
+		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+
+		graphics::RenderPipeline::Instance().modifyTransform(transform, rpc.containerIndex, rpc.transformIndex);
 
 		ECS_TRACE("SCENE_EVENTS: updateTransform!");
 	}
@@ -49,7 +53,10 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::updatedColor(const Entity* e) {
-		m_sceneManager->initialize();
+		const auto& color = e->getComponent<ColorComponent>();
+		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+
+		graphics::RenderPipeline::Instance().modifyColor(color, rpc.containerIndex, rpc.colorIndex);
 
 		ECS_TRACE("SCENE_EVENTS: updatedColor!");
 	}
@@ -67,7 +74,11 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::updatedLight(const Entity* e) {
-		m_sceneManager->initialize();
+		const auto& transform = e->getComponent<TransformComponent>();
+		const auto& light = e->getComponent<LightComponent>();
+		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+
+		graphics::RenderPipeline::Instance().modifyLight(transform.center, light, rpc.containerLightIndex, rpc.lightIndex);
 
 		ECS_TRACE("SCENE_EVENTS: updatedLight!");
 	}
