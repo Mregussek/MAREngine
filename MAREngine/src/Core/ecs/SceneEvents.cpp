@@ -31,7 +31,7 @@ namespace mar::ecs {
 	SceneEvents SceneEvents::s_instance;
 
 
-	void SceneEvents::updateTransform(const Entity* e) {
+	void SceneEvents::onTransformUpdate(const Entity* e) {
 		const auto& transform = e->getComponent<TransformComponent>();
 		const auto& rpc = e->getComponent<RenderPipelineComponent>();
 
@@ -40,19 +40,39 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: updateTransform!");
 	}
 
-	void SceneEvents::updateRenderables(const Entity* e) {
+	void SceneEvents::onRenderableAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onRenderableUpdate(const Entity* e) {
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updateRenderables!");
 	}
+	
+	void SceneEvents::onRenderableRemove() {
+		m_sceneManager->initialize();
+	}
 
-	void SceneEvents::updatedCamera(const Entity* e) {
+	void SceneEvents::onCameraAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onCameraUpdate(const Entity* e) {
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCamera!");
 	}
 
-	void SceneEvents::updatedColor(const Entity* e) {
+	void SceneEvents::onCameraRemove() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onColorAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onColorUpdate(const Entity* e) {
 		const auto& color = e->getComponent<ColorComponent>();
 		const auto& rpc = e->getComponent<RenderPipelineComponent>();
 
@@ -61,19 +81,43 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: updatedColor!");
 	}
 
-	void SceneEvents::updatedTexture2D(const Entity* e) {
+	void SceneEvents::onColorRemove() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onTexture2DAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onTexture2DUpdate(const Entity* e) {
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedTexture2D!");
 	}
 
-	void SceneEvents::updatedCubemap(const Entity* e) {
+	void SceneEvents::onTexture2DRemove() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onTextureCubemapAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onTextureCubemapUpdate(const Entity* e) {
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCubemap!");
 	}
 
-	void SceneEvents::updatedLight(const Entity* e) {
+	void SceneEvents::onTextureCubemapRemove() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onLightAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onLightUpdate(const Entity* e) {
 		const auto& transform = e->getComponent<TransformComponent>();
 		const auto& light = e->getComponent<LightComponent>();
 		const auto& rpc = e->getComponent<RenderPipelineComponent>();
@@ -83,10 +127,22 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: updatedLight!");
 	}
 
-	void SceneEvents::updatedScript(const Entity* e) {
+	void SceneEvents::onLightRemove() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onScriptAdd() {
+		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onScriptUpdate(const Entity* e) {
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: updatedScript!");
+	}
+
+	void SceneEvents::onScriptRemove() {
+		m_sceneManager->initialize();
 	}
 
 	void SceneEvents::onEntityCopy() {

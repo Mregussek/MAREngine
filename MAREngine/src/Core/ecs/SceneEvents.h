@@ -40,14 +40,36 @@ namespace mar::ecs {
 		static SceneEvents& Instance() { return s_instance; }
 		void setSceneManager(SceneManager& manager) { m_sceneManager = &manager; }
 
-		void updateTransform(const Entity* e);
-		void updateRenderables(const Entity* e);
-		void updatedCamera(const Entity* e);
-		void updatedColor(const Entity* e);
-		void updatedTexture2D(const Entity* e);
-		void updatedCubemap(const Entity* e);
-		void updatedLight(const Entity* e);
-		void updatedScript(const Entity* e);
+		void onTransformUpdate(const Entity* e);
+
+		void onRenderableAdd();
+		void onRenderableUpdate(const Entity* e);
+		void onRenderableRemove();
+
+		void onCameraAdd();
+		void onCameraUpdate(const Entity* e);
+		void onCameraRemove();
+
+		void onColorAdd();
+		void onColorUpdate(const Entity* e);
+		void onColorRemove();
+
+		void onTexture2DAdd();
+		void onTexture2DUpdate(const Entity* e);
+		void onTexture2DRemove();
+
+		void onTextureCubemapAdd();
+		void onTextureCubemapUpdate(const Entity* e);
+		void onTextureCubemapRemove();
+
+		void onLightAdd();
+		void onLightUpdate(const Entity* e);
+		void onLightRemove();
+
+		void onScriptAdd();
+		void onScriptUpdate(const Entity* e);
+		void onScriptRemove();
+
 		void onEntityCopy();
 		void onEntityRemove();
 		void onCollectionTransformUpdate();

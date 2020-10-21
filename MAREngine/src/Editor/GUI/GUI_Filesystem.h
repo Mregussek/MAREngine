@@ -53,6 +53,8 @@ namespace mar::editor {
 
 	private:
 
+		void eraseSubstring(std::string& str, const std::string& toErase);
+
 		imgui_addons::ImGuiFileBrowser m_fileDialog;
 
 		static GUI_Filesystem* s_instance;

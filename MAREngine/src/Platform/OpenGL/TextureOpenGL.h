@@ -48,6 +48,7 @@ namespace mar::platforms {
 		void unbind(const std::vector<float>& texture_types) const;
 
 		static bool hasTexture(std::string key);
+		static bool hasCubemap(std::string key);
 
 		static uint32_t getTexture(std::string key) { return s_2d.at(key); }
 		static uint32_t getCubemap(std::string key) { return s_cubemaps.at(key); }

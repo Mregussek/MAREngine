@@ -49,20 +49,20 @@ namespace mar::editor {
 
 	private:
 
-		void displayPlayMode(bool is_play_mode);
-		void displayEditorMode(bool is_play_mode);
+		void displayPlayMode();
+		void displayEditorMode();
 
-		void Scene_Entity_Modify_PopUp();
+		void popUpMenu();
 
-		void Scene_Handle_TagComponent();
-		void Scene_Handle_RenderableComponent();
-		void Scene_Handle_TransformComponent();
-		void Scene_Handle_ScriptComponent();
-		void Scene_Handle_CameraComponent(bool is_play_mode);
-		void Scene_Handle_ColorComponent();
-		void Scene_Handle_Texture2DComponent();
-		void Scene_Handle_TextureCubemapComponent();
-		void Scene_Handle_LightComponent();
+		void handleTagComponent();
+		void handleTransformComponent();
+		void handleScriptComponent();
+		void handleRenderableComponent();
+		void handleCameraComponent();
+		void handleColorComponent();
+		void handleTexture2DComponent();
+		void handleTextureCubemapComponent();
+		void handleLightComponent();
 
 		template<typename T>
 		bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName);

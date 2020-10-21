@@ -180,6 +180,14 @@ namespace mar::platforms {
 		return false;
 	}
 
+	bool TextureOpenGL::hasCubemap(std::string key) {
+		auto search = s_cubemaps.find(key);
+		if (search != s_cubemaps.end())
+			return true;
+
+		return false;
+	}
+
 	void TextureOpenGL::bind2D(uint32_t unit, uint32_t tex_id) const {
 		PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, tex_id) );

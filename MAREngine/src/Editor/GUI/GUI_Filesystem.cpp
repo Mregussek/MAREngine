@@ -115,8 +115,19 @@ namespace mar::editor {
 
 	void GUI_Filesystem::displayAssigningScriptWindow(const ecs::Entity* entity) {
 		if (m_fileDialog.showFileDialog(m_nameAssignScript, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".py")) {
+			const auto& assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
+
 			auto& script = entity->getComponent<ecs::ScriptComponent>();
 			script.script = std::string(m_fileDialog.selected_path);
+			
+			eraseSubstring(script.script, assetsPath);
+		}
+	}
+
+	void GUI_Filesystem::eraseSubstring(std::string& str, const std::string& toErase) {
+		size_t pos = std::string::npos;
+		while ((pos = str.find(toErase)) != std::string::npos) {
+			str.erase(pos, toErase.length());
 		}
 	}
 
