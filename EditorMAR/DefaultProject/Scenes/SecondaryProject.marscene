@@ -1,0 +1,74 @@
+MAREngine scene file
+
+#SceneStart
+#Scene_Name SecondaryProject.marscene
+#Scene_Background 0.22 0.69 0.87
+
+#EntityStart
+#TagComponent Camera
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#CameraComponent Begin
+#id secondary
+#used perspective
+#type perspective
+#fov 45
+#aspectratio 1.33333
+#near 0.01
+#far 100
+#type orthographic
+#left -10
+#right 10
+#top 10
+#bottom -10
+#near 100
+#far 100
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Light
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
+
+#EntityEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/deagle.obj
+
+#EntityStart
+#TagComponent deagle
+#TransformComponent Begin
+#center 3.75 0 0
+#angles -0.5 -53 -0.5
+#scale 1 1 1
+#general_scale 1
+#RenderableComponent deagle
+#ColorComponent 0.374658 0.842105 0.345073
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#CollectionTagComponent deagle.obj
+
+#EntityCollectionEnd
+
+#SceneEnd

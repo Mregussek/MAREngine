@@ -50,10 +50,18 @@ namespace mar::editor {
 	}
 
 	void GUI_Filesystem::displayNewSceneWindow() {
-		if (m_fileDialog.showFileDialog(m_nameNewScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {
-			std::cout << m_fileDialog.selected_fn << "\n";
-			std::cout << m_fileDialog.selected_path << "\n";
-			std::cout << m_fileDialog.ext << "\n";
+		if (m_fileDialog.showFileDialog(m_nameNewScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {		
+			ecs::Scene* newScene = ecs::Scene::createEmptyScene(m_fileDialog.selected_fn);
+			Filesystem::saveToFile(newScene, m_fileDialog.selected_path.c_str());
+			delete newScene;
+
+			engine::MAREngine::getEngine()->setLoadPath(m_fileDialog.selected_path);
+
+			GUI_EntityCollectionPanel::Instance()->reset();
+			GUI_EntityPanel::Instance()->reset();
+			GUI_TextEditor::Instance()->reset();
+
+			engine::MAREngine::getEngine()->setRestart();
 		}
 	}
 
