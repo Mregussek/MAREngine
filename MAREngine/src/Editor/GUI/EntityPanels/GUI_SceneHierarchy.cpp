@@ -30,7 +30,6 @@
 #include "../../../Core/ecs/SceneManager.h"
 
 #include "../../../Window/Input.h"
-#include "../../../Core/graphics/Renderer/RenderPipeline.h"
 
 #include "../../EditorLogging.h"
 
@@ -38,7 +37,7 @@
 namespace mar::editor {
 
 
-	void GUI_SceneHierarchy::Scene_Hierarchy(ecs::SceneManager* manager) {
+	void GUI_SceneHierarchy::update(ecs::SceneManager* manager) {
 		ImGui::Begin("Scene Hierarchy");
 
 		ImGui::Text("SCENE - %s", manager->getScene()->getName().c_str());
@@ -78,15 +77,14 @@ namespace mar::editor {
 			GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
 		}
 
-		Scene_Hierarchy_PopUp(manager);
-		Scene_Statistics(manager);
+		popUpMenu(manager);
 		
 		ImGui::End();
 
 		EDITOR_TRACE("GUI: scene_hierarchy");
 	}
 
-	void GUI_SceneHierarchy::Scene_Hierarchy_PopUp(ecs::SceneManager* manager) {
+	void GUI_SceneHierarchy::popUpMenu(ecs::SceneManager* manager) {
 		if (manager->isPlayMode()) {
 			EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
 			return;
@@ -94,7 +92,7 @@ namespace mar::editor {
 
 		if (ImGui::IsWindowFocused()) {
 			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
-				ImGui::OpenPopup("SceneEntityModifyPopUp");
+				ImGui::OpenPopup("SceneHierarchyPopUp");
 			}
 		}
 
@@ -110,112 +108,53 @@ namespace mar::editor {
 				GUI_EntityCollectionPanel::Instance()->reset();
 				GUI_EntityPanel::Instance()->setCurrentEntity(manager->getScene()->createEntity());
 			}
-			/*
-			if (GUI_EntityCollectionPanel::currentCollection) {
-				const char* collection_tag = GUI_EntityCollectionPanel::currentCollection->getComponent<ecs::TagComponent>().tag.c_str();
 
+			const auto& collection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
+			const bool collectionExists = &collection != nullptr;
+
+			const auto& entity = GUI_EntityPanel::Instance()->getCurrentEntity();
+			const bool entityExists = &entity != nullptr;
+
+			if (collectionExists) {
+				const char* collection_tag = collection.getComponent<ecs::TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
-					GUI_EntityPanel::currentEntity = &GUI_EntityCollectionPanel::currentCollection->createEntity();
-					GUI_EntityPanel::currentIndex = GUI_EntityCollectionPanel::currentCollection->getEntities().size() - 1;
+					const auto& createdEntity = collection.createEntity();
+					GUI_EntityPanel::Instance()->setCurrentEntity(createdEntity);
 				}
 
+				/*
 				if (ImGui::MenuItem("Delete selected collection from Scene", collection_tag)) {
 					manager->getScene()->destroyCollection(GUI_EntityCollectionPanel::currentIndex);
-					GUI_EntityCollectionPanel::reset();
-					GUI_EntityPanel::reset();
+					GUI_EntityCollectionPanel::Instance()->reset();
+					GUI_EntityPanel::Instance()->reset();
 					ecs::SceneEvents::Instance().onCollectionRemove();
 				}
-
-				if (GUI_EntityPanel::currentEntity) {
-					std::string delete_message = "Delete entity " + GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag + " from selected collection";
+				
+				if (entityExists) {
+					const std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
 					if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 						manager->getScene()->destroyEntityAtCollection(GUI_EntityCollectionPanel::currentIndex, GUI_EntityPanel::currentIndex);
-						GUI_EntityPanel::reset();
+						GUI_EntityPanel::Instance()->reset();
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 				}
+				*/
 			}
-			else if (GUI_EntityPanel::currentEntity) {
-				const char* entity_tag = GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag.c_str();
+			else if (entityExists) {
+				/*
+				const char* entity_tag = entity.getComponent<ecs::TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
 					manager->getScene()->destroyEntity(GUI_EntityPanel::currentIndex);
-					GUI_EntityPanel::reset();
+					GUI_EntityPanel::Instance()->reset();
 					ecs::SceneEvents::Instance().onEntityRemove();
 				}
+				*/
 			}
-			*/
+	
 			ImGui::EndPopup();
 		}
 
 		EDITOR_TRACE("GUI: scene_hierarchy_popup");
-	}
-
-	void GUI_SceneHierarchy::Scene_Statistics(ecs::SceneManager* manager) {
-		ImGui::Begin("Statistics Menu");
-
-		auto& render_pip = graphics::RenderPipeline::Instance();
-		auto& stats = render_pip.getStatistics();
-
-		for (const auto& container : render_pip.getContainers()) {
-			stats.shapesCount += container.getTransforms().size();
-			stats.verticesCount += container.getVertices().size();
-			stats.indicesCount += container.getIndices().size();
-			stats.trianglesCount += container.getIndices().size() / 3;
-		}
-		
-		stats.entitiesCount += manager->getScene()->getEntities().size();
-		stats.entityCollectionsCount += manager->getScene()->getCollections().size();
-
-		stats.allEntitiesCount += stats.entitiesCount;
-		for (auto& collection : manager->getScene()->getCollections()) {
-			stats.allEntitiesCount += collection.getEntities().size();
-		}
-
-		uint32_t renderables_count = 0;
-		for(auto& entity : manager->getScene()->getEntities()) { 
-			if (entity.hasComponent<ecs::RenderableComponent>()) { renderables_count++; }
-		}
-		for (auto& collection : manager->getScene()->getCollections()) {
-			for (auto& entity : collection.getEntities()) {
-				if (entity.hasComponent<ecs::RenderableComponent>()) { renderables_count++; }
-			}
-		}
-
-		ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
-		ImGui::Text("Vertices: %d" , stats.verticesCount);
-		ImGui::Text("Indices: %d", stats.indicesCount);
-		ImGui::Text("Triangles: %d", stats.trianglesCount);
-		ImGui::Text("Entities: %d", stats.entitiesCount);
-		ImGui::Text("EntityCollections: %d", stats.entityCollectionsCount);
-		ImGui::Text("All Entities: %d", stats.allEntitiesCount);
-		ImGui::Text("All Entities with Renderable: %d", renderables_count);
-
-		ImGui::Separator();
-
-		static double lasttime = GetTickCount() * 0.001;
-		static double currenttime;
-		static double fps = 0.0;
-		static int frames = 0;
-
-		currenttime = GetTickCount64() * 0.001;
-		frames++;
-
-		if (currenttime - lasttime > 1.0) {
-			fps = frames / (currenttime - lasttime);
-			frames = 0;
-			lasttime = currenttime;
-		}
-
-		ImGui::Text("My FPS: %f ms/frame", fps);
-
-		ImGui::Separator();
-
-		ImGui::Text("FPS: %f", ImGui::GetIO().Framerate);
-		ImGui::Text("ms/frame: %f", 1000.0f / ImGui::GetIO().Framerate);
-
-		ImGui::End();
-
-		EDITOR_TRACE("GUI: scene_statistics");
 	}
 
 	

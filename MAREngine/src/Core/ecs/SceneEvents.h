@@ -37,44 +37,44 @@ namespace mar::ecs {
 
 		SceneEvents() = default;
 
-		static SceneEvents& Instance() { return s_instance; }
-		void setSceneManager(SceneManager& manager) { m_sceneManager = &manager; }
+		static SceneEvents& Instance();
+		void setSceneManager(SceneManager& manager);
 
-		void onTransformUpdate(const Entity* e);
+		void onTransformUpdate(const Entity* e) const;
 
-		void onRenderableAdd();
-		void onRenderableUpdate(const Entity* e);
-		void onRenderableRemove();
+		void onRenderableAdd() const;
+		void onRenderableUpdate(const Entity* e) const;
+		void onRenderableRemove() const;
 
-		void onCameraAdd();
-		void onCameraUpdate(const Entity* e);
-		void onCameraRemove();
+		void onCameraAdd() const;
+		void onCameraUpdate(const Entity* e) const;
+		void onCameraRemove() const;
 
-		void onColorAdd();
-		void onColorUpdate(const Entity* e);
-		void onColorRemove();
+		void onColorAdd() const;
+		void onColorUpdate(const Entity* e) const;
+		void onColorRemove() const;
 
-		void onTexture2DAdd();
-		void onTexture2DUpdate(const Entity* e);
-		void onTexture2DRemove();
+		void onTexture2DAdd() const;
+		void onTexture2DUpdate(const Entity* e) const;
+		void onTexture2DRemove() const;
 
-		void onTextureCubemapAdd();
-		void onTextureCubemapUpdate(const Entity* e);
-		void onTextureCubemapRemove();
+		void onTextureCubemapAdd() const;
+		void onTextureCubemapUpdate(const Entity* e) const;
+		void onTextureCubemapRemove() const;
 
-		void onLightAdd();
-		void onLightUpdate(const Entity* e);
-		void onLightRemove();
+		void onLightAdd() const;
+		void onLightUpdate(const Entity* e) const;
+		void onLightRemove() const; 
 
-		void onScriptAdd();
-		void onScriptUpdate(const Entity* e);
-		void onScriptRemove();
+		void onScriptAdd() const;
+		void onScriptUpdate(const Entity* e) const;
+		void onScriptRemove() const;
 
-		void onEntityCopy();
-		void onEntityRemove();
-		void onCollectionTransformUpdate();
-		void onCollectionRemove();
-		void onCollectionOBJloaded(const EntityCollection& collection);
+		void onEntityCopy() const;
+		void onEntityRemove() const;
+		void onCollectionTransformUpdate() const;
+		void onCollectionRemove() const;
+		void onCollectionOBJloaded(const EntityCollection& collection) const;
 
 	private:
 

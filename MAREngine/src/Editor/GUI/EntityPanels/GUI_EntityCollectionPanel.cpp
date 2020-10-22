@@ -36,11 +36,27 @@ namespace mar::editor {
 
 	GUI_EntityCollectionPanel* GUI_EntityCollectionPanel::s_instance{ nullptr };
 
+
+	void GUI_EntityCollectionPanel::initialize() {
+		if (m_initialized) { return; }
+
+		s_instance = this;
+		m_initialized = true;
+	}
+
 	void GUI_EntityCollectionPanel::reset() {
 		currentCollection = nullptr;
 	}
 
-	void GUI_EntityCollectionPanel::Scene_EntityCollection_Modify() {
+	void GUI_EntityCollectionPanel::setCurrentCollection(const ecs::EntityCollection& collection) {
+		currentCollection = &collection; 
+	}
+
+	const ecs::EntityCollection& GUI_EntityCollectionPanel::getCurrentCollection() const {
+		return *currentCollection;
+	}
+
+	void GUI_EntityCollectionPanel::update() const {
 		ImGui::Begin("EntityCollection Panel");
 
 		if (!currentCollection) {
@@ -54,11 +70,11 @@ namespace mar::editor {
 		ImGui::Text("ENTITYCOLLECTION --- %s", tag.tag.c_str());
 		ImGui::Separator();
 
-		Handle_TagComponent(tag);
+		handleTagComponent(tag);
 		
 		ImGui::Separator();
 
-		Handle_TransformComponent();
+		handleTransformComponent();
 
 		ImGui::Separator();
 
@@ -71,69 +87,73 @@ namespace mar::editor {
 
 		std::for_each(entities.begin(), entities.end(), menuItemClicked);
 
-		Scene_EntityCollection_PopUp(tag.tag.c_str());
+		popUpMenu(tag.tag.c_str());
 
 		ImGui::End();
 	}
 
-	void GUI_EntityCollectionPanel::Handle_TagComponent(ecs::TagComponent& tag) {
-		static char* input;
-		input = (char*)tag.tag.c_str();
+	void GUI_EntityCollectionPanel::handleTagComponent(ecs::TagComponent& tag) const {
+		constexpr size_t inputSize = 50;
+		static char collectionName[inputSize]{ "" };
 
-		if (ImGui::InputText("Tag", input, 25))
-			tag.tag = std::string(input);
+		std::fill(std::begin(collectionName), std::end(collectionName), '\0');
+		std::copy(tag.tag.begin(), tag.tag.end(), collectionName);
+
+		if (ImGui::InputText(" - tag", collectionName, inputSize)) {
+			tag.tag = std::string(collectionName);
+		}
 	}
 
-	void GUI_EntityCollectionPanel::Handle_TransformComponent() {
+	void GUI_EntityCollectionPanel::handleTransformComponent() const {
 		auto& tran = currentCollection->getComponent<ecs::TransformComponent>();
 
-		// Sliders
-		{
-			static bool updated_transform;
-			updated_transform = false;
+		{ // Sliders
+			bool updatedTransform = false;
 
-			static maths::vec3 last_center;
-			static maths::vec3 last_angles;
-			static maths::vec3 last_scale;
-			static float last_general;
-			last_center = tran.center;
-			last_angles = tran.angles;
-			last_scale = tran.scale;
-			last_general = tran.general_scale;
+			static maths::vec3 lastCenter;
+			static maths::vec3 lastAngles;
+			static maths::vec3 lastScale;
+			static float lastGeneral;
 
-			if (ImGui::DragFloat3("Position", maths::vec3::value_ptr_nonconst(tran.center), 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) updated_transform = true;
-			if (ImGui::DragFloat3("Rotation", maths::vec3::value_ptr_nonconst(tran.angles), 0.5f, -360.f, 360.f, "%.2f", 1.f)) updated_transform = true;
-			if (ImGui::DragFloat3("Scale", maths::vec3::value_ptr_nonconst(tran.scale), 0.01f, 0.f, 20.0f, "%.2f", 1.f)) updated_transform = true;
-			if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)) updated_transform = true;
+			lastCenter = tran.center;
+			lastAngles = tran.angles;
+			lastScale = tran.scale;
+			lastGeneral = tran.general_scale;
 
-			if (last_general != tran.general_scale)
-				tran.scale += tran.general_scale - last_general;
+			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)) { updatedTransform = true; }
+
+			if (lastGeneral != tran.general_scale) { tran.scale += tran.general_scale - lastGeneral; }
 
 			if (ImGui::Button("Reset to default scale")) {
 				tran.general_scale = 1.f;
 				tran.scale.x = 1.f;
 				tran.scale.y = 1.f;
 				tran.scale.z = 1.f;
-				updated_transform = true;
+				updatedTransform = true;
 			}
 
-			if (updated_transform) {
-				maths::vec3 diff_center = last_center != tran.center ? tran.center - last_center : maths::vec3{ 0.f, 0.f, 0.f };
-				maths::vec3 diff_angles = last_angles != tran.angles ? tran.angles - last_angles : maths::vec3{ 0.f, 0.f, 0.f };
-				maths::vec3 diff_scale = last_scale != tran.scale ? tran.scale - last_scale : maths::vec3{ 0.f, 0.f, 0.f };
-				float diff_generalscale = last_general != tran.general_scale ? tran.general_scale - last_general : 0.f;
+			if (updatedTransform) {
+				const auto diffCenter = lastCenter != tran.center ? tran.center - lastCenter : maths::vec3();
+				const auto diffAngles = lastAngles != tran.angles ? tran.angles - lastAngles : maths::vec3();
+				const auto diffScale =	lastScale != tran.scale ? tran.scale - lastScale : maths::vec3();
+				const auto diffGeneralScale = lastGeneral != tran.general_scale ? tran.general_scale - lastGeneral : 0.f;
+
+				auto createRelativeTransformToCollection = [&diffCenter, &diffAngles, &diffScale, diffGeneralScale](const ecs::Entity& entity) {
+					auto& entityTransform = entity.getComponent<ecs::TransformComponent>();
+
+					entityTransform.center += diffCenter;
+					entityTransform.angles += diffAngles;
+					entityTransform.scale += diffScale;
+					entityTransform.general_scale += diffGeneralScale;
+
+					entityTransform.recalculate();
+				};
 
 				const auto& entities = currentCollection->getEntities();
-				std::for_each(entities.begin(), entities.end(), [&diff_center, &diff_angles, &diff_scale, diff_generalscale](const ecs::Entity& entity) {
-					auto& transform = entity.getComponent<ecs::TransformComponent>();
-
-					transform.center += diff_center;
-					transform.angles += diff_angles;
-					transform.scale += diff_scale;
-					transform.general_scale += diff_generalscale;
-
-					transform.recalculate();
-				});
+				std::for_each(entities.cbegin(), entities.cend(), createRelativeTransformToCollection);
 
 				ecs::SceneEvents::Instance().onCollectionTransformUpdate();
 			}
@@ -142,13 +162,13 @@ namespace mar::editor {
 		{ // Reset to entities 
 			if (ImGui::Button("Reset all entities to collection transform")) {
 				const auto& entities = currentCollection->getEntities();
-				std::for_each(entities.begin(), entities.end(), [&tran](const ecs::Entity& entity) {
+				std::for_each(entities.begin(), entities.end(), [&collectionTransform = std::as_const(tran)](const ecs::Entity& entity) {
 					auto& transform = entity.getComponent<ecs::TransformComponent>();
 
-					transform.center = tran.center;
-					transform.angles = tran.angles;
-					transform.scale = tran.scale;
-					transform.general_scale = tran.general_scale;
+					transform.center = collectionTransform.center;
+					transform.angles = collectionTransform.angles;
+					transform.scale = collectionTransform.scale;
+					transform.general_scale = collectionTransform.general_scale;
 
 					transform.recalculate();
 				});
@@ -158,25 +178,28 @@ namespace mar::editor {
 		}
 	}
 
-	void GUI_EntityCollectionPanel::Scene_EntityCollection_PopUp(const char* collection_tag) {
+	void GUI_EntityCollectionPanel::popUpMenu(const char* collection_tag) const {
 		if (ImGui::IsWindowFocused()) {
 			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
-				ImGui::OpenPopup("SceneEntityModifyPopUp");
+				ImGui::OpenPopup("EntityCollectionPopUp");
 			}
 		}
 
 		if (ImGui::BeginPopup("EntityCollectionPopUp")) {
+			const auto& entity = GUI_EntityPanel::Instance()->getCurrentEntity();
+			const bool selectedEntityExists = &entity != nullptr;
+
 			if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
 				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->createEntity());
 			}
 
 			/*
-			if (GUI_EntityPanel::currentEntity) {
-				std::string delete_message = "Delete entity " + GUI_EntityPanel::currentEntity->getComponent<ecs::TagComponent>().tag + " from selected collection";
+			if (selectedEntityExists) {
+				std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
 				if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 					currentCollection->destroyEntity(GUI_EntityPanel::currentIndex);
 					GUI_EntityPanel::Instance()->reset();
-					GUI_TextEditor::Instance().reset();
+					GUI_TextEditor::Instance()->reset();
 					ecs::SceneEvents::Instance().onEntityRemove();
 				}
 			}

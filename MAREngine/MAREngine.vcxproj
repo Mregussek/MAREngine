@@ -273,6 +273,7 @@
     <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
     <ClInclude Include="src\Editor\GUI\GUI_MainMenuBar.h" />
+    <ClInclude Include="src\Editor\GUI\Other\GUI_Statistics.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
@@ -364,6 +365,7 @@
     <ClCompile Include="src\Editor\GUI\GUI_MainMenuBar.cpp" />
     <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
+    <ClCompile Include="src\Editor\GUI\Other\GUI_Statistics.cpp" />
     <ClCompile Include="src\Editor\GUI\Other\GUI_Theme.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.cpp" />

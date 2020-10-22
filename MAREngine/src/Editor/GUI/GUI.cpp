@@ -28,6 +28,7 @@
 #include "../../Window/Window.h"
 
 #include "Other/GUI_Theme.h"
+#include "Other/GUI_Statistics.h"
 
 
 namespace mar::editor {
@@ -127,7 +128,8 @@ namespace mar::editor {
 	}
 
 	void GUI::updateFrame() {
-		GUI_SceneHierarchy::Scene_Hierarchy(m_sceneManager);
+		GUI_SceneHierarchy::update(m_sceneManager);
+		GUI_Statistics::update(m_sceneManager);
 
 		m_textEditor.update();
 
@@ -136,7 +138,7 @@ namespace mar::editor {
 		Editor_Properties();
 
 		m_entityPanel.update(m_sceneManager->isPlayMode());
-		m_collectionPanel.Scene_EntityCollection_Modify();
+		m_collectionPanel.update();
 
 		EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");
 	}

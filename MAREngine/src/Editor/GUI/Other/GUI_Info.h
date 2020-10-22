@@ -18,25 +18,20 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
-#define MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
+#ifndef MAR_ENGINE_EDITOR_GUI_INFO_H
+#define MAR_ENGINE_EDITOR_GUI_INFO_H
 
 
 #include "../../../mar.h"
 
 
-namespace mar::ecs { class SceneManager; }
 namespace mar::editor {
 
 
-	class GUI_SceneHierarchy {
-	public:
+	struct GUI_Info {
 
-		static void update(ecs::SceneManager* manager);
-		
-	private:
-
-		static void popUpMenu(ecs::SceneManager* manager);
+		static bool InfoWindow();
+		static bool InstructionWindow();
 
 	};
 
@@ -44,4 +39,4 @@ namespace mar::editor {
 }
 
 
-#endif // !MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
+#endif // !MAR_ENGINE_EDITOR_GUI_INFO_H

@@ -41,7 +41,7 @@ namespace mar::editor {
 		void initialize();
 		void reset();
 
-		void update(bool isPlayMode);
+		void update(bool isPlayMode) const;
 		
 		void setRenderCam(graphics::RenderCamera* renderCam);
 		void setCurrentEntity(const ecs::Entity& entity);
@@ -49,23 +49,23 @@ namespace mar::editor {
 
 	private:
 
-		void displayPlayMode();
-		void displayEditorMode();
+		void displayPlayMode() const;
+		void displayEditorMode() const;
 
-		void popUpMenu();
+		void popUpMenu() const;
 
-		void handleTagComponent();
-		void handleTransformComponent();
-		void handleScriptComponent();
-		void handleRenderableComponent();
-		void handleCameraComponent();
-		void handleColorComponent();
-		void handleTexture2DComponent();
-		void handleTextureCubemapComponent();
-		void handleLightComponent();
+		void handleTagComponent() const;
+		void handleTransformComponent() const;
+		void handleScriptComponent() const;
+		void handleRenderableComponent() const;
+		void handleCameraComponent() const;
+		void handleColorComponent() const;
+		void handleTexture2DComponent() const;
+		void handleTextureCubemapComponent() const;
+		void handleLightComponent() const;
 
 		template<typename T>
-		bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName);
+		bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) const;
 
 		static GUI_EntityPanel* s_instance;
 

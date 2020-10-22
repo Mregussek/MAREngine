@@ -2,7 +2,7 @@ MAREngine scene file
 
 #SceneStart
 #Scene_Name SecondaryProject.marscene
-#Scene_Background 0.22 0.69 0.87
+#Scene_Background 0.43055 0.863336 0.894737
 
 #EntityStart
 #TagComponent Camera
@@ -53,12 +53,12 @@ MAREngine scene file
 #EntityStart
 #TagComponent deagle
 #TransformComponent Begin
-#center 3.75 0 0
-#angles -0.5 -53 -0.5
+#center 5.55 -0.45 -6.25
+#angles 0 -41.5 2.5
 #scale 1 1 1
 #general_scale 1
 #RenderableComponent deagle
-#ColorComponent 0.374658 0.842105 0.345073
+#ColorComponent 0.448372 0.883459 0.834252
 
 #EntityEnd
 
@@ -68,6 +68,54 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 1
 #CollectionTagComponent deagle.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/monkey.obj
+
+#EntityStart
+#TagComponent Suzanne
+#TransformComponent Begin
+#center 7.7 0 0
+#angles -88.5 -0.5 -72
+#scale 2.01 2.01 2.01
+#general_scale 2.01
+#RenderableComponent Suzanne
+#ColorComponent 0.992481 0.115665 0.115665
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#CollectionTagComponent monkey.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/m4.obj
+
+#EntityStart
+#TagComponent m4a1
+#TransformComponent Begin
+#center 0 -2.6 -0.6
+#angles 0 0 0
+#scale 0.31 0.31 0.31
+#general_scale 0.31
+#RenderableComponent m4a1
+#ColorComponent 0.793233 0.793225 0.793225
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 1
+#CollectionTagComponent m4.obj
 
 #EntityCollectionEnd
 

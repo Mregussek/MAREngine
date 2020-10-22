@@ -66,7 +66,7 @@ namespace mar::editor {
 		return *currentEntity;
 	}
 
-	void GUI_EntityPanel::update(bool isPlayMode) {
+	void GUI_EntityPanel::update(bool isPlayMode) const {
 		ImGui::Begin("Entity Modification");
 
 		if (!currentEntity) {
@@ -89,7 +89,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: scene_entity_modify");
 	}
 
-	void GUI_EntityPanel::displayEditorMode() {
+	void GUI_EntityPanel::displayEditorMode() const {
 		if (currentEntity->hasComponent<ecs::TagComponent>()) {
 			handleTagComponent();
 		}
@@ -129,7 +129,7 @@ namespace mar::editor {
 		popUpMenu();
 	}
 
-	void GUI_EntityPanel::displayPlayMode() {
+	void GUI_EntityPanel::displayPlayMode() const {
 		ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
 
 		if (currentEntity->hasComponent<ecs::TransformComponent>()) {
@@ -148,7 +148,7 @@ namespace mar::editor {
 		}
 	}
 
-	void GUI_EntityPanel::popUpMenu() {
+	void GUI_EntityPanel::popUpMenu() const {
 		if (ImGui::IsWindowFocused()) {
 			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneEntityModifyPopUp");
@@ -220,22 +220,25 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: scene_entity_modify_popup");
 	}
 
-	void GUI_EntityPanel::handleTagComponent() {
+	void GUI_EntityPanel::handleTagComponent() const {
 		ImGui::Text("TagComponent\n");
 
 		auto& tag = currentEntity->getComponent<ecs::TagComponent>();
-		static char entityName[50]{ "" };
 
+		constexpr size_t inputSize = 50;
+		static char entityName[inputSize]{ "" };
+
+		std::fill(std::begin(entityName), std::end(entityName), '\0');
 		std::copy(tag.tag.begin(), tag.tag.end(), entityName);
 
-		if (ImGui::InputText(" - tag", entityName, 50)) {
+		if (ImGui::InputText(" - tag", entityName, inputSize)) {
 			tag.tag = std::string(entityName);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
 	}
 
-	void GUI_EntityPanel::handleTransformComponent() {
+	void GUI_EntityPanel::handleTransformComponent() const {
 		ImGui::Separator();
 		ImGui::Text("TransformComponent\n");
 
@@ -271,7 +274,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
 	}
 
-	void GUI_EntityPanel::handleScriptComponent() {
+	void GUI_EntityPanel::handleScriptComponent() const {
 		ImGui::Separator();
 
 		ImGui::Text("ScriptComponent\n");
@@ -302,7 +305,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}
 
-	void GUI_EntityPanel::handleRenderableComponent() {
+	void GUI_EntityPanel::handleRenderableComponent() const {
 		auto& renderable = currentEntity->getComponent<ecs::RenderableComponent>();
 
 		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ecs::ColorComponent>()
@@ -359,7 +362,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 	}
 
-	void GUI_EntityPanel::handleCameraComponent() {
+	void GUI_EntityPanel::handleCameraComponent() const {
 		ImGui::Separator();
 		ImGui::Text("CameraComponent\n");
 		ImGui::SameLine();
@@ -376,11 +379,13 @@ namespace mar::editor {
 
 		ImGui::Text("WARNING: To use camera in PlayMode please set Camera ID to \"main\"!");
 
-		static char cameraID[50]{ "" };
+		constexpr size_t inputSize = 50;
+		static char cameraID[inputSize]{ "" };
 
+		std::fill(std::begin(cameraID), std::end(cameraID), '\0');
 		std::copy(camera.id.begin(), camera.id.end(), cameraID);
 
-		if (ImGui::InputText(" - ID", cameraID, 50)) {
+		if (ImGui::InputText(" - camera ID", cameraID, inputSize)) {
 			camera.id = std::string(cameraID);
 		}
 
@@ -416,7 +421,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 	}
 
-	void GUI_EntityPanel::handleColorComponent() {
+	void GUI_EntityPanel::handleColorComponent() const {
 		ImGui::Separator();
 		ImGui::Text("ColorComponent\n");
 
@@ -437,15 +442,17 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 	}
 
-	void GUI_EntityPanel::handleTexture2DComponent() {
+	void GUI_EntityPanel::handleTexture2DComponent() const {
 		typedef platforms::TextureOpenGL TexGL;
 		auto& texture2D = currentEntity->getComponent<ecs::Texture2DComponent>();
 
 		auto modifyCurrentTexture = [&texture = texture2D.texture, this]() {
-			static char input[50];
+			constexpr size_t inputSize{ 50 };
+			static char input[inputSize];
+			std::fill(std::begin(input), std::end(input), '\0');
 			std::copy(texture.begin(), texture.end(), input);
 
-			if (ImGui::InputText(" ex. .jpg / .png", input, 50)) {
+			if (ImGui::InputText(" ex. .jpg / .png", input, inputSize)) {
 				texture = std::string(input);
 			}
 
@@ -487,17 +494,17 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
 	}
 
-	void GUI_EntityPanel::handleTextureCubemapComponent() {
+	void GUI_EntityPanel::handleTextureCubemapComponent() const {
 		typedef platforms::TextureOpenGL TexGL;
 		auto& cubemap = currentEntity->getComponent<ecs::TextureCubemapComponent>();
 
 		auto modifyCurrentCubemap = [&texture = cubemap.texture, this]() {
-			static char input[50];
+			constexpr size_t inputSize{ 50 };
+			static char input[inputSize];
+			std::fill(std::begin(input), std::end(input), '\0');
 			std::copy(texture.begin(), texture.end(), input);
 
-			ImGui::Text("Specify directory with 6 textures:");
-
-			if (ImGui::InputText(" - path", input, 50)) {
+			if (ImGui::InputText(" - path", input, inputSize)) {
 				texture = std::string(input);
 			}
 
@@ -537,7 +544,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
 	}
 
-	void GUI_EntityPanel::handleLightComponent() {
+	void GUI_EntityPanel::handleLightComponent() const {
 		ImGui::Separator();
 
 		ImGui::Text("LightComponent\n");
@@ -574,7 +581,7 @@ namespace mar::editor {
 	// --------------------------------------------
 
 	template<typename T>
-	bool GUI_EntityPanel::Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) {
+	bool GUI_EntityPanel::Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) const {
 		if (ImGui::Button(buttonName)) {
 			renderable.name = T::getID();
 			renderable.vertices = T::getVertices();

@@ -18,30 +18,22 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
-#define MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
+#ifndef MAR_ENGINE_EDITOR_GUI_THEME_H
+#define MAR_ENGINE_EDITOR_GUI_THEME_H
 
 
 #include "../../../mar.h"
 
 
-namespace mar::ecs { class SceneManager; }
 namespace mar::editor {
 
 
-	class GUI_SceneHierarchy {
-	public:
-
-		static void update(ecs::SceneManager* manager);
-		
-	private:
-
-		static void popUpMenu(ecs::SceneManager* manager);
-
+	struct GUI_Theme {
+		static void Setup_Theme();
 	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_GUI_SCENE_HIERARCHY_PANEL_H
+#endif // !MAR_ENGINE_EDITOR_GUI_THEME_H
