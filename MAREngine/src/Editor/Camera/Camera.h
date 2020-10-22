@@ -32,12 +32,12 @@ namespace mar::editor {
     class Camera {
     public:
 
-        Camera();
+        Camera() = default;
 
         void initialize(float aspectRatio);
         void update(float aspectRatio);
 
-        static graphics::RenderCamera& getCameraData() { return s_instance->m_renderCamera; }
+        static graphics::RenderCamera& getCameraData();
 
     private:
 
@@ -48,24 +48,25 @@ namespace mar::editor {
 
         void updateData();
 
-        maths::vec3 m_position;
-        maths::vec3 m_front;
-        maths::vec3 m_up;
-        maths::vec3 m_right;
-        maths::vec3 m_worldUp;
-
-        float m_yaw;
-        float m_pitch;
-
-        float m_movementSpeed;
-        float m_mouseSensitivity;
-        float m_zoom;
-
-        float m_aspectRatio;
-
         graphics::RenderCamera m_renderCamera;
 
+        maths::vec3 m_position{ -10.0f, 2.0f, 0.0f };
+        maths::vec3 m_front{ 0.0f, 0.0f, -1.0f };
+        maths::vec3 m_up;
+        maths::vec3 m_right;
+        maths::vec3 m_worldUp{ 0.0f, 1.0f, 0.0f };
+
+        float m_yaw{ 0.0f };
+        float m_pitch{ 0.0f };
+
+        float m_movementSpeed{ 5.0f };
+        float m_mouseSensitivity{ 0.1f };
+        float m_zoom{ 55.0f };
+
+        float m_aspectRatio{ 1.333f };
+
         static Camera* s_instance;
+
     };
 
 
