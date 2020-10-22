@@ -79,13 +79,16 @@ namespace mar::editor {
 		ImGui::Separator();
 
 		const auto& entities = currentCollection->getEntities();
-		auto menuItemClicked = [entityPanel = GUI_EntityPanel::Instance()](const ecs::Entity& entity) {
-			if (ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str())) {
-				entityPanel->setCurrentEntity(entity);
-			}
+
+		auto userSelectedEntity = [](const ecs::Entity& entity) {
+			return ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str());
 		};
 
-		std::for_each(entities.begin(), entities.end(), menuItemClicked);
+		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
+		if (itEntity != entities.cend()) {
+			const auto& entity = *itEntity;
+			GUI_EntityPanel::Instance()->setCurrentEntity(entity);
+		}
 
 		popUpMenu(tag.tag.c_str());
 
