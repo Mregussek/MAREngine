@@ -32,9 +32,11 @@ namespace mar::layers {
 
 
 	class Layer {
+
 		friend class LayerStack;
 
 	public:
+
 		Layer() = default;
 		Layer(const char* name) : p_debugName(name) { }
 

@@ -42,6 +42,7 @@ namespace mar::platforms::callbacks {
 	inline int32_t mouse_action{ 0 };
 	inline int32_t mouse_mods{ 0 };
 	
+
 	static void windowErrorCallback(int32_t error, const char* description) {
 		PLATFORM_ERROR("WINDOW_GLFW: Error number: {}, description: {}", error, description);
 	}

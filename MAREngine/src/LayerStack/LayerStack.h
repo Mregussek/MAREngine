@@ -31,10 +31,8 @@ namespace mar::layers {
 
 
 	class LayerStack {
-		std::vector<Layer*> m_layers;
-		uint32_t m_layerInsert{ 0 };
-
 	public:
+
 		LayerStack();
 
 		Layer* operator[](const uint32_t& index);
@@ -50,6 +48,11 @@ namespace mar::layers {
 		void popLayer(Layer* layer);
 
 		void popOverlay(Layer* overlay);
+
+	private:
+
+		std::vector<Layer*> m_layers;
+		uint32_t m_layerInsert{ 0 };
 
 	};
 

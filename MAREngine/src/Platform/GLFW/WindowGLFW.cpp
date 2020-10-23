@@ -69,6 +69,14 @@ namespace mar::platforms {
 		PLATFORM_INFO("WINDOW_GLFW: window terminated");
 	}
 
+	bool WindowGLFW::isGoingToClose() { 
+		return glfwWindowShouldClose(m_window); 
+	}
+
+	void WindowGLFW::close() { 
+		glfwSetWindowShouldClose(m_window, true);
+	}
+
 	void WindowGLFW::swapBuffers() {
 		glfwPollEvents();
 		glfwSwapBuffers(m_window);

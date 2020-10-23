@@ -32,6 +32,7 @@ namespace mar::platforms {
 
 
 	class WindowGLFW {
+
 		friend class editor::GUI;
 		friend class editor::ProjectSelectionGUI;
 
@@ -40,8 +41,8 @@ namespace mar::platforms {
 		bool initialize(int32_t height, int32_t width, const char* name);
 		static void terminate();
 
-		bool isGoingToClose() { return glfwWindowShouldClose(m_window); }
-		void close() { glfwSetWindowShouldClose(m_window, true); }
+		bool isGoingToClose();
+		void close();
 
 		void swapBuffers();
 
