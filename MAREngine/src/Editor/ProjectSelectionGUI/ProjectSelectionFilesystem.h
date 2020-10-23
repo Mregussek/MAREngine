@@ -30,31 +30,21 @@ namespace mar::editor {
 
 	class ProjectSelectionFilesystem {
 	public:
-		
-		// ----------------------------------------------
-		// STATIC VARIABLES
-		// ----------------------------------------------
 
-		static std::string projectPath;
-		static std::string projectName;
-		static bool new_project_name_selected;
-		static bool open_existing_project;
+		ProjectSelectionFilesystem() = default;
 
-		// ----------------------------------------------
-		// METHODS FOR PROJECT MANAGEMENT
-		// ----------------------------------------------
+		void openWindowNewProject();
+		void windowNewProject();
 
-		static void openWindowNewProject(const char* name);
-		static void windowNewProject(const char* name);
+		void openWindowOpenProject();
+		void windowOpenProject();
 
-		static void openWindowOpenProject(const char* name);
-		static void windowOpenProject(const char* name);
+	private:
 
-		// ----------------------------------------------
-		// STATE CHECKS
-		// ----------------------------------------------
+		imgui_addons::ImGuiFileBrowser m_fileDialog;
 
-		static void checkState();
+		const char* m_nameNewProject;
+		const char* m_nameOpenProject;
 
 	};
 

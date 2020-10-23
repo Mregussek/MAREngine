@@ -19,7 +19,6 @@
 
 
 #include "ProjectListWindow.h"
-#include "ProjectSelectionFilesystem.h"
 #include "../../Window/Window.h"
 #include "../../Engine.h"
 
@@ -48,7 +47,6 @@ namespace mar::editor {
 
 		ImGui::Separator();
 
-		const char* open_default = "Open Default Project";
 		if (ImGui::Button("Open Default Project")) {
 			engine::MAREngine::getEngine()->setProjectName("DefaultProject");
 			engine::MAREngine::getEngine()->setProjectPath("DefaultProject/");
@@ -58,23 +56,13 @@ namespace mar::editor {
 
 		ImGui::SameLine();
 
-		{
-			const char* new_project_name = "Create New Project";
-			if (ImGui::Button("New Project")) {
-				ProjectSelectionFilesystem::openWindowNewProject(new_project_name);
-			}
-			ProjectSelectionFilesystem::windowNewProject(new_project_name);
-		}
+		if (ImGui::Button("New Project")) { m_filesystemSelection.openWindowNewProject(); }
+		m_filesystemSelection.windowNewProject();
 
 		ImGui::SameLine();
 
-		{
-			const char* open_project_name = "Open Project Window";
-			if (ImGui::Button("Open Project")) {
-				ProjectSelectionFilesystem::openWindowOpenProject(open_project_name);
-			}
-			ProjectSelectionFilesystem::windowOpenProject(open_project_name);
-		}
+		if (ImGui::Button("Open Project")) { m_filesystemSelection.openWindowOpenProject(); }
+		m_filesystemSelection.windowOpenProject();
 
 		ImGui::SameLine();
 
@@ -94,7 +82,6 @@ namespace mar::editor {
 
 		ImGui::End();
 
-		ProjectSelectionFilesystem::checkState();
 	}
 
 

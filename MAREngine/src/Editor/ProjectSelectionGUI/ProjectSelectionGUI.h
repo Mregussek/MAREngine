@@ -23,16 +23,17 @@
 
 
 #include "../../mar.h"
+#include "ProjectListWindow.h"
 
 
 namespace mar::editor {
 
 
 	class ProjectSelectionGUI {
-		static bool s_dockspaceOpen;
-		static bool s_fullscreenPersisant;
-
 	public:
+
+		ProjectSelectionGUI() = default;
+
 		void initialize(const char* glsl_version);
 
 		void shutdown();
@@ -42,6 +43,14 @@ namespace mar::editor {
 		void update();
 
 		void render();
+	
+	private:
+
+		ProjectListWindow m_listWindow;
+
+		bool m_dockspaceOpen{ true };
+		static const bool m_fullscreenPersisant{ true };
+
 	};
 
 

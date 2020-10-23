@@ -27,84 +27,29 @@
 namespace mar::editor {
 
 
-	std::string ProjectSelectionFilesystem::projectPath{ "" };
-	std::string ProjectSelectionFilesystem::projectName{ "" };
-	bool ProjectSelectionFilesystem::new_project_name_selected{ false };
-	bool ProjectSelectionFilesystem::open_existing_project{ false };
-
-
-	void ProjectSelectionFilesystem::openWindowNewProject(const char* name) {
-		//igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
+	void ProjectSelectionFilesystem::openWindowNewProject() {
+		ImGui::OpenPopup(m_nameNewProject);
 	}
 
-	void ProjectSelectionFilesystem::windowNewProject(const char* name) {
-		static bool should_popup_be_opened = false;
+	void ProjectSelectionFilesystem::windowNewProject() {
+		if (m_fileDialog.showFileDialog(m_nameNewProject, imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, ImVec2(1200, 800), "")) {
 
-		/*
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-				projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
-				projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
-				should_popup_be_opened = true;
-			}
-
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
-		}
-		*/
-
-		if (should_popup_be_opened) {
-			ImGui::Begin("Select New Project Name");
-
-			ImGui::Text("Project will be created at: %s", projectPath.c_str());
-
-			static char name[100];
-			ImGui::InputText("ProjectName: ", name, 100);
-
-			if (ImGui::Button("Create")) {
-				projectName = std::string(name);
-				projectPath += projectName;
-				new_project_name_selected = true;
-				should_popup_be_opened = false;
-
-				ImGui::End();
-				return;
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Cancel")) {
-				projectPath = "";
-				projectName = "";
-				new_project_name_selected = false;
-				should_popup_be_opened = false;
-
-				ImGui::End();
-				return;
-			}
-
-			ImGui::End();
 		}
 	}
 
-	void ProjectSelectionFilesystem::openWindowOpenProject(const char* name) {
-		//igfd::ImGuiFileDialog::Instance()->OpenDialog(name, name, 0, ".");
+	void ProjectSelectionFilesystem::openWindowOpenProject() {
+		ImGui::OpenPopup(m_nameOpenProject);
 	}
 
-	void ProjectSelectionFilesystem::windowOpenProject(const char* name) {
-		/*
-		if (igfd::ImGuiFileDialog::Instance()->FileDialog(name)) {
-			if (igfd::ImGuiFileDialog::Instance()->IsOk == true) {
-				projectPath = igfd::ImGuiFileDialog::Instance()->GetFilePathName() + "/";
-				projectName = igfd::ImGuiFileDialog::Instance()->GetCurrentFileName();
-				open_existing_project = true;
-			}
+	void ProjectSelectionFilesystem::windowOpenProject() {
+		if (m_fileDialog.showFileDialog(m_nameOpenProject, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".marscene")) {
 
-			igfd::ImGuiFileDialog::Instance()->CloseDialog(name);
 		}
-		*/
 	}
 
+	/*
 	void ProjectSelectionFilesystem::checkState() {
+		
 		if (new_project_name_selected) {
 			std::string Assets = projectPath + "/Assets";
 			std::string Scenes = projectPath + "/Scenes";
@@ -136,6 +81,7 @@ namespace mar::editor {
 			open_existing_project = false;
 		}
 	}
+	*/
 
 
 }

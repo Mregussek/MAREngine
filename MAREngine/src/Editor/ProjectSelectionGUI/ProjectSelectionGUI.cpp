@@ -20,16 +20,11 @@
 
 #include "ProjectSelectionGUI.h"
 #include "ProjectTemplatesWindow.h"
-#include "ProjectListWindow.h"
 #include "../../Window/Window.h"
 #include "../GUI/Other/GUI_Theme.h"
 
 
 namespace mar::editor {
-
-
-	bool ProjectSelectionGUI::s_dockspaceOpen{ true };
-	bool ProjectSelectionGUI::s_fullscreenPersisant{ true };
 
 
 	void ProjectSelectionGUI::initialize(const char* glsl_version) {
@@ -56,34 +51,32 @@ namespace mar::editor {
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 
-		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		constexpr ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-		if (s_fullscreenPersisant) {
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		if (m_fullscreenPersisant) {
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->GetWorkPos());
 			ImGui::SetNextWindowSize(viewport->GetWorkSize());
 			ImGui::SetNextWindowViewport(viewport->ID);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+			windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
 
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
+		if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) { windowFlags |= ImGuiWindowFlags_NoBackground; }
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("MAREngineProjectSelection", &s_dockspaceOpen, window_flags);
+		ImGui::Begin("MAREngineDockspace", &m_dockspaceOpen, windowFlags);
 		ImGui::PopStyleVar();
 
-		if (s_fullscreenPersisant)
-			ImGui::PopStyleVar(2);
+		if (m_fullscreenPersisant) { ImGui::PopStyleVar(2); }
 
-		ImGuiIO& io = ImGui::GetIO();
+		const ImGuiIO& io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-			ImGuiID dockspace_id = ImGui::GetID("MARProjectSelectionDockSpace");
-			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+			const ImGuiID dockspaceID = ImGui::GetID("MARDockspace");
+			ImGui::DockSpace(dockspaceID, ImVec2(0.0f, 0.0f), dockspaceFlags);
 		}
 	}
 
@@ -95,7 +88,8 @@ namespace mar::editor {
 		}
 
 		ProjectTemplatesWindow::display();
-		ProjectListWindow::display();
+		m_listWindow.display();
+
 	}
 
 	void ProjectSelectionGUI::render() {

@@ -23,6 +23,7 @@
 
 
 #include "../../mar.h"
+#include "ProjectSelectionFilesystem.h"
 
 
 namespace mar::editor {
@@ -31,7 +32,12 @@ namespace mar::editor {
 	class ProjectListWindow {
 	public:
 
-		static void display();
+		void display();
+
+	private:
+
+		ProjectSelectionFilesystem m_filesystemSelection;
+
 	};
 
 
