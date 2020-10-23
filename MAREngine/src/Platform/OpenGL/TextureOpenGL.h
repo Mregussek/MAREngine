@@ -30,10 +30,6 @@ namespace mar::platforms {
 
 
 	class TextureOpenGL {
-		static std::unordered_map<std::string, uint32_t> s_2d;
-		static std::unordered_map<std::string, uint32_t> s_cubemaps;
-		static TextureOpenGL* s_instance;
-
 	public:
 
 		static TextureOpenGL* Instance() { return s_instance; }
@@ -50,13 +46,19 @@ namespace mar::platforms {
 		static bool hasTexture(std::string key);
 		static bool hasCubemap(std::string key);
 
-		static uint32_t getTexture(std::string key) { return s_2d.at(key); }
-		static uint32_t getCubemap(std::string key) { return s_cubemaps.at(key); }
+		static uint32_t getTexture(std::string key);
+		static uint32_t getCubemap(std::string key);
 
 	private:
 
 		uint32_t genNewTexture(const char* path);
-		uint32_t genNewCubemap(const char* path);
+		uint32_t genNewCubemap(const std::string& path);
+
+
+		static std::unordered_map<std::string, uint32_t> s_2d;
+		static std::unordered_map<std::string, uint32_t> s_cubemaps;
+		static TextureOpenGL* s_instance;
+
 	};
 
 

@@ -45,8 +45,8 @@ namespace mar::platforms {
 	}
 
 	uint32_t TextureOpenGL::genNewTexture(const char* path) {
-		int width, height;
-		int bitPerPixel;
+		int32_t width, height;
+		int32_t bitPerPixel;
 		unsigned char* localBuffer;
 
 		stbi_set_flip_vertically_on_load(true);
@@ -99,31 +99,32 @@ namespace mar::platforms {
 	}
 
 	uint32_t TextureOpenGL::loadTexture(std::string path) {
-		auto search = s_2d.find(path);
+		const auto search = s_2d.find(std::move(path));
 
-		if (search != s_2d.end()) {
+		if (search != s_2d.cend()) {
 			PLATFORM_TRACE("TEXTURE_OPENGL: Assigning loaded 2D texture {} - {}!", search->first, search->second);
 			return search->second;
 		}
 
-		std::string assets_texture = engine::MAREngine::getEngine()->getAssetsPath() + path;
-		uint32_t new_id = genNewTexture(assets_texture.c_str());
-		s_2d.insert({ path, new_id });
-		return new_id;
+		const std::string assetsTexturePath = engine::MAREngine::getEngine()->getAssetsPath() + path;
+		const uint32_t id = genNewTexture(assetsTexturePath.c_str());
+		s_2d.insert({ path, id });
+		return id;
 	}
 
-	uint32_t TextureOpenGL::genNewCubemap(const char* path) {
-		std::vector<std::string> faces(6);
-		faces[0] = std::string(path) + "/right.jpg";
-		faces[1] = std::string(path) + "/left.jpg";
-		faces[2] = std::string(path) + "/top.jpg";
-		faces[3] = std::string(path) + "/bottom.jpg";
-		faces[4] = std::string(path) + "/front.jpg";
-		faces[5] = std::string(path) + "/back.jpg";
+	uint32_t TextureOpenGL::genNewCubemap(const std::string& path) {
+		const std::array<const std::string, 6> faces{
+			 path + "/right.jpg",
+			 path + "/left.jpg",
+			 path + "/top.jpg",
+			 path + "/bottom.jpg",
+			 path + "/front.jpg",
+			 path + "/back.jpg"
+		};
 
 		uint32_t id;
-		int width, height;
-		int bitPerPixel;
+		int32_t width, height;
+		int32_t bitPerPixel;
 
 		PLATFORM_GL_FUNC( glGenTextures(1, &id) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP, id) );
@@ -135,12 +136,10 @@ namespace mar::platforms {
 
 			if (localBuffer) {
 				PLATFORM_GL_FUNC( glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, localBuffer) );
-
 				stbi_image_free(localBuffer);
 			}
 			else {
 				PLATFORM_ERROR("TEXTURE_OPENGL: Cubemap texture failed to load! Path: {}, Face: {}", path, faces[i]);
-
 				stbi_image_free(localBuffer);
 			}
 		}
@@ -158,22 +157,22 @@ namespace mar::platforms {
 	}
 
 	uint32_t TextureOpenGL::loadCubemap(std::string path) {
-		auto search = s_cubemaps.find(path);
+		const auto search = s_cubemaps.find(std::move(path));
 
-		if (search != s_cubemaps.end()) {
+		if (search != s_cubemaps.cend()) {
 			PLATFORM_TRACE("TEXTURE_OPENGL: Assigning loaded cubemap {} - {}!", search->first, search->second);
 			return search->second;
 		}
 
-		std::string assets_texture = engine::MAREngine::getEngine()->getAssetsPath() + path;
-		uint32_t new_id = genNewCubemap(assets_texture.c_str());
-		s_cubemaps.insert({ path, new_id });
+		const std::string assetsTexturePath = engine::MAREngine::getEngine()->getAssetsPath() + path;
+		const uint32_t id = genNewCubemap(assetsTexturePath);
+		s_cubemaps.insert({ path, id });
 
-		return new_id;
+		return id;
 	}
 
 	bool TextureOpenGL::hasTexture(std::string key) {
-		auto search = s_2d.find(key);
+		auto search = s_2d.find(std::move(key));
 		if (search != s_2d.end()) 
 			return true;
 
@@ -181,11 +180,19 @@ namespace mar::platforms {
 	}
 
 	bool TextureOpenGL::hasCubemap(std::string key) {
-		auto search = s_cubemaps.find(key);
+		auto search = s_cubemaps.find(std::move(key));
 		if (search != s_cubemaps.end())
 			return true;
 
 		return false;
+	}
+
+	uint32_t TextureOpenGL::getTexture(std::string key) { 
+		return s_2d.at(std::move(key)); 
+	}
+
+	uint32_t TextureOpenGL::getCubemap(std::string key) { 
+		return s_cubemaps.at(std::move(key));
 	}
 
 	void TextureOpenGL::bind2D(uint32_t unit, uint32_t tex_id) const {

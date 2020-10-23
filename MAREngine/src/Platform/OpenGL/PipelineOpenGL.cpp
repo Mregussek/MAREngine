@@ -140,21 +140,22 @@ namespace mar::platforms {
 			unsigned char normalized;
 		};
 
-		std::vector<VertexBufferElement> elements;
-		uint32_t stride = 0;
-
-		const std::vector<uint32_t> layout{ 3, 3, 2, 1 };
-
-		for (auto l : layout) {
-			elements.push_back({ GL_FLOAT, l, GL_FALSE });
-			stride += l * sizeof(GL_FLOAT);
-		}
+		constexpr std::array<const VertexBufferElement, 4> elements{
+			VertexBufferElement{ GL_FLOAT, 3, GL_FALSE },
+			VertexBufferElement{ GL_FLOAT, 3, GL_FALSE },
+			VertexBufferElement{ GL_FLOAT, 2, GL_FALSE },
+			VertexBufferElement{ GL_FLOAT, 1, GL_FALSE }
+		};
+		constexpr uint32_t stride{
+			3 * sizeof(GL_FLOAT) + 3 * sizeof(GL_FLOAT) +
+			2 * sizeof(GL_FLOAT) + 1 * sizeof(GL_FLOAT)
+		};
 
 		uint32_t offset = 0;
 
 		for (uint32_t i = 0; i < elements.size(); i++) {
-			PLATFORM_GL_FUNC(glVertexAttribPointer(i, elements[i].count, elements[i].type, elements[i].normalized, stride, (const void*)offset));
-			PLATFORM_GL_FUNC(glEnableVertexAttribArray(i));
+			PLATFORM_GL_FUNC( glVertexAttribPointer(i, elements[i].count, elements[i].type, elements[i].normalized, stride, (const void*)offset) );
+			PLATFORM_GL_FUNC( glEnableVertexAttribArray(i) );
 
 			offset += elements[i].count * sizeof(elements[i].type);
 

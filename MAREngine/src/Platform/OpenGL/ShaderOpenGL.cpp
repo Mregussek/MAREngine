@@ -60,57 +60,60 @@ namespace mar::platforms {
 		PLATFORM_TRACE("SHADER_OPENGL: Unbind shader {} - {}", m_id, m_shaderPath);
 	}
 
-	void ShaderOpenGL::setUniformFloat(const std::string& name, float f) const {
+	void ShaderOpenGL::setUniformFloat(const std::string& name, float f) {
 		PLATFORM_GL_FUNC( glUniform1f(getUniformLocation(name), f) );
 	}
 
-	void ShaderOpenGL::setUniformFloat(const std::string& name, const std::vector<float>& floats) const {
+	void ShaderOpenGL::setUniformFloat(const std::string& name, const std::vector<float>& floats) {
 		PLATFORM_GL_FUNC( glUniform1fv(getUniformLocation(name), floats.size(), floats.data()) );
 	}
 
-	void ShaderOpenGL::setUniformInt(const std::string& name, int32_t i) const {
+	void ShaderOpenGL::setUniformInt(const std::string& name, int32_t i) {
 		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), i) );
 	}
 
-	void ShaderOpenGL::setUniformInt(const std::string& name, const std::vector<int32_t>& ints) const {
+	void ShaderOpenGL::setUniformInt(const std::string& name, const std::vector<int32_t>& ints) {
 		PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), ints.size(), ints.data()) );
 	}
 
-	void ShaderOpenGL::setUniformSampler(const std::string& name, int32_t sampler) const {
+	void ShaderOpenGL::setUniformSampler(const std::string& name, int32_t sampler) {
 		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
 	}
 
-	void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) const {
+	void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) {
 		PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()) );
 	}
 
-	void ShaderOpenGL::setUniformVec3(const std::string& name, maths::vec3 vector3) const {
+	void ShaderOpenGL::setUniformVec3(const std::string& name, maths::vec3 vector3) {
 		PLATFORM_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, maths::vec3::value_ptr(vector3)) );
 	}
 
-	void ShaderOpenGL::setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec) const {
+	void ShaderOpenGL::setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec) {
 		PLATFORM_GL_FUNC(glUniform3fv(getUniformLocation(name), vec.size(), maths::vec3::value_ptr(vec)));
 	}
 
-	void ShaderOpenGL::setUniformMat4(const std::string& name, const maths::mat4& matrix4x4) const {
+	void ShaderOpenGL::setUniformMat4(const std::string& name, const maths::mat4& matrix4x4) {
 		PLATFORM_GL_FUNC(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, maths::mat4::value_ptr(matrix4x4)));
 	}
 
-	void ShaderOpenGL::setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices) const {
+	void ShaderOpenGL::setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices) {
 		PLATFORM_GL_FUNC(glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, maths::mat4::value_ptr(matrices)));
 	}
 
 	// ---- PRIVATE METHODS ---- //
 
-	int32_t ShaderOpenGL::getUniformLocation(const std::string& name) const {
+	int32_t ShaderOpenGL::getUniformLocation(const std::string& name) {
 		if (m_uniformLocation.find(name) != m_uniformLocation.end()) {
 			return m_uniformLocation.at(name);
 		}
 
 		const int32_t location = glGetUniformLocation(m_id, name.c_str());
-		if (location == -1)
-			PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
+		m_uniformLocation[name] = location;
 
+		if (location == -1) {
+			PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
+		}
+			
 		return location;
 	}
 

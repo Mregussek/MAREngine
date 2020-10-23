@@ -57,6 +57,7 @@ namespace mar::platforms {
 
 		void processLayout() const;
 
+
 		uint32_t m_vao{ 0 };
 		uint32_t m_vbo{ 0 };
 		uint32_t m_ebo{ 0 };

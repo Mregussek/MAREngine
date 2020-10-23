@@ -26,10 +26,12 @@ namespace mar::platforms {
 
 	bool SetupOpenGL::init() {
 		glewExperimental = GL_TRUE;
-		PLATFORM_GL_FUNC(GLenum glew_init = glewInit());
 
-		if (glew_init != GLEW_OK)
+		PLATFORM_GL_FUNC(const GLenum glew_init = glewInit());
+
+		if (glew_init != GLEW_OK) {
 			return false;
+		}
 
 		PLATFORM_GL_FUNC(glEnable(GL_DEPTH_TEST)); // Enable DEPTH, in other words 3D
 		PLATFORM_GL_FUNC(glEnable(GL_STENCIL_TEST)); // Enable STENCIL, outliner

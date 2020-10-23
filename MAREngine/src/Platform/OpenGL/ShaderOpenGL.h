@@ -46,20 +46,20 @@ namespace mar::platforms {
 		void bind() const;
 		void unbind() const;
 
-		void setUniformFloat(const std::string& name, float f) const;
-		void setUniformFloat(const std::string& name, const std::vector<float>& floats) const;
-		void setUniformInt(const std::string& name, int32_t i) const;
-		void setUniformInt(const std::string& name, const std::vector<int32_t>& ints) const;
-		void setUniformSampler(const std::string& name, int32_t sampler) const;
-		void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) const;
-		void setUniformVec3(const std::string& name, maths::vec3 vector3) const;
-		void setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec) const;
-		void setUniformMat4(const std::string& name, const maths::mat4& matrix4x4) const;
-		void setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices) const;
+		void setUniformFloat(const std::string& name, float f);
+		void setUniformFloat(const std::string& name, const std::vector<float>& floats);
+		void setUniformInt(const std::string& name, int32_t i);
+		void setUniformInt(const std::string& name, const std::vector<int32_t>& ints);
+		void setUniformSampler(const std::string& name, int32_t sampler);
+		void setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler);
+		void setUniformVec3(const std::string& name, maths::vec3 vector3);
+		void setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec);
+		void setUniformMat4(const std::string& name, const maths::mat4& matrix4x4);
+		void setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices);
 
 	private:
 
-		int32_t getUniformLocation(const std::string& name) const;
+		int32_t getUniformLocation(const std::string& name);
 
 		ShaderProgramSource parseShader() const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
