@@ -323,17 +323,17 @@ MAREngine scene file
 #EntityStart
 #TagComponent Suzanne
 #TransformComponent Begin
-#center 32.4 8.8 0
+#center 34.55 7.7 0
 #angles -816 32 -648
 #scale 1 1 1
 #general_scale 0
-#TagComponent Suzanne
+#RenderableComponent Suzanne
 #ColorComponent 0.5 0.5 0.5
 
 #EntityEnd
 
 #CollectionTransformComponent Begin
-#center 0 0 0
+#center 2.15 -1.1 0
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
@@ -346,7 +346,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent YellowCube
 #TransformComponent Begin
-#center 143.6 47.6 0
+#center 166.35 25.35 0
 #angles 0 354.5 0
 #scale 1 1 1
 #general_scale 0
@@ -358,7 +358,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent GrassPyramid
 #TransformComponent Begin
-#center 41.6 -14 102.4
+#center 64.35 -36.25 102.4
 #angles 0 -37.5 0
 #scale 1 1 1
 #general_scale 0
@@ -371,7 +371,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent SkyboxSurface
 #TransformComponent Begin
-#center 314.4 34.4 9.6
+#center 337.15 12.15 9.6
 #angles 0 1434.5 708
 #scale 1 -7 8.92
 #general_scale 0
@@ -389,7 +389,7 @@ MAREngine scene file
 #EntityEnd
 
 #CollectionTransformComponent Begin
-#center 0 0 0
+#center 22.75 -22.25 0
 #angles 0 -1.5 0
 #scale 1 1 1
 #general_scale 0
@@ -485,10 +485,10 @@ MAREngine scene file
 #EntityStart
 #TagComponent RedCube
 #TransformComponent Begin
-#center 0 0 15.1
+#center 9.9 6.5 -5
 #angles 0 0 17
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.947368 0.0463 0.0463
 
@@ -497,10 +497,10 @@ MAREngine scene file
 #EntityStart
 #TagComponent GreenCube
 #TransformComponent Begin
-#center 0 0 12.7
+#center 9.9 6.5 -7.4
 #angles 0 0 18.5
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.225497 1 0.0639098
 
@@ -509,10 +509,10 @@ MAREngine scene file
 #EntityStart
 #TagComponent BlueCube
 #TransformComponent Begin
-#center 0 0 10.25
+#center 9.9 6.5 -9.85
 #angles 0 0 17
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.0607864 0.0872985 0.951128
 
@@ -521,10 +521,10 @@ MAREngine scene file
 #EntityStart
 #TagComponent PinkCube
 #TransformComponent Begin
-#center -2.85 0 15.35
+#center 7.05 6.5 -4.75001
 #angles 0 0 18
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cube
 #ColorComponent 0.702001 0 0.951128
 
@@ -533,20 +533,20 @@ MAREngine scene file
 #EntityStart
 #TagComponent YellowCube
 #TransformComponent Begin
-#center -2.95 0 12.75
+#center 6.95 6.5 -7.35
 #angles 0 0 17.5
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cube
 #ColorComponent 1 0.946428 0
 
 #EntityEnd
 
 #CollectionTransformComponent Begin
-#center 0 0 4.8
+#center 9.9 6.5 -15.3
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #CollectionTagComponent DefaultName
 
 #EntityCollectionEnd

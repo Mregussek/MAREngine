@@ -29,7 +29,7 @@ namespace mar::editor {
 
 
 	void Filesystem::saveToFile(ecs::Scene* scene, const char* filename) {
-		const std::string name = scene->getName();
+		const auto& name = scene->getName();
 
 		EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", name, filename);
 
@@ -53,13 +53,7 @@ namespace mar::editor {
 		std::ifstream file(filename);
 
 		if (!file.is_open()) {
-			if (filename == "BrandNewScene") {
-				return ecs::Scene::createEmptyScene("BrandNewScene");
-			}
-			else {
-				EDITOR_ERROR("Cannot open file {}, returning empty scene!", filename);
-				return ecs::Scene::createEmptyScene("EmptySceneNotLoaded");
-			}
+			return ecs::Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
 
 		std::string line;
@@ -67,18 +61,18 @@ namespace mar::editor {
 
 		while (std::getline(file, line)) {
 			if (line.find("#SceneStart") != std::string::npos) {
-				std::getline(file, line); // next line should be #Scene_Name -- 11
+				std::getline(file, line);
 				std::istringstream is(line.substr(11));
 				std::string name;
 				is >> name;
 				scene = new ecs::Scene(name);
 				
-				std::getline(file, line); // next line should be #Scene_Background -- 18
-				float arr[3];
+				std::getline(file, line);
+				maths::vec3 background;
 				is.clear();
 				is = std::istringstream(line.substr(18));
-				is >> arr[0] >> arr[1] >> arr[2];
-				scene->setBackground({ arr[0], arr[1], arr[2] });
+				is >> background.x >> background.y >> background.z;
+				scene->setBackground(background);
 
 				Filesystem_Loading::loadScene(file, scene);
 			}
@@ -107,6 +101,8 @@ namespace mar::editor {
 		while (std::getline(file, line)) {
 			rtn += line + "\n";
 		}
+
+		file.close();
 
 		return rtn;
 	}

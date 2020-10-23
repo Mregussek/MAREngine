@@ -29,6 +29,16 @@
 namespace mar::editor {
 
 
+	template<typename T>
+	T& getComponentFromEntity(const ecs::Entity& entity, ecs::EntityComponents entcmp) {
+		if (entity.hasComponent<T>()) { 
+			return entity.getComponent<T>(); 
+		}
+		else {
+			return entity.addComponent<T>(entcmp);
+		}
+	}
+
 	void Filesystem_Loading::loadScene(std::ifstream& file, ecs::Scene* scene) {
 		std::string line;
 
@@ -50,29 +60,38 @@ namespace mar::editor {
 	void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, const ecs::EntityCollection& collection) {
 		std::string line;
 
+		auto loadVec3Getline = [&file, &line](maths::vec3& v, size_t num) {
+			std::getline(file, line);
+			std::istringstream is(line.substr(num));
+			is >> v.x >> v.y >> v.z;
+		};
+
+		auto loadString = [&line](std::string& str, size_t num) {
+			std::istringstream iss(line.substr(num));
+			iss >> str;
+		};
+
+		auto loadFloatGetline = [&file, &line](float& f, size_t num) {
+			std::getline(file, line);
+			std::istringstream is(line.substr(num));
+			is >> f;
+		};
+
 		while (std::getline(file, line)) {
 			if (line.find("#EntityStart") != std::string::npos) {
 				const auto& entity = collection.createEntity();
 				loadEntity(file, scene, entity);
 			}
 			else if (line.find("#CollectionTagComponent") != std::string::npos) {
-				std::istringstream is(line.substr(24));
-				std::string new_tag;
-				is >> new_tag;
 				auto& tag = collection.getComponent<ecs::TagComponent>();
-				tag = new_tag;
+				loadString(tag.tag, 24);
 			}
 			else if (line.find("#CollectionRenderableComponent") != std::string::npos) {
-				std::istringstream is(line.substr(31));
-				std::string path_to_load_obj;
-				is >> path_to_load_obj;
-
 				auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
-				crc.id = path_to_load_obj;
+				loadString(crc.id, 31);
+				graphics::MeshCreator::loadOBJ("CannotFindOBJname", crc.id, collection);
 
-				graphics::MeshCreator::loadOBJ("CannotFindOBJname", path_to_load_obj, collection);
-
-				auto size_after_loading = collection.getEntities().size();
+				const auto size_after_loading = collection.getEntities().size();
 				for (size_t i = 0; i < size_after_loading; ) {
 					std::getline(file, line);
 					if (line.find("#EntityStart") != std::string::npos) {
@@ -86,54 +105,16 @@ namespace mar::editor {
 				auto& tran = collection.getComponent<ecs::TransformComponent>();
 
 				// #center - 7 letters
-				std::getline(file, line);
-				std::istringstream is(line.substr(7));
-				float arr[3];
-				is >> arr[0] >> arr[1] >> arr[2];
+				loadVec3Getline(tran.center, 7);
 
-				tran.center.x = arr[0];
-				tran.center.y = arr[1];
-				tran.center.z = arr[2];
-
-				// #angles - 6 letters
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(7));
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				tran.angles.x = arr[0];
-				tran.angles.y = arr[1];
-				tran.angles.z = arr[2];
+				// #angles - 7 letters
+				loadVec3Getline(tran.angles, 7);
 
 				// #scale - 6  letters
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(6));
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				tran.scale.x = arr[0];
-				tran.scale.y = arr[1];
-				tran.scale.z = arr[2];
+				loadVec3Getline(tran.scale, 6);
 
 				// #general_scale - 12 letters
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(12));
-				is >> arr[0];
-
-				tran.general_scale = arr[0];
-
-				const auto& entities = collection.getEntities();
-				std::for_each(entities.begin(), entities.end(), [&tran](const ecs::Entity& entity) {
-					auto& transform = entity.getComponent<ecs::TransformComponent>();
-
-					transform.center += (transform.center - tran.center);
-					transform.angles += (transform.angles - tran.angles);
-					transform.scale += (transform.scale - tran.scale);
-					transform.general_scale += (transform.general_scale - tran.general_scale);
-
-					transform.recalculate();
-				});
+				loadFloatGetline(tran.general_scale, 12);
 			}
 			else if (line.find("#EntityCollectionEnd") != std::string::npos) {
 				return;
@@ -144,61 +125,56 @@ namespace mar::editor {
 	void Filesystem_Loading::loadEntity(std::ifstream& file, ecs::Scene* scene, const ecs::Entity& entity) {
 		std::string line;
 
+		auto loadVec3 = [&line](maths::vec3& v, size_t num) {
+			std::istringstream is(line.substr(num));
+			is >> v.x >> v.y >> v.z;
+		};
+
+		auto loadVec3Getline = [&file, &line, &loadVec3](maths::vec3& v, size_t num) {
+			std::getline(file, line);
+			loadVec3(v, num);
+		};
+
+		auto loadString = [&line](std::string& str, size_t num) {
+			std::istringstream iss(line.substr(num));
+			iss >> str;
+		};
+
+		auto loadStringGetline = [&file, &line, &loadString](std::string& str, size_t num) {
+			std::getline(file, line);
+			loadString(str, num);
+		};
+
+		auto loadFloatGetline = [&file, &line](float& f, size_t num) {
+			std::getline(file, line);
+			std::istringstream is(line.substr(num));
+			is >> f;
+		};
+
 		while (std::getline(file, line)) {
 			if (line.find("#TagComponent") != std::string::npos) {
-				std::istringstream is(line.substr(14));
-				std::string new_tag;
-				is >> new_tag;
 				auto& tag = entity.getComponent<ecs::TagComponent>();
-				tag.tag = new_tag;
+				loadString(tag.tag, 14);
 			}
 			else if (line.find("#TransformComponent") != std::string::npos) {
 				auto& tran = entity.getComponent<ecs::TransformComponent>();
 
 				// #center - 7 letters
-				std::getline(file, line);
-				std::istringstream is(line.substr(7));
-				float arr[3];
-				is >> arr[0] >> arr[1] >> arr[2];
+				loadVec3Getline(tran.center, 7);
 
-				tran.center.x = arr[0];
-				tran.center.y = arr[1];
-				tran.center.z = arr[2];
-
-				// #angles - 6 letters
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(7));
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				tran.angles.x = arr[0];
-				tran.angles.y = arr[1];
-				tran.angles.z = arr[2];
+				// #angles - 7 letters
+				loadVec3Getline(tran.angles, 7);
 
 				// #scale - 6  letters
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(6));
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				tran.scale.x = arr[0];
-				tran.scale.y = arr[1];
-				tran.scale.z = arr[2];
+				loadVec3Getline(tran.scale, 6);
 
 				// #general_scale - 12 letters
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(12));
-				is >> arr[0];
-
-				tran.general_scale = arr[0];
+				loadFloatGetline(tran.general_scale, 12);
 
 				tran.recalculate();
 			}
 			else if (line.find("#RenderableComponent") != std::string::npos) {
-				auto& ren = !entity.hasComponent<ecs::RenderableComponent>() ?
-					entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE) :
-					entity.getComponent<ecs::RenderableComponent>();
+				auto& ren = getComponentFromEntity<ecs::RenderableComponent>(entity, ECS_RENDERABLE);
 
 				if (line.find("Cube") != std::string::npos) {
 					ren.name = "Cube";
@@ -222,234 +198,100 @@ namespace mar::editor {
 				}
 			}
 			else if (line.find("#ColorComponent") != std::string::npos) {
-				std::istringstream is(line.substr(16));
-				float arr[3];
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				auto& color = !entity.hasComponent<ecs::ColorComponent>() ?
-					entity.addComponent<ecs::ColorComponent>(ECS_COLOR) :
-					entity.getComponent<ecs::ColorComponent>();
-
-				color.texture.x = arr[0];
-				color.texture.y = arr[1];
-				color.texture.z = arr[2];
+				auto& color = getComponentFromEntity<ecs::ColorComponent>(entity, ECS_COLOR);
+				loadVec3(color.texture, 16);
 			}
 			else if (line.find("Texture2DComponent") != std::string::npos) {
-				std::istringstream iss(line.substr(19));
-				std::string tex;
-				iss >> tex;
-
-				auto& texture = !entity.hasComponent<ecs::Texture2DComponent>() ?
-					entity.addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D) :
-					entity.getComponent<ecs::Texture2DComponent>();
-
-				texture.texture = tex;
+				auto& texture = getComponentFromEntity<ecs::Texture2DComponent>(entity, ECS_TEXTURE2D);
+				loadString(texture.texture, 19);
 			}
 			else if (line.find("#TextureCubemapComponent") != std::string::npos) {
-				std::istringstream iss(line.substr(25));
-				std::string tex;
-				iss >> tex;
-
-				auto& cubemap = !entity.hasComponent<ecs::TextureCubemapComponent>() ?
-					entity.addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP) :
-					entity.getComponent<ecs::TextureCubemapComponent>();
-
-				cubemap.texture = tex;
+				auto& cubemap = getComponentFromEntity<ecs::TextureCubemapComponent>(entity, ECS_CUBEMAP);
+				loadString(cubemap.texture, 25);
 			}
 			else if (line.find("#LightComponent") != std::string::npos) {
-				auto& light = !entity.hasComponent<ecs::LightComponent>() ?
-					entity.addComponent<ecs::LightComponent>(ECS_LIGHT) :
-					entity.getComponent<ecs::LightComponent>();
+				auto& light = getComponentFromEntity<ecs::LightComponent>(entity, ECS_LIGHT);
 
 				// #ambientlight - 13
-				std::getline(file, line);
-				std::istringstream is(line.substr(13));
-				float arr[3];
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				light.ambient.x = arr[0];
-				light.ambient.y = arr[1];
-				light.ambient.z = arr[2];
+				loadVec3Getline(light.ambient, 13);
 
 				// #diffuselight - 13
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(13));
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				light.diffuse.x = arr[0];
-				light.diffuse.y = arr[1];
-				light.diffuse.z = arr[2];
+				loadVec3Getline(light.diffuse, 13);
 
 				// #specularlight - 14
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(14));
-				is >> arr[0] >> arr[1] >> arr[2];
-
-				light.specular.x = arr[0];
-				light.specular.y = arr[1];
-				light.specular.z = arr[2];
+				loadVec3Getline(light.specular, 14);
 
 				// #constant - 9
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(9));
-				is >> arr[0];
-
-				light.constant = arr[0];
+				loadFloatGetline(light.constant, 9);
 
 				// #linear - 7
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(7));
-				is >> arr[0];
-
-				light.linear = arr[0];
+				loadFloatGetline(light.linear, 7);
 
 				// #quadratic - 10
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(10));
-				is >> arr[0];
-
-				light.quadratic = arr[0];
+				loadFloatGetline(light.quadratic, 10);
 
 				// #shininess - 10
-				std::getline(file, line);
-				is.clear();
-				is = std::istringstream(line.substr(10));
-				is >> arr[0];
-
-				light.shininess = arr[0];
+				loadFloatGetline(light.shininess, 10);
 			}
 			else if (line.find("#CameraComponent") != std::string::npos) {
-				auto& cam = !entity.hasComponent<ecs::CameraComponent>() ?
-					entity.addComponent<ecs::CameraComponent>(ECS_CAMERA) :
-					entity.getComponent<ecs::CameraComponent>();
-
-				std::string type;
-				float var;
+				auto& cam = getComponentFromEntity<ecs::CameraComponent>(entity, ECS_CAMERA);
 
 				// #id - 3
-				std::getline(file, line);
-				std::istringstream iss(line.substr(3));
-				iss >> type;
-
-				cam.id = type;
+				loadStringGetline(cam.id, 3);
 
 				// #used - 5
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(5));
-				type.clear();
-				iss >> type;
+				std::string type;
+				loadStringGetline(type, 5);
 
-				if (type.find("perspective") != std::string::npos) cam.Perspective = true;
-				else cam.Perspective = false;
+				if (type.find("perspective") != std::string::npos) { cam.Perspective = true; }
+				else { cam.Perspective = false; }
 
 				// #type - 5
 				std::getline(file, line);
 
-				// #fov
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(4));
-				iss >> var;
+				// #fov - 4
+				loadFloatGetline(cam.p_fov, 4);
 
-				cam.p_fov = var;
+				// #aspectratio - 12
+				loadFloatGetline(cam.p_aspectRatio, 12);
 
-				// #aspectratio
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(12));
-				iss >> var;
+				// #near - 5
+				loadFloatGetline(cam.p_near, 5);
 
-				cam.p_aspectRatio = var;
-
-				// #near
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(5));
-				iss >> var;
-
-				cam.p_near = var;
-
-				// #far
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(4));
-				iss >> var;
-
-				cam.p_far = var;
+				// #far - 4
+				loadFloatGetline(cam.p_far, 4);
 
 				// #type - 5
 				std::getline(file, line);
 
-				// #left
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(5));
-				iss >> var;
+				// #left - 5
+				loadFloatGetline(cam.o_left, 5);
 
-				cam.o_left = var;
+				// #right - 6
+				loadFloatGetline(cam.o_right, 6);
 
-				// #right
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(6));
-				iss >> var;
+				// #top - 4
+				loadFloatGetline(cam.o_top, 4);
 
-				cam.o_right = var;
+				// #bottom - 7
+				loadFloatGetline(cam.o_bottom, 7);
 
-				// #top
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(4));
-				iss >> var;
-
-				cam.o_top = var;
-
-				// #bottom
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(7));
-				iss >> var;
-
-				cam.o_bottom = var;
-
-				// #near
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(5));
-				iss >> var;
-
-				cam.o_near = var;
+				// #near - 5
+				loadFloatGetline(cam.o_near, 5);
 
 				// #far
-				std::getline(file, line);
-				iss.clear();
-				iss = std::istringstream(line.substr(4));
-				iss >> var;
-
-				cam.o_far = var;
+				loadFloatGetline(cam.o_far, 4);
 
 				if (cam.id.find("main") != std::string::npos) {
 					auto& renderCamera = scene->getRenderCamera();
-					auto& tran = entity.getComponent<ecs::TransformComponent>();
+					const auto& tran = entity.getComponent<ecs::TransformComponent>();
 
 					renderCamera.calculateCameraTransforms(tran, cam);
 				}
 			}
 			else if (line.find("#ScriptComponent") != std::string::npos) {
-				auto& script = !entity.hasComponent<ecs::ScriptComponent>() ?
-					entity.addComponent<ecs::ScriptComponent>(ECS_SCRIPT) :
-					entity.getComponent<ecs::ScriptComponent>();
-
-				std::istringstream iss(line.substr(17));
-				std::string s;
-				iss >> s;
-				script.script = s;
+				auto& script = getComponentFromEntity<ecs::ScriptComponent>(entity, ECS_SCRIPT);
+				loadString(script.script, 17);
 			}
 			else if (line.find("#EntityEnd") != std::string::npos) {
 				return;

@@ -80,20 +80,20 @@ namespace mar::editor {
 	void Filesystem_Saving::saveEntity(std::ofstream& ss, const ecs::Entity& entity) {
 		ss << "\n#EntityStart\n";
 
-		auto& com = entity.getComponent<ecs::Components>();
+		const auto& com = entity.getComponent<ecs::Components>();
 
-		for (auto& component : com.components) {
+		for (const auto component : com.components) {
 
 			if (component == ECS_TAG) {
-				auto& tag = entity.getComponent<ecs::TagComponent>();
+				const auto& tag = entity.getComponent<ecs::TagComponent>();
 				ss << "#TagComponent " << tag.tag << "\n";
 			}
 			else if (component == ECS_RENDERABLE) {
-				auto& renderable = entity.getComponent<ecs::RenderableComponent>();
+				const auto& renderable = entity.getComponent<ecs::RenderableComponent>();
 				ss << "#RenderableComponent " << renderable.name << "\n";
 			}
 			else if (component == ECS_TRANSFORM) {
-				auto& transform = entity.getComponent<ecs::TransformComponent>();
+				const auto& transform = entity.getComponent<ecs::TransformComponent>();
 				ss << "#TransformComponent Begin\n";
 				ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
 				ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";
@@ -101,19 +101,19 @@ namespace mar::editor {
 				ss << "#general_scale " << transform.general_scale << "\n";
 			}
 			else if (component == ECS_COLOR) {
-				auto& color = entity.getComponent<ecs::ColorComponent>();
+				const auto& color = entity.getComponent<ecs::ColorComponent>();
 				ss << "#ColorComponent " << color.texture.x << " " << color.texture.y << " " << color.texture.z << "\n";
 			}
 			else if (component == ECS_TEXTURE2D) {
-				auto& tex = entity.getComponent<ecs::Texture2DComponent>();
+				const auto& tex = entity.getComponent<ecs::Texture2DComponent>();
 				ss << "#Texture2DComponent " << tex.texture << "\n";
 			}
 			else if (component == ECS_CUBEMAP) {
-				auto& cube = entity.getComponent<ecs::TextureCubemapComponent>();
+				const auto& cube = entity.getComponent<ecs::TextureCubemapComponent>();
 				ss << "#TextureCubemapComponent " << cube.texture << "\n";
 			}
 			else if (component == ECS_LIGHT) {
-				auto& light = entity.getComponent<ecs::LightComponent>();
+				const auto& light = entity.getComponent<ecs::LightComponent>();
 
 				ss << "#LightComponent Begin\n";
 
@@ -127,15 +127,13 @@ namespace mar::editor {
 				ss << "#shininess " << light.shininess << '\n';
 			}
 			else if (component == ECS_CAMERA) {
-				auto& cam = entity.getComponent<ecs::CameraComponent>();
+				const auto& cam = entity.getComponent<ecs::CameraComponent>();
 
 				ss << "#CameraComponent Begin\n";
 				ss << "#id " << cam.id << "\n";
 
-				if (cam.Perspective)
-					ss << "#used perspective\n";
-				else
-					ss << "#used orthographic\n";
+				if (cam.Perspective) { ss << "#used perspective\n"; }
+				else { ss << "#used orthographic\n"; }
 
 				ss << "#type perspective\n";
 				ss << "#fov " << cam.p_fov << "\n";
@@ -152,7 +150,7 @@ namespace mar::editor {
 				ss << "#far " << cam.o_far << "\n";
 			}
 			else if (component == ECS_SCRIPT) {
-				auto& script = entity.getComponent<ecs::ScriptComponent>();
+				const auto& script = entity.getComponent<ecs::ScriptComponent>();
 
 				ss << "#ScriptComponent " << script.script << "\n";
 			}
