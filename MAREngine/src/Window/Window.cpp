@@ -34,19 +34,19 @@ namespace mar::window {
 		m_width = width;
 		m_height = height;
 
-		bool is_glfw_fine = m_window.initialize(m_height, m_width, name);
-		if (!is_glfw_fine) {
+		const bool isGLFW_OK = m_window.initialize(m_height, m_width, name);
+		if (!isGLFW_OK) {
 			WINDOW_ERROR("WINDOW: Cannot initialize GLFW window!");
-			char c = getchar();
+			const char c = getchar();
 			exit(0);
 		}
 
 		WINDOW_INFO("WINDOW: initialized window!");
 
-		bool is_opengl_fine = platforms::SetupOpenGL::init();
-		if (!is_opengl_fine) {
+		const bool isOpenGL_OK = platforms::SetupOpenGL::init();
+		if (!isOpenGL_OK) {
 			WINDOW_ERROR("WINDOW: Cannot initialize OpenGL!");
-			char c = getchar();
+			const char c = getchar();
 			exit(0);
 		}
 
@@ -63,7 +63,11 @@ namespace mar::window {
 		}
 	}
 
-	void Window::clear() {
+	void Window::updateBackgroundColor(maths::vec3 new_back) {
+		m_background = new_back; 
+	}
+
+	void Window::clear() const {
 		platforms::SetupOpenGL::clearScreen(m_background);
 
 		WINDOW_TRACE("WINDOW: is clearing screen");
@@ -75,7 +79,7 @@ namespace mar::window {
 		WINDOW_TRACE("WINDOW: updating buffers and callbacks");
 	}
 
-	bool Window::isGoingToClose() {
+	bool Window::isGoingToClose() const {
 		return m_window.isGoingToClose();
 	}
 

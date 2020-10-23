@@ -33,9 +33,34 @@ namespace mar::window {
 
 
 	class Window {
+
 		friend class Input;
 		friend class editor::GUI;
 		friend class editor::ProjectSelectionGUI;
+
+	public:
+
+		static Window& getInstance() { return *s_instance; }
+		
+		Window() = default;
+
+		void updateBackgroundColor(maths::vec3 new_back);
+
+		void initialize(int32_t width, int32_t height, const char* name);
+
+		void terminate();
+
+		void clear() const;
+
+		void update();
+
+		bool isGoingToClose() const;
+
+		void endRenderLoop();
+
+		void exitApp();
+
+	private:
 
 		static Window* s_instance;
 
@@ -45,26 +70,6 @@ namespace mar::window {
 		maths::vec3 m_background;
 		bool m_closeAfterTerminate{ false };
 
-	public:
-		static Window& getInstance() { return *s_instance; }
-		
-		Window() = default;
-
-		void updateBackgroundColor(maths::vec3 new_back) { m_background = new_back; }
-
-		void initialize(int32_t width, int32_t height, const char* name);
-
-		void terminate();
-
-		void clear();
-
-		void update();
-
-		bool isGoingToClose();
-
-		void endRenderLoop();
-
-		void exitApp();
 	};
 
 

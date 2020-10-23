@@ -69,7 +69,7 @@ namespace mar::platforms {
 		PLATFORM_INFO("WINDOW_GLFW: window terminated");
 	}
 
-	bool WindowGLFW::isGoingToClose() { 
+	bool WindowGLFW::isGoingToClose() const { 
 		return glfwWindowShouldClose(m_window); 
 	}
 
@@ -84,17 +84,17 @@ namespace mar::platforms {
 		PLATFORM_TRACE("WINDOW_GLFW: window has swapped buffers");
 	}
 
-	void WindowGLFW::setVSync(int32_t set) {
+	void WindowGLFW::setVSync(int32_t set) const {
 		glfwSwapInterval(set);
 
 		PLATFORM_INFO("WINDOW_GLFW: is vertical synchronization used - {}", set);
 	}
 
-	bool WindowGLFW::isKeyPressed(int32_t key) {
+	bool WindowGLFW::isKeyPressed(int32_t key) const {
 		return glfwGetKey(m_window, key) == GLFW_PRESS || glfwGetKey(m_window, key) == GLFW_REPEAT;
 	}
 
-	bool WindowGLFW::isMousePressed(int32_t key) {
+	bool WindowGLFW::isMousePressed(int32_t key) const {
 		return glfwGetMouseButton(m_window, key) == GLFW_PRESS || glfwGetMouseButton(m_window, key) == GLFW_REPEAT;
 	}
 

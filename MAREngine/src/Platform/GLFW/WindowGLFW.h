@@ -41,15 +41,15 @@ namespace mar::platforms {
 		bool initialize(int32_t height, int32_t width, const char* name);
 		static void terminate();
 
-		bool isGoingToClose();
+		bool isGoingToClose() const;
 		void close();
 
 		void swapBuffers();
 
-		void setVSync(int32_t set);
+		void setVSync(int32_t set) const;
 
-		bool isKeyPressed(int32_t key);
-		bool isMousePressed(int32_t key);
+		bool isKeyPressed(int32_t key) const;
+		bool isMousePressed(int32_t key) const;
 
 	private:
 
