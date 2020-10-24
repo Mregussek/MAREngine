@@ -129,7 +129,8 @@ namespace mar::scripting {
     }
     
     std::string PythonScript::changeSlashesToDots(std::string script) {
-        std::string rtn = engine::MAREngine::getEngine()->getAssetsPath() + script;
+        const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
+        std::string rtn = assetsPath + script;
     
         size_t pos = rtn.find("/");
     

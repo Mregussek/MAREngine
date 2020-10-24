@@ -40,7 +40,7 @@ namespace mar::window {
 
 	public:
 
-		static Window& getInstance() { return *s_instance; }
+		static Window& Instance() { return *s_instance; }
 		
 		Window() = default;
 

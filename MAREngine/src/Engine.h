@@ -32,38 +32,28 @@ namespace mar::engine {
 
 
 	class MAREngine {
-		std::string m_projectName{ "DefaultProject" };
-		std::string m_projectPath{ "DefaultProject/" };
-		std::string m_assetsPath{ "DefaultProject/Assets/" };
-		std::string m_scenesPath{ "DefaultProject/Scenes/" };
-		std::string m_pathLoad{ "DefaultProject/Scenes/DefaultProject.marscene" };
-		std::string m_editorName{ "EditorMAR" };
-		bool m_shouldRestart{ false };
-
-		static MAREngine* main_instance;
-
 	public:
+
 		MAREngine() = default;
+
+		// --- STATE CHECKS --- // 
+
+		const bool shouldEngineRestart() const { return m_shouldRestart; }
 
 		// --- GET METHODS --- //
 
-		static MAREngine* getEngine() { return main_instance; }
-		const char* getName() { return m_editorName.c_str(); }
-		std::string getPathToLoad() { return m_pathLoad; }
-		std::string getProjectName() { return m_projectName; }
-		std::string getProjectPath() { return m_projectPath; }
-		std::string getAssetsPath() { return m_assetsPath; }
-		std::string getScenesPath() { return m_scenesPath; }
+		static MAREngine* Instance() { return s_instance; }
+		const char* getName() const { return m_editorName.c_str(); }
+		const std::string& getPathToLoad() const { return m_pathLoad; }
+		const std::string& getProjectName() const { return m_projectName; }
+		const std::string& getProjectPath() const { return m_projectPath; }
+		const std::string& getAssetsPath() const { return m_assetsPath; }
+		const std::string& getScenesPath() const { return m_scenesPath; }
 
-		// -----------------------------------------
-		// END-USER METHODS
-		// -----------------------------------------
-
-		// --- ENGINE MANAGEMENT --- //
+		// --- SET METHODS --- //
 
 		void setRestart() { m_shouldRestart = true; }
 		void setNoRestart() { m_shouldRestart = false; }
-		const bool shouldEngineRestart() { return m_shouldRestart; }
 		void setLoadPath(std::string path) { m_pathLoad = path; }
 		void setProjectName(std::string name) { m_projectName = name; }
 		void setProjectPath(std::string path) { 
@@ -75,6 +65,18 @@ namespace mar::engine {
 		void initialize();
 		
 		void connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer);
+
+	private:
+
+		std::string m_projectName{ "DefaultProject" };
+		std::string m_projectPath{ "DefaultProject/" };
+		std::string m_assetsPath{ "DefaultProject/Assets/" };
+		std::string m_scenesPath{ "DefaultProject/Scenes/" };
+		std::string m_pathLoad{ "DefaultProject/Scenes/DefaultProject.marscene" };
+		std::string m_editorName{ "EditorMAR" };
+		bool m_shouldRestart{ false };
+
+		static MAREngine* s_instance;
 
 	};
 

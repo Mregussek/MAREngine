@@ -54,31 +54,31 @@ void EditorMAR::projectSelectionWindow() {
 }
 
 void EditorMAR::runProjectOnEngine() {
-	window::Window window = window::Window();
+	auto window = window::Window();
 	window.initialize(1600, 900, engine.getName());
 
 	auto stack = layers::LayerStack();
-	auto entitylayer = new layers::EntityLayer("Entity Layer");
-	auto guilayer = new layers::LayerGUI("Default GUI Layer");
+	auto entityLayer = new layers::EntityLayer("Entity Layer");
+	auto guiLayer = new layers::LayerGUI("Default GUI Layer");
 	auto gui = editor::GUI();
 	auto loaded_scene = editor::Filesystem::openFile(engine.getPathToLoad());
 
 	{ // Entity Layer Setup
-		entitylayer->initialize(loaded_scene);
-		stack.pushLayer(entitylayer);
+		entityLayer->initialize(loaded_scene);
+		stack.pushLayer(entityLayer);
 	}
 	
 	{ // Editor Layer Setup
-		guilayer->initialize(&gui, loaded_scene->getBackground());
-		engine.connectEntityLayerToGui(guilayer, entitylayer);
-		stack.pushOverlay(guilayer);
+		guiLayer->initialize(&gui, loaded_scene->getBackground());
+		engine.connectEntityLayerToGui(guiLayer, entityLayer);
+		stack.pushOverlay(guiLayer);
 	}
 
 	while (!window.isGoingToClose() && !engine.shouldEngineRestart())
 	{
 		window.clear();
 
-		guilayer->renderToViewport();
+		guiLayer->renderToViewport();
 
 		stack.update();
 

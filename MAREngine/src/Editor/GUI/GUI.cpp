@@ -37,7 +37,7 @@ namespace mar::editor {
 	void GUI::initialize(const char* glslVersion) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
-		ImGui_ImplGlfw_InitForOpenGL(window::Window::getInstance().m_window.m_window, true);
+		ImGui_ImplGlfw_InitForOpenGL(window::Window::Instance().m_window.m_window, true);
 		ImGui_ImplOpenGL3_Init(glslVersion);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -196,7 +196,7 @@ namespace mar::editor {
 
 		if (ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x)) {
 			m_viewportFramebuffer.setBackgroundColor(sceneBackground);
-			window::Window::getInstance().updateBackgroundColor(sceneBackground);
+			window::Window::Instance().updateBackgroundColor(sceneBackground);
 		}
 
 		ImGui::End();

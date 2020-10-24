@@ -85,18 +85,17 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_MANAGER: updating editor mode");
 
 		if (useEditorCamera) {
-			auto camdata = editor::Camera::getCameraData();
-			auto& cam = m_scene->getRenderCamera();
-
-			cam = camdata;
+			graphics::RenderPipeline::Instance().submitCamera(&editor::Camera::getCameraData());
 
 			ECS_TRACE("SCENE: initializing editor camera on scene");
 		}
 		else {
-			submitCameraIfPossible();
-		}
+			const auto submitted = submitCameraIfPossible();
 
-		graphics::RenderPipeline::Instance().submitCamera(&m_scene->getRenderCamera());
+			if (!submitted) {
+				graphics::RenderPipeline::Instance().submitCamera(&editor::Camera::getCameraData());
+			}
+		}
 
 		ECS_INFO("SCENE_MANAGER: updated editor mode!");
 	}
@@ -219,20 +218,27 @@ namespace mar::ecs {
 	// CAMERA STUFF
 	// -------------------------------------------------------------
 
-	void SceneManager::submitCameraIfPossible() {
-		auto view = m_scene->getView<CameraComponent>();
-
-		auto checkIfHasMainCamera = [&scene = std::as_const(m_scene)](entt::entity entity) {
+	bool SceneManager::submitCameraIfPossible() {
+		auto hasMainCamera = [&scene = std::as_const(m_scene)](entt::entity entity) {
 			const auto& cam = scene->getComponent<CameraComponent>(entity);
-
-			if (cam.id.find("main") != std::string::npos) {
-				const auto& transform = scene->getComponent<TransformComponent>(entity);
-				auto& renderCamera = scene->getRenderCamera();
-				renderCamera.calculateCameraTransforms(transform, cam);
-			}
+			return cam.id.find("main") != std::string::npos;
 		};
 
-		std::for_each(view.begin(), view.end(), checkIfHasMainCamera);
+		auto view = m_scene->getView<CameraComponent>();
+
+		const auto itEntity = std::find_if(view.begin(), view.end(), hasMainCamera);
+		if (itEntity != view.end()) {
+			const auto& cam = m_scene->getComponent<CameraComponent>(*itEntity);
+			const auto& transform = m_scene->getComponent<TransformComponent>(*itEntity);
+			auto& renderCamera = m_scene->getRenderCamera();
+			renderCamera.calculateCameraTransforms(transform, cam);
+
+			graphics::RenderPipeline::Instance().submitCamera(&renderCamera);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	// -------------------------------------------------------------

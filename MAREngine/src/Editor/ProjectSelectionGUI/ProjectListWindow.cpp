@@ -48,10 +48,10 @@ namespace mar::editor {
 		ImGui::Separator();
 
 		if (ImGui::Button("Open Default Project")) {
-			engine::MAREngine::getEngine()->setProjectName("DefaultProject");
-			engine::MAREngine::getEngine()->setProjectPath("DefaultProject/");
-			engine::MAREngine::getEngine()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
-			window::Window::getInstance().endRenderLoop();
+			engine::MAREngine::Instance()->setProjectName("DefaultProject");
+			engine::MAREngine::Instance()->setProjectPath("DefaultProject/");
+			engine::MAREngine::Instance()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
+			window::Window::Instance().endRenderLoop();
 		}
 
 		ImGui::SameLine();
@@ -77,7 +77,7 @@ namespace mar::editor {
 		}
 
 		if (ImGui::Button("Exit")) {
-			window::Window::getInstance().exitApp();
+			window::Window::Instance().exitApp();
 		}
 
 		ImGui::End();

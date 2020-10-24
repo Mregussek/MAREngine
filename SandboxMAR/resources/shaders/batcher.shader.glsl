@@ -33,7 +33,6 @@ void main() {
 	v_samplerType = u_samplerTypes[index];
 };
 
-
 #shader fragment
 #version 330 core
 
@@ -56,7 +55,7 @@ uniform struct Material {
 	float linear;
 	float quadratic;
 	float shininess;
-} u_material[15];
+} u_material[32];
 
 uniform int u_materialSize;
 uniform vec3 u_CameraPos;
@@ -232,4 +231,3 @@ vec4 computeAllLights(vec4 batchColor) {
 
 	return lightColor;
 }
-

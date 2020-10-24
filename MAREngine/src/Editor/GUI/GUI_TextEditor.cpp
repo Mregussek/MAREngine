@@ -138,7 +138,7 @@ namespace mar::editor {
 	void GUI_TextEditor::createNewScriptWindow() {
 		ImGui::Begin("Create New Script");
 
-		const auto assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
+		const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
 		static char moduleName[50]{ "empty" };
 
 		ImGui::InputText(".py", moduleName, 50);
@@ -166,7 +166,7 @@ namespace mar::editor {
 	void GUI_TextEditor::openScriptWindow() {
 		ImGui::Begin("Open Script Menu");
 
-		const auto assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
+		const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
 		static char moduleName[50]{ "empty" };
 
 		ImGui::InputText(".py", moduleName, 30);

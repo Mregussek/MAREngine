@@ -106,7 +106,7 @@ namespace mar::platforms {
 			return search->second;
 		}
 
-		const std::string assetsTexturePath = engine::MAREngine::getEngine()->getAssetsPath() + path;
+		const auto assetsTexturePath = engine::MAREngine::Instance()->getAssetsPath() + path;
 		const uint32_t id = genNewTexture(assetsTexturePath.c_str());
 		s_2d.insert({ path, id });
 		return id;
@@ -164,7 +164,7 @@ namespace mar::platforms {
 			return search->second;
 		}
 
-		const std::string assetsTexturePath = engine::MAREngine::getEngine()->getAssetsPath() + path;
+		const auto assetsTexturePath = engine::MAREngine::Instance()->getAssetsPath() + path;
 		const uint32_t id = genNewCubemap(assetsTexturePath);
 		s_cubemaps.insert({ path, id });
 

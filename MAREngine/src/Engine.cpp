@@ -29,11 +29,11 @@
 namespace mar::engine {
 
 		
-	MAREngine* MAREngine::main_instance{ nullptr };
+	MAREngine* MAREngine::s_instance{ nullptr };
 
 
 	void MAREngine::initialize() {
-		main_instance = this;
+		s_instance = this;
 
 		MAR_LOG_INIT();
 

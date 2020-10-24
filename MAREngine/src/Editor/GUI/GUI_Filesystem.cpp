@@ -55,13 +55,13 @@ namespace mar::editor {
 			Filesystem::saveToFile(newScene, m_fileDialog.selected_path.c_str());
 			delete newScene;
 
-			engine::MAREngine::getEngine()->setLoadPath(m_fileDialog.selected_path);
+			engine::MAREngine::Instance()->setLoadPath(m_fileDialog.selected_path);
 
 			GUI_EntityCollectionPanel::Instance()->reset();
 			GUI_EntityPanel::Instance()->reset();
 			GUI_TextEditor::Instance()->reset();
 
-			engine::MAREngine::getEngine()->setRestart();
+			engine::MAREngine::Instance()->setRestart();
 		}
 	}
 
@@ -81,13 +81,13 @@ namespace mar::editor {
 
 	void GUI_Filesystem::displayLoadSceneWindow() {
 		if (m_fileDialog.showFileDialog(m_nameOpenScene, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".marscene")) {
-			engine::MAREngine::getEngine()->setLoadPath(m_fileDialog.selected_path);
+			engine::MAREngine::Instance()->setLoadPath(m_fileDialog.selected_path);
 
 			GUI_EntityCollectionPanel::Instance()->reset();
 			GUI_EntityPanel::Instance()->reset();
 			GUI_TextEditor::Instance()->reset();
 
-			engine::MAREngine::getEngine()->setRestart();
+			engine::MAREngine::Instance()->setRestart();
 		}
 	}
 
@@ -115,7 +115,7 @@ namespace mar::editor {
 
 	void GUI_Filesystem::displayAssigningScriptWindow(const ecs::Entity* entity) {
 		if (m_fileDialog.showFileDialog(m_nameAssignScript, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".py")) {
-			const auto& assetsPath = engine::MAREngine::getEngine()->getAssetsPath();
+			const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
 
 			auto& script = entity->getComponent<ecs::ScriptComponent>();
 			script.script = std::string(m_fileDialog.selected_path);

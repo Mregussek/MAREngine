@@ -27,11 +27,11 @@ namespace mar::window {
 
 
 	bool Input::isKeyPressed(int32_t key) {
-		return Window::getInstance().m_window.isKeyPressed(key);
+		return Window::Instance().m_window.isKeyPressed(key);
 	}
 
 	bool Input::isMousePressed(int32_t key) {
-		return Window::getInstance().m_window.isMousePressed(key);
+		return Window::Instance().m_window.isMousePressed(key);
 	}
 
 	float Input::getMousePositionX() {

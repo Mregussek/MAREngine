@@ -36,22 +36,22 @@ public:
 	}
 
 	void run() {
-		window::Window window = window::Window();
+		auto window = window::Window();
 		window.initialize(1600, 900, engine.getName());
 
 		auto stack = layers::LayerStack();
-		auto entitylayer = new layers::EntityLayer("Entity Layer");
-		auto loaded_scene = editor::Filesystem::openFile(engine.getPathToLoad());
+		auto entityLayer = new layers::EntityLayer("Entity Layer");
+		auto scene = editor::Filesystem::openFile(engine.getPathToLoad());
 
 		{ // Entity Layer Setup
-			entitylayer->initialize(loaded_scene);
-			stack.pushLayer(entitylayer);
+			entityLayer->initialize(scene);
+			stack.pushLayer(entityLayer);
 		}
 
-		auto& back = entitylayer->getSceneManager()->getScene()->getBackground();
+		const auto& back = scene->getBackground();
 		window.updateBackgroundColor(back);
 
-		entitylayer->getSceneManager()->setPlayMode();
+		entityLayer->getSceneManager()->setPlayMode();
 
 		while (!window.isGoingToClose() && !engine.shouldEngineRestart())
 		{
@@ -59,7 +59,6 @@ public:
 
 			stack.update();
 
-			engine.resetStatistics();
 			window.update();
 		}
 

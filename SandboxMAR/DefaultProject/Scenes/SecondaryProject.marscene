@@ -1,0 +1,1474 @@
+MAREngine scene file
+
+#SceneStart
+#Scene_Name SecondaryProject.marscene
+#Scene_Background 0.43055 0.863336 0.894737
+
+#EntityStart
+#TagComponent Camera
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#CameraComponent Begin
+#id secondary
+#used perspective
+#type perspective
+#fov 45
+#aspectratio 1.33333
+#near 0.01
+#far 100
+#type orthographic
+#left -10
+#right 10
+#top 10
+#bottom -10
+#near 100
+#far 100
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Light
+#TransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#LightComponent Begin
+#ambientlight 0.5 0.5 0.5
+#diffuselight 0.9 0.9 0.9
+#specularlight 0.5 0.5 0.5
+#constant 1
+#linear 0.045
+#quadratic 0.0075
+#shininess 64
+
+#EntityEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/deagle.obj
+
+#EntityStart
+#TagComponent deagle
+#TransformComponent Begin
+#center 5.55 -0.45 -6.25
+#angles 0 -41.5 2.5
+#scale 1 1 1
+#general_scale 0
+#RenderableComponent deagle
+#ColorComponent 0.448372 0.883459 0.834252
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#CollectionTagComponent deagle.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/monkey.obj
+
+#EntityStart
+#TagComponent Suzanne
+#TransformComponent Begin
+#center 7.7 0 0
+#angles -88.5 -0.5 -72
+#scale 2.01 2.01 2.01
+#general_scale 0
+#RenderableComponent Suzanne
+#ColorComponent 0.992481 0.115665 0.115665
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#CollectionTagComponent monkey.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/m4.obj
+
+#EntityStart
+#TagComponent m4a1
+#TransformComponent Begin
+#center 0 -2.6 -0.6
+#angles 0 0 0
+#scale 0.31 0.31 0.31
+#general_scale 0
+#RenderableComponent m4a1
+#ColorComponent 0.793233 0.793225 0.793225
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 0 0
+#angles 0 0 0
+#scale 1 1 1
+#general_scale 0
+#CollectionTagComponent m4.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/CHALLENGER71.obj
+
+#EntityStart
+#TagComponent LicenseF
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent LicenseF
+
+#EntityEnd
+
+#EntityStart
+#TagComponent LicenseR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent LicenseR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Base_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Base_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Base_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Base_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Base_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Base_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Base
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Base
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BLightL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BLightL
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BLightR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BLightR
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Body
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Body
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeFL_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeFL_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeFL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeFL
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeFR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeFR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeFR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeFR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeRL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeRL
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeRR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeRR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BrakeRR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BrakeRR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperFB_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperFB_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperFB_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperFB_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperFB
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperFB
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperRB_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperRB_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperRB_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperRB_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperRB
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperRB
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent DoorL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent DoorL
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent DoorLine_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent DoorLine_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent DoorLine
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent DoorLine
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent DoorR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent DoorR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Driver
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Driver
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Engine_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Engine_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Engine_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Engine_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Engine_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Engine_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Engine_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Engine_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Engine_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Engine_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Engine
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Engine
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Exhaust_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Exhaust_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Exhaust
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Exhaust
+
+#EntityEnd
+
+#EntityStart
+#TagComponent HLightL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent HLightL
+
+#EntityEnd
+
+#EntityStart
+#TagComponent HLightLG
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent HLightLG
+
+#EntityEnd
+
+#EntityStart
+#TagComponent HLightR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent HLightR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent HLightRG
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent HLightRG
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Hood_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Hood_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Hood_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Hood_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Hood_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Hood_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Hood_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Hood_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Hood
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Hood
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Interior
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Interior
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorL
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent MirrorR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent MirrorR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Roof_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Roof_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Roof
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Roof
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Spoiler
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Spoiler
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFL
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireFR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireFR
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRL_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRL_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRL
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRR_2
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent TireRR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent TireRR
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent WindF
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent WindF
+
+#EntityEnd
+
+#EntityStart
+#TagComponent WindFL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent WindFL
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent WindFR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent WindFR
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent WindR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent WindR
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent WindRL
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent WindRL
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent WindRR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent WindRR
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Skirt_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Skirt_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Skirt_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Skirt_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Skirt_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Skirt_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Skirt_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Skirt_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Skirt
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent Skirt
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperF
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperF
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperR_2
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperR_2
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#EntityStart
+#TagComponent BumperR
+#TransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#RenderableComponent BumperR
+#ColorComponent 0.5 0.5 0.5
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 2.3 -1.5 -1.7
+#angles -86 0 -27.5
+#scale 1.73 1.73 1.73
+#general_scale 0.73
+#CollectionTagComponent CHALLENGER71.obj
+
+#EntityCollectionEnd
+
+#SceneEnd
