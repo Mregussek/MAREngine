@@ -164,24 +164,24 @@ namespace mar::editor {
 				if (ImGui::BeginMenu("Add Component")) {
 					if (!currentEntity->hasComponent<ecs::RenderableComponent>()) {
 						if (ImGui::MenuItem("Add RenderableComponent")) {
-							currentEntity->addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+							currentEntity->addComponent<ecs::RenderableComponent>();
 						}
 					}
 						
 					if (hasNeitherColorNorTexture) {
 						if (ImGui::BeginMenu("Add Color/Texture")) {
 							if (ImGui::MenuItem("Add ColorComponent")) {
-								currentEntity->addComponent<ecs::ColorComponent>(ECS_COLOR);
+								currentEntity->addComponent<ecs::ColorComponent>();
 								ecs::SceneEvents::Instance().onColorAdd();
 							}
 
 							if (ImGui::MenuItem("Add Texture2DComponent")) {
-								currentEntity->addComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+								currentEntity->addComponent<ecs::Texture2DComponent>();
 								ecs::SceneEvents::Instance().onTexture2DAdd();
 							}
 								
 							if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-								currentEntity->addComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+								currentEntity->addComponent<ecs::TextureCubemapComponent>();
 								ecs::SceneEvents::Instance().onTextureCubemapAdd();
 							}
 								
@@ -191,21 +191,21 @@ namespace mar::editor {
 
 					if (!currentEntity->hasComponent<ecs::LightComponent>()) {
 						if (ImGui::MenuItem("Add LightComponent")) {
-							currentEntity->addComponent<ecs::LightComponent>(ECS_LIGHT);
+							currentEntity->addComponent<ecs::LightComponent>();
 							ecs::SceneEvents::Instance().onLightAdd();
 						}
 					}
 
 					if (!currentEntity->hasComponent<ecs::CameraComponent>()) {
 						if (ImGui::MenuItem("Add CameraComponent")) {
-							currentEntity->addComponent<ecs::CameraComponent>(ECS_CAMERA);
+							currentEntity->addComponent<ecs::CameraComponent>();
 							ecs::SceneEvents::Instance().onCameraAdd();
 						}
 					}
 
 					if (!currentEntity->hasComponent<ecs::ScriptComponent>()) {
 						if (ImGui::MenuItem("Add ScriptComponent")) {
-							currentEntity->addComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+							currentEntity->addComponent<ecs::ScriptComponent>();
 							ecs::SceneEvents::Instance().onScriptAdd();
 						}
 					}
@@ -282,7 +282,7 @@ namespace mar::editor {
 		ImGui::SameLine();
 
 		if (ImGui::MenuItem("Remove Script")) {
-			currentEntity->removeComponent<ecs::ScriptComponent>(ECS_SCRIPT);
+			currentEntity->removeComponent<ecs::ScriptComponent>();
 			GUI_TextEditor::Instance()->reset();
 			return;
 		}
@@ -331,7 +331,7 @@ namespace mar::editor {
 
 		if (hasNeitherColorNorTexture) {
 			if (ImGui::MenuItem("Remove Renderable")) {
-				currentEntity->removeComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+				currentEntity->removeComponent<ecs::RenderableComponent>();
 				ecs::SceneEvents::Instance().onRenderableRemove();
 				return;
 			}
@@ -371,7 +371,7 @@ namespace mar::editor {
 
 		if (camera.id.find("main") == std::string::npos) {
 			if (ImGui::Button("Remove Camera")) {
-				currentEntity->removeComponent<ecs::CameraComponent>(ECS_CAMERA);
+				currentEntity->removeComponent<ecs::CameraComponent>();
 				ecs::SceneEvents::Instance().onCameraRemove();
 				return;
 			}
@@ -428,7 +428,7 @@ namespace mar::editor {
 		ImGui::SameLine();
 
 		if (ImGui::MenuItem("Remove Color")) {
-			currentEntity->removeComponent<ecs::ColorComponent>(ECS_COLOR);
+			currentEntity->removeComponent<ecs::ColorComponent>();
 			ecs::SceneEvents::Instance().onColorRemove();
 			return;
 		}
@@ -467,7 +467,7 @@ namespace mar::editor {
 		ImGui::Text("Texture2DComponent\n");
 		ImGui::SameLine();
 		if (ImGui::MenuItem("Remove Texture")) {
-			currentEntity->removeComponent<ecs::Texture2DComponent>(ECS_TEXTURE2D);
+			currentEntity->removeComponent<ecs::Texture2DComponent>();
 			ecs::SceneEvents::Instance().onTexture2DRemove();
 			return;
 		}
@@ -519,7 +519,7 @@ namespace mar::editor {
 		ImGui::Text("TextureCubemapComponent\n");
 		ImGui::SameLine();
 		if (ImGui::MenuItem("Remove Cubemap")) {
-			currentEntity->removeComponent<ecs::TextureCubemapComponent>(ECS_CUBEMAP);
+			currentEntity->removeComponent<ecs::TextureCubemapComponent>();
 			ecs::SceneEvents::Instance().onTextureCubemapRemove();
 			return;
 		}
@@ -552,7 +552,7 @@ namespace mar::editor {
 		ImGui::SameLine();
 
 		if (ImGui::MenuItem("Remove Light")) {
-			currentEntity->removeComponent<ecs::LightComponent>(ECS_LIGHT);
+			currentEntity->removeComponent<ecs::LightComponent>();
 			ecs::SceneEvents::Instance().onLightRemove();
 			return;
 		}

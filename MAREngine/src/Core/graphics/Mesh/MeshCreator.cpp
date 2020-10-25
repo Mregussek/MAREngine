@@ -130,7 +130,7 @@ namespace mar::graphics {
             for (size_t i = 0; i < Loader.LoadedMeshes.size(); i++) {
                 auto& entity = collection.createEntity();
                 auto& tag = entity.getComponent<ecs::TagComponent>();
-                auto& renderable = entity.addComponent<ecs::RenderableComponent>(ECS_RENDERABLE);
+                auto& renderable = entity.addComponent<ecs::RenderableComponent>();
     
                 objl::Mesh curMesh = Loader.LoadedMeshes[i];
     

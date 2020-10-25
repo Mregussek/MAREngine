@@ -55,14 +55,14 @@ namespace mar::ecs {
 
 		{ // create Camera entity
 			const auto& entity = scene->createEntity();
-			entity.addComponent<CameraComponent>(ECS_CAMERA);
+			entity.addComponent<CameraComponent>();
 
 			auto& cam = entity.getComponent<TagComponent>();
 			cam.tag = "Camera";
 		}
 		{ // create Light Entity
 			const auto& entity = scene->createEntity();
-			entity.addComponent<LightComponent>(ECS_LIGHT);
+			entity.addComponent<LightComponent>();
 
 			auto& light = entity.getComponent<TagComponent>();
 			light.tag = "Light";
@@ -81,8 +81,8 @@ namespace mar::ecs {
 		const auto& entity = m_container.m_entities.emplace_back(&m_sceneRegistry);
 
 		entity.addDefault();
-		entity.addComponent<TagComponent>(ECS_TAG);
-		entity.addComponent<TransformComponent>(ECS_TRANSFORM);
+		entity.addComponent<TagComponent>();
+		entity.addComponent<TransformComponent>();
 
 		ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
 

@@ -43,49 +43,46 @@ namespace mar::ecs {
 	}
 
 	void EntityOperation::copyEntity(const Entity& src, const Entity& dst) {
-		const auto& components = src.getComponent<Components>();
+		{ // Default Copy
+			copyComponent<TagComponent>(src, dst);
+			copyComponent<TransformComponent>(src, dst);
+		}
 
-		for (const auto component : components.components) {
-			switch (component) {
-			case ECS_RENDERABLE:
-				copyComponent<RenderableComponent>(component, src, dst);
-				break;
-			case ECS_COLOR:
-				copyComponent<ColorComponent>(component, src, dst);
-				break;
-			case ECS_TEXTURE2D:
-				copyComponent<Texture2DComponent>(component, src, dst);
-				break;
-			case ECS_CUBEMAP:
-				copyComponent<TextureCubemapComponent>(component, src, dst);
-				break;
-			case ECS_LIGHT:
-				copyComponent<LightComponent>(component, src, dst);
-				break;
-			case ECS_CAMERA:
-				copyComponent<CameraComponent>(component, src, dst);
-				break;
-			case ECS_SCRIPT:
-				copyComponent<ScriptComponent>(component, src, dst);
-				break;
-			case ECS_TRANSFORM:
-				copyComponent<TransformComponent>(component, src, dst);
-				break;
-			case ECS_TAG:
-				copyComponent<TagComponent>(component, src, dst);
-				break;
-			}
+		if (src.hasComponent<RenderableComponent>()) {
+			copyComponent<RenderableComponent>(src, dst);
+		}
+
+		if (src.hasComponent<ColorComponent>()) {
+			copyComponent<ColorComponent>(src, dst);
+		}
+		else if (src.hasComponent<Texture2DComponent>()) {
+			copyComponent<Texture2DComponent>(src, dst);
+		}
+		else if (src.hasComponent<TextureCubemapComponent>()) {
+			copyComponent<TextureCubemapComponent>(src, dst);
+		}
+
+		if (src.hasComponent<LightComponent>()) {
+			copyComponent<LightComponent>(src, dst);
+		}
+
+		if (src.hasComponent<CameraComponent>()) {
+			copyComponent<CameraComponent>(src, dst);
+		}
+
+		if (src.hasComponent<ScriptComponent>()) {
+			copyComponent<ScriptComponent>(src, dst);
 		}
 
 		src.copyDefault(dst);
 	}
 
 	template<typename T>
-	void EntityOperation::copyComponent(EntityComponents entcmp, const Entity& src, const Entity& dst) {
+	void EntityOperation::copyComponent(const Entity& src, const Entity& dst) {
 		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
 		else {
 			const auto com = src.getComponent<T>();
-			auto& component = dst.addComponent<T>(entcmp);
+			auto& component = dst.addComponent<T>();
 			component = com;
 		}
 	}

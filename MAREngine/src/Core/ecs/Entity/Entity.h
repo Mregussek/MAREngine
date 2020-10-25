@@ -63,13 +63,10 @@ namespace mar::ecs {
 		}
 
 		template<typename T, typename... Args>
-		T& addComponent(EntityComponents entcmp, Args&&... args) const {
+		T& addComponent(Args&&... args) const {
 			MAR_CORE_ASSERT(!hasComponent<T>(), "Entity already has this component!");
 
-			auto& com = getComponent<Components>();
-			com.components.push_back(entcmp);
-
-			ECS_TRACE("ENTITY: {} adding component explicitly - {}!", m_entityHandle, entcmp);
+			ECS_TRACE("ENTITY: {} adding component explicitly - {}!", m_entityHandle, typeid(T).name());
 
 			return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 		}
@@ -94,19 +91,12 @@ namespace mar::ecs {
 		}
 
 		template<typename T>
-		void removeComponent(EntityComponents entcmp) const {
+		void removeComponent() const {
 			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
 
-			ECS_INFO("ENTITY: {} going to remove component {}", m_entityHandle, entcmp);
-
-			auto& com = getComponent<Components>();
-			auto it = std::find(com.components.begin(), com.components.end(), entcmp);
-			if (it != com.components.end())
-				com.components.erase(it);
+			ECS_INFO("ENTITY: {} going to remove component {}", m_entityHandle, typeid(T).name());
 
 			m_scene->m_registry.remove<T>(m_entityHandle);
-
-			ECS_TRACE("ENTITY: {} removing component", m_entityHandle);
 		}
 
 	private:

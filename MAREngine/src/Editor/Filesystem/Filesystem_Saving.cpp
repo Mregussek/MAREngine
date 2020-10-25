@@ -80,80 +80,80 @@ namespace mar::editor {
 	void Filesystem_Saving::saveEntity(std::ofstream& ss, const ecs::Entity& entity) {
 		ss << "\n#EntityStart\n";
 
-		const auto& com = entity.getComponent<ecs::Components>();
+		{ // Tag Save
+			const auto& tag = entity.getComponent<ecs::TagComponent>();
+			ss << "#TagComponent " << tag.tag << "\n";
+		}
+		
+		{ // Transform Save
+			const auto& transform = entity.getComponent<ecs::TransformComponent>();
+			ss << "#TransformComponent Begin\n";
+			ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
+			ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";
+			ss << "#scale " << transform.scale.x << " " << transform.scale.y << " " << transform.scale.z << "\n";
+			ss << "#general_scale " << transform.general_scale << "\n";
+		}
+		
+		if (entity.hasComponent<ecs::RenderableComponent>()) {
+			const auto& renderable = entity.getComponent<ecs::RenderableComponent>();
+			ss << "#RenderableComponent " << renderable.name << "\n";
+		}
 
-		for (const auto component : com.components) {
+		if (entity.hasComponent<ecs::ColorComponent>()) {
+			const auto& color = entity.getComponent<ecs::ColorComponent>();
+			ss << "#ColorComponent " << color.texture.x << " " << color.texture.y << " " << color.texture.z << "\n";
+		}
+		else if (entity.hasComponent<ecs::Texture2DComponent>()) {
+			const auto& tex = entity.getComponent<ecs::Texture2DComponent>();
+			ss << "#Texture2DComponent " << tex.texture << "\n";
+		}
+		else if (entity.hasComponent<ecs::TextureCubemapComponent>()) {
+			const auto& cube = entity.getComponent<ecs::TextureCubemapComponent>();
+			ss << "#TextureCubemapComponent " << cube.texture << "\n";
+		}
 
-			if (component == ECS_TAG) {
-				const auto& tag = entity.getComponent<ecs::TagComponent>();
-				ss << "#TagComponent " << tag.tag << "\n";
-			}
-			else if (component == ECS_RENDERABLE) {
-				const auto& renderable = entity.getComponent<ecs::RenderableComponent>();
-				ss << "#RenderableComponent " << renderable.name << "\n";
-			}
-			else if (component == ECS_TRANSFORM) {
-				const auto& transform = entity.getComponent<ecs::TransformComponent>();
-				ss << "#TransformComponent Begin\n";
-				ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
-				ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";
-				ss << "#scale " << transform.scale.x << " " << transform.scale.y << " " << transform.scale.z << "\n";
-				ss << "#general_scale " << transform.general_scale << "\n";
-			}
-			else if (component == ECS_COLOR) {
-				const auto& color = entity.getComponent<ecs::ColorComponent>();
-				ss << "#ColorComponent " << color.texture.x << " " << color.texture.y << " " << color.texture.z << "\n";
-			}
-			else if (component == ECS_TEXTURE2D) {
-				const auto& tex = entity.getComponent<ecs::Texture2DComponent>();
-				ss << "#Texture2DComponent " << tex.texture << "\n";
-			}
-			else if (component == ECS_CUBEMAP) {
-				const auto& cube = entity.getComponent<ecs::TextureCubemapComponent>();
-				ss << "#TextureCubemapComponent " << cube.texture << "\n";
-			}
-			else if (component == ECS_LIGHT) {
-				const auto& light = entity.getComponent<ecs::LightComponent>();
+		if (entity.hasComponent<ecs::LightComponent>()) {
+			const auto& light = entity.getComponent<ecs::LightComponent>();
 
-				ss << "#LightComponent Begin\n";
+			ss << "#LightComponent Begin\n";
 
-				ss << "#ambientlight " << light.ambient.x << " " << light.ambient.y << " " << light.ambient.z << "\n";
-				ss << "#diffuselight " << light.diffuse.x << " " << light.diffuse.y << " " << light.diffuse.z << "\n";
-				ss << "#specularlight " << light.specular.x << " " << light.specular.y << " " << light.specular.z << "\n";
+			ss << "#ambientlight " << light.ambient.x << " " << light.ambient.y << " " << light.ambient.z << "\n";
+			ss << "#diffuselight " << light.diffuse.x << " " << light.diffuse.y << " " << light.diffuse.z << "\n";
+			ss << "#specularlight " << light.specular.x << " " << light.specular.y << " " << light.specular.z << "\n";
 
-				ss << "#constant " << light.constant << "\n";
-				ss << "#linear " << light.linear << "\n";
-				ss << "#quadratic " << light.quadratic << "\n";
-				ss << "#shininess " << light.shininess << '\n';
-			}
-			else if (component == ECS_CAMERA) {
-				const auto& cam = entity.getComponent<ecs::CameraComponent>();
+			ss << "#constant " << light.constant << "\n";
+			ss << "#linear " << light.linear << "\n";
+			ss << "#quadratic " << light.quadratic << "\n";
+			ss << "#shininess " << light.shininess << '\n';
+		}
 
-				ss << "#CameraComponent Begin\n";
-				ss << "#id " << cam.id << "\n";
+		if (entity.hasComponent<ecs::CameraComponent>()) {
+			const auto& cam = entity.getComponent<ecs::CameraComponent>();
 
-				if (cam.Perspective) { ss << "#used perspective\n"; }
-				else { ss << "#used orthographic\n"; }
+			ss << "#CameraComponent Begin\n";
+			ss << "#id " << cam.id << "\n";
 
-				ss << "#type perspective\n";
-				ss << "#fov " << cam.p_fov << "\n";
-				ss << "#aspectratio " << cam.p_aspectRatio << "\n";
-				ss << "#near " << cam.p_near << "\n";
-				ss << "#far " << cam.p_far << "\n";
+			if (cam.Perspective) { ss << "#used perspective\n"; }
+			else { ss << "#used orthographic\n"; }
 
-				ss << "#type orthographic\n";
-				ss << "#left " << cam.o_left << "\n";
-				ss << "#right " << cam.o_right << "\n";
-				ss << "#top " << cam.o_top << "\n";
-				ss << "#bottom " << cam.o_bottom << "\n";
-				ss << "#near " << cam.o_far << "\n";
-				ss << "#far " << cam.o_far << "\n";
-			}
-			else if (component == ECS_SCRIPT) {
-				const auto& script = entity.getComponent<ecs::ScriptComponent>();
+			ss << "#type perspective\n";
+			ss << "#fov " << cam.p_fov << "\n";
+			ss << "#aspectratio " << cam.p_aspectRatio << "\n";
+			ss << "#near " << cam.p_near << "\n";
+			ss << "#far " << cam.p_far << "\n";
 
-				ss << "#ScriptComponent " << script.script << "\n";
-			}
+			ss << "#type orthographic\n";
+			ss << "#left " << cam.o_left << "\n";
+			ss << "#right " << cam.o_right << "\n";
+			ss << "#top " << cam.o_top << "\n";
+			ss << "#bottom " << cam.o_bottom << "\n";
+			ss << "#near " << cam.o_far << "\n";
+			ss << "#far " << cam.o_far << "\n";
+		}
+
+		if (entity.hasComponent<ecs::ScriptComponent>()) {
+			const auto& script = entity.getComponent<ecs::ScriptComponent>();
+			ss << "#ScriptComponent " << script.script << "\n";
 		}
 
 		ss << "\n#EntityEnd\n";

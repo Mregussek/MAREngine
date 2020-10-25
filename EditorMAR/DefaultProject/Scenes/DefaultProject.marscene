@@ -80,8 +80,8 @@ MAREngine scene file
 #angles 265.85 210.46 0
 #scale 1 2 1
 #general_scale 0
-#ColorComponent 0.5 0.5 0.5
 #RenderableComponent Cube
+#ColorComponent 0.5 0.5 0.5
 
 #EntityEnd
 
@@ -129,8 +129,8 @@ MAREngine scene file
 #angles 1 -62.5 -5.5
 #scale 1 1 1
 #general_scale 0
-#Texture2DComponent textures/mr.jpg
 #RenderableComponent Cube
+#Texture2DComponent textures/mr.jpg
 
 #EntityEnd
 
@@ -153,8 +153,8 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#Texture2DComponent textures/grass-texture.jpg
 #RenderableComponent Surface
+#Texture2DComponent textures/grass-texture.jpg
 
 #EntityEnd
 
@@ -222,8 +222,8 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#TextureCubemapComponent textures/dirt
 #RenderableComponent Cube
+#TextureCubemapComponent textures/dirt
 
 #EntityEnd
 
@@ -246,8 +246,8 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#TextureCubemapComponent textures/grass
 #RenderableComponent Cube
+#TextureCubemapComponent textures/grass
 
 #EntityEnd
 
@@ -278,8 +278,8 @@ MAREngine scene file
 #angles 90 0 44.5
 #scale 0.01 0.35 0.04
 #general_scale 0
-#Texture2DComponent textures/grass_alpha.png
 #RenderableComponent Wall
+#Texture2DComponent textures/grass_alpha.png
 
 #EntityEnd
 
@@ -290,9 +290,9 @@ MAREngine scene file
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
-#ScriptComponent scripts/Examples.py
 #RenderableComponent Cube
 #ColorComponent 0.104383 0.456417 0.204165
+#ScriptComponent scripts/Examples.py
 
 #EntityEnd
 
