@@ -30,6 +30,7 @@
 #include "../../Core/ecs/Components/Components.h"
 #include "../../Core/ecs/SceneManager.h"
 #include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneEvents.h"
 
 #include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "EntityPanels/GUI_EntityPanel.h"
@@ -104,6 +105,7 @@ namespace mar::editor {
 						const auto& entity = m_sceneManager->getScene()->createEntity();
 						ecs::EntityOperation::copyEntity(currentEntity, entity);
 						GUI_EntityPanel::Instance()->setCurrentEntity(entity);
+						ecs::SceneEvents::Instance().onEntityCopy();
 					}
 				}
 
@@ -116,6 +118,7 @@ namespace mar::editor {
 						const auto& collection = m_sceneManager->getScene()->createCollection();
 						ecs::EntityOperation::copyCollection(currentCollection, collection);
 						GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
+						ecs::SceneEvents::Instance().onCollectionCopy();
 					}
 				}
 				

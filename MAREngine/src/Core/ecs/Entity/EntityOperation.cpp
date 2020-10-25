@@ -74,16 +74,15 @@ namespace mar::ecs {
 			copyComponent<ScriptComponent>(src, dst);
 		}
 
-		src.copyDefault(dst);
+		dst.copyDefault(src);
 	}
 
 	template<typename T>
 	void EntityOperation::copyComponent(const Entity& src, const Entity& dst) {
 		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
 		else {
-			const auto com = src.getComponent<T>();
-			auto& component = dst.addComponent<T>();
-			component = com;
+			dst.addComponent<T>();
+			dst.replaceComponent<T>(src);
 		}
 	}
 
@@ -91,9 +90,8 @@ namespace mar::ecs {
 	void EntityOperation::copyComponent(const EntityCollection& src, const EntityCollection& dst) {
 		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
 		else {
-			const auto com = src.getComponent<T>();
-			auto& component = dst.addComponent<T>();
-			component = com;
+			dst.addComponent<T>();
+			dst.replaceComponent<T>(src);
 		}
 	}
 		

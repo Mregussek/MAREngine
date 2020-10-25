@@ -72,7 +72,9 @@ namespace mar::ecs {
 
 		void onEntityCopy() const;
 		void onEntityRemove() const;
+
 		void onCollectionTransformUpdate() const;
+		void onCollectionCopy() const;
 		void onCollectionRemove() const;
 		void onCollectionOBJloaded(const EntityCollection& collection) const;
 

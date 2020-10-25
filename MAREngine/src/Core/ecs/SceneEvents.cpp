@@ -170,6 +170,12 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
 	}
 
+	void SceneEvents::onCollectionCopy() const {
+		m_sceneManager->initialize();
+
+		ECS_TRACE("SCENE_EVENTS: onCollectionCopy");
+	}
+
 	void SceneEvents::onCollectionRemove() const {
 		m_sceneManager->initialize();
 
