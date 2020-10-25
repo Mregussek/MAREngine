@@ -53,6 +53,8 @@ namespace mar::ecs {
 				ECS_TRACE("ENTITY_COLLECTION: from collection entity at {} is not valid, so it is not deleted!!", i);
 			}
 		}
+
+		m_scene->m_registry.destroy(m_collectionHandle);
 	}
 
 	const Entity& EntityCollection::createEntity() const {

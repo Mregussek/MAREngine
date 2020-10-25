@@ -128,7 +128,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent LicenseF
 
 #EntityEnd
@@ -139,7 +139,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent LicenseR
 
 #EntityEnd
@@ -150,7 +150,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Base_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -162,7 +162,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Base_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -174,7 +174,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Base_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -186,7 +186,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Base
 #ColorComponent 0.5 0.5 0.5
 
@@ -198,7 +198,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BLightL
 #ColorComponent 0.5 0.5 0.5
 
@@ -210,7 +210,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BLightR
 #ColorComponent 0.5 0.5 0.5
 
@@ -222,7 +222,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -234,7 +234,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -246,7 +246,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -258,7 +258,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -270,7 +270,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -282,7 +282,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -294,7 +294,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -306,7 +306,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Body
 #ColorComponent 0.5 0.5 0.5
 
@@ -318,7 +318,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeFL_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -330,7 +330,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeFL_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -342,7 +342,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeFL
 #ColorComponent 0.5 0.5 0.5
 
@@ -354,7 +354,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeFR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -366,7 +366,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeFR_2
 
 #EntityEnd
@@ -377,7 +377,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeFR
 
 #EntityEnd
@@ -388,7 +388,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeRL_2
 
 #EntityEnd
@@ -399,7 +399,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeRL_2
 
 #EntityEnd
@@ -410,7 +410,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeRL
 
 #EntityEnd
@@ -421,7 +421,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeRR_2
 
 #EntityEnd
@@ -432,7 +432,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeRR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -444,7 +444,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BrakeRR
 
 #EntityEnd
@@ -455,7 +455,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperFB_2
 
 #EntityEnd
@@ -466,7 +466,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperFB_2
 
 #EntityEnd
@@ -477,7 +477,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperFB
 #ColorComponent 0.5 0.5 0.5
 
@@ -489,7 +489,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperRB_2
 
 #EntityEnd
@@ -500,7 +500,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperRB_2
 
 #EntityEnd
@@ -511,7 +511,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperRB
 #ColorComponent 0.5 0.5 0.5
 
@@ -523,7 +523,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent DoorL
 #ColorComponent 0.5 0.5 0.5
 
@@ -535,7 +535,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent DoorLine_2
 
 #EntityEnd
@@ -546,7 +546,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent DoorLine
 #ColorComponent 0.5 0.5 0.5
 
@@ -558,7 +558,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent DoorR
 
 #EntityEnd
@@ -569,7 +569,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Driver
 
 #EntityEnd
@@ -580,7 +580,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Engine_2
 
 #EntityEnd
@@ -591,7 +591,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Engine_2
 
 #EntityEnd
@@ -602,7 +602,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Engine_2
 
 #EntityEnd
@@ -613,7 +613,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Engine_2
 
 #EntityEnd
@@ -624,7 +624,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Engine_2
 
 #EntityEnd
@@ -635,7 +635,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Engine
 
 #EntityEnd
@@ -646,7 +646,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Exhaust_2
 
 #EntityEnd
@@ -657,7 +657,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Exhaust
 
 #EntityEnd
@@ -668,7 +668,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent HLightL
 
 #EntityEnd
@@ -679,7 +679,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent HLightLG
 
 #EntityEnd
@@ -690,7 +690,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent HLightR
 
 #EntityEnd
@@ -701,7 +701,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent HLightRG
 
 #EntityEnd
@@ -712,7 +712,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Hood_2
 
 #EntityEnd
@@ -723,7 +723,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Hood_2
 
 #EntityEnd
@@ -734,7 +734,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Hood_2
 
 #EntityEnd
@@ -745,7 +745,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Hood_2
 
 #EntityEnd
@@ -756,7 +756,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Hood
 
 #EntityEnd
@@ -767,7 +767,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Interior
 
 #EntityEnd
@@ -778,7 +778,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorL_2
 
 #EntityEnd
@@ -789,7 +789,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorL_2
 
 #EntityEnd
@@ -800,7 +800,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorL_2
 
 #EntityEnd
@@ -811,7 +811,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorL
 
 #EntityEnd
@@ -822,7 +822,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorR_2
 
 #EntityEnd
@@ -833,7 +833,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorR_2
 
 #EntityEnd
@@ -844,7 +844,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorR_2
 
 #EntityEnd
@@ -855,7 +855,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent MirrorR
 
 #EntityEnd
@@ -866,7 +866,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Roof_2
 
 #EntityEnd
@@ -877,7 +877,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Roof
 
 #EntityEnd
@@ -888,7 +888,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Spoiler
 
 #EntityEnd
@@ -899,7 +899,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFL_2
 
 #EntityEnd
@@ -910,7 +910,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFL_2
 
 #EntityEnd
@@ -921,7 +921,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFL_2
 
 #EntityEnd
@@ -932,7 +932,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFL_2
 
 #EntityEnd
@@ -943,7 +943,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFL_2
 
 #EntityEnd
@@ -954,7 +954,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFL
 
 #EntityEnd
@@ -965,7 +965,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFR_2
 
 #EntityEnd
@@ -976,7 +976,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFR_2
 
 #EntityEnd
@@ -987,7 +987,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFR_2
 
 #EntityEnd
@@ -998,7 +998,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFR_2
 
 #EntityEnd
@@ -1009,7 +1009,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFR_2
 
 #EntityEnd
@@ -1020,7 +1020,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireFR
 
 #EntityEnd
@@ -1031,7 +1031,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRL_2
 
 #EntityEnd
@@ -1042,7 +1042,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRL_2
 
 #EntityEnd
@@ -1053,7 +1053,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRL_2
 
 #EntityEnd
@@ -1064,7 +1064,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRL_2
 
 #EntityEnd
@@ -1075,7 +1075,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRL_2
 
 #EntityEnd
@@ -1086,7 +1086,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRL
 #ColorComponent 0.5 0.5 0.5
 
@@ -1098,7 +1098,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1110,7 +1110,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1122,7 +1122,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRR_2
 
 #EntityEnd
@@ -1133,7 +1133,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1145,7 +1145,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1157,7 +1157,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent TireRR
 #ColorComponent 0.5 0.5 0.5
 
@@ -1169,7 +1169,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent WindF
 
 #EntityEnd
@@ -1180,7 +1180,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent WindFL
 #ColorComponent 0.5 0.5 0.5
 
@@ -1192,7 +1192,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent WindFR
 #ColorComponent 0.5 0.5 0.5
 
@@ -1204,7 +1204,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent WindR
 #ColorComponent 0.5 0.5 0.5
 
@@ -1216,7 +1216,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent WindRL
 #ColorComponent 0.5 0.5 0.5
 
@@ -1228,7 +1228,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent WindRR
 #ColorComponent 0.5 0.5 0.5
 
@@ -1240,7 +1240,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Skirt_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1252,7 +1252,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Skirt_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1264,7 +1264,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Skirt_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1276,7 +1276,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Skirt_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1288,7 +1288,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent Skirt
 #ColorComponent 0.5 0.5 0.5
 
@@ -1300,7 +1300,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1312,7 +1312,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1324,7 +1324,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1336,7 +1336,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1348,7 +1348,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1360,7 +1360,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1372,7 +1372,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1384,7 +1384,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperF
 #ColorComponent 0.5 0.5 0.5
 
@@ -1396,7 +1396,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1408,7 +1408,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1420,7 +1420,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1432,7 +1432,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1444,7 +1444,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperR_2
 #ColorComponent 0.5 0.5 0.5
 
@@ -1456,7 +1456,7 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #RenderableComponent BumperR
 #ColorComponent 0.5 0.5 0.5
 
@@ -1466,8 +1466,44 @@ MAREngine scene file
 #center 2.3 -1.5 -1.7
 #angles -86 0 -27.5
 #scale 1.73 1.73 1.73
-#general_scale 0.73
+#general_scale 0
 #CollectionTagComponent CHALLENGER71.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/karambit/karanbit.obj
+
+#EntityStart
+#TagComponent blade_Circle.000_2
+#TransformComponent Begin
+#center 0 2.2 4.25
+#angles 8 61 15.5
+#scale 7.52 7.52 7.52
+#general_scale 7.52
+#RenderableComponent blade_Circle.000_2
+#ColorComponent 0.832683 0.951128 0.00357565
+
+#EntityEnd
+
+#EntityStart
+#TagComponent blade_Circle.000
+#TransformComponent Begin
+#center 0 2.2 4.25
+#angles 8 61 15.5
+#scale 7.52 7.52 7.52
+#general_scale 7.52
+#RenderableComponent blade_Circle.000
+#ColorComponent 0.104514 0.17064 0.958647
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 0 2.2 4.25
+#angles 8 61 15.5
+#scale 7.52 7.52 7.52
+#general_scale 7.52
+#CollectionTagComponent karanbit.obj
 
 #EntityCollectionEnd
 

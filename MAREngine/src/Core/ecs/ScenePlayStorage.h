@@ -31,24 +31,22 @@ namespace mar::ecs {
 	class Entity; class EntityCollection;
 
 
-	struct EntityStorage {
-
-		TransformComponent transform;
-		LightComponent light;
-		ColorComponent color;
-
-	};
-
-	struct CollectionStorage {
-
-		std::vector<EntityStorage> entities;
-		
-		void clear() { 
-			entities.clear(); 
-		}
-	};
-
 	class ScenePlayStorage {
+
+		struct EntityStorage {
+			TransformComponent transform;
+			LightComponent light;
+			ColorComponent color;
+		};
+
+		struct CollectionStorage {
+			std::vector<EntityStorage> entities;
+
+			void clear() {
+				entities.clear();
+			}
+		};
+	
 	public:
 
 		ScenePlayStorage() = default;
