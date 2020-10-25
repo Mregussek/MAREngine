@@ -39,7 +39,7 @@ namespace mar::ecs {
 		return isValid();
 	}
 
-	void EntityCollection::destroyYourself() {
+	void EntityCollection::destroyYourself() const {
 		auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
 
 		for (size_t i = 0; i < entitiesVector.size(); i++) {

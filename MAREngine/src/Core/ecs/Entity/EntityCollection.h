@@ -43,6 +43,7 @@ namespace mar::ecs {
 	};
 
 	class EntityCollection {
+
 		friend class Scene;
 
 	public:
@@ -52,7 +53,7 @@ namespace mar::ecs {
 
 		EntityCollection(SceneRegistry* scene);
 
-		void destroyYourself();
+		void destroyYourself() const;
 
 		const bool isValid() const;
 		operator const bool() const;
