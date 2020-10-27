@@ -62,7 +62,6 @@ namespace mar::graphics {
 	
 		const std::vector<RenderContainer>& getContainers() const { return m_containers; }
 		const RenderCamera* getCamera() const { return m_camera; }
-		const size_t getAvailableContainerIndex() const { return m_availableContainerIndex; }
 
 		// --- SETTERS --- //
 
