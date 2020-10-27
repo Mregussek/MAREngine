@@ -43,8 +43,6 @@ namespace mar::scripting {
 
         void update(const ecs::Entity& entity) const;
 
-        py::object& getModule() { return m_module; }
-
         static void appendCurrentPath();
 
         static std::string changeSlashesToDots(std::string script);
