@@ -65,16 +65,16 @@ void EditorMAR::runProjectOnEngine() {
 
 	{ // Entity Layer Setup
 		entityLayer->passSceneToManager(loaded_scene);
-		entityLayer->initialize();
 		stack.pushLayer(entityLayer);
 	}
 	
 	{ // Editor Layer Setup
 		guiLayer->passGuiToLayer(&gui, loaded_scene->getBackground());
-		guiLayer->initialize();
 		engine.connectEntityLayerToGui(guiLayer, entityLayer);
 		stack.pushOverlay(guiLayer);
 	}
+
+	stack.initialize();
 
 	while (!window.isGoingToClose() && !engine.shouldEngineRestart())
 	{

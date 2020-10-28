@@ -35,7 +35,9 @@ namespace mar::layers {
 
 		LayerStack();
 
-		Layer* operator[](const uint32_t& index);
+		Layer* operator[](uint32_t index);
+
+		void initialize();
 
 		void close();
 

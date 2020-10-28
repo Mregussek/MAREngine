@@ -28,7 +28,25 @@ namespace mar::layers {
 
 	LayerStack::LayerStack() { LAYER_INFO("LAYER_STACK: initialized (called default constructor)!"); }
 
-	Layer* LayerStack::operator[](const uint32_t& index) { return m_layers[index]; }
+	Layer* LayerStack::operator[](uint32_t index) { return m_layers[index]; }
+
+	void LayerStack::initialize() {
+		LAYER_TRACE("LAYER_STACK: going to call initialize() on layers");
+
+		for (auto& layer : m_layers)
+			layer->initialize();
+
+		LAYER_INFO("LAYER_STACK: initialized layers");
+	}
+
+	void LayerStack::update() {
+		LAYER_TRACE("LAYER_STACK: going to call update() on layers");
+
+		for (auto& layer : m_layers)
+			layer->update();
+
+		LAYER_INFO("LAYER_STACK: updated layers");
+	}
 
 	void LayerStack::close() {
 		LAYER_TRACE("LAYER_STACK: going to delete all layers!");
@@ -39,15 +57,6 @@ namespace mar::layers {
 		}
 
 		LAYER_INFO("LAYER_STACK: closed deleted all layers!");
-	}
-
-	void LayerStack::update() {
-		LAYER_TRACE("LAYER_STACK: going to call update() on layers");
-
-		for (auto& layer : m_layers)
-			layer->update();
-
-		LAYER_INFO("LAYER_STACK: updated layers");
 	}
 
 	void LayerStack::pushLayer(Layer* layer) {
