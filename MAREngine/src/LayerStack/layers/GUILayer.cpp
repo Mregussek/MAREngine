@@ -32,12 +32,15 @@ namespace mar::layers {
 		p_debugName = name;
 	}
 
-	void LayerGUI::initialize(editor::GUI* gui, maths::vec3 backgroundcolor) {
+	void LayerGUI::passGuiToLayer(editor::GUI* gui, maths::vec3 backgroundcolor) {
+		m_gui = gui;
+		m_gui->getFramebuffer().setBackgroundColor(backgroundcolor);
+	}
+
+	void LayerGUI::initialize() {
 		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
-		m_gui = gui;
-		m_gui->initialize("#version 330");
-		m_gui->getFramebuffer().setBackgroundColor(backgroundcolor);
+		m_gui->initialize("#version 330");		
 
 		m_camera.initialize(m_gui->getViewportWidth() / m_gui->getViewportHeight());
 

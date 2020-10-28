@@ -40,6 +40,8 @@ namespace mar::layers {
 		Layer() = default;
 		Layer(const char* name) : p_debugName(name) { }
 
+		virtual void initialize() { }
+
 		virtual void update() { }
 
 		virtual void closeLayer() { }

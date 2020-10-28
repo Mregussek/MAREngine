@@ -31,8 +31,14 @@ namespace mar::layers {
 	EntityLayer::EntityLayer(const char* debugname) {
 		p_debugName = debugname;
 	}
+	
+	void EntityLayer::passSceneToManager(ecs::Scene* scene) {
+		m_sceneManager.setScene(scene);
 
-	void EntityLayer::initialize(ecs::Scene* scene) {
+		LAYER_TRACE("ENTITY_LAYER: {} passed scene to scenemanager");
+	}
+
+	void EntityLayer::initialize() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
 		m_renderPipeline.initialize();
@@ -40,7 +46,6 @@ namespace mar::layers {
 
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
 
-		m_sceneManager.setScene(scene);
 		m_sceneManager.initialize();
 
 		LAYER_INFO("ENTITY_LAYER: {} initialized!", m_debugName);

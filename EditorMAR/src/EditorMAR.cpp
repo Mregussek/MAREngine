@@ -64,12 +64,14 @@ void EditorMAR::runProjectOnEngine() {
 	auto loaded_scene = editor::Filesystem::openFile(engine.getPathToLoad());
 
 	{ // Entity Layer Setup
-		entityLayer->initialize(loaded_scene);
+		entityLayer->passSceneToManager(loaded_scene);
+		entityLayer->initialize();
 		stack.pushLayer(entityLayer);
 	}
 	
 	{ // Editor Layer Setup
-		guiLayer->initialize(&gui, loaded_scene->getBackground());
+		guiLayer->passGuiToLayer(&gui, loaded_scene->getBackground());
+		guiLayer->initialize();
 		engine.connectEntityLayerToGui(guiLayer, entityLayer);
 		stack.pushOverlay(guiLayer);
 	}

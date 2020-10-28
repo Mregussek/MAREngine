@@ -41,12 +41,13 @@ namespace mar::layers {
 		LayerGUI() = default;
 		LayerGUI(const char* name);
 
-		void initialize(editor::GUI* gui, maths::vec3 backgroundcolor);
+		void passGuiToLayer(editor::GUI* gui, maths::vec3 backgroundColor);
 		void submit(ecs::SceneManager* manager);
 		void renderToViewport();
 
 		// --- OVERRIDED METHODS --- // 
 
+		void initialize() override;
 		void update() override;
 		void closeLayer() override;
 

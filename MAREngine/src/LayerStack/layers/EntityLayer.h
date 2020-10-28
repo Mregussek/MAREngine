@@ -37,12 +37,13 @@ namespace mar::layers {
 	public:
 
 		EntityLayer(const char* debugname);
-
-		void initialize(ecs::Scene* scene = nullptr);
+		
+		void passSceneToManager(ecs::Scene* scene);
 		ecs::SceneManager* getSceneManager();
 
 		// --- OVERRIDED METHODS --- //
 
+		void initialize() override;
 		void update() override;
 		void closeLayer() override;
 
