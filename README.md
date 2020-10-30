@@ -17,6 +17,10 @@
 
 MAREngine is an educational 3D game engine written in modern C++. It is created with a dream of easy and intuitive interface for everyone. You can download MAREngine completely freely and release your creativity - create games you imagine.
 
+<p align="center">
+  <img width="960" height="526" src="img/default_project.png">
+</p>
+
 ## Documentation
 
 You can learn everything about the engine at the [documentation page](https://marengine-docs.readthedocs.io/).

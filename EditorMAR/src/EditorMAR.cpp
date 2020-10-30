@@ -23,9 +23,7 @@
 using namespace mar;
 
 void EditorMAR::initialize() {
-	engine = engine::MAREngine();
-
-	engine.initialize();
+	m_engine.initialize();
 
 	//projectSelectionWindow();
 }
@@ -54,29 +52,31 @@ void EditorMAR::projectSelectionWindow() {
 }
 
 void EditorMAR::runProjectOnEngine() {
-	auto window = window::Window();
-	window.initialize(1600, 900, engine.getName());
+	window::Window window{};
+	layers::LayerStack stack{};
+	editor::GUI gui{};
 
-	auto stack = layers::LayerStack();
 	auto entityLayer = new layers::EntityLayer("Entity Layer");
 	auto guiLayer = new layers::LayerGUI("Default GUI Layer");
-	auto gui = editor::GUI();
-	auto loaded_scene = editor::Filesystem::openFile(engine.getPathToLoad());
+	
+	window.initialize(1600, 900, m_engine.getName());
+
+	auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
 
 	{ // Entity Layer Setup
-		entityLayer->passSceneToManager(loaded_scene);
+		entityLayer->passSceneToManager(scene);
 		stack.pushLayer(entityLayer);
 	}
 	
 	{ // Editor Layer Setup
-		guiLayer->passGuiToLayer(&gui, loaded_scene->getBackground());
-		engine.connectEntityLayerToGui(guiLayer, entityLayer);
+		guiLayer->passGuiToLayer(&gui, scene->getBackground());
+		m_engine.connectEntityLayerToGui(guiLayer, entityLayer);
 		stack.pushOverlay(guiLayer);
 	}
 
 	stack.initialize();
 
-	while (!window.isGoingToClose() && !engine.shouldEngineRestart())
+	while (!window.isGoingToClose() && !m_engine.shouldEngineRestart())
 	{
 		window.clear();
 
@@ -92,10 +92,8 @@ void EditorMAR::runProjectOnEngine() {
 }
 
 void EditorMAR::shutdown() {
-start_again:
-	if (engine.shouldEngineRestart()) {
-		engine.setNoRestart();
+	while (m_engine.shouldEngineRestart()) {
+		m_engine.setNoRestart();
 		runProjectOnEngine();
-		goto start_again;
 	}
 }

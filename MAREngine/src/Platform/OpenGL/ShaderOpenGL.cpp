@@ -139,22 +139,21 @@ namespace mar::platforms {
 	}
 
 	uint32_t ShaderOpenGL::compileShader(uint32_t type, const std::string& sourceCode) const {
-		const uint32_t id = glCreateShader(type);
+		PLATFORM_GL_FUNC( const GLuint id = glCreateShader(type) );
 		const char* src = sourceCode.c_str();
-		glShaderSource(id, 1, &src, nullptr);
-		glCompileShader(id);
+		PLATFORM_GL_FUNC( glShaderSource(id, 1, &src, nullptr) );
+		PLATFORM_GL_FUNC( glCompileShader(id) );
 
-		int32_t result;
-		glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+		GLint compiledSucessfully;
+		PLATFORM_GL_FUNC( glGetShaderiv(id, GL_COMPILE_STATUS, &compiledSucessfully) );
 
-		if (result == GL_FALSE) {
-			int32_t length = 100;
-			char message[256];
-			glGetShaderInfoLog(id, length, &length, message);
+		if (!compiledSucessfully) {
+			GLchar message[256];
+			glGetShaderInfoLog(id, sizeof(message), nullptr, message);
 
 			PLATFORM_ERROR("SHADER_OPENGL: Failed to compile shader: {} - {} - {}", m_shaderPath, (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), message);
 
-			glDeleteShader(id);
+			PLATFORM_GL_FUNC( glDeleteShader(id) );
 			return 0;
 		}
 
@@ -164,21 +163,26 @@ namespace mar::platforms {
 	}
 
 	uint32_t ShaderOpenGL::createShader() const {
-		const uint32_t shaderProgramId = glCreateProgram();
-		const uint32_t vs = compileShader(GL_VERTEX_SHADER, m_programSource.vertexSource);
-		const uint32_t fs = compileShader(GL_FRAGMENT_SHADER, m_programSource.fragmentSource);
+		PLATFORM_GL_FUNC( const GLuint shaderProgramId = glCreateProgram() );
+		const GLuint vs = compileShader(GL_VERTEX_SHADER, m_programSource.vertexSource);
+		const GLuint fs = compileShader(GL_FRAGMENT_SHADER, m_programSource.fragmentSource);
 
-		glAttachShader(shaderProgramId, vs);
-		glAttachShader(shaderProgramId, fs);
-		glLinkProgram(shaderProgramId);
-		glValidateProgram(shaderProgramId);
+		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, vs) );
+		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, fs) );
 
-		int32_t result;
+		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 0, "position") );
+		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 1, "lightNormal") );
+		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 2, "texCoord") );
+		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 3, "shapeIndex") );
+
+		PLATFORM_GL_FUNC( glLinkProgram(shaderProgramId) );
+		PLATFORM_GL_FUNC( glValidateProgram(shaderProgramId) );
+
+		GLint result{ 0 };
 		glGetProgramiv(shaderProgramId, GL_LINK_STATUS, &result);
 		if (result == GL_FALSE) {
-			int32_t length = 100;
-			char message[256];
-			glGetProgramInfoLog(shaderProgramId, length, &length, message);
+			GLchar message[256];
+			glGetProgramInfoLog(shaderProgramId, sizeof(message), nullptr, message);
 
 			PLATFORM_ERROR("SHADER_OPENGL: Failed to load shader: {} - {}", m_shaderPath, message);
 

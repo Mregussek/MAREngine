@@ -24,27 +24,27 @@
 using namespace mar;
 
 class SandboxMAR {
-	mar::engine::MAREngine engine;
+
+	typedef mar::engine::MAREngine MAREngine;
 
 public:
 	SandboxMAR() = default;
 
 	void initialize() {
-		engine = engine::MAREngine();
-
-		engine.initialize();
+		m_engine.initialize();
 	}
 
 	void run() {
-		auto window = window::Window();
-		window.initialize(1600, 900, engine.getName());
+		window::Window window{};
+		layers::LayerStack stack{};
 
-		auto stack = layers::LayerStack();
+		window.initialize(1600, 900, m_engine.getName());
+
 		auto entityLayer = new layers::EntityLayer("Entity Layer");
-		auto scene = editor::Filesystem::openFile(engine.getPathToLoad());
+		auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
 
 		{ // Entity Layer Setup
-			entityLayer->initialize(scene);
+			entityLayer->passSceneToManager(scene);
 			stack.pushLayer(entityLayer);
 		}
 
@@ -53,7 +53,9 @@ public:
 
 		entityLayer->getSceneManager()->setPlayMode();
 
-		while (!window.isGoingToClose() && !engine.shouldEngineRestart())
+		stack.initialize();
+
+		while (!window.isGoingToClose() && !m_engine.shouldEngineRestart())
 		{
 			window.clear();
 
@@ -70,6 +72,10 @@ public:
 
 	}
 
+
+private:
+
+	MAREngine m_engine;
 
 };
 

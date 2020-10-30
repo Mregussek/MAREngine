@@ -22,9 +22,11 @@
 
 
 class EditorMAR {
-	mar::engine::MAREngine engine;
+
+	typedef mar::engine::MAREngine MAREngine;
 
 public:
+
 	EditorMAR() = default;
 
 	void initialize();
@@ -34,6 +36,10 @@ public:
 	void runProjectOnEngine();
 
 	void shutdown();
+
+private:
+
+	MAREngine m_engine;
 
 };
 

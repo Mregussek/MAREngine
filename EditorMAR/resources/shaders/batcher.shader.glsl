@@ -1,10 +1,10 @@
 #shader vertex
-#version 330 core
+#version 330
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec3 lightNormal;
-layout(location = 2) in vec2 texCoord;
-layout(location = 3) in float shapeIndex;
+in vec4 position;
+in vec3 lightNormal;
+in vec2 texCoord;
+in float shapeIndex;
 
 out vec3 v_Position;
 out vec3 v_lightNormal;
@@ -34,9 +34,9 @@ void main() {
 };
 
 #shader fragment
-#version 330 core
+#version 330
 
-layout(location = 0) out vec4 out_Color;
+out vec4 out_Color;
 
 in vec3 v_Position;
 in vec3 v_lightNormal;
