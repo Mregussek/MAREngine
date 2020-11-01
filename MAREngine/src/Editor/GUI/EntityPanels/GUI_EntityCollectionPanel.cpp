@@ -113,15 +113,10 @@ namespace mar::editor {
 		{ // Sliders
 			bool updatedTransform = false;
 
-			static maths::vec3 lastCenter;
-			static maths::vec3 lastAngles;
-			static maths::vec3 lastScale;
-			static float lastGeneral;
-
-			lastCenter = tran.center;
-			lastAngles = tran.angles;
-			lastScale = tran.scale;
-			lastGeneral = tran.general_scale;
+			const auto lastCenter = tran.center;
+			const auto lastAngles = tran.angles;
+			const auto lastScale = tran.scale;
+			const auto lastGeneral = tran.general_scale;
 
 			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }

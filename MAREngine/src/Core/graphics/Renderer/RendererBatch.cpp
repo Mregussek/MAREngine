@@ -60,7 +60,7 @@ namespace mar::graphics {
 					passCameraToShader(render_pip.getCamera());
 					passLightToShader(container_light);
 					drawContainer(container);
-					RenderEvents::onDrawCall(render_pip);
+					RenderEvents::Instance().onDrawCall();
 				}
 			}
 		}

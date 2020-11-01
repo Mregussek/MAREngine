@@ -46,6 +46,7 @@ namespace mar::graphics {
 	class RenderContainer {
 
 		friend class RenderPipeline;
+		friend class RenderEvents;
 
 	public:
 

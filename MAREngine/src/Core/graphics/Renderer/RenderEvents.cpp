@@ -20,17 +20,45 @@
 
 #include "RenderEvents.h"
 #include "RenderPipeline.h"
+#include "../../ecs/Components/Components.h"
 #include "../GraphicsLogs.h"
 
 
 namespace mar::graphics {
 
 
-	void RenderEvents::onDrawCall(RenderPipeline& renderPipeline) {
-		auto& stats = renderPipeline.getStatistics();
+	RenderEvents RenderEvents::s_instance;
+
+	void RenderEvents::setRenderPipeline(RenderPipeline& renderPipeline) {
+		m_renderPipeline = &renderPipeline;
+	}
+
+	void RenderEvents::onDrawCall() {
+		auto& stats = m_renderPipeline->getStatistics();
 		stats.drawCallsCount += 1;
 	
 		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
+	}
+
+	void RenderEvents::onTransformMat4Update(const maths::mat4& transform, const ecs::RenderPipelineComponent& rpc) {
+		m_renderPipeline->m_containers[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
+	}
+	
+	void RenderEvents::onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
+		onLightPositionUpdate(std::move(position), rpc);
+		onLightComponentUpdate(light, rpc);
+	}
+
+	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) {
+		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].first = position;
+	}
+
+	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
+		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].second = light;
+	}
+
+	void RenderEvents::onColorUpdate(maths::vec3 color, const ecs::RenderPipelineComponent& rpc) {
+		m_renderPipeline->m_containers[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 	}
 	
 

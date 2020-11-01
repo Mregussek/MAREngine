@@ -38,6 +38,9 @@ namespace mar::graphics {
 
 
 	class RenderPipeline {
+
+		friend class RenderEvents;
+
 	public:
 
 		RenderPipeline() = default;
@@ -48,10 +51,6 @@ namespace mar::graphics {
 		void submitEntity(const ecs::Entity& entity);
 
 		void submitCamera(RenderCamera* cam);
-
-		void modifyTransform(const ecs::TransformComponent& tran, size_t containerIndex, size_t transformIndex);
-		void modifyLight(const maths::vec3& position, const ecs::LightComponent& light, size_t containerIndex, size_t lightIndex);
-		void modifyColor(const ecs::ColorComponent& color, size_t containerIndex, size_t colorIndex);
 
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }

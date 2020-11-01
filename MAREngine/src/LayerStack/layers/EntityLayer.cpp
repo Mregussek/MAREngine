@@ -23,6 +23,7 @@
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneEvents.h"
 #include "../../Core/graphics/Renderer/RenderPipeline.h"
+#include "../../Core/graphics/Renderer/RenderEvents.h"
 
 
 namespace mar::layers {
@@ -45,6 +46,7 @@ namespace mar::layers {
 		m_renderer.initialize();
 
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
+		graphics::RenderEvents::Instance().setRenderPipeline(m_renderPipeline);
 
 		m_sceneManager.initialize();
 
@@ -56,7 +58,10 @@ namespace mar::layers {
 		
 		m_renderPipeline.setCurrentPipeline();
 		m_renderPipeline.getStatistics().resetStatistics();
+
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
+		graphics::RenderEvents::Instance().setRenderPipeline(m_renderPipeline);
+
 		m_sceneManager.update();
 		m_renderer.draw(m_renderPipeline);
 

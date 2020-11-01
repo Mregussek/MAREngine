@@ -241,24 +241,5 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
 	}
 
-	void RenderPipeline::modifyTransform(const ecs::TransformComponent& transform, size_t containerIndex, size_t transformIndex) {
-		m_containers[containerIndex].m_transforms[transformIndex] = transform;
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: modified transform component {} at container {}", transformIndex, containerIndex);
-	}
-
-	void RenderPipeline::modifyLight(const maths::vec3& position, const ecs::LightComponent& light, size_t containerIndex, size_t lightIndex) {
-		m_containers[containerIndex].m_lights[lightIndex].first = position;
-		m_containers[containerIndex].m_lights[lightIndex].second = light;
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: modified light component {} at container {}", lightIndex, containerIndex);
-	}
-
-	void RenderPipeline::modifyColor(const ecs::ColorComponent& color, size_t containerIndex, size_t colorIndex) {
-		m_containers[containerIndex].m_colors[colorIndex].second = color.texture;
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: modified color component {} at container {}", colorIndex, containerIndex);
-	}
-
 
 }
