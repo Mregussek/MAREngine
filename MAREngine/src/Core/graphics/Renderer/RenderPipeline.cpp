@@ -58,6 +58,12 @@ namespace mar::graphics {
 		const auto& tran = entity.getComponent<TransformComponent>();
 		auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
+		const bool hasColor = entity.hasComponent<ColorComponent>();
+		const bool hasTexture2D = entity.hasComponent<Texture2DComponent>();
+		const bool hasCubemap = entity.hasComponent<TextureCubemapComponent>();
+		const bool hasAnyMaterial = hasColor || hasTexture2D || hasCubemap;
+		const bool hasRenderable = entity.hasComponent<RenderableComponent>();
+
 		if (entity.hasComponent<LightComponent>()) {
 			const auto& light = entity.getComponent<LightComponent>();
 
@@ -65,7 +71,7 @@ namespace mar::graphics {
 			rpc.lightIndex = submitLight(tran.center, light);
 		}
 
-		if (entity.hasComponent<RenderableComponent>()) {
+		if (hasRenderable && hasAnyMaterial) {
 			auto& renderable = entity.getComponent<RenderableComponent>();
 
 			setAvailableContainerRenderable(rpc, renderable.vertices.size(), renderable.indices.size());
@@ -74,15 +80,15 @@ namespace mar::graphics {
 			renderable.shaderID = index;
 			rpc.transformIndex = index;
 
-			if (entity.hasComponent<ColorComponent>()) {
+			if (hasColor) {
 				const auto& color = entity.getComponent<ColorComponent>();
 				rpc.colorIndex = submitColor((int32_t)renderable.shaderID, color);
 			}
-			else if (entity.hasComponent<Texture2DComponent>()) {
+			else if (hasTexture2D) {
 				const auto& tex = entity.getComponent<Texture2DComponent>();
 				rpc.colorIndex = submitTexture2D((int32_t)renderable.shaderID, tex);
 			}
-			else if (entity.hasComponent<TextureCubemapComponent>()) {
+			else if (hasCubemap) {
 				const auto& cube = entity.getComponent<TextureCubemapComponent>();
 				rpc.colorIndex = submitCubemap((int32_t)renderable.shaderID, cube);
 			}
@@ -105,6 +111,7 @@ namespace mar::graphics {
 			}
 			else {
 				m_availableContainerIndex = i;
+
 				rpc.containerIndex = m_availableContainerIndex;
 				GRAPHICS_TRACE("RENDER_PIPELINE: available container is at index {}, returning...", i);
 				return;
@@ -126,6 +133,7 @@ namespace mar::graphics {
 			else {
 				m_availableContainerIndex = i;
 				rpc.containerLightIndex = m_availableContainerIndex;
+
 				GRAPHICS_TRACE("RENDER_PIPELINE: available container for light is at {}, returning...", i);
 				return;
 			}
@@ -147,24 +155,28 @@ namespace mar::graphics {
 
 		{ // set shapeID on every vertex for batch renderer
 			auto& vertices = m_containers[m_availableContainerIndex].m_vertices;
-
 			vertices.insert(vertices.end(), renderable.vertices.begin(), renderable.vertices.end());
-			auto itBegin = vertices.end() - renderable.vertices.size();
-			auto itEnd = vertices.end();
-			std::for_each(itBegin, itEnd, [newShapeID = shapeID](Vertex& vertex) {
+
+			auto fromBeginOfInsertedVertices = vertices.end() - renderable.vertices.size();
+			auto toItsEnd = vertices.end();
+			auto modifyShaderID = [newShapeID = shapeID](Vertex& vertex) {
 				vertex.shapeID = newShapeID;
-			});
+			};
+
+			std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
 		}
 
 		{ // increase indices for every vertex (batch renderer)
 			auto& indices = m_containers[m_availableContainerIndex].m_indices;
-
 			indices.insert(indices.end(), renderable.indices.begin(), renderable.indices.end());
-			auto itBegin = indices.end() - renderable.indices.size();
-			auto itEnd = indices.end();
-			std::for_each(itBegin, itEnd, [extension = indicesMax](uint32_t& indice) {
+
+			auto fromBeginOfInsertedIndices = indices.end() - renderable.indices.size();
+			auto toItsEnd = indices.end();
+			auto extendIndices = [extension = indicesMax](uint32_t& indice) {
 				indice += extension;
-			});
+			};
+
+			std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
 		}
 
 		indicesMax += (renderable.vertices.size() * sizeof(Vertex) / 4) / RenderContainer::getStride();

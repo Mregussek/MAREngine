@@ -123,37 +123,38 @@ namespace mar::graphics {
     }
     
     void MeshCreator::loadOBJ(std::string filename, std::string path, const ecs::EntityCollection& collection) {
-        objl::Loader Loader;
-        bool loadout = Loader.LoadFile(path);
+        objl::Loader Loader{};
+        const bool loadout = Loader.LoadFile(path);
     
         if (loadout) {
-            for (size_t i = 0; i < Loader.LoadedMeshes.size(); i++) {
-                auto& entity = collection.createEntity();
+            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](objl::Mesh& mesh) {
+                const auto& entity = collection.createEntity();
                 auto& tag = entity.getComponent<ecs::TagComponent>();
                 auto& renderable = entity.addComponent<ecs::RenderableComponent>();
-    
-                objl::Mesh curMesh = Loader.LoadedMeshes[i];
-    
-                if (curMesh.MeshName.empty()) {
+                auto& color = entity.addComponent<ecs::ColorComponent>();
+
+                if (mesh.MeshName.empty()) {
                     tag.tag = filename;
                     renderable.name = filename;
                 }
                 else {
-                    tag.tag = curMesh.MeshName;
-                    renderable.name = curMesh.MeshName;
+                    tag.tag = mesh.MeshName;
+                    renderable.name = mesh.MeshName;
                 }
-    
-                for (size_t j = 0; j < curMesh.Vertices.size(); j++) {
+
+                for (size_t j = 0; j < mesh.Vertices.size(); j++) {
                     renderable.vertices.push_back(Vertex{
-                        {curMesh.Vertices[j].Position.X, curMesh.Vertices[j].Position.Y, curMesh.Vertices[j].Position.Z},
-                        {curMesh.Vertices[j].Normal.X, curMesh.Vertices[j].Normal.Y, curMesh.Vertices[j].Normal.Z},
-                        {curMesh.Vertices[j].TextureCoordinate.X, curMesh.Vertices[j].TextureCoordinate.Y},
+                        {mesh.Vertices[j].Position.X, mesh.Vertices[j].Position.Y, mesh.Vertices[j].Position.Z},
+                        {mesh.Vertices[j].Normal.X, mesh.Vertices[j].Normal.Y, mesh.Vertices[j].Normal.Z},
+                        {mesh.Vertices[j].TextureCoordinate.X, mesh.Vertices[j].TextureCoordinate.Y},
                         {0.0f}
-                    });
+                        });
                 }
-    
-                renderable.indices = curMesh.Indices;
-            }
+
+                renderable.indices = mesh.Indices;
+            };
+
+            std::for_each(Loader.LoadedMeshes.begin(), Loader.LoadedMeshes.end(), passLoadedMeshToEntityAtCollection);
         }
         else {
             GRAPHICS_ERROR("MESH_CREATOR: could not load .obj file {}", path);

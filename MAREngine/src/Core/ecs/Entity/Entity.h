@@ -91,6 +91,15 @@ namespace mar::ecs {
 		}
 
 		template<typename T>
+		T& replaceComponent(const T& component) const {
+			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
+
+			ECS_TRACE("ENTITY: {} - replacing component at {}", typeid(T).name(), m_entityHandle);
+
+			return m_scene->m_registry.replace<T>(m_entityHandle, component);
+		}
+
+		template<typename T>
 		void removeComponent() const {
 			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
 

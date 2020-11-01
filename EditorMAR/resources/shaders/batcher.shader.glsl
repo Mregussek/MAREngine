@@ -36,14 +36,14 @@ void main() {
 #shader fragment
 #version 330
 
-out vec4 out_Color;
-
 in vec3 v_Position;
 in vec3 v_lightNormal;
 in float v_shapeIndex;
 in vec2 v_texCoords2D;
 in vec3 v_texCoords3D;
 in float v_samplerType;
+
+out vec4 outColor;
 
 uniform struct Material {
 	vec3 lightPos;
@@ -83,7 +83,7 @@ void main() {
 
 	vec4 lightColor = computeAllLights(batchColor);
 
-	out_Color = batchColor * lightColor;
+	outColor = batchColor * lightColor;
 };
 
 vec4 setProperColor(float index) {
@@ -224,7 +224,7 @@ vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
 vec4 computeAllLights(vec4 batchColor) {
 	vec4 lightColor = calculateLight(u_material[0], batchColor.xyz);
 
-	for (int i = 1; i < 15; i++) {
+	for (int i = 1; i < 32; i++) {
 		if (i >= u_materialSize) break;
 		lightColor = lightColor + calculateLight(u_material[i], batchColor.xyz);
 	}

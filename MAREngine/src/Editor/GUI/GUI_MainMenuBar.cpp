@@ -105,6 +105,7 @@ namespace mar::editor {
 						const auto& entity = m_sceneManager->getScene()->createEntity();
 						ecs::EntityOperation::copyEntity(currentEntity, entity);
 						GUI_EntityPanel::Instance()->setCurrentEntity(entity);
+						GUI_EntityCollectionPanel::Instance()->reset();
 						ecs::SceneEvents::Instance().onEntityCopy();
 					}
 				}
@@ -118,6 +119,7 @@ namespace mar::editor {
 						const auto& collection = m_sceneManager->getScene()->createCollection();
 						ecs::EntityOperation::copyCollection(currentCollection, collection);
 						GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
+						GUI_EntityPanel::Instance()->reset();
 						ecs::SceneEvents::Instance().onCollectionCopy();
 					}
 				}

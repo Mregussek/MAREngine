@@ -143,40 +143,15 @@ namespace mar::editor {
 				const auto diffAngles = lastAngles != tran.angles ? tran.angles - lastAngles : maths::vec3();
 				const auto diffScale =	lastScale != tran.scale ? tran.scale - lastScale : maths::vec3();
 				const auto diffGeneralScale = lastGeneral != tran.general_scale ? tran.general_scale - lastGeneral : 0.f;
+				const ecs::TransformComponent diffTransform{ diffCenter, diffAngles, diffScale, diffGeneralScale };
 
-				auto createRelativeTransformToCollection = [&diffCenter, &diffAngles, &diffScale, diffGeneralScale](const ecs::Entity& entity) {
-					auto& entityTransform = entity.getComponent<ecs::TransformComponent>();
-
-					entityTransform.center += diffCenter;
-					entityTransform.angles += diffAngles;
-					entityTransform.scale += diffScale;
-					entityTransform.general_scale += diffGeneralScale;
-
-					entityTransform.recalculate();
-				};
-
-				const auto& entities = currentCollection->getEntities();
-				std::for_each(entities.cbegin(), entities.cend(), createRelativeTransformToCollection);
-
-				ecs::SceneEvents::Instance().onCollectionTransformUpdate();
+				ecs::SceneEvents::Instance().onCollectionTransformUpdate(currentCollection, diffTransform);
 			}
 		}
 
 		{ // Reset to entities 
 			if (ImGui::Button("Reset all entities to collection transform")) {
-				const auto& entities = currentCollection->getEntities();
-				std::for_each(entities.begin(), entities.end(), [&collectionTransform = std::as_const(tran)](const ecs::Entity& entity) {
-					auto& transform = entity.getComponent<ecs::TransformComponent>();
-
-					transform.center = collectionTransform.center;
-					transform.angles = collectionTransform.angles;
-					transform.scale = collectionTransform.scale;
-					transform.general_scale = collectionTransform.general_scale;
-
-					transform.recalculate();
-				});
-
-				ecs::SceneEvents::Instance().onCollectionTransformUpdate();
+				ecs::SceneEvents::Instance().onCollectionTransformReset(currentCollection);
 			}
 		}
 	}

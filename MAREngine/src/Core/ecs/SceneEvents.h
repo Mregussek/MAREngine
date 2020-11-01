@@ -30,6 +30,7 @@ namespace mar::ecs {
 	class Entity; 
 	class EntityCollection;
 	class SceneManager;
+	struct TransformComponent;
 
 
 	class SceneEvents {
@@ -73,7 +74,8 @@ namespace mar::ecs {
 		void onEntityCopy() const;
 		void onEntityRemove() const;
 
-		void onCollectionTransformUpdate() const;
+		void onCollectionTransformUpdate(const EntityCollection* collection, const TransformComponent& transform) const;
+		void onCollectionTransformReset(const EntityCollection* collection) const;
 		void onCollectionCopy() const;
 		void onCollectionRemove() const;
 		void onCollectionOBJloaded(const EntityCollection& collection) const;

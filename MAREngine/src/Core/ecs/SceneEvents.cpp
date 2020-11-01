@@ -44,6 +44,9 @@ namespace mar::ecs {
 
 		graphics::RenderPipeline::Instance().modifyTransform(transform, rpc.containerIndex, rpc.transformIndex);
 
+		if (e->hasComponent<LightComponent>()) { onLightUpdate(e); }
+		if (e->hasComponent<CameraComponent>()) { onCameraUpdate(e); }
+
 		ECS_TRACE("SCENE_EVENTS: updateTransform!");
 	}
 
@@ -164,10 +167,34 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: onEntityRemove");
 	}
 
-	void SceneEvents::onCollectionTransformUpdate() const {
-		m_sceneManager->initialize();
+	void SceneEvents::onCollectionTransformUpdate(const EntityCollection* collection, const TransformComponent& transform) const {
+		auto createRelativeTransformToCollection = [&transform, this](const Entity& entity) {
+			auto& entityTransform = entity.getComponent<TransformComponent>();
+
+			entityTransform.center += transform.center;
+			entityTransform.angles += transform.angles;
+			entityTransform.scale += transform.scale;
+			entityTransform.general_scale += transform.general_scale;
+
+			entityTransform.recalculate();
+
+			onTransformUpdate(&entity);
+		};
+
+		const auto& entities = collection->getEntities();
+		std::for_each(entities.cbegin(), entities.cend(), createRelativeTransformToCollection);
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
+	}
+
+	void SceneEvents::onCollectionTransformReset(const EntityCollection* collection) const {
+		auto resetToDefaultPosition = [&transform = collection->getComponent<TransformComponent>(), this](const Entity& entity) {
+			entity.replaceComponent<TransformComponent>(transform);
+			onTransformUpdate(&entity);
+		};
+
+		const auto& entities = collection->getEntities();
+		std::for_each(entities.cbegin(), entities.cend(), resetToDefaultPosition);
 	}
 
 	void SceneEvents::onCollectionCopy() const {

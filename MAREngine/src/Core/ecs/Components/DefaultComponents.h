@@ -87,6 +87,12 @@ namespace mar::ecs {
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& tc) = default;
+		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale, float newGeneralScale) :
+			center(std::move(newCenter)),
+			angles(std::move(newAngles)),
+			scale(std::move(newScale)),
+			general_scale(newGeneralScale)
+		{}
 
 		operator maths::mat4& () { return transform; }
 		operator const maths::mat4& () const { return transform; }
