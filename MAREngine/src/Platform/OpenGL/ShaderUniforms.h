@@ -30,25 +30,46 @@ namespace mar::platforms::ShaderUniforms {
 
 
 	struct Material {
-		std::string lightPos;
-		std::string ambient;
-		std::string diffuse;
-		std::string specular;
-	
-		std::string constant;
-		std::string linear;
-		std::string quadratic;
-		std::string shininess;
+		constexpr Material(
+			const char* lp,
+			const char* a,
+			const char* d,
+			const char* s,
+			const char* c,
+			const char* l,
+			const char* q,
+			const char* shi
+		) :
+			lightPos(lp),
+			ambient(a),
+			diffuse(d),
+			specular(s),
+			constant(c),
+			linear(l),
+			quadratic(q),
+			shininess(shi)
+		{}
+
+
+		const char* lightPos;
+		const char* ambient;
+		const char* diffuse;
+		const char* specular;
+
+		const char* constant;
+		const char* linear;
+		const char* quadratic;
+		const char* shininess;
 	};
 	
-	inline static const std::string u_materialSize{ "u_materialSize" };
-	inline static const std::string u_samplerTypes{ "u_samplerTypes" };
-	inline static const std::string u_separateTransform{ "u_SeparateTransform" };
-	inline static const std::string u_CameraPos{ "u_CameraPos" };
-	inline static const std::string u_MVP{ "u_MVP" };
-	inline static const std::string u_Model{ "u_Model" };
+	constexpr const char* u_Model{ "u_Model" };
+	constexpr const char* u_MVP{ "u_MVP" };
+	constexpr const char* u_SeparateTransform{ "u_SeparateTransform" };
+	constexpr const char* u_samplerTypes{ "u_samplerTypes" };
+	constexpr const char* u_materialSize{ "u_materialSize" };
+	constexpr const char* u_CameraPos{ "u_CameraPos" };
 	
-	inline static const std::vector<std::string> u_SamplersColor = {
+	constexpr std::array<const char*, 32> u_SamplersColor = {
 		"u_SamplersColor[0]",
 		"u_SamplersColor[1]",
 		"u_SamplersColor[2]",
@@ -80,10 +101,10 @@ namespace mar::platforms::ShaderUniforms {
 		"u_SamplersColor[28]",
 		"u_SamplersColor[29]",
 		"u_SamplersColor[30]",
-		"u_SamplersColor[31]"
+		"u_SamplersColor[31]",
 	};
 	
-	inline static const std::vector<std::string> u_Samplers2D = {
+	constexpr std::array<const char*, 32> u_Samplers2D = {
 		"u_Samplers2D[0]",
 		"u_Samplers2D[1]",
 		"u_Samplers2D[2]",
@@ -118,7 +139,7 @@ namespace mar::platforms::ShaderUniforms {
 		"u_Samplers2D[31]"
 	};
 	
-	inline static const std::vector<std::string> u_SamplersCube = {
+	constexpr std::array<const char*, 32> u_SamplersCube = {
 		"u_SamplersCube[0]",
 		"u_SamplersCube[1]",
 		"u_SamplersCube[2]",
@@ -153,53 +174,18 @@ namespace mar::platforms::ShaderUniforms {
 		"u_SamplersCube[31]"
 	};
 
-	inline static const std::vector<std::string> u_SeparateTransform = {
-		"u_SeparateTransform[0]",
-		"u_SeparateTransform[1]",
-		"u_SeparateTransform[2]",
-		"u_SeparateTransform[3]",
-		"u_SeparateTransform[4]",
-		"u_SeparateTransform[5]",
-		"u_SeparateTransform[6]",
-		"u_SeparateTransform[7]",
-		"u_SeparateTransform[8]",
-		"u_SeparateTransform[9]",
-		"u_SeparateTransform[10]",
-		"u_SeparateTransform[11]",
-		"u_SeparateTransform[12]",
-		"u_SeparateTransform[13]",
-		"u_SeparateTransform[14]",
-		"u_SeparateTransform[15]",
-		"u_SeparateTransform[16]",
-		"u_SeparateTransform[17]",
-		"u_SeparateTransform[18]",
-		"u_SeparateTransform[19]",
-		"u_SeparateTransform[20]",
-		"u_SeparateTransform[21]",
-		"u_SeparateTransform[22]",
-		"u_SeparateTransform[23]",
-		"u_SeparateTransform[24]",
-		"u_SeparateTransform[25]",
-		"u_SeparateTransform[26]",
-		"u_SeparateTransform[27]",
-		"u_SeparateTransform[28]",
-		"u_SeparateTransform[29]",
-		"u_SeparateTransform[30]",
-		"u_SeparateTransform[31]"
-	};
-
-	inline static const std::vector<Material> u_material = {
-		{
+	constexpr std::array<Material, 32> u_material = {
+		Material{
 			"u_material[0].lightPos",
 			"u_material[0].ambient" ,
 			"u_material[0].diffuse" ,
 			"u_material[0].specular" ,
 			"u_material[0].constant" ,
 			"u_material[0].linear" ,
-			"u_material[0].quadratic" ,
+			"u_material[0].quadratic",
 			"u_material[0].shininess"
 		},
-		{
+		Material{
 			"u_material[1].lightPos",
 			"u_material[1].ambient" ,
 			"u_material[1].diffuse" ,
@@ -209,7 +195,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[1].quadratic" ,
 			"u_material[1].shininess"
 		},
-		{
+		Material{
 			"u_material[2].lightPos",
 			"u_material[2].ambient" ,
 			"u_material[2].diffuse" ,
@@ -219,7 +205,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[2].quadratic" ,
 			"u_material[2].shininess"
 		},
-		{
+		Material{
 			"u_material[3].lightPos",
 			"u_material[3].ambient" ,
 			"u_material[3].diffuse" ,
@@ -229,7 +215,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[3].quadratic" ,
 			"u_material[3].shininess"
 		},
-		{
+		Material{
 			"u_material[4].lightPos",
 			"u_material[4].ambient" ,
 			"u_material[4].diffuse" ,
@@ -239,7 +225,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[4].quadratic" ,
 			"u_material[4].shininess"
 		},
-		{
+		Material{
 			"u_material[5].lightPos",
 			"u_material[5].ambient" ,
 			"u_material[5].diffuse" ,
@@ -249,7 +235,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[5].quadratic" ,
 			"u_material[5].shininess"
 		},
-		{
+		Material{
 			"u_material[6].lightPos",
 			"u_material[6].ambient" ,
 			"u_material[6].diffuse" ,
@@ -259,7 +245,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[6].quadratic" ,
 			"u_material[6].shininess"
 		},
-		{
+		Material{
 			"u_material[7].lightPos",
 			"u_material[7].ambient" ,
 			"u_material[7].diffuse" ,
@@ -269,7 +255,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[7].quadratic" ,
 			"u_material[7].shininess"
 		},
-		{
+		Material{
 			"u_material[8].lightPos",
 			"u_material[8].ambient" ,
 			"u_material[8].diffuse" ,
@@ -279,7 +265,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[8].quadratic" ,
 			"u_material[8].shininess"
 		},
-		{
+		Material{
 			"u_material[9].lightPos",
 			"u_material[9].ambient" ,
 			"u_material[9].diffuse" ,
@@ -289,7 +275,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[9].quadratic" ,
 			"u_material[9].shininess"
 		},
-		{
+		Material{
 			"u_material[10].lightPos",
 			"u_material[10].ambient" ,
 			"u_material[10].diffuse" ,
@@ -299,7 +285,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[10].quadratic" ,
 			"u_material[10].shininess"
 		},
-		{
+		Material{
 			"u_material[11].lightPos",
 			"u_material[11].ambient" ,
 			"u_material[11].diffuse" ,
@@ -309,7 +295,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[11].quadratic" ,
 			"u_material[11].shininess"
 		},
-		{
+		Material{
 			"u_material[12].lightPos",
 			"u_material[12].ambient" ,
 			"u_material[12].diffuse" ,
@@ -319,7 +305,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[12].quadratic" ,
 			"u_material[12].shininess"
 		},
-		{
+		Material{
 			"u_material[13].lightPos",
 			"u_material[13].ambient" ,
 			"u_material[13].diffuse" ,
@@ -329,7 +315,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[13].quadratic" ,
 			"u_material[13].shininess"
 		},
-		{
+		Material{
 			"u_material[14].lightPos",
 			"u_material[14].ambient" ,
 			"u_material[14].diffuse" ,
@@ -339,7 +325,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[14].quadratic" ,
 			"u_material[14].shininess"
 		},
-		{
+		Material{
 			"u_material[15].lightPos",
 			"u_material[15].ambient" ,
 			"u_material[15].diffuse" ,
@@ -349,7 +335,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[15].quadratic" ,
 			"u_material[15].shininess"
 		},
-		{
+		Material{
 			"u_material[16].lightPos",
 			"u_material[16].ambient" ,
 			"u_material[16].diffuse" ,
@@ -359,7 +345,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[16].quadratic" ,
 			"u_material[16].shininess"
 		},
-		{
+		Material{
 			"u_material[17].lightPos",
 			"u_material[17].ambient" ,
 			"u_material[17].diffuse" ,
@@ -369,7 +355,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[17].quadratic" ,
 			"u_material[17].shininess"
 		},
-		{
+		Material{
 			"u_material[18].lightPos",
 			"u_material[18].ambient" ,
 			"u_material[18].diffuse" ,
@@ -379,7 +365,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[18].quadratic" ,
 			"u_material[18].shininess"
 		},
-		{
+		Material{
 			"u_material[19].lightPos",
 			"u_material[19].ambient" ,
 			"u_material[19].diffuse" ,
@@ -389,7 +375,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[19].quadratic" ,
 			"u_material[19].shininess"
 		},
-		{
+		Material{
 			"u_material[20].lightPos",
 			"u_material[20].ambient" ,
 			"u_material[20].diffuse" ,
@@ -399,7 +385,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[20].quadratic" ,
 			"u_material[20].shininess"
 		},
-		{
+		Material{
 			"u_material[21].lightPos",
 			"u_material[21].ambient" ,
 			"u_material[21].diffuse" ,
@@ -409,7 +395,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[21].quadratic" ,
 			"u_material[21].shininess"
 		},
-		{
+		Material{
 			"u_material[22].lightPos",
 			"u_material[22].ambient" ,
 			"u_material[22].diffuse" ,
@@ -419,7 +405,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[22].quadratic" ,
 			"u_material[22].shininess"
 		},
-		{
+		Material{
 			"u_material[23].lightPos",
 			"u_material[23].ambient" ,
 			"u_material[23].diffuse" ,
@@ -429,7 +415,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[23].quadratic" ,
 			"u_material[23].shininess"
 		},
-		{
+		Material{
 			"u_material[24].lightPos",
 			"u_material[24].ambient" ,
 			"u_material[24].diffuse" ,
@@ -439,7 +425,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[24].quadratic" ,
 			"u_material[24].shininess"
 		},
-		{
+		Material{
 			"u_material[25].lightPos",
 			"u_material[25].ambient" ,
 			"u_material[25].diffuse" ,
@@ -449,7 +435,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[25].quadratic" ,
 			"u_material[25].shininess"
 		},
-		{
+		Material{
 			"u_material[26].lightPos",
 			"u_material[26].ambient" ,
 			"u_material[26].diffuse" ,
@@ -459,7 +445,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[26].quadratic" ,
 			"u_material[26].shininess"
 		},
-		{
+		Material{
 			"u_material[27].lightPos",
 			"u_material[27].ambient" ,
 			"u_material[27].diffuse" ,
@@ -469,7 +455,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[27].quadratic" ,
 			"u_material[27].shininess"
 		},
-		{
+		Material{
 			"u_material[28].lightPos",
 			"u_material[28].ambient" ,
 			"u_material[28].diffuse" ,
@@ -479,7 +465,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[28].quadratic" ,
 			"u_material[28].shininess"
 		},
-		{
+		Material{
 			"u_material[29].lightPos",
 			"u_material[29].ambient" ,
 			"u_material[29].diffuse" ,
@@ -489,7 +475,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[29].quadratic" ,
 			"u_material[29].shininess"
 		},
-		{
+		Material{
 			"u_material[30].lightPos",
 			"u_material[30].ambient" ,
 			"u_material[30].diffuse" ,
@@ -499,7 +485,7 @@ namespace mar::platforms::ShaderUniforms {
 			"u_material[30].quadratic" ,
 			"u_material[30].shininess"
 		},
-		{
+		Material{
 			"u_material[31].lightPos",
 			"u_material[31].ambient" ,
 			"u_material[31].diffuse" ,

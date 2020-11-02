@@ -58,7 +58,8 @@ namespace mar::editor {
 	}
 
 	void GUI_Graphics::drawSelectedEntity(const ecs::RenderableComponent& ren, const ecs::TransformComponent& tran) {
-		const size_t index = 0;
+		using namespace platforms::ShaderUniforms;
+		
 		const maths::vec3 scale = tran.scale + 0.05f;
 		const maths::mat4 betterOutline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
 
@@ -66,8 +67,8 @@ namespace mar::editor {
 		m_pipeline.update(ren.vertices, ren.indices);
 
 		m_shader.bind();
-		m_shader.setUniformMat4("u_MVP", Camera::getCameraData().getMVP());
-		m_shader.setUniformMat4(platforms::ShaderUniforms::u_SeparateTransform[index], betterOutline);
+		m_shader.setUniformMat4(u_MVP, Camera::getCameraData().getMVP());
+		m_shader.setUniformMat4(u_SeparateTransform, betterOutline);
 
 		platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 

@@ -19,6 +19,7 @@
 
 
 #include "ShaderOpenGL.h"
+#include "ShaderUniforms.h"
 
 
 namespace mar::platforms {
@@ -39,6 +40,7 @@ namespace mar::platforms {
 		m_id = 0;
 		m_programSource = parseShader();
 		m_id = createShader();
+		setupShaderUniforms();
 		m_initialized = true;
 	}
 
@@ -60,61 +62,94 @@ namespace mar::platforms {
 		PLATFORM_TRACE("SHADER_OPENGL: Unbind shader {} - {}", m_id, m_shaderPath);
 	}
 
-	void ShaderOpenGL::setUniformFloat(const std::string& name, float f) {
+	void ShaderOpenGL::setUniformFloat(const char* name, float f) const {
 		PLATFORM_GL_FUNC( glUniform1f(getUniformLocation(name), f) );
 	}
 
-	void ShaderOpenGL::setUniformFloat(const std::string& name, const std::vector<float>& floats) {
+	void ShaderOpenGL::setUniformFloat(const char* name, const std::vector<float>& floats) const {
 		PLATFORM_GL_FUNC( glUniform1fv(getUniformLocation(name), floats.size(), floats.data()) );
 	}
 
-	void ShaderOpenGL::setUniformInt(const std::string& name, int32_t i) {
+	void ShaderOpenGL::setUniformInt(const char* name, int32_t i) const {
 		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), i) );
 	}
 
-	void ShaderOpenGL::setUniformInt(const std::string& name, const std::vector<int32_t>& ints) {
+	void ShaderOpenGL::setUniformInt(const char* name, const std::vector<int32_t>& ints) const {
 		PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), ints.size(), ints.data()) );
 	}
 
-	void ShaderOpenGL::setUniformSampler(const std::string& name, int32_t sampler) {
+	void ShaderOpenGL::setUniformSampler(const char* name, int32_t sampler) const {
 		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
 	}
 
-	void ShaderOpenGL::setUniformSampler(const std::string& name, const std::vector<int32_t>& sampler) {
+	void ShaderOpenGL::setUniformSampler(const char* name, const std::vector<int32_t>& sampler) const {
 		PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()) );
 	}
 
-	void ShaderOpenGL::setUniformVec3(const std::string& name, maths::vec3 vector3) {
+	void ShaderOpenGL::setUniformVec3(const char* name, maths::vec3 vector3) const {
 		PLATFORM_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, maths::vec3::value_ptr(vector3)) );
 	}
 
-	void ShaderOpenGL::setUniformVec3(const std::string& name, const std::vector<maths::vec3>& vec) {
+	void ShaderOpenGL::setUniformVec3(const char* name, const std::vector<maths::vec3>& vec) const {
 		PLATFORM_GL_FUNC(glUniform3fv(getUniformLocation(name), vec.size(), maths::vec3::value_ptr(vec)));
 	}
 
-	void ShaderOpenGL::setUniformMat4(const std::string& name, const maths::mat4& matrix4x4) {
+	void ShaderOpenGL::setUniformMat4(const char* name, const maths::mat4& matrix4x4) const {
 		PLATFORM_GL_FUNC(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, maths::mat4::value_ptr(matrix4x4)));
 	}
 
-	void ShaderOpenGL::setUniformMat4(const std::string& name, const std::vector<maths::mat4>& matrices) {
+	void ShaderOpenGL::setUniformMat4(const char* name, const std::vector<maths::mat4>& matrices) const {
 		PLATFORM_GL_FUNC(glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, maths::mat4::value_ptr(matrices)));
 	}
 
 	// ---- PRIVATE METHODS ---- //
 
-	int32_t ShaderOpenGL::getUniformLocation(const std::string& name) {
+	int32_t ShaderOpenGL::getUniformLocation(const char* name) const {
 		if (m_uniformLocation.find(name) != m_uniformLocation.end()) {
 			return m_uniformLocation.at(name);
 		}
 
-		const int32_t location = glGetUniformLocation(m_id, name.c_str());
-		m_uniformLocation[name] = location;
+		const int32_t location = glGetUniformLocation(m_id, name);
 
 		if (location == -1) {
 			PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
 		}
 			
 		return location;
+	}
+
+	void ShaderOpenGL::setupShaderUniforms() {
+		using namespace ShaderUniforms;
+		
+		auto pushUniformToMap = [this](const char* uniform) {
+			const int32_t location = glGetUniformLocation(m_id, uniform);
+			m_uniformLocation[uniform] = location;
+		};
+
+		auto pushMaterialToMap = [pushUniformToMap, this](const Material& material) {
+			pushUniformToMap(material.lightPos);
+			pushUniformToMap(material.ambient);
+			pushUniformToMap(material.diffuse);
+			pushUniformToMap(material.specular);
+			pushUniformToMap(material.constant);
+			pushUniformToMap(material.linear);
+			pushUniformToMap(material.quadratic);
+			pushUniformToMap(material.shininess);
+		};
+
+		pushUniformToMap(u_Model);
+		pushUniformToMap(u_MVP);
+		pushUniformToMap(u_SeparateTransform);
+		pushUniformToMap(u_samplerTypes);
+		pushUniformToMap(u_materialSize);
+		pushUniformToMap(u_CameraPos);
+
+		std::for_each(u_SamplersColor.begin(), u_SamplersColor.end(), pushUniformToMap);
+		std::for_each(u_Samplers2D.begin(), u_Samplers2D.end(), pushUniformToMap);
+		std::for_each(u_SamplersCube.begin(), u_SamplersCube.end(), pushUniformToMap);
+		std::for_each(u_material.begin(), u_material.end(), pushMaterialToMap);
+
+		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
 	}
 
 	ShaderProgramSource ShaderOpenGL::parseShader() const {

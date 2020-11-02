@@ -43,11 +43,11 @@ namespace mar::graphics {
 
 	private:
 
-		void drawContainer(const RenderContainer& container);
+		void drawContainer(const RenderContainer& container) const;
 
-		void passTexturesToShader(const RenderContainer& container);
-		void passLightToShader(const RenderContainer& container);
-		void passCameraToShader(const RenderCamera* camera);
+		void passTexturesToShader(const RenderContainer& container) const;
+		void passLightToShader(const RenderContainer& container) const;
+		void passCameraToShader(const RenderCamera* camera) const;
 
 		platforms::PipelineOpenGL m_buffers;
 		platforms::ShaderOpenGL m_shader;

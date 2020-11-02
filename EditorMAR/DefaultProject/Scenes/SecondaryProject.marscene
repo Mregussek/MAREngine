@@ -7,12 +7,12 @@ MAREngine scene file
 #EntityStart
 #TagComponent Camera
 #TransformComponent Begin
-#center 0 0 0
-#angles 0 0 0
+#center -14.7 4.25 -8.6
+#angles 0 24 0
 #scale 1 1 1
 #general_scale 0
 #CameraComponent Begin
-#id secondary
+#id main
 #used perspective
 #type perspective
 #fov 45
@@ -1580,7 +1580,7 @@ MAREngine scene file
 #center 23.3 -6.8 1.5
 #angles -91.5 -11 68
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Obi_ANH_CLEAN_Klinge.001
 #ColorComponent 1 0 0
 
@@ -1592,7 +1592,7 @@ MAREngine scene file
 #center 23.3 -6.8 1.5
 #angles -91.5 -11 68
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cylinder_2
 #ColorComponent 0.984962 0.755385 0
 
@@ -1604,7 +1604,7 @@ MAREngine scene file
 #center 23.3 -6.8 1.5
 #angles -91.5 -11 68
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cylinder_2
 #ColorComponent 0.020606 0.913534 0.892274
 
@@ -1616,7 +1616,7 @@ MAREngine scene file
 #center 23.3 -6.8 1.5
 #angles -91.5 -11 68
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #RenderableComponent Cylinder
 #ColorComponent 0.977444 0.378309 0.036746
 
@@ -1626,7 +1626,7 @@ MAREngine scene file
 #center 23.3 -6.8 1.5
 #angles -91.5 -11 68
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #CollectionTagComponent Lightsaber.obj
 
 #EntityCollectionEnd
@@ -1639,7 +1639,7 @@ MAREngine scene file
 #center 25.6 0 0
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #LightComponent Begin
 #ambientlight 0.5 0.5 0.5
 #diffuselight 0.9 0.9 0.9
@@ -1655,7 +1655,7 @@ MAREngine scene file
 #center 25.6 0 0
 #angles 0 0 0
 #scale 1 1 1
-#general_scale 1
+#general_scale 0
 #CollectionTagComponent MARCollection
 
 #EntityCollectionEnd

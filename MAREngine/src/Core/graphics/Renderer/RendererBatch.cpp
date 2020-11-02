@@ -68,13 +68,13 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
 
-	void RendererBatch::drawContainer(const RenderContainer& container) {
+	void RendererBatch::drawContainer(const RenderContainer& container) const {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render container!");
 		
 		{
 			using namespace platforms::ShaderUniforms;
 
-			m_shader.setUniformMat4(u_separateTransform, container.getTransforms());
+			m_shader.setUniformMat4(u_SeparateTransform, container.getTransforms());
 			passTexturesToShader(container);
 		}
 		{
@@ -92,7 +92,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render container!");
 	}
 
-	void RendererBatch::passTexturesToShader(const RenderContainer& container) {
+	void RendererBatch::passTexturesToShader(const RenderContainer& container) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
 
 		using namespace platforms::ShaderUniforms;
@@ -133,7 +133,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
 	}
 
-	void RendererBatch::passLightToShader(const RenderContainer& container) {
+	void RendererBatch::passLightToShader(const RenderContainer& container) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
 
 		using namespace platforms::ShaderUniforms;
@@ -159,7 +159,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}
 
-	void RendererBatch::passCameraToShader(const RenderCamera* camera) {
+	void RendererBatch::passCameraToShader(const RenderCamera* camera) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
 
 		using namespace platforms::ShaderUniforms;
