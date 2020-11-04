@@ -41,7 +41,6 @@ namespace mar::ecs {
 
 	void EntityCollection::destroyYourself() const {
 		auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
-
 		for (size_t i = 0; i < entitiesVector.size(); i++) {
 			if (entitiesVector[i].isValid()) {
 				entitiesVector[i].destroyYourself();
@@ -73,17 +72,16 @@ namespace mar::ecs {
 		return entity;
 	}
 
-	void EntityCollection::destroyEntity(int32_t entity_index) const {
+	void EntityCollection::destroyEntity(const Entity& entity) const {
 		auto& entitiesVector = getComponent<EntityCollectionComponent>().entities;
 
-		if (entitiesVector[entity_index].isValid()) {
-			entitiesVector[entity_index].destroyYourself();
-			entitiesVector.erase(entitiesVector.begin() + entity_index);
+		auto it = std::find_if(entitiesVector.begin(), entitiesVector.end(), [&entity](const Entity& iterator) {
+			return 	&iterator == &entity;
+		});
 
-			ECS_INFO("ENTITY_COLLECTION: destroyed entity {} at collection!", entity_index);
-		}
-		else {
-			ECS_INFO("ENTITY_COLLECTION: entity {} at collection is not valid, so it cannot be destroyed!", entity_index);
+		if (it != entitiesVector.end() && (*it).isValid()) {
+			(*it).destroyYourself();
+			entitiesVector.erase(it);
 		}
 	}
 

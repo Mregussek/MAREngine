@@ -37,13 +37,6 @@ namespace mar::ecs {
 		static void copyEntity(const Entity& src, const Entity& dst);
 		static void copyCollection(const EntityCollection& src, const EntityCollection& dst);
 
-	private:
-
-		template<typename T>
-		static void copyComponent(const Entity& src, const Entity& dst);
-
-		template<typename T>
-		static void copyComponent(const EntityCollection& src, const EntityCollection& dst);
 	};
 
 

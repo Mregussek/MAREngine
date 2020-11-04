@@ -82,12 +82,11 @@ namespace mar::ecs {
 
 		template<typename T>
 		T& replaceComponent(const Entity& other) const {
-			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
 			MAR_CORE_ASSERT(other.hasComponent<T>(), "Entity does not have this component!");
 
 			ECS_TRACE("ENTITY: {} - replacing component from {} to {}", typeid(T).name(), other.m_entityHandle, m_entityHandle);
 			
-			return m_scene->m_registry.replace<T>(m_entityHandle, other.getComponent<T>());
+			return m_scene->m_registry.emplace_or_replace<T>(m_entityHandle, other.getComponent<T>());
 		}
 
 		template<typename T>

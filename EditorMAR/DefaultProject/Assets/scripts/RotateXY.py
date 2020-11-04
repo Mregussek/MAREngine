@@ -38,3 +38,4 @@ class RotateXY(mar.Entity):
 		self.y_rotation += 5.0
 		
 		check_values(self.x_rotation, self.y_rotation, self.z_center, self.y_center)
+

@@ -67,12 +67,12 @@ namespace mar::platforms {
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
 		uint32_t createShader() const;
 
-		bool m_initialized{ false };
 
-		uint32_t m_id{ 0 };
-		std::string m_shaderPath{ "" };
-		std::unordered_map<const char*, int32_t> m_uniformLocation;
 		ShaderProgramSource m_programSource;
+		std::unordered_map<const char*, int32_t> m_uniformLocation;
+		std::string m_shaderPath{ "" };
+		uint32_t m_id{ 0 };
+		bool m_initialized{ false };
 
 	};
     

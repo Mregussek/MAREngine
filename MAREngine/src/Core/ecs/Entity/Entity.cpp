@@ -40,7 +40,7 @@ namespace mar::ecs {
 	void Entity::copyDefault(const Entity& other) const {
 		ECS_TRACE("ENTITY: copying default components from {} to {}", other.m_entityHandle, m_entityHandle);
 
-		m_scene->m_registry.replace<RenderPipelineComponent>(m_entityHandle, m_scene->m_registry.get<RenderPipelineComponent>(other.m_entityHandle));
+		m_scene->m_registry.emplace_or_replace<RenderPipelineComponent>(m_entityHandle, m_scene->m_registry.get<RenderPipelineComponent>(other.m_entityHandle));
 	}
 
 	const bool Entity::isValid() const {

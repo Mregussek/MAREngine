@@ -166,17 +166,16 @@ namespace mar::editor {
 				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->createEntity());
 			}
 
-			/*
 			if (selectedEntityExists) {
-				std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
+				const std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
 				if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
-					currentCollection->destroyEntity(GUI_EntityPanel::currentIndex);
+					currentCollection->destroyEntity(GUI_EntityPanel::Instance()->getCurrentEntity());
 					GUI_EntityPanel::Instance()->reset();
 					GUI_TextEditor::Instance()->reset();
 					ecs::SceneEvents::Instance().onEntityRemove();
 				}
 			}
-			*/
+		
 			ImGui::EndPopup();
 		}
 	}

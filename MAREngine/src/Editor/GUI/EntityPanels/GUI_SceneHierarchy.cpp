@@ -122,9 +122,9 @@ namespace mar::editor {
 					GUI_EntityPanel::Instance()->setCurrentEntity(createdEntity);
 				}
 
-				/*
+				
 				if (ImGui::MenuItem("Delete selected collection from Scene", collection_tag)) {
-					manager->getScene()->destroyCollection(GUI_EntityCollectionPanel::currentIndex);
+					manager->getScene()->destroyCollection(collection);
 					GUI_EntityCollectionPanel::Instance()->reset();
 					GUI_EntityPanel::Instance()->reset();
 					ecs::SceneEvents::Instance().onCollectionRemove();
@@ -133,22 +133,22 @@ namespace mar::editor {
 				if (entityExists) {
 					const std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
 					if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
-						manager->getScene()->destroyEntityAtCollection(GUI_EntityCollectionPanel::currentIndex, GUI_EntityPanel::currentIndex);
+						collection.destroyEntity(entity);
 						GUI_EntityPanel::Instance()->reset();
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 				}
-				*/
+				
 			}
 			else if (entityExists) {
-				/*
+				
 				const char* entity_tag = entity.getComponent<ecs::TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
-					manager->getScene()->destroyEntity(GUI_EntityPanel::currentIndex);
+					manager->getScene()->destroyEntity(entity);
 					GUI_EntityPanel::Instance()->reset();
 					ecs::SceneEvents::Instance().onEntityRemove();
 				}
-				*/
+				
 			}
 	
 			ImGui::EndPopup();

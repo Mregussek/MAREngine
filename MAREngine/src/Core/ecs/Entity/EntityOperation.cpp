@@ -27,11 +27,11 @@ namespace mar::ecs {
 
 
 	void EntityOperation::copyCollection(const EntityCollection& src, const EntityCollection& dst) {
-		copyComponent<TagComponent>(src, dst);
-		copyComponent<TransformComponent>(src, dst);
+		dst.replaceComponent<TagComponent>(src);
+		dst.replaceComponent<TransformComponent>(src);
 
-		if (src.hasComponent<CollectionRenderableComponent>()) { 
-			copyComponent<CollectionRenderableComponent>(src, dst);
+		if (src.hasComponent<CollectionRenderableComponent>()) {
+			dst.replaceComponent<CollectionRenderableComponent>(src);
 		}
 
 		const auto& entities = src.getEntities();
@@ -44,54 +44,35 @@ namespace mar::ecs {
 
 	void EntityOperation::copyEntity(const Entity& src, const Entity& dst) {
 		{ // Default Copy
-			copyComponent<TagComponent>(src, dst);
-			copyComponent<TransformComponent>(src, dst);
+			dst.replaceComponent<TagComponent>(src);
+			dst.replaceComponent<TransformComponent>(src);
+			dst.copyDefault(src);
 		}
 
 		if (src.hasComponent<RenderableComponent>()) {
-			copyComponent<RenderableComponent>(src, dst);
+			dst.replaceComponent<RenderableComponent>(src);
 		}
 
 		if (src.hasComponent<ColorComponent>()) {
-			copyComponent<ColorComponent>(src, dst);
+			dst.replaceComponent<ColorComponent>(src);
 		}
 		else if (src.hasComponent<Texture2DComponent>()) {
-			copyComponent<Texture2DComponent>(src, dst);
+			dst.replaceComponent<Texture2DComponent>(src);
 		}
 		else if (src.hasComponent<TextureCubemapComponent>()) {
-			copyComponent<TextureCubemapComponent>(src, dst);
+			dst.replaceComponent<TextureCubemapComponent>(src);
 		}
 
 		if (src.hasComponent<LightComponent>()) {
-			copyComponent<LightComponent>(src, dst);
+			dst.replaceComponent<LightComponent>(src);
 		}
 
 		if (src.hasComponent<CameraComponent>()) {
-			copyComponent<CameraComponent>(src, dst);
+			dst.replaceComponent<CameraComponent>(src);
 		}
 
 		if (src.hasComponent<ScriptComponent>()) {
-			copyComponent<ScriptComponent>(src, dst);
-		}
-
-		dst.copyDefault(src);
-	}
-
-	template<typename T>
-	void EntityOperation::copyComponent(const Entity& src, const Entity& dst) {
-		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
-		else {
-			dst.addComponent<T>();
-			dst.replaceComponent<T>(src);
-		}
-	}
-
-	template<typename T>
-	void EntityOperation::copyComponent(const EntityCollection& src, const EntityCollection& dst) {
-		if (dst.hasComponent<T>()) { dst.replaceComponent<T>(src); }
-		else {
-			dst.addComponent<T>();
-			dst.replaceComponent<T>(src);
+			dst.replaceComponent<ScriptComponent>(src);
 		}
 	}
 		

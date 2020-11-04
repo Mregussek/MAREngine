@@ -45,11 +45,10 @@ namespace mar::ecs {
 		static Scene* createEmptyScene(std::string name);
 
 		const Entity& createEntity();
-		void destroyEntity(int32_t index);
+		void destroyEntity(const Entity& entity);
 
 		const EntityCollection& createCollection();
-		void destroyCollection(int32_t index);
-		void destroyEntityAtCollection(int32_t collection_index, int32_t entity_index);
+		void destroyCollection(const EntityCollection& collection);
 
 		// --- SET METHODS --- //
 

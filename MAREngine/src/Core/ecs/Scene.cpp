@@ -37,13 +37,13 @@ namespace mar::ecs {
 	}
 
 	void Scene::shutdown() {
-		for (size_t i = 0; i < m_container.m_entities.size(); i++) {
-			destroyEntity(i);
-		}
+		std::for_each(m_container.m_entities.begin(), m_container.m_entities.end(), [this](const Entity& entity) {
+			destroyEntity(entity);
+		});
 
-		for (size_t i = 0; i < m_container.m_collections.size(); i++) {
-			destroyCollection(i);
-		}
+		std::for_each(m_container.m_collections.begin(), m_container.m_collections.end(), [this](const EntityCollection& collection) {
+			destroyCollection(collection);
+		});
 
 		m_sceneRegistry.cleanup();
 
@@ -89,18 +89,16 @@ namespace mar::ecs {
 		return entity;
 	}
 
-	void Scene::destroyEntity(int32_t index) {
-		ECS_INFO("SCENE: going to destroy entity at {}!", index);
+	void Scene::destroyEntity(const Entity& entity) {
+		ECS_INFO("SCENE: going to destroy entity at {}!", entity.m_entityHandle);
 
-		if (m_container.m_entities[index].isValid()) {
-			m_container.m_entities[index].destroyYourself();
-			m_container.m_entities.erase(m_container.m_entities.begin() + index);
+		auto it = std::find_if(m_container.m_entities.begin(), m_container.m_entities.end(), [&entity](const Entity& iterator) {
+			return 	&iterator == &entity;
+		});
 
-			ECS_INFO("SCENE: destroyed entity at {}!", index);
-			return;
-		}
-		else {
-			ECS_INFO("SCENE: entity at {} is not valid, so it cannot be destroyed!", index);
+		if (it != m_container.m_entities.end() && (*it).isValid()) {
+			(*it).destroyYourself();
+			m_container.m_entities.erase(it);
 		}
 	}
 
@@ -126,25 +124,17 @@ namespace mar::ecs {
 		return collection;
 	}
 
-	void Scene::destroyCollection(int32_t index) {
-		ECS_INFO("SCENE: going to destroy collection at {}", index);
+	void Scene::destroyCollection(const EntityCollection& collection) {
+		ECS_INFO("SCENE: going to destroy collection at {}!", collection.m_collectionHandle);
 
-		if (m_container.m_collections[index].isValid()) {
-			m_container.m_collections[index].destroyYourself();
-			m_container.m_collections.erase(m_container.m_collections.begin() + index);
+		auto it = std::find_if(m_container.m_collections.begin(), m_container.m_collections.end(), [&collection](const EntityCollection& iterator) {
+			return 	&iterator == &collection;
+		});
 
-			ECS_INFO("SCENE: destroyed collection at {}!", index);
-			return;
+		if (it != m_container.m_collections.end() && (*it).isValid()) {
+			(*it).destroyYourself();
+			m_container.m_collections.erase(it);
 		}
-		else {
-			ECS_INFO("SCENE: collection at {} is not valid, so it cannot be destroyed!", index);
-		}
-	}
-
-	void Scene::destroyEntityAtCollection(int32_t collection_index, int32_t entity_index) {
-		m_container.m_collections[collection_index].destroyEntity(entity_index);
-
-		ECS_INFO("SCENE: called destroyEntity({}) at collection {}, scene - ", entity_index, collection_index, m_name);
 	}
 
 	const std::vector<EntityCollection>& Scene::getCollections() const { 

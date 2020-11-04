@@ -59,7 +59,7 @@ namespace mar::ecs {
 		operator const bool() const;
 
 		const Entity& createEntity() const;
-		void destroyEntity(int32_t entity_index) const;
+		void destroyEntity(const Entity& entity) const;
 
 		const std::vector<Entity>& getEntities() const;
 
@@ -88,12 +88,11 @@ namespace mar::ecs {
 
 		template<typename T>
 		T& replaceComponent(const EntityCollection& other) const {
-			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have this component!");
 			MAR_CORE_ASSERT(other.hasComponent<T>(), "Entity does not have this component!");
 
-			ECS_TRACE("ENTITY_COLLECTION: {} - replacing component from {} to {}", typeid(T).name(), m_collectionHandle, other.m_collectionHandle);
+			ECS_TRACE("ENTITY_COLLECTION: {} - replacing component from {} to {}", typeid(T).name(), other.m_collectionHandle, m_collectionHandle);
 
-			return m_scene->m_registry.replace<T>(other.m_collectionHandle, getComponent<T>());
+			return m_scene->m_registry.emplace_or_replace<T>(m_collectionHandle, other.getComponent<T>());
 		}
 
 		template<typename T>
