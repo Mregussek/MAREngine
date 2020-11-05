@@ -122,7 +122,6 @@ namespace mar::editor {
 					GUI_EntityPanel::Instance()->setCurrentEntity(createdEntity);
 				}
 
-				
 				if (ImGui::MenuItem("Delete selected collection from Scene", collection_tag)) {
 					manager->getScene()->destroyCollection(collection);
 					GUI_EntityCollectionPanel::Instance()->reset();
@@ -138,10 +137,9 @@ namespace mar::editor {
 						ecs::SceneEvents::Instance().onEntityRemove();
 					}
 				}
-				
 			}
 			else if (entityExists) {
-				
+
 				const char* entity_tag = entity.getComponent<ecs::TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
 					manager->getScene()->destroyEntity(entity);

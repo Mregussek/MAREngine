@@ -113,6 +113,7 @@ namespace mar::editor {
 				const auto& currentCollection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
 				const bool collectionExists = &currentCollection != nullptr;
 
+				/*
 				if (collectionExists && !entityExists) {
 					const char* shortcut = currentCollection.getComponent<ecs::TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
@@ -123,7 +124,7 @@ namespace mar::editor {
 						ecs::SceneEvents::Instance().onCollectionCopy();
 					}
 				}
-				
+				*/
 				ImGui::EndMenu();
 			}
 
