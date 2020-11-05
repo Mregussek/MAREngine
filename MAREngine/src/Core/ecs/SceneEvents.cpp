@@ -25,11 +25,14 @@
 #include "ECSLogs.h"
 #include "../graphics/Renderer/RenderPipeline.h"
 #include "../graphics/Renderer/RenderEvents.h"
+#include "../graphics/Renderer/RenderCamera.h"
 
 
 namespace mar::ecs {
+	
 
 	SceneEvents SceneEvents::s_instance;
+
 
 	SceneEvents& SceneEvents::Instance() {
 		return s_instance; 
@@ -42,6 +45,12 @@ namespace mar::ecs {
 	void SceneEvents::onTransformUpdate(const Entity* e) const {
 		const auto& transform = e->getComponent<TransformComponent>();
 		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+
+		if (e->hasComponent<CameraComponent>()) {
+			const auto& cam = e->getComponent<CameraComponent>();
+			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
+			renderCamera.calculateCameraTransforms(transform, cam);
+		}
 
 		graphics::RenderEvents::Instance().onTransformMat4Update(transform.transform, rpc);
 
@@ -155,6 +164,31 @@ namespace mar::ecs {
 
 	void SceneEvents::onScriptRemove() const {
 		m_sceneManager->initialize();
+	}
+
+	void SceneEvents::onEditorCameraSet(graphics::RenderCamera* camera) const {
+		graphics::RenderPipeline::Instance().submitCamera(camera);
+	}
+
+	void SceneEvents::onGameCameraSet() const {
+		const auto& scene = m_sceneManager->getScene();
+
+		auto hasMainCamera = [&scene](entt::entity entity) {
+			const auto& cam = scene->getComponent<CameraComponent>(entity);
+			return cam.id.find("main") != std::string::npos;
+		};
+
+		auto view = scene->getView<CameraComponent>();
+
+		const auto itEntity = std::find_if(view.begin(), view.end(), hasMainCamera);
+		if (itEntity != view.end()) {
+			const auto& cam = scene->getComponent<CameraComponent>(*itEntity);
+			const auto& transform = scene->getComponent<TransformComponent>(*itEntity);
+			auto& renderCamera = scene->getRenderCamera();
+			renderCamera.calculateCameraTransforms(transform, cam);
+
+			graphics::RenderPipeline::Instance().submitCamera(&renderCamera);
+		}
 	}
 
 	void SceneEvents::onEntityCopy() const {

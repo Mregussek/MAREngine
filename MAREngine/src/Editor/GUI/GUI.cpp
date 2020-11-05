@@ -24,6 +24,8 @@
 
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneManager.h"
+#include "../../Core/ecs/SceneEvents.h"
+#include "../Camera/Camera.h"
 
 #include "../../Window/Window.h"
 
@@ -52,6 +54,8 @@ namespace mar::editor {
 		m_mainMenuBar.initialize();
 		m_entityPanel.initialize();
 		m_collectionPanel.initialize();
+
+		ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData());
 
 		EDITOR_INFO("GUI: initialized properly!");
 	}
@@ -190,7 +194,10 @@ namespace mar::editor {
 	void GUI::Editor_Properties() {
 		ImGui::Begin("Editor Properties");
 
-		ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera);
+		if (ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera)) {
+			if (m_sceneManager->useEditorCamera) { ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData()); }
+			else { ecs::SceneEvents::Instance().onGameCameraSet(); }
+		}
 
 		auto& sceneBackground = m_sceneManager->getScene()->getBackground();
 

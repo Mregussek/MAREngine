@@ -40,9 +40,9 @@ namespace mar::layers {
 	void LayerGUI::initialize() {
 		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
-		m_gui->initialize("#version 330");		
-
 		m_camera.initialize(m_gui->getViewportWidth() / m_gui->getViewportHeight());
+
+		m_gui->initialize("#version 330");		
 
 		m_guiGraphics.initialize();
 

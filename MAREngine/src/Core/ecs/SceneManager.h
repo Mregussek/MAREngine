@@ -81,8 +81,6 @@ namespace mar::ecs {
 
 		void updateEntityInPlaymode(const Entity& entity, RenderPipeline& renderPipeline);
 
-		bool submitCameraIfPossible();
-
 		// PRIVATE MEMBERS
 
 		Scene* m_scene{ nullptr };

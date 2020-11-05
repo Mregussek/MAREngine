@@ -32,6 +32,7 @@
 
 
 namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
+namespace mar::graphics { class RenderCamera; }
 namespace mar::editor {
 
 

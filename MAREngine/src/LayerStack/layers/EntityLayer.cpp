@@ -42,11 +42,11 @@ namespace mar::layers {
 	void EntityLayer::initialize() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
-		m_renderPipeline.initialize();
-		m_renderer.initialize();
-
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
 		graphics::RenderEvents::Instance().setRenderPipeline(m_renderPipeline);
+
+		m_renderPipeline.initialize();
+		m_renderer.initialize();
 
 		m_sceneManager.initialize();
 
