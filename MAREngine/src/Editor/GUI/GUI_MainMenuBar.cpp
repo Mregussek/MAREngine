@@ -112,7 +112,6 @@ namespace mar::editor {
 
 				const auto& currentCollection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
 				const bool collectionExists = &currentCollection != nullptr;
-
 				/*
 				if (collectionExists && !entityExists) {
 					const char* shortcut = currentCollection.getComponent<ecs::TagComponent>().tag.c_str();

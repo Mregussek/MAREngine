@@ -148,9 +148,7 @@ namespace mar::editor {
 
 		ImGui::Separator();
 
-		ImGui::Text("Creating to: ");
-		ImGui::SameLine();
-		ImGui::Text(savePath.c_str());
+		ImGui::Text("Creating to: %s", savePath.c_str());
 
 		ImGui::Separator();
 
@@ -176,9 +174,7 @@ namespace mar::editor {
 		const auto moduleNameStr = std::string(moduleName);
 		const auto loadPath = assetsPath + moduleNameStr + ".py";
 
-		ImGui::Text("Opening: ");
-		ImGui::SameLine();
-		ImGui::Text(loadPath.c_str());
+		ImGui::Text("Opening: %s", loadPath.c_str());
 
 		ImGui::Separator();
 
