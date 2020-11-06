@@ -72,9 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Vulkan\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)\Vulkan\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Vulkan\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)\Vulkan\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -86,12 +90,25 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\OBJ-Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\include;$(SolutionDir)VulkanSandbox\3rd_party\GL\include</AdditionalIncludeDirectories>
+      <SupportJustMyCode>false</SupportJustMyCode>
+      <CompileAsManaged>false</CompileAsManaged>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)VulkanSandbox\3rd_party\GLFW\lib-vc2019;$(SolutionDir)VulkanSandbox\3rd_party\GL\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>msvcrt.lib;msvcmrt.lib;legacy_stdio_definitions.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,14 +117,24 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\OBJ-Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\include;$(SolutionDir)VulkanSandbox\3rd_party\GL\include</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <CompileAsManaged>false</CompileAsManaged>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)VulkanSandbox\3rd_party\GLFW\lib-vc2019;$(SolutionDir)VulkanSandbox\3rd_party\GL\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>msvcrt.lib;msvcmrt.lib;legacy_stdio_definitions.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -139,7 +166,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="3rd_party\MARMaths\src\mat\mat4.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="3rd_party\GLFW\include\GLFW\glfw3.h" />
+    <ClInclude Include="3rd_party\GLFW\include\GLFW\glfw3native.h" />
+    <ClInclude Include="3rd_party\GL\include\GL\eglew.h" />
+    <ClInclude Include="3rd_party\GL\include\GL\glew.h" />
+    <ClInclude Include="3rd_party\GL\include\GL\glxew.h" />
+    <ClInclude Include="3rd_party\GL\include\GL\wglew.h" />
+    <ClInclude Include="3rd_party\MARMaths\include\MARMaths.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\maths.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\math_func\Basic_Math.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\mat\mat4.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\trig\trigonometric.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.h" />
+    <ClInclude Include="VulkanInclude.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
