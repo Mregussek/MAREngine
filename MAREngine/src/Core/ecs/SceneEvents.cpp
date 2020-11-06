@@ -51,9 +51,10 @@ namespace mar::ecs {
 			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
 			renderCamera.calculateCameraTransforms(transform, cam);
 		}
-
-		graphics::RenderEvents::Instance().onTransformMat4Update(transform.transform, rpc);
-
+		else {
+			graphics::RenderEvents::Instance().onTransformMat4Update(transform.transform, rpc);
+		}
+			
 		if (e->hasComponent<LightComponent>()) { 
 			graphics::RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
 		}
@@ -80,7 +81,7 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::onCameraUpdate(const Entity* e) const {
-		m_sceneManager->initialize();
+		onGameCameraSet();
 
 		ECS_TRACE("SCENE_EVENTS: updatedCamera!");
 	}

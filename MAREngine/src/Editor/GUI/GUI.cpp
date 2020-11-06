@@ -164,7 +164,12 @@ namespace mar::editor {
 				if (ImGui::Button("PLAY")) { m_sceneManager->setPlayMode(); }
 			}
 			else {
-				if (ImGui::Button("STOP")) { m_sceneManager->setExitPlayMode(); }
+				if (ImGui::Button("STOP")) { 
+					m_sceneManager->setExitPlayMode(); 
+					if (m_sceneManager->useEditorCamera) {
+						ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData());
+					}
+				}
 
 				ImGui::SameLine();
 
@@ -195,8 +200,14 @@ namespace mar::editor {
 		ImGui::Begin("Editor Properties");
 
 		if (ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera)) {
-			if (m_sceneManager->useEditorCamera) { ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData()); }
-			else { ecs::SceneEvents::Instance().onGameCameraSet(); }
+			if (m_sceneManager->isEditorMode()) {
+				if (m_sceneManager->useEditorCamera) { 
+					ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData()); 
+				}
+				else { 
+					ecs::SceneEvents::Instance().onGameCameraSet(); 
+				}
+			}
 		}
 
 		auto& sceneBackground = m_sceneManager->getScene()->getBackground();

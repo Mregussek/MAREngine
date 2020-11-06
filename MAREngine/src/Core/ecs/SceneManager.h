@@ -59,8 +59,8 @@ namespace mar::ecs {
 		bool isPauseMode() { return m_PauseMode; }
 
 		void setEditorMode() { m_EditorMode = true; }
-		void setPlayMode() { m_EditorMode = false; initPlayMode(); }
-		void setExitPlayMode() { m_EditorMode = true; unsetPauseMode(); exitPlayMode(); }
+		void setPlayMode();
+		void setExitPlayMode();
 		void setPauseMode() { m_PauseMode = true; }
 		void unsetPauseMode() { m_PauseMode = false; }
 

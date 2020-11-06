@@ -77,6 +77,18 @@ namespace mar::ecs {
 		ECS_INFO("SCENE_MANAGER: updated!");
 	}
 
+	void SceneManager::setPlayMode() { 
+		m_EditorMode = false; 
+		initPlayMode(); 
+		SceneEvents::Instance().onGameCameraSet(); 
+	}
+
+	void SceneManager::setExitPlayMode() { 
+		m_EditorMode = true; 
+		unsetPauseMode(); 
+		exitPlayMode(); 
+	}
+
 	// -------------------------------------------------------------
 	// EDITOR MODE
 	// -------------------------------------------------------------
