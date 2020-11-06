@@ -132,7 +132,8 @@ namespace mar::editor {
 	}
 
 	void GUI::updateFrame() {
-		GUI_SceneHierarchy::update(m_sceneManager);
+		m_sceneHierarchyPanel.update(m_sceneManager);
+
 		GUI_Statistics::update(m_sceneManager);
 
 		m_textEditor.update();
