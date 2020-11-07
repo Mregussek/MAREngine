@@ -1,135 +1,145 @@
 
 #include "VulkanInclude.h"
+#include "src/Window.h"
 
-static const struct
-{
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-{
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
-};
 
-static const char* vertex_shader_text =
-"#version 110\n"
-"uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
-"}\n";
+#define VK_CHECK(call) \
+    do { \
+        const VkResult result = call; \
+    } while(0)
 
-static const char* fragment_shader_text =
-"#version 110\n"
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
-"}\n";
 
-static void error_callback(int error, const char* description)
-{
-    fprintf(stderr, "Error: %s\n", description);
+VkInstance createVulkanInstance() {
+    VkApplicationInfo appInfo{ VK_STRUCTURE_TYPE_APPLICATION_INFO }; // check if 1.2 is available via vkEnumerateInstanceVersion
+    appInfo.apiVersion = VK_API_VERSION_1_2;
+
+    constexpr std::array<const char*, 1> debugLayers{
+        "VK_LAYER_KHRONOS_validation"
+    };
+
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+    constexpr std::array<const char*, 2> extensions = {
+        VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
+#else
+    constexpr std::array<const char*, 1> extensions = {
+#endif
+        VK_KHR_SURFACE_EXTENSION_NAME,
+    };
+
+    VkInstanceCreateInfo createInfo{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
+    createInfo.pApplicationInfo = &appInfo;
+    createInfo.ppEnabledLayerNames = debugLayers.data();
+    createInfo.enabledLayerCount = debugLayers.size();
+    createInfo.ppEnabledExtensionNames = extensions.data();
+    createInfo.enabledExtensionCount = extensions.size();
+
+    VkInstance instance{ 0 };
+
+    VK_CHECK( vkCreateInstance(&createInfo, nullptr, &instance) );
+
+    return instance;
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
+    std::array<VkPhysicalDevice, 16> physicalDevices;
+    uint32_t physicalDeviceCount{ physicalDevices.size() };
+    VK_CHECK( vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data()) );
+
+    return [&physicalDevices]() {
+        const auto it = std::find_if(physicalDevices.cbegin(), physicalDevices.cend(), [](const VkPhysicalDevice physicalDevice) {
+            VkPhysicalDeviceProperties properties;
+            vkGetPhysicalDeviceProperties(physicalDevice, &properties);
+            return properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
+        });
+
+        if (it != physicalDevices.end()) {
+            VkPhysicalDeviceProperties properties;
+            vkGetPhysicalDeviceProperties(*it, &properties);
+            std::cout << "Picking: " << properties.deviceName << "\n";
+            return *it;
+        }
+        else if (physicalDevices.size() > 0) {
+            VkPhysicalDeviceProperties fallbackProperties;
+            vkGetPhysicalDeviceProperties(physicalDevices[0], &fallbackProperties);
+            std::cout << "Picking fallback: " << fallbackProperties.deviceName << "\n";
+            return physicalDevices[0];
+        }
+
+        std::cout << "No physical devices available!\n";
+        return VkPhysicalDevice{ VK_NULL_HANDLE };
+    }(); 
+}
+
+VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t* familyIndex) {
+    *familyIndex = 0; // this may produce validation error
+
+    float queueProperties{ 1.f };
+
+    VkDeviceQueueCreateInfo queueInfo{ VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO };
+    queueInfo.queueFamilyIndex = *familyIndex;
+    queueInfo.queueCount = 1;
+    queueInfo.pQueuePriorities = &queueProperties;
+
+    VkDeviceCreateInfo createInfo{ VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
+    createInfo.queueCreateInfoCount = 1;
+    createInfo.pQueueCreateInfos = &queueInfo;
+
+    VkDevice device{ 0 };
+    VK_CHECK( vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) );
+
+    return device;
+}
+
+VkSurfaceKHR createSurface(VkInstance instance, GLFWwindow* window) {
+    if constexpr (VK_USE_PLATFORM_WIN32_KHR) {
+        VkWin32SurfaceCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR };
+        createInfo.hinstance = GetModuleHandle(0);
+        createInfo.hwnd = glfwGetWin32Window(window);
+        VkSurfaceKHR surface{ 0 };
+        VK_CHECK( vkCreateWin32SurfaceKHR(instance, &createInfo, nullptr, &surface) );
+        return surface;
+    }
+    else { // other platforms
+        return VkSurfaceKHR{ VK_NULL_HANDLE };
+    }
 }
 
 int main(void) {
-    using namespace mar::maths;
+    Window window{};
+    window.initialize("MAREngine Vulkan Renderer", 1200, 800);
 
-    GLFWwindow* window;
-    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
+    uint32_t familyIndex{ 0 };
+    auto instance = createVulkanInstance();
+    auto physicalDevice = createPhysicalDevice(instance);
+    auto device = createDevice(physicalDevice, &familyIndex);
+    auto surface = createSurface(instance, window.getWindow());
 
-    glfwSetErrorCallback(error_callback);
+    VkSwapchainCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR };
+    createInfo.surface = surface;
+    createInfo.minImageCount = 2;
+    createInfo.imageFormat = VK_FORMAT_R8G8B8A8_UNORM;
+    createInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
+    createInfo.imageExtent.width = window.getWidth();
+    createInfo.imageExtent.height = window.getHeight();
+    createInfo.imageArrayLayers = 1;
+    createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    createInfo.queueFamilyIndexCount = 1;
+    createInfo.pQueueFamilyIndices = &familyIndex;
+    createInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
 
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
+    VkSwapchainKHR swapChain{ 0 };
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    VK_CHECK( vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapChain) );
 
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
+    while (window.shouldClose()) {
+        window.clear();
+
+
+
+        window.pollEvents();
     }
 
-    glfwSetKeyCallback(window, key_callback);
+    window.terminate();
 
-    glfwMakeContextCurrent(window);
-    glewExperimental = GL_TRUE;
-    const GLenum glew_init = glewInit();
-    if (glew_init != GLEW_OK) { exit(0); }
-    glfwSwapInterval(1);
-
-    // NOTE: OpenGL error checks have been omitted for brevity
-
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    glCompileShader(vertex_shader);
-
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    glCompileShader(fragment_shader);
-
-    program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
-
-    mvp_location = glGetUniformLocation(program, "MVP");
-    vpos_location = glGetAttribLocation(program, "vPos");
-    vcol_location = glGetAttribLocation(program, "vCol");
-
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-        sizeof(vertices[0]), (void*)0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-        sizeof(vertices[0]), (void*)(sizeof(float) * 2));
-
-    while (!glfwWindowShouldClose(window))
-    {
-        float ratio;
-        int width, height;
-        mat4 m, p, mvp;
-
-        glfwGetFramebufferSize(window, &width, &height);
-        ratio = width / (float)height;
-
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        m = mat4::identity();
-        m *= mat4::rotation(Trig::toRadians((float)glfwGetTime()), { 0.f, 0.f, 1.f });
-        p = mat4::orthographic(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        mvp = p * m;
-
-        glUseProgram(program);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, mat4::value_ptr(mvp));
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
     exit(EXIT_SUCCESS);
 }

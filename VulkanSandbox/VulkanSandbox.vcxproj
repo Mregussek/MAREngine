@@ -90,10 +90,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;_CONSOLE;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\OBJ-Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\include;$(SolutionDir)VulkanSandbox\3rd_party\GL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\Vulkan\Include;$(SolutionDir)VulkanSandbox\3rd_party\OBJ-Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\include;$(SolutionDir)VulkanSandbox\3rd_party\GL\include</AdditionalIncludeDirectories>
       <SupportJustMyCode>false</SupportJustMyCode>
       <CompileAsManaged>false</CompileAsManaged>
       <Optimization>MaxSpeed</Optimization>
@@ -107,8 +107,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)VulkanSandbox\3rd_party\GLFW\lib-vc2019;$(SolutionDir)VulkanSandbox\3rd_party\GL\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>msvcrt.lib;msvcmrt.lib;legacy_stdio_definitions.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)VulkanSandbox\3rd_party\Vulkan\Lib32;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\lib-vc2019;$(SolutionDir)VulkanSandbox\3rd_party\GL\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;msvcrtd.lib;legacy_stdio_definitions.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,10 +117,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;_CONSOLE;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\OBJ-Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\include;$(SolutionDir)VulkanSandbox\3rd_party\GL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\Vulkan\Include;$(SolutionDir)VulkanSandbox\3rd_party\OBJ-Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\include;$(SolutionDir)VulkanSandbox\3rd_party\GL\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -133,8 +133,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)VulkanSandbox\3rd_party\GLFW\lib-vc2019;$(SolutionDir)VulkanSandbox\3rd_party\GL\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>msvcrt.lib;msvcmrt.lib;legacy_stdio_definitions.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)VulkanSandbox\3rd_party\Vulkan\Lib32;$(SolutionDir)VulkanSandbox\3rd_party\GLFW\lib-vc2019;$(SolutionDir)VulkanSandbox\3rd_party\GL\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vulkan-1.lib;msvcrt.lib;legacy_stdio_definitions.lib;opengl32.lib;glew32s.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -189,6 +189,7 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.h" />
+    <ClInclude Include="src\Window.h" />
     <ClInclude Include="VulkanInclude.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

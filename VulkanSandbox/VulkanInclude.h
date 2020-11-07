@@ -1,7 +1,12 @@
 
 
-#include <iostream>
 
+#include "vulkan/vulkan.h"
+
+
+#include <iostream>
+#include <array>
+#include <algorithm>
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -19,6 +24,7 @@
 
 #if __has_include(<GLFW/glfw3.h>)
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
 #define MAR_ENGINE_GLFW_LIB_IMPORTED
 #else
 #error "MAR ENGINE: Cannot import GLFW/glfw3.h!"
