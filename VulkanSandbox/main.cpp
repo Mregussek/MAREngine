@@ -148,6 +148,17 @@ VkSemaphore createSemaphore(VkDevice device) {
     return semaphore;
 }
 
+VkCommandPool createCommandPool(VkDevice device, uint32_t familyIndex) {
+    VkCommandPoolCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO };
+    createInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    createInfo.queueFamilyIndex = familyIndex;
+
+    VkCommandPool commandPool{ 0 };
+    VK_CHECK( vkCreateCommandPool(device, &createInfo, nullptr, &commandPool) );
+
+    return commandPool;
+}
+
 int main(void) {
     Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
@@ -158,12 +169,72 @@ int main(void) {
     const auto device = createDevice(physicalDevice, familyIndex);
     const auto surface = createSurface(instance, window.getWindow());
     const auto swapchain = createSwapchain(device, surface, window.getWidth(), window.getHeight(), &familyIndex);
-    const auto semaphore = createSemaphore(device); // check 1:40:20
+    const auto releaseSemaphore = createSemaphore(device);
+    const auto acquireSemaphore = createSemaphore(device);
+
+    VkQueue queue{ 0 };
+    vkGetDeviceQueue(device, familyIndex, 0, &queue);
+
+    std::array<VkImage, 16> swapchainImages;    // it should be dynamically allocated?
+    uint32_t swapchainImageCount = swapchainImages.size();
+    VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &swapchainImageCount, swapchainImages.data()) );
+
+    const auto commandPool = createCommandPool(device, familyIndex);
+
+    VkCommandBufferAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
+    allocateInfo.commandPool = commandPool;
+    allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocateInfo.commandBufferCount = 1;
+
+    VkCommandBuffer commandBuffer{ 0 };
+
+    VK_CHECK( vkAllocateCommandBuffers(device, &allocateInfo, &commandBuffer) );
 
     while (window.shouldClose()) {
-        window.clear();
 
+        uint32_t imageIndex{ 0 };
+        VK_CHECK(vkAcquireNextImageKHR(device, swapchain, ~0ull, acquireSemaphore, VK_NULL_HANDLE, &imageIndex));
 
+        VK_CHECK( vkResetCommandPool(device, commandPool, 0) );
+
+        VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+        beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+        VK_CHECK( vkBeginCommandBuffer(commandBuffer, &beginInfo) );
+
+        VkClearColorValue color{ 1, 0, 1 ,1 };
+        VkImageSubresourceRange range{};
+        range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        range.levelCount = 1;
+        range.layerCount = 1;
+
+        vkCmdClearColorImage(commandBuffer, swapchainImages[imageIndex], VK_IMAGE_LAYOUT_GENERAL, &color, 1, &range);
+
+        VK_CHECK( vkEndCommandBuffer(commandBuffer) );
+
+        VkPipelineStageFlags submitStageMask{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+
+        VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
+        submitInfo.waitSemaphoreCount = 1;
+        submitInfo.pWaitSemaphores = &acquireSemaphore;
+        submitInfo.pWaitDstStageMask = &submitStageMask;
+        submitInfo.commandBufferCount = 1;
+        submitInfo.pCommandBuffers = &commandBuffer;
+        submitInfo.signalSemaphoreCount = 1;
+        submitInfo.pSignalSemaphores = &releaseSemaphore;
+
+        vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+
+        VkPresentInfoKHR presentInfo{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = &swapchain;
+        presentInfo.pImageIndices = &imageIndex;
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = &releaseSemaphore;
+
+        VK_CHECK( vkQueuePresentKHR(queue, &presentInfo) );
+
+        VK_CHECK( vkDeviceWaitIdle(device) );
 
         window.pollEvents();
     }

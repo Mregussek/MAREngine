@@ -43,13 +43,8 @@ public:
 		glfwSwapInterval(1);
 	}
 
-	void clear() {
+	void pollEvents() {
 		glfwGetFramebufferSize(m_window, &m_width, &m_height);
-		glViewport(0, 0, m_width, m_height);
-		glClear(GL_COLOR_BUFFER_BIT);
-	}
-
-	void pollEvents() const {
 		glfwSwapBuffers(m_window);
 		glfwPollEvents();
 	}
