@@ -117,12 +117,20 @@ VkSurfaceKHR createSurface(VkInstance instance, GLFWwindow* window) {
     }
 }
 
-VkSwapchainKHR createSwapchain(VkDevice device, VkSurfaceKHR surface, int32_t width, int32_t height, const uint32_t* familyIndex) {
+VkFormat getSwapchainFormat(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface) {
+    std::array<VkSurfaceFormatKHR, 16> formats;
+    uint32_t formatCount = formats.size();
+    VK_CHECK( vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, formats.data()) );
+
+    return formats[0].format;
+}
+
+VkSwapchainKHR createSwapchain(VkDevice device, VkSurfaceKHR surface, VkFormat format, int32_t width, int32_t height, const uint32_t* familyIndex) {
 
     VkSwapchainCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR };
     createInfo.surface = surface;
     createInfo.minImageCount = 2;
-    createInfo.imageFormat = VK_FORMAT_R8G8B8A8_UNORM;
+    createInfo.imageFormat = format;
     createInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     createInfo.imageExtent.width = width;
     createInfo.imageExtent.height = height;
@@ -131,6 +139,8 @@ VkSwapchainKHR createSwapchain(VkDevice device, VkSurfaceKHR surface, int32_t wi
     createInfo.queueFamilyIndexCount = 1;
     createInfo.pQueueFamilyIndices = familyIndex;
     createInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
+    createInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
+    createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 
     VkSwapchainKHR swapchain{ 0 };
 
@@ -159,10 +169,10 @@ VkCommandPool createCommandPool(VkDevice device, uint32_t familyIndex) {
     return commandPool;
 }
 
-VkRenderPass createRenderPass(VkDevice device) {
+VkRenderPass createRenderPass(VkDevice device, VkFormat format) {
     constexpr uint32_t index = 0;
     std::array<VkAttachmentDescription, 1> attachments;
-    attachments[index].format = VK_FORMAT_R8G8B8A8_UNORM;
+    attachments[index].format = format;
     attachments[index].samples = VK_SAMPLE_COUNT_1_BIT;
     attachments[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
     attachments[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -190,11 +200,11 @@ VkRenderPass createRenderPass(VkDevice device) {
     return renderPass;
 }
 
-VkImageView createImageView(VkDevice device, VkImage image) {
+VkImageView createImageView(VkDevice device, VkImage image, VkFormat format) {
     VkImageViewCreateInfo createInfo{ VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
     createInfo.image = image;
     createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-    createInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+    createInfo.format = format;
     createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
     createInfo.subresourceRange.levelCount = 1;
     createInfo.subresourceRange.layerCount = 1;
@@ -222,6 +232,19 @@ VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImag
     return framebuffer;
 }
 
+VkCommandBuffer createCommandBuffer(VkDevice device, VkCommandPool commandPool) {
+    VkCommandBufferAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
+    allocateInfo.commandPool = commandPool;
+    allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocateInfo.commandBufferCount = 1;
+
+    VkCommandBuffer commandBuffer{ 0 };
+
+    VK_CHECK(vkAllocateCommandBuffers(device, &allocateInfo, &commandBuffer));
+
+    return commandBuffer;
+}
+
 int main(void) {
     Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
@@ -231,14 +254,16 @@ int main(void) {
     const auto physicalDevice = createPhysicalDevice(instance);
     const auto device = createDevice(physicalDevice, familyIndex);
     const auto surface = createSurface(instance, window.getWindow());
-    const auto swapchain = createSwapchain(device, surface, window.getWidth(), window.getHeight(), &familyIndex);
+    const auto swapchainFormat = getSwapchainFormat(physicalDevice, surface);
+    const auto swapchain = createSwapchain(device, surface, swapchainFormat, window.getWidth(), window.getHeight(), &familyIndex);
     const auto releaseSemaphore = createSemaphore(device);
     const auto acquireSemaphore = createSemaphore(device);
+    const auto renderPass = createRenderPass(device, swapchainFormat);
+    const auto commandPool = createCommandPool(device, familyIndex);
+    const auto commandBuffer = createCommandBuffer(device, commandPool);
 
     VkQueue queue{ 0 };
     vkGetDeviceQueue(device, familyIndex, 0, &queue);
-
-    const auto renderPass = createRenderPass(device);
 
     constexpr size_t swapchainSize = 16;
     std::array<VkImage, swapchainSize> swapchainImages;    // it should be dynamically allocated?
@@ -247,24 +272,13 @@ int main(void) {
 
     std::array<VkImageView, swapchainSize> swapchainImageViews;
     for (size_t i = 0; i < swapchainImageCount; i++) {
-        swapchainImageViews[i] = createImageView(device, swapchainImages[i]);
+        swapchainImageViews[i] = createImageView(device, swapchainImages[i], swapchainFormat);
     }
 
     std::array<VkFramebuffer, swapchainSize> swapchainFramebuffers;
     for (size_t i = 0; i < swapchainImageCount; i++) {
         swapchainFramebuffers[i] = createFramebuffer(device, renderPass, swapchainImageViews[i], window.getWidth(), window.getHeight());
     }
-
-    const auto commandPool = createCommandPool(device, familyIndex);
-
-    VkCommandBufferAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO };
-    allocateInfo.commandPool = commandPool;
-    allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocateInfo.commandBufferCount = 1;
-
-    VkCommandBuffer commandBuffer{ 0 };
-
-    VK_CHECK( vkAllocateCommandBuffers(device, &allocateInfo, &commandBuffer) );
 
     while (window.shouldClose()) {
 
@@ -278,13 +292,22 @@ int main(void) {
 
         VK_CHECK( vkBeginCommandBuffer(commandBuffer, &beginInfo) );
 
-        constexpr VkClearColorValue color{ 1, 0, 1 ,1 };
-        VkImageSubresourceRange range{};
-        range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        range.levelCount = 1;
-        range.layerCount = 1;
+        constexpr VkClearColorValue clearColor{ 48.f / 255.f, 10.f / 255.f, 36.f / 255.f ,1 };
+        constexpr VkClearValue clearValue{ clearColor };
 
-        vkCmdClearColorImage(commandBuffer, swapchainImages[imageIndex], VK_IMAGE_LAYOUT_GENERAL, &color, 1, &range);
+        VkRenderPassBeginInfo passBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
+        passBeginInfo.renderPass = renderPass;
+        passBeginInfo.framebuffer = swapchainFramebuffers[imageIndex];
+        passBeginInfo.renderArea.extent.width = window.getWidth();
+        passBeginInfo.renderArea.extent.height = window.getHeight();
+        passBeginInfo.clearValueCount = 1;
+        passBeginInfo.pClearValues = &clearValue;
+
+        vkCmdBeginRenderPass(commandBuffer, &passBeginInfo, VK_SUBPASS_CONTENTS_INLINE); // draw calls are below
+
+
+
+        vkCmdEndRenderPass(commandBuffer);
 
         VK_CHECK( vkEndCommandBuffer(commandBuffer) );
 
