@@ -87,4 +87,8 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\triangle.vert.glsl" />
+    <None Include="resources\triangle.frag.glsl" />
+  </ItemGroup>
 </Project>

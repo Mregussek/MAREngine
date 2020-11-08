@@ -192,6 +192,10 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="VulkanInclude.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\triangle.frag.glsl" />
+    <None Include="resources\triangle.vert.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

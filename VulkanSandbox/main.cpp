@@ -245,6 +245,100 @@ VkCommandBuffer createCommandBuffer(VkDevice device, VkCommandPool commandPool) 
     return commandBuffer;
 }
 
+VkShaderModule loadShader(VkDevice device, const char* path) {
+    FILE* file = fopen(path, "rb");
+    fseek(file, 0, SEEK_END);
+    const long length = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    char* buffer = new char[length];
+    size_t rc = fread(buffer, 1, length, file);
+    fclose(file);
+
+    VkShaderModuleCreateInfo createInfo{ VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
+    createInfo.codeSize = length;
+    createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer);
+
+    VkShaderModule shaderModule{ 0 };
+    VK_CHECK( vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) );
+    
+    delete[] buffer;
+
+    return shaderModule;
+}
+
+VkPipelineLayout createPipelineLayout(VkDevice device) {
+    VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+    VkPipelineLayout layout{ 0 };
+
+    VK_CHECK( vkCreatePipelineLayout(device, &createInfo, nullptr, &layout) );
+
+    return layout;
+}
+
+VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPipelineLayout layout, VkPipelineCache pipelineCache, VkShaderModule vertex, VkShaderModule fragment) {
+    VkGraphicsPipelineCreateInfo createInfo = { VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
+
+    VkPipelineShaderStageCreateInfo stages[2] = {};
+    stages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+    stages[0].module = vertex;
+    stages[0].pName = "main";
+    stages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    stages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    stages[1].module = fragment;
+    stages[1].pName = "main";
+
+    createInfo.stageCount = sizeof(stages) / sizeof(stages[0]);
+    createInfo.pStages = stages;
+
+    VkPipelineVertexInputStateCreateInfo vertexInput = { VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
+    createInfo.pVertexInputState = &vertexInput;
+
+    VkPipelineInputAssemblyStateCreateInfo inputAssembly = { VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
+    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+    createInfo.pInputAssemblyState = &inputAssembly;
+
+    VkPipelineViewportStateCreateInfo viewportState = { VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO };
+    viewportState.viewportCount = 1;
+    viewportState.scissorCount = 1;
+    createInfo.pViewportState = &viewportState;
+
+    VkPipelineRasterizationStateCreateInfo rasterizationState = { VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
+    rasterizationState.lineWidth = 1.f;
+    createInfo.pRasterizationState = &rasterizationState;
+
+    VkPipelineMultisampleStateCreateInfo multisampleState = { VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO };
+    multisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+    createInfo.pMultisampleState = &multisampleState;
+
+    VkPipelineDepthStencilStateCreateInfo depthStencilState = { VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO };
+    createInfo.pDepthStencilState = &depthStencilState;
+
+    VkPipelineColorBlendAttachmentState colorAttachmentState = {};
+    colorAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+
+    VkPipelineColorBlendStateCreateInfo colorBlendState = { VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO };
+    colorBlendState.attachmentCount = 1;
+    colorBlendState.pAttachments = &colorAttachmentState;
+    createInfo.pColorBlendState = &colorBlendState;
+
+    VkDynamicState dynamicStates[] = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+
+    VkPipelineDynamicStateCreateInfo dynamicState = { VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO };
+    dynamicState.dynamicStateCount = sizeof(dynamicStates) / sizeof(dynamicStates[0]);
+    dynamicState.pDynamicStates = dynamicStates;
+    createInfo.pDynamicState = &dynamicState;
+
+    createInfo.layout = layout;
+    createInfo.renderPass = renderPass;
+
+    VkPipeline pipeline{ 0 };
+
+    VK_CHECK( vkCreateGraphicsPipelines(device, pipelineCache, 1, &createInfo, nullptr, &pipeline) );
+
+    return pipeline;
+}
+
 int main(void) {
     Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
@@ -261,6 +355,11 @@ int main(void) {
     const auto renderPass = createRenderPass(device, swapchainFormat);
     const auto commandPool = createCommandPool(device, familyIndex);
     const auto commandBuffer = createCommandBuffer(device, commandPool);
+    const auto triangleVertShader = loadShader(device, "resources/triangle.vert.spv");
+    const auto triangleFragShader = loadShader(device, "resources/triangle.frag.spv");
+    VkPipelineCache pipelineCache{ 0 }; // critical for perfomance
+    const auto triangleLayout = createPipelineLayout(device);
+    const auto trianglePipeline = createGraphicsPipeline(device, renderPass, triangleLayout, pipelineCache, triangleVertShader, triangleFragShader);
 
     VkQueue queue{ 0 };
     vkGetDeviceQueue(device, familyIndex, 0, &queue);
@@ -287,7 +386,7 @@ int main(void) {
 
         VK_CHECK( vkResetCommandPool(device, commandPool, 0) );
 
-        VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
+        VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
         beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
         VK_CHECK( vkBeginCommandBuffer(commandBuffer, &beginInfo) );
@@ -305,7 +404,14 @@ int main(void) {
 
         vkCmdBeginRenderPass(commandBuffer, &passBeginInfo, VK_SUBPASS_CONTENTS_INLINE); // draw calls are below
 
+        VkViewport viewport{ 0.f , 0.f, (float)window.getWidth(), (float)window.getHeight(), 0.f, 1.f };
+        VkRect2D scissor{ {0, 0 }, { window.getWidth(), window.getHeight() } };
 
+        vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+        vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+
+        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, trianglePipeline);
+        vkCmdDraw(commandBuffer, 3, 1, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);
 
