@@ -193,7 +193,7 @@ int main(void) {
     while (window.shouldClose()) {
 
         uint32_t imageIndex{ 0 };
-        VK_CHECK(vkAcquireNextImageKHR(device, swapchain, ~0ull, acquireSemaphore, VK_NULL_HANDLE, &imageIndex));
+        VK_CHECK( vkAcquireNextImageKHR(device, swapchain, ~0ull, acquireSemaphore, VK_NULL_HANDLE, &imageIndex) );
 
         VK_CHECK( vkResetCommandPool(device, commandPool, 0) );
 
@@ -223,7 +223,7 @@ int main(void) {
         submitInfo.signalSemaphoreCount = 1;
         submitInfo.pSignalSemaphores = &releaseSemaphore;
 
-        vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE);
+        VK_CHECK( vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE) );
 
         VkPresentInfoKHR presentInfo{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
         presentInfo.swapchainCount = 1;
