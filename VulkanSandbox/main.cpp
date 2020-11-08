@@ -159,6 +159,69 @@ VkCommandPool createCommandPool(VkDevice device, uint32_t familyIndex) {
     return commandPool;
 }
 
+VkRenderPass createRenderPass(VkDevice device) {
+    constexpr uint32_t index = 0;
+    std::array<VkAttachmentDescription, 1> attachments;
+    attachments[index].format = VK_FORMAT_R8G8B8A8_UNORM;
+    attachments[index].samples = VK_SAMPLE_COUNT_1_BIT;
+    attachments[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    attachments[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    attachments[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    attachments[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    attachments[index].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    attachments[index].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    VkAttachmentReference colorAttachment{ index , VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+
+    VkSubpassDescription subpass{};
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.colorAttachmentCount = 1;
+    subpass.pColorAttachments = &colorAttachment;
+
+    VkRenderPassCreateInfo createInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO };
+    createInfo.attachmentCount = attachments.size();
+    createInfo.pAttachments = attachments.data();
+    createInfo.subpassCount = 1;
+    createInfo.pSubpasses = &subpass;
+
+    VkRenderPass renderPass{ 0 };
+    VK_CHECK( vkCreateRenderPass(device, &createInfo, nullptr, &renderPass) );
+    
+    return renderPass;
+}
+
+VkImageView createImageView(VkDevice device, VkImage image) {
+    VkImageViewCreateInfo createInfo{ VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
+    createInfo.image = image;
+    createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    createInfo.format = VK_FORMAT_R8G8B8A8_UNORM;
+    createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    createInfo.subresourceRange.levelCount = 1;
+    createInfo.subresourceRange.layerCount = 1;
+
+    VkImageView view{ 0 };
+
+    VK_CHECK( vkCreateImageView(device, &createInfo, nullptr, &view) );
+
+    return view;
+}
+
+VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, uint32_t width, uint32_t height) {
+    VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
+    createInfo.renderPass = renderPass;
+    createInfo.attachmentCount = 1;
+    createInfo.pAttachments = &imageView;
+    createInfo.width = width;
+    createInfo.height = height;
+    createInfo.layers = 1;
+
+    VkFramebuffer framebuffer{ 0 };
+
+    VK_CHECK( vkCreateFramebuffer(device, &createInfo, nullptr, &framebuffer) );
+
+    return framebuffer;
+}
+
 int main(void) {
     Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
@@ -175,9 +238,22 @@ int main(void) {
     VkQueue queue{ 0 };
     vkGetDeviceQueue(device, familyIndex, 0, &queue);
 
-    std::array<VkImage, 16> swapchainImages;    // it should be dynamically allocated?
+    const auto renderPass = createRenderPass(device);
+
+    constexpr size_t swapchainSize = 16;
+    std::array<VkImage, swapchainSize> swapchainImages;    // it should be dynamically allocated?
     uint32_t swapchainImageCount = swapchainImages.size();
     VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &swapchainImageCount, swapchainImages.data()) );
+
+    std::array<VkImageView, swapchainSize> swapchainImageViews;
+    for (size_t i = 0; i < swapchainImageCount; i++) {
+        swapchainImageViews[i] = createImageView(device, swapchainImages[i]);
+    }
+
+    std::array<VkFramebuffer, swapchainSize> swapchainFramebuffers;
+    for (size_t i = 0; i < swapchainImageCount; i++) {
+        swapchainFramebuffers[i] = createFramebuffer(device, renderPass, swapchainImageViews[i], window.getWidth(), window.getHeight());
+    }
 
     const auto commandPool = createCommandPool(device, familyIndex);
 
@@ -202,7 +278,7 @@ int main(void) {
 
         VK_CHECK( vkBeginCommandBuffer(commandBuffer, &beginInfo) );
 
-        VkClearColorValue color{ 1, 0, 1 ,1 };
+        constexpr VkClearColorValue color{ 1, 0, 1 ,1 };
         VkImageSubresourceRange range{};
         range.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
         range.levelCount = 1;
@@ -212,7 +288,7 @@ int main(void) {
 
         VK_CHECK( vkEndCommandBuffer(commandBuffer) );
 
-        VkPipelineStageFlags submitStageMask{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+        constexpr VkPipelineStageFlags submitStageMask{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
         VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
         submitInfo.waitSemaphoreCount = 1;
