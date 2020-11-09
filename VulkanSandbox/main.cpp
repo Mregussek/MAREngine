@@ -97,18 +97,45 @@ VkDebugReportCallbackEXT registerDebugCallback(VkInstance instance) {
     return callback;
 }
 
+bool supportPresentation(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
+    if constexpr (VK_USE_PLATFORM_WIN32_KHR) {
+        return vkGetPhysicalDeviceWin32PresentationSupportKHR(physicalDevice, familyIndex);
+    }
+    else {
+        return false;
+    }
+}
+
+uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) {
+    std::array<VkQueueFamilyProperties, 64> queues;
+    uint32_t queuesCount{ queues.size() };
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, queues.data());
+
+    for (uint32_t i = 0; i < queuesCount; i++) {
+        if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) { return i; }
+    }
+
+    return VK_QUEUE_FAMILY_IGNORED;
+}
+
 VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
     std::array<VkPhysicalDevice, 16> physicalDevices;
     uint32_t physicalDeviceCount{ physicalDevices.size() };
     VK_CHECK( vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data()) );
 
-    return [&physicalDevices]() {
+    auto pickPhysicalDevice = [&physicalDevices]()->VkPhysicalDevice {
         const auto it = std::find_if(physicalDevices.cbegin(), physicalDevices.cend(), [](const VkPhysicalDevice physicalDevice) {
             VkPhysicalDeviceProperties properties;
             vkGetPhysicalDeviceProperties(physicalDevice, &properties);
+            const auto familyIndex = getGraphicsQueueFamily(physicalDevice);
+
+            if (familyIndex == VK_QUEUE_FAMILY_IGNORED) { return false; }
+            if (!supportPresentation(physicalDevice, familyIndex)) { return false; };
+
             return properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
         });
 
+        
         if (it != physicalDevices.end()) {
             VkPhysicalDeviceProperties properties;
             vkGetPhysicalDeviceProperties(*it, &properties);
@@ -124,19 +151,9 @@ VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
 
         std::cout << "No physical devices available!\n";
         return VkPhysicalDevice{ VK_NULL_HANDLE };
-    }(); 
-}
+    };
 
-uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) {
-    std::array<VkQueueFamilyProperties, 64> queues;
-    uint32_t queuesCount{ queues.size() };
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, queues.data());
-
-    for (uint32_t i = 0; i < queuesCount; i++) {
-        if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) { return i; }
-    }
-
-    return VK_QUEUE_FAMILY_IGNORED;
+    return pickPhysicalDevice();
 }
 
 VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
