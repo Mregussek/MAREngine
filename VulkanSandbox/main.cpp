@@ -2,8 +2,6 @@
 #include "VulkanInclude.h"
 #include "src/Window.h"
 
-// 1:55:16
-
 /*
 There is no need to include all those files in MAREngine!
 
