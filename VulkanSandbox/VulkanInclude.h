@@ -1,16 +1,19 @@
 
 
 
-#include "vulkan/vulkan.h"
+#include "vulkan/vulkan.h" 
 
+#ifndef NOMINAX
+#define NOMINAX
+#endif
+
+#undef max
+#undef min
 
 #include <iostream>
+#include <vector>
 #include <array>
 #include <algorithm>
-
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 
 #if __has_include(<GL/glew.h>)
 #ifndef GLEW_STATIC

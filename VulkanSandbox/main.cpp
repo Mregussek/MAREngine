@@ -2,6 +2,7 @@
 #include "VulkanInclude.h"
 #include "src/Window.h"
 
+// 1:55:16
 
 /*
 There is no need to include all those files in MAREngine!
@@ -27,12 +28,23 @@ VkInstance createVulkanInstance() {
     };
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
+#if defined(_DEBUG)
+    constexpr std::array<const char*, 3> extensions = {
+        VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
+        VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
+#else 
     constexpr std::array<const char*, 2> extensions = {
         VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
+#endif
+#else
+#if defined(_DEBUG)
+    constexpr std::array<const char*, 2> extensions = {
+        VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
 #else
     constexpr std::array<const char*, 1> extensions = {
 #endif
-        VK_KHR_SURFACE_EXTENSION_NAME
+#endif
+        VK_KHR_SURFACE_EXTENSION_NAME,
     };
 
     VkInstanceCreateInfo createInfo{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
@@ -47,6 +59,42 @@ VkInstance createVulkanInstance() {
     VK_CHECK( vkCreateInstance(&createInfo, nullptr, &instance) );
 
     return instance;
+}
+
+VkDebugReportCallbackEXT registerDebugCallback(VkInstance instance) {
+    auto callbackFunction = [](VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object, size_t location, 
+                                int32_t messageCode, const char* pLayerPrefix, const char* pMessage, void* pUserData) ->VkBool32
+    {
+        const auto error = flags & VK_DEBUG_REPORT_ERROR_BIT_EXT;
+        const auto warning = flags & VK_DEBUG_REPORT_WARNING_BIT_EXT;
+        const auto perfomanceWarning = flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT;
+
+        if (error) {
+            printf("%s : %s\n", "ERROR", pMessage);
+            //__debugbreak();
+        }
+        else if (warning) {
+            //printf("%s : %s\n", "WARNING", pMessage);
+            //__debugbreak();
+        }
+        else if (perfomanceWarning) {
+            //printf("%s : %s\n", "PERFOMANCE_WARNING", pMessage);
+            //__debugbreak();
+        }
+
+        return VK_FALSE;
+    };
+
+    VkDebugReportCallbackCreateInfoEXT createInfo{ VK_STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT };
+    createInfo.flags = VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_ERROR_BIT_EXT;
+    createInfo.pfnCallback = callbackFunction;
+    
+    PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT");
+
+    VkDebugReportCallbackEXT callback{ 0 };
+    VK_CHECK( vkCreateDebugReportCallbackEXT(instance, &createInfo, nullptr, &callback) );
+
+    return callback;
 }
 
 VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
@@ -77,6 +125,18 @@ VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
         std::cout << "No physical devices available!\n";
         return VkPhysicalDevice{ VK_NULL_HANDLE };
     }(); 
+}
+
+uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) {
+    std::array<VkQueueFamilyProperties, 64> queues;
+    uint32_t queuesCount{ queues.size() };
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, queues.data());
+
+    for (uint32_t i = 0; i < queuesCount; i++) {
+        if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) { return i; }
+    }
+
+    return 0;
 }
 
 VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
@@ -118,18 +178,50 @@ VkSurfaceKHR createSurface(VkInstance instance, GLFWwindow* window) {
 }
 
 VkFormat getSwapchainFormat(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface) {
-    std::array<VkSurfaceFormatKHR, 16> formats;
-    uint32_t formatCount = formats.size();
+    std::vector<VkSurfaceFormatKHR> formats(64);
+    uint32_t formatCount{ formats.size() };
     VK_CHECK( vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, formats.data()) );
+
+    formats.resize(formatCount);
+
+    if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED) { return VK_FORMAT_R8G8B8A8_UNORM; }
+
+    /*
+    const auto it = std::find_if(formats.cbegin(), formats.cend(), [](const VkSurfaceFormatKHR surfaceFormat) {
+        return surfaceFormat.format == VK_FORMAT_A2R10G10B10_UNORM_PACK32 || surfaceFormat.format == VK_FORMAT_A2B10G10R10_UNORM_PACK32;
+    });
+
+    if (it != formats.cend()) { return (*it).format; }
+    */
+    {
+        const auto it = std::find_if(formats.cbegin(), formats.cend(), [](const VkSurfaceFormatKHR surfaceFormat) {
+            return surfaceFormat.format == VK_FORMAT_R8G8B8A8_UNORM || surfaceFormat.format == VK_FORMAT_B8G8R8A8_UNORM;
+        });
+
+        if (it != formats.cend()) { return (*it).format; }
+    }
 
     return formats[0].format;
 }
 
-VkSwapchainKHR createSwapchain(VkDevice device, VkSurfaceKHR surface, VkFormat format, int32_t width, int32_t height, const uint32_t* familyIndex) {
+VkSwapchainKHR createSwapchain(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkFormat format, int32_t width, int32_t height, const uint32_t* familyIndex) {
+
+    VkCompositeAlphaFlagBitsKHR surfaceComposite = [&surfaceCaps]() {
+        if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) { 
+            return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR };
+        }
+        else if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR) {
+            return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR };
+        }
+        else if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR) {
+            return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR };
+        }
+        else { return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR }; }
+    }();
 
     VkSwapchainCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR };
     createInfo.surface = surface;
-    createInfo.minImageCount = 2;
+    createInfo.minImageCount = std::max(2u, surfaceCaps.minImageCount);
     createInfo.imageFormat = format;
     createInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
     createInfo.imageExtent.width = width;
@@ -140,7 +232,7 @@ VkSwapchainKHR createSwapchain(VkDevice device, VkSurfaceKHR surface, VkFormat f
     createInfo.pQueueFamilyIndices = familyIndex;
     createInfo.presentMode = VK_PRESENT_MODE_FIFO_KHR;
     createInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-    createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    createInfo.compositeAlpha = surfaceComposite;
 
     VkSwapchainKHR swapchain{ 0 };
 
@@ -343,13 +435,21 @@ int main(void) {
     Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
 
-    uint32_t familyIndex{ 0 }; // this may produce validation error
     const auto instance = createVulkanInstance();
+    const auto debugCallback = registerDebugCallback(instance);
     const auto physicalDevice = createPhysicalDevice(instance);
+    const auto familyIndex{ getGraphicsQueueFamily(physicalDevice) };
     const auto device = createDevice(physicalDevice, familyIndex);
     const auto surface = createSurface(instance, window.getWindow());
+
+    VkBool32 presentSupported{ 0 };
+    VK_CHECK( vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, familyIndex, surface, &presentSupported) );
+
+    VkSurfaceCapabilitiesKHR surfaceCaps{ 0 };
+    VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &surfaceCaps) );
+
     const auto swapchainFormat = getSwapchainFormat(physicalDevice, surface);
-    const auto swapchain = createSwapchain(device, surface, swapchainFormat, window.getWidth(), window.getHeight(), &familyIndex);
+    const auto swapchain = createSwapchain(device, surface, surfaceCaps, swapchainFormat, window.getWidth(), window.getHeight(), &familyIndex);
     const auto releaseSemaphore = createSemaphore(device);
     const auto acquireSemaphore = createSemaphore(device);
     const auto renderPass = createRenderPass(device, swapchainFormat);
@@ -370,12 +470,12 @@ int main(void) {
     VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &swapchainImageCount, swapchainImages.data()) );
 
     std::array<VkImageView, swapchainSize> swapchainImageViews;
-    for (size_t i = 0; i < swapchainImageCount; i++) {
+    for (uint32_t i = 0; i < swapchainImageCount; i++) {
         swapchainImageViews[i] = createImageView(device, swapchainImages[i], swapchainFormat);
     }
 
     std::array<VkFramebuffer, swapchainSize> swapchainFramebuffers;
-    for (size_t i = 0; i < swapchainImageCount; i++) {
+    for (uint32_t i = 0; i < swapchainImageCount; i++) {
         swapchainFramebuffers[i] = createFramebuffer(device, renderPass, swapchainImageViews[i], window.getWidth(), window.getHeight());
     }
 
@@ -405,7 +505,7 @@ int main(void) {
         vkCmdBeginRenderPass(commandBuffer, &passBeginInfo, VK_SUBPASS_CONTENTS_INLINE); // draw calls are below
 
         VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
-        VkRect2D scissor{ {0, 0 }, { window.getWidth(), window.getHeight() } };
+        VkRect2D scissor{ {0, 0 }, { (int32_t)window.getWidth(), (int32_t)window.getHeight() } };
 
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
