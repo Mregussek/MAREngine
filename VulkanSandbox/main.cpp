@@ -464,17 +464,18 @@ int main(void) {
     VkQueue queue{ 0 };
     vkGetDeviceQueue(device, familyIndex, 0, &queue);
 
-    constexpr size_t swapchainSize = 16;
-    std::array<VkImage, swapchainSize> swapchainImages;    // it should be dynamically allocated?
-    uint32_t swapchainImageCount = swapchainImages.size();
+    uint32_t swapchainImageCount{ 0 };
+    VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &swapchainImageCount, nullptr) );
+
+    std::vector<VkImage> swapchainImages(swapchainImageCount);
     VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &swapchainImageCount, swapchainImages.data()) );
 
-    std::array<VkImageView, swapchainSize> swapchainImageViews;
+    std::vector<VkImageView> swapchainImageViews(swapchainImageCount);
     for (uint32_t i = 0; i < swapchainImageCount; i++) {
         swapchainImageViews[i] = createImageView(device, swapchainImages[i], swapchainFormat);
     }
 
-    std::array<VkFramebuffer, swapchainSize> swapchainFramebuffers;
+    std::vector<VkFramebuffer> swapchainFramebuffers(swapchainImageCount);
     for (uint32_t i = 0; i < swapchainImageCount; i++) {
         swapchainFramebuffers[i] = createFramebuffer(device, renderPass, swapchainImageViews[i], window.getWidth(), window.getHeight());
     }

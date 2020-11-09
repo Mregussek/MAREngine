@@ -16,13 +16,13 @@
 #include <algorithm>
 
 #if __has_include(<GL/glew.h>)
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-#include <GL/glew.h> 
-#define MAR_ENGINE_GLEW_LIB_IMPORTED
+	#ifndef GLEW_STATIC
+		#define GLEW_STATIC
+	#endif
+	#include <GL/glew.h> 
+	#define MAR_ENGINE_GLEW_LIB_IMPORTED
 #else
-#error "MAR ENGINE: Cannot import GL/glew.h!"
+	#error "MAR ENGINE: Cannot import GL/glew.h!"
 #endif
 
 #if __has_include(<GLFW/glfw3.h>)
