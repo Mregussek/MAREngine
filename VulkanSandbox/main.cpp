@@ -74,11 +74,11 @@ VkDebugReportCallbackEXT registerDebugCallback(VkInstance instance) {
             //__debugbreak();
         }
         else if (warning) {
-            //printf("%s : %s\n", "WARNING", pMessage);
+            printf("%s : %s\n", "WARNING", pMessage);
             //__debugbreak();
         }
         else if (perfomanceWarning) {
-            //printf("%s : %s\n", "PERFOMANCE_WARNING", pMessage);
+            printf("%s : %s\n", "PERFOMANCE_WARNING", pMessage);
             //__debugbreak();
         }
 
@@ -136,7 +136,7 @@ uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) {
         if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) { return i; }
     }
 
-    return 0;
+    return VK_QUEUE_FAMILY_IGNORED;
 }
 
 VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
@@ -334,7 +334,7 @@ VkCommandBuffer createCommandBuffer(VkDevice device, VkCommandPool commandPool) 
 
     VK_CHECK(vkAllocateCommandBuffers(device, &allocateInfo, &commandBuffer));
 
-    return commandBuffer;
+return commandBuffer;
 }
 
 VkShaderModule loadShader(VkDevice device, const char* path) {
@@ -351,8 +351,8 @@ VkShaderModule loadShader(VkDevice device, const char* path) {
     createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer);
 
     VkShaderModule shaderModule{ 0 };
-    VK_CHECK( vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) );
-    
+    VK_CHECK(vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule));
+
     delete[] buffer;
 
     return shaderModule;
@@ -362,7 +362,7 @@ VkPipelineLayout createPipelineLayout(VkDevice device) {
     VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
     VkPipelineLayout layout{ 0 };
 
-    VK_CHECK( vkCreatePipelineLayout(device, &createInfo, nullptr, &layout) );
+    VK_CHECK(vkCreatePipelineLayout(device, &createInfo, nullptr, &layout));
 
     return layout;
 }
@@ -426,9 +426,25 @@ VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPi
 
     VkPipeline pipeline{ 0 };
 
-    VK_CHECK( vkCreateGraphicsPipelines(device, pipelineCache, 1, &createInfo, nullptr, &pipeline) );
+    VK_CHECK(vkCreateGraphicsPipelines(device, pipelineCache, 1, &createInfo, nullptr, &pipeline));
 
     return pipeline;
+}
+
+VkImageMemoryBarrier pipelineBarrierImage(VkImage image, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkImageLayout oldLayout, VkImageLayout newLayout)  {
+    VkImageMemoryBarrier result{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
+    result.srcAccessMask = srcAccessMask;
+    result.dstAccessMask = dstAccessMask;
+    result.oldLayout = oldLayout;
+    result.newLayout = newLayout;
+    result.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    result.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    result.image = image;
+    result.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    result.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;       // those flags may not be supported on android!
+    result.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
+
+    return result;
 }
 
 int main(void) {
@@ -491,6 +507,12 @@ int main(void) {
         beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
         VK_CHECK( vkBeginCommandBuffer(commandBuffer, &beginInfo) );
+        
+        const auto renderBeginBarrier{ pipelineBarrierImage(swapchainImages[imageIndex], 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+            VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL) };
+
+        vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+            VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 1, &renderBeginBarrier);
 
         constexpr VkClearColorValue clearColor{ 48.f / 255.f, 10.f / 255.f, 36.f / 255.f ,1 };
         constexpr VkClearValue clearValue{ clearColor };
@@ -515,6 +537,12 @@ int main(void) {
         vkCmdDraw(commandBuffer, 3, 1, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);
+
+        const auto renderEndBarrier{ pipelineBarrierImage(swapchainImages[imageIndex], VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0,
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR) };
+
+        vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+            VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 1, &renderEndBarrier);
 
         VK_CHECK( vkEndCommandBuffer(commandBuffer) );
 
@@ -544,6 +572,43 @@ int main(void) {
 
         window.pollEvents();
     }
+
+    VK_CHECK(vkDeviceWaitIdle(device));
+
+    std::for_each(swapchainImageViews.cbegin(), swapchainImageViews.cend(), [&device](const VkImageView imageView) {
+        vkDestroyImageView(device, imageView, nullptr);
+    });
+
+    std::for_each(swapchainFramebuffers.cbegin(), swapchainFramebuffers.cend(), [&device](const VkFramebuffer framebuffer) {
+        vkDestroyFramebuffer(device, framebuffer, nullptr);
+    });
+
+    vkDestroyPipeline(device, trianglePipeline, nullptr);
+
+    vkDestroyPipelineLayout(device, triangleLayout, nullptr);
+
+    vkDestroyPipelineCache(device, pipelineCache, nullptr);
+
+    vkDestroyShaderModule(device, triangleVertShader, nullptr);
+    vkDestroyShaderModule(device, triangleFragShader, nullptr);
+
+    vkDestroyCommandPool(device, commandPool, nullptr);
+
+    vkDestroyRenderPass(device, renderPass, nullptr);
+
+    vkDestroySemaphore(device, releaseSemaphore, nullptr);
+    vkDestroySemaphore(device, acquireSemaphore, nullptr);
+
+    vkDestroySwapchainKHR(device, swapchain, nullptr);
+
+    vkDestroySurfaceKHR(instance, surface, nullptr);
+
+    vkDestroyDevice(device, nullptr);
+
+    PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT");
+    vkDestroyDebugReportCallbackEXT(instance, debugCallback, nullptr);
+
+    vkDestroyInstance(instance, nullptr);
 
     window.terminate();
 
