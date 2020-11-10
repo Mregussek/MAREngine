@@ -126,6 +126,7 @@ namespace mar::graphics {
 		
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 
+		/*
 		std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = m_shader](const TexturePair& texture) {
 			const uint32_t textureID = TextureGL::Instance()->loadCubemap(texture.second);
 			const uint32_t sampler = (uint32_t)texture.first;
@@ -135,6 +136,7 @@ namespace mar::graphics {
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
+		*/
 	}
 
 	void RendererBatch::passLightToShader(const RenderContainer& container) const {

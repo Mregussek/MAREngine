@@ -148,7 +148,7 @@ namespace mar::platforms {
 
 		std::for_each(u_SamplersColor.begin(), u_SamplersColor.end(), pushUniformToMap);
 		std::for_each(u_Samplers2D.begin(), u_Samplers2D.end(), pushUniformToMap);
-		std::for_each(u_SamplersCube.begin(), u_SamplersCube.end(), pushUniformToMap);
+		//std::for_each(u_SamplersCube.begin(), u_SamplersCube.end(), pushUniformToMap);
 		std::for_each(u_material.begin(), u_material.end(), pushMaterialToMap);
 
 		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
