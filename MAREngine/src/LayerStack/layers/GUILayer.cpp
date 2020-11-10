@@ -42,7 +42,7 @@ namespace mar::layers {
 
 		m_camera.initialize(m_gui->getViewportWidth() / m_gui->getViewportHeight());
 
-		m_gui->initialize("#version 330");		
+		m_gui->initialize("#version 450");		
 
 		m_guiGraphics.initialize();
 

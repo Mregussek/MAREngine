@@ -53,9 +53,9 @@ namespace mar::platforms {
 		localBuffer = stbi_load(path, &width, &height, &bitPerPixel, 0);
 
 		if (localBuffer) {
-			uint32_t id;
-			GLenum internalFormat = 0;
-			GLenum dataFormat = 0;
+			uint32_t id{ 0 };
+			GLenum internalFormat{ 0 };
+			GLenum dataFormat{ 0 };
 
 			if (bitPerPixel == 4) {
 				internalFormat = GL_RGBA8;
@@ -66,11 +66,7 @@ namespace mar::platforms {
 				dataFormat = GL_RGB;
 			}
 			else {
-				PLATFORM_ERROR(
-					"TEXTURE_OPENGL: Format from texture is not supported!"
-					"bitPerPixel: {0:d}",  bitPerPixel
-				);
-
+				PLATFORM_ERROR("TEXTURE_OPENGL: Format from texture is not supported! bitPerPixel: {0:d}",  bitPerPixel);
 				return 0;
 			}
 

@@ -1,5 +1,5 @@
 #shader vertex
-#version 330
+#version 450
 
 in vec4 position;
 in vec3 lightNormal;
@@ -16,7 +16,7 @@ void main() {
 }
 
 #shader fragment
-#version 330
+#version 450
 
 out vec4 out_Color;
 

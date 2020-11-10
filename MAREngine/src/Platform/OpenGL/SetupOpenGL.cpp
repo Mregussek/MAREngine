@@ -25,18 +25,17 @@ namespace mar::platforms {
 
 
 	bool SetupOpenGL::init() {
-		glewExperimental = GL_TRUE;
+		const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-		PLATFORM_GL_FUNC(const GLenum glew_init = glewInit());
-
-		if (glew_init != GLEW_OK) {
+		if (!isGLAD_OK) {
+			MAR_CORE_ERROR("SETUO_OPENGL: gladLoadGLLoader failed!");
 			return false;
 		}
 
-		PLATFORM_GL_FUNC(glEnable(GL_DEPTH_TEST)); // Enable DEPTH, in other words 3D
-		PLATFORM_GL_FUNC(glEnable(GL_STENCIL_TEST)); // Enable STENCIL, outliner
-		PLATFORM_GL_FUNC(glEnable(GL_BLEND)); // Enable loading PNG files and transparency
-		PLATFORM_GL_FUNC(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) ); // Enable DEPTH, in other words 3D
+		PLATFORM_GL_FUNC( glEnable(GL_STENCIL_TEST) ); // Enable STENCIL, outliner
+		PLATFORM_GL_FUNC( glEnable(GL_BLEND) ); // Enable loading PNG files and transparency
+		PLATFORM_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
 		return true;
 	}

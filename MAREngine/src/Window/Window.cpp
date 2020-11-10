@@ -42,15 +42,15 @@ namespace mar::window {
 		}
 
 		WINDOW_INFO("WINDOW: initialized window!");
-
+	
 		const bool isOpenGL_OK = platforms::SetupOpenGL::init();
 		if (!isOpenGL_OK) {
-			WINDOW_ERROR("WINDOW: Cannot initialize OpenGL!");
+			MAR_CORE_ERROR("MARENGINE: Cannot initialize OpenGL!");
 			const char c = getchar();
 			exit(0);
 		}
 
-		WINDOW_INFO("WINDOW: initialized OpenGL!");
+		MAR_CORE_INFO("WINDOW: initialized OpenGL!");
 	}
 
 	void Window::terminate() {

@@ -23,7 +23,6 @@
 #include "Core/scripting/PythonScript.h"
 #include "LayerStack/layers/EntityLayer.h"
 #include "LayerStack/layers/GUILayer.h"
-#include "Core/graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar::engine {
