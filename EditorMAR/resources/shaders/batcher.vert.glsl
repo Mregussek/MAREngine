@@ -1,17 +1,17 @@
 
 #version 450
 
-in vec4 position;
-in vec3 lightNormal;
-in vec2 texCoord;
-in float shapeIndex;
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec3 lightNormal;
+layout(location = 2) in vec2 texCoord;
+layout(location = 3) in float shapeIndex;
 
-out vec3 v_Position;
-out vec3 v_lightNormal;
-out float v_shapeIndex;
-out vec2 v_texCoords2D;
-out vec3 v_texCoords3D;
-out float v_samplerType;
+layout(location = 1) out vec3 v_lightNormal;
+layout(location = 2) out vec2 v_texCoords2D;
+layout(location = 3) out float v_shapeIndex;
+layout(location = 4) out vec3 v_Position;
+layout(location = 5) out vec3 v_texCoords3D;
+layout(location = 6) out float v_samplerType;
 
 uniform mat4 u_Model;
 uniform mat4 u_MVP;

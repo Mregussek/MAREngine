@@ -1,14 +1,14 @@
 
 #version 450
 
-in vec3 v_Position;
-in vec3 v_lightNormal;
-in float v_shapeIndex;
-in vec2 v_texCoords2D;
-in vec3 v_texCoords3D;
-in float v_samplerType;
+layout(location = 1) in vec3 v_lightNormal;
+layout(location = 2) in vec2 v_texCoords2D;
+layout(location = 3) in float v_shapeIndex;
+layout(location = 4) in vec3 v_Position;
+layout(location = 5) in vec3 v_texCoords3D;
+layout(location = 6) in float v_samplerType;
 
-out vec4 outColor;
+layout(location = 0) out vec4 outColor;
 
 uniform struct Material {
 	vec3 lightPos;

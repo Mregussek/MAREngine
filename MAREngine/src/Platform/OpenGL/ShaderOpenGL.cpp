@@ -196,11 +196,6 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, vs) );
 		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, fs) );
 
-		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 0, "position") );
-		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 1, "lightNormal") );
-		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 2, "texCoord") );
-		PLATFORM_GL_FUNC( glBindAttribLocation(shaderProgramId, 3, "shapeIndex") );
-
 		PLATFORM_GL_FUNC( glLinkProgram(shaderProgramId) );
 		PLATFORM_GL_FUNC( glValidateProgram(shaderProgramId) );
 
