@@ -29,5 +29,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
+    <None Include="resources\shaders\batcher.vert.glsl" />
+    <None Include="resources\shaders\batcher.frag.glsl" />
+    <None Include="resources\shaders\lineloops.vert.glsl" />
+    <None Include="resources\shaders\lineloops.frag.glsl" />
   </ItemGroup>
 </Project>

@@ -29,18 +29,26 @@
 namespace mar::platforms {
 
 
-	struct ShaderProgramSource {
-		std::string vertexSource;
-		std::string fragmentSource;
-	};
+	struct ShaderPaths {
+		ShaderPaths() = default;
 
+		ShaderPaths(const char* vert, const char* frag, const char* geo) :
+			vertexPath(vert),
+			fragmentPath(frag),
+			geometryPath(geo)
+		{}
+
+		const char* vertexPath{ nullptr };
+		const char* fragmentPath{ nullptr };
+		const char* geometryPath{ nullptr };
+	};
 
 	class ShaderOpenGL {
 	public:
 
 		ShaderOpenGL() = default;
 
-		void initialize(std::string shader = "resources/shaders/batcher.shader.glsl");
+		void initialize(ShaderPaths shaderPaths);
 		void shutdown() const;
 
 		void bind() const;
@@ -63,14 +71,12 @@ namespace mar::platforms {
 
 		void setupShaderUniforms();
 
-		ShaderProgramSource parseShader() const;
+		void loadShader(std::string& buffer, const char* path) const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
-		uint32_t createShader() const;
+		uint32_t createShader(const std::string& vertSrc, const std::string& fragSrc) const;
 
-
-		ShaderProgramSource m_programSource;
+		ShaderPaths m_shaderPaths;
 		std::unordered_map<const char*, int32_t> m_uniformLocation;
-		std::string m_shaderPath{ "" };
 		uint32_t m_id{ 0 };
 		bool m_initialized{ false };
 

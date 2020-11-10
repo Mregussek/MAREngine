@@ -35,8 +35,12 @@ namespace mar::editor {
 
 
 	void GUI_Graphics::initialize() {
+		const char* vert = "resources/shaders/lineloops.vert.glsl";
+		const char* frag = "resources/shaders/lineloops.frag.glsl";
+		const auto shaderPaths = platforms::ShaderPaths(vert, frag, nullptr);
+
 		m_pipeline.initialize(settings::maxVerticesCount, settings::maxIndicesCount);
-		m_shader.initialize("resources/shaders/lineloops.shader.glsl");
+		m_shader.initialize(shaderPaths);
 	}
 
 	void GUI_Graphics::close() { 

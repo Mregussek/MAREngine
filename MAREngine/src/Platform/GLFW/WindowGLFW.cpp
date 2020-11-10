@@ -27,7 +27,7 @@ namespace mar::platforms {
 	bool WindowGLFW::initialize(int32_t height, int32_t width, const char* name) {
 		glfwSetErrorCallback(callbacks::windowErrorCallback);
 
-		int32_t glfw_init = glfwInit();
+		const int32_t glfw_init = glfwInit();
 
 		if (glfw_init != GLFW_TRUE) {
 			PLATFORM_ERROR("WINDOW_GLFW: glfwInit() failure!");
