@@ -590,7 +590,7 @@ int main(void) {
     VkSurfaceCapabilitiesKHR surfaceCaps{ 0 };
     VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &surfaceCaps) );
 
-    const VkExtent2D windowSize{ window.getWidth() , window.getHeight() };
+    const VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
     const VkPresentModeKHR presentMode{ getPresentMode(physicalDevice, surface) };
 
     const VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
@@ -619,7 +619,7 @@ int main(void) {
 
     while (window.shouldClose()) {
         uint32_t imageIndex{ 0 };
-        VK_CHECK( vkAcquireNextImageKHR(device, swapchain, ~0ull, acquireSemaphore, VK_NULL_HANDLE, &imageIndex) );
+        VK_CHECK( vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, acquireSemaphore, VK_NULL_HANDLE, &imageIndex) );
 
         VK_CHECK( vkResetCommandPool(device, commandPool, 0) );
 
@@ -640,8 +640,7 @@ int main(void) {
         VkRenderPassBeginInfo passBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
         passBeginInfo.renderPass = renderPass;
         passBeginInfo.framebuffer = swapchainFramebuffers[imageIndex];
-        passBeginInfo.renderArea.extent.width = window.getWidth();
-        passBeginInfo.renderArea.extent.height = window.getHeight();
+        passBeginInfo.renderArea.extent = windowSize;
         passBeginInfo.clearValueCount = 1;
         passBeginInfo.pClearValues = &clearValue;
 
