@@ -7,7 +7,7 @@
 
 
 static void error_callback(int error, const char* description) {
-	fprintf(stderr, "Error: %s\n", description);
+	fprintf(stderr, "GLFW Error: %s\n", description);
 }
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -28,8 +28,8 @@ public:
 
 		if (!glfwInit()) { exit(EXIT_FAILURE); }
 
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 		m_window = glfwCreateWindow(m_width, m_height, m_name, nullptr, nullptr);
 		if (!m_window) {
@@ -38,14 +38,14 @@ public:
 		}
 
 		glfwSetKeyCallback(m_window, key_callback);
-		glfwMakeContextCurrent(m_window);
+		//glfwMakeContextCurrent(m_window); // No OpenGLContext!!! We use Vulkan
 
-		glfwSwapInterval(1);
+		//glfwSwapInterval(1); // No OpenGLContext!!! We use Vulkan
 	}
 
 	void pollEvents() {
 		glfwGetFramebufferSize(m_window, &m_width, &m_height);
-		glfwSwapBuffers(m_window);
+		//glfwSwapBuffers(m_window);  // No OpenGLContext!!! We use Vulkan
 		glfwPollEvents();
 	}
 

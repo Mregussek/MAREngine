@@ -2,14 +2,6 @@
 #include "VulkanInclude.h"
 #include "src/Window.h"
 
-/*
-There is no need to include all those files in MAREngine!
-
-remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
-remote: warning: See http://git.io/iEPt8g for more information.
-remote: warning: File VulkanSandbox/3rd_party/Vulkan/Lib32/SPIRV-Tools-opt.lib is 81.30 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-remote: warning: File VulkanSandbox/3rd_party/Vulkan/Lib32/shaderc_combined.lib is 56.33 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
-*/
 
 #define VK_CHECK(call) \
     do { \
@@ -17,43 +9,89 @@ remote: warning: File VulkanSandbox/3rd_party/Vulkan/Lib32/shaderc_combined.lib 
     } while(0)
 
 
+
+uint32_t getVulkanApiVersion() {
+    uint32_t apiVersion{ 0 };
+    VK_CHECK(vkEnumerateInstanceVersion(&apiVersion));
+
+    std::cout << "Supported version: " << VK_VERSION_MAJOR(apiVersion) << "." << VK_VERSION_MINOR(apiVersion) <<
+        "." << VK_VERSION_PATCH(apiVersion) << "\n";
+
+    return apiVersion;
+}
+
+bool pushExtensionIfAvailable(std::vector<const char*>& extensionsToEnable, std::vector<VkExtensionProperties>& allExtensions, const char* extensionProperty) {
+    const auto availableExtension = [&extensionProperty](const VkExtensionProperties extension) {
+        return std::strcmp(extension.extensionName, extensionProperty) == 0;
+    };
+
+    if (std::find_if(allExtensions.cbegin(), allExtensions.cend(), availableExtension) != allExtensions.cend()) {
+        extensionsToEnable.emplace_back(extensionProperty);
+        return true;
+    }
+
+    return false;
+}
+
+void fillNeededInstanceExtensions(std::vector<const char*>& extensionToEnable) {
+    uint32_t extensionCount{ 0 };
+    VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr));
+
+    std::vector<VkExtensionProperties> extensionProperties(extensionCount);
+    VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensionProperties.data()));
+
+    const bool isAvailableKHRWin32Surface = pushExtensionIfAvailable(extensionToEnable, extensionProperties, VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
+    const bool isAvailableDebugReport = pushExtensionIfAvailable(extensionToEnable, extensionProperties, VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+    const bool isAvailableKHRSurface = pushExtensionIfAvailable(extensionToEnable, extensionProperties, VK_KHR_SURFACE_EXTENSION_NAME);
+}
+
+void fillNeededLayers(std::vector<const char*>& layersToEnable) {
+    uint32_t layerCount{ 0 };
+    VK_CHECK( vkEnumerateInstanceLayerProperties(&layerCount, nullptr) );
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    VK_CHECK( vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) );
+
+    const auto pushLayerIfAvailable = [&layersToEnable, &availableLayers](const char* layerProperty)->bool {
+        const auto availableProperty = [&layerProperty](const VkLayerProperties property) {
+            return std::strcmp(property.layerName, layerProperty) == 0;
+        };
+
+        if (std::find_if(availableLayers.begin(), availableLayers.end(), availableProperty) != availableLayers.end()) {
+            layersToEnable.emplace_back(layerProperty);
+            return true;
+        }
+
+        return false;
+    };
+    
+    const bool isAvailableKHRONOSValidation = pushLayerIfAvailable("VK_LAYER_KHRONOS_validation");
+}
+
 VkInstance createVulkanInstance() {
-    VkApplicationInfo appInfo{ VK_STRUCTURE_TYPE_APPLICATION_INFO }; // check if 1.2 is available via vkEnumerateInstanceVersion
-    appInfo.apiVersion = VK_API_VERSION_1_2;
+    const auto apiVersion = getVulkanApiVersion();
 
-    constexpr std::array<const char*, 1> debugLayers{
-        "VK_LAYER_KHRONOS_validation"
-    };
+    std::vector<const char*> layersToEnable;
+    fillNeededLayers(layersToEnable);
 
-#if defined(VK_USE_PLATFORM_WIN32_KHR)
-#if defined(_DEBUG)
-    constexpr std::array<const char*, 3> extensions = {
-        VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
-        VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
-#else 
-    constexpr std::array<const char*, 2> extensions = {
-        VK_KHR_WIN32_SURFACE_EXTENSION_NAME,
-#endif
-#else
-#if defined(_DEBUG)
-    constexpr std::array<const char*, 2> extensions = {
-        VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
-#else
-    constexpr std::array<const char*, 1> extensions = {
-#endif
-#endif
-        VK_KHR_SURFACE_EXTENSION_NAME,
-    };
+    std::vector<const char*> extensionToEnable;
+    fillNeededInstanceExtensions(extensionToEnable);
+
+    VkApplicationInfo appInfo{ VK_STRUCTURE_TYPE_APPLICATION_INFO };
+    appInfo.apiVersion = apiVersion;
+    appInfo.pApplicationName = "Hello, Vulkan!";
+    appInfo.applicationVersion = VK_MAKE_VERSION(0, 0, 1);
+    appInfo.pEngineName = "MAREngine";
+    appInfo.engineVersion = VK_MAKE_VERSION(0, 0, 1);
 
     VkInstanceCreateInfo createInfo{ VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO };
     createInfo.pApplicationInfo = &appInfo;
-    createInfo.ppEnabledLayerNames = debugLayers.data();
-    createInfo.enabledLayerCount = debugLayers.size();
-    createInfo.ppEnabledExtensionNames = extensions.data();
-    createInfo.enabledExtensionCount = extensions.size();
+    createInfo.ppEnabledLayerNames = layersToEnable.data();
+    createInfo.enabledLayerCount = (uint32_t)layersToEnable.size();
+    createInfo.ppEnabledExtensionNames = extensionToEnable.data();
+    createInfo.enabledExtensionCount = (uint32_t)extensionToEnable.size();
 
     VkInstance instance{ 0 };
-
     VK_CHECK( vkCreateInstance(&createInfo, nullptr, &instance) );
 
     return instance;
@@ -87,7 +125,7 @@ VkDebugReportCallbackEXT registerDebugCallback(VkInstance instance) {
     createInfo.flags = VK_DEBUG_REPORT_WARNING_BIT_EXT | VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT | VK_DEBUG_REPORT_ERROR_BIT_EXT;
     createInfo.pfnCallback = callbackFunction;
     
-    PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT");
+    auto vkCreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugReportCallbackEXT");
 
     VkDebugReportCallbackEXT callback{ 0 };
     VK_CHECK( vkCreateDebugReportCallbackEXT(instance, &createInfo, nullptr, &callback) );
@@ -105,8 +143,10 @@ bool supportPresentation(VkPhysicalDevice physicalDevice, uint32_t familyIndex) 
 }
 
 uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) {
-    std::array<VkQueueFamilyProperties, 64> queues;
-    uint32_t queuesCount{ queues.size() };
+    uint32_t queuesCount{ 0 };
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queues(queuesCount);
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, queues.data());
 
     for (uint32_t i = 0; i < queuesCount; i++) {
@@ -116,24 +156,32 @@ uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) {
     return VK_QUEUE_FAMILY_IGNORED;
 }
 
-VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
-    std::array<VkPhysicalDevice, 16> physicalDevices;
-    uint32_t physicalDeviceCount{ physicalDevices.size() };
+VkPhysicalDevice selectPhysicalDevice(VkInstance instance) {
+    uint32_t physicalDeviceCount{ 0 };
+    VK_CHECK( vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr) );
+
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     VK_CHECK( vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data()) );
 
     auto pickPhysicalDevice = [&physicalDevices]()->VkPhysicalDevice {
-        const auto it = std::find_if(physicalDevices.cbegin(), physicalDevices.cend(), [](const VkPhysicalDevice physicalDevice) {
+        const auto isSuitable = [](const VkPhysicalDevice physicalDevice) {
             VkPhysicalDeviceProperties properties;
             vkGetPhysicalDeviceProperties(physicalDevice, &properties);
+            // properties.limits ---> VkPhysicalDeviceLimits (check this for some parameters)
+
+            //VkPhysicalDeviceFeatures deviceFeatures;  // features can be also checked
+            //vkGetPhysicalDeviceFeatures(physicalDevice, &deviceFeatures);
+
             const auto familyIndex = getGraphicsQueueFamily(physicalDevice);
 
             if (familyIndex == VK_QUEUE_FAMILY_IGNORED) { return false; }
             if (!supportPresentation(physicalDevice, familyIndex)) { return false; };
 
             return properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
-        });
+        };
 
-        
+        const auto it = std::find_if(physicalDevices.cbegin(), physicalDevices.cend(), isSuitable);
+
         if (it != physicalDevices.end()) {
             VkPhysicalDeviceProperties properties;
             vkGetPhysicalDeviceProperties(*it, &properties);
@@ -154,23 +202,32 @@ VkPhysicalDevice createPhysicalDevice(VkInstance instance) {
     return pickPhysicalDevice();
 }
 
-VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
-    constexpr std::array<const char*, 1> extensions{
-        VK_KHR_SWAPCHAIN_EXTENSION_NAME
-    };
+void fillDeviceNeededExtensions(VkPhysicalDevice physicalDevice, std::vector<const char*>& extensionsToEnable) {
+    uint32_t extensionCount{ 0 };
+    VK_CHECK( vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr) );
 
-    float queueProperties{ 1.f };
+    std::vector<VkExtensionProperties> extensionProperties(extensionCount);
+    VK_CHECK( vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, extensionProperties.data()));
+
+    const bool isAvailableSwapchain = pushExtensionIfAvailable(extensionsToEnable, extensionProperties, VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+}
+
+VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
+    float queuePriority{ 1.f };
 
     VkDeviceQueueCreateInfo queueInfo{ VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO };
     queueInfo.queueFamilyIndex = familyIndex;
     queueInfo.queueCount = 1;
-    queueInfo.pQueuePriorities = &queueProperties;
+    queueInfo.pQueuePriorities = &queuePriority;
+
+    std::vector<const char*> extensionsToEnable;
+    fillDeviceNeededExtensions(physicalDevice, extensionsToEnable);
 
     VkDeviceCreateInfo createInfo{ VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
     createInfo.queueCreateInfoCount = 1;
     createInfo.pQueueCreateInfos = &queueInfo;
-    createInfo.enabledExtensionCount = extensions.size();
-    createInfo.ppEnabledExtensionNames = extensions.data();
+    createInfo.enabledExtensionCount = extensionsToEnable.size();
+    createInfo.ppEnabledExtensionNames = extensionsToEnable.data();
 
     VkDevice device{ 0 };
     VK_CHECK( vkCreateDevice(physicalDevice, &createInfo, nullptr, &device) );
@@ -181,7 +238,7 @@ VkDevice createDevice(VkPhysicalDevice physicalDevice, uint32_t familyIndex) {
 VkSurfaceKHR createSurface(VkInstance instance, GLFWwindow* window) {
     if constexpr (VK_USE_PLATFORM_WIN32_KHR) {
         VkWin32SurfaceCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR };
-        createInfo.hinstance = GetModuleHandle(0);
+        createInfo.hinstance = GetModuleHandle(nullptr);
         createInfo.hwnd = glfwGetWin32Window(window);
         VkSurfaceKHR surface{ 0 };
         VK_CHECK( vkCreateWin32SurfaceKHR(instance, &createInfo, nullptr, &surface) );
@@ -468,7 +525,7 @@ int main(void) {
 
     const auto instance = createVulkanInstance();
     const auto debugCallback = registerDebugCallback(instance);
-    const auto physicalDevice = createPhysicalDevice(instance);
+    const auto physicalDevice = selectPhysicalDevice(instance);
     const auto familyIndex{ getGraphicsQueueFamily(physicalDevice) };
     const auto device = createDevice(physicalDevice, familyIndex);
     const auto surface = createSurface(instance, window.getWindow());
@@ -620,7 +677,7 @@ int main(void) {
 
     vkDestroyDevice(device, nullptr);
 
-    PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT");
+    auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugReportCallbackEXT");
     vkDestroyDebugReportCallbackEXT(instance, debugCallback, nullptr);
 
     vkDestroyInstance(instance, nullptr);
