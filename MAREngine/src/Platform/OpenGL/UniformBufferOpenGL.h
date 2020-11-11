@@ -24,29 +24,43 @@
 
 #include "../../mar.h"
 #include "../PlatformLogs.h"
+#include "ShaderUniforms.h"
 
 
 namespace mar::platforms {
 
 
 	class UniformBufferOpenGL {
+
+		friend class ShaderOpenGL;
+
+		typedef ShaderUniforms::UniformBlock UniformBlock;
+		typedef ShaderUniforms::UniformItem UniformItem;
+
 	public:
 
-		void initialize(const char* name, uint64_t memoryToAllocate);
+		void initialize(const UniformBlock& uo, std::vector<UniformItem>&& items);
 		void close();
 
 		void bind() const;
 		void unbind() const;
 
-		void bindToLayout(uint32_t bindingPoint) const;
+		template<typename T>
+		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
+			PLATFORM_GL_FUNC(glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()));
+		}
 
 		template<typename T>
-		void update(uint64_t offset, uint64_t memory, const std::vector<T>& data) const;
+		void update(uint32_t offset, uint32_t memory, const T* data) const {
+			PLATFORM_GL_FUNC(glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data));
+		}
+
 		void reset() const;
 
 	private:
 
-		const char* m_name{ "NullUniformBlock" };
+		UniformBlock m_uniformBlock{ "Null", 0, 0 };
+		std::vector<UniformItem> m_uniformItems;
 		uint32_t m_ubo{ 0 };
 
 	};

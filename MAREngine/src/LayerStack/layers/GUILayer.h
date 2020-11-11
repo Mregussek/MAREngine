@@ -54,7 +54,7 @@ namespace mar::layers {
 	private:
 
 		editor::GUI* m_gui{ nullptr };
-		editor::GUI_Graphics m_guiGraphics;
+		//editor::GUI_Graphics m_guiGraphics;
 		editor::Camera m_camera;
 
 	};

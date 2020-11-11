@@ -227,7 +227,16 @@ namespace mar::graphics {
 
 	size_t RenderPipeline::submitLight(const maths::vec3& position, const ecs::LightComponent& light) {
 		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
-		availableContainer->m_lights.push_back({ position, light });
+
+		auto& lightMaterial = availableContainer->m_lights.emplace_back();
+		lightMaterial.position = position;
+		lightMaterial.ambient = light.ambient;
+		lightMaterial.diffuse = light.diffuse;
+		lightMaterial.specular = light.specular;
+		lightMaterial.linear = light.linear;
+		lightMaterial.quadratic = light.quadratic;
+		lightMaterial.constant = light.constant;
+		lightMaterial.shininess = light.shininess;
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", 
 			availableContainer->m_lights.size());

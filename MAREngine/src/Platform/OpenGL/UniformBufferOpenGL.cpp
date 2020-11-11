@@ -24,21 +24,20 @@
 namespace mar::platforms {
 
 
-	void UniformBufferOpenGL::initialize(const char* name, uint64_t memoryToAllocate) {
-		m_name = name;
+	void UniformBufferOpenGL::initialize(const UniformBlock& uo, std::vector<UniformItem>&& items) {
+		m_uniformBlock = uo;
+		m_uniformItems = items;
 
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ubo) );
 		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, m_ubo) );
-		PLATFORM_GL_FUNC( glBufferData(GL_UNIFORM_BUFFER, memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
+		PLATFORM_GL_FUNC( glBufferData(GL_UNIFORM_BUFFER, uo.memory, nullptr, GL_DYNAMIC_DRAW) );
+		PLATFORM_GL_FUNC( glBindBufferBase(GL_UNIFORM_BUFFER, uo.bindingPoint, m_ubo) );
 	}
 
 	void UniformBufferOpenGL::close() {
-		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ubo) );
-	}
+		m_uniformItems.clear();
 
-	template<typename T>
-	void UniformBufferOpenGL::update(uint64_t offset, uint64_t memory, const std::vector<T>& data) const {
-		PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()) );
+		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ubo) );
 	}
 
 	void UniformBufferOpenGL::reset() const {
@@ -51,10 +50,6 @@ namespace mar::platforms {
 
 	void UniformBufferOpenGL::unbind() const {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, 0) );
-	}
-
-	void UniformBufferOpenGL::bindToLayout(uint32_t bindingPoint) const {
-		PLATFORM_GL_FUNC( glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, m_ubo) );
 	}
 
 

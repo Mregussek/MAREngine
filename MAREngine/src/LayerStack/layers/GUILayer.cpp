@@ -44,7 +44,7 @@ namespace mar::layers {
 
 		m_gui->initialize("#version 450");		
 
-		m_guiGraphics.initialize();
+		//m_guiGraphics.initialize();
 
 		LAYER_INFO("GUI_LAYER: {} initialized", p_debugName);
 	}
@@ -52,6 +52,7 @@ namespace mar::layers {
 	void LayerGUI::update() {
 		LAYER_TRACE("GUI_LAYER: {} going to display frame", p_debugName);
 		
+		/*
 		if (m_gui->canDrawLines()) {
 			const auto& currentEntity = m_gui->getCurrentEntity();
 			const bool userHasSelectedEntity = &currentEntity != nullptr;
@@ -66,7 +67,7 @@ namespace mar::layers {
 				m_guiGraphics.passToDrawEntity(currentEntity);
 			}
 		}
-		
+		*/
 		m_camera.update(m_gui->getViewportWidth() / m_gui->getViewportHeight());
 		m_gui->display();
 
@@ -78,7 +79,7 @@ namespace mar::layers {
 
 		m_gui->shutdown();
 
-		m_guiGraphics.close();
+		//m_guiGraphics.close();
 
 		LAYER_INFO("GUI_LAYER: {} closed!", p_debugName);
 	}

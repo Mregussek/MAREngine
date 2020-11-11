@@ -50,11 +50,19 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].first = position;
+		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].position = position;
 	}
 
 	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].second = light;
+		auto& lightMaterial = m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex];
+
+		lightMaterial.ambient = light.ambient;
+		lightMaterial.diffuse = light.diffuse;
+		lightMaterial.specular = light.specular;
+		lightMaterial.linear = light.linear;
+		lightMaterial.quadratic = light.quadratic;
+		lightMaterial.constant = light.constant;
+		lightMaterial.shininess = light.shininess;
 	}
 
 	void RenderEvents::onColorUpdate(maths::vec3 color, const ecs::RenderPipelineComponent& rpc) {

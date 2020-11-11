@@ -20,6 +20,7 @@
 
 #include "ShaderOpenGL.h"
 #include "ShaderUniforms.h"
+#include "../../Core/graphics/Renderer/RenderContainer.h"
 
 
 namespace mar::platforms {
@@ -42,14 +43,23 @@ namespace mar::platforms {
 		loadShader(fragmentSrc, m_shaderPaths.fragmentPath);
 		
 		m_id = createShader(vertexSrc, fragmentSrc);
-		setupShaderUniforms();
 		m_initialized = true;
 	}
 
-	void ShaderOpenGL::shutdown() const {
+	void ShaderOpenGL::shutdown() {
 		PLATFORM_TRACE("SHADER_OPENGL: Deleting shader {}", m_id);
 
+		std::for_each(m_uniformBuffers.begin(), m_uniformBuffers.end(), [](UniformBufferOpenGL& ubo) {
+			ubo.close();
+		});
+
+		m_uniformBuffers.clear();
+
 		PLATFORM_GL_FUNC( glDeleteProgram(m_id) );
+	}
+
+	UniformBufferOpenGL& ShaderOpenGL::submitUniformBuffer() {
+		return m_uniformBuffers.emplace_back();
 	}
 
 	void ShaderOpenGL::bind() const {
@@ -62,6 +72,164 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glUseProgram(0) );
 
 		PLATFORM_TRACE("SHADER_OPENGL: Unbind shader {}", m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformFloat(const UniformBlock& block, const UniformItem& item, float f) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, sizeof(float), { f });
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformFloat(const UniformBlock& block, const UniformItem& item, const std::vector<float>& floats) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, floats.size() * sizeof(float), floats);
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformInt(const UniformBlock& block, const UniformItem& item, int32_t i) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<int32_t>(item.offset, sizeof(int32_t), { i });
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformInt(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& ints) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<int32_t>(item.offset, ints.size() * sizeof(int32_t), ints);
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformSampler(const UniformBlock& block, const UniformItem& item, int32_t sampler) const {
+		uploadUniformInt(block, item, sampler);
+	}
+
+	void ShaderOpenGL::uploadUniformSampler(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& samplers) const {
+		uploadUniformInt(block, item, samplers);
+	}
+
+	void ShaderOpenGL::uploadUniformVec3(const UniformBlock& block, const UniformItem& item, maths::vec3 vector3) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, sizeof(maths::vec4), maths::vec3::value_ptr(vector3));
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformVec3(const UniformBlock& block, const UniformItem& item, const std::vector<maths::vec3>& vec) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, vec.size() * sizeof(maths::vec4), maths::vec3::value_ptr(vec));
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformMat4(const UniformBlock& block, const UniformItem& item, const maths::mat4& matrix4x4) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, sizeof(maths::mat4), maths::mat4::value_ptr(matrix4x4));
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformMat4(const UniformBlock& block, const UniformItem& item, const std::vector<maths::mat4>& matrices) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, matrices.size() * sizeof(maths::mat4), maths::mat4::value_ptr(matrices));
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadUniformVec3AtIndex(const UniformBlock& block, const UniformItem& item, int32_t index, maths::vec3 vector3) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(index * sizeof(maths::vec4), sizeof(maths::vec4), maths::vec3::value_ptr(vector3));
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
+	}
+
+	void ShaderOpenGL::uploadLightMaterial(const UniformBlock& block, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const {
+		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
+			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
+		});
+
+		if (foundBlock != m_uniformBuffers.end()) {
+			foundBlock->bind();
+			foundBlock->update<float>(item.offset, lights.size() * sizeof(graphics::LightMaterial), &lights[0].position.x);
+			foundBlock->unbind();
+			return;
+		}
+
+		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
 	}
 
 	void ShaderOpenGL::setUniformFloat(const char* name, float f) const {
@@ -118,40 +286,6 @@ namespace mar::platforms {
 		}
 			
 		return location;
-	}
-
-	void ShaderOpenGL::setupShaderUniforms() {
-		using namespace ShaderUniforms;
-		
-		auto pushUniformToMap = [this](const char* uniform) {
-			const int32_t location = glGetUniformLocation(m_id, uniform);
-			m_uniformLocation[uniform] = location;
-		};
-
-		auto pushMaterialToMap = [pushUniformToMap, this](const Material& material) {
-			pushUniformToMap(material.lightPos);
-			pushUniformToMap(material.ambient);
-			pushUniformToMap(material.diffuse);
-			pushUniformToMap(material.specular);
-			pushUniformToMap(material.constant);
-			pushUniformToMap(material.linear);
-			pushUniformToMap(material.quadratic);
-			pushUniformToMap(material.shininess);
-		};
-
-		pushUniformToMap(u_Model);
-		pushUniformToMap(u_MVP);
-		pushUniformToMap(u_SeparateTransform);
-		pushUniformToMap(u_samplerTypes);
-		pushUniformToMap(u_materialSize);
-		pushUniformToMap(u_CameraPos);
-
-		std::for_each(u_SamplersColor.begin(), u_SamplersColor.end(), pushUniformToMap);
-		std::for_each(u_Samplers2D.begin(), u_Samplers2D.end(), pushUniformToMap);
-		//std::for_each(u_SamplersCube.begin(), u_SamplersCube.end(), pushUniformToMap);
-		std::for_each(u_material.begin(), u_material.end(), pushMaterialToMap);
-
-		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
 	}
 
 	void ShaderOpenGL::loadShader(std::string& buffer, const char* path) const {

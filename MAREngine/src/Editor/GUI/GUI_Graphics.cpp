@@ -71,8 +71,8 @@ namespace mar::editor {
 		m_pipeline.update(ren.vertices, ren.indices);
 
 		m_shader.bind();
-		m_shader.setUniformMat4(u_MVP, Camera::getCameraData().getMVP());
-		m_shader.setUniformMat4(u_SeparateTransform, betterOutline);
+		//m_shader.setUniformMat4(u_MVP, Camera::getCameraData().getMVP());
+		//m_shader.setUniformMat4(u_SeparateTransform, betterOutline);
 
 		platforms::DrawingOpenGL::drawOutline(ren.indices.size());
 

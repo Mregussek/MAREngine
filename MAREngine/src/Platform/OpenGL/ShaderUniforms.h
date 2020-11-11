@@ -28,7 +28,25 @@
 
 namespace mar::platforms::ShaderUniforms {
 
+	struct UniformItem {
+		constexpr UniformItem(const char* n, uint64_t o, uint64_t m) :
+			name(n),
+			offset(o),
+			memory(m)
+		{}
+
+		const char* name;
+		uint64_t offset;
+		uint64_t memory;
+	};
+
 	struct UniformBlock {
+		constexpr UniformBlock(const char* n, size_t bp, uint64_t m) :
+			name(n),
+			bindingPoint(bp),
+			memory(m)
+		{}
+
 		const char* name;
 		size_t bindingPoint;
 		uint64_t memory;
@@ -67,21 +85,24 @@ namespace mar::platforms::ShaderUniforms {
 		const char* shininess;
 	};
 
-	constexpr uint64_t MaterialMemory{ 4 * sizeof(maths::vec4) + 4 * sizeof(float) };
+	constexpr UniformItem ut_u_Model{ "CameraUniforms.u_Model", 0, sizeof(maths::mat4) };
+	constexpr UniformItem ut_u_MVP{ "CameraUniforms.u_MVP", ut_u_Model.memory, sizeof(maths::mat4) };
+	constexpr UniformItem ut_u_CameraPos{ "CameraUniforms.u_CameraPos", ut_u_Model.memory + ut_u_MVP.memory, sizeof(maths::vec4) }; // vec3 has a base alignment of 4N.
+	constexpr UniformBlock ub_Camera{ "Camera", 0, ut_u_Model.memory * ut_u_MVP.memory * ut_u_CameraPos.memory };
 
-	constexpr UniformBlock Camera{ "Camera", 0, 2 * sizeof(maths::mat4) + sizeof(maths::vec4) }; // vec3 has a base alignment of 4N.
-	constexpr UniformBlock entitiesComponents{ "entitiesComponents", 1, 32 * sizeof(maths::mat4) + 32 * sizeof(float) };
-	constexpr UniformBlock MaterialInfo{ "MaterialInfo", 2, 32 * MaterialMemory };
-	constexpr UniformBlock MeshInfo{ "MeshInfo", 3, 1 * sizeof(int32_t) };
-	constexpr UniformBlock TextureSamplers{ "TextureSamplers", 4, 32 * sizeof(maths::vec4) };
+	constexpr UniformItem ut_u_SeparateTransform{ "components.u_SeparateTransform", 0, 32 * sizeof(maths::mat4) };
+	constexpr UniformItem ut_u_samplerTypes{ "components.u_samplerTypes", 32 * sizeof(maths::mat4), 32 * sizeof(float) };
+	constexpr UniformBlock ub_EntityCmp{ "EntityCmp", 1,  ut_u_SeparateTransform.memory + ut_u_samplerTypes.memory };
 
-	constexpr const char* u_Model{ "CameraUniforms.u_Model" };
-	constexpr const char* u_MVP{ "CameraUniforms.u_MVP" };
-	constexpr const char* u_CameraPos{ "CameraUniforms.u_CameraPos" };
-	constexpr const char* u_SeparateTransform{ "components.u_SeparateTransform" };
-	constexpr const char* u_samplerTypes{ "components.u_samplerTypes" };
-	constexpr const char* u_materialSize{ "info.u_materialSize" };
-	
+	constexpr UniformItem ut_u_material{ "materialInfo.u_material", 0, 4 * sizeof(maths::vec4) + 4 * sizeof(float) };
+	constexpr UniformBlock ub_MaterialInfo{ "MaterialInfo", 2, ut_u_material.memory };
+
+	constexpr UniformItem ut_u_materialSize{ "info.u_materialSize", 0, sizeof(int32_t) };
+	constexpr UniformBlock ub_MeshInfo{ "MeshInfo", 3, ut_u_materialSize.memory };
+
+	constexpr UniformItem ut_u_Color{ "", 0, 32 * sizeof(maths::vec4) };
+	constexpr UniformBlock ub_TextureSamplers{ "TextureSamplers", 4, ut_u_Color.memory };
+
 	constexpr std::array<const char*, 32> u_SamplersColor = {
 		"samplers.u_Color[0]",
 		"samplers.u_Color[1]",

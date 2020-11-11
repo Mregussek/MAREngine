@@ -20,7 +20,7 @@ layout(std140, binding = 0) uniform Camera {
 	vec3 u_CameraPos;
 } CameraUniforms;
 
-layout(std140, binding = 1) uniform entitiesComponents {
+layout(std140, binding = 1) uniform EntityCmp {
 	mat4 u_SeparateTransform[32];
 	float u_samplerTypes[32];
 } components;

@@ -24,8 +24,11 @@
 
 #include "../../mar.h"
 #include "../PlatformLogs.h"
+#include "UniformBufferOpenGL.h"
+#include "ShaderUniforms.h"
 
 
+namespace mar::graphics { struct LightMaterial; }
 namespace mar::platforms {
 
 
@@ -45,15 +48,35 @@ namespace mar::platforms {
 
 
 	class ShaderOpenGL {
+
+		typedef ShaderUniforms::UniformBlock UniformBlock;
+		typedef ShaderUniforms::UniformItem UniformItem;
+
 	public:
 
 		ShaderOpenGL() = default;
 
 		void initialize(ShaderPaths shaderPaths);
-		void shutdown() const;
+		void shutdown();
 
 		void bind() const;
 		void unbind() const;
+
+		UniformBufferOpenGL& submitUniformBuffer();
+
+		void uploadUniformFloat		(const UniformBlock& block, const UniformItem& item, float f) const;
+		void uploadUniformFloat		(const UniformBlock& block, const UniformItem& item, const std::vector<float>& floats) const;
+		void uploadUniformInt		(const UniformBlock& block, const UniformItem& item, int32_t i) const;
+		void uploadUniformInt		(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& ints) const;
+		void uploadUniformSampler	(const UniformBlock& block, const UniformItem& item, int32_t sampler) const;
+		void uploadUniformSampler	(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& sampler) const;
+		void uploadUniformVec3		(const UniformBlock& block, const UniformItem& item, maths::vec3 vector3) const;
+		void uploadUniformVec3		(const UniformBlock& block, const UniformItem& item, const std::vector<maths::vec3>& vec) const;
+		void uploadUniformMat4		(const UniformBlock& block, const UniformItem& item, const maths::mat4& matrix4x4) const;
+		void uploadUniformMat4		(const UniformBlock& block, const UniformItem& item, const std::vector<maths::mat4>& matrices) const;
+
+		void uploadUniformVec3AtIndex(const UniformBlock& block, const UniformItem& item, int32_t index, maths::vec3 vector3) const;
+		void uploadLightMaterial(const UniformBlock& block, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const;
 
 		void setUniformFloat(const char* name, float f) const;
 		void setUniformFloat(const char* name, const std::vector<float>& floats) const;
@@ -70,14 +93,14 @@ namespace mar::platforms {
 
 		int32_t getUniformLocation(const char* name) const;
 
-		void setupShaderUniforms();
-
 		void loadShader(std::string& buffer, const char* path) const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
 		uint32_t createShader(const std::string& vertSrc, const std::string& fragSrc) const;
 
-		ShaderPaths m_shaderPaths;
+		
+		std::vector<UniformBufferOpenGL> m_uniformBuffers;
 		std::unordered_map<const char*, int32_t> m_uniformLocation;
+		ShaderPaths m_shaderPaths;
 		uint32_t m_id{ 0 };
 		bool m_initialized{ false };
 

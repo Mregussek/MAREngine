@@ -34,13 +34,51 @@ namespace mar::graphics {
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
 
+		using namespace platforms::ShaderUniforms;
+
+		m_buffers.initialize(settings::maxVerticesCount * sizeof(Vertex), settings::maxIndicesCount * sizeof(uint32_t));
+
 		const char* vert = "resources/shaders/batcher.vert.glsl";
 		const char* frag = "resources/shaders/batcher.frag.glsl";
 		const auto shaderPaths = platforms::ShaderPaths(vert, frag, nullptr);
 
-		m_buffers.initialize(settings::maxVerticesCount * sizeof(Vertex), settings::maxIndicesCount * sizeof(uint32_t));
 		m_shader.initialize(shaderPaths);
-	
+
+		{ // setup Camera uniform block
+			auto& camera = m_shader.submitUniformBuffer();
+			std::vector<UniformItem> cameraItems{ ut_u_Model, ut_u_MVP, ut_u_CameraPos };
+
+			camera.initialize(ub_Camera, std::move(cameraItems));
+		}
+
+		{ // setup EntityCmp uniform block
+			auto& entityCmp = m_shader.submitUniformBuffer();
+			std::vector<UniformItem> entitycmpItems{ ut_u_SeparateTransform, ut_u_samplerTypes };
+
+			entityCmp.initialize(ub_EntityCmp, std::move(entitycmpItems));
+		}
+		
+		{ // setup MaterialInfo uniform block
+			auto& materialInfo = m_shader.submitUniformBuffer();
+			std::vector<UniformItem> materialInfoItems{ ut_u_material };
+
+			materialInfo.initialize(ub_MaterialInfo, std::move(materialInfoItems));
+		}
+
+		{ // setup MeshInfo uniform block
+			auto& meshInfo = m_shader.submitUniformBuffer();
+			std::vector<UniformItem> meshInfoItems{ ut_u_materialSize };
+
+			meshInfo.initialize(ub_MeshInfo, std::move(meshInfoItems));
+		}
+
+		{ // setup MeshInfo uniform block
+			auto& textureSamplers = m_shader.submitUniformBuffer();
+			std::vector<UniformItem> textureSamplersItems{ ut_u_Color };
+
+			textureSamplers.initialize(ub_TextureSamplers, std::move(textureSamplersItems));
+		}
+		
 		GRAPHICS_INFO("RENDERER_BATCH: initialized!");
 	}
 
@@ -78,7 +116,7 @@ namespace mar::graphics {
 		{
 			using namespace platforms::ShaderUniforms;
 
-			m_shader.setUniformMat4(u_SeparateTransform, container.getTransforms());
+			m_shader.uploadUniformMat4(ub_EntityCmp, ut_u_SeparateTransform, container.getTransforms());
 			passTexturesToShader(container);
 		}
 		{
@@ -107,11 +145,11 @@ namespace mar::graphics {
 		const auto& textures = container.getTexture2D();
 		const auto& cubemaps = container.getTextureCubemap();
 
-		m_shader.setUniformFloat(u_samplerTypes, samplerTypes);
+		m_shader.uploadUniformFloat(ub_EntityCmp, ut_u_samplerTypes, samplerTypes);
 
 		std::for_each(colors.begin(), colors.end(), [&shader = m_shader](const ColorPair& color) {
 			const uint32_t sampler = (uint32_t)color.first;
-			shader.setUniformVec3(u_SamplersColor[sampler], color.second);
+			shader.uploadUniformVec3AtIndex(ub_TextureSamplers, ut_u_Color, sampler, color.second);
 		});
 			
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
@@ -146,21 +184,8 @@ namespace mar::graphics {
 
 		const auto& lights = container.getLights();
 
-		for (size_t i = 0; i < lights.size(); i++) {
-			m_shader.setUniformVec3(u_material[i].lightPos, lights[i].first);
-	
-			m_shader.setUniformVec3(u_material[i].ambient, lights[i].second.ambient);
-			m_shader.setUniformVec3(u_material[i].diffuse, lights[i].second.diffuse);
-			m_shader.setUniformVec3(u_material[i].specular, lights[i].second.specular);
-	
-			m_shader.setUniformFloat(u_material[i].shininess, lights[i].second.shininess);
-	
-			m_shader.setUniformFloat(u_material[i].constant, lights[i].second.constant);
-			m_shader.setUniformFloat(u_material[i].linear, lights[i].second.linear);
-			m_shader.setUniformFloat(u_material[i].quadratic, lights[i].second.quadratic);
-		}
-
-		m_shader.setUniformInt(u_materialSize, lights.size());
+		m_shader.uploadLightMaterial(ub_MaterialInfo, ut_u_material, lights);
+		m_shader.uploadUniformInt(ub_MeshInfo, ut_u_materialSize, (int32_t)lights.size());
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}
@@ -170,9 +195,9 @@ namespace mar::graphics {
 
 		using namespace platforms::ShaderUniforms;
 
-		m_shader.setUniformVec3(u_CameraPos, camera->getPosition());
-		m_shader.setUniformMat4(u_Model, camera->getModel());
-		m_shader.setUniformMat4(u_MVP, camera->getMVP());
+		m_shader.uploadUniformVec3(ub_Camera, ut_u_CameraPos, camera->getPosition());
+		m_shader.uploadUniformMat4(ub_Camera, ut_u_Model, camera->getModel());
+		m_shader.uploadUniformMat4(ub_Camera, ut_u_MVP, camera->getMVP());
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 	}

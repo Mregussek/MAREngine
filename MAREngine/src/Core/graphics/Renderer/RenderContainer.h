@@ -30,16 +30,28 @@
 namespace mar::graphics {
 
 
+	struct LightMaterial {
+		maths::vec3 position{ 0.f, 0.f, 0.f };
+		maths::vec3 ambient{ 0.5f, 0.5f, 0.5f };
+		maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
+		maths::vec3 specular{ 0.5f, 0.5f, 0.5f };
+
+		float constant{ 1.0f };
+		float linear{ 0.045f };
+		float quadratic{ 0.0075f };
+
+		float shininess{ 64.0f };
+	};
+
 	typedef std::pair<int32_t, maths::vec3> ColorPair;
 	typedef std::pair<int32_t, std::string> TexturePair;
-	typedef std::pair<maths::vec3, ecs::LightComponent> LightPair;
 
 	typedef std::vector<Vertex> VertexVector;
 	typedef std::vector<uint32_t> IndicesVector;
 	typedef std::vector<maths::mat4> Mat4Vector;
 	typedef std::vector<ColorPair> ColorVector;
 	typedef std::vector<TexturePair> TextureVector;
-	typedef std::vector<LightPair> LightVector;
+	typedef std::vector<LightMaterial> LightVector;
 	typedef std::vector<float> FloatVector;
 
 
