@@ -299,6 +299,7 @@
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
+    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h" />
     <ClInclude Include="src\Platform\PlatformLogs.h" />
     <ClInclude Include="src\LayerStack\layers\GUILayer.h" />
     <ClInclude Include="src\LayerStack\Layer.h" />
@@ -384,6 +385,7 @@
     <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp" />
     <ClCompile Include="src\Window\Input.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>

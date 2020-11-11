@@ -384,6 +384,9 @@
     <ClInclude Include="src\Editor\GUI\Other\GUI_Statistics.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -585,6 +588,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="3rd_party\GLAD\src\glad.c">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

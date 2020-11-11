@@ -43,6 +43,7 @@ namespace mar::platforms {
 		const char* geometryPath{ nullptr };
 	};
 
+
 	class ShaderOpenGL {
 	public:
 

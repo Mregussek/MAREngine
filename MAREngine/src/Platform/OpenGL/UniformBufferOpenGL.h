@@ -18,58 +18,41 @@
 **/
 
 
-#ifndef MAR_ENGINE_PLATFORM_OPENGL_PIPELINE_H
-#define MAR_ENGINE_PLATFORM_OPENGL_PIPELINE_H
+#ifndef MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H
+#define MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H
 
 
 #include "../../mar.h"
 #include "../PlatformLogs.h"
-#include "../../Core/graphics/Mesh/Vertex.h"
 
 
 namespace mar::platforms {
 
 
-	class PipelineOpenGL {
+	class UniformBufferOpenGL {
 	public:
 
-		PipelineOpenGL() = default;
-
-		void initialize(uint64_t memoryVBO, uint64_t memoryEBO);
+		void initialize(const char* name, uint64_t memoryToAllocate);
 		void close();
-
-		void update(const std::vector<graphics::Vertex>& vertices, const std::vector<uint32_t>& indices) const;
-		void reset() const;
 
 		void bind() const;
 		void unbind() const;
 
+		void bindToLayout(uint32_t bindingPoint) const;
+
+		template<typename T>
+		void update(uint64_t offset, uint64_t memory, const std::vector<T>& data) const;
+		void reset() const;
+
 	private:
 
-		void createVAO();
-		void destroyVAO();
+		const char* m_name{ "NullUniformBlock" };
+		uint32_t m_ubo{ 0 };
 
-		void createVBO();
-		void destroyVBO();
-
-		void createEBO();
-		void destroyEBO();
-
-		void processLayout() const;
-
-
-		uint32_t m_vao{ 0 };
-		uint32_t m_vbo{ 0 };
-		uint32_t m_ebo{ 0 };
-
-		uint64_t m_vboAllocMemory{ 0 };
-		uint64_t m_eboAllocMemory{ 0 };
-
-		bool m_initialized{ false };
-	};	
+	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_PLATFORM_OPENGL_PIPELINE_H
+#endif // !MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H

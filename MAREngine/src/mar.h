@@ -38,8 +38,8 @@ namespace mar {
 #define MAR_ENGINE_SETTINGS
 
 	namespace settings {
-		inline static uint32_t maxVerticesCount = 500000;
-		inline static uint32_t maxIndicesCount = 500000 / 2;
+		inline static uint64_t maxVerticesCount = 500000;
+		inline static uint64_t maxIndicesCount = 500000 / 2;
 	}
 
 	template<typename T>
