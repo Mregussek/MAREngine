@@ -20,7 +20,6 @@
 
 #include "ShaderOpenGL.h"
 #include "ShaderUniforms.h"
-#include "../../Core/graphics/Renderer/RenderContainer.h"
 
 
 namespace mar::platforms {
@@ -209,7 +208,7 @@ namespace mar::platforms {
 
 		if (foundBlock != m_uniformBuffers.end()) {
 			foundBlock->bind();
-			foundBlock->update<float>(index * sizeof(maths::vec4), sizeof(maths::vec4), maths::vec3::value_ptr(vector3));
+			foundBlock->update<float>(item.offset + index * sizeof(maths::vec4), sizeof(maths::vec4), maths::vec3::value_ptr(vector3));
 			foundBlock->unbind();
 			return;
 		}
@@ -217,14 +216,14 @@ namespace mar::platforms {
 		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
 	}
 
-	void ShaderOpenGL::uploadLightMaterial(const UniformBlock& block, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const {
+	void ShaderOpenGL::uploadUniformFloatAtIndex(const UniformBlock& block, const UniformItem& item, int32_t index, float f) const {
 		const auto foundBlock = std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const UniformBufferOpenGL& ubo) {
 			return std::strcmp(ubo.m_uniformBlock.name, block.name) == 0;
 		});
 
 		if (foundBlock != m_uniformBuffers.end()) {
 			foundBlock->bind();
-			foundBlock->update<float>(item.offset, lights.size() * sizeof(graphics::LightMaterial), &lights[0].position.x);
+			foundBlock->update<float>(item.offset + index * sizeof(float), sizeof(float), { f });
 			foundBlock->unbind();
 			return;
 		}
@@ -232,61 +231,7 @@ namespace mar::platforms {
 		PLATFORM_WARN("SHADER_OPENGL: Cannot find UniformBlock {} at Shader {}", block.name, m_id);
 	}
 
-	void ShaderOpenGL::setUniformFloat(const char* name, float f) const {
-		PLATFORM_GL_FUNC( glUniform1f(getUniformLocation(name), f) );
-	}
-
-	void ShaderOpenGL::setUniformFloat(const char* name, const std::vector<float>& floats) const {
-		PLATFORM_GL_FUNC( glUniform1fv(getUniformLocation(name), floats.size(), floats.data()) );
-	}
-
-	void ShaderOpenGL::setUniformInt(const char* name, int32_t i) const {
-		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), i) );
-	}
-
-	void ShaderOpenGL::setUniformInt(const char* name, const std::vector<int32_t>& ints) const {
-		PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), ints.size(), ints.data()) );
-	}
-
-	void ShaderOpenGL::setUniformSampler(const char* name, int32_t sampler) const {
-		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
-	}
-
-	void ShaderOpenGL::setUniformSampler(const char* name, const std::vector<int32_t>& sampler) const {
-		PLATFORM_GL_FUNC( glUniform1iv(getUniformLocation(name), sampler.size(), sampler.data()) );
-	}
-
-	void ShaderOpenGL::setUniformVec3(const char* name, maths::vec3 vector3) const {
-		PLATFORM_GL_FUNC( glUniform3fv(getUniformLocation(name), 1, maths::vec3::value_ptr(vector3)) );
-	}
-
-	void ShaderOpenGL::setUniformVec3(const char* name, const std::vector<maths::vec3>& vec) const {
-		PLATFORM_GL_FUNC(glUniform3fv(getUniformLocation(name), vec.size(), maths::vec3::value_ptr(vec)));
-	}
-
-	void ShaderOpenGL::setUniformMat4(const char* name, const maths::mat4& matrix4x4) const {
-		PLATFORM_GL_FUNC(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, maths::mat4::value_ptr(matrix4x4)));
-	}
-
-	void ShaderOpenGL::setUniformMat4(const char* name, const std::vector<maths::mat4>& matrices) const {
-		PLATFORM_GL_FUNC(glUniformMatrix4fv(getUniformLocation(name), matrices.size(), GL_FALSE, maths::mat4::value_ptr(matrices)));
-	}
-
 	// ---- PRIVATE METHODS ---- //
-
-	int32_t ShaderOpenGL::getUniformLocation(const char* name) const {
-		if (m_uniformLocation.find(name) != m_uniformLocation.end()) {
-			return m_uniformLocation.at(name);
-		}
-
-		const int32_t location = glGetUniformLocation(m_id, name);
-
-		if (location == -1) {
-			PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
-		}
-			
-		return location;
-	}
 
 	void ShaderOpenGL::loadShader(std::string& buffer, const char* path) const {
 		FILE* file = fopen(path, "rb");

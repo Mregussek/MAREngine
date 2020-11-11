@@ -11,54 +11,47 @@ layout(location = 7) in vec3 v_CameraPos;
 
 layout(location = 0) out vec4 outColor;
 
-struct Material {
-	vec3 lightPos;
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+layout(std140, binding = 2) uniform Material {
+	vec3 lightPos[32];
+	vec3 ambient[32];
+	vec3 diffuse[32];
+	vec3 specular[32];
 
-	float constant;
-	float linear;
-	float quadratic;
-	float shininess;
-};
+	float constant[32];
+	float linear[32];
+	float quadratic[32];
+	float shininess[32];
 
-layout(std140, binding = 2) uniform MaterialInfo {
-	Material u_material[32];
-} materialInfo;
+	int materialSize;
+} u_material;
 
-layout(std140, binding = 3) uniform MeshInfo {
-	int u_materialSize;
-} info;
-
-layout(std140, binding = 4) uniform TextureSamplers {
+layout(std140, binding = 3) uniform TextureSamplers {
 	vec3 u_Color[32];
 } samplers;					
 
-layout(binding = 5) uniform sampler2D u_2D[32];
+layout(binding = 4) uniform sampler2D u_2D[32];
 //layout(binding = 6) uniform samplerCube u_Cube[32];
 
 vec4 setProperColor(float index);
 vec4 setProperTexture2D(float index);
 vec4 setProperTextureCubemap(float index);
-vec4 calculateLight(Material passed_material, vec3 passed_color_light);
 vec4 computeAllLights(vec4 batchColor);
 
 void main() {
 	vec4 batchColor;
 
-	if(v_samplerType <= 0.0f) {
-		batchColor = setProperColor(v_shapeIndex);
-	}
-	else if(v_samplerType <= 1.0f)	{
-		batchColor = setProperTexture2D(v_shapeIndex);
-	}	
+	//if(v_samplerType <= 0.0f) {
+	//	batchColor = setProperColor(v_shapeIndex);
+	//}
+	//else if(v_samplerType <= 1.0f)	{
+	//	batchColor = setProperTexture2D(v_shapeIndex);
+	//}	
 	//else if(v_samplerType <= 2.0f)	{
 	//	batchColor = setProperTextureCubemap(v_shapeIndex);
 	//}
-	else {
+	//else {
 		batchColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	}
+	//}
 
 	vec4 lightColor = computeAllLights(batchColor);
 
@@ -173,39 +166,45 @@ vec4 setProperTextureCubemap(float index) {
 	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
 }		
 */
-vec4 calculateLight(Material passed_material, vec3 passed_color_light) {
+
+vec4 calculateLight(vec3 lightPos, vec3 ambient, vec3 diffuse, vec3 specular,
+	float constant, float linear, float quadratic, float shininess, vec3 batchedColor)
+{
 	// AMBIENT
-	vec3 ambient = passed_color_light * passed_material.ambient;
+	vec3 ambientResult = batchedColor * ambient;
 
 	// DIFFUSE
 	vec3 norm = normalize(v_lightNormal);
-	vec3 lightDir = normalize(passed_material.lightPos - v_Position);
+	vec3 lightDir = normalize(lightPos - v_Position);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuse = passed_color_light * (diff * passed_material.diffuse);
+	vec3 diffuseResult = batchedColor * (diff * diffuse);
 
 	// SPECULAR
 	vec3 viewDir = normalize(v_CameraPos - v_Position);
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), passed_material.shininess);
-	vec3 specular = passed_color_light * (spec * passed_material.specular);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+	vec3 specularResult = batchedColor * (spec * specular);
 
 	// ATTENUATION
-	float distance = length(passed_material.lightPos - v_Position);
-	float attenuation = 1.0f / (passed_material.constant + passed_material.linear * distance +
-		passed_material.quadratic * (distance * distance));
-	ambient *= attenuation;
-	diffuse *= attenuation;
-	specular *= attenuation;
+	float distance = length(lightPos - v_Position);
+	float attenuation = 1.0f / (constant + linear * distance + quadratic * (distance * distance));
+		
+	ambientResult *= attenuation;
+	diffuseResult *= attenuation;
+	specularResult *= attenuation;
 
-	return(vec4(ambient + diffuse + specular, 1.0f));
+	return vec4(ambientResult + diffuseResult + specularResult, 1.0f);
 }
 
 vec4 computeAllLights(vec4 batchColor) {
-	vec4 lightColor = calculateLight(materialInfo.u_material[0], batchColor.xyz);
+	vec4 lightColor = calculateLight(u_material.lightPos[0], u_material.ambient[0], u_material.diffuse[0], u_material.specular[0],
+											u_material.constant[0], u_material.linear[0], u_material.quadratic[0], u_material.shininess[0], batchColor.xyz);
 
 	for (int i = 1; i < 32; i++) {
-		if (i >= info.u_materialSize) break;
-		lightColor = lightColor + calculateLight(materialInfo.u_material[i], batchColor.xyz);
+		if (i >= u_material.materialSize) break;
+
+		lightColor = lightColor + calculateLight(u_material.lightPos[i], u_material.ambient[i], u_material.diffuse[i], u_material.specular[i],
+											u_material.constant[i], u_material.linear[i], u_material.quadratic[i], u_material.shininess[i], batchColor.xyz);
 	}
 
 	return lightColor;

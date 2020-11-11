@@ -59,17 +59,20 @@ namespace mar::graphics {
 		}
 		
 		{ // setup MaterialInfo uniform block
-			auto& materialInfo = m_shader.submitUniformBuffer();
-			std::vector<UniformItem> materialInfoItems{ ut_u_material };
+			auto& material = m_shader.submitUniformBuffer();
+			std::vector<UniformItem> materialItems{ 
+				ut_u_LightPos,
+				ut_u_ambient,
+				ut_u_diffuse,
+				ut_u_specular,
+				ut_u_constant,
+				ut_u_linear,
+				ut_u_quadratic,
+				ut_u_shininess,
+				ut_u_materialSize
+			};
 
-			materialInfo.initialize(ub_MaterialInfo, std::move(materialInfoItems));
-		}
-
-		{ // setup MeshInfo uniform block
-			auto& meshInfo = m_shader.submitUniformBuffer();
-			std::vector<UniformItem> meshInfoItems{ ut_u_materialSize };
-
-			meshInfo.initialize(ub_MeshInfo, std::move(meshInfoItems));
+			material.initialize(ub_Material, std::move(materialItems));
 		}
 
 		{ // setup MeshInfo uniform block
@@ -153,7 +156,7 @@ namespace mar::graphics {
 		});
 			
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
-
+		/*
 		std::for_each(textures.begin(), textures.end(), [&shader = m_shader](const TexturePair& texture) {
 			const uint32_t textureID = TextureGL::Instance()->loadTexture(texture.second);
 			const uint32_t sampler = (uint32_t)texture.first;
@@ -164,7 +167,6 @@ namespace mar::graphics {
 		
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 
-		/*
 		std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = m_shader](const TexturePair& texture) {
 			const uint32_t textureID = TextureGL::Instance()->loadCubemap(texture.second);
 			const uint32_t sampler = (uint32_t)texture.first;
@@ -184,8 +186,19 @@ namespace mar::graphics {
 
 		const auto& lights = container.getLights();
 
-		m_shader.uploadLightMaterial(ub_MaterialInfo, ut_u_material, lights);
-		m_shader.uploadUniformInt(ub_MeshInfo, ut_u_materialSize, (int32_t)lights.size());
+		for (uint32_t i = 0; i < lights.size(); i++) {
+			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_LightPos, i, lights[i].position);
+			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_ambient, i, lights[i].ambient);
+			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_diffuse, i, lights[i].diffuse);
+			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_specular, i, lights[i].specular);
+
+			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_constant, i, lights[i].constant);
+			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_linear, i, lights[i].linear);
+			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_quadratic, i, lights[i].quadratic);
+			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_shininess, i, lights[i].shininess);
+		}
+		
+		m_shader.uploadUniformInt(ub_Material, ut_u_materialSize, (int32_t)lights.size());
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}

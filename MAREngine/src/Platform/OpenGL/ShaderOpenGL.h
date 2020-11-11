@@ -28,7 +28,6 @@
 #include "ShaderUniforms.h"
 
 
-namespace mar::graphics { struct LightMaterial; }
 namespace mar::platforms {
 
 
@@ -64,34 +63,21 @@ namespace mar::platforms {
 
 		UniformBufferOpenGL& submitUniformBuffer();
 
-		void uploadUniformFloat		(const UniformBlock& block, const UniformItem& item, float f) const;
-		void uploadUniformFloat		(const UniformBlock& block, const UniformItem& item, const std::vector<float>& floats) const;
-		void uploadUniformInt		(const UniformBlock& block, const UniformItem& item, int32_t i) const;
-		void uploadUniformInt		(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& ints) const;
-		void uploadUniformSampler	(const UniformBlock& block, const UniformItem& item, int32_t sampler) const;
-		void uploadUniformSampler	(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& sampler) const;
-		void uploadUniformVec3		(const UniformBlock& block, const UniformItem& item, maths::vec3 vector3) const;
-		void uploadUniformVec3		(const UniformBlock& block, const UniformItem& item, const std::vector<maths::vec3>& vec) const;
-		void uploadUniformMat4		(const UniformBlock& block, const UniformItem& item, const maths::mat4& matrix4x4) const;
-		void uploadUniformMat4		(const UniformBlock& block, const UniformItem& item, const std::vector<maths::mat4>& matrices) const;
+		void uploadUniformFloat(const UniformBlock& block, const UniformItem& item, float f) const;
+		void uploadUniformFloat(const UniformBlock& block, const UniformItem& item, const std::vector<float>& floats) const;
+		void uploadUniformInt(const UniformBlock& block, const UniformItem& item, int32_t i) const;
+		void uploadUniformInt(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& ints) const;
+		void uploadUniformSampler(const UniformBlock& block, const UniformItem& item, int32_t sampler) const;
+		void uploadUniformSampler(const UniformBlock& block, const UniformItem& item, const std::vector<int32_t>& sampler) const;
+		void uploadUniformVec3(const UniformBlock& block, const UniformItem& item, maths::vec3 vector3) const;
+		void uploadUniformVec3(const UniformBlock& block, const UniformItem& item, const std::vector<maths::vec3>& vec) const;
+		void uploadUniformMat4(const UniformBlock& block, const UniformItem& item, const maths::mat4& matrix4x4) const;
+		void uploadUniformMat4(const UniformBlock& block, const UniformItem& item, const std::vector<maths::mat4>& matrices) const;
 
 		void uploadUniformVec3AtIndex(const UniformBlock& block, const UniformItem& item, int32_t index, maths::vec3 vector3) const;
-		void uploadLightMaterial(const UniformBlock& block, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const;
-
-		void setUniformFloat(const char* name, float f) const;
-		void setUniformFloat(const char* name, const std::vector<float>& floats) const;
-		void setUniformInt(const char* name, int32_t i) const;
-		void setUniformInt(const char* name, const std::vector<int32_t>& ints) const;
-		void setUniformSampler(const char* name, int32_t sampler) const;
-		void setUniformSampler(const char* name, const std::vector<int32_t>& sampler) const;
-		void setUniformVec3(const char* name, maths::vec3 vector3) const;
-		void setUniformVec3(const char* name, const std::vector<maths::vec3>& vec) const;
-		void setUniformMat4(const char* name, const maths::mat4& matrix4x4) const;
-		void setUniformMat4(const char* name, const std::vector<maths::mat4>& matrices) const;
+		void uploadUniformFloatAtIndex(const UniformBlock& block, const UniformItem& item, int32_t index, float f) const;
 
 	private:
-
-		int32_t getUniformLocation(const char* name) const;
 
 		void loadShader(std::string& buffer, const char* path) const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
