@@ -28,6 +28,11 @@
 
 namespace mar::platforms::ShaderUniforms {
 
+	struct UniformBlock {
+		const char* name;
+		size_t bindingPoint;
+		uint64_t memory;
+	};
 
 	struct Material {
 		constexpr Material(
@@ -61,7 +66,15 @@ namespace mar::platforms::ShaderUniforms {
 		const char* quadratic;
 		const char* shininess;
 	};
-	
+
+	constexpr uint64_t MaterialMemory{ 4 * sizeof(maths::vec4) + 4 * sizeof(float) };
+
+	constexpr UniformBlock Camera{ "Camera", 0, 2 * sizeof(maths::mat4) + sizeof(maths::vec4) }; // vec3 has a base alignment of 4N.
+	constexpr UniformBlock entitiesComponents{ "entitiesComponents", 1, 32 * sizeof(maths::mat4) + 32 * sizeof(float) };
+	constexpr UniformBlock MaterialInfo{ "MaterialInfo", 2, 32 * MaterialMemory };
+	constexpr UniformBlock MeshInfo{ "MeshInfo", 3, 1 * sizeof(int32_t) };
+	constexpr UniformBlock TextureSamplers{ "TextureSamplers", 4, 32 * sizeof(maths::vec4) };
+
 	constexpr const char* u_Model{ "CameraUniforms.u_Model" };
 	constexpr const char* u_MVP{ "CameraUniforms.u_MVP" };
 	constexpr const char* u_CameraPos{ "CameraUniforms.u_CameraPos" };

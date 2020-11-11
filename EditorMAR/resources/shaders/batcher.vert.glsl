@@ -14,7 +14,7 @@ layout(location = 5) out vec3 v_texCoords3D;
 layout(location = 6) out float v_samplerType;
 layout(location = 7) out vec3 v_CameraPos;
 
-layout(std140, binding = 0) uniform matrices {
+layout(std140, binding = 0) uniform Camera {
 	mat4 u_Model;
 	mat4 u_MVP;
 	vec3 u_CameraPos;
