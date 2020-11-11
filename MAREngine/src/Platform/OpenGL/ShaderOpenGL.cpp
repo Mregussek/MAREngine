@@ -95,7 +95,7 @@ namespace mar::platforms {
 
 		if (foundBlock != m_uniformBuffers.end()) {
 			foundBlock->bind();
-			foundBlock->update<float>(item.offset, floats.size() * sizeof(float), floats);
+			foundBlock->update<float>(item.offset, item.memory, floats);
 			foundBlock->unbind();
 			return;
 		}
@@ -125,7 +125,7 @@ namespace mar::platforms {
 
 		if (foundBlock != m_uniformBuffers.end()) {
 			foundBlock->bind();
-			foundBlock->update<int32_t>(item.offset, ints.size() * sizeof(int32_t), ints);
+			foundBlock->update<int32_t>(item.offset, item.memory, ints);
 			foundBlock->unbind();
 			return;
 		}
@@ -163,7 +163,7 @@ namespace mar::platforms {
 
 		if (foundBlock != m_uniformBuffers.end()) {
 			foundBlock->bind();
-			foundBlock->update<float>(item.offset, vec.size() * sizeof(maths::vec4), maths::vec3::value_ptr(vec));
+			foundBlock->update<float>(item.offset, item.memory, maths::vec3::value_ptr(vec));
 			foundBlock->unbind();
 			return;
 		}
@@ -193,7 +193,7 @@ namespace mar::platforms {
 
 		if (foundBlock != m_uniformBuffers.end()) {
 			foundBlock->bind();
-			foundBlock->update<float>(item.offset, matrices.size() * sizeof(maths::mat4), maths::mat4::value_ptr(matrices));
+			foundBlock->update<float>(item.offset, item.memory, maths::mat4::value_ptr(matrices));
 			foundBlock->unbind();
 			return;
 		}

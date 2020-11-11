@@ -62,7 +62,7 @@ namespace mar::platforms::ShaderUniforms {
 	// ------------ EntityCmp Uniform Block
 
 	constexpr UniformItem ut_u_SeparateTransform{ "components.u_SeparateTransform", 0, 32 * sizeof(maths::mat4) };
-	constexpr UniformItem ut_u_samplerTypes{ "components.u_samplerTypes", ut_u_SeparateTransform.memory, 32 * sizeof(float) };
+	constexpr UniformItem ut_u_samplerTypes{ "components.u_samplerTypes", ut_u_SeparateTransform.memory, 32 * sizeof(maths::vec4) };
 	constexpr UniformBlock ub_EntityCmp{ "EntityCmp", 1,  ut_u_SeparateTransform.memory + ut_u_samplerTypes.memory };
 
 	// ------------ Material Uniform Block
@@ -79,16 +79,16 @@ namespace mar::platforms::ShaderUniforms {
 	constexpr UniformItem ut_u_specular{ "u_material.specular", offsetSpecular, 32 * sizeof(maths::vec4) };
 
 	constexpr uint32_t offsetConstant = offsetSpecular + ut_u_specular.memory;
-	constexpr UniformItem ut_u_constant{ "u_material.constant", offsetConstant, 32 * sizeof(float) };
+	constexpr UniformItem ut_u_constant{ "u_material.constant", offsetConstant, 32 * sizeof(maths::vec4) };
 
 	constexpr uint32_t offsetLinear = offsetConstant + ut_u_constant.memory;
-	constexpr UniformItem ut_u_linear{ "u_material.linear", offsetLinear, 32 * sizeof(float) };
+	constexpr UniformItem ut_u_linear{ "u_material.linear", offsetLinear, 32 * sizeof(maths::vec4) };
 
 	constexpr uint32_t offsetQuadratic = offsetLinear + ut_u_linear.memory;
-	constexpr UniformItem ut_u_quadratic{ "u_material.quadratic", offsetQuadratic, 32 * sizeof(float) };
+	constexpr UniformItem ut_u_quadratic{ "u_material.quadratic", offsetQuadratic, 32 * sizeof(maths::vec4) };
 
 	constexpr uint32_t offsetShininess = offsetQuadratic + ut_u_quadratic.memory;
-	constexpr UniformItem ut_u_shininess{ "u_material.shininess", offsetShininess, 32 * sizeof(float) };
+	constexpr UniformItem ut_u_shininess{ "u_material.shininess", offsetShininess, 32 * sizeof(maths::vec4) };
 
 	constexpr uint32_t offsetMaterialSize = offsetShininess + ut_u_shininess.memory;
 	constexpr UniformItem ut_u_materialSize{ "u_material.materialSize", offsetMaterialSize, sizeof(int32_t) };
