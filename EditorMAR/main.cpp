@@ -26,4 +26,6 @@ int main() {
 	editor.initialize();
 	editor.runProjectOnEngine();
 	editor.shutdown();
+
+	return 0;
 }

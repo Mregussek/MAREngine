@@ -11,7 +11,7 @@ layout(location = 7) in vec3 v_CameraPos;
 
 layout(location = 0) out vec4 outColor;
 
-layout(std140, binding = 2) uniform Material {
+layout(std430, binding = 2) buffer Material {
 	vec3 lightPos[32];
 	vec3 ambient[32];
 	vec3 diffuse[32];
@@ -25,7 +25,7 @@ layout(std140, binding = 2) uniform Material {
 	int materialSize;
 } u_material;
 
-layout(std140, binding = 3) uniform TextureSamplers {
+layout(std430, binding = 3) buffer TextureSamplers {
 	vec3 u_Color[32];
 } samplers;					
 

@@ -18,38 +18,38 @@
 **/
 
 
-#include "UniformBufferOpenGL.h"
+#include "ShaderBufferStorageOpenGL.h"
 
 
 namespace mar::platforms {
 
 
-	void UniformBufferOpenGL::initialize(const UniformBlock& uo, std::vector<UniformItem>&& items) {
-		m_uniformBlock = uo;
+	void ShaderBufferStorageOpenGL::initialize(const UniformBuffer& uniformBuffer, std::vector<UniformItem>&& items) {
+		m_uniformBuffer = uniformBuffer;
 		m_uniformItems = items;
 
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ubo) );
-		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, m_ubo) );
-		PLATFORM_GL_FUNC( glBufferData(GL_UNIFORM_BUFFER, uo.memory, nullptr, GL_DYNAMIC_DRAW) );
-		PLATFORM_GL_FUNC( glBindBufferBase(GL_UNIFORM_BUFFER, uo.bindingPoint, m_ubo) );
+		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ubo) );
+		PLATFORM_GL_FUNC( glBufferData(GL_SHADER_STORAGE_BUFFER, m_uniformBuffer.memory, nullptr, GL_DYNAMIC_DRAW) );
+		PLATFORM_GL_FUNC( glBindBufferBase(GL_SHADER_STORAGE_BUFFER, m_uniformBuffer.bindingPoint, m_ubo) );
 	}
 
-	void UniformBufferOpenGL::close() {
+	void ShaderBufferStorageOpenGL::close() {
 		m_uniformItems.clear();
 
 		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ubo) );
 	}
 
-	void UniformBufferOpenGL::reset() const {
-		PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, 0, 0, nullptr) );
+	void ShaderBufferStorageOpenGL::reset() const {
+		PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, 0, nullptr) );
 	}
 
-	void UniformBufferOpenGL::bind() const {
-		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, m_ubo) );
+	void ShaderBufferStorageOpenGL::bind() const {
+		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ubo) );
 	}
 
-	void UniformBufferOpenGL::unbind() const {
-		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, 0) );
+	void ShaderBufferStorageOpenGL::unbind() const {
+		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0) );
 	}
 
 

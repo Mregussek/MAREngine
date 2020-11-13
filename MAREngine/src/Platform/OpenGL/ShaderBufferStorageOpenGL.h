@@ -30,16 +30,16 @@
 namespace mar::platforms {
 
 
-	class UniformBufferOpenGL {
+	class ShaderBufferStorageOpenGL {
 
 		friend class ShaderOpenGL;
 
-		typedef ShaderUniforms::UniformBlock UniformBlock;
+		typedef ShaderUniforms::UniformBuffer UniformBuffer;
 		typedef ShaderUniforms::UniformItem UniformItem;
 
 	public:
 
-		void initialize(const UniformBlock& uo, std::vector<UniformItem>&& items);
+		void initialize(const UniformBuffer& uniformBuffer, std::vector<UniformItem>&& items);
 		void close();
 
 		void bind() const;
@@ -47,19 +47,19 @@ namespace mar::platforms {
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
-			PLATFORM_GL_FUNC(glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()));
+			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()) );
 		}
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const T* data) const {
-			PLATFORM_GL_FUNC(glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data));
+			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data) );
 		}
 
 		void reset() const;
 
 	private:
 
-		UniformBlock m_uniformBlock{ "Null", 0, 0 };
+		UniformBuffer m_uniformBuffer{ "Null", 0, 0 };
 		std::vector<UniformItem> m_uniformItems;
 		uint32_t m_ubo{ 0 };
 

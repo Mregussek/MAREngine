@@ -14,13 +14,13 @@ layout(location = 5) out vec3 v_texCoords3D;
 layout(location = 6) out float v_samplerType;
 layout(location = 7) out vec3 v_CameraPos;
 
-layout(std140, binding = 0) uniform Camera {
+layout(std430, binding = 0) buffer Camera {
 	mat4 u_Model;
 	mat4 u_MVP;
 	vec3 u_CameraPos;
 } CameraUniforms;
 
-layout(std140, binding = 1) uniform EntityCmp {
+layout(std430, binding = 1) buffer EntityCmp {
 	mat4 u_SeparateTransform[32];
 	float u_samplerTypes[32];
 } components;

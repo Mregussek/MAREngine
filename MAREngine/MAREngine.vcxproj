@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
@@ -144,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -299,7 +299,7 @@
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
-    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.h" />
     <ClInclude Include="src\Platform\PlatformLogs.h" />
     <ClInclude Include="src\LayerStack\layers\GUILayer.h" />
     <ClInclude Include="src\LayerStack\Layer.h" />
@@ -385,7 +385,7 @@
     <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.cpp" />
     <ClCompile Include="src\Window\Input.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
