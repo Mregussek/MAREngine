@@ -30,7 +30,17 @@ namespace mar::editor {
 	void ProjectSelectionGUI::initialize(const char* glsl_version) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
-		ImGui_ImplGlfw_InitForOpenGL(window::Window::Instance().m_window.m_window, true);
+
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			ImGui_ImplGlfw_InitForOpenGL(window::Window<GLFWwindow>::Instance().m_window, true);
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+
+		}
+		else {
+
+		}
+
 		ImGui_ImplOpenGL3_Init(glsl_version);
 
 		ImGuiIO& io = ImGui::GetIO();

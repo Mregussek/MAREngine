@@ -280,7 +280,6 @@
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectTemplatesWindow.h" />
     <ClInclude Include="src\mar_logging.h" />
     <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h" />
-    <ClInclude Include="src\Platform\GLFW\WindowGLFW.h" />
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\SetupOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\PipelineOpenGL.h" />
@@ -315,8 +314,8 @@
     <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h" />
     <ClInclude Include="src\mar.h" />
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h" />
-    <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\Window\Window.h" />
+    <ClInclude Include="src\Window\WindowInstance.h" />
     <ClInclude Include="src\Window\WindowLogs.h" />
   </ItemGroup>
   <ItemGroup>
@@ -386,8 +385,8 @@
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.cpp" />
-    <ClCompile Include="src\Window\Input.cpp" />
-    <ClCompile Include="src\Window\Window.cpp" />
+    <ClCompile Include="src\Platform\SDL\WindowSDL.cpp" />
+    <ClCompile Include="src\Window\WindowInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cmake\FindGLEW.cmake" />

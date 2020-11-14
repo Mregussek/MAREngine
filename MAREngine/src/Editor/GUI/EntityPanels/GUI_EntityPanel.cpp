@@ -34,7 +34,7 @@
 #include "../../../Engine.h"
 
 #include "../../Filesystem/EditorFilesystem.h"
-#include "../../../Window/Input.h"
+#include "../../../Window/Window.h"
 
 
 namespace mar::editor {
@@ -150,7 +150,7 @@ namespace mar::editor {
 
 	void GUI_EntityPanel::popUpMenu() const {
 		if (ImGui::IsWindowFocused()) {
-			if (window::Input::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+			if (window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneEntityModifyPopUp");
 			}
 		}

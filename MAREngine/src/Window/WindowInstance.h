@@ -18,46 +18,68 @@
 **/
 
 
-#ifndef MAR_ENGINE_PLATFORMS_GLFW_WINDOW_GLFW_H
-#define MAR_ENGINE_PLATFORMS_GLFW_WINDOW_GLFW_H
+#ifndef MAR_ENGINE_WINDOW_WINDOW_INSTANCE_H
+#define MAR_ENGINE_WINDOW_WINDOW_INSTANCE_H
 
 
-#include "../../mar.h"
-#include "WindowCallbacks.h"
-#include "../PlatformLogs.h"
+#include "../mar.h"
 
 
 namespace mar::editor { class GUI; class ProjectSelectionGUI; }
-namespace mar::platforms {
+namespace mar::window {
+	
+	class Input;
 
 
-	class WindowGLFW {
+	template<typename WindowType>
+	class Window {
 
+		friend class Input;
 		friend class editor::GUI;
 		friend class editor::ProjectSelectionGUI;
 
 	public:
 
-		bool initialize(int32_t height, int32_t width, const char* name);
-		static void terminate();
+		static Window<WindowType>& Instance() { return *s_instance; }
+		
+		Window() = default;
+
+		bool initialize(int32_t width, int32_t height, const char* name);
+		void endRenderLoop();
+		void terminate();
+
+		void setVerticalSync(int32_t setter) const;
 
 		bool isGoingToClose() const;
-		void close();
 
 		void swapBuffers();
 
-		void setVSync(int32_t set) const;
+		void clear() const;
 
 		bool isKeyPressed(int32_t key) const;
 		bool isMousePressed(int32_t key) const;
 
+		float getMousePositionX() const;
+		float getMousePositionY() const;
+
+		float getScrollX() const;
+		float getScrollY() const;
+
 	private:
 
-		GLFWwindow* m_window;
+		static Window<WindowType>* s_instance;
+
+		WindowType* m_window;
+		uint32_t m_width{ 0 };
+		uint32_t m_height{ 0 };
+
 	};
+
+	template<typename WindowType>
+	Window<WindowType>* Window<WindowType>::s_instance{ nullptr };
 
 
 }
 
 
-#endif // !MAR_ENGINE_PLATFORMS_GLFW_WINDOW_GLFW_H
+#endif // !MAR_ENGINE_WINDOW_WINDOW_INSTANCE_H

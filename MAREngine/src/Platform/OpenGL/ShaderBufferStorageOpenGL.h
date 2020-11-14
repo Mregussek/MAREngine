@@ -47,12 +47,12 @@ namespace mar::platforms {
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()) );
+			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data.data()) );
 		}
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const T* data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data) );
+			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data) );
 		}
 
 		void reset() const;

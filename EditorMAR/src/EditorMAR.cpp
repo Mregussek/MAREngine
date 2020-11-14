@@ -29,7 +29,7 @@ void EditorMAR::initialize() {
 }
 
 void EditorMAR::projectSelectionWindow() {
-	window::Window window = window::Window();
+	window::Window<GLFWwindow> window{};
 	window.initialize(1200, 700, "MAREngine - Project Manager - (C) 2020-present Mateusz Rzeczyca");
 
 	editor::ProjectSelectionGUI gui;
@@ -38,13 +38,13 @@ void EditorMAR::projectSelectionWindow() {
 
 	while (!window.isGoingToClose())
 	{
-		window.clear();
+		platforms::SetupOpenGL::clearScreen({0.f, 1.0f, 1.0f});
 
 		gui.prepare();
 		gui.update();
 		gui.render();
 
-		window.update();
+		window.swapBuffers();
 	}
 
 	gui.shutdown();
@@ -52,7 +52,7 @@ void EditorMAR::projectSelectionWindow() {
 }
 
 void EditorMAR::runProjectOnEngine() {
-	window::Window window{};
+	window::Window<GLFWwindow> window{};
 	layers::LayerStack stack{};
 	editor::GUI gui{};
 
@@ -78,13 +78,13 @@ void EditorMAR::runProjectOnEngine() {
 
 	while (!window.isGoingToClose() && !m_engine.shouldEngineRestart())
 	{
-		window.clear();
+		platforms::SetupOpenGL::clearScreen(scene->getBackground());
 
 		guiLayer->renderToViewport();
 
 		stack.update();
 
-		window.update();
+		window.swapBuffers();
 	}
 
 	stack.close();

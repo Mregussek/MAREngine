@@ -87,7 +87,7 @@ namespace mar::editor {
 				if (ImGui::MenuItem("Open Scene")) { m_loadSceneWindow = true; }
 				if (ImGui::MenuItem("Save Scene")) { m_saveSceneWindow = true; }
 				if (ImGui::MenuItem("Exit")) {
-					window::Window::Instance().endRenderLoop();
+					window::endRenderLoop();
 				}
 
 				ImGui::EndMenu();
@@ -135,7 +135,7 @@ namespace mar::editor {
 			}
 
 			if (ImGui::MenuItem("Exit")) {
-				window::Window::Instance().endRenderLoop();
+				window::endRenderLoop();
 			}
 
 			ImGui::EndMainMenuBar();

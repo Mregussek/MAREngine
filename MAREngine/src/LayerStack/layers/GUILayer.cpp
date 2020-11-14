@@ -20,8 +20,6 @@
 
 #include "GUILayer.h"
 #include "../LayerLogs.h"
-#include "../../Window/Window.h"
-#include "../../Window/Input.h"
 #include "../../Editor/GUI/GUI.h"
 
 

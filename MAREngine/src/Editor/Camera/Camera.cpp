@@ -19,7 +19,7 @@
 
 
 #include "Camera.h"
-#include "../../Window/Input.h"
+#include "../../Window/Window.h"
 
 
 namespace mar::editor {
@@ -55,10 +55,10 @@ namespace mar::editor {
         lastTime = currentFrame;
         const float velocity = m_movementSpeed * deltaTime;
     
-        if (window::Input::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
-        if (window::Input::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
-        if (window::Input::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
-        if (window::Input::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
+        if (window::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
+        if (window::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
+        if (window::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
+        if (window::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
     }
     
     void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse) {

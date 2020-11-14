@@ -21,6 +21,11 @@
 #include "mar_includes.h"
 #include "mar_logging.h"
 
+
+#define MAR_ENGINE_USE_GLFW_WINDOW 1
+#define MAR_ENGINE_USE_SDL_WINDOW 0
+
+
 /*!
 	mar is a main namespace for MAREngine
 	If class is here declared, it means that there is linker problem for other files with it,

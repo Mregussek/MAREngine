@@ -23,54 +23,168 @@
 
 
 #include "../mar.h"
-#include "../Platform/GLFW/WindowGLFW.h"
+#include "WindowInstance.h"
+#include "buttons_def.h"
 
 
-namespace mar::editor { class GUI; class ProjectSelectionGUI; }
 namespace mar::window {
-	
-	class Input;
 
 
-	class Window {
+	inline bool initialize(int32_t width, int32_t height, const char* name) {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().initialize(width, height, name);
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().initialize(width, height, name);
+		}
+		else {
+			return false;
+		}
+	}
 
-		friend class Input;
-		friend class editor::GUI;
-		friend class editor::ProjectSelectionGUI;
+	inline void endRenderLoop() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) { 
+			window::Window<GLFWwindow>::Instance().endRenderLoop(); 
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) { 
+			window::Window<SDL_Window>::Instance().endRenderLoop(); 
+		}
+		else {
 
-	public:
+		}
+	}
 
-		static Window& Instance() { return *s_instance; }
-		
-		Window() = default;
+	inline void terminate() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			window::Window<GLFWwindow>::Instance().terminate();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			window::Window<SDL_Window>::Instance().terminate();
+		}
+		else {
 
-		void updateBackgroundColor(maths::vec3 new_back);
+		}
+	}
 
-		void initialize(int32_t width, int32_t height, const char* name);
+	inline bool isGoingToClose() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().isGoingToClose();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().isGoingToClose();
+		}
+		else {
 
-		void terminate();
+		}
+	}
 
-		void clear() const;
+	inline void setVerticalSync(int32_t setter) {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			window::Window<GLFWwindow>::Instance().setVerticalSync(setter);
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			window::Window<SDL_Window>::Instance().setVerticalSync(setter);
+		}
+		else {
 
-		void update();
+		}
+	}
 
-		bool isGoingToClose() const;
+	inline void swapBuffers() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			window::Window<GLFWwindow>::Instance().swapBuffers();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			window::Window<SDL_Window>::Instance().swapBuffers();
+		}
+		else {
 
-		void endRenderLoop();
+		}
+	}
 
-		void exitApp();
+	inline void clear() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			window::Window<GLFWwindow>::Instance().clear();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			window::Window<SDL_Window>::Instance().clear();
+		}
+		else {
 
-	private:
+		}
+	}
 
-		static Window* s_instance;
+	inline bool isKeyPressed(int32_t key) {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().isKeyPressed(key);
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().isKeyPressed(key);
+		}
+		else {
+			return false;
+		}
+	}
 
-		platforms::WindowGLFW m_window;
-		uint32_t m_width{ 0 };
-		uint32_t m_height{ 0 };
-		maths::vec3 m_background;
-		bool m_closeAfterTerminate{ false };
+	inline bool isMousePressed(int32_t key) {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().isMousePressed(key);
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().isMousePressed(key);
+		}
+		else {
+			return false;
+		}
+	}
 
-	};
+	inline float getMousePositionX() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().getMousePositionX();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().getMousePositionX();
+		}
+		else {
+			return 0.f;
+		}
+	}
+
+	inline float getMousePositionY() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().getMousePositionY();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().getMousePositionY();
+		}
+		else {
+			return 0.f;
+		}
+	}
+
+	inline float getScrollX() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().getScrollX();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().getScrollX();
+		}
+		else {
+			return 0.f;
+		}
+	}
+
+	inline float getScrollY() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return window::Window<GLFWwindow>::Instance().getScrollY();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return window::Window<SDL_Window>::Instance().getScrollY();
+		}
+		else {
+			return 0.f;
+		}
+	}
 
 
 }

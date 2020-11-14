@@ -45,7 +45,7 @@ namespace mar::graphics {
 	}
 	
 	void RenderEvents::onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
-		onLightPositionUpdate(std::move(position), rpc);
+		onLightPositionUpdate(position, rpc);
 		onLightComponentUpdate(light, rpc);
 	}
 
