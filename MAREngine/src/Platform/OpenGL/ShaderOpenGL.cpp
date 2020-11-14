@@ -141,7 +141,7 @@ namespace mar::platforms {
 		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
-		shaderBuffer.update<float>(item.offset + index * sizeof(maths::vec3), sizeof(maths::vec3), maths::vec3::value_ptr(vector3));
+		shaderBuffer.update<float>(item.offset + index * sizeof(maths::vec3), 1 * sizeof(maths::vec3), maths::vec3::value_ptr(vector3));
 	}
 
 	void ShaderOpenGL::uploadUniformFloatAtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const float& f) const {

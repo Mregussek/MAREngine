@@ -145,28 +145,27 @@ namespace mar::graphics {
 
 		const auto& samplerTypes = container.getSamplerTypes();
 		const auto& colors = container.getColors();
-		//const auto& textures = container.getTexture2D();
+		const auto& textures = container.getTexture2D();
 		//const auto& cubemaps = container.getTextureCubemap();
 
 		m_shader.uploadUniformFloat(ub_EntityCmp, ut_u_samplerTypes, samplerTypes);
-		/*
+		
 		std::for_each(colors.begin(), colors.end(), [&shader = m_shader](const ColorPair& color) {
-			const auto sampler = color.first;
-			shader.uploadUniformVec3AtIndex(ub_TextureSamplers, ut_u_Color, sampler, color.second);
+			shader.uploadUniformVec3AtIndex(ub_TextureSamplers, ut_u_Color, color.first, color.second);
 		});
 			
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
-		
+		/*
 		std::for_each(textures.begin(), textures.end(), [&shader = m_shader](const TexturePair& texture) {
 			const uint32_t textureID = TextureGL::Instance()->loadTexture(texture.second);
 			const uint32_t sampler = (uint32_t)texture.first;
 
 			TextureGL::Instance()->bind2D(sampler, textureID);
-			shader.setUniformSampler(u_Samplers2D[sampler], sampler);
+			shader.uploadUniformSampler(u_Samplers2D[sampler], sampler);
 		});
 		
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
-
+		
 		std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = m_shader](const TexturePair& texture) {
 			const uint32_t textureID = TextureGL::Instance()->loadCubemap(texture.second);
 			const uint32_t sampler = (uint32_t)texture.first;

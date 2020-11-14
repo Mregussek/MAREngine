@@ -41,8 +41,7 @@ void main() {
 	vec4 batchColor;
 
 	if(v_samplerType <= 0.0f) {
-		batchColor = vec4(1.f, 0.f, 1.f, 1.0f);
-		//batchColor = setProperColor(v_shapeIndex);
+		batchColor = setProperColor(v_shapeIndex);
 	}
 	else if(v_samplerType <= 1.0f)	{
 		batchColor = vec4(0.f, 1.f, 1.0f, 1.0f);
@@ -56,7 +55,7 @@ void main() {
 		batchColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	}
 
-	//vec4 lightColor = computeAllLights(batchColor);
+	vec4 lightColor = computeAllLights(batchColor);
 
 	outColor = batchColor ;//* lightColor;
 }
