@@ -44,7 +44,7 @@ namespace mar::editor {
 			ImGui_ImplGlfw_InitForOpenGL(window::Window<GLFWwindow>::Instance().m_window, true);
 		}
 		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-
+			ImGui_ImplSDL2_InitForOpenGL(window::Window<SDL_Window>::Instance().m_window, &platforms::ContextSDL::s_context);
 		}
 		else {
 			
@@ -74,7 +74,17 @@ namespace mar::editor {
 		m_viewportFramebuffer.close();
 
 		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
+
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			ImGui_ImplGlfw_Shutdown();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			ImGui_ImplSDL2_Shutdown();
+		}
+		else {
+
+		}
+
 		ImGui::DestroyContext();
 
 		EDITOR_INFO("GUI: closed properly!");
@@ -106,7 +116,17 @@ namespace mar::editor {
 		m_viewportFramebuffer.unbind();
 
 		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
+
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			ImGui_ImplGlfw_NewFrame();
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			ImGui_ImplSDL2_NewFrame(window::Window<SDL_Window>::Instance().m_window);
+		}
+		else {
+
+		}
+		
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 

@@ -20,14 +20,16 @@
 
 #include "EditorMAR.h"
 
+
 using namespace mar;
+
 
 void EditorMAR::initialize() {
 	m_engine.initialize();
 
 	//projectSelectionWindow();
 }
-
+/*
 void EditorMAR::projectSelectionWindow() {
 	window::Window<GLFWwindow> window{};
 	window.initialize(1200, 700, "MAREngine - Project Manager - (C) 2020-present Mateusz Rzeczyca");
@@ -50,9 +52,9 @@ void EditorMAR::projectSelectionWindow() {
 	gui.shutdown();
 	window.terminate();
 }
-
+*/
 void EditorMAR::runProjectOnEngine() {
-	window::Window<GLFWwindow> window{};
+	window::Window<SDL_Window> window{};
 	layers::LayerStack stack{};
 	editor::GUI gui{};
 

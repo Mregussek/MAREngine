@@ -26,6 +26,7 @@
 
 
 namespace mar::editor { class GUI; class ProjectSelectionGUI; }
+namespace mar::platforms { class ContextSDL; }
 namespace mar::window {
 	
 	class Input;
@@ -34,7 +35,6 @@ namespace mar::window {
 	template<typename WindowType>
 	class Window {
 
-		friend class Input;
 		friend class editor::GUI;
 		friend class editor::ProjectSelectionGUI;
 
@@ -70,6 +70,7 @@ namespace mar::window {
 		static Window<WindowType>* s_instance;
 
 		WindowType* m_window;
+		
 		uint32_t m_width{ 0 };
 		uint32_t m_height{ 0 };
 

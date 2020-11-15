@@ -103,6 +103,9 @@ namespace mar::window {
 
 	template<>
 	void Window<GLFWwindow>::swapBuffers() {
+		m_width = platforms::callbacks::window_width;
+		m_height = platforms::callbacks::window_height;
+
 		glfwPollEvents();
 		glfwSwapBuffers(m_window);
 

@@ -83,7 +83,7 @@ else()
 endif()
 
 # -------------------------------------------------------------
-# glew
+# glew ! TODO: change to glad!
 # -------------------------------------------------------------
 message("Looking for: GLEW")
 add_definitions(-DGLEW_STATIC)

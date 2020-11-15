@@ -195,12 +195,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="3rd_party\entt\include\entt\entt.hpp" />
+    <ClInclude Include="3rd_party\GLAD\include\glad\glad.h" />
+    <ClInclude Include="3rd_party\GLAD\include\KHR\khrplatform.h" />
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\Dirent\dirent.h" />
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.h" />
     <ClInclude Include="3rd_party\ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="3rd_party\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="3rd_party\imgui\examples\imgui_impl_glfw.h" />
     <ClInclude Include="3rd_party\imgui\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_sdl.h" />
     <ClInclude Include="3rd_party\imgui\imconfig.h" />
     <ClInclude Include="3rd_party\imgui\imgui.h" />
     <ClInclude Include="3rd_party\imgui\imgui_internal.h" />
@@ -304,6 +307,7 @@
     <ClInclude Include="src\LayerStack\Layer.h" />
     <ClInclude Include="src\LayerStack\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
+    <ClInclude Include="src\Platform\SDL\ContextSDL.h" />
     <ClInclude Include="src\Window\buttons_def.h" />
     <ClInclude Include="src\Platform\OpenGL\FramebufferOpenGL.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h" />
@@ -325,6 +329,7 @@
     <ClCompile Include="3rd_party\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="3rd_party\imgui\examples\imgui_impl_glfw.cpp" />
     <ClCompile Include="3rd_party\imgui\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_sdl.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_demo.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_draw.cpp" />
@@ -385,6 +390,7 @@
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.cpp" />
+    <ClCompile Include="src\Platform\SDL\ContextSDL.cpp" />
     <ClCompile Include="src\Platform\SDL\WindowSDL.cpp" />
     <ClCompile Include="src\Window\WindowInstance.cpp" />
   </ItemGroup>

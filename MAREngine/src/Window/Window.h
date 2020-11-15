@@ -23,6 +23,7 @@
 
 
 #include "../mar.h"
+#include "../Platform/SDL/ContextSDL.h"
 #include "WindowInstance.h"
 #include "buttons_def.h"
 

@@ -87,6 +87,7 @@
 	#include "imgui_internal.h"
 	#include "examples/imgui_impl_glfw.h"
 	#include "examples/imgui_impl_opengl3.h"
+	#include "examples/imgui_impl_sdl.h"
 	#define MAR_ENGINE_IMGUI_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import imgui.h!"
