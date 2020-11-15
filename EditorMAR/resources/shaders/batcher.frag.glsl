@@ -12,10 +12,10 @@ layout(location = 7) in vec3 v_CameraPos;
 layout(location = 0) out vec4 outColor;
 
 struct LightMaterial {
-	vec3 lightPos;
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	float posX, posY, posZ;
+	float ambientX, ambientY, ambientZ;
+	float diffuseX, diffuseY, diffuseZ;
+	float specularX, specularY, specularZ;
 
 	float constant;
 	float linear;
@@ -60,7 +60,7 @@ void main() {
 
 	vec4 lightColor = computeAllLights(batchColor);
 
-	outColor = batchColor ;//* lightColor;
+	outColor = batchColor * lightColor;
 }
 
 vec4 setProperColor(float index) {
@@ -136,23 +136,25 @@ vec4 setProperTexture2D(float index) {
 }
 
 vec4 calculateLight(LightMaterial lightMaterial, vec3 batchedColor) {
+	vec3 position = vec3(lightMaterial.posX, lightMaterial.posY, lightMaterial.posZ);
+
 	// AMBIENT
-	vec3 ambientResult = batchedColor * lightMaterial.ambient;
+	vec3 ambientResult = batchedColor * vec3(lightMaterial.ambientX, lightMaterial.ambientY, lightMaterial.ambientZ);
 
 	// DIFFUSE
 	vec3 norm = normalize(v_lightNormal);
-	vec3 lightDir = normalize(lightMaterial.lightPos - v_Position);
+	vec3 lightDir = normalize(position - v_Position);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuseResult = batchedColor * (diff * lightMaterial.diffuse);
+	vec3 diffuseResult = batchedColor * (diff * vec3(lightMaterial.diffuseX, lightMaterial.diffuseY, lightMaterial.diffuseZ));
 
 	// SPECULAR
 	vec3 viewDir = normalize(v_CameraPos - v_Position);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), lightMaterial.shininess);
-	vec3 specularResult = batchedColor * (spec * lightMaterial.specular);
+	vec3 specularResult = batchedColor * (spec * vec3(lightMaterial.specularX, lightMaterial.specularY, lightMaterial.specularZ));
 
 	// ATTENUATION
-	float distance = length(lightMaterial.lightPos - v_Position);
+	float distance = length(position - v_Position);
 	float attenuation = 1.0f / (lightMaterial.constant + lightMaterial.linear * distance + lightMaterial.quadratic * (distance * distance));
 		
 	ambientResult *= attenuation;
