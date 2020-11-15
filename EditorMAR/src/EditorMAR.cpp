@@ -54,7 +54,7 @@ void EditorMAR::projectSelectionWindow() {
 }
 */
 void EditorMAR::runProjectOnEngine() {
-	window::Window<SDL_Window> window{};
+	window::Window<GLFWwindow> window{};
 	layers::LayerStack stack{};
 	editor::GUI gui{};
 
@@ -78,8 +78,7 @@ void EditorMAR::runProjectOnEngine() {
 
 	stack.initialize();
 
-	while (!window.isGoingToClose() && !m_engine.shouldEngineRestart())
-	{
+	while (!window.isGoingToClose() && !m_engine.shouldEngineRestart()) {
 		platforms::SetupOpenGL::clearScreen(scene->getBackground());
 
 		guiLayer->renderToViewport();
