@@ -68,33 +68,10 @@ namespace mar::platforms::ShaderUniforms {
 
 	// ------------ Material Uniform Block
 
-	constexpr UniformItem ut_u_LightPos{ "u_material.lightPos", 0, 32 * sizeof(maths::vec3) };
+	constexpr UniformItem ut_u_material{ "material.u_material", 0,  32 * (4 * sizeof(maths::vec3) + 4 * sizeof(float)) };
+	constexpr UniformItem ut_u_materialSize{ "material.materialSize", ut_u_material.memory, sizeof(int32_t) };
 
-	constexpr uint32_t offsetAmbient = ut_u_LightPos.memory;
-	constexpr UniformItem ut_u_ambient{ "u_material.ambient", offsetAmbient, 32 * sizeof(maths::vec3) };
-
-	constexpr uint32_t offsetDiffuse = offsetAmbient + ut_u_ambient.memory;
-	constexpr UniformItem ut_u_diffuse{ "u_material.diffuse", offsetDiffuse, 32 * sizeof(maths::vec3) };
-
-	constexpr uint32_t offsetSpecular = offsetDiffuse + ut_u_diffuse.memory;
-	constexpr UniformItem ut_u_specular{ "u_material.specular", offsetSpecular, 32 * sizeof(maths::vec3) };
-
-	constexpr uint32_t offsetConstant = offsetSpecular + ut_u_specular.memory;
-	constexpr UniformItem ut_u_constant{ "u_material.constant", offsetConstant, 32 * sizeof(float) };
-
-	constexpr uint32_t offsetLinear = offsetConstant + ut_u_constant.memory;
-	constexpr UniformItem ut_u_linear{ "u_material.linear", offsetLinear, 32 * sizeof(float) };
-
-	constexpr uint32_t offsetQuadratic = offsetLinear + ut_u_linear.memory;
-	constexpr UniformItem ut_u_quadratic{ "u_material.quadratic", offsetQuadratic, 32 * sizeof(float) };
-
-	constexpr uint32_t offsetShininess = offsetQuadratic + ut_u_quadratic.memory;
-	constexpr UniformItem ut_u_shininess{ "u_material.shininess", offsetShininess, 32 * sizeof(float) };
-
-	constexpr uint32_t offsetMaterialSize = offsetShininess + ut_u_shininess.memory;
-	constexpr UniformItem ut_u_materialSize{ "u_material.materialSize", offsetMaterialSize, sizeof(int32_t) };
-
-	constexpr UniformBuffer ub_Material{ "Material", 2, offsetMaterialSize + ut_u_materialSize.memory };
+	constexpr UniformBuffer ub_Material{ "Material", 2, ut_u_material.memory + ut_u_materialSize.memory };
 
 	// -------------- TextureSamplers Uniform Block
 

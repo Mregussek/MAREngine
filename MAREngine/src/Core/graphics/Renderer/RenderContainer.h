@@ -39,7 +39,6 @@ namespace mar::graphics {
 		float constant{ 1.0f };
 		float linear{ 0.045f };
 		float quadratic{ 0.0075f };
-
 		float shininess{ 64.0f };
 	};
 

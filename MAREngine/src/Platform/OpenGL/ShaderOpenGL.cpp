@@ -20,6 +20,7 @@
 
 #include "ShaderOpenGL.h"
 #include "ShaderUniforms.h"
+#include "../../Core/graphics/Renderer/RenderContainer.h"
 
 
 namespace mar::platforms {
@@ -48,17 +49,17 @@ namespace mar::platforms {
 	void ShaderOpenGL::shutdown() {
 		PLATFORM_TRACE("SHADER_OPENGL: Deleting shader {}", m_id);
 
-		std::for_each(m_uniformBuffers.begin(), m_uniformBuffers.end(), [](ShaderBufferStorageOpenGL& ubo) {
+		std::for_each(m_shaderBuffers.begin(), m_shaderBuffers.end(), [](ShaderBufferStorageOpenGL& ubo) {
 			ubo.close();
 		});
 
-		m_uniformBuffers.clear();
+		m_shaderBuffers.clear();
 
 		PLATFORM_GL_FUNC( glDeleteProgram(m_id) );
 	}
 
-	ShaderBufferStorageOpenGL& ShaderOpenGL::submitUniformBuffer() {
-		return m_uniformBuffers.emplace_back();
+	ShaderBufferStorageOpenGL& ShaderOpenGL::createShaderBufferStorage() {
+		return m_shaderBuffers.emplace_back();
 	}
 
 	void ShaderOpenGL::bind() const {
@@ -151,10 +152,17 @@ namespace mar::platforms {
 		shaderBuffer.update<float>(item.offset + index * sizeof(float), sizeof(float), &f);
 	}
 
+	void ShaderOpenGL::uploadUniformLightMaterial(const UniformBuffer& buffer, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const {
+		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+
+		shaderBuffer.bind();
+		shaderBuffer.update<float>(item.offset, sizeof(graphics::LightMaterial) * lights.size(), maths::vec3::value_ptr(lights[0].position));
+	}
+
 	// ---- PRIVATE METHODS ---- //
 
 	const ShaderBufferStorageOpenGL& ShaderOpenGL::getCorrectShaderBuffer(const UniformBuffer& block) const {
-		return *std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&block](const ShaderBufferStorageOpenGL& ubo) {
+		return *std::find_if(m_shaderBuffers.cbegin(), m_shaderBuffers.cend(), [&block](const ShaderBufferStorageOpenGL& ubo) {
 			return std::strcmp(ubo.m_uniformBuffer.name, block.name) == 0;
 		});
 	}

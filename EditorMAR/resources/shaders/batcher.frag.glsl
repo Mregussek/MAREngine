@@ -11,26 +11,29 @@ layout(location = 7) in vec3 v_CameraPos;
 
 layout(location = 0) out vec4 outColor;
 
-layout(std430, binding = 2) buffer Material {
-	vec3 lightPos[32];
-	vec3 ambient[32];
-	vec3 diffuse[32];
-	vec3 specular[32];
+struct LightMaterial {
+	vec3 lightPos;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
 
-	float constant[32];
-	float linear[32];
-	float quadratic[32];
-	float shininess[32];
+	float constant;
+	float linear;
+	float quadratic;
+	float shininess;
+}; 
+
+layout(std430, binding = 2) buffer Material {
+	LightMaterial u_material[32];
 
 	int materialSize;
-} u_material;
+} material;
 
 layout(std430, binding = 3) buffer TextureSamplers {
 	vec3 u_Color[32];
 } samplers;					
 
 layout(binding = 4) uniform sampler2D u_2D[32];
-//layout(binding = 6) uniform samplerCube u_Cube[32];
 
 vec4 setProperColor(float index);
 vec4 setProperTexture2D(float index);
@@ -131,65 +134,26 @@ vec4 setProperTexture2D(float index) {
 	else if (index <= 31.5f) return texture(u_2D[31], v_texCoords2D);
 	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
 }
-/*
-vec4 setProperTextureCubemap(float index) {
-	if      (index <= 0.5f)  return texture(u_Cube[0], v_texCoords3D);
-	else if (index <= 1.5f)  return texture(u_Cube[1], v_texCoords3D);
-	else if (index <= 2.5f)  return texture(u_Cube[2], v_texCoords3D);
-	else if (index <= 3.5f)  return texture(u_Cube[3], v_texCoords3D);
-	else if (index <= 4.5f)  return texture(u_Cube[4], v_texCoords3D);
-	else if (index <= 5.5f)  return texture(u_Cube[5], v_texCoords3D);
-	else if (index <= 6.5f)  return texture(u_Cube[6], v_texCoords3D);
-	else if (index <= 7.5f)  return texture(u_Cube[7], v_texCoords3D);
-	else if (index <= 8.5f)  return texture(u_Cube[8], v_texCoords3D);
-	else if (index <= 9.5f)  return texture(u_Cube[9], v_texCoords3D);
-	else if (index <= 10.5f) return texture(u_Cube[10], v_texCoords3D);
-	else if (index <= 11.5f) return texture(u_Cube[11], v_texCoords3D);
-	else if (index <= 12.5f) return texture(u_Cube[12], v_texCoords3D);
-	else if (index <= 13.5f) return texture(u_Cube[13], v_texCoords3D);
-	else if (index <= 14.5f) return texture(u_Cube[14], v_texCoords3D);
-	else if (index <= 15.5f) return texture(u_Cube[15], v_texCoords3D);
-	else if (index <= 16.5f) return texture(u_Cube[16], v_texCoords3D);
-	else if (index <= 17.5f) return texture(u_Cube[17], v_texCoords3D);
-	else if (index <= 18.5f) return texture(u_Cube[18], v_texCoords3D);
-	else if (index <= 19.5f) return texture(u_Cube[19], v_texCoords3D);
-	else if (index <= 20.5f) return texture(u_Cube[20], v_texCoords3D);
-	else if (index <= 21.5f) return texture(u_Cube[21], v_texCoords3D);
-	else if (index <= 22.5f) return texture(u_Cube[22], v_texCoords3D);
-	else if (index <= 23.5f) return texture(u_Cube[23], v_texCoords3D);
-	else if (index <= 24.5f) return texture(u_Cube[24], v_texCoords3D);
-	else if (index <= 25.5f) return texture(u_Cube[25], v_texCoords3D);
-	else if (index <= 26.5f) return texture(u_Cube[26], v_texCoords3D);
-	else if (index <= 27.5f) return texture(u_Cube[27], v_texCoords3D);
-	else if (index <= 28.5f) return texture(u_Cube[28], v_texCoords3D);
-	else if (index <= 29.5f) return texture(u_Cube[29], v_texCoords3D);
-	else if (index <= 30.5f) return texture(u_Cube[30], v_texCoords3D);
-	else if (index <= 31.5f) return texture(u_Cube[31], v_texCoords3D);
-	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
-}		
-*/
 
-vec4 calculateLight(vec3 lightPos, vec3 ambient, vec3 diffuse, vec3 specular,
-	float constant, float linear, float quadratic, float shininess, vec3 batchedColor)
-{
+vec4 calculateLight(LightMaterial lightMaterial, vec3 batchedColor) {
 	// AMBIENT
-	vec3 ambientResult = batchedColor * ambient;
+	vec3 ambientResult = batchedColor * lightMaterial.ambient;
 
 	// DIFFUSE
 	vec3 norm = normalize(v_lightNormal);
-	vec3 lightDir = normalize(lightPos - v_Position);
+	vec3 lightDir = normalize(lightMaterial.lightPos - v_Position);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuseResult = batchedColor * (diff * diffuse);
+	vec3 diffuseResult = batchedColor * (diff * lightMaterial.diffuse);
 
 	// SPECULAR
 	vec3 viewDir = normalize(v_CameraPos - v_Position);
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
-	vec3 specularResult = batchedColor * (spec * specular);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), lightMaterial.shininess);
+	vec3 specularResult = batchedColor * (spec * lightMaterial.specular);
 
 	// ATTENUATION
-	float distance = length(lightPos - v_Position);
-	float attenuation = 1.0f / (constant + linear * distance + quadratic * (distance * distance));
+	float distance = length(lightMaterial.lightPos - v_Position);
+	float attenuation = 1.0f / (lightMaterial.constant + lightMaterial.linear * distance + lightMaterial.quadratic * (distance * distance));
 		
 	ambientResult *= attenuation;
 	diffuseResult *= attenuation;
@@ -199,14 +163,11 @@ vec4 calculateLight(vec3 lightPos, vec3 ambient, vec3 diffuse, vec3 specular,
 }
 
 vec4 computeAllLights(vec4 batchColor) {
-	vec4 lightColor = calculateLight(u_material.lightPos[0], u_material.ambient[0], u_material.diffuse[0], u_material.specular[0],
-											u_material.constant[0], u_material.linear[0], u_material.quadratic[0], u_material.shininess[0], batchColor.xyz);
+	vec4 lightColor = calculateLight(material.u_material[0], batchColor.xyz);
 
 	for (int i = 1; i < 32; i++) {
-		if (i >= u_material.materialSize) break;
-
-		lightColor = lightColor + calculateLight(u_material.lightPos[i], u_material.ambient[i], u_material.diffuse[i], u_material.specular[i],
-											u_material.constant[i], u_material.linear[i], u_material.quadratic[i], u_material.shininess[i], batchColor.xyz);
+		if (i >= material.materialSize) break;
+		vec4 lightColor = calculateLight(material.u_material[i], batchColor.xyz);
 	}
 
 	return lightColor;

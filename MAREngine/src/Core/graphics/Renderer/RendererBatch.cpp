@@ -45,30 +45,23 @@ namespace mar::graphics {
 		m_shader.initialize(shaderPaths);
 
 		{ // setup Camera uniform block
-			auto& camera = m_shader.submitUniformBuffer();
+			auto& camera = m_shader.createShaderBufferStorage();
 			std::vector<UniformItem> cameraItems{ ut_u_Model, ut_u_MVP, ut_u_CameraPos };
 
 			camera.initialize(ub_Camera, std::move(cameraItems));
 		}
 
 		{ // setup EntityCmp uniform block
-			auto& entityCmp = m_shader.submitUniformBuffer();
+			auto& entityCmp = m_shader.createShaderBufferStorage();
 			std::vector<UniformItem> entitycmpItems{ ut_u_SeparateTransform, ut_u_samplerTypes };
 
 			entityCmp.initialize(ub_EntityCmp, std::move(entitycmpItems));
 		}
 		
 		{ // setup MaterialInfo uniform block
-			auto& material = m_shader.submitUniformBuffer();
+			auto& material = m_shader.createShaderBufferStorage();
 			std::vector<UniformItem> materialItems{ 
-				ut_u_LightPos,
-				ut_u_ambient,
-				ut_u_diffuse,
-				ut_u_specular,
-				ut_u_constant,
-				ut_u_linear,
-				ut_u_quadratic,
-				ut_u_shininess,
+				ut_u_material,
 				ut_u_materialSize
 			};
 
@@ -76,7 +69,7 @@ namespace mar::graphics {
 		}
 
 		{ // setup MeshInfo uniform block
-			auto& textureSamplers = m_shader.submitUniformBuffer();
+			auto& textureSamplers = m_shader.createShaderBufferStorage();
 			std::vector<UniformItem> textureSamplersItems{ ut_u_Color };
 
 			textureSamplers.initialize(ub_TextureSamplers, std::move(textureSamplersItems));
@@ -145,7 +138,7 @@ namespace mar::graphics {
 
 		const auto& samplerTypes = container.getSamplerTypes();
 		const auto& colors = container.getColors();
-		const auto& textures = container.getTexture2D();
+		//const auto& textures = container.getTexture2D();
 		//const auto& cubemaps = container.getTextureCubemap();
 
 		m_shader.uploadUniformFloat(ub_EntityCmp, ut_u_samplerTypes, samplerTypes);
@@ -185,18 +178,7 @@ namespace mar::graphics {
 
 		const auto& lights = container.getLights();
 
-		for (uint32_t i = 0; i < lights.size(); i++) {
-			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_LightPos, i, lights[i].position);
-			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_ambient, i, lights[i].ambient);
-			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_diffuse, i, lights[i].diffuse);
-			m_shader.uploadUniformVec3AtIndex(ub_Material, ut_u_specular, i, lights[i].specular);
-
-			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_constant, i, lights[i].constant);
-			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_linear, i, lights[i].linear);
-			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_quadratic, i, lights[i].quadratic);
-			m_shader.uploadUniformFloatAtIndex(ub_Material, ut_u_shininess, i, lights[i].shininess);
-		}
-		
+		m_shader.uploadUniformLightMaterial(ub_Material, ut_u_material, lights);
 		m_shader.uploadUniformInt(ub_Material, ut_u_materialSize, (int32_t)lights.size());
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
