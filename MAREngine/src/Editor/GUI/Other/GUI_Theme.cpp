@@ -27,7 +27,7 @@ namespace mar::editor {
 
 	void GUI_Theme::Setup_Theme() {
 		auto& io = ImGui::GetIO();
-		io.Fonts->AddFontFromFileTTF("resources/fonts/Ruda-Bold.ttf", 15.0f);
+		io.Fonts->AddFontFromFileTTF("../resources/fonts/Ruda-Bold.ttf", 15.0f);
 
 		ImGuiStyle* style = &ImGui::GetStyle();
 

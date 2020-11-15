@@ -12,15 +12,15 @@ layout(location = 7) in vec3 v_CameraPos;
 layout(location = 0) out vec4 outColor;
 
 struct LightMaterial {
-	float posX, posY, posZ;
-	float ambientX, ambientY, ambientZ;
-	float diffuseX, diffuseY, diffuseZ;
-	float specularX, specularY, specularZ;
+	float posX, posY, posZ;						// 3 * 4 = 12		offset = 0
+	float ambientX, ambientY, ambientZ;			// 3 * 4 = 12		offset = 12
+	float diffuseX, diffuseY, diffuseZ;			// 3 * 4 = 12		offset = 24
+	float specularX, specularY, specularZ;		// 3 * 4 = 12		offset = 36
 
-	float constant;
-	float linear;
-	float quadratic;
-	float shininess;
+	float constant;								// 1 * 4 = 4		offset = 40
+	float linear;								// 1 * 4 = 4		offset = 44
+	float quadratic;							// 1 * 4 = 4		offset = 48
+	float shininess;							// 1 * 4 = 4		offset = 52
 }; 
 
 layout(std430, binding = 2) buffer Material {
