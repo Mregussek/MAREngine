@@ -18,40 +18,50 @@
 **/
 
 
-#ifndef SANDBOX_MAR
-#define SANDBOX_MAR
-
-
-#include "MAREngine/MAREngine.h"
+#include "SandboxMAR.h"
 
 
 namespace mar {
 
 
-	class SandboxMAR {
+	void SandboxMAR::initialize() {
+		m_engine.initialize();
+	}
 
-		typedef engine::MAREngine MAREngine;
+	void SandboxMAR::run() {
+		window::Window<GLFWwindow> window{};
+		layers::LayerStack stack{};
 
-	public:
+		auto entityLayer = new layers::EntityLayer("Entity Layer");
 
-		SandboxMAR() = default;
+		window.initialize(1600, 900, m_engine.getName());
 
+		auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
 
-		void initialize();
+		{ // Entity Layer Setup
+			entityLayer->passSceneToManager(scene);
+			stack.pushLayer(entityLayer);
+		}
 
-		void run();
+		stack.initialize();
 
-		void shutdown();
+		entityLayer->getSceneManager()->setPlayMode();
 
+		while (!window.isGoingToClose() && !m_engine.shouldEngineRestart()) {
+			platforms::SetupOpenGL::clearScreen(scene->getBackground());
 
-	private:
+			stack.update();
 
-		MAREngine m_engine;
+			window.swapBuffers();
+		}
 
-	};
+		stack.close();
+		window.terminate();
+	}
+
+	void SandboxMAR::shutdown() {
+
+	}
 
 
 }
-
-
-#endif // !SANDBOX_MAR

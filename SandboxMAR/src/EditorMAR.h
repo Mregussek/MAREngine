@@ -18,28 +18,40 @@
 **/
 
 
+#ifndef EDITOR_MAR
+#define EDITOR_MAR
+
+
 #include "MAREngine/MAREngine.h"
 
 
-class EditorMAR {
+namespace mar {
 
-	typedef mar::engine::MAREngine MAREngine;
 
-public:
+	class EditorMAR {
 
-	EditorMAR() = default;
+		typedef engine::MAREngine MAREngine;
 
-	void initialize();
+	public:
 
-	void projectSelectionWindow();
+		EditorMAR() = default;
 
-	void runProjectOnEngine();
+		void initialize();
 
-	void shutdown();
+		//void projectSelectionWindow();
 
-private:
+		void runProjectOnEngine();
 
-	MAREngine m_engine;
+		void shutdown();
 
-};
+	private:
 
+		MAREngine m_engine;
+
+	};
+
+
+}
+
+
+#endif // !EDITOR_MAR

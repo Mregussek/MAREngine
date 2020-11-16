@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorMAR", "EditorMAR\EditorMAR.vcxproj", "{8C005ED4-33E4-4382-B132-773A2459E926}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SandboxMAR", "SandboxMAR\SandboxMAR.vcxproj", "{392FC164-86C5-45E5-9020-DB530FDA2D80}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MAREngine", "MAREngine\MAREngine.vcxproj", "{BB677FAE-7D61-46AA-ABC0-AB0BD75AA33B}"
@@ -19,14 +17,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Debug|x64.ActiveCfg = Debug|x64
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Debug|x64.Build.0 = Debug|x64
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Debug|x86.ActiveCfg = Debug|Win32
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Debug|x86.Build.0 = Debug|Win32
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Release|x64.ActiveCfg = Release|x64
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Release|x64.Build.0 = Release|x64
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Release|x86.ActiveCfg = Release|Win32
-		{8C005ED4-33E4-4382-B132-773A2459E926}.Release|x86.Build.0 = Release|Win32
 		{392FC164-86C5-45E5-9020-DB530FDA2D80}.Debug|x64.ActiveCfg = Debug|x64
 		{392FC164-86C5-45E5-9020-DB530FDA2D80}.Debug|x64.Build.0 = Debug|x64
 		{392FC164-86C5-45E5-9020-DB530FDA2D80}.Debug|x86.ActiveCfg = Debug|Win32

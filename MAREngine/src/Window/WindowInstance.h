@@ -42,7 +42,7 @@ namespace mar::window {
 
 		static Window<WindowType>& Instance() { return *s_instance; }
 		
-		Window() = default;
+		Window<WindowType>() = default;
 
 		bool initialize(int32_t width, int32_t height, const char* name);
 		void endRenderLoop();

@@ -19,12 +19,29 @@
 
 
 #include "src/SandboxMAR.h"
+#include "src/EditorMAR.h"
+
+
+#define USE_EDITOR_MAR_ENGINE 1
+
+
+using mar::EditorMAR;
+using mar::SandboxMAR;
 
 
 int main() {
-	SandboxMAR sandbox;
+	if constexpr (USE_EDITOR_MAR_ENGINE) {
+		EditorMAR editor;
 
-	sandbox.initialize();
-	sandbox.run();
-	sandbox.shutdown();
+		editor.initialize();
+		editor.runProjectOnEngine();
+		editor.shutdown();
+	}
+	else {
+		SandboxMAR sandbox;
+
+		sandbox.initialize();
+		sandbox.run();
+		sandbox.shutdown();
+	}
 }

@@ -528,7 +528,7 @@ MAREngine scene file
 #EntityCollectionEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/DefaultProject/Assets/objects/monkey.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/monkey.obj
 
 #EntityStart
 #TagComponent Suzanne

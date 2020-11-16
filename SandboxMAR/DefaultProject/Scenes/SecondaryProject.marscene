@@ -48,7 +48,7 @@ MAREngine scene file
 #EntityEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/deagle.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/deagle.obj
 
 #EntityStart
 #TagComponent deagle
@@ -72,7 +72,7 @@ MAREngine scene file
 #EntityCollectionEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/monkey.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/monkey.obj
 
 #EntityStart
 #TagComponent Suzanne
@@ -96,7 +96,7 @@ MAREngine scene file
 #EntityCollectionEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/m4.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/m4.obj
 
 #EntityStart
 #TagComponent m4a1
@@ -120,7 +120,7 @@ MAREngine scene file
 #EntityCollectionEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/karambit/karanbit.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/karambit/karanbit.obj
 
 #EntityStart
 #TagComponent blade_Circle.000_2
@@ -156,7 +156,7 @@ MAREngine scene file
 #EntityCollectionEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/CHALLENGER71.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/CHALLENGER71.obj
 
 #EntityStart
 #TagComponent LicenseF
@@ -1572,7 +1572,7 @@ MAREngine scene file
 #EntityCollectionEnd
 
 #EntityCollectionStart
-#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/EditorMAR/DefaultProject/Assets/objects/Lightsaber.obj
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/Lightsaber.obj
 
 #EntityStart
 #TagComponent Obi_ANH_CLEAN_Klinge.001

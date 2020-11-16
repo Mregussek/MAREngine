@@ -12,24 +12,6 @@ list(APPEND MAR_ENGINE_INCLUDE_DIRS ".")
 list(APPEND MAR_ENGINE_INCLUDE_LIBS ".")
 
 # -------------------------------------------------------------
-# EditorMAR setup
-# -------------------------------------------------------------
-set(EDITORMAR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR)
-set(EDITORMAR_NAME "EditorMAR")
-file(GLOB_RECURSE EDITORMAR_SOURCE_FILES
-	${EDITORMAR_PATH}/src/*.c
-	${EDITORMAR_PATH}/src/*.cpp
-)
-
-file(GLOB_RECURSE EDITORMAR_HEADER_FILES 
-	${EDITORMAR_PATH}/src/*.h
-	${EDITORMAR_PATH}/src/*.hpp
-)
-
-set(MAIN_EDITORMAR_FILE ${EDITORMAR_PATH}/main.cpp)
-set(EDITORMAR_FILES ${EDITORMAR_SOURCE_FILES} ${EDITORMAR_HEADER_FILES} ${MAIN_EDITORMAR_FILE}) 
-
-# -------------------------------------------------------------
 # SandboxMAR setup
 # -------------------------------------------------------------
 set(SANDBOXMAR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR)
@@ -332,15 +314,6 @@ add_library(${MARENGINE_NAME} ${MAR_ENGINE_ALL_FILES})
 message("Linking libraries to ${MARENGINE_NAME}")
 target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
 target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_ENGINE_ALL_LIBS})
-
-# -------------------------------------------------------------
-# Create EditorMAR executable
-# -------------------------------------------------------------
-message("Creating ${EDITORMAR_NAME} executable...")
-add_executable(${EDITORMAR_NAME} ${EDITORMAR_FILES} ${MARENGINE_INCLUDE_DIR})
-message("Linking libraries to ${EDITORMAR_NAME}")
-target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
-target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MARENGINE_NAME})
 
 # -------------------------------------------------------------
 # Create SandboxMAR executable
