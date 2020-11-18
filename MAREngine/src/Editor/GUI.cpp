@@ -29,8 +29,8 @@
 
 #include "../Window/Window.h"
 
-#include "GUIPanels/Other/GUI_Theme.h"
-#include "GUIPanels/Other/GUI_Statistics.h"
+#include "GUIPanels/OtherPanels/GUI_Theme.h"
+#include "GUIPanels/OtherPanels/GUI_Statistics.h"
 
 
 namespace mar::editor {

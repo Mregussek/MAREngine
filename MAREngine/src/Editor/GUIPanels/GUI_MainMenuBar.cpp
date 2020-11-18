@@ -34,7 +34,7 @@
 
 #include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "EntityPanels/GUI_EntityPanel.h"
-#include "Other/GUI_Info.h"
+#include "OtherPanels/GUI_Info.h"
 #include "GUI_Filesystem.h"
 
 

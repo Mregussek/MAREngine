@@ -40,8 +40,6 @@ namespace mar::graphics {
 		float linear{ 0.045f };
 		float quadratic{ 0.0075f };
 		float shininess{ 64.0f };
-		
-		float _padding[3];
 	};
 
 	typedef std::pair<int32_t, maths::vec3> ColorPair;

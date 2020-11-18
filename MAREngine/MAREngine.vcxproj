@@ -276,7 +276,7 @@
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_Graphics.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_MainMenuBar.h" />
-    <ClInclude Include="src\Editor\GUIPanels\Other\GUI_Statistics.h" />
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
@@ -294,10 +294,10 @@
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_Filesystem.h" />
-    <ClInclude Include="src\Editor\GUIPanels\Other\GUI_Info.h" />
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_TextEditor.h" />
-    <ClInclude Include="src\Editor\GUIPanels\Other\GUI_Theme.h" />
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.h" />
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
@@ -367,12 +367,12 @@
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_Filesystem.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_Graphics.cpp" />
-    <ClCompile Include="src\Editor\GUIPanels\Other\GUI_Info.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_MainMenuBar.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_TextEditor.cpp" />
-    <ClCompile Include="src\Editor\GUIPanels\Other\GUI_Statistics.cpp" />
-    <ClCompile Include="src\Editor\GUIPanels\Other\GUI_Theme.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp" />

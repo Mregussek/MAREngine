@@ -21,7 +21,7 @@
 #include "ProjectSelectionGUI.h"
 #include "ProjectTemplatesWindow.h"
 #include "../../Window/Window.h"
-#include "../GUIPanels/Other/GUI_Theme.h"
+#include "../GUIPanels/OtherPanels/GUI_Theme.h"
 
 
 namespace mar::editor {

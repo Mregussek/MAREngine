@@ -375,15 +375,6 @@
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\GUIPanels\Other\GUI_Info.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\GUIPanels\Other\GUI_Statistics.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\GUIPanels\Other\GUI_Theme.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\GUIPanels\GUI_Filesystem.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -394,6 +385,15 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\GUIPanels\GUI_TextEditor.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -590,15 +590,6 @@
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\GUIPanels\Other\GUI_Info.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\GUIPanels\Other\GUI_Statistics.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\GUIPanels\Other\GUI_Theme.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\GUIPanels\GUI_Filesystem.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -609,6 +600,15 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUIPanels\GUI_TextEditor.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
