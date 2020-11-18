@@ -25,24 +25,19 @@
 #include "../mar.h"
 
 
-namespace mar::editor { class GUI; class ProjectSelectionGUI; }
-namespace mar::platforms { class ContextSDL; }
 namespace mar::window {
 	
-	class Input;
-
 
 	template<typename WindowType>
-	class Window {
+	class WindowInstance {
 
-		friend class editor::GUI;
-		friend class editor::ProjectSelectionGUI;
+		friend class Window;
 
 	public:
 
-		static Window<WindowType>& Instance() { return *s_instance; }
+		static WindowInstance<WindowType>& Instance() { return *s_instance; }
 		
-		Window<WindowType>() = default;
+		WindowInstance<WindowType>() = default;
 
 		bool initialize(int32_t width, int32_t height, const char* name);
 		void endRenderLoop();
@@ -53,8 +48,6 @@ namespace mar::window {
 		bool isGoingToClose() const;
 
 		void swapBuffers();
-
-		void clear() const;
 
 		bool isKeyPressed(int32_t key) const;
 		bool isMousePressed(int32_t key) const;
@@ -67,7 +60,7 @@ namespace mar::window {
 
 	private:
 
-		static Window<WindowType>* s_instance;
+		static WindowInstance<WindowType>* s_instance;
 
 		WindowType* m_window;
 		
@@ -77,7 +70,7 @@ namespace mar::window {
 	};
 
 	template<typename WindowType>
-	Window<WindowType>* Window<WindowType>::s_instance{ nullptr };
+	WindowInstance<WindowType>* WindowInstance<WindowType>::s_instance{ nullptr };
 
 
 }

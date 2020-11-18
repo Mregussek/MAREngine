@@ -18,76 +18,69 @@
 **/
 
 
-#include "Window.h"
-#include "../Platform/OpenGL/SetupOpenGL.h"
-#include "WindowLogs.h"
+#include "WindowInstance.h"
 
 
 namespace mar::window {
 
 
 	template<typename WindowType>
-	bool Window<WindowType>::initialize(int32_t width, int32_t height, const char* name) {
+	bool WindowInstance<WindowType>::initialize(int32_t width, int32_t height, const char* name) {
 		return false;
 	}
 
 	template<typename WindowType>
-	void Window<WindowType>::endRenderLoop() {
+	void WindowInstance<WindowType>::endRenderLoop() {
 
 	}
 
 	template<typename WindowType>
-	void Window<WindowType>::terminate() {
+	void WindowInstance<WindowType>::terminate() {
 
 	}
 
 	template<typename WindowType>
-	void Window<WindowType>::clear() const {
+	void WindowInstance<WindowType>::swapBuffers() {
 
 	}
 
 	template<typename WindowType>
-	void Window<WindowType>::swapBuffers() {
-
-	}
-
-	template<typename WindowType>
-	bool Window<WindowType>::isGoingToClose() const {
+	bool WindowInstance<WindowType>::isGoingToClose() const {
 		return true;
 	}
 
 	template<typename WindowType>
-	void Window<WindowType>::setVerticalSync(int32_t setter) const {
+	void WindowInstance<WindowType>::setVerticalSync(int32_t setter) const {
 
 	}
 
 	template<typename WindowType>
-	bool Window<WindowType>::isKeyPressed(int32_t key) const {
+	bool WindowInstance<WindowType>::isKeyPressed(int32_t key) const {
 		return false;
 	}
 
 	template<typename WindowType>
-	bool Window<WindowType>::isMousePressed(int32_t key) const {
+	bool WindowInstance<WindowType>::isMousePressed(int32_t key) const {
 		return false;
 	}
 
 	template<typename WindowType>
-	float Window<WindowType>::getMousePositionX() const {
+	float WindowInstance<WindowType>::getMousePositionX() const {
 		return 0.f;
 	}
 
 	template<typename WindowType>
-	float Window<WindowType>::getMousePositionY() const {
+	float WindowInstance<WindowType>::getMousePositionY() const {
 		return 0.f;
 	}
 
 	template<typename WindowType>
-	float Window<WindowType>::getScrollX() const {
+	float WindowInstance<WindowType>::getScrollX() const {
 		return 0.f;
 	}
 
 	template<typename WindowType>
-	float Window<WindowType>::getScrollY() const {
+	float WindowInstance<WindowType>::getScrollY() const {
 		return 0.f;
 	}
 

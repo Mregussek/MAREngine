@@ -20,17 +20,17 @@
 
 #include "GUI.h"
 
-#include "../EditorLogging.h"
+#include "EditorLogging.h"
+#include "Camera/Camera.h"
 
-#include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneManager.h"
-#include "../../Core/ecs/SceneEvents.h"
-#include "../Camera/Camera.h"
+#include "../Core/ecs/Scene.h"
+#include "../Core/ecs/SceneManager.h"
+#include "../Core/ecs/SceneEvents.h"
 
-#include "../../Window/Window.h"
+#include "../Window/Window.h"
 
-#include "Other/GUI_Theme.h"
-#include "Other/GUI_Statistics.h"
+#include "GUIPanels/Other/GUI_Theme.h"
+#include "GUIPanels/Other/GUI_Statistics.h"
 
 
 namespace mar::editor {
@@ -39,17 +39,8 @@ namespace mar::editor {
 	void GUI::initialize(const char* glslVersion) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
-		
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			ImGui_ImplGlfw_InitForOpenGL(window::Window<GLFWwindow>::Instance().m_window, true);
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			ImGui_ImplSDL2_InitForOpenGL(window::Window<SDL_Window>::Instance().m_window, &platforms::ContextSDL::s_context);
-		}
-		else {
-			
-		}
-		
+
+		window::Window::imguiInit();
 		ImGui_ImplOpenGL3_Init(glslVersion);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -75,15 +66,7 @@ namespace mar::editor {
 
 		ImGui_ImplOpenGL3_Shutdown();
 
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			ImGui_ImplGlfw_Shutdown();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			ImGui_ImplSDL2_Shutdown();
-		}
-		else {
-
-		}
+		window::Window::imguiTerminate();
 
 		ImGui::DestroyContext();
 
@@ -117,15 +100,7 @@ namespace mar::editor {
 
 		ImGui_ImplOpenGL3_NewFrame();
 
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			ImGui_ImplGlfw_NewFrame();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			ImGui_ImplSDL2_NewFrame(window::Window<SDL_Window>::Instance().m_window);
-		}
-		else {
-
-		}
+		window::Window::imguiNewFrame();
 		
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();

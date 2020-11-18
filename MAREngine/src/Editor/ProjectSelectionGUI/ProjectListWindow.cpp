@@ -51,7 +51,7 @@ namespace mar::editor {
 			engine::MAREngine::Instance()->setProjectName("DefaultProject");
 			engine::MAREngine::Instance()->setProjectPath("DefaultProject/");
 			engine::MAREngine::Instance()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
-			window::endRenderLoop();
+			window::Window::endRenderLoop();
 		}
 
 		ImGui::SameLine();
@@ -77,7 +77,7 @@ namespace mar::editor {
 		}
 
 		if (ImGui::Button("Exit")) {
-			window::endRenderLoop();
+			window::Window::endRenderLoop();
 		}
 
 		ImGui::End();

@@ -54,14 +54,14 @@ namespace mar {
 	}
 	*/
 	void EditorMAR::runProjectOnEngine() {
-		window::Window<GLFWwindow> window{};
+		window::WindowInstance<GLFWwindow> displayWindow{};
 		layers::LayerStack stack{};
 		editor::GUI gui{};
 
 		auto entityLayer = new layers::EntityLayer("Entity Layer");
 		auto guiLayer = new layers::LayerGUI("Default GUI Layer");
 
-		window.initialize(1600, 900, m_engine.getName());
+		displayWindow.initialize(1600, 900, m_engine.getName());
 
 		auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
 
@@ -71,25 +71,25 @@ namespace mar {
 		}
 
 		{ // Editor Layer Setup
-			guiLayer->passGuiToLayer(&gui, scene->getBackground());
+			guiLayer->passGuiToLayer(scene->getBackground());
 			m_engine.connectEntityLayerToGui(guiLayer, entityLayer);
 			stack.pushOverlay(guiLayer);
 		}
 
 		stack.initialize();
 
-		while (!window.isGoingToClose() && !m_engine.shouldEngineRestart()) {
+		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
 			platforms::SetupOpenGL::clearScreen(scene->getBackground());
 
 			guiLayer->renderToViewport();
 
 			stack.update();
 
-			window.swapBuffers();
+			displayWindow.swapBuffers();
 		}
 
 		stack.close();
-		window.terminate();
+		displayWindow.terminate();
 	}
 
 	void EditorMAR::shutdown() {

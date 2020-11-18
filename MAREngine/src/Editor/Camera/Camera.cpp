@@ -55,10 +55,10 @@ namespace mar::editor {
         lastTime = currentFrame;
         const float velocity = m_movementSpeed * deltaTime;
     
-        if (window::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
-        if (window::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
-        if (window::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
-        if (window::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
+        if (window::Window::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
+        if (window::Window::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
+        if (window::Window::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
+        if (window::Window::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
     }
     
     void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse) {

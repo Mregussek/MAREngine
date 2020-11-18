@@ -22,13 +22,13 @@
 #define MAR_ENGINE_EDITOR_GUI_H
 
 
-#include "../../mar.h"
-#include "../../Platform/OpenGL/FramebufferOpenGL.h"
-#include "GUI_MainMenuBar.h"
-#include "EntityPanels/GUI_EntityPanel.h"
-#include "EntityPanels/GUI_EntityCollectionPanel.h"
-#include "EntityPanels/GUI_SceneHierarchy.h"
-#include "GUI_TextEditor.h"
+#include "../mar.h"
+#include "../Platform/OpenGL/FramebufferOpenGL.h"
+#include "GUIPanels/GUI_MainMenuBar.h"
+#include "GUIPanels/EntityPanels/GUI_EntityPanel.h"
+#include "GUIPanels/EntityPanels/GUI_EntityCollectionPanel.h"
+#include "GUIPanels/EntityPanels/GUI_SceneHierarchy.h"
+#include "GUIPanels/GUI_TextEditor.h"
 
 
 namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }

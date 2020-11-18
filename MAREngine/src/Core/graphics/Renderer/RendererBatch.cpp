@@ -38,8 +38,8 @@ namespace mar::graphics {
 
 		m_buffers.initialize(settings::maxVerticesCount * sizeof(Vertex), settings::maxIndicesCount * sizeof(uint32_t));
 
-		const char* vert = "../resources/shaders/batcher.vert.glsl";
-		const char* frag = "../resources/shaders/batcher.frag.glsl";
+		const char* vert = "resources/shaders/batcher.vert.glsl";
+		const char* frag = "resources/shaders/batcher.frag.glsl";
 		const auto shaderPaths = platforms::ShaderPaths(vert, frag, nullptr);
 
 		m_shader.initialize(shaderPaths);

@@ -20,7 +20,6 @@
 
 #include "GUILayer.h"
 #include "../LayerLogs.h"
-#include "../../Editor/GUI/GUI.h"
 
 
 namespace mar::layers {
@@ -30,17 +29,16 @@ namespace mar::layers {
 		p_debugName = name;
 	}
 
-	void LayerGUI::passGuiToLayer(editor::GUI* gui, maths::vec3 backgroundcolor) {
-		m_gui = gui;
-		m_gui->getFramebuffer().setBackgroundColor(backgroundcolor);
+	void LayerGUI::passGuiToLayer(maths::vec3 backgroundcolor) {
+		m_gui.getFramebuffer().setBackgroundColor(backgroundcolor);
 	}
 
 	void LayerGUI::initialize() {
 		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
-		m_camera.initialize(m_gui->getViewportWidth() / m_gui->getViewportHeight());
+		m_camera.initialize(m_gui.getViewportWidth() / m_gui.getViewportHeight());
 
-		m_gui->initialize("#version 450");		
+		m_gui.initialize("#version 450");		
 
 		//m_guiGraphics.initialize();
 
@@ -66,8 +64,8 @@ namespace mar::layers {
 			}
 		}
 		*/
-		m_camera.update(m_gui->getViewportWidth() / m_gui->getViewportHeight());
-		m_gui->display();
+		m_camera.update(m_gui.getViewportWidth() / m_gui.getViewportHeight());
+		m_gui.display();
 
 		LAYER_INFO("GUI_LAYER: {} displayed frame", p_debugName);
 	}
@@ -75,7 +73,7 @@ namespace mar::layers {
 	void LayerGUI::closeLayer() {
 		LAYER_TRACE("GUI_LAYER: {} going to close!", p_debugName);
 
-		m_gui->shutdown();
+		m_gui.shutdown();
 
 		//m_guiGraphics.close();
 
@@ -83,11 +81,11 @@ namespace mar::layers {
 	}
 
 	void LayerGUI::renderToViewport() {
-		m_gui->bind();
+		m_gui.bind();
 	}
 
 	void LayerGUI::submit(ecs::SceneManager* manager) {
-		m_gui->submit(manager);
+		m_gui.submit(manager);
 	}
 
 

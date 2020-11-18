@@ -42,6 +42,10 @@ namespace mar::platforms {
 		SDL_GL_DeleteContext(s_context);
 	}
 
+	SDL_GLContext* ContextSDL::getContext() {
+		return &s_context; 
+	}
+
 
 
 }

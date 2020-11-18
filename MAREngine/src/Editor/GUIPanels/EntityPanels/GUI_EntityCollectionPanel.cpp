@@ -153,7 +153,7 @@ namespace mar::editor {
 
 	void GUI_EntityCollectionPanel::popUpMenu(const char* collection_tag) const {
 		if (ImGui::IsWindowFocused()) {
-			if (window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+			if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("EntityCollectionPopUp");
 			}
 		}

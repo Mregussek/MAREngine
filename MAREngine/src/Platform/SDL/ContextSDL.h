@@ -24,22 +24,20 @@
 
 #include "../../mar.h"
 #include "../../Window/Window.h"
+#include "../../Window/WindowInstance.h"
 
 
-namespace mar::editor { class GUI; class ProjectSelectionGUI; }
 namespace mar::platforms {
 
 
 	class ContextSDL {
-
-		friend class editor::GUI;
-		friend class editor::ProjectSelectionGUI;
-
 	public:
 
 		static bool create(SDL_Window* window);
 
 		static void destroy();
+
+		static SDL_GLContext* getContext();
 
 		static bool windowGoingToClose;
 

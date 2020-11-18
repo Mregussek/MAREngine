@@ -27,7 +27,7 @@ namespace mar::window {
 
 
 	template<>
-	bool Window<GLFWwindow>::initialize(int32_t width, int32_t height, const char* name) {
+	bool WindowInstance<GLFWwindow>::initialize(int32_t width, int32_t height, const char* name) {
 		using namespace platforms;
 
 		s_instance = this;
@@ -78,31 +78,31 @@ namespace mar::window {
 	}
 
 	template<>
-	void Window<GLFWwindow>::endRenderLoop() {
+	void WindowInstance<GLFWwindow>::endRenderLoop() {
 		glfwSetWindowShouldClose(m_window, true);
 	}
 
 	template<>
-	void Window<GLFWwindow>::terminate() {
+	void WindowInstance<GLFWwindow>::terminate() {
 		glfwTerminate();
 
 		PLATFORM_INFO("WINDOW_GLFW: window terminated");
 	}
 
 	template<>
-	void Window<GLFWwindow>::setVerticalSync(int32_t setter) const {
+	void WindowInstance<GLFWwindow>::setVerticalSync(int32_t setter) const {
 		glfwSwapInterval(setter);
 
 		PLATFORM_INFO("WINDOW_GLFW: is vertical synchronization used - {}", setter);
 	}
 
 	template<>
-	bool Window<GLFWwindow>::isGoingToClose() const {
+	bool WindowInstance<GLFWwindow>::isGoingToClose() const {
 		return glfwWindowShouldClose(m_window); 
 	}
 
 	template<>
-	void Window<GLFWwindow>::swapBuffers() {
+	void WindowInstance<GLFWwindow>::swapBuffers() {
 		m_width = platforms::callbacks::window_width;
 		m_height = platforms::callbacks::window_height;
 
@@ -113,32 +113,32 @@ namespace mar::window {
 	}
 
 	template<>
-	bool Window<GLFWwindow>::isKeyPressed(int32_t key) const {
+	bool WindowInstance<GLFWwindow>::isKeyPressed(int32_t key) const {
 		return glfwGetKey(m_window, key) == GLFW_PRESS || glfwGetKey(m_window, key) == GLFW_REPEAT;
 	}
 
 	template<>
-	bool Window<GLFWwindow>::isMousePressed(int32_t key) const {
+	bool WindowInstance<GLFWwindow>::isMousePressed(int32_t key) const {
 		return glfwGetMouseButton(m_window, key) == GLFW_PRESS || glfwGetMouseButton(m_window, key) == GLFW_REPEAT;
 	}
 
 	template<>
-	float Window<GLFWwindow>::getMousePositionX() const {
+	float WindowInstance<GLFWwindow>::getMousePositionX() const {
 		return (float)platforms::callbacks::mouse_xpos;
 	}
 
 	template<>
-	float Window<GLFWwindow>::getMousePositionY() const {
+	float WindowInstance<GLFWwindow>::getMousePositionY() const {
 		return (float)platforms::callbacks::mouse_ypos;
 	}
 
 	template<>
-	float Window<GLFWwindow>::getScrollX() const {
+	float WindowInstance<GLFWwindow>::getScrollX() const {
 		return (float)platforms::callbacks::scroll_x;
 	}
 
 	template<>
-	float Window<GLFWwindow>::getScrollY() const {
+	float WindowInstance<GLFWwindow>::getScrollY() const {
 		return (float)platforms::callbacks::scroll_y;
 	}
 

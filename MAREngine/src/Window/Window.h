@@ -23,7 +23,6 @@
 
 
 #include "../mar.h"
-#include "../Platform/SDL/ContextSDL.h"
 #include "WindowInstance.h"
 #include "buttons_def.h"
 
@@ -31,161 +30,52 @@
 namespace mar::window {
 
 
-	inline bool initialize(int32_t width, int32_t height, const char* name) {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().initialize(width, height, name);
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().initialize(width, height, name);
-		}
-		else {
-			return false;
-		}
-	}
+	class Window {
+	public:
 
-	inline void endRenderLoop() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) { 
-			window::Window<GLFWwindow>::Instance().endRenderLoop(); 
+		template<typename WindowType>
+		static WindowInstance<WindowType> createWindow() {
+			if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+				return WindowInstance<GLFWwindow>{};
+			}
+			else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+				return WindowInstance<SDL_Window>{};
+			}
+			else {
+				return WindowInstance<GLFWwindow>{};
+			}
 		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) { 
-			window::Window<SDL_Window>::Instance().endRenderLoop(); 
-		}
-		else {
 
-		}
-	}
+		static void endRenderLoop();
 
-	inline void terminate() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			window::Window<GLFWwindow>::Instance().terminate();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			window::Window<SDL_Window>::Instance().terminate();
-		}
-		else {
+		static void terminate();
 
-		}
-	}
+		static bool isGoingToClose();
 
-	inline bool isGoingToClose() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().isGoingToClose();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().isGoingToClose();
-		}
-		else {
+		static void setVerticalSync(int32_t setter);
 
-		}
-	}
+		static void swapBuffers();
 
-	inline void setVerticalSync(int32_t setter) {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			window::Window<GLFWwindow>::Instance().setVerticalSync(setter);
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			window::Window<SDL_Window>::Instance().setVerticalSync(setter);
-		}
-		else {
+		static void imguiInit();
 
-		}
-	}
+		static void imguiTerminate();
 
-	inline void swapBuffers() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			window::Window<GLFWwindow>::Instance().swapBuffers();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			window::Window<SDL_Window>::Instance().swapBuffers();
-		}
-		else {
+		static void imguiNewFrame();
 
-		}
-	}
+		static bool isKeyPressed(int32_t key);
 
-	inline void clear() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			window::Window<GLFWwindow>::Instance().clear();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			window::Window<SDL_Window>::Instance().clear();
-		}
-		else {
+		static bool isMousePressed(int32_t key);
 
-		}
-	}
+		static float getMousePositionX();
 
-	inline bool isKeyPressed(int32_t key) {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().isKeyPressed(key);
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().isKeyPressed(key);
-		}
-		else {
-			return false;
-		}
-	}
+		static float getMousePositionY();
 
-	inline bool isMousePressed(int32_t key) {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().isMousePressed(key);
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().isMousePressed(key);
-		}
-		else {
-			return false;
-		}
-	}
+		static float getScrollX();
 
-	inline float getMousePositionX() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().getMousePositionX();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().getMousePositionX();
-		}
-		else {
-			return 0.f;
-		}
-	}
+		static float getScrollY();
 
-	inline float getMousePositionY() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().getMousePositionY();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().getMousePositionY();
-		}
-		else {
-			return 0.f;
-		}
-	}
-
-	inline float getScrollX() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().getScrollX();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().getScrollX();
-		}
-		else {
-			return 0.f;
-		}
-	}
-
-	inline float getScrollY() {
-		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
-			return window::Window<GLFWwindow>::Instance().getScrollY();
-		}
-		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			return window::Window<SDL_Window>::Instance().getScrollY();
-		}
-		else {
-			return 0.f;
-		}
-	}
+	};
+	
 
 
 }

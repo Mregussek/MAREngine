@@ -27,7 +27,7 @@ namespace mar::window {
 
 
 	template<>
-	bool Window<SDL_Window>::initialize(int32_t width, int32_t height, const char* name) {
+	bool WindowInstance<SDL_Window>::initialize(int32_t width, int32_t height, const char* name) {
 		using namespace platforms;
 
 		s_instance = this;
@@ -76,12 +76,12 @@ namespace mar::window {
 	}
 
 	template<>
-	void Window<SDL_Window>::endRenderLoop() {
+	void WindowInstance<SDL_Window>::endRenderLoop() {
 		platforms::ContextSDL::windowGoingToClose = true;
 	}
 
 	template<>
-	void Window<SDL_Window>::terminate() {
+	void WindowInstance<SDL_Window>::terminate() {
 		platforms::ContextSDL::destroy();
 		SDL_DestroyWindow(m_window);
 		SDL_Quit();
@@ -90,19 +90,19 @@ namespace mar::window {
 	}
 
 	template<>
-	void Window<SDL_Window>::setVerticalSync(int32_t setter) const {
+	void WindowInstance<SDL_Window>::setVerticalSync(int32_t setter) const {
 		SDL_GL_SetSwapInterval(setter);
 
 		PLATFORM_INFO("WINDOW_SDL: is vertical synchronization used - {}", setter);
 	}
 
 	template<>
-	bool Window<SDL_Window>::isGoingToClose() const {
+	bool WindowInstance<SDL_Window>::isGoingToClose() const {
 		return platforms::ContextSDL::windowGoingToClose;
 	}
 
 	template<>
-	void Window<SDL_Window>::swapBuffers() {
+	void WindowInstance<SDL_Window>::swapBuffers() {
 		SDL_GL_SwapWindow(m_window);
 
 		SDL_Event e;
@@ -116,32 +116,32 @@ namespace mar::window {
 	}
 
 	template<>
-	bool Window<SDL_Window>::isKeyPressed(int32_t key) const {
+	bool WindowInstance<SDL_Window>::isKeyPressed(int32_t key) const {
 		return false;
 	}
 
 	template<>
-	bool Window<SDL_Window>::isMousePressed(int32_t key) const {
+	bool WindowInstance<SDL_Window>::isMousePressed(int32_t key) const {
 		return false;
 	}
 
 	template<>
-	float Window<SDL_Window>::getMousePositionX() const {
+	float WindowInstance<SDL_Window>::getMousePositionX() const {
 		return 0.f;// (float)platforms::callbacks::mouse_xpos;
 	}
 
 	template<>
-	float Window<SDL_Window>::getMousePositionY() const {
+	float WindowInstance<SDL_Window>::getMousePositionY() const {
 		return 0.f;//(float)platforms::callbacks::mouse_ypos;
 	}
 
 	template<>
-	float Window<SDL_Window>::getScrollX() const {
+	float WindowInstance<SDL_Window>::getScrollX() const {
 		return 0.f;//(float)platforms::callbacks::scroll_x;
 	}
 
 	template<>
-	float Window<SDL_Window>::getScrollY() const {
+	float WindowInstance<SDL_Window>::getScrollY() const {
 		return 0.f;//(float)platforms::callbacks::scroll_y;
 	}
 }
