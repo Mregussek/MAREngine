@@ -74,8 +74,8 @@ namespace mar::platforms::ShaderUniforms {
 
 	// -------------- TextureSamplers Uniform Block
 
-	constexpr UniformItem ut_u_Color{ "samplers.u_Color", 0, 32 * sizeof(maths::vec3) };
-	constexpr UniformBuffer ub_TextureSamplers{ "TextureSamplers", 4, ut_u_Color.memory };
+	constexpr UniformItem ut_u_Color{ "samplers.u_Color", 0, 32 * sizeof(maths::vec4) };
+	constexpr UniformBuffer ub_TextureSamplers{ "TextureSamplers", 3, ut_u_Color.memory };
 
 
 }

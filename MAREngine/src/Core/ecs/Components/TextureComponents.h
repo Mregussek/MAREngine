@@ -29,16 +29,16 @@ namespace mar::ecs {
 
 
 	struct ColorComponent {
-		maths::vec3 texture{ 0.5f, 0.5f, 0.5f };
+		maths::vec4 texture{ 0.5f, 0.5f, 0.5f, 1.f };
 
 		ColorComponent() = default;
 		ColorComponent(const ColorComponent& cc) = default;
-		ColorComponent(const maths::vec3& col)
+		ColorComponent(maths::vec4 col)
 			: texture(col)
 		{}
 
-		operator maths::vec3& () { return texture; }
-		operator const maths::vec3& () const { return texture; }
+		operator maths::vec4& () { return texture; }
+		operator const maths::vec4& () const { return texture; }
 	};
 
 	struct Texture2DComponent {

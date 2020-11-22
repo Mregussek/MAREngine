@@ -135,10 +135,14 @@ namespace mar::editor {
 			loadVec3(v, num);
 		};
 
-		auto loadVec4Getline = [&file, &line](maths::vec4& v, size_t num) {
-			std::getline(file, line);
+		auto loadVec4 = [&line](maths::vec4& v, size_t num) {
 			std::istringstream is(line.substr(num));
 			is >> v.x >> v.y >> v.z >> v.w;
+		};
+
+		auto loadVec4Getline = [&file, &line, &loadVec4](maths::vec4& v, size_t num) {
+			std::getline(file, line);
+			loadVec4(v, num);
 		};
 
 		auto loadString = [&line](std::string& str, size_t num) {
@@ -205,7 +209,7 @@ namespace mar::editor {
 			}
 			else if (line.find("#ColorComponent") != std::string::npos) {
 				auto& color = getComponentFromEntity<ecs::ColorComponent>(entity);
-				loadVec3(color.texture, 16);
+				loadVec4(color.texture, 16);
 			}
 			else if (line.find("Texture2DComponent") != std::string::npos) {
 				auto& texture = getComponentFromEntity<ecs::Texture2DComponent>(entity);

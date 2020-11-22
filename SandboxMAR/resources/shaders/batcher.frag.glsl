@@ -29,14 +29,13 @@ layout(std430, binding = 2) buffer Material {
 } material;
 
 layout(std430, binding = 3) buffer TextureSamplers {
-	vec3 u_Color[32];
+	vec4 u_Color[32];
 } samplers;					
 
 layout(binding = 4) uniform sampler2D u_2D[32];
 
 vec4 setProperColor(float index);
 vec4 setProperTexture2D(float index);
-vec4 setProperTextureCubemap(float index);
 vec4 computeAllLights(vec4 batchColor);
 
 void main() {
@@ -63,39 +62,39 @@ void main() {
 }
 
 vec4 setProperColor(float index) {
-	if      (index <= 0.5f)  return vec4(samplers.u_Color[0], 1.0f);
-	else if (index <= 1.5f)  return vec4(samplers.u_Color[1], 1.0f);
-	else if (index <= 2.5f)  return vec4(samplers.u_Color[2], 1.0f);
-	else if (index <= 3.5f)  return vec4(samplers.u_Color[3], 1.0f);
-	else if (index <= 4.5f)  return vec4(samplers.u_Color[4], 1.0f);
-	else if (index <= 5.5f)  return vec4(samplers.u_Color[5], 1.0f);
-	else if (index <= 6.5f)  return vec4(samplers.u_Color[6], 1.0f);
-	else if (index <= 7.5f)  return vec4(samplers.u_Color[7], 1.0f);
-	else if (index <= 8.5f)  return vec4(samplers.u_Color[8], 1.0f);
-	else if (index <= 9.5f)  return vec4(samplers.u_Color[9], 1.0f);
-	else if (index <= 10.5f) return vec4(samplers.u_Color[10], 1.0f);
-	else if (index <= 11.5f) return vec4(samplers.u_Color[11], 1.0f);
-	else if (index <= 12.5f) return vec4(samplers.u_Color[12], 1.0f);
-	else if (index <= 13.5f) return vec4(samplers.u_Color[13], 1.0f);
-	else if (index <= 14.5f) return vec4(samplers.u_Color[14], 1.0f);
-	else if (index <= 15.5f) return vec4(samplers.u_Color[15], 1.0f);
-	else if (index <= 16.5f) return vec4(samplers.u_Color[16], 1.0f);
-	else if (index <= 17.5f) return vec4(samplers.u_Color[17], 1.0f);
-	else if (index <= 18.5f) return vec4(samplers.u_Color[18], 1.0f);
-	else if (index <= 19.5f) return vec4(samplers.u_Color[19], 1.0f);
-	else if (index <= 20.5f) return vec4(samplers.u_Color[20], 1.0f);
-	else if (index <= 21.5f) return vec4(samplers.u_Color[21], 1.0f);
-	else if (index <= 22.5f) return vec4(samplers.u_Color[22], 1.0f);
-	else if (index <= 23.5f) return vec4(samplers.u_Color[23], 1.0f);
-	else if (index <= 24.5f) return vec4(samplers.u_Color[24], 1.0f);
-	else if (index <= 25.5f) return vec4(samplers.u_Color[25], 1.0f);
-	else if (index <= 26.5f) return vec4(samplers.u_Color[26], 1.0f);
-	else if (index <= 27.5f) return vec4(samplers.u_Color[27], 1.0f);
-	else if (index <= 28.5f) return vec4(samplers.u_Color[28], 1.0f);
-	else if (index <= 29.5f) return vec4(samplers.u_Color[29], 1.0f);
-	else if (index <= 30.5f) return vec4(samplers.u_Color[30], 1.0f);
-	else if (index <= 31.5f) return vec4(samplers.u_Color[31], 1.0f);
-	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	if      (index <= 0.5f)  return samplers.u_Color[0];
+	else if (index <= 1.5f)  return samplers.u_Color[1];
+	else if (index <= 2.5f)  return samplers.u_Color[2];
+	else if (index <= 3.5f)  return samplers.u_Color[3];
+	else if (index <= 4.5f)  return samplers.u_Color[4];
+	else if (index <= 5.5f)  return samplers.u_Color[5];
+	else if (index <= 6.5f)  return samplers.u_Color[6];
+	else if (index <= 7.5f)  return samplers.u_Color[7];
+	else if (index <= 8.5f)  return samplers.u_Color[8];
+	else if (index <= 9.5f)  return samplers.u_Color[9];
+	else if (index <= 10.5f) return samplers.u_Color[10];
+	else if (index <= 11.5f) return samplers.u_Color[11];
+	else if (index <= 12.5f) return samplers.u_Color[12];
+	else if (index <= 13.5f) return samplers.u_Color[13];
+	else if (index <= 14.5f) return samplers.u_Color[14];
+	else if (index <= 15.5f) return samplers.u_Color[15];
+	else if (index <= 16.5f) return samplers.u_Color[16];
+	else if (index <= 17.5f) return samplers.u_Color[17];
+	else if (index <= 18.5f) return samplers.u_Color[18];
+	else if (index <= 19.5f) return samplers.u_Color[19];
+	else if (index <= 20.5f) return samplers.u_Color[20];
+	else if (index <= 21.5f) return samplers.u_Color[21];
+	else if (index <= 22.5f) return samplers.u_Color[22];
+	else if (index <= 23.5f) return samplers.u_Color[23];
+	else if (index <= 24.5f) return samplers.u_Color[24];
+	else if (index <= 25.5f) return samplers.u_Color[25];
+	else if (index <= 26.5f) return samplers.u_Color[26];
+	else if (index <= 27.5f) return samplers.u_Color[27];
+	else if (index <= 28.5f) return samplers.u_Color[28];
+	else if (index <= 29.5f) return samplers.u_Color[29];
+	else if (index <= 30.5f) return samplers.u_Color[30];
+	else if (index <= 31.5f) return samplers.u_Color[31];
+	else return vec4(1.f, 0.f, 1.f, 1.f);
 }
 
 vec4 setProperTexture2D(float index) {

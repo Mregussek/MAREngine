@@ -41,7 +41,7 @@ namespace mar::graphics {
 		float shininess{ 64.0f };
 	};
 
-	typedef std::pair<int32_t, maths::vec3> ColorPair;
+	typedef std::pair<int32_t, maths::vec4> ColorPair;
 	typedef std::pair<int32_t, std::string> TexturePair;
 
 	typedef std::vector<Vertex> VertexVector;

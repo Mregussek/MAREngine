@@ -101,7 +101,7 @@ namespace mar::editor {
 
 		if (entity.hasComponent<ecs::ColorComponent>()) {
 			const auto& color = entity.getComponent<ecs::ColorComponent>();
-			ss << "#ColorComponent " << color.texture.x << " " << color.texture.y << " " << color.texture.z << "\n";
+			ss << "#ColorComponent " << color.texture.x << " " << color.texture.y << " " << color.texture.z << " " << color.texture.w << "\n";
 		}
 		else if (entity.hasComponent<ecs::Texture2DComponent>()) {
 			const auto& tex = entity.getComponent<ecs::Texture2DComponent>();

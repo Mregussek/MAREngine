@@ -435,7 +435,7 @@ namespace mar::editor {
 
 		auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
-		if (ImGui::ColorEdit3("- color", &color.texture.x)) {
+		if (ImGui::ColorEdit4("- color", &color.texture.x)) {
 			ecs::SceneEvents::Instance().onColorUpdate(currentEntity);
 		}
 			

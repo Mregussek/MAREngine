@@ -77,7 +77,7 @@ namespace mar::platforms {
 
 		void uploadUniformLightMaterial(const UniformBuffer& buffer, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const;
 
-		void uploadUniformVec3AtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const maths::vec3& vector3) const;
+		void uploadUniformVec4AtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const maths::vec4& v) const;
 		void uploadUniformFloatAtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const float& f) const;
 
 	private:

@@ -45,7 +45,7 @@ namespace mar::graphics {
 		void onDrawCall();
 
 		void onTransformMat4Update(const maths::mat4& transfrom, const ecs::RenderPipelineComponent& rpc);
-		void onColorUpdate(maths::vec3 color, const ecs::RenderPipelineComponent& rpc);
+		void onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc);
 
 		void onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc);
 		void onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc);

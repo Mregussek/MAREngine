@@ -65,7 +65,7 @@ namespace mar::graphics {
 		lightMaterial.shininess = light.shininess;
 	}
 
-	void RenderEvents::onColorUpdate(maths::vec3 color, const ecs::RenderPipelineComponent& rpc) {
+	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) {
 		m_renderPipeline->m_containers[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 	}
 	

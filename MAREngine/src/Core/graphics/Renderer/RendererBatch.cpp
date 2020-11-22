@@ -141,7 +141,7 @@ namespace mar::graphics {
 		m_shader.uploadUniformFloat(ub_EntityCmp, ut_u_samplerTypes, samplerTypes);
 		
 		std::for_each(colors.begin(), colors.end(), [&shader = m_shader](const ColorPair& color) {
-			shader.uploadUniformVec3AtIndex(ub_TextureSamplers, ut_u_Color, color.first, color.second);
+			shader.uploadUniformVec4AtIndex(ub_TextureSamplers, ut_u_Color, color.first, color.second);
 		});
 			
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	

@@ -75,28 +75,28 @@ namespace mar::platforms {
 	}
 
 	void ShaderOpenGL::uploadUniformFloat(const UniformBuffer& buffer, const UniformItem& item, const float& f) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, sizeof(float), &f);
 	}
 
 	void ShaderOpenGL::uploadUniformFloat(const UniformBuffer& buffer, const UniformItem& item, const std::vector<float>& floats) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, floats.size() * sizeof(float), floats.data());
 	}
 
 	void ShaderOpenGL::uploadUniformInt(const UniformBuffer& buffer, const UniformItem& item, const int32_t& i) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<int32_t>(item.offset, sizeof(int32_t), &i);
 	}
 
 	void ShaderOpenGL::uploadUniformInt(const UniformBuffer& buffer, const UniformItem& item, const std::vector<int32_t>& ints) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<int32_t>(item.offset, ints.size() * sizeof(int32_t), ints.data());
@@ -111,49 +111,49 @@ namespace mar::platforms {
 	}
 
 	void ShaderOpenGL::uploadUniformVec3(const UniformBuffer& buffer, const UniformItem& item, const maths::vec3& vector3) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, sizeof(maths::vec3), maths::vec3::value_ptr(vector3));
 	}
 
 	void ShaderOpenGL::uploadUniformVec3(const UniformBuffer& buffer, const UniformItem& item, const std::vector<maths::vec3>& vec) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, vec.size() * sizeof(maths::vec3), maths::vec3::value_ptr(vec));
 	}
 
 	void ShaderOpenGL::uploadUniformMat4(const UniformBuffer& buffer, const UniformItem& item, const maths::mat4& matrix4x4) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, sizeof(maths::mat4), maths::mat4::value_ptr(matrix4x4));
 	}
 
 	void ShaderOpenGL::uploadUniformMat4(const UniformBuffer& buffer, const UniformItem& item, const std::vector<maths::mat4>& matrices) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, matrices.size() * sizeof(maths::mat4), maths::mat4::value_ptr(matrices));
 	}
 
-	void ShaderOpenGL::uploadUniformVec3AtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const maths::vec3& vector3) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+	void ShaderOpenGL::uploadUniformVec4AtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const maths::vec4& v) const {
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
-		shaderBuffer.update<float>(item.offset + index * sizeof(maths::vec3), 1 * sizeof(maths::vec3), maths::vec3::value_ptr(vector3));
+		shaderBuffer.update<float>(item.offset + index * sizeof(maths::vec4), 1 * sizeof(maths::vec4), &v.x);
 	}
 
 	void ShaderOpenGL::uploadUniformFloatAtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const float& f) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 		
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset + index * sizeof(float), sizeof(float), &f);
 	}
 
 	void ShaderOpenGL::uploadUniformLightMaterial(const UniformBuffer& buffer, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const {
-		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
+		const auto& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
 		shaderBuffer.update<float>(item.offset, sizeof(graphics::LightMaterial) * lights.size(), &lights[0].position.x);
