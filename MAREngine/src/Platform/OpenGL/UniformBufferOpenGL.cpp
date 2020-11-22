@@ -24,9 +24,8 @@
 namespace mar::platforms {
 
 
-	void UniformBufferOpenGL::initialize(const UniformBuffer& uniformBuffer, std::vector<UniformItem>&& items) {
+	void UniformBufferOpenGL::initialize(const UniformBuffer& uniformBuffer) {
 		m_uniformBuffer = uniformBuffer;
-		m_uniformItems = items;
 
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ubo) );
 		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, m_ubo) );
@@ -35,8 +34,6 @@ namespace mar::platforms {
 	}
 
 	void UniformBufferOpenGL::close() {
-		m_uniformItems.clear();
-
 		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ubo) );
 	}
 

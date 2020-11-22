@@ -45,8 +45,7 @@ void main() {
 		batchColor = setProperColor(v_shapeIndex);
 	}
 	else if(v_samplerType <= 1.0f)	{
-		batchColor = vec4(0.f, 1.f, 1.0f, 1.0f);
-		//batchColor = setProperTexture2D(v_shapeIndex);
+		batchColor = setProperTexture2D(v_shapeIndex);
 	}	
 	else if(v_samplerType <= 2.0f)	{
 		batchColor = vec4(1.f, 1.f, 0.f, 1.0f);

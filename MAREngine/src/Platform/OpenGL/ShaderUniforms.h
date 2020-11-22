@@ -77,6 +77,45 @@ namespace mar::platforms::ShaderUniforms {
 	constexpr UniformItem ut_u_Color{ "samplers.u_Color", 0, 32 * sizeof(maths::vec4) };
 	constexpr UniformBuffer ub_TextureSamplers{ "TextureSamplers", 3, ut_u_Color.memory };
 
+	// -------------- u_2D Uniform Block
+
+	constexpr UniformBuffer ub_u_2D{ "u_2D", 4, 32 * sizeof(int32_t) };
+
+	constexpr std::array<const char*, 32> u_2D = {
+		"u_2D[0]",
+		"u_2D[1]",
+		"u_2D[2]",
+		"u_2D[3]",
+		"u_2D[4]",
+		"u_2D[5]",
+		"u_2D[6]",
+		"u_2D[7]",
+		"u_2D[8]",
+		"u_2D[9]",
+		"u_2D[10]",
+		"u_2D[11]",
+		"u_2D[12]",
+		"u_2D[13]",
+		"u_2D[14]",
+		"u_2D[15]",
+		"u_2D[16]",
+		"u_2D[17]",
+		"u_2D[18]",
+		"u_2D[19]",
+		"u_2D[20]",
+		"u_2D[21]",
+		"u_2D[22]",
+		"u_2D[23]",
+		"u_2D[24]",
+		"u_2D[25]",
+		"u_2D[26]",
+		"u_2D[27]",
+		"u_2D[28]",
+		"u_2D[29]",
+		"u_2D[30]",
+		"u_2D[31]"
+	};
+
 
 }
 

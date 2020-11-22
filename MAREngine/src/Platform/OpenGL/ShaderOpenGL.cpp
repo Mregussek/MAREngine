@@ -43,17 +43,25 @@ namespace mar::platforms {
 		loadShader(fragmentSrc, m_shaderPaths.fragmentPath);
 		
 		m_id = createShader(vertexSrc, fragmentSrc);
+		
+		setupShaderUniforms();
+
 		m_initialized = true;
 	}
 
 	void ShaderOpenGL::shutdown() {
 		PLATFORM_TRACE("SHADER_OPENGL: Deleting shader {}", m_id);
 
-		std::for_each(m_shaderBuffers.begin(), m_shaderBuffers.end(), [](ShaderBufferStorageOpenGL& ubo) {
+		std::for_each(m_shaderBuffers.begin(), m_shaderBuffers.end(), [](ShaderBufferStorageOpenGL& ssbo) {
+			ssbo.close();
+		});
+
+		std::for_each(m_uniformBuffers.begin(), m_uniformBuffers.end(), [](UniformBufferOpenGL& ubo) {
 			ubo.close();
 		});
 
 		m_shaderBuffers.clear();
+		m_uniformBuffers.clear();
 
 		PLATFORM_GL_FUNC( glDeleteProgram(m_id) );
 	}
@@ -90,7 +98,38 @@ namespace mar::platforms {
 		});
 	}
 
+	void ShaderOpenGL::setUniformSampler(const char* name, int32_t sampler) const {
+		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
+	}
+
 	// ---- PRIVATE METHODS ---- //
+
+	void ShaderOpenGL::setupShaderUniforms() {
+		using namespace ShaderUniforms;
+
+		auto pushUniformToMap = [this](const char* uniform) {
+			PLATFORM_GL_FUNC( const int32_t location = glGetUniformLocation(m_id, uniform) );
+			m_uniformLocation[uniform] = location;
+		};
+
+		std::for_each(u_2D.begin(), u_2D.end(), pushUniformToMap);
+
+		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
+	}
+
+	int32_t ShaderOpenGL::getUniformLocation(const char* name) const {
+		if (m_uniformLocation.find(name) != m_uniformLocation.end()) {
+			return m_uniformLocation.at(name);
+		}
+
+		PLATFORM_GL_FUNC( const int32_t location = glGetUniformLocation(m_id, name) );
+
+		if (location == -1) {
+			PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
+		}
+
+		return location;
+	}
 
 	void ShaderOpenGL::loadShader(std::string& buffer, const char* path) const {
 		FILE* file = fopen(path, "rb");

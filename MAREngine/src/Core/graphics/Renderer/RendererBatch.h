@@ -43,6 +43,9 @@ namespace mar::graphics {
 
 	private:
 
+		void setupSSBOs();
+		void setupUBOs();
+
 		void drawContainer(const RenderContainer& container) const;
 
 		void passTransformsToShader(const RenderContainer& container) const;

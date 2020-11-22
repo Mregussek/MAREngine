@@ -69,13 +69,19 @@ namespace mar::platforms {
 		const ShaderBufferStorageOpenGL& getCorrectShaderBuffer(const UniformBuffer& buffer) const;
 		const UniformBufferOpenGL& getCorrectUniformBuffer(const UniformBuffer& block) const;
 
+		void setUniformSampler(const char* name, int32_t sampler) const;
+
 	private:
+
+		void setupShaderUniforms();
+		int32_t getUniformLocation(const char* name) const;
 
 		void loadShader(std::string& buffer, const char* path) const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
 		uint32_t createShader(const std::string& vertSrc, const std::string& fragSrc) const;
 
 		
+		std::unordered_map<const char*, int32_t> m_uniformLocation;
 		std::vector<ShaderBufferStorageOpenGL> m_shaderBuffers;
 		std::vector<UniformBufferOpenGL> m_uniformBuffers;
 		ShaderPaths m_shaderPaths;

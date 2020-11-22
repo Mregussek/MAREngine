@@ -39,7 +39,7 @@ namespace mar::platforms {
 
 	public:
 
-		void initialize(const UniformBuffer& uniformBuffer, std::vector<UniformItem>&& items);
+		void initialize(const UniformBuffer& uniformBuffer);
 		void close();
 
 		void bind() const;
@@ -60,7 +60,6 @@ namespace mar::platforms {
 	private:
 
 		UniformBuffer m_uniformBuffer{ "Null", 0, 0 };
-		std::vector<UniformItem> m_uniformItems;
 		uint32_t m_ubo{ 0 };
 
 	};
