@@ -30,7 +30,7 @@ layout(std430, binding = 2) buffer Material {
 
 layout(std430, binding = 3) buffer TextureSamplers {
 	vec4 u_Color[32];
-} samplers;					
+} samplers;
 
 layout(binding = 4) uniform sampler2D u_2D[32];
 

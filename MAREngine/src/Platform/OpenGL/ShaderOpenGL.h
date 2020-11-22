@@ -25,6 +25,7 @@
 #include "../../mar.h"
 #include "../PlatformLogs.h"
 #include "ShaderBufferStorageOpenGL.h"
+#include "UniformBufferOpenGL.h"
 #include "ShaderUniforms.h"
 
 
@@ -63,26 +64,12 @@ namespace mar::platforms {
 		void unbind() const;
 
 		ShaderBufferStorageOpenGL& createShaderBufferStorage();
+		UniformBufferOpenGL& createUniformBufferObject();
 
-		void uploadUniformFloat(const UniformBuffer& buffer, const UniformItem& item, const float& f) const;
-		void uploadUniformFloat(const UniformBuffer& buffer, const UniformItem& item, const std::vector<float>& floats) const;
-		void uploadUniformInt(const UniformBuffer& buffer, const UniformItem& item, const int32_t& i) const;
-		void uploadUniformInt(const UniformBuffer& buffer, const UniformItem& item, const std::vector<int32_t>& ints) const;
-		void uploadUniformSampler(const UniformBuffer& buffer, const UniformItem& item, const int32_t& sampler) const;
-		void uploadUniformSampler(const UniformBuffer& buffer, const UniformItem& item, const std::vector<int32_t>& sampler) const;
-		void uploadUniformVec3(const UniformBuffer& buffer, const UniformItem& item, const maths::vec3& vector3) const;
-		void uploadUniformVec3(const UniformBuffer& buffer, const UniformItem& item, const std::vector<maths::vec3>& vec) const;
-		void uploadUniformMat4(const UniformBuffer& buffer, const UniformItem& item, const maths::mat4& matrix4x4) const;
-		void uploadUniformMat4(const UniformBuffer& buffer, const UniformItem& item, const std::vector<maths::mat4>& matrices) const;
-
-		void uploadUniformLightMaterial(const UniformBuffer& buffer, const UniformItem& item, const std::vector<graphics::LightMaterial>& lights) const;
-
-		void uploadUniformVec4AtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const maths::vec4& v) const;
-		void uploadUniformFloatAtIndex(const UniformBuffer& buffer, const UniformItem& item, int32_t index, const float& f) const;
+		const ShaderBufferStorageOpenGL& getCorrectShaderBuffer(const UniformBuffer& buffer) const;
+		const UniformBufferOpenGL& getCorrectUniformBuffer(const UniformBuffer& block) const;
 
 	private:
-
-		const ShaderBufferStorageOpenGL& getCorrectShaderBuffer(const UniformBuffer& block) const;
 
 		void loadShader(std::string& buffer, const char* path) const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
@@ -90,6 +77,7 @@ namespace mar::platforms {
 
 		
 		std::vector<ShaderBufferStorageOpenGL> m_shaderBuffers;
+		std::vector<UniformBufferOpenGL> m_uniformBuffers;
 		ShaderPaths m_shaderPaths;
 		uint32_t m_id{ 0 };
 		bool m_initialized{ false };

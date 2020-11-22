@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_PLATFORMS_SHADER_BUFFER_STORAGE_OPENGL_H
-#define MAR_ENGINE_PLATFORMS_SHADER_BUFFER_STORAGE_OPENGL_H
+#ifndef MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H
+#define MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H
 
 
 #include "../../mar.h"
@@ -30,7 +30,7 @@
 namespace mar::platforms {
 
 
-	class ShaderBufferStorageOpenGL {
+	class UniformBufferOpenGL {
 
 		friend class ShaderOpenGL;
 
@@ -47,12 +47,12 @@ namespace mar::platforms {
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data.data()) );
+			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()) );
 		}
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const T* data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data) );
+			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data) );
 		}
 
 		void reset() const;
@@ -61,7 +61,7 @@ namespace mar::platforms {
 
 		UniformBuffer m_uniformBuffer{ "Null", 0, 0 };
 		std::vector<UniformItem> m_uniformItems;
-		uint32_t m_ssbo{ 0 };
+		uint32_t m_ubo{ 0 };
 
 	};
 
@@ -69,4 +69,4 @@ namespace mar::platforms {
 }
 
 
-#endif // !MAR_ENGINE_PLATFORMS_SHADER_BUFFER_STORAGE_OPENGL_H
+#endif // !MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H

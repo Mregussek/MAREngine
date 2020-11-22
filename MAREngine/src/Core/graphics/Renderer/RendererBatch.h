@@ -45,6 +45,7 @@ namespace mar::graphics {
 
 		void drawContainer(const RenderContainer& container) const;
 
+		void passTransformsToShader(const RenderContainer& container) const;
 		void passTexturesToShader(const RenderContainer& container) const;
 		void passLightToShader(const RenderContainer& container) const;
 		void passCameraToShader(const RenderCamera* camera) const;

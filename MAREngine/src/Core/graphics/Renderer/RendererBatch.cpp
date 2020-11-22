@@ -92,9 +92,12 @@ namespace mar::graphics {
 			for (const auto& container_light : render_pip.getContainers()) {
 				if (!container_light.getLights().empty()) {
 					m_shader.bind();
+
 					passCameraToShader(render_pip.getCamera());
 					passLightToShader(container_light);
+
 					drawContainer(container);
+
 					RenderEvents::Instance().onDrawCall();
 				}
 			}
@@ -107,9 +110,7 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render container!");
 		
 		{
-			using namespace platforms::ShaderUniforms;
-
-			m_shader.uploadUniformMat4(ub_EntityCmp, ut_u_SeparateTransform, container.getTransforms());
+			passTransformsToShader(container);
 			passTexturesToShader(container);
 		}
 		{
@@ -127,35 +128,50 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render container!");
 	}
 
+	void RendererBatch::passTransformsToShader(const RenderContainer& container) const {
+		using namespace platforms::ShaderUniforms;
+
+		const auto& transforms = container.getTransforms();
+		const auto& samplerTypes = container.getSamplerTypes();
+
+		const auto& entityShaderBuffer = m_shader.getCorrectShaderBuffer(ub_EntityCmp);
+
+		entityShaderBuffer.bind();
+		entityShaderBuffer.update<float>(ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+		entityShaderBuffer.update<float>(ut_u_samplerTypes.offset, samplerTypes.size() * sizeof(float), samplerTypes);
+	}
+
 	void RendererBatch::passTexturesToShader(const RenderContainer& container) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
 
 		using namespace platforms::ShaderUniforms;
+		using namespace mar::maths;
 		typedef platforms::TextureOpenGL TextureGL;
 
-		const auto& samplerTypes = container.getSamplerTypes();
 		const auto& colors = container.getColors();
-		//const auto& textures = container.getTexture2D();
+		const auto& textures = container.getTexture2D();
 		//const auto& cubemaps = container.getTextureCubemap();
-
-		m_shader.uploadUniformFloat(ub_EntityCmp, ut_u_samplerTypes, samplerTypes);
 		
-		std::for_each(colors.begin(), colors.end(), [&shader = m_shader](const ColorPair& color) {
-			shader.uploadUniformVec4AtIndex(ub_TextureSamplers, ut_u_Color, color.first, color.second);
+		const auto& textureShaderBuffer = m_shader.getCorrectShaderBuffer(ub_TextureSamplers);
+		textureShaderBuffer.bind();
+
+		std::for_each(colors.begin(), colors.end(), [&shader = m_shader, &textureShaderBuffer](const ColorPair& color) {
+			textureShaderBuffer.update<float>(ut_u_Color.offset + color.first * sizeof(vec4), sizeof(vec4), &color.second.x);
 		});
 			
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");	
+		
 		/*
 		std::for_each(textures.begin(), textures.end(), [&shader = m_shader](const TexturePair& texture) {
-			const uint32_t textureID = TextureGL::Instance()->loadTexture(texture.second);
-			const uint32_t sampler = (uint32_t)texture.first;
+			const auto textureID = TextureGL::Instance()->loadTexture(texture.second);
+			const auto sampler = (uint32_t)texture.first;
 
 			TextureGL::Instance()->bind2D(sampler, textureID);
 			shader.uploadUniformSampler(u_Samplers2D[sampler], sampler);
 		});
 		
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
-		
+
 		std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = m_shader](const TexturePair& texture) {
 			const uint32_t textureID = TextureGL::Instance()->loadCubemap(texture.second);
 			const uint32_t sampler = (uint32_t)texture.first;
@@ -174,9 +190,12 @@ namespace mar::graphics {
 		using namespace platforms::ShaderUniforms;
 
 		const auto& lights = container.getLights();
+		const auto lightSize = (int32_t)lights.size();
+		const auto& lightShaderBuffer = m_shader.getCorrectShaderBuffer(ub_Material);
 
-		m_shader.uploadUniformLightMaterial(ub_Material, ut_u_material, lights);
-		m_shader.uploadUniformInt(ub_Material, ut_u_lightSize, (int32_t)lights.size());
+		lightShaderBuffer.bind();
+		lightShaderBuffer.update<float>(ut_u_material.offset, sizeof(graphics::LightMaterial) * lights.size(), &lights[0].position.x);
+		lightShaderBuffer.update<int32_t>(ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}
@@ -185,10 +204,15 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
 
 		using namespace platforms::ShaderUniforms;
+		using namespace mar::maths;
 
-		m_shader.uploadUniformVec3(ub_Camera, ut_u_CameraPos, camera->getPosition());
-		m_shader.uploadUniformMat4(ub_Camera, ut_u_Model, camera->getModel());
-		m_shader.uploadUniformMat4(ub_Camera, ut_u_MVP, camera->getMVP());
+		const auto& cameraShaderBuffer = m_shader.getCorrectShaderBuffer(ub_Camera);
+
+		cameraShaderBuffer.bind();
+
+		cameraShaderBuffer.update<float>(ut_u_CameraPos.offset, sizeof(vec3), vec3::value_ptr(camera->getPosition()));
+		cameraShaderBuffer.update<float>(ut_u_Model.offset, sizeof(mat4), mat4::value_ptr(camera->getModel()));
+		cameraShaderBuffer.update<float>(ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera->getMVP()));
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 	}
