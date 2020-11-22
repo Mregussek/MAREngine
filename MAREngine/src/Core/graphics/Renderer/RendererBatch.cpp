@@ -83,10 +83,6 @@ namespace mar::graphics {
 	void RendererBatch::setupUBOs() {
 		using namespace platforms::ShaderUniforms;
 
-		{ // setup u_2D UBO
-			//auto& u2DUniformBuffer = m_shader.createUniformBufferObject();
-			//u2DUniformBuffer.initialize(ub_u_2D);
-		}
 	}
 
 	void RendererBatch::close() {
@@ -164,6 +160,7 @@ namespace mar::graphics {
 
 		const auto& colors = container.getColors();
 		const auto& textures = container.getTexture2D();
+		const auto& cubemaps = container.getTextureCubemap();
 
 		auto passColors = [this, &colors]() {
 			const auto& textureShaderBuffer = m_shader.getCorrectShaderBuffer(ub_TextureSamplers);
@@ -188,22 +185,21 @@ namespace mar::graphics {
 			GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 		};
 
+		auto passCubemap = [this, &cubemaps]() {
+			std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = m_shader](const TexturePair& texture) {
+				const auto textureID = (int32_t)TextureGL::Instance()->loadCubemap(texture.second);
+				const auto samplerIndex = (uint32_t)texture.first;
+
+				TextureGL::Instance()->bindCube(samplerIndex, textureID);
+				shader.setUniformSampler(u_Cubemap[samplerIndex], samplerIndex);
+			});
+
+			GRAPHICS_INFO("RENDERER_BATCH: passed texture cubemaps to shader");
+		};
+
 		passColors();
 		pass2D();
-		
-		//const auto& cubemaps = container.getTextureCubemap();
-		
-		/*
-		std::for_each(cubemaps.begin(), cubemaps.end(), [&shader = m_shader](const TexturePair& texture) {
-			const uint32_t textureID = TextureGL::Instance()->loadCubemap(texture.second);
-			const uint32_t sampler = (uint32_t)texture.first;
-
-			TextureGL::Instance()->bindCube(sampler, textureID);
-			shader.setUniformSampler(u_SamplersCube[sampler], sampler);
-		});
-
-		GRAPHICS_INFO("RENDERER_BATCH: passed cubemaps to shader!");
-		*/
+		//passCubemap();
 	}
 
 	void RendererBatch::passLightToShader(const RenderContainer& container) const {

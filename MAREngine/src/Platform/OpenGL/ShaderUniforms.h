@@ -116,6 +116,45 @@ namespace mar::platforms::ShaderUniforms {
 		"u_2D[31]"
 	};
 
+	// -------------- u_2D Uniform Block
+
+	constexpr UniformBuffer ub_u_Cubemap{ "u_Cubemap", 4, 32 * sizeof(int32_t) };
+
+	constexpr std::array<const char*, 32> u_Cubemap = {
+		"u_Cubemap[0]",
+		"u_Cubemap[1]",
+		"u_Cubemap[2]",
+		"u_Cubemap[3]",
+		"u_Cubemap[4]",
+		"u_Cubemap[5]",
+		"u_Cubemap[6]",
+		"u_Cubemap[7]",
+		"u_Cubemap[8]",
+		"u_Cubemap[9]",
+		"u_Cubemap[10]",
+		"u_Cubemap[11]",
+		"u_Cubemap[12]",
+		"u_Cubemap[13]",
+		"u_Cubemap[14]",
+		"u_Cubemap[15]",
+		"u_Cubemap[16]",
+		"u_Cubemap[17]",
+		"u_Cubemap[18]",
+		"u_Cubemap[19]",
+		"u_Cubemap[20]",
+		"u_Cubemap[21]",
+		"u_Cubemap[22]",
+		"u_Cubemap[23]",
+		"u_Cubemap[24]",
+		"u_Cubemap[25]",
+		"u_Cubemap[26]",
+		"u_Cubemap[27]",
+		"u_Cubemap[28]",
+		"u_Cubemap[29]",
+		"u_Cubemap[30]",
+		"u_Cubemap[31]"
+	};
+
 
 }
 

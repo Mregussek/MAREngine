@@ -67,57 +67,56 @@ namespace mar::graphics {
 		if (entity.hasComponent<LightComponent>()) {
 			const auto& light = entity.getComponent<LightComponent>();
 
-			setAvailableContainerLight(rpc);
+			setContainerLight(rpc);
 			rpc.lightIndex = submitLight(tran.center, light);
 		}
 
 		if (hasRenderable && hasAnyMaterial) {
 			auto& renderable = entity.getComponent<RenderableComponent>();
+			const auto vertSize = renderable.vertices.size();
+			const auto indiSize = renderable.indices.size();
 
-			setAvailableContainerRenderable(rpc, renderable.vertices.size(), renderable.indices.size());
-			const size_t index = submitRenderable(renderable, tran);
-
-			renderable.shaderID = index;
-			rpc.transformIndex = index;
+			setContainerRenderable(rpc, vertSize, indiSize);
+			rpc.transformIndex = submitRenderable(renderable, tran);
 
 			if (hasColor) {
 				const auto& color = entity.getComponent<ColorComponent>();
-				rpc.colorIndex = submitColor((int32_t)renderable.shaderID, color);
+				rpc.colorIndex = submitColor((int32_t)rpc.transformIndex, color);
 			}
 			else if (hasTexture2D) {
 				const auto& tex = entity.getComponent<Texture2DComponent>();
-				rpc.colorIndex = submitTexture2D((int32_t)renderable.shaderID, tex);
+				rpc.colorIndex = submitTexture2D((int32_t)rpc.transformIndex, tex);
 			}
 			else if (hasCubemap) {
 				const auto& cube = entity.getComponent<TextureCubemapComponent>();
-				rpc.colorIndex = submitCubemap((int32_t)renderable.shaderID, cube);
+				rpc.colorIndex = submitCubemap((int32_t)rpc.transformIndex, cube);
 			}
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	void RenderPipeline::setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
+	void RenderPipeline::setContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
 		for (size_t i = 0; i < m_containers.size(); i++) {
 			const size_t currentVerticesSize = m_containers[i].getVertices().size() + sizeof(Vertex) / 4;
 			const size_t currentIndicesSize = m_containers[i].getIndices().size();
 			const size_t currentTransformSize = m_containers[i].getTransforms().size();
 
-			if (currentVerticesSize + verticesToPush >= settings::maxVerticesCount ||
-				currentIndicesSize + indicesToPush >= settings::maxIndicesCount ||
-				currentTransformSize + 1 >= 32)
-			{
-				continue;
-			}
-			else {
-				m_availableContainerIndex = i;
+			const bool cannotPushVertices = currentVerticesSize + verticesToPush >= settings::maxVerticesCount;
+			const bool cannotPushIndices = currentIndicesSize + indicesToPush >= settings::maxIndicesCount;
+			const bool cannotPushTransform = currentTransformSize + 1 >= 32;
 
+			if (cannotPushVertices || cannotPushIndices || cannotPushTransform) { continue; }
+			else { // if there is place in container
+				m_availableContainerIndex = i;
 				rpc.containerIndex = m_availableContainerIndex;
+
 				GRAPHICS_TRACE("RENDER_PIPELINE: available container is at index {}, returning...", i);
 				return;
 			}
 		}
 
+		// if cannot find available container, create new one
 		m_containers.emplace_back();
 		m_availableContainerIndex = m_containers.size() - 1;
 		rpc.containerIndex = m_availableContainerIndex;
@@ -125,7 +124,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container, current size {}", m_containers.size());
 	}
 
-	void RenderPipeline::setAvailableContainerLight(ecs::RenderPipelineComponent& rpc) {
+	void RenderPipeline::setContainerLight(ecs::RenderPipelineComponent& rpc) {
 		for (size_t i = 0; i < m_containers.size(); i++) {
 			const size_t currentLightSize = m_containers[i].getLights().size();
 
@@ -186,8 +185,8 @@ namespace mar::graphics {
 
 		MAR_CORE_ASSERT(transforms.size() == shapeID, "transform.size() and shapeID are not equal!");
 
-		GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shaderID = {}", 
-			renderable.name, renderable.vertices.size(), renderable.indices.size(), indicesMax, renderable.shaderID);
+		GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}", 
+			renderable.name, renderable.vertices.size(), renderable.indices.size(), indicesMax);
 		
 		return transforms.size() - 1;
 	}

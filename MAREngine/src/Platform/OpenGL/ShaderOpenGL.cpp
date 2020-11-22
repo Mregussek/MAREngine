@@ -113,6 +113,7 @@ namespace mar::platforms {
 		};
 
 		std::for_each(u_2D.begin(), u_2D.end(), pushUniformToMap);
+		//std::for_each(u_Cubemap.begin(), u_Cubemap.end(), pushUniformToMap);
 
 		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
 	}

@@ -68,8 +68,8 @@ namespace mar::graphics {
 
 	private:
 
-		void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
-		void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
+		void setContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
+		void setContainerLight(ecs::RenderPipelineComponent& rpc);
 
 		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
 		size_t submitColor(int32_t entityIndex, const ecs::ColorComponent& color);

@@ -34,7 +34,7 @@ namespace mar::ecs {
 		ColorComponent() = default;
 		ColorComponent(const ColorComponent& cc) = default;
 		ColorComponent(maths::vec4 col)
-			: texture(col)
+			: texture(std::move(col))
 		{}
 
 		operator maths::vec4& () { return texture; }
