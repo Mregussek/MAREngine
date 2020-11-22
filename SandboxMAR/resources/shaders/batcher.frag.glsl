@@ -33,9 +33,11 @@ layout(std430, binding = 3) buffer TextureSamplers {
 } samplers;
 
 layout(binding = 4) uniform sampler2D u_2D[32];
+//layout(binding = 5) uniform samplerCube u_Cubemap[32];
 
 vec4 setProperColor(float index);
 vec4 setProperTexture2D(float index);
+//vec4 setProperTextureCubemap(float index);
 vec4 computeAllLights(vec4 batchColor);
 
 void main() {
@@ -48,7 +50,7 @@ void main() {
 		batchColor = setProperTexture2D(v_shapeIndex);
 	}	
 	else if(v_samplerType <= 2.0f)	{
-		batchColor = vec4(1.f, 1.f, 0.f, 1.0f);
+		batchColor = vec4(0.5f, 0.5f, 0.5f, 1.0f);
 		//batchColor = setProperTextureCubemap(v_shapeIndex);
 	}
 	else {
@@ -132,6 +134,43 @@ vec4 setProperTexture2D(float index) {
 	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
 }
 
+/*
+vec4 setProperTextureCubemap(float index) {
+	if      (index <= 0.5f)  return texture(u_Cubemap[0], v_texCoords3D);
+	else if (index <= 1.5f)  return texture(u_Cubemap[1], v_texCoords3D);
+	else if (index <= 2.5f)  return texture(u_Cubemap[2], v_texCoords3D);
+	else if (index <= 3.5f)  return texture(u_Cubemap[3], v_texCoords3D);
+	else if (index <= 4.5f)  return texture(u_Cubemap[4], v_texCoords3D);
+	else if (index <= 5.5f)  return texture(u_Cubemap[5], v_texCoords3D);
+	else if (index <= 6.5f)  return texture(u_Cubemap[6], v_texCoords3D);
+	else if (index <= 7.5f)  return texture(u_Cubemap[7], v_texCoords3D);
+	else if (index <= 8.5f)  return texture(u_Cubemap[8], v_texCoords3D);
+	else if (index <= 9.5f)  return texture(u_Cubemap[9], v_texCoords3D);
+	else if (index <= 10.5f) return texture(u_Cubemap[10], v_texCoords3D);
+	else if (index <= 11.5f) return texture(u_Cubemap[11], v_texCoords3D);
+	else if (index <= 12.5f) return texture(u_Cubemap[12], v_texCoords3D);
+	else if (index <= 13.5f) return texture(u_Cubemap[13], v_texCoords3D);
+	else if (index <= 14.5f) return texture(u_Cubemap[14], v_texCoords3D);
+	else if (index <= 15.5f) return texture(u_Cubemap[15], v_texCoords3D);
+	else if (index <= 16.5f) return texture(u_Cubemap[16], v_texCoords3D);
+	else if (index <= 17.5f) return texture(u_Cubemap[17], v_texCoords3D);
+	else if (index <= 18.5f) return texture(u_Cubemap[18], v_texCoords3D);
+	else if (index <= 19.5f) return texture(u_Cubemap[19], v_texCoords3D);
+	else if (index <= 20.5f) return texture(u_Cubemap[20], v_texCoords3D);
+	else if (index <= 21.5f) return texture(u_Cubemap[21], v_texCoords3D);
+	else if (index <= 22.5f) return texture(u_Cubemap[22], v_texCoords3D);
+	else if (index <= 23.5f) return texture(u_Cubemap[23], v_texCoords3D);
+	else if (index <= 24.5f) return texture(u_Cubemap[24], v_texCoords3D);
+	else if (index <= 25.5f) return texture(u_Cubemap[25], v_texCoords3D);
+	else if (index <= 26.5f) return texture(u_Cubemap[26], v_texCoords3D);
+	else if (index <= 27.5f) return texture(u_Cubemap[27], v_texCoords3D);
+	else if (index <= 28.5f) return texture(u_Cubemap[28], v_texCoords3D);
+	else if (index <= 29.5f) return texture(u_Cubemap[29], v_texCoords3D);
+	else if (index <= 30.5f) return texture(u_Cubemap[30], v_texCoords3D);
+	else if (index <= 31.5f) return texture(u_Cubemap[31], v_texCoords3D);
+	else return vec4(0.5f, 0.5f, 0.5f, 1.0f);
+}
+*/
 vec4 calculateLight(LightMaterial lightMaterial, vec3 batchedColor) {
 	vec3 position = lightMaterial.position.xyz;
 	vec3 ambient = lightMaterial.ambient.xyz;
