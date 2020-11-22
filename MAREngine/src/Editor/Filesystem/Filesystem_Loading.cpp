@@ -135,6 +135,12 @@ namespace mar::editor {
 			loadVec3(v, num);
 		};
 
+		auto loadVec4Getline = [&file, &line](maths::vec4& v, size_t num) {
+			std::getline(file, line);
+			std::istringstream is(line.substr(num));
+			is >> v.x >> v.y >> v.z >> v.w;
+		};
+
 		auto loadString = [&line](std::string& str, size_t num) {
 			std::istringstream iss(line.substr(num));
 			iss >> str;
@@ -213,13 +219,13 @@ namespace mar::editor {
 				auto& light = getComponentFromEntity<ecs::LightComponent>(entity);
 
 				// #ambientlight - 13
-				loadVec3Getline(light.ambient, 13);
+				loadVec4Getline(light.ambient, 13);
 
 				// #diffuselight - 13
-				loadVec3Getline(light.diffuse, 13);
+				loadVec4Getline(light.diffuse, 13);
 
 				// #specularlight - 14
-				loadVec3Getline(light.specular, 14);
+				loadVec4Getline(light.specular, 14);
 
 				// #constant - 9
 				loadFloatGetline(light.constant, 9);

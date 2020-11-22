@@ -12,21 +12,20 @@ layout(location = 7) in vec3 v_CameraPos;
 layout(location = 0) out vec4 outColor;
 
 struct LightMaterial {
-	float posX, posY, posZ;						// 3 * 4 = 12		offset = 0
-	float ambientX, ambientY, ambientZ;			// 3 * 4 = 12		offset = 12
-	float diffuseX, diffuseY, diffuseZ;			// 3 * 4 = 12		offset = 24
-	float specularX, specularY, specularZ;		// 3 * 4 = 12		offset = 36
+	vec4 position;								// 4 * 4 = 16		offset = 0
+	vec4 ambient;								// 4 * 4 = 16		offset = 16
+	vec4 diffuse;								// 4 * 4 = 16		offset = 32
+	vec4 specular;								// 4 * 4 = 16		offset = 48
 
-	float constant;								// 1 * 4 = 4		offset = 40
-	float linear;								// 1 * 4 = 4		offset = 44
-	float quadratic;							// 1 * 4 = 4		offset = 48
-	float shininess;							// 1 * 4 = 4		offset = 52
+	float constant;								// 1 * 4 = 4		offset = 52
+	float linear;								// 1 * 4 = 4		offset = 56
+	float quadratic;							// 1 * 4 = 4		offset = 60
+	float shininess;							// 1 * 4 = 4		offset = 64
 }; 
 
 layout(std430, binding = 2) buffer Material {
 	LightMaterial u_material[32];
-
-	int materialSize;
+	int u_lightSize;
 } material;
 
 layout(std430, binding = 3) buffer TextureSamplers {
@@ -136,22 +135,25 @@ vec4 setProperTexture2D(float index) {
 }
 
 vec4 calculateLight(LightMaterial lightMaterial, vec3 batchedColor) {
-	vec3 position = vec3(lightMaterial.posX, lightMaterial.posY, lightMaterial.posZ);
+	vec3 position = lightMaterial.position.xyz;
+	vec3 ambient = lightMaterial.ambient.xyz;
+	vec3 diffuse = lightMaterial.diffuse.xyz;
+	vec3 specular = lightMaterial.specular.xyz;
 
 	// AMBIENT
-	vec3 ambientResult = batchedColor * vec3(lightMaterial.ambientX, lightMaterial.ambientY, lightMaterial.ambientZ);
+	vec3 ambientResult = batchedColor * ambient;
 
 	// DIFFUSE
 	vec3 norm = normalize(v_lightNormal);
 	vec3 lightDir = normalize(position - v_Position);
 	float diff = max(dot(norm, lightDir), 0.0f);
-	vec3 diffuseResult = batchedColor * (diff * vec3(lightMaterial.diffuseX, lightMaterial.diffuseY, lightMaterial.diffuseZ));
+	vec3 diffuseResult = batchedColor * (diff * diffuse);
 
 	// SPECULAR
 	vec3 viewDir = normalize(v_CameraPos - v_Position);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), lightMaterial.shininess);
-	vec3 specularResult = batchedColor * (spec * vec3(lightMaterial.specularX, lightMaterial.specularY, lightMaterial.specularZ));
+	vec3 specularResult = batchedColor * (spec * specular);
 
 	// ATTENUATION
 	float distance = length(position - v_Position);
@@ -168,8 +170,8 @@ vec4 computeAllLights(vec4 batchColor) {
 	vec4 lightColor = calculateLight(material.u_material[0], batchColor.xyz);
 
 	for (int i = 1; i < 32; i++) {
-		if (i >= material.materialSize) break;
-		vec4 lightColor = calculateLight(material.u_material[i], batchColor.xyz);
+		if (i >= material.u_lightSize) break;
+		lightColor += calculateLight(material.u_material[i], batchColor.xyz);
 	}
 
 	return lightColor;

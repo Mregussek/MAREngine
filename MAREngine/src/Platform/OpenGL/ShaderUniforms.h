@@ -68,10 +68,9 @@ namespace mar::platforms::ShaderUniforms {
 
 	// ------------ Material Uniform Block
 
-	constexpr UniformItem ut_u_material{ "material.u_material", 0,  32 * (4 * sizeof(maths::vec3) + 4 * sizeof(float)) };
-	constexpr UniformItem ut_u_materialSize{ "material.materialSize", ut_u_material.memory, sizeof(int32_t) };
-
-	constexpr UniformBuffer ub_Material{ "Material", 2, ut_u_material.memory + ut_u_materialSize.memory };
+	constexpr UniformItem ut_u_material{ "material.u_material", 0,  32 * (4 * sizeof(maths::vec4) + 4 * sizeof(float)) };
+	constexpr UniformItem ut_u_lightSize{ "material.u_lightSize", ut_u_material.memory, sizeof(int32_t) };
+	constexpr UniformBuffer ub_Material{ "Material", 2, ut_u_material.memory + ut_u_lightSize.memory };
 
 	// -------------- TextureSamplers Uniform Block
 

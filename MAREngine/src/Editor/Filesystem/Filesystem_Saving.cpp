@@ -117,9 +117,9 @@ namespace mar::editor {
 
 			ss << "#LightComponent Begin\n";
 
-			ss << "#ambientlight " << light.ambient.x << " " << light.ambient.y << " " << light.ambient.z << "\n";
-			ss << "#diffuselight " << light.diffuse.x << " " << light.diffuse.y << " " << light.diffuse.z << "\n";
-			ss << "#specularlight " << light.specular.x << " " << light.specular.y << " " << light.specular.z << "\n";
+			ss << "#ambientlight " << light.ambient.x << " " << light.ambient.y << " " << light.ambient.z << " " << light.ambient.w << "\n";
+			ss << "#diffuselight " << light.diffuse.x << " " << light.diffuse.y << " " << light.diffuse.z << " " << light.diffuse.w << "\n";
+			ss << "#specularlight " << light.specular.x << " " << light.specular.y << " " << light.specular.z << " " << light.specular.w << "\n";
 
 			ss << "#constant " << light.constant << "\n";
 			ss << "#linear " << light.linear << "\n";

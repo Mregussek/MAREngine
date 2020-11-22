@@ -58,17 +58,14 @@ namespace mar::graphics {
 			entityCmp.initialize(ub_EntityCmp, std::move(entitycmpItems));
 		}
 		
-		{ // setup MaterialInfo uniform block
+		{ // setup Material Uniform Block
 			auto& material = m_shader.createShaderBufferStorage();
-			std::vector<UniformItem> materialItems{ 
-				ut_u_material,
-				ut_u_materialSize
-			};
+			std::vector<UniformItem> materialItems{ ut_u_material, ut_u_lightSize };
 
 			material.initialize(ub_Material, std::move(materialItems));
 		}
 
-		{ // setup MeshInfo uniform block
+		{ // setup TextureSmaplers Uniform Block
 			auto& textureSamplers = m_shader.createShaderBufferStorage();
 			std::vector<UniformItem> textureSamplersItems{ ut_u_Color };
 
@@ -179,7 +176,7 @@ namespace mar::graphics {
 		const auto& lights = container.getLights();
 
 		m_shader.uploadUniformLightMaterial(ub_Material, ut_u_material, lights);
-		m_shader.uploadUniformInt(ub_Material, ut_u_materialSize, (int32_t)lights.size());
+		m_shader.uploadUniformInt(ub_Material, ut_u_lightSize, (int32_t)lights.size());
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}

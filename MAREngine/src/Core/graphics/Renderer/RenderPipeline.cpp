@@ -229,7 +229,7 @@ namespace mar::graphics {
 		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
 
 		auto& lightMaterial = availableContainer->m_lights.emplace_back();
-		lightMaterial.position = position;
+		lightMaterial.position = maths::vec4(position, 1.f);
 		lightMaterial.ambient = light.ambient;
 		lightMaterial.diffuse = light.diffuse;
 		lightMaterial.specular = light.specular;

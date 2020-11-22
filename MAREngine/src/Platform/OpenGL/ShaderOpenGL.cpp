@@ -156,7 +156,7 @@ namespace mar::platforms {
 		const ShaderBufferStorageOpenGL& shaderBuffer = getCorrectShaderBuffer(buffer);
 
 		shaderBuffer.bind();
-		shaderBuffer.update<float>(item.offset, sizeof(graphics::LightMaterial) * lights.size(), maths::vec3::value_ptr(lights[0].position));
+		shaderBuffer.update<float>(item.offset, sizeof(graphics::LightMaterial) * lights.size(), &lights[0].position.x);
 	}
 
 	// ---- PRIVATE METHODS ---- //

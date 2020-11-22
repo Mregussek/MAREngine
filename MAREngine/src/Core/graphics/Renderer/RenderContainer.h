@@ -23,7 +23,6 @@
 
 
 #include "../../../mar.h"
-#include "../../ecs/Components/LightComponents.h"
 #include "../Mesh/Vertex.h"
 
 
@@ -31,10 +30,10 @@ namespace mar::graphics {
 
 
 	struct LightMaterial {
-		maths::vec3 position{ 0.f, 0.f, 0.f };
-		maths::vec3 ambient{ 0.5f, 0.5f, 0.5f };
-		maths::vec3 diffuse{ 0.9f, 0.9f, 0.9f };
-		maths::vec3 specular{ 0.5f, 0.5f, 0.5f };
+		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
+		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
+		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
+		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
 
 		float constant{ 1.0f };
 		float linear{ 0.045f };

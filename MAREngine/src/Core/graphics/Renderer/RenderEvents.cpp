@@ -50,7 +50,7 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].position = position;
+		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
 	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
