@@ -81,7 +81,7 @@ namespace mar::graphics {
 
 		RenderStatistics m_statistics;
 		std::vector<RenderContainer> m_containers;
-		size_t m_availableContainerIndex{ 0 };
+		RenderContainer* m_containerPtr{ nullptr };
 
 		RenderCamera* m_camera{ nullptr };
 
