@@ -66,11 +66,15 @@ namespace mar::platforms {
 	}
 
 	void FramebufferOpenGL::resize(float x, float y) {
-		if (m_id) {
-			close();
-		}
+		setSize(x, y);
 
-		initialize(x, y);
+		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, m_colorAttachment) );
+		PLATFORM_GL_FUNC( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_size.x, (size_t)m_size.y, 0, GL_RGB, GL_FLOAT, 0) );
+		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, 0) );
+
+		PLATFORM_GL_FUNC( glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttanchment) );
+		PLATFORM_GL_FUNC( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (size_t)m_size.x, (size_t)m_size.y) );
+		PLATFORM_GL_FUNC( glBindRenderbuffer(GL_RENDERBUFFER, 0) );
 	}
 
 	uint32_t FramebufferOpenGL::getColorAttach() const { 
@@ -95,7 +99,7 @@ namespace mar::platforms {
 	void FramebufferOpenGL::createColorAttachment() {
 		PLATFORM_GL_FUNC( glGenTextures(1, &m_colorAttachment) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, m_colorAttachment) );
-		PLATFORM_GL_FUNC( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_size.x, (size_t)m_size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0) );
+		PLATFORM_GL_FUNC( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (size_t)m_size.x, (size_t)m_size.y, 0, GL_RGB, GL_FLOAT, 0) );
 		PLATFORM_GL_FUNC( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
 		PLATFORM_GL_FUNC( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
 

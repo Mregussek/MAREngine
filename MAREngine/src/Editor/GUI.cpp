@@ -223,8 +223,8 @@ namespace mar::editor {
 		const auto size = m_viewportFramebuffer.getSize();
 
 		if (size.x != viewportSize.x || size.y != viewportSize.y) {
-			//m_viewportFramebuffer.resize(viewportSize.x, viewportSize.y);
-			//updateViewportAspectRatio();
+			m_viewportFramebuffer.resize(viewportSize.x, viewportSize.y);
+			updateViewportAspectRatio();
 		}
 
 		const uint32_t id = m_viewportFramebuffer.getColorAttach();
