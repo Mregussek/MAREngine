@@ -48,7 +48,10 @@ namespace mar::editor {
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-		m_viewportFramebuffer.initialize(800.f, 600.f);
+		constexpr float xDefault = 800.f;
+		constexpr float yDefault = 600.f;
+		m_viewportFramebuffer.initialize(xDefault, yDefault);
+		updateViewportAspectRatio();
 
 		m_textEditor.initialize();
 
@@ -76,7 +79,6 @@ namespace mar::editor {
 	void GUI::submit(ecs::SceneManager* scene) {
 		m_sceneManager = scene;
 		m_sceneManager->useEditorCamera = true;
-		m_entityPanel.setRenderCam(&m_sceneManager->getScene()->getRenderCamera());
 		m_mainMenuBar.setSceneManager(m_sceneManager);
 
 		EDITOR_INFO("GUI: scene has been submitted!");
@@ -84,7 +86,7 @@ namespace mar::editor {
 
 	void GUI::bind() const {
 		m_viewportFramebuffer.bind();
-		m_viewportFramebuffer.clear();
+		m_viewportFramebuffer.clear(m_sceneManager->getScene()->getBackground());
 	}
 
 	void GUI::display() {
@@ -94,6 +96,33 @@ namespace mar::editor {
 		
 		EDITOR_INFO("GUI: displayed frame!");
 	}
+
+	void GUI::updateViewportAspectRatio() {
+		const auto size = m_viewportFramebuffer.getSize();
+		m_viewportAspectRatio = size.x / size.y;
+	}
+
+	float GUI::getViewportAspectRatio() const {
+		return m_viewportAspectRatio;
+	}
+
+	platforms::FramebufferOpenGL& GUI::getFramebuffer() {
+		return m_viewportFramebuffer;
+	}
+
+	const ecs::Entity& GUI::getCurrentEntity() const {
+		return m_entityPanel.getCurrentEntity();
+	}
+
+	const ecs::EntityCollection& GUI::getCurrentCollection() const {
+		return m_collectionPanel.getCurrentCollection();
+	}
+
+	bool GUI::canDrawLines() const {
+		return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera;
+	}
+
+	// --------- PRIVATE METHODS ------------- //
 
 	void GUI::prepareNewFrame() {
 		m_viewportFramebuffer.unbind();
@@ -190,12 +219,16 @@ namespace mar::editor {
 			ImGui::EndMenuBar();
 		}
 
+		const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		const auto size = m_viewportFramebuffer.getSize();
+
+		if (size.x != viewportSize.x || size.y != viewportSize.y) {
+			//m_viewportFramebuffer.resize(viewportSize.x, viewportSize.y);
+			//updateViewportAspectRatio();
+		}
+
 		const uint32_t id = m_viewportFramebuffer.getColorAttach();
-
-		const ImVec2 size = ImGui::GetContentRegionAvail();
-		m_viewportFramebuffer.setSpecificationSize(size.x, size.y);
-
-		ImGui::Image((ImTextureID)id, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();
 
@@ -218,27 +251,10 @@ namespace mar::editor {
 
 		auto& sceneBackground = m_sceneManager->getScene()->getBackground();
 
-		if (ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x)) {
-			m_viewportFramebuffer.setBackgroundColor(sceneBackground);
-		}
+		ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
 
 		ImGui::End();
 	}
 
-	platforms::FramebufferOpenGL& GUI::getFramebuffer() { 
-		return m_viewportFramebuffer; 
-	}
-
-	const ecs::Entity& GUI::getCurrentEntity() const {
-		return m_entityPanel.getCurrentEntity();
-	}
-
-	const ecs::EntityCollection& GUI::getCurrentCollection() const {
-		return m_collectionPanel.getCurrentCollection();
-	}
-
-	bool GUI::canDrawLines() const {
-		return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera; 
-	}
 
 }

@@ -43,7 +43,6 @@ namespace mar::editor {
 
 		void update(bool isPlayMode) const;
 		
-		void setRenderCam(graphics::RenderCamera* renderCam);
 		void setCurrentEntity(const ecs::Entity& entity);
 		const ecs::Entity& getCurrentEntity() const;
 
@@ -67,9 +66,9 @@ namespace mar::editor {
 		template<typename T>
 		bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) const;
 
+
 		static GUI_EntityPanel* s_instance;
 
-		graphics::RenderCamera* render_cam{ nullptr };
 		const ecs::Entity* currentEntity;
 		bool m_initialized{ false };
 

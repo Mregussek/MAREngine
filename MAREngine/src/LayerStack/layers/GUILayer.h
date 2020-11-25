@@ -41,7 +41,6 @@ namespace mar::layers {
 		LayerGUI() = default;
 		LayerGUI(const char* name);
 
-		void passGuiToLayer(maths::vec3 backgroundColor);
 		void submit(ecs::SceneManager* manager);
 		void renderToViewport();
 

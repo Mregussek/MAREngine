@@ -51,11 +51,8 @@ namespace mar::editor {
 		void display();
 
 		// --- GET METHODS --- //
-		float getViewportWidth() { return m_viewportFramebuffer.getSpecification().width; }
-		float getViewportHeight() { return m_viewportFramebuffer.getSpecification().height; }
-		float getMouseViewportPosX() { return m_mouseViewportX; }
-		float getMouseViewportPosY() { return m_mouseViewportY; }
-		bool isViewportInputEnabled() { return m_enableViewportInput; }
+
+		float getViewportAspectRatio() const;
 		platforms::FramebufferOpenGL& getFramebuffer();
 		const ecs::Entity& getCurrentEntity() const;
 		const ecs::EntityCollection& getCurrentCollection() const;
@@ -70,20 +67,21 @@ namespace mar::editor {
 		void Editor_ViewPort();
 		void Editor_Properties();
 
+		void updateViewportAspectRatio();
+
 	private:
 
-		ecs::SceneManager* m_sceneManager;
-
 		platforms::FramebufferOpenGL m_viewportFramebuffer;
-		float m_mouseViewportX{ 0.f };
-		float m_mouseViewportY{ 0.f };
-		bool m_enableViewportInput{ false };
 
 		GUI_MainMenuBar m_mainMenuBar;
 		GUI_EntityPanel m_entityPanel;
 		GUI_EntityCollectionPanel m_collectionPanel;
 		GUI_SceneHierarchy m_sceneHierarchyPanel;
 		GUI_TextEditor m_textEditor;
+
+		ecs::SceneManager* m_sceneManager;
+
+		float m_viewportAspectRatio{ 1.33f };
 
 		bool m_dockspaceOpen{ true };
 		static const bool m_fullscreenPersisant{ true };

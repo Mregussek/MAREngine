@@ -29,18 +29,6 @@
 namespace mar::platforms {
 
 
-	struct FramebufferSpecification {
-		
-		FramebufferSpecification() = default;
-		FramebufferSpecification(float w, float h) : width(w), height(h) { }
-
-		maths::vec3 backgroundColor{ 0.22f, 0.69f, 0.87f };
-		float width{ 0.f };
-		float height{ 0.f };
-
-	};
-
-
 	class FramebufferOpenGL {
 	public:
 
@@ -52,18 +40,19 @@ namespace mar::platforms {
 		void bind() const;
 		void unbind() const;
 
-		void clear() const;
+		void clear(maths::vec3 backgroundColor) const;
+
+		void resize(float x, float y);
 
 		// --- GET METHODS --- // 
 
-		uint32_t getColorAttach() const { return m_colorAttachment; }
-		uint32_t getDepthAttach() const { return m_depthAttanchment; }
-		FramebufferSpecification& getSpecification() { return m_specification; }
+		uint32_t getColorAttach() const;
+		uint32_t getDepthAttach() const;
+		maths::vec2 getSize() const;
 		
 		// --- SET METHODS --- //
 
-		void setBackgroundColor(maths::vec3 background_color) { m_specification.backgroundColor = background_color; }
-		void setSpecificationSize(float width, float height);
+		void setSize(float x, float y);
 		
 	private:
 
@@ -72,11 +61,13 @@ namespace mar::platforms {
 		void createFramebuffer();
 		void checkCreationStatus();
 
+
+		maths::vec2 m_size{ 0.f, 0.f };
+
 		uint32_t m_id{ 0 };
 		uint32_t m_colorAttachment{ 0 };
 		uint32_t m_depthAttanchment{ 0 };
 
-		FramebufferSpecification m_specification;
 	};
 
 

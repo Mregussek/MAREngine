@@ -31,7 +31,7 @@ by actual line of code. Commenting MAR_ENGINE_DEBUG_MODE means all those macro's
 
 Logging is damaging perfomance, so it will be wise to comment it (Of course if you don't need logging).
 */
-#define MAR_ENGINE_DEBUG_MODE
+#define MAR_ENGINE_DEBUG_MODE 1
 
 // set logging level
 //#define MAR_ENGINE_LOGS_LEVEL_TRACE

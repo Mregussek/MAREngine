@@ -71,7 +71,6 @@ namespace mar {
 		}
 
 		{ // Editor Layer Setup
-			guiLayer->passGuiToLayer(scene->getBackground());
 			m_engine.connectEntityLayerToGui(guiLayer, entityLayer);
 			stack.pushOverlay(guiLayer);
 		}

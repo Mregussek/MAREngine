@@ -54,10 +54,6 @@ namespace mar::editor {
 		currentEntity = nullptr;
 	}
 
-	void GUI_EntityPanel::setRenderCam(graphics::RenderCamera* renderCam) {
-		render_cam = renderCam;
-	}
-
 	void GUI_EntityPanel::setCurrentEntity(const ecs::Entity& entity) { 
 		currentEntity = &entity; 
 	}

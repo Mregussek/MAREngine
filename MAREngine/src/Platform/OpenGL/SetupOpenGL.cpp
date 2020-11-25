@@ -24,6 +24,20 @@
 namespace mar::platforms {
 
 
+	void GLAPIENTRY
+		MessageCallback(GLenum source,
+			GLenum type,
+			GLuint id,
+			GLenum severity,
+			GLsizei length,
+			const GLchar* message,
+			const void* userParam)
+	{
+		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+			type, severity, message);
+	}
+
 	bool SetupOpenGL::init() {
 		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
 			const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -44,6 +58,11 @@ namespace mar::platforms {
 		else {
 			MAR_CORE_ERROR("SETUP_OPENGL: Cannot initialize OpenGL, unsupported platform!");
 			return false;
+		}
+
+		if constexpr (MAR_ENGINE_DEBUG_MODE) {
+			PLATFORM_GL_FUNC( glEnable(GL_DEBUG_OUTPUT) );
+			PLATFORM_GL_FUNC( glDebugMessageCallback(MessageCallback, 0) );
 		}
 
 		PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) ); // Enable DEPTH, in other words 3D
