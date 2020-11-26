@@ -33,8 +33,9 @@ namespace mar::graphics {
 
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
-		const uint64_t size_vertices = settings::maxVerticesCount * sizeof(Vertex);
-		const uint64_t size_indices = settings::maxIndicesCount * sizeof(uint32_t);
+
+		const uint32_t size_vertices = settings::maxVerticesCount * sizeof(Vertex);
+		const uint32_t size_indices = settings::maxIndicesCount * sizeof(uint32_t);
 
 		m_buffers.initialize(size_vertices, size_indices);
 

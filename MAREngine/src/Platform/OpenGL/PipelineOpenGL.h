@@ -35,7 +35,7 @@ namespace mar::platforms {
 
 		PipelineOpenGL() = default;
 
-		void initialize(uint64_t memoryVBO, uint64_t memoryEBO);
+		void initialize(uint32_t memoryVBO, uint32_t memoryEBO);
 		void close();
 
 		void update(const std::vector<graphics::Vertex>& vertices, const std::vector<uint32_t>& indices) const;
@@ -62,8 +62,8 @@ namespace mar::platforms {
 		uint32_t m_vbo{ 0 };
 		uint32_t m_ebo{ 0 };
 
-		uint64_t m_vboAllocMemory{ 0 };
-		uint64_t m_eboAllocMemory{ 0 };
+		uint32_t m_vboAllocMemory{ 0 };
+		uint32_t m_eboAllocMemory{ 0 };
 
 		bool m_initialized{ false };
 	};	

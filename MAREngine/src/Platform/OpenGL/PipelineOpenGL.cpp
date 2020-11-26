@@ -26,7 +26,7 @@ namespace mar::platforms {
 
 	// ---- PUBLIC METHODS ---- //
 
-	void PipelineOpenGL::initialize(uint64_t memoryVBO, uint64_t memoryEBO) {
+	void PipelineOpenGL::initialize(uint32_t memoryVBO, uint32_t memoryEBO) {
 		if (m_initialized) {
 			PLATFORM_WARN("PIPELINE_OPENGL: is already initialized with VAO {} EBO {} VBO {}!", m_vao, m_ebo, m_vbo);
 			return;

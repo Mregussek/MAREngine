@@ -19,17 +19,27 @@
 
 
 #include "SphericalCamera.h"
+#include "../../Window/Window.h"
 
 
 namespace mar::editor {
 
 
-	void SphericalCamera::initialize() {
+	bool SphericalCamera::processFrame(float deltaTime) {
+        bool userRotatedCamera = false;
 
-	}
+        if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_3)) {
+            const float posX = window::Window::getMousePositionX();
+            const float posY = window::Window::getMousePositionY();
 
-	void SphericalCamera::update() {
+            std::cout << posX << ", " << posY << "\n";
 
+            //processPositionWithMouse(posX, posY);
+
+            userRotatedCamera = true;
+        }
+
+        return userRotatedCamera;
 	}
 
 

@@ -25,17 +25,23 @@
 #include "../../mar.h"
 
 
+namespace mar::window { class Window; }
 namespace mar::editor {
 
 
 	class StandardCamera {
+
+		typedef window::Window Window;
+
 	public:
 
-		void initialize();
-
-		void update();
+		static bool processFrame(float deltaTime);
 
 	private:
+
+		static float checkForSpeedUpdate(float scroll);
+		static bool processMousePosition(bool firstMouse);
+
 	};
 
 

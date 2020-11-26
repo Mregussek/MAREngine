@@ -31,12 +31,7 @@ namespace mar::editor {
 	class SphericalCamera {
 	public:
 
-		void initialize();
-		void update();
-
-	private:
-
-
+		static bool processFrame(float deltaTime);
 
 	};
 
