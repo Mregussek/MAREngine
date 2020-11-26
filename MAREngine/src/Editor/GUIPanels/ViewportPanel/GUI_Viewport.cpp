@@ -35,7 +35,7 @@ namespace mar::editor {
 
 		m_camera.initialize(m_aspectRatio);
 
-		ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData());
+		ecs::SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
 	}
 
 	void GUI_Viewport::close() {
@@ -63,7 +63,7 @@ namespace mar::editor {
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
 					if (sceneManager->useEditorCamera) {
-						ecs::SceneEvents::Instance().onEditorCameraSet(&m_camera.getCameraData());
+						ecs::SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
 					}
 					else {
 						ecs::SceneEvents::Instance().onGameCameraSet();
@@ -76,7 +76,7 @@ namespace mar::editor {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
-					ecs::SceneEvents::Instance().onEditorCameraSet(&m_camera.getCameraData());
+					ecs::SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
 				}
 			}
 

@@ -50,7 +50,7 @@ namespace mar::graphics {
 
 		void submitEntity(const ecs::Entity& entity);
 
-		void submitCamera(RenderCamera* cam);
+		void submitCamera(const RenderCamera* cam);
 
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }
@@ -83,7 +83,7 @@ namespace mar::graphics {
 		std::vector<RenderContainer> m_containers;
 		RenderContainer* m_containerPtr{ nullptr };
 
-		RenderCamera* m_camera{ nullptr };
+		const RenderCamera* m_camera{ nullptr };
 
 	};
 

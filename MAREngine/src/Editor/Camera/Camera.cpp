@@ -27,13 +27,7 @@
 namespace mar::editor {
 
     
-    Camera* Camera::s_instance{ nullptr };
-    
-    // ---- PUBLIC METHODS ---- //
-    
     void Camera::initialize(float aspectRatio) {
-        s_instance = this;
-
         m_aspectRatio = aspectRatio;
 
         updateCameraVectors();
@@ -59,8 +53,8 @@ namespace mar::editor {
         const float deltaTime = currentFrame - lastTime;
         lastTime = currentFrame;
         
-        if (StandardCamera::processFrame(deltaTime)) { userPressedSth = true; }
-        if (SphericalCamera::processFrame(deltaTime)) { userPressedSth = true; }
+        if (m_standard.processFrame(this, deltaTime)) { userPressedSth = true; }
+        if (m_spherical.processFrame(this, deltaTime)) { userPressedSth = true; }
 
         return userPressedSth;
     }
@@ -88,12 +82,8 @@ namespace mar::editor {
         m_up = maths::vec3::normalize(maths::vec3::cross(m_right, m_front));
     }
 
-    Camera* Camera::Instance() {
-        return s_instance;
-    }
-
-    graphics::RenderCamera& Camera::getCameraData() { 
-        return s_instance->m_renderCamera; 
+    const graphics::RenderCamera* Camera::getCameraData() const { 
+        return &m_renderCamera; 
     }
 
 

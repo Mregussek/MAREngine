@@ -19,13 +19,14 @@
 
 
 #include "SphericalCamera.h"
+#include "Camera.h"
 #include "../../Window/Window.h"
 
 
 namespace mar::editor {
 
 
-	bool SphericalCamera::processFrame(float deltaTime) {
+	bool SphericalCamera::processFrame(Camera* camera, float deltaTime) {
         bool userRotatedCamera = false;
 
         if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_3)) {

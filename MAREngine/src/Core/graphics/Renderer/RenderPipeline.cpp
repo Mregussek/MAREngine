@@ -271,7 +271,7 @@ namespace mar::graphics {
 		return m_containerPtr->m_lights.size() - 1;
 	}
 
-	void RenderPipeline::submitCamera(RenderCamera* cam) {
+	void RenderPipeline::submitCamera(const RenderCamera* cam) {
 		m_camera = cam;
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");

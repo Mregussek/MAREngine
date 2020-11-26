@@ -24,6 +24,8 @@
 
 #include "../../mar.h"
 #include "../../Core/graphics/Renderer/RenderCamera.h"
+#include "StandardCamera.h"
+#include "SphericalCamera.h"
 
 
 namespace mar::editor {
@@ -41,7 +43,7 @@ namespace mar::editor {
         void initialize(float aspectRatio);
         void update(float aspectRatio);
 
-        static graphics::RenderCamera& getCameraData();
+        const graphics::RenderCamera* getCameraData() const;
 
     private:
 
@@ -50,7 +52,6 @@ namespace mar::editor {
 
         void updateData();
 
-        static Camera* Instance();
 
         graphics::RenderCamera m_renderCamera;
 
@@ -67,7 +68,8 @@ namespace mar::editor {
 
         float m_aspectRatio{ 1.333f };
 
-        static Camera* s_instance;
+        StandardCamera m_standard;
+        SphericalCamera m_spherical;
 
     };
 

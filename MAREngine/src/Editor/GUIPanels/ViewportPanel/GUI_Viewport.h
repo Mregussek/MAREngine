@@ -44,8 +44,6 @@ namespace mar::editor {
 
 		void updateAspectRatio();
 
-		platforms::FramebufferOpenGL& getFramebuffer() { return m_framebuffer; }
-
 	private:
 
 		void displayMainMenuBar(ecs::SceneManager* sceneManager);

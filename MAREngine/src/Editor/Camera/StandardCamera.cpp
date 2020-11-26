@@ -26,7 +26,7 @@
 namespace mar::editor {
 
 
-	bool StandardCamera::processFrame(float deltaTime) {
+	bool StandardCamera::processFrame(Camera* camera, float deltaTime) const {
         static bool firstMouse = true;
         static bool holdingRightMouseButton{ false };
         bool userPressedSth = false;
@@ -36,30 +36,26 @@ namespace mar::editor {
         if (userPressedRightMouseButton) {
             if(!holdingRightMouseButton) { firstMouse = true; }
 
-            auto& position = Camera::Instance()->m_position;
-            auto& front = Camera::Instance()->m_front;
-            auto& right = Camera::Instance()->m_right;
-
-            const float velocity = checkForSpeedUpdate(deltaTime);
+            const float velocity = checkForSpeedUpdate(camera, deltaTime);
 
             if (Window::isKeyPressed(MAR_KEY_W)) {
-                position += front * velocity;
+                camera->m_position += camera->m_front * velocity;
                 userPressedSth = true;
             }
             if (Window::isKeyPressed(MAR_KEY_S)) {
-                position -= front * velocity;
+                camera->m_position -= camera->m_front * velocity;
                 userPressedSth = true;
             }
             if (Window::isKeyPressed(MAR_KEY_A)) {
-                position -= right * velocity;
+                camera->m_position -= camera->m_right * velocity;
                 userPressedSth = true;
             }
             if (Window::isKeyPressed(MAR_KEY_D)) {
-                position += right * velocity;
+                camera->m_position += camera->m_right * velocity;
                 userPressedSth = true;
             }
 
-            if (processMousePosition(firstMouse)) {
+            if (processMousePosition(camera, firstMouse)) {
                 firstMouse = false;
                 userPressedSth = true;
             }
@@ -73,8 +69,8 @@ namespace mar::editor {
         return userPressedSth;
 	}
 
-    float StandardCamera::checkForSpeedUpdate(float deltaTime) {
-        auto& speed = Camera::Instance()->m_movementSpeed;
+    float StandardCamera::checkForSpeedUpdate(Camera* camera, float deltaTime) const {
+        auto& speed = camera->m_movementSpeed;
         speed += window::Window::getScrollY();
 
         if (speed < 1.0f) { speed = 1.0f; }
@@ -85,7 +81,7 @@ namespace mar::editor {
         return velocity;
     }
 
-    bool StandardCamera::processMousePosition(bool firstMouse) {
+    bool StandardCamera::processMousePosition(Camera* camera, bool firstMouse) const {
         static float lastX{ 0.f };
         static float lastY{ 0.f };
 
@@ -94,10 +90,6 @@ namespace mar::editor {
 
         if (lastX == xoffset && lastY == yoffset) { return false; }
         
-        auto& speed = Camera::Instance()->m_movementSpeed;
-        auto& yaw = Camera::Instance()->m_yaw;
-        auto& pitch = Camera::Instance()->m_pitch;
-
         if (firstMouse) {
             lastX = xoffset;
             lastY = yoffset;
@@ -111,13 +103,13 @@ namespace mar::editor {
         lastX = xoffset;
         lastY = yoffset;
 
-        yaw += x_position;
-        pitch += y_position;
+        camera->m_yaw += x_position;
+        camera->m_pitch += y_position;
 
         constexpr bool constrainPaith{ true };
         if (constrainPaith) {
-            if (pitch > 89.0f) { pitch = 89.0f; }
-            if (pitch < -89.f) { pitch = -89.f; };
+            if (camera->m_pitch > 89.0f) { camera->m_pitch = 89.0f; }
+            if (camera->m_pitch < -89.f) { camera->m_pitch = -89.f; };
         }
 
         return true;

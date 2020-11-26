@@ -28,6 +28,8 @@
 namespace mar::window { class Window; }
 namespace mar::editor {
 
+	class Camera;
+
 
 	class StandardCamera {
 
@@ -35,12 +37,12 @@ namespace mar::editor {
 
 	public:
 
-		static bool processFrame(float deltaTime);
+		bool processFrame(Camera* camera, float deltaTime) const;
 
 	private:
 
-		static float checkForSpeedUpdate(float scroll);
-		static bool processMousePosition(bool firstMouse);
+		float checkForSpeedUpdate(Camera* camera, float scroll) const;
+		bool processMousePosition(Camera* camera, bool firstMouse) const;
 
 	};
 
