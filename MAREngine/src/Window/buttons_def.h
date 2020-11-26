@@ -160,7 +160,7 @@
 
 #define MAR_KEY_LAST               MAR_KEY_MENU
 
-// --- MOUSE DEFINES --- //
+// --- MOUSE DEFINES --- //			
 #define MAR_MOUSE_BUTTON_1         0
 #define MAR_MOUSE_BUTTON_2         1
 #define MAR_MOUSE_BUTTON_3         2

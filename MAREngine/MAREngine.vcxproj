@@ -271,6 +271,8 @@
     <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
+    <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
+    <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Loading.h" />
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.h" />
@@ -361,6 +363,8 @@
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
+    <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
+    <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Loading.cpp" />
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Saving.cpp" />

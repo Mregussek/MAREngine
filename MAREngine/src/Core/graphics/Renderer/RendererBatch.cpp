@@ -33,8 +33,10 @@ namespace mar::graphics {
 
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
+		const uint64_t size_vertices = settings::maxVerticesCount * sizeof(Vertex);
+		const uint64_t size_indices = settings::maxIndicesCount * sizeof(uint32_t);
 
-		m_buffers.initialize(settings::maxVerticesCount * sizeof(Vertex), settings::maxIndicesCount * sizeof(uint32_t));
+		m_buffers.initialize(size_vertices, size_indices);
 
 		const char* vert = "resources/shaders/batcher.vert.glsl";
 		const char* frag = "resources/shaders/batcher.frag.glsl";

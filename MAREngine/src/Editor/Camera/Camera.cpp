@@ -38,10 +38,12 @@ namespace mar::editor {
     
     void Camera::update(float aspectRatio) {
         processInput();
+
         //processMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
         //processMouseScroll(window::Input::getScrollY());
     
         m_aspectRatio = aspectRatio;
+
         updateData();
     }
     
@@ -64,6 +66,16 @@ namespace mar::editor {
             if (window::Window::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
             if (window::Window::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
         }
+
+        if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_3)) {
+            const float posX = window::Window::getMousePositionX();
+            const float posY = window::Window::getMousePositionY();
+
+            std::cout << posX << ", " << posY << "\n";
+
+            //processPositionWithMouse(posX, posY);
+        }
+        
     }
     
     void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse) {
