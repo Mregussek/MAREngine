@@ -279,6 +279,8 @@
     <ClInclude Include="src\Editor\GUIPanels\GUI_Graphics.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_MainMenuBar.h" />
     <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.h" />
+    <ClInclude Include="src\Editor\GUIPanels\ScenePropertiesPanel\GUI_SceneProperties.h" />
+    <ClInclude Include="src\Editor\GUIPanels\ViewportPanel\GUI_Viewport.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
@@ -378,6 +380,8 @@
     <ClCompile Include="src\Editor\GUIPanels\GUI_TextEditor.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\ScenePropertiesPanel\GUI_SceneProperties.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\ViewportPanel\GUI_Viewport.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp" />

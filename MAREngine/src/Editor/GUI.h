@@ -23,8 +23,9 @@
 
 
 #include "../mar.h"
-#include "../Platform/OpenGL/FramebufferOpenGL.h"
 #include "GUIPanels/GUI_MainMenuBar.h"
+#include "GUIPanels/ViewportPanel/GUI_Viewport.h"
+#include "GUIPanels/ScenePropertiesPanel/GUI_SceneProperties.h"
 #include "GUIPanels/EntityPanels/GUI_EntityPanel.h"
 #include "GUIPanels/EntityPanels/GUI_EntityCollectionPanel.h"
 #include "GUIPanels/EntityPanels/GUI_SceneHierarchy.h"
@@ -44,16 +45,13 @@ namespace mar::editor {
 		void initialize(const char* glsl_version);
 		void shutdown();
 
+		void renderToViewport() const;
 		void submit(ecs::SceneManager* scene);
-
-		void bind() const;
 
 		void display();
 
 		// --- GET METHODS --- //
 
-		float getViewportAspectRatio() const;
-		platforms::FramebufferOpenGL& getFramebuffer();
 		const ecs::Entity& getCurrentEntity() const;
 		const ecs::EntityCollection& getCurrentCollection() const;
 		bool canDrawLines() const;
@@ -64,24 +62,17 @@ namespace mar::editor {
 		void updateFrame();
 		void endFrame() const;
 
-		void Editor_ViewPort();
-		void Editor_Properties();
-
-		void updateViewportAspectRatio();
-
 	private:
 
-		platforms::FramebufferOpenGL m_viewportFramebuffer;
-
+		GUI_Viewport m_viewport;
 		GUI_MainMenuBar m_mainMenuBar;
 		GUI_EntityPanel m_entityPanel;
 		GUI_EntityCollectionPanel m_collectionPanel;
 		GUI_SceneHierarchy m_sceneHierarchyPanel;
 		GUI_TextEditor m_textEditor;
+		GUI_SceneProperties m_sceneProperties;
 
 		ecs::SceneManager* m_sceneManager;
-
-		float m_viewportAspectRatio{ 1.33f };
 
 		bool m_dockspaceOpen{ true };
 		static const bool m_fullscreenPersisant{ true };

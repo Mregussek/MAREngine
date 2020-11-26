@@ -18,46 +18,19 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
+#include "GUI_SceneProperties.h"
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/GUI.h"
-#include "../../Editor/GUIPanels/GUI_Graphics.h"
+namespace mar::editor {
 
 
-namespace mar {
-	namespace ecs { class SceneManager; }
-}
-namespace mar::layers {
+	void GUI_SceneProperties::display(maths::vec3& sceneBackground) {
+		ImGui::Begin("Editor Properties");
 
+		ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
 
-	class LayerGUI : public Layer {
-	public:
-
-		LayerGUI() = default;
-		LayerGUI(const char* name);
-
-		void submit(ecs::SceneManager* manager);
-		void renderToViewport();
-
-		// --- OVERRIDED METHODS --- // 
-
-		void initialize() override;
-		void update() override;
-		void closeLayer() override;
-
-	private:
-
-		editor::GUI m_gui;
-		//editor::GUI_Graphics m_guiGraphics;
-
-	};
+		ImGui::End();
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_GUI_LAYER_H

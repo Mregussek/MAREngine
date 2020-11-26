@@ -32,8 +32,6 @@ namespace mar::layers {
 	void LayerGUI::initialize() {
 		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
-		m_camera.initialize(m_gui.getViewportAspectRatio());
-
 		m_gui.initialize("#version 450");		
 
 		//m_guiGraphics.initialize();
@@ -60,7 +58,7 @@ namespace mar::layers {
 			}
 		}
 		*/
-		m_camera.update(m_gui.getViewportAspectRatio());
+		
 		m_gui.display();
 
 		LAYER_INFO("GUI_LAYER: {} displayed frame", p_debugName);
@@ -77,7 +75,7 @@ namespace mar::layers {
 	}
 
 	void LayerGUI::renderToViewport() {
-		m_gui.bind();
+		m_gui.renderToViewport();
 	}
 
 	void LayerGUI::submit(ecs::SceneManager* manager) {

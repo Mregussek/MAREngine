@@ -66,12 +66,10 @@ namespace mar::editor {
     }
     
     void Camera::updateData() {
-
         m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
         m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
         m_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
         m_renderCamera.recalculateMVP();
- 
     }
     
     void Camera::updateCameraVectors() {

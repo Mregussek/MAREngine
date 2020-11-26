@@ -18,41 +18,20 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
+#ifndef MAR_ENGINE_EDITOR_GUI_SCENE_PROPERTIES_PANEL_H
+#define MAR_ENGINE_EDITOR_GUI_SCENE_PROPERTIES_PANEL_H
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/GUI.h"
-#include "../../Editor/GUIPanels/GUI_Graphics.h"
+#include "../../../mar.h"
 
 
-namespace mar {
-	namespace ecs { class SceneManager; }
-}
-namespace mar::layers {
+namespace mar::editor {
 
 
-	class LayerGUI : public Layer {
+	class GUI_SceneProperties {
 	public:
 
-		LayerGUI() = default;
-		LayerGUI(const char* name);
-
-		void submit(ecs::SceneManager* manager);
-		void renderToViewport();
-
-		// --- OVERRIDED METHODS --- // 
-
-		void initialize() override;
-		void update() override;
-		void closeLayer() override;
-
-	private:
-
-		editor::GUI m_gui;
-		//editor::GUI_Graphics m_guiGraphics;
+		void display(maths::vec3& sceneBackground);
 
 	};
 
@@ -60,4 +39,4 @@ namespace mar::layers {
 }
 
 
-#endif // !MAR_ENGINE_GUI_LAYER_H
+#endif // !MAR_ENGINE_EDITOR_GUI_SCENE_PROPERTIES_PANEL_H

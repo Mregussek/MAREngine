@@ -18,41 +18,42 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
+#ifndef MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
+#define MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/GUI.h"
-#include "../../Editor/GUIPanels/GUI_Graphics.h"
+#include "../../../mar.h"
+#include "../../Camera/Camera.h"
+#include "../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
-namespace mar {
-	namespace ecs { class SceneManager; }
-}
-namespace mar::layers {
+namespace mar::ecs { class SceneManager; }
+namespace mar::editor {
 
 
-	class LayerGUI : public Layer {
+	class GUI_Viewport {
 	public:
 
-		LayerGUI() = default;
-		LayerGUI(const char* name);
+		void initialize();
+		void close();
 
-		void submit(ecs::SceneManager* manager);
-		void renderToViewport();
+		void display(ecs::SceneManager* sceneManager);
 
-		// --- OVERRIDED METHODS --- // 
+		void bind(maths::vec3 backgroundColor) const;
+		void unbind() const;
 
-		void initialize() override;
-		void update() override;
-		void closeLayer() override;
+		void updateAspectRatio();
+
+		platforms::FramebufferOpenGL& getFramebuffer() { return m_framebuffer; }
 
 	private:
 
-		editor::GUI m_gui;
-		//editor::GUI_Graphics m_guiGraphics;
+		void displayMainMenuBar(ecs::SceneManager* sceneManager);
+		void displayActualViewport();
+
+		platforms::FramebufferOpenGL m_framebuffer;
+		Camera m_camera;
+		float m_aspectRatio{ 1.33f };
 
 	};
 
@@ -60,4 +61,4 @@ namespace mar::layers {
 }
 
 
-#endif // !MAR_ENGINE_GUI_LAYER_H
+#endif // !MAR_ENGINE_EDITOR_GUI_VIEWPORT_H

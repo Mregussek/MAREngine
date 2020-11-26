@@ -25,7 +25,6 @@
 
 #include "../Core/ecs/Scene.h"
 #include "../Core/ecs/SceneManager.h"
-#include "../Core/ecs/SceneEvents.h"
 
 #include "../Window/Window.h"
 
@@ -48,24 +47,17 @@ namespace mar::editor {
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-		constexpr float xDefault = 800.f;
-		constexpr float yDefault = 600.f;
-		m_viewportFramebuffer.initialize(xDefault, yDefault);
-		updateViewportAspectRatio();
-
+		m_viewport.initialize();
 		m_textEditor.initialize();
-
 		m_mainMenuBar.initialize();
 		m_entityPanel.initialize();
 		m_collectionPanel.initialize();
-
-		ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData());
 
 		EDITOR_INFO("GUI: initialized properly!");
 	}
 
 	void GUI::shutdown() {
-		m_viewportFramebuffer.close();
+		m_viewport.close();
 
 		ImGui_ImplOpenGL3_Shutdown();
 
@@ -84,11 +76,6 @@ namespace mar::editor {
 		EDITOR_INFO("GUI: scene has been submitted!");
 	}
 
-	void GUI::bind() const {
-		m_viewportFramebuffer.bind();
-		m_viewportFramebuffer.clear(m_sceneManager->getScene()->getBackground());
-	}
-
 	void GUI::display() {
 		prepareNewFrame();
 		updateFrame();
@@ -97,17 +84,8 @@ namespace mar::editor {
 		EDITOR_INFO("GUI: displayed frame!");
 	}
 
-	void GUI::updateViewportAspectRatio() {
-		const auto size = m_viewportFramebuffer.getSize();
-		m_viewportAspectRatio = size.x / size.y;
-	}
-
-	float GUI::getViewportAspectRatio() const {
-		return m_viewportAspectRatio;
-	}
-
-	platforms::FramebufferOpenGL& GUI::getFramebuffer() {
-		return m_viewportFramebuffer;
+	void GUI::renderToViewport() const {
+		m_viewport.bind(m_sceneManager->getScene()->getBackground());
 	}
 
 	const ecs::Entity& GUI::getCurrentEntity() const {
@@ -125,7 +103,7 @@ namespace mar::editor {
 	// --------- PRIVATE METHODS ------------- //
 
 	void GUI::prepareNewFrame() {
-		m_viewportFramebuffer.unbind();
+		m_viewport.unbind();
 
 		ImGui_ImplOpenGL3_NewFrame();
 
@@ -173,8 +151,8 @@ namespace mar::editor {
 		m_textEditor.update();
 
 		m_mainMenuBar.display();
-		Editor_ViewPort();
-		Editor_Properties();
+		m_viewport.display(m_sceneManager);
+		m_sceneProperties.display(m_sceneManager->getScene()->getBackground());
 
 		m_entityPanel.update(m_sceneManager->isPlayMode());
 		m_collectionPanel.update();
@@ -189,72 +167,6 @@ namespace mar::editor {
 		ImGui::EndFrame();
 
 		EDITOR_TRACE("GUI: ending frame! (rendering gathered data)");
-	}
-
-	void GUI::Editor_ViewPort() {
-		ImGui::Begin("ViewPort", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
-
-		if (ImGui::BeginMenuBar()) {
-			if (m_sceneManager->isEditorMode()) {
-				if (ImGui::Button("PLAY")) { m_sceneManager->setPlayMode(); }
-			}
-			else {
-				if (ImGui::Button("STOP")) { 
-					m_sceneManager->setExitPlayMode(); 
-					if (m_sceneManager->useEditorCamera) {
-						ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData());
-					}
-				}
-
-				ImGui::SameLine();
-
-				if (!m_sceneManager->isPauseMode()) {
-					if (ImGui::Button("PAUSE")) { m_sceneManager->setPauseMode(); }
-				}
-				else {
-					if (ImGui::Button("RESUME")) { m_sceneManager->unsetPauseMode(); }
-				}
-			}
-
-			ImGui::EndMenuBar();
-		}
-
-		const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		const auto size = m_viewportFramebuffer.getSize();
-
-		if (size.x != viewportSize.x || size.y != viewportSize.y) {
-			m_viewportFramebuffer.resize(viewportSize.x, viewportSize.y);
-			updateViewportAspectRatio();
-		}
-
-		const uint32_t id = m_viewportFramebuffer.getColorAttach();
-
-		ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-		ImGui::End();
-
-		EDITOR_TRACE("GUI: Displaying viewport");
-	}
-
-	void GUI::Editor_Properties() {
-		ImGui::Begin("Editor Properties");
-
-		if (ImGui::Checkbox("UseCameraEditor", &m_sceneManager->useEditorCamera)) {
-			if (m_sceneManager->isEditorMode()) {
-				if (m_sceneManager->useEditorCamera) { 
-					ecs::SceneEvents::Instance().onEditorCameraSet(&Camera::getCameraData()); 
-				}
-				else { 
-					ecs::SceneEvents::Instance().onGameCameraSet(); 
-				}
-			}
-		}
-
-		auto& sceneBackground = m_sceneManager->getScene()->getBackground();
-
-		ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
-
-		ImGui::End();
 	}
 
 
