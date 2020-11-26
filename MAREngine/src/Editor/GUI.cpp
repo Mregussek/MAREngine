@@ -228,6 +228,7 @@ namespace mar::editor {
 		}
 
 		const uint32_t id = m_viewportFramebuffer.getColorAttach();
+
 		ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		ImGui::End();

@@ -53,12 +53,17 @@ namespace mar::editor {
         const float currentFrame = (float)glfwGetTime();
         const float deltaTime = currentFrame - lastTime;
         lastTime = currentFrame;
-        const float velocity = m_movementSpeed * deltaTime;
-    
-        if (window::Window::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
-        if (window::Window::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
-        if (window::Window::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
-        if (window::Window::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
+        
+        if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+            processSpeedWithScroll(window::Window::getScrollY());
+
+            const float velocity = m_movementSpeed * deltaTime;
+
+            if (window::Window::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
+            if (window::Window::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
+            if (window::Window::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
+            if (window::Window::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
+        }
     }
     
     void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse) {
@@ -97,6 +102,13 @@ namespace mar::editor {
 
         if (m_zoom < 1.0f) { m_zoom = 1.0f; }
         if (m_zoom > 45.0f) { m_zoom = 45.0f; }
+    }
+
+    void Camera::processSpeedWithScroll(float yoffset) {
+        m_movementSpeed -= yoffset;
+
+        if (m_movementSpeed < 1.0f) { m_movementSpeed = 1.0f; }
+        if (m_movementSpeed > 45.0f) { m_movementSpeed = 45.0f; }
     }
     
     void Camera::updateData() {

@@ -44,6 +44,7 @@ namespace mar::editor {
         void processInput();
         void processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse);
         void processMouseScroll(float yoffset);
+        void processSpeedWithScroll(float yoffset);
         void updateCameraVectors();
 
         void updateData();
