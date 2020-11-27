@@ -24,20 +24,10 @@
 
 #include "../../../mar.h"
 #include "../Mesh/Vertex.h"
+#include "RenderContainerDefinitions.h"
 
 
 namespace mar::graphics {
-
-
-	typedef std::pair<int32_t, maths::vec4> ColorPair;
-	typedef std::pair<int32_t, std::string> TexturePair;
-
-	typedef std::vector<Vertex> VertexVector;
-	typedef std::vector<uint32_t> IndicesVector;
-	typedef std::vector<maths::mat4> Mat4Vector;
-	typedef std::vector<ColorPair> ColorVector;
-	typedef std::vector<TexturePair> TextureVector;
-	typedef std::vector<float> FloatVector;
 
 
 	class RenderContainer {

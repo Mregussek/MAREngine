@@ -265,6 +265,7 @@
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderContainer.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RenderContainerDefinitions.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />

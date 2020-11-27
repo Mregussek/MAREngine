@@ -25,6 +25,7 @@
 #include "../../../mar.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
 #include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "RenderContainerDefinitions.h"
 
 
 namespace mar::graphics {
@@ -32,6 +33,7 @@ namespace mar::graphics {
 	class RenderPipeline;
 	class RenderContainer;
 	class RenderCamera;
+	class LightContainer;
 	struct LightMaterial;
 
 
@@ -40,24 +42,28 @@ namespace mar::graphics {
 
 		void initialize();
 		void close();
-		void draw(RenderPipeline& renderPipeline);
+		void draw(const RenderPipeline& renderPipeline);
 
 	private:
 
-		void setupSSBOs();
-		void setupUBOs();
+		void setupSSBOs(platforms::ShaderOpenGL& shader);
+
+		void drawWithShader(const platforms::ShaderOpenGL& shader, const std::vector<LightContainer>& lights,
+			const RenderCamera& camera, const std::vector<RenderContainer>& containers) const;
 
 		void drawContainer(const RenderContainer& container) const;
 
 		void passTransformsToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
-		void passColorsToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
-		void passTexturesToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
-		void passCubemapsToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
+		void passColorsToShader(const platforms::ShaderOpenGL& shader, const ColorVector& colors) const;
+		void passTexturesToShader(const platforms::ShaderOpenGL& shader, const TextureVector& textures) const;
+		void passCubemapsToShader(const platforms::ShaderOpenGL& shader, const TextureVector& cubemaps) const;
 		void passLightToShader(const platforms::ShaderOpenGL& shader, const std::vector<LightMaterial>& lightMaterials) const;
 		void passCameraToShader(const platforms::ShaderOpenGL& shader, const RenderCamera& camera) const;
 
 		platforms::PipelineOpenGL m_buffers;
-		platforms::ShaderOpenGL m_shader;
+		platforms::ShaderOpenGL m_shader2D;
+		platforms::ShaderOpenGL m_shaderCubemap;
+
 	};
 
 
