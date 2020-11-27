@@ -43,8 +43,6 @@ namespace mar::platforms {
 		loadShader(fragmentSrc, m_shaderPaths.fragmentPath);
 		
 		m_id = createShader(vertexSrc, fragmentSrc);
-		
-		setupShaderUniforms();
 
 		m_initialized = true;
 	}
@@ -102,9 +100,7 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glUniform1i(getUniformLocation(name), sampler) );
 	}
 
-	// ---- PRIVATE METHODS ---- //
-
-	void ShaderOpenGL::setupShaderUniforms() {
+	void ShaderOpenGL::setupShaderUniforms(const std::array<const char*, 32>& shaderUniforms) {
 		using namespace ShaderUniforms;
 
 		auto pushUniformToMap = [this](const char* uniform) {
@@ -112,11 +108,12 @@ namespace mar::platforms {
 			m_uniformLocation[uniform] = location;
 		};
 
-		std::for_each(u_2D.begin(), u_2D.end(), pushUniformToMap);
-		//std::for_each(u_Cubemap.begin(), u_Cubemap.end(), pushUniformToMap);
+		std::for_each(shaderUniforms.begin(), shaderUniforms.end(), pushUniformToMap);
 
 		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
 	}
+
+	// ---- PRIVATE METHODS ---- //
 
 	int32_t ShaderOpenGL::getUniformLocation(const char* name) const {
 		if (m_uniformLocation.find(name) != m_uniformLocation.end()) {

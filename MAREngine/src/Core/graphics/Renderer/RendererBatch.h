@@ -32,6 +32,7 @@ namespace mar::graphics {
 	class RenderPipeline;
 	class RenderContainer;
 	class RenderCamera;
+	struct LightMaterial;
 
 
 	class RendererBatch {
@@ -48,10 +49,12 @@ namespace mar::graphics {
 
 		void drawContainer(const RenderContainer& container) const;
 
-		void passTransformsToShader(const RenderContainer& container) const;
-		void passTexturesToShader(const RenderContainer& container) const;
-		void passLightToShader(const RenderContainer& container) const;
-		void passCameraToShader(const RenderCamera* camera) const;
+		void passTransformsToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
+		void passColorsToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
+		void passTexturesToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
+		void passCubemapsToShader(const platforms::ShaderOpenGL& shader, const RenderContainer& container) const;
+		void passLightToShader(const platforms::ShaderOpenGL& shader, const std::vector<LightMaterial>& lightMaterials) const;
+		void passCameraToShader(const platforms::ShaderOpenGL& shader, const RenderCamera& camera) const;
 
 		platforms::PipelineOpenGL m_buffers;
 		platforms::ShaderOpenGL m_shader;

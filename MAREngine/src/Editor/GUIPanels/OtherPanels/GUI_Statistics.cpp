@@ -35,7 +35,8 @@ namespace mar::editor {
 
 		auto& render_pip = graphics::RenderPipeline::Instance();
 		auto& stats = render_pip.getStatistics();
-		const auto& containers = render_pip.getContainers();
+		const auto& containers2D = render_pip.get2Dcontainers();
+		const auto& containersCubemap = render_pip.getCubemapContainers();
 
 		const auto& collections = manager->getScene()->getCollections();
 		const auto& entities = manager->getScene()->getEntities();
@@ -44,12 +45,17 @@ namespace mar::editor {
 		stats.entityCollectionsCount += collections.size();
 		stats.allEntitiesCount += stats.entitiesCount;
 
-		std::for_each(containers.begin(), containers.end(), [&stats](const graphics::RenderContainer& container) {
-			stats.shapesCount += container.getTransforms().size();
-			stats.verticesCount += container.getVertices().size();
-			stats.indicesCount += container.getIndices().size();
-			stats.trianglesCount += container.getIndices().size() / 3;
-		});
+		auto pushContainerDataToStats = [&stats](const std::vector<graphics::RenderContainer>& containers) {
+			std::for_each(containers.cbegin(), containers.cend(), [&stats](const graphics::RenderContainer& container) {
+				stats.shapesCount += container.getTransforms().size();
+				stats.verticesCount += container.getVertices().size();
+				stats.indicesCount += container.getIndices().size();
+				stats.trianglesCount += container.getIndices().size() / 3;
+			});
+		};
+
+		pushContainerDataToStats(containers2D);
+		pushContainerDataToStats(containersCubemap);
 
 		std::for_each(collections.begin(), collections.end(), [&stats](const ecs::EntityCollection& collection) {
 			stats.allEntitiesCount += collection.getEntities().size();

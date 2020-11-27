@@ -29,18 +29,6 @@
 namespace mar::graphics {
 
 
-	struct LightMaterial {
-		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
-		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
-		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
-		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
-
-		float constant{ 1.0f };
-		float linear{ 0.045f };
-		float quadratic{ 0.0075f };
-		float shininess{ 64.0f };
-	};
-
 	typedef std::pair<int32_t, maths::vec4> ColorPair;
 	typedef std::pair<int32_t, std::string> TexturePair;
 
@@ -49,7 +37,6 @@ namespace mar::graphics {
 	typedef std::vector<maths::mat4> Mat4Vector;
 	typedef std::vector<ColorPair> ColorVector;
 	typedef std::vector<TexturePair> TextureVector;
-	typedef std::vector<LightMaterial> LightVector;
 	typedef std::vector<float> FloatVector;
 
 
@@ -64,7 +51,7 @@ namespace mar::graphics {
 	
 		void reset();
 
-		// ---- GETTERS ---- //
+		// ---- GET methods ---- //
 
 		const VertexVector& getVertices() const { return m_vertices; }
 		const IndicesVector& getIndices() const { return m_indices; }
@@ -72,7 +59,7 @@ namespace mar::graphics {
 		const ColorVector& getColors() const { return m_colors; }
 		const TextureVector& getTexture2D() const { return m_tex2D; }
 		const TextureVector& getTextureCubemap() const { return m_cubes; }
-		const LightVector& getLights() const { return m_lights; }
+		
 		const FloatVector& getSamplerTypes() const { return m_samplerTypes; }
 
 		static uint32_t getStride() { return m_stride; }
@@ -92,7 +79,40 @@ namespace mar::graphics {
 		TextureVector m_cubes;
 		FloatVector m_samplerTypes;
 
-		LightVector m_lights;
+	};
+
+
+	struct LightMaterial {
+		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
+		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
+		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
+		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
+
+		float constant{ 1.0f };
+		float linear{ 0.045f };
+		float quadratic{ 0.0075f };
+		float shininess{ 64.0f };
+	};
+
+	class LightContainer {
+	private:
+
+		friend class RenderPipeline;
+		friend class RenderEvents;
+
+	public:
+
+		LightContainer() = default;
+
+		const std::vector<LightMaterial>& getLightMaterials() const { return m_lightMaterials; }
+
+		void reset() {
+			m_lightMaterials.clear();
+		}
+
+	private:
+
+		std::vector<LightMaterial> m_lightMaterials;
 
 	};
 

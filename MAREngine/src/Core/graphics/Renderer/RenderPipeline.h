@@ -41,6 +41,10 @@ namespace mar::graphics {
 
 		friend class RenderEvents;
 
+		enum class Material {
+			COLOR, TEXTURE2D, CUBEMAP
+		};
+
 	public:
 
 		RenderPipeline() = default;
@@ -59,7 +63,9 @@ namespace mar::graphics {
 
 		// ---- GETTERS for container ---- //
 	
-		const std::vector<RenderContainer>& getContainers() const { return m_containers; }
+		const std::vector<RenderContainer>& get2Dcontainers() const { return m_containers2D; }
+		const std::vector<RenderContainer>& getCubemapContainers() const { return m_containersCubemap; }
+		const std::vector<LightContainer>& getLightContainers() const { return m_lights; }
 		const RenderCamera* getCamera() const { return m_camera; }
 
 		// --- SETTERS --- //
@@ -68,7 +74,7 @@ namespace mar::graphics {
 
 	private:
 
-		void setContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
+		void setContainerRenderable(RenderPipeline::Material materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
 		void setContainerLight(ecs::RenderPipelineComponent& rpc);
 
 		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
@@ -80,8 +86,11 @@ namespace mar::graphics {
 		static RenderPipeline* s_instance;
 
 		RenderStatistics m_statistics;
-		std::vector<RenderContainer> m_containers;
+		std::vector<RenderContainer> m_containers2D;
+		std::vector<RenderContainer> m_containersCubemap;
+		std::vector<LightContainer> m_lights;
 		RenderContainer* m_containerPtr{ nullptr };
+		LightContainer* m_lightPtr{ nullptr };
 
 		const RenderCamera* m_camera{ nullptr };
 

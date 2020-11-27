@@ -41,7 +41,12 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onTransformMat4Update(const maths::mat4& transform, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_containers[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
+		if (rpc.materialType == (size_t)RenderPipeline::Material::TEXTURE2D) {
+			m_renderPipeline->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
+		}
+		else if (rpc.materialType == (size_t)RenderPipeline::Material::CUBEMAP) {
+			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
+		}
 	}
 	
 	void RenderEvents::onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
@@ -50,11 +55,11 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex].position = maths::vec4(position, 1.f);
+		m_renderPipeline->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
 	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
-		auto& lightMaterial = m_renderPipeline->m_containers[rpc.containerLightIndex].m_lights[rpc.lightIndex];
+		auto& lightMaterial = m_renderPipeline->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
 
 		lightMaterial.ambient = light.ambient;
 		lightMaterial.diffuse = light.diffuse;
@@ -66,7 +71,12 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_containers[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+		if (rpc.materialType == (size_t)RenderPipeline::Material::TEXTURE2D) {
+			m_renderPipeline->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+		}
+		else if (rpc.materialType == (size_t)RenderPipeline::Material::CUBEMAP) {
+			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+		}
 	}
 	
 

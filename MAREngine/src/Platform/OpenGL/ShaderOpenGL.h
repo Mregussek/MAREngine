@@ -66,6 +66,8 @@ namespace mar::platforms {
 		ShaderBufferStorageOpenGL& createShaderBufferStorage();
 		UniformBufferOpenGL& createUniformBufferObject();
 
+		void setupShaderUniforms(const std::array<const char*, 32>& shaderUniforms);
+
 		const ShaderBufferStorageOpenGL& getCorrectShaderBuffer(const UniformBuffer& buffer) const;
 		const UniformBufferOpenGL& getCorrectUniformBuffer(const UniformBuffer& block) const;
 
@@ -73,7 +75,6 @@ namespace mar::platforms {
 
 	private:
 
-		void setupShaderUniforms();
 		int32_t getUniformLocation(const char* name) const;
 
 		void loadShader(std::string& buffer, const char* path) const;
