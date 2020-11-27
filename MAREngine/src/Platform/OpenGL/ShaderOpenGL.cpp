@@ -50,26 +50,7 @@ namespace mar::platforms {
 	void ShaderOpenGL::shutdown() {
 		PLATFORM_TRACE("SHADER_OPENGL: Deleting shader {}", m_id);
 
-		std::for_each(m_shaderBuffers.begin(), m_shaderBuffers.end(), [](ShaderBufferStorageOpenGL& ssbo) {
-			ssbo.close();
-		});
-
-		std::for_each(m_uniformBuffers.begin(), m_uniformBuffers.end(), [](UniformBufferOpenGL& ubo) {
-			ubo.close();
-		});
-
-		m_shaderBuffers.clear();
-		m_uniformBuffers.clear();
-
 		PLATFORM_GL_FUNC( glDeleteProgram(m_id) );
-	}
-
-	ShaderBufferStorageOpenGL& ShaderOpenGL::createShaderBufferStorage() {
-		return m_shaderBuffers.emplace_back();
-	}
-
-	UniformBufferOpenGL& ShaderOpenGL::createUniformBufferObject() {
-		return m_uniformBuffers.emplace_back();
 	}
 
 	void ShaderOpenGL::bind() const {
@@ -82,18 +63,6 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glUseProgram(0) );
 
 		PLATFORM_TRACE("SHADER_OPENGL: Unbind shader {}", m_id);
-	}
-
-	const ShaderBufferStorageOpenGL& ShaderOpenGL::getCorrectShaderBuffer(const UniformBuffer& buffer) const {
-		return *std::find_if(m_shaderBuffers.cbegin(), m_shaderBuffers.cend(), [&buffer](const ShaderBufferStorageOpenGL& ubo) {
-			return std::strcmp(ubo.m_uniformBuffer.name, buffer.name) == 0;
-		});
-	}
-
-	const UniformBufferOpenGL& ShaderOpenGL::getCorrectUniformBuffer(const UniformBuffer& buffer) const {
-		return *std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&buffer](const UniformBufferOpenGL& ubo) {
-			return std::strcmp(ubo.m_uniformBuffer.name, buffer.name) == 0;
-		});
 	}
 
 	void ShaderOpenGL::setUniformSampler(const char* name, int32_t sampler) const {

@@ -41,10 +41,10 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onTransformMat4Update(const maths::mat4& transform, const ecs::RenderPipelineComponent& rpc) {
-		if (rpc.materialType == (size_t)RenderPipeline::Material::TEXTURE2D) {
+		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 			m_renderPipeline->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
 		}
-		else if (rpc.materialType == (size_t)RenderPipeline::Material::CUBEMAP) {
+		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
 			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
 		}
 	}
@@ -71,10 +71,10 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) {
-		if (rpc.materialType == (size_t)RenderPipeline::Material::TEXTURE2D) {
+		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 			m_renderPipeline->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
-		else if (rpc.materialType == (size_t)RenderPipeline::Material::CUBEMAP) {
+		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
 			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
 	}

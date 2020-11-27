@@ -122,6 +122,30 @@ namespace mar::window {
 		}
 	}
 
+	int32_t Window::getSizeX() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return WindowInstance<GLFWwindow>::Instance().m_width;
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return WindowInstance<SDL_Window>::Instance().m_width;
+		}
+		else {
+			return -1;
+		}
+	}
+
+	int32_t Window::getSizeY() {
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			return WindowInstance<GLFWwindow>::Instance().m_height;
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			return WindowInstance<SDL_Window>::Instance().m_height;
+		}
+		else {
+			return -1;
+		}
+	}
+
 	bool Window::isKeyPressed(int32_t key) {
 		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
 			return WindowInstance<GLFWwindow>::Instance().isKeyPressed(key);

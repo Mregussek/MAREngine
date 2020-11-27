@@ -76,21 +76,21 @@ namespace mar::graphics {
 			const auto indiSize = renderable.indices.size();
 
 			if (hasColor) {
-				setContainerRenderable(Material::COLOR, rpc, vertSize, indiSize);
+				setContainerRenderable(MaterialRenderType::COLOR, rpc, vertSize, indiSize);
 				rpc.transformIndex = submitRenderable(renderable, tran);
 
 				const auto& color = entity.getComponent<ColorComponent>();
 				rpc.colorIndex = submitColor((int32_t)rpc.transformIndex, color);
 			}
 			else if (hasTexture2D) {
-				setContainerRenderable(Material::TEXTURE2D, rpc, vertSize, indiSize);
+				setContainerRenderable(MaterialRenderType::TEXTURE2D, rpc, vertSize, indiSize);
 				rpc.transformIndex = submitRenderable(renderable, tran);
 
 				const auto& tex = entity.getComponent<Texture2DComponent>();
 				rpc.colorIndex = submitTexture2D((int32_t)rpc.transformIndex, tex);
 			}
 			else if (hasCubemap) {
-				setContainerRenderable(Material::CUBEMAP, rpc, vertSize, indiSize);
+				setContainerRenderable(MaterialRenderType::CUBEMAP, rpc, vertSize, indiSize);
 				rpc.transformIndex = submitRenderable(renderable, tran);
 
 				const auto& cube = entity.getComponent<TextureCubemapComponent>();
@@ -101,7 +101,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	void RenderPipeline::setContainerRenderable(RenderPipeline::Material materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
+	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
 		m_containerPtr = nullptr;
 
 		auto canPushToContainer = [verticesToPush, indicesToPush](const RenderContainer& container)->bool {
@@ -116,7 +116,7 @@ namespace mar::graphics {
 			return !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
 		};
 
-		auto textureContainerCheck = [&canPushToContainer, &rpc, this](std::vector<RenderContainer>& renderContainers, Material matType)->bool{
+		auto textureContainerCheck = [&canPushToContainer, &rpc, this](std::vector<RenderContainer>& renderContainers, MaterialRenderType matType)->bool{
 			for (size_t i = 0; i < renderContainers.size(); i++) {
 				const bool thereIsPlaceInContainer = canPushToContainer(renderContainers[i]);
 
@@ -133,38 +133,49 @@ namespace mar::graphics {
 			return false;
 		};
 
-		if (materialType == Material::COLOR) {
-			if (textureContainerCheck(m_containers2D, Material::TEXTURE2D)) { return; }
-			if (textureContainerCheck(m_containersCubemap, Material::CUBEMAP)) { return; }
+		auto emplaceNewContainer = [&rpc, this](std::vector<RenderContainer>& containers, MaterialRenderType matType) {
+			m_containerPtr = &containers.emplace_back();
+			rpc.containerIndex = containers.size() - 1;
+			rpc.materialType = (size_t)matType;
 
-			// if cannot find available container, create new one
-			m_containerPtr = &m_containers2D.emplace_back();
-			rpc.containerIndex = m_containers2D.size() - 1;
-			rpc.materialType = (size_t)Material::TEXTURE2D;
+			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container at {}, current size {}", matType, containers.size());
+		};
 
-			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container, current size {}", m_containers2D.size());
+		if (materialType == MaterialRenderType::COLOR) { // we don't have "Color" containers, in order to get less draw calls
+			if (textureContainerCheck(m_containers2D, MaterialRenderType::TEXTURE2D) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
+				return; 
+			}
+			if (textureContainerCheck(m_containersCubemap, MaterialRenderType::CUBEMAP) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::CUBEMAP;
+				return;
+			}
+
+			// if cannot find available container, create new one (for color we want to emplace new container in textures 2d)
+			emplaceNewContainer(m_containers2D, MaterialRenderType::TEXTURE2D);
+			m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
 			return;
 		}
-		else if (materialType == Material::TEXTURE2D) {
-			if (textureContainerCheck(m_containers2D, Material::TEXTURE2D)) { return; }
+		else if (materialType == MaterialRenderType::TEXTURE2D) {
+			if (textureContainerCheck(m_containers2D, MaterialRenderType::TEXTURE2D) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
+				return;
+			}
 
 			// if cannot find available container, create new one
-			m_containerPtr = &m_containers2D.emplace_back();
-			rpc.containerIndex = m_containers2D.size() - 1;
-			rpc.materialType = (size_t)Material::TEXTURE2D;
-
-			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container, current size {}", m_containers2D.size());
+			emplaceNewContainer(m_containers2D, MaterialRenderType::TEXTURE2D);
+			m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
 			return;
 		}
-		else if (materialType == Material::CUBEMAP) {
-			if (textureContainerCheck(m_containersCubemap, Material::CUBEMAP)) { return; }
+		else if (materialType == MaterialRenderType::CUBEMAP) {
+			if (textureContainerCheck(m_containersCubemap, MaterialRenderType::CUBEMAP) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::CUBEMAP;
+				return;
+			}
 
 			// if cannot find available container, create new one
-			m_containerPtr = &m_containersCubemap.emplace_back();
-			rpc.containerIndex = m_containersCubemap.size() - 1;
-			rpc.materialType = (size_t)Material::TEXTURE2D;
-
-			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container, current size {}", m_containersCubemap.size());
+			emplaceNewContainer(m_containersCubemap, MaterialRenderType::CUBEMAP);
+			m_containerPtr->m_materialRenderType = MaterialRenderType::CUBEMAP;
 			return;
 		}
 	}

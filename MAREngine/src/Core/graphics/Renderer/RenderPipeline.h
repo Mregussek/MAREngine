@@ -41,10 +41,6 @@ namespace mar::graphics {
 
 		friend class RenderEvents;
 
-		enum class Material {
-			COLOR, TEXTURE2D, CUBEMAP
-		};
-
 	public:
 
 		RenderPipeline() = default;
@@ -74,7 +70,7 @@ namespace mar::graphics {
 
 	private:
 
-		void setContainerRenderable(RenderPipeline::Material materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
+		void setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
 		void setContainerLight(ecs::RenderPipelineComponent& rpc);
 
 		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);

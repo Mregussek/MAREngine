@@ -62,6 +62,10 @@ namespace mar::window {
 
 		static void imguiNewFrame();
 
+		static int32_t getSizeX();
+
+		static int32_t getSizeY();
+
 		static bool isKeyPressed(int32_t key);
 
 		static bool isMousePressed(int32_t key);

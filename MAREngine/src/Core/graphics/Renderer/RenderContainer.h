@@ -30,6 +30,11 @@
 namespace mar::graphics {
 
 
+	enum class MaterialRenderType {
+		NONE, COLOR, TEXTURE2D, CUBEMAP
+	};
+
+
 	class RenderContainer {
 
 		friend class RenderPipeline;
@@ -54,6 +59,8 @@ namespace mar::graphics {
 
 		static uint32_t getStride() { return m_stride; }
 
+		bool doesContain2Dtextures() const { return m_materialRenderType == MaterialRenderType::TEXTURE2D; }
+
 	private:
 
 		VertexVector m_vertices;
@@ -68,6 +75,8 @@ namespace mar::graphics {
 		TextureVector m_tex2D;
 		TextureVector m_cubes;
 		FloatVector m_samplerTypes;
+
+		MaterialRenderType m_materialRenderType{ MaterialRenderType::NONE };
 
 	};
 

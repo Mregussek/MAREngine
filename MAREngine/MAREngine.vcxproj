@@ -271,6 +271,7 @@
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\ShaderBufferStorage.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
     <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
@@ -363,6 +364,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderStatistics.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\ShaderBufferStorage.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />

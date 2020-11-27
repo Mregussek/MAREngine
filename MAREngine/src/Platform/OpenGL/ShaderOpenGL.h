@@ -63,14 +63,7 @@ namespace mar::platforms {
 		void bind() const;
 		void unbind() const;
 
-		ShaderBufferStorageOpenGL& createShaderBufferStorage();
-		UniformBufferOpenGL& createUniformBufferObject();
-
 		void setupShaderUniforms(const std::array<const char*, 32>& shaderUniforms);
-
-		const ShaderBufferStorageOpenGL& getCorrectShaderBuffer(const UniformBuffer& buffer) const;
-		const UniformBufferOpenGL& getCorrectUniformBuffer(const UniformBuffer& block) const;
-
 		void setUniformSampler(const char* name, int32_t sampler) const;
 
 	private:
@@ -83,8 +76,6 @@ namespace mar::platforms {
 
 		
 		std::unordered_map<const char*, int32_t> m_uniformLocation;
-		std::vector<ShaderBufferStorageOpenGL> m_shaderBuffers;
-		std::vector<UniformBufferOpenGL> m_uniformBuffers;
 		ShaderPaths m_shaderPaths;
 		uint32_t m_id{ 0 };
 		bool m_initialized{ false };
