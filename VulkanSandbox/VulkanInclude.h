@@ -15,14 +15,11 @@
 #include <array>
 #include <algorithm>
 
-#if __has_include(<GL/glew.h>)
-	#ifndef GLEW_STATIC
-		#define GLEW_STATIC
-	#endif
-	#include <GL/glew.h> 
-	#define MAR_ENGINE_GLEW_LIB_IMPORTED
+#if __has_include(<glad/glad.h>)
+	#include <glad/glad.h> 
+	#define MAR_ENGINE_GLAD_LIB_IMPORTED
 #else
-	#error "MAR ENGINE: Cannot import GL/glew.h!"
+	#error "MAR ENGINE: Cannot import glad/glad.h!"
 #endif
 
 #if __has_include(<GLFW/glfw3.h>)
@@ -33,11 +30,11 @@
 #error "MAR ENGINE: Cannot import GLFW/glfw3.h!"
 #endif
 
-#if __has_include("Source/OBJ_Loader.h")
-#include "Source/OBJ_Loader.h"
+#if __has_include("OBJ_Loader.h")
+#include "OBJ_Loader.h"
 #define MAR_ENGINE_OBJ_LOADER_LIB_IMPORTED
 #else
-#error "MAR ENGINE: Cannot import OBJ_Loader lib - Source/OBJ_Loader.h!"
+#error "MAR ENGINE: Cannot import OBJ_Loader lib - OBJ_Loader.h!"
 #endif
 
 #if __has_include("MARMaths.h")
