@@ -5,7 +5,7 @@
 #include "src/Vulkan/PhysicalDevVulkan.h"
 #include "src/Vulkan/DeviceVulkan.h"
 #include "src/Vulkan/SwapchainVulkan.h"
-#include "src/Window.h"
+#include "src/Window/Window.h"
 
 
 
@@ -255,7 +255,7 @@ VkImageMemoryBarrier pipelineBarrierImage(VkImage image, VkAccessFlags srcAccess
 }
 
 int main(void) {
-    Window window{};
+    mar::Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
 
     mar::ContextVulkan contextVk;

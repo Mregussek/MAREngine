@@ -28,6 +28,10 @@ namespace mar {
 
         void fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format, VkExtent2D extent);
 
+    private:
+
+        void close(VkDevice device, VkSwapchainKHR swapchain);
+
     };
 
 

@@ -176,6 +176,7 @@
     <ClCompile Include="src\Vulkan\DeviceVulkan.cpp" />
     <ClCompile Include="src\Vulkan\PhysicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\SwapchainVulkan.cpp" />
+    <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3rd_party\MARMaths\include\MARMaths.h" />
@@ -192,7 +193,7 @@
     <ClInclude Include="src\Vulkan\PhysicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\SwapchainVulkan.h" />
     <ClInclude Include="VulkanLogging.h" />
-    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="VulkanInclude.h" />
   </ItemGroup>
   <ItemGroup>

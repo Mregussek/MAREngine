@@ -83,13 +83,13 @@ namespace mar {
     void SwapchainVulkan::close(VkDevice device) {
         std::for_each(imageViews.cbegin(), imageViews.cend(), [&device](const VkImageView imageView) {
             vkDestroyImageView(device, imageView, nullptr);
-            });
+        });
 
         std::for_each(framebuffers.cbegin(), framebuffers.cend(), [&device](const VkFramebuffer framebuffer) {
             vkDestroyFramebuffer(device, framebuffer, nullptr);
-            });
+        });
 
-        vkDestroySwapchainKHR(device, swapchain, nullptr);
+        close(device, swapchain);
     }
 
     void SwapchainVulkan::fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format, VkExtent2D extent) {
@@ -109,6 +109,10 @@ namespace mar {
         for (uint32_t i = 0; i < imageCount; i++) {
             framebuffers[i] = createFramebuffer(device, renderPass, imageViews[i], extent);
         }
+    }
+
+    void SwapchainVulkan::close(VkDevice device, VkSwapchainKHR passedSwapchain) {
+        vkDestroySwapchainKHR(device, passedSwapchain, nullptr);
     }
 
 
