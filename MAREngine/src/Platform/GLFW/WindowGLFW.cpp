@@ -18,16 +18,23 @@
 **/
 
 
-#include "WindowGLFW.h"
+#include "WindowCallbacks.h"
+#include "../../Window/WindowInstance.h"
+#include "../OpenGL/SetupOpenGL.h"
 
 
-namespace mar::platforms {
+namespace mar::window {
 
 
-	bool WindowGLFW::initialize(int32_t height, int32_t width, const char* name) {
+	template<>
+	bool WindowInstance<GLFWwindow>::initialize(int32_t width, int32_t height, const char* name) {
+		using namespace platforms;
+
+		s_instance = this;
+
 		glfwSetErrorCallback(callbacks::windowErrorCallback);
 
-		int32_t glfw_init = glfwInit();
+		const int32_t glfw_init = glfwInit();
 
 		if (glfw_init != GLFW_TRUE) {
 			PLATFORM_ERROR("WINDOW_GLFW: glfwInit() failure!");
@@ -35,8 +42,8 @@ namespace mar::platforms {
 		}
 
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 		PLATFORM_INFO("WINDOW_GLFW: GLFW has been initialized successfully!");
@@ -58,44 +65,81 @@ namespace mar::platforms {
 
 		PLATFORM_INFO("WINDOW_GLFW: set all callbacks!");
 
-		setVSync(1);
+		setVerticalSync(1);
+
+		const bool isOpenGL_OK = platforms::SetupOpenGL::init();
+		if (!isOpenGL_OK) {
+			MAR_CORE_ERROR("MARENGINE: Cannot initialize OpenGL!");
+			const char c = getchar();
+			return false;
+		}
 
 		return true;
 	}
 
-	void WindowGLFW::terminate() {
+	template<>
+	void WindowInstance<GLFWwindow>::endRenderLoop() {
+		glfwSetWindowShouldClose(m_window, true);
+	}
+
+	template<>
+	void WindowInstance<GLFWwindow>::terminate() {
 		glfwTerminate();
 
 		PLATFORM_INFO("WINDOW_GLFW: window terminated");
 	}
 
-	bool WindowGLFW::isGoingToClose() const { 
+	template<>
+	void WindowInstance<GLFWwindow>::setVerticalSync(int32_t setter) const {
+		glfwSwapInterval(setter);
+
+		PLATFORM_INFO("WINDOW_GLFW: is vertical synchronization used - {}", setter);
+	}
+
+	template<>
+	bool WindowInstance<GLFWwindow>::isGoingToClose() const {
 		return glfwWindowShouldClose(m_window); 
 	}
 
-	void WindowGLFW::close() { 
-		glfwSetWindowShouldClose(m_window, true);
-	}
+	template<>
+	void WindowInstance<GLFWwindow>::swapBuffers() {
+		m_width = platforms::callbacks::window_width;
+		m_height = platforms::callbacks::window_height;
 
-	void WindowGLFW::swapBuffers() {
 		glfwPollEvents();
 		glfwSwapBuffers(m_window);
 
 		PLATFORM_TRACE("WINDOW_GLFW: window has swapped buffers");
 	}
 
-	void WindowGLFW::setVSync(int32_t set) const {
-		glfwSwapInterval(set);
-
-		PLATFORM_INFO("WINDOW_GLFW: is vertical synchronization used - {}", set);
-	}
-
-	bool WindowGLFW::isKeyPressed(int32_t key) const {
+	template<>
+	bool WindowInstance<GLFWwindow>::isKeyPressed(int32_t key) const {
 		return glfwGetKey(m_window, key) == GLFW_PRESS || glfwGetKey(m_window, key) == GLFW_REPEAT;
 	}
 
-	bool WindowGLFW::isMousePressed(int32_t key) const {
+	template<>
+	bool WindowInstance<GLFWwindow>::isMousePressed(int32_t key) const {
 		return glfwGetMouseButton(m_window, key) == GLFW_PRESS || glfwGetMouseButton(m_window, key) == GLFW_REPEAT;
+	}
+
+	template<>
+	float WindowInstance<GLFWwindow>::getMousePositionX() const {
+		return (float)platforms::callbacks::mouse_xpos;
+	}
+
+	template<>
+	float WindowInstance<GLFWwindow>::getMousePositionY() const {
+		return (float)platforms::callbacks::mouse_ypos;
+	}
+
+	template<>
+	float WindowInstance<GLFWwindow>::getScrollX() const {
+		return (float)platforms::callbacks::scroll_x;
+	}
+
+	template<>
+	float WindowInstance<GLFWwindow>::getScrollY() const {
+		return (float)platforms::callbacks::scroll_y;
 	}
 
 

@@ -19,97 +19,57 @@
 
 
 #include "Camera.h"
-#include "../../Window/Input.h"
+#include "StandardCamera.h"
+#include "SphericalCamera.h"
+#include "../../Window/Window.h"
 
 
 namespace mar::editor {
 
     
-    Camera* Camera::s_instance{ nullptr };
-    
-    // ---- PUBLIC METHODS ---- //
-    
     void Camera::initialize(float aspectRatio) {
-        s_instance = this;
         m_aspectRatio = aspectRatio;
+
         updateCameraVectors();
         updateData();
     }
     
     void Camera::update(float aspectRatio) {
-        processInput();
-        //processMouseMovement(m_gui->getMouseViewportPosX(), m_gui->getMouseViewportPosY(), false, firstMouse);
-        //processMouseScroll(window::Input::getScrollY());
-    
         m_aspectRatio = aspectRatio;
-        updateData();
+
+        if (processInput()) {
+            updateCameraVectors();
+            updateData();
+        }
     }
     
     // ---- PRIVATE METHODS ---- //
     
-    void Camera::processInput() {
+    bool Camera::processInput() {
         static float lastTime = 0.0f;
+        bool userPressedSth = false;
     
         const float currentFrame = (float)glfwGetTime();
         const float deltaTime = currentFrame - lastTime;
         lastTime = currentFrame;
-        const float velocity = m_movementSpeed * deltaTime;
-    
-        if (window::Input::isKeyPressed(MAR_KEY_W)) { m_position += m_front * velocity; }
-        if (window::Input::isKeyPressed(MAR_KEY_S)) { m_position -= m_front * velocity; }
-        if (window::Input::isKeyPressed(MAR_KEY_A)) { m_position -= m_right * velocity; }
-        if (window::Input::isKeyPressed(MAR_KEY_D)) { m_position += m_right * velocity; }
-    }
-    
-    void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse) {
-        static float lastX;
-        static float lastY;
-    
-        if (firstMouse) {
-            lastX = xoffset;
-            lastY = yoffset;
-        }
-    
-        float x_position = xoffset - lastX;
-        float y_position = lastY - yoffset;
+        
+        if (m_standard.processFrame(this, deltaTime)) { userPressedSth = true; }
+        if (m_spherical.processFrame(this, deltaTime)) { userPressedSth = true; }
 
-        lastX = xoffset;
-        lastY = yoffset;
-    
-        x_position *= m_mouseSensitivity;
-        y_position *= m_mouseSensitivity;
-    
-        m_yaw += x_position;
-        m_pitch += y_position;
-    
-        if (constrainPitch) {
-            if (m_pitch > 89.0f)
-                m_pitch = 89.0f;
-            if (m_pitch < -89.0f)
-                m_pitch = -89.0f;
-        }
-    
-        updateCameraVectors();
-    }
-    
-    void Camera::processMouseScroll(float yoffset) {
-        m_zoom -= yoffset;
-
-        if (m_zoom < 1.0f) { m_zoom = 1.0f; }
-        if (m_zoom > 45.0f) { m_zoom = 45.0f; }
+        return userPressedSth;
     }
     
     void Camera::updateData() {
-
         m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
         m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
         m_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
         m_renderCamera.recalculateMVP();
- 
     }
     
     void Camera::updateCameraVectors() {
         typedef maths::Trig tri;
+
+        const maths::vec3 worldUp{ 0.f, 1.f, 0.f };
     
         const maths::vec3 front{
             {tri::cosine(tri::toRadians(m_yaw)) * tri::cosine(tri::toRadians(m_pitch))},
@@ -118,13 +78,12 @@ namespace mar::editor {
         };
 
         m_front = maths::vec3::normalize(front);
-    
-        m_right = maths::vec3::normalize(maths::vec3::cross(m_front, m_worldUp));
+        m_right = maths::vec3::normalize(maths::vec3::cross(m_front, worldUp));
         m_up = maths::vec3::normalize(maths::vec3::cross(m_right, m_front));
     }
 
-    graphics::RenderCamera& Camera::getCameraData() { 
-        return s_instance->m_renderCamera; 
+    const graphics::RenderCamera* Camera::getCameraData() const { 
+        return &m_renderCamera; 
     }
 
 

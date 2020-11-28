@@ -23,24 +23,16 @@
 
 
 #include "../../../mar.h"
-#include "../../ecs/Components/LightComponents.h"
 #include "../Mesh/Vertex.h"
+#include "RenderContainerDefinitions.h"
 
 
 namespace mar::graphics {
 
 
-	typedef std::pair<int32_t, maths::vec3> ColorPair;
-	typedef std::pair<int32_t, std::string> TexturePair;
-	typedef std::pair<maths::vec3, ecs::LightComponent> LightPair;
-
-	typedef std::vector<Vertex> VertexVector;
-	typedef std::vector<uint32_t> IndicesVector;
-	typedef std::vector<maths::mat4> Mat4Vector;
-	typedef std::vector<ColorPair> ColorVector;
-	typedef std::vector<TexturePair> TextureVector;
-	typedef std::vector<LightPair> LightVector;
-	typedef std::vector<float> FloatVector;
+	enum class MaterialRenderType {
+		NONE, COLOR, TEXTURE2D, CUBEMAP
+	};
 
 
 	class RenderContainer {
@@ -54,7 +46,7 @@ namespace mar::graphics {
 	
 		void reset();
 
-		// ---- GETTERS ---- //
+		// ---- GET methods ---- //
 
 		const VertexVector& getVertices() const { return m_vertices; }
 		const IndicesVector& getIndices() const { return m_indices; }
@@ -62,10 +54,12 @@ namespace mar::graphics {
 		const ColorVector& getColors() const { return m_colors; }
 		const TextureVector& getTexture2D() const { return m_tex2D; }
 		const TextureVector& getTextureCubemap() const { return m_cubes; }
-		const LightVector& getLights() const { return m_lights; }
+		
 		const FloatVector& getSamplerTypes() const { return m_samplerTypes; }
 
 		static uint32_t getStride() { return m_stride; }
+
+		bool doesContain2Dtextures() const { return m_materialRenderType == MaterialRenderType::TEXTURE2D; }
 
 	private:
 
@@ -82,7 +76,42 @@ namespace mar::graphics {
 		TextureVector m_cubes;
 		FloatVector m_samplerTypes;
 
-		LightVector m_lights;
+		MaterialRenderType m_materialRenderType{ MaterialRenderType::NONE };
+
+	};
+
+
+	struct LightMaterial {
+		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
+		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
+		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
+		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
+
+		float constant{ 1.0f };
+		float linear{ 0.045f };
+		float quadratic{ 0.0075f };
+		float shininess{ 64.0f };
+	};
+
+	class LightContainer {
+	private:
+
+		friend class RenderPipeline;
+		friend class RenderEvents;
+
+	public:
+
+		LightContainer() = default;
+
+		const std::vector<LightMaterial>& getLightMaterials() const { return m_lightMaterials; }
+
+		void reset() {
+			m_lightMaterials.clear();
+		}
+
+	private:
+
+		std::vector<LightMaterial> m_lightMaterials;
 
 	};
 

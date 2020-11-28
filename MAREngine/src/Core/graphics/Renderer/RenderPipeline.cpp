@@ -32,18 +32,17 @@ namespace mar::graphics {
 	void RenderPipeline::initialize() {
 		setCurrentPipeline();
 
-		m_containers.emplace_back();
-		m_availableContainerIndex = m_containers.size() - 1;
-
 		GRAPHICS_INFO("RENDER_PIPELINE: initialized!");
 	}
 
 	void RenderPipeline::reset() {
-		for (auto& container : m_containers) {
-			container.reset();
-		}
+		for (auto& container : m_containers2D) { container.reset(); }
+		for (auto& container : m_containersCubemap) { container.reset(); }
+		for (auto& light : m_lights) { light.reset(); }
 
-		m_containers.clear();
+		m_containers2D.clear();
+		m_containersCubemap.clear();
+		m_lights.clear();
 
 		initialize();
 
@@ -67,94 +66,161 @@ namespace mar::graphics {
 		if (entity.hasComponent<LightComponent>()) {
 			const auto& light = entity.getComponent<LightComponent>();
 
-			setAvailableContainerLight(rpc);
+			setContainerLight(rpc);
 			rpc.lightIndex = submitLight(tran.center, light);
 		}
 
 		if (hasRenderable && hasAnyMaterial) {
 			auto& renderable = entity.getComponent<RenderableComponent>();
-
-			setAvailableContainerRenderable(rpc, renderable.vertices.size(), renderable.indices.size());
-			const size_t index = submitRenderable(renderable, tran);
-
-			renderable.shaderID = index;
-			rpc.transformIndex = index;
+			const auto vertSize = renderable.vertices.size();
+			const auto indiSize = renderable.indices.size();
 
 			if (hasColor) {
+				setContainerRenderable(MaterialRenderType::COLOR, rpc, vertSize, indiSize);
+				rpc.transformIndex = submitRenderable(renderable, tran);
+
 				const auto& color = entity.getComponent<ColorComponent>();
-				rpc.colorIndex = submitColor((int32_t)renderable.shaderID, color);
+				rpc.colorIndex = submitColor((int32_t)rpc.transformIndex, color);
 			}
 			else if (hasTexture2D) {
+				setContainerRenderable(MaterialRenderType::TEXTURE2D, rpc, vertSize, indiSize);
+				rpc.transformIndex = submitRenderable(renderable, tran);
+
 				const auto& tex = entity.getComponent<Texture2DComponent>();
-				rpc.colorIndex = submitTexture2D((int32_t)renderable.shaderID, tex);
+				rpc.colorIndex = submitTexture2D((int32_t)rpc.transformIndex, tex);
 			}
 			else if (hasCubemap) {
+				setContainerRenderable(MaterialRenderType::CUBEMAP, rpc, vertSize, indiSize);
+				rpc.transformIndex = submitRenderable(renderable, tran);
+
 				const auto& cube = entity.getComponent<TextureCubemapComponent>();
-				rpc.colorIndex = submitCubemap((int32_t)renderable.shaderID, cube);
+				rpc.colorIndex = submitCubemap((int32_t)rpc.transformIndex, cube);
 			}
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	void RenderPipeline::setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
-		for (size_t i = 0; i < m_containers.size(); i++) {
-			const size_t currentVerticesSize = m_containers[i].getVertices().size() + sizeof(Vertex) / 4;
-			const size_t currentIndicesSize = m_containers[i].getIndices().size();
-			const size_t currentTransformSize = m_containers[i].getTransforms().size();
+	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
+		m_containerPtr = nullptr;
 
-			if (currentVerticesSize + verticesToPush >= settings::maxVerticesCount ||
-				currentIndicesSize + indicesToPush >= settings::maxIndicesCount ||
-				currentTransformSize + 1 >= 32)
-			{
-				continue;
+		auto canPushToContainer = [verticesToPush, indicesToPush](const RenderContainer& container)->bool {
+			const size_t currentVerticesSize = container.getVertices().size() + sizeof(Vertex) / 4;
+			const size_t currentIndicesSize = container.getIndices().size();
+			const size_t currentTransformSize = container.getTransforms().size();
+
+			const bool cannotPushVertices = currentVerticesSize + verticesToPush >= settings::maxVerticesCount;
+			const bool cannotPushIndices = currentIndicesSize + indicesToPush >= settings::maxIndicesCount;
+			const bool cannotPushTransform = currentTransformSize + 1 >= 32;
+
+			return !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
+		};
+
+		auto textureContainerCheck = [&canPushToContainer, &rpc, this](std::vector<RenderContainer>& renderContainers, MaterialRenderType matType)->bool{
+			for (size_t i = 0; i < renderContainers.size(); i++) {
+				const bool thereIsPlaceInContainer = canPushToContainer(renderContainers[i]);
+
+				if (thereIsPlaceInContainer) {
+					m_containerPtr = &renderContainers[i];
+					rpc.containerIndex = i;
+					rpc.materialType = (size_t)matType;
+
+					GRAPHICS_TRACE("RENDER_PIPELINE: available container is at index {}, returning...", i);
+					return true;
+				}
 			}
-			else {
-				m_availableContainerIndex = i;
 
-				rpc.containerIndex = m_availableContainerIndex;
-				GRAPHICS_TRACE("RENDER_PIPELINE: available container is at index {}, returning...", i);
+			return false;
+		};
+
+		auto emplaceNewContainer = [&rpc, this](std::vector<RenderContainer>& containers, MaterialRenderType matType) {
+			m_containerPtr = &containers.emplace_back();
+			rpc.containerIndex = containers.size() - 1;
+			rpc.materialType = (size_t)matType;
+
+			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container at {}, current size {}", matType, containers.size());
+		};
+
+		if (materialType == MaterialRenderType::COLOR) { // we don't have "Color" containers, in order to get less draw calls
+			if (textureContainerCheck(m_containers2D, MaterialRenderType::TEXTURE2D) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
+				return; 
+			}
+			if (textureContainerCheck(m_containersCubemap, MaterialRenderType::CUBEMAP) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::CUBEMAP;
 				return;
 			}
+
+			// if cannot find available container, create new one (for color we want to emplace new container in textures 2d)
+			emplaceNewContainer(m_containers2D, MaterialRenderType::TEXTURE2D);
+			m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
+			return;
 		}
+		else if (materialType == MaterialRenderType::TEXTURE2D) {
+			if (textureContainerCheck(m_containers2D, MaterialRenderType::TEXTURE2D) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
+				return;
+			}
 
-		m_containers.emplace_back();
-		m_availableContainerIndex = m_containers.size() - 1;
-		rpc.containerIndex = m_availableContainerIndex;
+			// if cannot find available container, create new one
+			emplaceNewContainer(m_containers2D, MaterialRenderType::TEXTURE2D);
+			m_containerPtr->m_materialRenderType = MaterialRenderType::TEXTURE2D;
+			return;
+		}
+		else if (materialType == MaterialRenderType::CUBEMAP) {
+			if (textureContainerCheck(m_containersCubemap, MaterialRenderType::CUBEMAP) && m_containerPtr) {
+				m_containerPtr->m_materialRenderType = MaterialRenderType::CUBEMAP;
+				return;
+			}
 
-		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container, current size {}", m_containers.size());
+			// if cannot find available container, create new one
+			emplaceNewContainer(m_containersCubemap, MaterialRenderType::CUBEMAP);
+			m_containerPtr->m_materialRenderType = MaterialRenderType::CUBEMAP;
+			return;
+		}
 	}
 
-	void RenderPipeline::setAvailableContainerLight(ecs::RenderPipelineComponent& rpc) {
-		for (size_t i = 0; i < m_containers.size(); i++) {
-			const size_t currentLightSize = m_containers[i].getLights().size();
+	void RenderPipeline::setContainerLight(ecs::RenderPipelineComponent& rpc) {
+		m_lightPtr = nullptr;
 
-			if (currentLightSize + 1 >= 32) { continue; }
-			else {
-				m_availableContainerIndex = i;
-				rpc.containerLightIndex = m_availableContainerIndex;
+		for (size_t i = 0; i < m_lights.size(); i++) {
+			auto canPushToContainer = [currentLightSize = m_lights[i].m_lightMaterials.size()]()->bool {
+				const bool cannotPushLights = currentLightSize + 1 >= 32;
+				return !cannotPushLights;
+			};
 
-				GRAPHICS_TRACE("RENDER_PIPELINE: available container for light is at {}, returning...", i);
+			const bool thereIsPlaceInContainer = canPushToContainer();
+
+			if (thereIsPlaceInContainer) {
+				m_lightPtr = &m_lights[i];
+				rpc.containerLightIndex = i;
+
+				GRAPHICS_TRACE("RENDER_PIPELINE: available container for light is at {}, returning...", 0);
 				return;
 			}
 		}
-		
-		m_containers.emplace_back();
-		m_availableContainerIndex = m_containers.size() - 1;
-		rpc.containerLightIndex = m_availableContainerIndex;
 
-		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container (for light), current size {}", m_containers.size());
+		// if cannot find available container, create new one
+		m_lightPtr = &m_lights.emplace_back();
+		rpc.containerLightIndex = m_lights.size() - 1;
+
+		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container (for light), current size {}", m_lights.size());
 	}
 
 	size_t RenderPipeline::submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform) {
+		if (!m_containerPtr) {
+			GRAPHICS_ERROR("RENDER_PIPELINE: submitRenderable(), m_containerPtr is nullptr!");
+			return -1;
+		}
+		
 		GRAPHICS_INFO("RENDER_PIPELINE: submitting renderable component");
 
-		auto& indicesMax = m_containers[m_availableContainerIndex].m_indicesMax;
-		auto& shapeID = m_containers[m_availableContainerIndex].m_shapeID;
-		auto& transforms = m_containers[m_availableContainerIndex].m_transforms;
+		auto& indicesMax = m_containerPtr->m_indicesMax;
+		auto& shapeID = m_containerPtr->m_shapeID;
+		auto& transforms = m_containerPtr->m_transforms;
 
 		{ // set shapeID on every vertex for batch renderer
-			auto& vertices = m_containers[m_availableContainerIndex].m_vertices;
+			auto& vertices = m_containerPtr->m_vertices;
 			vertices.insert(vertices.end(), renderable.vertices.begin(), renderable.vertices.end());
 
 			auto fromBeginOfInsertedVertices = vertices.end() - renderable.vertices.size();
@@ -167,7 +233,7 @@ namespace mar::graphics {
 		}
 
 		{ // increase indices for every vertex (batch renderer)
-			auto& indices = m_containers[m_availableContainerIndex].m_indices;
+			auto& indices = m_containerPtr->m_indices;
 			indices.insert(indices.end(), renderable.indices.begin(), renderable.indices.end());
 
 			auto fromBeginOfInsertedIndices = indices.end() - renderable.indices.size();
@@ -186,56 +252,76 @@ namespace mar::graphics {
 
 		MAR_CORE_ASSERT(transforms.size() == shapeID, "transform.size() and shapeID are not equal!");
 
-		GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}, shaderID = {}", 
-			renderable.name, renderable.vertices.size(), renderable.indices.size(), indicesMax, renderable.shaderID);
+		GRAPHICS_INFO("RENDER_PIPELINE: submitted renderable component {} --- vert_size = {} indi_size = {}, indicesMax = {}", renderable.name, renderable.vertices.size(), renderable.indices.size(), indicesMax);
 		
 		return transforms.size() - 1;
 	}
 
 	size_t RenderPipeline::submitColor(int32_t entityIndex, const ecs::ColorComponent& color) {
-		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
-		availableContainer->m_colors.push_back({ entityIndex, color.texture });
-		availableContainer->m_samplerTypes.push_back(0.0f);
+		if (!m_containerPtr) {
+			GRAPHICS_ERROR("RENDER_PIPELINE: submitColor(), m_containerPtr is nullptr!");
+			return -1;
+		}
 
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted color component, current size = {}, entity_index = {}",
-			availableContainer->m_colors.size(), entityIndex);
+		m_containerPtr->m_colors.push_back({ entityIndex, color.texture });
+		m_containerPtr->m_samplerTypes.push_back(0.0f);
+
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitted color component, current size = {}, entity_index = {}", m_containerPtr->m_colors.size(), entityIndex);
 		
-		return availableContainer->m_colors.size() - 1;
+		return m_containerPtr->m_colors.size() - 1;
 	}
 
 	size_t RenderPipeline::submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture) {
-		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
-		availableContainer->m_tex2D.push_back({ entityIndex, texture.texture });
-		availableContainer->m_samplerTypes.push_back(1.0f);
+		if (!m_containerPtr) {
+			GRAPHICS_ERROR("RENDER_PIPELINE: submitTexture2D(), m_containerPtr is nullptr!");
+			return -1;
+		}
 
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture2d component, current size = {}, entity_index = {}, texture2D = {}", 
-			availableContainer->m_tex2D.size(), entityIndex, texture.texture);
+		m_containerPtr->m_tex2D.push_back({ entityIndex, texture.texture });
+		m_containerPtr->m_samplerTypes.push_back(1.0f);
 
-		return availableContainer->m_tex2D.size() - 1;
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture2d component, current size = {}, entity_index = {}, texture2D = {}", m_containerPtr->m_tex2D.size(), entityIndex, texture.texture);
+
+		return m_containerPtr->m_tex2D.size() - 1;
 	}
 
 	size_t RenderPipeline::submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap) {
-		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
-		availableContainer->m_cubes.push_back({ entityIndex, cubemap.texture });
-		availableContainer->m_samplerTypes.push_back(2.0f);
+		if (!m_containerPtr) {
+			GRAPHICS_ERROR("RENDER_PIPELINE: submitCubemap(), m_containerPtr is nullptr!");
+			return -1;
+		}
+
+		m_containerPtr->m_cubes.push_back({ entityIndex, cubemap.texture });
+		m_containerPtr->m_samplerTypes.push_back(2.0f);
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", 
-			availableContainer->m_cubes.size(), entityIndex, cubemap.texture);
+			m_containerPtr->m_cubes.size(), entityIndex, cubemap.texture);
 
-		return availableContainer->m_cubes.size() - 1;
+		return m_containerPtr->m_cubes.size() - 1;
 	}
 
 	size_t RenderPipeline::submitLight(const maths::vec3& position, const ecs::LightComponent& light) {
-		RenderContainer* availableContainer = &m_containers[m_availableContainerIndex];
-		availableContainer->m_lights.push_back({ position, light });
+		if (!m_containerPtr) {
+			GRAPHICS_ERROR("RENDER_PIPELINE: submitLight(), m_containerPtr is nullptr!");
+			return -1;
+		}
 
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", 
-			availableContainer->m_lights.size());
+		auto& lightMaterial = m_lightPtr->m_lightMaterials.emplace_back();
+		lightMaterial.position = maths::vec4(position, 1.f);
+		lightMaterial.ambient = light.ambient;
+		lightMaterial.diffuse = light.diffuse;
+		lightMaterial.specular = light.specular;
+		lightMaterial.linear = light.linear;
+		lightMaterial.quadratic = light.quadratic;
+		lightMaterial.constant = light.constant;
+		lightMaterial.shininess = light.shininess;
+
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", m_lights.size());
 		
-		return availableContainer->m_lights.size() - 1;
+		return m_lights.size() - 1;
 	}
 
-	void RenderPipeline::submitCamera(RenderCamera* cam) {
+	void RenderPipeline::submitCamera(const RenderCamera* cam) {
 		m_camera = cam;
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");

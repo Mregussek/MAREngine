@@ -27,25 +27,17 @@
 	#define NOMINMAX
 #endif
 
-// --- Include OpenGL Libs --- //
-#if __has_include(<GL/glew.h>)
-	#ifndef GLEW_STATIC
-		#define GLEW_STATIC
+// --- OS Specific libraries --- //
+#ifdef WIN32
+	#if __has_include(<crtdbg.h>)
+		#include <crtdbg.h>
+	#else	
+		#error "MAR ENGINE: Cannot import crtdbg.h for Windows Platform!"
 	#endif
-	#include <GL/glew.h> 
-	#define MAR_ENGINE_GLEW_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import GL/glew.h!"
 #endif
 
-#if __has_include(<GLFW/glfw3.h>)
-	#include <GLFW/glfw3.h>
-	#define MAR_ENGINE_GLFW_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import GLFW/glfw3.h!"
-#endif
+// --- Include 3rd_party libs --- //
 
-// --- Include other third-party libraries --- //
 #pragma warning( push )
 #pragma warning( disable : 26439	)
 #pragma warning( disable : 26495	) 
@@ -61,6 +53,28 @@
 #pragma warning( disable : 4244		) 
 #pragma warning( disable : 4099		) 
 
+#if __has_include(<glad/glad.h>)
+	#include <glad/glad.h> 
+	#define MAR_ENGINE_GLAD_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import glad/glad.h!"
+#endif
+
+#if __has_include(<SDL.h>)
+	#define HAVE_M_PI
+	#include <SDL.h>
+	#define MAR_ENGINE_SDL_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import SDL2.h!"
+#endif
+
+#if __has_include(<GLFW/glfw3.h>)
+	#include <GLFW/glfw3.h>
+	#define MAR_ENGINE_GLFW_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import GLFW/glfw3.h!"
+#endif
+
 #if __has_include("stb_image/stb_image.h")
 	#include "stb_image/stb_image.h"
 	#define MAR_ENGINE_STB_IMAGE_LIB_IMPORTED
@@ -73,6 +87,7 @@
 	#include "imgui_internal.h"
 	#include "examples/imgui_impl_glfw.h"
 	#include "examples/imgui_impl_opengl3.h"
+	#include "examples/imgui_impl_sdl.h"
 	#define MAR_ENGINE_IMGUI_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import imgui.h!"
@@ -141,16 +156,8 @@
 	#error "MAR ENGINE: Cannot import MARMaths.h!"
 #endif
 
-// --- OS Specific libraries --- //
-#ifdef WIN32
-	#if __has_include(<crtdbg.h>)
-		#include <crtdbg.h>
-	#else	
-		#error "MAR ENGINE: Cannot import crtdbg.h for Windows Platform!"
-	#endif
-#endif
-
 // --- Include C++ STL libraries --- //
+
 // I/O events
 #include <iostream>
 #include <fstream> 
@@ -158,14 +165,9 @@
 #include <sstream>
 #include <vector> 
 #include <utility>
-#include <optional>
-#include <variant>
 #include <unordered_map>
-#include <algorithm> // std::find, std::copy
+#include <algorithm>
 #include <ctime>
-// multi-threading
-#include <thread> 
-#include <mutex>
 // random numbers
 #include <random>
 // filesystem

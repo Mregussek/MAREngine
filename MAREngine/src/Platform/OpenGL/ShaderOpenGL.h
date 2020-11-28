@@ -24,53 +24,59 @@
 
 #include "../../mar.h"
 #include "../PlatformLogs.h"
+#include "ShaderBufferStorageOpenGL.h"
+#include "UniformBufferOpenGL.h"
+#include "ShaderUniforms.h"
 
 
+namespace mar::graphics { struct LightMaterial; }
 namespace mar::platforms {
 
 
-	struct ShaderProgramSource {
-		std::string vertexSource;
-		std::string fragmentSource;
+	struct ShaderPaths {
+		ShaderPaths() = default;
+
+		ShaderPaths(const char* vert, const char* frag, const char* geo) :
+			vertexPath(vert),
+			fragmentPath(frag),
+			geometryPath(geo)
+		{}
+
+		const char* vertexPath{ nullptr };
+		const char* fragmentPath{ nullptr };
+		const char* geometryPath{ nullptr };
 	};
 
 
 	class ShaderOpenGL {
+
+		typedef ShaderUniforms::UniformBuffer UniformBuffer;
+		typedef ShaderUniforms::UniformItem UniformItem;
+
 	public:
 
 		ShaderOpenGL() = default;
 
-		void initialize(std::string shader = "resources/shaders/batcher.shader.glsl");
-		void shutdown() const;
+		void initialize(ShaderPaths shaderPaths);
+		void shutdown();
 
 		void bind() const;
 		void unbind() const;
 
-		void setUniformFloat(const char* name, float f) const;
-		void setUniformFloat(const char* name, const std::vector<float>& floats) const;
-		void setUniformInt(const char* name, int32_t i) const;
-		void setUniformInt(const char* name, const std::vector<int32_t>& ints) const;
+		void setupShaderUniforms(const std::array<const char*, 32>& shaderUniforms);
 		void setUniformSampler(const char* name, int32_t sampler) const;
-		void setUniformSampler(const char* name, const std::vector<int32_t>& sampler) const;
-		void setUniformVec3(const char* name, maths::vec3 vector3) const;
-		void setUniformVec3(const char* name, const std::vector<maths::vec3>& vec) const;
-		void setUniformMat4(const char* name, const maths::mat4& matrix4x4) const;
-		void setUniformMat4(const char* name, const std::vector<maths::mat4>& matrices) const;
 
 	private:
 
 		int32_t getUniformLocation(const char* name) const;
 
-		void setupShaderUniforms();
-
-		ShaderProgramSource parseShader() const;
+		void loadShader(std::string& buffer, const char* path) const;
 		uint32_t compileShader(uint32_t type, const std::string& sourceCode) const;
-		uint32_t createShader() const;
+		uint32_t createShader(const std::string& vertSrc, const std::string& fragSrc) const;
 
-
-		ShaderProgramSource m_programSource;
+		
 		std::unordered_map<const char*, int32_t> m_uniformLocation;
-		std::string m_shaderPath{ "" };
+		ShaderPaths m_shaderPaths;
 		uint32_t m_id{ 0 };
 		bool m_initialized{ false };
 

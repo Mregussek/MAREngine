@@ -24,8 +24,11 @@
 // Log
 #include "../../src/Debug/Log.h"
 
+// Platforms
+#include "../../src/Platform/OpenGL/SetupOpenGL.h"
+
 // Editor
-#include "../../src/Editor/GUI/GUI.h"
+#include "../../src/Editor/GUI.h"
 #include "../../src/Editor/ProjectSelectionGUI/ProjectSelectionGUI.h"
 #include "../../src/Editor/Filesystem/EditorFilesystem.h"
 #include "../../src/Editor/Camera/Camera.h"
@@ -49,8 +52,8 @@
 #include "../../src/Core/scripting/PythonScript.h"
 
 // Window && Input
-#include "../../src/Window/Input.h"
 #include "../../src/Window/Window.h"
+#include "../../src/Window/WindowInstance.h"
 
 // Engine	 
 #include "../../src/Engine.h"

@@ -21,7 +21,7 @@
 #include "ProjectSelectionGUI.h"
 #include "ProjectTemplatesWindow.h"
 #include "../../Window/Window.h"
-#include "../GUI/Other/GUI_Theme.h"
+#include "../GUIPanels/OtherPanels/GUI_Theme.h"
 
 
 namespace mar::editor {
@@ -30,7 +30,8 @@ namespace mar::editor {
 	void ProjectSelectionGUI::initialize(const char* glsl_version) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
-		ImGui_ImplGlfw_InitForOpenGL(window::Window::Instance().m_window.m_window, true);
+
+		window::Window::imguiInit();
 		ImGui_ImplOpenGL3_Init(glsl_version);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -41,13 +42,13 @@ namespace mar::editor {
 
 	void ProjectSelectionGUI::shutdown() {
 		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
+		window::Window::imguiTerminate();
 		ImGui::DestroyContext();
 	}
 
 	void ProjectSelectionGUI::prepare() {
 		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
+		window::Window::imguiNewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 

@@ -24,19 +24,51 @@
 namespace mar::platforms {
 
 
+	void GLAPIENTRY
+		MessageCallback(GLenum source,
+			GLenum type,
+			GLuint id,
+			GLenum severity,
+			GLsizei length,
+			const GLchar* message,
+			const void* userParam)
+	{
+		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+			type, severity, message);
+	}
+
 	bool SetupOpenGL::init() {
-		glewExperimental = GL_TRUE;
+		if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+			const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-		PLATFORM_GL_FUNC(const GLenum glew_init = glewInit());
+			if (!isGLAD_OK) {
+				MAR_CORE_ERROR("SETUP_OPENGL: gladLoadGLLoader with GLFW failed!");
+				return false;
+			}
+		}
+		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+			const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 
-		if (glew_init != GLEW_OK) {
+			if (!isGLAD_OK) {
+				MAR_CORE_ERROR("SETUP_OPENGL: gladLoadGLLoader with SDL failed!");
+				return false;
+			}
+		}
+		else {
+			MAR_CORE_ERROR("SETUP_OPENGL: Cannot initialize OpenGL, unsupported platform!");
 			return false;
 		}
 
-		PLATFORM_GL_FUNC(glEnable(GL_DEPTH_TEST)); // Enable DEPTH, in other words 3D
-		PLATFORM_GL_FUNC(glEnable(GL_STENCIL_TEST)); // Enable STENCIL, outliner
-		PLATFORM_GL_FUNC(glEnable(GL_BLEND)); // Enable loading PNG files and transparency
-		PLATFORM_GL_FUNC(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		if constexpr (MAR_ENGINE_DEBUG_MODE) {
+			PLATFORM_GL_FUNC( glEnable(GL_DEBUG_OUTPUT) );
+			PLATFORM_GL_FUNC( glDebugMessageCallback(MessageCallback, 0) );
+		}
+
+		PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) ); // Enable DEPTH, in other words 3D
+		PLATFORM_GL_FUNC( glEnable(GL_STENCIL_TEST) ); // Enable STENCIL, outliner
+		PLATFORM_GL_FUNC( glEnable(GL_BLEND) ); // Enable loading PNG files and transparency
+		PLATFORM_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
 		return true;
 	}

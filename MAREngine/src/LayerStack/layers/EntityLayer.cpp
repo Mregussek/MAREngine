@@ -24,6 +24,7 @@
 #include "../../Core/ecs/SceneEvents.h"
 #include "../../Core/graphics/Renderer/RenderPipeline.h"
 #include "../../Core/graphics/Renderer/RenderEvents.h"
+#include "../../Window/Window.h"
 
 
 namespace mar::layers {
@@ -63,8 +64,11 @@ namespace mar::layers {
 		graphics::RenderEvents::Instance().setRenderPipeline(m_renderPipeline);
 
 		m_sceneManager.update();
-		m_renderer.draw(m_renderPipeline);
+		
+		const bool isWindowMinimized = window::Window::getSizeX() < 2 && window::Window::getSizeY() < 2;
 
+		m_renderer.draw(m_renderPipeline);
+		
 		LAYER_INFO("ENTITY_LAYER: {} updated!", m_debugName);
 	}
 

@@ -4,27 +4,12 @@
 #
 
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+set(CMAKE_GENERATOR_PLATFORM win32)
 project(MAREngine)
 set(MARENGINE_NAME "MAREngine")
 
-# -------------------------------------------------------------
-# EditorMAR setup
-# -------------------------------------------------------------
-set(EDITORMAR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/EditorMAR)
-set(EDITORMAR_NAME "EditorMAR")
-file(GLOB_RECURSE EDITORMAR_SOURCE_FILES
-	${EDITORMAR_PATH}/src/*.c
-	${EDITORMAR_PATH}/src/*.cpp
-)
-
-file(GLOB_RECURSE EDITORMAR_HEADER_FILES 
-	${EDITORMAR_PATH}/src/*.h
-	${EDITORMAR_PATH}/src/*.hpp
-)
-
-set(MAIN_EDITORMAR_FILE ${EDITORMAR_PATH}/main.cpp)
-
-set(EDITORMAR_FILES ${EDITORMAR_SOURCE_FILES} ${EDITORMAR_HEADER_FILES} ${MAIN_EDITORMAR_FILE}) 
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ".")
+list(APPEND MAR_ENGINE_INCLUDE_LIBS ".")
 
 # -------------------------------------------------------------
 # SandboxMAR setup
@@ -42,7 +27,6 @@ file(GLOB_RECURSE SANDBOXMAR_HEADER_FILES
 )
 
 set(MAIN_SANDBOXMAR_FILE ${SANDBOXMAR_PATH}/main.cpp)
-
 set(SANDBOXMAR_FILES ${SANDBOXMAR_SOURCE_FILES} ${SANDBOXMAR_HEADER_FILES} ${MAIN_SANDBOXMAR_FILE}) 
 
 # -------------------------------------------------------------
@@ -58,8 +42,10 @@ file(GLOB_RECURSE HEADER_FILES
 	${MARENGINE_PATH}/src/*.hpp)
 
 set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES})
-
 set(MARENGINE_INCLUDE_DIR "${MARENGINE_PATH}/include")
+
+list(APPEND MAR_ENGINE_ALL_FILES ${MAR_ENGINE_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MARENGINE_INCLUDE_DIR})
 
 # -------------------------------------------------------------
 # Include statically other libs
@@ -82,23 +68,31 @@ else()
     message("Error: Cannot find OpenGL!")
 endif()
 
-# -------------------------------------------------------------
-# glew
-# -------------------------------------------------------------
-message("Looking for: GLEW")
-add_definitions(-DGLEW_STATIC)
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GL")
-find_package(GLEW REQUIRED)
-if (GLEW_FOUND)
-	message(STATUS "GLEW_INCLUDE_DIRS:= ${GLEW_INCLUDE_DIRS}")
-    message(STATUS "GLEW_LIBRARIES:= ${GLEW_LIBRARIES}")
-    message(STATUS "GLEW_STATIC_LIBRARIES:= ${GLEW_STATIC_LIBRARIES}")
-else()
-	message(STATUS "Error: Cannot find GLEW!")
-endif()
+list(APPEND MAR_ENGINE_ALL_LIBS ${OPENGL_gl_LIBRARY})
+list(APPEND MAR_ENGINE_INCLUDE_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GL/lib")
 
 # -------------------------------------------------------------
-# glfw
+# GLAD
+# -------------------------------------------------------------
+message("Looking for: GLAD")
+set(GLAD_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLAD")
+set(GLAD_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLAD/include")
+file(GLOB_RECURSE GLAD_CPP_FILES 
+	${GLAD_DIRECTORY}/*.c
+	${GLAD_DIRECTORY}/*.cpp
+)
+file(GLOB_RECURSE GLAD_HEADER_FILES 
+	${GLAD_DIRECTORY}/*.h
+	${GLAD_DIRECTORY}/*.hpp
+)
+set(GLAD_FILES ${GLAD_HEADER_FILES} ${GLAD_CPP_FILES})
+message(STATUS "GLAD_INCLUDE_DIR:= ${GLAD_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${GLAD_INCLUDE_DIR})
+list(APPEND MAR_ENGINE_ALL_FILES ${GLAD_FILES})
+
+# -------------------------------------------------------------
+# GLFW
 # -------------------------------------------------------------
 message("Looking for: GLFW")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -114,6 +108,32 @@ else()
 	message(STATUS "Error: Cannot find GLFW3!")
 endif()
 
+list(APPEND MAR_ENGINE_ALL_LIBS ${GLFW3_LIBRARY})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MAR_GLFW_DIR})
+list(APPEND MAR_ENGINE_INCLUDE_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/lib-vc2019")
+
+# -------------------------------------------------------------
+# SDL2
+# -------------------------------------------------------------
+message("Looing for: SDL2")
+set(SDL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/SDL2-2.0.12/include")
+message(STATUS "SDL_INCLUDE_DIR:= ${SDL_INCLUDE_DIR}")
+file(GLOB_RECURSE SDL_CPP_FILES 
+	${SDL_INCLUDE_DIR}/*.c
+	${SDL_INCLUDE_DIR}/*.cpp
+)
+file(GLOB_RECURSE SDL_HEADER_FILES 
+	${SDL_INCLUDE_DIR}/*.h
+	${SDL_INCLUDE_DIR}/*.hpp
+)
+set(SDL_FILES ${SDL_CPP_FILES} ${SDL_HEADER_FILES})
+
+list(APPEND MAR_ENGINE_ALL_FILES ${SDL_FILES})
+list(APPEND MAR_ENGINE_ALL_LIBS SDL2 SDL2main SDL2test)
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${SDL_INCLUDE_DIR})
+list(APPEND MAR_ENGINE_INCLUDE_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/SDL2-2.0.12/lib/x86")
+
+
 # -------------------------------------------------------------
 # spdlog
 # -------------------------------------------------------------
@@ -122,17 +142,31 @@ add_subdirectory(MAREngine/3rd_party/spdlog)
 set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/spdlog/include")
 message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
 
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${SPDLOG_INCLUDE_DIR})
+
 # -------------------------------------------------------------
 # pybind11
 # -------------------------------------------------------------
-message("Looking for: pybind11 && python3.8.5")
+message("Looking for: pybind11")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11)
 set(PYBIND11_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11/include")
+message(STATUS "PYBIND11_INCLUDE_DIR:= ${PYBIND11_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_LIBS pybind11::embed)
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${PYBIND11_INCLUDE_DIR})
+
+# -------------------------------------------------------------
+# python 3.8.5
+# -------------------------------------------------------------
+message("Looking for: python 3.8.5")
 set(PYTHON385_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/include")
 set(PYTHON385_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs")
-message(STATUS "PYBIND11_INCLUDE_DIR:= ${PYBIND11_INCLUDE_DIR}")
 message(STATUS "PYTHON385_INCLUDE_DIR:= ${PYTHON385_INCLUDE_DIR}")
 message(STATUS "PYTHON385_LIB_DIR:= ${PYTHON385_LIB_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_LIBS python38)
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${PYTHON385_INCLUDE_DIR})
+list(APPEND MAR_ENGINE_INCLUDE_LIBS ${PYTHON385_LIB_DIR})
 
 # -------------------------------------------------------------
 # MARMaths
@@ -152,6 +186,9 @@ file(GLOB_RECURSE MAR_MATH_LIB_HEADER_FILES
 set(MAR_MATH_FILES ${MAR_MATH_LIB_SOURCE_FILES} ${MAR_MATH_LIB_HEADER_FILES} ${MAR_MATH_INCLUDE_FILE})
 message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
 
+list(APPEND MAR_ENGINE_ALL_FILES ${MAR_MATH_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MAR_MATH_INCLUDE_DIR})
+
 # -------------------------------------------------------------
 # stb_image
 # -------------------------------------------------------------
@@ -162,6 +199,9 @@ set(STB_IMAGE_SRC "${STB_IMAGE_INCLUDE_DIR}/stb_image/stb_image.cpp")
 set(STB_IMAGE_FILES ${STB_IMAGE_H} ${STB_IMAGE_SRC})
 message(STATUS "STB_IMAGE_INCLUDE_DIR:= ${STB_IMAGE_INCLUDE_DIR}")
 
+list(APPEND MAR_ENGINE_ALL_FILES ${STB_IMAGE_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${STB_IMAGE_INCLUDE_DIR})
+
 # -------------------------------------------------------------
 # Dear ImGui
 # -------------------------------------------------------------
@@ -170,6 +210,7 @@ set(IMGUI_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/imgui")
 set(IMGUI_SOURCES
 	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.cpp
     ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.cpp
+    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_sdl.cpp
 	${IMGUI_INCLUDE_DIR}/imgui.cpp
 	${IMGUI_INCLUDE_DIR}/imgui_demo.cpp
 	${IMGUI_INCLUDE_DIR}/imgui_draw.cpp
@@ -178,6 +219,7 @@ set(IMGUI_SOURCES
 set(IMGUI_HEADERS
 	${IMGUI_INCLUDE_DIR}/examples/imgui_impl_opengl3.h
     ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_glfw.h
+    ${IMGUI_INCLUDE_DIR}/examples/imgui_impl_sdl.h
 	${IMGUI_INCLUDE_DIR}/imgui.h
 	${IMGUI_INCLUDE_DIR}/imconfig.h
     ${IMGUI_INCLUDE_DIR}/imgui_internal.h
@@ -187,6 +229,9 @@ set(IMGUI_HEADERS
 )
 set(IMGUI_FILES ${IMGUI_HEADERS} ${IMGUI_SOURCES})
 message(STATUS "IMGUI_INCLUDE_DIR:= ${IMGUI_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_FILES ${IMGUI_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${IMGUI_INCLUDE_DIR})
 
 # -------------------------------------------------------------
 # ImGuizmo
@@ -198,6 +243,9 @@ set(IMGUIZMO_SOURCES ${IMGUIZMO_INCLUDE_DIR}/ImGuizmo.cpp)
 set(IMGUIZMO_FILES ${IMGUIZMO_HEADERS} ${IMGUIZMO_SOURCES})
 message(STATUS "IMGUIZMO_INCLUDE_DIR:= ${IMGUIZMO_INCLUDE_DIR}")
 
+list(APPEND MAR_ENGINE_ALL_FILES ${IMGUIZMO_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${IMGUIZMO_INCLUDE_DIR})
+
 # -------------------------------------------------------------
 # ImGuiColorTextEdit
 # -------------------------------------------------------------
@@ -208,6 +256,9 @@ set(IMGUICOLORTEXTEDIT_SOURCES ${IMGUICOLORTEXTEDIT_INCLUDE_DIR}/TextEditor.cpp)
 set(IMGUICOLORTEXTEDIT_FILES ${IMGUICOLORTEXTEDIT_HEADERS} ${IMGUICOLORTEXTEDIT_SOURCES})
 message(STATUS "IMGUICOLORTEXTEDIT_INCLUDE_DIR:= ${IMGUICOLORTEXTEDIT_INCLUDE_DIR}")
 
+list(APPEND MAR_ENGINE_ALL_FILES ${IMGUICOLORTEXTEDIT_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${IMGUICOLORTEXTEDIT_INCLUDE_DIR})
+
 # -------------------------------------------------------------
 # entt
 # -------------------------------------------------------------
@@ -215,6 +266,9 @@ message("Looking for: entt")
 set(ENTT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/entt/include")
 set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
 message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_FILES ${ENTT_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${ENTT_INCLUDE_DIR})
 
 # -------------------------------------------------------------
 # OBJ-Loader
@@ -224,92 +278,47 @@ set(OBJ_LOADER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/OBJ-
 set(OBJ_LOADER_FILES ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.h ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.cpp)
 message(STATUS "OBJ_LOADER_INCLUDE_DIR:= ${OBJ_LOADER_INCLUDE_DIR}")
 
+list(APPEND MAR_ENGINE_ALL_FILES ${OBJ_LOADER_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${OBJ_LOADER_INCLUDE_DIR})
+
 # -------------------------------------------------------------
 # ImGuiFileDialog
 # -------------------------------------------------------------
-message("Looking for: ImGuiFileDialog")
-set(IMGUI_FILE_DIALOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiFileDialog")
-set(IMGUI_FILE_DIALOG_FILES )
-file(GLOB_RECURSE IMGUI_FILE_DIALOG_FILES 
-	${IMGUI_FILE_DIALOG_INCLUDE_DIR}/ImGuiFileDialog/*.h
-	${IMGUI_FILE_DIALOG_INCLUDE_DIR}/ImGuiFileDialog/*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiFileDialog/CustomFont.h
-	${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGuiFileDialog/CustomFont.cpp
+message("Looking for: ImGuiFileBrowser")
+set(IMGUI_FILE_BROWSER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/ImGui-Addons")
+set(IMGUI_FILE_BROWSER_FILES
+	"${IMGUI_FILE_BROWSER_INCLUDE_DIR}/FileBrowser/ImGuiFileBrowser.h"
+	"${IMGUI_FILE_BROWSER_INCLUDE_DIR}/FileBrowser/ImGuiFileBrowser.cpp"
+	"${IMGUI_FILE_BROWSER_INCLUDE_DIR}/FileBrowser/Dirent/dirent.h"
 )
-message(STATUS "IMGUI_FILE_DIALOG_INCLUDE_DIR:= ${IMGUI_FILE_DIALOG_INCLUDE_DIR}")
+message(STATUS "IMGUI_FILE_BROWSER_INCLUDE_DIR:= ${IMGUI_FILE_BROWSER_INCLUDE_DIR}")
 
-# -------------------------------------------------------------
-# dirent
-# -------------------------------------------------------------
-message("Looking for: dirent")
-add_subdirectory(MAREngine/3rd_party/dirent)
-set(DIRENT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/dirent/include")
-message(STATUS "DIRENT_INCLUDE_DIR:= ${DIRENT_INCLUDE_DIR}")
+list(APPEND MAR_ENGINE_ALL_FILES ${IMGUI_FILE_BROWSER_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${IMGUI_FILE_BROWSER_INCLUDE_DIR})
 
 # -------------------------------------------------------------
 # Set includes for MAREngine (mar_includes.h file)
 # -------------------------------------------------------------
-include_directories(
-	"${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/src"
-	${SERIALPORT_INCLUDE_DIR}
-	${IMGUI_INCLUDE_DIR}
-	${IMGUIZMO_INCLUDE_DIR}
-	${IMGUICOLORTEXTEDIT_INCLUDE_DIR}
-	${MAR_MATH_INCLUDE_DIR}
-	${GLEW_INCLUDE_DIRS}
-	${GLFW_INDLUCE_DIR}
-	${MAR_GLFW_DIR}
-	${IMGUI_FILE_DIALOG_INCLUDE_DIR}
-	${OBJ_LOADER_INCLUDE_DIR}
-	${STB_IMAGE_INCLUDE_DIR}
-	${SPDLOG_INCLUDE_DIR}
-	${ENTT_INCLUDE_DIR}
-	${MARENGINE_INCLUDE_DIR}
-	${PYBIND11_INCLUDE_DIR}
-	${PYTHON385_INCLUDE_DIR}
-	${DIRENT_INCLUDE_DIR}
-)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/src" ${MAR_ENGINE_INCLUDE_DIRS})
 
 # -------------------------------------------------------------
 # link .lib files for MAREngine
 # -------------------------------------------------------------
-link_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GL/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/lib-vc2019
-	${CMAKE_CURRENT_SOURCE_DIR}/bin/Release/Win32/Engine
-	${PYTHON385_LIB_DIR}
-)
+link_directories(${MAR_ENGINE_INCLUDE_LIBS})
 
 # -------------------------------------------------------------
-# Imports setup
-# -------------------------------------------------------------
-set(ALL_INCLUDE_FILES_MARENGINE 
-	${MAR_ENGINE_FILES} ${MAR_MATH_FILES} ${IMGUI_FILES} ${IMGUIZMO_FILES} 
-	${STB_IMAGE_FILES} ${IMGUI_FILES} ${ENTT_FILES} ${IMGUI_FILE_DIALOG_FILES}
-	${IMGUICOLORTEXTEDIT_FILES} ${OBJ_LOADER_FILES}
-)
-
-set(MAR_OPENGL_IMPORT 
-	${OPENGL_gl_LIBRARY} ${GLEW_STATIC_LIBRARIES} ${GLFW3_LIBRARY} python38 pybind11::embed
-)
-
-# -------------------------------------------------------------
-# Create MAREngine library and Editor / Sandbox executables
+# Create MAREngine library
 # -------------------------------------------------------------
 message("Creating ${MARENGINE_NAME} library...")
-add_library(${MARENGINE_NAME} ${ALL_INCLUDE_FILES_MARENGINE})
+add_library(${MARENGINE_NAME} ${MAR_ENGINE_ALL_FILES})
 
 message("Linking libraries to ${MARENGINE_NAME}")
 target_compile_features(${MARENGINE_NAME} PRIVATE cxx_std_17)
-target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_OPENGL_IMPORT})
+target_link_libraries ( ${MARENGINE_NAME} PRIVATE ${MAR_ENGINE_ALL_LIBS})
 
-message("Creating ${EDITORMAR_NAME} executable...")
-add_executable(${EDITORMAR_NAME} ${EDITORMAR_FILES} ${MARENGINE_INCLUDE_DIR})
-
-message("Linking libraries to ${EDITORMAR_NAME}")
-target_compile_features(${EDITORMAR_NAME} PRIVATE cxx_std_17)
-target_link_libraries(${EDITORMAR_NAME} PRIVATE ${MARENGINE_NAME})
-
+# -------------------------------------------------------------
+# Create SandboxMAR executable
+# -------------------------------------------------------------
 message("Creating ${SANDBOXMAR_NAME} executable...")
 add_executable(${SANDBOXMAR_NAME} ${SANDBOXMAR_FILES} ${MARENGINE_INCLUDE_DIR})
 message("Linking libraries to ${SANDBOXMAR_NAME}")

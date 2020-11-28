@@ -69,9 +69,7 @@ namespace mar::debug {
 
            static bool checkForOpenGLError(const char* function, const char* file, int line) {
                while (GLenum err = glGetError()) {
-                   getCoreLogger()->error("[OpenGL Error] " + GetGLErrorStr(err));
-                   getCoreLogger()->error(std::string(function) + " - " + std::string(file) 
-                       + " - " + std::to_string(line));
+                   getCoreLogger()->error("[OpenGL Error] {} {} {} \n{}", GetGLErrorStr(err), function, file, line);
                    return false;
                }
 
@@ -93,15 +91,17 @@ namespace mar::debug {
     #define MAR_CORE_ERROR(...) ::mar::debug::Log::getCoreLogger()->error(__VA_ARGS__)
     
     #define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::CheckGLError(__FILE__, __LINE__) 
+    
+    #define ASSERT_NO_MSG(x) if(!(x)) __debugbreak()
 
     #define ASSERT(x, msg) if(!(x)) MAR_CORE_ERROR(msg);\
-                           if(!(x)) __debugbreak()
+                           ASSERT_NO_MSG(x)
                            
     #define MAR_CORE_ASSERT(x, msg) ASSERT(x, msg)
     
     #define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::clearError();\
                                 x;\
-                                ASSERT(::mar::debug::Log::checkForOpenGLError(#x, __FILE__, __LINE__), "OPENGL")
+                                ASSERT_NO_MSG(::mar::debug::Log::checkForOpenGLError(#x, __FILE__, __LINE__))
 
 #else
 

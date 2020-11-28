@@ -38,8 +38,6 @@ namespace mar::graphics {
 		m_cubes.clear();
 		m_samplerTypes.clear();
 
-		m_lights.clear();
-	
 		GRAPHICS_TRACE("RENDER_CONTAINER: resetting container");
 	}
 

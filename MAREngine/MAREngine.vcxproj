@@ -89,9 +89,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\dirent\include;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
@@ -142,9 +142,9 @@
       <WarningLevel>Level3</WarningLevel>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\dirent\include;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GL\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\OBJ-Loader;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -196,12 +196,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="3rd_party\entt\include\entt\entt.hpp" />
+    <ClInclude Include="3rd_party\GLAD\include\glad\glad.h" />
+    <ClInclude Include="3rd_party\GLAD\include\KHR\khrplatform.h" />
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\Dirent\dirent.h" />
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.h" />
     <ClInclude Include="3rd_party\ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="3rd_party\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="3rd_party\imgui\examples\imgui_impl_glfw.h" />
     <ClInclude Include="3rd_party\imgui\examples\imgui_impl_opengl3.h" />
+    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_sdl.h" />
     <ClInclude Include="3rd_party\imgui\imconfig.h" />
     <ClInclude Include="3rd_party\imgui\imgui.h" />
     <ClInclude Include="3rd_party\imgui\imgui_internal.h" />
@@ -263,25 +266,30 @@
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderContainer.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RenderContainerDefinitions.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\ShaderBufferStorage.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
+    <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
+    <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Loading.h" />
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
-    <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_EntityCollectionPanel.h" />
-    <ClInclude Include="src\Editor\GUI\GUI_Graphics.h" />
-    <ClInclude Include="src\Editor\GUI\GUI_MainMenuBar.h" />
-    <ClInclude Include="src\Editor\GUI\Other\GUI_Statistics.h" />
+    <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.h" />
+    <ClInclude Include="src\Editor\GUIPanels\GUI_Graphics.h" />
+    <ClInclude Include="src\Editor\GUIPanels\GUI_MainMenuBar.h" />
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.h" />
+    <ClInclude Include="src\Editor\GUIPanels\ScenePropertiesPanel\GUI_SceneProperties.h" />
+    <ClInclude Include="src\Editor\GUIPanels\ViewportPanel\GUI_Viewport.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectTemplatesWindow.h" />
     <ClInclude Include="src\mar_logging.h" />
     <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h" />
-    <ClInclude Include="src\Platform\GLFW\WindowGLFW.h" />
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\SetupOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\PipelineOpenGL.h" />
@@ -291,40 +299,45 @@
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
     <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
-    <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_EntityPanel.h" />
-    <ClInclude Include="src\Editor\GUI\GUI_Filesystem.h" />
-    <ClInclude Include="src\Editor\GUI\Other\GUI_Info.h" />
-    <ClInclude Include="src\Editor\GUI\EntityPanels\GUI_SceneHierarchy.h" />
-    <ClInclude Include="src\Editor\GUI\GUI_TextEditor.h" />
-    <ClInclude Include="src\Editor\GUI\Other\GUI_Theme.h" />
+    <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.h" />
+    <ClInclude Include="src\Editor\GUIPanels\GUI_Filesystem.h" />
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.h" />
+    <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.h" />
+    <ClInclude Include="src\Editor\GUIPanels\GUI_TextEditor.h" />
+    <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.h" />
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
+    <ClInclude Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h" />
     <ClInclude Include="src\Platform\PlatformLogs.h" />
     <ClInclude Include="src\LayerStack\layers\GUILayer.h" />
     <ClInclude Include="src\LayerStack\Layer.h" />
     <ClInclude Include="src\LayerStack\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
+    <ClInclude Include="src\Platform\SDL\ContextSDL.h" />
     <ClInclude Include="src\Window\buttons_def.h" />
     <ClInclude Include="src\Platform\OpenGL\FramebufferOpenGL.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h" />
-    <ClInclude Include="src\Editor\GUI\GUI.h" />
+    <ClInclude Include="src\Editor\GUI.h" />
     <ClInclude Include="src\Editor\Camera\Camera.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Core\ecs\Scene.h" />
     <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h" />
     <ClInclude Include="src\mar.h" />
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h" />
-    <ClInclude Include="src\Window\Input.h" />
     <ClInclude Include="src\Window\Window.h" />
+    <ClInclude Include="src\Window\WindowInstance.h" />
     <ClInclude Include="src\Window\WindowLogs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="3rd_party\GLAD\src\glad.c" />
     <ClCompile Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp" />
     <ClCompile Include="3rd_party\ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="3rd_party\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="3rd_party\imgui\examples\imgui_impl_glfw.cpp" />
     <ClCompile Include="3rd_party\imgui\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_sdl.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_demo.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_draw.cpp" />
@@ -352,22 +365,27 @@
     <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderStatistics.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\ShaderBufferStorage.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
+    <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
+    <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Loading.cpp" />
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Saving.cpp" />
-    <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_EntityCollectionPanel.cpp" />
-    <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_EntityPanel.cpp" />
-    <ClCompile Include="src\Editor\GUI\GUI_Filesystem.cpp" />
-    <ClCompile Include="src\Editor\GUI\GUI_Graphics.cpp" />
-    <ClCompile Include="src\Editor\GUI\Other\GUI_Info.cpp" />
-    <ClCompile Include="src\Editor\GUI\GUI_MainMenuBar.cpp" />
-    <ClCompile Include="src\Editor\GUI\EntityPanels\GUI_SceneHierarchy.cpp" />
-    <ClCompile Include="src\Editor\GUI\GUI_TextEditor.cpp" />
-    <ClCompile Include="src\Editor\GUI\Other\GUI_Statistics.cpp" />
-    <ClCompile Include="src\Editor\GUI\Other\GUI_Theme.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\GUI_Filesystem.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\GUI_Graphics.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\GUI_MainMenuBar.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\GUI_TextEditor.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\ScenePropertiesPanel\GUI_SceneProperties.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\ViewportPanel\GUI_Viewport.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectListWindow.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp" />
@@ -377,15 +395,19 @@
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
     <ClCompile Include="src\Platform\OpenGL\DrawingOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp" />
-    <ClCompile Include="src\Editor\GUI\GUI.cpp" />
+    <ClCompile Include="src\Editor\GUI.cpp" />
     <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
-    <ClCompile Include="src\Window\Input.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\SDL\ContextSDL.cpp" />
+    <ClCompile Include="src\Platform\SDL\WindowSDL.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
+    <ClCompile Include="src\Window\WindowInstance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cmake\FindGLEW.cmake" />

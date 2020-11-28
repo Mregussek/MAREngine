@@ -44,7 +44,6 @@ namespace mar::ecs {
 
 	struct RenderableComponent {
 		std::string name{ "empty" };
-		size_t shaderID{ 0 };
 		std::vector<graphics::Vertex> vertices;
 		std::vector<uint32_t> indices;
 

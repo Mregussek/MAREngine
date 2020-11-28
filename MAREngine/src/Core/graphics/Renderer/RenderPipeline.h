@@ -50,7 +50,7 @@ namespace mar::graphics {
 
 		void submitEntity(const ecs::Entity& entity);
 
-		void submitCamera(RenderCamera* cam);
+		void submitCamera(const RenderCamera* cam);
 
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }
@@ -59,7 +59,9 @@ namespace mar::graphics {
 
 		// ---- GETTERS for container ---- //
 	
-		const std::vector<RenderContainer>& getContainers() const { return m_containers; }
+		const std::vector<RenderContainer>& get2Dcontainers() const { return m_containers2D; }
+		const std::vector<RenderContainer>& getCubemapContainers() const { return m_containersCubemap; }
+		const std::vector<LightContainer>& getLightContainers() const { return m_lights; }
 		const RenderCamera* getCamera() const { return m_camera; }
 
 		// --- SETTERS --- //
@@ -68,8 +70,8 @@ namespace mar::graphics {
 
 	private:
 
-		void setAvailableContainerRenderable(ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
-		void setAvailableContainerLight(ecs::RenderPipelineComponent& rpc);
+		void setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
+		void setContainerLight(ecs::RenderPipelineComponent& rpc);
 
 		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
 		size_t submitColor(int32_t entityIndex, const ecs::ColorComponent& color);
@@ -80,10 +82,13 @@ namespace mar::graphics {
 		static RenderPipeline* s_instance;
 
 		RenderStatistics m_statistics;
-		std::vector<RenderContainer> m_containers;
-		size_t m_availableContainerIndex{ 0 };
+		std::vector<RenderContainer> m_containers2D;
+		std::vector<RenderContainer> m_containersCubemap;
+		std::vector<LightContainer> m_lights;
+		RenderContainer* m_containerPtr{ nullptr };
+		LightContainer* m_lightPtr{ nullptr };
 
-		RenderCamera* m_camera{ nullptr };
+		const RenderCamera* m_camera{ nullptr };
 
 	};
 

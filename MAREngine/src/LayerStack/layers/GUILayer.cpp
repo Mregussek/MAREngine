@@ -20,9 +20,6 @@
 
 #include "GUILayer.h"
 #include "../LayerLogs.h"
-#include "../../Window/Window.h"
-#include "../../Window/Input.h"
-#include "../../Editor/GUI/GUI.h"
 
 
 namespace mar::layers {
@@ -32,19 +29,12 @@ namespace mar::layers {
 		p_debugName = name;
 	}
 
-	void LayerGUI::passGuiToLayer(editor::GUI* gui, maths::vec3 backgroundcolor) {
-		m_gui = gui;
-		m_gui->getFramebuffer().setBackgroundColor(backgroundcolor);
-	}
-
 	void LayerGUI::initialize() {
 		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
-		m_camera.initialize(m_gui->getViewportWidth() / m_gui->getViewportHeight());
+		m_gui.initialize("#version 450");		
 
-		m_gui->initialize("#version 330");		
-
-		m_guiGraphics.initialize();
+		//m_guiGraphics.initialize();
 
 		LAYER_INFO("GUI_LAYER: {} initialized", p_debugName);
 	}
@@ -52,6 +42,7 @@ namespace mar::layers {
 	void LayerGUI::update() {
 		LAYER_TRACE("GUI_LAYER: {} going to display frame", p_debugName);
 		
+		/*
 		if (m_gui->canDrawLines()) {
 			const auto& currentEntity = m_gui->getCurrentEntity();
 			const bool userHasSelectedEntity = &currentEntity != nullptr;
@@ -66,9 +57,9 @@ namespace mar::layers {
 				m_guiGraphics.passToDrawEntity(currentEntity);
 			}
 		}
+		*/
 		
-		m_camera.update(m_gui->getViewportWidth() / m_gui->getViewportHeight());
-		m_gui->display();
+		m_gui.display();
 
 		LAYER_INFO("GUI_LAYER: {} displayed frame", p_debugName);
 	}
@@ -76,19 +67,19 @@ namespace mar::layers {
 	void LayerGUI::closeLayer() {
 		LAYER_TRACE("GUI_LAYER: {} going to close!", p_debugName);
 
-		m_gui->shutdown();
+		m_gui.shutdown();
 
-		m_guiGraphics.close();
+		//m_guiGraphics.close();
 
 		LAYER_INFO("GUI_LAYER: {} closed!", p_debugName);
 	}
 
 	void LayerGUI::renderToViewport() {
-		m_gui->bind();
+		m_gui.renderToViewport();
 	}
 
 	void LayerGUI::submit(ecs::SceneManager* manager) {
-		m_gui->submit(manager);
+		m_gui.submit(manager);
 	}
 
 

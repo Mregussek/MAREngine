@@ -23,54 +23,63 @@
 
 
 #include "../mar.h"
-#include "../Platform/GLFW/WindowGLFW.h"
+#include "WindowInstance.h"
+#include "buttons_def.h"
 
 
-namespace mar::editor { class GUI; class ProjectSelectionGUI; }
 namespace mar::window {
-	
-	class Input;
 
 
 	class Window {
-
-		friend class Input;
-		friend class editor::GUI;
-		friend class editor::ProjectSelectionGUI;
-
 	public:
 
-		static Window& Instance() { return *s_instance; }
-		
-		Window() = default;
+		template<typename WindowType>
+		static WindowInstance<WindowType> createWindow() {
+			if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+				return WindowInstance<GLFWwindow>{};
+			}
+			else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+				return WindowInstance<SDL_Window>{};
+			}
+			else {
+				return WindowInstance<GLFWwindow>{};
+			}
+		}
 
-		void updateBackgroundColor(maths::vec3 new_back);
+		static void endRenderLoop();
 
-		void initialize(int32_t width, int32_t height, const char* name);
+		static void terminate();
 
-		void terminate();
+		static bool isGoingToClose();
 
-		void clear() const;
+		static void setVerticalSync(int32_t setter);
 
-		void update();
+		static void swapBuffers();
 
-		bool isGoingToClose() const;
+		static void imguiInit();
 
-		void endRenderLoop();
+		static void imguiTerminate();
 
-		void exitApp();
+		static void imguiNewFrame();
 
-	private:
+		static int32_t getSizeX();
 
-		static Window* s_instance;
+		static int32_t getSizeY();
 
-		platforms::WindowGLFW m_window;
-		uint32_t m_width{ 0 };
-		uint32_t m_height{ 0 };
-		maths::vec3 m_background;
-		bool m_closeAfterTerminate{ false };
+		static bool isKeyPressed(int32_t key);
+
+		static bool isMousePressed(int32_t key);
+
+		static float getMousePositionX();
+
+		static float getMousePositionY();
+
+		static float getScrollX();
+
+		static float getScrollY();
 
 	};
+	
 
 
 }

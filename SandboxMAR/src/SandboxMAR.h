@@ -18,64 +18,40 @@
 **/
 
 
+#ifndef SANDBOX_MAR
+#define SANDBOX_MAR
+
+
 #include "MAREngine/MAREngine.h"
 
 
-using namespace mar;
-
-class SandboxMAR {
-
-	typedef mar::engine::MAREngine MAREngine;
-
-public:
-	SandboxMAR() = default;
-
-	void initialize() {
-		m_engine.initialize();
-	}
-
-	void run() {
-		window::Window window{};
-		layers::LayerStack stack{};
-
-		window.initialize(1600, 900, m_engine.getName());
-
-		auto entityLayer = new layers::EntityLayer("Entity Layer");
-		auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
-
-		{ // Entity Layer Setup
-			entityLayer->passSceneToManager(scene);
-			stack.pushLayer(entityLayer);
-		}
-
-		const auto& back = scene->getBackground();
-		window.updateBackgroundColor(back);
-
-		entityLayer->getSceneManager()->setPlayMode();
-
-		stack.initialize();
-
-		while (!window.isGoingToClose() && !m_engine.shouldEngineRestart())
-		{
-			window.clear();
-
-			stack.update();
-
-			window.update();
-		}
-
-		stack.close();
-		window.terminate();
-	}
-
-	void shutdown() {
-
-	}
+namespace mar {
 
 
-private:
+	class SandboxMAR {
 
-	MAREngine m_engine;
+		typedef engine::MAREngine MAREngine;
 
-};
+	public:
 
+		SandboxMAR() = default;
+
+
+		void initialize();
+
+		void run();
+
+		void shutdown();
+
+
+	private:
+
+		MAREngine m_engine;
+
+	};
+
+
+}
+
+
+#endif // !SANDBOX_MAR

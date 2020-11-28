@@ -24,12 +24,18 @@
 
 #include "../../mar.h"
 #include "../../Core/graphics/Renderer/RenderCamera.h"
+#include "StandardCamera.h"
+#include "SphericalCamera.h"
 
 
 namespace mar::editor {
 
 
     class Camera {
+
+        friend class StandardCamera;
+        friend class SphericalCamera;
+
     public:
 
         Camera() = default;
@@ -37,16 +43,15 @@ namespace mar::editor {
         void initialize(float aspectRatio);
         void update(float aspectRatio);
 
-        static graphics::RenderCamera& getCameraData();
+        const graphics::RenderCamera* getCameraData() const;
 
     private:
 
-        void processInput();
-        void processMouseMovement(float xoffset, float yoffset, bool constrainPitch, bool firstMouse);
-        void processMouseScroll(float yoffset);
+        bool processInput();
         void updateCameraVectors();
 
         void updateData();
+
 
         graphics::RenderCamera m_renderCamera;
 
@@ -54,18 +59,17 @@ namespace mar::editor {
         maths::vec3 m_front{ 0.0f, 0.0f, -1.0f };
         maths::vec3 m_up;
         maths::vec3 m_right;
-        maths::vec3 m_worldUp{ 0.0f, 1.0f, 0.0f };
 
         float m_yaw{ 0.0f };
         float m_pitch{ 0.0f };
 
         float m_movementSpeed{ 5.0f };
-        float m_mouseSensitivity{ 0.1f };
         float m_zoom{ 55.0f };
 
         float m_aspectRatio{ 1.333f };
 
-        static Camera* s_instance;
+        StandardCamera m_standard;
+        SphericalCamera m_spherical;
 
     };
 

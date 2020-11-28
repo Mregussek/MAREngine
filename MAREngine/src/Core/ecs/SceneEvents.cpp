@@ -167,7 +167,7 @@ namespace mar::ecs {
 		m_sceneManager->initialize();
 	}
 
-	void SceneEvents::onEditorCameraSet(graphics::RenderCamera* camera) const {
+	void SceneEvents::onEditorCameraSet(const graphics::RenderCamera* camera) const {
 		graphics::RenderPipeline::Instance().submitCamera(camera);
 	}
 

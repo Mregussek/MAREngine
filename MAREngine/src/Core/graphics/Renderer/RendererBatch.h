@@ -23,8 +23,10 @@
 
 
 #include "../../../mar.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
 #include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "../../../Platform/OpenGL/ShaderOpenGL.h"
+#include "ShaderBufferStorage.h"
+#include "RenderContainerDefinitions.h"
 
 
 namespace mar::graphics {
@@ -32,6 +34,8 @@ namespace mar::graphics {
 	class RenderPipeline;
 	class RenderContainer;
 	class RenderCamera;
+	class LightContainer;
+	struct LightMaterial;
 
 
 	class RendererBatch {
@@ -39,18 +43,29 @@ namespace mar::graphics {
 
 		void initialize();
 		void close();
-		void draw(RenderPipeline& renderPipeline);
+		void draw(const RenderPipeline& renderPipeline);
 
 	private:
 
-		void drawContainer(const RenderContainer& container) const;
+		void setupSSBOs();
 
-		void passTexturesToShader(const RenderContainer& container) const;
-		void passLightToShader(const RenderContainer& container) const;
-		void passCameraToShader(const RenderCamera* camera) const;
+		void drawWithShader(const platforms::ShaderOpenGL& shader, const std::vector<LightContainer>& lights,
+			const std::vector<RenderContainer>& containers) const;
+
+		void passVerticesAndIndicesToBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) const;
+		void passTransformsToSSBO(const RenderContainer& container) const;
+		void passColorsToSSBO(const ColorVector& colors) const;
+		void passTexturesToShader(const platforms::ShaderOpenGL& shader, const TextureVector& textures) const;
+		void passCubemapsToShader(const platforms::ShaderOpenGL& shader, const TextureVector& cubemaps) const;
+		void passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const;
+		void passCameraToSSBO(const RenderCamera& camera) const;
+
 
 		platforms::PipelineOpenGL m_buffers;
-		platforms::ShaderOpenGL m_shader;
+		platforms::ShaderOpenGL m_shader2D;
+		platforms::ShaderOpenGL m_shaderCubemap;
+		ShaderBufferStorage m_shaderBufferStorage;
+
 	};
 
 

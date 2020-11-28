@@ -36,6 +36,8 @@ namespace mar::ecs {
 		size_t containerLightIndex{ 0 };
 		size_t lightIndex{ 0 };
 
+		size_t materialType{ 0 };
+
 		RenderPipelineComponent() = default;
 		RenderPipelineComponent(const RenderPipelineComponent& rpc) = default;
 	};

@@ -24,13 +24,12 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
-#include "../../Editor/Camera/Camera.h"
-#include "../../Editor/GUI/GUI_Graphics.h"
+#include "../../Editor/GUI.h"
+#include "../../Editor/GUIPanels/GUI_Graphics.h"
 
 
 namespace mar {
 	namespace ecs { class SceneManager; }
-	namespace editor { class GUI; }
 }
 namespace mar::layers {
 
@@ -41,7 +40,6 @@ namespace mar::layers {
 		LayerGUI() = default;
 		LayerGUI(const char* name);
 
-		void passGuiToLayer(editor::GUI* gui, maths::vec3 backgroundColor);
 		void submit(ecs::SceneManager* manager);
 		void renderToViewport();
 
@@ -53,9 +51,8 @@ namespace mar::layers {
 
 	private:
 
-		editor::GUI* m_gui{ nullptr };
-		editor::GUI_Graphics m_guiGraphics;
-		editor::Camera m_camera;
+		editor::GUI m_gui;
+		//editor::GUI_Graphics m_guiGraphics;
 
 	};
 
