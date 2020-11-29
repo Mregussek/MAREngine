@@ -8,48 +8,16 @@
 namespace mar {
 
 
-    VkImageView createImageView(VkDevice device, VkImage image, VkFormat format) {
-        VkImageViewCreateInfo createInfo{ VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
-        createInfo.image = image;
-        createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        createInfo.format = format;
-        createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        createInfo.subresourceRange.levelCount = 1;
-        createInfo.subresourceRange.layerCount = 1;
-        createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-        createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-        createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-        createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-
-        VkImageView view{ 0 };
-
-        VK_CHECK(vkCreateImageView(device, &createInfo, nullptr, &view));
-
-        return view;
-    }
-
-    VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent) {
-        VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
-        createInfo.renderPass = renderPass;
-        createInfo.attachmentCount = 1;
-        createInfo.pAttachments = &imageView;
-        createInfo.width = extent.width;
-        createInfo.height = extent.height;
-        createInfo.layers = 1;
-
-        VkFramebuffer framebuffer{ 0 };
-        VK_CHECK(vkCreateFramebuffer(device, &createInfo, nullptr, &framebuffer));
-
-        return framebuffer;
-    }
-
     SwapchainVulkan::SwapchainVulkan(VkExtent2D swapchainSize) :
         extent(swapchainSize)
     {}
 
 
-    void SwapchainVulkan::create(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format) {
-        VkCompositeAlphaFlagBitsKHR surfaceComposite = [&surfaceCaps]() {
+    void SwapchainVulkan::create(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format) {
+        VkSurfaceCapabilitiesKHR surfaceCaps;
+        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(PhysicalDevVulkan::Instance()->getPhyDev(), surface, &surfaceCaps) );
+
+        const auto surfaceComposite = [&surfaceCaps]()->VkCompositeAlphaFlagBitsKHR {
             if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) {
                 return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR };
             }
@@ -74,11 +42,12 @@ namespace mar {
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         createInfo.queueFamilyIndexCount = 1;
         createInfo.pQueueFamilyIndices = &PhysicalDevVulkan::Instance()->getFamilyIndex();
-        createInfo.presentMode = presentMode;
         createInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
         createInfo.compositeAlpha = surfaceComposite;
+        createInfo.presentMode = presentMode;
+        createInfo.oldSwapchain = oldSwapchain;
 
-        VK_CHECK(vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapchain));
+        VK_CHECK( vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapchain) );
     }
 
     void SwapchainVulkan::close(VkDevice device) {
@@ -90,18 +59,21 @@ namespace mar {
             vkDestroyFramebuffer(device, framebuffer, nullptr);
         });
 
-        close(device, swapchain);
+        vkDestroySwapchainKHR(device, swapchain, nullptr);
+    
+        images.clear();
+        imageViews.clear();
+        framebuffers.clear();
     }
 
-    void SwapchainVulkan::fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format, VkExtent2D extent) {
-        uint32_t imageCount{ 0 };
+    void SwapchainVulkan::fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format) {
         VK_CHECK(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, nullptr));
 
         images.resize(imageCount);
         imageViews.resize(imageCount);
         framebuffers.resize(imageCount);
 
-        VK_CHECK(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, images.data()));
+        VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &imageCount, images.data()) );
 
         for (uint32_t i = 0; i < imageCount; i++) {
             imageViews[i] = createImageView(device, images[i], format);
@@ -112,8 +84,58 @@ namespace mar {
         }
     }
 
-    void SwapchainVulkan::close(VkDevice device, VkSwapchainKHR passedSwapchain) {
-        vkDestroySwapchainKHR(device, passedSwapchain, nullptr);
+    void SwapchainVulkan::resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass) {
+        VkSurfaceCapabilitiesKHR surfaceCaps;
+        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(PhysicalDevVulkan::Instance()->getPhyDev(), surface, &surfaceCaps) );
+
+        const bool sizeDidntChange = extent.width == surfaceCaps.currentExtent.width && extent.height == surfaceCaps.currentExtent.height;
+        if (sizeDidntChange) { return; }
+
+        SwapchainVulkan swapchainToReplace{ surfaceCaps.currentExtent };
+        swapchainToReplace.oldSwapchain = this->swapchain;
+        swapchainToReplace.create(device, surface, presentMode, format);
+        swapchainToReplace.fillImageViewsAndFramebuffers(device, renderPass, format);
+
+        VK_CHECK( vkDeviceWaitIdle(device) );
+
+        close(device);
+
+        *this = swapchainToReplace;
+    }
+
+    VkImageView SwapchainVulkan::createImageView(VkDevice device, VkImage image, VkFormat format) {
+        VkImageViewCreateInfo createInfo{ VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO };
+        createInfo.image = image;
+        createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        createInfo.format = format;
+        createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        createInfo.subresourceRange.levelCount = 1;
+        createInfo.subresourceRange.layerCount = 1;
+        createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+        VkImageView view{ 0 };
+
+        VK_CHECK(vkCreateImageView(device, &createInfo, nullptr, &view));
+
+        return view;
+    }
+
+    VkFramebuffer SwapchainVulkan::createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent) {
+        VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
+        createInfo.renderPass = renderPass;
+        createInfo.attachmentCount = 1;
+        createInfo.pAttachments = &imageView;
+        createInfo.width = extent.width;
+        createInfo.height = extent.height;
+        createInfo.layers = 1;
+
+        VkFramebuffer framebuffer{ 0 };
+        VK_CHECK(vkCreateFramebuffer(device, &createInfo, nullptr, &framebuffer));
+
+        return framebuffer;
     }
 
 

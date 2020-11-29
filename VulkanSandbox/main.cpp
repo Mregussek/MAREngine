@@ -271,9 +271,6 @@ int main(void) {
     VkBool32 presentSupported{ 0 };
     VK_CHECK( vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevVk.getPhyDev(), physicalDevVk.getFamilyIndex(), surface, &presentSupported) );
 
-    VkSurfaceCapabilitiesKHR surfaceCaps{ 0 };
-    VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.getPhyDev(), surface, &surfaceCaps) );
-
     const VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
     const VkPresentModeKHR presentMode{ getPresentMode(physicalDevVk.getPhyDev(), surface) };
 
@@ -281,9 +278,6 @@ int main(void) {
     const VkRect2D scissor{ {0, 0 }, windowSize };
 
     const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.getPhyDev(), surface) };
-
-    mar::SwapchainVulkan swapchainStruct(windowSize);
-    swapchainStruct.create(deviceVk.m_device, surface, surfaceCaps, presentMode, swapchainFormat);
 
     const auto releaseSemaphore{ createSemaphore(deviceVk.m_device) };
     const auto acquireSemaphore{ createSemaphore(deviceVk.m_device) };
@@ -299,9 +293,13 @@ int main(void) {
     VkQueue queue{ 0 };
     vkGetDeviceQueue(deviceVk.m_device, physicalDevVk.getFamilyIndex(), 0, &queue);
 
-    swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.m_device, renderPass, swapchainFormat, windowSize);
+    mar::SwapchainVulkan swapchainStruct(windowSize);
+    swapchainStruct.create(deviceVk.m_device, surface, presentMode, swapchainFormat);
+    swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.m_device, renderPass, swapchainFormat);
 
     while (window.shouldClose()) {
+        swapchainStruct.resizeIfNecessary(deviceVk.m_device, surface, presentMode, swapchainFormat, renderPass);
+
         uint32_t imageIndex{ 0 };
         VK_CHECK( vkAcquireNextImageKHR(deviceVk.m_device, swapchainStruct.swapchain, UINT64_MAX, acquireSemaphore, VK_NULL_HANDLE, &imageIndex) );
 
@@ -324,7 +322,7 @@ int main(void) {
         VkRenderPassBeginInfo passBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
         passBeginInfo.renderPass = renderPass;
         passBeginInfo.framebuffer = swapchainStruct.framebuffers[imageIndex];
-        passBeginInfo.renderArea.extent = windowSize;
+        passBeginInfo.renderArea.extent = swapchainStruct.extent;
         passBeginInfo.clearValueCount = 1;
         passBeginInfo.pClearValues = &clearValue;
 

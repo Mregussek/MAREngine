@@ -12,7 +12,8 @@ namespace mar {
 
     struct SwapchainVulkan {
 
-        VkSwapchainKHR swapchain;
+        VkSwapchainKHR swapchain{ VK_NULL_HANDLE };
+        VkSwapchainKHR oldSwapchain{ VK_NULL_HANDLE };
 
         std::vector<VkImage> images;
         std::vector<VkImageView> imageViews;
@@ -20,17 +21,23 @@ namespace mar {
 
         VkExtent2D extent;
 
+        uint32_t imageCount{ 0 };
+
+
         SwapchainVulkan() = default;
         SwapchainVulkan(VkExtent2D swapchainSize);
 
-        void create(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format);
+        void create(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format);
         void close(VkDevice device);
 
-        void fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format, VkExtent2D extent);
+        void fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format);
+
+        void resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass);
 
     private:
 
-        void close(VkDevice device, VkSwapchainKHR swapchain);
+        VkImageView createImageView(VkDevice device, VkImage image, VkFormat format);
+        VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent);
 
     };
 
