@@ -9,29 +9,38 @@
 
 namespace mar {
 
-	class DeviceVulkan;
-
 
 	class PhysicalDevVulkan {
-
-		friend class DeviceVulkan;
-
 	public:
 
-		VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
-		uint32_t m_familyIndex{ 0 };
+		static PhysicalDevVulkan* Instance();
 
-		void create(VkInstance instance);
+		
+		PhysicalDevVulkan() = default;
+
+		void create();
+
+		const VkPhysicalDevice& getPhyDev() const;
+		const uint32_t& getFamilyIndex() const;
 
 	private:
 
-		bool supportPresentation(VkPhysicalDevice physicalDevice, uint32_t familyIndex);
+		bool supportPresentation(VkPhysicalDevice physicalDevice, uint32_t familyIndex) const;
 
-        uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice);
+        uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice, bool displayInfo) const;
 
-        VkPhysicalDevice selectPhysicalDevice(VkInstance instance);
+        VkPhysicalDevice selectPhysicalDevice() const;
 
-		static void fillDeviceNeededExtensions(VkPhysicalDevice physicalDevice, std::vector<const char*>& extensionsToEnable);
+		void checkDeviceLayerProperties(std::vector<const char*>& layersToEnable) const;
+
+		void displayInfoAboutPhysicalDevice(VkPhysicalDevice physicalDevice, const char* message) const;
+		void displayInfoAboutQueueFamilyIndex(const VkQueueFlags& queueFlags) const;
+
+
+		static PhysicalDevVulkan* s_instance;
+
+		VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
+		uint32_t m_familyIndex{ 0 };
 
 	};
 

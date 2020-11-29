@@ -1,10 +1,18 @@
 
 
 #include "ContextVulkan.h"
+#include "ExtensionFiller.h"
 #include "../../VulkanLogging.h"
 
 
 namespace mar {
+
+
+    ContextVulkan* ContextVulkan::s_instance{ nullptr };
+
+    ContextVulkan* ContextVulkan::Instance() {
+        return s_instance;
+    }
 
 
     void ContextVulkan::create() {
@@ -30,9 +38,11 @@ namespace mar {
         createInfo.ppEnabledExtensionNames = extensionToEnable.data();
         createInfo.enabledExtensionCount = (uint32_t)extensionToEnable.size();
 
-        VK_CHECK(vkCreateInstance(&createInfo, nullptr, &m_instance));
+        VK_CHECK( vkCreateInstance(&createInfo, nullptr, &m_instance) );
 
         registerDebugCallback();
+
+        s_instance = this;
     }
 
     void ContextVulkan::close() {
@@ -42,9 +52,13 @@ namespace mar {
         vkDestroyInstance(m_instance, nullptr);
     }
 
+    const VkInstance& ContextVulkan::get() const {
+        return m_instance;
+    }
+
     uint32_t ContextVulkan::getVulkanApiVersion() {
         uint32_t apiVersion{ 0 };
-        VK_CHECK(vkEnumerateInstanceVersion(&apiVersion));
+        VK_CHECK( vkEnumerateInstanceVersion(&apiVersion) );
 
         std::cout << "Supported version: " << VK_VERSION_MAJOR(apiVersion) << "." << VK_VERSION_MINOR(apiVersion) <<
             "." << VK_VERSION_PATCH(apiVersion) << "\n";
@@ -52,20 +66,7 @@ namespace mar {
         return apiVersion;
     }
 
-    bool ContextVulkan::pushExtensionIfAvailable(std::vector<const char*>& extensionsToEnable, std::vector<VkExtensionProperties>& allExtensions, const char* extensionProperty) {
-        const auto availableExtension = [&extensionProperty](const VkExtensionProperties extension) {
-            return std::strcmp(extension.extensionName, extensionProperty) == 0;
-        };
-
-        if (std::find_if(allExtensions.cbegin(), allExtensions.cend(), availableExtension) != allExtensions.cend()) {
-            extensionsToEnable.emplace_back(extensionProperty);
-            return true;
-        }
-
-        return false;
-    }
-
-    void ContextVulkan::fillNeededInstanceExtensions(std::vector<const char*>& extensionToEnable) {
+    void ContextVulkan::fillNeededInstanceExtensions(std::vector<const char*>& extensionToEnable) const {
         uint32_t extensionCount{ 0 };
         VK_CHECK(vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr));
 
@@ -77,27 +78,20 @@ namespace mar {
         const bool isAvailableKHRSurface = pushExtensionIfAvailable(extensionToEnable, extensionProperties, VK_KHR_SURFACE_EXTENSION_NAME);
     }
 
-    void ContextVulkan::fillNeededLayers(std::vector<const char*>& layersToEnable) {
+    void ContextVulkan::fillNeededLayers(std::vector<const char*>& layersToEnable) const {
         uint32_t layerCount{ 0 };
-        VK_CHECK(vkEnumerateInstanceLayerProperties(&layerCount, nullptr));
+        VK_CHECK( vkEnumerateInstanceLayerProperties(&layerCount, nullptr) );
 
         std::vector<VkLayerProperties> availableLayers(layerCount);
-        VK_CHECK(vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()));
+        VK_CHECK( vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) );
 
-        const auto pushLayerIfAvailable = [&layersToEnable, &availableLayers](const char* layerProperty)->bool {
-            const auto availableProperty = [&layerProperty](const VkLayerProperties property) {
-                return std::strcmp(property.layerName, layerProperty) == 0;
-            };
+        std::cout << "Instance available layers: \n";
+        std::for_each(availableLayers.begin(), availableLayers.end(), [](const VkLayerProperties& property) {
+            std::cout << property.layerName << " ";
+        });
+        std::cout << "\n";
 
-            if (std::find_if(availableLayers.begin(), availableLayers.end(), availableProperty) != availableLayers.end()) {
-                layersToEnable.emplace_back(layerProperty);
-                return true;
-            }
-
-            return false;
-        };
-
-        const bool isAvailableKHRONOSValidation = pushLayerIfAvailable("VK_LAYER_KHRONOS_validation");
+        const bool isAvailableKHRONOSValidation = pushLayerIfAvailable(layersToEnable, availableLayers, "VK_LAYER_KHRONOS_validation");
     }
 
     void ContextVulkan::registerDebugCallback() {

@@ -173,7 +173,8 @@
     <ClCompile Include="3rd_party\OBJ_Loader\OBJ_Loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Vulkan\ContextVulkan.cpp" />
-    <ClCompile Include="src\Vulkan\DeviceVulkan.cpp" />
+    <ClCompile Include="src\Vulkan\ExtensionFiller.cpp" />
+    <ClCompile Include="src\Vulkan\LogicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\PhysicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\SwapchainVulkan.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
@@ -189,7 +190,8 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="3rd_party\OBJ_Loader\OBJ_Loader.h" />
     <ClInclude Include="src\Vulkan\ContextVulkan.h" />
-    <ClInclude Include="src\Vulkan\DeviceVulkan.h" />
+    <ClInclude Include="src\Vulkan\ExtensionFiller.h" />
+    <ClInclude Include="src\Vulkan\LogicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\PhysicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\SwapchainVulkan.h" />
     <ClInclude Include="VulkanLogging.h" />

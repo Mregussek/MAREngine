@@ -3,7 +3,7 @@
 #include "VulkanLogging.h"
 #include "src/Vulkan/ContextVulkan.h"
 #include "src/Vulkan/PhysicalDevVulkan.h"
-#include "src/Vulkan/DeviceVulkan.h"
+#include "src/Vulkan/LogicalDevVulkan.h"
 #include "src/Vulkan/SwapchainVulkan.h"
 #include "src/Window/Window.h"
 
@@ -129,7 +129,7 @@ VkCommandBuffer createCommandBuffer(VkDevice device, VkCommandPool commandPool) 
 
     VK_CHECK(vkAllocateCommandBuffers(device, &allocateInfo, &commandBuffer));
 
-return commandBuffer;
+    return commandBuffer;
 }
 
 VkShaderModule loadShader(VkDevice device, const char* path) {
@@ -137,24 +137,24 @@ VkShaderModule loadShader(VkDevice device, const char* path) {
     fseek(file, 0, SEEK_END);
     const long length = ftell(file);
     fseek(file, 0, SEEK_SET);
-    char* buffer = new char[length];
-    size_t rc = fread(buffer, 1, length, file);
+
+    std::vector<char> buffer(length);
+    const size_t rc = fread(buffer.data(), 1, length, file);
+
     fclose(file);
 
     VkShaderModuleCreateInfo createInfo{ VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
     createInfo.codeSize = length;
-    createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer);
+    createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
 
     VkShaderModule shaderModule{ 0 };
     VK_CHECK( vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) );
-
-    delete[] buffer;
 
     return shaderModule;
 }
 
 VkPipelineLayout createPipelineLayout(VkDevice device) {
-    VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+    constexpr VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
     VkPipelineLayout layout{ 0 };
 
     VK_CHECK(vkCreatePipelineLayout(device, &createInfo, nullptr, &layout));
@@ -165,19 +165,6 @@ VkPipelineLayout createPipelineLayout(VkDevice device) {
 VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPipelineLayout layout, VkPipelineCache pipelineCache, 
     VkViewport viewport, VkRect2D scissor, VkShaderModule vertex, VkShaderModule fragment) 
 {
-    std::array<VkPipelineShaderStageCreateInfo, 2> stages{ 
-        VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO },
-        VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO }
-    };
-
-    stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-    stages[0].module = vertex;
-    stages[0].pName = "main";
-
-    stages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    stages[1].module = fragment;
-    stages[1].pName = "main";
-
     VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
@@ -217,6 +204,19 @@ VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPi
     dynamicState.dynamicStateCount = dynamicStates.size();
     dynamicState.pDynamicStates = dynamicStates.data();
 
+    std::array<VkPipelineShaderStageCreateInfo, 2> stages{
+        VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO },
+        VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO }
+    };
+
+    stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
+    stages[0].module = vertex;
+    stages[0].pName = "main";
+
+    stages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    stages[1].module = fragment;
+    stages[1].pName = "main";
+
     VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
     createInfo.stageCount = stages.size();
     createInfo.pStages = stages.data();
@@ -232,7 +232,6 @@ VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPi
     createInfo.renderPass = renderPass;
 
     VkPipeline pipeline{ 0 };
-
     VK_CHECK(vkCreateGraphicsPipelines(device, pipelineCache, 1, &createInfo, nullptr, &pipeline));
 
     return pipeline;
@@ -262,34 +261,34 @@ int main(void) {
     contextVk.create();
     
     mar::PhysicalDevVulkan physicalDevVk;
-    physicalDevVk.create(contextVk.m_instance);
+    physicalDevVk.create();
 
-    mar::DeviceVulkan deviceVk;
-    deviceVk.create(physicalDevVk.m_physicalDevice, physicalDevVk.m_familyIndex);
+    mar::LogicalDevVulkan deviceVk;
+    deviceVk.create();
 
-    const auto surface{ createSurface(contextVk.m_instance, window.getWindow()) };
+    const auto surface{ createSurface(contextVk.get(), window.getWindow()) };
 
     VkBool32 presentSupported{ 0 };
-    VK_CHECK( vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevVk.m_physicalDevice, physicalDevVk.m_familyIndex, surface, &presentSupported) );
+    VK_CHECK( vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevVk.getPhyDev(), physicalDevVk.getFamilyIndex(), surface, &presentSupported) );
 
     VkSurfaceCapabilitiesKHR surfaceCaps{ 0 };
-    VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.m_physicalDevice, surface, &surfaceCaps) );
+    VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.getPhyDev(), surface, &surfaceCaps) );
 
     const VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
-    const VkPresentModeKHR presentMode{ getPresentMode(physicalDevVk.m_physicalDevice, surface) };
+    const VkPresentModeKHR presentMode{ getPresentMode(physicalDevVk.getPhyDev(), surface) };
 
     const VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
     const VkRect2D scissor{ {0, 0 }, windowSize };
 
-    const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.m_physicalDevice, surface) };
+    const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.getPhyDev(), surface) };
 
     mar::SwapchainVulkan swapchainStruct(windowSize);
-    swapchainStruct.create(deviceVk.m_device, surface, surfaceCaps, presentMode, swapchainFormat, &physicalDevVk.m_familyIndex);
+    swapchainStruct.create(deviceVk.m_device, surface, surfaceCaps, presentMode, swapchainFormat);
 
     const auto releaseSemaphore{ createSemaphore(deviceVk.m_device) };
     const auto acquireSemaphore{ createSemaphore(deviceVk.m_device) };
     const auto renderPass{ createRenderPass(deviceVk.m_device, swapchainFormat) };
-    const auto commandPool{ createCommandPool(deviceVk.m_device, physicalDevVk.m_familyIndex) };
+    const auto commandPool{ createCommandPool(deviceVk.m_device, physicalDevVk.getFamilyIndex()) };
     const auto commandBuffer{ createCommandBuffer(deviceVk.m_device, commandPool) };
     const auto triangleVertShader{ loadShader(deviceVk.m_device, "resources/triangle.vert.spv") };
     const auto triangleFragShader{ loadShader(deviceVk.m_device, "resources/triangle.frag.spv") };
@@ -298,7 +297,7 @@ int main(void) {
     const auto trianglePipeline{ createGraphicsPipeline(deviceVk.m_device, renderPass, triangleLayout, pipelineCache, viewport, scissor, triangleVertShader, triangleFragShader) };
 
     VkQueue queue{ 0 };
-    vkGetDeviceQueue(deviceVk.m_device, physicalDevVk.m_familyIndex, 0, &queue);
+    vkGetDeviceQueue(deviceVk.m_device, physicalDevVk.getFamilyIndex(), 0, &queue);
 
     swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.m_device, renderPass, swapchainFormat, windowSize);
 
@@ -394,7 +393,7 @@ int main(void) {
     vkDestroySemaphore(deviceVk.m_device, releaseSemaphore, nullptr);
     vkDestroySemaphore(deviceVk.m_device, acquireSemaphore, nullptr);
 
-    vkDestroySurfaceKHR(contextVk.m_instance, surface, nullptr);
+    vkDestroySurfaceKHR(contextVk.get(), surface, nullptr);
 
     deviceVk.close();
 

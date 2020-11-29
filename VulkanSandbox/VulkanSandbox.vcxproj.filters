@@ -42,10 +42,13 @@
     <ClCompile Include="src\Vulkan\PhysicalDevVulkan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\DeviceVulkan.cpp">
+    <ClCompile Include="src\Window\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Window\Window.cpp">
+    <ClCompile Include="src\Vulkan\LogicalDevVulkan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\ExtensionFiller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,10 +95,13 @@
     <ClInclude Include="src\Vulkan\PhysicalDevVulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Vulkan\DeviceVulkan.h">
+    <ClInclude Include="src\Window\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window\Window.h">
+    <ClInclude Include="src\Vulkan\LogicalDevVulkan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vulkan\ExtensionFiller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

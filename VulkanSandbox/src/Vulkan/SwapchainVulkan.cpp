@@ -1,6 +1,7 @@
 
 
 #include "SwapchainVulkan.h"
+#include "PhysicalDevVulkan.h"
 #include "../../VulkanLogging.h"
 
 
@@ -47,7 +48,7 @@ namespace mar {
     {}
 
 
-    void SwapchainVulkan::create(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format, const uint32_t* familyIndex) {
+    void SwapchainVulkan::create(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format) {
         VkCompositeAlphaFlagBitsKHR surfaceComposite = [&surfaceCaps]() {
             if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) {
                 return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR };
@@ -72,7 +73,7 @@ namespace mar {
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         createInfo.queueFamilyIndexCount = 1;
-        createInfo.pQueueFamilyIndices = familyIndex;
+        createInfo.pQueueFamilyIndices = &PhysicalDevVulkan::Instance()->getFamilyIndex();
         createInfo.presentMode = presentMode;
         createInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
         createInfo.compositeAlpha = surfaceComposite;

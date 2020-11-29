@@ -10,13 +10,17 @@
 namespace mar {
 
 
-	class DeviceVulkan {
+	class LogicalDevVulkan {
 	public:
 
 		VkDevice m_device{ VK_NULL_HANDLE };
 
-		void create(VkPhysicalDevice physicalDevice, uint32_t familyIndex);
+		void create();
 		void close();
+
+	private:
+
+		void fillDeviceNeededExtensions(VkPhysicalDevice physicalDevice, std::vector<const char*>& extensionsToEnable);
 
 	};
 

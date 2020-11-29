@@ -9,32 +9,31 @@
 
 namespace mar {
 
-    class PhysicalDevVulkan;
-
 
 	class ContextVulkan {
-
-        friend class PhysicalDevVulkan;
-
     public:
 
-        VkInstance m_instance{ VK_NULL_HANDLE };
-        VkDebugReportCallbackEXT m_callback{ VK_NULL_HANDLE };
+        static ContextVulkan* Instance();
 
         void create();
         void close();
+
+        const VkInstance& get() const;
 
     private:
 
         uint32_t getVulkanApiVersion();
 
-        static bool pushExtensionIfAvailable(std::vector<const char*>& extensionsToEnable, std::vector<VkExtensionProperties>& allExtensions, const char* extensionProperty);
-
-        void fillNeededInstanceExtensions(std::vector<const char*>& extensionToEnable);
-
-        void fillNeededLayers(std::vector<const char*>& layersToEnable);
+        void fillNeededInstanceExtensions(std::vector<const char*>& extensionToEnable) const;
+        void fillNeededLayers(std::vector<const char*>& layersToEnable) const;
 
         void registerDebugCallback();
+
+
+        static ContextVulkan* s_instance;
+
+        VkInstance m_instance{ VK_NULL_HANDLE };
+        VkDebugReportCallbackEXT m_callback{ VK_NULL_HANDLE };
 
 	};
 

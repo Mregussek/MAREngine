@@ -1,10 +1,15 @@
 
 
+#pragma warning( push )
+#pragma warning( disable : 28612 )
 
 #include "vulkan/vulkan.h" 
 
+#pragma warning (pop)
+
+
 #ifndef NOMINAX
-#define NOMINAX
+	#define NOMINAX
 #endif
 
 #undef max

@@ -23,7 +23,7 @@ namespace mar {
         SwapchainVulkan() = default;
         SwapchainVulkan(VkExtent2D swapchainSize);
 
-        void create(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format, const uint32_t* familyIndex);
+        void create(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format);
         void close(VkDevice device);
 
         void fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format, VkExtent2D extent);
