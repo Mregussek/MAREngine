@@ -5,7 +5,9 @@
 #include "src/Vulkan/PhysicalDevVulkan.h"
 #include "src/Vulkan/LogicalDevVulkan.h"
 #include "src/Vulkan/SwapchainVulkan.h"
+#include "src/Vulkan/BufferVulkan.h"
 #include "src/Window/Window.h"
+#include "src/Mesh/Mesh.h"
 
 
 
@@ -165,7 +167,27 @@ VkPipelineLayout createPipelineLayout(VkDevice device) {
 VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPipelineLayout layout, VkPipelineCache pipelineCache, 
     VkViewport viewport, VkRect2D scissor, VkShaderModule vertex, VkShaderModule fragment) 
 {
+    std::array<VkVertexInputBindingDescription, 1> bindings;
+    bindings[0].binding = 0;
+    bindings[0].stride = 32;
+    bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+    std::array<VkVertexInputAttributeDescription, 3> attributes;
+    attributes[0].location = 0;
+    attributes[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributes[0].offset = 0;
+    attributes[1].location = 1;
+    attributes[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+    attributes[1].offset = 12;
+    attributes[2].location = 2;
+    attributes[2].format = VK_FORMAT_R32G32_SFLOAT;
+    attributes[2].offset = 24;
+
     VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
+    vertexInput.vertexBindingDescriptionCount = bindings.size();
+    vertexInput.pVertexBindingDescriptions = bindings.data();
+    vertexInput.vertexAttributeDescriptionCount = attributes.size();
+    vertexInput.pVertexAttributeDescriptions = attributes.data();
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -208,11 +230,9 @@ VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPi
         VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO },
         VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO }
     };
-
     stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
     stages[0].module = vertex;
     stages[0].pName = "main";
-
     stages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
     stages[1].module = fragment;
     stages[1].pName = "main";
@@ -257,13 +277,13 @@ int main(void) {
     mar::Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
 
-    mar::ContextVulkan contextVk;
+    mar::ContextVulkan contextVk{};
     contextVk.create();
     
-    mar::PhysicalDevVulkan physicalDevVk;
+    mar::PhysicalDevVulkan physicalDevVk{};
     physicalDevVk.create();
 
-    mar::LogicalDevVulkan deviceVk;
+    mar::LogicalDevVulkan deviceVk{};
     deviceVk.create();
 
     const auto surface{ createSurface(contextVk.get(), window.getWindow()) };
@@ -286,7 +306,7 @@ int main(void) {
     const auto commandBuffer{ createCommandBuffer(deviceVk.m_device, commandPool) };
     const auto triangleVertShader{ loadShader(deviceVk.m_device, "resources/triangle.vert.spv") };
     const auto triangleFragShader{ loadShader(deviceVk.m_device, "resources/triangle.frag.spv") };
-    VkPipelineCache pipelineCache{ 0 }; // critical for perfomance
+    constexpr VkPipelineCache pipelineCache{ 0 }; // critical for perfomance
     const auto triangleLayout{ createPipelineLayout(deviceVk.m_device) };
     const auto trianglePipeline{ createGraphicsPipeline(deviceVk.m_device, renderPass, triangleLayout, pipelineCache, viewport, scissor, triangleVertShader, triangleFragShader) };
 
@@ -296,6 +316,17 @@ int main(void) {
     mar::SwapchainVulkan swapchainStruct(windowSize);
     swapchainStruct.create(deviceVk.m_device, surface, presentMode, swapchainFormat);
     swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.m_device, renderPass, swapchainFormat);
+
+    mar::Mesh mesh{};
+    mesh.loadFromFile("resources/monkey.obj");
+
+    mar::BufferVulkan vertexBuffer{};
+    vertexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
+    memcpy(vertexBuffer.m_data, mesh.m_vertices.data(), mesh.m_vertices.size() * 32);
+
+    mar::BufferVulkan indexBuffer{};
+    indexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
+    memcpy(indexBuffer.m_data, mesh.m_indices.data(), mesh.m_indices.size() * 4);
 
     while (window.shouldClose()) {
         swapchainStruct.resizeIfNecessary(deviceVk.m_device, surface, presentMode, swapchainFormat, renderPass);
@@ -332,7 +363,13 @@ int main(void) {
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, trianglePipeline);
-        vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+
+        VkDeviceSize dummyOffset{ VK_NULL_HANDLE };
+        vkCmdBindVertexBuffers(commandBuffer, 0, 1, &vertexBuffer.m_buffer, &dummyOffset);
+        vkCmdBindIndexBuffer(commandBuffer, indexBuffer.m_buffer, dummyOffset, VK_INDEX_TYPE_UINT32);
+
+        //vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+        vkCmdDrawIndexed(commandBuffer, mesh.m_indices.size(), 1, 0, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);
 
@@ -392,6 +429,9 @@ int main(void) {
     vkDestroySemaphore(deviceVk.m_device, acquireSemaphore, nullptr);
 
     vkDestroySurfaceKHR(contextVk.get(), surface, nullptr);
+
+    vertexBuffer.close(deviceVk.m_device);
+    indexBuffer.close(deviceVk.m_device);
 
     deviceVk.close();
 

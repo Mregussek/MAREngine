@@ -16,6 +16,10 @@ namespace mar {
 
 
     void ContextVulkan::create() {
+#if MAR_ENGINE_USE_VOLK
+            VK_CHECK( volkInitialize() );
+#endif
+        
         const auto apiVersion = getVulkanApiVersion();
 
         std::vector<const char*> layersToEnable;
@@ -39,6 +43,10 @@ namespace mar {
         createInfo.enabledExtensionCount = (uint32_t)extensionToEnable.size();
 
         VK_CHECK( vkCreateInstance(&createInfo, nullptr, &m_instance) );
+
+#if MAR_ENGINE_USE_VOLK
+        volkLoadInstance(m_instance);
+#endif
 
         registerDebugCallback();
 

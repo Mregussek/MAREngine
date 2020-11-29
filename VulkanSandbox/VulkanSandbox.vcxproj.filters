@@ -51,6 +51,15 @@
     <ClCompile Include="src\Vulkan\ExtensionFiller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mesh\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\BufferVulkan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\volk\volk.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanInclude.h">
@@ -102,6 +111,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vulkan\ExtensionFiller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vulkan\BufferVulkan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="3rd_party\volk\volk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -246,6 +246,7 @@
     <ClInclude Include="3rd_party\pybind11\include\pybind11\stl.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\stl_bind.h" />
     <ClInclude Include="3rd_party\stb_image\include\stb_image\stb_image.h" />
+    <ClInclude Include="3rd_party\volk\volk.h" />
     <ClInclude Include="include\MAREngine\MAREngine.h" />
     <ClInclude Include="src\Core\ecs\Components\CameraComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\Components.h" />
@@ -348,6 +349,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
+    <ClCompile Include="3rd_party\volk\volk.c" />
     <ClCompile Include="src\Core\ecs\Components\DefaultComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\EntityCollection-impl.cpp" />

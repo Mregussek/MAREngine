@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;_CONSOLE;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\Vulkan\Include;$(SolutionDir)VulkanSandbox\3rd_party\OBJ_Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\volk;$(SolutionDir)MAREngine\3rd_party\Vulkan\Include;$(SolutionDir)VulkanSandbox\3rd_party\OBJ_Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include</AdditionalIncludeDirectories>
       <SupportJustMyCode>false</SupportJustMyCode>
       <CompileAsManaged>false</CompileAsManaged>
       <Optimization>MaxSpeed</Optimization>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;_CONSOLE;VK_USE_PLATFORM_WIN32_KHR;GLFW_EXPOSE_NATIVE_WIN32;CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;WIN32;_NO_CRT_STDIO_INLINE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\Vulkan\Include;$(SolutionDir)VulkanSandbox\3rd_party\OBJ_Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)VulkanSandbox\3rd_party\volk;$(SolutionDir)MAREngine\3rd_party\Vulkan\Include;$(SolutionDir)VulkanSandbox\3rd_party\OBJ_Loader;$(SolutionDir)VulkanSandbox\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAsManaged>false</CompileAsManaged>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -171,7 +171,10 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\OBJ_Loader\OBJ_Loader.cpp" />
+    <ClCompile Include="3rd_party\volk\volk.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\Mesh\Mesh.cpp" />
+    <ClCompile Include="src\Vulkan\BufferVulkan.cpp" />
     <ClCompile Include="src\Vulkan\ContextVulkan.cpp" />
     <ClCompile Include="src\Vulkan\ExtensionFiller.cpp" />
     <ClCompile Include="src\Vulkan\LogicalDevVulkan.cpp" />
@@ -189,6 +192,9 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="3rd_party\OBJ_Loader\OBJ_Loader.h" />
+    <ClInclude Include="3rd_party\volk\volk.h" />
+    <ClInclude Include="src\Mesh\Mesh.h" />
+    <ClInclude Include="src\Vulkan\BufferVulkan.h" />
     <ClInclude Include="src\Vulkan\ContextVulkan.h" />
     <ClInclude Include="src\Vulkan\ExtensionFiller.h" />
     <ClInclude Include="src\Vulkan\LogicalDevVulkan.h" />

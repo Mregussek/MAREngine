@@ -417,6 +417,9 @@
     <ClInclude Include="src\Core\graphics\Renderer\ShaderBufferStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="3rd_party\volk\volk.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -648,6 +651,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Renderer\ShaderBufferStorage.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\volk\volk.c">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
