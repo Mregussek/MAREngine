@@ -33,5 +33,13 @@ namespace mar {
         return false;
     }
 
+    void displayInfoAboutAvailableLayers(const std::vector<VkLayerProperties>& availableLayers, const char* message) {
+        std::cout << message;
+        std::for_each(availableLayers.begin(), availableLayers.end(), [](const VkLayerProperties& property) {
+            std::cout << property.layerName << " ";
+            });
+        std::cout << "\n";
+    }
+
 
 }

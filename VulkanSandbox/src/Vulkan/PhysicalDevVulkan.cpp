@@ -2,6 +2,7 @@
 
 #include "PhysicalDevVulkan.h"
 #include "ContextVulkan.h"
+#include "ExtensionFiller.h"
 #include "../../VulkanLogging.h"
 
 
@@ -16,10 +17,13 @@ namespace mar {
 
     void PhysicalDevVulkan::create() {
         m_physicalDevice = selectPhysicalDevice();
-        m_familyIndex = getGraphicsQueueFamily(m_physicalDevice, true);
+        auto [m_familyQueueProperties, m_familyIndex] = getGraphicsQueueFamilyWithProperties(m_physicalDevice);
 
-        std::vector<const char*> layersToEnable;
-        checkDeviceLayerProperties(layersToEnable);
+        //std::vector<const char*> layersToEnable;
+        //checkDeviceLayerProperties(layersToEnable);
+
+        //displayInfoAboutPhysicalDevice(m_physicalDevice, "Main Physical Device");
+        //displayInfoAboutQueueFamilyIndex(m_familyQueueProperties.queueFlags);
 
         s_instance = this;
     }
@@ -41,7 +45,7 @@ namespace mar {
         }
     }
 
-    uint32_t PhysicalDevVulkan::getGraphicsQueueFamily(VkPhysicalDevice physicalDevice, bool displayInfo) const {
+    const std::pair<VkQueueFamilyProperties, uint32_t> PhysicalDevVulkan::getGraphicsQueueFamilyWithProperties(VkPhysicalDevice physicalDevice) const {
         uint32_t queuesCount{ 0 };
         vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, nullptr);
 
@@ -50,7 +54,22 @@ namespace mar {
 
         for (uint32_t i = 0; i < queuesCount; i++) {
             if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) { 
-                if (displayInfo) { displayInfoAboutQueueFamilyIndex(queues[i].queueFlags); }
+                return { queues[i], i };
+            }
+        }
+
+        return { { VK_NULL_HANDLE}, VK_QUEUE_FAMILY_IGNORED };
+    }
+
+    uint32_t PhysicalDevVulkan::getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) const {
+        uint32_t queuesCount{ 0 };
+        vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, nullptr);
+
+        std::vector<VkQueueFamilyProperties> queues(queuesCount);
+        vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queuesCount, queues.data());
+
+        for (uint32_t i = 0; i < queuesCount; i++) {
+            if (queues[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
                 return i;
             }
         }
@@ -75,7 +94,7 @@ namespace mar {
             //VkPhysicalDeviceFeatures deviceFeatures;  // features can be also checked
             //vkGetPhysicalDeviceFeatures(physicalDevice, &deviceFeatures);
 
-            const auto familyIndex = getGraphicsQueueFamily(physicalDevice, false);
+            const auto familyIndex = getGraphicsQueueFamily(physicalDevice);
 
             if (familyIndex == VK_QUEUE_FAMILY_IGNORED) { return false; }
             if (!supportPresentation(physicalDevice, familyIndex)) { return false; };
@@ -86,11 +105,9 @@ namespace mar {
         const auto physicalDevProposal = std::find_if(physicalDevices.cbegin(), physicalDevices.cend(), isSuitable);
 
         if (physicalDevProposal != physicalDevices.end()) {
-            displayInfoAboutPhysicalDevice(*physicalDevProposal, "Main Physical Device");
             return *physicalDevProposal;
         }
         else if (physicalDevices.size() > 0) {
-            displayInfoAboutPhysicalDevice(physicalDevices[0], "Fallback Physical Device");
             return physicalDevices[0];
         }
 
@@ -104,11 +121,7 @@ namespace mar {
         std::vector<VkLayerProperties> availableLayers(layerCount);
         VK_CHECK( vkEnumerateDeviceLayerProperties(m_physicalDevice, &layerCount, availableLayers.data()) );
 
-        std::cout << "Physical Device available layers: \n";
-        std::for_each(availableLayers.begin(), availableLayers.end(), [](const VkLayerProperties& property) {
-            std::cout << property.layerName << " ";
-        });
-        std::cout << "\n";
+        //displayInfoAboutAvailableLayers(availableLayers, "Physical Device available layers: \n");
 
         //const bool isAvailableKHRONOSValidation = ContextVulkan::pushLayerIfAvailable(layersToEnable, availableLayers, "VK_LAYER_KHRONOS_validation");
     }

@@ -60,8 +60,7 @@ namespace mar {
         uint32_t apiVersion{ 0 };
         VK_CHECK( vkEnumerateInstanceVersion(&apiVersion) );
 
-        std::cout << "Supported version: " << VK_VERSION_MAJOR(apiVersion) << "." << VK_VERSION_MINOR(apiVersion) <<
-            "." << VK_VERSION_PATCH(apiVersion) << "\n";
+        //std::cout << "Supported version: " << VK_VERSION_MAJOR(apiVersion) << "." << VK_VERSION_MINOR(apiVersion) << "." << VK_VERSION_PATCH(apiVersion) << "\n";
 
         return apiVersion;
     }
@@ -85,11 +84,7 @@ namespace mar {
         std::vector<VkLayerProperties> availableLayers(layerCount);
         VK_CHECK( vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data()) );
 
-        std::cout << "Instance available layers: \n";
-        std::for_each(availableLayers.begin(), availableLayers.end(), [](const VkLayerProperties& property) {
-            std::cout << property.layerName << " ";
-        });
-        std::cout << "\n";
+        //displayInfoAboutAvailableLayers(availableLayers, "Instance available layers: \n");
 
         const bool isAvailableKHRONOSValidation = pushLayerIfAvailable(layersToEnable, availableLayers, "VK_LAYER_KHRONOS_validation");
     }

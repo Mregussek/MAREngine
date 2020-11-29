@@ -14,6 +14,8 @@ namespace mar {
 
 	bool pushLayerIfAvailable(std::vector<const char*>& layersToEnable, std::vector<VkLayerProperties>& allLayers, const char* layerProperty);
 
+	void displayInfoAboutAvailableLayers(const std::vector<VkLayerProperties>& availableLayers, const char* message);
+
 }
 
 

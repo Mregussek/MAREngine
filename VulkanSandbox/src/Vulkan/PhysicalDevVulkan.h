@@ -27,7 +27,8 @@ namespace mar {
 
 		bool supportPresentation(VkPhysicalDevice physicalDevice, uint32_t familyIndex) const;
 
-        uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice, bool displayInfo) const;
+		const std::pair<VkQueueFamilyProperties, uint32_t> getGraphicsQueueFamilyWithProperties(VkPhysicalDevice physicalDevice) const;
+		uint32_t getGraphicsQueueFamily(VkPhysicalDevice physicalDevice) const;
 
         VkPhysicalDevice selectPhysicalDevice() const;
 
@@ -40,6 +41,7 @@ namespace mar {
 		static PhysicalDevVulkan* s_instance;
 
 		VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
+		VkQueueFamilyProperties m_familyQueueProperties{ VK_NULL_HANDLE };
 		uint32_t m_familyIndex{ 0 };
 
 	};
