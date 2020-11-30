@@ -296,8 +296,9 @@ int main(void) {
     const VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
     const VkRect2D scissor{ {0, 0 }, windowSize };
 
-    const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.getPhyDev(), surface) };
+    constexpr VkPipelineCache pipelineCache{ VK_NULL_HANDLE }; // critical for perfomance
 
+    const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.getPhyDev(), surface) };
     const auto releaseSemaphore{ createSemaphore(deviceVk.m_device) };
     const auto acquireSemaphore{ createSemaphore(deviceVk.m_device) };
     const auto renderPass{ createRenderPass(deviceVk.m_device, swapchainFormat) };
@@ -305,7 +306,6 @@ int main(void) {
     const auto commandBuffer{ createCommandBuffer(deviceVk.m_device, commandPool) };
     const auto triangleVertShader{ loadShader(deviceVk.m_device, "resources/triangle.vert.spv") };
     const auto triangleFragShader{ loadShader(deviceVk.m_device, "resources/triangle.frag.spv") };
-    constexpr VkPipelineCache pipelineCache{ 0 }; // critical for perfomance
     const auto triangleSetLayout{ createDescriptorSetLayout(deviceVk.m_device) };
     const auto triangleLayout{ createPipelineLayout(deviceVk.m_device, triangleSetLayout) };
     const auto trianglePipeline{ createGraphicsPipeline(deviceVk.m_device, renderPass, triangleLayout, pipelineCache, viewport, scissor, triangleVertShader, triangleFragShader) };
@@ -324,11 +324,11 @@ int main(void) {
 
     mar::BufferVulkan vertexBuffer{};
     vertexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, vertexUsageFlags);
-    memcpy(vertexBuffer.m_data, mesh.m_vertices.data(), mesh.m_vertices.size() * sizeof(objl::Vertex));
+    vertexBuffer.update(mesh.m_vertices);
 
     mar::BufferVulkan indexBuffer{};
     indexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
-    memcpy(indexBuffer.m_data, mesh.m_indices.data(), mesh.m_indices.size() * sizeof(uint32_t));
+    indexBuffer.update(mesh.m_indices);
 
     while (window.shouldClose()) {
         swapchainStruct.resizeIfNecessary(deviceVk.m_device, surface, presentMode, swapchainFormat, renderPass);

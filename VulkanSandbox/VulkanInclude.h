@@ -3,26 +3,11 @@
 #pragma warning( push )
 #pragma warning( disable : 28612 )
 
-#define MAR_ENGINE_USE_VOLK 1
-
-#if MAR_ENGINE_USE_VOLK
-
 #if __has_include(<volk.h>)
 	#include <volk.h> 
 	#define MAR_ENGINE_VOLK_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import volk.h!"
-#endif
-
-#else
-
-#if __has_include(<vulkan/vulkan.h>)
-	#include <vulkan/vulkan.h> 
-	#define MAR_ENGINE_VULKAN_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import vulkan/vulkan.h!"
-#endif
-
 #endif
 
 #pragma warning (pop)

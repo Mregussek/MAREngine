@@ -20,6 +20,11 @@ namespace mar {
         void create(VkDevice device, VkDeviceSize size, VkBufferUsageFlags useFlags);
         void close(VkDevice device);
 
+        template<typename T>
+        void update(const std::vector<T>& data) {
+            memcpy(m_data, data.data(), data.size() * sizeof(T));
+        }
+
     private:
 
         uint32_t getMemoryTypeIndex(const VkPhysicalDeviceMemoryProperties& memoryProperties, uint32_t memoryTypeBits, VkMemoryPropertyFlags flags) const;

@@ -16,9 +16,7 @@ namespace mar {
 
 
     void ContextVulkan::create() {
-#if MAR_ENGINE_USE_VOLK
-            VK_CHECK( volkInitialize() );
-#endif
+        VK_CHECK(volkInitialize());
         
         const auto apiVersion = getVulkanApiVersion();
 
@@ -44,9 +42,7 @@ namespace mar {
 
         VK_CHECK( vkCreateInstance(&createInfo, nullptr, &m_instance) );
 
-#if MAR_ENGINE_USE_VOLK
         volkLoadInstance(m_instance);
-#endif
 
         registerDebugCallback();
 
