@@ -22,11 +22,15 @@ namespace mar {
         std::vector<const char*> extensionsToEnable;
         fillDeviceNeededExtensions(PhysicalDevVulkan::Instance()->getPhyDev(), extensionsToEnable);
 
+        VkPhysicalDeviceFeatures features{};
+        features.vertexPipelineStoresAndAtomics = VK_TRUE; // we aren't using this yet
+
         VkDeviceCreateInfo createInfo{ VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO };
         createInfo.queueCreateInfoCount = deviceQueueInfo.size();
         createInfo.pQueueCreateInfos = deviceQueueInfo.data();
         createInfo.enabledExtensionCount = extensionsToEnable.size();
         createInfo.ppEnabledExtensionNames = extensionsToEnable.data();
+        createInfo.pEnabledFeatures = &features;
 
         VK_CHECK( vkCreateDevice(PhysicalDevVulkan::Instance()->getPhyDev(), &createInfo, nullptr, &m_device) );
     }
@@ -43,6 +47,7 @@ namespace mar {
         VK_CHECK(vkEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, extensionProperties.data()));
 
         const bool isAvailableSwapchain = pushExtensionIfAvailable(extensionsToEnable, extensionProperties, VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+        const bool isAvailablePushDescriptor = pushExtensionIfAvailable(extensionsToEnable, extensionProperties, VK_KHR_PUSH_DESCRIPTOR_EXTENSION_NAME);
     }
 
 

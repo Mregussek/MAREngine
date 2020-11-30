@@ -156,9 +156,25 @@ VkShaderModule loadShader(VkDevice device, const char* path) {
 }
 
 VkPipelineLayout createPipelineLayout(VkDevice device) {
-    constexpr VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-    VkPipelineLayout layout{ 0 };
+    std::array<VkDescriptorSetLayoutBinding, 1> setBindings;
+    setBindings[0].binding = 0;
+    setBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    setBindings[0].descriptorCount = 1;
+    setBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    
+    VkDescriptorSetLayoutCreateInfo setLayoutCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
+    setLayoutCreateInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
+    setLayoutCreateInfo.bindingCount = setBindings.size();
+    setLayoutCreateInfo.pBindings = setBindings.data();
 
+    std::array<VkDescriptorSetLayout, 1> setLayouts{ VK_NULL_HANDLE };
+    VK_CHECK( vkCreateDescriptorSetLayout(device, &setLayoutCreateInfo, nullptr, &setLayouts[0]) );
+
+    VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+    createInfo.setLayoutCount = setLayouts.size();
+    createInfo.pSetLayouts = setLayouts.data();
+
+    VkPipelineLayout layout{ VK_NULL_HANDLE };
     VK_CHECK(vkCreatePipelineLayout(device, &createInfo, nullptr, &layout));
 
     return layout;
@@ -167,27 +183,7 @@ VkPipelineLayout createPipelineLayout(VkDevice device) {
 VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPipelineLayout layout, VkPipelineCache pipelineCache, 
     VkViewport viewport, VkRect2D scissor, VkShaderModule vertex, VkShaderModule fragment) 
 {
-    std::array<VkVertexInputBindingDescription, 1> bindings;
-    bindings[0].binding = 0;
-    bindings[0].stride = 32;
-    bindings[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-
-    std::array<VkVertexInputAttributeDescription, 3> attributes;
-    attributes[0].location = 0;
-    attributes[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributes[0].offset = 0;
-    attributes[1].location = 1;
-    attributes[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-    attributes[1].offset = 12;
-    attributes[2].location = 2;
-    attributes[2].format = VK_FORMAT_R32G32_SFLOAT;
-    attributes[2].offset = 24;
-
     VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
-    vertexInput.vertexBindingDescriptionCount = bindings.size();
-    vertexInput.pVertexBindingDescriptions = bindings.data();
-    vertexInput.vertexAttributeDescriptionCount = attributes.size();
-    vertexInput.pVertexAttributeDescriptions = attributes.data();
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
     inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -322,11 +318,11 @@ int main(void) {
 
     mar::BufferVulkan vertexBuffer{};
     vertexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
-    memcpy(vertexBuffer.m_data, mesh.m_vertices.data(), mesh.m_vertices.size() * 32);
+    memcpy(vertexBuffer.m_data, mesh.m_vertices.data(), mesh.m_vertices.size() * sizeof(objl::Vertex));
 
     mar::BufferVulkan indexBuffer{};
     indexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
-    memcpy(indexBuffer.m_data, mesh.m_indices.data(), mesh.m_indices.size() * 4);
+    memcpy(indexBuffer.m_data, mesh.m_indices.data(), mesh.m_indices.size() * sizeof(uint32_t));
 
     while (window.shouldClose()) {
         swapchainStruct.resizeIfNecessary(deviceVk.m_device, surface, presentMode, swapchainFormat, renderPass);
@@ -364,11 +360,21 @@ int main(void) {
 
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, trianglePipeline);
 
-        VkDeviceSize dummyOffset{ VK_NULL_HANDLE };
-        vkCmdBindVertexBuffers(commandBuffer, 0, 1, &vertexBuffer.m_buffer, &dummyOffset);
-        vkCmdBindIndexBuffer(commandBuffer, indexBuffer.m_buffer, dummyOffset, VK_INDEX_TYPE_UINT32);
+        VkDescriptorBufferInfo bufferInfo;
+        bufferInfo.buffer = vertexBuffer.m_buffer;
+        bufferInfo.offset = 0;
+        bufferInfo.range = vertexBuffer.m_size;
 
-        //vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+        std::array<VkWriteDescriptorSet, 1> descriptors;
+        descriptors[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        descriptors[0].dstBinding = 0;
+        descriptors[0].descriptorCount = 1;
+        descriptors[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        descriptors[0].pBufferInfo = &bufferInfo;
+
+        vkCmdPushDescriptorSetKHR(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, triangleLayout, 0, 1, descriptors.data());
+
+        vkCmdBindIndexBuffer(commandBuffer, indexBuffer.m_buffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(commandBuffer, mesh.m_indices.size(), 1, 0, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);

@@ -3,7 +3,7 @@
 #pragma warning( push )
 #pragma warning( disable : 28612 )
 
-#define MAR_ENGINE_USE_VOLK 0
+#define MAR_ENGINE_USE_VOLK 1
 
 #if MAR_ENGINE_USE_VOLK
 
