@@ -10,7 +10,6 @@
 #include "src/Mesh/Mesh.h"
 
 
-
 VkSurfaceKHR createSurface(VkInstance instance, GLFWwindow* window) {
     if constexpr (VK_USE_PLATFORM_WIN32_KHR) {
         VkWin32SurfaceCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR };
@@ -155,24 +154,28 @@ VkShaderModule loadShader(VkDevice device, const char* path) {
     return shaderModule;
 }
 
-VkPipelineLayout createPipelineLayout(VkDevice device) {
+VkDescriptorSetLayout createDescriptorSetLayout(VkDevice device) {
     std::array<VkDescriptorSetLayoutBinding, 1> setBindings;
     setBindings[0].binding = 0;
     setBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     setBindings[0].descriptorCount = 1;
     setBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-    
+
     VkDescriptorSetLayoutCreateInfo setLayoutCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
     setLayoutCreateInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
     setLayoutCreateInfo.bindingCount = setBindings.size();
     setLayoutCreateInfo.pBindings = setBindings.data();
 
-    std::array<VkDescriptorSetLayout, 1> setLayouts{ VK_NULL_HANDLE };
-    VK_CHECK( vkCreateDescriptorSetLayout(device, &setLayoutCreateInfo, nullptr, &setLayouts[0]) );
+    VkDescriptorSetLayout setLayouts{ VK_NULL_HANDLE };
+    VK_CHECK(vkCreateDescriptorSetLayout(device, &setLayoutCreateInfo, nullptr, &setLayouts));
 
+    return setLayouts;
+}
+
+VkPipelineLayout createPipelineLayout(VkDevice device, VkDescriptorSetLayout setLayout) {
     VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-    createInfo.setLayoutCount = setLayouts.size();
-    createInfo.pSetLayouts = setLayouts.data();
+    createInfo.setLayoutCount = 1;
+    createInfo.pSetLayouts = &setLayout;
 
     VkPipelineLayout layout{ VK_NULL_HANDLE };
     VK_CHECK(vkCreatePipelineLayout(device, &createInfo, nullptr, &layout));
@@ -303,7 +306,8 @@ int main(void) {
     const auto triangleVertShader{ loadShader(deviceVk.m_device, "resources/triangle.vert.spv") };
     const auto triangleFragShader{ loadShader(deviceVk.m_device, "resources/triangle.frag.spv") };
     constexpr VkPipelineCache pipelineCache{ 0 }; // critical for perfomance
-    const auto triangleLayout{ createPipelineLayout(deviceVk.m_device) };
+    const auto triangleSetLayout{ createDescriptorSetLayout(deviceVk.m_device) };
+    const auto triangleLayout{ createPipelineLayout(deviceVk.m_device, triangleSetLayout) };
     const auto trianglePipeline{ createGraphicsPipeline(deviceVk.m_device, renderPass, triangleLayout, pipelineCache, viewport, scissor, triangleVertShader, triangleFragShader) };
 
     VkQueue queue{ 0 };
@@ -316,8 +320,10 @@ int main(void) {
     mar::Mesh mesh{};
     mesh.loadFromFile("resources/monkey.obj");
 
+    const auto vertexUsageFlags{ VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT };
+
     mar::BufferVulkan vertexBuffer{};
-    vertexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
+    vertexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, vertexUsageFlags);
     memcpy(vertexBuffer.m_data, mesh.m_vertices.data(), mesh.m_vertices.size() * sizeof(objl::Vertex));
 
     mar::BufferVulkan indexBuffer{};
@@ -344,14 +350,14 @@ int main(void) {
             VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 1, &renderBeginBarrier);
 
         constexpr VkClearColorValue clearColor{ 48.f / 255.f, 10.f / 255.f, 36.f / 255.f ,1 };
-        constexpr VkClearValue clearValue{ clearColor };
+        constexpr std::array<VkClearValue, 1> clearValue{ clearColor };
 
         VkRenderPassBeginInfo passBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
         passBeginInfo.renderPass = renderPass;
         passBeginInfo.framebuffer = swapchainStruct.framebuffers[imageIndex];
         passBeginInfo.renderArea.extent = swapchainStruct.extent;
-        passBeginInfo.clearValueCount = 1;
-        passBeginInfo.pClearValues = &clearValue;
+        passBeginInfo.clearValueCount = clearValue.size();
+        passBeginInfo.pClearValues = clearValue.data();
 
         vkCmdBeginRenderPass(commandBuffer, &passBeginInfo, VK_SUBPASS_CONTENTS_INLINE); // draw calls are below
 
@@ -365,17 +371,17 @@ int main(void) {
         bufferInfo.offset = 0;
         bufferInfo.range = vertexBuffer.m_size;
 
-        std::array<VkWriteDescriptorSet, 1> descriptors;
-        descriptors[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+        std::array<VkWriteDescriptorSet, 1> descriptors{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
         descriptors[0].dstBinding = 0;
         descriptors[0].descriptorCount = 1;
         descriptors[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         descriptors[0].pBufferInfo = &bufferInfo;
+        descriptors[0].pNext = nullptr;
 
-        vkCmdPushDescriptorSetKHR(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, triangleLayout, 0, 1, descriptors.data());
+        vkCmdPushDescriptorSetKHR(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, triangleLayout, 0, descriptors.size(), descriptors.data());
 
         vkCmdBindIndexBuffer(commandBuffer, indexBuffer.m_buffer, 0, VK_INDEX_TYPE_UINT32);
-        vkCmdDrawIndexed(commandBuffer, mesh.m_indices.size(), 1, 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffer, (uint32_t)mesh.m_indices.size(), 1, 0, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);
 
@@ -416,7 +422,12 @@ int main(void) {
 
     VK_CHECK( vkDeviceWaitIdle(deviceVk.m_device) );
 
+    vertexBuffer.close(deviceVk.m_device);
+    indexBuffer.close(deviceVk.m_device);
+
     swapchainStruct.close(deviceVk.m_device);
+
+    vkDestroyDescriptorSetLayout(deviceVk.m_device, triangleSetLayout, nullptr);
 
     vkDestroyPipeline(deviceVk.m_device, trianglePipeline, nullptr);
 
@@ -435,9 +446,6 @@ int main(void) {
     vkDestroySemaphore(deviceVk.m_device, acquireSemaphore, nullptr);
 
     vkDestroySurfaceKHR(contextVk.get(), surface, nullptr);
-
-    vertexBuffer.close(deviceVk.m_device);
-    indexBuffer.close(deviceVk.m_device);
 
     deviceVk.close();
 
