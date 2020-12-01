@@ -2,6 +2,8 @@
 
 #include "SwapchainVulkan.h"
 #include "PhysicalDevVulkan.h"
+#include "LogicalDevVulkan.h"
+#include "WindowSurfaceVulkan.h"
 #include "../../VulkanLogging.h"
 
 
@@ -13,7 +15,11 @@ namespace mar {
     {}
 
 
-    void SwapchainVulkan::create(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format) {
+    void SwapchainVulkan::create(const WindowSurfaceVulkan& windowSurface, VkRenderPass renderPass) {
+        const auto surface = windowSurface.getSurface();
+        const auto presentMode = windowSurface.getSwapchainPresentMode();
+        const auto format = windowSurface.getSwapchainFormat();
+
         VkSurfaceCapabilitiesKHR surfaceCaps;
         VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(PhysicalDevVulkan::Instance()->getPhyDev(), surface, &surfaceCaps) );
 
@@ -47,10 +53,14 @@ namespace mar {
         createInfo.presentMode = presentMode;
         createInfo.oldSwapchain = oldSwapchain;
 
-        VK_CHECK( vkCreateSwapchainKHR(device, &createInfo, nullptr, &swapchain) );
+        VK_CHECK( vkCreateSwapchainKHR(LogicalDevVulkan::Instance()->getDev(), &createInfo, nullptr, &swapchain) );
+
+        fillImageViewsAndFramebuffers(renderPass, format);
     }
 
-    void SwapchainVulkan::close(VkDevice device) {
+    void SwapchainVulkan::close() {
+        const auto& device = LogicalDevVulkan::Instance()->getDev();
+
         std::for_each(imageViews.cbegin(), imageViews.cend(), [&device](const VkImageView imageView) {
             vkDestroyImageView(device, imageView, nullptr);
         });
@@ -60,20 +70,38 @@ namespace mar {
         });
 
         vkDestroySwapchainKHR(device, swapchain, nullptr);
-    
+
         images.clear();
         imageViews.clear();
         framebuffers.clear();
     }
 
-    void SwapchainVulkan::fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format) {
+    void SwapchainVulkan::resizeIfNecessary(const WindowSurfaceVulkan& windowSurface, VkSurfaceCapabilitiesKHR surfaceCaps, VkRenderPass renderPass) {
+        const auto format = windowSurface.getSwapchainFormat();
+        const auto& device = LogicalDevVulkan::Instance()->getDev();
+
+        SwapchainVulkan swapchainToReplace{ surfaceCaps.currentExtent };
+        swapchainToReplace.oldSwapchain = this->swapchain;
+        swapchainToReplace.create(windowSurface, renderPass);
+        swapchainToReplace.fillImageViewsAndFramebuffers(renderPass, format);
+
+        VK_CHECK( vkDeviceWaitIdle(device) );
+
+        close();
+
+        *this = swapchainToReplace;
+    }
+
+    void SwapchainVulkan::fillImageViewsAndFramebuffers(VkRenderPass renderPass, VkFormat format) {
+        const auto& device = LogicalDevVulkan::Instance()->getDev();
+
         VK_CHECK(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, nullptr));
 
         images.resize(imageCount);
         imageViews.resize(imageCount);
         framebuffers.resize(imageCount);
 
-        VK_CHECK( vkGetSwapchainImagesKHR(device, swapchain, &imageCount, images.data()) );
+        VK_CHECK(vkGetSwapchainImagesKHR(device, swapchain, &imageCount, images.data()));
 
         for (uint32_t i = 0; i < imageCount; i++) {
             imageViews[i] = createImageView(device, images[i], format);
@@ -82,19 +110,6 @@ namespace mar {
         for (uint32_t i = 0; i < imageCount; i++) {
             framebuffers[i] = createFramebuffer(device, renderPass, imageViews[i], extent);
         }
-    }
-
-    void SwapchainVulkan::resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass) {
-        SwapchainVulkan swapchainToReplace{ surfaceCaps.currentExtent };
-        swapchainToReplace.oldSwapchain = this->swapchain;
-        swapchainToReplace.create(device, surface, presentMode, format);
-        swapchainToReplace.fillImageViewsAndFramebuffers(device, renderPass, format);
-
-        VK_CHECK( vkDeviceWaitIdle(device) );
-
-        close(device);
-
-        *this = swapchainToReplace;
     }
 
     VkImageView SwapchainVulkan::createImageView(VkDevice device, VkImage image, VkFormat format) {

@@ -14,11 +14,20 @@ namespace mar {
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 	}
+	
+
+	Window* Window::s_instance{ nullptr };
+
+	Window* Window::Instance() {
+		return s_instance;
+	}
+
 
 	void Window::initialize(const char* name, int32_t width, int32_t height) {
 		m_name = name;
 		m_width = width;
 		m_height = height;
+		s_instance = this;
 
 		glfwSetErrorCallback(error_callback);
 

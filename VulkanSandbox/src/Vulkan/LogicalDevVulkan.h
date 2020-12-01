@@ -16,7 +16,7 @@ namespace mar {
 		static LogicalDevVulkan* Instance();
 
 		void create();
-		void close();
+		void close() const;
 
 		void endPendingJobs() const;
 

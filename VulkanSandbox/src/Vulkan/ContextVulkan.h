@@ -16,7 +16,7 @@ namespace mar {
         static ContextVulkan* Instance();
 
         void create();
-        void close();
+        void close() const;
 
         const VkInstance& get() const;
 

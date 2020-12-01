@@ -181,6 +181,7 @@
     <ClCompile Include="src\Vulkan\LogicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\PhysicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\SwapchainVulkan.cpp" />
+    <ClCompile Include="src\Vulkan\WindowSurfaceVulkan.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +203,7 @@
     <ClInclude Include="src\Vulkan\LogicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\PhysicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\SwapchainVulkan.h" />
+    <ClInclude Include="src\Vulkan\WindowSurfaceVulkan.h" />
     <ClInclude Include="VulkanLogging.h" />
     <ClInclude Include="src\Window\Window.h" />
     <ClInclude Include="VulkanInclude.h" />

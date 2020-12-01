@@ -9,6 +9,8 @@
 
 namespace mar {
 
+    class WindowSurfaceVulkan;
+
 
     class SwapchainVulkan {
     public:
@@ -20,7 +22,7 @@ namespace mar {
         std::vector<VkImageView> imageViews;
         std::vector<VkFramebuffer> framebuffers;
 
-        VkExtent2D extent;
+        VkExtent2D extent; 
 
         uint32_t imageCount{ 0 };
 
@@ -28,14 +30,14 @@ namespace mar {
         SwapchainVulkan() = default;
         SwapchainVulkan(VkExtent2D swapchainSize);
 
-        void create(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format);
-        void close(VkDevice device);
+        void create(const WindowSurfaceVulkan& windowSurface, VkRenderPass renderPass);
+        void close();
 
-        void fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format);
-
-        void resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass);
+        void resizeIfNecessary(const WindowSurfaceVulkan& windowSurface, VkSurfaceCapabilitiesKHR surfaceCaps, VkRenderPass renderPass);
 
     private:
+
+        void fillImageViewsAndFramebuffers(VkRenderPass renderPass, VkFormat format);
 
         VkImageView createImageView(VkDevice device, VkImage image, VkFormat format);
         VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent);

@@ -6,69 +6,11 @@
 #include "src/Vulkan/LogicalDevVulkan.h"
 #include "src/Vulkan/SwapchainVulkan.h"
 #include "src/Vulkan/BufferVulkan.h"
+#include "src/Vulkan/WindowSurfaceVulkan.h"
 #include "src/Vulkan/DeviceQueueVulkan.h"
 #include "src/Window/Window.h"
 #include "src/Mesh/Mesh.h"
 
-
-VkSurfaceKHR createSurface(VkInstance instance, GLFWwindow* window) {
-    if constexpr (VK_USE_PLATFORM_WIN32_KHR) {
-        VkWin32SurfaceCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR };
-        createInfo.hinstance = GetModuleHandle(nullptr);
-        createInfo.hwnd = glfwGetWin32Window(window);
-        VkSurfaceKHR surface{ 0 };
-        VK_CHECK( vkCreateWin32SurfaceKHR(instance, &createInfo, nullptr, &surface) );
-        return surface;
-    }
-    else { // other platforms
-        return VkSurfaceKHR{ VK_NULL_HANDLE };
-    }
-}
-
-VkFormat getSwapchainFormat(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface) {
-    uint32_t formatCount{ 0 };
-    VK_CHECK( vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, nullptr) );
-
-    std::vector<VkSurfaceFormatKHR> formats(formatCount);
-    VK_CHECK( vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, formats.data()) );
-
-    if (formatCount == 1 && formats[0].format == VK_FORMAT_UNDEFINED) { return VK_FORMAT_R8G8B8A8_UNORM; }
-
-    /*
-    const auto it = std::find_if(formats.cbegin(), formats.cend(), [](const VkSurfaceFormatKHR surfaceFormat) {
-        return surfaceFormat.format == VK_FORMAT_A2R10G10B10_UNORM_PACK32 || surfaceFormat.format == VK_FORMAT_A2B10G10R10_UNORM_PACK32;
-    });
-
-    if (it != formats.cend()) { return (*it).format; }
-    */
-    {
-        const auto it = std::find_if(formats.cbegin(), formats.cend(), [](const VkSurfaceFormatKHR surfaceFormat) {
-            return surfaceFormat.format == VK_FORMAT_R8G8B8A8_UNORM || surfaceFormat.format == VK_FORMAT_B8G8R8A8_UNORM;
-        });
-
-        if (it != formats.cend()) { return (*it).format; }
-    }
-
-    return formats[0].format;
-}
-
-VkPresentModeKHR getPresentMode(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface) {
-    uint32_t presentModeCount{ 0 };
-    VK_CHECK( vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr) );
-
-    std::vector<VkPresentModeKHR> presentModes(presentModeCount);
-    VK_CHECK( vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, presentModes.data()) );
-
-    const auto it = std::find_if(presentModes.cbegin(), presentModes.cend(), [](const VkPresentModeKHR mode) {
-        return mode == VK_PRESENT_MODE_MAILBOX_KHR;
-    });
-
-    if (it != presentModes.cend()) {
-        return VK_PRESENT_MODE_MAILBOX_KHR;
-    }
-    
-    return VK_PRESENT_MODE_FIFO_KHR;
-}
 
 VkCommandPool createCommandPool(VkDevice device, uint32_t familyIndex) {
     VkCommandPoolCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO };
@@ -91,6 +33,7 @@ VkRenderPass createRenderPass(VkDevice device, VkFormat format) {
     attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
     attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
     attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    attachments[0].flags = VK_ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT;
 
     VkAttachmentReference colorAttachment{ 0 , VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 
@@ -276,21 +219,17 @@ int main(void) {
     mar::LogicalDevVulkan deviceVk{};
     deviceVk.create();
 
-    const auto surface{ createSurface(contextVk.get(), window.getWindow()) };
-
-    VkBool32 presentSupported{ 0 };
-    VK_CHECK( vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevVk.getPhyDev(), physicalDevVk.getFamilyIndex(), surface, &presentSupported) );
+    mar::WindowSurfaceVulkan windowSurface{};
+    windowSurface.create();
 
     VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
-    const VkPresentModeKHR presentMode{ getPresentMode(physicalDevVk.getPhyDev(), surface) };
 
     const VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
     const VkRect2D scissor{ {0, 0 }, windowSize };
 
     constexpr VkPipelineCache pipelineCache{ VK_NULL_HANDLE }; // critical for perfomance
 
-    const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.getPhyDev(), surface) };
-    const auto renderPass{ createRenderPass(deviceVk.getDev(), swapchainFormat) };
+    const auto renderPass{ createRenderPass(deviceVk.getDev(), windowSurface.getSwapchainFormat()) };
     const auto commandPool{ createCommandPool(deviceVk.getDev(), physicalDevVk.getFamilyIndex()) };
     const auto commandBuffer{ createCommandBuffer(deviceVk.getDev(), commandPool) };
     
@@ -306,8 +245,7 @@ int main(void) {
     const auto trianglePipeline{ createGraphicsPipeline(deviceVk.getDev(), renderPass, triangleLayout, pipelineCache, viewport, scissor, vertexShader, fragmentShader) };
 
     mar::SwapchainVulkan swapchainStruct(windowSize);
-    swapchainStruct.create(deviceVk.getDev(), surface, presentMode, swapchainFormat);
-    swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.getDev(), renderPass, swapchainFormat);
+    swapchainStruct.create(windowSurface, renderPass);
 
     mar::Mesh mesh{};
     mesh.loadFromFile("resources/monkey.obj");
@@ -322,10 +260,10 @@ int main(void) {
 
     while (window.shouldClose()) {
         VkSurfaceCapabilitiesKHR surfaceCaps;
-        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.getPhyDev(), surface, &surfaceCaps) );
+        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.getPhyDev(), windowSurface.getSurface(), &surfaceCaps) );
         const bool windowSizeHasChanged = !(swapchainStruct.extent.width == surfaceCaps.currentExtent.width && swapchainStruct.extent.height == surfaceCaps.currentExtent.height);
         if (windowSizeHasChanged) {
-            swapchainStruct.resizeIfNecessary(deviceVk.getDev(), surface, surfaceCaps, presentMode, swapchainFormat, renderPass);
+            swapchainStruct.resizeIfNecessary(windowSurface, surfaceCaps, renderPass);
             windowSize.height = window.getHeight();
             windowSize.width = window.getWidth();
         }
@@ -402,7 +340,7 @@ int main(void) {
     vertexBuffer.close(deviceVk.getDev());
     indexBuffer.close(deviceVk.getDev());
 
-    swapchainStruct.close(deviceVk.getDev());
+    swapchainStruct.close();
 
     deviceQueueVk.close();
 
@@ -421,7 +359,7 @@ int main(void) {
 
     vkDestroyRenderPass(deviceVk.getDev(), renderPass, nullptr);
 
-    vkDestroySurfaceKHR(contextVk.get(), surface, nullptr);
+    windowSurface.close();
 
     deviceVk.close();
 

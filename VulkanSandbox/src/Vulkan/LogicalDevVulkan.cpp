@@ -45,7 +45,7 @@ namespace mar {
         s_instance = this;
     }
 
-    void LogicalDevVulkan::close() {
+    void LogicalDevVulkan::close() const {
         vkDestroyDevice(m_device, nullptr);
     }
 

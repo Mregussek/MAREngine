@@ -49,7 +49,7 @@ namespace mar {
         s_instance = this;
     }
 
-    void ContextVulkan::close() {
+    void ContextVulkan::close() const {
         auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkDestroyDebugReportCallbackEXT");
         vkDestroyDebugReportCallbackEXT(m_instance, m_callback, nullptr);
 
