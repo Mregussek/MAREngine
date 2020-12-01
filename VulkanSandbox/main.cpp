@@ -8,6 +8,8 @@
 #include "src/Vulkan/BufferVulkan.h"
 #include "src/Vulkan/WindowSurfaceVulkan.h"
 #include "src/Vulkan/DeviceQueueVulkan.h"
+#include "src/Vulkan/ShaderVulkan.h"
+#include "src/Vulkan/GraphicsPipelineVulkan.h"
 #include "src/Window/Window.h"
 #include "src/Mesh/Mesh.h"
 
@@ -67,129 +69,6 @@ VkCommandBuffer createCommandBuffer(VkDevice device, VkCommandPool commandPool) 
     return commandBuffer;
 }
 
-VkShaderModule loadShader(VkDevice device, const char* path) {
-    FILE* file = fopen(path, "rb");
-    fseek(file, 0, SEEK_END);
-    const long length = ftell(file);
-    fseek(file, 0, SEEK_SET);
-
-    std::vector<char> buffer(length);
-    const size_t rc = fread(buffer.data(), 1, length, file);
-
-    fclose(file);
-
-    VkShaderModuleCreateInfo createInfo{ VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO };
-    createInfo.codeSize = length;
-    createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
-
-    VkShaderModule shaderModule{ 0 };
-    VK_CHECK( vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) );
-
-    return shaderModule;
-}
-
-VkDescriptorSetLayout createDescriptorSetLayout(VkDevice device) {
-    std::array<VkDescriptorSetLayoutBinding, 1> setBindings;
-    setBindings[0].binding = 0;
-    setBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    setBindings[0].descriptorCount = 1;
-    setBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-
-    VkDescriptorSetLayoutCreateInfo setLayoutCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-    setLayoutCreateInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
-    setLayoutCreateInfo.bindingCount = setBindings.size();
-    setLayoutCreateInfo.pBindings = setBindings.data();
-
-    VkDescriptorSetLayout setLayouts{ VK_NULL_HANDLE };
-    VK_CHECK( vkCreateDescriptorSetLayout(device, &setLayoutCreateInfo, nullptr, &setLayouts) );
-
-    return setLayouts;
-}
-
-VkPipelineLayout createPipelineLayout(VkDevice device, VkDescriptorSetLayout setLayout) {
-    VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-    createInfo.setLayoutCount = 1;
-    createInfo.pSetLayouts = &setLayout;
-
-    VkPipelineLayout layout{ VK_NULL_HANDLE };
-    VK_CHECK(vkCreatePipelineLayout(device, &createInfo, nullptr, &layout));
-
-    return layout;
-}
-
-VkPipeline createGraphicsPipeline(VkDevice device, VkRenderPass renderPass, VkPipelineLayout layout, VkPipelineCache pipelineCache, 
-    VkViewport viewport, VkRect2D scissor, VkShaderModule vertex, VkShaderModule fragment) 
-{
-    VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
-
-    VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
-    inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-    inputAssembly.primitiveRestartEnable = VK_FALSE;
-
-    VkPipelineViewportStateCreateInfo viewportState{ VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO };
-    viewportState.viewportCount = 1;
-    viewportState.pViewports = &viewport;
-    viewportState.scissorCount = 1;
-    viewportState.pScissors = &scissor;
-
-    VkPipelineRasterizationStateCreateInfo rasterizationState{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
-    rasterizationState.lineWidth = 1.f;
-    rasterizationState.depthClampEnable = VK_FALSE;
-    rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
-    rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-    rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
-    rasterizationState.depthBiasEnable = VK_FALSE;
-
-    VkPipelineMultisampleStateCreateInfo multisampleState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO };
-    multisampleState.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-    multisampleState.sampleShadingEnable = VK_FALSE;
-
-    VkPipelineDepthStencilStateCreateInfo depthStencilState{ VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO };
-
-    VkPipelineColorBlendAttachmentState colorAttachmentState{};
-    colorAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-
-    VkPipelineColorBlendStateCreateInfo colorBlendState{ VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO };
-    colorBlendState.attachmentCount = 1;
-    colorBlendState.pAttachments = &colorAttachmentState;
-
-    constexpr std::array<VkDynamicState, 2> dynamicStates{ VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
-
-    VkPipelineDynamicStateCreateInfo dynamicState{ VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO };
-    dynamicState.dynamicStateCount = dynamicStates.size();
-    dynamicState.pDynamicStates = dynamicStates.data();
-
-    std::array<VkPipelineShaderStageCreateInfo, 2> stages{
-        VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO },
-        VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO }
-    };
-    stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-    stages[0].module = vertex;
-    stages[0].pName = "main";
-    stages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-    stages[1].module = fragment;
-    stages[1].pName = "main";
-
-    VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };
-    createInfo.stageCount = stages.size();
-    createInfo.pStages = stages.data();
-    createInfo.pVertexInputState = &vertexInput;
-    createInfo.pInputAssemblyState = &inputAssembly;
-    createInfo.pViewportState = &viewportState;
-    createInfo.pRasterizationState = &rasterizationState;
-    createInfo.pMultisampleState = &multisampleState;
-    createInfo.pDepthStencilState = &depthStencilState;
-    createInfo.pColorBlendState = &colorBlendState;
-    createInfo.pDynamicState = &dynamicState;
-    createInfo.layout = layout;
-    createInfo.renderPass = renderPass;
-
-    VkPipeline pipeline{ 0 };
-    VK_CHECK(vkCreateGraphicsPipelines(device, pipelineCache, 1, &createInfo, nullptr, &pipeline));
-
-    return pipeline;
-}
-
 VkImageMemoryBarrier pipelineBarrierImage(VkImage image, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkImageLayout oldLayout, VkImageLayout newLayout)  {
     VkImageMemoryBarrier result{ VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER };
     result.srcAccessMask = srcAccessMask;
@@ -227,8 +106,6 @@ int main(void) {
     const VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
     const VkRect2D scissor{ {0, 0 }, windowSize };
 
-    constexpr VkPipelineCache pipelineCache{ VK_NULL_HANDLE }; // critical for perfomance
-
     const auto renderPass{ createRenderPass(deviceVk.getDev(), windowSurfaceVk.getSwapchainFormat()) };
     const auto commandPool{ createCommandPool(deviceVk.getDev(), physicalDevVk.getFamilyIndex()) };
     const auto commandBuffer{ createCommandBuffer(deviceVk.getDev(), commandPool) };
@@ -236,13 +113,14 @@ int main(void) {
     mar::DeviceQueueVulkan deviceQueueVk{};
     deviceQueueVk.create();
 
-    const auto triangleSetLayout{ createDescriptorSetLayout(deviceVk.getDev()) };
-    const auto triangleLayout{ createPipelineLayout(deviceVk.getDev(), triangleSetLayout) };
+    mar::ShaderCollectionVulkan shaderCollectionVk{};
+    auto& vertexShader = shaderCollectionVk.getVertex();
+    vertexShader.load("resources/triangle.vert.spv");
+    auto& fragmentShader = shaderCollectionVk.getFragment();
+    fragmentShader.load("resources/triangle.frag.spv");
 
-    const auto vertexShader{ loadShader(deviceVk.getDev(), "resources/triangle.vert.spv") };
-    const auto fragmentShader{ loadShader(deviceVk.getDev(), "resources/triangle.frag.spv") };
-
-    const auto trianglePipeline{ createGraphicsPipeline(deviceVk.getDev(), renderPass, triangleLayout, pipelineCache, viewport, scissor, vertexShader, fragmentShader) };
+    mar::GraphicsPipelineVulkan graphicsPipelineVk{};
+    graphicsPipelineVk.create(shaderCollectionVk, renderPass, viewport, scissor);
 
     mar::SwapchainVulkan swapchainVk{};
     swapchainVk.create(windowSurfaceVk, renderPass);
@@ -251,11 +129,11 @@ int main(void) {
     mesh.loadFromFile("resources/monkey.obj");
 
     mar::BufferVulkan vertexBuffer{};
-    vertexBuffer.create(deviceVk.getDev(), 128 * 1024 * 1024, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
+    vertexBuffer.create(128 * 1024 * 1024, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
     vertexBuffer.update(mesh.m_vertices);
 
     mar::BufferVulkan indexBuffer{};
-    indexBuffer.create(deviceVk.getDev(), 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
+    indexBuffer.create(128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
     indexBuffer.update(mesh.m_indices);
 
     while (window.shouldClose()) {
@@ -299,7 +177,7 @@ int main(void) {
         vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
         vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
-        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, trianglePipeline);
+        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipelineVk.m_pipeline);
 
         VkDescriptorBufferInfo bufferInfo;
         bufferInfo.buffer = vertexBuffer.m_buffer;
@@ -313,7 +191,7 @@ int main(void) {
         descriptors[0].pBufferInfo = &bufferInfo;
         descriptors[0].pNext = nullptr;
 
-        vkCmdPushDescriptorSetKHR(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, triangleLayout, 0, descriptors.size(), descriptors.data());
+        vkCmdPushDescriptorSetKHR(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipelineVk.m_pipelineLayout, 0, descriptors.size(), descriptors.data());
 
         vkCmdBindIndexBuffer(commandBuffer, indexBuffer.m_buffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(commandBuffer, (uint32_t)mesh.m_indices.size(), 1, 0, 0, 0);
@@ -337,23 +215,16 @@ int main(void) {
 
     deviceVk.endPendingJobs();
 
-    vertexBuffer.close(deviceVk.getDev());
-    indexBuffer.close(deviceVk.getDev());
+    vertexBuffer.close();
+    indexBuffer.close();
 
     swapchainVk.close();
 
     deviceQueueVk.close();
 
-    vkDestroyDescriptorSetLayout(deviceVk.getDev(), triangleSetLayout, nullptr);
+    graphicsPipelineVk.close();
 
-    vkDestroyPipeline(deviceVk.getDev(), trianglePipeline, nullptr);
-
-    vkDestroyPipelineLayout(deviceVk.getDev(), triangleLayout, nullptr);
-
-    vkDestroyPipelineCache(deviceVk.getDev(), pipelineCache, nullptr);
-
-    vkDestroyShaderModule(deviceVk.getDev(), vertexShader, nullptr);
-    vkDestroyShaderModule(deviceVk.getDev(), fragmentShader, nullptr);
+    shaderCollectionVk.close();
 
     vkDestroyCommandPool(deviceVk.getDev(), commandPool, nullptr);
 

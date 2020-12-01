@@ -17,8 +17,8 @@ namespace mar {
         VkDeviceSize m_size{ VK_NULL_HANDLE };
         void* m_data{ nullptr };
 
-        void create(VkDevice device, VkDeviceSize size, VkBufferUsageFlags useFlags);
-        void close(VkDevice device);
+        void create(VkDeviceSize size, VkBufferUsageFlags useFlags);
+        void close();
 
         template<typename T>
         void update(const std::vector<T>& data) {

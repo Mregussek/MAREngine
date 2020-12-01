@@ -2,13 +2,16 @@
 
 #include "BufferVulkan.h"
 #include "PhysicalDevVulkan.h"
+#include "LogicalDevVulkan.h"
 #include "../../VulkanLogging.h"
 
 
 namespace mar {
 
 
-	void BufferVulkan::create(VkDevice device, VkDeviceSize size, VkBufferUsageFlags useFlags) {
+	void BufferVulkan::create(VkDeviceSize size, VkBufferUsageFlags useFlags) {
+		const auto& device = LogicalDevVulkan::Instance()->getDev();
+
 		m_size = size;
 
 		VkPhysicalDeviceMemoryProperties memoryProperties;
@@ -41,7 +44,9 @@ namespace mar {
 		VK_CHECK( vkMapMemory(device, m_deviceMemory, memoryOffset, m_size, memoryMapFlags, &m_data) );
 	}
 
-	void BufferVulkan::close(VkDevice device) {
+	void BufferVulkan::close() {
+		const auto& device = LogicalDevVulkan::Instance()->getDev();
+
 		vkFreeMemory(device, m_deviceMemory, nullptr);
 
 		vkDestroyBuffer(device, m_buffer, nullptr);

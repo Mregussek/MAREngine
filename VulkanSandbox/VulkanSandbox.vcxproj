@@ -178,8 +178,10 @@
     <ClCompile Include="src\Vulkan\ContextVulkan.cpp" />
     <ClCompile Include="src\Vulkan\DeviceQueueVulkan.cpp" />
     <ClCompile Include="src\Vulkan\ExtensionFiller.cpp" />
+    <ClCompile Include="src\Vulkan\GraphicsPipelineVulkan.cpp" />
     <ClCompile Include="src\Vulkan\LogicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\PhysicalDevVulkan.cpp" />
+    <ClCompile Include="src\Vulkan\ShaderVulkan.cpp" />
     <ClCompile Include="src\Vulkan\SwapchainVulkan.cpp" />
     <ClCompile Include="src\Vulkan\WindowSurfaceVulkan.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
@@ -200,8 +202,10 @@
     <ClInclude Include="src\Vulkan\ContextVulkan.h" />
     <ClInclude Include="src\Vulkan\DeviceQueueVulkan.h" />
     <ClInclude Include="src\Vulkan\ExtensionFiller.h" />
+    <ClInclude Include="src\Vulkan\GraphicsPipelineVulkan.h" />
     <ClInclude Include="src\Vulkan\LogicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\PhysicalDevVulkan.h" />
+    <ClInclude Include="src\Vulkan\ShaderVulkan.h" />
     <ClInclude Include="src\Vulkan\SwapchainVulkan.h" />
     <ClInclude Include="src\Vulkan\WindowSurfaceVulkan.h" />
     <ClInclude Include="VulkanLogging.h" />
