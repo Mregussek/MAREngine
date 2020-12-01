@@ -22,25 +22,24 @@ namespace mar {
         std::vector<VkImageView> imageViews;
         std::vector<VkFramebuffer> framebuffers;
 
-        VkExtent2D extent; 
-
         uint32_t imageCount{ 0 };
+        VkExtent2D m_extent;
 
-
-        SwapchainVulkan() = default;
-        SwapchainVulkan(VkExtent2D swapchainSize);
 
         void create(const WindowSurfaceVulkan& windowSurface, VkRenderPass renderPass);
         void close();
 
-        void resizeIfNecessary(const WindowSurfaceVulkan& windowSurface, VkSurfaceCapabilitiesKHR surfaceCaps, VkRenderPass renderPass);
+        void resizeIfNecessary(const WindowSurfaceVulkan& windowSurface, VkRenderPass renderPass);
+
+        uint32_t getWidth() const;
+        uint32_t getHeight() const;
 
     private:
 
         void fillImageViewsAndFramebuffers(VkRenderPass renderPass, VkFormat format);
 
         VkImageView createImageView(VkDevice device, VkImage image, VkFormat format);
-        VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent);
+        VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView);
 
     };
 

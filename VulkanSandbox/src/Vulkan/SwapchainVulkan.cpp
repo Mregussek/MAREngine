@@ -10,18 +10,13 @@
 namespace mar {
 
 
-    SwapchainVulkan::SwapchainVulkan(VkExtent2D swapchainSize) :
-        extent(swapchainSize)
-    {}
-
-
     void SwapchainVulkan::create(const WindowSurfaceVulkan& windowSurface, VkRenderPass renderPass) {
         const auto surface = windowSurface.getSurface();
         const auto presentMode = windowSurface.getSwapchainPresentMode();
         const auto format = windowSurface.getSwapchainFormat();
+        const auto& surfaceCaps = windowSurface.getSurfaceCaps();
 
-        VkSurfaceCapabilitiesKHR surfaceCaps;
-        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(PhysicalDevVulkan::Instance()->getPhyDev(), surface, &surfaceCaps) );
+        m_extent = surfaceCaps.currentExtent;
 
         const auto surfaceComposite = [&surfaceCaps]()->VkCompositeAlphaFlagBitsKHR {
             if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) {
@@ -43,7 +38,7 @@ namespace mar {
         createInfo.minImageCount = std::max(2u, surfaceCaps.minImageCount);
         createInfo.imageFormat = format;
         createInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-        createInfo.imageExtent = extent;
+        createInfo.imageExtent = m_extent;
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         createInfo.queueFamilyIndexCount = 1;
@@ -61,11 +56,11 @@ namespace mar {
     void SwapchainVulkan::close() {
         const auto& device = LogicalDevVulkan::Instance()->getDev();
 
-        std::for_each(imageViews.cbegin(), imageViews.cend(), [&device](const VkImageView imageView) {
+        std::for_each(imageViews.cbegin(), imageViews.cend(), [&device](const VkImageView& imageView) {
             vkDestroyImageView(device, imageView, nullptr);
         });
 
-        std::for_each(framebuffers.cbegin(), framebuffers.cend(), [&device](const VkFramebuffer framebuffer) {
+        std::for_each(framebuffers.cbegin(), framebuffers.cend(), [&device](const VkFramebuffer& framebuffer) {
             vkDestroyFramebuffer(device, framebuffer, nullptr);
         });
 
@@ -76,20 +71,27 @@ namespace mar {
         framebuffers.clear();
     }
 
-    void SwapchainVulkan::resizeIfNecessary(const WindowSurfaceVulkan& windowSurface, VkSurfaceCapabilitiesKHR surfaceCaps, VkRenderPass renderPass) {
+    void SwapchainVulkan::resizeIfNecessary(const WindowSurfaceVulkan& windowSurface, VkRenderPass renderPass) {
         const auto format = windowSurface.getSwapchainFormat();
-        const auto& device = LogicalDevVulkan::Instance()->getDev();
 
-        SwapchainVulkan swapchainToReplace{ surfaceCaps.currentExtent };
+        SwapchainVulkan swapchainToReplace;
         swapchainToReplace.oldSwapchain = this->swapchain;
         swapchainToReplace.create(windowSurface, renderPass);
         swapchainToReplace.fillImageViewsAndFramebuffers(renderPass, format);
 
-        VK_CHECK( vkDeviceWaitIdle(device) );
+        LogicalDevVulkan::Instance()->endPendingJobs();
 
         close();
 
         *this = swapchainToReplace;
+    }
+
+    uint32_t SwapchainVulkan::getWidth() const {
+        return m_extent.width;
+    }
+
+    uint32_t SwapchainVulkan::getHeight() const {
+        return m_extent.height;
     }
 
     void SwapchainVulkan::fillImageViewsAndFramebuffers(VkRenderPass renderPass, VkFormat format) {
@@ -108,7 +110,7 @@ namespace mar {
         }
 
         for (uint32_t i = 0; i < imageCount; i++) {
-            framebuffers[i] = createFramebuffer(device, renderPass, imageViews[i], extent);
+            framebuffers[i] = createFramebuffer(device, renderPass, imageViews[i]);
         }
     }
 
@@ -126,19 +128,18 @@ namespace mar {
         createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
 
         VkImageView view{ 0 };
-
         VK_CHECK(vkCreateImageView(device, &createInfo, nullptr, &view));
 
         return view;
     }
 
-    VkFramebuffer SwapchainVulkan::createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent) {
+    VkFramebuffer SwapchainVulkan::createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView) {
         VkFramebufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO };
         createInfo.renderPass = renderPass;
         createInfo.attachmentCount = 1;
         createInfo.pAttachments = &imageView;
-        createInfo.width = extent.width;
-        createInfo.height = extent.height;
+        createInfo.width = m_extent.width;
+        createInfo.height = m_extent.height;
         createInfo.layers = 1;
 
         VkFramebuffer framebuffer{ 0 };

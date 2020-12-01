@@ -33,10 +33,16 @@ namespace mar {
 
         m_format = getSurfaceFormat();
         m_presentMode = getPresentMode();
+
+        update();
     }
 
     void WindowSurfaceVulkan::close() const {
         vkDestroySurfaceKHR(ContextVulkan::Instance()->get(), m_surface, nullptr);
+    }
+
+    void WindowSurfaceVulkan::update() {
+        VK_CHECK(vkGetPhysicalDeviceSurfaceCapabilitiesKHR(PhysicalDevVulkan::Instance()->getPhyDev(), m_surface, &m_surfaceCaps));
     }
 
     VkSurfaceKHR WindowSurfaceVulkan::getSurface() const {
@@ -49,6 +55,18 @@ namespace mar {
 
     VkFormat WindowSurfaceVulkan::getSwapchainFormat() const {
         return m_format;
+    }
+
+    const VkSurfaceCapabilitiesKHR& WindowSurfaceVulkan::getSurfaceCaps() const {
+        return m_surfaceCaps;
+    }
+
+    uint32_t WindowSurfaceVulkan::getWidth() const {
+        return m_surfaceCaps.currentExtent.width;
+    }
+
+    uint32_t WindowSurfaceVulkan::getHeight() const {
+        return m_surfaceCaps.currentExtent.height;
     }
 
     VkFormat WindowSurfaceVulkan::getSurfaceFormat() const {

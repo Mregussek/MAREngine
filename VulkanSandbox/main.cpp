@@ -219,8 +219,8 @@ int main(void) {
     mar::LogicalDevVulkan deviceVk{};
     deviceVk.create();
 
-    mar::WindowSurfaceVulkan windowSurface{};
-    windowSurface.create();
+    mar::WindowSurfaceVulkan windowSurfaceVk{};
+    windowSurfaceVk.create();
 
     VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
 
@@ -229,7 +229,7 @@ int main(void) {
 
     constexpr VkPipelineCache pipelineCache{ VK_NULL_HANDLE }; // critical for perfomance
 
-    const auto renderPass{ createRenderPass(deviceVk.getDev(), windowSurface.getSwapchainFormat()) };
+    const auto renderPass{ createRenderPass(deviceVk.getDev(), windowSurfaceVk.getSwapchainFormat()) };
     const auto commandPool{ createCommandPool(deviceVk.getDev(), physicalDevVk.getFamilyIndex()) };
     const auto commandBuffer{ createCommandBuffer(deviceVk.getDev(), commandPool) };
     
@@ -244,8 +244,8 @@ int main(void) {
 
     const auto trianglePipeline{ createGraphicsPipeline(deviceVk.getDev(), renderPass, triangleLayout, pipelineCache, viewport, scissor, vertexShader, fragmentShader) };
 
-    mar::SwapchainVulkan swapchainStruct(windowSize);
-    swapchainStruct.create(windowSurface, renderPass);
+    mar::SwapchainVulkan swapchainVk{};
+    swapchainVk.create(windowSurfaceVk, renderPass);
 
     mar::Mesh mesh{};
     mesh.loadFromFile("resources/monkey.obj");
@@ -259,17 +259,17 @@ int main(void) {
     indexBuffer.update(mesh.m_indices);
 
     while (window.shouldClose()) {
-        VkSurfaceCapabilitiesKHR surfaceCaps;
-        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.getPhyDev(), windowSurface.getSurface(), &surfaceCaps) );
-        const bool windowSizeHasChanged = !(swapchainStruct.extent.width == surfaceCaps.currentExtent.width && swapchainStruct.extent.height == surfaceCaps.currentExtent.height);
+        windowSurfaceVk.update();
+
+        const bool windowSizeHasChanged = !(swapchainVk.m_extent.width == windowSurfaceVk.getWidth() && swapchainVk.m_extent.height == windowSurfaceVk.getHeight());
         if (windowSizeHasChanged) {
-            swapchainStruct.resizeIfNecessary(windowSurface, surfaceCaps, renderPass);
+            swapchainVk.resizeIfNecessary(windowSurfaceVk, renderPass);
             windowSize.height = window.getHeight();
             windowSize.width = window.getWidth();
         }
 
         uint32_t imageIndex{ 0 };
-        deviceQueueVk.prepare(swapchainStruct.swapchain, imageIndex);
+        deviceQueueVk.prepare(swapchainVk.swapchain, imageIndex);
 
         VK_CHECK( vkResetCommandPool(deviceVk.getDev(), commandPool, 0) );
 
@@ -278,7 +278,7 @@ int main(void) {
 
         VK_CHECK( vkBeginCommandBuffer(commandBuffer, &beginInfo) );
         
-        const auto renderBeginBarrier{ pipelineBarrierImage(swapchainStruct.images[imageIndex], 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+        const auto renderBeginBarrier{ pipelineBarrierImage(swapchainVk.images[imageIndex], 0, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL) };
 
         vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
@@ -289,8 +289,8 @@ int main(void) {
 
         VkRenderPassBeginInfo passBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
         passBeginInfo.renderPass = renderPass;
-        passBeginInfo.framebuffer = swapchainStruct.framebuffers[imageIndex];
-        passBeginInfo.renderArea.extent = swapchainStruct.extent;
+        passBeginInfo.framebuffer = swapchainVk.framebuffers[imageIndex];
+        passBeginInfo.renderArea.extent = swapchainVk.m_extent;
         passBeginInfo.clearValueCount = clearValue.size();
         passBeginInfo.pClearValues = clearValue.data();
 
@@ -320,7 +320,7 @@ int main(void) {
 
         vkCmdEndRenderPass(commandBuffer);
 
-        const auto renderEndBarrier{ pipelineBarrierImage(swapchainStruct.images[imageIndex], VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0,
+        const auto renderEndBarrier{ pipelineBarrierImage(swapchainVk.images[imageIndex], VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 0,
             VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR) };
 
         vkCmdPipelineBarrier(commandBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
@@ -328,7 +328,7 @@ int main(void) {
 
         VK_CHECK( vkEndCommandBuffer(commandBuffer) );
 
-        deviceQueueVk.draw(commandBuffer, swapchainStruct.swapchain, imageIndex);
+        deviceQueueVk.draw(commandBuffer, swapchainVk.swapchain, imageIndex);
         
         deviceVk.endPendingJobs();
 
@@ -340,7 +340,7 @@ int main(void) {
     vertexBuffer.close(deviceVk.getDev());
     indexBuffer.close(deviceVk.getDev());
 
-    swapchainStruct.close();
+    swapchainVk.close();
 
     deviceQueueVk.close();
 
@@ -359,7 +359,7 @@ int main(void) {
 
     vkDestroyRenderPass(deviceVk.getDev(), renderPass, nullptr);
 
-    windowSurface.close();
+    windowSurfaceVk.close();
 
     deviceVk.close();
 
