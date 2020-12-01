@@ -6,6 +6,7 @@
 #include "src/Vulkan/LogicalDevVulkan.h"
 #include "src/Vulkan/SwapchainVulkan.h"
 #include "src/Vulkan/BufferVulkan.h"
+#include "src/Vulkan/DeviceQueueVulkan.h"
 #include "src/Window/Window.h"
 #include "src/Mesh/Mesh.h"
 
@@ -69,15 +70,6 @@ VkPresentModeKHR getPresentMode(VkPhysicalDevice physicalDevice, VkSurfaceKHR su
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-VkSemaphore createSemaphore(VkDevice device) {
-    VkSemaphoreCreateInfo createInfo{ VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO };
-
-    VkSemaphore semaphore{ 0 };
-    VK_CHECK(vkCreateSemaphore(device, &createInfo, nullptr, &semaphore));
-
-    return semaphore;
-}
-
 VkCommandPool createCommandPool(VkDevice device, uint32_t familyIndex) {
     VkCommandPoolCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO };
     createInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
@@ -90,18 +82,17 @@ VkCommandPool createCommandPool(VkDevice device, uint32_t familyIndex) {
 }
 
 VkRenderPass createRenderPass(VkDevice device, VkFormat format) {
-    constexpr uint32_t index = 0;
     std::array<VkAttachmentDescription, 1> attachments;
-    attachments[index].format = format;
-    attachments[index].samples = VK_SAMPLE_COUNT_1_BIT;
-    attachments[index].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    attachments[index].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    attachments[index].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    attachments[index].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    attachments[index].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    attachments[index].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    attachments[0].format = format;
+    attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
+    attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    attachments[0].stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    attachments[0].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    attachments[0].initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    attachments[0].finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-    VkAttachmentReference colorAttachment{ index , VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
+    VkAttachmentReference colorAttachment{ 0 , VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };
 
     VkSubpassDescription subpass{};
     subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
@@ -167,7 +158,7 @@ VkDescriptorSetLayout createDescriptorSetLayout(VkDevice device) {
     setLayoutCreateInfo.pBindings = setBindings.data();
 
     VkDescriptorSetLayout setLayouts{ VK_NULL_HANDLE };
-    VK_CHECK(vkCreateDescriptorSetLayout(device, &setLayoutCreateInfo, nullptr, &setLayouts));
+    VK_CHECK( vkCreateDescriptorSetLayout(device, &setLayoutCreateInfo, nullptr, &setLayouts) );
 
     return setLayouts;
 }
@@ -290,7 +281,7 @@ int main(void) {
     VkBool32 presentSupported{ 0 };
     VK_CHECK( vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevVk.getPhyDev(), physicalDevVk.getFamilyIndex(), surface, &presentSupported) );
 
-    const VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
+    VkExtent2D windowSize{ (uint32_t)window.getWidth() , (uint32_t)window.getHeight() };
     const VkPresentModeKHR presentMode{ getPresentMode(physicalDevVk.getPhyDev(), surface) };
 
     const VkViewport viewport{ 0.f , (float)window.getHeight(), (float)window.getWidth(), -(float)window.getHeight(), 0.f, 1.f };
@@ -299,44 +290,50 @@ int main(void) {
     constexpr VkPipelineCache pipelineCache{ VK_NULL_HANDLE }; // critical for perfomance
 
     const auto swapchainFormat{ getSwapchainFormat(physicalDevVk.getPhyDev(), surface) };
-    const auto releaseSemaphore{ createSemaphore(deviceVk.m_device) };
-    const auto acquireSemaphore{ createSemaphore(deviceVk.m_device) };
-    const auto renderPass{ createRenderPass(deviceVk.m_device, swapchainFormat) };
-    const auto commandPool{ createCommandPool(deviceVk.m_device, physicalDevVk.getFamilyIndex()) };
-    const auto commandBuffer{ createCommandBuffer(deviceVk.m_device, commandPool) };
-    const auto triangleVertShader{ loadShader(deviceVk.m_device, "resources/triangle.vert.spv") };
-    const auto triangleFragShader{ loadShader(deviceVk.m_device, "resources/triangle.frag.spv") };
-    const auto triangleSetLayout{ createDescriptorSetLayout(deviceVk.m_device) };
-    const auto triangleLayout{ createPipelineLayout(deviceVk.m_device, triangleSetLayout) };
-    const auto trianglePipeline{ createGraphicsPipeline(deviceVk.m_device, renderPass, triangleLayout, pipelineCache, viewport, scissor, triangleVertShader, triangleFragShader) };
+    const auto renderPass{ createRenderPass(deviceVk.getDev(), swapchainFormat) };
+    const auto commandPool{ createCommandPool(deviceVk.getDev(), physicalDevVk.getFamilyIndex()) };
+    const auto commandBuffer{ createCommandBuffer(deviceVk.getDev(), commandPool) };
+    
+    mar::DeviceQueueVulkan deviceQueueVk{};
+    deviceQueueVk.create();
 
-    VkQueue queue{ 0 };
-    vkGetDeviceQueue(deviceVk.m_device, physicalDevVk.getFamilyIndex(), 0, &queue);
+    const auto triangleSetLayout{ createDescriptorSetLayout(deviceVk.getDev()) };
+    const auto triangleLayout{ createPipelineLayout(deviceVk.getDev(), triangleSetLayout) };
+
+    const auto vertexShader{ loadShader(deviceVk.getDev(), "resources/triangle.vert.spv") };
+    const auto fragmentShader{ loadShader(deviceVk.getDev(), "resources/triangle.frag.spv") };
+
+    const auto trianglePipeline{ createGraphicsPipeline(deviceVk.getDev(), renderPass, triangleLayout, pipelineCache, viewport, scissor, vertexShader, fragmentShader) };
 
     mar::SwapchainVulkan swapchainStruct(windowSize);
-    swapchainStruct.create(deviceVk.m_device, surface, presentMode, swapchainFormat);
-    swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.m_device, renderPass, swapchainFormat);
+    swapchainStruct.create(deviceVk.getDev(), surface, presentMode, swapchainFormat);
+    swapchainStruct.fillImageViewsAndFramebuffers(deviceVk.getDev(), renderPass, swapchainFormat);
 
     mar::Mesh mesh{};
     mesh.loadFromFile("resources/monkey.obj");
 
-    const auto vertexUsageFlags{ VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT };
-
     mar::BufferVulkan vertexBuffer{};
-    vertexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, vertexUsageFlags);
+    vertexBuffer.create(deviceVk.getDev(), 128 * 1024 * 1024, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
     vertexBuffer.update(mesh.m_vertices);
 
     mar::BufferVulkan indexBuffer{};
-    indexBuffer.create(deviceVk.m_device, 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
+    indexBuffer.create(deviceVk.getDev(), 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
     indexBuffer.update(mesh.m_indices);
 
     while (window.shouldClose()) {
-        swapchainStruct.resizeIfNecessary(deviceVk.m_device, surface, presentMode, swapchainFormat, renderPass);
+        VkSurfaceCapabilitiesKHR surfaceCaps;
+        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevVk.getPhyDev(), surface, &surfaceCaps) );
+        const bool windowSizeHasChanged = !(swapchainStruct.extent.width == surfaceCaps.currentExtent.width && swapchainStruct.extent.height == surfaceCaps.currentExtent.height);
+        if (windowSizeHasChanged) {
+            swapchainStruct.resizeIfNecessary(deviceVk.getDev(), surface, surfaceCaps, presentMode, swapchainFormat, renderPass);
+            windowSize.height = window.getHeight();
+            windowSize.width = window.getWidth();
+        }
 
         uint32_t imageIndex{ 0 };
-        VK_CHECK( vkAcquireNextImageKHR(deviceVk.m_device, swapchainStruct.swapchain, UINT64_MAX, acquireSemaphore, VK_NULL_HANDLE, &imageIndex) );
+        deviceQueueVk.prepare(swapchainStruct.swapchain, imageIndex);
 
-        VK_CHECK( vkResetCommandPool(deviceVk.m_device, commandPool, 0) );
+        VK_CHECK( vkResetCommandPool(deviceVk.getDev(), commandPool, 0) );
 
         VkCommandBufferBeginInfo beginInfo{ VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO };
         beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -393,57 +390,36 @@ int main(void) {
 
         VK_CHECK( vkEndCommandBuffer(commandBuffer) );
 
-        constexpr VkPipelineStageFlags submitStageMask{ VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-
-        VkSubmitInfo submitInfo{ VK_STRUCTURE_TYPE_SUBMIT_INFO };
-        submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = &acquireSemaphore;
-        submitInfo.pWaitDstStageMask = &submitStageMask;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &commandBuffer;
-        submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = &releaseSemaphore;
-
-        VK_CHECK( vkQueueSubmit(queue, 1, &submitInfo, VK_NULL_HANDLE) );
-
-        VkPresentInfoKHR presentInfo{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
-        presentInfo.swapchainCount = 1;
-        presentInfo.pSwapchains = &swapchainStruct.swapchain;
-        presentInfo.pImageIndices = &imageIndex;
-        presentInfo.waitSemaphoreCount = 1;
-        presentInfo.pWaitSemaphores = &releaseSemaphore;
-
-        VK_CHECK( vkQueuePresentKHR(queue, &presentInfo) );
-
-        VK_CHECK( vkDeviceWaitIdle(deviceVk.m_device) );
+        deviceQueueVk.draw(commandBuffer, swapchainStruct.swapchain, imageIndex);
+        
+        deviceVk.endPendingJobs();
 
         window.pollEvents();
     }
 
-    VK_CHECK( vkDeviceWaitIdle(deviceVk.m_device) );
+    deviceVk.endPendingJobs();
 
-    vertexBuffer.close(deviceVk.m_device);
-    indexBuffer.close(deviceVk.m_device);
+    vertexBuffer.close(deviceVk.getDev());
+    indexBuffer.close(deviceVk.getDev());
 
-    swapchainStruct.close(deviceVk.m_device);
+    swapchainStruct.close(deviceVk.getDev());
 
-    vkDestroyDescriptorSetLayout(deviceVk.m_device, triangleSetLayout, nullptr);
+    deviceQueueVk.close();
 
-    vkDestroyPipeline(deviceVk.m_device, trianglePipeline, nullptr);
+    vkDestroyDescriptorSetLayout(deviceVk.getDev(), triangleSetLayout, nullptr);
 
-    vkDestroyPipelineLayout(deviceVk.m_device, triangleLayout, nullptr);
+    vkDestroyPipeline(deviceVk.getDev(), trianglePipeline, nullptr);
 
-    vkDestroyPipelineCache(deviceVk.m_device, pipelineCache, nullptr);
+    vkDestroyPipelineLayout(deviceVk.getDev(), triangleLayout, nullptr);
 
-    vkDestroyShaderModule(deviceVk.m_device, triangleVertShader, nullptr);
-    vkDestroyShaderModule(deviceVk.m_device, triangleFragShader, nullptr);
+    vkDestroyPipelineCache(deviceVk.getDev(), pipelineCache, nullptr);
 
-    vkDestroyCommandPool(deviceVk.m_device, commandPool, nullptr);
+    vkDestroyShaderModule(deviceVk.getDev(), vertexShader, nullptr);
+    vkDestroyShaderModule(deviceVk.getDev(), fragmentShader, nullptr);
 
-    vkDestroyRenderPass(deviceVk.m_device, renderPass, nullptr);
+    vkDestroyCommandPool(deviceVk.getDev(), commandPool, nullptr);
 
-    vkDestroySemaphore(deviceVk.m_device, releaseSemaphore, nullptr);
-    vkDestroySemaphore(deviceVk.m_device, acquireSemaphore, nullptr);
+    vkDestroyRenderPass(deviceVk.getDev(), renderPass, nullptr);
 
     vkDestroySurfaceKHR(contextVk.get(), surface, nullptr);
 

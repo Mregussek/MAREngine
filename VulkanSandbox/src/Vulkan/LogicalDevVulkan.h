@@ -13,14 +13,23 @@ namespace mar {
 	class LogicalDevVulkan {
 	public:
 
-		VkDevice m_device{ VK_NULL_HANDLE };
+		static LogicalDevVulkan* Instance();
 
 		void create();
 		void close();
 
+		void endPendingJobs() const;
+
+		const VkDevice& getDev() const;
+
 	private:
 
 		void fillDeviceNeededExtensions(VkPhysicalDevice physicalDevice, std::vector<const char*>& extensionsToEnable);
+
+		
+		static LogicalDevVulkan* s_instance;
+
+		VkDevice m_device{ VK_NULL_HANDLE };
 
 	};
 

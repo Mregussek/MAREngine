@@ -10,7 +10,8 @@
 namespace mar {
 
 
-    struct SwapchainVulkan {
+    class SwapchainVulkan {
+    public:
 
         VkSwapchainKHR swapchain{ VK_NULL_HANDLE };
         VkSwapchainKHR oldSwapchain{ VK_NULL_HANDLE };
@@ -32,7 +33,7 @@ namespace mar {
 
         void fillImageViewsAndFramebuffers(VkDevice device, VkRenderPass renderPass, VkFormat format);
 
-        void resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass);
+        void resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass);
 
     private:
 

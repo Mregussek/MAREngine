@@ -7,6 +7,14 @@
 
 
 namespace mar {
+    
+
+    LogicalDevVulkan* LogicalDevVulkan::s_instance{ nullptr };
+
+    LogicalDevVulkan* LogicalDevVulkan::Instance() {
+        return s_instance;
+    }
+
 
 
     void LogicalDevVulkan::create() {
@@ -33,10 +41,20 @@ namespace mar {
         createInfo.pEnabledFeatures = &features;
 
         VK_CHECK( vkCreateDevice(PhysicalDevVulkan::Instance()->getPhyDev(), &createInfo, nullptr, &m_device) );
+    
+        s_instance = this;
     }
 
     void LogicalDevVulkan::close() {
         vkDestroyDevice(m_device, nullptr);
+    }
+
+    void LogicalDevVulkan::endPendingJobs() const {
+        VK_CHECK( vkDeviceWaitIdle(m_device) );
+    }
+
+    const VkDevice& LogicalDevVulkan::getDev() const {
+        return m_device;
     }
 
     void LogicalDevVulkan::fillDeviceNeededExtensions(VkPhysicalDevice physicalDevice, std::vector<const char*>& extensionsToEnable) {

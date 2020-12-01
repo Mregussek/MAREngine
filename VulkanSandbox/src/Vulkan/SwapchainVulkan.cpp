@@ -84,13 +84,7 @@ namespace mar {
         }
     }
 
-    void SwapchainVulkan::resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass) {
-        VkSurfaceCapabilitiesKHR surfaceCaps;
-        VK_CHECK( vkGetPhysicalDeviceSurfaceCapabilitiesKHR(PhysicalDevVulkan::Instance()->getPhyDev(), surface, &surfaceCaps) );
-
-        const bool sizeDidntChange = extent.width == surfaceCaps.currentExtent.width && extent.height == surfaceCaps.currentExtent.height;
-        if (sizeDidntChange) { return; }
-
+    void SwapchainVulkan::resizeIfNecessary(VkDevice device, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR surfaceCaps, VkPresentModeKHR presentMode, VkFormat format, VkRenderPass renderPass) {
         SwapchainVulkan swapchainToReplace{ surfaceCaps.currentExtent };
         swapchainToReplace.oldSwapchain = this->swapchain;
         swapchainToReplace.create(device, surface, presentMode, format);
