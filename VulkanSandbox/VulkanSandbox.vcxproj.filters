@@ -72,6 +72,9 @@
     <ClCompile Include="src\Vulkan\GraphicsPipelineVulkan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\CommandManagerVulkan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanInclude.h">
@@ -144,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vulkan\GraphicsPipelineVulkan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vulkan\CommandManagerVulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
