@@ -28,10 +28,7 @@
 #include "../../ecs/Components/Components.h"
 
 
-namespace mar::ecs { 
-	class Entity; 
-}
-
+namespace mar::ecs {  class Entity; }
 namespace mar::graphics {
 
 	class RenderCamera;
@@ -55,7 +52,7 @@ namespace mar::graphics {
 		RenderStatistics& getStatistics() { return m_statistics; }
 		void clearStatistics() { m_statistics.resetStatistics(); }
 
-		static RenderPipeline& Instance() { return *s_instance; }
+		static RenderPipeline& Instance();
 
 		// ---- GETTERS for container ---- //
 	
@@ -78,6 +75,7 @@ namespace mar::graphics {
 		size_t submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture);
 		size_t submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
+
 
 		static RenderPipeline* s_instance;
 

@@ -42,12 +42,12 @@ namespace mar::ecs {
 		m_sceneManager = &manager; 
 	}
 
-	void SceneEvents::onTransformUpdate(const Entity* e) const {
-		const auto& transform = e->getComponent<TransformComponent>();
-		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+	void SceneEvents::onTransformUpdate(const Entity& entity) const {
+		const auto& transform = entity.getComponent<TransformComponent>();
+		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
-		if (e->hasComponent<CameraComponent>()) {
-			const auto& cam = e->getComponent<CameraComponent>();
+		if (entity.hasComponent<CameraComponent>()) {
+			const auto& cam = entity.getComponent<CameraComponent>();
 			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
 			renderCamera.calculateCameraTransforms(transform, cam);
 		}
@@ -55,7 +55,7 @@ namespace mar::ecs {
 			graphics::RenderEvents::Instance().onTransformMat4Update(transform.transform, rpc);
 		}
 			
-		if (e->hasComponent<LightComponent>()) { 
+		if (entity.hasComponent<LightComponent>()) {
 			graphics::RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
 		}
 
@@ -94,9 +94,9 @@ namespace mar::ecs {
 		m_sceneManager->initialize();
 	}
 
-	void SceneEvents::onColorUpdate(const Entity* e) const {
-		const auto& color = e->getComponent<ColorComponent>();
-		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+	void SceneEvents::onColorUpdate(const Entity& e) const {
+		const auto& color = e.getComponent<ColorComponent>();
+		const auto& rpc = e.getComponent<RenderPipelineComponent>();
 
 		graphics::RenderEvents::Instance().onColorUpdate(color.texture, rpc);
 
@@ -139,10 +139,10 @@ namespace mar::ecs {
 		m_sceneManager->initialize();
 	}
 
-	void SceneEvents::onLightUpdate(const Entity* e) const {
-		const auto& transform = e->getComponent<TransformComponent>();
-		const auto& light = e->getComponent<LightComponent>();
-		const auto& rpc = e->getComponent<RenderPipelineComponent>();
+	void SceneEvents::onLightUpdate(const Entity& e) const {
+		const auto& transform = e.getComponent<TransformComponent>();
+		const auto& light = e.getComponent<LightComponent>();
+		const auto& rpc = e.getComponent<RenderPipelineComponent>();
 
 		graphics::RenderEvents::Instance().onLightUpdate(transform.center, light, rpc);
 
@@ -192,8 +192,8 @@ namespace mar::ecs {
 		}
 	}
 
-	void SceneEvents::onEntityCopy() const {
-		m_sceneManager->initialize();
+	void SceneEvents::onEntityCopy(const Entity& entity) const {
+		graphics::RenderPipeline::Instance().submitEntity(entity);
 
 		ECS_TRACE("SCENE_EVENTS: onEntityCopy");
 	}
@@ -215,7 +215,7 @@ namespace mar::ecs {
 
 			entityTransform.recalculate();
 
-			onTransformUpdate(&entity);
+			onTransformUpdate(entity);
 		};
 
 		const auto& entities = collection->getEntities();
@@ -227,7 +227,7 @@ namespace mar::ecs {
 	void SceneEvents::onCollectionTransformReset(const EntityCollection* collection) const {
 		auto resetToDefaultPosition = [&transform = collection->getComponent<TransformComponent>(), this](const Entity& entity) {
 			entity.replaceComponent<TransformComponent>(transform);
-			onTransformUpdate(&entity);
+			onTransformUpdate(entity);
 		};
 
 		const auto& entities = collection->getEntities();

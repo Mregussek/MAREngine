@@ -193,17 +193,17 @@ namespace mar::ecs {
 		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
 		if (entity.hasComponent<RenderableComponent>()) {
-			SceneEvents::Instance().onTransformUpdate(&entity);
+			SceneEvents::Instance().onTransformUpdate(entity);
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
 			const auto& light = entity.getComponent<LightComponent>();
-			SceneEvents::Instance().onLightUpdate(&entity);
+			SceneEvents::Instance().onLightUpdate(entity);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
 			const auto& color = entity.getComponent<ColorComponent>();
-			SceneEvents::Instance().onColorUpdate(&entity);
+			SceneEvents::Instance().onColorUpdate(entity);
 		}
 	}
 

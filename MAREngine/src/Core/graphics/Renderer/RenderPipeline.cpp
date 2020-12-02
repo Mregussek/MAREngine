@@ -29,6 +29,11 @@ namespace mar::graphics {
 
 	RenderPipeline* RenderPipeline::s_instance{ nullptr };
 
+	RenderPipeline& RenderPipeline::Instance() { 
+		return *s_instance; 
+	}
+
+
 	void RenderPipeline::initialize() {
 		setCurrentPipeline();
 
@@ -301,8 +306,8 @@ namespace mar::graphics {
 	}
 
 	size_t RenderPipeline::submitLight(const maths::vec3& position, const ecs::LightComponent& light) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitLight(), m_containerPtr is nullptr!");
+		if (!m_lightPtr) {
+			GRAPHICS_ERROR("RENDER_PIPELINE: submitLight(), m_lightPtr is nullptr!");
 			return -1;
 		}
 

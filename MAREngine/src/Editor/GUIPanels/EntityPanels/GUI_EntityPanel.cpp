@@ -263,7 +263,7 @@ namespace mar::editor {
 
 			if (updatedTransform) {
 				tran.recalculate();
-				ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);
+				ecs::SceneEvents::Instance().onTransformUpdate(*currentEntity);
 			}
 		}
 
@@ -432,7 +432,7 @@ namespace mar::editor {
 		auto& color = currentEntity->getComponent<ecs::ColorComponent>();
 
 		if (ImGui::ColorEdit4("- color", &color.texture.x)) {
-			ecs::SceneEvents::Instance().onColorUpdate(currentEntity);
+			ecs::SceneEvents::Instance().onColorUpdate(*currentEntity);
 		}
 			
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
@@ -566,7 +566,7 @@ namespace mar::editor {
 		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) { updatedLight = true; }
 
 		if (updatedLight) {
-			ecs::SceneEvents::Instance().onLightUpdate(currentEntity);
+			ecs::SceneEvents::Instance().onLightUpdate(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");

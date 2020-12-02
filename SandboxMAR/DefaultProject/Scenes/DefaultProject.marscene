@@ -12,7 +12,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.2 0.5 0.2
+#ColorComponent 0.2 0.5 0.2 1
 #ScriptComponent scripts/RotateXY.py
 
 #EntityEnd
@@ -25,7 +25,7 @@ MAREngine scene file
 #scale 3 3.5 3
 #general_scale 0
 #RenderableComponent Pyramid
-#ColorComponent 0.5 0.9 0.25
+#ColorComponent 0.5 0.9 0.25 1
 
 #EntityEnd
 
@@ -37,7 +37,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Surface
-#ColorComponent 0.5 0.2 0.9
+#ColorComponent 0.5 0.2 0.9 1
 
 #EntityEnd
 
@@ -49,7 +49,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Wall
-#ColorComponent 0.9 0.2 0.3
+#ColorComponent 0.9 0.2 0.3 1
 
 #EntityEnd
 
@@ -61,7 +61,7 @@ MAREngine scene file
 #scale 0.750999 1.5 0.750999
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 1 1 1
+#ColorComponent 1 1 1 1
 #LightComponent Begin
 #ambientlight 0.5 0.5 0.5 1
 #diffuselight 0.9 0.9 0.9 1
@@ -81,7 +81,7 @@ MAREngine scene file
 #scale 1 2 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.5 0.5 0.5
+#ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
 
@@ -291,7 +291,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.104383 0.456417 0.204165
+#ColorComponent 0.104383 0.456417 0.204165 1
 #ScriptComponent scripts/Examples.py
 
 #EntityEnd
@@ -304,7 +304,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Pyramid
-#ColorComponent 1 0.917293 0.917293
+#ColorComponent 1 0.917293 0.917293 1
 #LightComponent Begin
 #ambientlight 0.5 0.5 0.5 1
 #diffuselight 0.9 0.9 0.9 1
@@ -320,136 +320,80 @@ MAREngine scene file
 #EntityCollectionStart
 
 #EntityStart
-#TagComponent YellowCube
-#TransformComponent Begin
-#center 166.35 25.35 0
-#angles 0 354.5 0
-#scale 1 1 1
-#general_scale 0
-#RenderableComponent Cube
-#ColorComponent 0.871021 0.909774 0.441206
-
-#EntityEnd
-
-#EntityStart
-#TagComponent GrassPyramid
-#TransformComponent Begin
-#center 64.35 -36.25 102.4
-#angles 0 -37.5 0
-#scale 1 1 1
-#general_scale 0
-#RenderableComponent Pyramid
-#Texture2DComponent textures/grass-texture.jpg
-#ScriptComponent scripts/Examples.py
-
-#EntityEnd
-
-#EntityStart
-#TagComponent SkyboxSurface
-#TransformComponent Begin
-#center 337.15 12.15 9.6
-#angles 0 1434.5 708
-#scale 1 -7 8.92
-#general_scale 0
-#RenderableComponent Surface
-#Texture2DComponent textures/skybox/front.jpg
-#LightComponent Begin
-#ambientlight 0.5 0.5 0.5 1
-#diffuselight 0.9 0.9 0.9 1
-#specularlight 0.5 0.5 0.5 1
-#constant 1
-#linear 0.045
-#quadratic 0.0075
-#shininess 64
-
-#EntityEnd
-
-#CollectionTransformComponent Begin
-#center 22.75 -22.25 0
-#angles 0 -1.5 0
-#scale 1 1 1
-#general_scale 0
-#CollectionTagComponent FirstCollectionEver
-
-#EntityCollectionEnd
-
-#EntityCollectionStart
-
-#EntityStart
 #TagComponent LeftLeftCube
 #TransformComponent Begin
-#center 2.25 3.1 -8
-#angles 0 0 0
+#center 18.7 10.6 -9.55
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.736842 0.243767 0.243767
+#ColorComponent 0.736842 0.243767 0.243767 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent LeftPyramid
 #TransformComponent Begin
-#center 2.25 3.1 0
-#angles 0 0 0
+#center 18.7 10.6 -1.55
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Pyramid
-#ColorComponent 0.594316 0.902256 0.271355
+#ColorComponent 0.594316 0.902256 0.271355 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent RightPyramid
 #TransformComponent Begin
-#center 2.25 3.1 8
-#angles 0 0 0
+#center 18.7 10.6 6.45
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Pyramid
-#ColorComponent 0.165527 0.407174 0.917293
+#ColorComponent 0.165527 0.407174 0.917293 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent RightRightCube
 #TransformComponent Begin
-#center 2.25 3.1 16
-#angles 0 0 0
+#center 18.7 10.6 14.45
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.876562 0.890977 0.0837385
+#ColorComponent 0.876562 0.890977 0.0837385 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent CenterUp
 #TransformComponent Begin
-#center 11.35 8.7 3.6
-#angles 0 0 0
+#center 27.8 16.2 2.05
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.0722907 0.620301 0.60794
+#ColorComponent 0.0722907 0.620301 0.60794 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent CenterDown
 #TransformComponent Begin
-#center 14.25 -1.9 2.6
-#angles 0 0 0
+#center 30.7 5.6 1.05
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.674119 0.208816 0.740602
+#ColorComponent 0.674119 0.208816 0.740602 1
 
 #EntityEnd
 
 #CollectionTransformComponent Begin
-#center 2.25 3.1 0
-#angles 0 0 0
+#center 18.7 10.6 -1.55
+#angles 0 -21 0
 #scale 1 1 1
 #general_scale 0
 #CollectionTagComponent FullfillTo32
@@ -461,65 +405,65 @@ MAREngine scene file
 #EntityStart
 #TagComponent RedCube
 #TransformComponent Begin
-#center 9.9 6.5 -5
+#center 9.9 6.65 -5
 #angles 0 0 17
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.947368 0.0463 0.0463
+#ColorComponent 0.947368 0.0463 0.0463 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent GreenCube
 #TransformComponent Begin
-#center 9.9 6.5 -7.4
+#center 9.9 6.65 -7.4
 #angles 0 0 18.5
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.225497 1 0.0639098
+#ColorComponent 0.225497 1 0.0639098 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent BlueCube
 #TransformComponent Begin
-#center 9.9 6.5 -9.85
+#center 9.9 6.65 -9.85
 #angles 0 0 17
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.0607864 0.0872985 0.951128
+#ColorComponent 0.0607864 0.0872985 0.951128 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent PinkCube
 #TransformComponent Begin
-#center 7.05 6.5 -4.75001
+#center 7.05 6.65 -4.75001
 #angles 0 0 18
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 0.702001 0 0.951128
+#ColorComponent 0.702001 0 0.951128 1
 
 #EntityEnd
 
 #EntityStart
 #TagComponent YellowCube
 #TransformComponent Begin
-#center 6.95 6.5 -7.35
+#center 6.95 6.65 -7.35
 #angles 0 0 17.5
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Cube
-#ColorComponent 1 0.946428 0
+#ColorComponent 1 0.946428 0 1
 
 #EntityEnd
 
 #CollectionTransformComponent Begin
-#center 9.9 6.5 -15.3
+#center 9.9 6.65 -15.3
 #angles 0 0 0
 #scale 1 1 1
 #general_scale 0
@@ -538,7 +482,7 @@ MAREngine scene file
 #scale 1 1 1
 #general_scale 0
 #RenderableComponent Suzanne
-#ColorComponent 0.5 0.499998 0.499995
+#ColorComponent 0.5 0.499998 0.499995 1
 
 #EntityEnd
 

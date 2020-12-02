@@ -21,13 +21,14 @@
 #include "GUI_SceneHierarchy.h"
 #include "GUI_EntityCollectionPanel.h"
 #include "GUI_EntityPanel.h"
+#include "../GUI_Events.h"
 #include "../GUI_TextEditor.h"
 
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/Scene.h"
-#include "../../../Core/ecs/SceneEvents.h"
 #include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneEvents.h"
 
 #include "../../../Window/Window.h"
 
@@ -39,6 +40,8 @@ namespace mar::editor {
 
 	void GUI_SceneHierarchy::update(ecs::SceneManager* manager) {
 		ImGui::Begin("Scene Hierarchy");
+
+		buttonsAtPanel(manager);
 
 		ImGui::Text("SCENE - %s", manager->getScene()->getName().c_str());
 		ImGui::Separator();
@@ -54,9 +57,7 @@ namespace mar::editor {
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
 		if (itEntity != entities.cend()) {
-			const auto& entity = *itEntity;
-			GUI_EntityCollectionPanel::Instance()->reset();
-			GUI_EntityPanel::Instance()->setCurrentEntity(entity);
+			GUI_Events::Instance()->onEntitySelected(*itEntity);
 		}
 
 		ImGui::Separator();
@@ -72,9 +73,7 @@ namespace mar::editor {
 
 		const auto itCollection = std::find_if(collections.cbegin(), collections.cend(), userSelectedCollection);
 		if (itCollection != collections.cend()) {
-			const auto& collection = *itCollection;
-			GUI_EntityPanel::Instance()->reset();
-			GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
+			GUI_Events::Instance()->onEntityCollectionSelected(*itCollection);
 		}
 
 		popUpMenu(manager);
@@ -82,6 +81,57 @@ namespace mar::editor {
 		ImGui::End();
 
 		EDITOR_TRACE("GUI: scene_hierarchy");
+	}
+
+	void GUI_SceneHierarchy::buttonsAtPanel(ecs::SceneManager* manager) {
+		if (ImGui::Button("+ E")) {
+			GUI_Events::Instance()->onEntityCreated(manager);
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("+ EC")) {
+			GUI_Events::Instance()->onEntityCollectionCreated(manager);
+		}
+
+		const auto& collection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
+		const bool collectionExists = &collection != nullptr;
+
+		const auto& entity = GUI_EntityPanel::Instance()->getCurrentEntity();
+		const bool entityExists = &entity != nullptr;
+
+		if (collectionExists) {
+			ImGui::SameLine();
+
+			if (ImGui::Button("- EC")) {
+				GUI_Events::Instance()->onEntityCollectionDeleted(manager, collection);
+			}
+
+			if (ImGui::Button("+ E in EC")) {
+				GUI_Events::Instance()->onEntityCreatedAtCollection(collection);
+			}
+
+			if (entityExists) {
+				ImGui::SameLine();
+
+				if (ImGui::Button("- E in EC")) {
+					GUI_Events::Instance()->onEntityDeletedFromCollection(collection, entity);
+				}
+			}
+		}
+		else if (entityExists) {
+			ImGui::SameLine();
+
+			if (ImGui::Button("Copy - E")) {
+				GUI_Events::Instance()->onEntityCopied(manager, entity);
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("- E")) {
+				GUI_Events::Instance()->onEntityDeleted(manager, entity);
+			}
+		}
 	}
 
 	void GUI_SceneHierarchy::popUpMenu(ecs::SceneManager* manager) {
@@ -100,13 +150,11 @@ namespace mar::editor {
 
 		if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 			if (ImGui::MenuItem("Add EntityCollection to scene")) {
-				GUI_EntityPanel::Instance()->reset();
-				GUI_EntityCollectionPanel::Instance()->setCurrentCollection(manager->getScene()->createCollection());
+				GUI_Events::Instance()->onEntityCollectionCreated(manager);
 			}
 
 			if (ImGui::MenuItem("Add Entity to scene")) {
-				GUI_EntityCollectionPanel::Instance()->reset();
-				GUI_EntityPanel::Instance()->setCurrentEntity(manager->getScene()->createEntity());
+				GUI_Events::Instance()->onEntityCreated(manager);
 			}
 
 			const auto& collection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
@@ -118,23 +166,17 @@ namespace mar::editor {
 			if (collectionExists) {
 				const char* collection_tag = collection.getComponent<ecs::TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
-					const auto& createdEntity = collection.createEntity();
-					GUI_EntityPanel::Instance()->setCurrentEntity(createdEntity);
+					GUI_Events::Instance()->onEntityCreatedAtCollection(collection);
 				}
 
 				if (ImGui::MenuItem("Delete selected collection from Scene", collection_tag)) {
-					manager->getScene()->destroyCollection(collection);
-					GUI_EntityCollectionPanel::Instance()->reset();
-					GUI_EntityPanel::Instance()->reset();
-					ecs::SceneEvents::Instance().onCollectionRemove();
+					GUI_Events::Instance()->onEntityCollectionDeleted(manager, collection);
 				}
 				
 				if (entityExists) {
 					const std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
 					if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
-						collection.destroyEntity(entity);
-						GUI_EntityPanel::Instance()->reset();
-						ecs::SceneEvents::Instance().onEntityRemove();
+						GUI_Events::Instance()->onEntityDeletedFromCollection(collection, entity);
 					}
 				}
 			}
@@ -142,9 +184,7 @@ namespace mar::editor {
 
 				const char* entity_tag = entity.getComponent<ecs::TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
-					manager->getScene()->destroyEntity(entity);
-					GUI_EntityPanel::Instance()->reset();
-					ecs::SceneEvents::Instance().onEntityRemove();
+					GUI_Events::Instance()->onEntityDeleted(manager, entity);
 				}
 				
 			}

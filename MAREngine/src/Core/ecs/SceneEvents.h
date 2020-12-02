@@ -42,7 +42,7 @@ namespace mar::ecs {
 		static SceneEvents& Instance();
 		void setSceneManager(SceneManager& manager);
 
-		void onTransformUpdate(const Entity* e) const;
+		void onTransformUpdate(const Entity& e) const;
 
 		void onRenderableAdd() const;
 		void onRenderableUpdate(const Entity* e) const;
@@ -53,7 +53,7 @@ namespace mar::ecs {
 		void onCameraRemove() const;
 
 		void onColorAdd() const;
-		void onColorUpdate(const Entity* e) const;
+		void onColorUpdate(const Entity& e) const;
 		void onColorRemove() const;
 
 		void onTexture2DAdd() const;
@@ -65,7 +65,7 @@ namespace mar::ecs {
 		void onTextureCubemapRemove() const;
 
 		void onLightAdd() const;
-		void onLightUpdate(const Entity* e) const;
+		void onLightUpdate(const Entity& e) const;
 		void onLightRemove() const; 
 
 		void onScriptAdd() const;
@@ -75,7 +75,7 @@ namespace mar::ecs {
 		void onEditorCameraSet(const graphics::RenderCamera* camera) const;
 		void onGameCameraSet() const;
 
-		void onEntityCopy() const;
+		void onEntityCopy(const Entity& entity) const;
 		void onEntityRemove() const;
 
 		void onCollectionTransformUpdate(const EntityCollection* collection, const TransformComponent& transform) const;

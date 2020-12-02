@@ -36,6 +36,7 @@
 #include "EntityPanels/GUI_EntityPanel.h"
 #include "OtherPanels/GUI_Info.h"
 #include "GUI_Filesystem.h"
+#include "GUI_Events.h"
 
 
 namespace mar::editor {
@@ -102,11 +103,7 @@ namespace mar::editor {
 				if (entityExists) {
 					const char* shortcut = currentEntity.getComponent<ecs::TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
-						const auto& entity = m_sceneManager->getScene()->createEntity();
-						ecs::EntityOperation::copyEntity(currentEntity, entity);
-						GUI_EntityPanel::Instance()->setCurrentEntity(entity);
-						GUI_EntityCollectionPanel::Instance()->reset();
-						ecs::SceneEvents::Instance().onEntityCopy();
+						GUI_Events::Instance()->onEntityCopied(m_sceneManager, currentEntity);
 					}
 				}
 

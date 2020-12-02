@@ -36,6 +36,7 @@ namespace mar::editor {
 		
 	private:
 
+		static void buttonsAtPanel(ecs::SceneManager* manager);
 		static void popUpMenu(ecs::SceneManager* manager);
 
 	};
