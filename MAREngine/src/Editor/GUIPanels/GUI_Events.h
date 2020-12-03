@@ -44,7 +44,7 @@ namespace mar::editor {
 		void onEntityCollectionCreated(ecs::SceneManager* sceneManager) const;
 		void onEntityCollectionDeleted(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collection) const;
 		void onEntityCollectionSelected(const ecs::EntityCollection& collection) const;
-		void onEntityCollectionCopied() const;
+		void onEntityCollectionCopied(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collectionToCopy) const;
 
 		void onEntityCreatedAtCollection(const ecs::EntityCollection& collection) const;
 		void onEntityDeletedFromCollection(const ecs::EntityCollection& collection, const ecs::Entity& entity) const;

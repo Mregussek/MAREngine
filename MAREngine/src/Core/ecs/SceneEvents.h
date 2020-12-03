@@ -80,7 +80,7 @@ namespace mar::ecs {
 
 		void onCollectionTransformUpdate(const EntityCollection* collection, const TransformComponent& transform) const;
 		void onCollectionTransformReset(const EntityCollection* collection) const;
-		void onCollectionCopy() const;
+		void onCollectionCopy(const EntityCollection& collection) const;
 		void onCollectionRemove() const;
 		void onCollectionOBJloaded(const EntityCollection& collection) const;
 

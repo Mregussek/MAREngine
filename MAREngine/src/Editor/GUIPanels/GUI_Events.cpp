@@ -82,8 +82,12 @@ namespace mar::editor {
 		GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
 	}
 
-	void GUI_Events::onEntityCollectionCopied() const {
-
+	void GUI_Events::onEntityCollectionCopied(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collectionToCopy) const {
+		const auto& collection = sceneManager->getScene()->createCollection();
+		ecs::EntityOperation::copyCollection(collectionToCopy, collection);
+		GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
+		GUI_EntityPanel::Instance()->reset();
+		ecs::SceneEvents::Instance().onCollectionCopy(collection);
 	}
 
 	void GUI_Events::onEntityCreatedAtCollection(const ecs::EntityCollection& collection) const {

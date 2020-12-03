@@ -107,6 +107,10 @@ namespace mar::editor {
 				GUI_Events::Instance()->onEntityCollectionDeleted(manager, collection);
 			}
 
+			if(ImGui::Button("Copy - EC")) {
+				GUI_Events::Instance()->onEntityCollectionCopied(manager, collection);
+			}
+
 			if (ImGui::Button("+ E in EC")) {
 				GUI_Events::Instance()->onEntityCreatedAtCollection(collection);
 			}

@@ -234,8 +234,11 @@ namespace mar::ecs {
 		std::for_each(entities.cbegin(), entities.cend(), resetToDefaultPosition);
 	}
 
-	void SceneEvents::onCollectionCopy() const {
-		m_sceneManager->initialize();
+	void SceneEvents::onCollectionCopy(const EntityCollection& collection) const {
+		const auto& entities = collection.getEntities();
+		std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
+			onEntityCopy(entity);
+		});
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionCopy");
 	}
