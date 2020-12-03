@@ -18,40 +18,23 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
-#define MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
+#ifndef MAR_ENGINE_EDITOR_GUI_VIEWPORT_GUIZMO_H
+#define MAR_ENGINE_EDITOR_GUI_VIEWPORT_GUIZMO_H
 
 
 #include "../../../mar.h"
-#include "../../Camera/Camera.h"
-#include "../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
-namespace mar::ecs { class SceneManager; class Entity; }
+namespace mar::ecs { class Entity; }
 namespace mar::editor {
 
+	class Camera;
 
-	class GUI_Viewport {
+
+	class GUI_Guizmo {
 	public:
 
-		void initialize();
-		void close();
-
-		void display(ecs::SceneManager* sceneManager, const ecs::Entity& currentEntity);
-
-		void bind(maths::vec3 backgroundColor) const;
-		void unbind() const;
-
-		void updateAspectRatio();
-
-	private:
-
-		void displayMainMenuBar(ecs::SceneManager* sceneManager);
-		void displayActualViewport();
-
-		platforms::FramebufferOpenGL m_framebuffer;
-		Camera m_camera;
-		float m_aspectRatio{ 1.33f };
+		static void draw(const Camera& editorCamera, const ecs::Entity& currentEntity);
 
 	};
 
@@ -59,4 +42,5 @@ namespace mar::editor {
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
+
+#endif // !MAR_ENGINE_EDITOR_GUI_VIEWPORT_GUIZMO_H

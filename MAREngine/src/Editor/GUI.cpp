@@ -151,7 +151,7 @@ namespace mar::editor {
 		m_textEditor.update();
 
 		m_mainMenuBar.display();
-		m_viewport.display(m_sceneManager);
+		m_viewport.display(m_sceneManager, m_entityPanel.getCurrentEntity());
 		m_sceneProperties.display(m_sceneManager->getScene()->getBackground());
 
 		m_entityPanel.update(m_sceneManager->isPlayMode());

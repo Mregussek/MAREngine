@@ -20,8 +20,10 @@
 
 #include "GUI_Viewport.h"
 #include "../../EditorLogging.h"
+#include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/SceneEvents.h"
+#include "GUI_Guizmo.h"
 
 
 namespace mar::editor {
@@ -42,16 +44,23 @@ namespace mar::editor {
 		m_framebuffer.close();
 	}
 
-	void GUI_Viewport::display(ecs::SceneManager* sceneManager) {
+	void GUI_Viewport::display(ecs::SceneManager* sceneManager, const ecs::Entity& currentEntity) {
 		ImGui::Begin("ViewPort", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
-
-		if (ImGui::IsWindowFocused() && sceneManager->useEditorCamera) {
-			m_camera.update(m_aspectRatio);
-		}
 
 		displayMainMenuBar(sceneManager);
 		displayActualViewport();
 
+		if (sceneManager->useEditorCamera) {
+			const bool entityExists = &currentEntity != nullptr;
+			if (entityExists) {
+				GUI_Guizmo::draw(m_camera, currentEntity);
+			}
+
+			if (ImGui::IsWindowFocused()) {
+				m_camera.update(m_aspectRatio);
+			}
+		}
+		
 		ImGui::End();
 
 		EDITOR_TRACE("GUI: Displaying viewport");
