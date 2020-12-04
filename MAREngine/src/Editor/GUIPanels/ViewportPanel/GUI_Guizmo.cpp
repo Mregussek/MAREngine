@@ -58,7 +58,7 @@ namespace mar::editor {
 			maths::mat4::decompose(transform.transform, pos, rot, sca);
 
 			transform.center = pos;
-			transform.angles += (rot - transform.angles);
+			transform.angles = maths::vec3(maths::trig::toDegrees(rot.x), maths::trig::toDegrees(rot.y), maths::trig::toDegrees(rot.z));
 			transform.scale = sca;
 
 			ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);
