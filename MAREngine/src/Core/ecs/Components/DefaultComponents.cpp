@@ -30,9 +30,9 @@ namespace mar::ecs {
 
 		transform =
 			mat4::translation(center) *
-			mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
-			mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
-			mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
+			mat4::rotation(trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
+			mat4::rotation(trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
+			mat4::rotation(trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
 			mat4::scale(scale);
 
 		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent!");
@@ -42,9 +42,9 @@ namespace mar::ecs {
 		using namespace maths;
 
 		return	mat4::translation(center) *
-			mat4::rotation(Trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
-			mat4::rotation(Trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
-			mat4::rotation(Trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
+			mat4::rotation(trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
+			mat4::rotation(trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
+			mat4::rotation(trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
 			mat4::scale(scale);
 
 		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent (static call)!");

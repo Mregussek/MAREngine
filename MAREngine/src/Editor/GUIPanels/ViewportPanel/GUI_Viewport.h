@@ -24,6 +24,7 @@
 
 #include "../../../mar.h"
 #include "../../Camera/Camera.h"
+#include "GUI_Guizmo.h"
 #include "../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
@@ -52,6 +53,7 @@ namespace mar::editor {
 		platforms::FramebufferOpenGL m_framebuffer;
 		Camera m_camera;
 		float m_aspectRatio{ 1.33f };
+		GUI_Guizmo m_guizmo;
 
 	};
 

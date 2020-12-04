@@ -34,7 +34,16 @@ namespace mar::editor {
 	class GUI_Guizmo {
 	public:
 
-		static void draw(const Camera& editorCamera, const ecs::Entity& currentEntity);
+		void selectType();
+		void draw(const Camera& editorCamera, const ecs::Entity& currentEntity) const;
+
+	private:
+
+		void setTranslation();
+		void setRotation();
+		void setScale();
+
+		ImGuizmo::OPERATION m_operation;
 
 	};
 

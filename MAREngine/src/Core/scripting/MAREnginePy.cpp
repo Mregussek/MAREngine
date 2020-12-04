@@ -72,10 +72,10 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 			(math::vec3 & (math::vec3::*)(const math::vec3 & other)) & math::vec3::divide,
 			py::arg("other"))
 		.def("cross",
-			(math::vec3(math::vec3::*)(const math::vec3 & other)) & math::vec3::cross,
+			(math::vec3(math::vec3::*)(const math::vec3 & other) const) & math::vec3::cross,
 			py::arg("other"))
 		.def("dot",
-			(float (math::vec3::*)(const math::vec3 & other)) & math::vec3::dot,
+			(float (math::vec3::*)(const math::vec3 & other) const) & math::vec3::dot,
 			py::arg("other"))
 		.def("length",
 			(float (math::vec3::*)() const) & math::vec3::length)
@@ -153,7 +153,7 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 			(math::vec4 & (math::vec4::*)(const math::vec4 & other)) & math::vec4::divide,
 			py::arg("other"))
 		.def("dot",
-			(float (math::vec4::*)(const math::vec4 & other)) & math::vec4::dot,
+			(float (math::vec4::*)(const math::vec4 & other) const) & math::vec4::dot,
 			py::arg("other"))
 		.def("length",
 			(float (math::vec4::*)() const) & math::vec4::length)
@@ -206,10 +206,10 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def_static("identity",
 			&math::mat4::identity)
 		.def("multiply",
-			(math::mat4(math::mat4::*)(math::mat4 & other)) & math::mat4::multiply,
+			(math::mat4(math::mat4::*)(const math::mat4 & other) const) & math::mat4::multiply,
 			py::arg("other"))
 		.def("multiply",
-			(math::vec4(math::mat4::*)(math::vec4 & other)) & math::mat4::multiply,
+			(math::vec4(math::mat4::*)(const math::vec4 & other) const) & math::mat4::multiply,
 			py::arg("other"))
 		.def_static("orthographic",
 			&math::mat4::orthographic,
@@ -248,21 +248,21 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 
 
 	// --- TRIG ---- //
-	py::class_<math::Trig>(m, "trig")
+	py::class_<math::trig>(m, "trig")
 		.def_static("toRadians",
-			&math::Trig::toRadians,
+			&math::trig::toRadians,
 			py::arg("degrees"))
 		.def_static("toDegrees",
-			&math::Trig::toDegrees,
+			&math::trig::toDegrees,
 			py::arg("radians"))
 		.def_static("sine",
-			&math::Trig::sine,
+			&math::trig::sine,
 			py::arg("radians"))
 		.def_static("tangent",
-			&math::Trig::tangent,
+			&math::trig::tangent,
 			py::arg("radians"))
 		.def_static("cosine",
-			&math::Trig::cosine,
+			&math::trig::cosine,
 			py::arg("radians"));
 
 	// -----------------------------------------------------------------------------------

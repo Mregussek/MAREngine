@@ -423,6 +423,12 @@
     <ClInclude Include="src\Editor\GUIPanels\ViewportPanel\GUI_Guizmo.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="3rd_party\MARMaths\src\math_func\basic.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="3rd_party\MARMaths\src\trig\trig.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -660,6 +666,12 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUIPanels\ViewportPanel\GUI_Guizmo.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\MARMaths\src\math_func\basic.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\MARMaths\src\trig\trig.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

@@ -53,7 +53,8 @@ namespace mar::editor {
 		if (sceneManager->useEditorCamera) {
 			const bool entityExists = &currentEntity != nullptr;
 			if (entityExists) {
-				GUI_Guizmo::draw(m_camera, currentEntity);
+				m_guizmo.selectType();
+				m_guizmo.draw(m_camera, currentEntity);
 			}
 
 			if (ImGui::IsWindowFocused()) {

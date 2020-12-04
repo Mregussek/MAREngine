@@ -22,12 +22,22 @@
 #include "../../Camera/Camera.h"
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/SceneEvents.h"
+#include "../../../Window/Window.h"
 
 
 namespace mar::editor {
 
 
-	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::Entity& currentEntity) {
+	void GUI_Guizmo::selectType() {
+		//if (window::Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {}
+
+		if (window::Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
+		if (window::Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
+		if (window::Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
+	}
+
+	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::Entity& currentEntity) const {
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
 
@@ -38,10 +48,33 @@ namespace mar::editor {
 		auto& transform = currentEntity.getComponent<ecs::TransformComponent>();
 
 		const graphics::RenderCamera* renderCam = editorCamera.getCameraData();
-		const float* viewPtr = maths::mat4::value_ptr(renderCam->getView());
-		const float* projPtr = maths::mat4::value_ptr(renderCam->getProjection());
-		float* transfromPtr = maths::mat4::value_ptr_nonconst(transform.transform);
-		ImGuizmo::Manipulate(viewPtr, projPtr, ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::LOCAL, transfromPtr);
+		const float* viewPtr = renderCam->getView().value_ptr();
+		const float* projPtr = renderCam->getProjection().value_ptr();
+		float* transfromPtr = transform.transform.value_ptr_nonconst();
+		ImGuizmo::Manipulate(viewPtr, projPtr, m_operation, ImGuizmo::MODE::LOCAL, transfromPtr);
+
+		if (ImGuizmo::IsUsing()) {
+			maths::vec3 pos, rot, sca;
+			maths::mat4::decompose(transform.transform, pos, rot, sca);
+
+			transform.center = pos;
+			transform.angles += (rot - transform.angles);
+			transform.scale = sca;
+
+			ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);
+		}
+	}
+
+	void GUI_Guizmo::setTranslation() {
+		m_operation = ImGuizmo::OPERATION::TRANSLATE;
+	}
+
+	void GUI_Guizmo::setRotation() {
+		m_operation = ImGuizmo::OPERATION::ROTATE;
+	}
+
+	void GUI_Guizmo::setScale() {
+		m_operation = ImGuizmo::OPERATION::SCALE;
 	}
 
 }

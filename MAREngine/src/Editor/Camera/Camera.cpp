@@ -67,7 +67,7 @@ namespace mar::editor {
     }
     
     void Camera::updateCameraVectors() {
-        typedef maths::Trig tri;
+        typedef maths::trig tri;
 
         const maths::vec3 worldUp{ 0.f, 1.f, 0.f };
     

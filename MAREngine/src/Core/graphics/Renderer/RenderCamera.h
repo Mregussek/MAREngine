@@ -34,7 +34,7 @@ namespace mar::graphics {
 
 	class RenderCamera{
 
-		typedef maths::Trig trig;
+		typedef maths::trig trig;
 		typedef maths::vec3 vec3;
 		typedef maths::mat4 mat4;
 
