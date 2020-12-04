@@ -45,9 +45,14 @@ namespace mar::editor {
 	}
 
 	void GUI_Viewport::display(ecs::SceneManager* sceneManager, const ecs::Entity& currentEntity) {
-		ImGui::Begin("ViewPort", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
-
+		ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_MenuBar);
+		
 		displayMainMenuBar(sceneManager);
+
+		ImGui::End();
+
+		ImGui::Begin("ViewPort", nullptr);
+
 		displayActualViewport();
 
 		if (sceneManager->useEditorCamera) {
@@ -63,6 +68,8 @@ namespace mar::editor {
 		}
 		
 		ImGui::End();
+
+		ImGui::ShowDemoWindow();
 
 		EDITOR_TRACE("GUI: Displaying viewport");
 	}

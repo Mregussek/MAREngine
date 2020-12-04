@@ -30,11 +30,11 @@ namespace mar::editor {
 
 
 	void GUI_Guizmo::selectType() {
-		//if (window::Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {}
-
-		if (window::Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
-		if (window::Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
-		if (window::Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
+		if (window::Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
+			if (window::Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
+			if (window::Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
+			if (window::Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
+		}
 	}
 
 	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::Entity& currentEntity) const {
@@ -57,8 +57,10 @@ namespace mar::editor {
 			maths::vec3 pos, rot, sca;
 			maths::mat4::decompose(transform.transform, pos, rot, sca);
 
+			const auto rotDegrees{ maths::vec3(maths::trig::toDegrees(rot.x), maths::trig::toDegrees(rot.y), maths::trig::toDegrees(rot.z)) };
+
 			transform.center = pos;
-			transform.angles = maths::vec3(maths::trig::toDegrees(rot.x), maths::trig::toDegrees(rot.y), maths::trig::toDegrees(rot.z));
+			transform.angles = rotDegrees;
 			transform.scale = sca;
 
 			ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);

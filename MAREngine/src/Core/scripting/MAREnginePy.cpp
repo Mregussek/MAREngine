@@ -200,8 +200,8 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def(py::init<>())
 		.def(py::init<float>(),
 			py::arg("diagonal"))
-		.def("getColumn",
-			&math::mat4::getColumn,
+		.def("getColumn4",
+			&math::mat4::getColumn4,
 			py::arg("index"))
 		.def_static("identity",
 			&math::mat4::identity)

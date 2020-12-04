@@ -28,12 +28,7 @@ namespace mar::ecs {
 	void TransformComponent::recalculate() {
 		using namespace maths;
 
-		transform =
-			mat4::translation(center) *
-			mat4::rotation(trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
-			mat4::rotation(trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
-			mat4::rotation(trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
-			mat4::scale(scale);
+		mat4::recompose(transform, center, angles, scale);
 
 		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent!");
 	}
@@ -41,13 +36,11 @@ namespace mar::ecs {
 	maths::mat4 TransformComponent::calculate(const maths::vec3& center, const maths::vec3& angles, const maths::vec3& scale) {
 		using namespace maths;
 
-		return	mat4::translation(center) *
+		return mat4::translation(center) *
 			mat4::rotation(trig::toRadians(angles.x), { 1.f, 0.f, 0.f }) *
 			mat4::rotation(trig::toRadians(angles.y), { 0.f, 1.f, 0.f }) *
 			mat4::rotation(trig::toRadians(angles.z), { 0.f, 0.f, 1.f }) *
 			mat4::scale(scale);
-
-		ECS_TRACE("TRANSFORM_COMPONENT: calculated new TransformComponent (static call)!");
 	}
 
 
