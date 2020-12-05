@@ -21,6 +21,7 @@
 #include "GUI_Viewport.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/SceneEvents.h"
 #include "GUI_Guizmo.h"
@@ -44,12 +45,16 @@ namespace mar::editor {
 		m_framebuffer.close();
 	}
 
-	void GUI_Viewport::display(ecs::SceneManager* sceneManager, const ecs::Entity& currentEntity) {
-		ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_MenuBar);
+	void GUI_Viewport::display(ecs::SceneManager* sceneManager, const ecs::EntityCollection& currentCollection, const ecs::Entity& currentEntity) {
+		ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
 		
 		displayMainMenuBar(sceneManager);
 
 		ImGui::End();
+
+		ImGuiStyle* style = &ImGui::GetStyle();
+		const auto rememberDefaultVal = style->WindowPadding;
+		style->WindowPadding = ImVec2(1.f, 1.f);
 
 		ImGui::Begin("ViewPort", nullptr);
 
@@ -57,10 +62,11 @@ namespace mar::editor {
 
 		if (sceneManager->useEditorCamera) {
 			const bool entityExists = &currentEntity != nullptr;
-			if (entityExists) {
-				m_guizmo.selectType();
-				m_guizmo.draw(m_camera, currentEntity);
-			}
+			const bool collectionExists = &currentCollection != nullptr;
+			m_guizmo.selectType();
+
+			if (collectionExists) { m_guizmo.draw(m_camera, currentCollection); }
+			else if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
 			if (ImGui::IsWindowFocused()) {
 				m_camera.update(m_aspectRatio);
@@ -69,7 +75,7 @@ namespace mar::editor {
 		
 		ImGui::End();
 
-		ImGui::ShowDemoWindow();
+		style->WindowPadding = rememberDefaultVal;
 
 		EDITOR_TRACE("GUI: Displaying viewport");
 	}

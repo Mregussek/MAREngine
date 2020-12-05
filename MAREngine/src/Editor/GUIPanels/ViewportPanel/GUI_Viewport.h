@@ -28,7 +28,7 @@
 #include "../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
-namespace mar::ecs { class SceneManager; class Entity; }
+namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; }
 namespace mar::editor {
 
 
@@ -38,7 +38,7 @@ namespace mar::editor {
 		void initialize();
 		void close();
 
-		void display(ecs::SceneManager* sceneManager, const ecs::Entity& currentEntity);
+		void display(ecs::SceneManager* sceneManager, const ecs::EntityCollection& currentCollection, const ecs::Entity& currentEntity);
 
 		void bind(maths::vec3 backgroundColor) const;
 		void unbind() const;

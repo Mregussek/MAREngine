@@ -22,6 +22,7 @@
 #include "../../Camera/Camera.h"
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/SceneEvents.h"
 #include "../../../Window/Window.h"
 
@@ -38,14 +39,26 @@ namespace mar::editor {
 	}
 
 	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::Entity& currentEntity) const {
+		auto& transform = currentEntity.getComponent<ecs::TransformComponent>();
+		if (draw(editorCamera, transform)) {
+			ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);
+		}
+	}
+
+	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::EntityCollection& currentCollection) const {
+		auto& transform = currentCollection.getComponent<ecs::TransformComponent>();
+		if (draw(editorCamera, transform)) {
+			ecs::SceneEvents::Instance().onCollectionTransformUpdate(&currentCollection, transform);
+		}
+	}
+
+	bool GUI_Guizmo::draw(const Camera& editorCamera, ecs::TransformComponent& transform) const {
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
 
 		const auto windowPos = ImGui::GetWindowPos();
 		const auto windowSize = ImGui::GetWindowSize();
 		ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
-
-		auto& transform = currentEntity.getComponent<ecs::TransformComponent>();
 
 		const graphics::RenderCamera* renderCam = editorCamera.getCameraData();
 		const float* viewPtr = renderCam->getView().value_ptr();
@@ -63,8 +76,10 @@ namespace mar::editor {
 			transform.angles = rotDegrees;
 			transform.scale = sca;
 
-			ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);
+			return true;
 		}
+
+		return false;
 	}
 
 	void GUI_Guizmo::setTranslation() {

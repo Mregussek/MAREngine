@@ -66,15 +66,13 @@ namespace mar::editor {
 		}
 
 		auto& tag = currentCollection->getComponent<ecs::TagComponent>();
+		if (ImGui::CollapsingHeader("TagComponent")) {
+			handleTagComponent(tag);
+		}
 
-		ImGui::Text("ENTITYCOLLECTION --- %s", tag.tag.c_str());
-		ImGui::Separator();
-
-		handleTagComponent(tag);
-		
-		ImGui::Separator();
-
-		handleTransformComponent();
+		if (ImGui::CollapsingHeader("TransformComponent")) {
+			handleTransformComponent();
+		}
 
 		ImGui::Separator();
 

@@ -48,9 +48,6 @@ namespace mar::editor {
 
 		const auto& entities = manager->getScene()->getEntities();
 
-		ImGui::Text("ENTITIES --- %d", entities.size());
-		ImGui::Separator();
-
 		auto userSelectedEntity = [](const ecs::Entity& entity) {
 			return ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str());
 		};
@@ -60,12 +57,7 @@ namespace mar::editor {
 			GUI_Events::Instance()->onEntitySelected(*itEntity);
 		}
 
-		ImGui::Separator();
-
 		const auto& collections = manager->getScene()->getCollections();
-
-		ImGui::Text("Collections --- %d", collections.size());
-		ImGui::Separator();
 
 		auto userSelectedCollection = [](const ecs::EntityCollection& collection) {
 			return ImGui::MenuItem(collection.getComponent<ecs::TagComponent>().tag.c_str());
