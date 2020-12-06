@@ -41,11 +41,14 @@ namespace mar::editor {
         Camera() = default;
 
         void initialize(float aspectRatio);
-        void update(float aspectRatio);
+        void update(float aspectRatio, bool useInput);
 
         const graphics::RenderCamera* getCameraData() const;
 
     private:
+
+        void updateWithInput();
+        void updateOnlyMVP();
 
         bool processInput();
         void updateCameraVectors();

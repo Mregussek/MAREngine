@@ -34,17 +34,31 @@ namespace mar::editor {
         updateData();
     }
     
-    void Camera::update(float aspectRatio) {
+    void Camera::update(float aspectRatio, bool useInput) {
         m_aspectRatio = aspectRatio;
 
-        if (processInput()) {
-            updateCameraVectors();
-            updateData();
+        if (useInput) {
+            updateWithInput();
+        }
+        else {
+            updateOnlyMVP();
         }
     }
     
     // ---- PRIVATE METHODS ---- //
     
+    void Camera::updateWithInput() {
+        if (processInput()) {
+            updateCameraVectors();
+            updateData();
+        }
+    }
+
+    void Camera::updateOnlyMVP() {
+        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
+        m_renderCamera.recalculateMVP();
+    }
+
     bool Camera::processInput() {
         static float lastTime = 0.0f;
         bool userPressedSth = false;

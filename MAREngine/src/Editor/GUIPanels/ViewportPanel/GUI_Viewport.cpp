@@ -73,7 +73,10 @@ namespace mar::editor {
 			}
 
 			if (ImGui::IsWindowFocused()) {
-				m_camera.update(m_aspectRatio);
+				m_camera.update(m_aspectRatio, true);
+			}
+			else {
+				m_camera.update(m_aspectRatio, false);
 			}
 		}
 		
@@ -85,12 +88,12 @@ namespace mar::editor {
 	}
 
 	void GUI_Viewport::displayMainMenuBar(ecs::SceneManager* sceneManager) {
-		auto displayEditorModeButtons = [&sceneManager, this]() {
+		auto displayEditorModeButtons = [&sceneManager, &camera = std::as_const(m_camera)]() {
 			if (ImGui::Button("PLAY")) { sceneManager->setPlayMode(); }
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
 					if (sceneManager->useEditorCamera) {
-						ecs::SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
+						ecs::SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
 					}
 					else {
 						ecs::SceneEvents::Instance().onGameCameraSet();
@@ -99,11 +102,11 @@ namespace mar::editor {
 			}
 		};
 
-		auto displayPlayModeButtons = [&sceneManager, this]() {
+		auto displayPlayModeButtons = [&sceneManager, &camera = std::as_const(m_camera)]() {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
-					ecs::SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
+					ecs::SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
 				}
 			}
 
