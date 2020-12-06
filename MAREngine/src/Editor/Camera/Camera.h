@@ -47,13 +47,8 @@ namespace mar::editor {
 
     private:
 
-        void updateWithInput();
-        void updateOnlyMVP();
-
         bool processInput();
         void updateCameraVectors();
-
-        void updateData();
 
 
         graphics::RenderCamera m_renderCamera;

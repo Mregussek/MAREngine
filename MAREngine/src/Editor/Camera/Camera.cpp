@@ -31,33 +31,44 @@ namespace mar::editor {
         m_aspectRatio = aspectRatio;
 
         updateCameraVectors();
-        updateData();
+
+        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
+        m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
+        m_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
+        m_renderCamera.recalculateMVP();
     }
     
-    void Camera::update(float aspectRatio, bool useInput) {
-        m_aspectRatio = aspectRatio;
+    void Camera::update(float aspectRatio, bool useInput) {       
+        auto updatePerspectiveIfNeeded = [this, aspectRatio]()->bool {
+            if (m_aspectRatio != aspectRatio) {
+                m_aspectRatio = aspectRatio;
+                m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
+                return true;
+            }
+
+            return false;
+        };
+
+        auto recalculateMatrixAfterUserInput = [this, &updatePerspectiveIfNeeded]() {
+            updateCameraVectors();
+            updatePerspectiveIfNeeded();
+            m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
+            m_renderCamera.recalculateMVP();
+        };
 
         if (useInput) {
-            updateWithInput();
+            const bool userPressedSomeKey{ processInput() };
+            if (userPressedSomeKey) { recalculateMatrixAfterUserInput(); }
+            else {
+                if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); }
+            }
         }
         else {
-            updateOnlyMVP();
+            if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); }
         }
     }
     
     // ---- PRIVATE METHODS ---- //
-    
-    void Camera::updateWithInput() {
-        if (processInput()) {
-            updateCameraVectors();
-            updateData();
-        }
-    }
-
-    void Camera::updateOnlyMVP() {
-        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
-        m_renderCamera.recalculateMVP();
-    }
 
     bool Camera::processInput() {
         static float lastTime = 0.0f;
@@ -72,14 +83,7 @@ namespace mar::editor {
 
         return userPressedSth;
     }
-    
-    void Camera::updateData() {
-        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
-        m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
-        m_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
-        m_renderCamera.recalculateMVP();
-    }
-    
+
     void Camera::updateCameraVectors() {
         typedef maths::trig tri;
 
