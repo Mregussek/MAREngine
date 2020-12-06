@@ -114,29 +114,15 @@ namespace mar::editor {
 			const auto lastCenter = tran.center;
 			const auto lastAngles = tran.angles;
 			const auto lastScale = tran.scale;
-			const auto lastGeneral = tran.general_scale;
-
 			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
-			if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)) { updatedTransform = true; }
-
-			if (lastGeneral != tran.general_scale) { tran.scale += tran.general_scale - lastGeneral; }
-
-			if (ImGui::Button("Reset to default scale")) {
-				tran.general_scale = 1.f;
-				tran.scale.x = 1.f;
-				tran.scale.y = 1.f;
-				tran.scale.z = 1.f;
-				updatedTransform = true;
-			}
 
 			if (updatedTransform) {
 				const auto diffCenter = lastCenter != tran.center ? tran.center - lastCenter : maths::vec3();
 				const auto diffAngles = lastAngles != tran.angles ? tran.angles - lastAngles : maths::vec3();
 				const auto diffScale =	lastScale != tran.scale ? tran.scale - lastScale : maths::vec3();
-				const auto diffGeneralScale = lastGeneral != tran.general_scale ? tran.general_scale - lastGeneral : 0.f;
-				const ecs::TransformComponent diffTransform{ diffCenter, diffAngles, diffScale, diffGeneralScale };
+				const ecs::TransformComponent diffTransform{ diffCenter, diffAngles, diffScale };
 
 				ecs::SceneEvents::Instance().onCollectionTransformUpdate(currentCollection, diffTransform);
 			}

@@ -29,6 +29,7 @@ namespace mar::ecs {
 	class Entity; 
 	struct RenderPipelineComponent; 
 	struct LightComponent;
+	struct TransformComponent;
 }
 namespace mar::graphics {
 
@@ -44,7 +45,7 @@ namespace mar::graphics {
 
 		void onDrawCall();
 
-		void onTransformMat4Update(const maths::mat4& transfrom, const ecs::RenderPipelineComponent& rpc);
+		void onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc);
 		void onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc);
 
 		void onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc);

@@ -96,8 +96,7 @@ namespace mar::scripting {
         m_module.attr("update")();
     
         transform = m_module.attr("transform").cast<ecs::TransformComponent>();
-        transform.recalculate();
-    
+
         if (entity.hasComponent<ecs::LightComponent>()) {
             auto& light = entity.getComponent<ecs::LightComponent>();
             light = m_module.attr("light").cast<ecs::LightComponent>();

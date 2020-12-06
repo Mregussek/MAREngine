@@ -40,12 +40,12 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
 	}
 
-	void RenderEvents::onTransformMat4Update(const maths::mat4& transform, const ecs::RenderPipelineComponent& rpc) {
+	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) {
 		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			m_renderPipeline->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
+			m_renderPipeline->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform;
+			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 	}
 	

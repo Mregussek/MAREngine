@@ -95,8 +95,6 @@ namespace mar::ecs {
 		tran.angles = storage.transform.angles;
 		tran.scale = storage.transform.scale;
 
-		tran.recalculate();
-
 		if (entity.hasComponent<LightComponent>()) {
 			auto& light = entity.getComponent<LightComponent>();
 

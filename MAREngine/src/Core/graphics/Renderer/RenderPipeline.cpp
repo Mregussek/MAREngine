@@ -253,7 +253,7 @@ namespace mar::graphics {
 		indicesMax += (renderable.vertices.size() * sizeof(Vertex) / 4) / RenderContainer::getStride();
 		shapeID++;
 
-		transforms.push_back(transform.transform);
+		transforms.push_back(transform.getTransform());
 
 		MAR_CORE_ASSERT(transforms.size() == shapeID, "transform.size() and shapeID are not equal!");
 

@@ -77,27 +77,19 @@ namespace mar::ecs {
 	};
 
 	struct TransformComponent {
-		float general_scale{ 1.f };
 		maths::vec3 center{ 0.f, 0.f, 0.f };
 		maths::vec3 angles{ 0.f, 0.f, 0.f };
 		maths::vec3 scale{ 1.f, 1.f, 1.f };
 
-		maths::mat4 transform{ 1.f };
-
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& tc) = default;
-		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale, float newGeneralScale) :
+		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale) :
 			center(std::move(newCenter)),
 			angles(std::move(newAngles)),
-			scale(std::move(newScale)),
-			general_scale(newGeneralScale)
+			scale(std::move(newScale))
 		{}
 
-		operator maths::mat4& () { return transform; }
-		operator const maths::mat4& () const { return transform; }
-
-		void recalculate();
-		static maths::mat4 calculate(const maths::vec3& center, const maths::vec3& angles, const maths::vec3& scale);
+		maths::mat4 getTransform() const;
 	};
 
 

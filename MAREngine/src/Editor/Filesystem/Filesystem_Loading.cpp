@@ -112,9 +112,6 @@ namespace mar::editor {
 
 				// #scale - 6  letters
 				loadVec3Getline(tran.scale, 6);
-
-				// #general_scale - 12 letters
-				loadFloatGetline(tran.general_scale, 12);
 			}
 			else if (line.find("#EntityCollectionEnd") != std::string::npos) {
 				return;
@@ -177,11 +174,6 @@ namespace mar::editor {
 
 				// #scale - 6  letters
 				loadVec3Getline(tran.scale, 6);
-
-				// #general_scale - 12 letters
-				loadFloatGetline(tran.general_scale, 12);
-
-				tran.recalculate();
 			}
 			else if (line.find("#RenderableComponent") != std::string::npos) {
 				auto& ren = getComponentFromEntity<ecs::RenderableComponent>(entity);

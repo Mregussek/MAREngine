@@ -52,7 +52,7 @@ namespace mar::ecs {
 			renderCamera.calculateCameraTransforms(transform, cam);
 		}
 		else {
-			graphics::RenderEvents::Instance().onTransformMat4Update(transform.transform, rpc);
+			graphics::RenderEvents::Instance().onTransformMat4Update(transform, rpc);
 		}
 			
 		if (entity.hasComponent<LightComponent>()) {
@@ -211,9 +211,6 @@ namespace mar::ecs {
 			entityTransform.center += transform.center;
 			entityTransform.angles += transform.angles;
 			entityTransform.scale += transform.scale;
-			entityTransform.general_scale += transform.general_scale;
-
-			entityTransform.recalculate();
 
 			onTransformUpdate(entity);
 		};

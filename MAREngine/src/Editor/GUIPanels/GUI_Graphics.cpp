@@ -64,8 +64,9 @@ namespace mar::editor {
 	void GUI_Graphics::drawSelectedEntity(const ecs::RenderableComponent& ren, const ecs::TransformComponent& tran) {
 		using namespace platforms::ShaderUniforms;
 		
-		const maths::vec3 scale = tran.scale + 0.05f;
-		const maths::mat4 betterOutline = ecs::TransformComponent::calculate(tran.center, tran.angles, scale);
+		const auto outlineScale{ tran.scale + 0.05f };
+		const ecs::TransformComponent tranCopy{ tran.center, tran.angles, outlineScale };
+		const maths::mat4 betterOutline = tranCopy.getTransform();
 
 		m_pipeline.bind();
 		m_pipeline.update(ren.vertices, ren.indices);

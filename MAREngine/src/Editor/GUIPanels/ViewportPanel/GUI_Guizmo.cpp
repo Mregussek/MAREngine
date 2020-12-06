@@ -53,6 +53,10 @@ namespace mar::editor {
 	}
 
 	bool GUI_Guizmo::draw(const Camera& editorCamera, ecs::TransformComponent& transform) const {
+		using namespace maths;
+
+		mat4 matrix{ transform.getTransform() };
+
 		ImGuizmo::SetOrthographic(false);
 		ImGuizmo::SetDrawlist();
 
@@ -63,18 +67,13 @@ namespace mar::editor {
 		const graphics::RenderCamera* renderCam = editorCamera.getCameraData();
 		const float* viewPtr = renderCam->getView().value_ptr();
 		const float* projPtr = renderCam->getProjection().value_ptr();
-		float* transfromPtr = transform.transform.value_ptr_nonconst();
+		float* transfromPtr = matrix.value_ptr_nonconst();
 		ImGuizmo::Manipulate(viewPtr, projPtr, m_operation, ImGuizmo::MODE::LOCAL, transfromPtr);
 
 		if (ImGuizmo::IsUsing()) {
-			maths::vec3 pos, rot, sca;
-			maths::mat4::decompose(transform.transform, pos, rot, sca);
-
-			const auto rotDegrees{ maths::vec3(maths::trig::toDegrees(rot.x), maths::trig::toDegrees(rot.y), maths::trig::toDegrees(rot.z)) };
-
-			transform.center = pos;
-			transform.angles = rotDegrees;
-			transform.scale = sca;
+			vec3 rot;
+			mat4::decompose(matrix, transform.center, rot, transform.scale);
+			transform.angles = vec3(trig::toDegrees(rot.x), trig::toDegrees(rot.y), trig::toDegrees(rot.z));
 
 			return true;
 		}

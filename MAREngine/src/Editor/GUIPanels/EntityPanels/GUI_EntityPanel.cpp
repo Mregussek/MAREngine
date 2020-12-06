@@ -231,31 +231,18 @@ namespace mar::editor {
 	}
 
 	void GUI_EntityPanel::handleTransformComponent() const {
+		using namespace maths;
+
 		auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
 
 		{ // Sliders
 			bool updatedTransform = false;
 
-			static float lastGeneral;
-			lastGeneral = tran.general_scale;
-
 			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
-			if (ImGui::DragFloat("GeneralScale", &tran.general_scale, 0.01f, 0.001f, 10.f, "%.3f", 1.f)) { updatedTransform = true; }
-
-			if (lastGeneral != tran.general_scale) { tran.scale += tran.general_scale - lastGeneral; }
-
-			if (ImGui::Button("Reset to default scale")) {
-				tran.general_scale = 1.f;
-				tran.scale.x = 1.f;
-				tran.scale.y = 1.f;
-				tran.scale.z = 1.f;
-				updatedTransform = true;
-			}
 
 			if (updatedTransform) {
-				tran.recalculate();
 				ecs::SceneEvents::Instance().onTransformUpdate(*currentEntity);
 			}
 		}

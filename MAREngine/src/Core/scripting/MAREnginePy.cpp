@@ -273,9 +273,7 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def(py::init<>())
 		.def_readwrite("scale", &ecs::TransformComponent::scale)
 		.def_readwrite("center", &ecs::TransformComponent::center)
-		.def_readwrite("angles", &ecs::TransformComponent::angles)
-		.def_readwrite("general_scale", &ecs::TransformComponent::general_scale)
-		.def_readwrite("transform", &ecs::TransformComponent::transform);
+		.def_readwrite("angles", &ecs::TransformComponent::angles);
 
 	py::class_<ecs::ColorComponent>(m, "Color")
 		.def(py::init<>())

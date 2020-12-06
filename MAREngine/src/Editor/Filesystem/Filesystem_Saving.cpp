@@ -70,7 +70,6 @@ namespace mar::editor {
 			ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
 			ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";
 			ss << "#scale " << transform.scale.x << " " << transform.scale.y << " " << transform.scale.z << "\n";
-			ss << "#general_scale " << transform.general_scale << "\n";
 		}
 		
 		ss << "#CollectionTagComponent " << tag.tag << "\n";
@@ -91,7 +90,6 @@ namespace mar::editor {
 			ss << "#center " << transform.center.x << " " << transform.center.y << " " << transform.center.z << "\n";
 			ss << "#angles " << transform.angles.x << " " << transform.angles.y << " " << transform.angles.z << "\n";
 			ss << "#scale " << transform.scale.x << " " << transform.scale.y << " " << transform.scale.z << "\n";
-			ss << "#general_scale " << transform.general_scale << "\n";
 		}
 		
 		if (entity.hasComponent<ecs::RenderableComponent>()) {
