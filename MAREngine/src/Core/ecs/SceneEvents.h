@@ -49,7 +49,7 @@ namespace mar::ecs {
 		void onRenderableRemove() const;
 
 		void onCameraAdd() const;
-		void onCameraUpdate(const Entity* e) const;
+		void onMainCameraUpdate(const Entity& entity) const;
 		void onCameraRemove() const;
 
 		void onColorAdd() const;

@@ -46,15 +46,13 @@ namespace mar::ecs {
 		const auto& transform = entity.getComponent<TransformComponent>();
 		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
+		graphics::RenderEvents::Instance().onTransformMat4Update(transform, rpc);
+
 		if (entity.hasComponent<CameraComponent>()) {
-			const auto& cam = entity.getComponent<CameraComponent>();
-			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
-			renderCamera.calculateCameraTransforms(transform, cam);
+			const auto& camera{ entity.getComponent<CameraComponent>() };
+			if (camera.checkIfMain()) { onMainCameraUpdate(entity); }
 		}
-		else {
-			graphics::RenderEvents::Instance().onTransformMat4Update(transform, rpc);
-		}
-			
+
 		if (entity.hasComponent<LightComponent>()) {
 			graphics::RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
 		}
@@ -80,8 +78,19 @@ namespace mar::ecs {
 		m_sceneManager->initialize();
 	}
 
-	void SceneEvents::onCameraUpdate(const Entity* e) const {
-		onGameCameraSet();
+	void SceneEvents::onMainCameraUpdate(const Entity& entity) const {
+		const auto& camera = entity.getComponent<CameraComponent>();
+
+		auto updateCameraOperation = [&entity, &camera, this]() {
+			const auto& transform = entity.getComponent<TransformComponent>();
+			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
+			renderCamera.calculateCameraTransforms(transform, camera);
+		};
+
+		if (m_sceneManager->isPlayMode() || m_sceneManager->isPauseMode()) { updateCameraOperation(); }
+		else if (m_sceneManager->isEditorMode() && !m_sceneManager->useEditorCamera) {
+			updateCameraOperation();
+		}
 
 		ECS_TRACE("SCENE_EVENTS: updatedCamera!");
 	}
@@ -176,7 +185,7 @@ namespace mar::ecs {
 
 		auto hasMainCamera = [&scene](entt::entity entity) {
 			const auto& cam = scene->getComponent<CameraComponent>(entity);
-			return cam.id.find("main") != std::string::npos;
+			return cam.checkIfMain();
 		};
 
 		auto view = scene->getView<CameraComponent>();

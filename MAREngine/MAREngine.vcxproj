@@ -353,6 +353,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
     <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
+    <ClCompile Include="src\Core\ecs\Components\CameraComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Components\DefaultComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\EntityCollection-impl.cpp" />

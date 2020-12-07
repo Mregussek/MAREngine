@@ -674,6 +674,9 @@
     <ClCompile Include="3rd_party\MARMaths\src\trig\trig.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\ecs\Components\CameraComponents.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cmake\FindGLFW3.cmake" />

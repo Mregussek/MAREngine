@@ -329,7 +329,7 @@ namespace mar::editor {
 	void GUI_EntityPanel::handleCameraComponent() const {		
 		auto& camera = currentEntity->getComponent<ecs::CameraComponent>();
 
-		if (camera.id.find("main") == std::string::npos) {
+		if (!camera.checkIfMain()) {
 			if (ImGui::Button("Remove Camera")) {
 				currentEntity->removeComponent<ecs::CameraComponent>();
 				ecs::SceneEvents::Instance().onCameraRemove();
@@ -345,37 +345,45 @@ namespace mar::editor {
 		std::fill(std::begin(cameraID), std::end(cameraID), '\0');
 		std::copy(camera.id.begin(), camera.id.end(), cameraID);
 
-		if (ImGui::InputText(" - camera ID", cameraID, inputSize)) {
-			camera.id = std::string(cameraID);
-		}
+		if (ImGui::InputText(" - camera ID", cameraID, inputSize)) { camera.id = std::string(cameraID); }
 
 		ImGui::Checkbox("Perspective (True) / Orthographic (False)", &camera.Perspective);
 
-		bool updaterCamera = false;
+		bool updatedCamera = false;
 
 		if (camera.Perspective) {
-			if (ImGui::DragFloat("AspectRatio", &camera.p_aspectRatio, 0.1f, 1.f, 10.f)) { updaterCamera = true; }
-			if (ImGui::DragFloat("Field Of View", &camera.p_fov, 0.1f, 1.f, 90.f) )	{ updaterCamera = true; }
-			if (ImGui::DragFloat("Near", &camera.p_near, 0.01f, 0.001f, 150.f)	  )	{ updaterCamera = true; }
-			if (ImGui::DragFloat("Far", &camera.p_far, 0.1f, 0.001f, 150.f)		  )	{ updaterCamera = true; }
-
-			if (ImGui::Button("Set 16:9")) { camera.p_aspectRatio = 16.f / 9.f; }
+			if (ImGui::DragFloat("AspectRatio", &camera.p_aspectRatio, 0.1f, 1.f, 10.f)) { updatedCamera = true; }
+			if (ImGui::DragFloat("Field Of View", &camera.p_fov, 0.1f, 1.f, 90.f) )	{ updatedCamera = true; }
+			if (ImGui::DragFloat("Near", &camera.p_near, 0.01f, 0.001f, 150.f)	  )	{ updatedCamera = true; }
+			if (ImGui::DragFloat("Far", &camera.p_far, 0.1f, 0.001f, 150.f)		  )	{ updatedCamera = true; }
+			if (ImGui::Button("Set 16:9")) { 
+				camera.p_aspectRatio = 16.f / 9.f; 
+				updatedCamera = true; 
+			}
 			ImGui::SameLine();			  							  
-			if (ImGui::Button("Set 8:5")) { camera.p_aspectRatio = 8.f / 5.f; }
+			if (ImGui::Button("Set 8:5")) { 
+				camera.p_aspectRatio = 8.f / 5.f; 
+				updatedCamera = true;
+			}
 			ImGui::SameLine();			  					  
-			if (ImGui::Button("Set 4:3")) { camera.p_aspectRatio = 4.f / 3.f; }
+			if (ImGui::Button("Set 4:3")) { 
+				camera.p_aspectRatio = 4.f / 3.f;
+				updatedCamera = true;
+			}
 		}
 		else {
-			if (ImGui::DragFloat("Left", &camera.o_left, 0.1f, -100.f, 100.f)	)  { updaterCamera = true; }
-			if (ImGui::DragFloat("Right", &camera.o_right, 0.1f, -100.f, 100.f)	)  { updaterCamera = true; }
-			if (ImGui::DragFloat("Top", &camera.o_top, 0.1f, -100.f, 100.f)		)  { updaterCamera = true; }
-			if (ImGui::DragFloat("Bottom", &camera.o_bottom, 0.1f, -100.f, 100.f)) { updaterCamera = true; }
-			if (ImGui::DragFloat("Near", &camera.o_near, 0.1f, 0.001f, 150.f)	)  { updaterCamera = true; }
-			if (ImGui::DragFloat("Far", &camera.o_far, 0.1f, 0.001f, 150.f)		)  { updaterCamera = true; }
+			if (ImGui::DragFloat("Left", &camera.o_left, 0.1f, -100.f, 100.f)	)  { updatedCamera = true; }
+			if (ImGui::DragFloat("Right", &camera.o_right, 0.1f, -100.f, 100.f)	)  { updatedCamera = true; }
+			if (ImGui::DragFloat("Top", &camera.o_top, 0.1f, -100.f, 100.f)		)  { updatedCamera = true; }
+			if (ImGui::DragFloat("Bottom", &camera.o_bottom, 0.1f, -100.f, 100.f)) { updatedCamera = true; }
+			if (ImGui::DragFloat("Near", &camera.o_near, 0.1f, 0.001f, 150.f)	)  { updatedCamera = true; }
+			if (ImGui::DragFloat("Far", &camera.o_far, 0.1f, 0.001f, 150.f)		)  { updatedCamera = true; }
 		}
 
-		if (updaterCamera) {
-			ecs::SceneEvents::Instance().onCameraUpdate(currentEntity);
+		if (updatedCamera) {
+			if (camera.checkIfMain()) {
+				ecs::SceneEvents::Instance().onMainCameraUpdate(*currentEntity);
+			}
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");

@@ -30,22 +30,20 @@ namespace mar::graphics {
 	void RenderCamera::calculateCameraTransforms(const ecs::TransformComponent& transform, const ecs::CameraComponent& camera) {
 		GRAPHICS_TRACE("RENDER_CAMERA: going to calculate camera transform");
 
-		const float x = trig::cosine(trig::toRadians(transform.angles.y)) * trig::cosine(trig::toRadians(transform.angles.x));
-		const float y = trig::sine(trig::toRadians(transform.angles.x));
-		const float z = trig::sine(trig::toRadians(transform.angles.y)) * trig::cosine(trig::toRadians(transform.angles.x));
-		const vec3 front{ x, y ,z };
-
-		const vec3 eyeToCenter = transform.center + vec3::normalize(front);
+		const auto yRad{ trig::toRadians(transform.angles.y) };
+		const auto xRad{ trig::toRadians(transform.angles.x) };
+		const vec3 front{ 
+			trig::cosine(yRad) * trig::cosine(xRad), 
+			trig::sine(xRad),
+			trig::sine(yRad) * trig::cosine(xRad) 
+		};
+		const vec3 eyeToCenter{ transform.center + vec3::normalize(front) };
 
 		calculateModel({ 0.f, 0.f, 0.f });
 		calculateView(transform.center, eyeToCenter, { 0.f, 1.0f, 0.f });
 
-		if (camera.Perspective) { 
-			calculatePerspective(camera.p_fov, camera.p_aspectRatio, camera.p_near, camera.p_far); 
-		}
-		else { 
-			calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far); 
-		}
+		if (camera.Perspective) {  calculatePerspective(camera.p_fov, camera.p_aspectRatio, camera.p_near, camera.p_far);  }
+		else {  calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far);  }
 
 		recalculateMVP();
 	

@@ -65,18 +65,12 @@ namespace mar::editor {
 			const bool collectionExists = &currentCollection != nullptr;
 			m_guizmo.selectType();
 
-			if (collectionExists) { 
-				m_guizmo.draw(m_camera, currentCollection);
-			}
-			else if (entityExists) { 
-				m_guizmo.draw(m_camera, currentEntity); 
-			}
+			if (sceneManager->isEditorMode()) {
+				if (collectionExists) { m_guizmo.draw(m_camera, currentCollection); }
+				else if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
-			if (ImGui::IsWindowFocused()) {
-				m_camera.update(m_aspectRatio, true);
-			}
-			else {
-				m_camera.update(m_aspectRatio, false);
+				if (ImGui::IsWindowFocused()) { m_camera.update(m_aspectRatio, true); }
+				else { m_camera.update(m_aspectRatio, false); }
 			}
 		}
 		
