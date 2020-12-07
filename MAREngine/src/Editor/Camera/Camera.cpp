@@ -88,11 +88,13 @@ namespace mar::editor {
         typedef maths::trig tri;
 
         const maths::vec3 worldUp{ 0.f, 1.f, 0.f };
-    
+        const auto yawRad{ tri::toRadians(m_yaw) };
+        const auto pitchRad{ tri::toRadians(m_pitch) };
+
         const maths::vec3 front{
-            {tri::cosine(tri::toRadians(m_yaw)) * tri::cosine(tri::toRadians(m_pitch))},
-            {tri::sine(tri::toRadians(m_pitch))},
-            {tri::sine(tri::toRadians(m_yaw)) * tri::cosine(tri::toRadians(m_pitch))}
+            {tri::cosine(yawRad) * tri::cosine(pitchRad)},
+            {tri::sine(pitchRad)},
+            {tri::sine(yawRad) * tri::cosine(pitchRad)}
         };
 
         m_front = maths::vec3::normalize(front);
