@@ -20,6 +20,7 @@
 
 #include "RenderEvents.h"
 #include "RenderPipeline.h"
+#include "RenderStatistics.h"
 #include "../../ecs/Components/Components.h"
 #include "../GraphicsLogs.h"
 
@@ -29,37 +30,36 @@ namespace mar::graphics {
 
 	RenderEvents RenderEvents::s_instance;
 
-	void RenderEvents::setRenderPipeline(RenderPipeline& renderPipeline) {
-		m_renderPipeline = &renderPipeline;
+	const RenderEvents& RenderEvents::Instance() { 
+		return s_instance; 
 	}
 
-	void RenderEvents::onDrawCall() {
-		auto& stats = m_renderPipeline->getStatistics();
-		stats.drawCallsCount += 1;
+	void RenderEvents::onDrawCall() const {
+		RenderStatistics::Instance()->drawCallsCount += 1;
 	
 		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
 	}
 
-	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) {
+	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			m_renderPipeline->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+			RenderPipeline::Instance().m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+			RenderPipeline::Instance().m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 	}
 	
-	void RenderEvents::onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
+	void RenderEvents::onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const{
 		onLightPositionUpdate(position, rpc);
 		onLightComponentUpdate(light, rpc);
 	}
 
-	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) {
-		m_renderPipeline->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
+	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) const {
+		RenderPipeline::Instance().m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
-	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) {
-		auto& lightMaterial = m_renderPipeline->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
+	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const {
+		auto& lightMaterial = RenderPipeline::Instance().m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
 
 		lightMaterial.ambient = light.ambient;
 		lightMaterial.diffuse = light.diffuse;
@@ -70,12 +70,12 @@ namespace mar::graphics {
 		lightMaterial.shininess = light.shininess;
 	}
 
-	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) {
+	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			m_renderPipeline->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+			RenderPipeline::Instance().m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			m_renderPipeline->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+			RenderPipeline::Instance().m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
 	}
 	

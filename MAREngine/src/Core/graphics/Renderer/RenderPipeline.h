@@ -23,7 +23,6 @@
 
 
 #include "../../../mar.h"
-#include "RenderStatistics.h"
 #include "RenderContainer.h"
 #include "../../ecs/Components/Components.h"
 
@@ -49,21 +48,18 @@ namespace mar::graphics {
 
 		void submitCamera(const RenderCamera* cam);
 
-		RenderStatistics& getStatistics() { return m_statistics; }
-		void clearStatistics() { m_statistics.resetStatistics(); }
-
 		static RenderPipeline& Instance();
 
 		// ---- GETTERS for container ---- //
 	
-		const std::vector<RenderContainer>& get2Dcontainers() const { return m_containers2D; }
-		const std::vector<RenderContainer>& getCubemapContainers() const { return m_containersCubemap; }
-		const std::vector<LightContainer>& getLightContainers() const { return m_lights; }
-		const RenderCamera* getCamera() const { return m_camera; }
+		const std::vector<RenderContainer>& get2Dcontainers() const;
+		const std::vector<RenderContainer>& getCubemapContainers() const;
+		const std::vector<LightContainer>& getLightContainers() const;
+		const RenderCamera* getCamera() const;
 
 		// --- SETTERS --- //
 
-		void setCurrentPipeline() { s_instance = this; }
+		void setCurrentPipeline();
 
 	private:
 
@@ -79,10 +75,10 @@ namespace mar::graphics {
 
 		static RenderPipeline* s_instance;
 
-		RenderStatistics m_statistics;
 		std::vector<RenderContainer> m_containers2D;
 		std::vector<RenderContainer> m_containersCubemap;
 		std::vector<LightContainer> m_lights;
+
 		RenderContainer* m_containerPtr{ nullptr };
 		LightContainer* m_lightPtr{ nullptr };
 

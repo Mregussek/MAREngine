@@ -22,7 +22,6 @@
 #include "../LayerLogs.h"
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneEvents.h"
-#include "../../Core/graphics/Renderer/RenderPipeline.h"
 #include "../../Core/graphics/Renderer/RenderEvents.h"
 #include "../../Window/Window.h"
 
@@ -43,8 +42,9 @@ namespace mar::layers {
 	void EntityLayer::initialize() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
+		m_statistics.instance = &m_statistics;
+
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
-		graphics::RenderEvents::Instance().setRenderPipeline(m_renderPipeline);
 
 		m_renderPipeline.initialize();
 		m_renderer.initialize();
@@ -58,10 +58,9 @@ namespace mar::layers {
 		LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
 		
 		m_renderPipeline.setCurrentPipeline();
-		m_renderPipeline.getStatistics().resetStatistics();
+		graphics::RenderStatistics::Instance()->resetStatistics();
 
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
-		graphics::RenderEvents::Instance().setRenderPipeline(m_renderPipeline);
 
 		m_sceneManager.update();
 		

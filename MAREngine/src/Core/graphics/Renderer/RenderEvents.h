@@ -33,30 +33,24 @@ namespace mar::ecs {
 }
 namespace mar::graphics {
 
-	class RenderPipeline;
-
 
 	class RenderEvents {
 	public:
 
-		static RenderEvents& Instance() { return s_instance; }
+		static const RenderEvents& Instance();
 
-		void setRenderPipeline(RenderPipeline& renderPipeline);
+		void onDrawCall() const;
 
-		void onDrawCall();
+		void onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const;
+		void onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) const;
 
-		void onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc);
-		void onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc);
-
-		void onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc);
-		void onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc);
-		void onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc);
+		void onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
+		void onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) const;
+		void onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
 
 	private:
 
 		static RenderEvents s_instance;
-
-		RenderPipeline* m_renderPipeline{ nullptr };
 
 	};
 

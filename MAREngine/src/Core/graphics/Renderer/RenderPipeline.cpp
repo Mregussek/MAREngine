@@ -33,6 +33,15 @@ namespace mar::graphics {
 		return *s_instance; 
 	}
 
+	void RenderPipeline::setCurrentPipeline() { 
+		s_instance = this; 
+	}
+
+	const std::vector<RenderContainer>& RenderPipeline::get2Dcontainers() const { return m_containers2D; }
+	const std::vector<RenderContainer>& RenderPipeline::getCubemapContainers() const { return m_containersCubemap; }
+	const std::vector<LightContainer>& RenderPipeline::getLightContainers() const { return m_lights; }
+	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
+
 
 	void RenderPipeline::initialize() {
 		setCurrentPipeline();

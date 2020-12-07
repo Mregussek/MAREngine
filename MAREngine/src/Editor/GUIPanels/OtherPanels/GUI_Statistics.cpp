@@ -20,26 +20,27 @@
 
 #include "GUI_Statistics.h"
 #include "../../EditorLogging.h"
-#include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/Scene.h"
+#include "../../../Core/graphics/Renderer/RenderStatistics.h"
 #include "../../../Core/graphics/Renderer/RenderPipeline.h"
 
 
 namespace mar::editor {
 
 
-	void GUI_Statistics::update(ecs::SceneManager* manager) {
+	void GUI_Statistics::update(const ecs::Scene* scene) {
 		ImGui::Begin("Statistics Menu");
 
-		auto& render_pip = graphics::RenderPipeline::Instance();
-		auto& stats = render_pip.getStatistics();
-		const auto& containers2D = render_pip.get2Dcontainers();
-		const auto& containersCubemap = render_pip.getCubemapContainers();
+		auto& stats{ *graphics::RenderStatistics::Instance() };
+		const auto& renderPipeline{ graphics::RenderPipeline::Instance() };
+		
+		const auto& containers2D{ renderPipeline.get2Dcontainers() };
+		const auto& containersCubemap{ renderPipeline.getCubemapContainers() };
 
-		const auto& collections = manager->getScene()->getCollections();
-		const auto& entities = manager->getScene()->getEntities();
+		const auto& collections{ scene->getCollections() };
+		const auto& entities{ scene->getEntities() };
 
 		stats.entitiesCount += entities.size();
 		stats.entityCollectionsCount += collections.size();

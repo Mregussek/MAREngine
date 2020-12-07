@@ -71,11 +71,11 @@ namespace mar::editor {
     // ---- PRIVATE METHODS ---- //
 
     bool Camera::processInput() {
-        static float lastTime = 0.0f;
-        bool userPressedSth = false;
+        static float lastTime{ 0.0f };
+        bool userPressedSth{ false };
     
-        const float currentFrame = (float)glfwGetTime();
-        const float deltaTime = currentFrame - lastTime;
+        const float currentFrame{ (float)glfwGetTime() };
+        const float deltaTime{ currentFrame - lastTime };
         lastTime = currentFrame;
         
         if (m_standard.processFrame(this, deltaTime)) { userPressedSth = true; }

@@ -24,6 +24,12 @@
 namespace mar::graphics {
 
 
+	RenderStatistics* RenderStatistics::instance{ nullptr };
+
+	RenderStatistics* RenderStatistics::Instance() {
+		return instance;
+	}
+
 	void RenderStatistics::resetStatistics() {
 		drawCallsCount = 0;
 		indicesCount = 0;
