@@ -28,6 +28,7 @@
 #include "../../Core/graphics/Renderer/RendererBatch.h"
 #include "../../Core/graphics/Renderer/RenderPipeline.h"
 #include "../../Core/graphics/Renderer/RenderStatistics.h"
+#include "../../Core/graphics/Renderer/ShaderBufferStorage.h"
 
 
 namespace mar::ecs { class Scene; }
@@ -54,6 +55,7 @@ namespace mar::layers {
 		graphics::RendererBatch m_renderer;
 		graphics::RenderPipeline m_renderPipeline;
 		graphics::RenderStatistics m_statistics;
+		graphics::ShaderBufferStorage m_shaderBufferStorage;
 
 	};
 

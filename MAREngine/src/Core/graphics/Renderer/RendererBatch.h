@@ -25,7 +25,6 @@
 #include "../../../mar.h"
 #include "../../../Platform/OpenGL/PipelineOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "ShaderBufferStorage.h"
 #include "RenderContainerDefinitions.h"
 
 
@@ -58,13 +57,11 @@ namespace mar::graphics {
 		void passTexturesToShader(const platforms::ShaderOpenGL& shader, const TextureVector& textures) const;
 		void passCubemapsToShader(const platforms::ShaderOpenGL& shader, const TextureVector& cubemaps) const;
 		void passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const;
-		void passCameraToSSBO(const RenderCamera& camera) const;
 
 
 		platforms::PipelineOpenGL m_buffers;
 		platforms::ShaderOpenGL m_shader2D;
 		platforms::ShaderOpenGL m_shaderCubemap;
-		ShaderBufferStorage m_shaderBufferStorage;
 
 	};
 

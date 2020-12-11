@@ -33,7 +33,7 @@ namespace mar::debug {
 
 	class Log {
 		static bool s_initialized;
-		static Ref<spdlog::logger> s_CoreLogger;
+		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 
 	public:
 		static void init();

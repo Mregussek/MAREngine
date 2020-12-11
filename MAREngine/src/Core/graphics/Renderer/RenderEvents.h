@@ -33,6 +33,8 @@ namespace mar::ecs {
 }
 namespace mar::graphics {
 
+	class RenderCamera;
+
 
 	class RenderEvents {
 	public:
@@ -47,8 +49,13 @@ namespace mar::graphics {
 		void onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
 		void onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) const;
 		void onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
+		
+		void onMainCameraUpdate(const RenderCamera& camera) const;
 
 	private:
+
+		void passCameraToSSBO(const RenderCamera& camera) const;
+
 
 		static RenderEvents s_instance;
 

@@ -27,7 +27,7 @@
 namespace mar::debug {
 
 	bool Log::s_initialized{ false };
-	Ref<spdlog::logger> Log::s_CoreLogger;
+	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 
 
 	void Log::init() {

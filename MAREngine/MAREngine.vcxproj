@@ -263,6 +263,7 @@
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
     <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
+    <ClInclude Include="src\Core\graphics\GraphicLimits.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
@@ -404,7 +405,6 @@
     <ClCompile Include="src\Platform\OpenGL\DrawingOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp" />
     <ClCompile Include="src\Editor\GUI.cpp" />
-    <ClCompile Include="src\mar.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\Platform\OpenGL\PipelineOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp" />

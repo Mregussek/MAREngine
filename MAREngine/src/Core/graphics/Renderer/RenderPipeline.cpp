@@ -21,6 +21,7 @@
 #include "RenderPipeline.h"
 #include "RenderCamera.h"
 #include "../GraphicsLogs.h"
+#include "../GraphicLimits.h"
 #include "../../ecs/Entity/Entity.h"
 
 
@@ -71,18 +72,18 @@ namespace mar::graphics {
 		const auto& tran = entity.getComponent<TransformComponent>();
 		auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
-		const bool hasColor = entity.hasComponent<ColorComponent>();
-		const bool hasTexture2D = entity.hasComponent<Texture2DComponent>();
-		const bool hasCubemap = entity.hasComponent<TextureCubemapComponent>();
-		const bool hasAnyMaterial = hasColor || hasTexture2D || hasCubemap;
-		const bool hasRenderable = entity.hasComponent<RenderableComponent>();
-
 		if (entity.hasComponent<LightComponent>()) {
 			const auto& light = entity.getComponent<LightComponent>();
 
 			setContainerLight(rpc);
 			rpc.lightIndex = submitLight(tran.center, light);
 		}
+
+		const bool hasColor = entity.hasComponent<ColorComponent>();
+		const bool hasTexture2D = entity.hasComponent<Texture2DComponent>();
+		const bool hasCubemap = entity.hasComponent<TextureCubemapComponent>();
+		const bool hasAnyMaterial = hasColor || hasTexture2D || hasCubemap;
+		const bool hasRenderable = entity.hasComponent<RenderableComponent>();
 
 		if (hasRenderable && hasAnyMaterial) {
 			auto& renderable = entity.getComponent<RenderableComponent>();
@@ -123,8 +124,8 @@ namespace mar::graphics {
 			const size_t currentIndicesSize = container.getIndices().size();
 			const size_t currentTransformSize = container.getTransforms().size();
 
-			const bool cannotPushVertices = currentVerticesSize + verticesToPush >= settings::maxVerticesCount;
-			const bool cannotPushIndices = currentIndicesSize + indicesToPush >= settings::maxIndicesCount;
+			const bool cannotPushVertices = currentVerticesSize + verticesToPush >= GraphicLimits::maxVerticesCount;
+			const bool cannotPushIndices = currentIndicesSize + indicesToPush >= GraphicLimits::maxIndicesCount;
 			const bool cannotPushTransform = currentTransformSize + 1 >= 32;
 
 			return !(cannotPushVertices || cannotPushIndices || cannotPushTransform);

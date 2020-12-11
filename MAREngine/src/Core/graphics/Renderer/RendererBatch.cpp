@@ -22,7 +22,9 @@
 #include "RenderPipeline.h"
 #include "RenderCamera.h"
 #include "RenderEvents.h"
+#include "ShaderBufferStorage.h"
 #include "../GraphicsLogs.h"
+#include "../GraphicLimits.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderUniforms.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
@@ -36,10 +38,7 @@ namespace mar::graphics {
 
 		using namespace platforms::ShaderUniforms;
 
-		const uint32_t size_vertices = settings::maxVerticesCount * sizeof(Vertex);
-		const uint32_t size_indices = settings::maxIndicesCount * sizeof(uint32_t);
-
-		m_buffers.initialize(size_vertices, size_indices);
+		m_buffers.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
 
 		setupSSBOs();
 
@@ -66,29 +65,31 @@ namespace mar::graphics {
 	void RendererBatch::setupSSBOs() {
 		using namespace platforms::ShaderUniforms;
 
+		ShaderBufferStorage* ssbo{ ShaderBufferStorage::Instance() };
+
 		{ // setup Camera SSBO
-			auto& camera = m_shaderBufferStorage.createShaderBufferStorage();
+			auto& camera = ssbo->createShaderBufferStorage();
 			std::vector<UniformItem> cameraItems{ ut_u_Model, ut_u_MVP, ut_u_CameraPos };
 
 			camera.initialize(ub_Camera, std::move(cameraItems));
 		}
 
 		{ // setup EntityCmp SSBO
-			auto& entityCmp = m_shaderBufferStorage.createShaderBufferStorage();
+			auto& entityCmp = ssbo->createShaderBufferStorage();
 			std::vector<UniformItem> entitycmpItems{ ut_u_SeparateTransform, ut_u_samplerTypes };
 
 			entityCmp.initialize(ub_EntityCmp, std::move(entitycmpItems));
 		}
 
 		{ // setup Material SSBO
-			auto& material = m_shaderBufferStorage.createShaderBufferStorage();
+			auto& material = ssbo->createShaderBufferStorage();
 			std::vector<UniformItem> materialItems{ ut_u_material, ut_u_lightSize };
 
 			material.initialize(ub_Material, std::move(materialItems));
 		}
 
 		{ // setup TextureSmaplers SSBO
-			auto& textureSamplers = m_shaderBufferStorage.createShaderBufferStorage();
+			auto& textureSamplers = ssbo->createShaderBufferStorage();
 			std::vector<UniformItem> textureSamplersItems{ ut_u_Color };
 
 			textureSamplers.initialize(ub_TextureSamplers, std::move(textureSamplersItems));
@@ -98,7 +99,7 @@ namespace mar::graphics {
 	void RendererBatch::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
-		m_shaderBufferStorage.close();
+		ShaderBufferStorage::Instance()->close();
 		m_buffers.close();
 		m_shader2D.shutdown();
 		m_shaderCubemap.shutdown();
@@ -112,7 +113,8 @@ namespace mar::graphics {
 		
 		const auto& lights = renderPipeline.getLightContainers();
 
-		passCameraToSSBO(*renderPipeline.getCamera());
+		const auto& cameraSSBO{ ShaderBufferStorage::Instance()->getCorrectShaderBuffer(platforms::ShaderUniforms::ub_Camera) };
+		cameraSSBO.bind();
 
 		m_shader2D.bind();
 		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());
@@ -156,7 +158,7 @@ namespace mar::graphics {
 		const auto& transforms = container.getTransforms();
 		const auto& samplerTypes = container.getSamplerTypes();
 
-		const auto& entityShaderBuffer = m_shaderBufferStorage.getCorrectShaderBuffer(ub_EntityCmp);
+		const auto& entityShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_EntityCmp);
 
 		entityShaderBuffer.bind();
 		entityShaderBuffer.update<float>(ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
@@ -167,7 +169,7 @@ namespace mar::graphics {
 		using namespace platforms::ShaderUniforms;
 		using namespace mar::maths;
 
-		const auto& textureShaderBuffer = m_shaderBufferStorage.getCorrectShaderBuffer(ub_TextureSamplers);
+		const auto& textureShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_TextureSamplers);
 		textureShaderBuffer.bind();
 
 		std::for_each(colors.cbegin(), colors.cend(), [&textureShaderBuffer](const ColorPair& color) {
@@ -215,7 +217,7 @@ namespace mar::graphics {
 		using namespace platforms::ShaderUniforms;
 
 		const auto lightSize = (int32_t)lightMaterials.size();
-		const auto& lightShaderBuffer = m_shaderBufferStorage.getCorrectShaderBuffer(ub_Material);
+		const auto& lightShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_Material);
 
 		lightShaderBuffer.bind();
 
@@ -223,23 +225,6 @@ namespace mar::graphics {
 		lightShaderBuffer.update<int32_t>(ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
-	}
-
-	void RendererBatch::passCameraToSSBO(const RenderCamera& camera) const {
-		GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
-
-		using namespace platforms::ShaderUniforms;
-		using namespace mar::maths;
-
-		const auto& cameraShaderBuffer = m_shaderBufferStorage.getCorrectShaderBuffer(ub_Camera);
-
-		cameraShaderBuffer.bind();
-
-		cameraShaderBuffer.update<float>(ut_u_CameraPos.offset, sizeof(vec3), vec3::value_ptr(camera.getPosition()));
-		cameraShaderBuffer.update<float>(ut_u_Model.offset, sizeof(mat4), mat4::value_ptr(camera.getModel()));
-		cameraShaderBuffer.update<float>(ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
-
-		GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
 	}
 
 

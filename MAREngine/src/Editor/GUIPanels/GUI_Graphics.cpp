@@ -23,6 +23,7 @@
 #include "../../Platform/OpenGL/ShaderUniforms.h"
 #include "../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../Core/graphics/Renderer/RenderContainer.h"
+#include "../../Core/graphics/GraphicLimits.h"
 
 #include "../../Core/ecs/Components/Components.h"
 #include "../../Core/ecs/Entity/Entity.h"
@@ -35,11 +36,13 @@ namespace mar::editor {
 
 
 	void GUI_Graphics::initialize() {
+		typedef graphics::GraphicLimits marLimits;
+
 		const char* vert = "resources/shaders/lineloops.vert.glsl";
 		const char* frag = "resources/shaders/lineloops.frag.glsl";
 		const auto shaderPaths = platforms::ShaderPaths(vert, frag, nullptr);
 
-		m_pipeline.initialize(settings::maxVerticesCount, settings::maxIndicesCount);
+		m_pipeline.initialize(marLimits::sizeOfVertices, marLimits::sizeOfIndices);
 		m_shader.initialize(shaderPaths);
 	}
 

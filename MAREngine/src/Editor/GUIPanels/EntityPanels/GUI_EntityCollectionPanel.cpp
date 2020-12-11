@@ -114,7 +114,7 @@ namespace mar::editor {
 			const auto lastCenter = tran.center;
 			const auto lastAngles = tran.angles;
 			const auto lastScale = tran.scale;
-			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.0f, 200.0f, "%.2f", 1.f)) { updatedTransform = true; }
+			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.f, 200.f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }
 			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
 

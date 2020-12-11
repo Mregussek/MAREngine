@@ -24,6 +24,16 @@
 namespace mar::graphics {
 
 
+	ShaderBufferStorage* ShaderBufferStorage::s_instance{ nullptr };
+
+	ShaderBufferStorage* ShaderBufferStorage::Instance() {
+		return s_instance;
+	}
+
+	void ShaderBufferStorage::initialize() {
+		s_instance = this;
+	}
+
 	platforms::ShaderBufferStorageOpenGL& ShaderBufferStorage::createShaderBufferStorage() {
 		return m_shaderBuffers.emplace_back();
 	}

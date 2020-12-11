@@ -85,6 +85,7 @@ namespace mar::ecs {
 			const auto& transform = entity.getComponent<TransformComponent>();
 			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
 			renderCamera.calculateCameraTransforms(transform, camera);
+			graphics::RenderEvents::Instance().onMainCameraUpdate(renderCamera);
 		};
 
 		if (m_sceneManager->isPlayMode() || m_sceneManager->isPauseMode()) { updateCameraOperation(); }
@@ -178,6 +179,7 @@ namespace mar::ecs {
 
 	void SceneEvents::onEditorCameraSet(const graphics::RenderCamera* camera) const {
 		graphics::RenderPipeline::Instance().submitCamera(camera);
+		graphics::RenderEvents::Instance().onMainCameraUpdate(*camera);
 	}
 
 	void SceneEvents::onGameCameraSet() const {
@@ -198,6 +200,7 @@ namespace mar::ecs {
 			renderCamera.calculateCameraTransforms(transform, cam);
 
 			graphics::RenderPipeline::Instance().submitCamera(&renderCamera);
+			graphics::RenderEvents::Instance().onMainCameraUpdate(renderCamera);
 		}
 	}
 

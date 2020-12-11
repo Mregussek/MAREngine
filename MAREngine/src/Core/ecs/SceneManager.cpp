@@ -197,13 +197,16 @@ namespace mar::ecs {
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
-			const auto& light = entity.getComponent<LightComponent>();
 			SceneEvents::Instance().onLightUpdate(entity);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
-			const auto& color = entity.getComponent<ColorComponent>();
 			SceneEvents::Instance().onColorUpdate(entity);
+		}
+
+		if (entity.hasComponent<CameraComponent>()) {
+			const auto& camera{ entity.getComponent<CameraComponent>() };
+			if (camera.checkIfMain()) { SceneEvents::Instance().onMainCameraUpdate(entity); }	
 		}
 	}
 

@@ -18,17 +18,29 @@
 **/
 
 
-#include "mar.h"
+#ifndef MAR_ENGINE_GRAPHICS_GRAPHICS_LIMITS_H
+#define MAR_ENGINE_GRAPHICS_GRAPHICS_LIMITS_H
 
 
-namespace mar {
+#include "../../mar.h"
+#include "Mesh/Vertex.h"
 
 
-	template<typename T>
-	uint32_t PointerFactory<T>::ref_counter{ 0 };
+namespace mar::graphics {
 
-	template<typename T>
-	uint32_t PointerFactory<T>::scope_counter{ 0 };
+
+	struct GraphicLimits {
+			
+		const static inline uint32_t maxTrianglesCount{ 100000 };
+		const static inline uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
+		const static inline uint32_t maxIndicesCount{ maxTrianglesCount / 3 };
+		const static inline uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
+		const static inline uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
+
+	};
 
 
 }
+
+
+#endif // !MAR_ENGINE_GRAPHICS_GRAPHICS_LIMITS_H

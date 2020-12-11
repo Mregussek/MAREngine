@@ -46,6 +46,7 @@ namespace mar::layers {
 
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
 
+		m_shaderBufferStorage.initialize();
 		m_renderPipeline.initialize();
 		m_renderer.initialize();
 

@@ -19,10 +19,13 @@
 
 
 #include "RenderEvents.h"
+#include "RenderCamera.h"
 #include "RenderPipeline.h"
 #include "RenderStatistics.h"
 #include "../../ecs/Components/Components.h"
 #include "../GraphicsLogs.h"
+#include "ShaderBufferStorage.h"
+#include "../../../Platform/OpenGL/ShaderUniforms.h"
 
 
 namespace mar::graphics {
@@ -79,5 +82,26 @@ namespace mar::graphics {
 		}
 	}
 	
+	void RenderEvents::onMainCameraUpdate(const RenderCamera& camera) const {
+		passCameraToSSBO(camera);
+	}
+
+	void RenderEvents::passCameraToSSBO(const RenderCamera& camera) const {
+		GRAPHICS_INFO("RENDERER_BATCH: passing camera data to shader!");
+
+		using namespace platforms::ShaderUniforms;
+		using namespace mar::maths;
+
+		const auto& cameraShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_Camera);
+
+		cameraShaderBuffer.bind();
+
+		cameraShaderBuffer.update<float>(ut_u_CameraPos.offset, sizeof(vec3), vec3::value_ptr(camera.getPosition()));
+		cameraShaderBuffer.update<float>(ut_u_Model.offset, sizeof(mat4), mat4::value_ptr(camera.getModel()));
+		cameraShaderBuffer.update<float>(ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
+
+		GRAPHICS_INFO("RENDERER_BATCH: passed camera to shader!");
+	}
+
 
 }

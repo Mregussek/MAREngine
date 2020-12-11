@@ -24,6 +24,7 @@
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/SceneEvents.h"
+#include "../../../Core/graphics/Renderer/RenderEvents.h"
 #include "GUI_Guizmo.h"
 
 
@@ -69,8 +70,11 @@ namespace mar::editor {
 				if (collectionExists) { m_guizmo.draw(m_camera, currentCollection); }
 				else if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
-				if (ImGui::IsWindowFocused()) { m_camera.update(m_aspectRatio, true); }
-				else { m_camera.update(m_aspectRatio, false); }
+				bool useInputInCamera = false;
+				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
+				if (m_camera.update(m_aspectRatio, useInputInCamera)) {
+					graphics::RenderEvents::Instance().onMainCameraUpdate(*m_camera.getCameraData());
+				}
 			}
 		}
 		

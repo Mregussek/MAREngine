@@ -38,7 +38,7 @@ namespace mar::editor {
         m_renderCamera.recalculateMVP();
     }
     
-    void Camera::update(float aspectRatio, bool useInput) {       
+    bool Camera::update(float aspectRatio, bool useInput) {       
         auto updatePerspectiveIfNeeded = [this, aspectRatio]()->bool {
             if (m_aspectRatio != aspectRatio) {
                 m_aspectRatio = aspectRatio;
@@ -58,14 +58,16 @@ namespace mar::editor {
 
         if (useInput) {
             const bool userPressedSomeKey{ processInput() };
-            if (userPressedSomeKey) { recalculateMatrixAfterUserInput(); }
+            if (userPressedSomeKey) { recalculateMatrixAfterUserInput(); return true; }
             else {
-                if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); }
+                if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); return true; }
             }
         }
         else {
-            if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); }
+            if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); return true; }
         }
+
+        return false;
     }
     
     // ---- PRIVATE METHODS ---- //
