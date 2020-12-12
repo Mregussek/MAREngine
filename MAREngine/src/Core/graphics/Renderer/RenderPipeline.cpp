@@ -71,8 +71,8 @@ namespace mar::graphics {
 
 		if (hasRenderable && hasAnyMaterial) {
 			auto& renderable = entity.getComponent<RenderableComponent>();
-			const auto vertSize = renderable.vertices.size();
-			const auto indiSize = renderable.indices.size();
+			const auto vertSize{ (uint32_t)renderable.vertices.size() };
+			const auto indiSize{ (uint32_t)renderable.indices.size() };
 
 			if (hasColor) {
 				setContainerRenderable(MaterialRenderType::COLOR, rpc, vertSize, indiSize);
@@ -100,17 +100,17 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush) {
+	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush) {
 		m_containerPtr = nullptr;
 
 		auto canPushToContainer = [verticesToPush, indicesToPush](const RenderContainer& container)->bool {
-			const size_t currentVerticesSize = container.getVertices().size() + sizeof(Vertex) / 4;
-			const size_t currentIndicesSize = container.getIndices().size();
-			const size_t currentTransformSize = container.getTransforms().size();
+			const auto currentVerticesSize{ container.getVertices().size() };
+			const auto currentIndicesSize{ container.getIndices().size() };
+			const auto currentTransformSize{ container.getTransforms().size() };
 
-			const bool cannotPushVertices = currentVerticesSize + verticesToPush >= GraphicLimits::maxVerticesCount;
-			const bool cannotPushIndices = currentIndicesSize + indicesToPush >= GraphicLimits::maxIndicesCount;
-			const bool cannotPushTransform = currentTransformSize + 1 >= 32;
+			const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
+			const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
+			const bool cannotPushTransform = (currentTransformSize + 1) >= 32;
 
 			return !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
 		};

@@ -56,13 +56,9 @@ namespace mar::graphics {
 		const std::vector<LightContainer>& getLightContainers() const;
 		const RenderCamera* getCamera() const;
 
-		// --- SETTERS --- //
-
-		void setCurrentPipeline();
-
 	private:
 
-		void setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, size_t verticesToPush, size_t indicesToPush);
+		void setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush);
 		void setContainerLight(ecs::RenderPipelineComponent& rpc);
 
 		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);

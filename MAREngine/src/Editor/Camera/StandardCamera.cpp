@@ -36,7 +36,13 @@ namespace mar::editor {
         if (userPressedRightMouseButton) {
             if(!holdingRightMouseButton) { firstMouse = true; }
 
-            const float velocity = checkForSpeedUpdate(camera, deltaTime);
+            const float velocity = [&camera, this, deltaTime]()->float {
+                if (Window::isKeyPressed(MAR_KEY_LEFT_SHIFT)) {
+                    return 360.f * deltaTime;
+                }
+
+                return checkForSpeedUpdate(camera, deltaTime); // max from this is 90.f
+            }();
 
             if (Window::isKeyPressed(MAR_KEY_W)) {
                 camera->m_position += camera->m_front * velocity;

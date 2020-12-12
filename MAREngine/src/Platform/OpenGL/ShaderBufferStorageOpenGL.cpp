@@ -28,6 +28,8 @@ namespace mar::platforms {
 		m_uniformBuffer = uniformBuffer;
 		m_uniformItems = items;
 
+		PLATFORM_TRACE("SHADER_STORAGE_BUFFER_OPENGL: creating {} - {}", m_uniformBuffer.name, m_ssbo);
+
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ssbo) );
 		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo) );
 		PLATFORM_GL_FUNC( glBufferData(GL_SHADER_STORAGE_BUFFER, m_uniformBuffer.memory, nullptr, GL_DYNAMIC_DRAW) );
@@ -35,6 +37,8 @@ namespace mar::platforms {
 	}
 
 	void ShaderBufferStorageOpenGL::close() {
+		PLATFORM_TRACE("SHADER_STORAGE_BUFFER_OPENGL: deleting {} - {}", m_uniformBuffer.name, m_ssbo);
+
 		m_uniformItems.clear();
 
 		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ssbo) );
@@ -45,10 +49,14 @@ namespace mar::platforms {
 	}
 
 	void ShaderBufferStorageOpenGL::bind() const {
+		PLATFORM_TRACE("SHADER_STORAGE_BUFFER_OPENGL: binding {} - {}", m_uniformBuffer.name, m_ssbo);
+
 		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo) );
 	}
 
 	void ShaderBufferStorageOpenGL::unbind() const {
+		PLATFORM_TRACE("SHADER_STORAGE_BUFFER_OPENGL: unbinding {} - {}", m_uniformBuffer.name, m_ssbo);
+
 		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0) );
 	}
 

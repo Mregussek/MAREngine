@@ -61,13 +61,13 @@ namespace mar::platforms {
 	}
 
 	void PipelineOpenGL::update(const std::vector<graphics::Vertex>& vertices, const std::vector<uint32_t>& indices) const {
-		const uint32_t vert_size = sizeof(graphics::Vertex) * vertices.size();
-		const uint32_t indi_size = indices.size() * sizeof(uint32_t);
+		const uint32_t vertSize{ vertices.size() * sizeof(graphics::Vertex) };
+		const uint32_t indiSize{ indices.size() * sizeof(uint32_t) };
 
-		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vert_size, vertices.data()) );
-		PLATFORM_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indi_size, indices.data()) );
+		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vertSize, vertices.data()) );
+		PLATFORM_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indiSize, indices.data()) );
 	
-		PLATFORM_TRACE("PIPELINE_OPENGL: updated vertices size = {} memory = {} and indices size = {} memory = {}", vertices.size(), vert_size, indices.size(), indi_size );
+		PLATFORM_TRACE("PIPELINE_OPENGL: updated vertices size = {} memory = {} and indices size = {} memory = {}", vertices.size(), vertSize, indices.size(), indiSize);
 	}
 
 	void PipelineOpenGL::reset() const {
@@ -108,9 +108,9 @@ namespace mar::platforms {
 	}
 
 	void PipelineOpenGL::createVBO() {
-		PLATFORM_GL_FUNC(glGenBuffers(1, &m_vbo));
-		PLATFORM_GL_FUNC(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-		PLATFORM_GL_FUNC(glBufferData(GL_ARRAY_BUFFER, m_vboAllocMemory, nullptr, GL_DYNAMIC_DRAW));
+		PLATFORM_GL_FUNC( glGenBuffers(1, &m_vbo) );
+		PLATFORM_GL_FUNC( glBindBuffer(GL_ARRAY_BUFFER, m_vbo) );
+		PLATFORM_GL_FUNC( glBufferData(GL_ARRAY_BUFFER, m_vboAllocMemory, nullptr, GL_DYNAMIC_DRAW) );
 
 		PLATFORM_TRACE("PIPELINE_OPENGL: initialized VBO {} with memory {}!", m_vbo, m_vboAllocMemory);
 	}
@@ -121,9 +121,9 @@ namespace mar::platforms {
 	}
 
 	void PipelineOpenGL::createEBO() {
-		PLATFORM_GL_FUNC(glGenBuffers(1, &m_ebo));
-		PLATFORM_GL_FUNC(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-		PLATFORM_GL_FUNC(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_eboAllocMemory, nullptr, GL_DYNAMIC_DRAW));
+		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ebo) );
+		PLATFORM_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo) );
+		PLATFORM_GL_FUNC( glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_eboAllocMemory, nullptr, GL_DYNAMIC_DRAW) );
 
 		PLATFORM_TRACE("PIPELINE_OPENGL: initialized EBO {} with memory {}!", m_ebo, m_eboAllocMemory);
 	}
