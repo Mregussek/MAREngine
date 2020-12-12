@@ -18,72 +18,47 @@
 **/
 
 
-#include "EntityLayer.h"
+#include "SceneLayer.h"
 #include "../LayerLogs.h"
 #include "../../Core/ecs/Scene.h"
 #include "../../Core/ecs/SceneEvents.h"
-#include "../../Core/graphics/Renderer/RenderEvents.h"
-#include "../../Window/Window.h"
 
 
 namespace mar::layers {
 
 
-	EntityLayer::EntityLayer(const char* debugname) {
+	SceneLayer::SceneLayer(const char* debugname) {
 		p_debugName = debugname;
 	}
 	
-	void EntityLayer::passSceneToManager(ecs::Scene* scene) {
-		m_sceneManager.setScene(scene);
+	void SceneLayer::passSceneToManager(ecs::Scene* scene) {
+		LAYER_TRACE("ENTITY_LAYER: passing to Scene to SceneManager!");
 
-		LAYER_TRACE("ENTITY_LAYER: {} passed scene to scenemanager");
+		m_sceneManager.setScene(scene);
 	}
 
-	void EntityLayer::initialize() {
+	void SceneLayer::initialize() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
 
-		m_statistics.instance = &m_statistics;
-
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
-
-		m_shaderBufferStorage.initialize();
-		m_renderPipeline.initialize();
-		m_renderer.initialize();
 
 		m_sceneManager.initialize();
-
-		LAYER_INFO("ENTITY_LAYER: {} initialized!", m_debugName);
 	}
 
-	void EntityLayer::update() {
-		LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
-		
-		m_renderPipeline.setCurrentPipeline();
-		graphics::RenderStatistics::Instance()->resetStatistics();
-
-		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
-
-		m_sceneManager.update();
-		
-		const bool isWindowMinimized = window::Window::getSizeX() < 2 && window::Window::getSizeY() < 2;
-
-		m_renderer.draw(m_renderPipeline);
-		
-		LAYER_INFO("ENTITY_LAYER: {} updated!", m_debugName);
-	}
-
-	void EntityLayer::closeLayer() {
+	void SceneLayer::close() {
 		LAYER_TRACE("ENTITY_LAYER: {} going to close", m_debugName);
 
-		m_renderPipeline.setCurrentPipeline();
-		m_renderPipeline.reset();
-		m_renderer.close();
 		m_sceneManager.shutdown();
-
-		LAYER_INFO("ENTITY_LAYER: {} closed!", m_debugName);
 	}
 
-	ecs::SceneManager* EntityLayer::getSceneManager() {
+	void SceneLayer::update() {
+		LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
+		
+		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
+		m_sceneManager.update();
+	}
+
+	ecs::SceneManager* SceneLayer::getSceneManager() {
 		return &m_sceneManager; 
 	}
 

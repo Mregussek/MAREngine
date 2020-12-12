@@ -52,7 +52,7 @@ namespace mar::layers {
 		LAYER_TRACE("LAYER_STACK: going to delete all layers!");
 
 		for (auto& layer : m_layers) {
-			layer->closeLayer();
+			layer->close();
 			delete layer;
 		}
 

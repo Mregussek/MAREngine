@@ -18,37 +18,39 @@
 **/
 
 
-#ifndef MAR_ENGINE_LAYER_H
-#define MAR_ENGINE_LAYER_H
+#ifndef MAR_ENGINE_GUI_LAYER_H
+#define MAR_ENGINE_GUI_LAYER_H
 
 
-#include "../mar.h"
-#include "LayerLogs.h"
+#include "../../mar.h"
+#include "../Layer.h"
+#include "../../Editor/GUI.h"
+#include "../../Editor/GUIPanels/GUI_Graphics.h"
 
 
+namespace mar::ecs { class SceneManager; }
 namespace mar::layers {
 
-	class LayerStack;
 
-
-	class Layer {
-
-		friend class LayerStack;
-
+	class EditorLayer : public Layer {
 	public:
 
-		Layer() = default;
-		Layer(const char* name) : p_debugName(name) { }
+		EditorLayer() = default;
+		EditorLayer(const char* name);
 
-		virtual void initialize() { }
+		void submit(ecs::SceneManager* manager);
+		void renderToViewport();
 
-		virtual void update() { }
+		// --- OVERRIDED METHODS --- // 
 
-		virtual void close() { }
+		void initialize() override;
+		void update() override;
+		void close() override;
 
-	protected:
-		
-		const char* p_debugName{ "Default_Debug_Name" };
+	private:
+
+		editor::GUI m_gui;
+		//editor::GUI_Graphics m_guiGraphics;
 
 	};
 
@@ -56,4 +58,4 @@ namespace mar::layers {
 }
 
 
-#endif // !MAR_ENGINE_LAYER_H
+#endif // !MAR_ENGINE_GUI_LAYER_H

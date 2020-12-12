@@ -19,13 +19,8 @@
 
 
 #include "SceneManager.h"
-
 #include "ECSLogs.h"
 #include "SceneEvents.h"
-
-#include "../../Editor/Camera/Camera.h"
-
-#include "../graphics/Renderer/RenderCamera.h"
 #include "../graphics/Renderer/RenderPipeline.h"
 
 
@@ -35,17 +30,16 @@ namespace mar::ecs {
 	void SceneManager::initialize() const {
 		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
-		auto& renderPipeline = RenderPipeline::Instance();
-		renderPipeline.reset();
+		graphics::RenderPipeline::Instance->reset();
 
 		const auto& entitiesVector = m_scene->getEntities();
 		const auto& collectionsVector = m_scene->getCollections();
 
-		auto pushEntityToPipeline = [&renderPipeline](const Entity& entity) {
-			renderPipeline.submitEntity(entity);
+		auto pushEntityToPipeline = [](const Entity& entity) {
+			graphics::RenderPipeline::Instance->submitEntity(entity);
 		};
 
-		auto pushCollectionToPipeline = [&renderPipeline, &pushEntityToPipeline](const EntityCollection& collection) {
+		auto pushCollectionToPipeline = [&pushEntityToPipeline](const EntityCollection& collection) {
 			const auto& entitiesVector = collection.getEntities();
 			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
 		};
@@ -153,14 +147,13 @@ namespace mar::ecs {
 	void SceneManager::updatePlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-		auto& renderPipeline = graphics::RenderPipeline::Instance();
 		const auto& entitiesVector = m_scene->getEntities();
 
-		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
+		auto updateEntityWithScript = [this](const Entity& entity) {
 			if (entity.hasComponent<ScriptComponent>()) {
 				const auto& script = entity.getComponent<ScriptComponent>();
 				script.pythonScript.update(entity);
-				updateEntityInPlaymode(entity, renderPipeline);
+				updateEntityInPlaymode(entity);
 			}
 		};
 
@@ -174,11 +167,10 @@ namespace mar::ecs {
 	void SceneManager::updatePauseMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
-		auto& renderPipeline = graphics::RenderPipeline::Instance();
 		const auto& entitiesVector = m_scene->getEntities();
 
-		auto updateEntityWithScript = [&renderPipeline, this](const Entity& entity) {
-			updateEntityInPlaymode(entity, renderPipeline);
+		auto updateEntityWithScript = [this](const Entity& entity) {
+			updateEntityInPlaymode(entity);
 		};
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
@@ -188,7 +180,7 @@ namespace mar::ecs {
 		ECS_INFO("SCENE_MANAGER: updated pause mode");
 	}
 
-	void SceneManager::updateEntityInPlaymode(const Entity& entity, RenderPipeline& renderPipeline) {
+	void SceneManager::updateEntityInPlaymode(const Entity& entity) {
 		const auto& transform = entity.getComponent<TransformComponent>();
 		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 

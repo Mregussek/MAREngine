@@ -18,46 +18,38 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
+#include "RenderLayer.h"
+#include "../../Window/Window.h"
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/GUI.h"
-#include "../../Editor/GUIPanels/GUI_Graphics.h"
-
-
-namespace mar {
-	namespace ecs { class SceneManager; }
-}
 namespace mar::layers {
 
 
-	class LayerGUI : public Layer {
-	public:
+	RenderLayer::RenderLayer(const char* name) {
+		p_debugName = name;
+	}
 
-		LayerGUI() = default;
-		LayerGUI(const char* name);
+	void RenderLayer::initialize() {
+		m_memorizer.Instance = &m_memorizer;
+		m_statistics.Instance = &m_statistics;
+		m_renderPipeline.Instance = &m_renderPipeline;
 
-		void submit(ecs::SceneManager* manager);
-		void renderToViewport();
+		m_shaderBufferStorage.initialize();
+		m_renderer.initialize();
+	}
 
-		// --- OVERRIDED METHODS --- // 
+	void RenderLayer::close() {
+		m_renderPipeline.reset();
+		m_renderer.close();
+	}
 
-		void initialize() override;
-		void update() override;
-		void closeLayer() override;
+	void RenderLayer::update() {
+		m_renderPipeline.Instance = &m_renderPipeline;
 
-	private:
+		m_statistics.resetStatistics();
 
-		editor::GUI m_gui;
-		//editor::GUI_Graphics m_guiGraphics;
-
-	};
+		m_renderer.draw(m_renderPipeline);
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_GUI_LAYER_H

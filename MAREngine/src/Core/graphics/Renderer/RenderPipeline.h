@@ -41,14 +41,13 @@ namespace mar::graphics {
 
 		RenderPipeline() = default;
 
-		void initialize();
 		void reset();
 
 		void submitEntity(const ecs::Entity& entity);
 
 		void submitCamera(const RenderCamera* cam);
 
-		static RenderPipeline& Instance();
+		static RenderPipeline* Instance;
 
 		// ---- GETTERS for container ---- //
 	
@@ -72,8 +71,6 @@ namespace mar::graphics {
 		size_t submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
-
-		static RenderPipeline* s_instance;
 
 		std::vector<RenderContainer> m_containers2D;
 		std::vector<RenderContainer> m_containersCubemap;

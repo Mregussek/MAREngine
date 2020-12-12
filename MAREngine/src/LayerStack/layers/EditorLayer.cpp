@@ -18,18 +18,18 @@
 **/
 
 
-#include "GUILayer.h"
+#include "EditorLayer.h"
 #include "../LayerLogs.h"
 
 
 namespace mar::layers {
 
 
-	LayerGUI::LayerGUI(const char* name) {
+	EditorLayer::EditorLayer(const char* name) {
 		p_debugName = name;
 	}
 
-	void LayerGUI::initialize() {
+	void EditorLayer::initialize() {
 		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
 
 		m_gui.initialize("#version 450");		
@@ -39,7 +39,7 @@ namespace mar::layers {
 		LAYER_INFO("GUI_LAYER: {} initialized", p_debugName);
 	}
 
-	void LayerGUI::update() {
+	void EditorLayer::update() {
 		LAYER_TRACE("GUI_LAYER: {} going to display frame", p_debugName);
 		
 		/*
@@ -64,7 +64,7 @@ namespace mar::layers {
 		LAYER_INFO("GUI_LAYER: {} displayed frame", p_debugName);
 	}
 
-	void LayerGUI::closeLayer() {
+	void EditorLayer::close() {
 		LAYER_TRACE("GUI_LAYER: {} going to close!", p_debugName);
 
 		m_gui.shutdown();
@@ -74,11 +74,11 @@ namespace mar::layers {
 		LAYER_INFO("GUI_LAYER: {} closed!", p_debugName);
 	}
 
-	void LayerGUI::renderToViewport() {
+	void EditorLayer::renderToViewport() {
 		m_gui.renderToViewport();
 	}
 
-	void LayerGUI::submit(ecs::SceneManager* manager) {
+	void EditorLayer::submit(ecs::SceneManager* manager) {
 		m_gui.submit(manager);
 	}
 

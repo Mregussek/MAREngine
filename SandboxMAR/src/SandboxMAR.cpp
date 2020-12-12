@@ -32,20 +32,20 @@ namespace mar {
 		window::WindowInstance<GLFWwindow> displayWindow{};
 		layers::LayerStack stack{};
 
-		auto entityLayer = new layers::EntityLayer("Entity Layer");
+		auto* scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
+
+		auto renderLayer = new layers::RenderLayer("Render Layer");
+		stack.pushLayer(renderLayer);
+
+		auto sceneLayer = new layers::SceneLayer("Scene Layer");
+		sceneLayer->passSceneToManager(scene);
+		stack.pushLayer(sceneLayer);
 
 		displayWindow.initialize(1600, 900, m_engine.getName());
 
-		auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
-
-		{ // Entity Layer Setup
-			entityLayer->passSceneToManager(scene);
-			stack.pushLayer(entityLayer);
-		}
-
 		stack.initialize();
 
-		entityLayer->getSceneManager()->setPlayMode();
+		sceneLayer->getSceneManager()->setPlayMode();
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
 			platforms::SetupOpenGL::clearScreen(scene->getBackground());

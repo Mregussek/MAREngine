@@ -30,8 +30,6 @@
 #include "Scene.h"
 
 
-namespace mar::graphics { class RenderPipeline; } // forward declaration
-
 namespace mar::ecs {
 
 	class SceneEvents;
@@ -40,7 +38,6 @@ namespace mar::ecs {
 	class SceneManager {
 
 		friend class SceneEvents;
-		typedef graphics::RenderPipeline RenderPipeline;
 
 	public:
 		SceneManager() = default;
@@ -79,7 +76,7 @@ namespace mar::ecs {
 		void updatePlayMode();
 		void updatePauseMode();
 
-		void updateEntityInPlaymode(const Entity& entity, RenderPipeline& renderPipeline);
+		void updateEntityInPlaymode(const Entity& entity);
 
 		// PRIVATE MEMBERS
 

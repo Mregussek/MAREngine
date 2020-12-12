@@ -25,20 +25,17 @@
 #include "../../mar.h"
 #include "../Layer.h"
 #include "../../Core/ecs/SceneManager.h"
-#include "../../Core/graphics/Renderer/RendererBatch.h"
-#include "../../Core/graphics/Renderer/RenderPipeline.h"
-#include "../../Core/graphics/Renderer/RenderStatistics.h"
-#include "../../Core/graphics/Renderer/ShaderBufferStorage.h"
 
 
 namespace mar::ecs { class Scene; }
 namespace mar::layers {
 
 
-	class EntityLayer : public Layer {
+	class SceneLayer : public Layer {
 	public:
 
-		EntityLayer(const char* debugname);
+		SceneLayer() = default;
+		SceneLayer(const char* debugname);
 		
 		void passSceneToManager(ecs::Scene* scene);
 		ecs::SceneManager* getSceneManager();
@@ -47,15 +44,11 @@ namespace mar::layers {
 
 		void initialize() override;
 		void update() override;
-		void closeLayer() override;
+		void close() override;
 
 	private:
 
 		ecs::SceneManager m_sceneManager;
-		graphics::RendererBatch m_renderer;
-		graphics::RenderPipeline m_renderPipeline;
-		graphics::RenderStatistics m_statistics;
-		graphics::ShaderBufferStorage m_shaderBufferStorage;
 
 	};
 

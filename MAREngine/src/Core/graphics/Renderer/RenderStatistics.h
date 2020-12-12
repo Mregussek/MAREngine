@@ -32,11 +32,9 @@ namespace mar::graphics {
 		
 		RenderStatistics() = default;
 
-		static RenderStatistics* Instance();
-
 		void resetStatistics();
 		
-		static RenderStatistics* instance;
+		static RenderStatistics* Instance;
 
 
 		uint32_t drawCallsCount{ 0 };

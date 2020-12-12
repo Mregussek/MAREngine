@@ -21,8 +21,6 @@
 #include "Engine.h"
 #include "Debug/Log.h"
 #include "Core/scripting/PythonScript.h"
-#include "LayerStack/layers/EntityLayer.h"
-#include "LayerStack/layers/GUILayer.h"
 
 
 namespace mar::engine {
@@ -39,10 +37,6 @@ namespace mar::engine {
 		scripting::PythonScript::appendCurrentPath();
 
 		m_editorName = m_pathLoad + " --- MAREngine";
-	}
-
-	void MAREngine::connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer) {
-		guilayer->submit(entitylayer->getSceneManager());
 	}
 
 

@@ -38,17 +38,17 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onDrawCall() const {
-		RenderStatistics::Instance()->drawCallsCount += 1;
+		RenderStatistics::Instance->drawCallsCount += 1;
 	
 		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
 	}
 
 	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			RenderPipeline::Instance().m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			RenderPipeline::Instance().m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+			RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 	}
 	
@@ -58,11 +58,11 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) const {
-		RenderPipeline::Instance().m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
+		RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
 	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const {
-		auto& lightMaterial = RenderPipeline::Instance().m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
+		auto& lightMaterial = RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
 
 		lightMaterial.ambient = light.ambient;
 		lightMaterial.diffuse = light.diffuse;
@@ -75,10 +75,10 @@ namespace mar::graphics {
 
 	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			RenderPipeline::Instance().m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			RenderPipeline::Instance().m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+			RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
 	}
 	

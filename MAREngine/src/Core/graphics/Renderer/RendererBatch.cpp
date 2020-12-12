@@ -23,6 +23,7 @@
 #include "RenderCamera.h"
 #include "RenderEvents.h"
 #include "ShaderBufferStorage.h"
+#include "RenderMemorizer.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicLimits.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
@@ -63,15 +64,16 @@ namespace mar::graphics {
 	}
 
 	void RendererBatch::setupSSBOs() {
+		using namespace platforms;
 		using namespace platforms::ShaderUniforms;
 
-		ShaderBufferStorage* ssbo{ ShaderBufferStorage::Instance() };
+		auto* ssbo{ ShaderBufferStorage::Instance() };
 
 		{ // setup Camera SSBO
-			auto& camera = ssbo->createShaderBufferStorage();
-			std::vector<UniformItem> cameraItems{ ut_u_Model, ut_u_MVP, ut_u_CameraPos };
+			const std::vector<UniformItem> cameraItems{ ut_u_Model, ut_u_MVP, ut_u_CameraPos };
 
-			camera.initialize(ub_Camera, std::move(cameraItems));
+			RMem::Instance->cameraSSBO = &ssbo->createShaderBufferStorage();
+			RMem::Instance->cameraSSBO->initialize(ub_Camera, cameraItems);
 		}
 
 		{ // setup EntityCmp SSBO
@@ -113,8 +115,7 @@ namespace mar::graphics {
 		
 		const auto& lights = renderPipeline.getLightContainers();
 
-		const auto& cameraSSBO{ ShaderBufferStorage::Instance()->getCorrectShaderBuffer(platforms::ShaderUniforms::ub_Camera) };
-		cameraSSBO.bind();
+		RMem::Instance->cameraSSBO->bind();
 
 		m_shader2D.bind();
 		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());

@@ -33,11 +33,9 @@ namespace mar::editor {
 	void GUI_Statistics::update(const ecs::Scene* scene) {
 		ImGui::Begin("Statistics Menu");
 
-		auto& stats{ *graphics::RenderStatistics::Instance() };
-		const auto& renderPipeline{ graphics::RenderPipeline::Instance() };
-		
-		const auto& containers2D{ renderPipeline.get2Dcontainers() };
-		const auto& containersCubemap{ renderPipeline.getCubemapContainers() };
+		auto& stats{ *graphics::RenderStatistics::Instance };
+		const auto& containers2D{ graphics::RenderPipeline::Instance->get2Dcontainers() };
+		const auto& containersCubemap{ graphics::RenderPipeline::Instance->getCubemapContainers() };
 
 		const auto& collections{ scene->getCollections() };
 		const auto& entities{ scene->getEntities() };

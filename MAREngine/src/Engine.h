@@ -25,9 +25,6 @@
 #include "mar.h"
 
 
-namespace mar::layers { 
-	class EntityLayer; class LayerGUI; /* forward declarations */ 
-}
 namespace mar::engine {
 
 
@@ -64,8 +61,6 @@ namespace mar::engine {
 
 		void initialize();
 		
-		void connectEntityLayerToGui(layers::LayerGUI* guilayer, layers::EntityLayer* entitylayer);
-
 	private:
 
 		std::string m_projectName{ "DefaultProject" };

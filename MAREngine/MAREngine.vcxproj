@@ -269,6 +269,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderContainer.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderContainerDefinitions.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RenderMemorizer.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />
@@ -292,6 +293,7 @@
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h" />
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectTemplatesWindow.h" />
+    <ClInclude Include="src\LayerStack\layers\RenderLayer.h" />
     <ClInclude Include="src\mar_logging.h" />
     <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h" />
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h" />
@@ -310,12 +312,12 @@
     <ClInclude Include="src\Editor\GUIPanels\GUI_TextEditor.h" />
     <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Theme.h" />
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
-    <ClInclude Include="src\LayerStack\layers\EntityLayer.h" />
+    <ClInclude Include="src\LayerStack\layers\SceneLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
     <ClInclude Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h" />
     <ClInclude Include="src\Platform\PlatformLogs.h" />
-    <ClInclude Include="src\LayerStack\layers\GUILayer.h" />
+    <ClInclude Include="src\LayerStack\layers\EditorLayer.h" />
     <ClInclude Include="src\LayerStack\Layer.h" />
     <ClInclude Include="src\LayerStack\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
@@ -370,6 +372,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RenderContainer.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RenderMemorizer.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderStatistics.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\ShaderBufferStorage.cpp" />
@@ -399,8 +402,9 @@
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.cpp" />
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp" />
     <ClCompile Include="src\LayerStack\LayerStack.cpp" />
-    <ClCompile Include="src\LayerStack\layers\EntityLayer.cpp" />
-    <ClCompile Include="src\LayerStack\layers\GUILayer.cpp" />
+    <ClCompile Include="src\LayerStack\layers\SceneLayer.cpp" />
+    <ClCompile Include="src\LayerStack\layers\EditorLayer.cpp" />
+    <ClCompile Include="src\LayerStack\layers\RenderLayer.cpp" />
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp" />
     <ClCompile Include="src\Platform\OpenGL\DrawingOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp" />

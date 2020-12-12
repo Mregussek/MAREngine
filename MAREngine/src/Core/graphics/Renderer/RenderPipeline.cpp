@@ -28,27 +28,13 @@
 namespace mar::graphics {
 
 
-	RenderPipeline* RenderPipeline::s_instance{ nullptr };
+	RenderPipeline* RenderPipeline::Instance{ nullptr };
 
-	RenderPipeline& RenderPipeline::Instance() { 
-		return *s_instance; 
-	}
-
-	void RenderPipeline::setCurrentPipeline() { 
-		s_instance = this; 
-	}
 
 	const std::vector<RenderContainer>& RenderPipeline::get2Dcontainers() const { return m_containers2D; }
 	const std::vector<RenderContainer>& RenderPipeline::getCubemapContainers() const { return m_containersCubemap; }
 	const std::vector<LightContainer>& RenderPipeline::getLightContainers() const { return m_lights; }
 	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
-
-
-	void RenderPipeline::initialize() {
-		setCurrentPipeline();
-
-		GRAPHICS_INFO("RENDER_PIPELINE: initialized!");
-	}
 
 	void RenderPipeline::reset() {
 		for (auto& container : m_containers2D) { container.reset(); }
@@ -58,8 +44,6 @@ namespace mar::graphics {
 		m_containers2D.clear();
 		m_containersCubemap.clear();
 		m_lights.clear();
-
-		initialize();
 
 		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}

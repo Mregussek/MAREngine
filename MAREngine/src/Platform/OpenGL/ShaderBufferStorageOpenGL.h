@@ -40,7 +40,7 @@ namespace mar::platforms {
 
 	public:
 
-		void initialize(const UniformBuffer& uniformBuffer, std::vector<UniformItem>&& items);
+		void initialize(const UniformBuffer& uniformBuffer, const std::vector<UniformItem>& items);
 		void close();
 
 		void bind() const;

@@ -24,7 +24,7 @@
 namespace mar::platforms {
 
 
-	void ShaderBufferStorageOpenGL::initialize(const UniformBuffer& uniformBuffer, std::vector<UniformItem>&& items) {
+	void ShaderBufferStorageOpenGL::initialize(const UniformBuffer& uniformBuffer, const std::vector<UniformItem>& items) {
 		m_uniformBuffer = uniformBuffer;
 		m_uniformItems = items;
 

@@ -35,8 +35,9 @@
 
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"
-#include "../../src/LayerStack/layers/GUILayer.h"
-#include "../../src/LayerStack/layers/EntityLayer.h"
+#include "../../src/LayerStack/layers/EditorLayer.h"
+#include "../../src/LayerStack/layers/SceneLayer.h"
+#include "../../src/LayerStack/layers/RenderLayer.h"
 
 // Entity Component System
 #include "../../src/Core/ecs/Scene.h"

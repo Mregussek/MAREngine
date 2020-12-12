@@ -33,10 +33,10 @@ namespace mar::ecs {
 
 	SceneEvents SceneEvents::s_instance;
 
-
 	SceneEvents& SceneEvents::Instance() {
 		return s_instance; 
 	}
+
 
 	void SceneEvents::setSceneManager(SceneManager& manager) {
 		m_sceneManager = &manager; 
@@ -178,7 +178,7 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::onEditorCameraSet(const graphics::RenderCamera* camera) const {
-		graphics::RenderPipeline::Instance().submitCamera(camera);
+		graphics::RenderPipeline::Instance->submitCamera(camera);
 		graphics::RenderEvents::Instance().onMainCameraUpdate(*camera);
 	}
 
@@ -199,13 +199,13 @@ namespace mar::ecs {
 			auto& renderCamera = scene->getRenderCamera();
 			renderCamera.calculateCameraTransforms(transform, cam);
 
-			graphics::RenderPipeline::Instance().submitCamera(&renderCamera);
+			graphics::RenderPipeline::Instance->submitCamera(&renderCamera);
 			graphics::RenderEvents::Instance().onMainCameraUpdate(renderCamera);
 		}
 	}
 
 	void SceneEvents::onEntityCopy(const Entity& entity) const {
-		graphics::RenderPipeline::Instance().submitEntity(entity);
+		graphics::RenderPipeline::Instance->submitEntity(entity);
 
 		ECS_TRACE("SCENE_EVENTS: onEntityCopy");
 	}

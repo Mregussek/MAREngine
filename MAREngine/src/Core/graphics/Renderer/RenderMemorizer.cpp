@@ -18,42 +18,13 @@
 **/
 
 
-#ifndef MAR_ENGINE_LAYER_H
-#define MAR_ENGINE_LAYER_H
+#include "RenderMemorizer.h"
+#include "../../../Platform/OpenGL/ShaderBufferStorageOpenGL.h"
 
 
-#include "../mar.h"
-#include "LayerLogs.h"
+namespace mar::graphics {
 
 
-namespace mar::layers {
-
-	class LayerStack;
-
-
-	class Layer {
-
-		friend class LayerStack;
-
-	public:
-
-		Layer() = default;
-		Layer(const char* name) : p_debugName(name) { }
-
-		virtual void initialize() { }
-
-		virtual void update() { }
-
-		virtual void close() { }
-
-	protected:
-		
-		const char* p_debugName{ "Default_Debug_Name" };
-
-	};
-
+	RenderMemorizer* RenderMemorizer::Instance{ nullptr };
 
 }
-
-
-#endif // !MAR_ENGINE_LAYER_H

@@ -56,31 +56,28 @@ namespace mar {
 	void EditorMAR::runProjectOnEngine() {
 		window::WindowInstance<GLFWwindow> displayWindow{};
 		layers::LayerStack stack{};
-		editor::GUI gui{};
 
-		auto entityLayer = new layers::EntityLayer("Entity Layer");
-		auto guiLayer = new layers::LayerGUI("Default GUI Layer");
+		auto* scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
+
+		auto renderLayer = new layers::RenderLayer("Render Layer");
+		stack.pushLayer(renderLayer);
+
+		auto sceneLayer = new layers::SceneLayer("Scene Layer");
+		sceneLayer->passSceneToManager(scene);
+		stack.pushLayer(sceneLayer);
+
+		auto editorLayer = new layers::EditorLayer("Editor Layer");
+		editorLayer->submit(sceneLayer->getSceneManager());
+		stack.pushOverlay(editorLayer);
 
 		displayWindow.initialize(1600, 900, m_engine.getName());
-
-		auto scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
-
-		{ // Entity Layer Setup
-			entityLayer->passSceneToManager(scene);
-			stack.pushLayer(entityLayer);
-		}
-
-		{ // Editor Layer Setup
-			m_engine.connectEntityLayerToGui(guiLayer, entityLayer);
-			stack.pushOverlay(guiLayer);
-		}
 
 		stack.initialize();
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
 			platforms::SetupOpenGL::clearScreen(scene->getBackground());
 
-			guiLayer->renderToViewport();
+			editorLayer->renderToViewport();
 
 			stack.update();
 

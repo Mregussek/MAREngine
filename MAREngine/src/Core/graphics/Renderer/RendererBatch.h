@@ -33,11 +33,15 @@ namespace mar::graphics {
 	class RenderPipeline;
 	class RenderContainer;
 	class RenderCamera;
+	struct RenderMemorizer;
 	class LightContainer;
 	struct LightMaterial;
 
 
 	class RendererBatch {
+
+		typedef RenderMemorizer RMem;
+
 	public:
 
 		void initialize();

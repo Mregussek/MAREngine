@@ -18,37 +18,23 @@
 **/
 
 
-#ifndef MAR_ENGINE_LAYER_H
-#define MAR_ENGINE_LAYER_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_RENDER_MEMORIZER_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_RENDER_MEMORIZER_H
 
 
-#include "../mar.h"
-#include "LayerLogs.h"
+#include "../../../mar.h"
 
 
-namespace mar::layers {
+namespace mar::layers { class RenderLayer; }
+namespace mar::platforms { class ShaderBufferStorageOpenGL; }
+namespace mar::graphics {
 
-	class LayerStack;
 
+	struct RenderMemorizer {
 
-	class Layer {
+		static RenderMemorizer* Instance;
 
-		friend class LayerStack;
-
-	public:
-
-		Layer() = default;
-		Layer(const char* name) : p_debugName(name) { }
-
-		virtual void initialize() { }
-
-		virtual void update() { }
-
-		virtual void close() { }
-
-	protected:
-		
-		const char* p_debugName{ "Default_Debug_Name" };
+		platforms::ShaderBufferStorageOpenGL* cameraSSBO{ nullptr };
 
 	};
 
@@ -56,4 +42,5 @@ namespace mar::layers {
 }
 
 
-#endif // !MAR_ENGINE_LAYER_H
+#endif // !MAR_ENGINE_GRAPHICS_RENDERER_RENDER_MEMORIZER_H
+
