@@ -41,34 +41,28 @@ namespace mar::graphics::loader_obj {
 		// Split a String into a string array at a given token
 		inline void split(const std::string& in, std::vector<std::string>& out, std::string token) {
 			out.clear();
-
 			std::string temp;
 
-			for (int i = 0; i < int(in.size()); i++)
-			{
-				std::string test = in.substr(i, token.size());
+			const size_t inSize{ in.size() };
+			for (size_t i = 0; i < inSize; i++) {
+				const std::string test{ in.substr(i, token.size()) };
 
-				if (test == token)
-				{
-					if (!temp.empty())
-					{
+				if (test == token) {
+					if (!temp.empty()) {
 						out.push_back(temp);
 						temp.clear();
-						i += (int)token.size() - 1;
+						i += token.size() - 1;
 					}
-					else
-					{
+					else {
 						out.push_back("");
 					}
 				}
-				else if (i + token.size() >= in.size())
-				{
+				else if ((i + token.size()) >= in.size()) {
 					temp += in.substr(i, token.size());
 					out.push_back(temp);
 					break;
 				}
-				else
-				{
+				else {
 					temp += in[i];
 				}
 			}
@@ -77,37 +71,39 @@ namespace mar::graphics::loader_obj {
 		// Get tail of string after first token and possibly following spaces
 		inline std::string tail(const std::string& in)
 		{
-			size_t token_start = in.find_first_not_of(" \t");
-			size_t space_start = in.find_first_of(" \t", token_start);
-			size_t tail_start = in.find_first_not_of(" \t", space_start);
-			size_t tail_end = in.find_last_not_of(" \t");
-			if (tail_start != std::string::npos && tail_end != std::string::npos)
-			{
-				return in.substr(tail_start, tail_end - tail_start + 1);
+			const size_t tokenStart{ in.find_first_not_of(" \t") };
+			const size_t spaceStart{ in.find_first_of(" \t", tokenStart) };
+			const size_t tailStart{ in.find_first_not_of(" \t", spaceStart) };
+			const size_t tailEnd{ in.find_last_not_of(" \t") };
+			const bool startIsNotEOF{ tailStart != std::string::npos };
+			const bool endIsNotEOF{ tailEnd != std::string::npos };
+
+			if (startIsNotEOF && endIsNotEOF) {
+				return in.substr(tailStart, tailEnd - tailStart + 1);
 			}
-			else if (tail_start != std::string::npos)
-			{
-				return in.substr(tail_start);
+			else if (startIsNotEOF) {
+				return in.substr(tailStart);
 			}
+
 			return "";
 		}
 
 		// Get first token of string
-		inline std::string firstToken(const std::string& in)
-		{
-			if (!in.empty())
-			{
-				size_t token_start = in.find_first_not_of(" \t");
-				size_t token_end = in.find_first_of(" \t", token_start);
-				if (token_start != std::string::npos && token_end != std::string::npos)
-				{
-					return in.substr(token_start, token_end - token_start);
+		inline std::string firstToken(const std::string& in) {
+			if (!in.empty()) {
+				const size_t tokenStart{ in.find_first_not_of(" \t") };
+				const size_t tokenEnd{ in.find_first_of(" \t", tokenStart) };
+				const bool startIsNotEOF{ tokenStart != std::string::npos };
+				const bool endIsNotEOF{ tokenEnd != std::string::npos };
+
+				if (startIsNotEOF && endIsNotEOF) {
+					return in.substr(tokenStart, tokenEnd - tokenStart);
 				}
-				else if (token_start != std::string::npos)
-				{
-					return in.substr(token_start);
+				else if (startIsNotEOF) {
+					return in.substr(tokenStart);
 				}
 			}
+
 			return "";
 		}
 	}
@@ -172,12 +168,8 @@ namespace mar::graphics::loader_obj {
 				}
 				else {
 					if (!Indices.empty() && !Vertices.empty()) {
-						// Create Mesh
-						tempMesh = Mesh(Vertices, Indices);
+						auto& tmpMesh = LoadedMeshes.emplace_back(Vertices, Indices);
 						tempMesh.MeshName = meshname;
-
-						// Insert Mesh
-						LoadedMeshes.push_back(tempMesh);
 
 						// Cleanup
 						Vertices.clear();
@@ -278,18 +270,13 @@ namespace mar::graphics::loader_obj {
 
 		file.close();
 
-		// Set Materials for each Mesh
-		for (size_t i = 0; i < MeshMatNames.size(); i++) {
-			std::string matname = MeshMatNames[i];
+		const auto meshMatNamesSize{ MeshMatNames.size() };
+		for (size_t i = 0; i < meshMatNamesSize; i++) { // Set Materials for each Mesh
+			const auto it = std::find_if(LoadedMaterials.cbegin(), LoadedMaterials.cend(), [&meshMatName = std::as_const(MeshMatNames[i])](const auto& material) {
+				return material.name == meshMatName;
+			});
 
-			// Find corresponding material name in loaded materials
-			// when found copy material variables into mesh material
-			for (size_t j = 0; j < LoadedMaterials.size(); j++) {
-				if (LoadedMaterials[j].name == matname) {
-					LoadedMeshes[i].MeshMaterial = LoadedMaterials[j];
-					break;
-				}
-			}
+			if (it != LoadedMaterials.cend()) { LoadedMeshes[i].MeshMaterial = *it; }
 		}
 
 		const bool couldNotLoadAnything{ LoadedMeshes.empty() && LoadedVertices.empty() && LoadedIndices.empty() };
@@ -298,111 +285,66 @@ namespace mar::graphics::loader_obj {
 		else { return true; }
 	}
 
-	// Generate vertices from a list of positions, 
-	//	tcoords, normals and a face line
+	int32_t Loader::checkVertexType(const std::string& sFace, std::vector<std::string>& sVertices) const {
+		algorithm::split(sFace, sVertices, "/");
+
+		if (sVertices.size() == 1) { return 1; }	// Only position
+		if (sVertices.size() == 2) { return 2; }	// Position / Texture
+		if (sVertices.size() == 3) {
+			if (sVertices[1] != "") { return 4; }	// Position / Texture / Normal
+			else { return 3; }						// Position / Normal
+		}
+
+		return 0;
+	}
+
+	// Generate vertices from a list of positions, tcoords, normals and a face line
 	void Loader::GenVerticesFromRawOBJ(std::vector<Vertex>& oVerts,
 		const std::vector<Vector3>& iPositions,
 		const std::vector<Vector2>& iTCoords,
 		const std::vector<Vector3>& iNormals,
-		std::string icurline)
+		const std::string& icurline)
 	{
 		std::vector<std::string> sface, svert;
-		Vertex vVert;
 		algorithm::split(algorithm::tail(icurline), sface, " ");
 
 		bool noNormal = false;
 
-		// For every given vertex do this
-		for (int i = 0; i < int(sface.size()); i++)
-		{
-			// See What type the vertex is.
-			int vtype = 0;
+		for (const auto& face : sface) {
+			const auto vertexType{ checkVertexType(face, svert) };
 
-			algorithm::split(sface[i], svert, "/");
-
-			// Check for just position - v1
-			if (svert.size() == 1)
-			{
-				// Only position
-				vtype = 1;
-			}
-
-			// Check for position & texture - v1/vt1
-			if (svert.size() == 2)
-			{
-				// Position & Texture
-				vtype = 2;
-			}
-
-			// Check for Position, Texture and Normal - v1/vt1/vn1
-			// or if Position and Normal - v1//vn1
-			if (svert.size() == 3)
-			{
-				if (svert[1] != "")
-				{
-					// Position, Texture, and Normal
-					vtype = 4;
-				}
-				else
-				{
-					// Position & Normal
-					vtype = 3;
-				}
-			}
-
-			// Calculate and store the vertex
-			switch (vtype)
-			{
-			case 1: // P
-			{
-				vVert.position = algorithm::getElement(iPositions, svert[0]);
-				vVert.textureCoordinates = Vector2(0, 0);
+			if (vertexType == 1) { // P
+				auto& vertex = oVerts.emplace_back();
+				vertex.position = algorithm::getElement(iPositions, svert[0]);
+				vertex.textureCoordinates = Vector2(0.f, 0.f);
 				noNormal = true;
-				oVerts.push_back(vVert);
-				break;
 			}
-			case 2: // P/T
-			{
-				vVert.position = algorithm::getElement(iPositions, svert[0]);
-				vVert.textureCoordinates = algorithm::getElement(iTCoords, svert[1]);
+			else if (vertexType == 2) { // P/T
+				auto& vertex = oVerts.emplace_back();
+				vertex.position = algorithm::getElement(iPositions, svert[0]);
+				vertex.textureCoordinates = algorithm::getElement(iTCoords, svert[1]);
 				noNormal = true;
-				oVerts.push_back(vVert);
-				break;
 			}
-			case 3: // P//N
-			{
-				vVert.position = algorithm::getElement(iPositions, svert[0]);
-				vVert.textureCoordinates = Vector2(0, 0);
-				vVert.lightNormal = algorithm::getElement(iNormals, svert[2]);
-				oVerts.push_back(vVert);
-				break;
+			else if (vertexType == 3) { // P//N
+				auto& vertex = oVerts.emplace_back();
+				vertex.position = algorithm::getElement(iPositions, svert[0]);
+				vertex.textureCoordinates = Vector2(0.f, 0.f);
+				vertex.lightNormal = algorithm::getElement(iNormals, svert[2]);
 			}
-			case 4: // P/T/N
-			{
-				vVert.position = algorithm::getElement(iPositions, svert[0]);
-				vVert.textureCoordinates = algorithm::getElement(iTCoords, svert[1]);
-				vVert.lightNormal = algorithm::getElement(iNormals, svert[2]);
-				oVerts.push_back(vVert);
-				break;
-			}
-			default:
-			{
-				break;
-			}
+			else if (vertexType == 4) { // P/T/N
+				auto& vertex = oVerts.emplace_back();
+				vertex.position = algorithm::getElement(iPositions, svert[0]);
+				vertex.textureCoordinates = algorithm::getElement(iTCoords, svert[1]);
+				vertex.lightNormal = algorithm::getElement(iNormals, svert[2]);
 			}
 		}
 
-		// take care of missing normals
-		// these may not be truly acurate but it is the 
-		// best they get for not compiling a mesh with normals	
-		if (noNormal) {
+		if (noNormal) { // take care of missing normals
 			const Vector3 A{ oVerts[0].position - oVerts[1].position };
 			const Vector3 B{ oVerts[2].position - oVerts[1].position };
 			const Vector3 normal{ Vector3::cross(A, B) };
 
-			for (auto& oVertex : oVerts) {
-				oVertex.lightNormal = normal;
-			}
+			for (auto& oVertex : oVerts) { oVertex.lightNormal = normal; }
 		}
 	}
 
@@ -411,105 +353,72 @@ namespace mar::graphics::loader_obj {
 	void Loader::VertexTriangluation(std::vector<unsigned int>& oIndices,
 		const std::vector<Vertex>& iVerts)
 	{
-		// If there are 2 or less verts,
-		// no triangle can be created,
-		// so exit
-		if (iVerts.size() < 3) {
-			return;
-		}
-		// If it is a triangle no need to calculate it
-		if (iVerts.size() == 3) {
+		if (iVerts.size() < 3) { return; } // no triangle can be created
+		else if (iVerts.size() == 3) { // if it is triangle no need to be calculated
 			oIndices.push_back(0);
 			oIndices.push_back(1);
 			oIndices.push_back(2);
 			return;
 		}
 
-		// Create a list of vertices
-		std::vector<Vertex> tVerts = iVerts;
+		std::vector<Vertex> tVerts = iVerts; // Create a list of vertices
 
-		while (true)
-		{
-			// For every vertex
-			for (int i = 0; i < int(tVerts.size()); i++)
-			{
-				// pPrev = the previous vertex in the list
-				Vertex pPrev;
-				if (i == 0)
-				{
-					pPrev = tVerts[tVerts.size() - 1];
-				}
-				else
-				{
-					pPrev = tVerts[i - 1];
-				}
+		while (true) {
+			for (int i = 0; i < int(tVerts.size()); i++) { // For every vertex
+				const auto pPrevious = [i, &tVerts]()->Vertex {
+					if (i == 0) {
+						return tVerts[tVerts.size() - 1]; 
+					}
+					
+					return tVerts[i - 1];
+				}();
 
-				// pCur = the current vertex;
-				Vertex pCur = tVerts[i];
+				const auto pCurrent{ tVerts[i] };
 
-				// pNext = the next vertex in the list
-				Vertex pNext;
-				if (i == tVerts.size() - 1)
-				{
-					pNext = tVerts[0];
-				}
-				else
-				{
-					pNext = tVerts[i + 1];
-				}
+				const auto pNext = [i, &tVerts]()->Vertex {
+					if (i == (tVerts.size() - 1)) {
+						return tVerts[0];
+					}
+
+					return tVerts[i + 1];
+				}();
 
 				// Check to see if there are only 3 verts left
 				// if so this is the last triangle
-				if (tVerts.size() == 3)
-				{
-					// Create a triangle from pCur, pPrev, pNext
-					for (int j = 0; j < int(tVerts.size()); j++)
-					{
-						if (iVerts[j].position == pCur.position)
-							oIndices.push_back(j);
-						if (iVerts[j].position == pPrev.position)
-							oIndices.push_back(j);
-						if (iVerts[j].position == pNext.position)
-							oIndices.push_back(j);
+				const auto tVertsSize{ (uint32_t)tVerts.size() };
+				const auto iVertSize{ (uint32_t)iVerts.size() };
+				if (tVertsSize == 3) {
+					 
+					for (uint32_t j = 0; j < tVertsSize; j++) { // Create a triangle from pCur, pPrev, pNext
+						if (iVerts[j].position == pCurrent.position) { oIndices.push_back(j); }
+						if (iVerts[j].position == pPrevious.position) { oIndices.push_back(j); }
+						if (iVerts[j].position == pNext.position) { oIndices.push_back(j); }
 					}
 
 					tVerts.clear();
 					break;
 				}
-				if (tVerts.size() == 4)
-				{
-					// Create a triangle from pCur, pPrev, pNext
-					for (int j = 0; j < int(iVerts.size()); j++)
-					{
-						if (iVerts[j].position == pCur.position)
-							oIndices.push_back(j);
-						if (iVerts[j].position == pPrev.position)
-							oIndices.push_back(j);
-						if (iVerts[j].position == pNext.position)
-							oIndices.push_back(j);
+				else if (tVertsSize == 4) {
+					for (uint32_t j = 0; j < iVertSize; j++) { // Create a triangle from pCur, pPrev, pNext
+						if (iVerts[j].position == pCurrent.position) { oIndices.push_back(j); }
+						if (iVerts[j].position == pPrevious.position) { oIndices.push_back(j); }
+						if (iVerts[j].position == pNext.position) { oIndices.push_back(j); }
 					}
 
-					Vector3 tempVec;
-					for (int j = 0; j < int(tVerts.size()); j++)
-					{
-						if (tVerts[j].position != pCur.position
-							&& tVerts[j].position != pPrev.position
-							&& tVerts[j].position != pNext.position)
-						{
-							tempVec = tVerts[j].position;
-							break;
-						}
-					}
+					const auto tempVec = [&tVerts, &pCurrent, &pNext, &pPrevious]()->Vector3 {
+						const auto it = std::find_if(tVerts.cbegin(), tVerts.cend(), [&pCurrent, &pNext, &pPrevious](const auto& vertex) {
+							return vertex.position != pCurrent.position && vertex.position != pPrevious.position && vertex.position != pNext.position;
+						});
 
-					// Create a triangle from pCur, pPrev, pNext
-					for (int j = 0; j < int(iVerts.size()); j++)
-					{
-						if (iVerts[j].position == pPrev.position)
-							oIndices.push_back(j);
-						if (iVerts[j].position == pNext.position)
-							oIndices.push_back(j);
-						if (iVerts[j].position == tempVec)
-							oIndices.push_back(j);
+						if (it != tVerts.cend()) { return it->position; }
+
+						return Vector3{};
+					}();
+
+					for (uint32_t j = 0; j < iVertSize; j++) {
+						if (iVerts[j].position == tempVec) { oIndices.push_back(j); }
+						if (iVerts[j].position == pPrevious.position) { oIndices.push_back(j); }
+						if (iVerts[j].position == pNext.position) { oIndices.push_back(j); }
 					}
 
 					tVerts.clear();
@@ -517,59 +426,46 @@ namespace mar::graphics::loader_obj {
 				}
 
 				// If Vertex is not an interior vertex
-				float angle = Vector3::angleBetween(pPrev.position - pCur.position, pNext.position - pCur.position) * (180.f / (float)3.14159265359);
-				if (angle <= 0.f && angle >= 180.f)
-					continue;
-
+				const float angleRad{ Vector3::angleBetween(pPrevious.position - pCurrent.position, pNext.position - pCurrent.position) };
+				const float angleDeg{ maths::trig::toDegrees(angleRad) };
+				if (angleDeg <= 0.f && angleDeg >= 180.f) {continue; }
+					
 				// If any vertices are within this triangle
-				bool inTri = false;
-				for (int j = 0; j < int(iVerts.size()); j++)
-				{
-					if (Vector3::inTriangle(iVerts[j].position, pPrev.position, pCur.position, pNext.position)
-						&& iVerts[j].position != pPrev.position
-						&& iVerts[j].position != pCur.position
-						&& iVerts[j].position != pNext.position)
-					{
-						inTri = true;
-						break;
-					}
-				}
-				if (inTri)
-					continue;
+				const bool inTriangle = [&iVerts, &pCurrent, &pNext, &pPrevious]()->bool {
+					const auto it = std::find_if(iVerts.cbegin(), iVerts.cend(), [&pCurrent, &pNext, &pPrevious](const auto& vertex) {
 
-				// Create a triangle from pCur, pPrev, pNext
-				for (int j = 0; j < int(iVerts.size()); j++)
-				{
-					if (iVerts[j].position == pCur.position)
-						oIndices.push_back(j);
-					if (iVerts[j].position == pPrev.position)
-						oIndices.push_back(j);
-					if (iVerts[j].position == pNext.position)
-						oIndices.push_back(j);
+						const bool isInTriangle{ Vector3::inTriangle(vertex.position, pPrevious.position, pCurrent.position, pNext.position) };
+						const bool notEqualToPrevious{ vertex.position != pPrevious.position };
+						const bool notEqualToCurrent{ vertex.position != pCurrent.position };
+						const bool notEqualToNext{ vertex.position != pNext.position };
+
+						return isInTriangle && notEqualToPrevious && notEqualToCurrent && notEqualToNext;
+					});
+
+					if (it != iVerts.cend()) { return true; }
+					return false;
+				}();
+
+				if (inTriangle) { continue; }
+
+				for (uint32_t j = 0; j < iVertSize; j++) { // Create a triangle from pCur, pPrev, pNext
+					if (iVerts[j].position == pCurrent.position) { oIndices.push_back(j); }
+					if (iVerts[j].position == pPrevious.position) { oIndices.push_back(j); }
+					if (iVerts[j].position == pNext.position) { oIndices.push_back(j); }
 				}
 
-				// Delete pCur from the list
-				for (int j = 0; j < int(tVerts.size()); j++)
-				{
-					if (tVerts[j].position == pCur.position)
-					{
-						tVerts.erase(tVerts.begin() + j);
-						break;
-					}
-				}
+				auto foundCurrentInList = [&pCurrent](const Vertex& vertex) {
+					return vertex.position == pCurrent.position;
+				};
 
-				// reset i to the start
-				// -1 since loop will add 1 to it
-				i = -1;
+				auto it = std::find_if(tVerts.begin(), tVerts.end(), foundCurrentInList);
+				if (it != tVerts.end()) { tVerts.erase(it); }
+
+				i = -1; // reset i to the start : -1 since loop will add 1 to it
 			}
 
-			// if no triangles were created
-			if (oIndices.size() == 0)
-				break;
-
-			// if no more vertices
-			if (tVerts.size() == 0)
-				break;
+			if (oIndices.size() == 0) { break; } // if no triangles were created 
+			if (tVerts.size() == 0) { break; } // if no more vertices
 		}
 	}
 

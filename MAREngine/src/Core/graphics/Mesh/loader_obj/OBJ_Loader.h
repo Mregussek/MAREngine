@@ -128,7 +128,7 @@ namespace mar::graphics::loader_obj {
 			const std::vector<Vector3>& iPositions,
 			const std::vector<Vector2>& iTCoords,
 			const std::vector<Vector3>& iNormals,
-			std::string icurline);
+			const std::string& icurline);
 
 		// Triangulate a list of vertices into a face by printing
 		//	inducies corresponding with triangles within it
@@ -137,6 +137,10 @@ namespace mar::graphics::loader_obj {
 
 		// Load Materials from .mtl file
 		bool LoadMaterials(std::string path);
+
+
+		int32_t checkVertexType(const std::string& sFace, std::vector<std::string>& sVertices) const;
+
 	};
 }
 
