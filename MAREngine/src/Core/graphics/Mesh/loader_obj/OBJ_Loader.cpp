@@ -141,8 +141,6 @@ namespace mar::graphics::loader_obj {
 		bool listening = false;
 		std::string meshname;
 
-		Mesh tempMesh;
-
 		std::string curline;
 
 		while (std::getline(file, curline)) {
@@ -169,7 +167,7 @@ namespace mar::graphics::loader_obj {
 				else {
 					if (!Indices.empty() && !Vertices.empty()) {
 						auto& tmpMesh = LoadedMeshes.emplace_back(Vertices, Indices);
-						tempMesh.MeshName = meshname;
+						tmpMesh.MeshName = meshname;
 
 						// Cleanup
 						Vertices.clear();
@@ -223,9 +221,10 @@ namespace mar::graphics::loader_obj {
 				MeshMatNames.push_back(algorithm::tail(curline));
 
 				if (!Indices.empty() && !Vertices.empty()) {
-					tempMesh = Mesh(Vertices, Indices);
+					auto& tempMesh = LoadedMeshes.emplace_back(Vertices, Indices);
 					tempMesh.MeshName = meshname;
-					const int32_t i{ 2 };
+					constexpr int32_t i{ 2 };
+
 					while (1) {
 						tempMesh.MeshName = meshname + "_" + std::to_string(i);
 
@@ -235,8 +234,6 @@ namespace mar::graphics::loader_obj {
 							
 						break;
 					}
-
-					LoadedMeshes.push_back(tempMesh);
 
 					Vertices.clear();
 					Indices.clear();
@@ -262,10 +259,8 @@ namespace mar::graphics::loader_obj {
 
 		// Deal with last mesh
 		if (!Indices.empty() && !Vertices.empty()) {
-			tempMesh = Mesh(Vertices, Indices);
+			auto& tempMesh = LoadedMeshes.emplace_back(Vertices, Indices);
 			tempMesh.MeshName = meshname;
-
-			LoadedMeshes.push_back(tempMesh);
 		}
 
 		file.close();

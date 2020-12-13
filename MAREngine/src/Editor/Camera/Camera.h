@@ -66,6 +66,9 @@ namespace mar::editor {
 
         float m_aspectRatio{ 1.333f };
 
+        const float m_near{ 0.001f };
+        const float m_far{ 10000.f };
+
         StandardCamera m_standard;
         SphericalCamera m_spherical;
 

@@ -353,9 +353,9 @@ namespace mar::editor {
 
 		if (camera.Perspective) {
 			if (ImGui::DragFloat("AspectRatio", &camera.p_aspectRatio, 0.1f, 1.f, 10.f)) { updatedCamera = true; }
-			if (ImGui::DragFloat("Field Of View", &camera.p_fov, 0.1f, 1.f, 90.f) )	{ updatedCamera = true; }
-			if (ImGui::DragFloat("Near", &camera.p_near, 0.01f, 0.001f, 150.f)	  )	{ updatedCamera = true; }
-			if (ImGui::DragFloat("Far", &camera.p_far, 0.1f, 0.001f, 150.f)		  )	{ updatedCamera = true; }
+			if (ImGui::DragFloat("Field Of View", &camera.p_fov, 0.1f, 1.f, 90.f)) { updatedCamera = true; }
+			if (ImGui::DragFloat("Near", &camera.p_near, 0.01f, 0.001f, 150.f))	{ updatedCamera = true; }
+			if (ImGui::DragFloat("Far", &camera.p_far, 0.1f, 0.001f, 10000.f)) { updatedCamera = true; }
 			if (ImGui::Button("Set 16:9")) { 
 				camera.p_aspectRatio = 16.f / 9.f; 
 				updatedCamera = true; 

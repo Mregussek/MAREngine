@@ -32,7 +32,7 @@ namespace mar::editor {
 
         updateCameraVectors();
 
-        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
+        m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, m_near, m_far);
         m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
         m_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
         m_renderCamera.recalculateMVP();
@@ -42,7 +42,7 @@ namespace mar::editor {
         auto updatePerspectiveIfNeeded = [this, aspectRatio]()->bool {
             if (m_aspectRatio != aspectRatio) {
                 m_aspectRatio = aspectRatio;
-                m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, 0.01f, 100.0f);
+                m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, m_near, m_far);
                 return true;
             }
 

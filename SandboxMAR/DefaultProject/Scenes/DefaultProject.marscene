@@ -52,8 +52,8 @@ MAREngine scene file
 #EntityStart
 #TagComponent LightCube
 #TransformComponent Begin
-#center 17.69 0.72 7.7
-#angles 0 0 0
+#center 17.69 22.57 7.7
+#angles 0 -31.5 0
 #scale 0.750999 1.5 0.750999
 #RenderableComponent Cube
 #ColorComponent 1 1 1 1
@@ -62,8 +62,8 @@ MAREngine scene file
 #diffuselight 0.9 0.9 0.9 1
 #specularlight 0.5 0.5 0.5 1
 #constant 1
-#linear 0.045
-#quadratic 0.0075
+#linear 0
+#quadratic 0
 #shininess 64
 
 #EntityEnd
@@ -93,9 +93,9 @@ MAREngine scene file
 #EntityStart
 #TagComponent CameraSavedFile
 #TransformComponent Begin
-#center -17.55 7.41 19.1
-#angles -8.54 -26.88 0
-#scale 1 1 1
+#center -1.95525 29.9974 85.66
+#angles -12.5 -90 0
+#scale 0.999998 0.999997 0.999999
 #CameraComponent Begin
 #id main
 #used perspective
@@ -103,7 +103,7 @@ MAREngine scene file
 #fov 45
 #aspectratio 1.33333
 #near 0.1
-#far 50
+#far 10000
 #type orthographic
 #left -31.1
 #right 29.8
@@ -295,6 +295,17 @@ MAREngine scene file
 
 #EntityEnd
 
+#EntityStart
+#TagComponent empty
+#TransformComponent Begin
+#center 0 -20 0
+#angles 0 0 0
+#scale 100 1 1000
+#RenderableComponent Surface
+#ColorComponent 0.203008 0.203005 0.203005 1
+
+#EntityEnd
+
 #EntityCollectionStart
 
 #EntityStart
@@ -455,6 +466,446 @@ MAREngine scene file
 #angles -87.5 18.5 -80
 #scale 1 1 1
 #CollectionTagComponent monkey.obj
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/low_poly_buildings.obj
+
+#EntityStart
+#TagComponent Highrise_1
+#TransformComponent Begin
+#center 106.2 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_1
+#ColorComponent 0.642865 0.808271 0.337286 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_2
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_2
+#ColorComponent 0.815789 0.718672 0.233083 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_3
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_3
+#ColorComponent 0.326808 0.321414 0.62406 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_4
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_4
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_5
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_5
+#ColorComponent 0.545113 0.170092 0.491539 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_6
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_6
+#ColorComponent 0.921053 0.290859 0.290859 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_7
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_7
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_8
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_8
+#ColorComponent 0.234722 0.650376 0.313894 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_9
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_9
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_10
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_10
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_11
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_11
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_12
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_12
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent highrise_13
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 49 0
+#scale 1 1 1
+#RenderableComponent highrise_13
+#ColorComponent 0.770677 0.194118 0.194118 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_14
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_14
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_15
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_15
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_16
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_16
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_17
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_17
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_18
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_18
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_19
+#TransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_19
+#ColorComponent 0.192153 0.774436 0.552614 1
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 100 -20 2.35
+#angles 0 90 0
+#scale 1 1 1
+#CollectionTagComponent LowPolyBuildsings1
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/low_poly_buildings.obj
+
+#EntityStart
+#TagComponent Highrise_1
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_1
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_2
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_2
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_3
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_3
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_4
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_4
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_5
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_5
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_6
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_6
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_7
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_7
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_8
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_8
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_9
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_9
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_10
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_10
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_11
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_11
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_12
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_12
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent highrise_13
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent highrise_13
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_14
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_14
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_15
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_15
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_16
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_16
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_17
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_17
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_18
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_18
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_19
+#TransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent Highrise_19
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center -300 0 0
+#angles 0 90 0
+#scale 1 1 1
+#CollectionTagComponent SecondLowPolyBuildings
 
 #EntityCollectionEnd
 
