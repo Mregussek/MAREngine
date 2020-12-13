@@ -31,104 +31,49 @@ namespace mar::graphics::loader_obj {
 	typedef maths::vec2 Vector2;
 	typedef maths::vec3 Vector3;
 
-	struct Material {
-		Material();
 
-		// Material Name
-		std::string name;
-		// Ambient Color
-		Vector3 Ka;
-		// Diffuse Color
-		Vector3 Kd;
-		// Specular Color
-		Vector3 Ks;
-		// Specular Exponent
-		float Ns;
-		// Optical Density
-		float Ni;
-		// Dissolve
-		float d;
-		// Illumination
-		int illum;
-		// Ambient Texture Map
-		std::string map_Ka;
-		// Diffuse Texture Map
-		std::string map_Kd;
-		// Specular Texture Map
-		std::string map_Ks;
-		// Specular Hightlight Map
-		std::string map_Ns;
-		// Alpha Texture Map
-		std::string map_d;
-		// Bump Map
-		std::string map_bump;
+	struct Material {
+
+		std::string name;		// Material Name
+		Vector3 Ka;				// Ambient Color
+		Vector3 Kd;				// Diffuse Color
+		Vector3 Ks;				// Specular Color
+		float Ns{ 0.f };		// Specular Exponent
+		float Ni{ 0.f };		// Optical Density
+		float d{ 0.f };			// Dissolve
+		int32_t illum{ 0 };		// Illumination
+		std::string map_Ka;		// Ambient Texture Map
+		std::string map_Kd;		// Diffuse Texture Map
+		std::string map_Ks;		// Specular Texture Map
+		std::string map_Ns;		// Specular Hightlight Map
+		std::string map_d;		// Alpha Texture Map
+		std::string map_bump;	// Bump Map
+
 	};
 
 	// Structure: Mesh
 	//
 	// Description: A Simple Mesh Object that holds
 	//	a name, a vertex list, and an index list
-	struct Mesh
-	{
-		// Default Constructor
-		Mesh();
-		// Variable Set Constructor
-		Mesh(std::vector<Vertex>& _Vertices, std::vector<unsigned int>& _Indices);
-		// Mesh Name
-		std::string MeshName;
-		// Vertex List
-		std::vector<Vertex> Vertices;
-		// Index List
-		std::vector<unsigned int> Indices;
+	struct Mesh {
 
-		// Material
+		Mesh() = default;
+		Mesh(std::vector<Vertex>& _Vertices, std::vector<uint32_t>& _Indices);
+
+		std::string MeshName;
+		std::vector<Vertex> Vertices;
+		std::vector<uint32_t> Indices;
+
 		Material MeshMaterial;
 	};
-
-	// Namespace: Math
-	//
-	// Description: The namespace that holds all of the math
-	//	functions need for OBJL
-	namespace math
-	{
-		// Vector3 Cross Product
-		Vector3 CrossV3(const Vector3 a, const Vector3 b);
-
-		// Vector3 Magnitude Calculation
-		float MagnitudeV3(const Vector3 in);
-
-		// Vector3 DotProduct
-		float DotV3(const Vector3 a, const Vector3 b);
-
-		// Angle between 2 Vector3 Objects
-		float AngleBetweenV3(const Vector3 a, const Vector3 b);
-
-		// Projection Calculation of a onto b
-		Vector3 ProjV3(const Vector3 a, const Vector3 b);
-	}
 
 	// Namespace: Algorithm
 	//
 	// Description: The namespace that holds all of the
 	// Algorithms needed for OBJL
-	namespace algorithm
-	{
-		// Vector3 Multiplication Opertor Overload
-		Vector3 operator*(const float& left, const Vector3& right);
-
-		// A test to see if P1 is on the same side as P2 of a line segment ab
-		bool SameSide(Vector3 p1, Vector3 p2, Vector3 a, Vector3 b);
-
-		// Generate a cross produect normal for a triangle
-		Vector3 GenTriNormal(Vector3 t1, Vector3 t2, Vector3 t3);
-
-		// Check to see if a Vector3 Point is within a 3 Vector3 Triangle
-		bool inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3);
-
+	namespace algorithm {
 		// Split a String into a string array at a given token
-		inline void split(const std::string& in,
-			std::vector<std::string>& out,
-			std::string token);
+		inline void split(const std::string& in, std::vector<std::string>& out, std::string token);
 
 		// Get tail of string after first token and possibly following spaces
 		inline std::string tail(const std::string& in);
@@ -138,26 +83,28 @@ namespace mar::graphics::loader_obj {
 
 		// Get element at given index position
 		template <class T>
-		inline const T & getElement(const std::vector<T> &elements, std::string &index)
-		{
-			int idx = std::stoi(index);
-			if (idx < 0)
-				idx = int(elements.size()) + idx;
-			else
-				idx--;
-			return elements[idx];
+		inline const T& getElement(const std::vector<T> &elements, const std::string& strIndex) {
+			const auto index = [&elements, &strIndex]()->int32_t {
+				const int32_t idx{ std::stoi(strIndex) };
+				if (idx < 0) { 
+					return (int32_t)elements.size() + idx; 
+				}
+				else { 
+					return idx - 1;
+				}
+			}();
+
+			return elements[index];
 		}
 	}
 
 	// Class: Loader
 	//
 	// Description: The OBJ Model Loader
-	class Loader
-	{
+	class Loader {
 	public:
-		// Default Constructor
-		Loader();
-		// Default Destructor
+
+		Loader() = default;
 		~Loader();
 
 		// Load a file into the loader
@@ -168,13 +115,10 @@ namespace mar::graphics::loader_obj {
 		// or unable to be loaded return false
 		bool LoadFile(std::string Path);
 
-		// Loaded Mesh Objects
+
 		std::vector<Mesh> LoadedMeshes;
-		// Loaded Vertex Objects
 		std::vector<Vertex> LoadedVertices;
-		// Loaded Index Positions
-		std::vector<unsigned int> LoadedIndices;
-		// Loaded Material Objects
+		std::vector<uint32_t> LoadedIndices;
 		std::vector<Material> LoadedMaterials;
 
 	private:
@@ -188,7 +132,7 @@ namespace mar::graphics::loader_obj {
 
 		// Triangulate a list of vertices into a face by printing
 		//	inducies corresponding with triangles within it
-		void VertexTriangluation(std::vector<unsigned int>& oIndices,
+		void VertexTriangluation(std::vector<uint32_t>& oIndices,
 			const std::vector<Vertex>& iVerts);
 
 		// Load Materials from .mtl file

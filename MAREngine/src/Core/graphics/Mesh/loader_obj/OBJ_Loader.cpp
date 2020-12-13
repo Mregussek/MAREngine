@@ -23,145 +23,23 @@
 
 namespace mar::graphics::loader_obj {
 
-	// -------------------------------------
-	// MATERIAL
-	// -------------------------------------
-
-	Material::Material()
-	{
-		name;
-		Ns = 0.0f;
-		Ni = 0.0f;
-		d = 0.0f;
-		illum = 0;
-	}
-
 
 	// -------------------------------------
 	// MESH
 	// -------------------------------------
 
-	// Default Constructor
-	Mesh::Mesh()
-	{
-
-	}
-	// Variable Set Constructor
-	Mesh::Mesh(std::vector<Vertex>& _Vertices, std::vector<unsigned int>& _Indices)
-	{
+	Mesh::Mesh(std::vector<Vertex>& _Vertices, std::vector<unsigned int>& _Indices) {
 		Vertices = _Vertices;
 		Indices = _Indices;
 	}
-
-
-	// -------------------------------------
-	// namespace MATH
-	// -------------------------------------
-
-	namespace math
-	{
-		// Vector3 Cross Product
-		Vector3 CrossV3(const Vector3 a, const Vector3 b)
-		{
-			return Vector3(a.y * b.z - a.z * b.z,
-				a.z * b.x - a.x * b.z,
-				a.x * b.y - a.y * b.x);
-		}
-
-		// Vector3 Magnitude Calculation
-		float MagnitudeV3(const Vector3 in)
-		{
-			return (sqrtf(powf(in.x, 2) + powf(in.y, 2) + powf(in.z, 2)));
-		}
-
-		// Vector3 DotProduct
-		float DotV3(const Vector3 a, const Vector3 b)
-		{
-			return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
-		}
-
-		// Angle between 2 Vector3 Objects
-		float AngleBetweenV3(const Vector3 a, const Vector3 b)
-		{
-			float angle = DotV3(a, b);
-			angle /= (MagnitudeV3(a) * MagnitudeV3(b));
-			return angle = acosf(angle);
-		}
-
-		// Projection Calculation of a onto b
-		Vector3 ProjV3(const Vector3 a, const Vector3 b)
-		{
-			Vector3 bn = b / MagnitudeV3(b);
-			return bn * DotV3(a, bn);
-		}
-	}
-
 
 	// -------------------------------------
 	// namespace ALGORITHM
 	// -------------------------------------
 
-	namespace algorithm
-	{
-		// Vector3 Multiplication Opertor Overload
-		Vector3 operator*(const float& left, const Vector3& right)
-		{
-			return Vector3(right.x * left, right.y * left, right.z * left);
-		}
-
-		// A test to see if P1 is on the same side as P2 of a line segment ab
-		bool SameSide(Vector3 p1, Vector3 p2, Vector3 a, Vector3 b)
-		{
-			Vector3 cp1 = math::CrossV3(b - a, p1 - a);
-			Vector3 cp2 = math::CrossV3(b - a, p2 - a);
-
-			if (math::DotV3(cp1, cp2) >= 0)
-				return true;
-			else
-				return false;
-		}
-
-		// Generate a cross produect normal for a triangle
-		Vector3 GenTriNormal(Vector3 t1, Vector3 t2, Vector3 t3)
-		{
-			Vector3 u = t2 - t1;
-			Vector3 v = t3 - t1;
-
-			Vector3 normal = math::CrossV3(u, v);
-
-			return normal;
-		}
-
-		// Check to see if a Vector3 Point is within a 3 Vector3 Triangle
-		bool inTriangle(Vector3 point, Vector3 tri1, Vector3 tri2, Vector3 tri3)
-		{
-			// Test to see if it is within an infinite prism that the triangle outlines.
-			bool within_tri_prisim = SameSide(point, tri1, tri2, tri3) && SameSide(point, tri2, tri1, tri3)
-				&& SameSide(point, tri3, tri1, tri2);
-
-			// If it isn't it will never be on the triangle
-			if (!within_tri_prisim)
-				return false;
-
-			// Calulate Triangle's Normal
-			Vector3 n = GenTriNormal(tri1, tri2, tri3);
-
-			// Project the point onto this normal
-			Vector3 proj = math::ProjV3(point, n);
-
-			// If the distance from the triangle to the point is 0
-			//	it lies on the triangle
-			if (math::MagnitudeV3(proj) == 0)
-				return true;
-			else
-				return false;
-		}
-
+	namespace algorithm {
 		// Split a String into a string array at a given token
-		inline void split(const std::string& in,
-			std::vector<std::string>& out,
-			std::string token)
-		{
+		inline void split(const std::string& in, std::vector<std::string>& out, std::string token) {
 			out.clear();
 
 			std::string temp;
@@ -234,12 +112,7 @@ namespace mar::graphics::loader_obj {
 		}
 	}
 
-	Loader::Loader()
-	{
-
-	}
-	Loader::~Loader()
-	{
+	Loader::~Loader() {
 		LoadedMeshes.clear();
 	}
 
@@ -249,17 +122,12 @@ namespace mar::graphics::loader_obj {
 	//
 	// If the file is unable to be found
 	// or unable to be loaded return false
-	bool Loader::LoadFile(std::string Path)
-	{
-		// If the file is not an .obj file return false
-		if (Path.substr(Path.size() - 4, 4) != ".obj")
-			return false;
-
+	bool Loader::LoadFile(std::string Path) {
+		if (Path.substr(Path.size() - 4, 4) != ".obj") { return false; }
 
 		std::ifstream file(Path);
 
-		if (!file.is_open())
-			return false;
+		if (!file.is_open()) { return false; }
 
 		LoadedMeshes.clear();
 		LoadedVertices.clear();
@@ -270,7 +138,7 @@ namespace mar::graphics::loader_obj {
 		std::vector<Vector3> Normals;
 
 		std::vector<Vertex> Vertices;
-		std::vector<unsigned int> Indices;
+		std::vector<uint32_t> Indices;
 
 		std::vector<std::string> MeshMatNames;
 
@@ -279,52 +147,31 @@ namespace mar::graphics::loader_obj {
 
 		Mesh tempMesh;
 
-#ifdef OBJL_CONSOLE_OUTPUT
-		const unsigned int outputEveryNth = 1000;
-		unsigned int outputIndicator = outputEveryNth;
-#endif
-
 		std::string curline;
-		while (std::getline(file, curline))
-		{
-#ifdef OBJL_CONSOLE_OUTPUT
-			if ((outputIndicator = ((outputIndicator + 1) % outputEveryNth)) == 1)
-			{
-				if (!meshname.empty())
-				{
-					std::cout
-						<< "\r- " << meshname
-						<< "\t| vertices > " << Positions.size()
-						<< "\t| texcoords > " << TCoords.size()
-						<< "\t| normals > " << Normals.size()
-						<< "\t| triangles > " << (Vertices.size() / 3)
-						<< (!MeshMatNames.empty() ? "\t| material: " + MeshMatNames.back() : "");
-				}
-			}
-#endif
+
+		while (std::getline(file, curline)) {
+			const bool itIsObjectName_o{ algorithm::firstToken(curline) == "o" };
+			const bool itIsPolygonGroup_g{ algorithm::firstToken(curline) == "g" };
+			const bool firstLetterIsG{ curline[0] == 'g' };
+			const bool firstLetterDefinesObject{ itIsObjectName_o || itIsPolygonGroup_g };
+
+			const bool itIsVertexPosition{ algorithm::firstToken(curline) == "v" };
+			const bool itIsVertexNormal{ algorithm::firstToken(curline) == "vn" };
+			const bool itIsTextureCoordinate{ algorithm::firstToken(curline) == "vt" };
+			const bool itIsFace{ algorithm::firstToken(curline) == "f" };
+			const bool itIsMaterial{ algorithm::firstToken(curline) == "usemtl" };
+			const bool itIsMaterialLibrary{ algorithm::firstToken(curline) == "mtllib" };
 
 			// Generate a Mesh Object or Prepare for an object to be created
-			if (algorithm::firstToken(curline) == "o" || algorithm::firstToken(curline) == "g" || curline[0] == 'g')
-			{
-				if (!listening)
-				{
+			if (firstLetterDefinesObject || firstLetterIsG) {
+				if (!listening) {
 					listening = true;
 
-					if (algorithm::firstToken(curline) == "o" || algorithm::firstToken(curline) == "g")
-					{
-						meshname = algorithm::tail(curline);
-					}
-					else
-					{
-						meshname = "unnamed";
-					}
+					if (firstLetterDefinesObject) { meshname = algorithm::tail(curline); }
+					else { meshname = "unnamed"; }
 				}
-				else
-				{
-					// Generate the mesh to put into the array
-
-					if (!Indices.empty() && !Vertices.empty())
-					{
+				else {
+					if (!Indices.empty() && !Vertices.empty()) {
 						// Create Mesh
 						tempMesh = Mesh(Vertices, Indices);
 						tempMesh.MeshName = meshname;
@@ -339,198 +186,116 @@ namespace mar::graphics::loader_obj {
 
 						meshname = algorithm::tail(curline);
 					}
-					else
-					{
-						if (algorithm::firstToken(curline) == "o" || algorithm::firstToken(curline) == "g")
-						{
-							meshname = algorithm::tail(curline);
-						}
-						else
-						{
-							meshname = "unnamed";
-						}
+					else {
+						if (firstLetterDefinesObject) { meshname = algorithm::tail(curline); }
+						else { meshname = "unnamed"; }
 					}
 				}
-#ifdef OBJL_CONSOLE_OUTPUT
-				std::cout << std::endl;
-				outputIndicator = 0;
-#endif
 			}
-			// Generate a Vertex Position
-			if (algorithm::firstToken(curline) == "v")
-			{
+			else if(itIsVertexPosition) {
 				std::vector<std::string> spos;
-				Vector3 vpos;
 				algorithm::split(algorithm::tail(curline), spos, " ");
-
-				vpos.x = std::stof(spos[0]);
-				vpos.y = std::stof(spos[1]);
-				vpos.z = std::stof(spos[2]);
-
-				Positions.push_back(vpos);
+				Positions.emplace_back(std::stof(spos[0]), std::stof(spos[1]), std::stof(spos[2]));
 			}
-			// Generate a Vertex Texture Coordinate
-			if (algorithm::firstToken(curline) == "vt")
-			{
+			else if(itIsTextureCoordinate) {
 				std::vector<std::string> stex;
-				Vector2 vtex;
 				algorithm::split(algorithm::tail(curline), stex, " ");
-
-				vtex.x = std::stof(stex[0]);
-				vtex.y = std::stof(stex[1]);
-
-				TCoords.push_back(vtex);
+				TCoords.emplace_back(std::stof(stex[0]), std::stof(stex[1]));
 			}
-			// Generate a Vertex Normal;
-			if (algorithm::firstToken(curline) == "vn")
-			{
+			else  if (itIsVertexNormal) {
 				std::vector<std::string> snor;
-				Vector3 vnor;
 				algorithm::split(algorithm::tail(curline), snor, " ");
-
-				vnor.x = std::stof(snor[0]);
-				vnor.y = std::stof(snor[1]);
-				vnor.z = std::stof(snor[2]);
-
-				Normals.push_back(vnor);
+				Normals.emplace_back(std::stof(snor[0]), std::stof(snor[1]), std::stof(snor[2]));
 			}
-			// Generate a Face (vertices & indices)
-			if (algorithm::firstToken(curline) == "f")
-			{
-				// Generate the vertices
+			else if (itIsFace) {
 				std::vector<Vertex> vVerts;
 				GenVerticesFromRawOBJ(vVerts, Positions, TCoords, Normals, curline);
 
-				// Add Vertices
-				for (int i = 0; i < int(vVerts.size()); i++)
-				{
-					Vertices.push_back(vVerts[i]);
-
-					LoadedVertices.push_back(vVerts[i]);
+				for (const auto& vertex : vVerts) {
+					Vertices.push_back(vertex);
+					LoadedVertices.push_back(vertex);
 				}
 
-				std::vector<unsigned int> iIndices;
-
+				std::vector<uint32_t> iIndices;
 				VertexTriangluation(iIndices, vVerts);
 
-				// Add Indices
-				for (int i = 0; i < int(iIndices.size()); i++)
-				{
-					unsigned int indnum = (unsigned int)((Vertices.size()) - vVerts.size()) + iIndices[i];
-					Indices.push_back(indnum);
+				for (const auto& iIndice : iIndices) {
+					const auto meshIndNum{ (uint32_t)((Vertices.size()) - vVerts.size()) + iIndice };
+					Indices.push_back(meshIndNum);
 
-					indnum = (unsigned int)((LoadedVertices.size()) - vVerts.size()) + iIndices[i];
-					LoadedIndices.push_back(indnum);
-
+					const auto loaderIndNum{ (uint32_t)((LoadedVertices.size()) - vVerts.size()) + iIndice };
+					LoadedIndices.push_back(loaderIndNum);
 				}
 			}
-			// Get Mesh Material Name
-			if (algorithm::firstToken(curline) == "usemtl")
-			{
+			else if(itIsMaterial) {
 				MeshMatNames.push_back(algorithm::tail(curline));
 
-				// Create new Mesh, if Material changes within a group
-				if (!Indices.empty() && !Vertices.empty())
-				{
-					// Create Mesh
+				if (!Indices.empty() && !Vertices.empty()) {
 					tempMesh = Mesh(Vertices, Indices);
 					tempMesh.MeshName = meshname;
-					int i = 2;
+					const int32_t i{ 2 };
 					while (1) {
 						tempMesh.MeshName = meshname + "_" + std::to_string(i);
 
-						for (auto& m : LoadedMeshes)
-							if (m.MeshName == tempMesh.MeshName)
-								continue;
+						for (auto& m : LoadedMeshes) {
+							if (m.MeshName == tempMesh.MeshName) { continue; }
+						}
+							
 						break;
 					}
 
-					// Insert Mesh
 					LoadedMeshes.push_back(tempMesh);
 
-					// Cleanup
 					Vertices.clear();
 					Indices.clear();
 				}
-
-#ifdef OBJL_CONSOLE_OUTPUT
-				outputIndicator = 0;
-#endif
 			}
-			// Load Materials
-			if (algorithm::firstToken(curline) == "mtllib")
-			{
-				// Generate LoadedMaterial
-
-				// Generate a path to the material file
+			else if (itIsMaterialLibrary) {
 				std::vector<std::string> temp;
 				algorithm::split(Path, temp, "/");
 
 				std::string pathtomat = "";
 
-				if (temp.size() != 1)
-				{
-					for (size_t i = 0; i < temp.size() - 1; i++)
-					{
+				if (temp.size() != 1) {
+					for (size_t i = 0; i < temp.size() - 1; i++) {
 						pathtomat += temp[i] + "/";
 					}
 				}
 
-
 				pathtomat += algorithm::tail(curline);
 
-#ifdef OBJL_CONSOLE_OUTPUT
-				std::cout << std::endl << "- find materials in: " << pathtomat << std::endl;
-#endif
-
-				// Load Materials
 				LoadMaterials(pathtomat);
 			}
 		}
 
-#ifdef OBJL_CONSOLE_OUTPUT
-		std::cout << std::endl;
-#endif
-
 		// Deal with last mesh
-
-		if (!Indices.empty() && !Vertices.empty())
-		{
-			// Create Mesh
+		if (!Indices.empty() && !Vertices.empty()) {
 			tempMesh = Mesh(Vertices, Indices);
 			tempMesh.MeshName = meshname;
 
-			// Insert Mesh
 			LoadedMeshes.push_back(tempMesh);
 		}
 
 		file.close();
 
 		// Set Materials for each Mesh
-		for (size_t i = 0; i < MeshMatNames.size(); i++)
-		{
+		for (size_t i = 0; i < MeshMatNames.size(); i++) {
 			std::string matname = MeshMatNames[i];
 
 			// Find corresponding material name in loaded materials
 			// when found copy material variables into mesh material
-			for (size_t j = 0; j < LoadedMaterials.size(); j++)
-			{
-				if (LoadedMaterials[j].name == matname)
-				{
+			for (size_t j = 0; j < LoadedMaterials.size(); j++) {
+				if (LoadedMaterials[j].name == matname) {
 					LoadedMeshes[i].MeshMaterial = LoadedMaterials[j];
 					break;
 				}
 			}
 		}
 
-		if (LoadedMeshes.empty() && LoadedVertices.empty() && LoadedIndices.empty())
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		const bool couldNotLoadAnything{ LoadedMeshes.empty() && LoadedVertices.empty() && LoadedIndices.empty() };
+
+		if (couldNotLoadAnything) { return false; }
+		else { return true; }
 	}
 
 	// Generate vertices from a list of positions, 
@@ -630,35 +395,30 @@ namespace mar::graphics::loader_obj {
 		// take care of missing normals
 		// these may not be truly acurate but it is the 
 		// best they get for not compiling a mesh with normals	
-		if (noNormal)
-		{
-			Vector3 A = oVerts[0].position - oVerts[1].position;
-			Vector3 B = oVerts[2].position - oVerts[1].position;
+		if (noNormal) {
+			const Vector3 A{ oVerts[0].position - oVerts[1].position };
+			const Vector3 B{ oVerts[2].position - oVerts[1].position };
+			const Vector3 normal{ Vector3::cross(A, B) };
 
-			Vector3 normal = math::CrossV3(A, B);
-
-			for (int i = 0; i < int(oVerts.size()); i++)
-			{
-				oVerts[i].lightNormal = normal;
+			for (auto& oVertex : oVerts) {
+				oVertex.lightNormal = normal;
 			}
 		}
 	}
 
 	// Triangulate a list of vertices into a face by printing
-	//	inducies corresponding with triangles within it
+	//	indicies corresponding with triangles within it
 	void Loader::VertexTriangluation(std::vector<unsigned int>& oIndices,
 		const std::vector<Vertex>& iVerts)
 	{
 		// If there are 2 or less verts,
 		// no triangle can be created,
 		// so exit
-		if (iVerts.size() < 3)
-		{
+		if (iVerts.size() < 3) {
 			return;
 		}
 		// If it is a triangle no need to calculate it
-		if (iVerts.size() == 3)
-		{
+		if (iVerts.size() == 3) {
 			oIndices.push_back(0);
 			oIndices.push_back(1);
 			oIndices.push_back(2);
@@ -757,7 +517,7 @@ namespace mar::graphics::loader_obj {
 				}
 
 				// If Vertex is not an interior vertex
-				float angle = math::AngleBetweenV3(pPrev.position - pCur.position, pNext.position - pCur.position) * (180.f / (float)3.14159265359);
+				float angle = Vector3::angleBetween(pPrev.position - pCur.position, pNext.position - pCur.position) * (180.f / (float)3.14159265359);
 				if (angle <= 0.f && angle >= 180.f)
 					continue;
 
@@ -765,7 +525,7 @@ namespace mar::graphics::loader_obj {
 				bool inTri = false;
 				for (int j = 0; j < int(iVerts.size()); j++)
 				{
-					if (algorithm::inTriangle(iVerts[j].position, pPrev.position, pCur.position, pNext.position)
+					if (Vector3::inTriangle(iVerts[j].position, pPrev.position, pCur.position, pNext.position)
 						&& iVerts[j].position != pPrev.position
 						&& iVerts[j].position != pCur.position
 						&& iVerts[j].position != pNext.position)
