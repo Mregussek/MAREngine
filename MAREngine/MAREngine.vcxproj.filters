@@ -243,9 +243,6 @@
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -438,6 +435,9 @@
     <ClInclude Include="src\LayerStack\layers\EditorLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -516,9 +516,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="3rd_party\OBJ-Loader\Source\OBJ_Loader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\ProjectSelectionGUI\ProjectSelectionGUI.cpp">
@@ -687,6 +684,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\LayerStack\layers\EditorLayer.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,21 +33,18 @@ namespace mar::layers {
 		m_memorizer.Instance = &m_memorizer;
 		m_statistics.Instance = &m_statistics;
 		m_renderPipeline.Instance = &m_renderPipeline;
-
-		m_shaderBufferStorage.initialize();
+		m_shaderBufferStorage.Instance = &m_shaderBufferStorage;
+		
 		m_renderer.initialize();
 	}
 
 	void RenderLayer::close() {
-		m_renderPipeline.reset();
 		m_renderer.close();
+		m_renderPipeline.reset();
 	}
 
 	void RenderLayer::update() {
-		m_renderPipeline.Instance = &m_renderPipeline;
-
 		m_statistics.resetStatistics();
-
 		m_renderer.draw(m_renderPipeline);
 	}
 

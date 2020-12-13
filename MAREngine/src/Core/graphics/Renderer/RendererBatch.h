@@ -39,9 +39,6 @@ namespace mar::graphics {
 
 
 	class RendererBatch {
-
-		typedef RenderMemorizer RMem;
-
 	public:
 
 		void initialize();

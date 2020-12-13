@@ -19,6 +19,7 @@
 
 
 #include "MeshCreator.h"
+#include "loader_obj/OBJ_Loader.h"
 #include "../GraphicsLogs.h"
 #include "../../ecs/Entity/EntityCollection.h"
 #include "../../ecs/Entity/Entity.h"
@@ -123,11 +124,11 @@ namespace mar::graphics {
     }
     
     void MeshCreator::loadOBJ(std::string filename, std::string path, const ecs::EntityCollection& collection) {
-        objl::Loader Loader{};
+        loader_obj::Loader Loader{};
         const bool loadout = Loader.LoadFile(path);
     
         if (loadout) {
-            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](objl::Mesh& mesh) {
+            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](loader_obj::Mesh& mesh) {
                 const auto& entity = collection.createEntity();
                 auto& tag = entity.getComponent<ecs::TagComponent>();
                 auto& renderable = entity.addComponent<ecs::RenderableComponent>();
@@ -142,15 +143,7 @@ namespace mar::graphics {
                     renderable.name = mesh.MeshName;
                 }
 
-                for (size_t j = 0; j < mesh.Vertices.size(); j++) {
-                    renderable.vertices.push_back(Vertex{
-                        {mesh.Vertices[j].Position.X, mesh.Vertices[j].Position.Y, mesh.Vertices[j].Position.Z},
-                        {mesh.Vertices[j].Normal.X, mesh.Vertices[j].Normal.Y, mesh.Vertices[j].Normal.Z},
-                        {mesh.Vertices[j].TextureCoordinate.X, mesh.Vertices[j].TextureCoordinate.Y},
-                        {0.0f}
-                        });
-                }
-
+                renderable.vertices = mesh.Vertices;
                 renderable.indices = mesh.Indices;
             };
 

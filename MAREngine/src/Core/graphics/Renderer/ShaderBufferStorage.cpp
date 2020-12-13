@@ -24,15 +24,7 @@
 namespace mar::graphics {
 
 
-	ShaderBufferStorage* ShaderBufferStorage::s_instance{ nullptr };
-
-	ShaderBufferStorage* ShaderBufferStorage::Instance() {
-		return s_instance;
-	}
-
-	void ShaderBufferStorage::initialize() {
-		s_instance = this;
-	}
+	ShaderBufferStorage* ShaderBufferStorage::Instance{ nullptr };
 
 	platforms::ShaderBufferStorageOpenGL& ShaderBufferStorage::createShaderBufferStorage() {
 		return m_shaderBuffers.emplace_back();
@@ -52,6 +44,22 @@ namespace mar::graphics {
 		return *std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&buffer](const UniformBufferOpenGL& ubo) {
 			return std::strcmp(ubo.m_uniformBuffer.name, buffer.name) == 0;
 		});
+	}
+
+	const std::vector<platforms::ShaderBufferStorageOpenGL>& ShaderBufferStorage::getSSBOs() const {
+		return m_shaderBuffers;
+	}
+
+	const std::vector<platforms::UniformBufferOpenGL>& ShaderBufferStorage::getUBOs() const {
+		return m_uniformBuffers;
+	}
+
+	platforms::ShaderBufferStorageOpenGL& ShaderBufferStorage::getSSBO(uint32_t index) {
+		return m_shaderBuffers.at(index);
+	}
+
+	platforms::UniformBufferOpenGL& ShaderBufferStorage::getUBO(uint32_t index) {
+		return m_uniformBuffers.at(index);
 	}
 
 	void ShaderBufferStorage::close() {

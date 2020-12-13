@@ -32,7 +32,7 @@ namespace mar::graphics {
 		maths::vec3 position;
 		maths::vec3 lightNormal;
 		maths::vec2 textureCoordinates;
-		float shapeID;
+		float shapeID{ 0.f };
 	};
 
 

@@ -20,7 +20,6 @@
 
 #include "RendererBatch.h"
 #include "RenderPipeline.h"
-#include "RenderCamera.h"
 #include "RenderEvents.h"
 #include "ShaderBufferStorage.h"
 #include "RenderMemorizer.h"
@@ -67,31 +66,30 @@ namespace mar::graphics {
 		using namespace platforms;
 		using namespace platforms::ShaderUniforms;
 
-		auto* ssbo{ ShaderBufferStorage::Instance() };
-
 		{ // setup Camera SSBO
 			const std::vector<UniformItem> cameraItems{ ut_u_Model, ut_u_MVP, ut_u_CameraPos };
 
-			RMem::Instance->cameraSSBO = &ssbo->createShaderBufferStorage();
-			RMem::Instance->cameraSSBO->initialize(ub_Camera, cameraItems);
+			auto& camera = ShaderBufferStorage::Instance->createShaderBufferStorage();
+			RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
+			camera.initialize(ub_Camera, cameraItems);
 		}
 
 		{ // setup EntityCmp SSBO
-			auto& entityCmp = ssbo->createShaderBufferStorage();
+			auto& entityCmp = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			std::vector<UniformItem> entitycmpItems{ ut_u_SeparateTransform, ut_u_samplerTypes };
 
 			entityCmp.initialize(ub_EntityCmp, std::move(entitycmpItems));
 		}
 
 		{ // setup Material SSBO
-			auto& material = ssbo->createShaderBufferStorage();
+			auto& material = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			std::vector<UniformItem> materialItems{ ut_u_material, ut_u_lightSize };
 
 			material.initialize(ub_Material, std::move(materialItems));
 		}
 
 		{ // setup TextureSmaplers SSBO
-			auto& textureSamplers = ssbo->createShaderBufferStorage();
+			auto& textureSamplers = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			std::vector<UniformItem> textureSamplersItems{ ut_u_Color };
 
 			textureSamplers.initialize(ub_TextureSamplers, std::move(textureSamplersItems));
@@ -101,7 +99,7 @@ namespace mar::graphics {
 	void RendererBatch::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
-		ShaderBufferStorage::Instance()->close();
+		ShaderBufferStorage::Instance->close();
 		m_buffers.close();
 		m_shader2D.shutdown();
 		m_shaderCubemap.shutdown();
@@ -112,10 +110,11 @@ namespace mar::graphics {
 
 	void RendererBatch::draw(const RenderPipeline& renderPipeline) {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
-		
+
 		const auto& lights = renderPipeline.getLightContainers();
 
-		RMem::Instance->cameraSSBO->bind();
+		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		cameraSSBO.bind();
 
 		m_shader2D.bind();
 		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());
@@ -159,7 +158,7 @@ namespace mar::graphics {
 		const auto& transforms = container.getTransforms();
 		const auto& samplerTypes = container.getSamplerTypes();
 
-		const auto& entityShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_EntityCmp);
+		const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(ub_EntityCmp);
 
 		entityShaderBuffer.bind();
 		entityShaderBuffer.update<float>(ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
@@ -170,7 +169,7 @@ namespace mar::graphics {
 		using namespace platforms::ShaderUniforms;
 		using namespace mar::maths;
 
-		const auto& textureShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_TextureSamplers);
+		const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(ub_TextureSamplers);
 		textureShaderBuffer.bind();
 
 		std::for_each(colors.cbegin(), colors.cend(), [&textureShaderBuffer](const ColorPair& color) {
@@ -218,7 +217,7 @@ namespace mar::graphics {
 		using namespace platforms::ShaderUniforms;
 
 		const auto lightSize = (int32_t)lightMaterials.size();
-		const auto& lightShaderBuffer = ShaderBufferStorage::Instance()->getCorrectShaderBuffer(ub_Material);
+		const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(ub_Material);
 
 		lightShaderBuffer.bind();
 

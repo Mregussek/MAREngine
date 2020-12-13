@@ -124,13 +124,6 @@
 	#error "MAR ENGINE: Cannot import spdlog/spdlog.h!"
 #endif
 
-#if __has_include("Source/OBJ_Loader.h")
-	#include "Source/OBJ_Loader.h"
-	#define MAR_ENGINE_OBJ_LOADER_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import OBJ_Loader lib - Source/OBJ_Loader.h!"
-#endif
-
 #if __has_include("entt/entt.hpp")
 	#include "entt/entt.hpp"
 	#define MAR_ENGINE_ENTT_LIB_IMPORTED

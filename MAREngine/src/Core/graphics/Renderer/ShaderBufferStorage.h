@@ -39,9 +39,7 @@ namespace mar::graphics {
 
 	public:
 
-		static ShaderBufferStorage* Instance();
-
-		void initialize();
+		static ShaderBufferStorage* Instance;
 
 		ShaderBufferStorageOpenGL& createShaderBufferStorage();
 		UniformBufferOpenGL& createUniformBufferObject();
@@ -49,14 +47,18 @@ namespace mar::graphics {
 		const ShaderBufferStorageOpenGL& getCorrectShaderBuffer(const UniformBuffer& buffer) const;
 		const UniformBufferOpenGL& getCorrectUniformBuffer(const UniformBuffer& buffer) const;
 
+		const std::vector<ShaderBufferStorageOpenGL>& getSSBOs() const;
+		const std::vector<platforms::UniformBufferOpenGL>& getUBOs() const;
+
+		ShaderBufferStorageOpenGL& getSSBO(uint32_t index);
+		UniformBufferOpenGL& getUBO(uint32_t index);
+
 		void close();
 
 	private:
 
 		std::vector<ShaderBufferStorageOpenGL> m_shaderBuffers;
 		std::vector<UniformBufferOpenGL> m_uniformBuffers;
-
-		static ShaderBufferStorage* s_instance;
 
 	};
 

@@ -34,7 +34,7 @@ namespace mar::graphics {
 
 		static RenderMemorizer* Instance;
 
-		platforms::ShaderBufferStorageOpenGL* cameraSSBO{ nullptr };
+		uint32_t cameraSSBO{ 0 };
 
 	};
 
