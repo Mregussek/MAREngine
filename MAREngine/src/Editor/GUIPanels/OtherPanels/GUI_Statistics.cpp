@@ -20,11 +20,11 @@
 
 #include "GUI_Statistics.h"
 #include "../../EditorLogging.h"
+#include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
-#include "../../../Core/ecs/Scene.h"
-#include "../../../Core/graphics/Renderer/RenderStatistics.h"
-#include "../../../Core/graphics/Renderer/RenderPipeline.h"
+#include "../../../Core/graphics/RenderAPI/RenderStatistics.h"
+#include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
 
 
 namespace mar::editor {

@@ -20,7 +20,6 @@
 
 #include "ShaderOpenGL.h"
 #include "ShaderUniforms.h"
-#include "../../Core/graphics/Renderer/RenderContainer.h"
 
 
 namespace mar::platforms {

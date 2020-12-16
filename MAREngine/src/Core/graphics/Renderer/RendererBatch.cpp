@@ -19,12 +19,12 @@
 
 
 #include "RendererBatch.h"
-#include "RenderPipeline.h"
-#include "RenderEvents.h"
 #include "ShaderBufferStorage.h"
 #include "RenderMemorizer.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicLimits.h"
+#include "../RenderAPI/RenderPipeline.h"
+#include "../RenderAPI/RenderEvents.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderUniforms.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"

@@ -21,6 +21,8 @@
 #include "EntityOperation.h"
 #include "Entity.h"
 #include "EntityCollection.h"
+#include "../Components/Components.h"
+
 
 
 namespace mar::ecs {

@@ -19,6 +19,7 @@
 
 
 #include "SceneRegistry.h"
+#include "ECSLogs.h"
 
 
 namespace mar::ecs {

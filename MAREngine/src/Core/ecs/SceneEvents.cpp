@@ -23,9 +23,9 @@
 #include "Entity/Entity.h"
 #include "Entity/EntityCollection.h"
 #include "ECSLogs.h"
-#include "../graphics/Renderer/RenderPipeline.h"
-#include "../graphics/Renderer/RenderEvents.h"
-#include "../graphics/Renderer/RenderCamera.h"
+#include "../graphics/RenderAPI/RenderPipeline.h"
+#include "../graphics/RenderAPI/RenderEvents.h"
+#include "../graphics/RenderAPI/RenderCamera.h"
 
 
 namespace mar::ecs {
@@ -79,13 +79,12 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::onMainCameraUpdate(const Entity& entity) const {
-		const auto& camera = entity.getComponent<CameraComponent>();
+		auto& camera = entity.getComponent<CameraComponent>();
 
 		auto updateCameraOperation = [&entity, &camera, this]() {
 			const auto& transform = entity.getComponent<TransformComponent>();
-			auto& renderCamera = m_sceneManager->getScene()->getRenderCamera();
-			renderCamera.calculateCameraTransforms(transform, camera);
-			graphics::RenderEvents::Instance().onMainCameraUpdate(renderCamera);
+			camera.renderCamera.calculateCameraTransforms(transform, camera);
+			graphics::RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
 		};
 
 		if (m_sceneManager->isPlayMode() || m_sceneManager->isPauseMode()) { updateCameraOperation(); }
@@ -194,13 +193,12 @@ namespace mar::ecs {
 
 		const auto itEntity = std::find_if(view.begin(), view.end(), hasMainCamera);
 		if (itEntity != view.end()) {
-			const auto& cam = scene->getComponent<CameraComponent>(*itEntity);
+			auto& camera = scene->getComponent<CameraComponent>(*itEntity);
 			const auto& transform = scene->getComponent<TransformComponent>(*itEntity);
-			auto& renderCamera = scene->getRenderCamera();
-			renderCamera.calculateCameraTransforms(transform, cam);
+			camera.renderCamera.calculateCameraTransforms(transform, camera);
 
-			graphics::RenderPipeline::Instance->submitCamera(&renderCamera);
-			graphics::RenderEvents::Instance().onMainCameraUpdate(renderCamera);
+			graphics::RenderPipeline::Instance->submitCamera(&camera.renderCamera);
+			graphics::RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
 		}
 	}
 

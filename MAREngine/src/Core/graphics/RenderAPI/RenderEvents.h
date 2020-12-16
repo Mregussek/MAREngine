@@ -26,7 +26,6 @@
 
 
 namespace mar::ecs { 
-	class Entity; 
 	struct RenderPipelineComponent; 
 	struct LightComponent;
 	struct TransformComponent;

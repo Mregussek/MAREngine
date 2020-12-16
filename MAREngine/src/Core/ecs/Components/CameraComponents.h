@@ -23,6 +23,7 @@
 
 
 #include "../../../mar.h"
+#include "../../graphics/RenderAPI/RenderCamera.h"
 
 
 namespace mar::ecs {
@@ -30,6 +31,8 @@ namespace mar::ecs {
 
 	// p_... stands for perspective parameters, o_... orthographic
 	struct CameraComponent {
+		graphics::RenderCamera renderCamera;
+
 		std::string id{ "secondary" };
 
 		bool Perspective{ true }; // true - perspective | false - orthographic

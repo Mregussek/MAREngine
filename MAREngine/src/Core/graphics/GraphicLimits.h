@@ -31,9 +31,9 @@ namespace mar::graphics {
 
 	struct GraphicLimits {
 			
-		const static inline uint32_t maxTrianglesCount{ 300000 };
-		const static inline uint32_t maxVerticesCount{ maxTrianglesCount / 3 };
-		const static inline uint32_t maxIndicesCount{ maxTrianglesCount / 3 };
+		const static inline uint32_t maxTrianglesCount{ 100000 };
+		const static inline uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
+		const static inline uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
 		const static inline uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
 		const static inline uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
 

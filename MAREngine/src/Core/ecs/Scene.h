@@ -23,7 +23,6 @@
 
 
 #include "../../mar.h"
-#include "../graphics/Renderer/RenderCamera.h"
 #include "Entity/EntityContainer.h"
 
 
@@ -40,9 +39,8 @@ namespace mar::ecs {
 		Scene() = default;
 		Scene(std::string name);
 
-		void shutdown();
-
 		static Scene* createEmptyScene(std::string name);
+		void shutdown();
 
 		const Entity& createEntity();
 		void destroyEntity(const Entity& entity);
@@ -62,7 +60,6 @@ namespace mar::ecs {
 
 		const std::vector<Entity>& getEntities() const;
 		const std::vector<EntityCollection>& getCollections() const;
-		graphics::RenderCamera& getRenderCamera() { return m_sceneCamera; }
 
 		template<typename T>
 		auto getView() {
@@ -78,12 +75,10 @@ namespace mar::ecs {
 	private:
 
 		std::string m_name{ "Empty Scene" };
-		SceneRegistry m_sceneRegistry;
-
 		EntityContainer m_container;
 
-		graphics::RenderCamera m_sceneCamera;
 		maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
+		SceneRegistry m_sceneRegistry;
 
 	};
 

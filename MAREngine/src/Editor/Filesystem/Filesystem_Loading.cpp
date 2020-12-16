@@ -283,13 +283,6 @@ namespace mar::editor {
 
 				// #far
 				loadFloatGetline(cam.o_far, 4);
-
-				if (cam.id.find("main") != std::string::npos) {
-					auto& renderCamera = scene->getRenderCamera();
-					const auto& tran = entity.getComponent<ecs::TransformComponent>();
-
-					renderCamera.calculateCameraTransforms(tran, cam);
-				}
 			}
 			else if (line.find("#ScriptComponent") != std::string::npos) {
 				auto& script = getComponentFromEntity<ecs::ScriptComponent>(entity);

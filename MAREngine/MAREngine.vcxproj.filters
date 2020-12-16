@@ -63,9 +63,6 @@
     <ClInclude Include="src\Editor\Camera\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RenderCamera.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Engine.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -219,13 +216,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RenderPipeline.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RenderEvents.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h">
@@ -253,9 +244,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\ProjectSelectionGUI\ProjectSelectionFilesystem.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RenderStatistics.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\SceneRegistry.h">
@@ -289,9 +277,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RenderContainer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\Components\EngineOnlyComponents.h">
@@ -402,9 +387,6 @@
     <ClInclude Include="src\Editor\GUIPanels\ScenePropertiesPanel\GUI_SceneProperties.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\Renderer\RenderContainerDefinitions.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\Renderer\ShaderBufferStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -436,6 +418,24 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainer.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainerDefinitions.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -494,13 +494,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\graphics\Renderer\RenderPipeline.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\Scene.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\graphics\Renderer\RenderEvents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp">
@@ -545,12 +539,6 @@
     <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\graphics\Renderer\RenderContainer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\graphics\Renderer\RenderCamera.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -558,9 +546,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\graphics\Renderer\RenderStatistics.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp">
@@ -687,6 +672,21 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderStatistics.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderEvents.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderContainer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

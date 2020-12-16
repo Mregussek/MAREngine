@@ -46,7 +46,7 @@
 #include "../../src/Core/ecs/Components/Components.h"
 
 // Rendering 
-#include "../../src/Core/graphics/Renderer/RenderPipeline.h"
+#include "../../src/Core/graphics/RenderAPI/RenderPipeline.h"
 #include "../../src/Core/graphics/Renderer/RendererBatch.h"
 
 // Scripting

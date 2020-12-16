@@ -21,7 +21,7 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "SceneEvents.h"
-#include "../graphics/Renderer/RenderPipeline.h"
+#include "../graphics/RenderAPI/RenderPipeline.h"
 
 
 namespace mar::ecs {

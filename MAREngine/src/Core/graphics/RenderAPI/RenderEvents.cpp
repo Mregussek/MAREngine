@@ -21,11 +21,11 @@
 #include "RenderEvents.h"
 #include "RenderCamera.h"
 #include "RenderPipeline.h"
-#include "RenderMemorizer.h"
 #include "RenderStatistics.h"
-#include "../../ecs/Components/Components.h"
 #include "../GraphicsLogs.h"
-#include "ShaderBufferStorage.h"
+#include "../Renderer/RenderMemorizer.h"
+#include "../Renderer/ShaderBufferStorage.h"
+#include "../../ecs/Components/Components.h"
 #include "../../../Platform/OpenGL/ShaderUniforms.h"
 
 

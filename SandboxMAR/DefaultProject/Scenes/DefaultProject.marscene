@@ -695,7 +695,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_1
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_1
@@ -706,7 +706,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_2
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_2
@@ -717,7 +717,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_3
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_3
@@ -728,7 +728,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_4
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_4
@@ -739,7 +739,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_5
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_5
@@ -750,7 +750,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_6
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_6
@@ -761,7 +761,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_7
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_7
@@ -772,7 +772,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_8
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_8
@@ -783,7 +783,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_9
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_9
@@ -794,7 +794,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_10
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_10
@@ -805,7 +805,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_11
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_11
@@ -816,7 +816,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_12
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_12
@@ -827,7 +827,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent highrise_13
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent highrise_13
@@ -838,7 +838,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_14
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_14
@@ -849,7 +849,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_15
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_15
@@ -860,7 +860,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_16
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_16
@@ -871,7 +871,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_17
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_17
@@ -882,7 +882,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_18
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_18
@@ -893,7 +893,7 @@ MAREngine scene file
 #EntityStart
 #TagComponent Highrise_19
 #TransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #RenderableComponent Highrise_19
@@ -902,7 +902,7 @@ MAREngine scene file
 #EntityEnd
 
 #CollectionTransformComponent Begin
-#center -300 0 0
+#center -300 -20 0
 #angles 0 90 0
 #scale 1 1 1
 #CollectionTagComponent SecondLowPolyBuildings

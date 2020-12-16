@@ -25,8 +25,6 @@
 #include "../../../mar.h"
 
 
-namespace mar::layers { class RenderLayer; }
-namespace mar::platforms { class ShaderBufferStorageOpenGL; }
 namespace mar::graphics {
 
 

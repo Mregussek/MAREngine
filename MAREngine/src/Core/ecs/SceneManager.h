@@ -23,16 +23,14 @@
 
 
 #include "../../mar.h"
-#include "Components/Components.h"
 #include "ScenePlayStorage.h"
-#include "Entity/EntityCollection.h"
-#include "Entity/Entity.h"
 #include "Scene.h"
 
 
 namespace mar::ecs {
 
 	class SceneEvents;
+	class Entity;
 
 
 	class SceneManager {
@@ -40,9 +38,9 @@ namespace mar::ecs {
 		friend class SceneEvents;
 
 	public:
+
 		SceneManager() = default;
 	
-		// PUBLIC METHODS
 
 		void initialize() const;
 		void shutdown();
@@ -67,8 +65,6 @@ namespace mar::ecs {
 
 	private:
 
-		// PRIVATE METHODS
-
 		void initPlayMode();
 		void exitPlayMode();
 
@@ -78,10 +74,10 @@ namespace mar::ecs {
 
 		void updateEntityInPlaymode(const Entity& entity);
 
-		// PRIVATE MEMBERS
 
-		Scene* m_scene{ nullptr };
 		ScenePlayStorage m_playStorage;
+		Scene* m_scene{ nullptr };
+		
 
 		bool m_EditorMode{ true };
 		bool m_PauseMode{ false };
