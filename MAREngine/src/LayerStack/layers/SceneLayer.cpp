@@ -32,30 +32,29 @@ namespace mar::layers {
 	}
 	
 	void SceneLayer::passSceneToManager(ecs::Scene* scene) {
-		LAYER_TRACE("ENTITY_LAYER: passing to Scene to SceneManager!");
+		LAYER_TRACE("SCENE_LAYER: passing to Scene to SceneManager in {}!", p_debugName);
 
 		m_sceneManager.setScene(scene);
 	}
 
 	void SceneLayer::initialize() {
-		LAYER_TRACE("ENTITY_LAYER: {} going to initialize!", m_debugName);
+		LAYER_TRACE("SCENE_LAYER: {} going to initialize...", p_debugName);
 
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
-
 		m_sceneManager.initialize();
 	}
 
-	void SceneLayer::close() {
-		LAYER_TRACE("ENTITY_LAYER: {} going to close", m_debugName);
-
-		m_sceneManager.shutdown();
-	}
-
 	void SceneLayer::update() {
-		LAYER_TRACE("ENTITY_LAYER: {} going to update", m_debugName);
-		
+		LAYER_TRACE("SCENE_LAYER: {} going to update...", p_debugName);
+
 		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
 		m_sceneManager.update();
+	}
+
+	void SceneLayer::close() {
+		LAYER_TRACE("SCENE_LAYER: {} going to close...", p_debugName);
+
+		m_sceneManager.shutdown();
 	}
 
 	ecs::SceneManager* SceneLayer::getSceneManager() {

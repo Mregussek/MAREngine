@@ -38,4 +38,5 @@ void main() {
 	v_texCoords2D = texCoord;
 	v_texCoords3D = position.xyz;
 	v_samplerType = components.u_samplerTypes[index];
+	v_CameraPos = CameraUniforms.u_CameraPos;
 }

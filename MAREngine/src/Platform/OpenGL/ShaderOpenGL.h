@@ -23,13 +23,8 @@
 
 
 #include "../../mar.h"
-#include "../PlatformLogs.h"
-#include "ShaderBufferStorageOpenGL.h"
-#include "UniformBufferOpenGL.h"
-#include "ShaderUniforms.h"
 
 
-namespace mar::graphics { struct LightMaterial; }
 namespace mar::platforms {
 
 
@@ -49,9 +44,6 @@ namespace mar::platforms {
 
 
 	class ShaderOpenGL {
-
-		typedef ShaderUniforms::UniformBuffer UniformBuffer;
-		typedef ShaderUniforms::UniformItem UniformItem;
 
 	public:
 

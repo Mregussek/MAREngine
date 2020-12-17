@@ -24,7 +24,7 @@
 
 #include "../../mar.h"
 #include "../PlatformLogs.h"
-#include "ShaderUniforms.h"
+#include "../GLSL/ShaderUniforms.h"
 
 
 namespace mar::graphics { class ShaderBufferStorage; }
@@ -34,9 +34,6 @@ namespace mar::platforms {
 	class UniformBufferOpenGL {
 
 		friend class graphics::ShaderBufferStorage;
-
-		typedef ShaderUniforms::UniformBuffer UniformBuffer;
-		typedef ShaderUniforms::UniformItem UniformItem;
 
 	public:
 

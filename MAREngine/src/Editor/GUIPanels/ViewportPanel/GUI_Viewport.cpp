@@ -53,9 +53,9 @@ namespace mar::editor {
 
 		ImGui::End();
 
-		ImGuiStyle* style = &ImGui::GetStyle();
-		const auto rememberDefaultVal = style->WindowPadding;
-		style->WindowPadding = ImVec2(1.f, 1.f);
+		auto& style{ ImGui::GetStyle() };
+		const auto rememberDefaultVal{ style.WindowPadding };
+		style.WindowPadding = ImVec2(1.f, 1.f);
 
 		ImGui::Begin("ViewPort", nullptr);
 
@@ -80,7 +80,7 @@ namespace mar::editor {
 		
 		ImGui::End();
 
-		style->WindowPadding = rememberDefaultVal;
+		style.WindowPadding = rememberDefaultVal;
 
 		EDITOR_TRACE("GUI: Displaying viewport");
 	}

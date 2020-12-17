@@ -19,6 +19,7 @@
 
 
 #include "ShaderBufferStorage.h"
+#include "../../../Platform/GLSL/ShaderUniforms.h"
 
 
 namespace mar::graphics {

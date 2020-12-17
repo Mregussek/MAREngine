@@ -25,7 +25,6 @@
 #include "../../mar.h"
 #include "../Layer.h"
 #include "../../Editor/GUI.h"
-#include "../../Editor/GUIPanels/GUI_Graphics.h"
 
 
 namespace mar::ecs { class SceneManager; }
@@ -50,7 +49,6 @@ namespace mar::layers {
 	private:
 
 		editor::GUI m_gui;
-		//editor::GUI_Graphics m_guiGraphics;
 
 	};
 

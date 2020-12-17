@@ -30,6 +30,8 @@ namespace mar::layers {
 	}
 
 	void RenderLayer::initialize() {
+		LAYER_TRACE("RENDER_LAYER: {} going to initialize...", p_debugName);
+
 		m_memorizer.Instance = &m_memorizer;
 		m_statistics.Instance = &m_statistics;
 		m_renderPipeline.Instance = &m_renderPipeline;
@@ -38,14 +40,20 @@ namespace mar::layers {
 		m_renderer.initialize();
 	}
 
-	void RenderLayer::close() {
-		m_renderer.close();
-		m_renderPipeline.reset();
-	}
-
 	void RenderLayer::update() {
+		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
+
 		m_statistics.resetStatistics();
 		m_renderer.draw(m_renderPipeline);
+	}
+
+	void RenderLayer::close() {
+		LAYER_TRACE("RENDER_LAYER: {} going to close...", p_debugName);
+	
+		m_renderPipeline.reset();
+		m_shaderBufferStorage.close();
+
+		m_renderer.close();
 	}
 
 

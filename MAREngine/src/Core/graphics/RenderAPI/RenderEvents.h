@@ -25,17 +25,20 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs { 
-	struct RenderPipelineComponent; 
-	struct LightComponent;
-	struct TransformComponent;
-}
+namespace mar::ecs {  struct RenderPipelineComponent;  struct LightComponent; struct TransformComponent; }
+namespace mar::platforms { struct GLSL_SSBOs; }
 namespace mar::graphics {
 
 	class RenderCamera;
 
 
 	class RenderEvents {
+
+		typedef platforms::GLSL_SSBOs SSBOsGL;
+		typedef maths::vec3 vec3;
+		typedef maths::vec4 vec4;
+		typedef maths::mat4 mat4;
+
 	public:
 
 		static const RenderEvents& Instance();
@@ -43,10 +46,10 @@ namespace mar::graphics {
 		void onDrawCall() const;
 
 		void onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const;
-		void onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) const;
+		void onColorUpdate(vec4 color, const ecs::RenderPipelineComponent& rpc) const;
 
-		void onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
-		void onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) const;
+		void onLightUpdate(vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
+		void onLightPositionUpdate(vec3 position, const ecs::RenderPipelineComponent& rpc) const;
 		void onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const;
 		
 		void onMainCameraUpdate(const RenderCamera& camera) const;

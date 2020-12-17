@@ -30,55 +30,32 @@ namespace mar::layers {
 	}
 
 	void EditorLayer::initialize() {
-		LAYER_TRACE("GUI_LAYER: {} going to initialize", p_debugName);
+		LAYER_TRACE("EDITOR_LAYER: {} going to initialize...", p_debugName);
 
 		m_gui.initialize("#version 450");		
-
-		//m_guiGraphics.initialize();
-
-		LAYER_INFO("GUI_LAYER: {} initialized", p_debugName);
 	}
 
 	void EditorLayer::update() {
-		LAYER_TRACE("GUI_LAYER: {} going to display frame", p_debugName);
-		
-		/*
-		if (m_gui->canDrawLines()) {
-			const auto& currentEntity = m_gui->getCurrentEntity();
-			const bool userHasSelectedEntity = &currentEntity != nullptr;
+		LAYER_TRACE("EDITOR_LAYER: {} going to display frame...", p_debugName);
 
-			const auto& currentCollection = m_gui->getCurrentCollection();
-			const bool userHasSelectedCollection = &currentCollection != nullptr;
-
-			if (userHasSelectedCollection && !userHasSelectedEntity) {
-				m_guiGraphics.passToDrawCollection(currentCollection);
-			}
-			else if (userHasSelectedEntity) {
-				m_guiGraphics.passToDrawEntity(currentEntity);
-			}
-		}
-		*/
-		
 		m_gui.display();
-
-		LAYER_INFO("GUI_LAYER: {} displayed frame", p_debugName);
 	}
 
 	void EditorLayer::close() {
-		LAYER_TRACE("GUI_LAYER: {} going to close!", p_debugName);
+		LAYER_TRACE("EDITOR_LAYER: {} going to close...", p_debugName);
 
-		m_gui.shutdown();
-
-		//m_guiGraphics.close();
-
-		LAYER_INFO("GUI_LAYER: {} closed!", p_debugName);
+		m_gui.shutdown();	
 	}
 
 	void EditorLayer::renderToViewport() {
+		LAYER_TRACE("EDITOR_LAYER: {} starting rendering to viewport in Viewport Panel", p_debugName);
+
 		m_gui.renderToViewport();
 	}
 
 	void EditorLayer::submit(ecs::SceneManager* manager) {
+		LAYER_TRACE("EDITOR_LAYER: submitting scene manager to {}", p_debugName);
+
 		m_gui.submit(manager);
 	}
 

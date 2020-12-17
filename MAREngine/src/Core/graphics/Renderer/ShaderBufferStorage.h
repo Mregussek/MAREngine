@@ -25,7 +25,6 @@
 #include "../../../mar.h"
 #include "../../../Platform/OpenGL/ShaderBufferStorageOpenGL.h"
 #include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
-#include "../../../Platform/OpenGL/ShaderUniforms.h"
 
 
 namespace mar::graphics {
@@ -33,7 +32,7 @@ namespace mar::graphics {
 
 	class ShaderBufferStorage {
 
-		typedef platforms::ShaderUniforms::UniformBuffer UniformBuffer;
+		typedef platforms::UniformBuffer UniformBuffer;
 		typedef platforms::ShaderBufferStorageOpenGL ShaderBufferStorageOpenGL;
 		typedef platforms::UniformBufferOpenGL UniformBufferOpenGL;
 
@@ -48,7 +47,7 @@ namespace mar::graphics {
 		const UniformBufferOpenGL& getCorrectUniformBuffer(const UniformBuffer& buffer) const;
 
 		const std::vector<ShaderBufferStorageOpenGL>& getSSBOs() const;
-		const std::vector<platforms::UniformBufferOpenGL>& getUBOs() const;
+		const std::vector<UniformBufferOpenGL>& getUBOs() const;
 
 		ShaderBufferStorageOpenGL& getSSBO(uint32_t index);
 		UniformBufferOpenGL& getUBO(uint32_t index);

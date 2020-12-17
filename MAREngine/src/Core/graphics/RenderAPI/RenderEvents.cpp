@@ -26,7 +26,7 @@
 #include "../Renderer/RenderMemorizer.h"
 #include "../Renderer/ShaderBufferStorage.h"
 #include "../../ecs/Components/Components.h"
-#include "../../../Platform/OpenGL/ShaderUniforms.h"
+#include "../../../Platform/GLSL/ShaderUniforms.h"
 
 
 namespace mar::graphics {
@@ -53,12 +53,12 @@ namespace mar::graphics {
 		}
 	}
 	
-	void RenderEvents::onLightUpdate(maths::vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const{
+	void RenderEvents::onLightUpdate(vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const{
 		onLightPositionUpdate(position, rpc);
 		onLightComponentUpdate(light, rpc);
 	}
 
-	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const ecs::RenderPipelineComponent& rpc) const {
+	void RenderEvents::onLightPositionUpdate(vec3 position, const ecs::RenderPipelineComponent& rpc) const {
 		RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
@@ -74,7 +74,7 @@ namespace mar::graphics {
 		lightMaterial.shininess = light.shininess;
 	}
 
-	void RenderEvents::onColorUpdate(maths::vec4 color, const ecs::RenderPipelineComponent& rpc) const {
+	void RenderEvents::onColorUpdate(vec4 color, const ecs::RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
@@ -90,16 +90,12 @@ namespace mar::graphics {
 	void RenderEvents::passCameraToSSBO(const RenderCamera& camera) const {
 		GRAPHICS_INFO("RENDER_EVENTS: passing camera data to ssbo!");
 
-		typedef RenderMemorizer RM;
-		using namespace platforms::ShaderUniforms;
-		using namespace mar::maths;
-
 		auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 
 		cameraSSBO.bind();
-		cameraSSBO.update<float>(ut_u_CameraPos.offset, sizeof(vec3), vec3::value_ptr(camera.getPosition()));
-		cameraSSBO.update<float>(ut_u_Model.offset, sizeof(mat4), mat4::value_ptr(camera.getModel()));
-		cameraSSBO.update<float>(ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
+		cameraSSBO.update<float>(SSBOsGL::ut_u_CameraPos.offset, sizeof(vec3), vec3::value_ptr(camera.getPosition()));
+		cameraSSBO.update<float>(SSBOsGL::ut_u_Model.offset, sizeof(mat4), mat4::value_ptr(camera.getModel()));
+		cameraSSBO.update<float>(SSBOsGL::ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
 	}
 
 

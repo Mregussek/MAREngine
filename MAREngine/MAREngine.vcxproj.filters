@@ -87,9 +87,6 @@
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\ShaderUniforms.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\PlatformLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -354,9 +351,6 @@
     <ClInclude Include="src\Editor\GUIPanels\GUI_Filesystem.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\GUIPanels\GUI_Graphics.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\GUIPanels\GUI_MainMenuBar.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -436,6 +430,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainerDefinitions.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\GLSL\ShaderUniforms.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -606,9 +603,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUIPanels\GUI_Filesystem.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\GUIPanels\GUI_Graphics.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUIPanels\GUI_MainMenuBar.cpp">

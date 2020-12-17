@@ -283,7 +283,6 @@
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_Events.h" />
-    <ClInclude Include="src\Editor\GUIPanels\GUI_Graphics.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_MainMenuBar.h" />
     <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Statistics.h" />
     <ClInclude Include="src\Editor\GUIPanels\ScenePropertiesPanel\GUI_SceneProperties.h" />
@@ -299,7 +298,7 @@
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\SetupOpenGL.h" />
     <ClInclude Include="src\Platform\OpenGL\PipelineOpenGL.h" />
-    <ClInclude Include="src\Platform\OpenGL\ShaderUniforms.h" />
+    <ClInclude Include="src\Platform\GLSL\ShaderUniforms.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy_Trampoline.h" />
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp" />
@@ -388,7 +387,6 @@
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_Events.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_Filesystem.cpp" />
-    <ClCompile Include="src\Editor\GUIPanels\GUI_Graphics.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_MainMenuBar.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_SceneHierarchy.cpp" />
