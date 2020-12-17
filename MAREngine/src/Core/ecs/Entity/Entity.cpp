@@ -31,6 +31,13 @@ namespace mar::ecs {
 		ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
 	}
 
+	Entity::Entity(entt::entity entity, SceneRegistry* scene) :
+		m_scene(scene),
+		m_entityHandle(entity)
+	{
+		ECS_TRACE("ENTITY: {} is constructed from entt::entity!", m_entityHandle);
+	}
+
 	void Entity::addDefault() const {
 		m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle);
 

@@ -20,10 +20,10 @@
 
 #include "GUI_EntityCollectionPanel.h"
 #include "GUI_EntityPanel.h"
+#include "CommonComponentHandler.h"
 #include "../GUI_TextEditor.h"
 #include "../../EditorLogging.h"
 
-#include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/SceneEvents.h"
@@ -67,11 +67,15 @@ namespace mar::editor {
 
 		auto& tag = currentCollection->getComponent<ecs::TagComponent>();
 		if (ImGui::CollapsingHeader("TagComponent")) {
-			handleTagComponent(tag);
+			CommonComponentHandler::handleTagComponent(tag);
 		}
 
 		if (ImGui::CollapsingHeader("TransformComponent")) {
 			handleTransformComponent();
+		}
+
+		if (currentCollection->hasComponent<ecs::ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
+			CommonComponentHandler::handleScriptComponent(*currentCollection);
 		}
 
 		ImGui::Separator();
@@ -84,25 +88,13 @@ namespace mar::editor {
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
 		if (itEntity != entities.cend()) {
-			const auto& entity = *itEntity;
+			const auto& entity{ *itEntity };
 			GUI_EntityPanel::Instance()->setCurrentEntity(entity);
 		}
 
 		popUpMenu(tag.tag.c_str());
 
 		ImGui::End();
-	}
-
-	void GUI_EntityCollectionPanel::handleTagComponent(ecs::TagComponent& tag) const {
-		constexpr size_t inputSize = 50;
-		static char collectionName[inputSize]{ "" };
-
-		std::fill(std::begin(collectionName), std::end(collectionName), '\0');
-		std::copy(tag.tag.begin(), tag.tag.end(), collectionName);
-
-		if (ImGui::InputText(" - tag", collectionName, inputSize)) {
-			tag.tag = std::string(collectionName);
-		}
 	}
 
 	void GUI_EntityCollectionPanel::handleTransformComponent() const {
@@ -148,6 +140,13 @@ namespace mar::editor {
 
 			if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
 				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->createEntity());
+			}
+
+			if (!currentCollection->hasComponent<ecs::ScriptComponent>()) {
+				if (ImGui::MenuItem("Add ScriptComponent")) {
+					currentCollection->addComponent<ecs::ScriptComponent>();
+					ecs::SceneEvents::Instance().onScriptAdd();
+				}
 			}
 
 			if (selectedEntityExists) {

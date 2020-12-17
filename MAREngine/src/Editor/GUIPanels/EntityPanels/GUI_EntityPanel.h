@@ -25,11 +25,8 @@
 #include "../../../mar.h"
 
 
-namespace mar {
-	/* forward declarations */
-	namespace ecs { class Entity; struct RenderableComponent; }
-	namespace graphics { class RenderCamera; }
-}
+namespace mar::graphics { class RenderCamera; }
+namespace mar::ecs { class Entity; struct RenderableComponent; }
 namespace mar::editor {
 
 
@@ -53,9 +50,7 @@ namespace mar::editor {
 
 		void popUpMenu() const;
 
-		void handleTagComponent() const;
 		void handleTransformComponent() const;
-		void handleScriptComponent() const;
 		void handleRenderableComponent() const;
 		void handleCameraComponent() const;
 		void handleColorComponent() const;

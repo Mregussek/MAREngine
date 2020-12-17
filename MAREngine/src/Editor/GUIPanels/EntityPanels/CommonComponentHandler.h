@@ -18,40 +18,26 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
-#define MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
+#ifndef MAR_ENGINE_EDITOR_GUI_ENTITY_PANEL_COMMON_COMPONENT_HANDLER_H
+#define MAR_ENGINE_EDITOR_GUI_ENTITY_PANEL_COMMON_COMPONENT_HANDLER_H
 
 
 #include "../../../mar.h"
 
 
-namespace mar::ecs { class EntityCollection; struct TagComponent; }
+namespace mar::ecs { struct TagComponent; struct ScriptComponent; class Entity; class EntityCollection; }
 namespace mar::editor {
 
 
-	class GUI_EntityCollectionPanel {
-	public:
+	struct CommonComponentHandler {
 
-		static GUI_EntityCollectionPanel* Instance() { return s_instance; }
-
-		void initialize();
-		void reset();
-
-		void update() const;
-
-		void setCurrentCollection(const ecs::EntityCollection& collection);
-		const ecs::EntityCollection& getCurrentCollection() const;
+		static void handleTagComponent(ecs::TagComponent& tag);
+		static void handleScriptComponent(const ecs::Entity& entity);
+		static void handleScriptComponent(const ecs::EntityCollection& collection);
 
 	private:
 
-		void popUpMenu(const char* collection_tag) const;
-
-		void handleTransformComponent() const;
-
-		static GUI_EntityCollectionPanel* s_instance;
-
-		const ecs::EntityCollection* currentCollection;
-		bool m_initialized{ false };
+		static void handleScriptComponent(ecs::ScriptComponent& script);
 
 	};
 
@@ -59,4 +45,4 @@ namespace mar::editor {
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
+#endif // !MAR_ENGINE_EDITOR_GUI_ENTITY_PANEL_COMMON_COMPONENT_HANDLER_H

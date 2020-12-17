@@ -25,7 +25,7 @@
 #include "../../mar.h"
 
 
-namespace mar::ecs { class Scene; class Entity; }
+namespace mar::ecs { class Scene; class Entity; struct ScriptComponent; }
 namespace mar::editor {
 
 
@@ -49,7 +49,7 @@ namespace mar::editor {
 		void displayLoadOBJWindow(ecs::Scene* scene);
 
 		void openAssigningScriptWindow();
-		void displayAssigningScriptWindow(const ecs::Entity* entity);
+		void displayAssigningScriptWindow(ecs::ScriptComponent& script);
 
 	private:
 

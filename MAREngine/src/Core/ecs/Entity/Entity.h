@@ -39,6 +39,7 @@ namespace mar::ecs {
 	public:
 
 		Entity() = delete;
+		Entity(entt::entity entity, SceneRegistry* scene);
 		Entity(const Entity& other) = default;
 
 		Entity(SceneRegistry* scene);

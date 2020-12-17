@@ -147,19 +147,13 @@ namespace mar::ecs {
 	void SceneManager::updatePlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-		const auto& entitiesVector = m_scene->getEntities();
-
-		auto updateEntityWithScript = [this](const Entity& entity) {
-			if (entity.hasComponent<ScriptComponent>()) {
-				const auto& script = entity.getComponent<ScriptComponent>();
-				script.pythonScript.update(entity);
-				updateEntityInPlaymode(entity);
-			}
-		};
-
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
-
-		/// TODO: add support for collection scripting
+		const auto view = m_scene->getView<ScriptComponent>();
+		std::for_each(view.begin(), view.end(), [this](entt::entity entt_entity) {
+			const auto& script{ m_scene->getComponent<ScriptComponent>(entt_entity) };
+			const Entity entity(entt_entity, m_scene->getRegistry());
+			script.pythonScript.update(entity);
+			updateEntityInPlaymode(entity);
+		});
 
 		ECS_INFO("SCENE_MANAGER: updated play mode");
 	}
@@ -167,16 +161,12 @@ namespace mar::ecs {
 	void SceneManager::updatePauseMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
-		const auto& entitiesVector = m_scene->getEntities();
-
-		auto updateEntityWithScript = [this](const Entity& entity) {
+		const auto view = m_scene->getView<ScriptComponent>();
+		std::for_each(view.begin(), view.end(), [this](entt::entity entt_entity) {
+			const Entity entity(entt_entity, m_scene->getRegistry());
 			updateEntityInPlaymode(entity);
-		};
+		});
 
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), updateEntityWithScript);
-
-		/// TODO: add support for collection
-		
 		ECS_INFO("SCENE_MANAGER: updated pause mode");
 	}
 

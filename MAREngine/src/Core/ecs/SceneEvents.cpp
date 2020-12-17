@@ -163,7 +163,7 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::onScriptAdd() const {
-		m_sceneManager->initialize();
+
 	}
 
 	void SceneEvents::onScriptUpdate(const Entity* e) const {

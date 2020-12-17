@@ -281,6 +281,7 @@
     <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Loading.h" />
     <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
+    <ClInclude Include="src\Editor\GUIPanels\EntityPanels\CommonComponentHandler.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_Events.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_MainMenuBar.h" />
@@ -383,6 +384,7 @@
     <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Loading.cpp" />
     <ClCompile Include="src\Editor\Filesystem\Filesystem_Saving.cpp" />
+    <ClCompile Include="src\Editor\GUIPanels\EntityPanels\CommonComponentHandler.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\GUI_Events.cpp" />

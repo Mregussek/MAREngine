@@ -57,6 +57,7 @@ namespace mar::ecs {
 
 		const std::string& getName() const { return m_name; }
 		maths::vec3& getBackground() { return m_backgroundColor; }
+		SceneRegistry* getRegistry() { return &m_sceneRegistry; }
 
 		const std::vector<Entity>& getEntities() const;
 		const std::vector<EntityCollection>& getCollections() const;

@@ -19,6 +19,7 @@
 
 
 #include "GUI_EntityPanel.h"
+#include "CommonComponentHandler.h"
 #include "../GUI_TextEditor.h"
 #include "../GUI_Filesystem.h"
 
@@ -87,13 +88,16 @@ namespace mar::editor {
 
 	void GUI_EntityPanel::displayEditorMode() const {
 		if (ImGui::CollapsingHeader("TagComponent")) {
-			handleTagComponent();
+			auto& tag = currentEntity->getComponent<ecs::TagComponent>();
+			CommonComponentHandler::handleTagComponent(tag);
 		}
+
 		if (ImGui::CollapsingHeader("TransformComponent")) {
 			handleTransformComponent();
 		}
+
 		if (currentEntity->hasComponent<ecs::ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
-			handleScriptComponent();
+			CommonComponentHandler::handleScriptComponent(*currentEntity);
 		}
 
 		if (currentEntity->hasComponent<ecs::RenderableComponent>() && ImGui::CollapsingHeader("RenderableComponent")) {
@@ -214,22 +218,6 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: scene_entity_modify_popup");
 	}
 
-	void GUI_EntityPanel::handleTagComponent() const {
-		auto& tag = currentEntity->getComponent<ecs::TagComponent>();
-
-		constexpr size_t inputSize = 50;
-		static char entityName[inputSize]{ "" };
-
-		std::fill(std::begin(entityName), std::end(entityName), '\0');
-		std::copy(tag.tag.begin(), tag.tag.end(), entityName);
-
-		if (ImGui::InputText(" - tag", entityName, inputSize)) {
-			tag.tag = std::string(entityName);
-		}
-
-		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
-	}
-
 	void GUI_EntityPanel::handleTransformComponent() const {
 		using namespace maths;
 
@@ -248,31 +236,6 @@ namespace mar::editor {
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
-	}
-
-	void GUI_EntityPanel::handleScriptComponent() const {
-		if (ImGui::MenuItem("Remove Script")) {
-			currentEntity->removeComponent<ecs::ScriptComponent>();
-			GUI_TextEditor::Instance()->reset();
-			return;
-		}
-
-		const auto& script = currentEntity->getComponent<ecs::ScriptComponent>();
-		ImGui::Text("Current script: %s", script.script.c_str());
-
-		if (ImGui::Button("Create new script")) { GUI_TextEditor::Instance()->setCreatingNewScript(); }
-		
-		ImGui::SameLine();
-
-		if (ImGui::Button("Load from file")) { GUI_TextEditor::Instance()->setLoadingScript(); }
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Assign script to entity")) { GUI_Filesystem::Instance()->openAssigningScriptWindow(); }
-
-		GUI_Filesystem::Instance()->displayAssigningScriptWindow(currentEntity);
-
-		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}
 
 	void GUI_EntityPanel::handleRenderableComponent() const {
