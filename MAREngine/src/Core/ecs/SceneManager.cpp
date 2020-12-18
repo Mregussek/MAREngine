@@ -21,6 +21,7 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "SceneEvents.h"
+#include "../graphics/RenderAPI/RenderEvents.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
 
@@ -46,6 +47,8 @@ namespace mar::ecs {
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
 		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), pushCollectionToPipeline);
+
+		graphics::RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_INFO("SCENE_MANAGER: initialized!");
 	}
@@ -103,24 +106,26 @@ namespace mar::ecs {
 		const auto& entitiesVector = m_scene->getEntities();
 		const auto& collectionsVector = m_scene->getCollections();
 
-		auto inititializeScriptModule = [](const Entity& entity) {
-			if (entity.hasComponent<ScriptComponent>()) {
-				auto& script = entity.getComponent<ScriptComponent>();
-				script.pythonScript.loadScript(script.script);
-				script.pythonScript.start(entity);
-			}
+		auto saveEntityAtStorage = [&playStorage = m_playStorage](const Entity& entity) {
+			playStorage.pushEntityToStorage(entity);
 		};
 
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const Entity& entity) {
-			playStorage.pushEntityToStorage(entity);
-			inititializeScriptModule(entity);
-		});
-
-		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage, &inititializeScriptModule](const EntityCollection& collection) {
+		auto saveCollectionAtStorage = [&playStorage = m_playStorage](const EntityCollection& collection) {
 			playStorage.pushCollectionToStorage(collection);
-			const auto& entitiesVector = collection.getEntities();
-			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), inititializeScriptModule);
-		});
+		};
+
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), saveEntityAtStorage);
+		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), saveCollectionAtStorage);
+
+		auto initializeScriptModule = [this](entt::entity entt_entity) {
+			auto& script = m_scene->getComponent<ScriptComponent>(entt_entity);
+			const Entity entity(entt_entity, m_scene->getRegistry());
+			script.pythonScript.loadScript(script.script);
+			script.pythonScript.start(entity);
+		};
+
+		const auto view{ m_scene->getView<ScriptComponent>() };
+		std::for_each(view.begin(), view.end(), initializeScriptModule);
 
 		ECS_INFO("SCENE_MANAGER: initialized play mode!");
 	}

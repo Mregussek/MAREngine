@@ -21,6 +21,7 @@
 #include "RendererBatch.h"
 #include "ShaderBufferStorage.h"
 #include "RenderMemorizer.h"
+#include "PipelineStorage.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicLimits.h"
 #include "../RenderAPI/RenderPipeline.h"
@@ -35,8 +36,6 @@ namespace mar::graphics {
 
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
-
-		m_buffers.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
 
 		setupSSBOs();
 		setupShaders();
@@ -104,7 +103,6 @@ namespace mar::graphics {
 	void RendererBatch::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
-		m_buffers.close();
 		m_shader2D.shutdown();
 		m_shaderCubemap.shutdown();
 		platforms::TextureOpenGL::Instance()->shutdown();
@@ -137,7 +135,8 @@ namespace mar::graphics {
 			if(container.doesContain2Dtextures()) { passTexturesToShader(shader, container.getTexture2D()); }
 			else { passCubemapsToShader(shader, container.getTextureCubemap()); }
 			
-			passVerticesAndIndicesToBuffer(container.getVertices(), container.getIndices());
+			const auto& containerBuffer{ PipelineStorage::Instance->getPipeline(container.getUniqueContainerID()) };
+			containerBuffer.bind();
 
 			for (const auto& light : lights) {
 				passLightToSSBO(light.getLightMaterials());
@@ -149,11 +148,6 @@ namespace mar::graphics {
 		};
 
 		std::for_each(containers.cbegin(), containers.cend(), pushContainerToLight);
-	}
-
-	void RendererBatch::passVerticesAndIndicesToBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) const {
-		m_buffers.bind();
-		m_buffers.update(vertices, indices);
 	}
 
 	void RendererBatch::passTransformsToSSBO(const RenderContainer& container) const {

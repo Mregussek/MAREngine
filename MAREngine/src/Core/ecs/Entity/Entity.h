@@ -100,6 +100,13 @@ namespace mar::ecs {
 		}
 
 		template<typename T>
+		T& getOrEmplace() const {
+			ECS_TRACE("ENTITY: {} - getOrReplace at {}", typeid(T).name(), m_entityHandle);
+
+			return m_scene->m_registry.get_or_emplace<T>(m_entityHandle);
+		}
+
+		template<typename T>
 		void removeComponent() const {
 			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
 

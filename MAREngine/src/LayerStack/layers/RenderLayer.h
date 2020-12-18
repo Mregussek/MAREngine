@@ -29,6 +29,7 @@
 #include "../../Core/graphics/Renderer/RendererBatch.h"
 #include "../../Core/graphics/Renderer/RenderMemorizer.h"
 #include "../../Core/graphics/Renderer/ShaderBufferStorage.h"
+#include "../../Core/graphics/Renderer/PipelineStorage.h"
 
 
 namespace mar::layers {
@@ -53,6 +54,7 @@ namespace mar::layers {
 		graphics::RenderStatistics m_statistics;
 		graphics::ShaderBufferStorage m_shaderBufferStorage;
 		graphics::RenderMemorizer m_memorizer;
+		graphics::PipelineStorage m_pipelineStorage;
 
 	};
 

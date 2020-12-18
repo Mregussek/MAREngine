@@ -98,14 +98,7 @@ namespace mar::editor {
 	void GUI_Filesystem::displayLoadOBJWindow(ecs::Scene* scene) {
 		if (m_fileDialog.showFileDialog(m_nameLoadOBJ, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".obj")) {
 			const auto& collection = scene->createCollection();
-			auto& tag = collection.getComponent<ecs::TagComponent>();
-			auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
-
-			tag.tag = m_fileDialog.selected_fn;
-			crc.id = m_fileDialog.selected_path;
-
-			graphics::MeshCreator::loadOBJ(tag.tag, crc.id, collection);
-			ecs::SceneEvents::Instance().onCollectionOBJloaded(collection);
+			ecs::SceneEvents::Instance().onOBJload(collection, m_fileDialog.selected_fn, m_fileDialog.selected_path);
 		}
 	}
 
@@ -117,7 +110,7 @@ namespace mar::editor {
 		if (m_fileDialog.showFileDialog(m_nameAssignScript, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".py")) {
 			const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
 
-			script.script = std::string(m_fileDialog.selected_path);
+			script.script = m_fileDialog.selected_path;
 			eraseSubstring(script.script, assetsPath);
 		}
 	}

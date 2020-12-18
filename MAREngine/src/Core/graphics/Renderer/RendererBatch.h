@@ -23,7 +23,6 @@
 
 
 #include "../../../mar.h"
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
 #include "../RenderAPI/RenderContainerDefinitions.h"
 
@@ -57,7 +56,6 @@ namespace mar::graphics {
 		void drawWithShader(const ShaderGL& shader, const std::vector<LightContainer>& lights,
 			const std::vector<RenderContainer>& containers) const;
 
-		void passVerticesAndIndicesToBuffer(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) const;
 		void passTransformsToSSBO(const RenderContainer& container) const;
 		void passColorsToSSBO(const ColorVector& colors) const;
 		void passTexturesToShader(const ShaderGL& shader, const TextureVector& textures) const;
@@ -65,7 +63,6 @@ namespace mar::graphics {
 		void passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const;
 
 
-		platforms::PipelineOpenGL m_buffers;
 		platforms::ShaderOpenGL m_shader2D;
 		platforms::ShaderOpenGL m_shaderCubemap;
 

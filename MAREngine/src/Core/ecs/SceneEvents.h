@@ -82,7 +82,8 @@ namespace mar::ecs {
 		void onCollectionTransformReset(const EntityCollection* collection) const;
 		void onCollectionCopy(const EntityCollection& collection) const;
 		void onCollectionRemove() const;
-		void onCollectionOBJloaded(const EntityCollection& collection) const;
+
+		void onOBJload(const EntityCollection& collection, const std::string& filename, const std::string& path) const;
 
 	private:
 

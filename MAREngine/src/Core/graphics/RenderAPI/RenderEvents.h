@@ -45,6 +45,8 @@ namespace mar::graphics {
 
 		void onDrawCall() const;
 
+		void onContainersReadyToDraw() const;
+
 		void onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const;
 		void onColorUpdate(vec4 color, const ecs::RenderPipelineComponent& rpc) const;
 

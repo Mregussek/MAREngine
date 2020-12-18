@@ -23,7 +23,9 @@
 #include "RenderPipeline.h"
 #include "RenderStatistics.h"
 #include "../GraphicsLogs.h"
+#include "../GraphicLimits.h"
 #include "../Renderer/RenderMemorizer.h"
+#include "../Renderer/PipelineStorage.h"
 #include "../Renderer/ShaderBufferStorage.h"
 #include "../../ecs/Components/Components.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
@@ -42,6 +44,24 @@ namespace mar::graphics {
 		RenderStatistics::Instance->drawCallsCount += 1;
 	
 		GRAPHICS_TRACE("RENDER_EVENTS: Handling draw call");
+	}
+
+	void RenderEvents::onContainersReadyToDraw() const {
+		PipelineStorage::Instance->close();
+
+		auto& containers2D{ RenderPipeline::Instance->m_containers2D };
+		auto& containersCubemap{ RenderPipeline::Instance->m_containersCubemap };
+
+		auto createPipelineStorage = [](RenderContainer& container) {
+			auto& pipeline = PipelineStorage::Instance->createPipeline();
+			pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
+			pipeline.bind();
+			pipeline.update(container.getVertices(), container.getIndices());
+			PipelineStorage::Instance->fillContainer(container);
+		};
+		
+		std::for_each(containers2D.begin(), containers2D.end(), createPipelineStorage);
+		std::for_each(containersCubemap.begin(), containersCubemap.end(), createPipelineStorage);
 	}
 
 	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const {

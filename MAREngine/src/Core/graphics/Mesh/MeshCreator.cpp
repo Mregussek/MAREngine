@@ -128,26 +128,23 @@ namespace mar::graphics {
         const bool loadout = Loader.LoadFile(path);
     
         if (loadout) {
-            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](loader_obj::Mesh& mesh) {
+            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
                 const auto& entity = collection.createEntity();
                 auto& tag = entity.getComponent<ecs::TagComponent>();
                 auto& renderable = entity.addComponent<ecs::RenderableComponent>();
                 auto& color = entity.addComponent<ecs::ColorComponent>();
 
-                if (mesh.MeshName.empty()) {
-                    tag.tag = filename;
-                    renderable.name = filename;
-                }
-                else {
-                    tag.tag = mesh.MeshName;
-                    renderable.name = mesh.MeshName;
-                }
-
+                tag.tag = [&mesh, &filename]()->std::string {
+                    if (mesh.MeshName.empty()) { return filename; }
+                    else { return mesh.MeshName; }
+                }();
+                
+                renderable.name = filename;
                 renderable.vertices = mesh.Vertices;
                 renderable.indices = mesh.Indices;
             };
 
-            std::for_each(Loader.LoadedMeshes.begin(), Loader.LoadedMeshes.end(), passLoadedMeshToEntityAtCollection);
+            std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
         }
         else {
             GRAPHICS_ERROR("MESH_CREATOR: could not load .obj file {}", path);

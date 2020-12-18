@@ -39,6 +39,7 @@ namespace mar::graphics {
 
 		friend class RenderPipeline;
 		friend class RenderEvents;
+		friend class PipelineStorage;
 
 	public:
 
@@ -56,6 +57,8 @@ namespace mar::graphics {
 		const TextureVector& getTextureCubemap() const { return m_cubes; }
 		
 		const FloatVector& getSamplerTypes() const { return m_samplerTypes; }
+
+		const uint32_t getUniqueContainerID() const { return m_uniqueContainerID; }
 
 		static uint32_t getStride() { return m_stride; }
 
@@ -75,6 +78,8 @@ namespace mar::graphics {
 		TextureVector m_tex2D;
 		TextureVector m_cubes;
 		FloatVector m_samplerTypes;
+
+		uint32_t m_uniqueContainerID{ 0 };
 
 		MaterialRenderType m_materialRenderType{ MaterialRenderType::NONE };
 

@@ -36,6 +36,7 @@ namespace mar::layers {
 		m_statistics.Instance = &m_statistics;
 		m_renderPipeline.Instance = &m_renderPipeline;
 		m_shaderBufferStorage.Instance = &m_shaderBufferStorage;
+		m_pipelineStorage.Instance = &m_pipelineStorage;
 		
 		m_renderer.initialize();
 	}
@@ -52,6 +53,7 @@ namespace mar::layers {
 	
 		m_renderPipeline.reset();
 		m_shaderBufferStorage.close();
+		m_pipelineStorage.close();
 
 		m_renderer.close();
 	}

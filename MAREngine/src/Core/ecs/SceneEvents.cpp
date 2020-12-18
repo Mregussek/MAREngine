@@ -19,13 +19,14 @@
 
 
 #include "SceneEvents.h"
+#include "ECSLogs.h"
 #include "SceneManager.h"
 #include "Entity/Entity.h"
 #include "Entity/EntityCollection.h"
-#include "ECSLogs.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 #include "../graphics/RenderAPI/RenderEvents.h"
 #include "../graphics/RenderAPI/RenderCamera.h"
+#include "../graphics/Mesh/MeshCreator.h"
 
 
 namespace mar::ecs {
@@ -256,7 +257,40 @@ namespace mar::ecs {
 		ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
 	}
 
-	void SceneEvents::onCollectionOBJloaded(const EntityCollection& collection) const {
+	void SceneEvents::onOBJload(const EntityCollection& collection, const std::string& filename, const std::string& path) const {
+		const auto scene{ m_sceneManager->getScene() };
+
+		auto& tag{ collection.getComponent<TagComponent>() };
+
+		auto theSameOBJhasBeenLoaded = [&path, &scene](entt::entity entity) {
+			const auto& crc{ scene->getComponent<CollectionRenderableComponent>(entity) };
+			return crc.id == path;
+		};
+
+		const auto view = scene->getView<CollectionRenderableComponent>();
+		const auto it = std::find_if(view.begin(), view.end(), theSameOBJhasBeenLoaded);
+		const bool otherCollectionHasOBJ{ it != view.end() };
+
+		if(otherCollectionHasOBJ) {
+			const auto& entities{ scene->getComponent<EntityCollectionComponent>(*it).entities };
+			for (const auto& entity : entities) {
+				const auto& renderable{ entity.getComponent<RenderableComponent>() };
+				if (renderable.name == filename) {
+					const auto& createdEntity{ collection.createEntity() };
+					auto& createdRenderable = createdEntity.addComponent<RenderableComponent>();
+
+					createdRenderable.name = renderable.name;
+					createdRenderable.vertices = renderable.vertices;
+					createdRenderable.indices = renderable.indices;
+				}
+			}
+		}
+		else {
+			tag.tag = filename;
+			auto& crc = collection.addComponent<CollectionRenderableComponent>(path);
+			graphics::MeshCreator::loadOBJ(tag.tag, crc.id, collection);
+		}
+
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
