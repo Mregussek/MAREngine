@@ -94,10 +94,10 @@ namespace mar::debug {
     
     #define ASSERT_NO_MSG(x) if(!(x)) __debugbreak()
 
-    #define ASSERT(x, msg) if(!(x)) MAR_CORE_ERROR(msg);\
+    #define ASSERT(x, ...) if(!(x)) MAR_CORE_ERROR(__VA_ARGS__);\
                            ASSERT_NO_MSG(x)
                            
-    #define MAR_CORE_ASSERT(x, msg) ASSERT(x, msg)
+    #define MAR_CORE_ASSERT(x, ...) ASSERT(x, __VA_ARGS__)
     
     #define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::clearError();\
                                 x;\

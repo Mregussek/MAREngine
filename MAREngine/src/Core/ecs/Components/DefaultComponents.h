@@ -65,11 +65,13 @@ namespace mar::ecs {
 
 	struct CollectionRenderableComponent {
 		std::string id{ "empty" };
+		uint32_t entitiesRenderableCount{ 0 };
 
 		CollectionRenderableComponent() = default;
 		CollectionRenderableComponent(const CollectionRenderableComponent& crc) = default;
-		CollectionRenderableComponent(std::string i)
-			: id(std::move(i))
+		CollectionRenderableComponent(std::string str, uint32_t count) : 
+			id(std::move(str)),
+			entitiesRenderableCount(count)
 		{}
 
 		operator std::string& () { return id; }

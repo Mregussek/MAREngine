@@ -69,37 +69,39 @@ namespace mar::ecs {
 
 		template<typename T>
 		bool hasComponent() const {
-			return m_scene->m_registry.has<T>(m_collectionHandle);
+			const bool hasComp{ m_scene->m_registry.has<T>(m_collectionHandle) };
+			ECS_TRACE("ENTITY_COLLECTION: checking if {} collection contains component {}... result={}", m_collectionHandle, typeid(T).name(), hasComp);
+			return hasComp;
 		}
 
 		template<typename T, typename... Args>
 		T& addComponent(Args&&... args) const {
-			MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY_COLLECTION: already has CollectionTagComponent!");
+			ECS_TRACE("ENTITY_COLLECTION: add component {} to collection {}", typeid(T).name(), m_collectionHandle);
+			MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY_COLLECTION: {} does not have {} component!", m_collectionHandle, typeid(T).name());
 
 			return m_scene->m_registry.emplace<T>(m_collectionHandle, std::forward<Args>(args)...);
 		}
 
 		template<typename T>
 		T& getComponent() const {
-			MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: does not have this component!");
+			ECS_TRACE("ENTITY_COLLECTION: get component {} from collection {}", typeid(T).name(), m_collectionHandle);
+			MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: {} does not have {} component!", m_collectionHandle, typeid(T).name());
 
 			return m_scene->m_registry.get<T>(m_collectionHandle);
 		}
 
 		template<typename T>
 		T& replaceComponent(const EntityCollection& other) const {
-			MAR_CORE_ASSERT(other.hasComponent<T>(), "Entity does not have this component!");
-
-			ECS_TRACE("ENTITY_COLLECTION: {} - replacing component from {} to {}", typeid(T).name(), other.m_collectionHandle, m_collectionHandle);
+			ECS_TRACE("ENTITY_COLLECTION: replacing component {} given from collection {} to {}", typeid(T).name(), other.m_collectionHandle, m_collectionHandle);
+			MAR_CORE_ASSERT(other.hasComponent<T>(), "ENTITY_COLLECTION: {} does not have {} component!", other.m_collectionHandle, typeid(T).name());
 
 			return m_scene->m_registry.emplace_or_replace<T>(m_collectionHandle, other.getComponent<T>());
 		}
 
 		template<typename T>
 		void removeComponent() const {
-			MAR_CORE_ASSERT(hasComponent<T>(), "Entity does not have component!");
-
-			ECS_INFO("ENTITY_COLLECTION: {} going to remove component {}", m_collectionHandle, typeid(T).name());
+			ECS_TRACE("ENTITY_COLLECTION: removing {} from collection {}", typeid(T).name(), m_collectionHandle);
+			MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY_COLLECTION: {} does not have {} component!", m_collectionHandle, typeid(T).name());
 
 			m_scene->m_registry.remove<T>(m_collectionHandle);
 		}

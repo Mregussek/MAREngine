@@ -21,6 +21,7 @@
 #include "Filesystem_Loading.h"
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/SceneOptimizer.h"
 #include "../../Core/ecs/Entity/Entity.h"
 #include "../../Core/ecs/Entity/EntityCollection.h"
 #include "../../Core/ecs/Components/Components.h"
@@ -77,18 +78,23 @@ namespace mar::editor {
 				loadString(tag.tag, 24);
 			}
 			else if (line.find("#CollectionRenderableComponent") != std::string::npos) {
-				auto& crc = collection.addComponent<ecs::CollectionRenderableComponent>();
-				loadString(crc.id, 31);
-				const std::string filename{ crc.id.substr(crc.id.find_last_of("/") + 1, crc.id.size()) };
+				std::string path{};
+				loadString(path, 31);
+				const auto filename{ path.substr(path.find_last_of("/") + 1, path.size()) };
 
-				graphics::MeshCreator::loadOBJ(filename, crc.id, collection);
+				const auto collectionIndex{ ecs::SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
+				if (collectionIndex != -1) {
+					ecs::SceneOptimizer::copyOBJtoOtherCollection(collection, scene->getCollections()[collectionIndex]);
+				}
+				else {
+					graphics::MeshCreator::loadOBJ(filename, path, collection);
+				}
 
-				const auto size_after_loading{ collection.getEntities().size() };
-				for (size_t i = 0; i < size_after_loading; ) {
+				const auto sizeAfterLoading{ collection.getEntities().size() };
+				for (size_t i = 0; i < sizeAfterLoading; ) {
 					std::getline(file, line);
 					if (line.find("#EntityStart") != std::string::npos) {
-						const auto& entity = collection.getEntities()[i];
-						loadEntity(file, scene, entity);
+						loadEntity(file, scene, collection.getEntities()[i]);
 						i++;
 					}
 				}
@@ -96,14 +102,9 @@ namespace mar::editor {
 			else if (line.find("#CollectionTransformComponent") != std::string::npos) {
 				auto& tran = collection.getComponent<ecs::TransformComponent>();
 
-				// #center - 7 letters
-				loadVec3Getline(tran.center, 7);
-
-				// #angles - 7 letters
-				loadVec3Getline(tran.angles, 7);
-
-				// #scale - 6  letters
-				loadVec3Getline(tran.scale, 6);
+				loadVec3Getline(tran.center, 7); // #center - 7 letters
+				loadVec3Getline(tran.angles, 7); // #angles - 7 letters
+				loadVec3Getline(tran.scale, 6);  // #scale  - 6  letters
 			}
 			else if (line.find("#EntityCollectionEnd") != std::string::npos) {
 				return;
@@ -158,17 +159,12 @@ namespace mar::editor {
 			else if (line.find("#TransformComponent") != std::string::npos) {
 				auto& tran = entity.getComponent<ecs::TransformComponent>();
 
-				// #center - 7 letters
-				loadVec3Getline(tran.center, 7);
-
-				// #angles - 7 letters
-				loadVec3Getline(tran.angles, 7);
-
-				// #scale - 6  letters
-				loadVec3Getline(tran.scale, 6);
+				loadVec3Getline(tran.center, 7); // #center - 7 letters
+				loadVec3Getline(tran.angles, 7); // #angles - 7 letters
+				loadVec3Getline(tran.scale, 6);  // #scale  - 6  letters
 			}
 			else if (line.find("#RenderableComponent") != std::string::npos) {
-				auto& ren{ entity.getOrEmplace<ecs::RenderableComponent>() };
+				auto& ren{ entity.get_addComponent<ecs::RenderableComponent>() };
 
 				if (line.find("Cube") != std::string::npos) {
 					ren.name = "Cube";
@@ -192,92 +188,57 @@ namespace mar::editor {
 				}
 			}
 			else if (line.find("#ColorComponent") != std::string::npos) {
-				auto& color{ entity.getOrEmplace<ecs::ColorComponent>() };
+				auto& color{ entity.get_addComponent<ecs::ColorComponent>() };
 				loadVec4(color.texture, 16);
 			}
 			else if (line.find("Texture2DComponent") != std::string::npos) {
-				auto& texture{ entity.getOrEmplace<ecs::Texture2DComponent>() };
+				auto& texture{ entity.get_addComponent<ecs::Texture2DComponent>() };
 				loadString(texture.texture, 19);
 			}
 			else if (line.find("#TextureCubemapComponent") != std::string::npos) {
-				auto& cubemap{ entity.getOrEmplace<ecs::TextureCubemapComponent>() };
+				auto& cubemap{ entity.get_addComponent<ecs::TextureCubemapComponent>() };
 				loadString(cubemap.texture, 25);
 			}
 			else if (line.find("#LightComponent") != std::string::npos) {
-				auto& light{ entity.getOrEmplace<ecs::LightComponent>() };
+				auto& light{ entity.get_addComponent<ecs::LightComponent>() };
 
-				// #ambientlight - 13
-				loadVec4Getline(light.ambient, 13);
+				loadVec4Getline(light.ambient, 13);		// #ambientlight - 13
+				loadVec4Getline(light.diffuse, 13);		// #diffuselight - 13
+				loadVec4Getline(light.specular, 14);	// #specularlight - 14
 
-				// #diffuselight - 13
-				loadVec4Getline(light.diffuse, 13);
-
-				// #specularlight - 14
-				loadVec4Getline(light.specular, 14);
-
-				// #constant - 9
-				loadFloatGetline(light.constant, 9);
-
-				// #linear - 7
-				loadFloatGetline(light.linear, 7);
-
-				// #quadratic - 10
-				loadFloatGetline(light.quadratic, 10);
-
-				// #shininess - 10
-				loadFloatGetline(light.shininess, 10);
+				loadFloatGetline(light.constant, 9);	// #constant - 9
+				loadFloatGetline(light.linear, 7);		// #linear - 7
+				loadFloatGetline(light.quadratic, 10);	// #quadratic - 10
+				loadFloatGetline(light.shininess, 10);	// #shininess - 10
 			}
 			else if (line.find("#CameraComponent") != std::string::npos) {
-				auto& cam{ entity.getOrEmplace<ecs::CameraComponent>() };
-
-				// #id - 3
-				loadStringGetline(cam.id, 3);
-
-				// #used - 5
+				auto& cam{ entity.get_addComponent<ecs::CameraComponent>() };
 				std::string type;
-				loadStringGetline(type, 5);
+				
+				loadStringGetline(cam.id, 3);	// #id - 3
+				loadStringGetline(type, 5);		// #used - 5
 
 				if (type.find("perspective") != std::string::npos) { cam.Perspective = true; }
 				else { cam.Perspective = false; }
 
-				// #type - 5
-				std::getline(file, line);
+				std::getline(file, line); // #type - 5	perspective
 
-				// #fov - 4
-				loadFloatGetline(cam.p_fov, 4);
+				loadFloatGetline(cam.p_fov, 4);				// #fov - 4
+				loadFloatGetline(cam.p_aspectRatio, 12);	// #aspectratio - 12
+				loadFloatGetline(cam.p_near, 5);			// #near - 5
+				loadFloatGetline(cam.p_far, 4);				// #far - 4
 
-				// #aspectratio - 12
-				loadFloatGetline(cam.p_aspectRatio, 12);
+				std::getline(file, line); // #type - 5 orthographic
 
-				// #near - 5
-				loadFloatGetline(cam.p_near, 5);
-
-				// #far - 4
-				loadFloatGetline(cam.p_far, 4);
-
-				// #type - 5
-				std::getline(file, line);
-
-				// #left - 5
-				loadFloatGetline(cam.o_left, 5);
-
-				// #right - 6
-				loadFloatGetline(cam.o_right, 6);
-
-				// #top - 4
-				loadFloatGetline(cam.o_top, 4);
-
-				// #bottom - 7
-				loadFloatGetline(cam.o_bottom, 7);
-
-				// #near - 5
-				loadFloatGetline(cam.o_near, 5);
-
-				// #far
-				loadFloatGetline(cam.o_far, 4);
+				loadFloatGetline(cam.o_left, 5);	// #left - 5
+				loadFloatGetline(cam.o_right, 6);	// #right - 6
+				loadFloatGetline(cam.o_top, 4);		// #top - 4
+				loadFloatGetline(cam.o_bottom, 7);	// #bottom - 7
+				loadFloatGetline(cam.o_near, 5);	// #near - 5
+				loadFloatGetline(cam.o_far, 4);		// #far
 			}
 			else if (line.find("#ScriptComponent") != std::string::npos) {
-				auto& script{ entity.getOrEmplace<ecs::ScriptComponent>() };
+				auto& script{ entity.get_addComponent<ecs::ScriptComponent>() };
 				loadString(script.script, 17);
 			}
 			else if (line.find("#EntityEnd") != std::string::npos) {

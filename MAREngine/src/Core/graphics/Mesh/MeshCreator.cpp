@@ -123,32 +123,38 @@ namespace mar::graphics {
         };
     }
     
-    void MeshCreator::loadOBJ(std::string filename, std::string path, const ecs::EntityCollection& collection) {
+    void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const ecs::EntityCollection& collection) {
         loader_obj::Loader Loader{};
-        const bool loadout = Loader.LoadFile(path);
+        const bool loadout{ Loader.LoadFile(path) };
     
-        if (loadout) {
-            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
-                const auto& entity = collection.createEntity();
-                auto& tag = entity.getComponent<ecs::TagComponent>();
-                auto& renderable = entity.addComponent<ecs::RenderableComponent>();
-                auto& color = entity.addComponent<ecs::ColorComponent>();
-
-                tag.tag = [&mesh, &filename]()->std::string {
-                    if (mesh.MeshName.empty()) { return filename; }
-                    else { return mesh.MeshName; }
-                }();
-                
-                renderable.name = filename;
-                renderable.vertices = mesh.Vertices;
-                renderable.indices = mesh.Indices;
-            };
-
-            std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
+        if (!loadout) {
+            GRAPHICS_WARN("MESH_CREATOR: could not load .obj file {}", path);
+            return;
         }
-        else {
-            GRAPHICS_ERROR("MESH_CREATOR: could not load .obj file {}", path);
-        }
+
+        GRAPHICS_TRACE("MESH_CREATOR: loaded {}, pushing to collection...", path);
+
+        auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
+            const auto& entity = collection.createEntity();
+            auto& tag = entity.getComponent<ecs::TagComponent>();
+            auto& renderable = entity.addComponent<ecs::RenderableComponent>();
+            entity.addComponent<ecs::ColorComponent>();
+
+            tag.tag = [&mesh, &filename]()->std::string {
+                if (mesh.MeshName.empty()) { return filename; }
+                else { return mesh.MeshName; }
+            }();
+            
+            renderable.name = filename;
+            renderable.vertices = mesh.Vertices;
+            renderable.indices = mesh.Indices;
+        };
+
+        std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
+
+        auto& tag{ collection.getComponent<ecs::TagComponent>() };
+        tag.tag = filename;
+        auto& crc{ collection.addComponent<ecs::CollectionRenderableComponent>(path, Loader.LoadedMeshes.size()) };
     }
 
 

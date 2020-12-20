@@ -60,7 +60,7 @@ namespace mar::graphics {
             static std::vector<uint32_t> getIndices();
         };
     
-        static void loadOBJ(std::string filename, std::string path, const ecs::EntityCollection& collection);
+        static void loadOBJ(const std::string& filename, const std::string& path, const ecs::EntityCollection& collection);
     };
 
 
