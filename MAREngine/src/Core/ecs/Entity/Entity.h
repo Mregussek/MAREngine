@@ -39,10 +39,10 @@ namespace mar::ecs {
 	public:
 
 		Entity() = delete;
+		Entity(SceneRegistry* scene);
 		Entity(entt::entity entity, SceneRegistry* scene);
 		Entity(const Entity& other) = default;
 
-		Entity(SceneRegistry* scene);
 
 		void destroyYourself() const;
 
@@ -95,11 +95,11 @@ namespace mar::ecs {
 			return m_scene->m_registry.replace<T>(m_entityHandle, other);
 		}
 
-		template<typename T>
-		T& get_addComponent() const {
+		template<typename T, typename... Args>
+		T& get_addComponent(Args&&... args) const {
 			ECS_TRACE("ENTITY: {} - get_addComponent at {}", typeid(T).name(), m_entityHandle);
 
-			return m_scene->m_registry.get_or_emplace<T>(m_entityHandle);
+			return m_scene->m_registry.get_or_emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 		}
 
 		template<typename T>

@@ -91,11 +91,18 @@ namespace mar::ecs {
 		}
 
 		template<typename T>
-		T& replaceComponent(const EntityCollection& other) const {
-			ECS_TRACE("ENTITY_COLLECTION: replacing component {} given from collection {} to {}", typeid(T).name(), other.m_collectionHandle, m_collectionHandle);
+		T& replaceComponent(const T& other) const {
+			ECS_TRACE("ENTITY_COLLECTION: replacing component {} given from collection {} to {}", typeid(T).name(), m_collectionHandle);
+
+			return m_scene->m_registry.replace<T>(m_collectionHandle, other);
+		}
+
+		template<typename T>
+		T& get_addComponent(const EntityCollection& other) const {
+			ECS_TRACE("ENTITY_COLLECTION: returning or adding component {} given from collection {} to {}", typeid(T).name(), other.m_collectionHandle, m_collectionHandle);
 			MAR_CORE_ASSERT(other.hasComponent<T>(), "ENTITY_COLLECTION: {} does not have {} component!", other.m_collectionHandle, typeid(T).name());
 
-			return m_scene->m_registry.emplace_or_replace<T>(m_collectionHandle, other.getComponent<T>());
+			return m_scene->m_registry.get_or_emplace<T>(m_collectionHandle, other.getComponent<T>());
 		}
 
 		template<typename T>

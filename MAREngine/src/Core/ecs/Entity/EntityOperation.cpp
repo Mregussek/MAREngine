@@ -28,16 +28,20 @@
 namespace mar::ecs {
 
 
-	void EntityOperation::copyCollection(const EntityCollection& src, const EntityCollection& dst) {
-		dst.replaceComponent<TagComponent>(src);
-		dst.replaceComponent<TransformComponent>(src);
-
-		if (src.hasComponent<CollectionRenderableComponent>()) {
-			dst.replaceComponent<CollectionRenderableComponent>(src);
+	template<typename EntityType, typename ComponentType>
+	void addComponentIfContains(const EntityType& src, const EntityType& dst) {
+		if (src.hasComponent<ComponentType>()) {
+			dst.addComponent<ComponentType>(src.getComponent<ComponentType>());
 		}
+	}
+
+	void EntityOperation::copyCollection(const EntityCollection& src, const EntityCollection& dst) {
+		dst.replaceComponent<TagComponent>(src.getComponent<TagComponent>());
+		dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
+
+		addComponentIfContains<EntityCollection, CollectionRenderableComponent>(src, dst);
 
 		const auto& entities = src.getEntities();
-
 		std::for_each(entities.cbegin(), entities.cend(), [&dst](const Entity& entity) {
 			const auto& entityDst = dst.createEntity();
 			copyEntity(entity, entityDst);
@@ -46,36 +50,18 @@ namespace mar::ecs {
 
 	void EntityOperation::copyEntity(const Entity& src, const Entity& dst) {
 		{ // Default Copy
-			dst.replaceComponent<TagComponent>(src);
-			dst.replaceComponent<TransformComponent>(src);
+			dst.replaceComponent<TagComponent>(src.getComponent<TagComponent>());
+			dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
 			dst.copyDefault(src);
 		}
 
-		if (src.hasComponent<RenderableComponent>()) {
-			dst.replaceComponent<RenderableComponent>(src);
-		}
-
-		if (src.hasComponent<ColorComponent>()) {
-			dst.replaceComponent<ColorComponent>(src);
-		}
-		else if (src.hasComponent<Texture2DComponent>()) {
-			dst.replaceComponent<Texture2DComponent>(src);
-		}
-		else if (src.hasComponent<TextureCubemapComponent>()) {
-			dst.replaceComponent<TextureCubemapComponent>(src);
-		}
-
-		if (src.hasComponent<LightComponent>()) {
-			dst.replaceComponent<LightComponent>(src);
-		}
-
-		if (src.hasComponent<CameraComponent>()) {
-			dst.replaceComponent<CameraComponent>(src);
-		}
-
-		if (src.hasComponent<ScriptComponent>()) {
-			dst.replaceComponent<ScriptComponent>(src);
-		}
+		addComponentIfContains<Entity, RenderableComponent>(src, dst);
+		addComponentIfContains<Entity, ColorComponent>(src, dst);
+		addComponentIfContains<Entity, Texture2DComponent>(src, dst);
+		addComponentIfContains<Entity, TextureCubemapComponent>(src, dst);
+		addComponentIfContains<Entity, LightComponent>(src, dst);
+		addComponentIfContains<Entity, CameraComponent>(src, dst);
+		addComponentIfContains<Entity, ScriptComponent>(src, dst);
 	}
 		
 

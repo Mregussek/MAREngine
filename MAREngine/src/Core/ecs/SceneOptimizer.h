@@ -31,12 +31,6 @@ namespace mar::ecs {
 	class EntityCollection;
 
 
-	enum class OptimizerType {
-		SCENE_FILE_LOADING,
-		SCENE_EVENT
-	};
-
-
 	class SceneOptimizer {
 	public:
 
