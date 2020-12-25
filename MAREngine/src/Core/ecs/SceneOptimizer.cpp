@@ -58,10 +58,9 @@ namespace mar::ecs {
 		const auto& crcOBJ{ collectionWithOBJ.getComponent<CollectionRenderableComponent>() };
 		const auto& entitiesOBJ{ collectionWithOBJ.getComponent<EntityCollectionComponent>().entities };
 
-		auto& crc = collection.addComponent<CollectionRenderableComponent>();
-		crc.id = crcOBJ.id;
+		auto& crc = collection.addComponent<CollectionRenderableComponent>(crcOBJ);
 
-		for (size_t i = 0; i < crcOBJ.entitiesRenderableCount; i++) {
+		for (size_t i = 0; i < crc.entitiesRenderableCount; i++) {
 			const auto& entity = collection.createEntity();
 			auto& renderable = entity.addComponent<RenderableComponent>();
 
@@ -71,8 +70,6 @@ namespace mar::ecs {
 			renderable.vertices = renderableOBJ.vertices;
 			renderable.indices = renderableOBJ.indices;
 		}
-
-		crc.entitiesRenderableCount = crcOBJ.entitiesRenderableCount;
 	}
 
 
