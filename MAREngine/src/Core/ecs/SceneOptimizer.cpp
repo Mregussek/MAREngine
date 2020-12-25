@@ -52,23 +52,41 @@ namespace mar::ecs {
 		return -1;
 	}
 
-	void SceneOptimizer::copyOBJtoOtherCollection(const EntityCollection& collection, const EntityCollection& collectionWithOBJ) {
-		ECS_TRACE("SCENE_OPTIMIZER: copying component to collection (OBJ copying)...");
+	void SceneOptimizer::copyOBJtoOtherCollectionDuringSceneLoading(const EntityCollection& collection, const EntityCollection& collectionWithOBJ) {
+		ECS_TRACE("SCENE_OPTIMIZER: copying OBJ to collection during scene file loading...");
 
 		const auto& crcOBJ{ collectionWithOBJ.getComponent<CollectionRenderableComponent>() };
 		const auto& entitiesOBJ{ collectionWithOBJ.getComponent<EntityCollectionComponent>().entities };
-
-		auto& crc = collection.addComponent<CollectionRenderableComponent>(crcOBJ);
+		const auto& crc = collection.addComponent<CollectionRenderableComponent>(crcOBJ);
 
 		for (size_t i = 0; i < crc.entitiesRenderableCount; i++) {
 			const auto& entity = collection.createEntity();
-			auto& renderable = entity.addComponent<RenderableComponent>();
-
 			const auto& renderableOBJ{ entitiesOBJ[i].getComponent<RenderableComponent>() };
+			const auto& renderable = entity.addComponent<RenderableComponent>(renderableOBJ);
+		}
+	}
 
-			renderable.name = renderableOBJ.name;
-			renderable.vertices = renderableOBJ.vertices;
-			renderable.indices = renderableOBJ.indices;
+	void SceneOptimizer::copyOBJtoOtherCollectionOnSceneEvent(const EntityCollection& collection, const EntityCollection& collectionWithOBJ, const std::string& filename) {
+		ECS_TRACE("SCENE_OPTIMIZER: copying OBJ to collection on scene event...");
+
+		const auto& crcOBJ{ collectionWithOBJ.getComponent<CollectionRenderableComponent>() };
+		const auto& entitiesOBJ{ collectionWithOBJ.getComponent<EntityCollectionComponent>().entities };
+		const auto& crc = collection.addComponent<CollectionRenderableComponent>(crcOBJ);
+
+		{ // modify collection's tag component
+			auto& tag = collection.getComponent<TagComponent>();
+			tag.tag = filename;
+		}
+
+		for (size_t i = 0; i < crc.entitiesRenderableCount; i++) {
+			const auto& entity = collection.createEntity();
+			const auto& renderableOBJ{ entitiesOBJ[i].getComponent<RenderableComponent>() };
+			const auto& renderable = entity.addComponent<RenderableComponent>(renderableOBJ);
+
+			auto& tag = entity.getComponent<TagComponent>();
+			tag.tag = entitiesOBJ[i].getComponent<TagComponent>().tag;
+
+			const auto& color = entity.addComponent<ColorComponent>();
 		}
 	}
 

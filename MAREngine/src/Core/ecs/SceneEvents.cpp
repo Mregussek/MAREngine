@@ -262,9 +262,9 @@ namespace mar::ecs {
 		auto& tag{ collection.getComponent<TagComponent>() };
 
 		auto scene{ m_sceneManager->getScene() };
-		const auto collectionIndex{ ecs::SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
+		const auto collectionIndex{ SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
 		if (collectionIndex != -1) {
-			ecs::SceneOptimizer::copyOBJtoOtherCollection(collection, scene->getCollections()[collectionIndex]);
+			SceneOptimizer::copyOBJtoOtherCollectionOnSceneEvent(collection, scene->getCollections()[collectionIndex], filename);
 		}
 		else {
 			graphics::MeshCreator::loadOBJ(filename, path, collection);

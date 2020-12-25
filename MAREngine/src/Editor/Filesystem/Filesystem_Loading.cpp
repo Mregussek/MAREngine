@@ -84,7 +84,7 @@ namespace mar::editor {
 
 				const auto collectionIndex{ ecs::SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
 				if (collectionIndex != -1) {
-					ecs::SceneOptimizer::copyOBJtoOtherCollection(collection, scene->getCollections()[collectionIndex]);
+					ecs::SceneOptimizer::copyOBJtoOtherCollectionDuringSceneLoading(collection, scene->getCollections()[collectionIndex]);
 				}
 				else {
 					graphics::MeshCreator::loadOBJ(filename, path, collection);

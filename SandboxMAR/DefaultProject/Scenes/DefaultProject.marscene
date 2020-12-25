@@ -456,7 +456,7 @@ MAREngine scene file
 #center 0 0 0
 #angles -87.5 18.5 -80
 #scale 1 1 1
-#RenderableComponent Suzanne
+#RenderableComponent monkey.obj
 #ColorComponent 0.5 0.499998 0.499995 1
 
 #EntityEnd
@@ -478,7 +478,7 @@ MAREngine scene file
 #center 106.2 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_1
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.642865 0.808271 0.337286 1
 
 #EntityEnd
@@ -489,7 +489,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_2
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.815789 0.718672 0.233083 1
 
 #EntityEnd
@@ -500,7 +500,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_3
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.326808 0.321414 0.62406 1
 
 #EntityEnd
@@ -511,7 +511,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_4
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -522,7 +522,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_5
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.545113 0.170092 0.491539 1
 
 #EntityEnd
@@ -533,7 +533,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_6
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.921053 0.290859 0.290859 1
 
 #EntityEnd
@@ -544,7 +544,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_7
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -555,7 +555,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_8
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.234722 0.650376 0.313894 1
 
 #EntityEnd
@@ -566,7 +566,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_9
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -577,7 +577,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_10
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -588,7 +588,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_11
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -599,7 +599,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_12
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -610,7 +610,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent highrise_13
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.890977 0.381847 0.381847 1
 
 #EntityEnd
@@ -621,7 +621,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_14
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -632,7 +632,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_15
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -643,7 +643,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_16
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -654,7 +654,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_17
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -665,7 +665,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_18
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -676,7 +676,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_19
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.192153 0.774436 0.552614 1
 
 #EntityEnd
@@ -685,7 +685,7 @@ MAREngine scene file
 #center 100 -20 0
 #angles 0 90 0
 #scale 1 1 1
-#CollectionTagComponent LowPolyBuildsings1
+#CollectionTagComponent LowPolyBuildings1
 
 #EntityCollectionEnd
 
@@ -698,7 +698,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_1
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -709,7 +709,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_2
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -720,7 +720,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_3
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -731,7 +731,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_4
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -742,7 +742,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_5
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -753,7 +753,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_6
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -764,7 +764,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_7
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -775,7 +775,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_8
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -786,7 +786,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_9
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -797,7 +797,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_10
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -808,7 +808,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_11
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -819,7 +819,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_12
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -830,7 +830,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent highrise_13
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -841,7 +841,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_14
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -852,7 +852,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_15
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -863,7 +863,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_16
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -874,7 +874,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_17
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -885,7 +885,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_18
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -896,7 +896,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_19
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -905,7 +905,7 @@ MAREngine scene file
 #center -300 -20 0
 #angles 0 270 0
 #scale 1 1 1
-#CollectionTagComponent SecondLowPolyBuildings
+#CollectionTagComponent LowPolyBuildings2
 
 #EntityCollectionEnd
 
@@ -918,7 +918,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_1
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -929,7 +929,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_2
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -940,7 +940,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_3
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -951,7 +951,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_4
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -962,7 +962,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_5
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -973,7 +973,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_6
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -984,7 +984,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_7
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -995,7 +995,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_8
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1006,7 +1006,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_9
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1017,7 +1017,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_10
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1028,7 +1028,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_11
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1039,7 +1039,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_12
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1050,7 +1050,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent highrise_13
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1061,7 +1061,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_14
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1072,7 +1072,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_15
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1083,7 +1083,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_16
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1094,7 +1094,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_17
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1105,7 +1105,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_18
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1116,7 +1116,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#RenderableComponent Highrise_19
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1125,7 +1125,7 @@ MAREngine scene file
 #center -1100 0 0
 #angles 0 90 0
 #scale 1 1 1
-#CollectionTagComponent low_poly_buildings.obj
+#CollectionTagComponent LowPolyBuildings3
 
 #EntityCollectionEnd
 
@@ -1138,7 +1138,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_1
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1149,7 +1149,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_2
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1160,7 +1160,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_3
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1171,7 +1171,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_4
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1182,7 +1182,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_5
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1193,7 +1193,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_6
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1204,7 +1204,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_7
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1215,7 +1215,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_8
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1226,7 +1226,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_9
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1237,7 +1237,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_10
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1248,7 +1248,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_11
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1259,7 +1259,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_12
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1270,7 +1270,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent highrise_13
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1281,7 +1281,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_14
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1292,7 +1292,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_15
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1303,7 +1303,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_16
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1314,7 +1314,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_17
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1325,7 +1325,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_18
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1336,7 +1336,7 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#RenderableComponent Highrise_19
+#RenderableComponent low_poly_buildings.obj
 #ColorComponent 0.5 0.5 0.5 1
 
 #EntityEnd
@@ -1345,7 +1345,447 @@ MAREngine scene file
 #center 1100 0 0
 #angles 0 270 0
 #scale 1 1 1
-#CollectionTagComponent low_poly_buildings.obj
+#CollectionTagComponent LowPolyBuildings4
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/low_poly_buildings.obj
+
+#EntityStart
+#TagComponent Highrise_1
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_2
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_3
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_4
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_5
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_6
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_7
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_8
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_9
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_10
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_11
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_12
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent highrise_13
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_14
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_15
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_16
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_17
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_18
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_19
+#TransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 100 -20 5000
+#angles 0 90 0
+#scale 1 1 1
+#CollectionTagComponent LowPolyBuildings5
+
+#EntityCollectionEnd
+
+#EntityCollectionStart
+#CollectionRenderableComponent D:/Projects_VisualStudio/MAREngine/SandboxMAR/DefaultProject/Assets/objects/low_poly_buildings.obj
+
+#EntityStart
+#TagComponent Highrise_1
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_2
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_3
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_4
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_5
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_6
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_7
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_8
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_9
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_10
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_11
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_12
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent highrise_13
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_14
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_15
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_16
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_17
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_18
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#EntityStart
+#TagComponent Highrise_19
+#TransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#RenderableComponent low_poly_buildings.obj
+#ColorComponent 0.5 0.5 0.5 1
+
+#EntityEnd
+
+#CollectionTransformComponent Begin
+#center 1100 0 5000
+#angles 0 270 0
+#scale 1 1 1
+#CollectionTagComponent LowPolyBuildings6
 
 #EntityCollectionEnd
 

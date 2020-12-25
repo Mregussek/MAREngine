@@ -31,12 +31,19 @@ namespace mar::ecs {
 	class EntityCollection;
 
 
+	enum class OptimizerType {
+		SCENE_FILE_LOADING,
+		SCENE_EVENT
+	};
+
+
 	class SceneOptimizer {
 	public:
 
 		static int32_t checkIfOBJhasBeenLoaded(const std::string& path, Scene* scene);
 
-		static void copyOBJtoOtherCollection(const EntityCollection& collection, const EntityCollection& collectionWithOBJ);
+		static void copyOBJtoOtherCollectionDuringSceneLoading(const EntityCollection& collection, const EntityCollection& collectionWithOBJ);
+		static void copyOBJtoOtherCollectionOnSceneEvent(const EntityCollection& collection, const EntityCollection& collectionWithOBJ, const std::string& filename);
 
 	};
 
