@@ -34,6 +34,7 @@ namespace mar::editor {
 		ImGui::Begin("Statistics Menu");
 
 		auto& stats{ *graphics::RenderStatistics::Instance };
+		const auto& containersColor{ graphics::RenderPipeline::Instance->getColorContainers() };
 		const auto& containers2D{ graphics::RenderPipeline::Instance->get2Dcontainers() };
 		const auto& containersCubemap{ graphics::RenderPipeline::Instance->getCubemapContainers() };
 
@@ -53,6 +54,7 @@ namespace mar::editor {
 			});
 		};
 
+		pushContainerDataToStats(containersColor);
 		pushContainerDataToStats(containers2D);
 		pushContainerDataToStats(containersCubemap);
 

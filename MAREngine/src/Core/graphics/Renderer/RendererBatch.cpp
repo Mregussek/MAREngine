@@ -45,9 +45,7 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shader storage buffers...");
 
 		{ // setup Camera SSBO
-			const std::vector<platforms::UniformItem> cameraItems{ 
-				SSBOsGL::ut_u_Model, SSBOsGL::ut_u_MVP, SSBOsGL::ut_u_CameraPos 
-			};
+			const std::vector<platforms::UniformItem> cameraItems{ SSBOsGL::ut_u_MVP };
 
 			auto& camera = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
@@ -91,20 +89,12 @@ namespace mar::graphics {
 			m_shader2D.initialize(shaderPaths);
 			m_shader2D.setupShaderUniforms(SSBOsGL::u_2D);
 		}
-		{
-			const char* frag = "resources/shaders/cubemap.frag.glsl";
-			const platforms::ShaderPaths shaderPaths(vert, frag, nullptr);
-
-			m_shaderCubemap.initialize(shaderPaths);
-			m_shaderCubemap.setupShaderUniforms(SSBOsGL::u_Cubemap);
-		}
 	}
 
 	void RendererBatch::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
 		m_shader2D.shutdown();
-		m_shaderCubemap.shutdown();
 		platforms::TextureOpenGL::Instance()->shutdown();
 
 		GRAPHICS_INFO("RENDERER_BATCH: closed!");
@@ -119,10 +109,9 @@ namespace mar::graphics {
 		cameraSSBO.bind();
 
 		m_shader2D.bind();
+		drawWithShader(m_shader2D, lights, renderPipeline.getColorContainers());
 		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());
-
-		m_shaderCubemap.bind();
-		drawWithShader(m_shaderCubemap, lights, renderPipeline.getCubemapContainers());
+		drawWithShader(m_shader2D, lights, renderPipeline.getCubemapContainers());
 
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}

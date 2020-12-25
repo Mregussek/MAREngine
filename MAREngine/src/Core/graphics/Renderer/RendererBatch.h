@@ -64,7 +64,6 @@ namespace mar::graphics {
 
 
 		platforms::ShaderOpenGL m_shader2D;
-		platforms::ShaderOpenGL m_shaderCubemap;
 
 	};
 

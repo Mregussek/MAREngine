@@ -49,6 +49,7 @@ namespace mar::graphics {
 	void RenderEvents::onContainersReadyToDraw() const {
 		PipelineStorage::Instance->close();
 
+		auto& containersColor{ RenderPipeline::Instance->m_containersColor };
 		auto& containers2D{ RenderPipeline::Instance->m_containers2D };
 		auto& containersCubemap{ RenderPipeline::Instance->m_containersCubemap };
 
@@ -60,12 +61,16 @@ namespace mar::graphics {
 			PipelineStorage::Instance->fillContainer(container);
 		};
 		
+		std::for_each(containersColor.begin(), containersColor.end(), createPipelineStorage);
 		std::for_each(containers2D.begin(), containers2D.end(), createPipelineStorage);
 		std::for_each(containersCubemap.begin(), containersCubemap.end(), createPipelineStorage);
 	}
 
 	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const {
-		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+			RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+		}
+		else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
@@ -95,7 +100,10 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onColorUpdate(vec4 color, const ecs::RenderPipelineComponent& rpc) const {
-		if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+			RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
+		}
+		else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
 		}
 		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
@@ -113,8 +121,6 @@ namespace mar::graphics {
 		auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 
 		cameraSSBO.bind();
-		cameraSSBO.update<float>(SSBOsGL::ut_u_CameraPos.offset, sizeof(vec3), vec3::value_ptr(camera.getPosition()));
-		cameraSSBO.update<float>(SSBOsGL::ut_u_Model.offset, sizeof(mat4), mat4::value_ptr(camera.getModel()));
 		cameraSSBO.update<float>(SSBOsGL::ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
 	}
 

@@ -37,6 +37,8 @@ namespace mar::graphics {
 		const static inline uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
 		const static inline uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
 
+		const static inline uint32_t maxTransforms{ 32 };
+
 	};
 
 

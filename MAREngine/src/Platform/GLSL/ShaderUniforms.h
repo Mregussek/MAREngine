@@ -57,16 +57,14 @@ namespace mar::platforms {
 
 		// ------------- Camera Uniform Block
 
-		inline static const UniformItem ut_u_Model{ "CameraUniforms.u_Model", 0, sizeof(maths::mat4) };
-		inline static const UniformItem ut_u_MVP{ "CameraUniforms.u_MVP", ut_u_Model.memory, sizeof(maths::mat4) };
-		inline static const UniformItem ut_u_CameraPos{ "CameraUniforms.u_CameraPos", ut_u_Model.memory + ut_u_MVP.memory, sizeof(maths::vec3) };
+		inline static const UniformItem ut_u_MVP{ "CameraUniforms.u_MVP", 0, sizeof(maths::mat4) };
 
-		inline static const UniformBuffer ub_Camera{ "Camera", 0, ut_u_Model.memory + ut_u_MVP.memory + ut_u_CameraPos.memory };
+		inline static const UniformBuffer ub_Camera{ "Camera", 0, ut_u_MVP.memory };
 
 		// ------------ EntityCmp Uniform Block
 
-		inline static const UniformItem ut_u_SeparateTransform{ "components.u_SeparateTransform", 0, 32 * sizeof(maths::mat4) };
-		inline static const UniformItem ut_u_samplerTypes{ "components.u_samplerTypes", ut_u_SeparateTransform.memory, 32 * sizeof(float) };
+		inline static const UniformItem ut_u_SeparateTransform{ "components.u_SeparateTransform", 0, 64 * sizeof(maths::mat4) };
+		inline static const UniformItem ut_u_samplerTypes{ "components.u_samplerTypes", ut_u_SeparateTransform.memory, 64 * sizeof(float) };
 		inline static const UniformBuffer ub_EntityCmp{ "EntityCmp", 1,  ut_u_SeparateTransform.memory + ut_u_samplerTypes.memory };
 
 		// ------------ Material Uniform Block

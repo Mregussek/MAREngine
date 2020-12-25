@@ -51,6 +51,7 @@ namespace mar::graphics {
 
 		// ---- GETTERS for container ---- //
 	
+		const std::vector<RenderContainer>& getColorContainers() const;
 		const std::vector<RenderContainer>& get2Dcontainers() const;
 		const std::vector<RenderContainer>& getCubemapContainers() const;
 		const std::vector<LightContainer>& getLightContainers() const;
@@ -62,12 +63,16 @@ namespace mar::graphics {
 		void setContainerLight(ecs::RenderPipelineComponent& rpc);
 
 		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
+		void submitVertices(const std::vector<Vertex>& vertices, float shapeID);
+		void submitIndices(const std::vector<uint32_t>& indices, uint32_t indicesMax);
+		void submitTransform(const maths::mat4& transform);
+
 		size_t submitColor(int32_t entityIndex, const ecs::ColorComponent& color);
 		size_t submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture);
 		size_t submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
-
+		std::vector<RenderContainer> m_containersColor;
 		std::vector<RenderContainer> m_containers2D;
 		std::vector<RenderContainer> m_containersCubemap;
 		std::vector<LightContainer> m_lights;
