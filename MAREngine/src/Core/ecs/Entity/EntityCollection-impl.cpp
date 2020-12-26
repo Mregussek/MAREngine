@@ -21,7 +21,7 @@
 #include "EntityCollection.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;

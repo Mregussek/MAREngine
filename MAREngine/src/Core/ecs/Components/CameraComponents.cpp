@@ -21,7 +21,7 @@
 #include "CameraComponents.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	bool CameraComponent::checkIfMain() const {

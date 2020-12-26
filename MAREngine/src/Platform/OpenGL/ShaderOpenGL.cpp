@@ -22,7 +22,7 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	// ---- PUBLIC METHODS ---- //

@@ -25,9 +25,11 @@
 #include "../../../mar.h"
 
 
-namespace mar::graphics { class RenderCamera; }
-namespace mar::ecs { class Entity; struct RenderableComponent; }
-namespace mar::editor {
+namespace marengine {
+
+	class RenderCamera;
+	class Entity; 
+	struct RenderableComponent;
 
 
 	class GUI_EntityPanel {
@@ -40,8 +42,8 @@ namespace mar::editor {
 
 		void update(bool isPlayMode) const;
 		
-		void setCurrentEntity(const ecs::Entity& entity);
-		const ecs::Entity& getCurrentEntity() const;
+		void setCurrentEntity(const Entity& entity);
+		const Entity& getCurrentEntity() const;
 
 	private:
 
@@ -59,12 +61,12 @@ namespace mar::editor {
 		void handleLightComponent() const;
 
 		template<typename T>
-		bool Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) const;
+		bool Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) const;
 
 
 		static GUI_EntityPanel* s_instance;
 
-		const ecs::Entity* currentEntity;
+		const Entity* currentEntity;
 		bool m_initialized{ false };
 
 	};

@@ -25,7 +25,7 @@
 #include "Components/Components.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 	
 	int32_t SceneOptimizer::checkIfOBJhasBeenLoaded(const std::string& path, Scene* scene) {

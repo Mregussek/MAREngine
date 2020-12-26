@@ -26,7 +26,7 @@
 #include "ProjectListWindow.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	class ProjectSelectionGUI {

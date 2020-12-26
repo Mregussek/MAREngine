@@ -39,7 +39,7 @@
 #include "GUI_Events.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void GUI_MainMenuBar::initialize() {
@@ -88,7 +88,7 @@ namespace mar::editor {
 				if (ImGui::MenuItem("Open Scene")) { m_loadSceneWindow = true; }
 				if (ImGui::MenuItem("Save Scene")) { m_saveSceneWindow = true; }
 				if (ImGui::MenuItem("Exit")) {
-					window::Window::endRenderLoop();
+					Window::endRenderLoop();
 				}
 
 				ImGui::EndMenu();
@@ -101,7 +101,7 @@ namespace mar::editor {
 				const bool entityExists = &currentEntity != nullptr;
 
 				if (entityExists) {
-					const char* shortcut = currentEntity.getComponent<ecs::TagComponent>().tag.c_str();
+					const char* shortcut = currentEntity.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
 						GUI_Events::Instance()->onEntityCopied(m_sceneManager, currentEntity);
 					}
@@ -111,7 +111,7 @@ namespace mar::editor {
 				const bool collectionExists = &currentCollection != nullptr;
 				
 				if (collectionExists && !entityExists) {
-					const char* shortcut = currentCollection.getComponent<ecs::TagComponent>().tag.c_str();
+					const char* shortcut = currentCollection.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
 						GUI_Events::Instance()->onEntityCollectionCopied(m_sceneManager, currentCollection);
 					}
@@ -128,7 +128,7 @@ namespace mar::editor {
 			}
 
 			if (ImGui::MenuItem("Exit")) {
-				window::Window::endRenderLoop();
+				Window::endRenderLoop();
 			}
 
 			ImGui::EndMainMenuBar();
@@ -137,7 +137,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: pushing main menu bar");
 	}
 
-	void GUI_MainMenuBar::setSceneManager(ecs::SceneManager* manager) {
+	void GUI_MainMenuBar::setSceneManager(SceneManager* manager) {
 		m_sceneManager = manager;
 	}
 

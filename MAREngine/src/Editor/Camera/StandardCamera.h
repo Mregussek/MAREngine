@@ -25,16 +25,13 @@
 #include "../../mar.h"
 
 
-namespace mar::window { class Window; }
-namespace mar::editor {
+namespace marengine {
 
+	class Window;
 	class Camera;
 
 
 	class StandardCamera {
-
-		typedef window::Window Window;
-
 	public:
 
 		bool processFrame(Camera* camera, float deltaTime) const;

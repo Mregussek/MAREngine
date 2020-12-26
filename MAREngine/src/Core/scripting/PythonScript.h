@@ -24,12 +24,11 @@
 
 #include "../../mar.h"
 
-namespace mar::ecs {
-    class Entity;
-}
-namespace mar::scripting {
+
+namespace marengine {
 
     namespace py = pybind11;
+    class Entity;
     
 
     class PythonScript {
@@ -39,9 +38,9 @@ namespace mar::scripting {
 
         void loadScript(std::string path_to_script);
 
-        void start(const ecs::Entity& entity) const;
+        void start(const Entity& entity) const;
 
-        void update(const ecs::Entity& entity) const;
+        void update(const Entity& entity) const;
 
         static void appendCurrentPath();
 

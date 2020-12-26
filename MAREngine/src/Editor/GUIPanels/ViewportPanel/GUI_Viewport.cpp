@@ -28,7 +28,7 @@
 #include "GUI_Guizmo.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void GUI_Viewport::initialize() {
@@ -39,14 +39,14 @@ namespace mar::editor {
 
 		m_camera.initialize(m_aspectRatio);
 
-		ecs::SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
+		SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
 	}
 
 	void GUI_Viewport::close() {
 		m_framebuffer.close();
 	}
 
-	void GUI_Viewport::display(ecs::SceneManager* sceneManager, const ecs::EntityCollection& currentCollection, const ecs::Entity& currentEntity) {
+	void GUI_Viewport::display(SceneManager* sceneManager, const EntityCollection& currentCollection, const Entity& currentEntity) {
 		ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
 		
 		displayMainMenuBar(sceneManager);
@@ -73,7 +73,7 @@ namespace mar::editor {
 				bool useInputInCamera = false;
 				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
 				if (m_camera.update(m_aspectRatio, useInputInCamera)) {
-					graphics::RenderEvents::Instance().onMainCameraUpdate(*m_camera.getCameraData());
+					RenderEvents::Instance().onMainCameraUpdate(*m_camera.getCameraData());
 				}
 			}
 		}
@@ -85,16 +85,16 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: Displaying viewport");
 	}
 
-	void GUI_Viewport::displayMainMenuBar(ecs::SceneManager* sceneManager) {
+	void GUI_Viewport::displayMainMenuBar(SceneManager* sceneManager) {
 		auto displayEditorModeButtons = [&sceneManager, &camera = std::as_const(m_camera)]() {
 			if (ImGui::Button("PLAY")) { sceneManager->setPlayMode(); }
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
 					if (sceneManager->useEditorCamera) {
-						ecs::SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
+						SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
 					}
 					else {
-						ecs::SceneEvents::Instance().onGameCameraSet();
+						SceneEvents::Instance().onGameCameraSet();
 					}
 				}
 			}
@@ -104,7 +104,7 @@ namespace mar::editor {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
-					ecs::SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
+					SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
 				}
 			}
 

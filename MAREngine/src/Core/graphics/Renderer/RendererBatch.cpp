@@ -31,7 +31,7 @@
 #include "../../../Platform/GLSL/ShaderUniforms.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	void RendererBatch::initialize() {
@@ -45,36 +45,36 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shader storage buffers...");
 
 		{ // setup Camera SSBO
-			const std::vector<platforms::UniformItem> cameraItems{ SSBOsGL::ut_u_MVP };
+			const std::vector<UniformItem> cameraItems{ GLSL_SSBOs::ut_u_MVP };
 
 			auto& camera = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
-			camera.initialize(SSBOsGL::ub_Camera, cameraItems);
+			camera.initialize(GLSL_SSBOs::ub_Camera, cameraItems);
 		}
 
 		{ // setup EntityCmp SSBO
 			auto& entityCmp = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<platforms::UniformItem> entitycmpItems{ 
-				SSBOsGL::ut_u_SeparateTransform, SSBOsGL::ut_u_samplerTypes
+			std::vector<UniformItem> entitycmpItems{ 
+				GLSL_SSBOs::ut_u_SeparateTransform, GLSL_SSBOs::ut_u_samplerTypes
 			};
 
-			entityCmp.initialize(SSBOsGL::ub_EntityCmp, std::move(entitycmpItems));
+			entityCmp.initialize(GLSL_SSBOs::ub_EntityCmp, std::move(entitycmpItems));
 		}
 
 		{ // setup Material SSBO
 			auto& material = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<platforms::UniformItem> materialItems{ 
-				SSBOsGL::ut_u_material, SSBOsGL::ut_u_lightSize 
+			std::vector<UniformItem> materialItems{ 
+				GLSL_SSBOs::ut_u_material, GLSL_SSBOs::ut_u_lightSize
 			};
 
-			material.initialize(SSBOsGL::ub_Material, std::move(materialItems));
+			material.initialize(GLSL_SSBOs::ub_Material, std::move(materialItems));
 		}
 
 		{ // setup TextureSmaplers SSBO
 			auto& textureSamplers = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<platforms::UniformItem> textureSamplersItems{ SSBOsGL::ut_u_Color };
+			std::vector<UniformItem> textureSamplersItems{ GLSL_SSBOs::ut_u_Color };
 
-			textureSamplers.initialize(SSBOsGL::ub_TextureSamplers, std::move(textureSamplersItems));
+			textureSamplers.initialize(GLSL_SSBOs::ub_TextureSamplers, std::move(textureSamplersItems));
 		}
 	}
 
@@ -84,10 +84,10 @@ namespace mar::graphics {
 		const char* vert = "resources/shaders/batcher.vert.glsl";
 		{
 			const char* frag = "resources/shaders/texture2d.frag.glsl";
-			const platforms::ShaderPaths shaderPaths(vert, frag, nullptr);
+			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
 			m_shader2D.initialize(shaderPaths);
-			m_shader2D.setupShaderUniforms(SSBOsGL::u_2D);
+			m_shader2D.setupShaderUniforms(GLSL_SSBOs::u_2D);
 		}
 	}
 
@@ -95,7 +95,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
 		m_shader2D.shutdown();
-		platforms::TextureOpenGL::Instance()->shutdown();
+		TextureOpenGL::Instance()->shutdown();
 
 		GRAPHICS_INFO("RENDERER_BATCH: closed!");
 	}
@@ -130,7 +130,7 @@ namespace mar::graphics {
 			for (const auto& light : lights) {
 				passLightToSSBO(light.getLightMaterials());
 
-				platforms::DrawingOpenGL::drawTriangles(container.getIndices().size());
+				DrawingOpenGL::drawTriangles(container.getIndices().size());
 
 				RenderEvents::Instance().onDrawCall();
 			}
@@ -143,21 +143,19 @@ namespace mar::graphics {
 		const auto& transforms = container.getTransforms();
 		const auto& samplerTypes = container.getSamplerTypes();
 
-		const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(SSBOsGL::ub_EntityCmp);
+		const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
 
 		entityShaderBuffer.bind();
-		entityShaderBuffer.update<float>(SSBOsGL::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-		entityShaderBuffer.update<float>(SSBOsGL::ut_u_samplerTypes.offset, samplerTypes.size() * sizeof(float), samplerTypes);
+		entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+		entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_samplerTypes.offset, samplerTypes.size() * sizeof(float), samplerTypes);
 	}
 
 	void RendererBatch::passColorsToSSBO(const ColorVector& colors) const {
-		using namespace mar::maths;
-
-		const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(SSBOsGL::ub_TextureSamplers);
+		const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_TextureSamplers);
 		textureShaderBuffer.bind();
 
 		std::for_each(colors.cbegin(), colors.cend(), [&textureShaderBuffer](const ColorPair& color) {
-			textureShaderBuffer.update<float>(SSBOsGL::ut_u_Color.offset + color.first * sizeof(vec4), sizeof(vec4), &color.second.x);
+			textureShaderBuffer.update<float>(GLSL_SSBOs::ut_u_Color.offset + color.first * sizeof(maths::vec4), sizeof(maths::vec4), &color.second.x);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");
@@ -171,7 +169,7 @@ namespace mar::graphics {
 			const auto samplerIndex = (uint32_t)texture.first;
 
 			TextureGL::Instance()->bind2D(samplerIndex, textureID);
-			shader.setUniformSampler(SSBOsGL::u_2D[samplerIndex], samplerIndex);
+			shader.setUniformSampler(GLSL_SSBOs::u_2D[samplerIndex], samplerIndex);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
@@ -183,7 +181,7 @@ namespace mar::graphics {
 			const auto samplerIndex = (uint32_t)texture.first;
 
 			TextureGL::Instance()->bindCube(samplerIndex, textureID);
-			shader.setUniformSampler(SSBOsGL::u_Cubemap[samplerIndex], samplerIndex);
+			shader.setUniformSampler(GLSL_SSBOs::u_Cubemap[samplerIndex], samplerIndex);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed texture cubemaps to shader");
@@ -193,12 +191,12 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
 
 		const auto lightSize = (int32_t)lightMaterials.size();
-		const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(SSBOsGL::ub_Material);
+		const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
 
 		lightShaderBuffer.bind();
 
-		lightShaderBuffer.update<float>(SSBOsGL::ut_u_material.offset, sizeof(graphics::LightMaterial) * lightMaterials.size(), &lightMaterials[0].position.x);
-		lightShaderBuffer.update<int32_t>(SSBOsGL::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
+		lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * lightMaterials.size(), &lightMaterials[0].position.x);
+		lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}

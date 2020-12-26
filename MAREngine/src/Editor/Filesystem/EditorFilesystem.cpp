@@ -25,10 +25,10 @@
 #include "Filesystem_Loading.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
-	void Filesystem::saveToFile(ecs::Scene* scene, const char* filename) {
+	void Filesystem::saveToFile(Scene* scene, const char* filename) {
 		const auto& name = scene->getName();
 
 		EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", name, filename);
@@ -47,17 +47,17 @@ namespace mar::editor {
 		MAR_CORE_INFO("FILESYSTEM: scene has been saved!");
 	}
 
-	ecs::Scene* Filesystem::openFile(std::string filename) {
+	Scene* Filesystem::openFile(std::string filename) {
 		EDITOR_INFO("FILESYSTEM: going to load scene from: {}", filename);
 
 		std::ifstream file(filename);
 
 		if (!file.is_open()) {
-			return ecs::Scene::createEmptyScene("EmptySceneNotLoaded");
+			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
 
 		std::string line;
-		ecs::Scene* scene{ nullptr };
+		Scene* scene{ nullptr };
 
 		while (std::getline(file, line)) {
 			if (line.find("#SceneStart") != std::string::npos) {
@@ -65,7 +65,7 @@ namespace mar::editor {
 				std::istringstream is(line.substr(11));
 				std::string name;
 				is >> name;
-				scene = new ecs::Scene(name);
+				scene = new Scene(name);
 				
 				std::getline(file, line);
 				maths::vec3 background;

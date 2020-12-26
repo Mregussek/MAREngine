@@ -22,7 +22,7 @@
 #include "../../Window/Window.h"
 
 
-namespace mar::layers {
+namespace marengine {
 
 
 	RenderLayer::RenderLayer(const char* name) {

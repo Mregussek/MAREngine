@@ -27,7 +27,7 @@
 #include "EntityCollection.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	class EntityContainer {

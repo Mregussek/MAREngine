@@ -26,11 +26,9 @@
 #include "Vertex.h"
 
 
-namespace mar::ecs {
-    class EntityCollection;
-}
+namespace marengine {
 
-namespace mar::graphics {
+    class EntityCollection;
 
 
     class MeshCreator {
@@ -60,7 +58,7 @@ namespace mar::graphics {
             static std::vector<uint32_t> getIndices();
         };
     
-        static void loadOBJ(const std::string& filename, const std::string& path, const ecs::EntityCollection& collection);
+        static void loadOBJ(const std::string& filename, const std::string& path, const EntityCollection& collection);
     };
 
 

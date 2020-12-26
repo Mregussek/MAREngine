@@ -26,7 +26,7 @@
 #include "../Mesh/Vertex.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 	typedef std::pair<int32_t, maths::vec4> ColorPair;
 	typedef std::pair<int32_t, std::string> TexturePair;

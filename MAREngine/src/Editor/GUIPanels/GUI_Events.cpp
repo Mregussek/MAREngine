@@ -27,7 +27,7 @@
 #include "../../Core/ecs/Entity/EntityOperation.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	GUI_Events* GUI_Events::s_instance{ nullptr };
@@ -41,64 +41,64 @@ namespace mar::editor {
 		s_instance = this;
 	}
 
-	void GUI_Events::onEntityCreated(ecs::SceneManager* sceneManager) const {
+	void GUI_Events::onEntityCreated(SceneManager* sceneManager) const {
 		GUI_EntityCollectionPanel::Instance()->reset();
 		GUI_EntityPanel::Instance()->setCurrentEntity(sceneManager->getScene()->createEntity());
 	}
 
-	void GUI_Events::onEntityDeleted(ecs::SceneManager* sceneManager, const ecs::Entity& entity) const {
+	void GUI_Events::onEntityDeleted(SceneManager* sceneManager, const Entity& entity) const {
 		sceneManager->getScene()->destroyEntity(entity);
 		GUI_EntityPanel::Instance()->reset();
-		ecs::SceneEvents::Instance().onEntityRemove();
+		SceneEvents::Instance().onEntityRemove();
 	}
 
-	void GUI_Events::onEntitySelected(const ecs::Entity& entity) const {
+	void GUI_Events::onEntitySelected(const Entity& entity) const {
 		GUI_EntityCollectionPanel::Instance()->reset();
 		GUI_EntityPanel::Instance()->setCurrentEntity(entity);
 	}
 
-	void GUI_Events::onEntityCopied(ecs::SceneManager* sceneManager, const ecs::Entity& entityToCopy) const {
+	void GUI_Events::onEntityCopied(SceneManager* sceneManager, const Entity& entityToCopy) const {
 		const auto& entity = sceneManager->getScene()->createEntity();
-		ecs::EntityOperation::copyEntity(entityToCopy, entity);
+		EntityOperation::copyEntity(entityToCopy, entity);
 
 		onEntitySelected(entity);
-		ecs::SceneEvents::Instance().onEntityCopy(entity);
+		SceneEvents::Instance().onEntityCopy(entity);
 	}
 
-	void GUI_Events::onEntityCollectionCreated(ecs::SceneManager* sceneManager) const {
+	void GUI_Events::onEntityCollectionCreated(SceneManager* sceneManager) const {
 		GUI_EntityPanel::Instance()->reset();
 		GUI_EntityCollectionPanel::Instance()->setCurrentCollection(sceneManager->getScene()->createCollection());
 	}
 
-	void GUI_Events::onEntityCollectionDeleted(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collection) const {
+	void GUI_Events::onEntityCollectionDeleted(SceneManager* sceneManager, const EntityCollection& collection) const {
 		sceneManager->getScene()->destroyCollection(collection);
 		GUI_EntityCollectionPanel::Instance()->reset();
 		GUI_EntityPanel::Instance()->reset();
-		ecs::SceneEvents::Instance().onCollectionRemove();
+		SceneEvents::Instance().onCollectionRemove();
 	}
 
-	void GUI_Events::onEntityCollectionSelected(const ecs::EntityCollection& collection) const {
+	void GUI_Events::onEntityCollectionSelected(const EntityCollection& collection) const {
 		GUI_EntityPanel::Instance()->reset();
 		GUI_EntityCollectionPanel::Instance()->setCurrentCollection(collection);
 	}
 
-	void GUI_Events::onEntityCollectionCopied(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collectionToCopy) const {
+	void GUI_Events::onEntityCollectionCopied(SceneManager* sceneManager, const EntityCollection& collectionToCopy) const {
 		const auto& collection = sceneManager->getScene()->createCollection();
-		ecs::EntityOperation::copyCollection(collectionToCopy, collection);
+		EntityOperation::copyCollection(collectionToCopy, collection);
 
 		onEntityCollectionSelected(collection);
-		ecs::SceneEvents::Instance().onCollectionCopy(collection);
+		SceneEvents::Instance().onCollectionCopy(collection);
 	}
 
-	void GUI_Events::onEntityCreatedAtCollection(const ecs::EntityCollection& collection) const {
+	void GUI_Events::onEntityCreatedAtCollection(const EntityCollection& collection) const {
 		const auto& createdEntity = collection.createEntity();
 		GUI_EntityPanel::Instance()->setCurrentEntity(createdEntity);
 	}
 
-	void GUI_Events::onEntityDeletedFromCollection(const ecs::EntityCollection& collection, const ecs::Entity& entity) const {
+	void GUI_Events::onEntityDeletedFromCollection(const EntityCollection& collection, const Entity& entity) const {
 		collection.destroyEntity(entity);
 		GUI_EntityPanel::Instance()->reset();
-		ecs::SceneEvents::Instance().onEntityRemove();
+		SceneEvents::Instance().onEntityRemove();
 	}
 
 

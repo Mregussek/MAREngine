@@ -27,8 +27,9 @@
 #include "../../Core/ecs/SceneManager.h"
 
 
-namespace mar::ecs { class Scene; }
-namespace mar::layers {
+namespace marengine {
+
+	class Scene;
 
 
 	class SceneLayer : public Layer {
@@ -37,8 +38,8 @@ namespace mar::layers {
 		SceneLayer() = default;
 		SceneLayer(const char* debugname);
 		
-		void passSceneToManager(ecs::Scene* scene);
-		ecs::SceneManager* getSceneManager();
+		void passSceneToManager(Scene* scene);
+		SceneManager* getSceneManager();
 
 		// --- OVERRIDED METHODS --- //
 
@@ -48,7 +49,7 @@ namespace mar::layers {
 
 	private:
 
-		ecs::SceneManager m_sceneManager;
+		SceneManager m_sceneManager;
 
 	};
 

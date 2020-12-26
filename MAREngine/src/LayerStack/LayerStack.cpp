@@ -23,7 +23,7 @@
 #include "LayerLogs.h"
 
 
-namespace mar::layers {
+namespace marengine {
 
 
 	LayerStack::LayerStack() { LAYER_INFO("LAYER_STACK: initialized (called default constructor)!"); }

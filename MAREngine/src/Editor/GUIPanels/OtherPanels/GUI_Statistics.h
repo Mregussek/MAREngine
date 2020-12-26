@@ -25,14 +25,15 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs { class Scene; }
-namespace mar::editor {
+namespace marengine {
+
+	class Scene;
 
 
 	class GUI_Statistics {
 	public:
 
-		static void update(const ecs::Scene* scene);
+		static void update(const Scene* scene);
 
 	};
 

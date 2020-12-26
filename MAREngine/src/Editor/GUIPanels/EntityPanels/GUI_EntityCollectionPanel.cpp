@@ -31,7 +31,7 @@
 #include "../../../Window/Window.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	GUI_EntityCollectionPanel* GUI_EntityCollectionPanel::s_instance{ nullptr };
@@ -48,11 +48,11 @@ namespace mar::editor {
 		currentCollection = nullptr;
 	}
 
-	void GUI_EntityCollectionPanel::setCurrentCollection(const ecs::EntityCollection& collection) {
+	void GUI_EntityCollectionPanel::setCurrentCollection(const EntityCollection& collection) {
 		currentCollection = &collection; 
 	}
 
-	const ecs::EntityCollection& GUI_EntityCollectionPanel::getCurrentCollection() const {
+	const EntityCollection& GUI_EntityCollectionPanel::getCurrentCollection() const {
 		return *currentCollection;
 	}
 
@@ -65,7 +65,7 @@ namespace mar::editor {
 			return;
 		}
 
-		auto& tag = currentCollection->getComponent<ecs::TagComponent>();
+		auto& tag = currentCollection->getComponent<TagComponent>();
 		if (ImGui::CollapsingHeader("TagComponent")) {
 			CommonComponentHandler::handleTagComponent(tag);
 		}
@@ -74,7 +74,7 @@ namespace mar::editor {
 			handleTransformComponent();
 		}
 
-		if (currentCollection->hasComponent<ecs::ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
+		if (currentCollection->hasComponent<ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
 			CommonComponentHandler::handleScriptComponent(*currentCollection);
 		}
 
@@ -82,8 +82,8 @@ namespace mar::editor {
 
 		const auto& entities = currentCollection->getEntities();
 
-		auto userSelectedEntity = [](const ecs::Entity& entity) {
-			return ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str());
+		auto userSelectedEntity = [](const Entity& entity) {
+			return ImGui::MenuItem(entity.getComponent<TagComponent>().tag.c_str());
 		};
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
@@ -98,7 +98,7 @@ namespace mar::editor {
 	}
 
 	void GUI_EntityCollectionPanel::handleTransformComponent() const {
-		auto& tran = currentCollection->getComponent<ecs::TransformComponent>();
+		auto& tran = currentCollection->getComponent<TransformComponent>();
 
 		{ // Sliders
 			bool updatedTransform = false;
@@ -114,22 +114,22 @@ namespace mar::editor {
 				const auto diffCenter = lastCenter != tran.center ? tran.center - lastCenter : maths::vec3();
 				const auto diffAngles = lastAngles != tran.angles ? tran.angles - lastAngles : maths::vec3();
 				const auto diffScale =	lastScale != tran.scale ? tran.scale - lastScale : maths::vec3();
-				const ecs::TransformComponent diffTransform{ diffCenter, diffAngles, diffScale };
+				const TransformComponent diffTransform{ diffCenter, diffAngles, diffScale };
 
-				ecs::SceneEvents::Instance().onCollectionTransformUpdate(currentCollection, diffTransform);
+				SceneEvents::Instance().onCollectionTransformUpdate(currentCollection, diffTransform);
 			}
 		}
 
 		{ // Reset to entities 
 			if (ImGui::Button("Reset all entities to collection transform")) {
-				ecs::SceneEvents::Instance().onCollectionTransformReset(currentCollection);
+				SceneEvents::Instance().onCollectionTransformReset(currentCollection);
 			}
 		}
 	}
 
 	void GUI_EntityCollectionPanel::popUpMenu(const char* collection_tag) const {
 		if (ImGui::IsWindowFocused()) {
-			if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("EntityCollectionPopUp");
 			}
 		}
@@ -142,20 +142,20 @@ namespace mar::editor {
 				GUI_EntityPanel::Instance()->setCurrentEntity(currentCollection->createEntity());
 			}
 
-			if (!currentCollection->hasComponent<ecs::ScriptComponent>()) {
+			if (!currentCollection->hasComponent<ScriptComponent>()) {
 				if (ImGui::MenuItem("Add ScriptComponent")) {
-					currentCollection->addComponent<ecs::ScriptComponent>();
-					ecs::SceneEvents::Instance().onScriptAdd();
+					currentCollection->addComponent<ScriptComponent>();
+					SceneEvents::Instance().onScriptAdd();
 				}
 			}
 
 			if (selectedEntityExists) {
-				const std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
+				const std::string delete_message = "Delete entity " + entity.getComponent<TagComponent>().tag + " from selected collection";
 				if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 					currentCollection->destroyEntity(GUI_EntityPanel::Instance()->getCurrentEntity());
 					GUI_EntityPanel::Instance()->reset();
 					GUI_TextEditor::Instance()->reset();
-					ecs::SceneEvents::Instance().onEntityRemove();
+					SceneEvents::Instance().onEntityRemove();
 				}
 			}
 		

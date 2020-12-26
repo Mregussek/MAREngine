@@ -21,7 +21,7 @@
 #include "RenderMemorizer.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	RenderMemorizer* RenderMemorizer::Instance{ nullptr };

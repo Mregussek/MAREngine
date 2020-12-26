@@ -22,7 +22,7 @@
 #include "../LayerLogs.h"
 
 
-namespace mar::layers {
+namespace marengine {
 
 
 	EditorLayer::EditorLayer(const char* name) {
@@ -53,7 +53,7 @@ namespace mar::layers {
 		m_gui.renderToViewport();
 	}
 
-	void EditorLayer::submit(ecs::SceneManager* manager) {
+	void EditorLayer::submit(SceneManager* manager) {
 		LAYER_TRACE("EDITOR_LAYER: submitting scene manager to {}", p_debugName);
 
 		m_gui.submit(manager);

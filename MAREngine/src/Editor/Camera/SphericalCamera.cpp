@@ -23,15 +23,15 @@
 #include "../../Window/Window.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	bool SphericalCamera::processFrame(Camera* camera, float deltaTime) {
         bool userRotatedCamera = false;
 
-        if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_3)) {
-            const float posX = window::Window::getMousePositionX();
-            const float posY = window::Window::getMousePositionY();
+        if (Window::isMousePressed(MAR_MOUSE_BUTTON_3)) {
+            const float posX = Window::getMousePositionX();
+            const float posY = Window::getMousePositionY();
 
             std::cout << posX << ", " << posY << "\n";
 

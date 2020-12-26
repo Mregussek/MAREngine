@@ -26,7 +26,7 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	class SetupOpenGL {

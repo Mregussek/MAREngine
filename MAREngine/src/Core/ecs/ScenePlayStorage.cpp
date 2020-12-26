@@ -23,7 +23,7 @@
 #include "Entity/EntityCollection.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	template<typename T>

@@ -22,7 +22,7 @@
 #include "../../EditorLogging.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	bool GUI_Info::InfoWindow() {

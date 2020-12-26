@@ -32,14 +32,14 @@
 #include "GUIPanels/OtherPanels/GUI_Statistics.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void GUI::initialize(const char* glslVersion) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
 
-		window::Window::imguiInit();
+		Window::imguiInit();
 		ImGui_ImplOpenGL3_Init(glslVersion);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -61,14 +61,14 @@ namespace mar::editor {
 
 		ImGui_ImplOpenGL3_Shutdown();
 
-		window::Window::imguiTerminate();
+		Window::imguiTerminate();
 
 		ImGui::DestroyContext();
 
 		EDITOR_INFO("GUI: closed properly!");
 	}
 
-	void GUI::submit(ecs::SceneManager* scene) {
+	void GUI::submit(SceneManager* scene) {
 		m_sceneManager = scene;
 		m_sceneManager->useEditorCamera = true;
 		m_mainMenuBar.setSceneManager(m_sceneManager);
@@ -88,11 +88,11 @@ namespace mar::editor {
 		m_viewport.bind(m_sceneManager->getScene()->getBackground());
 	}
 
-	const ecs::Entity& GUI::getCurrentEntity() const {
+	const Entity& GUI::getCurrentEntity() const {
 		return m_entityPanel.getCurrentEntity();
 	}
 
-	const ecs::EntityCollection& GUI::getCurrentCollection() const {
+	const EntityCollection& GUI::getCurrentCollection() const {
 		return m_collectionPanel.getCurrentCollection();
 	}
 
@@ -107,7 +107,7 @@ namespace mar::editor {
 
 		ImGui_ImplOpenGL3_NewFrame();
 
-		window::Window::imguiNewFrame();
+		Window::imguiNewFrame();
 		
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();

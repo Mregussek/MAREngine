@@ -25,19 +25,22 @@
 #include "../../mar.h"
 
 
-namespace mar::ecs {
-	class Scene; class EntityCollection; class Entity;	/* forward declarations */
-}
+namespace marengine {
 
-namespace mar::editor {
+	class Scene; 
+	class EntityCollection; 
+	class Entity;
 
 
 	class Filesystem_Loading {
 	public:
 
-		static void loadScene(std::ifstream& file, ecs::Scene* scene);
-		static void loadEntity(std::ifstream& file, ecs::Scene* scene, const ecs::Entity& entity);
-		static void loadCollection(std::ifstream& file, ecs::Scene* scene, const ecs::EntityCollection& collection);
+		static void loadScene(std::ifstream& file, Scene* scene);
+
+	private:
+
+		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
+		static void loadCollection(std::ifstream& file, Scene* scene, const EntityCollection& collection);
 
 	};
 

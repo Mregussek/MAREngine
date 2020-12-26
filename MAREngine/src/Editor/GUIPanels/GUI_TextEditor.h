@@ -26,7 +26,7 @@
 #include "../../Core/ecs/Entity/Entity.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	class GUI_TextEditor {

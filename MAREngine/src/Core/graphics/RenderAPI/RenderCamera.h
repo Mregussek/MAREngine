@@ -25,11 +25,10 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs {
+namespace marengine {
+
 	struct TransformComponent;
 	struct CameraComponent;
-}
-namespace mar::graphics {
 
 
 	class RenderCamera{
@@ -44,27 +43,27 @@ namespace mar::graphics {
 
 		void calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane);
 		void calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane);
-		void calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up);
-		void calculateModel(maths::vec3 arg);
+		void calculateView(vec3 position, vec3 lookAt, vec3 up);
+		void calculateModel(vec3 arg);
 		void recalculateMVP();
 
-		void calculateCameraTransforms(const ecs::TransformComponent& transform, const ecs::CameraComponent& camera);
+		void calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera);
 
-		const maths::mat4& getProjection() const { return m_projection; }
-		const maths::mat4& getView() const { return m_view; }
-		const maths::mat4& getModel() const { return m_model; }
-		const maths::mat4& getMVP() const { return m_mvp; }
-		const maths::vec3& getPosition() const { return m_position; }
+		const mat4& getProjection() const { return m_projection; }
+		const mat4& getView() const { return m_view; }
+		const mat4& getModel() const { return m_model; }
+		const mat4& getMVP() const { return m_mvp; }
+		const vec3& getPosition() const { return m_position; }
 
 	private:
 
-		maths::mat4 m_model;
-		maths::mat4 m_view;
-		maths::mat4 m_projection;
+		mat4 m_model;
+		mat4 m_view;
+		mat4 m_projection;
 		
-		maths::mat4 m_mvp;
+		mat4 m_mvp;
 
-		maths::vec3 m_position;
+		vec3 m_position;
 	};
 
 

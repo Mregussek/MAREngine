@@ -28,8 +28,11 @@
 #include "../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
-namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; }
-namespace mar::editor {
+namespace marengine {
+
+	class SceneManager; 
+	class Entity; 
+	class EntityCollection;
 
 
 	class GUI_Viewport {
@@ -38,7 +41,7 @@ namespace mar::editor {
 		void initialize();
 		void close();
 
-		void display(ecs::SceneManager* sceneManager, const ecs::EntityCollection& currentCollection, const ecs::Entity& currentEntity);
+		void display(SceneManager* sceneManager, const EntityCollection& currentCollection, const Entity& currentEntity);
 
 		void bind(maths::vec3 backgroundColor) const;
 		void unbind() const;
@@ -47,10 +50,10 @@ namespace mar::editor {
 
 	private:
 
-		void displayMainMenuBar(ecs::SceneManager* sceneManager);
+		void displayMainMenuBar(SceneManager* sceneManager);
 		void displayActualViewport();
 
-		platforms::FramebufferOpenGL m_framebuffer;
+		FramebufferOpenGL m_framebuffer;
 		Camera m_camera;
 		float m_aspectRatio{ 1.33f };
 		GUI_Guizmo m_guizmo;

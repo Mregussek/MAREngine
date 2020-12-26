@@ -26,7 +26,7 @@
 #include "../../ecs/Components/Components.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
     std::vector<Vertex> MeshCreator::Cube::getVertices() {
@@ -123,7 +123,7 @@ namespace mar::graphics {
         };
     }
     
-    void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const ecs::EntityCollection& collection) {
+    void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const EntityCollection& collection) {
         loader_obj::Loader Loader{};
         const bool loadout{ Loader.LoadFile(path) };
     
@@ -136,9 +136,9 @@ namespace mar::graphics {
 
         auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
             const auto& entity = collection.createEntity();
-            auto& tag = entity.getComponent<ecs::TagComponent>();
-            auto& renderable = entity.addComponent<ecs::RenderableComponent>();
-            entity.addComponent<ecs::ColorComponent>();
+            auto& tag = entity.getComponent<TagComponent>();
+            auto& renderable = entity.addComponent<RenderableComponent>();
+            entity.addComponent<ColorComponent>();
 
             tag.tag = [&mesh, &filename]()->std::string {
                 if (mesh.MeshName.empty()) { return filename; }
@@ -152,9 +152,9 @@ namespace mar::graphics {
 
         std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
 
-        auto& tag{ collection.getComponent<ecs::TagComponent>() };
+        auto& tag{ collection.getComponent<TagComponent>() };
         tag.tag = filename;
-        auto& crc{ collection.addComponent<ecs::CollectionRenderableComponent>(path, Loader.LoadedMeshes.size()) };
+        auto& crc{ collection.addComponent<CollectionRenderableComponent>(path, Loader.LoadedMeshes.size()) };
     }
 
 

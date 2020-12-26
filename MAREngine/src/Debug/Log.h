@@ -28,10 +28,11 @@
 #ifdef MAR_ENGINE_DEBUG_MODE
 
 
-namespace mar::debug {
+namespace marengine {
 
 
 	class Log {
+
 		static bool s_initialized;
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 
@@ -83,14 +84,14 @@ namespace mar::debug {
 }
 
 
-    #define MAR_LOG_INIT() ::mar::debug::Log::init()
+    #define MAR_LOG_INIT() ::marengine::Log::init()
     
-    #define MAR_CORE_TRACE(...) ::mar::debug::Log::getCoreLogger()->trace(__VA_ARGS__)
-    #define MAR_CORE_INFO(...)  ::mar::debug::Log::getCoreLogger()->info(__VA_ARGS__)
-    #define MAR_CORE_WARN(...)  ::mar::debug::Log::getCoreLogger()->warn(__VA_ARGS__)
-    #define MAR_CORE_ERROR(...) ::mar::debug::Log::getCoreLogger()->error(__VA_ARGS__)
+    #define MAR_CORE_TRACE(...) ::marengine::Log::getCoreLogger()->trace(__VA_ARGS__)
+    #define MAR_CORE_INFO(...)  ::marengine::Log::getCoreLogger()->info(__VA_ARGS__)
+    #define MAR_CORE_WARN(...)  ::marengine::Log::getCoreLogger()->warn(__VA_ARGS__)
+    #define MAR_CORE_ERROR(...) ::marengine::Log::getCoreLogger()->error(__VA_ARGS__)
     
-    #define MAR_CORE_CHECK_FOR_ERROR()  ::mar::debug::Log::CheckGLError(__FILE__, __LINE__) 
+    #define MAR_CORE_CHECK_FOR_ERROR()  ::marengine::Log::CheckGLError(__FILE__, __LINE__) 
     
     #define ASSERT_NO_MSG(x) if(!(x)) __debugbreak()
 
@@ -99,9 +100,9 @@ namespace mar::debug {
                            
     #define MAR_CORE_ASSERT(x, ...) ASSERT(x, __VA_ARGS__)
     
-    #define MAR_CORE_GL_FUNC(x) ::mar::debug::Log::clearError();\
+    #define MAR_CORE_GL_FUNC(x) ::marengine::Log::clearError();\
                                 x;\
-                                ASSERT_NO_MSG(::mar::debug::Log::checkForOpenGLError(#x, __FILE__, __LINE__))
+                                ASSERT_NO_MSG(::marengine::Log::checkForOpenGLError(#x, __FILE__, __LINE__))
 
 #else
 

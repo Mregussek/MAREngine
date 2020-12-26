@@ -27,7 +27,7 @@
 #include "buttons_def.h"
 
 
-namespace mar::window {
+namespace marengine {
 
 
 	class Window {

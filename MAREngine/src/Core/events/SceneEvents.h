@@ -25,9 +25,9 @@
 #include "../../mar.h"
 
 
-namespace mar::graphics { class RenderCamera; }
-namespace mar::ecs {
+namespace marengine {
 
+	class RenderCamera;
 	class Entity; 
 	class EntityCollection;
 	class SceneManager;
@@ -72,7 +72,7 @@ namespace mar::ecs {
 		void onScriptUpdate(const Entity* e) const;
 		void onScriptRemove() const;
 
-		void onEditorCameraSet(const graphics::RenderCamera* camera) const;
+		void onEditorCameraSet(const RenderCamera* camera) const;
 		void onGameCameraSet() const;
 
 		void onEntityCopy(const Entity& entity) const;

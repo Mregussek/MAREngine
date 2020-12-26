@@ -25,13 +25,10 @@
 #include "MAREngine/MAREngine.h"
 
 
-namespace mar {
+namespace marengine {
 
 
 	class SandboxMAR {
-
-		typedef engine::MAREngine MAREngine;
-
 	public:
 
 		SandboxMAR() = default;

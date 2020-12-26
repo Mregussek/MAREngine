@@ -27,10 +27,10 @@
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
-	void CommonComponentHandler::handleTagComponent(ecs::TagComponent& tag) {
+	void CommonComponentHandler::handleTagComponent(TagComponent& tag) {
 		constexpr size_t inputSize = 50;
 		static char collectionName[inputSize]{ "" };
 
@@ -42,29 +42,29 @@ namespace mar::editor {
 		}
 	}
 
-	void CommonComponentHandler::handleScriptComponent(const ecs::Entity& entity) {
+	void CommonComponentHandler::handleScriptComponent(const Entity& entity) {
 		if (ImGui::MenuItem("Remove Script")) {
-			entity.removeComponent<ecs::ScriptComponent>();
+			entity.removeComponent<ScriptComponent>();
 			GUI_TextEditor::Instance()->reset();
 			return;
 		}
 
-		auto& script = entity.getComponent<ecs::ScriptComponent>();
+		auto& script = entity.getComponent<ScriptComponent>();
 		handleScriptComponent(script);
 	}
 
-	void CommonComponentHandler::handleScriptComponent(const ecs::EntityCollection& collection) {
+	void CommonComponentHandler::handleScriptComponent(const EntityCollection& collection) {
 		if (ImGui::MenuItem("Remove Script")) {
-			collection.removeComponent<ecs::ScriptComponent>();
+			collection.removeComponent<ScriptComponent>();
 			GUI_TextEditor::Instance()->reset();
 			return;
 		}
 
-		auto& script = collection.getComponent<ecs::ScriptComponent>();
+		auto& script = collection.getComponent<ScriptComponent>();
 		handleScriptComponent(script);
 	}
 
-	void CommonComponentHandler::handleScriptComponent(ecs::ScriptComponent& script) {
+	void CommonComponentHandler::handleScriptComponent(ScriptComponent& script) {
 		ImGui::Text("Current script: %s", script.script.c_str());
 
 		if (ImGui::Button("Create new script")) { GUI_TextEditor::Instance()->setCreatingNewScript(); }

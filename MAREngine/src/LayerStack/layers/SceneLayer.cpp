@@ -24,14 +24,14 @@
 #include "../../Core/events/SceneEvents.h"
 
 
-namespace mar::layers {
+namespace marengine {
 
 
 	SceneLayer::SceneLayer(const char* debugname) {
 		p_debugName = debugname;
 	}
 	
-	void SceneLayer::passSceneToManager(ecs::Scene* scene) {
+	void SceneLayer::passSceneToManager(Scene* scene) {
 		LAYER_TRACE("SCENE_LAYER: passing to Scene to SceneManager in {}!", p_debugName);
 
 		m_sceneManager.setScene(scene);
@@ -40,14 +40,14 @@ namespace mar::layers {
 	void SceneLayer::initialize() {
 		LAYER_TRACE("SCENE_LAYER: {} going to initialize...", p_debugName);
 
-		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
+		SceneEvents::Instance().setSceneManager(m_sceneManager);
 		m_sceneManager.initialize();
 	}
 
 	void SceneLayer::update() {
 		LAYER_TRACE("SCENE_LAYER: {} going to update...", p_debugName);
 
-		ecs::SceneEvents::Instance().setSceneManager(m_sceneManager);
+		SceneEvents::Instance().setSceneManager(m_sceneManager);
 		m_sceneManager.update();
 	}
 
@@ -57,7 +57,7 @@ namespace mar::layers {
 		m_sceneManager.shutdown();
 	}
 
-	ecs::SceneManager* SceneLayer::getSceneManager() {
+	SceneManager* SceneLayer::getSceneManager() {
 		return &m_sceneManager; 
 	}
 

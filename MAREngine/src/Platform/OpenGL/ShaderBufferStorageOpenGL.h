@@ -27,13 +27,14 @@
 #include "../GLSL/ShaderUniforms.h"
 
 
-namespace mar::graphics { class ShaderBufferStorage; }
-namespace mar::platforms {
+namespace marengine {
+
+	class ShaderBufferStorage;
 
 
 	class ShaderBufferStorageOpenGL {
 
-		friend class graphics::ShaderBufferStorage;
+		friend class ShaderBufferStorage;
 
 	public:
 

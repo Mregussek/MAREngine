@@ -35,10 +35,10 @@
 #include "../../EditorLogging.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
-	void GUI_SceneHierarchy::update(ecs::SceneManager* manager) {
+	void GUI_SceneHierarchy::update(SceneManager* manager) {
 		ImGui::Begin("Scene Hierarchy");
 
 		buttonsAtPanel(manager);
@@ -48,8 +48,8 @@ namespace mar::editor {
 
 		const auto& entities = manager->getScene()->getEntities();
 
-		auto userSelectedEntity = [](const ecs::Entity& entity) {
-			return ImGui::MenuItem(entity.getComponent<ecs::TagComponent>().tag.c_str());
+		auto userSelectedEntity = [](const Entity& entity) {
+			return ImGui::MenuItem(entity.getComponent<TagComponent>().tag.c_str());
 		};
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
@@ -59,8 +59,8 @@ namespace mar::editor {
 
 		const auto& collections = manager->getScene()->getCollections();
 
-		auto userSelectedCollection = [](const ecs::EntityCollection& collection) {
-			return ImGui::MenuItem(collection.getComponent<ecs::TagComponent>().tag.c_str());
+		auto userSelectedCollection = [](const EntityCollection& collection) {
+			return ImGui::MenuItem(collection.getComponent<TagComponent>().tag.c_str());
 		};
 
 		const auto itCollection = std::find_if(collections.cbegin(), collections.cend(), userSelectedCollection);
@@ -75,7 +75,7 @@ namespace mar::editor {
 		EDITOR_TRACE("GUI: scene_hierarchy");
 	}
 
-	void GUI_SceneHierarchy::buttonsAtPanel(ecs::SceneManager* manager) {
+	void GUI_SceneHierarchy::buttonsAtPanel(SceneManager* manager) {
 		if (ImGui::Button("+ E")) {
 			GUI_Events::Instance()->onEntityCreated(manager);
 		}
@@ -130,14 +130,14 @@ namespace mar::editor {
 		}
 	}
 
-	void GUI_SceneHierarchy::popUpMenu(ecs::SceneManager* manager) {
+	void GUI_SceneHierarchy::popUpMenu(SceneManager* manager) {
 		if (manager->isPlayMode()) {
 			EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
 			return;
 		}
 
 		if (ImGui::IsWindowFocused()) {
-			if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneHierarchyPopUp");
 			}
 		}
@@ -160,7 +160,7 @@ namespace mar::editor {
 			const bool entityExists = &entity != nullptr;
 
 			if (collectionExists) {
-				const char* collection_tag = collection.getComponent<ecs::TagComponent>().tag.c_str();
+				const char* collection_tag = collection.getComponent<TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
 					GUI_Events::Instance()->onEntityCreatedAtCollection(collection);
 				}
@@ -170,7 +170,7 @@ namespace mar::editor {
 				}
 				
 				if (entityExists) {
-					const std::string delete_message = "Delete entity " + entity.getComponent<ecs::TagComponent>().tag + " from selected collection";
+					const std::string delete_message = "Delete entity " + entity.getComponent<TagComponent>().tag + " from selected collection";
 					if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
 						GUI_Events::Instance()->onEntityDeletedFromCollection(collection, entity);
 					}
@@ -178,7 +178,7 @@ namespace mar::editor {
 			}
 			else if (entityExists) {
 
-				const char* entity_tag = entity.getComponent<ecs::TagComponent>().tag.c_str();
+				const char* entity_tag = entity.getComponent<TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
 					GUI_Events::Instance()->onEntityDeleted(manager, entity);
 				}

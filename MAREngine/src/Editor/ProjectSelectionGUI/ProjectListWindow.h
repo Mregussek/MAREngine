@@ -26,7 +26,7 @@
 #include "ProjectSelectionFilesystem.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	class ProjectListWindow {

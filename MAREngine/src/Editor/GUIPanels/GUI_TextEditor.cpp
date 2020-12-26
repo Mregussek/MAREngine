@@ -24,7 +24,7 @@
 #include "../../Engine.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	GUI_TextEditor* GUI_TextEditor::s_instance{ nullptr };
@@ -138,7 +138,7 @@ namespace mar::editor {
 	void GUI_TextEditor::createNewScriptWindow() {
 		ImGui::Begin("Create New Script");
 
-		const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
+		const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
 		static char moduleName[50]{ "empty" };
 
 		ImGui::InputText(".py", moduleName, 50);
@@ -164,7 +164,7 @@ namespace mar::editor {
 	void GUI_TextEditor::openScriptWindow() {
 		ImGui::Begin("Open Script Menu");
 
-		const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
+		const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
 		static char moduleName[50]{ "empty" };
 
 		ImGui::InputText(".py", moduleName, 30);
@@ -221,15 +221,15 @@ namespace mar::editor {
 		m_openScriptWindow = false;
 	}
 
-	void GUI_TextEditor::setPathToSave(std::string s) { 
+	void GUI_TextEditor::setPathToSave(std::string s) {
 		m_pathToSave = std::move(s); 
 	}
 
-	void GUI_TextEditor::setEditorText(std::string s) { 
+	void GUI_TextEditor::setEditorText(std::string s) {
 		editor.SetText(std::move(s)); 
 	}
 
-	void GUI_TextEditor::setEditorTitle(std::string new_title) { 
+	void GUI_TextEditor::setEditorTitle(std::string new_title) {
 		m_title = std::move(new_title); 
 	}
 

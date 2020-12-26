@@ -21,7 +21,7 @@
 #include "Entity.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	Entity::Entity(SceneRegistry* scene) :

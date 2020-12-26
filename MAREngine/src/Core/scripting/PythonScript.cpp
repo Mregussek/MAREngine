@@ -26,7 +26,7 @@
 #include "../ecs/Components/Components.h"
 
 
-namespace mar::scripting {
+namespace marengine {
 
     
     void PythonScript::loadScript(std::string path_to_script) {
@@ -44,25 +44,25 @@ namespace mar::scripting {
         SCRIPTING_INFO("PYTHON_SCRIPT: Loaded script {} from {}", what, from);
     }
     
-    void PythonScript::start(const ecs::Entity& entity) const {
+    void PythonScript::start(const Entity& entity) const {
         if (!m_initialized)
             return;
     
-        const auto& transform = entity.getComponent<ecs::TransformComponent>();
+        const auto& transform = entity.getComponent<TransformComponent>();
         m_module.attr("transform") = transform;
     
-        if (entity.hasComponent<ecs::LightComponent>()) {
-            const auto& light = entity.getComponent<ecs::LightComponent>();
+        if (entity.hasComponent<LightComponent>()) {
+            const auto& light = entity.getComponent<LightComponent>();
             m_module.attr("light") = light;
         }
     
-        if (entity.hasComponent<ecs::CameraComponent>()) {
-            const auto& camera = entity.getComponent<ecs::CameraComponent>();
+        if (entity.hasComponent<CameraComponent>()) {
+            const auto& camera = entity.getComponent<CameraComponent>();
             m_module.attr("camera") = camera;
         }
     
-        if (entity.hasComponent<ecs::ColorComponent>()) {
-            const auto& color = entity.getComponent<ecs::ColorComponent>();
+        if (entity.hasComponent<ColorComponent>()) {
+            const auto& color = entity.getComponent<ColorComponent>();
             m_module.attr("color") = color;
         }
     
@@ -71,45 +71,45 @@ namespace mar::scripting {
         SCRIPTING_TRACE("PYTHON_SCRIPT: Calling start method at python script");
     }
     
-    void PythonScript::update(const ecs::Entity& entity) const {
+    void PythonScript::update(const Entity& entity) const {
         if (!m_initialized)
             return;
         
-        auto& transform = entity.getComponent<ecs::TransformComponent>();
+        auto& transform = entity.getComponent<TransformComponent>();
         m_module.attr("transform") = transform;
     
-        if (entity.hasComponent<ecs::LightComponent>()) {
-            const auto& light = entity.getComponent<ecs::LightComponent>();
+        if (entity.hasComponent<LightComponent>()) {
+            const auto& light = entity.getComponent<LightComponent>();
             m_module.attr("light") = light;
         }
     
-        if (entity.hasComponent<ecs::CameraComponent>()) {
-            const auto& camera = entity.getComponent<ecs::CameraComponent>();
+        if (entity.hasComponent<CameraComponent>()) {
+            const auto& camera = entity.getComponent<CameraComponent>();
             m_module.attr("camera") = camera;
         }
     
-        if (entity.hasComponent<ecs::ColorComponent>()) {
-            const auto& color = entity.getComponent<ecs::ColorComponent>();
+        if (entity.hasComponent<ColorComponent>()) {
+            const auto& color = entity.getComponent<ColorComponent>();
             m_module.attr("color") = color;
         }
     
         m_module.attr("update")();
     
-        transform = m_module.attr("transform").cast<ecs::TransformComponent>();
+        transform = m_module.attr("transform").cast<TransformComponent>();
 
-        if (entity.hasComponent<ecs::LightComponent>()) {
-            auto& light = entity.getComponent<ecs::LightComponent>();
-            light = m_module.attr("light").cast<ecs::LightComponent>();
+        if (entity.hasComponent<LightComponent>()) {
+            auto& light = entity.getComponent<LightComponent>();
+            light = m_module.attr("light").cast<LightComponent>();
         }
     
-        if (entity.hasComponent<ecs::CameraComponent>()) {
-            auto& camera = entity.getComponent<ecs::CameraComponent>();
-            camera = m_module.attr("camera").cast<ecs::CameraComponent>();
+        if (entity.hasComponent<CameraComponent>()) {
+            auto& camera = entity.getComponent<CameraComponent>();
+            camera = m_module.attr("camera").cast<CameraComponent>();
         }
     
-        if (entity.hasComponent<ecs::ColorComponent>()) {
-            auto& color = entity.getComponent<ecs::ColorComponent>();
-            color = m_module.attr("color").cast<ecs::ColorComponent>();
+        if (entity.hasComponent<ColorComponent>()) {
+            auto& color = entity.getComponent<ColorComponent>();
+            color = m_module.attr("color").cast<ColorComponent>();
         }
     
         SCRIPTING_TRACE("PYTHON_SCRIPT: Calling update method at python script");
@@ -128,7 +128,7 @@ namespace mar::scripting {
     }
     
     std::string PythonScript::changeSlashesToDots(std::string script) {
-        const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
+        const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
         std::string rtn = assetsPath + script;
     
         size_t pos = rtn.find("/");

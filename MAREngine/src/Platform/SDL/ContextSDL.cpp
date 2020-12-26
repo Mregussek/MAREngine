@@ -21,7 +21,7 @@
 #include "ContextSDL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	SDL_GLContext ContextSDL::s_context;

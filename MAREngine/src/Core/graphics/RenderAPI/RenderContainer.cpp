@@ -22,7 +22,7 @@
 #include "../GraphicsLogs.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	void RenderContainer::reset() {

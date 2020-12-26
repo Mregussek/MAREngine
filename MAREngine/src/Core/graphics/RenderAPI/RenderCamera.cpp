@@ -24,10 +24,10 @@
 #include "../GraphicsLogs.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
-	void RenderCamera::calculateCameraTransforms(const ecs::TransformComponent& transform, const ecs::CameraComponent& camera) {
+	void RenderCamera::calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera) {
 		GRAPHICS_TRACE("RENDER_CAMERA: going to calculate camera transform");
 
 		const auto yRad{ trig::toRadians(transform.angles.y) };

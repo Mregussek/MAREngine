@@ -30,7 +30,7 @@
 #include "EngineOnlyComponents.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 }

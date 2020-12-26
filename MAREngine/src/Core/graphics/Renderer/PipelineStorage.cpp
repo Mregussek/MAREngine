@@ -23,23 +23,23 @@
 #include "../RenderAPI/RenderContainer.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	PipelineStorage* PipelineStorage::Instance{ nullptr };
 
 
-	platforms::PipelineOpenGL& PipelineStorage::createPipeline() {
+	PipelineOpenGL& PipelineStorage::createPipeline() {
 		GRAPHICS_TRACE("PIPELINE_STORAGE: creating pipeline... current size {}", m_buffers.size() + 1);
 
 		return m_buffers.emplace_back();
 	}
 
-	const std::vector<platforms::PipelineOpenGL>& PipelineStorage::getPipelines() const {
+	const std::vector<PipelineOpenGL>& PipelineStorage::getPipelines() const {
 		return m_buffers;
 	}
 
-	const platforms::PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
+	const PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
 		return m_buffers.at(index);
 	}
 

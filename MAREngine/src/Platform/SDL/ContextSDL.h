@@ -27,7 +27,7 @@
 #include "../../Window/WindowInstance.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	class ContextSDL {

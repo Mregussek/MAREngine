@@ -27,10 +27,10 @@
 #include "../../Core/ecs/Components/Components.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
-	void Filesystem_Loading::loadScene(std::ifstream& file, ecs::Scene* scene) {
+	void Filesystem_Loading::loadScene(std::ifstream& file, Scene* scene) {
 		std::string line;
 
 		while (std::getline(file, line)) {
@@ -48,7 +48,7 @@ namespace mar::editor {
 		}
 	}
 
-	void Filesystem_Loading::loadCollection(std::ifstream& file, ecs::Scene* scene, const ecs::EntityCollection& collection) {
+	void Filesystem_Loading::loadCollection(std::ifstream& file, Scene* scene, const EntityCollection& collection) {
 		std::string line;
 
 		auto loadVec3Getline = [&file, &line](maths::vec3& v, size_t num) {
@@ -74,7 +74,7 @@ namespace mar::editor {
 				loadEntity(file, scene, entity);
 			}
 			else if (line.find("#CollectionTagComponent") != std::string::npos) {
-				auto& tag = collection.getComponent<ecs::TagComponent>();
+				auto& tag = collection.getComponent<TagComponent>();
 				loadString(tag.tag, 24);
 			}
 			else if (line.find("#CollectionRenderableComponent") != std::string::npos) {
@@ -82,12 +82,12 @@ namespace mar::editor {
 				loadString(path, 31);
 				const auto filename{ path.substr(path.find_last_of("/") + 1, path.size()) };
 
-				const auto collectionIndex{ ecs::SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
+				const auto collectionIndex{ SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
 				if (collectionIndex != -1) {
-					ecs::SceneOptimizer::copyOBJtoOtherCollectionDuringSceneLoading(collection, scene->getCollections()[collectionIndex]);
+					SceneOptimizer::copyOBJtoOtherCollectionDuringSceneLoading(collection, scene->getCollections()[collectionIndex]);
 				}
 				else {
-					graphics::MeshCreator::loadOBJ(filename, path, collection);
+					MeshCreator::loadOBJ(filename, path, collection);
 				}
 
 				const auto sizeAfterLoading{ collection.getEntities().size() };
@@ -100,7 +100,7 @@ namespace mar::editor {
 				}
 			}
 			else if (line.find("#CollectionTransformComponent") != std::string::npos) {
-				auto& tran = collection.getComponent<ecs::TransformComponent>();
+				auto& tran = collection.getComponent<TransformComponent>();
 
 				loadVec3Getline(tran.center, 7); // #center - 7 letters
 				loadVec3Getline(tran.angles, 7); // #angles - 7 letters
@@ -112,7 +112,7 @@ namespace mar::editor {
 		}
 	}
 
-	void Filesystem_Loading::loadEntity(std::ifstream& file, ecs::Scene* scene, const ecs::Entity& entity) {
+	void Filesystem_Loading::loadEntity(std::ifstream& file, Scene* scene, const Entity& entity) {
 		std::string line;
 
 		auto loadVec3 = [&line](maths::vec3& v, size_t num) {
@@ -153,54 +153,54 @@ namespace mar::editor {
 
 		while (std::getline(file, line)) {
 			if (line.find("#TagComponent") != std::string::npos) {
-				auto& tag = entity.getComponent<ecs::TagComponent>();
+				auto& tag = entity.getComponent<TagComponent>();
 				loadString(tag.tag, 14);
 			}
 			else if (line.find("#TransformComponent") != std::string::npos) {
-				auto& tran = entity.getComponent<ecs::TransformComponent>();
+				auto& tran = entity.getComponent<TransformComponent>();
 
 				loadVec3Getline(tran.center, 7); // #center - 7 letters
 				loadVec3Getline(tran.angles, 7); // #angles - 7 letters
 				loadVec3Getline(tran.scale, 6);  // #scale  - 6  letters
 			}
 			else if (line.find("#RenderableComponent") != std::string::npos) {
-				auto& ren{ entity.get_addComponent<ecs::RenderableComponent>() };
+				auto& ren{ entity.get_addComponent<RenderableComponent>() };
 
 				if (line.find("Cube") != std::string::npos) {
 					ren.name = "Cube";
-					ren.vertices = graphics::MeshCreator::Cube::getVertices();
-					ren.indices = graphics::MeshCreator::Cube::getIndices();
+					ren.vertices = MeshCreator::Cube::getVertices();
+					ren.indices = MeshCreator::Cube::getIndices();
 				}
 				else if (line.find("Surface") != std::string::npos) {
 					ren.name = "Surface";
-					ren.vertices = graphics::MeshCreator::Surface::getVertices();
-					ren.indices = graphics::MeshCreator::Surface::getIndices();
+					ren.vertices = MeshCreator::Surface::getVertices();
+					ren.indices = MeshCreator::Surface::getIndices();
 				}
 				else if (line.find("Wall") != std::string::npos) {
 					ren.name = "Wall";
-					ren.vertices = graphics::MeshCreator::Wall::getVertices();
-					ren.indices = graphics::MeshCreator::Wall::getIndices();
+					ren.vertices = MeshCreator::Wall::getVertices();
+					ren.indices = MeshCreator::Wall::getIndices();
 				}
 				else if (line.find("Pyramid") != std::string::npos) {
 					ren.name = "Pyramid";
-					ren.vertices = graphics::MeshCreator::Pyramid::getVertices();
-					ren.indices = graphics::MeshCreator::Pyramid::getIndices();
+					ren.vertices = MeshCreator::Pyramid::getVertices();
+					ren.indices = MeshCreator::Pyramid::getIndices();
 				}
 			}
 			else if (line.find("#ColorComponent") != std::string::npos) {
-				auto& color{ entity.get_addComponent<ecs::ColorComponent>() };
+				auto& color{ entity.get_addComponent<ColorComponent>() };
 				loadVec4(color.texture, 16);
 			}
 			else if (line.find("Texture2DComponent") != std::string::npos) {
-				auto& texture{ entity.get_addComponent<ecs::Texture2DComponent>() };
+				auto& texture{ entity.get_addComponent<Texture2DComponent>() };
 				loadString(texture.texture, 19);
 			}
 			else if (line.find("#TextureCubemapComponent") != std::string::npos) {
-				auto& cubemap{ entity.get_addComponent<ecs::TextureCubemapComponent>() };
+				auto& cubemap{ entity.get_addComponent<TextureCubemapComponent>() };
 				loadString(cubemap.texture, 25);
 			}
 			else if (line.find("#LightComponent") != std::string::npos) {
-				auto& light{ entity.get_addComponent<ecs::LightComponent>() };
+				auto& light{ entity.get_addComponent<LightComponent>() };
 
 				loadVec4Getline(light.ambient, 13);		// #ambientlight - 13
 				loadVec4Getline(light.diffuse, 13);		// #diffuselight - 13
@@ -212,7 +212,7 @@ namespace mar::editor {
 				loadFloatGetline(light.shininess, 10);	// #shininess - 10
 			}
 			else if (line.find("#CameraComponent") != std::string::npos) {
-				auto& cam{ entity.get_addComponent<ecs::CameraComponent>() };
+				auto& cam{ entity.get_addComponent<CameraComponent>() };
 				std::string type;
 				
 				loadStringGetline(cam.id, 3);	// #id - 3
@@ -238,7 +238,7 @@ namespace mar::editor {
 				loadFloatGetline(cam.o_far, 4);		// #far
 			}
 			else if (line.find("#ScriptComponent") != std::string::npos) {
-				auto& script{ entity.get_addComponent<ecs::ScriptComponent>() };
+				auto& script{ entity.get_addComponent<ScriptComponent>() };
 				loadString(script.script, 17);
 			}
 			else if (line.find("#EntityEnd") != std::string::npos) {

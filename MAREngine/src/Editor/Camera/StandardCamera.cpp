@@ -23,7 +23,7 @@
 #include "../../Window/Window.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	bool StandardCamera::processFrame(Camera* camera, float deltaTime) const {
@@ -79,7 +79,7 @@ namespace mar::editor {
 
     float StandardCamera::checkForSpeedUpdate(Camera* camera, float deltaTime) const {
         auto& speed = camera->m_movementSpeed;
-        speed += window::Window::getScrollY();
+        speed += Window::getScrollY();
 
         if (speed < 1.0f) { speed = 1.0f; }
         if (speed > 90.f) { speed = 90.f; }
@@ -93,8 +93,8 @@ namespace mar::editor {
         static float lastX{ 0.f };
         static float lastY{ 0.f };
 
-        const float xoffset = window::Window::getMousePositionX();
-        const float yoffset = window::Window::getMousePositionY();
+        const float xoffset = Window::getMousePositionX();
+        const float yoffset = Window::getMousePositionY();
 
         if (lastX == xoffset && lastY == yoffset) { return false; }
         

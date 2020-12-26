@@ -21,7 +21,7 @@
 #include "SetupOpenGL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	void GLAPIENTRY

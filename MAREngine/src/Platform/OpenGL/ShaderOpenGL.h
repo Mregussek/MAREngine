@@ -25,7 +25,7 @@
 #include "../../mar.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	struct ShaderPaths {

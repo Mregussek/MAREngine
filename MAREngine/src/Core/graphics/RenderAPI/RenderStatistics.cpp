@@ -21,7 +21,7 @@
 #include "RenderStatistics.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	RenderStatistics* RenderStatistics::Instance{ nullptr };

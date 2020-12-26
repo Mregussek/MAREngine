@@ -21,7 +21,7 @@
 #include "ShaderBufferStorageOpenGL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	void ShaderBufferStorageOpenGL::initialize(const UniformBuffer& uniformBuffer, const std::vector<UniformItem>& items) {

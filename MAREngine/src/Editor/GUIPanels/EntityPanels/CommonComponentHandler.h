@@ -25,19 +25,23 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs { struct TagComponent; struct ScriptComponent; class Entity; class EntityCollection; }
-namespace mar::editor {
+namespace marengine {
+
+	struct TagComponent; 
+	struct ScriptComponent; 
+	class Entity; 
+	class EntityCollection;
 
 
 	struct CommonComponentHandler {
 
-		static void handleTagComponent(ecs::TagComponent& tag);
-		static void handleScriptComponent(const ecs::Entity& entity);
-		static void handleScriptComponent(const ecs::EntityCollection& collection);
+		static void handleTagComponent(TagComponent& tag);
+		static void handleScriptComponent(const Entity& entity);
+		static void handleScriptComponent(const EntityCollection& collection);
 
 	private:
 
-		static void handleScriptComponent(ecs::ScriptComponent& script);
+		static void handleScriptComponent(ScriptComponent& script);
 
 	};
 

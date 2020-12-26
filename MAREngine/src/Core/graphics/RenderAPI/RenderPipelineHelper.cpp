@@ -23,7 +23,7 @@
 #include "../GraphicLimits.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	bool RenderPipelineHelper::canPushRenderableToContainer(const RenderContainer& container, uint32_t verticesToPush, uint32_t indicesToPush) {

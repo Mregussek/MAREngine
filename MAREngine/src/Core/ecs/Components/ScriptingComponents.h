@@ -26,13 +26,13 @@
 #include "../../scripting/PythonScript.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	struct ScriptComponent {
 		std::string script{ "empty" };
 		std::string source{ "empty" };
-		scripting::PythonScript pythonScript;
+		PythonScript pythonScript;
 
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent& sc) = default;

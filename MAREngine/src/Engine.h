@@ -25,7 +25,7 @@
 #include "mar.h"
 
 
-namespace mar::engine {
+namespace marengine {
 
 
 	class MAREngine {

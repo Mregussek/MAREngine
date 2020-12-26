@@ -24,7 +24,7 @@
 #include "../Filesystem/EditorFilesystem.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void ProjectSelectionFilesystem::openWindowNewProject() {
@@ -58,14 +58,14 @@ namespace mar::editor {
 			std::filesystem::create_directories(Assets);
 			std::filesystem::create_directories(Scenes);
 
-			auto scene = ecs::Scene::createEmptyScene(projectName);
+			auto scene = Scene::createEmptyScene(projectName);
 			Filesystem::saveToFile(scene, EmptySceneName.c_str());
 			delete scene;
 
-			engine::MAREngine::getEngine()->setProjectPath(projectPath);
-			engine::MAREngine::getEngine()->setProjectName(projectName);
-			engine::MAREngine::getEngine()->setLoadPath(EmptySceneName);
-			window::Window::getInstance().endRenderLoop();
+			MARgetEngine()->setProjectPath(projectPath);
+			MARgetEngine()->setProjectName(projectName);
+			MARgetEngine()->setLoadPath(EmptySceneName);
+			getInstance().endRenderLoop();
 
 			new_project_name_selected = false;
 		}
@@ -73,10 +73,10 @@ namespace mar::editor {
 		if (open_existing_project) {
 			std::string scene_to_load = projectPath + "/Scenes/" + projectName + ".marscene";
 
-			engine::MAREngine::getEngine()->setProjectPath(projectPath);
-			engine::MAREngine::getEngine()->setProjectName(projectName);
-			engine::MAREngine::getEngine()->setLoadPath(scene_to_load);
-			window::Window::getInstance().endRenderLoop();
+			MARgetEngine()->setProjectPath(projectPath);
+			MARgetEngine()->setProjectName(projectName);
+			MARgetEngine()->setLoadPath(scene_to_load);
+			getInstance().endRenderLoop();
 
 			open_existing_project = false;
 		}

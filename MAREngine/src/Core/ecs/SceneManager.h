@@ -27,7 +27,7 @@
 #include "Scene.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 	class SceneEvents;
 	class Entity;

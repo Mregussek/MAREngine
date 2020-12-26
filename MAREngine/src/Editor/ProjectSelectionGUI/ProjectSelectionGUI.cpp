@@ -24,14 +24,14 @@
 #include "../GUIPanels/OtherPanels/GUI_Theme.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void ProjectSelectionGUI::initialize(const char* glsl_version) {
 		ImGui::CreateContext();
 		GUI_Theme::Setup_Theme();
 
-		window::Window::imguiInit();
+		Window::imguiInit();
 		ImGui_ImplOpenGL3_Init(glsl_version);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -42,13 +42,13 @@ namespace mar::editor {
 
 	void ProjectSelectionGUI::shutdown() {
 		ImGui_ImplOpenGL3_Shutdown();
-		window::Window::imguiTerminate();
+		Window::imguiTerminate();
 		ImGui::DestroyContext();
 	}
 
 	void ProjectSelectionGUI::prepare() {
 		ImGui_ImplOpenGL3_NewFrame();
-		window::Window::imguiNewFrame();
+		Window::imguiNewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
 

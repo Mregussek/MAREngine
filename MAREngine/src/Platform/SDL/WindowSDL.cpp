@@ -23,13 +23,11 @@
 #include "ContextSDL.h"
 
 
-namespace mar::window {
+namespace marengine {
 
 
 	template<>
 	bool WindowInstance<SDL_Window>::initialize(int32_t width, int32_t height, const char* name) {
-		using namespace platforms;
-
 		s_instance = this;
 
 		const int32_t isSDL_OK = SDL_Init(SDL_INIT_VIDEO);
@@ -54,7 +52,7 @@ namespace mar::window {
 		SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 
 		m_window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
-		const bool isContextSDL_OK = platforms::ContextSDL::create(m_window);
+		const bool isContextSDL_OK = ContextSDL::create(m_window);
 		if (!isContextSDL_OK) {
 			MAR_CORE_ERROR("WINDOW_SDL: Cannot initialize Context SDL!");
 			const char c = getchar();
@@ -63,26 +61,26 @@ namespace mar::window {
 
 		setVerticalSync(1);
 
-		const bool isOpenGL_OK = platforms::SetupOpenGL::init();
+		const bool isOpenGL_OK = SetupOpenGL::init();
 		if (!isOpenGL_OK) {
 			MAR_CORE_ERROR("MARENGINE: Cannot initialize OpenGL!");
 			const char c = getchar();
 			return false;
 		}
 
-		platforms::ContextSDL::windowGoingToClose = false;
+		ContextSDL::windowGoingToClose = false;
 
 		return true;
 	}
 
 	template<>
 	void WindowInstance<SDL_Window>::endRenderLoop() {
-		platforms::ContextSDL::windowGoingToClose = true;
+		ContextSDL::windowGoingToClose = true;
 	}
 
 	template<>
 	void WindowInstance<SDL_Window>::terminate() {
-		platforms::ContextSDL::destroy();
+		ContextSDL::destroy();
 		SDL_DestroyWindow(m_window);
 		SDL_Quit();
 
@@ -98,7 +96,7 @@ namespace mar::window {
 
 	template<>
 	bool WindowInstance<SDL_Window>::isGoingToClose() const {
-		return platforms::ContextSDL::windowGoingToClose;
+		return ContextSDL::windowGoingToClose;
 	}
 
 	template<>
@@ -108,7 +106,7 @@ namespace mar::window {
 		SDL_Event e;
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT) {
-				platforms::ContextSDL::windowGoingToClose = true;
+				ContextSDL::windowGoingToClose = true;
 			}
 		}
 
@@ -127,21 +125,21 @@ namespace mar::window {
 
 	template<>
 	float WindowInstance<SDL_Window>::getMousePositionX() const {
-		return 0.f;// (float)platforms::callbacks::mouse_xpos;
+		return 0.f;// (float)callbacks::mouse_xpos;
 	}
 
 	template<>
 	float WindowInstance<SDL_Window>::getMousePositionY() const {
-		return 0.f;//(float)platforms::callbacks::mouse_ypos;
+		return 0.f;//(float)callbacks::mouse_ypos;
 	}
 
 	template<>
 	float WindowInstance<SDL_Window>::getScrollX() const {
-		return 0.f;//(float)platforms::callbacks::scroll_x;
+		return 0.f;//(float)callbacks::scroll_x;
 	}
 
 	template<>
 	float WindowInstance<SDL_Window>::getScrollY() const {
-		return 0.f;//(float)platforms::callbacks::scroll_y;
+		return 0.f;//(float)callbacks::scroll_y;
 	}
 }

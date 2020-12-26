@@ -25,25 +25,25 @@
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	void SceneManager::initialize() const {
 		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
-		graphics::RenderPipeline::Instance->reset();
+		RenderPipeline::Instance->reset();
 
 		const auto& entitiesVector = m_scene->getEntities();
 		const auto& collectionsVector = m_scene->getCollections();
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
-			graphics::RenderPipeline::Instance->submitEntity(entity);
+			RenderPipeline::Instance->submitEntity(entity);
 		});
 		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [](const EntityCollection& collection) {
-			graphics::RenderPipeline::Instance->submitCollection(collection);
+			RenderPipeline::Instance->submitCollection(collection);
 		});
 
-		graphics::RenderEvents::Instance().onContainersReadyToDraw();
+		RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_INFO("SCENE_MANAGER: initialized!");
 	}

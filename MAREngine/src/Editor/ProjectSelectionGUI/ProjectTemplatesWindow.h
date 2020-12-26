@@ -25,7 +25,7 @@
 #include "../../mar.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	class ProjectTemplatesWindow {

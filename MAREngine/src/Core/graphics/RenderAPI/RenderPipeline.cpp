@@ -27,7 +27,7 @@
 #include "../../ecs/Entity/EntityCollection.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	RenderPipeline* RenderPipeline::Instance{ nullptr };
@@ -59,16 +59,15 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
 	}
 
-	void RenderPipeline::submitCollection(const ecs::EntityCollection& collection) {
+	void RenderPipeline::submitCollection(const EntityCollection& collection) {
 		const auto& entities{ collection.getEntities() };
-		std::for_each(entities.cbegin(), entities.cend(), [this](const ecs::Entity& entity) {
+		std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
 			submitEntity(entity);
 		});
 	}
 
-	void RenderPipeline::submitEntity(const ecs::Entity& entity) {
+	void RenderPipeline::submitEntity(const Entity& entity) {
 		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
-		using namespace ecs;
 
 		const auto& tran = entity.getComponent<TransformComponent>();
 		auto& rpc = entity.getComponent<RenderPipelineComponent>();
@@ -117,7 +116,7 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush) {
+	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush) {
 		m_containerPtr = nullptr;
 
 		auto selectContainerPtrProcedure = [&rpc, materialType, verticesToPush, indicesToPush, this](std::vector<RenderContainer>& containers) {
@@ -148,7 +147,7 @@ namespace mar::graphics {
 		}
 	}
 
-	void RenderPipeline::setContainerLight(ecs::RenderPipelineComponent& rpc) {
+	void RenderPipeline::setContainerLight(RenderPipelineComponent& rpc) {
 		m_lightPtr = nullptr;
 
 		const auto index = RenderPipelineHelper::findAvailableLightContainer(m_lights);
@@ -162,7 +161,7 @@ namespace mar::graphics {
 		}
 	}
 
-	size_t RenderPipeline::submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform) {
+	size_t RenderPipeline::submitRenderable(const RenderableComponent& renderable, const TransformComponent& transform) {
 		if (!m_containerPtr) {
 			GRAPHICS_ERROR("RENDER_PIPELINE: submitRenderable(), m_containerPtr is nullptr!");
 			return -1;
@@ -219,7 +218,7 @@ namespace mar::graphics {
 		m_containerPtr->m_transforms.push_back(transform);
 	}
 
-	size_t RenderPipeline::submitColor(int32_t entityIndex, const ecs::ColorComponent& color) {
+	size_t RenderPipeline::submitColor(int32_t entityIndex, const ColorComponent& color) {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting color component, current size = {}, entity_index = {}", m_containerPtr->m_colors.size(), entityIndex);
 
 		m_containerPtr->m_colors.push_back({ entityIndex, color.texture });
@@ -227,7 +226,7 @@ namespace mar::graphics {
 		return m_containerPtr->m_colors.size() - 1;
 	}
 
-	size_t RenderPipeline::submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture) {
+	size_t RenderPipeline::submitTexture2D(int32_t entityIndex, const Texture2DComponent& texture) {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting texture2d component, current size = {}, entity_index = {}, texture2D = {}", m_containerPtr->m_tex2D.size(), entityIndex, texture.texture);
 
 		m_containerPtr->m_tex2D.push_back({ entityIndex, texture.texture });
@@ -235,7 +234,7 @@ namespace mar::graphics {
 		return m_containerPtr->m_tex2D.size() - 1;
 	}
 
-	size_t RenderPipeline::submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap) {
+	size_t RenderPipeline::submitCubemap(int32_t entityIndex, const TextureCubemapComponent& cubemap) {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", m_containerPtr->m_cubes.size(), entityIndex, cubemap.texture);
 
 		m_containerPtr->m_cubes.push_back({ entityIndex, cubemap.texture });
@@ -243,7 +242,7 @@ namespace mar::graphics {
 		return m_containerPtr->m_cubes.size() - 1;
 	}
 
-	size_t RenderPipeline::submitLight(const maths::vec3& position, const ecs::LightComponent& light) {
+	size_t RenderPipeline::submitLight(const maths::vec3& position, const LightComponent& light) {
 		if (!m_lightPtr) {
 			GRAPHICS_ERROR("RENDER_PIPELINE: submitLight(), m_lightPtr is nullptr!");
 			return -1;

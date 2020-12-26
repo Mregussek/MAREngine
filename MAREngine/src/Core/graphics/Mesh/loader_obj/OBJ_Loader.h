@@ -26,7 +26,7 @@
 #include "../Vertex.h"
 
 
-namespace mar::graphics::loader_obj {
+namespace marengine::loader_obj {
 
 	typedef maths::vec2 Vector2;
 	typedef maths::vec3 Vector3;

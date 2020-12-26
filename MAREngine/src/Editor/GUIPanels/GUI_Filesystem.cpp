@@ -35,7 +35,7 @@
 #include "../../Engine.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	GUI_Filesystem* GUI_Filesystem::s_instance{ nullptr };
@@ -51,17 +51,17 @@ namespace mar::editor {
 
 	void GUI_Filesystem::displayNewSceneWindow() {
 		if (m_fileDialog.showFileDialog(m_nameNewScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {		
-			ecs::Scene* newScene = ecs::Scene::createEmptyScene(m_fileDialog.selected_fn);
+			Scene* newScene = Scene::createEmptyScene(m_fileDialog.selected_fn);
 			Filesystem::saveToFile(newScene, m_fileDialog.selected_path.c_str());
 			delete newScene;
 
-			engine::MAREngine::Instance()->setLoadPath(m_fileDialog.selected_path);
+			MAREngine::Instance()->setLoadPath(m_fileDialog.selected_path);
 
 			GUI_EntityCollectionPanel::Instance()->reset();
 			GUI_EntityPanel::Instance()->reset();
 			GUI_TextEditor::Instance()->reset();
 
-			engine::MAREngine::Instance()->setRestart();
+			MAREngine::Instance()->setRestart();
 		}
 	}
 
@@ -69,7 +69,7 @@ namespace mar::editor {
 		ImGui::OpenPopup(m_nameSaveScene);
 	}
 
-	void GUI_Filesystem::displaySaveSceneWindow(ecs::Scene* scene) {
+	void GUI_Filesystem::displaySaveSceneWindow(Scene* scene) {
 		if (m_fileDialog.showFileDialog(m_nameSaveScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {
 			Filesystem::saveToFile(scene, m_fileDialog.selected_path.c_str());
 		}
@@ -81,13 +81,13 @@ namespace mar::editor {
 
 	void GUI_Filesystem::displayLoadSceneWindow() {
 		if (m_fileDialog.showFileDialog(m_nameOpenScene, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".marscene")) {
-			engine::MAREngine::Instance()->setLoadPath(m_fileDialog.selected_path);
+			MAREngine::Instance()->setLoadPath(m_fileDialog.selected_path);
 
 			GUI_EntityCollectionPanel::Instance()->reset();
 			GUI_EntityPanel::Instance()->reset();
 			GUI_TextEditor::Instance()->reset();
 
-			engine::MAREngine::Instance()->setRestart();
+			MAREngine::Instance()->setRestart();
 		}
 	}
 
@@ -95,10 +95,10 @@ namespace mar::editor {
 		ImGui::OpenPopup(m_nameLoadOBJ);
 	}
 
-	void GUI_Filesystem::displayLoadOBJWindow(ecs::Scene* scene) {
+	void GUI_Filesystem::displayLoadOBJWindow(Scene* scene) {
 		if (m_fileDialog.showFileDialog(m_nameLoadOBJ, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".obj")) {
 			const auto& collection = scene->createCollection();
-			ecs::SceneEvents::Instance().onOBJload(collection, m_fileDialog.selected_fn, m_fileDialog.selected_path);
+			SceneEvents::Instance().onOBJload(collection, m_fileDialog.selected_fn, m_fileDialog.selected_path);
 		}
 	}
 
@@ -106,9 +106,9 @@ namespace mar::editor {
 		ImGui::OpenPopup(m_nameAssignScript);
 	}
 
-	void GUI_Filesystem::displayAssigningScriptWindow(ecs::ScriptComponent& script) {
+	void GUI_Filesystem::displayAssigningScriptWindow(ScriptComponent& script) {
 		if (m_fileDialog.showFileDialog(m_nameAssignScript, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, ImVec2(1200, 800), ".py")) {
-			const auto& assetsPath = engine::MAREngine::Instance()->getAssetsPath();
+			const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
 
 			script.script = m_fileDialog.selected_path;
 			eraseSubstring(script.script, assetsPath);

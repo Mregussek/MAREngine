@@ -21,7 +21,7 @@
 #include "UniformBufferOpenGL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	void UniformBufferOpenGL::initialize(const UniformBuffer& uniformBuffer) {

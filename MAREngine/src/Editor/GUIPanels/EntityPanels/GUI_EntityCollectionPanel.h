@@ -25,8 +25,10 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs { class EntityCollection; struct TagComponent; }
-namespace mar::editor {
+namespace marengine {
+
+	class EntityCollection; 
+	struct TagComponent;
 
 
 	class GUI_EntityCollectionPanel {
@@ -39,8 +41,8 @@ namespace mar::editor {
 
 		void update() const;
 
-		void setCurrentCollection(const ecs::EntityCollection& collection);
-		const ecs::EntityCollection& getCurrentCollection() const;
+		void setCurrentCollection(const EntityCollection& collection);
+		const EntityCollection& getCurrentCollection() const;
 
 	private:
 
@@ -50,7 +52,7 @@ namespace mar::editor {
 
 		static GUI_EntityCollectionPanel* s_instance;
 
-		const ecs::EntityCollection* currentCollection;
+		const EntityCollection* currentCollection;
 		bool m_initialized{ false };
 
 	};

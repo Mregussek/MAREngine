@@ -21,7 +21,7 @@
 #include "EditorMAR.h"
 
 
-namespace mar {
+namespace marengine {
 
 
 	void EditorMAR::initialize() {
@@ -54,19 +54,19 @@ namespace mar {
 	}
 	*/
 	void EditorMAR::runProjectOnEngine() {
-		window::WindowInstance<GLFWwindow> displayWindow{};
-		layers::LayerStack stack{};
+		WindowInstance<GLFWwindow> displayWindow{};
+		LayerStack stack{};
 
-		auto* scene = editor::Filesystem::openFile(m_engine.getPathToLoad());
+		auto* scene = Filesystem::openFile(m_engine.getPathToLoad());
 
-		auto renderLayer = new layers::RenderLayer("Render Layer");
+		auto renderLayer = new RenderLayer("Render Layer");
 		stack.pushLayer(renderLayer);
 
-		auto sceneLayer = new layers::SceneLayer("Scene Layer");
+		auto sceneLayer = new SceneLayer("Scene Layer");
 		sceneLayer->passSceneToManager(scene);
 		stack.pushLayer(sceneLayer);
 
-		auto editorLayer = new layers::EditorLayer("Editor Layer");
+		auto editorLayer = new EditorLayer("Editor Layer");
 		editorLayer->submit(sceneLayer->getSceneManager());
 		stack.pushOverlay(editorLayer);
 
@@ -75,7 +75,7 @@ namespace mar {
 		stack.initialize();
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
-			platforms::SetupOpenGL::clearScreen(scene->getBackground());
+			SetupOpenGL::clearScreen(scene->getBackground());
 
 			editorLayer->renderToViewport();
 

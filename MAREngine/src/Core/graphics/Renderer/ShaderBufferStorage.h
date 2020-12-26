@@ -27,14 +27,14 @@
 #include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	class ShaderBufferStorage {
 
-		typedef platforms::UniformBuffer UniformBuffer;
-		typedef platforms::ShaderBufferStorageOpenGL ShaderBufferStorageOpenGL;
-		typedef platforms::UniformBufferOpenGL UniformBufferOpenGL;
+		typedef UniformBuffer UniformBuffer;
+		typedef ShaderBufferStorageOpenGL ShaderBufferStorageOpenGL;
+		typedef UniformBufferOpenGL UniformBufferOpenGL;
 
 	public:
 

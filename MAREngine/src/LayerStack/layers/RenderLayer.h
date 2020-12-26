@@ -32,7 +32,7 @@
 #include "../../Core/graphics/Renderer/PipelineStorage.h"
 
 
-namespace mar::layers {
+namespace marengine {
 
 
 	class RenderLayer : public Layer {
@@ -49,12 +49,12 @@ namespace mar::layers {
 
 	private:
 
-		graphics::RendererBatch m_renderer;
-		graphics::RenderPipeline m_renderPipeline;
-		graphics::RenderStatistics m_statistics;
-		graphics::ShaderBufferStorage m_shaderBufferStorage;
-		graphics::RenderMemorizer m_memorizer;
-		graphics::PipelineStorage m_pipelineStorage;
+		RendererBatch m_renderer;
+		RenderPipeline m_renderPipeline;
+		RenderStatistics m_statistics;
+		ShaderBufferStorage m_shaderBufferStorage;
+		RenderMemorizer m_memorizer;
+		PipelineStorage m_pipelineStorage;
 
 	};
 

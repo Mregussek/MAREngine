@@ -22,7 +22,7 @@
 #include "ECSLogs.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	SceneRegistry::SceneRegistry() {

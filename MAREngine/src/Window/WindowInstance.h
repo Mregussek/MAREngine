@@ -25,7 +25,7 @@
 #include "../mar.h"
 
 
-namespace mar::window {
+namespace marengine {
 	
 
 	template<typename WindowType>

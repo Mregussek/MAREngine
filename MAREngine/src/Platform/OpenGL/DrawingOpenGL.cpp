@@ -21,7 +21,7 @@
 #include "DrawingOpenGL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	void DrawingOpenGL::drawTriangles(size_t indices_count) {

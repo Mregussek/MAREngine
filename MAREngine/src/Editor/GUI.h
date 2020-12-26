@@ -32,9 +32,11 @@
 #include "GUIPanels/GUI_TextEditor.h"
 
 
-namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; /* forward declarations */ }
-namespace mar::graphics { class RenderCamera; }
-namespace mar::editor {
+namespace marengine {
+
+	class SceneManager; 
+	class Entity; 
+	class EntityCollection;
 
 
 	class GUI {
@@ -46,14 +48,14 @@ namespace mar::editor {
 		void shutdown();
 
 		void renderToViewport() const;
-		void submit(ecs::SceneManager* scene);
+		void submit(SceneManager* scene);
 
 		void display();
 
 		// --- GET METHODS --- //
 
-		const ecs::Entity& getCurrentEntity() const;
-		const ecs::EntityCollection& getCurrentCollection() const;
+		const Entity& getCurrentEntity() const;
+		const EntityCollection& getCurrentCollection() const;
 		bool canDrawLines() const;
 
 	private:
@@ -72,7 +74,7 @@ namespace mar::editor {
 		GUI_TextEditor m_textEditor;
 		GUI_SceneProperties m_sceneProperties;
 
-		ecs::SceneManager* m_sceneManager;
+		SceneManager* m_sceneManager;
 
 		bool m_dockspaceOpen{ true };
 		static const bool m_fullscreenPersisant{ true };

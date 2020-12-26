@@ -21,7 +21,7 @@
 #include "WindowInstance.h"
 
 
-namespace mar::window {
+namespace marengine {
 
 
 	template<typename WindowType>

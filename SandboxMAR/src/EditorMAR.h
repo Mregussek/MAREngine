@@ -25,13 +25,10 @@
 #include "MAREngine/MAREngine.h"
 
 
-namespace mar {
+namespace marengine {
 
 
 	class EditorMAR {
-
-		typedef engine::MAREngine MAREngine;
-
 	public:
 
 		EditorMAR() = default;

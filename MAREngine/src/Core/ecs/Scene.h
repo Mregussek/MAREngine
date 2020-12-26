@@ -26,7 +26,7 @@
 #include "Entity/EntityContainer.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	class Scene {

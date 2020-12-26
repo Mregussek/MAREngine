@@ -27,15 +27,15 @@
 #include "../ecs/Entity/Entity.h"
 
 
-namespace mar::scripting {
+namespace marengine {
 
 
 	class PyEntity {
 	public:
-		ecs::TransformComponent transform;
-		ecs::LightComponent light;
-		ecs::CameraComponent camera;
-		ecs::ColorComponent color;
+		TransformComponent transform;
+		LightComponent light;
+		CameraComponent camera;
+		ColorComponent color;
 
 		virtual void start() { }
 		virtual void update() { }

@@ -26,7 +26,7 @@
 #include "../PlatformLogs.h"
 
 
-namespace mar::platforms::callbacks {
+namespace marengine::callbacks {
 
 
 	inline int32_t window_width{ 0 };

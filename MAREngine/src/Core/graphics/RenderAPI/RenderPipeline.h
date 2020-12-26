@@ -27,10 +27,11 @@
 #include "../../ecs/Components/Components.h"
 
 
-namespace mar::ecs { class Entity; class EntityCollection; }
-namespace mar::graphics {
+namespace marengine {
 
 	class RenderCamera;
+	class Entity; 
+	class EntityCollection;
 
 
 	class RenderPipeline {
@@ -43,8 +44,8 @@ namespace mar::graphics {
 
 		void reset();
 
-		void submitCollection(const ecs::EntityCollection& collection);
-		void submitEntity(const ecs::Entity& entity);
+		void submitCollection(const EntityCollection& collection);
+		void submitEntity(const Entity& entity);
 
 		void submitCamera(const RenderCamera* cam);
 
@@ -60,18 +61,18 @@ namespace mar::graphics {
 
 	private:
 
-		void setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush);
-		void setContainerLight(ecs::RenderPipelineComponent& rpc);
+		void setContainerRenderable(MaterialRenderType materialType, RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush);
+		void setContainerLight(RenderPipelineComponent& rpc);
 
-		size_t submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform);
+		size_t submitRenderable(const RenderableComponent& renderable, const TransformComponent& transform);
 		void submitVertices(const std::vector<Vertex>& vertices, float shapeID);
 		void submitIndices(const std::vector<uint32_t>& indices, uint32_t indicesMax);
 		void submitTransform(const maths::mat4& transform);
 
-		size_t submitColor(int32_t entityIndex, const ecs::ColorComponent& color);
-		size_t submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture);
-		size_t submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap);
-		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
+		size_t submitColor(int32_t entityIndex, const ColorComponent& color);
+		size_t submitTexture2D(int32_t entityIndex, const Texture2DComponent& texture);
+		size_t submitCubemap(int32_t entityIndex, const TextureCubemapComponent& cubemap);
+		size_t submitLight(const maths::vec3& position, const LightComponent& light);
 
 
 		std::vector<RenderContainer> m_containersColor;

@@ -26,7 +26,7 @@
 #include "../../../Platform/OpenGL/PipelineOpenGL.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 	
 	class RenderContainer;
 
@@ -36,11 +36,11 @@ namespace mar::graphics {
 
 		static PipelineStorage* Instance;
 
-		platforms::PipelineOpenGL& createPipeline();
+		PipelineOpenGL& createPipeline();
 
-		const std::vector<platforms::PipelineOpenGL>& getPipelines() const;
+		const std::vector<PipelineOpenGL>& getPipelines() const;
 
-		const platforms::PipelineOpenGL& getPipeline(uint32_t index) const;
+		const PipelineOpenGL& getPipeline(uint32_t index) const;
 
 		void fillContainer(RenderContainer& container) const;
 
@@ -48,7 +48,7 @@ namespace mar::graphics {
 
 	private:
 
-		std::vector<platforms::PipelineOpenGL> m_buffers;
+		std::vector<PipelineOpenGL> m_buffers;
 
 	};
 

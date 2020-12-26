@@ -21,7 +21,7 @@
 #include "OBJ_Loader.h"
 
 
-namespace mar::graphics::loader_obj {
+namespace marengine::loader_obj {
 
 
 	// -------------------------------------

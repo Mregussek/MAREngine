@@ -25,8 +25,11 @@
 #include "../../mar.h"
 
 
-namespace mar::ecs { class Scene; class Entity; struct ScriptComponent; }
-namespace mar::editor {
+namespace marengine {
+
+	class Scene; 
+	class Entity; 
+	struct ScriptComponent;
 
 
 	class GUI_Filesystem {
@@ -40,16 +43,16 @@ namespace mar::editor {
 		void displayNewSceneWindow();
 
 		void openSaveSceneWindow();
-		void displaySaveSceneWindow(ecs::Scene* scene);
+		void displaySaveSceneWindow(Scene* scene);
 
 		void openLoadSceneWindow();
 		void displayLoadSceneWindow();
 
 		void openLoadOBJWindow();
-		void displayLoadOBJWindow(ecs::Scene* scene);
+		void displayLoadOBJWindow(Scene* scene);
 
 		void openAssigningScriptWindow();
-		void displayAssigningScriptWindow(ecs::ScriptComponent& script);
+		void displayAssigningScriptWindow(ScriptComponent& script);
 
 	private:
 

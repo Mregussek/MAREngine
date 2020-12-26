@@ -25,20 +25,16 @@
 #define USE_EDITOR_MAR_ENGINE 1
 
 
-using mar::EditorMAR;
-using mar::SandboxMAR;
-
-
 int main() {
 	if constexpr (USE_EDITOR_MAR_ENGINE) {
-		EditorMAR editor;
+		marengine::EditorMAR editor;
 
 		editor.initialize();
 		editor.runProjectOnEngine();
 		editor.shutdown();
 	}
 	else {
-		SandboxMAR sandbox;
+		marengine::SandboxMAR sandbox;
 
 		sandbox.initialize();
 		sandbox.run();

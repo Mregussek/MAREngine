@@ -23,13 +23,11 @@
 #include "../OpenGL/SetupOpenGL.h"
 
 
-namespace mar::window {
+namespace marengine {
 
 
 	template<>
 	bool WindowInstance<GLFWwindow>::initialize(int32_t width, int32_t height, const char* name) {
-		using namespace platforms;
-
 		s_instance = this;
 
 		glfwSetErrorCallback(callbacks::windowErrorCallback);
@@ -67,7 +65,7 @@ namespace mar::window {
 
 		setVerticalSync(1);
 
-		const bool isOpenGL_OK = platforms::SetupOpenGL::init();
+		const bool isOpenGL_OK = SetupOpenGL::init();
 		if (!isOpenGL_OK) {
 			MAR_CORE_ERROR("MARENGINE: Cannot initialize OpenGL!");
 			const char c = getchar();
@@ -103,8 +101,8 @@ namespace mar::window {
 
 	template<>
 	void WindowInstance<GLFWwindow>::swapBuffers() {
-		m_width = platforms::callbacks::window_width;
-		m_height = platforms::callbacks::window_height;
+		m_width = callbacks::window_width;
+		m_height = callbacks::window_height;
 
 		glfwPollEvents();
 		glfwSwapBuffers(m_window);
@@ -124,22 +122,22 @@ namespace mar::window {
 
 	template<>
 	float WindowInstance<GLFWwindow>::getMousePositionX() const {
-		return (float)platforms::callbacks::mouse_xpos;
+		return (float)callbacks::mouse_xpos;
 	}
 
 	template<>
 	float WindowInstance<GLFWwindow>::getMousePositionY() const {
-		return (float)platforms::callbacks::mouse_ypos;
+		return (float)callbacks::mouse_ypos;
 	}
 
 	template<>
 	float WindowInstance<GLFWwindow>::getScrollX() const {
-		return (float)platforms::callbacks::scroll_x;
+		return (float)callbacks::scroll_x;
 	}
 
 	template<>
 	float WindowInstance<GLFWwindow>::getScrollY() const {
-		return (float)platforms::callbacks::scroll_y;
+		return (float)callbacks::scroll_y;
 	}
 
 

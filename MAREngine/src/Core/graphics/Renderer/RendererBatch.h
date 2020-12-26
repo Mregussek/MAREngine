@@ -27,9 +27,10 @@
 #include "../RenderAPI/RenderContainerDefinitions.h"
 
 
-namespace mar::platforms { struct GLSL_SSBOs; class TextureOpenGL; }
-namespace mar::graphics {
+namespace marengine {
 
+	struct GLSL_SSBOs; 
+	class TextureOpenGL;
 	class RenderPipeline;
 	class RenderContainer;
 	class LightContainer;
@@ -38,9 +39,8 @@ namespace mar::graphics {
 
 	class RendererBatch {
 
-		typedef platforms::ShaderOpenGL ShaderGL;
-		typedef platforms::GLSL_SSBOs SSBOsGL;
-		typedef platforms::TextureOpenGL TextureGL;
+		typedef ShaderOpenGL ShaderGL;
+		typedef TextureOpenGL TextureGL;
 
 	public:
 
@@ -63,7 +63,7 @@ namespace mar::graphics {
 		void passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const;
 
 
-		platforms::ShaderOpenGL m_shader2D;
+		ShaderOpenGL m_shader2D;
 
 	};
 

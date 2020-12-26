@@ -25,7 +25,7 @@
 
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	template<typename EntityType, typename ComponentType>

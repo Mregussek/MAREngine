@@ -27,16 +27,16 @@
 #include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
-	void GUI_Statistics::update(const ecs::Scene* scene) {
+	void GUI_Statistics::update(const Scene* scene) {
 		ImGui::Begin("Statistics Menu");
 
-		auto& stats{ *graphics::RenderStatistics::Instance };
-		const auto& containersColor{ graphics::RenderPipeline::Instance->getColorContainers() };
-		const auto& containers2D{ graphics::RenderPipeline::Instance->get2Dcontainers() };
-		const auto& containersCubemap{ graphics::RenderPipeline::Instance->getCubemapContainers() };
+		auto& stats{ *RenderStatistics::Instance };
+		const auto& containersColor{ RenderPipeline::Instance->getColorContainers() };
+		const auto& containers2D{ RenderPipeline::Instance->get2Dcontainers() };
+		const auto& containersCubemap{ RenderPipeline::Instance->getCubemapContainers() };
 
 		const auto& collections{ scene->getCollections() };
 		const auto& entities{ scene->getEntities() };
@@ -45,8 +45,8 @@ namespace mar::editor {
 		stats.entityCollectionsCount += collections.size();
 		stats.allEntitiesCount += stats.entitiesCount;
 
-		auto pushContainerDataToStats = [&stats](const std::vector<graphics::RenderContainer>& containers) {
-			std::for_each(containers.cbegin(), containers.cend(), [&stats](const graphics::RenderContainer& container) {
+		auto pushContainerDataToStats = [&stats](const std::vector<RenderContainer>& containers) {
+			std::for_each(containers.cbegin(), containers.cend(), [&stats](const RenderContainer& container) {
 				stats.shapesCount += container.getTransforms().size();
 				stats.verticesCount += container.getVertices().size();
 				stats.indicesCount += container.getIndices().size();
@@ -58,16 +58,16 @@ namespace mar::editor {
 		pushContainerDataToStats(containers2D);
 		pushContainerDataToStats(containersCubemap);
 
-		std::for_each(collections.begin(), collections.end(), [&stats](const ecs::EntityCollection& collection) {
+		std::for_each(collections.begin(), collections.end(), [&stats](const EntityCollection& collection) {
 			stats.allEntitiesCount += collection.getEntities().size();
 		});
 
-		auto entityHasRenderable = [](const ecs::Entity& entity) {
-			return entity.hasComponent<ecs::RenderableComponent>();
+		auto entityHasRenderable = [](const Entity& entity) {
+			return entity.hasComponent<RenderableComponent>();
 		};
 
 		uint32_t renderablesEntities = std::count_if(entities.cbegin(), entities.cend(), entityHasRenderable);
-		std::for_each(collections.cbegin(), collections.cend(), [&entityHasRenderable, &renderablesEntities](const ecs::EntityCollection& collection) {
+		std::for_each(collections.cbegin(), collections.cend(), [&entityHasRenderable, &renderablesEntities](const EntityCollection& collection) {
 			const auto& entities = collection.getEntities();
 			renderablesEntities += std::count_if(entities.cbegin(), entities.cend(), entityHasRenderable);
 		});

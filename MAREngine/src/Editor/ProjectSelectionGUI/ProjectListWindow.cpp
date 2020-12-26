@@ -23,7 +23,7 @@
 #include "../../Engine.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void ProjectListWindow::display() {
@@ -48,10 +48,10 @@ namespace mar::editor {
 		ImGui::Separator();
 
 		if (ImGui::Button("Open Default Project")) {
-			engine::MAREngine::Instance()->setProjectName("DefaultProject");
-			engine::MAREngine::Instance()->setProjectPath("DefaultProject/");
-			engine::MAREngine::Instance()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
-			window::Window::endRenderLoop();
+			MAREngine::Instance()->setProjectName("DefaultProject");
+			MAREngine::Instance()->setProjectPath("DefaultProject/");
+			MAREngine::Instance()->setLoadPath("DefaultProject/Scenes/DefaultProject.marscene");
+			Window::endRenderLoop();
 		}
 
 		ImGui::SameLine();
@@ -77,7 +77,7 @@ namespace mar::editor {
 		}
 
 		if (ImGui::Button("Exit")) {
-			window::Window::endRenderLoop();
+			Window::endRenderLoop();
 		}
 
 		ImGui::End();

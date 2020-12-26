@@ -23,7 +23,7 @@
 #include "Core/scripting/PythonScript.h"
 
 
-namespace mar::engine {
+namespace marengine {
 
 		
 	MAREngine* MAREngine::s_instance{ nullptr };
@@ -34,7 +34,7 @@ namespace mar::engine {
 
 		MAR_LOG_INIT();
 
-		scripting::PythonScript::appendCurrentPath();
+		PythonScript::appendCurrentPath();
 
 		m_editorName = m_pathLoad + " --- MAREngine";
 	}

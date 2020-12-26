@@ -25,7 +25,7 @@
 #include "ECSLogs.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	Scene::Scene(std::string name)

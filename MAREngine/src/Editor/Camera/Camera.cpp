@@ -24,7 +24,7 @@
 #include "../../Window/Window.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
     
     void Camera::initialize(float aspectRatio) {
@@ -104,7 +104,7 @@ namespace mar::editor {
         m_up = maths::vec3::normalize(maths::vec3::cross(m_right, m_front));
     }
 
-    const graphics::RenderCamera* Camera::getCameraData() const { 
+    const RenderCamera* Camera::getCameraData() const { 
         return &m_renderCamera; 
     }
 

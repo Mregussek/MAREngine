@@ -25,22 +25,24 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs { class Entity; class EntityCollection; struct TransformComponent; }
-namespace mar::editor {
+namespace marengine {
 
 	class Camera;
+	class Entity; 
+	class EntityCollection; 
+	struct TransformComponent;
 
 
 	class GUI_Guizmo {
 	public:
 
 		void selectType();
-		void draw(const Camera& editorCamera, const ecs::Entity& currentEntity) const;
-		void draw(const Camera& editorCamera, const ecs::EntityCollection& currentCollection) const;
+		void draw(const Camera& editorCamera, const Entity& currentEntity) const;
+		void draw(const Camera& editorCamera, const EntityCollection& currentCollection) const;
 
 	private:
 
-		bool draw(const Camera& editorCamera, ecs::TransformComponent& transform) const;
+		bool draw(const Camera& editorCamera, TransformComponent& transform) const;
 
 		void setTranslation();
 		void setRotation();

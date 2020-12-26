@@ -22,45 +22,45 @@
 #include "../../../Platform/GLSL/ShaderUniforms.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	ShaderBufferStorage* ShaderBufferStorage::Instance{ nullptr };
 
 
-	platforms::ShaderBufferStorageOpenGL& ShaderBufferStorage::createShaderBufferStorage() {
+	ShaderBufferStorageOpenGL& ShaderBufferStorage::createShaderBufferStorage() {
 		return m_shaderBuffers.emplace_back();
 	}
 
-	platforms::UniformBufferOpenGL& ShaderBufferStorage::createUniformBufferObject() {
+	UniformBufferOpenGL& ShaderBufferStorage::createUniformBufferObject() {
 		return m_uniformBuffers.emplace_back();
 	}
 
-	const platforms::ShaderBufferStorageOpenGL& ShaderBufferStorage::getCorrectShaderBuffer(const UniformBuffer& buffer) const {
+	const ShaderBufferStorageOpenGL& ShaderBufferStorage::getCorrectShaderBuffer(const UniformBuffer& buffer) const {
 		return *std::find_if(m_shaderBuffers.cbegin(), m_shaderBuffers.cend(), [&buffer](const ShaderBufferStorageOpenGL& ubo) {
 			return std::strcmp(ubo.m_uniformBuffer.name, buffer.name) == 0;
 		});
 	}
 
-	const platforms::UniformBufferOpenGL& ShaderBufferStorage::getCorrectUniformBuffer(const UniformBuffer& buffer) const {
+	const UniformBufferOpenGL& ShaderBufferStorage::getCorrectUniformBuffer(const UniformBuffer& buffer) const {
 		return *std::find_if(m_uniformBuffers.cbegin(), m_uniformBuffers.cend(), [&buffer](const UniformBufferOpenGL& ubo) {
 			return std::strcmp(ubo.m_uniformBuffer.name, buffer.name) == 0;
 		});
 	}
 
-	const std::vector<platforms::ShaderBufferStorageOpenGL>& ShaderBufferStorage::getSSBOs() const {
+	const std::vector<ShaderBufferStorageOpenGL>& ShaderBufferStorage::getSSBOs() const {
 		return m_shaderBuffers;
 	}
 
-	const std::vector<platforms::UniformBufferOpenGL>& ShaderBufferStorage::getUBOs() const {
+	const std::vector<UniformBufferOpenGL>& ShaderBufferStorage::getUBOs() const {
 		return m_uniformBuffers;
 	}
 
-	platforms::ShaderBufferStorageOpenGL& ShaderBufferStorage::getSSBO(uint32_t index) {
+	ShaderBufferStorageOpenGL& ShaderBufferStorage::getSSBO(uint32_t index) {
 		return m_shaderBuffers.at(index);
 	}
 
-	platforms::UniformBufferOpenGL& ShaderBufferStorage::getUBO(uint32_t index) {
+	UniformBufferOpenGL& ShaderBufferStorage::getUBO(uint32_t index) {
 		return m_uniformBuffers.at(index);
 	}
 

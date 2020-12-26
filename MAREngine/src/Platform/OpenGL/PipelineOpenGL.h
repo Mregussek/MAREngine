@@ -27,7 +27,7 @@
 #include "../../Core/graphics/Mesh/Vertex.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	class PipelineOpenGL {
@@ -38,7 +38,7 @@ namespace mar::platforms {
 		void initialize(uint32_t memoryVBO, uint32_t memoryEBO);
 		void close();
 
-		void update(const std::vector<graphics::Vertex>& vertices, const std::vector<uint32_t>& indices) const;
+		void update(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) const;
 		void reset() const;
 
 		void bind() const;

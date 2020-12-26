@@ -26,15 +26,14 @@
 #include "../../graphics/RenderAPI/RenderCamera.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	// p_... stands for perspective parameters, o_... orthographic
 	struct CameraComponent {
-		graphics::RenderCamera renderCamera;
 
+		RenderCamera renderCamera;
 		std::string id{ "secondary" };
-
 		bool Perspective{ true }; // true - perspective | false - orthographic
 
 		float p_fov{ 45.f };

@@ -27,7 +27,7 @@
 #include "RenderContainerDefinitions.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	enum class MaterialRenderType {

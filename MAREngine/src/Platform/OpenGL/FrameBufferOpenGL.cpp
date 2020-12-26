@@ -21,7 +21,7 @@
 #include "FrameBufferOpenGL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	// ---- PUBLIC METHODS ---- //

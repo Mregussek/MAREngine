@@ -23,7 +23,7 @@
 #include "WindowInstance.h"
 
 
-namespace mar::window {
+namespace marengine {
 
 
 	void Window::endRenderLoop() {
@@ -91,7 +91,7 @@ namespace mar::window {
 			ImGui_ImplGlfw_InitForOpenGL(WindowInstance<GLFWwindow>::Instance().m_window, true);
 		}
 		else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
-			ImGui_ImplSDL2_InitForOpenGL(WindowInstance<SDL_Window>::Instance().m_window, platforms::ContextSDL::getContext());
+			ImGui_ImplSDL2_InitForOpenGL(WindowInstance<SDL_Window>::Instance().m_window, ContextSDL::getContext());
 		}
 		else {
 

@@ -26,8 +26,9 @@
 #include "GUI_Filesystem.h"
 
 
-namespace mar::ecs { class SceneManager; /* forward declaration */ }
-namespace mar::editor {
+namespace marengine {
+
+	class SceneManager;
 
 
 	class GUI_MainMenuBar {
@@ -35,7 +36,7 @@ namespace mar::editor {
 
 		GUI_MainMenuBar() = default;
 
-		void setSceneManager(ecs::SceneManager* manager);
+		void setSceneManager(SceneManager* manager);
 		
 		void initialize();
 		void display();
@@ -44,7 +45,7 @@ namespace mar::editor {
 
 		void display_mainMenuBar();
 
-		ecs::SceneManager* m_sceneManager{ nullptr };
+		SceneManager* m_sceneManager{ nullptr };
 		GUI_Filesystem m_guiFilesystem;
 
 		bool m_newSceneWindow{ false };

@@ -23,36 +23,36 @@
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
-#include "../../../Core/ecs/SceneEvents.h"
+#include "../../../Core/events/SceneEvents.h"
 #include "../../../Window/Window.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void GUI_Guizmo::selectType() {
-		if (window::Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
-			if (window::Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
-			if (window::Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
-			if (window::Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
+		if (Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
+			if (Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
+			if (Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
+			if (Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
 		}
 	}
 
-	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::Entity& currentEntity) const {
-		auto& transform = currentEntity.getComponent<ecs::TransformComponent>();
+	void GUI_Guizmo::draw(const Camera& editorCamera, const Entity& currentEntity) const {
+		auto& transform = currentEntity.getComponent<TransformComponent>();
 		if (draw(editorCamera, transform)) {
-			ecs::SceneEvents::Instance().onTransformUpdate(currentEntity);
+			SceneEvents::Instance().onTransformUpdate(currentEntity);
 		}
 	}
 
-	void GUI_Guizmo::draw(const Camera& editorCamera, const ecs::EntityCollection& currentCollection) const {
-		auto& transform = currentCollection.getComponent<ecs::TransformComponent>();
+	void GUI_Guizmo::draw(const Camera& editorCamera, const EntityCollection& currentCollection) const {
+		auto& transform = currentCollection.getComponent<TransformComponent>();
 		if (draw(editorCamera, transform)) {
-			ecs::SceneEvents::Instance().onCollectionTransformUpdate(&currentCollection, transform);
+			SceneEvents::Instance().onCollectionTransformUpdate(&currentCollection, transform);
 		}
 	}
 
-	bool GUI_Guizmo::draw(const Camera& editorCamera, ecs::TransformComponent& transform) const {
+	bool GUI_Guizmo::draw(const Camera& editorCamera, TransformComponent& transform) const {
 		using namespace maths;
 
 		mat4 matrix{ transform.getTransform() };
@@ -64,7 +64,7 @@ namespace mar::editor {
 		const auto windowSize = ImGui::GetWindowSize();
 		ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
 
-		const graphics::RenderCamera* renderCam = editorCamera.getCameraData();
+		const RenderCamera* renderCam = editorCamera.getCameraData();
 		const float* viewPtr = renderCam->getView().value_ptr();
 		const float* projPtr = renderCam->getProjection().value_ptr();
 		float* transfromPtr = matrix.value_ptr_nonconst();

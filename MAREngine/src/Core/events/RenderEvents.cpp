@@ -31,7 +31,7 @@
 #include "../../Platform/GLSL/ShaderUniforms.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	RenderEvents RenderEvents::s_instance;
@@ -66,7 +66,7 @@ namespace mar::graphics {
 		std::for_each(containersCubemap.begin(), containersCubemap.end(), createPipelineStorage);
 	}
 
-	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const {
+	void RenderEvents::onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const {
 		auto getTransformFromCorrectContainer = [&rpc]()->maths::mat4& {
 			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
 				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_transforms[rpc.transformIndex];
@@ -83,16 +83,16 @@ namespace mar::graphics {
 		containerTransform = transform.getTransform();
 	}
 	
-	void RenderEvents::onLightUpdate(vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const{
+	void RenderEvents::onLightUpdate(vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const{
 		onLightPositionUpdate(position, rpc);
 		onLightComponentUpdate(light, rpc);
 	}
 
-	void RenderEvents::onLightPositionUpdate(vec3 position, const ecs::RenderPipelineComponent& rpc) const {
+	void RenderEvents::onLightPositionUpdate(vec3 position, const RenderPipelineComponent& rpc) const {
 		RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
-	void RenderEvents::onLightComponentUpdate(const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const {
+	void RenderEvents::onLightComponentUpdate(const LightComponent& light, const RenderPipelineComponent& rpc) const {
 		auto& lightMaterial = RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
 
 		lightMaterial.ambient = light.ambient;
@@ -104,7 +104,7 @@ namespace mar::graphics {
 		lightMaterial.shininess = light.shininess;
 	}
 
-	void RenderEvents::onColorUpdate(vec4 color, const ecs::RenderPipelineComponent& rpc) const {
+	void RenderEvents::onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const {
 		auto getColorFromCorrectContainer = [&rpc]()->maths::vec4& {
 			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
 				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_colors[rpc.colorIndex].second;
@@ -131,7 +131,7 @@ namespace mar::graphics {
 		auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 
 		cameraSSBO.bind();
-		cameraSSBO.update<float>(SSBOsGL::ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
+		cameraSSBO.update<float>(GLSL_SSBOs::ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
 	}
 
 

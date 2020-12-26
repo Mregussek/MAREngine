@@ -25,8 +25,11 @@
 #include "../../mar.h"
 
 
-namespace mar::ecs { class SceneManager; class Entity; class EntityCollection; }
-namespace mar::editor {
+namespace marengine {
+
+	class SceneManager; 
+	class Entity; 
+	class EntityCollection;
 
 
 	class GUI_Events {
@@ -36,18 +39,18 @@ namespace mar::editor {
 
 		void initialize();
 
-		void onEntityCreated(ecs::SceneManager* sceneManager) const;
-		void onEntityDeleted(ecs::SceneManager* sceneManager, const ecs::Entity& entity) const;
-		void onEntitySelected(const ecs::Entity& entity) const;
-		void onEntityCopied(ecs::SceneManager* sceneManager, const ecs::Entity& entityToCopy) const;
+		void onEntityCreated(SceneManager* sceneManager) const;
+		void onEntityDeleted(SceneManager* sceneManager, const Entity& entity) const;
+		void onEntitySelected(const Entity& entity) const;
+		void onEntityCopied(SceneManager* sceneManager, const Entity& entityToCopy) const;
 
-		void onEntityCollectionCreated(ecs::SceneManager* sceneManager) const;
-		void onEntityCollectionDeleted(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collection) const;
-		void onEntityCollectionSelected(const ecs::EntityCollection& collection) const;
-		void onEntityCollectionCopied(ecs::SceneManager* sceneManager, const ecs::EntityCollection& collectionToCopy) const;
+		void onEntityCollectionCreated(SceneManager* sceneManager) const;
+		void onEntityCollectionDeleted(SceneManager* sceneManager, const EntityCollection& collection) const;
+		void onEntityCollectionSelected(const EntityCollection& collection) const;
+		void onEntityCollectionCopied(SceneManager* sceneManager, const EntityCollection& collectionToCopy) const;
 
-		void onEntityCreatedAtCollection(const ecs::EntityCollection& collection) const;
-		void onEntityDeletedFromCollection(const ecs::EntityCollection& collection, const ecs::Entity& entity) const;
+		void onEntityCreatedAtCollection(const EntityCollection& collection) const;
+		void onEntityDeletedFromCollection(const EntityCollection& collection, const Entity& entity) const;
 
 	private:
 

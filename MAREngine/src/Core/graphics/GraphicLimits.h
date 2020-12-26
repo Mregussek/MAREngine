@@ -26,7 +26,7 @@
 #include "Mesh/Vertex.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
 	struct GraphicLimits {

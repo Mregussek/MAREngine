@@ -26,7 +26,7 @@
 #include "Components/Components.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 	class Entity; class EntityCollection;
 

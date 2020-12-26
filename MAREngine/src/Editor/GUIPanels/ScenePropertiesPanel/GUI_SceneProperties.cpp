@@ -21,7 +21,7 @@
 #include "GUI_SceneProperties.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void GUI_SceneProperties::display(maths::vec3& sceneBackground) {

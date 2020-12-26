@@ -25,7 +25,7 @@
 #include "../../../mar.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
 	struct RenderPipelineComponent {

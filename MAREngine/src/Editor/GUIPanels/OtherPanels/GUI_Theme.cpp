@@ -22,7 +22,7 @@
 #include "../../EditorLogging.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	void GUI_Theme::Setup_Theme() {

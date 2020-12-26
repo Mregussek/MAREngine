@@ -21,7 +21,7 @@
 #include "PipelineOpenGL.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	// ---- PUBLIC METHODS ---- //
@@ -60,8 +60,8 @@ namespace mar::platforms {
 		PLATFORM_INFO("PIPELINE_OPENGL: pipeline is closed!");
 	}
 
-	void PipelineOpenGL::update(const std::vector<graphics::Vertex>& vertices, const std::vector<uint32_t>& indices) const {
-		const uint32_t vertSize{ vertices.size() * sizeof(graphics::Vertex) };
+	void PipelineOpenGL::update(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) const {
+		const uint32_t vertSize{ vertices.size() * sizeof(Vertex) };
 		const uint32_t indiSize{ indices.size() * sizeof(uint32_t) };
 
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vertSize, vertices.data()) );

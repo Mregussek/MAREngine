@@ -28,7 +28,7 @@
 #include "../../Core/graphics/RenderAPI/RenderCamera.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
     class Camera {
@@ -43,7 +43,7 @@ namespace mar::editor {
         void initialize(float aspectRatio);
         bool update(float aspectRatio, bool useInput);
 
-        const graphics::RenderCamera* getCameraData() const;
+        const RenderCamera* getCameraData() const;
 
     private:
 
@@ -51,7 +51,7 @@ namespace mar::editor {
         void updateCameraVectors();
 
 
-        graphics::RenderCamera m_renderCamera;
+        RenderCamera m_renderCamera;
 
         maths::vec3 m_position{ -10.0f, 2.0f, 0.0f };
         maths::vec3 m_front{ 0.0f, 0.0f, -1.0f };

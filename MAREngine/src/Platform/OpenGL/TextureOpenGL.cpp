@@ -22,7 +22,7 @@
 #include "../../Engine.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	std::unordered_map<std::string, uint32_t> TextureOpenGL::s_2d;
@@ -102,7 +102,7 @@ namespace mar::platforms {
 			return search->second;
 		}
 
-		const auto assetsTexturePath = engine::MAREngine::Instance()->getAssetsPath() + path;
+		const auto assetsTexturePath = MAREngine::Instance()->getAssetsPath() + path;
 		const uint32_t id = genNewTexture(assetsTexturePath.c_str());
 		s_2d.insert({ path, id });
 		return id;
@@ -160,7 +160,7 @@ namespace mar::platforms {
 			return search->second;
 		}
 
-		const auto assetsTexturePath = engine::MAREngine::Instance()->getAssetsPath() + path;
+		const auto assetsTexturePath = MAREngine::Instance()->getAssetsPath() + path;
 		const uint32_t id = genNewCubemap(assetsTexturePath);
 		s_cubemaps.insert({ path, id });
 

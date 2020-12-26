@@ -24,7 +24,7 @@
 #ifdef MAR_ENGINE_DEBUG_MODE
 
 
-namespace mar::debug {
+namespace marengine {
 
 	bool Log::s_initialized{ false };
 	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;

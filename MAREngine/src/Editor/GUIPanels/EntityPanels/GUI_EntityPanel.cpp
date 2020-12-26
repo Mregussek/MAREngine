@@ -38,7 +38,7 @@
 #include "../../../Window/Window.h"
 
 
-namespace mar::editor {
+namespace marengine {
 
 
 	GUI_EntityPanel* GUI_EntityPanel::s_instance{ nullptr };
@@ -55,11 +55,11 @@ namespace mar::editor {
 		currentEntity = nullptr;
 	}
 
-	void GUI_EntityPanel::setCurrentEntity(const ecs::Entity& entity) { 
+	void GUI_EntityPanel::setCurrentEntity(const Entity& entity) { 
 		currentEntity = &entity; 
 	}
 
-	const ecs::Entity& GUI_EntityPanel::getCurrentEntity() const { 
+	const Entity& GUI_EntityPanel::getCurrentEntity() const { 
 		return *currentEntity;
 	}
 
@@ -88,7 +88,7 @@ namespace mar::editor {
 
 	void GUI_EntityPanel::displayEditorMode() const {
 		if (ImGui::CollapsingHeader("TagComponent")) {
-			auto& tag = currentEntity->getComponent<ecs::TagComponent>();
+			auto& tag = currentEntity->getComponent<TagComponent>();
 			CommonComponentHandler::handleTagComponent(tag);
 		}
 
@@ -96,31 +96,31 @@ namespace mar::editor {
 			handleTransformComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
+		if (currentEntity->hasComponent<ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
 			CommonComponentHandler::handleScriptComponent(*currentEntity);
 		}
 
-		if (currentEntity->hasComponent<ecs::RenderableComponent>() && ImGui::CollapsingHeader("RenderableComponent")) {
+		if (currentEntity->hasComponent<RenderableComponent>() && ImGui::CollapsingHeader("RenderableComponent")) {
 			handleRenderableComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::CameraComponent>() && ImGui::CollapsingHeader("CameraComponent")) {
+		if (currentEntity->hasComponent<CameraComponent>() && ImGui::CollapsingHeader("CameraComponent")) {
 			handleCameraComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::ColorComponent>() && ImGui::CollapsingHeader("ColorComponent")) {
+		if (currentEntity->hasComponent<ColorComponent>() && ImGui::CollapsingHeader("ColorComponent")) {
 			handleColorComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::Texture2DComponent>() && ImGui::CollapsingHeader("Texture2DComponent")) {
+		if (currentEntity->hasComponent<Texture2DComponent>() && ImGui::CollapsingHeader("Texture2DComponent")) {
 			handleTexture2DComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::TextureCubemapComponent>() && ImGui::CollapsingHeader("TextureCubemapComponent")) {
+		if (currentEntity->hasComponent<TextureCubemapComponent>() && ImGui::CollapsingHeader("TextureCubemapComponent")) {
 			handleTextureCubemapComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::LightComponent>() && ImGui::CollapsingHeader("LightComponent")) {
+		if (currentEntity->hasComponent<LightComponent>() && ImGui::CollapsingHeader("LightComponent")) {
 			handleLightComponent();
 		}
 			
@@ -130,25 +130,25 @@ namespace mar::editor {
 	void GUI_EntityPanel::displayPlayMode() const {
 		ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
 
-		if (currentEntity->hasComponent<ecs::TransformComponent>()) {
+		if (currentEntity->hasComponent<TransformComponent>()) {
 			handleTransformComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::CameraComponent>())
+		if (currentEntity->hasComponent<CameraComponent>())
 			handleCameraComponent();
 
-		if (currentEntity->hasComponent<ecs::ColorComponent>()) {
+		if (currentEntity->hasComponent<ColorComponent>()) {
 			handleColorComponent();
 		}
 
-		if (currentEntity->hasComponent<ecs::LightComponent>()) {
+		if (currentEntity->hasComponent<LightComponent>()) {
 			handleLightComponent();
 		}
 	}
 
 	void GUI_EntityPanel::popUpMenu() const {
 		if (ImGui::IsWindowFocused()) {
-			if (window::Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneEntityModifyPopUp");
 			}
 		}
@@ -156,46 +156,46 @@ namespace mar::editor {
 		{ // Actual PopUp menu
 			if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
 				if (ImGui::BeginMenu("Add Component")) {
-					const bool hasRenderable{ currentEntity->hasComponent<ecs::RenderableComponent>() };
-					const bool hasLight{ currentEntity->hasComponent<ecs::LightComponent>() };
-					const bool hasCamera{ currentEntity->hasComponent<ecs::CameraComponent>() };
-					const bool hasScript{ currentEntity->hasComponent<ecs::ScriptComponent>() };
-					const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ecs::ColorComponent>() 
-						&& !currentEntity->hasComponent<ecs::Texture2DComponent>() 
-						&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
+					const bool hasRenderable{ currentEntity->hasComponent<RenderableComponent>() };
+					const bool hasLight{ currentEntity->hasComponent<LightComponent>() };
+					const bool hasCamera{ currentEntity->hasComponent<CameraComponent>() };
+					const bool hasScript{ currentEntity->hasComponent<ScriptComponent>() };
+					const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>() 
+						&& !currentEntity->hasComponent<Texture2DComponent>() 
+						&& !currentEntity->hasComponent<TextureCubemapComponent>();
 
 					if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
-						currentEntity->addComponent<ecs::RenderableComponent>();
+						currentEntity->addComponent<RenderableComponent>();
 					}
 						
 					if (hasNeitherColorNorTexture) {
 						if (ImGui::MenuItem("Add ColorComponent")) {
-							currentEntity->addComponent<ecs::ColorComponent>();
-							ecs::SceneEvents::Instance().onColorAdd();
+							currentEntity->addComponent<ColorComponent>();
+							SceneEvents::Instance().onColorAdd();
 						}
 
 						if (ImGui::MenuItem("Add Texture2DComponent")) {
-							currentEntity->addComponent<ecs::Texture2DComponent>();
+							currentEntity->addComponent<Texture2DComponent>();
 						}
 								
 						if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-							currentEntity->addComponent<ecs::TextureCubemapComponent>();
+							currentEntity->addComponent<TextureCubemapComponent>();
 						}
 					}
 
 					if (!hasLight && ImGui::MenuItem("Add LightComponent")) {
-						currentEntity->addComponent<ecs::LightComponent>();
-						ecs::SceneEvents::Instance().onLightAdd();
+						currentEntity->addComponent<LightComponent>();
+						SceneEvents::Instance().onLightAdd();
 					}
 
 					if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
-						currentEntity->addComponent<ecs::CameraComponent>();
-						ecs::SceneEvents::Instance().onCameraAdd();
+						currentEntity->addComponent<CameraComponent>();
+						SceneEvents::Instance().onCameraAdd();
 					}
 
 					if (!hasScript && ImGui::MenuItem("Add ScriptComponent")) {
-						currentEntity->addComponent<ecs::ScriptComponent>();
-						ecs::SceneEvents::Instance().onScriptAdd();
+						currentEntity->addComponent<ScriptComponent>();
+						SceneEvents::Instance().onScriptAdd();
 					}
 
 					ImGui::EndMenu();
@@ -209,7 +209,7 @@ namespace mar::editor {
 	void GUI_EntityPanel::handleTransformComponent() const {
 		using namespace maths;
 
-		auto& tran = currentEntity->getComponent<ecs::TransformComponent>();
+		auto& tran = currentEntity->getComponent<TransformComponent>();
 
 		{ // Sliders
 			bool updatedTransform = false;
@@ -219,7 +219,7 @@ namespace mar::editor {
 			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
 
 			if (updatedTransform) {
-				ecs::SceneEvents::Instance().onTransformUpdate(*currentEntity);
+				SceneEvents::Instance().onTransformUpdate(*currentEntity);
 			}
 		}
 
@@ -227,27 +227,27 @@ namespace mar::editor {
 	}
 
 	void GUI_EntityPanel::handleRenderableComponent() const {
-		auto& renderable = currentEntity->getComponent<ecs::RenderableComponent>();
+		auto& renderable = currentEntity->getComponent<RenderableComponent>();
 
-		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ecs::ColorComponent>()
-			&& !currentEntity->hasComponent<ecs::Texture2DComponent>()
-			&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
+		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>()
+			&& !currentEntity->hasComponent<Texture2DComponent>()
+			&& !currentEntity->hasComponent<TextureCubemapComponent>();
 
 		auto modifyRenderableButtons = [this, &renderable]() {
-			Button_ChooseRenderable<graphics::MeshCreator::Cube>(renderable, "Cube");
+			Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube");
 			ImGui::SameLine();
-			Button_ChooseRenderable<graphics::MeshCreator::Pyramid>(renderable, "Pyramid");
+			Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid");
 			ImGui::SameLine();
-			Button_ChooseRenderable<graphics::MeshCreator::Wall>(renderable, "Wall");
+			Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall");
 			ImGui::SameLine();
-			Button_ChooseRenderable<graphics::MeshCreator::Surface>(renderable, "Surface");
+			Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface");
 		};
 		
 		// Actual Panel for Renderable
 		if (hasNeitherColorNorTexture) {
 			if (ImGui::MenuItem("Remove Renderable")) {
-				currentEntity->removeComponent<ecs::RenderableComponent>();
-				ecs::SceneEvents::Instance().onRenderableRemove();
+				currentEntity->removeComponent<RenderableComponent>();
+				SceneEvents::Instance().onRenderableRemove();
 				return;
 			}
 		}
@@ -278,12 +278,12 @@ namespace mar::editor {
 	}
 
 	void GUI_EntityPanel::handleCameraComponent() const {		
-		auto& camera = currentEntity->getComponent<ecs::CameraComponent>();
+		auto& camera = currentEntity->getComponent<CameraComponent>();
 
 		if (!camera.checkIfMain()) {
 			if (ImGui::Button("Remove Camera")) {
-				currentEntity->removeComponent<ecs::CameraComponent>();
-				ecs::SceneEvents::Instance().onCameraRemove();
+				currentEntity->removeComponent<CameraComponent>();
+				SceneEvents::Instance().onCameraRemove();
 				return;
 			}
 		}
@@ -333,7 +333,7 @@ namespace mar::editor {
 
 		if (updatedCamera) {
 			if (camera.checkIfMain()) {
-				ecs::SceneEvents::Instance().onMainCameraUpdate(*currentEntity);
+				SceneEvents::Instance().onMainCameraUpdate(*currentEntity);
 			}
 		}
 
@@ -342,23 +342,23 @@ namespace mar::editor {
 
 	void GUI_EntityPanel::handleColorComponent() const {
 		if (ImGui::MenuItem("Remove Color")) {
-			currentEntity->removeComponent<ecs::ColorComponent>();
-			ecs::SceneEvents::Instance().onColorRemove();
+			currentEntity->removeComponent<ColorComponent>();
+			SceneEvents::Instance().onColorRemove();
 			return;
 		}
 
-		auto& color = currentEntity->getComponent<ecs::ColorComponent>();
+		auto& color = currentEntity->getComponent<ColorComponent>();
 
 		if (ImGui::ColorEdit4("- color", &color.texture.x)) {
-			ecs::SceneEvents::Instance().onColorUpdate(*currentEntity);
+			SceneEvents::Instance().onColorUpdate(*currentEntity);
 		}
 			
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 	}
 
 	void GUI_EntityPanel::handleTexture2DComponent() const {
-		typedef platforms::TextureOpenGL TexGL;
-		auto& texture2D = currentEntity->getComponent<ecs::Texture2DComponent>();
+		typedef TextureOpenGL TexGL;
+		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
 
 		auto modifyCurrentTexture = [&texture = texture2D.texture, this]() {
 			constexpr size_t inputSize{ 50 };
@@ -371,14 +371,14 @@ namespace mar::editor {
 			}
 
 			if (ImGui::Button("Load Texture")) {
-				ecs::SceneEvents::Instance().onTexture2DUpdate(currentEntity);
+				SceneEvents::Instance().onTexture2DUpdate(currentEntity);
 			}
 		};
 
 		// Actual Texture2D Panel
 		if (ImGui::MenuItem("Remove Texture")) {
-			currentEntity->removeComponent<ecs::Texture2DComponent>();
-			ecs::SceneEvents::Instance().onTexture2DRemove();
+			currentEntity->removeComponent<Texture2DComponent>();
+			SceneEvents::Instance().onTexture2DRemove();
 			return;
 		}
 
@@ -405,8 +405,8 @@ namespace mar::editor {
 	}
 
 	void GUI_EntityPanel::handleTextureCubemapComponent() const {
-		typedef platforms::TextureOpenGL TexGL;
-		auto& cubemap = currentEntity->getComponent<ecs::TextureCubemapComponent>();
+		typedef TextureOpenGL TexGL;
+		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
 
 		auto modifyCurrentCubemap = [&texture = cubemap.texture, this]() {
 			constexpr size_t inputSize{ 50 };
@@ -419,14 +419,14 @@ namespace mar::editor {
 			}
 
 			if (ImGui::Button("Load Cubemap")) {
-				ecs::SceneEvents::Instance().onTextureCubemapUpdate(currentEntity);
+				SceneEvents::Instance().onTextureCubemapUpdate(currentEntity);
 			}
 		};
 
 		// Actual TextureCubemap Panel
 		if (ImGui::MenuItem("Remove Cubemap")) {
-			currentEntity->removeComponent<ecs::TextureCubemapComponent>();
-			ecs::SceneEvents::Instance().onTextureCubemapRemove();
+			currentEntity->removeComponent<TextureCubemapComponent>();
+			SceneEvents::Instance().onTextureCubemapRemove();
 			return;
 		}
 
@@ -452,12 +452,12 @@ namespace mar::editor {
 
 	void GUI_EntityPanel::handleLightComponent() const {
 		if (ImGui::MenuItem("Remove Light")) {
-			currentEntity->removeComponent<ecs::LightComponent>();
-			ecs::SceneEvents::Instance().onLightRemove();
+			currentEntity->removeComponent<LightComponent>();
+			SceneEvents::Instance().onLightRemove();
 			return;
 		}
 
-		auto& light = currentEntity->getComponent<ecs::LightComponent>();
+		auto& light = currentEntity->getComponent<LightComponent>();
 		bool updatedLight = false;
 
 		if (ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
@@ -470,7 +470,7 @@ namespace mar::editor {
 		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) { updatedLight = true; }
 
 		if (updatedLight) {
-			ecs::SceneEvents::Instance().onLightUpdate(*currentEntity);
+			SceneEvents::Instance().onLightUpdate(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
@@ -481,13 +481,13 @@ namespace mar::editor {
 	// --------------------------------------------
 
 	template<typename T>
-	bool GUI_EntityPanel::Button_ChooseRenderable(ecs::RenderableComponent& renderable, const char* buttonName) const {
+	bool GUI_EntityPanel::Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) const {
 		if (ImGui::Button(buttonName)) {
 			renderable.name = T::getID();
 			renderable.vertices = T::getVertices();
 			renderable.indices = T::getIndices();
 
-			ecs::SceneEvents::Instance().onRenderableUpdate(currentEntity);
+			SceneEvents::Instance().onRenderableUpdate(currentEntity);
 
 			return true;
 		}

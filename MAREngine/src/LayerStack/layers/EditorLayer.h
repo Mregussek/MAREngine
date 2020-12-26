@@ -27,8 +27,9 @@
 #include "../../Editor/GUI.h"
 
 
-namespace mar::ecs { class SceneManager; }
-namespace mar::layers {
+namespace marengine {
+
+	class SceneManager;
 
 
 	class EditorLayer : public Layer {
@@ -37,7 +38,7 @@ namespace mar::layers {
 		EditorLayer() = default;
 		EditorLayer(const char* name);
 
-		void submit(ecs::SceneManager* manager);
+		void submit(SceneManager* manager);
 		void renderToViewport();
 
 		// --- OVERRIDED METHODS --- // 
@@ -48,7 +49,7 @@ namespace mar::layers {
 
 	private:
 
-		editor::GUI m_gui;
+		GUI m_gui;
 
 	};
 

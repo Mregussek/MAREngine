@@ -30,7 +30,7 @@
 #include "../graphics/Mesh/MeshCreator.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 	
 
 	SceneEvents SceneEvents::s_instance;
@@ -48,7 +48,7 @@ namespace mar::ecs {
 		const auto& transform = entity.getComponent<TransformComponent>();
 		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
-		graphics::RenderEvents::Instance().onTransformMat4Update(transform, rpc);
+		RenderEvents::Instance().onTransformMat4Update(transform, rpc);
 
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& camera{ entity.getComponent<CameraComponent>() };
@@ -56,7 +56,7 @@ namespace mar::ecs {
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
-			graphics::RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
+			RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
 		}
 
 		ECS_TRACE("SCENE_EVENTS: updateTransform!");
@@ -86,7 +86,7 @@ namespace mar::ecs {
 		auto updateCameraOperation = [&entity, &camera, this]() {
 			const auto& transform = entity.getComponent<TransformComponent>();
 			camera.renderCamera.calculateCameraTransforms(transform, camera);
-			graphics::RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
+			RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
 		};
 
 		if (m_sceneManager->isPlayMode() || m_sceneManager->isPauseMode()) { updateCameraOperation(); }
@@ -109,7 +109,7 @@ namespace mar::ecs {
 		const auto& color = e.getComponent<ColorComponent>();
 		const auto& rpc = e.getComponent<RenderPipelineComponent>();
 
-		graphics::RenderEvents::Instance().onColorUpdate(color.texture, rpc);
+		RenderEvents::Instance().onColorUpdate(color.texture, rpc);
 
 		ECS_TRACE("SCENE_EVENTS: updatedColor!");
 	}
@@ -155,7 +155,7 @@ namespace mar::ecs {
 		const auto& light = e.getComponent<LightComponent>();
 		const auto& rpc = e.getComponent<RenderPipelineComponent>();
 
-		graphics::RenderEvents::Instance().onLightUpdate(transform.center, light, rpc);
+		RenderEvents::Instance().onLightUpdate(transform.center, light, rpc);
 
 		ECS_TRACE("SCENE_EVENTS: updatedLight!");
 	}
@@ -176,9 +176,9 @@ namespace mar::ecs {
 
 	}
 
-	void SceneEvents::onEditorCameraSet(const graphics::RenderCamera* camera) const {
-		graphics::RenderPipeline::Instance->submitCamera(camera);
-		graphics::RenderEvents::Instance().onMainCameraUpdate(*camera);
+	void SceneEvents::onEditorCameraSet(const RenderCamera* camera) const {
+		RenderPipeline::Instance->submitCamera(camera);
+		RenderEvents::Instance().onMainCameraUpdate(*camera);
 	}
 
 	void SceneEvents::onGameCameraSet() const {
@@ -197,13 +197,13 @@ namespace mar::ecs {
 			const auto& transform = scene->getComponent<TransformComponent>(*itEntity);
 			camera.renderCamera.calculateCameraTransforms(transform, camera);
 
-			graphics::RenderPipeline::Instance->submitCamera(&camera.renderCamera);
-			graphics::RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
+			RenderPipeline::Instance->submitCamera(&camera.renderCamera);
+			RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
 		}
 	}
 
 	void SceneEvents::onEntityCopy(const Entity& entity) const {
-		graphics::RenderPipeline::Instance->submitEntity(entity);
+		RenderPipeline::Instance->submitEntity(entity);
 
 		ECS_TRACE("SCENE_EVENTS: onEntityCopy");
 	}
@@ -265,11 +265,11 @@ namespace mar::ecs {
 			SceneOptimizer::copyOBJtoOtherCollectionOnSceneEvent(collection, scene->getCollections()[collectionIndex], filename);
 		}
 		else {
-			graphics::MeshCreator::loadOBJ(filename, path, collection);
+			MeshCreator::loadOBJ(filename, path, collection);
 		}
 
-		graphics::RenderPipeline::Instance->submitCollection(collection);
-		graphics::RenderEvents::Instance().onContainersReadyToDraw();
+		RenderPipeline::Instance->submitCollection(collection);
+		RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
 	}
