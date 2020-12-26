@@ -27,7 +27,7 @@
 #include "../../ecs/Components/Components.h"
 
 
-namespace mar::ecs {  class Entity; }
+namespace mar::ecs { class Entity; class EntityCollection; }
 namespace mar::graphics {
 
 	class RenderCamera;
@@ -43,6 +43,7 @@ namespace mar::graphics {
 
 		void reset();
 
+		void submitCollection(const ecs::EntityCollection& collection);
 		void submitEntity(const ecs::Entity& entity);
 
 		void submitCamera(const RenderCamera* cam);

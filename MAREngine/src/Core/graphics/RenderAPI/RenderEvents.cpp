@@ -67,15 +67,20 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onTransformMat4Update(const ecs::TransformComponent& transform, const ecs::RenderPipelineComponent& rpc) const {
-		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
-			RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
-		}
-		else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
-		}
-		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
-		}
+		auto getTransformFromCorrectContainer = [&rpc]()->maths::mat4& {
+			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_transforms[rpc.transformIndex];
+			}
+			else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex];
+			}
+			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
+				return RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex];
+			}
+		};
+
+		auto& containerTransform{ getTransformFromCorrectContainer() };
+		containerTransform = transform.getTransform();
 	}
 	
 	void RenderEvents::onLightUpdate(vec3 position, const ecs::LightComponent& light, const ecs::RenderPipelineComponent& rpc) const{
@@ -100,15 +105,20 @@ namespace mar::graphics {
 	}
 
 	void RenderEvents::onColorUpdate(vec4 color, const ecs::RenderPipelineComponent& rpc) const {
-		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
-			RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
-		}
-		else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-			RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
-		}
-		else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-			RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second = color;
-		}
+		auto getColorFromCorrectContainer = [&rpc]()->maths::vec4& {
+			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_colors[rpc.colorIndex].second;
+			}
+			else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second;
+			}
+			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
+				return RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second;
+			}
+		};
+
+		auto& containerColor{ getColorFromCorrectContainer() };
+		containerColor = color;
 	}
 	
 	void RenderEvents::onMainCameraUpdate(const RenderCamera& camera) const {

@@ -24,6 +24,7 @@
 #include "../GraphicsLogs.h"
 #include "../GraphicLimits.h"
 #include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Entity/EntityCollection.h"
 
 
 namespace mar::graphics {
@@ -39,10 +40,12 @@ namespace mar::graphics {
 	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
 
 	void RenderPipeline::reset() {
+		for (auto& container : m_containersColor) { container.reset(); }
 		for (auto& container : m_containers2D) { container.reset(); }
 		for (auto& container : m_containersCubemap) { container.reset(); }
 		for (auto& light : m_lights) { light.reset(); }
 
+		m_containersColor.clear();
 		m_containers2D.clear();
 		m_containersCubemap.clear();
 		m_lights.clear();
@@ -50,9 +53,15 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}
 
-	void RenderPipeline::submitEntity(const ecs::Entity& entity) {
-		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline");
+	void RenderPipeline::submitCollection(const ecs::EntityCollection& collection) {
+		const auto& entities{ collection.getEntities() };
+		std::for_each(entities.cbegin(), entities.cend(), [this](const ecs::Entity& entity) {
+			submitEntity(entity);
+		});
+	}
 
+	void RenderPipeline::submitEntity(const ecs::Entity& entity) {
+		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
 		using namespace ecs;
 
 		const auto& tran = entity.getComponent<TransformComponent>();

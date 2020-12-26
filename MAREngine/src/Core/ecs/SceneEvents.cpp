@@ -270,7 +270,7 @@ namespace mar::ecs {
 			graphics::MeshCreator::loadOBJ(filename, path, collection);
 		}
 
-		m_sceneManager->initialize();
+		graphics::RenderPipeline::Instance->submitCollection(collection);
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
 	}

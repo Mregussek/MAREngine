@@ -36,17 +36,12 @@ namespace mar::ecs {
 		const auto& entitiesVector = m_scene->getEntities();
 		const auto& collectionsVector = m_scene->getCollections();
 
-		auto pushEntityToPipeline = [](const Entity& entity) {
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
 			graphics::RenderPipeline::Instance->submitEntity(entity);
-		};
-
-		auto pushCollectionToPipeline = [&pushEntityToPipeline](const EntityCollection& collection) {
-			const auto& entitiesVector = collection.getEntities();
-			std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
-		};
-
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), pushEntityToPipeline);
-		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), pushCollectionToPipeline);
+		});
+		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [](const EntityCollection& collection) {
+			graphics::RenderPipeline::Instance->submitCollection(collection);
+		});
 
 		graphics::RenderEvents::Instance().onContainersReadyToDraw();
 
