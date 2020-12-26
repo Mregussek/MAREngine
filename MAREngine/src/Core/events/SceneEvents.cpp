@@ -19,13 +19,13 @@
 
 
 #include "SceneEvents.h"
-#include "ECSLogs.h"
-#include "SceneManager.h"
-#include "SceneOptimizer.h"
-#include "Entity/Entity.h"
-#include "Entity/EntityCollection.h"
+#include "RenderEvents.h"
+#include "../ecs/ECSLogs.h"
+#include "../ecs/SceneManager.h"
+#include "../ecs/SceneOptimizer.h"
+#include "../ecs/Entity/Entity.h"
+#include "../ecs/Entity/EntityCollection.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
-#include "../graphics/RenderAPI/RenderEvents.h"
 #include "../graphics/RenderAPI/RenderCamera.h"
 #include "../graphics/Mesh/MeshCreator.h"
 
@@ -169,13 +169,11 @@ namespace mar::ecs {
 	}
 
 	void SceneEvents::onScriptUpdate(const Entity* e) const {
-		m_sceneManager->initialize();
 
-		ECS_TRACE("SCENE_EVENTS: updatedScript!");
 	}
 
 	void SceneEvents::onScriptRemove() const {
-		m_sceneManager->initialize();
+
 	}
 
 	void SceneEvents::onEditorCameraSet(const graphics::RenderCamera* camera) const {

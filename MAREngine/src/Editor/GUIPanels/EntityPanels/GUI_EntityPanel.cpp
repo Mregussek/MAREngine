@@ -29,7 +29,7 @@
 
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
-#include "../../../Core/ecs/SceneEvents.h"
+#include "../../../Core/events/SceneEvents.h"
 
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Engine.h"
@@ -154,58 +154,48 @@ namespace mar::editor {
 		}
 
 		{ // Actual PopUp menu
-			const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ecs::ColorComponent>()
-				&& !currentEntity->hasComponent<ecs::Texture2DComponent>()
-				&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
-
 			if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
 				if (ImGui::BeginMenu("Add Component")) {
-					if (!currentEntity->hasComponent<ecs::RenderableComponent>()) {
-						if (ImGui::MenuItem("Add RenderableComponent")) {
-							currentEntity->addComponent<ecs::RenderableComponent>();
-						}
+					const bool hasRenderable{ currentEntity->hasComponent<ecs::RenderableComponent>() };
+					const bool hasLight{ currentEntity->hasComponent<ecs::LightComponent>() };
+					const bool hasCamera{ currentEntity->hasComponent<ecs::CameraComponent>() };
+					const bool hasScript{ currentEntity->hasComponent<ecs::ScriptComponent>() };
+					const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ecs::ColorComponent>() 
+						&& !currentEntity->hasComponent<ecs::Texture2DComponent>() 
+						&& !currentEntity->hasComponent<ecs::TextureCubemapComponent>();
+
+					if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
+						currentEntity->addComponent<ecs::RenderableComponent>();
 					}
 						
 					if (hasNeitherColorNorTexture) {
-						if (ImGui::BeginMenu("Add Color/Texture")) {
-							if (ImGui::MenuItem("Add ColorComponent")) {
-								currentEntity->addComponent<ecs::ColorComponent>();
-								ecs::SceneEvents::Instance().onColorAdd();
-							}
+						if (ImGui::MenuItem("Add ColorComponent")) {
+							currentEntity->addComponent<ecs::ColorComponent>();
+							ecs::SceneEvents::Instance().onColorAdd();
+						}
 
-							if (ImGui::MenuItem("Add Texture2DComponent")) {
-								currentEntity->addComponent<ecs::Texture2DComponent>();
-								ecs::SceneEvents::Instance().onTexture2DAdd();
-							}
+						if (ImGui::MenuItem("Add Texture2DComponent")) {
+							currentEntity->addComponent<ecs::Texture2DComponent>();
+						}
 								
-							if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-								currentEntity->addComponent<ecs::TextureCubemapComponent>();
-								ecs::SceneEvents::Instance().onTextureCubemapAdd();
-							}
-								
-							ImGui::EndMenu();
+						if (ImGui::MenuItem("Add TextureCubemapComponent")) {
+							currentEntity->addComponent<ecs::TextureCubemapComponent>();
 						}
 					}
 
-					if (!currentEntity->hasComponent<ecs::LightComponent>()) {
-						if (ImGui::MenuItem("Add LightComponent")) {
-							currentEntity->addComponent<ecs::LightComponent>();
-							ecs::SceneEvents::Instance().onLightAdd();
-						}
+					if (!hasLight && ImGui::MenuItem("Add LightComponent")) {
+						currentEntity->addComponent<ecs::LightComponent>();
+						ecs::SceneEvents::Instance().onLightAdd();
 					}
 
-					if (!currentEntity->hasComponent<ecs::CameraComponent>()) {
-						if (ImGui::MenuItem("Add CameraComponent")) {
-							currentEntity->addComponent<ecs::CameraComponent>();
-							ecs::SceneEvents::Instance().onCameraAdd();
-						}
+					if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
+						currentEntity->addComponent<ecs::CameraComponent>();
+						ecs::SceneEvents::Instance().onCameraAdd();
 					}
 
-					if (!currentEntity->hasComponent<ecs::ScriptComponent>()) {
-						if (ImGui::MenuItem("Add ScriptComponent")) {
-							currentEntity->addComponent<ecs::ScriptComponent>();
-							ecs::SceneEvents::Instance().onScriptAdd();
-						}
+					if (!hasScript && ImGui::MenuItem("Add ScriptComponent")) {
+						currentEntity->addComponent<ecs::ScriptComponent>();
+						ecs::SceneEvents::Instance().onScriptAdd();
 					}
 
 					ImGui::EndMenu();
@@ -214,8 +204,6 @@ namespace mar::editor {
 				ImGui::EndPopup();
 			}
 		}
-
-		EDITOR_TRACE("GUI: scene_entity_modify_popup");
 	}
 
 	void GUI_EntityPanel::handleTransformComponent() const {

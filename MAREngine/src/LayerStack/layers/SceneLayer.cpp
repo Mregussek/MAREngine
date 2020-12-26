@@ -21,7 +21,7 @@
 #include "SceneLayer.h"
 #include "../LayerLogs.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/events/SceneEvents.h"
 
 
 namespace mar::layers {

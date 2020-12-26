@@ -26,7 +26,7 @@
 
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
-#include "../../../Core/ecs/SceneEvents.h"
+#include "../../../Core/events/SceneEvents.h"
 
 #include "../../../Window/Window.h"
 

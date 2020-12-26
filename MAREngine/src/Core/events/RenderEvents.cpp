@@ -19,16 +19,16 @@
 
 
 #include "RenderEvents.h"
-#include "RenderCamera.h"
-#include "RenderPipeline.h"
-#include "RenderStatistics.h"
-#include "../GraphicsLogs.h"
-#include "../GraphicLimits.h"
-#include "../Renderer/RenderMemorizer.h"
-#include "../Renderer/PipelineStorage.h"
-#include "../Renderer/ShaderBufferStorage.h"
-#include "../../ecs/Components/Components.h"
-#include "../../../Platform/GLSL/ShaderUniforms.h"
+#include "../graphics/RenderAPI/RenderCamera.h"
+#include "../graphics/RenderAPI/RenderPipeline.h"
+#include "../graphics/RenderAPI/RenderStatistics.h"
+#include "../graphics/GraphicsLogs.h"
+#include "../graphics/GraphicLimits.h"
+#include "../graphics/Renderer/RenderMemorizer.h"
+#include "../graphics/Renderer/PipelineStorage.h"
+#include "../graphics/Renderer/ShaderBufferStorage.h"
+#include "../ecs/Components/Components.h"
+#include "../../Platform/GLSL/ShaderUniforms.h"
 
 
 namespace mar::graphics {

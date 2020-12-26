@@ -30,7 +30,7 @@
 #include "../../Core/ecs/Components/Components.h"
 #include "../../Core/ecs/SceneManager.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/events/SceneEvents.h"
 
 #include "EntityPanels/GUI_EntityCollectionPanel.h"
 #include "EntityPanels/GUI_EntityPanel.h"

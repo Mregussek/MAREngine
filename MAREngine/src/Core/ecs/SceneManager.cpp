@@ -20,8 +20,8 @@
 
 #include "SceneManager.h"
 #include "ECSLogs.h"
-#include "SceneEvents.h"
-#include "../graphics/RenderAPI/RenderEvents.h"
+#include "../events/SceneEvents.h"
+#include "../events/RenderEvents.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
 

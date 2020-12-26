@@ -26,7 +26,7 @@
 #include "../EditorLogging.h"
 
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneEvents.h"
+#include "../../Core/events/SceneEvents.h"
 #include "../../Core/ecs/Entity/EntityCollection.h"
 
 #include "../../Core/graphics/Mesh/MeshCreator.h"

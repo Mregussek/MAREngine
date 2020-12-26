@@ -260,7 +260,7 @@
     <ClInclude Include="src\Core\ecs\Entity\EntityCollection.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h" />
-    <ClInclude Include="src\Core\ecs\SceneEvents.h" />
+    <ClInclude Include="src\Core\events\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
     <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
@@ -276,7 +276,7 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderEvents.h" />
+    <ClInclude Include="src\Core\events\RenderEvents.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h" />
     <ClInclude Include="src\Core\graphics\Renderer\ShaderBufferStorage.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
@@ -367,7 +367,7 @@
     <ClCompile Include="src\Core\ecs\Entity\EntityCollection.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\EntityOperation.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
-    <ClCompile Include="src\Core\ecs\SceneEvents.cpp" />
+    <ClCompile Include="src\Core\events\SceneEvents.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp" />
@@ -377,7 +377,7 @@
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\PipelineStorage.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
-    <ClCompile Include="src\Core\graphics\RenderAPI\RenderEvents.cpp" />
+    <ClCompile Include="src\Core\events\RenderEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderMemorizer.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderStatistics.cpp" />

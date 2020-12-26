@@ -42,8 +42,8 @@ namespace mar::graphics {
 		calculateModel({ 0.f, 0.f, 0.f });
 		calculateView(transform.center, eyeToCenter, { 0.f, 1.0f, 0.f });
 
-		if (camera.Perspective) {  calculatePerspective(camera.p_fov, camera.p_aspectRatio, camera.p_near, camera.p_far);  }
-		else {  calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far);  }
+		if (camera.Perspective) { calculatePerspective(camera.p_fov, camera.p_aspectRatio, camera.p_near, camera.p_far); }
+		else { calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far); }
 
 		recalculateMVP();
 	
