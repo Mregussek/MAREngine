@@ -270,6 +270,7 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainer.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainerDefinitions.h" />
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.h" />
     <ClInclude Include="src\Core\graphics\Renderer\PipelineStorage.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderMemorizer.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h" />
@@ -373,6 +374,7 @@
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderContainer.cpp" />
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\PipelineStorage.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderEvents.cpp" />

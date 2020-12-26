@@ -72,6 +72,7 @@ namespace mar::graphics {
 		size_t submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const ecs::LightComponent& light);
 
+
 		std::vector<RenderContainer> m_containersColor;
 		std::vector<RenderContainer> m_containers2D;
 		std::vector<RenderContainer> m_containersCubemap;

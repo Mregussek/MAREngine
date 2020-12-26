@@ -18,27 +18,28 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_GRAPHICS_LIMITS_H
-#define MAR_ENGINE_GRAPHICS_GRAPHICS_LIMITS_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDER_API_RENDER_PIPELINE_HELPER_H
+#define MAR_ENGINE_GRAPHICS_RENDER_API_RENDER_PIPELINE_HELPER_H
 
 
-#include "../../mar.h"
-#include "Mesh/Vertex.h"
+#include "../../../mar.h"
 
 
 namespace mar::graphics {
 
+	class RenderContainer;
+	class LightContainer;
 
-	struct GraphicLimits {
-			
-		const static inline uint32_t maxTrianglesCount{ 100000 };
-		const static inline uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
-		const static inline uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
-		const static inline uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
-		const static inline uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
 
-		const static inline uint32_t maxTransforms{ 32 };
-		const static inline uint32_t maxLights{ 32 };
+	class RenderPipelineHelper {
+	public:
+
+		static int32_t findAvailableRenderContainer(const std::vector<RenderContainer>& containers, uint32_t verticesToPush, uint32_t indicesToPush);
+		static int32_t findAvailableLightContainer(const std::vector<LightContainer>& containers);
+
+	private:
+
+		static bool canPushRenderableToContainer(const RenderContainer& container, uint32_t verticesToPush, uint32_t indicesToPush);
 
 	};
 
@@ -46,4 +47,4 @@ namespace mar::graphics {
 }
 
 
-#endif // !MAR_ENGINE_GRAPHICS_GRAPHICS_LIMITS_H
+#endif // !MAR_ENGINE_GRAPHICS_RENDER_API_RENDER_PIPELINE_HELPER_H

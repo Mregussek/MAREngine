@@ -20,6 +20,7 @@
 
 #include "RenderPipeline.h"
 #include "RenderCamera.h"
+#include "RenderPipelineHelper.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicLimits.h"
 #include "../../ecs/Entity/Entity.h"
@@ -104,87 +105,46 @@ namespace mar::graphics {
 	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, ecs::RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush) {
 		m_containerPtr = nullptr;
 
-		auto canPushToContainer = [verticesToPush, indicesToPush](const RenderContainer& container)->bool {
-			const auto currentVerticesSize{ container.getVertices().size() };
-			const auto currentIndicesSize{ container.getIndices().size() };
-			const auto currentTransformSize{ container.getTransforms().size() };
-
-			const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
-			const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
-			const bool cannotPushTransform = (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
-
-			return !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
-		};
-
-		auto textureContainerCheck = [&canPushToContainer, &rpc, this](std::vector<RenderContainer>& renderContainers, MaterialRenderType matType)->bool{
-			for (size_t i = 0; i < renderContainers.size(); i++) {
-				const bool thereIsPlaceInContainer = canPushToContainer(renderContainers[i]);
-
-				if (thereIsPlaceInContainer) {
-					m_containerPtr = &renderContainers[i];
-					rpc.containerIndex = i;
-					rpc.materialType = (size_t)matType;
-
-					GRAPHICS_TRACE("RENDER_PIPELINE: available container is at index {}, returning...", i);
-					return true;
-				}
+		auto selectContainerPtrProcedure = [&rpc, materialType, verticesToPush, indicesToPush, this](std::vector<RenderContainer>& containers) {
+			const auto index = RenderPipelineHelper::findAvailableRenderContainer(containers, verticesToPush, indicesToPush);
+			if (index != -1) {
+				GRAPHICS_TRACE("RENDER_PIPELINE: found render container with place for new renderable, index {}, materialType {}", index, materialType);
+				m_containerPtr = &containers[index];
+				rpc.containerIndex = index;
+			}
+			else {
+				GRAPHICS_TRACE("RENDER_PIPELINE: cannot find render container with place in it for materialType {}, creating new one...", index, materialType);
+				m_containerPtr = &containers.emplace_back();
+				rpc.containerIndex = containers.size() - 1;
 			}
 
-			return false;
+			rpc.materialType = (size_t)materialType;
+			m_containerPtr->m_materialRenderType = materialType;
 		};
 
-		auto emplaceNewContainer = [&rpc, this](std::vector<RenderContainer>& containers, MaterialRenderType matType) {
-			m_containerPtr = &containers.emplace_back();
-			rpc.containerIndex = containers.size() - 1;
-			rpc.materialType = (size_t)matType;
-
-			GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container at {}, current size {}", matType, containers.size());
-		};
-
-		auto selectContainerPtrProcedure = [this, materialType, &textureContainerCheck, &emplaceNewContainer](std::vector<RenderContainer>& containers, MaterialRenderType passedMaterialType) {
-			if (materialType == passedMaterialType) {
-				if (textureContainerCheck(containers, passedMaterialType) && m_containerPtr) {
-					m_containerPtr->m_materialRenderType = passedMaterialType;
-					return;
-				}
-
-				// if cannot find available container, create new one
-				emplaceNewContainer(containers, passedMaterialType);
-				m_containerPtr->m_materialRenderType = passedMaterialType;
-				return;
-			}
-		};
-
-		selectContainerPtrProcedure(m_containersColor, MaterialRenderType::COLOR);
-		selectContainerPtrProcedure(m_containers2D, MaterialRenderType::TEXTURE2D);
-		selectContainerPtrProcedure(m_containersCubemap, MaterialRenderType::CUBEMAP);
+		if (materialType == MaterialRenderType::COLOR) {
+			selectContainerPtrProcedure(m_containersColor);
+		}
+		else if (materialType == MaterialRenderType::TEXTURE2D) {
+			selectContainerPtrProcedure(m_containers2D);
+		}
+		else if (materialType == MaterialRenderType::CUBEMAP) {
+			selectContainerPtrProcedure(m_containersCubemap);
+		}
 	}
 
 	void RenderPipeline::setContainerLight(ecs::RenderPipelineComponent& rpc) {
 		m_lightPtr = nullptr;
 
-		for (size_t i = 0; i < m_lights.size(); i++) {
-			auto canPushToContainer = [currentLightSize = m_lights[i].m_lightMaterials.size()]()->bool {
-				const bool cannotPushLights = currentLightSize + 1 >= 32;
-				return !cannotPushLights;
-			};
-
-			const bool thereIsPlaceInContainer = canPushToContainer();
-
-			if (thereIsPlaceInContainer) {
-				m_lightPtr = &m_lights[i];
-				rpc.containerLightIndex = i;
-
-				GRAPHICS_TRACE("RENDER_PIPELINE: available container for light is at {}, returning...", 0);
-				return;
-			}
+		const auto index = RenderPipelineHelper::findAvailableLightContainer(m_lights);
+		if (index != -1) {
+			m_lightPtr = &m_lights[index];
+			rpc.containerLightIndex = index;
 		}
-
-		// if cannot find available container, create new one
-		m_lightPtr = &m_lights.emplace_back();
-		rpc.containerLightIndex = m_lights.size() - 1;
-
-		GRAPHICS_INFO("RENDER_PIPELINE: emplaced back new render container (for light), current size {}", m_lights.size());
+		else {
+			m_lightPtr = &m_lights.emplace_back();
+			rpc.containerLightIndex = m_lights.size() - 1;
+		}
 	}
 
 	size_t RenderPipeline::submitRenderable(const ecs::RenderableComponent& renderable, const ecs::TransformComponent& transform) {
@@ -315,9 +275,9 @@ namespace mar::graphics {
 		lightMaterial.constant = light.constant;
 		lightMaterial.shininess = light.shininess;
 
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", m_lights.size());
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", m_lightPtr->m_lightMaterials.size());
 		
-		return m_lights.size() - 1;
+		return m_lightPtr->m_lightMaterials.size() - 1;
 	}
 
 	void RenderPipeline::submitCamera(const RenderCamera* cam) {
