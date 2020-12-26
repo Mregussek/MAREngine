@@ -271,6 +271,7 @@ namespace mar::ecs {
 		}
 
 		graphics::RenderPipeline::Instance->submitCollection(collection);
+		graphics::RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
 	}

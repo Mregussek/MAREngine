@@ -53,6 +53,12 @@ namespace mar::graphics {
 		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}
 
+	void RenderPipeline::submitCamera(const RenderCamera* cam) {
+		m_camera = cam;
+
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
+	}
+
 	void RenderPipeline::submitCollection(const ecs::EntityCollection& collection) {
 		const auto& entities{ collection.getEntities() };
 		std::for_each(entities.cbegin(), entities.cend(), [this](const ecs::Entity& entity) {
@@ -178,10 +184,6 @@ namespace mar::graphics {
 	}
 
 	void RenderPipeline::submitVertices(const std::vector<Vertex>& vertices, float shapeID) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitVertices(), m_containerPtr is nullptr!");
-			return;
-		}
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting vertices and setting shapeID for batch renderer...");
 
 		auto& containerVertices{ m_containerPtr->m_vertices };
@@ -197,10 +199,6 @@ namespace mar::graphics {
 	}
 
 	void RenderPipeline::submitIndices(const std::vector<uint32_t>& indices, uint32_t indicesMax) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitIndices(), m_containerPtr is nullptr!");
-			return;
-		}
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting indices and increasing every indice for batch renderer...");
 
 		auto& containerIndices{ m_containerPtr->m_indices };
@@ -216,55 +214,32 @@ namespace mar::graphics {
 	}
 
 	void RenderPipeline::submitTransform(const maths::mat4& transform) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitTransform(), m_containerPtr is nullptr!");
-			return;
-		}
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting transform...");
 
 		m_containerPtr->m_transforms.push_back(transform);
 	}
 
 	size_t RenderPipeline::submitColor(int32_t entityIndex, const ecs::ColorComponent& color) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitColor(), m_containerPtr is nullptr!");
-			return -1;
-		}
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitting color component, current size = {}, entity_index = {}", m_containerPtr->m_colors.size(), entityIndex);
 
 		m_containerPtr->m_colors.push_back({ entityIndex, color.texture });
 		m_containerPtr->m_samplerTypes.push_back(0.0f);
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted color component, current size = {}, entity_index = {}", m_containerPtr->m_colors.size(), entityIndex);
-		
 		return m_containerPtr->m_colors.size() - 1;
 	}
 
 	size_t RenderPipeline::submitTexture2D(int32_t entityIndex, const ecs::Texture2DComponent& texture) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitTexture2D(), m_containerPtr is nullptr!");
-			return -1;
-		}
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitting texture2d component, current size = {}, entity_index = {}, texture2D = {}", m_containerPtr->m_tex2D.size(), entityIndex, texture.texture);
 
 		m_containerPtr->m_tex2D.push_back({ entityIndex, texture.texture });
 		m_containerPtr->m_samplerTypes.push_back(1.0f);
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture2d component, current size = {}, entity_index = {}, texture2D = {}", m_containerPtr->m_tex2D.size(), entityIndex, texture.texture);
-
 		return m_containerPtr->m_tex2D.size() - 1;
 	}
 
 	size_t RenderPipeline::submitCubemap(int32_t entityIndex, const ecs::TextureCubemapComponent& cubemap) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitCubemap(), m_containerPtr is nullptr!");
-			return -1;
-		}
+		GRAPHICS_TRACE("RENDER_PIPELINE: submitting texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", m_containerPtr->m_cubes.size(), entityIndex, cubemap.texture);
 
 		m_containerPtr->m_cubes.push_back({ entityIndex, cubemap.texture });
 		m_containerPtr->m_samplerTypes.push_back(2.0f);
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", 
-			m_containerPtr->m_cubes.size(), entityIndex, cubemap.texture);
-
 		return m_containerPtr->m_cubes.size() - 1;
 	}
 
@@ -287,12 +262,6 @@ namespace mar::graphics {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", m_lightPtr->m_lightMaterials.size());
 		
 		return m_lightPtr->m_lightMaterials.size() - 1;
-	}
-
-	void RenderPipeline::submitCamera(const RenderCamera* cam) {
-		m_camera = cam;
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
 	}
 
 
