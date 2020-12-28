@@ -18,26 +18,13 @@
 **/
 
 
-#include "src/SandboxMAR.h"
 #include "src/EditorMAR.h"
 
 
-#define USE_EDITOR_MAR_ENGINE 1
-
-
 int main() {
-	if constexpr (USE_EDITOR_MAR_ENGINE) {
-		marengine::EditorMAR editor;
+	marengine::EditorMAR editor;
 
-		editor.initialize();
-		editor.runProjectOnEngine();
-		editor.shutdown();
-	}
-	else {
-		marengine::SandboxMAR sandbox;
-
-		sandbox.initialize();
-		sandbox.run();
-		sandbox.shutdown();
-	}
+	editor.initialize();
+	editor.runProjectOnEngine();
+	editor.shutdown();
 }

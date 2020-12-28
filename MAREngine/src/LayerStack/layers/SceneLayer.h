@@ -39,7 +39,6 @@ namespace marengine {
 		SceneLayer(const char* debugname);
 		
 		void passSceneToManager(Scene* scene);
-		SceneManager* getSceneManager();
 
 		// --- OVERRIDED METHODS --- //
 

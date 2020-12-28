@@ -27,13 +27,11 @@
 
 namespace marengine {
 
-	class Scene;
-
 
 	class GUI_Statistics {
 	public:
 
-		static void update(const Scene* scene);
+		static void update();
 
 	};
 

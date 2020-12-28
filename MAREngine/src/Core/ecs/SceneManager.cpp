@@ -28,6 +28,9 @@
 namespace marengine {
 
 
+	SceneManager* SceneManager::Instance{ nullptr };
+
+
 	void SceneManager::initialize() const {
 		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 

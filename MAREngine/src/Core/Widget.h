@@ -31,22 +31,24 @@ namespace marengine {
 		virtual void create() { }
 		virtual void destroy() { }
 
-		virtual void onCreation() const { }
-		virtual void onDestruction() const { }
-
 		virtual void beginFrame() { }
 		virtual void updateFrame() { }
 		virtual void endFrame() { }
+
+		virtual void onCreation() const { }
+		virtual void onDestruction() const { }
 
 		virtual void onBeginFrame() const { }
 		virtual void onUpdateFrame() const { }
 		virtual void onEndFrame() const { }
 
 		virtual bool isHovered() const { }
-		virtual bool isInterectable() const { }
 
 		virtual void onKeyboardButtonPressed() const { }
 		virtual void onMouseButtonPressed() const { }
+
+		virtual void onDragDetected() const { }
+		virtual void onDrop() const { }
 
 	};
 

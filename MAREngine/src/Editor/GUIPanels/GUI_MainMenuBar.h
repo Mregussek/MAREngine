@@ -28,16 +28,12 @@
 
 namespace marengine {
 
-	class SceneManager;
-
 
 	class GUI_MainMenuBar {
 	public:
 
 		GUI_MainMenuBar() = default;
 
-		void setSceneManager(SceneManager* manager);
-		
 		void initialize();
 		void display();
 
@@ -45,7 +41,6 @@ namespace marengine {
 
 		void display_mainMenuBar();
 
-		SceneManager* m_sceneManager{ nullptr };
 		GUI_Filesystem m_guiFilesystem;
 
 		bool m_newSceneWindow{ false };

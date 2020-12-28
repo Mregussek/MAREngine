@@ -47,6 +47,8 @@ namespace marengine {
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
+		SceneManager::Instance->useEditorCamera = true;
+
 		m_viewport.initialize();
 		m_textEditor.initialize();
 		m_mainMenuBar.initialize();
@@ -68,14 +70,6 @@ namespace marengine {
 		EDITOR_INFO("GUI: closed properly!");
 	}
 
-	void GUI::submit(SceneManager* scene) {
-		m_sceneManager = scene;
-		m_sceneManager->useEditorCamera = true;
-		m_mainMenuBar.setSceneManager(m_sceneManager);
-
-		EDITOR_INFO("GUI: scene has been submitted!");
-	}
-
 	void GUI::display() {
 		prepareNewFrame();
 		updateFrame();
@@ -85,7 +79,7 @@ namespace marengine {
 	}
 
 	void GUI::renderToViewport() const {
-		m_viewport.bind(m_sceneManager->getScene()->getBackground());
+		m_viewport.bind(SceneManager::Instance->getScene()->getBackground());
 	}
 
 	const Entity& GUI::getCurrentEntity() const {
@@ -97,7 +91,7 @@ namespace marengine {
 	}
 
 	bool GUI::canDrawLines() const {
-		return m_sceneManager->isEditorMode() && m_sceneManager->useEditorCamera;
+		return SceneManager::Instance->isEditorMode() && SceneManager::Instance->useEditorCamera;
 	}
 
 	// --------- PRIVATE METHODS ------------- //
@@ -144,17 +138,17 @@ namespace marengine {
 	}
 
 	void GUI::updateFrame() {
-		m_sceneHierarchyPanel.update(m_sceneManager);
+		m_sceneHierarchyPanel.update();
 
-		GUI_Statistics::update(m_sceneManager->getScene());
+		GUI_Statistics::update();
 
 		m_textEditor.update();
 
 		m_mainMenuBar.display();
-		m_viewport.display(m_sceneManager, m_collectionPanel.getCurrentCollection(), m_entityPanel.getCurrentEntity());
-		m_sceneProperties.display(m_sceneManager->getScene()->getBackground());
+		m_viewport.display(m_collectionPanel.getCurrentCollection(), m_entityPanel.getCurrentEntity());
+		m_sceneProperties.display(SceneManager::Instance->getScene()->getBackground());
 
-		m_entityPanel.update(m_sceneManager->isPlayMode());
+		m_entityPanel.update(SceneManager::Instance->isPlayMode());
 		m_collectionPanel.update();
 
 		EDITOR_TRACE("GUI: updated frame! (Actual Editor Windows)");

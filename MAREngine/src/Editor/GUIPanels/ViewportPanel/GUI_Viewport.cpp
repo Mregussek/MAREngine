@@ -46,10 +46,10 @@ namespace marengine {
 		m_framebuffer.close();
 	}
 
-	void GUI_Viewport::display(SceneManager* sceneManager, const EntityCollection& currentCollection, const Entity& currentEntity) {
+	void GUI_Viewport::display(const EntityCollection& currentCollection, const Entity& currentEntity) {
 		ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
 		
-		displayMainMenuBar(sceneManager);
+		displayMainMenuBar();
 
 		ImGui::End();
 
@@ -61,12 +61,12 @@ namespace marengine {
 
 		displayActualViewport();
 
-		if (sceneManager->useEditorCamera) {
+		if (SceneManager::Instance->useEditorCamera) {
 			const bool entityExists = &currentEntity != nullptr;
 			const bool collectionExists = &currentCollection != nullptr;
 			m_guizmo.selectType();
 
-			if (sceneManager->isEditorMode()) {
+			if (SceneManager::Instance->isEditorMode()) {
 				if (collectionExists) { m_guizmo.draw(m_camera, currentCollection); }
 				else if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
@@ -85,8 +85,8 @@ namespace marengine {
 		EDITOR_TRACE("GUI: Displaying viewport");
 	}
 
-	void GUI_Viewport::displayMainMenuBar(SceneManager* sceneManager) {
-		auto displayEditorModeButtons = [&sceneManager, &camera = std::as_const(m_camera)]() {
+	void GUI_Viewport::displayMainMenuBar() {
+		auto displayEditorModeButtons = [&sceneManager = SceneManager::Instance, &camera = std::as_const(m_camera)]() {
 			if (ImGui::Button("PLAY")) { sceneManager->setPlayMode(); }
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
@@ -100,7 +100,7 @@ namespace marengine {
 			}
 		};
 
-		auto displayPlayModeButtons = [&sceneManager, &camera = std::as_const(m_camera)]() {
+		auto displayPlayModeButtons = [&sceneManager = SceneManager::Instance, &camera = std::as_const(m_camera)]() {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
@@ -119,7 +119,7 @@ namespace marengine {
 		};
 
 		if (ImGui::BeginMenuBar()) {
-			if (sceneManager->isEditorMode()) { displayEditorModeButtons(); }
+			if (SceneManager::Instance->isEditorMode()) { displayEditorModeButtons(); }
 			else { displayPlayModeButtons(); }
 
 			ImGui::EndMenuBar();

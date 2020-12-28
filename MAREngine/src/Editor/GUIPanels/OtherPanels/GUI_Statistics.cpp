@@ -21,6 +21,7 @@
 #include "GUI_Statistics.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Scene.h"
+#include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/graphics/RenderAPI/RenderStatistics.h"
@@ -30,7 +31,7 @@
 namespace marengine {
 
 
-	void GUI_Statistics::update(const Scene* scene) {
+	void GUI_Statistics::update() {
 		ImGui::Begin("Statistics Menu");
 
 		auto& stats{ *RenderStatistics::Instance };
@@ -38,8 +39,8 @@ namespace marengine {
 		const auto& containers2D{ RenderPipeline::Instance->get2Dcontainers() };
 		const auto& containersCubemap{ RenderPipeline::Instance->getCubemapContainers() };
 
-		const auto& collections{ scene->getCollections() };
-		const auto& entities{ scene->getEntities() };
+		const auto& collections{ SceneManager::Instance->getScene()->getCollections() };
+		const auto& entities{ SceneManager::Instance->getScene()->getEntities() };
 
 		stats.entitiesCount += entities.size();
 		stats.entityCollectionsCount += collections.size();

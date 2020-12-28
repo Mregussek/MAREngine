@@ -53,11 +53,5 @@ namespace marengine {
 		m_gui.renderToViewport();
 	}
 
-	void EditorLayer::submit(SceneManager* manager) {
-		LAYER_TRACE("EDITOR_LAYER: submitting scene manager to {}", p_debugName);
-
-		m_gui.submit(manager);
-	}
-
 
 }

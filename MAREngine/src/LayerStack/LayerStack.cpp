@@ -53,7 +53,6 @@ namespace marengine {
 
 		for (auto& layer : m_layers) {
 			layer->close();
-			delete layer;
 		}
 
 		LAYER_INFO("LAYER_STACK: closed deleted all layers!");

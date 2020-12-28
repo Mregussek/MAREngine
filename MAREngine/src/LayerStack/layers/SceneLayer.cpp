@@ -40,6 +40,7 @@ namespace marengine {
 	void SceneLayer::initialize() {
 		LAYER_TRACE("SCENE_LAYER: {} going to initialize...", p_debugName);
 
+		SceneManager::Instance = &m_sceneManager;
 		SceneEvents::Instance().setSceneManager(m_sceneManager);
 		m_sceneManager.initialize();
 	}
@@ -47,7 +48,6 @@ namespace marengine {
 	void SceneLayer::update() {
 		LAYER_TRACE("SCENE_LAYER: {} going to update...", p_debugName);
 
-		SceneEvents::Instance().setSceneManager(m_sceneManager);
 		m_sceneManager.update();
 	}
 
@@ -55,10 +55,6 @@ namespace marengine {
 		LAYER_TRACE("SCENE_LAYER: {} going to close...", p_debugName);
 
 		m_sceneManager.shutdown();
-	}
-
-	SceneManager* SceneLayer::getSceneManager() {
-		return &m_sceneManager; 
 	}
 
 

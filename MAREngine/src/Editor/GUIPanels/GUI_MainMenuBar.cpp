@@ -59,7 +59,7 @@ namespace marengine {
 			m_guiFilesystem.openSaveSceneWindow();
 			m_saveSceneWindow = false;
 		}
-		m_guiFilesystem.displaySaveSceneWindow(m_sceneManager->getScene());
+		m_guiFilesystem.displaySaveSceneWindow(SceneManager::Instance->getScene());
 
 		if (m_loadSceneWindow) {
 			m_guiFilesystem.openLoadSceneWindow();
@@ -71,7 +71,7 @@ namespace marengine {
 			m_guiFilesystem.openLoadOBJWindow();
 			m_loadOBJfileWindow = false;
 		}
-		m_guiFilesystem.displayLoadOBJWindow(m_sceneManager->getScene());
+		m_guiFilesystem.displayLoadOBJWindow(SceneManager::Instance->getScene());
 
 		if (m_infoWindow) {
 			m_infoWindow = GUI_Info::InfoWindow();
@@ -103,7 +103,7 @@ namespace marengine {
 				if (entityExists) {
 					const char* shortcut = currentEntity.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
-						GUI_Events::Instance()->onEntityCopied(m_sceneManager, currentEntity);
+						GUI_Events::Instance()->onEntityCopied(SceneManager::Instance, currentEntity);
 					}
 				}
 
@@ -113,7 +113,7 @@ namespace marengine {
 				if (collectionExists && !entityExists) {
 					const char* shortcut = currentCollection.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
-						GUI_Events::Instance()->onEntityCollectionCopied(m_sceneManager, currentCollection);
+						GUI_Events::Instance()->onEntityCollectionCopied(SceneManager::Instance, currentCollection);
 					}
 				}
 				
@@ -135,10 +135,6 @@ namespace marengine {
 		}
 
 		EDITOR_TRACE("GUI: pushing main menu bar");
-	}
-
-	void GUI_MainMenuBar::setSceneManager(SceneManager* manager) {
-		m_sceneManager = manager;
 	}
 
 

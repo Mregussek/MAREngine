@@ -154,12 +154,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorMAR.h" />
-    <ClInclude Include="src\SandboxMAR.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\EditorMAR.cpp" />
-    <ClCompile Include="src\SandboxMAR.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="desktop.ini" />

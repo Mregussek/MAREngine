@@ -30,7 +30,6 @@
 
 namespace marengine {
 
-	class SceneManager; 
 	class Entity; 
 	class EntityCollection;
 
@@ -41,7 +40,7 @@ namespace marengine {
 		void initialize();
 		void close();
 
-		void display(SceneManager* sceneManager, const EntityCollection& currentCollection, const Entity& currentEntity);
+		void display(const EntityCollection& currentCollection, const Entity& currentEntity);
 
 		void bind(maths::vec3 backgroundColor) const;
 		void unbind() const;
@@ -50,7 +49,7 @@ namespace marengine {
 
 	private:
 
-		void displayMainMenuBar(SceneManager* sceneManager);
+		void displayMainMenuBar();
 		void displayActualViewport();
 
 		FramebufferOpenGL m_framebuffer;

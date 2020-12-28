@@ -38,15 +38,15 @@
 namespace marengine {
 
 
-	void GUI_SceneHierarchy::update(SceneManager* manager) {
+	void GUI_SceneHierarchy::update() {
 		ImGui::Begin("Scene Hierarchy");
 
-		buttonsAtPanel(manager);
+		buttonsAtPanel();
 
-		ImGui::Text("SCENE - %s", manager->getScene()->getName().c_str());
+		ImGui::Text("SCENE - %s", SceneManager::Instance->getScene()->getName().c_str());
 		ImGui::Separator();
 
-		const auto& entities = manager->getScene()->getEntities();
+		const auto& entities = SceneManager::Instance->getScene()->getEntities();
 
 		auto userSelectedEntity = [](const Entity& entity) {
 			return ImGui::MenuItem(entity.getComponent<TagComponent>().tag.c_str());
@@ -57,7 +57,7 @@ namespace marengine {
 			GUI_Events::Instance()->onEntitySelected(*itEntity);
 		}
 
-		const auto& collections = manager->getScene()->getCollections();
+		const auto& collections{ SceneManager::Instance->getScene()->getCollections() };
 
 		auto userSelectedCollection = [](const EntityCollection& collection) {
 			return ImGui::MenuItem(collection.getComponent<TagComponent>().tag.c_str());
@@ -68,22 +68,22 @@ namespace marengine {
 			GUI_Events::Instance()->onEntityCollectionSelected(*itCollection);
 		}
 
-		popUpMenu(manager);
+		popUpMenu();
 		
 		ImGui::End();
 
 		EDITOR_TRACE("GUI: scene_hierarchy");
 	}
 
-	void GUI_SceneHierarchy::buttonsAtPanel(SceneManager* manager) {
+	void GUI_SceneHierarchy::buttonsAtPanel() {
 		if (ImGui::Button("+ E")) {
-			GUI_Events::Instance()->onEntityCreated(manager);
+			GUI_Events::Instance()->onEntityCreated(SceneManager::Instance);
 		}
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("+ EC")) {
-			GUI_Events::Instance()->onEntityCollectionCreated(manager);
+			GUI_Events::Instance()->onEntityCollectionCreated(SceneManager::Instance);
 		}
 
 		const auto& collection = GUI_EntityCollectionPanel::Instance()->getCurrentCollection();
@@ -96,11 +96,11 @@ namespace marengine {
 			ImGui::SameLine();
 
 			if (ImGui::Button("- EC")) {
-				GUI_Events::Instance()->onEntityCollectionDeleted(manager, collection);
+				GUI_Events::Instance()->onEntityCollectionDeleted(SceneManager::Instance, collection);
 			}
 
 			if(ImGui::Button("Copy - EC")) {
-				GUI_Events::Instance()->onEntityCollectionCopied(manager, collection);
+				GUI_Events::Instance()->onEntityCollectionCopied(SceneManager::Instance, collection);
 			}
 
 			if (ImGui::Button("+ E in EC")) {
@@ -119,18 +119,20 @@ namespace marengine {
 			ImGui::SameLine();
 
 			if (ImGui::Button("Copy - E")) {
-				GUI_Events::Instance()->onEntityCopied(manager, entity);
+				GUI_Events::Instance()->onEntityCopied(SceneManager::Instance, entity);
 			}
 
 			ImGui::SameLine();
 
 			if (ImGui::Button("- E")) {
-				GUI_Events::Instance()->onEntityDeleted(manager, entity);
+				GUI_Events::Instance()->onEntityDeleted(SceneManager::Instance, entity);
 			}
 		}
 	}
 
-	void GUI_SceneHierarchy::popUpMenu(SceneManager* manager) {
+	void GUI_SceneHierarchy::popUpMenu() {
+		SceneManager* manager{ SceneManager::Instance };
+
 		if (manager->isPlayMode()) {
 			EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
 			return;

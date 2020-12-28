@@ -27,18 +27,16 @@
 
 namespace marengine {
 
-	class SceneManager;
-
 
 	class GUI_SceneHierarchy {
 	public:
 
-		static void update(SceneManager* manager);
+		static void update();
 		
 	private:
 
-		static void buttonsAtPanel(SceneManager* manager);
-		static void popUpMenu(SceneManager* manager);
+		static void buttonsAtPanel();
+		static void popUpMenu();
 
 	};
 

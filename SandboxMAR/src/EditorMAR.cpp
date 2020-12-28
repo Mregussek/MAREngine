@@ -59,16 +59,15 @@ namespace marengine {
 
 		auto* scene = Filesystem::openFile(m_engine.getPathToLoad());
 
-		auto renderLayer = new RenderLayer("Render Layer");
-		stack.pushLayer(renderLayer);
+		RenderLayer renderLayer("Render Layer");
+		stack.pushLayer(&renderLayer);
 
-		auto sceneLayer = new SceneLayer("Scene Layer");
-		sceneLayer->passSceneToManager(scene);
-		stack.pushLayer(sceneLayer);
+		SceneLayer sceneLayer("Scene Layer");
+		sceneLayer.passSceneToManager(scene);
+		stack.pushLayer(&sceneLayer);
 
-		auto editorLayer = new EditorLayer("Editor Layer");
-		editorLayer->submit(sceneLayer->getSceneManager());
-		stack.pushOverlay(editorLayer);
+		EditorLayer editorLayer("Editor Layer");
+		stack.pushOverlay(&editorLayer);
 
 		displayWindow.initialize(1600, 900, m_engine.getName());
 
@@ -77,7 +76,7 @@ namespace marengine {
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
 			SetupOpenGL::clearScreen(scene->getBackground());
 
-			editorLayer->renderToViewport();
+			editorLayer.renderToViewport();
 
 			stack.update();
 

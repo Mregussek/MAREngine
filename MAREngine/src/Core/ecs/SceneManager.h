@@ -39,8 +39,9 @@ namespace marengine {
 
 	public:
 
+		static SceneManager* Instance;
+
 		SceneManager() = default;
-	
 
 		void initialize() const;
 		void shutdown();

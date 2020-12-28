@@ -34,7 +34,6 @@
 
 namespace marengine {
 
-	class SceneManager; 
 	class Entity; 
 	class EntityCollection;
 
@@ -48,7 +47,6 @@ namespace marengine {
 		void shutdown();
 
 		void renderToViewport() const;
-		void submit(SceneManager* scene);
 
 		void display();
 
@@ -73,8 +71,6 @@ namespace marengine {
 		GUI_SceneHierarchy m_sceneHierarchyPanel;
 		GUI_TextEditor m_textEditor;
 		GUI_SceneProperties m_sceneProperties;
-
-		SceneManager* m_sceneManager;
 
 		bool m_dockspaceOpen{ true };
 		static const bool m_fullscreenPersisant{ true };
