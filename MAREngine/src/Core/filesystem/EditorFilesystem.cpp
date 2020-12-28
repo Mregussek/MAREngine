@@ -19,10 +19,11 @@
 
 
 #include "EditorFilesystem.h"
-#include "../../Core/graphics/Mesh/MeshCreator.h"
-#include "../EditorLogging.h"
+#include "FilesystemLogging.h"
 #include "Filesystem_Saving.h"
 #include "Filesystem_Loading.h"
+#include "../ecs/Scene.h"
+#include "../graphics/Mesh/MeshCreator.h"
 
 
 namespace marengine {
@@ -31,12 +32,12 @@ namespace marengine {
 	void Filesystem::saveToFile(Scene* scene, const char* filename) {
 		const auto& name = scene->getName();
 
-		EDITOR_INFO("FILESYSTEM: going to save scene {} at: {}", name, filename);
+		FILESYSTEM_INFO("FILESYSTEM: going to save scene {} at: {}", name, filename);
 
 		std::ofstream ss(filename, std::ios::out | std::ios::trunc);
 
 		if (!ss.is_open()) {
-			EDITOR_ERROR("Cannot open file {} and save scene at {}!", name, filename);
+			FILESYSTEM_ERROR("Cannot open file {} and save scene at {}!", name, filename);
 			return;
 		}
 
@@ -48,7 +49,7 @@ namespace marengine {
 	}
 
 	Scene* Filesystem::openFile(std::string filename) {
-		EDITOR_INFO("FILESYSTEM: going to load scene from: {}", filename);
+		FILESYSTEM_INFO("FILESYSTEM: going to load scene from: {}", filename);
 
 		std::ifstream file(filename);
 
@@ -80,18 +81,18 @@ namespace marengine {
 
 		file.close();
 
-		EDITOR_INFO("FILESYSTEM: returning loaded scene {} from file {}", scene->getName(), filename);
+		FILESYSTEM_INFO("FILESYSTEM: returning loaded scene {} from file {}", scene->getName(), filename);
 
 		return scene;
 	}
 
 	std::string Filesystem::loadPyScript(const char* filename) {
-		EDITOR_INFO("FILESYSTEM: going to load python script from: {}", filename);
+		FILESYSTEM_INFO("FILESYSTEM: going to load python script from: {}", filename);
 
 		std::ifstream file(filename);
 
 		if (!file.is_open()) {
-			EDITOR_ERROR("Cannot open script file {}, returning empty string!", filename);
+			FILESYSTEM_ERROR("Cannot open script file {}, returning empty string!", filename);
 			return "";
 		}
 
@@ -108,12 +109,12 @@ namespace marengine {
 	}
 
 	void Filesystem::savePyScript(const char* filename, std::string source) {
-		EDITOR_INFO("FILESYSTEM: going to save PyScript at: {}", filename);
+		FILESYSTEM_INFO("FILESYSTEM: going to save PyScript at: {}", filename);
 
 		std::ofstream ss(filename, std::ios::out | std::ios::trunc);
 
 		if (!ss.is_open()) {
-			EDITOR_ERROR("FILESYSTEM: Cannot save python script - {}!", filename);
+			FILESYSTEM_ERROR("FILESYSTEM: Cannot save python script - {}!", filename);
 			return;
 		}
 
@@ -121,7 +122,7 @@ namespace marengine {
 
 		ss.close();
 
-		EDITOR_INFO("FILESYSTEM: saved PyScript at: {}", filename);
+		FILESYSTEM_INFO("FILESYSTEM: saved PyScript at: {}", filename);
 	}
 
 

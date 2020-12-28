@@ -20,22 +20,13 @@
 
 #include "GUI_EntityPanel.h"
 #include "CommonComponentHandler.h"
-#include "../GUI_TextEditor.h"
-#include "../GUI_Filesystem.h"
-
 #include "../../EditorLogging.h"
-
+#include "../../../Window/Window.h"
+#include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Core/graphics/Mesh/MeshCreator.h"
-
+#include "../../../Core/events/SceneEvents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
-#include "../../../Core/events/SceneEvents.h"
-
-#include "../../../Platform/OpenGL/TextureOpenGL.h"
-#include "../../../Engine.h"
-
-#include "../../Filesystem/EditorFilesystem.h"
-#include "../../../Window/Window.h"
 
 
 namespace marengine {
@@ -357,7 +348,6 @@ namespace marengine {
 	}
 
 	void GUI_EntityPanel::handleTexture2DComponent() const {
-		typedef TextureOpenGL TexGL;
 		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
 
 		auto modifyCurrentTexture = [&texture = texture2D.texture, this]() {
@@ -384,8 +374,8 @@ namespace marengine {
 
 		ImGui::Text("Current Texture: %s", texture2D.texture.c_str());
 
-		if (TexGL::hasTexture(texture2D.texture)) {
-			ImGui::Image((ImTextureID)TexGL::getTexture(texture2D.texture), { 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		if (TextureOpenGL::hasTexture(texture2D.texture)) {
+			ImGui::Image((ImTextureID)TextureOpenGL::getTexture(texture2D.texture), { 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 			static bool wantToModifyTexture = false;
 			if (!wantToModifyTexture) {
@@ -405,7 +395,6 @@ namespace marengine {
 	}
 
 	void GUI_EntityPanel::handleTextureCubemapComponent() const {
-		typedef TextureOpenGL TexGL;
 		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
 
 		auto modifyCurrentCubemap = [&texture = cubemap.texture, this]() {
@@ -432,7 +421,7 @@ namespace marengine {
 
 		ImGui::Text("Current Cubemap: %s", cubemap.texture.c_str());
 
-		if (TexGL::hasCubemap(cubemap.texture)) {
+		if (TextureOpenGL::hasCubemap(cubemap.texture)) {
 			static bool wantToModifyCubemap = false;
 			if (!wantToModifyCubemap) {
 				if (ImGui::Button("Modify current Texture")) { wantToModifyCubemap = true; }

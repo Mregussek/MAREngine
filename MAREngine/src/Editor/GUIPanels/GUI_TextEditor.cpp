@@ -19,7 +19,7 @@
 
 
 #include "GUI_TextEditor.h"
-#include "../Filesystem/EditorFilesystem.h"
+#include "../../Core/filesystem/EditorFilesystem.h"
 #include "../../Core/ecs/Components/ScriptingComponents.h"
 #include "../../Engine.h"
 

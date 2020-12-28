@@ -18,29 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_H
-
-
-#include "../../mar.h"
-#include "../../Core/ecs/Scene.h"
+#ifndef MAR_ENGINE_WWIDGET_H
+#define MAR_ENGINE_WWIDGET_H
 
 
 namespace marengine {
 
 
-	class Filesystem {
+	class IWidget {
 	public:
 
-		static void saveToFile(Scene* scene, const char* filename);
-		static Scene* openFile(std::string filename);
+		virtual void create() { }
+		virtual void destroy() { }
 
-		static std::string loadPyScript(const char* filename);
-		static void savePyScript(const char* filename, std::string source);
+		virtual void onCreation() const { }
+		virtual void onDestruction() const { }
+
+		virtual void beginFrame() { }
+		virtual void updateFrame() { }
+		virtual void endFrame() { }
+
+		virtual void onBeginFrame() const { }
+		virtual void onUpdateFrame() const { }
+		virtual void onEndFrame() const { }
+
+		virtual bool isHovered() const { }
+		virtual bool isInterectable() const { }
+
+		virtual void onKeyboardButtonPressed() const { }
+		virtual void onMouseButtonPressed() const { }
+
 	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_H
+#endif // !MAR_ENGINE_WWIDGET_H

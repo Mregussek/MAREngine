@@ -86,9 +86,14 @@ If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_ECS_LOGS will not affect anyth
 #define MAR_ENGINE_ECS_LOGS
 
 /*
-!!! Uncomment to see Platform Logs
+!!! Uncomment to see Scripting Logs
 */
 //#define MAR_ENGINE_SCRIPTING_LOGS
+
+/*
+!!! Uncomment to see Filesystem Logs
+*/
+//#define MAR_ENGINE_FILESYSTEM_LOGS
 
 
 /*

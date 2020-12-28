@@ -222,6 +222,7 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="src\Core\ecs\SceneOptimizer.h" />
+    <ClInclude Include="src\Core\filesystem\FilesystemLogging.h" />
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\attr.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\buffer_info.h" />
@@ -280,10 +281,11 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h" />
     <ClInclude Include="src\Core\graphics\Renderer\ShaderBufferStorage.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
+    <ClInclude Include="src\Core\Widget.h" />
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
     <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
-    <ClInclude Include="src\Editor\Filesystem\Filesystem_Loading.h" />
-    <ClInclude Include="src\Editor\Filesystem\Filesystem_Saving.h" />
+    <ClInclude Include="src\Core\filesystem\Filesystem_Loading.h" />
+    <ClInclude Include="src\Core\filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\CommonComponentHandler.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_Events.h" />
@@ -307,7 +309,7 @@
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
-    <ClInclude Include="src\Editor\Filesystem\EditorFilesystem.h" />
+    <ClInclude Include="src\Core\filesystem\EditorFilesystem.h" />
     <ClInclude Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.h" />
     <ClInclude Include="src\Editor\GUIPanels\GUI_Filesystem.h" />
     <ClInclude Include="src\Editor\GUIPanels\OtherPanels\GUI_Info.h" />
@@ -387,9 +389,9 @@
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
     <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />
-    <ClCompile Include="src\Editor\Filesystem\EditorFilesystem.cpp" />
-    <ClCompile Include="src\Editor\Filesystem\Filesystem_Loading.cpp" />
-    <ClCompile Include="src\Editor\Filesystem\Filesystem_Saving.cpp" />
+    <ClCompile Include="src\Core\filesystem\EditorFilesystem.cpp" />
+    <ClCompile Include="src\Core\filesystem\Filesystem_Loading.cpp" />
+    <ClCompile Include="src\Core\filesystem\Filesystem_Saving.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\CommonComponentHandler.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityCollectionPanel.cpp" />
     <ClCompile Include="src\Editor\GUIPanels\EntityPanels\GUI_EntityPanel.cpp" />

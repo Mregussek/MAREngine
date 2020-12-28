@@ -31,7 +31,7 @@
 
 #include "../../Core/graphics/Mesh/MeshCreator.h"
 
-#include "../Filesystem/EditorFilesystem.h"
+#include "../../Core/filesystem/EditorFilesystem.h"
 #include "../../Engine.h"
 
 
