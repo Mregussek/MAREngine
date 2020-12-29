@@ -58,6 +58,7 @@ namespace marengine {
 		LayerStack stack{};
 
 		auto* scene = Filesystem::openFile(m_engine.getPathToLoad());
+		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");
 		stack.pushLayer(&renderLayer);

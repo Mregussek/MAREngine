@@ -20,6 +20,7 @@
 
 #include "EditorLayer.h"
 #include "../LayerLogs.h"
+#include "../../Core/ecs/SceneManager.h"
 
 
 namespace marengine {
@@ -32,25 +33,37 @@ namespace marengine {
 	void EditorLayer::initialize() {
 		LAYER_TRACE("EDITOR_LAYER: {} going to initialize...", p_debugName);
 
-		m_gui.initialize("#version 450");		
+		m_editorManager.pushPanel(&m_allWidgets.textEditor);
+		m_editorManager.pushPanel(&m_allWidgets.viewport);
+		m_editorManager.pushPanel(&m_allWidgets.general);
+		m_editorManager.pushPanel(&m_allWidgets.theme);
+		m_editorManager.pushPanel(&m_allWidgets.filesystem);
+		m_editorManager.pushPanel(&m_allWidgets.sceneHierarchy);
+		m_editorManager.pushPanel(&m_allWidgets.statistics);
+		m_editorManager.pushPanel(&m_allWidgets.mainMenuBar);
+		m_editorManager.pushPanel(&m_allWidgets.sceneProperties);
+		m_editorManager.pushPanel(&m_allWidgets.entity);
+		m_editorManager.pushPanel(&m_allWidgets.entityCollection);
+
+		m_editorManager.create();
 	}
 
 	void EditorLayer::update() {
 		LAYER_TRACE("EDITOR_LAYER: {} going to display frame...", p_debugName);
 
-		m_gui.display();
+		m_editorManager.update();
 	}
 
 	void EditorLayer::close() {
 		LAYER_TRACE("EDITOR_LAYER: {} going to close...", p_debugName);
 
-		m_gui.shutdown();	
+		m_editorManager.destroy();
 	}
 
 	void EditorLayer::renderToViewport() {
 		LAYER_TRACE("EDITOR_LAYER: {} starting rendering to viewport in Viewport Panel", p_debugName);
 
-		m_gui.renderToViewport();
+		m_allWidgets.viewport.bind(SceneManager::Instance->getScene()->getBackground());
 	}
 
 

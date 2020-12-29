@@ -28,10 +28,7 @@
 #include "../../src/Platform/OpenGL/SetupOpenGL.h"
 
 // Editor
-#include "../../src/Editor/GUI.h"
-#include "../../src/Editor/ProjectSelectionGUI/ProjectSelectionGUI.h"
 #include "../../src/Core/filesystem/EditorFilesystem.h"
-#include "../../src/Editor/Camera/Camera.h"
 
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"

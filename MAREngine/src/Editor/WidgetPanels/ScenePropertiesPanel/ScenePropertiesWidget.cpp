@@ -18,42 +18,21 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
-
-
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/EditorManager.h"
-#include "../../Editor/WidgetPanels/AllWidgetPanels.h"
+#include "ScenePropertiesWidget.h"
+#include "../../../Core/ecs/SceneManager.h"
 
 
 namespace marengine {
 
 
-	class EditorLayer : public Layer {
-	public:
+	void WScenePropertiesWidget::updateFrame() {
+		ImGui::Begin("Editor Properties");
 
-		EditorLayer() = default;
-		EditorLayer(const char* name);
+		auto& sceneBackground{ SceneManager::Instance->getScene()->getBackground() };
+		ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
 
-		void renderToViewport();
-
-		// --- OVERRIDED METHODS --- // 
-
-		void initialize() override;
-		void update() override;
-		void close() override;
-
-	private:
-
-		FAllWidgetPanels m_allWidgets;
-		FEditorManager m_editorManager;
-
-	};
+		ImGui::End();
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_GUI_LAYER_H

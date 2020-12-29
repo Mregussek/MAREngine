@@ -78,8 +78,6 @@ namespace marengine {
 
 		auto it = std::find(m_layers.begin(), m_layers.begin() + m_layerInsert, layer);
 		if (it != m_layers.begin() + m_layerInsert) {
-			delete* it;
-
 			m_layers.erase(it);
 			m_layerInsert--;
 

@@ -18,42 +18,19 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
-
-
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/EditorManager.h"
-#include "../../Editor/WidgetPanels/AllWidgetPanels.h"
+#include "IWidget.h"
 
 
 namespace marengine {
 
 
-	class EditorLayer : public Layer {
-	public:
+	IWidget::IWidget(const char* tag) {
+		p_tag = tag;
+	}
 
-		EditorLayer() = default;
-		EditorLayer(const char* name);
-
-		void renderToViewport();
-
-		// --- OVERRIDED METHODS --- // 
-
-		void initialize() override;
-		void update() override;
-		void close() override;
-
-	private:
-
-		FAllWidgetPanels m_allWidgets;
-		FEditorManager m_editorManager;
-
-	};
+	const char* IWidget::getTag() const {
+		return p_tag;
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_GUI_LAYER_H

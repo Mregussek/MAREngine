@@ -18,37 +18,47 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
+#ifndef MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
+#define MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/EditorManager.h"
-#include "../../Editor/WidgetPanels/AllWidgetPanels.h"
+#include "../IWidgetPanel.h"
+#include "../../Camera/Camera.h"
+#include "GuizmoWidget.h"
+#include "../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
 namespace marengine {
 
+	class Entity; 
+	class EntityCollection;
 
-	class EditorLayer : public Layer {
+
+	class WViewportWidget : public IWidgetPanel {
 	public:
 
-		EditorLayer() = default;
-		EditorLayer(const char* name);
+		virtual void create() override;
+		virtual void destroy() override;
 
-		void renderToViewport();
+		virtual void beginFrame() override;
+		virtual void updateFrame() override;
 
-		// --- OVERRIDED METHODS --- // 
-
-		void initialize() override;
-		void update() override;
-		void close() override;
+		void bind(maths::vec3 backgroundColor) const;
 
 	private:
 
-		FAllWidgetPanels m_allWidgets;
-		FEditorManager m_editorManager;
+		void unbind() const;
+
+		void updateAspectRatio();
+
+		void displayViewportControlPanel();
+		void displayActualViewport();
+		void handleGuizmo();
+
+		FramebufferOpenGL m_framebuffer;
+		Camera m_camera;
+		float m_aspectRatio{ 1.33f };
+		GUI_Guizmo m_guizmo;
 
 	};
 
@@ -56,4 +66,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_GUI_LAYER_H
+#endif // !MAR_ENGINE_EDITOR_GUI_VIEWPORT_H

@@ -18,37 +18,46 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
-
-
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/EditorManager.h"
-#include "../../Editor/WidgetPanels/AllWidgetPanels.h"
+#ifndef MAR_ENGINE_WWIDGET_H
+#define MAR_ENGINE_WWIDGET_H
 
 
 namespace marengine {
 
 
-	class EditorLayer : public Layer {
+	class IWidget {
 	public:
 
-		EditorLayer() = default;
-		EditorLayer(const char* name);
+		IWidget() = default;
+		IWidget(const char* tag);
 
-		void renderToViewport();
+		const char* getTag() const;
 
-		// --- OVERRIDED METHODS --- // 
+		virtual void create() { }
+		virtual void destroy() { }
 
-		void initialize() override;
-		void update() override;
-		void close() override;
+		virtual void beginFrame() { }
+		virtual void updateFrame() { }
+		virtual void endFrame() { }
 
-	private:
+		virtual void onCreation() const { }
+		virtual void onDestruction() const { }
 
-		FAllWidgetPanels m_allWidgets;
-		FEditorManager m_editorManager;
+		virtual void onBeginFrame() const { }
+		virtual void onUpdateFrame() const { }
+		virtual void onEndFrame() const { }
+
+		virtual bool isHovered() const { return false; }
+
+		virtual void onKeyboardButtonPressed() const { }
+		virtual void onMouseButtonPressed() const { }
+
+		virtual void onDragDetected() const { }
+		virtual void onDrop() const { }
+
+	protected:
+
+		const char* p_tag{ "DefaultName" };
 
 	};
 
@@ -56,4 +65,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_GUI_LAYER_H
+#endif // !MAR_ENGINE_WWIDGET_H

@@ -18,37 +18,39 @@
 **/
 
 
-#ifndef MAR_ENGINE_GUI_LAYER_H
-#define MAR_ENGINE_GUI_LAYER_H
+#ifndef MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
+#define MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Editor/EditorManager.h"
-#include "../../Editor/WidgetPanels/AllWidgetPanels.h"
+#include "../../../mar.h"
+#include "../IWidgetPanel.h"
 
 
 namespace marengine {
 
+	class EntityCollection; 
 
-	class EditorLayer : public Layer {
+
+	class WEntityCollectionWidgetPanel : public IWidgetPanel {
 	public:
 
-		EditorLayer() = default;
-		EditorLayer(const char* name);
+		static WEntityCollectionWidgetPanel* Instance;
 
-		void renderToViewport();
+		virtual void create() override;
+		virtual void updateFrame() override;
 
-		// --- OVERRIDED METHODS --- // 
-
-		void initialize() override;
-		void update() override;
-		void close() override;
+		void setCurrentCollection(const EntityCollection& collection);
+		void reset();
+		const EntityCollection& getCurrentCollection() const;
 
 	private:
 
-		FAllWidgetPanels m_allWidgets;
-		FEditorManager m_editorManager;
+		void popUpMenu(const char* collection_tag) const;
+
+		void handleTransformComponent() const;
+
+
+		const EntityCollection* currentCollection;
 
 	};
 
@@ -56,4 +58,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_GUI_LAYER_H
+#endif // !MAR_ENGINE_EDITOR_GUI_ENTITY_COLLECTION_PANEL_H
