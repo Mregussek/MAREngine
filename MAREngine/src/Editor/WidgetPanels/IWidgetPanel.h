@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_W_WIDGET_PANEL_H
-#define MAR_ENGINE_W_WIDGET_PANEL_H
+#ifndef MAR_ENGINE_I_WIDGET_PANEL_H
+#define MAR_ENGINE_I_WIDGET_PANEL_H
 
 
 #include "../../Core/IWidget.h"
@@ -28,10 +28,15 @@
 namespace marengine {
 
 
+	/*
+	* IWidgetPanel is a base class for all panels. Every panel should derive
+	* from this class and override IWidgetPanel's methods in order to write
+	* its own implementation.
+	*/
 	class IWidgetPanel : public IWidget { };
 
 
 }
 
 
-#endif // !MAR_ENGINE_W_WIDGET_PANEL_H
+#endif // !MAR_ENGINE_I_WIDGET_PANEL_H

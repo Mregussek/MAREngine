@@ -18,32 +18,32 @@
 **/
 
 
-#ifndef MAR_ENGINE_W_MAIN_MENU_BAR_WIDGET_H
-#define MAR_ENGINE_W_MAIN_MENU_BAR_WIDGET_H
-
-
-#include "../IWidgetPanel.h"
+#ifndef MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H
+#define MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H
 
 
 namespace marengine {
 
+	class Entity;
 
-	class WMainMenuBarWidget : public IWidgetPanel {
+
+	class FEntityWidgetEvents {
 	public:
 
-		virtual void updateFrame() override;
+		static void onCreateEntity();
+		static void onDestroyEntity(const Entity& entity);
 
-	private:
+		static void onSelectedEntity(const Entity& entity);
+		static void onUnselectedEntity(const Entity& entity);
 
-		void displayActualMenuBar();
-		void handleInputs();
+		static void onCopyEntity(const Entity& entity);
 
-		bool m_newSceneWindow{ false };
-		bool m_loadSceneWindow{ false };
-		bool m_saveSceneWindow{ false };
-		bool m_loadOBJfileWindow{ false };
-		bool m_infoWindow{ false };
-		bool m_instructionWindow{ false };
+		static void onSetVisibleEntity(const Entity& entity);
+		static void onSetInvisibleEntity(const Entity& entity);
+
+		template<typename T> static void onAddComponent(const Entity& entity);
+		template<typename T> static void onRemoveComponent(const Entity& entity);
+		template<typename T> static void onUpdateComponent(const Entity& entity);
 
 	};
 
@@ -51,4 +51,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_W_MAIN_MENU_BAR_WIDGET_H
+#endif // !MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H

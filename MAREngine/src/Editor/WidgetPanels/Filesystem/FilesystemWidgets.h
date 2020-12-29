@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_FILESYSTEM_H
-#define MAR_ENGINE_EDITOR_GUI_FILESYSTEM_H
+#ifndef MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
+#define MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
 
 
 #include "../../../mar.h"
@@ -56,6 +56,7 @@ namespace marengine {
 
 		void eraseSubstring(std::string& str, const std::string& toErase);
 
+
 		imgui_addons::ImGuiFileBrowser m_fileDialog;
 
 		const char* m_nameNewScene{ "New Scene" };
@@ -70,4 +71,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_FILESYSTEM_H
+#endif // !MAR_ENGINE_W_FILESYSTEM_WIDGETS_H

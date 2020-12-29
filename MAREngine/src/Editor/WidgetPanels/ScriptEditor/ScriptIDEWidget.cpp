@@ -19,9 +19,9 @@
 
 
 #include "ScriptIDEWidget.h"
-#include "../../Core/filesystem/EditorFilesystem.h"
-#include "../../Core/ecs/Components/ScriptingComponents.h"
-#include "../../Engine.h"
+#include "../../../Core/filesystem/EditorFilesystem.h"
+#include "../../../Core/ecs/Components/ScriptingComponents.h"
+#include "../../../Engine.h"
 
 
 namespace marengine {

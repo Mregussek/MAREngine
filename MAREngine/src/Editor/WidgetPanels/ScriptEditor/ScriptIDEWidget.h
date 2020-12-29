@@ -18,12 +18,12 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H
-#define MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H
+#ifndef MAR_ENGINE_W_SCRIPT_IDE_H
+#define MAR_ENGINE_W_SCRIPT_IDE_H
 
 
-#include "../../mar.h"
-#include "IWidgetPanel.h"
+#include "../../../mar.h"
+#include "../IWidgetPanel.h"
 
 
 namespace marengine {
@@ -81,4 +81,4 @@ namespace marengine {
 
 }
 
-#endif // !MAR_ENGINE_EDITOR_GUI_TEXT_EDITOR_H
+#endif // !MAR_ENGINE_W_SCRIPT_IDE_H

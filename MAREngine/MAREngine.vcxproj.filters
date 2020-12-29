@@ -396,9 +396,6 @@
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\GUI_Events.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\EditorManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -447,7 +444,13 @@
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\ScriptIDEWidget.h">
+    <ClInclude Include="src\Editor\WidgetEvents\EntityWidgetEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetEvents\EntityCollectionWidgetEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -659,9 +662,6 @@
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\GUI_Events.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\EditorManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -704,7 +704,13 @@
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\ScriptIDEWidget.cpp">
+    <ClCompile Include="src\Editor\WidgetEvents\EntityWidgetEvents.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetEvents\EntityCollectionWidgetEvents.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

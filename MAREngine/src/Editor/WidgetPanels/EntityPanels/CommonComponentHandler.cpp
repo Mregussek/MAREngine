@@ -19,7 +19,7 @@
 
 
 #include "CommonComponentHandler.h"
-#include "../ScriptIDEWidget.h"
+#include "../ScriptEditor/ScriptIDEWidget.h"
 #include "../Filesystem/FilesystemWidgets.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Components/Components.h"

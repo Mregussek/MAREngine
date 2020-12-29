@@ -25,7 +25,7 @@
 #include "GeneralWidgetPanel.h"
 #include "MenuBars/MainMenuBarWidget.h"
 #include "Filesystem/FilesystemWidgets.h"
-#include "ScriptIDEWidget.h"
+#include "ScriptEditor/ScriptIDEWidget.h"
 #include "Viewport/ViewportWidget.h"
 #include "ScenePropertiesPanel/ScenePropertiesWidget.h"
 #include "EntityPanels/EntityWidgetPanel.h"

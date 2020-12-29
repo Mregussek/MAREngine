@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
-#define MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
+#ifndef MAR_ENGINE_W_VIEWPORT_WIDGET_H
+#define MAR_ENGINE_W_VIEWPORT_WIDGET_H
 
 
 #include "../IWidgetPanel.h"
@@ -66,4 +66,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_VIEWPORT_H
+#endif // !MAR_ENGINE_W_VIEWPORT_WIDGET_H

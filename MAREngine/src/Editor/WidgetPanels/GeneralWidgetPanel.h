@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_H
-#define MAR_ENGINE_EDITOR_GUI_H
+#ifndef MAR_ENGINE_W_GENERAL_WIDGET_PANEL_H
+#define MAR_ENGINE_W_GENERAL_WIDGET_PANEL_H
 
 
 #include "../../mar.h"
@@ -49,4 +49,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_H
+#endif // !MAR_ENGINE_W_GENERAL_WIDGET_PANEL_H

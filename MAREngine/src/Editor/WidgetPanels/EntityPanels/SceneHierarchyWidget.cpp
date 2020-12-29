@@ -21,17 +21,14 @@
 #include "SceneHierarchyWidget.h"
 #include "EntityCollectionWidgetPanel.h"
 #include "EntityWidgetPanel.h"
-#include "../GUI_Events.h"
-#include "../ScriptIDEWidget.h"
-
+#include "../../WidgetEvents/EntityWidgetEvents.h"
+#include "../../WidgetEvents/EntityCollectionWidgetEvents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/events/SceneEvents.h"
-
 #include "../../../Window/Window.h"
-
 #include "../../EditorLogging.h"
 
 
@@ -54,7 +51,7 @@ namespace marengine {
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
 		if (itEntity != entities.cend()) {
-			GUI_Events::Instance()->onEntitySelected(*itEntity);
+			FEntityWidgetEvents::onSelectedEntity(*itEntity);
 		}
 
 		const auto& collections{ SceneManager::Instance->getScene()->getCollections() };
@@ -65,7 +62,7 @@ namespace marengine {
 
 		const auto itCollection = std::find_if(collections.cbegin(), collections.cend(), userSelectedCollection);
 		if (itCollection != collections.cend()) {
-			GUI_Events::Instance()->onEntityCollectionSelected(*itCollection);
+			FEntityCollectionWidgetEvents::onSelectedCollection(*itCollection);
 		}
 
 		popUpMenu();
@@ -77,13 +74,13 @@ namespace marengine {
 
 	void WSceneHierarchyWidget::buttonsAtPanel() {
 		if (ImGui::Button("+ E")) {
-			GUI_Events::Instance()->onEntityCreated(SceneManager::Instance);
+			FEntityWidgetEvents::onCreateEntity();
 		}
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("+ EC")) {
-			GUI_Events::Instance()->onEntityCollectionCreated(SceneManager::Instance);
+			FEntityCollectionWidgetEvents::onCreateCollection();
 		}
 
 		const auto& collection = WEntityCollectionWidgetPanel::Instance->getCurrentCollection();
@@ -96,22 +93,22 @@ namespace marengine {
 			ImGui::SameLine();
 
 			if (ImGui::Button("- EC")) {
-				GUI_Events::Instance()->onEntityCollectionDeleted(SceneManager::Instance, collection);
+				FEntityCollectionWidgetEvents::onDestroyCollection(collection);
 			}
 
 			if(ImGui::Button("Copy - EC")) {
-				GUI_Events::Instance()->onEntityCollectionCopied(SceneManager::Instance, collection);
+				FEntityCollectionWidgetEvents::onCopyCollection(collection);
 			}
 
 			if (ImGui::Button("+ E in EC")) {
-				GUI_Events::Instance()->onEntityCreatedAtCollection(collection);
+				FEntityCollectionWidgetEvents::onEntityAddedToCollection(collection);
 			}
 
 			if (entityExists) {
 				ImGui::SameLine();
 
 				if (ImGui::Button("- E in EC")) {
-					GUI_Events::Instance()->onEntityDeletedFromCollection(collection, entity);
+					FEntityCollectionWidgetEvents::onEntityRemovedFromCollection(collection, entity);
 				}
 			}
 		}
@@ -119,26 +116,19 @@ namespace marengine {
 			ImGui::SameLine();
 
 			if (ImGui::Button("Copy - E")) {
-				GUI_Events::Instance()->onEntityCopied(SceneManager::Instance, entity);
+				FEntityWidgetEvents::onCopyEntity(entity);
 			}
 
 			ImGui::SameLine();
 
 			if (ImGui::Button("- E")) {
-				GUI_Events::Instance()->onEntityDeleted(SceneManager::Instance, entity);
+				FEntityWidgetEvents::onDestroyEntity(entity);
 			}
 		}
 	}
 
 	void WSceneHierarchyWidget::popUpMenu() {
-		SceneManager* manager{ SceneManager::Instance };
-
-		if (manager->isPlayMode()) {
-			EDITOR_TRACE("GUI: return from scene_hierarchy_popup (PLAY MODE)");
-			return;
-		}
-
-		if (ImGui::IsWindowFocused()) {
+		if (SceneManager::Instance->isEditorMode() && ImGui::IsWindowFocused()) {
 			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneHierarchyPopUp");
 			}
@@ -148,11 +138,11 @@ namespace marengine {
 
 		if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
 			if (ImGui::MenuItem("Add EntityCollection to scene")) {
-				GUI_Events::Instance()->onEntityCollectionCreated(manager);
+				FEntityCollectionWidgetEvents::onCreateCollection();
 			}
 
 			if (ImGui::MenuItem("Add Entity to scene")) {
-				GUI_Events::Instance()->onEntityCreated(manager);
+				FEntityWidgetEvents::onCreateEntity();
 			}
 
 			const auto& collection = WEntityCollectionWidgetPanel::Instance->getCurrentCollection();
@@ -164,17 +154,17 @@ namespace marengine {
 			if (collectionExists) {
 				const char* collection_tag = collection.getComponent<TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
-					GUI_Events::Instance()->onEntityCreatedAtCollection(collection);
+					FEntityCollectionWidgetEvents::onEntityAddedToCollection(collection);
 				}
 
 				if (ImGui::MenuItem("Delete selected collection from Scene", collection_tag)) {
-					GUI_Events::Instance()->onEntityCollectionDeleted(manager, collection);
+					FEntityCollectionWidgetEvents::onDestroyCollection(collection);
 				}
 				
 				if (entityExists) {
 					const std::string delete_message = "Delete entity " + entity.getComponent<TagComponent>().tag + " from selected collection";
 					if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
-						GUI_Events::Instance()->onEntityDeletedFromCollection(collection, entity);
+						FEntityCollectionWidgetEvents::onEntityRemovedFromCollection(collection, entity);
 					}
 				}
 			}
@@ -182,7 +172,7 @@ namespace marengine {
 
 				const char* entity_tag = entity.getComponent<TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
-					GUI_Events::Instance()->onEntityDeleted(manager, entity);
+					FEntityWidgetEvents::onDestroyEntity(entity);
 				}
 				
 			}

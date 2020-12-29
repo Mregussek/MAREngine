@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_INFO_H
-#define MAR_ENGINE_EDITOR_GUI_INFO_H
+#ifndef MAR_ENGINE_W_INFO_WIDGET_H
+#define MAR_ENGINE_W_INFO_WIDGET_H
 
 
 #include "../IWidgetPanel.h"
@@ -55,4 +55,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_GUI_INFO_H
+#endif // !MAR_ENGINE_W_INFO_WIDGET_H

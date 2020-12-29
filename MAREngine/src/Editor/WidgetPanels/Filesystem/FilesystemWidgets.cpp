@@ -19,7 +19,7 @@
 
 
 #include "FilesystemWidgets.h"
-#include "../ScriptIDEWidget.h"
+#include "../ScriptEditor/ScriptIDEWidget.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../EntityPanels/EntityCollectionWidgetPanel.h"
 

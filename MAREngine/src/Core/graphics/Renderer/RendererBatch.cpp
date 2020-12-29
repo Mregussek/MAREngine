@@ -111,7 +111,7 @@ namespace marengine {
 		m_shader2D.bind();
 		drawWithShader(m_shader2D, lights, renderPipeline.getColorContainers());
 		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());
-		drawWithShader(m_shader2D, lights, renderPipeline.getCubemapContainers());
+		//drawWithShader(m_shader2D, lights, renderPipeline.getCubemapContainers());
 
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
