@@ -69,7 +69,15 @@ namespace marengine {
 
 	}
 
-	template<typename T> void FEntityWidgetEvents::onAddComponent(const Entity& entity) {}
+	template<typename T> void FEntityWidgetEvents::onAddComponent(const Entity& entity) {
+		const auto& component{ entity.addComponent<T>() };
+	}
+
+	template<> void FEntityWidgetEvents::onAddComponent<ColorComponent>(const Entity& entity) {
+		entity.addComponent<ColorComponent>();
+		SceneEvents::Instance().onColorAdd();
+	}
+
 	template<typename T> void FEntityWidgetEvents::onRemoveComponent(const Entity& entity) {}
 	template<typename T> void FEntityWidgetEvents::onUpdateComponent(const Entity& entity) {}
 

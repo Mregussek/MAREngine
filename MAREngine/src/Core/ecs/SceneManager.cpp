@@ -46,6 +46,12 @@ namespace marengine {
 			RenderPipeline::Instance->submitCollection(collection);
 		});
 
+		const auto view{ m_scene->getView<LightComponent>() };
+		view.each([this](entt::entity entt_entity, const LightComponent& light) {
+			const Entity entity(entt_entity, m_scene->getRegistry());
+			RenderPipeline::Instance->submitLight(entity);
+		});
+
 		RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_INFO("SCENE_MANAGER: initialized!");
@@ -115,15 +121,14 @@ namespace marengine {
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), saveEntityAtStorage);
 		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), saveCollectionAtStorage);
 
-		auto initializeScriptModule = [this](entt::entity entt_entity) {
-			auto& script = m_scene->getComponent<ScriptComponent>(entt_entity);
+		auto initializeScriptModule = [this](entt::entity entt_entity, ScriptComponent& script) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
 			script.pythonScript.loadScript(script.script);
 			script.pythonScript.start(entity);
 		};
 
 		const auto view{ m_scene->getView<ScriptComponent>() };
-		std::for_each(view.begin(), view.end(), initializeScriptModule);
+		view.each(initializeScriptModule);
 
 		ECS_INFO("SCENE_MANAGER: initialized play mode!");
 	}
@@ -150,13 +155,14 @@ namespace marengine {
 	void SceneManager::updatePlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
-		const auto view = m_scene->getView<ScriptComponent>();
-		std::for_each(view.begin(), view.end(), [this](entt::entity entt_entity) {
-			const auto& script{ m_scene->getComponent<ScriptComponent>(entt_entity) };
+		auto updateScriptModule = [this](entt::entity entt_entity, ScriptComponent& script) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
 			script.pythonScript.update(entity);
 			updateEntityInPlaymode(entity);
-		});
+		};
+
+		const auto view{ m_scene->getView<ScriptComponent>() };
+		view.each(updateScriptModule);
 
 		ECS_INFO("SCENE_MANAGER: updated play mode");
 	}
@@ -165,7 +171,7 @@ namespace marengine {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
 		const auto view = m_scene->getView<ScriptComponent>();
-		std::for_each(view.begin(), view.end(), [this](entt::entity entt_entity) {
+		view.each([this](entt::entity entt_entity, const ScriptComponent& script) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
 			updateEntityInPlaymode(entity);
 		});

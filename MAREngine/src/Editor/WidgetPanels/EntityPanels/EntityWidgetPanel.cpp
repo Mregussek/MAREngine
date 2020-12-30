@@ -20,6 +20,7 @@
 
 #include "EntityWidgetPanel.h"
 #include "CommonComponentHandler.h"
+#include "../../WidgetEvents/EntityWidgetEvents.h"
 #include "../../EditorLogging.h"
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
@@ -154,21 +155,20 @@ namespace marengine {
 						&& !currentEntity->hasComponent<TextureCubemapComponent>();
 
 					if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
-						currentEntity->addComponent<RenderableComponent>();
+						FEntityWidgetEvents::onAddComponent<RenderableComponent>(*currentEntity);
 					}
 						
 					if (hasNeitherColorNorTexture) {
 						if (ImGui::MenuItem("Add ColorComponent")) {
-							currentEntity->addComponent<ColorComponent>();
-							SceneEvents::Instance().onColorAdd();
+							FEntityWidgetEvents::onAddComponent<ColorComponent>(*currentEntity);
 						}
 
 						if (ImGui::MenuItem("Add Texture2DComponent")) {
-							currentEntity->addComponent<Texture2DComponent>();
+							FEntityWidgetEvents::onAddComponent<Texture2DComponent>(*currentEntity);
 						}
 								
 						if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-							currentEntity->addComponent<TextureCubemapComponent>();
+							FEntityWidgetEvents::onAddComponent<TextureCubemapComponent>(*currentEntity);
 						}
 					}
 
@@ -196,8 +196,6 @@ namespace marengine {
 	}
 
 	void WEntityWidgetPanel::handleTransformComponent() const {
-		using namespace maths;
-
 		auto& tran = currentEntity->getComponent<TransformComponent>();
 
 		{ // Sliders

@@ -69,21 +69,14 @@ namespace marengine {
 	void RenderPipeline::submitEntity(const Entity& entity) {
 		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
 
-		const auto& tran = entity.getComponent<TransformComponent>();
-		auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
-		if (entity.hasComponent<LightComponent>()) {
-			const auto& light = entity.getComponent<LightComponent>();
-
-			setContainerLight(rpc);
-			rpc.lightIndex = submitLight(tran.center, light);
-		}
-
 		const bool hasColor = entity.hasComponent<ColorComponent>();
 		const bool hasTexture2D = entity.hasComponent<Texture2DComponent>();
 		const bool hasCubemap = entity.hasComponent<TextureCubemapComponent>();
 		const bool hasAnyMaterial = hasColor || hasTexture2D || hasCubemap;
 		const bool hasRenderable = entity.hasComponent<RenderableComponent>();
+
+		const auto& tran = entity.getComponent<TransformComponent>();
+		auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
 		if (hasRenderable && hasAnyMaterial) {
 			auto& renderable = entity.getComponent<RenderableComponent>();
@@ -114,6 +107,15 @@ namespace marengine {
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
+	}
+
+	void RenderPipeline::submitLight(const Entity& entity) {
+		const auto& tran = entity.getComponent<TransformComponent>();
+		auto& rpc = entity.getComponent<RenderPipelineComponent>();
+		const auto& light = entity.getComponent<LightComponent>();
+
+		setContainerLight(rpc);
+		rpc.lightIndex = submitLight(tran.center, light);
 	}
 
 	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush) {

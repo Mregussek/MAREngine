@@ -47,6 +47,7 @@ namespace marengine {
 		void submitCollection(const EntityCollection& collection);
 		void submitEntity(const Entity& entity);
 
+		void submitLight(const Entity& entity);
 		void submitCamera(const RenderCamera* cam);
 
 		static RenderPipeline* Instance;
