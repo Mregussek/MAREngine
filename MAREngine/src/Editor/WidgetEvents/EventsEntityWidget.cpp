@@ -18,7 +18,7 @@
 **/
 
 
-#include "EntityWidgetEvents.h"
+#include "EventsEntityWidget.h"
 #include "../WidgetPanels/EntityPanels/EntityWidgetPanel.h"
 #include "../WidgetPanels/EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../../Core/ecs/Entity/Entity.h"
@@ -30,28 +30,28 @@
 namespace marengine {
 
 
-	void FEntityWidgetEvents::onCreateEntity() {
+	void FEventsEntityWidget::onCreateEntity() {
 		const Entity& createdEntity{ SceneManager::Instance->getScene()->createEntity() };
 		onSelectedEntity(createdEntity);
 	}
 
-	void FEntityWidgetEvents::onDestroyEntity(const Entity& entity) {
+	void FEventsEntityWidget::onDestroyEntity(const Entity& entity) {
 		SceneManager::Instance->getScene()->destroyEntity(entity);
 
 		WEntityWidgetPanel::Instance->reset();
 		SceneEvents::Instance().onEntityRemove();
 	}
 
-	void FEntityWidgetEvents::onSelectedEntity(const Entity& entity) {
+	void FEventsEntityWidget::onSelectedEntity(const Entity& entity) {
 		WEntityCollectionWidgetPanel::Instance->reset();
 		WEntityWidgetPanel::Instance->setCurrentEntity(entity);
 	}
 
-	void FEntityWidgetEvents::onUnselectedEntity(const Entity& entity) {
+	void FEventsEntityWidget::onUnselectedEntity(const Entity& entity) {
 
 	}
 
-	void FEntityWidgetEvents::onCopyEntity(const Entity& entity) {
+	void FEventsEntityWidget::onCopyEntity(const Entity& entity) {
 		onCreateEntity();
 		
 		// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
@@ -61,25 +61,13 @@ namespace marengine {
 		SceneEvents::Instance().onEntityCopy(entity);
 	}
 
-	void FEntityWidgetEvents::onSetVisibleEntity(const Entity& entity) {
+	void FEventsEntityWidget::onSetVisibleEntity(const Entity& entity) {
 
 	}
 
-	void FEntityWidgetEvents::onSetInvisibleEntity(const Entity& entity) {
+	void FEventsEntityWidget::onSetInvisibleEntity(const Entity& entity) {
 
 	}
-
-	template<typename T> void FEntityWidgetEvents::onAddComponent(const Entity& entity) {
-		const auto& component{ entity.addComponent<T>() };
-	}
-
-	template<> void FEntityWidgetEvents::onAddComponent<ColorComponent>(const Entity& entity) {
-		entity.addComponent<ColorComponent>();
-		SceneEvents::Instance().onColorAdd();
-	}
-
-	template<typename T> void FEntityWidgetEvents::onRemoveComponent(const Entity& entity) {}
-	template<typename T> void FEntityWidgetEvents::onUpdateComponent(const Entity& entity) {}
 
 
 }

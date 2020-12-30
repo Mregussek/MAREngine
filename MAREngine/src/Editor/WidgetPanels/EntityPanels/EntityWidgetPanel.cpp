@@ -20,7 +20,8 @@
 
 #include "EntityWidgetPanel.h"
 #include "CommonComponentHandler.h"
-#include "../../WidgetEvents/EntityWidgetEvents.h"
+#include "../../WidgetEvents/EventsEntityWidget.h"
+#include "../../WidgetEvents/EventsWidgetComponentEntity.inl"
 #include "../../EditorLogging.h"
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
@@ -155,20 +156,20 @@ namespace marengine {
 						&& !currentEntity->hasComponent<TextureCubemapComponent>();
 
 					if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
-						FEntityWidgetEvents::onAddComponent<RenderableComponent>(*currentEntity);
+						TEventsWidgetComponentEntity::onAdd<RenderableComponent>(*currentEntity);
 					}
 						
 					if (hasNeitherColorNorTexture) {
 						if (ImGui::MenuItem("Add ColorComponent")) {
-							FEntityWidgetEvents::onAddComponent<ColorComponent>(*currentEntity);
+							TEventsWidgetComponentEntity::onAdd<ColorComponent>(*currentEntity);
 						}
 
 						if (ImGui::MenuItem("Add Texture2DComponent")) {
-							FEntityWidgetEvents::onAddComponent<Texture2DComponent>(*currentEntity);
+							TEventsWidgetComponentEntity::onAdd<Texture2DComponent>(*currentEntity);
 						}
 								
 						if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-							FEntityWidgetEvents::onAddComponent<TextureCubemapComponent>(*currentEntity);
+							TEventsWidgetComponentEntity::onAdd<TextureCubemapComponent>(*currentEntity);
 						}
 					}
 

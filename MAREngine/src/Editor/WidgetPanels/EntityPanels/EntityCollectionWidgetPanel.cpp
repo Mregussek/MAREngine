@@ -21,7 +21,7 @@
 #include "EntityCollectionWidgetPanel.h"
 #include "EntityWidgetPanel.h"
 #include "CommonComponentHandler.h"
-#include "../../WidgetEvents/EntityCollectionWidgetEvents.h"
+#include "../../WidgetEvents/EventsCollectionWidget.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/events/SceneEvents.h"
@@ -82,7 +82,7 @@ namespace marengine {
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
 		if (itEntity != entities.cend()) {
-			FEntityCollectionWidgetEvents::onSelectedEntityFromCollection(*itEntity);
+			FEventsCollectionWidget::onSelectedEntityFromCollection(*itEntity);
 		}
 
 		popUpMenu(tag.tag.c_str());
@@ -132,7 +132,7 @@ namespace marengine {
 			const bool selectedEntityExists = &entity != nullptr;
 
 			if (ImGui::MenuItem("Add Entity to selected collection", collection_tag)) {
-				FEntityCollectionWidgetEvents::onEntityAddedToCollection(*currentCollection);
+				FEventsCollectionWidget::onEntityAddedToCollection(*currentCollection);
 			}
 
 			if (!currentCollection->hasComponent<ScriptComponent>()) {
@@ -145,7 +145,7 @@ namespace marengine {
 			if (selectedEntityExists) {
 				const std::string delete_message = "Delete entity " + entity.getComponent<TagComponent>().tag + " from selected collection";
 				if (ImGui::MenuItem(delete_message.c_str(), collection_tag)) {
-					FEntityCollectionWidgetEvents::onEntityRemovedFromCollection(*currentCollection, entity);
+					FEventsCollectionWidget::onEntityRemovedFromCollection(*currentCollection, entity);
 				}
 			}
 		

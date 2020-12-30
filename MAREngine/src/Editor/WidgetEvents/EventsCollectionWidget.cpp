@@ -18,7 +18,7 @@
 **/
 
 
-#include "EntityCollectionWidgetEvents.h"
+#include "EventsCollectionWidget.h"
 #include "../WidgetPanels/EntityPanels/EntityWidgetPanel.h"
 #include "../WidgetPanels/EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../../Core/ecs/Entity/Entity.h"
@@ -30,48 +30,48 @@
 namespace marengine {
 
 
-	void FEntityCollectionWidgetEvents::onCreateCollection() {
+	void FEventsCollectionWidget::onCreateCollection() {
 		const EntityCollection& createdCollection{ SceneManager::Instance->getScene()->createCollection() };
 		onSelectedCollection(createdCollection);
 	}
 
-	void FEntityCollectionWidgetEvents::onDestroyCollection(const EntityCollection& collection) {
+	void FEventsCollectionWidget::onDestroyCollection(const EntityCollection& collection) {
 		SceneManager::Instance->getScene()->destroyCollection(collection);
 
 		onUnselectedCollection();
 		SceneEvents::Instance().onCollectionRemove();
 	}
 
-	void FEntityCollectionWidgetEvents::onEntityAddedToCollection(const EntityCollection& collection) {
+	void FEventsCollectionWidget::onEntityAddedToCollection(const EntityCollection& collection) {
 		const Entity& createdEntity{ collection.createEntity() };
 		WEntityWidgetPanel::Instance->setCurrentEntity(createdEntity);
 	}
 
-	void FEntityCollectionWidgetEvents::onEntityRemovedFromCollection(const EntityCollection& collection, const Entity& entity) {
+	void FEventsCollectionWidget::onEntityRemovedFromCollection(const EntityCollection& collection, const Entity& entity) {
 		collection.destroyEntity(entity);
 		onUnselectedEntityFromCollection();
 		SceneEvents::Instance().onEntityRemove();
 	}
 
-	void FEntityCollectionWidgetEvents::onSelectedCollection(const EntityCollection& collection) {
+	void FEventsCollectionWidget::onSelectedCollection(const EntityCollection& collection) {
 		onUnselectedEntityFromCollection();
 		WEntityCollectionWidgetPanel::Instance->setCurrentCollection(collection);
 	}
 
-	void FEntityCollectionWidgetEvents::onUnselectedCollection() {
+	void FEventsCollectionWidget::onUnselectedCollection() {
 		WEntityWidgetPanel::Instance->reset();
 		WEntityCollectionWidgetPanel::Instance->reset();
 	}
 
-	void FEntityCollectionWidgetEvents::onSelectedEntityFromCollection(const Entity& entity) {
+	void FEventsCollectionWidget::onSelectedEntityFromCollection(const Entity& entity) {
 		WEntityWidgetPanel::Instance->setCurrentEntity(entity);
 	}
 
-	void FEntityCollectionWidgetEvents::onUnselectedEntityFromCollection() {
+	void FEventsCollectionWidget::onUnselectedEntityFromCollection() {
 		WEntityWidgetPanel::Instance->reset();
 	}
 
-	void FEntityCollectionWidgetEvents::onCopyCollection(const EntityCollection& collection) {
+	void FEventsCollectionWidget::onCopyCollection(const EntityCollection& collection) {
 		onCreateCollection();
 
 		// onCreateEntityCollection creates collection, then sets it to EntityCollectionWidgetPanel, so it can be got in that way
@@ -79,17 +79,13 @@ namespace marengine {
 		EntityOperation::copyCollection(collection, createdCollection);
 	}
 
-	void FEntityCollectionWidgetEvents::onSetVisibleCollection(const EntityCollection& collection) {
+	void FEventsCollectionWidget::onSetVisibleCollection(const EntityCollection& collection) {
 
 	}
 
-	void FEntityCollectionWidgetEvents::onSetInvisibleCollection(const EntityCollection& collection) {
+	void FEventsCollectionWidget::onSetInvisibleCollection(const EntityCollection& collection) {
 
 	}
-
-	template<typename T> static void FEntityCollectionWidgetEvents::onAddComponent(const EntityCollection& collection) { }
-	template<typename T> static void FEntityCollectionWidgetEvents::onRemoveComponent(const EntityCollection& collection) { }
-	template<typename T> static void FEntityCollectionWidgetEvents::onUpdateComponent(const EntityCollection& collection) { }
 
 
 }

@@ -53,20 +53,20 @@ namespace marengine {
 		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}
 
-	void RenderPipeline::submitCamera(const RenderCamera* cam) {
+	void RenderPipeline::pushCameraToPipeline(const RenderCamera* cam) {
 		m_camera = cam;
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
 	}
 
-	void RenderPipeline::submitCollection(const EntityCollection& collection) {
+	void RenderPipeline::pushCollectionToPipeline(const EntityCollection& collection) {
 		const auto& entities{ collection.getEntities() };
 		std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
-			submitEntity(entity);
+			pushEntityToPipeline(entity);
 		});
 	}
 
-	void RenderPipeline::submitEntity(const Entity& entity) {
+	void RenderPipeline::pushEntityToPipeline(const Entity& entity) {
 		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
 
 		const bool hasColor = entity.hasComponent<ColorComponent>();
@@ -109,7 +109,7 @@ namespace marengine {
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	void RenderPipeline::submitLight(const Entity& entity) {
+	void RenderPipeline::pushLightToPipeline(const Entity& entity) {
 		const auto& tran = entity.getComponent<TransformComponent>();
 		auto& rpc = entity.getComponent<RenderPipelineComponent>();
 		const auto& light = entity.getComponent<LightComponent>();

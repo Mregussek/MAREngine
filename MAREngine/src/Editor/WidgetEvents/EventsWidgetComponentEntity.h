@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H
-#define MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H
+#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_H
+#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_H
 
 
 namespace marengine {
@@ -27,23 +27,17 @@ namespace marengine {
 	class Entity;
 
 
-	class FEntityWidgetEvents {
+	class TEventsWidgetComponentEntity {
 	public:
 
-		static void onCreateEntity();
-		static void onDestroyEntity(const Entity& entity);
+		template<typename T>
+		static void onAdd(const Entity& entity);
 
-		static void onSelectedEntity(const Entity& entity);
-		static void onUnselectedEntity(const Entity& entity);
+		template<typename T>
+		static void onUpdate(const Entity& entity);
 
-		static void onCopyEntity(const Entity& entity);
-
-		static void onSetVisibleEntity(const Entity& entity);
-		static void onSetInvisibleEntity(const Entity& entity);
-
-		template<typename T> static void onAddComponent(const Entity& entity);
-		template<typename T> static void onRemoveComponent(const Entity& entity);
-		template<typename T> static void onUpdateComponent(const Entity& entity);
+		template<typename T>
+		static void onRemove(const Entity& entity);
 
 	};
 
@@ -51,4 +45,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H
+#endif // !MAR_ENGINE_T_COMPONENT_WIDGET_EVENTS_H

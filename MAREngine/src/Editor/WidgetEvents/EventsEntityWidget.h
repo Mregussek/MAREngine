@@ -18,14 +18,34 @@
 **/
 
 
-#include "EntityCollection.h"
+#ifndef MAR_ENGINE_F_EVENTS_ENTITY_WIDGET_H
+#define MAR_ENGINE_F_EVENTS_ENTITY_WIDGET_H
+
+
+#include "../../Core/ecs/Entity/Entity.h"
 
 
 namespace marengine {
 
 
-	template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;
-	template CollectionRenderableComponent& EntityCollection::getComponent<CollectionRenderableComponent>() const;
+	class FEventsEntityWidget {
+	public:
+
+		static void onCreateEntity();
+		static void onDestroyEntity(const Entity& entity);
+
+		static void onSelectedEntity(const Entity& entity);
+		static void onUnselectedEntity(const Entity& entity);
+
+		static void onCopyEntity(const Entity& entity);
+
+		static void onSetVisibleEntity(const Entity& entity);
+		static void onSetInvisibleEntity(const Entity& entity);
+
+	};
 
 
-} 
+}
+
+
+#endif // !MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H

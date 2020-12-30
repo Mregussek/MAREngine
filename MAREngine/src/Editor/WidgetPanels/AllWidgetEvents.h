@@ -18,14 +18,26 @@
 **/
 
 
-#include "EntityCollection.h"
+#ifndef MAR_ENGINE_F_ALL_WIDGET_EVENTS_H
+#define MAR_ENGINE_F_ALL_WIDGET_EVENTS_H
+
+
+#include "../WidgetEvents/EventsEntityWidget.h"
+#include "../WidgetEvents/EntityEventsCollectionWidget.h"
 
 
 namespace marengine {
 
 
-	template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;
-	template CollectionRenderableComponent& EntityCollection::getComponent<CollectionRenderableComponent>() const;
+	struct FAllWidgetEvents {
+
+		FEventsEntityWidget entityEvents{};
+		FEventsCollectionWidget collectionEvents{};
+
+	};
 
 
-} 
+}
+
+
+#endif // !MAR_ENGINE_F_ALL_WIDGET_EVENTS_H

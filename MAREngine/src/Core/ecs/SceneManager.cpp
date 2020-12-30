@@ -40,16 +40,16 @@ namespace marengine {
 		const auto& collectionsVector = m_scene->getCollections();
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
-			RenderPipeline::Instance->submitEntity(entity);
+			RenderPipeline::Instance->pushEntityToPipeline(entity);
 		});
 		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [](const EntityCollection& collection) {
-			RenderPipeline::Instance->submitCollection(collection);
+			RenderPipeline::Instance->pushCollectionToPipeline(collection);
 		});
 
 		const auto view{ m_scene->getView<LightComponent>() };
 		view.each([this](entt::entity entt_entity, const LightComponent& light) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
-			RenderPipeline::Instance->submitLight(entity);
+			RenderPipeline::Instance->pushLightToPipeline(entity);
 		});
 
 		RenderEvents::Instance().onContainersReadyToDraw();

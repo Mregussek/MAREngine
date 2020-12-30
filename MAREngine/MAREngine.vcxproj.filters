@@ -444,13 +444,22 @@
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EntityWidgetEvents.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EntityCollectionWidgetEvents.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetPanels\AllWidgetEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentCollection.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -704,13 +713,19 @@
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EntityWidgetEvents.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EntityCollectionWidgetEvents.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentCollection.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.inl">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

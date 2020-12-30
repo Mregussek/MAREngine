@@ -287,8 +287,11 @@
     <ClInclude Include="src\Core\filesystem\Filesystem_Loading.h" />
     <ClInclude Include="src\Core\filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\EditorManager.h" />
-    <ClInclude Include="src\Editor\WidgetEvents\EntityCollectionWidgetEvents.h" />
-    <ClInclude Include="src\Editor\WidgetEvents\EntityWidgetEvents.h" />
+    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentCollection.h" />
+    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.h" />
+    <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h" />
+    <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h" />
+    <ClInclude Include="src\Editor\WidgetPanels\AllWidgetEvents.h" />
     <ClInclude Include="src\Editor\WidgetPanels\AllWidgetPanels.h" />
     <ClInclude Include="src\Editor\WidgetPanels\IWidgetPanel.h" />
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h" />
@@ -394,8 +397,10 @@
     <ClCompile Include="src\Core\filesystem\Filesystem_Loading.cpp" />
     <ClCompile Include="src\Core\filesystem\Filesystem_Saving.cpp" />
     <ClCompile Include="src\Editor\EditorManager.cpp" />
-    <ClCompile Include="src\Editor\WidgetEvents\EntityCollectionWidgetEvents.cpp" />
-    <ClCompile Include="src\Editor\WidgetEvents\EntityWidgetEvents.cpp" />
+    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentCollection.cpp" />
+    <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp" />
+    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.inl" />
+    <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.cpp" />

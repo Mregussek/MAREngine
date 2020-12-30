@@ -177,7 +177,7 @@ namespace marengine {
 	}
 
 	void SceneEvents::onEditorCameraSet(const RenderCamera* camera) const {
-		RenderPipeline::Instance->submitCamera(camera);
+		RenderPipeline::Instance->pushCameraToPipeline(camera);
 		RenderEvents::Instance().onMainCameraUpdate(*camera);
 	}
 
@@ -197,13 +197,13 @@ namespace marengine {
 			const auto& transform = scene->getComponent<TransformComponent>(*itEntity);
 			camera.renderCamera.calculateCameraTransforms(transform, camera);
 
-			RenderPipeline::Instance->submitCamera(&camera.renderCamera);
+			RenderPipeline::Instance->pushCameraToPipeline(&camera.renderCamera);
 			RenderEvents::Instance().onMainCameraUpdate(camera.renderCamera);
 		}
 	}
 
 	void SceneEvents::onEntityCopy(const Entity& entity) const {
-		RenderPipeline::Instance->submitEntity(entity);
+		RenderPipeline::Instance->pushEntityToPipeline(entity);
 
 		ECS_TRACE("SCENE_EVENTS: onEntityCopy");
 	}
@@ -268,7 +268,7 @@ namespace marengine {
 			MeshCreator::loadOBJ(filename, path, collection);
 		}
 
-		RenderPipeline::Instance->submitCollection(collection);
+		RenderPipeline::Instance->pushCollectionToPipeline(collection);
 		RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");

@@ -18,14 +18,24 @@
 **/
 
 
-#include "EntityCollection.h"
+#include "EventsWidgetComponentCollection.h"
+#include "../../Core/ecs/Entity/EntityCollection.h"
 
 
 namespace marengine {
 
 
-	template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;
-	template CollectionRenderableComponent& EntityCollection::getComponent<CollectionRenderableComponent>() const;
+	template<typename T> void TEventsWidgetComponentCollection<T>::onAdd(const EntityCollection& collection) {
+		const auto& component{ collection.template addComponent<T>() };
+	}
+
+	template<typename T> void TEventsWidgetComponentCollection<T>::onUpdate(const EntityCollection& collection) {
+		collection.template removeComponent<T>();
+	}
+
+	template<typename T> void TEventsWidgetComponentCollection<T>::onRemove(const EntityCollection& collection) {
+
+	}
 
 
-} 
+}

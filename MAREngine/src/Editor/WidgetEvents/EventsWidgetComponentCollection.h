@@ -18,14 +18,27 @@
 **/
 
 
-#include "EntityCollection.h"
+#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_H
+#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_H
 
 
 namespace marengine {
 
-
-	template bool EntityCollection::hasComponent<CollectionRenderableComponent>() const;
-	template CollectionRenderableComponent& EntityCollection::getComponent<CollectionRenderableComponent>() const;
+	class EntityCollection;
 
 
-} 
+	template<typename T>
+	class TEventsWidgetComponentCollection {
+	public:
+
+		static void onAdd(const EntityCollection& collection);
+		static void onUpdate(const EntityCollection& collection);
+		static void onRemove(const EntityCollection& collection);
+
+	};
+
+
+}
+
+
+#endif // !MAR_ENGINE_T_COLLECTION_COMPONENT_WIDGET_EVENTS_H

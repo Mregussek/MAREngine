@@ -36,8 +36,8 @@
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../OtherPanels/InfoWidget.h"
 #include "../Filesystem/FilesystemWidgets.h"
-#include "../../WidgetEvents/EntityWidgetEvents.h"
-#include "../../WidgetEvents/EntityCollectionWidgetEvents.h"
+#include "../../WidgetEvents/EventsEntityWidget.h"
+#include "../../WidgetEvents/EventsCollectionWidget.h"
 
 
 namespace marengine {
@@ -72,7 +72,7 @@ namespace marengine {
 				if (entityExists) {
 					const char* shortcut = currentEntity.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
-						FEntityWidgetEvents::onCopyEntity(currentEntity);
+						FEventsEntityWidget::onCopyEntity(currentEntity);
 					}
 				}
 
@@ -82,7 +82,7 @@ namespace marengine {
 				if (collectionExists && !entityExists) {
 					const char* shortcut = currentCollection.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
-						FEntityCollectionWidgetEvents::onCopyCollection(currentCollection);
+						FEventsCollectionWidget::onCopyCollection(currentCollection);
 					}
 				}
 

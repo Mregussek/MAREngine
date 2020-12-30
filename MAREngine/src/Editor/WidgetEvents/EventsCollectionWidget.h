@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_ENTITY_COLLECTION_WIDGET_EVENTS_H
-#define MAR_ENGINE_F_ENTITY_COLLECTION_WIDGET_EVENTS_H
+#ifndef MAR_ENGINE_F_EVENTS_COLLECTION_WIDGET_H
+#define MAR_ENGINE_F_EVENTS_COLLECTION_WIDGET_H
 
 
 namespace marengine {
@@ -28,7 +28,7 @@ namespace marengine {
 	class EntityCollection;
 
 
-	class FEntityCollectionWidgetEvents {
+	class FEventsCollectionWidget {
 	public:
 
 		static void onCreateCollection();
@@ -48,14 +48,10 @@ namespace marengine {
 		static void onSetVisibleCollection(const EntityCollection& collection);
 		static void onSetInvisibleCollection(const EntityCollection& collection);
 
-		template<typename T> static void onAddComponent(const EntityCollection& collection);
-		template<typename T> static void onRemoveComponent(const EntityCollection& collection);
-		template<typename T> static void onUpdateComponent(const EntityCollection& collection);
-
 	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_ENTITY_COLLECTION_WIDGET_EVENTS_H
+#endif // !MAR_ENGINE_F_COLLECTION_WIDGET_EVENTS_H
