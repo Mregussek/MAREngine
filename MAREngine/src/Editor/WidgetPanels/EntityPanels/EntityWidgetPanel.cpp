@@ -21,7 +21,7 @@
 #include "EntityWidgetPanel.h"
 #include "CommonComponentHandler.h"
 #include "../../WidgetEvents/EventsEntityWidget.h"
-#include "../../WidgetEvents/EventsWidgetComponentEntity.inl"
+#include "../../../Core/events/ComponentEvents/EventsComponentEntity.inl"
 #include "../../EditorLogging.h"
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"

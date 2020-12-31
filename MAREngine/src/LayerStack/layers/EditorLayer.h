@@ -26,6 +26,7 @@
 #include "../Layer.h"
 #include "../../Editor/EditorManager.h"
 #include "../../Editor/WidgetPanels/AllWidgetPanels.h"
+#include "../../Editor/WidgetPanels/AllWidgetEvents.h"
 
 
 namespace marengine {
@@ -48,6 +49,7 @@ namespace marengine {
 	private:
 
 		FAllWidgetPanels m_allWidgets;
+		FAllWidgetEvents m_allEvents;
 		FEditorManager m_editorManager;
 
 	};

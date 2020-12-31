@@ -51,7 +51,7 @@ namespace marengine {
 
 		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
 		if (itEntity != entities.cend()) {
-			FEventsEntityWidget::onSelectedEntity(*itEntity);
+			FEventsEntityWidget::Instance->onSelectedEntity(*itEntity);
 		}
 
 		const auto& collections{ SceneManager::Instance->getScene()->getCollections() };
@@ -74,7 +74,7 @@ namespace marengine {
 
 	void WSceneHierarchyWidget::buttonsAtPanel() {
 		if (ImGui::Button("+ E")) {
-			FEventsEntityWidget::onCreateEntity();
+			FEventsEntityWidget::Instance->onCreateEntity();
 		}
 
 		ImGui::SameLine();
@@ -116,13 +116,13 @@ namespace marengine {
 			ImGui::SameLine();
 
 			if (ImGui::Button("Copy - E")) {
-				FEventsEntityWidget::onCopyEntity(entity);
+				FEventsEntityWidget::Instance->onCopyEntity(entity);
 			}
 
 			ImGui::SameLine();
 
 			if (ImGui::Button("- E")) {
-				FEventsEntityWidget::onDestroyEntity(entity);
+				FEventsEntityWidget::Instance->onDestroyEntity(entity);
 			}
 		}
 	}
@@ -142,7 +142,7 @@ namespace marengine {
 			}
 
 			if (ImGui::MenuItem("Add Entity to scene")) {
-				FEventsEntityWidget::onCreateEntity();
+				FEventsEntityWidget::Instance->onCreateEntity();
 			}
 
 			const auto& collection = WEntityCollectionWidgetPanel::Instance->getCurrentCollection();
@@ -172,7 +172,7 @@ namespace marengine {
 
 				const char* entity_tag = entity.getComponent<TagComponent>().tag.c_str();
 				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
-					FEventsEntityWidget::onDestroyEntity(entity);
+					FEventsEntityWidget::Instance->onDestroyEntity(entity);
 				}
 				
 			}

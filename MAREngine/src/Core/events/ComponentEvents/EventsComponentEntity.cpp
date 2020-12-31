@@ -18,7 +18,7 @@
 **/
 
 
-#include "EventsWidgetComponentEntity.inl"
+#include "EventsComponentEntity.inl"
 
 
 namespace marengine {

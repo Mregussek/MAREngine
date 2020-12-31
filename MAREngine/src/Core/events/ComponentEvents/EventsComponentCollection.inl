@@ -18,35 +18,30 @@
 **/
 
 
-#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
-#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
+#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
+#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
 
 
-#include "EventsWidgetComponentEntity.h"
-#include "../../Core/ecs/Entity/Entity.h"
-#include "../../Core/ecs/Components/Components.h"
-#include "../../Core/events/SceneEvents.h"
+#include "EventsComponentCollection.h"
+#include "../../ecs/Entity/EntityCollection.h"
 
 
 namespace marengine {
 
 
-	template<typename T> void TEventsWidgetComponentEntity::onAdd(const Entity& entity) {
-		const auto& component{ entity.template addComponent<T>() };
+	template<typename T> void TEventsWidgetComponentCollection<T>::onAdd(const EntityCollection& collection) {
+		const auto& component{ collection.template addComponent<T>() };
 	}
 
-	template<typename T> void TEventsWidgetComponentEntity::onUpdate(const Entity& entity) {
-
+	template<typename T> void TEventsWidgetComponentCollection<T>::onUpdate(const EntityCollection& collection) {
+		collection.template removeComponent<T>();
 	}
 
-	template<typename T> void TEventsWidgetComponentEntity::onRemove(const Entity& entity) {
-		entity.template removeComponent<T>();
-	}
+	template<typename T> void TEventsWidgetComponentCollection<T>::onRemove(const EntityCollection& collection) {
 
-	template<> void TEventsWidgetComponentEntity::onAdd<ColorComponent>(const Entity& entity);
+	}
 
 
 }
 
-
-#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
+#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL

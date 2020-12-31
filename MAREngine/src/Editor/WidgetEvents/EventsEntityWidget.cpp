@@ -30,28 +30,31 @@
 namespace marengine {
 
 
-	void FEventsEntityWidget::onCreateEntity() {
+	FEventsEntityWidget* FEventsEntityWidget::Instance{ nullptr };
+
+
+	void FEventsEntityWidget::onCreateEntity() const {
 		const Entity& createdEntity{ SceneManager::Instance->getScene()->createEntity() };
 		onSelectedEntity(createdEntity);
 	}
 
-	void FEventsEntityWidget::onDestroyEntity(const Entity& entity) {
+	void FEventsEntityWidget::onDestroyEntity(const Entity& entity) const {
 		SceneManager::Instance->getScene()->destroyEntity(entity);
 
 		WEntityWidgetPanel::Instance->reset();
 		SceneEvents::Instance().onEntityRemove();
 	}
 
-	void FEventsEntityWidget::onSelectedEntity(const Entity& entity) {
+	void FEventsEntityWidget::onSelectedEntity(const Entity& entity) const {
 		WEntityCollectionWidgetPanel::Instance->reset();
 		WEntityWidgetPanel::Instance->setCurrentEntity(entity);
 	}
 
-	void FEventsEntityWidget::onUnselectedEntity(const Entity& entity) {
+	void FEventsEntityWidget::onUnselectedEntity(const Entity& entity) const {
 
 	}
 
-	void FEventsEntityWidget::onCopyEntity(const Entity& entity) {
+	void FEventsEntityWidget::onCopyEntity(const Entity& entity) const {
 		onCreateEntity();
 		
 		// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
@@ -61,11 +64,11 @@ namespace marengine {
 		SceneEvents::Instance().onEntityCopy(entity);
 	}
 
-	void FEventsEntityWidget::onSetVisibleEntity(const Entity& entity) {
+	void FEventsEntityWidget::onSetVisibleEntity(const Entity& entity) const {
 
 	}
 
-	void FEventsEntityWidget::onSetInvisibleEntity(const Entity& entity) {
+	void FEventsEntityWidget::onSetInvisibleEntity(const Entity& entity) const {
 
 	}
 

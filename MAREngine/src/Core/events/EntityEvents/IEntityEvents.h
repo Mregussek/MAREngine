@@ -18,30 +18,34 @@
 **/
 
 
-#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
-#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
-
-
-#include "EventsWidgetComponentCollection.h"
-#include "../../Core/ecs/Entity/EntityCollection.h"
+#ifndef MAR_ENGINE_I_ENTITY_EVENTS_H
+#define MAR_ENGINE_I_ENTITY_EVENTS_H
 
 
 namespace marengine {
 
+	class Entity;
 
-	template<typename T> void TEventsWidgetComponentCollection<T>::onAdd(const EntityCollection& collection) {
-		const auto& component{ collection.template addComponent<T>() };
-	}
 
-	template<typename T> void TEventsWidgetComponentCollection<T>::onUpdate(const EntityCollection& collection) {
-		collection.template removeComponent<T>();
-	}
+	class IEntityEvents {
+	public:
 
-	template<typename T> void TEventsWidgetComponentCollection<T>::onRemove(const EntityCollection& collection) {
+		virtual void onCreateEntity() const { }
+		virtual void onDestroyEntity(const Entity& entity) const { }
 
-	}
+		virtual void onSelectedEntity(const Entity& entity) const { }
+		virtual void onUnselectedEntity(const Entity& entity) const { }
+
+		virtual void onCopyEntity(const Entity& entity) const { }
+
+		virtual void onSetVisibleEntity(const Entity& entity) const { }
+		virtual void onSetInvisibleEntity(const Entity& entity) const { }
+
+	};
+
 
 
 }
 
-#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
+
+#endif // !MAR_ENGINE_I_ENTITY_EVENTS_H

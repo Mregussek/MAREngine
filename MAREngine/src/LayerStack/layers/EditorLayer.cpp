@@ -33,6 +33,8 @@ namespace marengine {
 	void EditorLayer::initialize() {
 		LAYER_TRACE("EDITOR_LAYER: {} going to initialize...", p_debugName);
 
+		m_allEvents.entityEvents.Instance = &m_allEvents.entityEvents;
+
 		m_editorManager.pushPanel(&m_allWidgets.textEditor);
 		m_editorManager.pushPanel(&m_allWidgets.viewport);
 		m_editorManager.pushPanel(&m_allWidgets.general);

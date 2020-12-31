@@ -72,7 +72,7 @@ namespace marengine {
 				if (entityExists) {
 					const char* shortcut = currentEntity.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
-						FEventsEntityWidget::onCopyEntity(currentEntity);
+						FEventsEntityWidget::Instance->onCopyEntity(currentEntity);
 					}
 				}
 

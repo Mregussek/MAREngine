@@ -18,38 +18,35 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_EVENTS_ENTITY_WIDGET_H
-#define MAR_ENGINE_F_EVENTS_ENTITY_WIDGET_H
+#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
+#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
 
 
-#include "../../Core/events/EntityEvents/IEntityEvents.h"
+#include "EventsComponentEntity.h"
+#include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Components/Components.h"
+#include "../SceneEvents.h"
 
 
 namespace marengine {
 
-	class Entity;
 
+	template<typename T> void TEventsWidgetComponentEntity::onAdd(const Entity& entity) {
+		const auto& component{ entity.template addComponent<T>() };
+	}
 
-	class FEventsEntityWidget : public IEntityEvents {
-	public:
+	template<typename T> void TEventsWidgetComponentEntity::onUpdate(const Entity& entity) {
 
-		static FEventsEntityWidget* Instance;
+	}
 
-		virtual void onCreateEntity() const override;
-		virtual void onDestroyEntity(const Entity& entity) const override;
+	template<typename T> void TEventsWidgetComponentEntity::onRemove(const Entity& entity) {
+		entity.template removeComponent<T>();
+	}
 
-		virtual void onSelectedEntity(const Entity& entity) const override;
-		virtual void onUnselectedEntity(const Entity& entity) const override;
-
-		virtual void onCopyEntity(const Entity& entity) const override;
-
-		virtual void onSetVisibleEntity(const Entity& entity) const override;
-		virtual void onSetInvisibleEntity(const Entity& entity) const override;
-
-	};
+	template<> void TEventsWidgetComponentEntity::onAdd<ColorComponent>(const Entity& entity);
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_ENTITY_WIDGET_EVENTS_H
+#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL

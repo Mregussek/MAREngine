@@ -23,7 +23,7 @@
 
 
 #include "../WidgetEvents/EventsEntityWidget.h"
-#include "../WidgetEvents/EntityEventsCollectionWidget.h"
+#include "../WidgetEvents/EventsCollectionWidget.h"
 
 
 namespace marengine {

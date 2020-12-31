@@ -450,16 +450,19 @@
     <ClInclude Include="src\Editor\WidgetPanels\AllWidgetEvents.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentCollection.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.h">
+    <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentCollection.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\events\EntityEvents\IEntityEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentEntity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -716,19 +719,19 @@
     <ClCompile Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentCollection.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.inl">
+    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.inl">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.cpp">
+    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentCollection.inl">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
