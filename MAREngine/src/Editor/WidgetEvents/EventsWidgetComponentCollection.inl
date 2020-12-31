@@ -18,6 +18,10 @@
 **/
 
 
+#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
+#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
+
+
 #include "EventsWidgetComponentCollection.h"
 #include "../../Core/ecs/Entity/EntityCollection.h"
 
@@ -39,3 +43,5 @@ namespace marengine {
 
 
 }
+
+#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL

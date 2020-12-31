@@ -456,10 +456,10 @@
     <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.h">
+    <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h">
+    <ClInclude Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -726,6 +726,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.inl">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetEvents\EventsWidgetComponentEntity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
