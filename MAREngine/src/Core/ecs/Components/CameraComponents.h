@@ -34,7 +34,7 @@ namespace marengine {
 
 		RenderCamera renderCamera;
 		std::string id{ "secondary" };
-		bool Perspective{ true }; // true - perspective | false - orthographic
+		bool Perspective{ true }; // true - perspective / false - orthographic
 
 		float p_fov{ 45.f };
 		float p_aspectRatio{ 4.f / 3.f };

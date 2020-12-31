@@ -49,12 +49,14 @@ namespace marengine {
 	}
 
 	void EntityOperation::copyEntity(const Entity& src, const Entity& dst) {
-		{ // Default Copy
-			dst.replaceComponent<TagComponent>(src.getComponent<TagComponent>());
-			dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
-			dst.copyDefault(src);
-		}
+		// Default Component Copy
+		dst.replaceComponent<TagComponent>(src.getComponent<TagComponent>());
+		dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
 
+		// Engine-Only Components Copy
+		addComponentIfContains<Entity, RenderPipelineComponent>(src, dst);
+
+		// User-Available Components Copy
 		addComponentIfContains<Entity, RenderableComponent>(src, dst);
 		addComponentIfContains<Entity, ColorComponent>(src, dst);
 		addComponentIfContains<Entity, Texture2DComponent>(src, dst);

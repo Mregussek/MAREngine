@@ -38,18 +38,6 @@ namespace marengine {
 		ECS_TRACE("ENTITY: {} is constructed from entt::entity!", m_entityHandle);
 	}
 
-	void Entity::addDefault() const {
-		m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle);
-
-		ECS_TRACE("ENTITY: {} adding default component", m_entityHandle);
-	}
-
-	void Entity::copyDefault(const Entity& other) const {
-		ECS_TRACE("ENTITY: copying default components from {} to {}", other.m_entityHandle, m_entityHandle);
-
-		m_scene->m_registry.emplace<RenderPipelineComponent>(m_entityHandle, m_scene->m_registry.get<RenderPipelineComponent>(other.m_entityHandle));
-	}
-
 	const bool Entity::isValid() const {
 		ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
 

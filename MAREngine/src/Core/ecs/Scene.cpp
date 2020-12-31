@@ -80,7 +80,6 @@ namespace marengine {
 
 		const Entity& entity{ m_container.m_entities.emplace_back(&m_sceneRegistry) };
 
-		entity.addDefault();
 		entity.addComponent<TagComponent>();
 		entity.addComponent<TransformComponent>();
 

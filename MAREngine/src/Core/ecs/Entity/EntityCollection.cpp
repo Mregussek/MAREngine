@@ -63,11 +63,10 @@ namespace marengine {
 
 		const auto& entity = entitiesVector.emplace_back(m_scene);
 
-		entity.addDefault();
 		entity.addComponent<TagComponent>();
 		entity.addComponent<TransformComponent>();
 
-		ECS_INFO("EntityCollection: created entity {} at collection {}!", entity.m_entityHandle, m_collectionHandle);
+		ECS_INFO("EntityCollection: created entity at collection {}!", m_collectionHandle);
 
 		return entity;
 	}

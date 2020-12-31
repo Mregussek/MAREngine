@@ -75,11 +75,11 @@ namespace marengine {
 		const bool hasAnyMaterial = hasColor || hasTexture2D || hasCubemap;
 		const bool hasRenderable = entity.hasComponent<RenderableComponent>();
 
-		const auto& tran = entity.getComponent<TransformComponent>();
-		auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
 		if (hasRenderable && hasAnyMaterial) {
+			const auto& tran = entity.getComponent<TransformComponent>();
 			auto& renderable = entity.getComponent<RenderableComponent>();
+			auto& rpc = entity.get_addComponent<RenderPipelineComponent>();
+
 			const auto vertSize{ (uint32_t)renderable.vertices.size() };
 			const auto indiSize{ (uint32_t)renderable.indices.size() };
 
