@@ -99,9 +99,12 @@ namespace marengine {
 			const auto lastCenter = tran.center;
 			const auto lastAngles = tran.angles;
 			const auto lastScale = tran.scale;
-			if (ImGui::DragFloat3("Position", &tran.center.x, 0.05f, -200.f, 200.f, "%.2f", 1.f)) { updatedTransform = true; }
-			if (ImGui::DragFloat3("Rotation", &tran.angles.x, 0.5f, -360.f, 360.f, "%.2f", 1.f)) { updatedTransform = true; }
-			if (ImGui::DragFloat3("Scale", &tran.scale.x, 0.01f, 0.f, 20.0f, "%.2f", 1.f)) { updatedTransform = true; }
+
+			if (CommonComponentHandler::drawVec3Control("Position", tran.center, 0.f, 100.f)) { updatedTransform = true; }
+			if (CommonComponentHandler::drawVec3Control("Rotation", tran.angles, 0.f, 100.f)) { updatedTransform = true; }
+			if (CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f)) { updatedTransform = true; }
+
+			ImGui::NewLine();
 
 			if (updatedTransform) {
 				const auto diffCenter = lastCenter != tran.center ? tran.center - lastCenter : maths::vec3();
