@@ -24,6 +24,7 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
+#include "../../Core/events/AllEventsScene.h"
 #include "../../Core/ecs/SceneManager.h"
 
 
@@ -49,6 +50,7 @@ namespace marengine {
 	private:
 
 		SceneManager m_sceneManager;
+		FAllEventsScene m_allSceneEvents;
 
 	};
 

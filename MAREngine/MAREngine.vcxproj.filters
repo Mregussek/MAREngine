@@ -465,6 +465,12 @@
     <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentEntity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\events\AllEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\events\AllEventsScene.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -725,13 +731,10 @@
     <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.inl">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentCollection.inl">
+    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentCollection.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,30 +18,27 @@
 **/
 
 
-#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
-#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
+#ifndef MAR_ENGINE_F_ALL_EVENTS_SCENE_H
+#define MAR_ENGINE_F_ALL_EVENTS_SCENE_H
 
 
-#include "EventsComponentCollection.h"
-#include "../../ecs/Entity/EntityCollection.h"
+#include "ComponentEvents/EventsComponentCollection.h"
+#include "ComponentEvents/EventsComponentEntity.h"
 
 
 namespace marengine {
 
 
-	template<typename T> void TEventsWidgetComponentCollection<T>::onAdd(const EntityCollection& collection) {
-		const auto& component{ collection.template addComponent<T>() };
-	}
+	struct FAllEventsScene {
 
-	template<typename T> void TEventsWidgetComponentCollection<T>::onUpdate(const EntityCollection& collection) {
-		collection.template removeComponent<T>();
-	}
+		FEventsComponentCollection eventsComponentCollection;
+		FEventsComponentEntity eventsComponentEntity;
 
-	template<typename T> void TEventsWidgetComponentCollection<T>::onRemove(const EntityCollection& collection) {
-
-	}
+	};
 
 
 }
 
-#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_INL
+
+
+#endif // !MAR_ENGINE_F_ALL_EVENTS_SCENE_H

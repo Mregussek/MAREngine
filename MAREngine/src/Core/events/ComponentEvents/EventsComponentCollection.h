@@ -18,22 +18,32 @@
 **/
 
 
-#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_H
-#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_COLLECTION_H
+#ifndef MAR_ENGINE_F_EVENTS_COMPONENT_COLLECTION_H
+#define MAR_ENGINE_F_EVENTS_COMPONENT_COLLECTION_H
+
+
+#include "../../ecs/Entity/EntityCollection.h"
 
 
 namespace marengine {
 
-	class EntityCollection;
 
-
-	template<typename T>
-	class TEventsWidgetComponentCollection {
+	class FEventsComponentCollection {
 	public:
 
-		static void onAdd(const EntityCollection& collection);
-		static void onUpdate(const EntityCollection& collection);
-		static void onRemove(const EntityCollection& collection);
+		static FEventsComponentCollection* Instance;
+
+		template<typename T> void onAdd(const EntityCollection& collection) {
+			collection.template addComponent<T>();
+		}
+
+		template<typename T> void onUpdate(const EntityCollection& collection) {
+
+		}
+
+		template<typename T> void onRemove(const EntityCollection& collection) {
+			collection.removeComponent<T>();
+		}
 
 	};
 
@@ -41,4 +51,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_T_COLLECTION_COMPONENT_WIDGET_EVENTS_H
+#endif // !MAR_ENGINE_F_EVENTS_COMPONENT_COLLECTION_H

@@ -18,13 +18,17 @@
 **/
 
 
-#include "EventsComponentEntity.inl"
+#include "EventsComponentEntity.h"
+#include "../SceneEvents.h"
 
 
 namespace marengine {
 
 
-	template<> void TEventsWidgetComponentEntity::onAdd<ColorComponent>(const Entity& entity) {
+	FEventsComponentEntity* FEventsComponentEntity::Instance{ nullptr };
+
+
+	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) {
 		entity.addComponent<ColorComponent>();
 		SceneEvents::Instance().onColorAdd();
 	}

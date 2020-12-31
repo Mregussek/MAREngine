@@ -18,35 +18,14 @@
 **/
 
 
-#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
-#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL
-
-
-#include "EventsComponentEntity.h"
-#include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
-#include "../SceneEvents.h"
+#include "EventsComponentCollection.h"
 
 
 namespace marengine {
 
-
-	template<typename T> void TEventsWidgetComponentEntity::onAdd(const Entity& entity) {
-		const auto& component{ entity.template addComponent<T>() };
-	}
-
-	template<typename T> void TEventsWidgetComponentEntity::onUpdate(const Entity& entity) {
-
-	}
-
-	template<typename T> void TEventsWidgetComponentEntity::onRemove(const Entity& entity) {
-		entity.template removeComponent<T>();
-	}
-
-	template<> void TEventsWidgetComponentEntity::onAdd<ColorComponent>(const Entity& entity);
+	
+	FEventsComponentCollection* FEventsComponentCollection::Instance{ nullptr };
 
 
 }
 
-
-#endif // !MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_INL

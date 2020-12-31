@@ -18,29 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_H
-#define MAR_ENGINE_T_EVENTS_WIDGET_COMPONENT_ENTITY_H
+#ifndef MAR_ENGINE_T_EVENTS_COMPONENT_ENTITY_H
+#define MAR_ENGINE_T_EVENTS_COMPONENT_ENTITY_H
+
+
+#include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Components/Components.h"
 
 
 namespace marengine {
 
-	class Entity;
 
-
-	class TEventsWidgetComponentEntity {
+	class FEventsComponentEntity {
 	public:
 
-		template<typename T>
-		static void onAdd(const Entity& entity);
+		static FEventsComponentEntity* Instance;
 
-		template<typename T>
-		static void onUpdate(const Entity& entity);
 
-		template<typename T>
-		static void onRemove(const Entity& entity);
+		template<typename T> void onAdd(const Entity& entity) { 
+			entity.template addComponent<T>();
+		}
+
+		template<typename T> void onUpdate(const Entity& entity) { 
+		
+		}
+
+		template<typename T> void onRemove(const Entity& entity) { 
+			entity.template removeComponent<T>();
+		}
 
 	};
 
+	// Here add declarations for specific component event implementations ...
+
+	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity);
 
 }
 
