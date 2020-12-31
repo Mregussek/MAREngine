@@ -79,9 +79,7 @@ namespace marengine {
 		ECS_INFO("SCENE: going to create entity!");
 
 		const Entity& entity{ m_container.m_entities.emplace_back(&m_sceneRegistry) };
-
-		entity.addComponent<TagComponent>();
-		entity.addComponent<TransformComponent>();
+		Entity::fillEntityWithBasicComponents(entity);
 
 		ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
 

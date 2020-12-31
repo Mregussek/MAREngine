@@ -39,15 +39,22 @@ namespace marengine {
 
 		// Entity default constructor is disabled, because we don't want to store nullptr at m_registry!
 		Entity() = delete;
-		Entity(SceneRegistry* scene);
-		Entity(entt::entity entity, SceneRegistry* scene);
+		Entity(SceneRegistry* sceneRegistry);
+		Entity(entt::entity entt_entity, SceneRegistry* sceneRegistry);
 		Entity(const Entity& other) = default;
 
+		static void fillEntityWithBasicComponents(const Entity& entity);
 
 		void destroyYourself() const;
 
 		MAR_NO_DISCARD const bool isValid() const;
 
+		const Entity& createChild();
+		void destroyChild(size_t index);
+		void destroyChild(const Entity& entity);
+
+		bool hasChilds() const;
+		const Entity& getChild(size_t index) const;
 
 		template<typename T> 
 		MAR_NO_DISCARD const bool hasComponent() const;
@@ -73,7 +80,8 @@ namespace marengine {
 	private:
 		
 		entt::entity m_entityHandle{ entt::null };
-		SceneRegistry* m_scene{ nullptr };
+		SceneRegistry* m_sceneRegistry{ nullptr };
+		std::vector<Entity> m_childs;
 
 	};
 

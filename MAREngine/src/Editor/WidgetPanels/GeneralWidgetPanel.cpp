@@ -89,6 +89,8 @@ namespace marengine {
 		}
 
 		EDITOR_TRACE("GUI: prepared frame (render, dockspace, other...)");
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void WGeneralWidgetPanel::endFrame() {

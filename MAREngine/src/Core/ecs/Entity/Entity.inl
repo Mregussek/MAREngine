@@ -30,7 +30,7 @@ namespace marengine {
 
 	template<typename T>
 	MAR_NO_DISCARD const bool Entity::hasComponent() const {
-		const bool hasComp{ m_scene->m_registry.has<T>(m_entityHandle) };
+		const bool hasComp{ m_sceneRegistry->m_registry.has<T>(m_entityHandle) };
 		ECS_TRACE("ENTITY: checking if {} entity contains component {}... result={}", m_entityHandle, typeid(T).name(), hasComp);
 		return hasComp;
 	}
@@ -40,7 +40,7 @@ namespace marengine {
 		ECS_TRACE("ENTITY: add component {} to entity {}", typeid(T).name(), m_entityHandle);
 		MAR_CORE_ASSERT(!hasComponent<T>(), "ENTITY: entity {} already has {} component!", m_entityHandle, typeid(T).name());
 
-		return m_scene->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
+		return m_sceneRegistry->m_registry.emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 	}
 
 	template<typename T>
@@ -48,7 +48,7 @@ namespace marengine {
 		ECS_TRACE("ENTITY: get component {} from entity {}", typeid(T).name(), m_entityHandle);
 		MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY: {} does not have {} component!", m_entityHandle, typeid(T).name());
 
-		return m_scene->m_registry.get<T>(m_entityHandle);
+		return m_sceneRegistry->m_registry.get<T>(m_entityHandle);
 	}
 
 	template<typename T>
@@ -56,7 +56,7 @@ namespace marengine {
 		ECS_TRACE("ENTITY: replacing component {} given from entity {} to {}", typeid(T).name(), other.m_entityHandle, m_entityHandle);
 		MAR_CORE_ASSERT(other.hasComponent<T>(), "ENTITY: {} does not have {} component!", other.m_entityHandle, typeid(T).name());
 
-		return m_scene->m_registry.replace<T>(m_entityHandle, other.getComponent<T>());
+		return m_sceneRegistry->m_registry.replace<T>(m_entityHandle, other.getComponent<T>());
 	}
 
 	template<typename T>
@@ -64,14 +64,14 @@ namespace marengine {
 		ECS_TRACE("ENTITY: replacing component {} in {} entity", typeid(T).name(), m_entityHandle);
 		MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY: {} does not have {} component!", m_entityHandle, typeid(T).name());
 
-		return m_scene->m_registry.replace<T>(m_entityHandle, other);
+		return m_sceneRegistry->m_registry.replace<T>(m_entityHandle, other);
 	}
 
 	template<typename T, typename... Args>
 	MAR_NO_DISCARD T& Entity::get_addComponent(Args&&... args) const {
 		ECS_TRACE("ENTITY: {} - get_addComponent at {}", typeid(T).name(), m_entityHandle);
 
-		return m_scene->m_registry.get_or_emplace<T>(m_entityHandle, std::forward<Args>(args)...);
+		return m_sceneRegistry->m_registry.get_or_emplace<T>(m_entityHandle, std::forward<Args>(args)...);
 	}
 
 	template<typename T>
@@ -79,7 +79,7 @@ namespace marengine {
 		ECS_TRACE("ENTITY: removing {} from entity {}", typeid(T).name(), m_entityHandle);
 		MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY: {} does not have {} component!", m_entityHandle, typeid(T).name());
 
-		m_scene->m_registry.remove<T>(m_entityHandle);
+		m_sceneRegistry->m_registry.remove<T>(m_entityHandle);
 	}
 
 
