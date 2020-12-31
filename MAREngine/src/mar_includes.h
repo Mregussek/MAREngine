@@ -131,6 +131,13 @@
 	#error "MAR ENGINE: Cannot import entt/entt.hpp!"
 #endif
 
+#if __has_include("json.hpp")
+	#include "json.hpp"
+	#define MAR_ENGINE_JSON_LIB_IMPORTED
+#else
+	#error "MAR ENGINE: Cannot import json.hpp!"
+#endif
+
 #if __has_include(<pybind11/pybind11.h>)
 	#include <pybind11/pybind11.h>
 	#include <pybind11/embed.h>

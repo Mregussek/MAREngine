@@ -44,6 +44,7 @@ namespace marengine {
 		ss << "MAREngine scene file\n";
 
 		Filesystem_Saving::saveScene(ss, scene);
+		ss.close();
 
 		MAR_CORE_INFO("FILESYSTEM: scene has been saved!");
 	}

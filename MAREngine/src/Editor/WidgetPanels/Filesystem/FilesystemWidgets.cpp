@@ -30,6 +30,8 @@
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/graphics/Mesh/MeshCreator.h"
 #include "../../../Core/filesystem/EditorFilesystem.h"
+#include "../../../Core/filesystem/SceneSerializer.h"
+#include "../../../Core/filesystem/SceneDeserializer.h"
 #include "../../../Engine.h"
 
 
@@ -87,8 +89,9 @@ namespace marengine {
 	}
 
 	void WFilesystemWidgets::displaySaveSceneWindow(Scene* scene) {
-		if (m_fileDialog.showFileDialog(m_nameSaveScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene")) {
-			Filesystem::saveToFile(scene, m_fileDialog.selected_path.c_str());
+		if (m_fileDialog.showFileDialog(m_nameSaveScene, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, ImVec2(1200, 800), ".marscene.json")) {
+			//Filesystem::saveToFile(scene, m_fileDialog.selected_path.c_str());
+			FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(), scene);
 		}
 	}
 
