@@ -35,11 +35,11 @@ namespace marengine {
 
 	struct CommonComponentHandler {
 
-		static bool drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth);
-
 		static void handleTagComponent(TagComponent& tag);
 		static void handleScriptComponent(const Entity& entity);
 		static void handleScriptComponent(const EntityCollection& collection);
+
+		static bool drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth);
 
 	private:
 

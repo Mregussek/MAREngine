@@ -46,6 +46,12 @@ namespace marengine {
 		virtual void onSetVisibleEntity(const Entity& entity) const override;
 		virtual void onSetInvisibleEntity(const Entity& entity) const override;
 
+		virtual void onAssignChild(const Entity& entity, const Entity& child) const override;
+		virtual void onRemoveChild(const Entity& entity, const Entity& child) const override;
+
+		virtual void onCreateChild(const Entity& entity) const override;
+		virtual void onDestroyChild(const Entity& entity, const Entity& child) const override;
+
 	};
 
 

@@ -51,6 +51,8 @@ namespace marengine {
 		void displayEditorMode() const;
 
 		void popUpMenu() const;
+		void displayChildsPopMenu() const;
+		void displayComponentPopMenu() const;
 
 		void handleTransformComponent() const;
 		void handleRenderableComponent() const;

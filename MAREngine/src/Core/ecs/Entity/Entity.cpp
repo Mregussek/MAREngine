@@ -47,6 +47,7 @@ namespace marengine {
 	void Entity::fillEntityWithBasicComponents(const Entity& entity) {
 		entity.addComponent<TagComponent>();
 		entity.addComponent<TransformComponent>();
+		entity.addComponent<ChildComponent>();
 	}
 
 	void Entity::destroyYourself() const {
@@ -57,35 +58,39 @@ namespace marengine {
 		ECS_INFO("ENTITY: destroyed yourself!");
 	}
 
-	const Entity& Entity::createChild() {
-		const Entity& createdChild{ m_childs.emplace_back(m_sceneRegistry) };
-		fillEntityWithBasicComponents(createdChild);
-		return createdChild;
+	void Entity::assignChild(const Entity& entity) const {
+		auto& childs{ getComponent<ChildComponent>().childs };
+		childs.push_back(entity);
 	}
 
-	void Entity::destroyChild(size_t index) {
-		destroyChild(m_childs[index]);
+	void Entity::removeChild(size_t index) const {
+		removeChild(getChild(index));
 	}
 
-	void Entity::destroyChild(const Entity& entity) {
-		auto it = std::find_if(m_childs.begin(), m_childs.end(), [&entity](const Entity& iterator) {
+	void Entity::removeChild(const Entity& entity) const {
+		auto& childs{ getComponent<ChildComponent>().childs };
+
+		auto it = std::find_if(childs.begin(), childs.end(), [&entity](const Entity& iterator) {
 			return 	&iterator == &entity;
 		});
 
-		const bool canDestroyChild{ it != m_childs.end() && (*it).isValid() };
+		const bool canRemoveChild{ it != childs.end() };
 
-		if (canDestroyChild) {
-			(*it).destroyYourself();
-			m_childs.erase(it);
+		if (canRemoveChild) {
+			childs.erase(it);
 		}
 	}
 
 	bool Entity::hasChilds() const {
-		return !m_childs.empty();
+		return !getComponent<ChildComponent>().childs.empty();
 	}
 
 	const Entity& Entity::getChild(size_t index) const {
-		return m_childs[index];
+		return getComponent<ChildComponent>().childs[index];
+	}
+
+	const std::vector<Entity>& Entity::getChilds() const {
+		return getComponent<ChildComponent>().childs;
 	}
 
 

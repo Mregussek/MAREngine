@@ -28,6 +28,8 @@
 
 namespace marengine {
 
+	class Entity;
+
 
 	class WSceneHierarchyWidget : public IWidgetPanel {
 	public:
@@ -36,8 +38,9 @@ namespace marengine {
 		
 	private:
 
-		void buttonsAtPanel();
-		void popUpMenu();
+		void displayTreesForEntities(const std::vector<Entity>& entities) const;
+		void buttonsAtPanel() const;
+		void popUpMenu() const;
 
 	};
 

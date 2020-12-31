@@ -146,53 +146,71 @@ namespace marengine {
 
 		{ // Actual PopUp menu
 			if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
-				if (ImGui::BeginMenu("Add Component")) {
-					const bool hasRenderable{ currentEntity->hasComponent<RenderableComponent>() };
-					const bool hasLight{ currentEntity->hasComponent<LightComponent>() };
-					const bool hasCamera{ currentEntity->hasComponent<CameraComponent>() };
-					const bool hasScript{ currentEntity->hasComponent<ScriptComponent>() };
-					const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>() 
-						&& !currentEntity->hasComponent<Texture2DComponent>() 
-						&& !currentEntity->hasComponent<TextureCubemapComponent>();
-
-					if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
-						FEventsComponentEntity::Instance->onAdd<RenderableComponent>(*currentEntity);
-					}
-						
-					if (hasNeitherColorNorTexture) {
-						if (ImGui::MenuItem("Add ColorComponent")) {
-							FEventsComponentEntity::Instance->onAdd<ColorComponent>(*currentEntity);
-						}
-
-						if (ImGui::MenuItem("Add Texture2DComponent")) {
-							FEventsComponentEntity::Instance->onAdd<Texture2DComponent>(*currentEntity);
-						}
-								
-						if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-							FEventsComponentEntity::Instance->onAdd<TextureCubemapComponent>(*currentEntity);
-						}
-					}
-
-					if (!hasLight && ImGui::MenuItem("Add LightComponent")) {
-						currentEntity->addComponent<LightComponent>();
-						SceneEvents::Instance().onLightAdd();
-					}
-
-					if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
-						currentEntity->addComponent<CameraComponent>();
-						SceneEvents::Instance().onCameraAdd();
-					}
-
-					if (!hasScript && ImGui::MenuItem("Add ScriptComponent")) {
-						currentEntity->addComponent<ScriptComponent>();
-						SceneEvents::Instance().onScriptAdd();
-					}
-
+				if (ImGui::BeginMenu("Childs")) {
+					displayChildsPopMenu();
+					ImGui::EndMenu();
+				}
+				
+				if (ImGui::BeginMenu("Components")) {
+					displayComponentPopMenu();
 					ImGui::EndMenu();
 				}
 
 				ImGui::EndPopup();
 			}
+		}
+	}
+
+	void WEntityWidgetPanel::displayChildsPopMenu() const {
+		if (ImGui::MenuItem("Create and assign child")) {
+			FEventsEntityWidget::Instance->onCreateChild(*currentEntity);
+		}
+
+		if (ImGui::MenuItem("Assign new child")) {
+
+		}
+	}
+
+	void WEntityWidgetPanel::displayComponentPopMenu() const {
+		const bool hasRenderable{ currentEntity->hasComponent<RenderableComponent>() };
+		const bool hasLight{ currentEntity->hasComponent<LightComponent>() };
+		const bool hasCamera{ currentEntity->hasComponent<CameraComponent>() };
+		const bool hasScript{ currentEntity->hasComponent<ScriptComponent>() };
+		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>()
+			&& !currentEntity->hasComponent<Texture2DComponent>()
+			&& !currentEntity->hasComponent<TextureCubemapComponent>();
+
+		if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
+			FEventsComponentEntity::Instance->onAdd<RenderableComponent>(*currentEntity);
+		}
+
+		if (hasNeitherColorNorTexture) {
+			if (ImGui::MenuItem("Add ColorComponent")) {
+				FEventsComponentEntity::Instance->onAdd<ColorComponent>(*currentEntity);
+			}
+
+			if (ImGui::MenuItem("Add Texture2DComponent")) {
+				FEventsComponentEntity::Instance->onAdd<Texture2DComponent>(*currentEntity);
+			}
+
+			if (ImGui::MenuItem("Add TextureCubemapComponent")) {
+				FEventsComponentEntity::Instance->onAdd<TextureCubemapComponent>(*currentEntity);
+			}
+		}
+
+		if (!hasLight && ImGui::MenuItem("Add LightComponent")) {
+			currentEntity->addComponent<LightComponent>();
+			SceneEvents::Instance().onLightAdd();
+		}
+
+		if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
+			currentEntity->addComponent<CameraComponent>();
+			SceneEvents::Instance().onCameraAdd();
+		}
+
+		if (!hasScript && ImGui::MenuItem("Add ScriptComponent")) {
+			currentEntity->addComponent<ScriptComponent>();
+			SceneEvents::Instance().onScriptAdd();
 		}
 	}
 

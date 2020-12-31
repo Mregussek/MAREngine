@@ -72,5 +72,24 @@ namespace marengine {
 
 	}
 
+	void FEventsEntityWidget::onAssignChild(const Entity& entity, const Entity& child) const {
+		entity.assignChild(child);
+		onSelectedEntity(child);
+	}
+
+	void FEventsEntityWidget::onRemoveChild(const Entity& entity, const Entity& child) const {
+		entity.removeChild(child);
+		onUnselectedEntity(child);
+	}
+
+	void FEventsEntityWidget::onCreateChild(const Entity& entity) const {
+		const Entity& createdChild{ SceneManager::Instance->getScene()->createEntity() };
+		onAssignChild(entity, createdChild);
+	}
+
+	void FEventsEntityWidget::onDestroyChild(const Entity& entity, const Entity& child) const {
+
+	}
+
 
 }

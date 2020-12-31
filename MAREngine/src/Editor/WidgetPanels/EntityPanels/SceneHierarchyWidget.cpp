@@ -43,16 +43,8 @@ namespace marengine {
 		ImGui::Text("SCENE - %s", SceneManager::Instance->getScene()->getName().c_str());
 		ImGui::Separator();
 
-		const auto& entities = SceneManager::Instance->getScene()->getEntities();
-
-		auto userSelectedEntity = [](const Entity& entity) {
-			return ImGui::MenuItem(entity.getComponent<TagComponent>().tag.c_str());
-		};
-
-		const auto itEntity = std::find_if(entities.cbegin(), entities.cend(), userSelectedEntity);
-		if (itEntity != entities.cend()) {
-			FEventsEntityWidget::Instance->onSelectedEntity(*itEntity);
-		}
+		const std::vector<Entity>& entities{ SceneManager::Instance->getScene()->getEntities() };
+		displayTreesForEntities(entities);
 
 		const auto& collections{ SceneManager::Instance->getScene()->getCollections() };
 
@@ -72,7 +64,33 @@ namespace marengine {
 		EDITOR_TRACE("GUI: scene_hierarchy");
 	}
 
-	void WSceneHierarchyWidget::buttonsAtPanel() {
+	void WSceneHierarchyWidget::displayTreesForEntities(const std::vector<Entity>& entities) const {
+		auto displayTreeOrMenuItemRecursively = [this](const Entity& entity) {
+			constexpr ImGuiTreeNodeFlags treeNodeFlags{
+				ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth
+			};
+			const char* entityTag{ entity.getComponent<TagComponent>().tag.c_str() };
+
+			if (entity.hasChilds()) { // if entity has childs we want tree nodes
+				if (ImGui::TreeNodeEx(entityTag, treeNodeFlags)) {
+					FEventsEntityWidget::Instance->onSelectedEntity(entity);
+					const std::vector<Entity>& childs{ entity.getChilds() };
+					displayTreesForEntities(childs);
+
+					ImGui::TreePop();
+				}
+			}
+			else { // if not normal menu item
+				if (ImGui::MenuItem(entityTag)) {
+					FEventsEntityWidget::Instance->onSelectedEntity(entity);
+				}
+			}
+		};
+
+		std::for_each(entities.cbegin(), entities.cend(), displayTreeOrMenuItemRecursively);
+	}
+
+	void WSceneHierarchyWidget::buttonsAtPanel() const {
 		if (ImGui::Button("+ E")) {
 			FEventsEntityWidget::Instance->onCreateEntity();
 		}
@@ -127,7 +145,7 @@ namespace marengine {
 		}
 	}
 
-	void WSceneHierarchyWidget::popUpMenu() {
+	void WSceneHierarchyWidget::popUpMenu() const {
 		if (SceneManager::Instance->isEditorMode() && ImGui::IsWindowFocused()) {
 			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneHierarchyPopUp");

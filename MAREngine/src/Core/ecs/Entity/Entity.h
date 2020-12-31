@@ -35,6 +35,10 @@ namespace marengine {
 
 		friend class Scene;
 
+		struct ChildComponent {
+			std::vector<Entity> childs;
+		};
+
 	public:
 
 		// Entity default constructor is disabled, because we don't want to store nullptr at m_registry!
@@ -49,11 +53,12 @@ namespace marengine {
 
 		MAR_NO_DISCARD const bool isValid() const;
 
-		const Entity& createChild();
-		void destroyChild(size_t index);
-		void destroyChild(const Entity& entity);
+		void assignChild(const Entity& entity) const;
+		void removeChild(size_t index) const;
+		void removeChild(const Entity& entity) const;
 
 		bool hasChilds() const;
+		const std::vector<Entity>& getChilds() const;
 		const Entity& getChild(size_t index) const;
 
 		template<typename T> 
@@ -81,7 +86,6 @@ namespace marengine {
 		
 		entt::entity m_entityHandle{ entt::null };
 		SceneRegistry* m_sceneRegistry{ nullptr };
-		std::vector<Entity> m_childs;
 
 	};
 
