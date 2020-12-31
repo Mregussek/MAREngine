@@ -72,8 +72,11 @@ namespace marengine {
 			const char* entityTag{ entity.getComponent<TagComponent>().tag.c_str() };
 
 			if (entity.hasChilds()) { // if entity has childs we want tree nodes
-				if (ImGui::TreeNodeEx(entityTag, treeNodeFlags)) {
+				const bool isTreeOpen{ ImGui::TreeNodeEx(entityTag, treeNodeFlags) };
+				if (ImGui::IsItemClicked()) {
 					FEventsEntityWidget::Instance->onSelectedEntity(entity);
+				}
+				if (isTreeOpen) {
 					const std::vector<Entity>& childs{ entity.getChilds() };
 					displayTreesForEntities(childs);
 
