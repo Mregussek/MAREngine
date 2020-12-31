@@ -49,15 +49,14 @@ namespace marengine {
 		void addDefault() const;
 		void copyDefault(const Entity& other) const;
 
-		const bool isValid() const;
-		operator const bool() const;
+		MAR_NO_DISCARD const bool isValid() const;
 
 		// ----------------------------------------------------
 		// ENTITY COMPONENT METHODS (definitions must be here, because of linker errors)
 		// ----------------------------------------------------
 
 		template<typename T>
-		const bool hasComponent() const {
+		MAR_NO_DISCARD const bool hasComponent() const {
 			const bool hasComp{ m_scene->m_registry.has<T>(m_entityHandle) };
 			ECS_TRACE("ENTITY: checking if {} entity contains component {}... result={}", m_entityHandle, typeid(T).name(), hasComp);
 			return hasComp;
@@ -72,7 +71,7 @@ namespace marengine {
 		}
 
 		template<typename T>
-		T& getComponent() const {
+		MAR_NO_DISCARD T& getComponent() const {
 			ECS_TRACE("ENTITY: get component {} from entity {}", typeid(T).name(), m_entityHandle);
 			MAR_CORE_ASSERT(hasComponent<T>(), "ENTITY: {} does not have {} component!", m_entityHandle, typeid(T).name());
 
@@ -96,7 +95,7 @@ namespace marengine {
 		}
 
 		template<typename T, typename... Args>
-		T& get_addComponent(Args&&... args) const {
+		MAR_NO_DISCARD T& get_addComponent(Args&&... args) const {
 			ECS_TRACE("ENTITY: {} - get_addComponent at {}", typeid(T).name(), m_entityHandle);
 
 			return m_scene->m_registry.get_or_emplace<T>(m_entityHandle, std::forward<Args>(args)...);

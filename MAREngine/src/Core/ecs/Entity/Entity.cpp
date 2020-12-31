@@ -56,10 +56,6 @@ namespace marengine {
 		return m_scene->m_registry.valid(m_entityHandle);
 	}
 
-	Entity::operator const bool() const {
-		return isValid();
-	}
-
 	void Entity::destroyYourself() const {
 		ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
 

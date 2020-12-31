@@ -54,18 +54,18 @@ namespace marengine {
 		Scene* scene = new Scene(std::move(name));
 
 		{ // create Camera entity
-			const auto& entity = scene->createEntity();
-			entity.addComponent<CameraComponent>();
+			const Entity& cameraEntity{ scene->createEntity() };
+			cameraEntity.addComponent<CameraComponent>();
 
-			auto& cam = entity.getComponent<TagComponent>();
-			cam.tag = "Camera";
+			TagComponent& tag = cameraEntity.getComponent<TagComponent>();
+			tag.tag = "CameraEntity";
 		}
 		{ // create Light Entity
-			const auto& entity = scene->createEntity();
-			entity.addComponent<LightComponent>();
+			const Entity& lightEntity{ scene->createEntity() };
+			lightEntity.addComponent<LightComponent>();
 
-			auto& light = entity.getComponent<TagComponent>();
-			light.tag = "Light";
+			TagComponent& tag = lightEntity.getComponent<TagComponent>();
+			tag.tag = "LightEntity";
 		}
 
 		return scene;
@@ -78,7 +78,7 @@ namespace marengine {
 	const Entity& Scene::createEntity() {
 		ECS_INFO("SCENE: going to create entity!");
 
-		const auto& entity = m_container.m_entities.emplace_back(&m_sceneRegistry);
+		const Entity& entity{ m_container.m_entities.emplace_back(&m_sceneRegistry) };
 
 		entity.addDefault();
 		entity.addComponent<TagComponent>();
@@ -96,7 +96,9 @@ namespace marengine {
 			return 	&iterator == &entity;
 		});
 
-		if (it != m_container.m_entities.end() && (*it).isValid()) {
+		const bool canDestroyEntity{ it != m_container.m_entities.end() && (*it).isValid() };
+
+		if (canDestroyEntity) {
 			(*it).destroyYourself();
 			m_container.m_entities.erase(it);
 		}
@@ -113,7 +115,7 @@ namespace marengine {
 	const EntityCollection& Scene::createCollection() {
 		ECS_INFO("SCENE: going to create entity collection!");
 
-		const auto& collection = m_container.m_collections.emplace_back(&m_sceneRegistry);
+		const EntityCollection& collection{ m_container.m_collections.emplace_back(&m_sceneRegistry) };
 
 		collection.addComponent<EntityCollectionComponent>();
 		collection.addComponent<TagComponent>("DefaultName");
@@ -131,7 +133,9 @@ namespace marengine {
 			return 	&iterator == &collection;
 		});
 
-		if (it != m_container.m_collections.end() && (*it).isValid()) {
+		const bool canDestroyCollection{ it != m_container.m_collections.end() && (*it).isValid() };
+
+		if (canDestroyCollection) {
 			(*it).destroyYourself();
 			m_container.m_collections.erase(it);
 		}

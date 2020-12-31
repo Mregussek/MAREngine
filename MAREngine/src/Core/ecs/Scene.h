@@ -39,13 +39,13 @@ namespace marengine {
 		Scene() = default;
 		Scene(std::string name);
 
-		static Scene* createEmptyScene(std::string name);
+		MAR_NO_DISCARD static Scene* createEmptyScene(std::string name);
 		void shutdown();
 
-		const Entity& createEntity();
+		MAR_NO_DISCARD const Entity& createEntity();
 		void destroyEntity(const Entity& entity);
 
-		const EntityCollection& createCollection();
+		MAR_NO_DISCARD const EntityCollection& createCollection();
 		void destroyCollection(const EntityCollection& collection);
 
 		// --- SET METHODS --- //
@@ -55,20 +55,19 @@ namespace marengine {
 		
 		// --- GET METHODS --- //
 
-		const std::string& getName() const { return m_name; }
-		maths::vec3& getBackground() { return m_backgroundColor; }
-		SceneRegistry* getRegistry() { return &m_sceneRegistry; }
+		MAR_NO_DISCARD const std::string& getName() const { return m_name; }
+		MAR_NO_DISCARD maths::vec3& getBackground() { return m_backgroundColor; }
+		MAR_NO_DISCARD SceneRegistry* getRegistry() { return &m_sceneRegistry; }
+		MAR_NO_DISCARD const std::vector<Entity>& getEntities() const;
+		MAR_NO_DISCARD const std::vector<EntityCollection>& getCollections() const;
 
-		const std::vector<Entity>& getEntities() const;
-		const std::vector<EntityCollection>& getCollections() const;
-
-		template<typename T>
-		auto getView() {
+		template<typename T> 
+		MAR_NO_DISCARD auto getView() {
 			return m_sceneRegistry.m_registry.view<T>();
 		}
 
-		template<typename T>
-		T& getComponent(entt::entity entity) {
+		template<typename T> 
+		MAR_NO_DISCARD T& getComponent(entt::entity entity) {
 			MAR_CORE_ASSERT(m_sceneRegistry.m_registry.has<T>(entity), "Passed entity does not have component");
 			return m_sceneRegistry.m_registry.get<T>(entity);
 		}

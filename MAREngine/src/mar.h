@@ -24,3 +24,6 @@
 
 #define MAR_ENGINE_USE_GLFW_WINDOW 1
 #define MAR_ENGINE_USE_SDL_WINDOW 0
+
+
+#define MAR_NO_DISCARD [[nodiscard]]
