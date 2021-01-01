@@ -152,8 +152,20 @@ namespace marengine {
 	***************************** TEXTURE 2D COMPONENT TEMPLATES **************************************
 	***************************************************************************************************/
 
+	template<> void FEventsComponentEntity::onAdd<Texture2DComponent>(const Entity& entity) const {
+		entity.addComponent<Texture2DComponent>();
+
+		if (entity.hasComponent<RenderableComponent>()) {
+			RenderPipeline::Instance->pushEntityToPipeline(entity);
+			RenderEvents::Instance().onContainersReadyToDraw();
+		}
+	}
+
 	template<> void FEventsComponentEntity::onUpdate<Texture2DComponent>(const Entity& entity) const {
-		SceneManager::Instance->initialize();
+		const auto& tex2DComponent{ entity.getComponent<Texture2DComponent>() };
+		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
+		
+		RenderEvents::Instance().onTex2DUpdate(tex2DComponent.texture, renderPipelineComponent);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const {
@@ -200,6 +212,13 @@ namespace marengine {
 	/**************************************************************************************************
 	***************************** CAMERA COMPONENT TEMPLATES ***************************************
 	***************************************************************************************************/
+
+	template<> void FEventsComponentEntity::onUpdate<CameraComponent>(const Entity& entity) const {
+		const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+		if (cameraComponent.checkIfMain()) {
+			onMainCameraUpdate(entity);
+		}
+	}
 
 	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) const {
 		const auto& cameraComponent{ entity.getComponent<CameraComponent>() };

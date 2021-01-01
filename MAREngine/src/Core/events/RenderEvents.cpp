@@ -117,8 +117,25 @@ namespace marengine {
 			}
 		};
 
-		auto& containerColor{ getColorFromCorrectContainer() };
-		containerColor = color;
+		auto& colorInContainer{ getColorFromCorrectContainer() };
+		colorInContainer = color;
+	}
+
+	void RenderEvents::onTex2DUpdate(const std::string& texture, const RenderPipelineComponent& rpc) const {
+		auto getTextureFromCorrectContainer = [&rpc]()->std::string& {
+			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_tex2D[rpc.colorIndex].second;
+			}
+			else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_tex2D[rpc.colorIndex].second;
+			}
+			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
+				return RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_tex2D[rpc.colorIndex].second;
+			}
+		};
+
+		auto& textureInContainer{ getTextureFromCorrectContainer() };
+		textureInContainer = texture;
 	}
 	
 	void RenderEvents::onMainCameraUpdate(const RenderCamera& camera) const {

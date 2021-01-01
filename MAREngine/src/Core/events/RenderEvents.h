@@ -48,6 +48,7 @@ namespace marengine {
 
 		void onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const;
 		void onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const;
+		void onTex2DUpdate(const std::string& texture, const RenderPipelineComponent& rpc) const;
 
 		void onLightUpdate(vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const;
 		void onLightPositionUpdate(vec3 position, const RenderPipelineComponent& rpc) const;

@@ -71,6 +71,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const;
 
 	// Texture2D Component
+	template<> void FEventsComponentEntity::onAdd<Texture2DComponent>(const Entity& entity) const;
 	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const;
 	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const;
 
@@ -84,6 +85,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const;
 
 	// CameraComponent
+	template<> void FEventsComponentEntity::onUpdate<CameraComponent>(const Entity& entity) const;
 	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) const;
 
 
