@@ -333,6 +333,34 @@
                         }
                     }
                 },
+                "GrassOnGrassXD": {
+                    "RenderableComponent": {
+                        "name": "Wall"
+                    },
+                    "TagComponent": {
+                        "tag": "GrassOnGrassXD"
+                    },
+                    "Texture2DComponent": {
+                        "name": "textures/grass_alpha.png"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 90.0,
+                            "y": 0.0,
+                            "z": 44.5
+                        },
+                        "center": {
+                            "x": 8.600000381469727,
+                            "y": 3.6500000953674316,
+                            "z": 9.149999618530273
+                        },
+                        "scale": {
+                            "x": 0.009999999776482582,
+                            "y": 0.3499999940395355,
+                            "z": 0.03999999910593033
+                        }
+                    }
+                },
                 "GrassSurface": {
                     "RenderableComponent": {
                         "name": "Surface"
@@ -736,6 +764,38 @@
                             "z": 1.0
                         }
                     }
+                },
+                "empty": {
+                    "ColorComponent": {
+                        "texture": {
+                            "x": 0.2030079960823059,
+                            "y": 0.20300500094890594,
+                            "z": 0.20300500094890594
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Surface"
+                    },
+                    "TagComponent": {
+                        "tag": "empty"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "center": {
+                            "x": 0.0,
+                            "y": -20.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1000.0,
+                            "y": 1.0,
+                            "z": 1000.0
+                        }
+                    }
                 }
             },
             "Info": {
@@ -818,14 +878,22 @@
                     },
                     {
                         "childsCount": 0,
+                        "tag": "GrassOnGrassXD"
+                    },
+                    {
+                        "childsCount": 0,
                         "tag": "ScriptEntity"
                     },
                     {
                         "childsCount": 0,
                         "tag": "NewScript"
+                    },
+                    {
+                        "childsCount": 0,
+                        "tag": "empty"
                     }
                 ],
-                "EntitiesCount": 21
+                "EntitiesCount": 23
             }
         },
         "Name": "DefaultScene"

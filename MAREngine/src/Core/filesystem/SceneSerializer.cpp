@@ -36,7 +36,6 @@ namespace marengine {
 		}
 
 		nlohmann::json json;
-
 		json["Documentation"]["Engine"] = "MAREngine";
 		json["Documentation"]["EngineVersion"] = "v0.0.1";
 		json["Documentation"]["App"] = "DefaultApplication";

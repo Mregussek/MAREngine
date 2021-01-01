@@ -58,6 +58,7 @@ namespace marengine {
 		LayerStack stack{};
 
 		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
+		//auto* scene = Filesystem::openFile("DefaultProject/Scenes/DefaultProject.marscene");
 		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");

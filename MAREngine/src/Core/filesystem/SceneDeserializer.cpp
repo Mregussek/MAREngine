@@ -22,6 +22,7 @@
 #include "FilesystemLogging.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
+#include "../graphics/Mesh/MeshCreator.h"
 #include "../ecs/Components/Components.h"
 
 
@@ -35,17 +36,16 @@ namespace marengine {
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
 
-		nlohmann::json json;
-
+		
 		std::ifstream file(path);
 		if (!file.is_open()) {
 			FILESYSTEM_ERROR("FILESYSTEM: cannot open file at given path {}!", path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
-		file >> json;
+		nlohmann::json json{ nlohmann::json::parse(file) };
 		file.close();
 
-		const std::string sceneName{ json["Scene"]["name"].get<std::string>() };
+		const std::string sceneName{ json["Scene"]["Name"] };
 		const float backX{ json["Scene"][sceneName]["Background"]["x"].get<float>() };
 		const float backY{ json["Scene"][sceneName]["Background"]["y"].get<float>() };
 		const float backZ{ json["Scene"][sceneName]["Background"]["z"].get<float>() };
@@ -57,14 +57,33 @@ namespace marengine {
 		const uint32_t entitiesCount{ json["Scene"][sceneName]["Info"]["EntitiesCount"].get<uint32_t>() };
 
 		for (uint32_t i = 0; i < entitiesCount; i++) {
-			const std::string entityTag{ json["Scene"][sceneName]["Info"]["Entities"][std::to_string(i)]["tag"].get<std::string>() };
-			const uint32_t childsCount{ json["Scene"][sceneName]["Info"]["Entities"][std::to_string(i)]["childsCount"].get<uint32_t>() };
+			const std::string entityTag{ json["Scene"][sceneName]["Info"]["Entities"][i]["tag"] };
+			const uint32_t childsCount{ json["Scene"][sceneName]["Info"]["Entities"][i]["childsCount"].get<uint32_t>() };
 		
 			const Entity& entity{ scene->createEntity() };
 			loadEntity(entity, json, entityTag, childsCount, sceneName);
 		}
 
 		return scene;
+	}
+
+	void fillRenderable(RenderableComponent& renderable) {
+		if (renderable.name.find("Cube") != std::string::npos) {
+			renderable.vertices = MeshCreator::Cube::getVertices();
+			renderable.indices = MeshCreator::Cube::getIndices();
+		}
+		else if (renderable.name.find("Surface") != std::string::npos) {
+			renderable.vertices = MeshCreator::Surface::getVertices();
+			renderable.indices = MeshCreator::Surface::getIndices();
+		}
+		else if (renderable.name.find("Wall") != std::string::npos) {
+			renderable.vertices = MeshCreator::Wall::getVertices();
+			renderable.indices = MeshCreator::Wall::getIndices();
+		}
+		else if (renderable.name.find("Pyramid") != std::string::npos) {
+			renderable.vertices = MeshCreator::Pyramid::getVertices();
+			renderable.indices = MeshCreator::Pyramid::getIndices();
+		}
 	}
 
 	void FSceneDeserializer::loadEntity(const Entity& entity, nlohmann::json& json, const std::string& entityTag, uint32_t childsCount, const std::string& sceneName) {
@@ -97,6 +116,7 @@ namespace marengine {
 		if (jsonContains("RenderableComponent")) {
 			auto& renderable{ entity.addComponent<RenderableComponent>() };
 			setString(renderable.name, "RenderableComponent", "name");
+			fillRenderable(renderable);
 		}
 
 		if (jsonContains("ColorComponent")) {
