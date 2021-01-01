@@ -57,7 +57,7 @@ namespace marengine {
 		WindowInstance<GLFWwindow> displayWindow{};
 		LayerStack stack{};
 
-		auto* scene = Filesystem::openFile(m_engine.getPathToLoad());
+		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
 		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");

@@ -27,7 +27,8 @@
 // Platforms
 #include "../../src/Platform/OpenGL/SetupOpenGL.h"
 
-// Editor
+// Filesystem
+#include "../../src/Core/filesystem/SceneDeserializer.h"
 #include "../../src/Core/filesystem/EditorFilesystem.h"
 
 // Layers	 

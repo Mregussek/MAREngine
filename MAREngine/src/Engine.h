@@ -67,7 +67,7 @@ namespace marengine {
 		std::string m_projectPath{ "DefaultProject/" };
 		std::string m_assetsPath{ "DefaultProject/Assets/" };
 		std::string m_scenesPath{ "DefaultProject/Scenes/" };
-		std::string m_pathLoad{ "DefaultProject/Scenes/DefaultProject.marscene" };
+		std::string m_pathLoad{ "DefaultProject/Scenes/default.marscene.json" };
 		std::string m_editorName{ "EditorMAR" };
 		bool m_shouldRestart{ false };
 
