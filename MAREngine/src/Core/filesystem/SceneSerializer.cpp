@@ -52,32 +52,28 @@ namespace marengine {
 		const std::vector<Entity>& entities{ scene->getEntities() };
 		const uint32_t entitiesSize{ entities.size() };
 
-		json["Scene"][sceneName]["Info"]["EntitiesCount"] = entitiesSize;
-		
 		for (uint32_t i = 0; i < entitiesSize; i++) {
 			const auto& tag{ entities[i].getComponent<TagComponent>().tag };
-			json["Scene"][sceneName]["Info"]["Entities"][i]["tag"] = tag;
-			json["Scene"][sceneName]["Info"]["Entities"][i]["childsCount"] = entities[i].getChilds().size();
 
-			saveEntity(entities[i], json, sceneName);
+			saveEntity(entities[i], i, json, sceneName);
 		}
 		
 		ss << json.dump(4);
 		ss.close();
 	}
 
-	void FSceneSerializer::saveEntity(const Entity& entity, nlohmann::json& json, const std::string& sceneName) {
+	void FSceneSerializer::saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
 		const std::string& tag{ entity.getComponent<TagComponent>() };
-		auto saveString = [&json, &tag, &sceneName](const char* componentName, const char* value, const std::string& str) {
-			json["Scene"][sceneName]["Entity"][tag][componentName][value] = str;
+		auto saveString = [&json, &tag, &sceneName, index](const char* componentName, const char* value, const std::string& str) {
+			json["Scene"][sceneName]["Entity"][index][componentName][value] = str;
 		};
-		auto saveFloat = [&json, &tag, &sceneName](const char* componentName, const char* value, float f) {
-			json["Scene"][sceneName]["Entity"][tag][componentName][value] = f;
+		auto saveFloat = [&json, &tag, &sceneName, index](const char* componentName, const char* value, float f) {
+			json["Scene"][sceneName]["Entity"][index][componentName][value] = f;
 		};
-		auto saveVec3 = [&json, &tag, &sceneName](const char* componentName, const char* value, const maths::vec3& v) {
-			json["Scene"][sceneName]["Entity"][tag][componentName][value]["x"] = v.x;
-			json["Scene"][sceneName]["Entity"][tag][componentName][value]["y"] = v.y;
-			json["Scene"][sceneName]["Entity"][tag][componentName][value]["z"] = v.z;
+		auto saveVec3 = [&json, &tag, &sceneName, index](const char* componentName, const char* value, const maths::vec3& v) {
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["x"] = v.x;
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["y"] = v.y;
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["z"] = v.z;
 		};
 
 		saveString("TagComponent", "tag", tag);

@@ -38,7 +38,7 @@ namespace marengine {
 
 	private:
 
-		static void saveEntity(const Entity& entity, nlohmann::json& json, const std::string& sceneName);
+		static void saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
 
 	};
 

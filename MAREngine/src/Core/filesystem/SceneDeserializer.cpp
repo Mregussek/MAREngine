@@ -54,14 +54,11 @@ namespace marengine {
 		scene->setName(sceneName);
 		scene->setBackground({ backX, backY, backZ });
 
-		const uint32_t entitiesCount{ json["Scene"][sceneName]["Info"]["EntitiesCount"].get<uint32_t>() };
-
-		for (uint32_t i = 0; i < entitiesCount; i++) {
-			const std::string entityTag{ json["Scene"][sceneName]["Info"]["Entities"][i]["tag"] };
-			const uint32_t childsCount{ json["Scene"][sceneName]["Info"]["Entities"][i]["childsCount"].get<uint32_t>() };
-		
+		uint32_t i = 0;
+		for (nlohmann::json& jsonEntity : json["Scene"][sceneName]["Entity"]) {
 			const Entity& entity{ scene->createEntity() };
-			loadEntity(entity, json, entityTag, childsCount, sceneName);
+			loadEntity(entity, i, json, sceneName);
+			i++;
 		}
 
 		return scene;
@@ -86,21 +83,21 @@ namespace marengine {
 		}
 	}
 
-	void FSceneDeserializer::loadEntity(const Entity& entity, nlohmann::json& json, const std::string& entityTag, uint32_t childsCount, const std::string& sceneName) {
-		auto jsonContains = [&sceneName, &entityTag, &json](const char* componentName)->bool {
-			return json["Scene"][sceneName]["Entity"][entityTag].contains(componentName);
+	void FSceneDeserializer::loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
+		auto jsonContains = [&sceneName, index, &json](const char* componentName)->bool {
+			return json["Scene"][sceneName]["Entity"][index].contains(componentName);
 		};
-		auto setString = [&sceneName, &entityTag, &json](std::string& str, const char* componentName, const char* value) {
-			str = json["Scene"][sceneName]["Entity"][entityTag][componentName][value];
+		auto setString = [&sceneName, index, &json](std::string& str, const char* componentName, const char* value) {
+			str = json["Scene"][sceneName]["Entity"][index][componentName][value];
 		};
-		auto loadFloat = [&sceneName, &entityTag, &json](const char* componentName, const char* value)->float {
-			return json["Scene"][sceneName]["Entity"][entityTag][componentName][value].get<float>();
+		auto loadFloat = [&sceneName, index, &json](const char* componentName, const char* value)->float {
+			return json["Scene"][sceneName]["Entity"][index][componentName][value].get<float>();
 		};
-		auto loadVec3 = [&sceneName, &entityTag, &json](const char* componentName, const char* value)->maths::vec4 {
+		auto loadVec3 = [&sceneName, index, &json](const char* componentName, const char* value)->maths::vec4 {
 			return {
-				json["Scene"][sceneName]["Entity"][entityTag][componentName][value]["x"].get<float>(),
-				json["Scene"][sceneName]["Entity"][entityTag][componentName][value]["y"].get<float>(),
-				json["Scene"][sceneName]["Entity"][entityTag][componentName][value]["z"].get<float>(),
+				json["Scene"][sceneName]["Entity"][index][componentName][value]["x"].get<float>(),
+				json["Scene"][sceneName]["Entity"][index][componentName][value]["y"].get<float>(),
+				json["Scene"][sceneName]["Entity"][index][componentName][value]["z"].get<float>(),
 				0.f 
 			};
 		};

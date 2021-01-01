@@ -38,7 +38,7 @@ namespace marengine {
 
 	private:
 
-		static void loadEntity(const Entity& entity, nlohmann::json& json, const std::string& entityTag, uint32_t childsCount, const std::string& sceneName);
+		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
 
 	};
 
