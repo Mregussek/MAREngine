@@ -30,7 +30,6 @@ namespace marengine {
 
 	class Scene; 
 	struct ScriptComponent;
-	struct FFilesystemWidgetInfo;
 
 
 	class WFilesystemWidgets : public IWidgetPanel {
@@ -40,11 +39,11 @@ namespace marengine {
 
 		virtual void create() override;
 
-		void openWidget(const std::string& widgetName) const;
+		void openWidget(const char* widgetName) const;
 
-		void displayOpenWidget(const FFilesystemWidgetInfo& widgetInfo, void(*callback)(const std::string& path, const std::string& filename));
+		void displayOpenWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename));
 
-		void displaySaveWidget(const FFilesystemWidgetInfo& widgetInfo, void(*callback)(const std::string& path, const std::string& filename));
+		void displaySaveWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename));
 
 	private:
 

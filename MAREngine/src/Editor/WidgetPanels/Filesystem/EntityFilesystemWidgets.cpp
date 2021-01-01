@@ -53,16 +53,16 @@ namespace marengine {
 			}
 		};
 
-		WFilesystemWidgets::Instance->displayOpenWidget(m_loadOBJInfo, loadOBJcallback);
-		WFilesystemWidgets::Instance->displayOpenWidget(m_assignScriptInfo, assignScriptCallback);
+		WFilesystemWidgets::Instance->displayOpenWidget(m_loadOBJname, m_objExtension, loadOBJcallback);
+		WFilesystemWidgets::Instance->displayOpenWidget(m_assignScriptName, m_pythonExtension, assignScriptCallback);
 	}
 
 	void WEntityFilesystemWidgets::openLoadOBJWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_loadOBJInfo.name);
+		WFilesystemWidgets::Instance->openWidget(m_loadOBJname.c_str());
 	}
 
 	void WEntityFilesystemWidgets::openAssignPythonScriptWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_assignScriptInfo.name);
+		WFilesystemWidgets::Instance->openWidget(m_assignScriptName.c_str());
 	}
 
 

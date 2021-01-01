@@ -24,7 +24,6 @@
 
 #include "../../../mar.h"
 #include "../IWidgetPanel.h"
-#include "FilesystemWidgetInfo.h"
 
 
 namespace marengine {
@@ -44,9 +43,10 @@ namespace marengine {
 
 	private:
 
-		const FFilesystemWidgetInfo m_newSceneInfo{ "Create new scene", {1200, 800}, ".marscene.json" };
-		const FFilesystemWidgetInfo m_loadSceneInfo{ "Load scene from file", {1200, 800}, ".marscene.json" };
-		const FFilesystemWidgetInfo m_saveSceneInfo{ "Save current scene", {1200, 800}, ".marscene.json" };
+		const std::string m_newSceneName{ "Create new scene" };
+		const std::string m_saveSceneName{ "Save current scene" };
+		const std::string m_loadSceneName{ "Load scene from file" };
+		const std::string extensions{ ".json" };
 
 	};
 

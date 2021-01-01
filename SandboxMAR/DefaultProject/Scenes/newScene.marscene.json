@@ -1,0 +1,112 @@
+{
+    "Documentation": {
+        "App": "DefaultApplication",
+        "AppVersion": "v1.0.0",
+        "Engine": "MAREngine",
+        "EngineVersion": "v0.0.1"
+    },
+    "Scene": {
+        "Name": "newScene.marscene.json",
+        "newScene.marscene.json": {
+            "Background": {
+                "x": 0.2199999988079071,
+                "y": 0.6899999976158142,
+                "z": 0.8700000047683716
+            },
+            "Entity": {
+                "CameraEntity": {
+                    "CameraComponent": {
+                        "Perspective": 1.0,
+                        "id": "secondary",
+                        "o_bottom": -10.0,
+                        "o_far": 100.0,
+                        "o_left": -10.0,
+                        "o_near": 0.009999999776482582,
+                        "o_right": 10.0,
+                        "o_top": 10.0,
+                        "p_aspectRatio": 1.3333333730697632,
+                        "p_far": 100.0,
+                        "p_fov": 45.0,
+                        "p_near": 0.009999999776482582
+                    },
+                    "TagComponent": {
+                        "tag": "CameraEntity"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "center": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                "LightEntity": {
+                    "LightComponent": {
+                        "ambient": {
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "constant": 1.0,
+                        "diffuse": {
+                            "x": 0.8999999761581421,
+                            "y": 0.8999999761581421,
+                            "z": 0.8999999761581421
+                        },
+                        "linear": 0.04500000178813934,
+                        "quadratic": 0.007499999832361937,
+                        "shininess": 64.0,
+                        "specular": {
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "TagComponent": {
+                        "tag": "LightEntity"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "center": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                }
+            },
+            "Info": {
+                "Entities": [
+                    {
+                        "childsCount": 0,
+                        "tag": "CameraEntity"
+                    },
+                    {
+                        "childsCount": 0,
+                        "tag": "LightEntity"
+                    }
+                ],
+                "EntitiesCount": 2
+            }
+        }
+    }
+}

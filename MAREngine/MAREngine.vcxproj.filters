@@ -477,9 +477,6 @@
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgetInfo.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>

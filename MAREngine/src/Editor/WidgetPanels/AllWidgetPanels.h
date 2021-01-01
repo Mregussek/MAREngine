@@ -24,6 +24,8 @@
 
 #include "GeneralWidgetPanel.h"
 #include "MenuBars/MainMenuBarWidget.h"
+#include "Filesystem/EntityFilesystemWidgets.h"
+#include "Filesystem/SceneFilesystemWidgets.h"
 #include "Filesystem/FilesystemWidgets.h"
 #include "ScriptEditor/ScriptIDEWidget.h"
 #include "Viewport/ViewportWidget.h"
@@ -42,6 +44,8 @@ namespace marengine {
 
 		FAllWidgetPanels() = default;
 
+		WEntityFilesystemWidgets entityFilesystem{};
+		WSceneFilesystemWidgets sceneFilesystem{};
 		WGeneralWidgetPanel general{};
 		WViewportWidget viewport{};
 		WMainMenuBarWidget mainMenuBar{};

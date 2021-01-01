@@ -67,21 +67,21 @@ namespace marengine {
 			MAREngine::Instance()->setRestart();
 		};
 
-		WFilesystemWidgets::Instance->displaySaveWidget(m_newSceneInfo, newSceneCallback);
-		WFilesystemWidgets::Instance->displaySaveWidget(m_saveSceneInfo, saveSceneCallback);
-		WFilesystemWidgets::Instance->displayOpenWidget(m_loadSceneInfo, loadSceneCallback);
+		WFilesystemWidgets::Instance->displaySaveWidget(m_newSceneName, extensions, newSceneCallback);
+		WFilesystemWidgets::Instance->displaySaveWidget(m_saveSceneName, extensions, saveSceneCallback);
+		WFilesystemWidgets::Instance->displayOpenWidget(m_loadSceneName, extensions, loadSceneCallback);
 	}
 
 	void WSceneFilesystemWidgets::openNewSceneWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_newSceneInfo.name);
+		WFilesystemWidgets::Instance->openWidget(m_newSceneName.c_str());
 	}
 
 	void WSceneFilesystemWidgets::openSaveSceneWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_saveSceneInfo.name);
+		WFilesystemWidgets::Instance->openWidget(m_saveSceneName.c_str());
 	}
 
 	void WSceneFilesystemWidgets::openLoadSceneWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_loadSceneInfo.name);
+		WFilesystemWidgets::Instance->openWidget(m_loadSceneName.c_str());
 	}
 
 

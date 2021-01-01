@@ -78,7 +78,7 @@ namespace marengine {
 		if (hasRenderable && hasAnyMaterial) {
 			const auto& tran = entity.getComponent<TransformComponent>();
 			auto& renderable = entity.getComponent<RenderableComponent>();
-			auto& rpc = entity.get_addComponent<RenderPipelineComponent>();
+			auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
 			const auto vertSize{ (uint32_t)renderable.vertices.size() };
 			const auto indiSize{ (uint32_t)renderable.indices.size() };

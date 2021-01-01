@@ -24,7 +24,6 @@
 
 #include "../../../mar.h"
 #include "../IWidgetPanel.h"
-#include "FilesystemWidgetInfo.h"
 
 
 namespace marengine {
@@ -45,8 +44,11 @@ namespace marengine {
 
 	private:
 
-		const FFilesystemWidgetInfo m_loadOBJInfo{ "Load .obj for entity", {1200, 800}, ".obj" };
-		const FFilesystemWidgetInfo m_assignScriptInfo{ "Assign Python Script to Entity", {1200, 800}, ".py" };
+		const std::string m_loadOBJname{ "Load .obj for entity" };
+		const std::string m_objExtension{ ".obj" };
+
+		const std::string m_assignScriptName{ "Assign Python Script to Entity" };
+		const std::string m_pythonExtension{ ".py" };
 
 	};
 

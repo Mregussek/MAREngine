@@ -19,7 +19,6 @@
 
 
 #include "FilesystemWidgets.h"
-#include "FilesystemWidgetInfo.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/SceneManager.h"
@@ -40,18 +39,18 @@ namespace marengine {
 		Instance = this;
 	}
 
-	void WFilesystemWidgets::openWidget(const std::string& widgetName) const {
-		ImGui::OpenPopup(widgetName.c_str());
+	void WFilesystemWidgets::openWidget(const char* widgetName) const {
+		ImGui::OpenPopup(widgetName);
 	}
 
-	void WFilesystemWidgets::displaySaveWidget(const FFilesystemWidgetInfo& widgetInfo, void(*callback)(const std::string& path, const std::string& filename)) {
-		if (m_fileDialog.showFileDialog(widgetInfo.name, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, widgetInfo.size, widgetInfo.extensions)) {
+	void WFilesystemWidgets::displaySaveWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename)) {
+		if (m_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, { 1200, 800 }, extensions)) {
 			callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
 		}
 	}
 
-	void WFilesystemWidgets::displayOpenWidget(const FFilesystemWidgetInfo& widgetInfo, void(*callback)(const std::string& path, const std::string& filename)) {
-		if (m_fileDialog.showFileDialog(widgetInfo.name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, widgetInfo.size, widgetInfo.extensions)) {
+	void WFilesystemWidgets::displayOpenWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename)) {
+		if (m_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, {1200, 800 }, extensions)) {
 			callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
 		}
 	}
