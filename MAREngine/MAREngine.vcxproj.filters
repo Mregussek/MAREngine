@@ -243,9 +243,6 @@
     <ClInclude Include="src\Core\ecs\Entity\Entity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\Entity\EntityCollection.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -369,9 +366,6 @@
     <ClInclude Include="src\Core\graphics\Renderer\PipelineStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\SceneOptimizer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -426,9 +420,6 @@
     <ClInclude Include="src\Editor\WidgetPanels\ScenePropertiesPanel\ScenePropertiesWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -442,12 +433,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentCollection.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\events\EntityEvents\IEntityEvents.h">
@@ -545,9 +530,6 @@
     <ClCompile Include="src\LayerStack\LayerStack.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\ecs\Entity\EntityCollection-impl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\Components\DefaultComponents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -561,9 +543,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\ecs\Entity\EntityCollection.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp">
@@ -665,9 +644,6 @@
     <ClCompile Include="src\Core\graphics\Renderer\PipelineStorage.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\ecs\SceneOptimizer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -713,9 +689,6 @@
     <ClCompile Include="src\Editor\WidgetPanels\ScenePropertiesPanel\ScenePropertiesWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -728,13 +701,7 @@
     <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentCollection.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp">

@@ -21,7 +21,6 @@
 #include "Scene.h"
 #include "Components/Components.h"
 #include "Entity/Entity.h"
-#include "Entity/EntityCollection.h"
 #include "ECSLogs.h"
 
 
@@ -39,10 +38,6 @@ namespace marengine {
 	void Scene::shutdown() {
 		std::for_each(m_container.m_entities.begin(), m_container.m_entities.end(), [this](const Entity& entity) {
 			destroyEntity(entity);
-		});
-
-		std::for_each(m_container.m_collections.begin(), m_container.m_collections.end(), [this](const EntityCollection& collection) {
-			destroyCollection(collection);
 		});
 
 		m_sceneRegistry.cleanup();
@@ -103,43 +98,6 @@ namespace marengine {
 
 	const std::vector<Entity>& Scene::getEntities() const { 
 		return m_container.m_entities;
-	}
-
-	// -------------------------------------------------------------
-	// ENTITIES COLLECTIONS MANAGEMENT
-	// -------------------------------------------------------------
-
-	const EntityCollection& Scene::createCollection() {
-		ECS_INFO("SCENE: going to create entity collection!");
-
-		const EntityCollection& collection{ m_container.m_collections.emplace_back(&m_sceneRegistry) };
-
-		collection.addComponent<EntityCollectionComponent>();
-		collection.addComponent<TagComponent>("DefaultName");
-		collection.addComponent<TransformComponent>();
-
-		ECS_TRACE("SCENE: create collection {} at scene {}", collection.m_collectionHandle, m_name);
-
-		return collection;
-	}
-
-	void Scene::destroyCollection(const EntityCollection& collection) {
-		ECS_INFO("SCENE: going to destroy collection at {}!", collection.m_collectionHandle);
-
-		auto it = std::find_if(m_container.m_collections.begin(), m_container.m_collections.end(), [&collection](const EntityCollection& iterator) {
-			return 	&iterator == &collection;
-		});
-
-		const bool canDestroyCollection{ it != m_container.m_collections.end() && (*it).isValid() };
-
-		if (canDestroyCollection) {
-			(*it).destroyYourself();
-			m_container.m_collections.erase(it);
-		}
-	}
-
-	const std::vector<EntityCollection>& Scene::getCollections() const { 
-		return m_container.m_collections;
 	}
 
 

@@ -33,7 +33,6 @@ namespace marengine {
 		verticesCount = 0;
 		trianglesCount = 0;
 		entitiesCount = 0;
-		entityCollectionsCount = 0;
 		allEntitiesCount = 0;
 	}
 

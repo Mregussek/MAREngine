@@ -28,8 +28,6 @@
 
 namespace marengine {
 
-    class EntityCollection;
-
 
     class MeshCreator {
     public:
@@ -58,7 +56,7 @@ namespace marengine {
             static std::vector<uint32_t> getIndices();
         };
     
-        static void loadOBJ(const std::string& filename, const std::string& path, const EntityCollection& collection);
+        //static void loadOBJ(const std::string& filename, const std::string& path, const EntityCollection& collection);
     };
 
 

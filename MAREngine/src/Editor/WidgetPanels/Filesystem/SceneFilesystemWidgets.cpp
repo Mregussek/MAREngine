@@ -22,7 +22,6 @@
 #include "FilesystemWidgets.h"
 #include "../ScriptEditor/ScriptIDEWidget.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
-#include "../EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/filesystem/SceneSerializer.h"
@@ -46,7 +45,6 @@ namespace marengine {
 
 			MAREngine::Instance()->setLoadPath(path);
 
-			WEntityCollectionWidgetPanel::Instance->reset();
 			WEntityWidgetPanel::Instance->reset();
 			WScriptIDE::Instance->reset();
 
@@ -60,7 +58,6 @@ namespace marengine {
 		constexpr auto loadSceneCallback = [](const std::string& path, const std::string& filename) {
 			MAREngine::Instance()->setLoadPath(path);
 
-			WEntityCollectionWidgetPanel::Instance->reset();
 			WEntityWidgetPanel::Instance->reset();
 			WScriptIDE::Instance->reset();
 

@@ -20,10 +20,8 @@
 
 #include "ViewportWidget.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
-#include "../EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/events/SceneEvents.h"
 #include "../../../Core/events/RenderEvents.h"
@@ -129,15 +127,11 @@ namespace marengine {
 	void WViewportWidget::handleGuizmo() {
 		if (SceneManager::Instance->useEditorCamera) {
 			const auto& currentEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
-			const auto& currentCollection{ WEntityCollectionWidgetPanel::Instance->getCurrentCollection() };
-
 			const bool entityExists = &currentEntity != nullptr;
-			const bool collectionExists = &currentCollection != nullptr;
 			m_guizmo.selectType();
 
 			if (SceneManager::Instance->isEditorMode()) {
-				if (collectionExists) { m_guizmo.draw(m_camera, currentCollection); }
-				else if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
+				if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
 				bool useInputInCamera = false;
 				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }

@@ -22,19 +22,16 @@
 #include "../../EditorLogging.h"
 #include "../../../Window/Window.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/Entity/EntityOperation.h"
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/events/SceneEvents.h"
-#include "../EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../OtherPanels/InfoWidget.h"
 #include "../Filesystem/SceneFilesystemWidgets.h"
 #include "../Filesystem/EntityFilesystemWidgets.h"
 #include "../../WidgetEvents/EventsEntityWidget.h"
-#include "../../WidgetEvents/EventsCollectionWidget.h"
 
 
 namespace marengine {
@@ -70,16 +67,6 @@ namespace marengine {
 					const char* shortcut = currentEntity.getComponent<TagComponent>().tag.c_str();
 					if (ImGui::MenuItem("Copy selected entity", shortcut)) {
 						FEventsEntityWidget::Instance->onCopyEntity(currentEntity);
-					}
-				}
-
-				const auto& currentCollection = WEntityCollectionWidgetPanel::Instance->getCurrentCollection();
-				const bool collectionExists = &currentCollection != nullptr;
-
-				if (collectionExists && !entityExists) {
-					const char* shortcut = currentCollection.getComponent<TagComponent>().tag.c_str();
-					if (ImGui::MenuItem("Copy selected collection", shortcut)) {
-						FEventsCollectionWidget::onCopyCollection(currentCollection);
 					}
 				}
 

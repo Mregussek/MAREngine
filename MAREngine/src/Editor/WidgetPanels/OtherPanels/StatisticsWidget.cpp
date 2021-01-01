@@ -24,7 +24,6 @@
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/graphics/RenderAPI/RenderStatistics.h"
 #include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
 
@@ -40,11 +39,9 @@ namespace marengine {
 		const auto& containers2D{ RenderPipeline::Instance->get2Dcontainers() };
 		const auto& containersCubemap{ RenderPipeline::Instance->getCubemapContainers() };
 
-		const auto& collections{ SceneManager::Instance->getScene()->getCollections() };
 		const auto& entities{ SceneManager::Instance->getScene()->getEntities() };
 
 		stats.entitiesCount += entities.size();
-		stats.entityCollectionsCount += collections.size();
 		stats.allEntitiesCount += stats.entitiesCount;
 
 		auto pushContainerDataToStats = [&stats](const std::vector<RenderContainer>& containers) {
@@ -60,26 +57,17 @@ namespace marengine {
 		pushContainerDataToStats(containers2D);
 		pushContainerDataToStats(containersCubemap);
 
-		std::for_each(collections.begin(), collections.end(), [&stats](const EntityCollection& collection) {
-			stats.allEntitiesCount += collection.getEntities().size();
-		});
-
 		auto entityHasRenderable = [](const Entity& entity) {
 			return entity.hasComponent<RenderableComponent>();
 		};
 
 		uint32_t renderablesEntities = std::count_if(entities.cbegin(), entities.cend(), entityHasRenderable);
-		std::for_each(collections.cbegin(), collections.cend(), [&entityHasRenderable, &renderablesEntities](const EntityCollection& collection) {
-			const auto& entities = collection.getEntities();
-			renderablesEntities += std::count_if(entities.cbegin(), entities.cend(), entityHasRenderable);
-		});
 
 		ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
 		ImGui::Text("Vertices: %d", stats.verticesCount);
 		ImGui::Text("Indices: %d", stats.indicesCount);
 		ImGui::Text("Triangles: %d", stats.trianglesCount);
 		ImGui::Text("Entities: %d", stats.entitiesCount);
-		ImGui::Text("EntityCollections: %d", stats.entityCollectionsCount);
 		ImGui::Text("All Entities: %d", stats.allEntitiesCount);
 		ImGui::Text("All Entities with Renderable: %d", renderablesEntities);
 

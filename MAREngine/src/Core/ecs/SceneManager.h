@@ -24,12 +24,12 @@
 
 #include "../../mar.h"
 #include "ScenePlayStorage.h"
-#include "Scene.h"
 
 
 namespace marengine {
 
 	class SceneEvents;
+	class Scene;
 	class Entity;
 
 
@@ -50,9 +50,9 @@ namespace marengine {
 		void setScene(Scene* scene);
 		Scene* getScene();
 
-		bool isEditorMode() { return m_EditorMode; }
-		bool isPlayMode() { return !m_EditorMode; }
-		bool isPauseMode() { return m_PauseMode; }
+		bool isEditorMode() const { return m_EditorMode; }
+		bool isPlayMode() const { return !m_EditorMode; }
+		bool isPauseMode() const { return m_PauseMode; }
 
 		void setEditorMode() { m_EditorMode = true; }
 		void setPlayMode();

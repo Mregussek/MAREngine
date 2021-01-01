@@ -20,7 +20,6 @@
 
 #include "EntityOperation.h"
 #include "Entity.h"
-#include "EntityCollection.h"
 #include "../Components/Components.h"
 
 
@@ -33,19 +32,6 @@ namespace marengine {
 		if (src.hasComponent<ComponentType>()) {
 			dst.addComponent<ComponentType>(src.getComponent<ComponentType>());
 		}
-	}
-
-	void EntityOperation::copyCollection(const EntityCollection& src, const EntityCollection& dst) {
-		dst.replaceComponent<TagComponent>(src.getComponent<TagComponent>());
-		dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
-
-		addComponentIfContains<EntityCollection, CollectionRenderableComponent>(src, dst);
-
-		const auto& entities = src.getEntities();
-		std::for_each(entities.cbegin(), entities.cend(), [&dst](const Entity& entity) {
-			const auto& entityDst = dst.createEntity();
-			copyEntity(entity, entityDst);
-		});
 	}
 
 	void EntityOperation::copyEntity(const Entity& src, const Entity& dst) {

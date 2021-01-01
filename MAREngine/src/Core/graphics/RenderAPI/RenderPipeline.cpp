@@ -24,7 +24,6 @@
 #include "../GraphicsLogs.h"
 #include "../GraphicLimits.h"
 #include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Entity/EntityCollection.h"
 
 
 namespace marengine {
@@ -57,13 +56,6 @@ namespace marengine {
 		m_camera = cam;
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
-	}
-
-	void RenderPipeline::pushCollectionToPipeline(const EntityCollection& collection) {
-		const auto& entities{ collection.getEntities() };
-		std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
-			pushEntityToPipeline(entity);
-		});
 	}
 
 	void RenderPipeline::pushEntityToPipeline(const Entity& entity) {

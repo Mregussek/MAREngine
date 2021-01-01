@@ -24,7 +24,6 @@
 
 #include "../../../mar.h"
 #include "Entity.h"
-#include "EntityCollection.h"
 
 
 namespace marengine {
@@ -35,7 +34,6 @@ namespace marengine {
 		friend class Scene;
 
 		std::vector<Entity> m_entities;
-		std::vector<EntityCollection> m_collections;
 
 	};
 

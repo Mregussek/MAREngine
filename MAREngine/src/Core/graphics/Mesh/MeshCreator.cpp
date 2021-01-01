@@ -21,9 +21,6 @@
 #include "MeshCreator.h"
 #include "loader_obj/OBJ_Loader.h"
 #include "../GraphicsLogs.h"
-#include "../../ecs/Entity/EntityCollection.h"
-#include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
 
 
 namespace marengine {
@@ -123,6 +120,7 @@ namespace marengine {
         };
     }
     
+    /*
     void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const EntityCollection& collection) {
         loader_obj::Loader Loader{};
         const bool loadout{ Loader.LoadFile(path) };
@@ -156,6 +154,6 @@ namespace marengine {
         tag.tag = filename;
         auto& crc{ collection.addComponent<CollectionRenderableComponent>(path, Loader.LoadedMeshes.size()) };
     }
-
+    */
 
 }

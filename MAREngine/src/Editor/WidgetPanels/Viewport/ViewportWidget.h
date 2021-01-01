@@ -30,8 +30,7 @@
 
 namespace marengine {
 
-	class Entity; 
-	class EntityCollection;
+	class Entity;
 
 
 	class WViewportWidget : public IWidgetPanel {

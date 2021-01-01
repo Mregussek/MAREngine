@@ -22,7 +22,6 @@
 #define MAR_ENGINE_F_ALL_EVENTS_SCENE_H
 
 
-#include "ComponentEvents/EventsComponentCollection.h"
 #include "ComponentEvents/EventsComponentEntity.h"
 
 
@@ -31,7 +30,6 @@ namespace marengine {
 
 	struct FAllEventsScene {
 
-		FEventsComponentCollection eventsComponentCollection;
 		FEventsComponentEntity eventsComponentEntity;
 
 	};

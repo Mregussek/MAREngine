@@ -22,7 +22,6 @@
 #include "../../Camera/Camera.h"
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/events/SceneEvents.h"
 #include "../../../Window/Window.h"
 
@@ -40,15 +39,10 @@ namespace marengine {
 
 	void GUI_Guizmo::draw(const Camera& editorCamera, const Entity& currentEntity) const {
 		auto& transform = currentEntity.getComponent<TransformComponent>();
-		if (draw(editorCamera, transform)) {
-			SceneEvents::Instance().onTransformUpdate(currentEntity);
-		}
-	}
+		const bool userUsedGuizmo{ draw(editorCamera, transform) };
 
-	void GUI_Guizmo::draw(const Camera& editorCamera, const EntityCollection& currentCollection) const {
-		auto& transform = currentCollection.getComponent<TransformComponent>();
-		if (draw(editorCamera, transform)) {
-			SceneEvents::Instance().onCollectionTransformUpdate(&currentCollection, transform);
+		if (userUsedGuizmo) {
+			SceneEvents::Instance().onTransformUpdate(currentEntity);
 		}
 	}
 

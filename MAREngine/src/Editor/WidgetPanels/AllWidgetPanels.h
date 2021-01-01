@@ -31,7 +31,6 @@
 #include "Viewport/ViewportWidget.h"
 #include "ScenePropertiesPanel/ScenePropertiesWidget.h"
 #include "EntityPanels/EntityWidgetPanel.h"
-#include "EntityPanels/EntityCollectionWidgetPanel.h"
 #include "EntityPanels/SceneHierarchyWidget.h"
 #include "OtherPanels/ThemeWidget.h"
 #include "OtherPanels/StatisticsWidget.h"
@@ -51,7 +50,6 @@ namespace marengine {
 		WMainMenuBarWidget mainMenuBar{};
 		WFilesystemWidgets filesystem{};
 		WEntityWidgetPanel entity{};
-		WEntityCollectionWidgetPanel entityCollection{};
 		WSceneHierarchyWidget sceneHierarchy{};
 		WScriptIDE textEditor{};
 		WScenePropertiesWidget sceneProperties{};

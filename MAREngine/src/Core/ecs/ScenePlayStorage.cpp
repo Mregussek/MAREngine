@@ -20,7 +20,6 @@
 
 #include "ScenePlayStorage.h"
 #include "Entity/Entity.h"
-#include "Entity/EntityCollection.h"
 
 
 namespace marengine {
@@ -30,15 +29,6 @@ namespace marengine {
 	static void popFront(std::vector<T>& vec) {
 		MAR_CORE_ASSERT(!vec.empty(), "Cannot pop front, vec is empty!");
 		vec.erase(vec.begin());
-	}
-
-	void ScenePlayStorage::pushCollectionToStorage(const EntityCollection& collection) {
-		auto& storage = m_collectionStorage.emplace_back();
-		const auto& entities = collection.getEntities();
-
-		std::for_each(entities.cbegin(), entities.cend(), [&entitiesStorage = storage.entities, this](const Entity& entity) {
-			pushEntityToStorage(entitiesStorage, entity);
-		});
 	}
 
 	void ScenePlayStorage::pushEntityToStorage(const Entity& entity) {
@@ -59,17 +49,6 @@ namespace marengine {
 		if (entity.hasComponent<ColorComponent>()) {
 			storage.color = entity.getComponent<ColorComponent>();
 		}
-	}
-
-	void ScenePlayStorage::loadCollectionFromStorage(const EntityCollection& collection) {
-		auto& storage = m_collectionStorage.front();
-		const auto& entities = collection.getEntities();
-
-		std::for_each(entities.cbegin(), entities.cend(), [&entitiesStorage = storage.entities, this](const Entity& entity) {
-			pushEntityToStorage(entitiesStorage, entity);
-		});
-
-		popFront(m_collectionStorage);
 	}
 
 	void ScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
@@ -115,8 +94,6 @@ namespace marengine {
 
 	void ScenePlayStorage::clear() {
 		m_entityStorage.clear();
-
-		for (auto& collection : m_collectionStorage) { collection.clear(); }
 	}
 
 

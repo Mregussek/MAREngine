@@ -20,10 +20,10 @@
 
 #include "EventsEntityWidget.h"
 #include "../WidgetPanels/EntityPanels/EntityWidgetPanel.h"
-#include "../WidgetPanels/EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../../Core/ecs/Entity/Entity.h"
 #include "../../Core/ecs/Entity/EntityOperation.h"
 #include "../../Core/ecs/SceneManager.h"
+#include "../../Core/ecs/Scene.h"
 #include "../../Core/events/SceneEvents.h"
 
 
@@ -46,7 +46,6 @@ namespace marengine {
 	}
 
 	void FEventsEntityWidget::onSelectedEntity(const Entity& entity) const {
-		WEntityCollectionWidgetPanel::Instance->reset();
 		WEntityWidgetPanel::Instance->setCurrentEntity(entity);
 	}
 

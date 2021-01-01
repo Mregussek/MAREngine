@@ -20,6 +20,7 @@
 
 #include "SceneManager.h"
 #include "ECSLogs.h"
+#include "Scene.h"
 #include "../events/SceneEvents.h"
 #include "../events/RenderEvents.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
@@ -37,13 +38,9 @@ namespace marengine {
 		RenderPipeline::Instance->reset();
 
 		const auto& entitiesVector = m_scene->getEntities();
-		const auto& collectionsVector = m_scene->getCollections();
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
 			RenderPipeline::Instance->pushEntityToPipeline(entity);
-		});
-		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [](const EntityCollection& collection) {
-			RenderPipeline::Instance->pushCollectionToPipeline(collection);
 		});
 
 		const auto view{ m_scene->getView<LightComponent>() };
@@ -107,19 +104,13 @@ namespace marengine {
 
 		m_playStorage.clear();
 
-		const auto& entitiesVector = m_scene->getEntities();
-		const auto& collectionsVector = m_scene->getCollections();
+		const auto& entitiesVector{ m_scene->getEntities() };
 
 		auto saveEntityAtStorage = [&playStorage = m_playStorage](const Entity& entity) {
 			playStorage.pushEntityToStorage(entity);
 		};
 
-		auto saveCollectionAtStorage = [&playStorage = m_playStorage](const EntityCollection& collection) {
-			playStorage.pushCollectionToStorage(collection);
-		};
-
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), saveEntityAtStorage);
-		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), saveCollectionAtStorage);
 
 		auto initializeScriptModule = [this](entt::entity entt_entity, ScriptComponent& script) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
@@ -136,15 +127,10 @@ namespace marengine {
 	void SceneManager::exitPlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
-		const auto& entitiesVector = m_scene->getEntities();
-		const auto& collectionsVector = m_scene->getCollections();
+		const auto& entitiesVector{ m_scene->getEntities() };
 
 		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage](const Entity& entity) {
 			playStorage.loadEntityFromStorage(entity);
-		});
-
-		std::for_each(collectionsVector.cbegin(), collectionsVector.cend(), [&playStorage = m_playStorage](const EntityCollection& collection) {
-			playStorage.loadCollectionFromStorage(collection);
 		});
 
 		initialize();

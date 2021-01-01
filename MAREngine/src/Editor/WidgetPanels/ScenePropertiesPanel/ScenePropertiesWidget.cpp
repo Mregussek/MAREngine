@@ -20,6 +20,7 @@
 
 #include "ScenePropertiesWidget.h"
 #include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/Scene.h"
 
 
 namespace marengine {

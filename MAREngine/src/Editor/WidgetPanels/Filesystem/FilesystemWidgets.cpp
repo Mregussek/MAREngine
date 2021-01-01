@@ -20,13 +20,6 @@
 
 #include "FilesystemWidgets.h"
 #include "../../EditorLogging.h"
-#include "../../../Core/ecs/Scene.h"
-#include "../../../Core/ecs/SceneManager.h"
-#include "../../../Core/events/SceneEvents.h"
-#include "../../../Core/ecs/Entity/EntityCollection.h"
-#include "../../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../../Core/filesystem/SceneSerializer.h"
-#include "../../../Engine.h"
 
 
 namespace marengine {

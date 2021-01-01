@@ -20,11 +20,10 @@
 
 #include "SceneEvents.h"
 #include "RenderEvents.h"
+#include "../ecs/Scene.h"
 #include "../ecs/ECSLogs.h"
 #include "../ecs/SceneManager.h"
-#include "../ecs/SceneOptimizer.h"
 #include "../ecs/Entity/Entity.h"
-#include "../ecs/Entity/EntityCollection.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 #include "../graphics/RenderAPI/RenderCamera.h"
 #include "../graphics/Mesh/MeshCreator.h"
@@ -212,66 +211,6 @@ namespace marengine {
 		m_sceneManager->initialize();
 
 		ECS_TRACE("SCENE_EVENTS: onEntityRemove");
-	}
-
-	void SceneEvents::onCollectionTransformUpdate(const EntityCollection* collection, const TransformComponent& transform) const {
-		auto createRelativeTransformToCollection = [&transform, this](const Entity& entity) {
-			auto& entityTransform = entity.getComponent<TransformComponent>();
-
-			entityTransform.center += transform.center;
-			entityTransform.angles += transform.angles;
-			entityTransform.scale += transform.scale;
-
-			onTransformUpdate(entity);
-		};
-
-		const auto& entities = collection->getEntities();
-		std::for_each(entities.cbegin(), entities.cend(), createRelativeTransformToCollection);
-
-		ECS_TRACE("SCENE_EVENTS: onCollectionTransformUpdate");
-	}
-
-	void SceneEvents::onCollectionTransformReset(const EntityCollection* collection) const {
-		auto resetToDefaultPosition = [&transform = collection->getComponent<TransformComponent>(), this](const Entity& entity) {
-			entity.replaceComponent<TransformComponent>(transform);
-			onTransformUpdate(entity);
-		};
-
-		const auto& entities = collection->getEntities();
-		std::for_each(entities.cbegin(), entities.cend(), resetToDefaultPosition);
-	}
-
-	void SceneEvents::onCollectionCopy(const EntityCollection& collection) const {
-		const auto& entities = collection.getEntities();
-		std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
-			onEntityCopy(entity);
-		});
-
-		ECS_TRACE("SCENE_EVENTS: onCollectionCopy");
-	}
-
-	void SceneEvents::onCollectionRemove() const {
-		m_sceneManager->initialize();
-
-		ECS_TRACE("SCENE_EVENTS: onCollectionRemove");
-	}
-
-	void SceneEvents::onOBJload(const EntityCollection& collection, const std::string& filename, const std::string& path) const {
-		auto& tag{ collection.getComponent<TagComponent>() };
-
-		auto scene{ m_sceneManager->getScene() };
-		const auto collectionIndex{ SceneOptimizer::checkIfOBJhasBeenLoaded(path, scene) };
-		if (collectionIndex != -1) {
-			SceneOptimizer::copyOBJtoOtherCollectionOnSceneEvent(collection, scene->getCollections()[collectionIndex], filename);
-		}
-		else {
-			MeshCreator::loadOBJ(filename, path, collection);
-		}
-
-		RenderPipeline::Instance->pushCollectionToPipeline(collection);
-		RenderEvents::Instance().onContainersReadyToDraw();
-
-		ECS_TRACE("SCENE_EVENTS: onCollectionOBJloaded");
 	}
 
 

@@ -27,14 +27,13 @@
 
 namespace marengine {
 
-	class Entity; class EntityCollection;
+	class Entity;
 
 
 	class EntityOperation {
 	public:
 
 		static void copyEntity(const Entity& src, const Entity& dst);
-		static void copyCollection(const EntityCollection& src, const EntityCollection& dst);
 
 	};
 

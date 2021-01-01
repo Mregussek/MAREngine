@@ -29,7 +29,6 @@ namespace marengine {
 
 	class Camera;
 	class Entity; 
-	class EntityCollection; 
 	struct TransformComponent;
 
 
@@ -38,7 +37,6 @@ namespace marengine {
 
 		void selectType();
 		void draw(const Camera& editorCamera, const Entity& currentEntity) const;
-		void draw(const Camera& editorCamera, const EntityCollection& currentCollection) const;
 
 	private:
 

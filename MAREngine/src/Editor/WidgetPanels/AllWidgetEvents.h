@@ -23,7 +23,6 @@
 
 
 #include "../WidgetEvents/EventsEntityWidget.h"
-#include "../WidgetEvents/EventsCollectionWidget.h"
 
 
 namespace marengine {
@@ -32,7 +31,6 @@ namespace marengine {
 	struct FAllWidgetEvents {
 
 		FEventsEntityWidget entityEvents{};
-		FEventsCollectionWidget collectionEvents{};
 
 	};
 

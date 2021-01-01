@@ -32,7 +32,6 @@ namespace marengine {
 	class Scene {
 		
 		friend class Entity;
-		friend class EntityCollection;
 
 	public:
 
@@ -45,9 +44,6 @@ namespace marengine {
 		MAR_NO_DISCARD const Entity& createEntity();
 		void destroyEntity(const Entity& entity);
 
-		MAR_NO_DISCARD const EntityCollection& createCollection();
-		void destroyCollection(const EntityCollection& collection);
-
 		// --- SET METHODS --- //
 
 		void setName(std::string name) { m_name = std::move(name); }
@@ -59,7 +55,6 @@ namespace marengine {
 		MAR_NO_DISCARD maths::vec3& getBackground() { return m_backgroundColor; }
 		MAR_NO_DISCARD SceneRegistry* getRegistry() { return &m_sceneRegistry; }
 		MAR_NO_DISCARD const std::vector<Entity>& getEntities() const;
-		MAR_NO_DISCARD const std::vector<EntityCollection>& getCollections() const;
 
 		template<typename T> 
 		MAR_NO_DISCARD auto getView() {

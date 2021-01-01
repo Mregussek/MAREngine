@@ -29,7 +29,6 @@ namespace marengine {
 
 	class RenderCamera;
 	class Entity; 
-	class EntityCollection;
 	class SceneManager;
 	struct TransformComponent;
 
@@ -77,13 +76,6 @@ namespace marengine {
 
 		void onEntityCopy(const Entity& entity) const;
 		void onEntityRemove() const;
-
-		void onCollectionTransformUpdate(const EntityCollection* collection, const TransformComponent& transform) const;
-		void onCollectionTransformReset(const EntityCollection* collection) const;
-		void onCollectionCopy(const EntityCollection& collection) const;
-		void onCollectionRemove() const;
-
-		void onOBJload(const EntityCollection& collection, const std::string& filename, const std::string& path) const;
 
 	private:
 

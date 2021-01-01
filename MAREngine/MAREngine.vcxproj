@@ -222,7 +222,6 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
-    <ClInclude Include="src\Core\ecs\SceneOptimizer.h" />
     <ClInclude Include="src\Core\events\AllEvents.h" />
     <ClInclude Include="src\Core\events\AllEventsScene.h" />
     <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentEntity.h" />
@@ -266,7 +265,6 @@
     <ClInclude Include="src\Core\ecs\Components\ScriptingComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\TextureComponents.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
-    <ClInclude Include="src\Core\ecs\Entity\EntityCollection.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h" />
     <ClInclude Include="src\Core\events\SceneEvents.h" />
@@ -293,8 +291,6 @@
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
     <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
     <ClInclude Include="src\Editor\EditorManager.h" />
-    <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentCollection.h" />
-    <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h" />
     <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\AllWidgetEvents.h" />
     <ClInclude Include="src\Editor\WidgetPanels\AllWidgetPanels.h" />
@@ -302,7 +298,6 @@
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.h" />
     <ClInclude Include="src\Editor\WidgetPanels\IWidgetPanel.h" />
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h" />
-    <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.h" />
     <ClInclude Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\StatisticsWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\ScenePropertiesPanel\ScenePropertiesWidget.h" />
@@ -368,8 +363,6 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
-    <ClCompile Include="src\Core\ecs\SceneOptimizer.cpp" />
-    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentCollection.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp" />
     <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp" />
@@ -378,8 +371,6 @@
     <ClCompile Include="src\Core\ecs\Components\CameraComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Components\DefaultComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp" />
-    <ClCompile Include="src\Core\ecs\Entity\EntityCollection-impl.cpp" />
-    <ClCompile Include="src\Core\ecs\Entity\EntityCollection.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\EntityOperation.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\events\SceneEvents.cpp" />
@@ -404,11 +395,9 @@
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
     <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />
     <ClCompile Include="src\Editor\EditorManager.cpp" />
-    <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp" />
     <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.cpp" />
     <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.cpp" />
-    <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgets.cpp" />

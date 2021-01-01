@@ -28,7 +28,7 @@
 
 namespace marengine {
 
-	class Entity; class EntityCollection;
+	class Entity;
 
 
 	class ScenePlayStorage {
@@ -39,23 +39,13 @@ namespace marengine {
 			ColorComponent color;
 		};
 
-		struct CollectionStorage {
-			std::vector<EntityStorage> entities;
-
-			void clear() {
-				entities.clear();
-			}
-		};
-	
 	public:
 
 		ScenePlayStorage() = default;
 
 		void pushEntityToStorage(const Entity& entity);
-		void pushCollectionToStorage(const EntityCollection& collection);
 
 		void loadEntityFromStorage(const Entity& entity);
-		void loadCollectionFromStorage(const EntityCollection& collection);
 
 		void clear();
 
@@ -68,7 +58,6 @@ namespace marengine {
 		void loadOperation(const EntityStorage& storage, const Entity& entity);
 
 		std::vector<EntityStorage> m_entityStorage;
-		std::vector<CollectionStorage> m_collectionStorage;
 
 	};
 

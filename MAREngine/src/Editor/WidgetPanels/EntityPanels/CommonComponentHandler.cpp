@@ -24,7 +24,6 @@
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/Entity/EntityCollection.h"
 
 
 namespace marengine {
@@ -50,17 +49,6 @@ namespace marengine {
 		}
 
 		auto& script = entity.getComponent<ScriptComponent>();
-		handleScriptComponent(script);
-	}
-
-	void CommonComponentHandler::handleScriptComponent(const EntityCollection& collection) {
-		if (ImGui::MenuItem("Remove Script")) {
-			collection.removeComponent<ScriptComponent>();
-			WScriptIDE::Instance->reset();
-			return;
-		}
-
-		auto& script = collection.getComponent<ScriptComponent>();
 		handleScriptComponent(script);
 	}
 

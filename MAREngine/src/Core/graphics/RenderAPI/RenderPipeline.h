@@ -31,7 +31,6 @@ namespace marengine {
 
 	class RenderCamera;
 	class Entity; 
-	class EntityCollection;
 
 
 	class RenderPipeline {
@@ -44,7 +43,6 @@ namespace marengine {
 
 		void reset();
 
-		void pushCollectionToPipeline(const EntityCollection& collection);
 		void pushEntityToPipeline(const Entity& entity);
 		void pushLightToPipeline(const Entity& entity);
 		void pushCameraToPipeline(const RenderCamera* cam);

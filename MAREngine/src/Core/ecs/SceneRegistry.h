@@ -32,7 +32,6 @@ namespace marengine {
 
 		friend class Scene;
 		friend class Entity;
-		friend class EntityCollection;
 
 	public:
 

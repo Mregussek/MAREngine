@@ -21,6 +21,7 @@
 #include "EditorLayer.h"
 #include "../LayerLogs.h"
 #include "../../Core/ecs/SceneManager.h"
+#include "../../Core/ecs/Scene.h"
 
 
 namespace marengine {
@@ -47,7 +48,6 @@ namespace marengine {
 
 		m_editorManager.pushPanel(&m_allWidgets.sceneHierarchy);
 		m_editorManager.pushPanel(&m_allWidgets.entity);
-		m_editorManager.pushPanel(&m_allWidgets.entityCollection);
 
 		m_editorManager.pushPanel(&m_allWidgets.statistics);
 		m_editorManager.pushPanel(&m_allWidgets.mainMenuBar);
