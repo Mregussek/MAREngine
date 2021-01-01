@@ -19,11 +19,8 @@
 
 
 #include "MainMenuBarWidget.h"
-
 #include "../../EditorLogging.h"
-
 #include "../../../Window/Window.h"
-
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityCollection.h"
 #include "../../../Core/ecs/Entity/EntityOperation.h"
@@ -31,11 +28,11 @@
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/events/SceneEvents.h"
-
 #include "../EntityPanels/EntityCollectionWidgetPanel.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../OtherPanels/InfoWidget.h"
-#include "../Filesystem/FilesystemWidgets.h"
+#include "../Filesystem/SceneFilesystemWidgets.h"
+#include "../Filesystem/EntityFilesystemWidgets.h"
 #include "../../WidgetEvents/EventsEntityWidget.h"
 #include "../../WidgetEvents/EventsCollectionWidget.h"
 
@@ -106,19 +103,19 @@ namespace marengine {
 
 	void WMainMenuBarWidget::handleInputs() {
 		if (m_newSceneWindow) {
-			WFilesystemWidgets::Instance->openNewSceneWindow();
+			WSceneFilesystemWidgets::Instance->openNewSceneWidget();
 			m_newSceneWindow = false;
 		}
 		if (m_saveSceneWindow) {
-			WFilesystemWidgets::Instance->openSaveSceneWindow();
+			WSceneFilesystemWidgets::Instance->openSaveSceneWidget();
 			m_saveSceneWindow = false;
 		}
 		if (m_loadSceneWindow) {
-			WFilesystemWidgets::Instance->openLoadSceneWindow();
+			WSceneFilesystemWidgets::Instance->openLoadSceneWidget();
 			m_loadSceneWindow = false;
 		}
 		if (m_loadOBJfileWindow) {
-			WFilesystemWidgets::Instance->openLoadOBJWindow();
+			WEntityFilesystemWidgets::Instance->openLoadOBJWidget();
 			m_loadOBJfileWindow = false;
 		}
 		if (m_infoWindow) { 

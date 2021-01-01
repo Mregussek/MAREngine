@@ -72,6 +72,7 @@ namespace marengine {
 
 		bool m_createNewScriptWindow{ false };
 		bool m_openScriptWindow{ false };
+		bool m_saveAsScriptWindow{ false };
 
 		static const std::string defaultScript;
 		static const std::string defaultTitle;

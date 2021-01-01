@@ -18,30 +18,41 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_H
+#ifndef MAR_ENGINE_W_ENTITY_FILESYSTEM_WIDGETS_H
+#define MAR_ENGINE_W_ENTITY_FILESYSTEM_WIDGETS_H
 
 
-#include "../../mar.h"
+#include "../../../mar.h"
+#include "../IWidgetPanel.h"
+#include "FilesystemWidgetInfo.h"
 
 
 namespace marengine {
 
-	class Scene;
 
-
-	class Filesystem {
+	class WEntityFilesystemWidgets : public IWidgetPanel {
 	public:
 
-		static void saveToFile(Scene* scene, const char* filename);
-		static Scene* openFile(std::string filename);
+		static WEntityFilesystemWidgets* Instance;
 
-		static std::string loadPyScript(const char* filename);
-		static void savePyScript(const char* filename, std::string source);
+		virtual void create() override;
+
+		virtual void updateFrame() override;
+
+		
+		void openLoadOBJWidget() const;
+		void openAssignPythonScriptWidget() const;
+
+	private:
+
+		const FFilesystemWidgetInfo m_loadOBJInfo{ "Load .obj for entity", {1200, 800}, ".obj" };
+		const FFilesystemWidgetInfo m_assignScriptInfo{ "Assign Python Script to Entity", {1200, 800}, ".py" };
+
 	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_H
+
+#endif // !MAR_ENGINE_W_ENTITY_FILESYSTEM_WIDGETS_H

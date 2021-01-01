@@ -20,7 +20,7 @@
 
 #include "CommonComponentHandler.h"
 #include "../ScriptEditor/ScriptIDEWidget.h"
-#include "../Filesystem/FilesystemWidgets.h"
+#include "../Filesystem/EntityFilesystemWidgets.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/Entity/Entity.h"
@@ -75,7 +75,7 @@ namespace marengine {
 
 		ImGui::SameLine();
 
-		if (ImGui::Button("Assign script to entity")) { WFilesystemWidgets::Instance->openAssigningScriptWindow(); }
+		if (ImGui::Button("Assign script to entity")) { WEntityFilesystemWidgets::Instance->openAssignPythonScriptWidget(); }
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}

@@ -19,7 +19,8 @@
 
 
 #include "ScriptIDEWidget.h"
-#include "../../../Core/filesystem/EditorFilesystem.h"
+#include "../Filesystem/EntityFilesystemWidgets.h"
+#include "../../../Core/filesystem/ScriptsFileManager.h"
 #include "../../../Core/ecs/Components/ScriptingComponents.h"
 #include "../../../Engine.h"
 
@@ -92,7 +93,8 @@ namespace marengine {
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("New", "Ctrl-N")) { m_createNewScriptWindow = true; }
 				if (ImGui::MenuItem("Open", "Ctrl-O")) { m_openScriptWindow = true; }
-				if (ImGui::MenuItem("Save", "Ctrl-S")) { Filesystem::savePyScript(m_pathToSave.c_str(), editor.GetText()); }
+				if (ImGui::MenuItem("Save", "Ctrl-S")) { FScriptsFileManager::saveScript(editor.GetText(), m_pathToSave.c_str()); }
+				if (ImGui::MenuItem("Save as")) { m_saveAsScriptWindow = true; }
 
 				ImGui::EndMenu();
 			}
@@ -202,7 +204,8 @@ namespace marengine {
 		const std::string toReplace = "<put here name>";
 
 		const auto scriptSource = replaceOcurrences(defaultScript, toReplace, moduleName);
-		Filesystem::savePyScript(scriptPath.c_str(), scriptSource);
+
+		FScriptsFileManager::saveScript(scriptSource, scriptPath.c_str());
 
 		setEditorTitle(moduleName);
 		setEditorText(scriptSource);
@@ -212,11 +215,12 @@ namespace marengine {
 	}
 
 	void WScriptIDE::openFile(const std::string& scriptPath, const std::string& moduleName) {
-		const auto source = Filesystem::loadPyScript(scriptPath.c_str());
+		std::string sourceCode;
+		FScriptsFileManager::loadScript(sourceCode, scriptPath.c_str());
 		
 		setEditorTitle(moduleName);
 		setPathToSave(scriptPath);
-		setEditorText(source);
+		setEditorText(sourceCode);
 
 		m_openScriptWindow = false;
 	}

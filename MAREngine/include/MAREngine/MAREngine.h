@@ -29,7 +29,6 @@
 
 // Filesystem
 #include "../../src/Core/filesystem/SceneDeserializer.h"
-#include "../../src/Core/filesystem/EditorFilesystem.h"
 
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"

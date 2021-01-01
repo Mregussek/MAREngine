@@ -230,6 +230,7 @@
     <ClInclude Include="src\Core\filesystem\FilesystemLogging.h" />
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h" />
     <ClInclude Include="src\Core\filesystem\SceneSerializer.h" />
+    <ClInclude Include="src\Core\filesystem\ScriptsFileManager.h" />
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\attr.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\buffer_info.h" />
@@ -291,14 +292,15 @@
     <ClInclude Include="src\Core\IWidget.h" />
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
     <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
-    <ClInclude Include="src\Core\filesystem\Filesystem_Loading.h" />
-    <ClInclude Include="src\Core\filesystem\Filesystem_Saving.h" />
     <ClInclude Include="src\Editor\EditorManager.h" />
     <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentCollection.h" />
     <ClInclude Include="src\Editor\WidgetEvents\EventsCollectionWidget.h" />
     <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\AllWidgetEvents.h" />
     <ClInclude Include="src\Editor\WidgetPanels\AllWidgetPanels.h" />
+    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.h" />
+    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgetInfo.h" />
+    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.h" />
     <ClInclude Include="src\Editor\WidgetPanels\IWidgetPanel.h" />
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h" />
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.h" />
@@ -318,7 +320,6 @@
     <ClInclude Include="src\Core\scripting\PythonScript.h" />
     <ClInclude Include="src\Core\scripting\MAREnginePy.cpp" />
     <ClInclude Include="src\Editor\EditorLogging.h" />
-    <ClInclude Include="src\Core\filesystem\EditorFilesystem.h" />
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.h" />
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgets.h" />
     <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.h" />
@@ -372,6 +373,7 @@
     <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentCollection.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp" />
+    <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\ecs\Components\CameraComponents.cpp" />
@@ -402,9 +404,6 @@
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
     <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />
-    <ClCompile Include="src\Core\filesystem\EditorFilesystem.cpp" />
-    <ClCompile Include="src\Core\filesystem\Filesystem_Loading.cpp" />
-    <ClCompile Include="src\Core\filesystem\Filesystem_Saving.cpp" />
     <ClCompile Include="src\Editor\EditorManager.cpp" />
     <ClCompile Include="src\Editor\WidgetEvents\EventsCollectionWidget.cpp" />
     <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.cpp" />
@@ -412,7 +411,9 @@
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityCollectionWidgetPanel.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.cpp" />
+    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgets.cpp" />
+    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.cpp" />

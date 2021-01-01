@@ -123,11 +123,13 @@ namespace marengine {
 			auto& color{ entity.addComponent<ColorComponent>() };
 			color.texture = loadVec3("ColorComponent", "texture");
 		}
-		else if (jsonContains("Texture2DComponent")) {
+
+		if (jsonContains("Texture2DComponent")) {
 			auto& tex{ entity.addComponent<Texture2DComponent>() };
 			setString(tex.texture, "Texture2DComponent", "name");
 		}
-		else if (jsonContains("TextureCubemapComponent")) {
+
+		if (jsonContains("TextureCubemapComponent")) {
 			auto& cube{ entity.addComponent<TextureCubemapComponent>() };
 			setString(cube.texture, "TextureCubemapComponent", "name");
 		}

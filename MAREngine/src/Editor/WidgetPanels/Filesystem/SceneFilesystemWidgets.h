@@ -18,35 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_SAVE_TO_FILE_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_SAVE_TO_FILE_H
+#ifndef MAR_ENGINE_W_SCENE_FILESYSTEM_WIDGETS_H
+#define MAR_ENGINE_W_SCENE_FILESYSTEM_WIDGETS_H
 
 
-#include "../../mar.h"
+#include "../../../mar.h"
+#include "../IWidgetPanel.h"
+#include "FilesystemWidgetInfo.h"
 
 
-namespace marengine { 
-		/* forward declarations */
-}
 namespace marengine {
 
-	class Scene; 
-	class EntityCollection; 
-	class Entity;
 
-
-	class Filesystem_Saving {
+	class WSceneFilesystemWidgets : public IWidgetPanel {
 	public:
-		static void saveScene(std::ofstream& ss, Scene* scene);
+
+		static WSceneFilesystemWidgets* Instance;
+
+		virtual void create() override;
+		virtual void updateFrame() override;
+
+		void openNewSceneWidget() const;
+		void openSaveSceneWidget() const;
+		void openLoadSceneWidget() const;
 
 	private:
 
-		static void saveCollection(std::ofstream& ss, const EntityCollection& collection);
-		static void saveEntity(std::ofstream& ss, const Entity& entity);
+		const FFilesystemWidgetInfo m_newSceneInfo{ "Create new scene", {1200, 800}, ".marscene.json" };
+		const FFilesystemWidgetInfo m_loadSceneInfo{ "Load scene from file", {1200, 800}, ".marscene.json" };
+		const FFilesystemWidgetInfo m_saveSceneInfo{ "Save current scene", {1200, 800}, ".marscene.json" };
+
 	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_SAVE_TO_FILE_H
+#endif // !MAR_ENGINE_W_SCENE_FILESYSTEM_WIDGETS_H

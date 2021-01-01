@@ -18,37 +18,27 @@
 **/
 
 
-#ifndef MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
-#define MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
+#ifndef MAR_ENGINE_F_FILESYSTEM_WIDGET_INFO_H
+#define MAR_ENGINE_F_FILESYSTEM_WIDGET_INFO_H
 
 
 #include "../../../mar.h"
-#include "../IWidgetPanel.h"
 
 
 namespace marengine {
 
-	class Scene; 
-	struct ScriptComponent;
-	struct FFilesystemWidgetInfo;
 
+	struct FFilesystemWidgetInfo {
 
-	class WFilesystemWidgets : public IWidgetPanel {
-	public:
+		const FFilesystemWidgetInfo(std::string&& n, ImVec2 s, std::string&& e) :
+			name(n),
+			size(s),
+			extensions(e)
+		{}
 
-		static WFilesystemWidgets* Instance;
-
-		virtual void create() override;
-
-		void openWidget(const std::string& widgetName) const;
-
-		void displayOpenWidget(const FFilesystemWidgetInfo& widgetInfo, void(*callback)(const std::string& path, const std::string& filename));
-
-		void displaySaveWidget(const FFilesystemWidgetInfo& widgetInfo, void(*callback)(const std::string& path, const std::string& filename));
-
-	private:
-
-		imgui_addons::ImGuiFileBrowser m_fileDialog;
+		const std::string name;
+		const ImVec2 size;
+		const std::string extensions;
 
 	};
 
@@ -56,4 +46,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
+#endif // !MAR_ENGINE_F_FILESYSTEM_WIDGET_INFO_H

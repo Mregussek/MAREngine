@@ -18,33 +18,19 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_FILESYSTEM_LOADING_H
-#define MAR_ENGINE_EDITOR_FILESYSTEM_LOADING_H
-
-
-#include "../../mar.h"
+#include "ScriptsFileManager.h"
 
 
 namespace marengine {
 
-	class Scene; 
-	class EntityCollection; 
-	class Entity;
 
+	void FScriptsFileManager::loadScript(std::string& stringToFill, const char* path) {
 
-	class Filesystem_Loading {
-	public:
+	}
 
-		static void loadScene(std::ifstream& file, Scene* scene);
+	void FScriptsFileManager::saveScript(const std::string& sourceCode, const char* path) {
 
-	private:
-
-		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
-		static void loadCollection(std::ifstream& file, Scene* scene, const EntityCollection& collection);
-
-	};
+	}
 
 
 }
-
-#endif // !MAR_ENGINE_EDITOR_FILESYSTEM_LOADING_H
