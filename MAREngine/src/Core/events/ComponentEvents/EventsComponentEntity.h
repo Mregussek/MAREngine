@@ -28,22 +28,28 @@
 
 namespace marengine {
 
+	class RenderCamera;
+
 
 	class FEventsComponentEntity {
 	public:
 
-		static FEventsComponentEntity* Instance;
+		static const FEventsComponentEntity* Instance;
 
 
-		template<typename T> void onAdd(const Entity& entity) { 
+		void onMainCameraUpdate(const Entity& entity) const;
+		void onEditorCameraSet(const RenderCamera* camera) const;
+		void onGameCameraSet() const;
+
+		template<typename T> void onAdd(const Entity& entity) const { 
 			entity.template addComponent<T>();
 		}
 
-		template<typename T> void onUpdate(const Entity& entity) { 
+		template<typename T> void onUpdate(const Entity& entity) const { 
 		
 		}
 
-		template<typename T> void onRemove(const Entity& entity) { 
+		template<typename T> void onRemove(const Entity& entity) const { 
 			entity.template removeComponent<T>();
 		}
 
@@ -51,7 +57,35 @@ namespace marengine {
 
 	// Here add declarations for specific component event implementations ...
 
-	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity);
+	// TransformComponent
+	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) const;
+
+	// RenderableComponent
+	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity) const;
+
+	// ColorComponent
+	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const;
+
+	// Texture2D Component
+	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const;
+
+	// Texture CubemapComponent
+	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity) const;
+
+	// Light Component
+	template<> void FEventsComponentEntity::onAdd<LightComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const;
+	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const;
+
+	// CameraComponent
+	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) const;
+
 
 }
 

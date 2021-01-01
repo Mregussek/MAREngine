@@ -43,6 +43,7 @@ namespace marengine {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+		glfwWindowHint(GLFW_SAMPLES, 4);
 
 		PLATFORM_INFO("WINDOW_GLFW: GLFW has been initialized successfully!");
 

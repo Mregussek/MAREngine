@@ -267,7 +267,6 @@
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h" />
-    <ClInclude Include="src\Core\events\SceneEvents.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
     <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
@@ -373,7 +372,6 @@
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp" />
     <ClCompile Include="src\Core\ecs\Entity\EntityOperation.cpp" />
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
-    <ClCompile Include="src\Core\events\SceneEvents.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp" />

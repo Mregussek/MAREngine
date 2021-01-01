@@ -65,6 +65,7 @@ namespace marengine {
 			PLATFORM_GL_FUNC( glDebugMessageCallback(MessageCallback, 0) );
 		}
 
+		PLATFORM_GL_FUNC( glEnable(GL_MULTISAMPLE) );
 		PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) ); // Enable DEPTH, in other words 3D
 		PLATFORM_GL_FUNC( glEnable(GL_STENCIL_TEST) ); // Enable STENCIL, outliner
 		PLATFORM_GL_FUNC( glEnable(GL_BLEND) ); // Enable loading PNG files and transparency
@@ -74,8 +75,8 @@ namespace marengine {
 	}
 
 	void SetupOpenGL::clearScreen(maths::vec3 background) {
-		PLATFORM_GL_FUNC(glClearColor(background.x, background.y, background.z, 1.0f));
-		PLATFORM_GL_FUNC(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+		PLATFORM_GL_FUNC( glClearColor(background.x, background.y, background.z, 1.0f) );
+		PLATFORM_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) );
 	}
 
 

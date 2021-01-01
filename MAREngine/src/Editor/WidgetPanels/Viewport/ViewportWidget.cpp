@@ -23,8 +23,8 @@
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/SceneManager.h"
-#include "../../../Core/events/SceneEvents.h"
 #include "../../../Core/events/RenderEvents.h"
+#include "../../../Core/events/ComponentEvents/EventsComponentEntity.h"
 
 
 namespace marengine {
@@ -38,7 +38,7 @@ namespace marengine {
 
 		m_camera.initialize(m_aspectRatio);
 
-		SceneEvents::Instance().onEditorCameraSet(m_camera.getCameraData());
+		FEventsComponentEntity::Instance->onEditorCameraSet(m_camera.getCameraData());
 	}
 
 	void WViewportWidget::destroy() {
@@ -74,10 +74,10 @@ namespace marengine {
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
 					if (sceneManager->useEditorCamera) {
-						SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
+						FEventsComponentEntity::Instance->onEditorCameraSet(camera.getCameraData());
 					}
 					else {
-						SceneEvents::Instance().onGameCameraSet();
+						FEventsComponentEntity::Instance->onGameCameraSet();
 					}
 				}
 			}
@@ -87,7 +87,7 @@ namespace marengine {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
-					SceneEvents::Instance().onEditorCameraSet(camera.getCameraData());
+					FEventsComponentEntity::Instance->onEditorCameraSet(camera.getCameraData());
 				}
 			}
 

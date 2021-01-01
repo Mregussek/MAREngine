@@ -21,8 +21,8 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "Scene.h"
-#include "../events/SceneEvents.h"
 #include "../events/RenderEvents.h"
+#include "../events/ComponentEvents/EventsComponentEntity.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
 
@@ -78,7 +78,7 @@ namespace marengine {
 	void SceneManager::setPlayMode() { 
 		m_EditorMode = false; 
 		initPlayMode(); 
-		SceneEvents::Instance().onGameCameraSet(); 
+		FEventsComponentEntity::Instance->onGameCameraSet();
 	}
 
 	void SceneManager::setExitPlayMode() { 
@@ -166,24 +166,14 @@ namespace marengine {
 	}
 
 	void SceneManager::updateEntityInPlaymode(const Entity& entity) {
-		const auto& transform = entity.getComponent<TransformComponent>();
-		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
-		if (entity.hasComponent<RenderableComponent>()) {
-			SceneEvents::Instance().onTransformUpdate(entity);
-		}
+		FEventsComponentEntity::Instance->onUpdate<TransformComponent>(entity);
 
 		if (entity.hasComponent<LightComponent>()) {
-			SceneEvents::Instance().onLightUpdate(entity);
+			FEventsComponentEntity::Instance->onUpdate<LightComponent>(entity);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
-			SceneEvents::Instance().onColorUpdate(entity);
-		}
-
-		if (entity.hasComponent<CameraComponent>()) {
-			const auto& camera{ entity.getComponent<CameraComponent>() };
-			if (camera.checkIfMain()) { SceneEvents::Instance().onMainCameraUpdate(entity); }	
+			FEventsComponentEntity::Instance->onUpdate<ColorComponent>(entity);
 		}
 	}
 

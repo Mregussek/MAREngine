@@ -211,7 +211,7 @@ namespace marengine {
 
 		m_containerPtr->m_transforms.push_back(transform);
 	}
-
+	
 	size_t RenderPipeline::submitColor(int32_t entityIndex, const ColorComponent& color) {
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitting color component, current size = {}, entity_index = {}", m_containerPtr->m_colors.size(), entityIndex);
 

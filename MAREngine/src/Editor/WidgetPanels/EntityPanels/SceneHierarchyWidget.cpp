@@ -24,7 +24,6 @@
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/SceneManager.h"
-#include "../../../Core/events/SceneEvents.h"
 #include "../../../Window/Window.h"
 #include "../../EditorLogging.h"
 

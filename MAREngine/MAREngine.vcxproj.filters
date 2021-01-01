@@ -369,9 +369,6 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\events\SceneEvents.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\events\RenderEvents.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -645,9 +642,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\events\SceneEvents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\events\RenderEvents.cpp">

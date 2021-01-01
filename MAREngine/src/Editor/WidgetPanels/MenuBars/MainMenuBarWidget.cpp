@@ -26,7 +26,6 @@
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Scene.h"
-#include "../../../Core/events/SceneEvents.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../OtherPanels/InfoWidget.h"
 #include "../Filesystem/SceneFilesystemWidgets.h"

@@ -26,7 +26,6 @@
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../../Core/events/SceneEvents.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
@@ -199,18 +198,15 @@ namespace marengine {
 		}
 
 		if (!hasLight && ImGui::MenuItem("Add LightComponent")) {
-			currentEntity->addComponent<LightComponent>();
-			SceneEvents::Instance().onLightAdd();
+			FEventsComponentEntity::Instance->onAdd<LightComponent>(*currentEntity);
 		}
 
 		if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
-			currentEntity->addComponent<CameraComponent>();
-			SceneEvents::Instance().onCameraAdd();
+			FEventsComponentEntity::Instance->onAdd<CameraComponent>(*currentEntity);
 		}
 
 		if (!hasScript && ImGui::MenuItem("Add ScriptComponent")) {
-			currentEntity->addComponent<ScriptComponent>();
-			SceneEvents::Instance().onScriptAdd();
+			FEventsComponentEntity::Instance->onAdd<ScriptComponent>(*currentEntity);
 		}
 	}
 
@@ -227,7 +223,7 @@ namespace marengine {
 			ImGui::NewLine();
 
 			if (updatedTransform) {
-				SceneEvents::Instance().onTransformUpdate(*currentEntity);
+				FEventsComponentEntity::Instance->onUpdate<TransformComponent>(*currentEntity);
 			}
 		}
 
@@ -242,20 +238,24 @@ namespace marengine {
 			&& !currentEntity->hasComponent<TextureCubemapComponent>();
 
 		auto modifyRenderableButtons = [this, &renderable]() {
-			Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube");
+			bool userHasChosenRenderable{ false };
+			if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { userHasChosenRenderable = true; }
 			ImGui::SameLine();
-			Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid");
+			if(Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { userHasChosenRenderable = true; }
 			ImGui::SameLine();
-			Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall");
+			if(Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { userHasChosenRenderable = true; }
 			ImGui::SameLine();
-			Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface");
+			if(Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { userHasChosenRenderable = true; }
+
+			if (userHasChosenRenderable) {
+				FEventsComponentEntity::Instance->onUpdate<RenderableComponent>(*currentEntity);
+			}
 		};
 		
 		// Actual Panel for Renderable
 		if (hasNeitherColorNorTexture) {
 			if (ImGui::MenuItem("Remove Renderable")) {
-				currentEntity->removeComponent<RenderableComponent>();
-				SceneEvents::Instance().onRenderableRemove();
+				FEventsComponentEntity::Instance->onRemove<RenderableComponent>(*currentEntity);
 				return;
 			}
 		}
@@ -290,8 +290,7 @@ namespace marengine {
 
 		if (!camera.checkIfMain()) {
 			if (ImGui::Button("Remove Camera")) {
-				currentEntity->removeComponent<CameraComponent>();
-				SceneEvents::Instance().onCameraRemove();
+				FEventsComponentEntity::Instance->onRemove<CameraComponent>(*currentEntity);
 				return;
 			}
 		}
@@ -341,7 +340,7 @@ namespace marengine {
 
 		if (updatedCamera) {
 			if (camera.checkIfMain()) {
-				SceneEvents::Instance().onMainCameraUpdate(*currentEntity);
+				FEventsComponentEntity::Instance->onMainCameraUpdate(*currentEntity);
 			}
 		}
 
@@ -350,15 +349,14 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleColorComponent() const {
 		if (ImGui::MenuItem("Remove Color")) {
-			currentEntity->removeComponent<ColorComponent>();
-			SceneEvents::Instance().onColorRemove();
+			FEventsComponentEntity::Instance->onRemove<ColorComponent>(*currentEntity);
 			return;
 		}
 
 		auto& color = currentEntity->getComponent<ColorComponent>();
 
 		if (ImGui::ColorEdit4("- color", &color.texture.x)) {
-			SceneEvents::Instance().onColorUpdate(*currentEntity);
+			FEventsComponentEntity::Instance->onUpdate<ColorComponent>(*currentEntity);
 		}
 			
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
@@ -367,7 +365,7 @@ namespace marengine {
 	void WEntityWidgetPanel::handleTexture2DComponent() const {
 		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
 
-		auto modifyCurrentTexture = [&texture = texture2D.texture, this]() {
+		auto modifyCurrentTexture = [&texture = texture2D.texture, this]()->bool {
 			constexpr size_t inputSize{ 50 };
 			static char input[inputSize];
 			std::fill(std::begin(input), std::end(input), '\0');
@@ -378,14 +376,15 @@ namespace marengine {
 			}
 
 			if (ImGui::Button("Load Texture")) {
-				SceneEvents::Instance().onTexture2DUpdate(currentEntity);
+				return true;
 			}
+
+			return false;
 		};
 
 		// Actual Texture2D Panel
 		if (ImGui::MenuItem("Remove Texture")) {
-			currentEntity->removeComponent<Texture2DComponent>();
-			SceneEvents::Instance().onTexture2DRemove();
+			FEventsComponentEntity::Instance->onRemove<Texture2DComponent>(*currentEntity);
 			return;
 		}
 
@@ -399,13 +398,17 @@ namespace marengine {
 				if (ImGui::Button("Modify current Texture")) { wantToModifyTexture = true; }
 			}
 			else {
-				modifyCurrentTexture();
+				if (modifyCurrentTexture()) { 
+					FEventsComponentEntity::Instance->onUpdate<Texture2DComponent>(*currentEntity); 
+				}
 				ImGui::SameLine();
 				if (ImGui::Button("Do not modify")) { wantToModifyTexture = false; }
 			}
 		}
 		else {
-			modifyCurrentTexture();
+			if (modifyCurrentTexture()) {
+				FEventsComponentEntity::Instance->onUpdate<Texture2DComponent>(*currentEntity);
+			}
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
@@ -425,14 +428,13 @@ namespace marengine {
 			}
 
 			if (ImGui::Button("Load Cubemap")) {
-				SceneEvents::Instance().onTextureCubemapUpdate(currentEntity);
+				FEventsComponentEntity::Instance->onUpdate<TextureCubemapComponent>(*currentEntity);
 			}
 		};
 
 		// Actual TextureCubemap Panel
 		if (ImGui::MenuItem("Remove Cubemap")) {
-			currentEntity->removeComponent<TextureCubemapComponent>();
-			SceneEvents::Instance().onTextureCubemapRemove();
+			FEventsComponentEntity::Instance->onRemove<TextureCubemapComponent>(*currentEntity);
 			return;
 		}
 
@@ -458,8 +460,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleLightComponent() const {
 		if (ImGui::MenuItem("Remove Light")) {
-			currentEntity->removeComponent<LightComponent>();
-			SceneEvents::Instance().onLightRemove();
+			FEventsComponentEntity::Instance->onRemove<LightComponent>(*currentEntity);
 			return;
 		}
 
@@ -476,7 +477,7 @@ namespace marengine {
 		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) { updatedLight = true; }
 
 		if (updatedLight) {
-			SceneEvents::Instance().onLightUpdate(*currentEntity);
+			FEventsComponentEntity::Instance->onUpdate<LightComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
@@ -492,9 +493,6 @@ namespace marengine {
 			renderable.name = T::getID();
 			renderable.vertices = T::getVertices();
 			renderable.indices = T::getIndices();
-
-			SceneEvents::Instance().onRenderableUpdate(currentEntity);
-
 			return true;
 		}
 

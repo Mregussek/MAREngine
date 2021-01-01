@@ -24,7 +24,6 @@
 #include "../../Core/ecs/Entity/EntityOperation.h"
 #include "../../Core/ecs/SceneManager.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/events/SceneEvents.h"
 
 
 namespace marengine {
@@ -42,7 +41,7 @@ namespace marengine {
 		SceneManager::Instance->getScene()->destroyEntity(entity);
 
 		WEntityWidgetPanel::Instance->reset();
-		SceneEvents::Instance().onEntityRemove();
+		SceneManager::Instance->initialize();
 	}
 
 	void FEventsEntityWidget::onSelectedEntity(const Entity& entity) const {
@@ -59,8 +58,7 @@ namespace marengine {
 		// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
 		const auto& createdEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
 		EntityOperation::copyEntity(entity, createdEntity);
-
-		SceneEvents::Instance().onEntityCopy(entity);
+		SceneManager::Instance->initialize();
 	}
 
 	void FEventsEntityWidget::onSetVisibleEntity(const Entity& entity) const {

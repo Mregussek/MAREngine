@@ -21,7 +21,6 @@
 #include "SceneLayer.h"
 #include "../LayerLogs.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/events/SceneEvents.h"
 
 
 namespace marengine {
@@ -43,7 +42,6 @@ namespace marengine {
 		m_allSceneEvents.eventsComponentEntity.Instance = &m_allSceneEvents.eventsComponentEntity;
 
 		SceneManager::Instance = &m_sceneManager;
-		SceneEvents::Instance().setSceneManager(m_sceneManager);
 
 		m_sceneManager.initialize();
 	}

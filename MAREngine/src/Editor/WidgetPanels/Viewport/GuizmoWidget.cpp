@@ -20,9 +20,9 @@
 
 #include "GuizmoWidget.h"
 #include "../../Camera/Camera.h"
+#include "../../../Core/events/ComponentEvents/EventsComponentEntity.h"
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/events/SceneEvents.h"
 #include "../../../Window/Window.h"
 
 
@@ -42,7 +42,7 @@ namespace marengine {
 		const bool userUsedGuizmo{ draw(editorCamera, transform) };
 
 		if (userUsedGuizmo) {
-			SceneEvents::Instance().onTransformUpdate(currentEntity);
+			FEventsComponentEntity::Instance->onUpdate<TransformComponent>(currentEntity);
 		}
 	}
 
