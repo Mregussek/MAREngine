@@ -45,9 +45,11 @@ namespace marengine {
 	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
 		FMeshBatchStatic::submitToBatch(entity);
 
-		auto& colorComponent{ entity.getComponent<ColorComponent>() };
+		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
 		submitColorComponent(colorComponent);
-		colorComponent.batchIndex = m_colors.size() - 1;
+
+		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+		meshBatchComponent.materialIndex = m_colors.size() - 1;
 	}
 
 	void FMeshBatchStaticColor::submitColorComponent(const ColorComponent& colorComponent) {

@@ -20,12 +20,15 @@
 
 #include "RenderManagerEvents.h"
 #include "RenderCamera.h"
+#include "RenderManager.h"
 #include "RenderMemorizer.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
 #include "../Renderer/PipelineStorage.h"
 #include "../Renderer/ShaderBufferStorage.h"
+#include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Components/Components.h"
 
 
 namespace marengine {
@@ -65,6 +68,71 @@ namespace marengine {
 		pointLightSSBO.bind();
 		pointLightSSBO.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
 		pointLightSSBO.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
+	}
+
+	void FRenderManagerEvents::onTransformAtMeshUpdate(const Entity& entity) {
+		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		const auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+		maths::mat4& instanceAtAssignedMesh{ meshBatchComponent.assignedMesh->p_transforms[meshBatchComponent.transformIndex] };
+
+		instanceAtAssignedMesh = transformComponent.getTransform();
+
+		const uint32_t offset{ GLSL_SSBOs::ut_u_SeparateTransform.offset + meshBatchComponent.transformIndex };
+		const float* pPointerToInstance{ maths::mat4::value_ptr(instanceAtAssignedMesh) };
+
+		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshBatchComponent.assignedMesh->getTransformsSSBOindex()) };
+		transformsSSBO.bind();
+		transformsSSBO.update<float>(offset, sizeof(maths::mat4), pPointerToInstance);
+	}
+
+	void FRenderManagerEvents::onColorAtMeshUpdate(const Entity& entity) {
+		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
+		const auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+
+		FMeshBatchStaticColor* meshColorBatch{ (FMeshBatchStaticColor*)meshBatchComponent.assignedMesh };
+		maths::vec4& instanceAtAssignedMesh{ meshColorBatch->m_colors[meshBatchComponent.materialIndex] };
+
+		instanceAtAssignedMesh = colorComponent.texture;
+
+		const uint32_t offset{ GLSL_SSBOs::ut_u_Color.offset + meshBatchComponent.materialIndex };
+		const float* pPointerToInstance{ maths::vec4::value_ptr(instanceAtAssignedMesh) };
+
+		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshColorBatch->getColorsSSBOindex()) };
+		colorsSSBO.bind();
+		colorsSSBO.update<float>(offset, sizeof(maths::vec4), pPointerToInstance);
+	}
+
+	void FRenderManagerEvents::onTexture2DatMeshUpdate(const Entity& entity) {
+		const auto& texture2DComponent{ entity.getComponent<Texture2DComponent>() };
+		const auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+
+		FMeshBatchStaticTexture2D* meshColorBatch{ (FMeshBatchStaticTexture2D*)meshBatchComponent.assignedMesh };
+		std::string& instanceAtAssignedMesh{ meshColorBatch->m_textures[meshBatchComponent.materialIndex].texturePath };
+
+		instanceAtAssignedMesh = texture2DComponent.texture;
+	}
+
+	void FRenderManagerEvents::onPointLightAtBatchUpdate(const Entity& entity) {
+		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		const auto& pointLightComponent{ entity.getComponent<LightComponent>() };
+		const auto& lightBatchComponent{ entity.getComponent<LightBatchComponent>() };
+
+		LightMaterial& lightInstanceAtBatch{ FRenderManager::Instance->m_pointLightBatch.m_lights[lightBatchComponent.pointLightIndex] };
+
+		lightInstanceAtBatch.position = maths::vec4(transformComponent.center, 1.f);
+		lightInstanceAtBatch.ambient = pointLightComponent.ambient;
+		lightInstanceAtBatch.diffuse = pointLightComponent.diffuse;
+		lightInstanceAtBatch.specular = pointLightComponent.specular;
+		lightInstanceAtBatch.linear = pointLightComponent.linear;
+		lightInstanceAtBatch.quadratic = pointLightComponent.quadratic;
+		lightInstanceAtBatch.constant = pointLightComponent.constant;
+		lightInstanceAtBatch.shininess = pointLightComponent.shininess;
+
+		const uint32_t offset{ GLSL_SSBOs::ut_u_material.offset + lightBatchComponent.pointLightIndex };
+
+		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(FRenderManager::Instance->m_pointLightBatch.getPointLightSSBOindex()) };
+		pointLightSSBO.bind();
+		pointLightSSBO.update<float>(offset, sizeof(LightMaterial), &lightInstanceAtBatch.position.x);
 	}
 
 

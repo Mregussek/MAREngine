@@ -29,7 +29,7 @@ namespace marengine {
 
 
 	template<typename T>
-	MAR_NO_DISCARD const bool Entity::hasComponent() const {
+	MAR_NO_DISCARD bool Entity::hasComponent() const {
 		const bool hasComp{ m_sceneRegistry->m_registry.has<T>(m_entityHandle) };
 		ECS_TRACE("ENTITY: checking if {} entity contains component {}... result={}", m_entityHandle, typeid(T).name(), hasComp);
 		return hasComp;

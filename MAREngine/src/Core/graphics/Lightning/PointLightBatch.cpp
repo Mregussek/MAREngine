@@ -56,6 +56,9 @@ namespace marengine {
 		lightMaterial.quadratic = lightComponent.quadratic;
 		lightMaterial.constant = lightComponent.constant;
 		lightMaterial.shininess = lightComponent.shininess;
+
+		auto& lightBatchComponent{ entity.getComponent<LightBatchComponent>() };
+		lightBatchComponent.pointLightIndex = m_lights.size() - 1;
 	}
 
 	const FPointLightsArray& FPointLightBatch::getLights() const {

@@ -29,6 +29,7 @@ namespace marengine {
 	class FMeshBatchStaticTexture2D;
 	class FPointLightBatch;
 	class RenderCamera;
+	class Entity;
 
 
 	class FRenderManagerEvents {
@@ -42,6 +43,13 @@ namespace marengine {
 		static void onRenderCameraUpdate(const RenderCamera* renderCamera);
 
 		static void onPointLightUpdate(const FPointLightBatch& pointLightBatch);
+
+
+		static void onTransformAtMeshUpdate(const Entity& entity);
+		static void onColorAtMeshUpdate(const Entity& entity);
+		static void onTexture2DatMeshUpdate(const Entity& entity);
+
+		static void onPointLightAtBatchUpdate(const Entity& entity);
 
 	};
 

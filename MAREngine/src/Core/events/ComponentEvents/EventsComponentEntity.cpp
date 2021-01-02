@@ -34,12 +34,6 @@ namespace marengine {
 	void FEventsComponentEntity::onMainCameraUpdate(const Entity& entity) const {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
-		auto updateCameraOperation = [&entity, &cameraComponent, this]() {
-			const auto& transform = entity.getComponent<TransformComponent>();
-			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			FRenderManagerEvents::onRenderCameraUpdate(&cameraComponent.renderCamera);
-		};
-
 		const bool userCheckingGameInPlayMode{
 			SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode()
 		};
@@ -49,7 +43,9 @@ namespace marengine {
 		};
 
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
-			updateCameraOperation();
+			const auto& transform = entity.getComponent<TransformComponent>();
+			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
+			FRenderManagerEvents::onRenderCameraUpdate(&cameraComponent.renderCamera);
 		}
 	}
 
@@ -77,10 +73,6 @@ namespace marengine {
 	***************************************************************************************************/
 
 	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) const {
-		const auto& transform = entity.getComponent<TransformComponent>();
-
-		//RenderEvents::Instance().onTransformMat4Update(transform, rpc);
-
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& camera{ entity.getComponent<CameraComponent>() };
 			if (camera.isMainCamera()) { 
@@ -89,7 +81,11 @@ namespace marengine {
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
-			//RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
+			FRenderManagerEvents::onPointLightAtBatchUpdate(entity);
+		}
+
+		if (entity.hasComponent<RenderableComponent>() && entity.hasAnyMaterial()) {
+			FRenderManagerEvents::onTransformAtMeshUpdate(entity);
 		}
 	}
 
@@ -99,14 +95,14 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) const {
 		entity.addComponent<RenderableComponent>();
-		const auto submitReturnInfo{ FRenderManager::Instance->submitEntityRenderableToBatch(entity) };
-		if (submitReturnInfo.submitted) {
-			FRenderManagerEvents::onVertexIndexBuffersUpdate(*submitReturnInfo.pMeshBatch);
-		}
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) const {
 		SceneManager::Instance->initialize();
+		const auto submitReturnInfo{ FRenderManager::Instance->submitEntityRenderableToBatch(entity) };
+		if (submitReturnInfo.submitted) {
+			FRenderManagerEvents::onVertexIndexBuffersUpdate(*submitReturnInfo.pMeshBatch);
+		}
 	}
 
 	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity) const {
@@ -127,8 +123,7 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const {
-		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		//RenderEvents::Instance().onColorUpdate(colorComponent.texture, renderPipelineComponent);
+		FRenderManagerEvents::onColorAtMeshUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const {
@@ -149,9 +144,7 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<Texture2DComponent>(const Entity& entity) const {
-		const auto& tex2DComponent{ entity.getComponent<Texture2DComponent>() };
-
-		//RenderEvents::Instance().onTex2DUpdate(tex2DComponent.texture, renderPipelineComponent);
+		FRenderManagerEvents::onTexture2DatMeshUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const {
@@ -178,15 +171,11 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<LightComponent>(const Entity& entity) const {
 		entity.addComponent<LightComponent>();
-
-		//RenderPipeline::Instance->pushLightToPipeline(entity);
+		FRenderManager::Instance->submitEntityLightToBatch(entity);
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {
-		const maths::vec3& position{ entity.getComponent<TransformComponent>().center };
-		const auto& lightComponent{ entity.getComponent<LightComponent>() };
-
-		//RenderEvents::Instance().onLightUpdate(position, lightComponent, renderPipelineComponent);
+		FRenderManagerEvents::onPointLightAtBatchUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const {

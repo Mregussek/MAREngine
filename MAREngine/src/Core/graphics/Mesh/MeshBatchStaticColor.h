@@ -33,6 +33,9 @@ namespace marengine {
 
 
 	class FMeshBatchStaticColor : public FMeshBatchStatic {
+
+		friend class FRenderManagerEvents;
+
 	public:
 
 		virtual void reset() override;

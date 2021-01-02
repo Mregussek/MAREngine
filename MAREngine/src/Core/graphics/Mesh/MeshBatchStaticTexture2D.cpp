@@ -44,9 +44,11 @@ namespace marengine {
 	void FMeshBatchStaticTexture2D::submitToBatch(const Entity& entity) {
 		FMeshBatchStatic::submitToBatch(entity);
 
-		auto& texture2dComponent{ entity.getComponent<Texture2DComponent>() };
+		const auto& texture2dComponent{ entity.getComponent<Texture2DComponent>() };
 		submitTexture2DComponent((uint32_t)(p_meshID - 1.f), texture2dComponent);
-		texture2dComponent.batchIndex = m_textures.size() - 1;
+
+		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+		meshBatchComponent.materialIndex = m_textures.size() - 1;
 	}
 
 	void FMeshBatchStaticTexture2D::submitTexture2DComponent(uint32_t bindingIndex, const Texture2DComponent& texture2dComponent) {

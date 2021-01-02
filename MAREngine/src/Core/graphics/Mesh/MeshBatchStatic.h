@@ -29,6 +29,9 @@ namespace marengine {
 
 
 	class FMeshBatchStatic : public IMeshBatch {
+
+		friend class FRenderManagerEvents;
+
 	public:
 
 		virtual void reset() override;

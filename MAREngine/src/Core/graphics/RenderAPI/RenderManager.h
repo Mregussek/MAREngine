@@ -34,6 +34,9 @@ namespace marengine {
 
 
 	class FRenderManager {
+
+		friend class FRenderManagerEvents;
+
 	public:
 
 		struct SubmitRenderableReturnInfo {

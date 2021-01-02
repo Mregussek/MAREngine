@@ -70,6 +70,9 @@ namespace marengine {
 
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		submitTransformComponent(transformComponent);
+
+		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+		meshBatchComponent.assignedMesh = this;
 	}
 
 	void FMeshBatchStatic::submitRenderableComponent(const RenderableComponent& renderableComponent) {

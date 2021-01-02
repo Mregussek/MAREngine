@@ -31,7 +31,6 @@ namespace marengine {
 	struct ColorComponent {
 
 		maths::vec4 texture{ 0.5f, 0.5f, 0.5f, 1.f };
-		uint32_t batchIndex{ 0 };
 
 		ColorComponent() = default;
 		ColorComponent(const ColorComponent& cc) = default;
@@ -44,7 +43,6 @@ namespace marengine {
 	struct Texture2DComponent {
 
 		std::string texture{ "empty" };
-		uint32_t batchIndex{ 0 };
 
 		Texture2DComponent() = default;
 		Texture2DComponent(const Texture2DComponent& tex) = default;

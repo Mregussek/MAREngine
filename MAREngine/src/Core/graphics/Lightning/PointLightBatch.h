@@ -31,6 +31,9 @@ namespace marengine {
 
 
 	class FPointLightBatch {
+
+		friend class FRenderManagerEvents;
+
 	public:
 
 		void reset();

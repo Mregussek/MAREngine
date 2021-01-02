@@ -34,13 +34,13 @@
                     },
                     "TransformComponent": {
                         "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
+                            "x": -18.600000381469727,
+                            "y": 0.699999988079071,
                             "z": 0.0
                         },
                         "center": {
-                            "x": 0.0,
-                            "y": 0.0,
+                            "x": -37.400001525878906,
+                            "y": 10.600000381469727,
                             "z": 0.0
                         },
                         "scale": {
@@ -84,6 +84,94 @@
                         "center": {
                             "x": 0.0,
                             "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "MRCube"
+                    },
+                    "Texture2DComponent": {
+                        "name": "textures/mr.jpg"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 0.0,
+                            "y": -40.0,
+                            "z": 0.0
+                        },
+                        "center": {
+                            "x": -1.2465238571166992,
+                            "y": 3.799999952316284,
+                            "z": 0.39085954427719116
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Wall"
+                    },
+                    "TagComponent": {
+                        "tag": "GrassSurface"
+                    },
+                    "Texture2DComponent": {
+                        "name": "textures/grass-texture.jpg"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "center": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "texture": {
+                            "x": 0.6590671539306641,
+                            "y": 0.0836678221821785,
+                            "z": 0.695488691329956
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "PurpleWall"
+                    },
+                    "TransformComponent": {
+                        "angles": {
+                            "x": 0.0,
+                            "y": 1.600000023841858,
+                            "z": 0.0
+                        },
+                        "center": {
+                            "x": 0.0,
+                            "y": 7.800000190734863,
                             "z": 0.0
                         },
                         "scale": {

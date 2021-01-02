@@ -38,6 +38,9 @@ namespace marengine {
 
 
 	void FRenderManager::reset() {
+		PipelineStorage::Instance->close();
+		ShaderBufferStorage::Instance->close();
+
 		m_staticColorMeshBatch.reset();
 		m_staticTexture2DMeshBatch.reset();
 		m_pointLightBatch.reset();
@@ -104,9 +107,6 @@ namespace marengine {
 	}
 
 	void FRenderManager::createBuffers() {
-		PipelineStorage::Instance->close();
-		ShaderBufferStorage::Instance->close();
-
 		{ // handle static color mesh batches
 			const uint32_t uniquePipelineID{ createVertexIndexBuffers(&m_staticColorMeshBatch) };
 			m_staticColorMeshBatch.setUniquePipelineID(uniquePipelineID);
@@ -138,14 +138,15 @@ namespace marengine {
 	}
 
 	void FRenderManager::fillBuffers() {
-		{ // fill static color mesh batch
+		if (m_staticColorMeshBatch.hasAnythingToDraw()) {
 			FRenderManagerEvents::onVertexIndexBuffersUpdate(m_staticColorMeshBatch);
 			FRenderManagerEvents::onTransformsUpdate(m_staticColorMeshBatch);
 			FRenderManagerEvents::onColorsUpdate(m_staticColorMeshBatch);
 		}
-		{ // fill texture2d static mesh batch
+		if (m_staticTexture2DMeshBatch.hasAnythingToDraw()) {
 			FRenderManagerEvents::onVertexIndexBuffersUpdate(m_staticTexture2DMeshBatch);
 			FRenderManagerEvents::onTransformsUpdate(m_staticTexture2DMeshBatch);
+			// TODO: should add texture loading
 		}
 		{ // fill point light batch
 			FRenderManagerEvents::onPointLightUpdate(m_pointLightBatch);

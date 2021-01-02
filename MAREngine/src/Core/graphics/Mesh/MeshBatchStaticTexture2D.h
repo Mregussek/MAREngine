@@ -31,6 +31,9 @@ namespace marengine {
 
 
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
+
+		friend class FRenderManagerEvents;
+
 	public:
 
 		virtual void reset() override;
