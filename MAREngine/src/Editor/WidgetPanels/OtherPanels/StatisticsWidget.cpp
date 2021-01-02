@@ -35,41 +35,13 @@ namespace marengine {
 		ImGui::Begin("Statistics Menu");
 
 		auto& stats{ *RenderStatistics::Instance };
-		const auto& containersColor{ RenderPipeline::Instance->getColorContainers() };
-		const auto& containers2D{ RenderPipeline::Instance->get2Dcontainers() };
-		const auto& containersCubemap{ RenderPipeline::Instance->getCubemapContainers() };
-
-		const auto& entities{ SceneManager::Instance->getScene()->getEntities() };
-
-		stats.entitiesCount += entities.size();
-		stats.allEntitiesCount += stats.entitiesCount;
-
-		auto pushContainerDataToStats = [&stats](const std::vector<RenderContainer>& containers) {
-			std::for_each(containers.cbegin(), containers.cend(), [&stats](const RenderContainer& container) {
-				stats.shapesCount += container.getTransforms().size();
-				stats.verticesCount += container.getVertices().size();
-				stats.indicesCount += container.getIndices().size();
-				stats.trianglesCount += container.getIndices().size() / 3;
-			});
-		};
-
-		pushContainerDataToStats(containersColor);
-		pushContainerDataToStats(containers2D);
-		pushContainerDataToStats(containersCubemap);
-
-		auto entityHasRenderable = [](const Entity& entity) {
-			return entity.hasComponent<RenderableComponent>();
-		};
-
-		uint32_t renderablesEntities = std::count_if(entities.cbegin(), entities.cend(), entityHasRenderable);
-
+		
 		ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
 		ImGui::Text("Vertices: %d", stats.verticesCount);
 		ImGui::Text("Indices: %d", stats.indicesCount);
 		ImGui::Text("Triangles: %d", stats.trianglesCount);
 		ImGui::Text("Entities: %d", stats.entitiesCount);
 		ImGui::Text("All Entities: %d", stats.allEntitiesCount);
-		ImGui::Text("All Entities with Renderable: %d", renderablesEntities);
 
 		ImGui::Separator();
 

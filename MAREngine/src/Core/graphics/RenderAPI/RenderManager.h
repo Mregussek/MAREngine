@@ -18,26 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDER_CONTAINER_DEFINITIONS_H
-#define MAR_ENGINE_GRAPHICS_RENDER_CONTAINER_DEFINITIONS_H
+#ifndef MAR_ENGINE_F_RENDER_MANAGER_H
+#define MAR_ENGINE_F_RENDER_MANAGER_H
 
 
-#include "../../../mar.h"
-#include "../Mesh/Vertex.h"
+#include "../Mesh/MeshBatchStaticColor.h"
+#include "../Lightning/PointLightBatch.h"
 
 
 namespace marengine {
 
-	typedef std::pair<int32_t, maths::vec4> ColorPair;
-	typedef std::pair<int32_t, std::string> TexturePair;
 
-	typedef std::vector<Vertex> VertexVector;
-	typedef std::vector<uint32_t> IndicesVector;
-	typedef std::vector<maths::mat4> Mat4Vector;
-	typedef std::vector<ColorPair> ColorVector;
-	typedef std::vector<TexturePair> TextureVector;
-	typedef std::vector<float> FloatVector;
+	class FRenderManager {
+	public:
+
+		static FRenderManager* Instance;
+
+		void reset();
+
+		void batchEntities(const std::vector<Entity>& entities);
+
+		void onContainersReadyToDraw();
+
+		const FMeshBatchStaticColor& getStaticColorBatch() const;
+		const FPointLightBatch& getPointLightsBatch() const;
+
+	private:
+
+		FMeshBatchStaticColor m_staticColorMeshBatch;
+		FPointLightBatch m_pointLightBatch;
+
+	};
+
 
 }
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDER_CONTAINER_DEFINITIONS_H
+
+#endif // !MAR_ENGINE_F_RENDER_MANAGER_H

@@ -18,37 +18,27 @@
 **/
 
 
-#include "PipelineStorage.h"
-#include "../GraphicsLogs.h"
+#ifndef MAR_ENGINE_MESH_DEFINITIONS_H
+#define MAR_ENGINE_MESH_DEFINITIONS_H
+
+
+#include "Vertex.h"
 
 
 namespace marengine {
 
 
-	PipelineStorage* PipelineStorage::Instance{ nullptr };
+	constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
 
-
-	PipelineOpenGL& PipelineStorage::createPipeline() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: creating pipeline... current size {}", m_buffers.size() + 1);
-
-		return m_buffers.emplace_back();
-	}
-
-	const std::vector<PipelineOpenGL>& PipelineStorage::getPipelines() const {
-		return m_buffers;
-	}
-
-	const PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
-		return m_buffers.at(index);
-	}
-
-	void PipelineStorage::close() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: closing...");
-
-		for (auto& buffer : m_buffers) { buffer.close(); }
-
-		m_buffers.clear();
-	}
+	typedef std::vector<Vertex> FVertexArray;
+	typedef std::vector<uint32_t> FIndicesArray;
+	typedef std::vector<maths::mat4> FTransformsArray;
+	typedef std::vector<maths::vec4> FColorsArray;
 
 
 }
+
+
+
+
+#endif // !MAR_ENGINE_RENDER_API_DEFINITIONS_H

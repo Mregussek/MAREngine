@@ -27,8 +27,6 @@
 
 namespace marengine {
 
-	struct RenderPipelineComponent;  struct LightComponent; struct TransformComponent;
-	struct GLSL_SSBOs;
 	class RenderCamera;
 
 
@@ -44,16 +42,6 @@ namespace marengine {
 
 		void onDrawCall() const;
 
-		void onContainersReadyToDraw() const;
-
-		void onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const;
-		void onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const;
-		void onTex2DUpdate(const std::string& texture, const RenderPipelineComponent& rpc) const;
-
-		void onLightUpdate(vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const;
-		void onLightPositionUpdate(vec3 position, const RenderPipelineComponent& rpc) const;
-		void onLightComponentUpdate(const LightComponent& light, const RenderPipelineComponent& rpc) const;
-		
 		void onMainCameraUpdate(const RenderCamera& camera) const;
 
 	private:

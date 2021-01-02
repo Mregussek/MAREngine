@@ -26,6 +26,7 @@
 #include "../Layer.h"
 #include "../../Core/graphics/RenderAPI/RenderPipeline.h"
 #include "../../Core/graphics/RenderAPI/RenderStatistics.h"
+#include "../../Core/graphics/RenderAPI/RenderManager.h"
 #include "../../Core/graphics/Renderer/RendererBatch.h"
 #include "../../Core/graphics/Renderer/RenderMemorizer.h"
 #include "../../Core/graphics/Renderer/ShaderBufferStorage.h"
@@ -55,6 +56,7 @@ namespace marengine {
 		ShaderBufferStorage m_shaderBufferStorage;
 		RenderMemorizer m_memorizer;
 		PipelineStorage m_pipelineStorage;
+		FRenderManager m_renderManager;
 
 	};
 

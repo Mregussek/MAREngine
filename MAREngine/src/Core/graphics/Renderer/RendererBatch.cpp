@@ -30,6 +30,9 @@
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
 
+#include "../Mesh/MeshBatchStaticColor.h"
+#include "../Lightning/PointLightBatch.h"
+
 
 namespace marengine {
 
@@ -54,9 +57,7 @@ namespace marengine {
 
 		{ // setup EntityCmp SSBO
 			auto& entityCmp = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> entitycmpItems{ 
-				GLSL_SSBOs::ut_u_SeparateTransform, GLSL_SSBOs::ut_u_samplerTypes
-			};
+			std::vector<UniformItem> entitycmpItems{ GLSL_SSBOs::ut_u_SeparateTransform };
 
 			entityCmp.initialize(GLSL_SSBOs::ub_EntityCmp, std::move(entitycmpItems));
 		}
@@ -100,105 +101,39 @@ namespace marengine {
 		GRAPHICS_INFO("RENDERER_BATCH: closed!");
 	}
 
-	void RendererBatch::draw(const RenderPipeline& renderPipeline) {
-		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
-
-		const auto& lights = renderPipeline.getLightContainers();
-
-		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
-		cameraSSBO.bind();
-
+	void RendererBatch::draw(const FMeshBatchStaticColor& staticColorBatch, const FPointLightBatch& pointLightBatch) const {
 		m_shader2D.bind();
-		drawWithShader(m_shader2D, lights, renderPipeline.getColorContainers());
-		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());
-		//drawWithShader(m_shader2D, lights, renderPipeline.getCubemapContainers());
 
-		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
-	}
+		{ // pass camera
+			const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+			cameraSSBO.bind();
+		}
+		{ // pass transforms
+			const FTransformsArray& transforms{ staticColorBatch.getTransforms() };
+			const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
 
-	void RendererBatch::drawWithShader(const ShaderGL& shader, const std::vector<LightContainer>& lights, const std::vector<RenderContainer>& containers) const {
-		auto pushContainerToLight = [&shader, &lights, this](const RenderContainer& container) {
-			passTransformsToSSBO(container);
-			passColorsToSSBO(container.getColors());
+			entityShaderBuffer.bind();
+			entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+		}
+		{ // pass colors
+			const FColorsArray& colors{ staticColorBatch.getColors() };
+			const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_TextureSamplers);
+			textureShaderBuffer.bind();
 
-			if(container.doesContain2Dtextures()) { passTexturesToShader(shader, container.getTexture2D()); }
-			else { passCubemapsToShader(shader, container.getTextureCubemap()); }
-			
-			const auto& containerBuffer{ PipelineStorage::Instance->getPipeline(container.getUniqueContainerID()) };
-			containerBuffer.bind();
+			textureShaderBuffer.update<float>(GLSL_SSBOs::ut_u_Color.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
+		}
+		{ // pass lights
+			const FPointLightsArray& pointLights{ pointLightBatch.getLights() };
+			const auto lightSize = (int32_t)pointLights.size();
+			const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
+			lightShaderBuffer.bind();
 
-			for (const auto& light : lights) {
-				passLightToSSBO(light.getLightMaterials());
-
-				DrawingOpenGL::drawTriangles(container.getIndices().size());
-
-				RenderEvents::Instance().onDrawCall();
-			}
-		};
-
-		std::for_each(containers.cbegin(), containers.cend(), pushContainerToLight);
-	}
-
-	void RendererBatch::passTransformsToSSBO(const RenderContainer& container) const {
-		const auto& transforms = container.getTransforms();
-		const auto& samplerTypes = container.getSamplerTypes();
-
-		const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
-
-		entityShaderBuffer.bind();
-		entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-		entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_samplerTypes.offset, samplerTypes.size() * sizeof(float), samplerTypes);
-	}
-
-	void RendererBatch::passColorsToSSBO(const ColorVector& colors) const {
-		const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_TextureSamplers);
-		textureShaderBuffer.bind();
-
-		std::for_each(colors.cbegin(), colors.cend(), [&textureShaderBuffer](const ColorPair& color) {
-			textureShaderBuffer.update<float>(GLSL_SSBOs::ut_u_Color.offset + color.first * sizeof(maths::vec4), sizeof(maths::vec4), &color.second.x);
-		});
-
-		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");
-	}
-
-	void RendererBatch::passTexturesToShader(const ShaderGL& shader, const TextureVector& textures) const {
-		GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
-
-		std::for_each(textures.cbegin(), textures.cend(), [&shader](const TexturePair& texture) {
-			const auto textureID = (int32_t)TextureGL::Instance()->loadTexture(texture.second);
-			const auto samplerIndex = (uint32_t)texture.first;
-
-			TextureGL::Instance()->bind2D(samplerIndex, textureID);
-			shader.setUniformSampler(GLSL_SSBOs::u_2D[samplerIndex], samplerIndex);
-		});
-
-		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
-	}
-
-	void RendererBatch::passCubemapsToShader(const ShaderGL& shader, const TextureVector& cubemaps) const {
-		std::for_each(cubemaps.cbegin(), cubemaps.cend(), [&shader](const TexturePair& texture) {
-			const auto textureID = (int32_t)TextureGL::Instance()->loadCubemap(texture.second);
-			const auto samplerIndex = (uint32_t)texture.first;
-
-			TextureGL::Instance()->bindCube(samplerIndex, textureID);
-			shader.setUniformSampler(GLSL_SSBOs::u_Cubemap[samplerIndex], samplerIndex);
-		});
-
-		GRAPHICS_INFO("RENDERER_BATCH: passed texture cubemaps to shader");
-	}
-
-	void RendererBatch::passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const {
-		GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
-
-		const auto lightSize = (int32_t)lightMaterials.size();
-		const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
-
-		lightShaderBuffer.bind();
-
-		lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * lightMaterials.size(), &lightMaterials[0].position.x);
-		lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
-
-		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
+			lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
+			lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
+		}
+		
+		DrawingOpenGL::drawTriangles(staticColorBatch.getIndices().size());
+		RenderEvents::Instance().onDrawCall();
 	}
 
 

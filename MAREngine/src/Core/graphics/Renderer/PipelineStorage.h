@@ -42,8 +42,6 @@ namespace marengine {
 
 		const PipelineOpenGL& getPipeline(uint32_t index) const;
 
-		void fillContainer(RenderContainer& container) const;
-
 		void close();
 
 	private:

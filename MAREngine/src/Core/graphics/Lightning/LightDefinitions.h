@@ -18,28 +18,35 @@
 **/
 
 
-#include "RenderContainer.h"
-#include "../GraphicsLogs.h"
+#ifndef MAR_ENGINE_LIGHT_DEFINITIONS_H
+#define MAR_ENGINE_LIGHT_DEFINITIONS_H
+
+
+#include "../../../mar.h"
 
 
 namespace marengine {
 
 
-	void RenderContainer::reset() {
-		m_vertices.clear();
-		m_indices.clear();
-		m_shapeID = 0.f;
-		m_indicesMax = 0;
+	struct LightMaterial {
 
-		m_transforms.clear();
+		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
+		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
+		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
+		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
 
-		m_colors.clear();
-		m_tex2D.clear();
-		m_cubes.clear();
-		m_samplerTypes.clear();
+		float constant{ 1.0f };
+		float linear{ 0.045f };
+		float quadratic{ 0.0075f };
+		float shininess{ 64.0f };
 
-		GRAPHICS_TRACE("RENDER_CONTAINER: resetting container");
-	}
+	};
+
+
+	typedef std::vector<LightMaterial> FPointLightsArray;
 
 
 }
+
+
+#endif // !MAR_ENGINE_LIGHT_DEFINITIONS_H

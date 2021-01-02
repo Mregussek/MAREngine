@@ -37,7 +37,8 @@ namespace marengine {
 		m_renderPipeline.Instance = &m_renderPipeline;
 		m_shaderBufferStorage.Instance = &m_shaderBufferStorage;
 		m_pipelineStorage.Instance = &m_pipelineStorage;
-		
+		m_renderManager.Instance = &m_renderManager;
+
 		m_renderer.initialize();
 	}
 
@@ -45,13 +46,16 @@ namespace marengine {
 		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
 
 		m_statistics.resetStatistics();
-		m_renderer.draw(m_renderPipeline);
+
+		const FMeshBatchStaticColor& batchStaticColor{ m_renderManager.getStaticColorBatch() };
+		const FPointLightBatch& batchPointLight{ m_renderManager.getPointLightsBatch() };
+
+		m_renderer.draw(batchStaticColor, batchPointLight);
 	}
 
 	void RenderLayer::close() {
 		LAYER_TRACE("RENDER_LAYER: {} going to close...", p_debugName);
 	
-		m_renderPipeline.reset();
 		m_shaderBufferStorage.close();
 		m_pipelineStorage.close();
 

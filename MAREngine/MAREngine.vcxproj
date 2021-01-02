@@ -230,6 +230,8 @@
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h" />
     <ClInclude Include="src\Core\filesystem\SceneSerializer.h" />
     <ClInclude Include="src\Core\filesystem\ScriptsFileManager.h" />
+    <ClInclude Include="src\Core\graphics\Lightning\LightDefinitions.h" />
+    <ClInclude Include="src\Core\graphics\Lightning\PointLightBatch.h" />
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\attr.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\buffer_info.h" />
@@ -272,11 +274,14 @@
     <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
     <ClInclude Include="src\Core\graphics\GraphicLimits.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\MeshDefinitions.h" />
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticColor.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\IMeshBatch.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\RenderAPIDefinitions.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h" />
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainer.h" />
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderContainerDefinitions.h" />
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.h" />
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderManager.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\IMeshBatchStatic.h" />
     <ClInclude Include="src\Core\graphics\Renderer\PipelineStorage.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderMemorizer.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h" />
@@ -365,6 +370,7 @@
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp" />
     <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp" />
+    <ClCompile Include="src\Core\graphics\Lightning\PointLightBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp" />
     <ClCompile Include="src\Core\ecs\Components\CameraComponents.cpp" />
@@ -375,10 +381,10 @@
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp" />
+    <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticColor.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp" />
-    <ClCompile Include="src\Core\graphics\RenderAPI\RenderContainer.cpp" />
-    <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipelineHelper.cpp" />
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderManager.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\PipelineStorage.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
     <ClCompile Include="src\Core\events\RenderEvents.cpp" />

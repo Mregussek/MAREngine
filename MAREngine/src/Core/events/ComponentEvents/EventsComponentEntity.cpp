@@ -87,7 +87,7 @@ namespace marengine {
 		const auto& transform = entity.getComponent<TransformComponent>();
 		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
-		RenderEvents::Instance().onTransformMat4Update(transform, rpc);
+		//RenderEvents::Instance().onTransformMat4Update(transform, rpc);
 
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& camera{ entity.getComponent<CameraComponent>() };
@@ -97,7 +97,7 @@ namespace marengine {
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
-			RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
+			//RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
 		}
 	}
 
@@ -109,8 +109,8 @@ namespace marengine {
 		entity.addComponent<RenderableComponent>();
 		
 		if (entity.hasComponent<ColorComponent>()) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-			RenderEvents::Instance().onContainersReadyToDraw();
+			//RenderPipeline::Instance->pushEntityToPipeline(entity);
+			//RenderEvents::Instance().onContainersReadyToDraw();
 		}
 	}
 
@@ -131,8 +131,8 @@ namespace marengine {
 		entity.addComponent<ColorComponent>();
 		
 		if (entity.hasComponent<RenderableComponent>()) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-			RenderEvents::Instance().onContainersReadyToDraw();
+			//RenderPipeline::Instance->pushEntityToPipeline(entity);
+			//RenderEvents::Instance().onContainersReadyToDraw();
 		}
 	}
 
@@ -140,7 +140,7 @@ namespace marengine {
 		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 
-		RenderEvents::Instance().onColorUpdate(colorComponent.texture, renderPipelineComponent);
+		//RenderEvents::Instance().onColorUpdate(colorComponent.texture, renderPipelineComponent);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const {
@@ -156,8 +156,8 @@ namespace marengine {
 		entity.addComponent<Texture2DComponent>();
 
 		if (entity.hasComponent<RenderableComponent>()) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-			RenderEvents::Instance().onContainersReadyToDraw();
+			//RenderPipeline::Instance->pushEntityToPipeline(entity);
+			//RenderEvents::Instance().onContainersReadyToDraw();
 		}
 	}
 
@@ -165,7 +165,7 @@ namespace marengine {
 		const auto& tex2DComponent{ entity.getComponent<Texture2DComponent>() };
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 		
-		RenderEvents::Instance().onTex2DUpdate(tex2DComponent.texture, renderPipelineComponent);
+		//RenderEvents::Instance().onTex2DUpdate(tex2DComponent.texture, renderPipelineComponent);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const {
@@ -193,7 +193,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onAdd<LightComponent>(const Entity& entity) const {
 		entity.addComponent<LightComponent>();
 
-		RenderPipeline::Instance->pushLightToPipeline(entity);
+		//RenderPipeline::Instance->pushLightToPipeline(entity);
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {
@@ -201,7 +201,7 @@ namespace marengine {
 		const auto& lightComponent{ entity.getComponent<LightComponent>() };
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 
-		RenderEvents::Instance().onLightUpdate(position, lightComponent, renderPipelineComponent);
+		//RenderEvents::Instance().onLightUpdate(position, lightComponent, renderPipelineComponent);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const {

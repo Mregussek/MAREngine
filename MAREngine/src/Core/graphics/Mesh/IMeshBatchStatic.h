@@ -18,37 +18,21 @@
 **/
 
 
-#include "PipelineStorage.h"
-#include "../GraphicsLogs.h"
+#ifndef MAR_ENGINE_I_MESH_BATCH_STATIC_H
+#define MAR_ENGINE_I_MESH_BATCH_STATIC_H
+
+
+#include "IMeshBatch.h"
 
 
 namespace marengine {
 
 
-	PipelineStorage* PipelineStorage::Instance{ nullptr };
-
-
-	PipelineOpenGL& PipelineStorage::createPipeline() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: creating pipeline... current size {}", m_buffers.size() + 1);
-
-		return m_buffers.emplace_back();
-	}
-
-	const std::vector<PipelineOpenGL>& PipelineStorage::getPipelines() const {
-		return m_buffers;
-	}
-
-	const PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
-		return m_buffers.at(index);
-	}
-
-	void PipelineStorage::close() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: closing...");
-
-		for (auto& buffer : m_buffers) { buffer.close(); }
-
-		m_buffers.clear();
-	}
+	class IMeshBatchStatic : public IMeshBatch { };
 
 
 }
+
+
+
+#endif // !MAR_ENGINE_I_STATIC_MESH_BATCH_H

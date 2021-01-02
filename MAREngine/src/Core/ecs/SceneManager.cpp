@@ -23,7 +23,7 @@
 #include "Scene.h"
 #include "../events/RenderEvents.h"
 #include "../events/ComponentEvents/EventsComponentEntity.h"
-#include "../graphics/RenderAPI/RenderPipeline.h"
+#include "../graphics/RenderAPI/RenderManager.h"
 
 
 namespace marengine {
@@ -35,21 +35,10 @@ namespace marengine {
 	void SceneManager::initialize() const {
 		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
-		RenderPipeline::Instance->reset();
-
 		const auto& entitiesVector = m_scene->getEntities();
 
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-		});
-
-		const auto view{ m_scene->getView<LightComponent>() };
-		view.each([this](entt::entity entt_entity, const LightComponent& light) {
-			const Entity entity(entt_entity, m_scene->getRegistry());
-			RenderPipeline::Instance->pushLightToPipeline(entity);
-		});
-
-		RenderEvents::Instance().onContainersReadyToDraw();
+		FRenderManager::Instance->reset();
+		FRenderManager::Instance->batchEntities(entitiesVector);
 
 		ECS_INFO("SCENE_MANAGER: initialized!");
 	}
