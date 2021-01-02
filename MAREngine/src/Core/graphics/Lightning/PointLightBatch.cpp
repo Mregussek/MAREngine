@@ -62,5 +62,13 @@ namespace marengine {
 		return m_lights;
 	}
 
+	uint32_t FPointLightBatch::getPointLightSSBOindex() const {
+		return m_pointLightSSBOindex;
+	}
+
+	void FPointLightBatch::setPointLightSSBOindex(uint32_t index) {
+		m_pointLightSSBOindex = index;
+	}
+
 
 }

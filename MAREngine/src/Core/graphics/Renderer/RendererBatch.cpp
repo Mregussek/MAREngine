@@ -19,11 +19,11 @@
 
 
 #include "RendererBatch.h"
+#include "RendererEvents.h"
 #include "ShaderBufferStorage.h"
-#include "RenderMemorizer.h"
+#include "../RenderAPI/RenderMemorizer.h"
 #include "PipelineStorage.h"
 #include "../GraphicsLogs.h"
-#include "../../events/RenderEvents.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
@@ -38,48 +38,6 @@ namespace marengine {
 
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
-
-		setupSSBOs();
-		setupShaders();
-	}
-
-	void RendererBatch::setupSSBOs() {
-		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shader storage buffers...");
-
-		{ // setup Camera SSBO
-			const std::vector<UniformItem> cameraItems{ GLSL_SSBOs::ut_u_MVP };
-
-			auto& camera = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
-			camera.initialize(GLSL_SSBOs::ub_Camera, cameraItems);
-		}
-
-		{ // setup EntityCmp SSBO
-			auto& entityCmp = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> entitycmpItems{ GLSL_SSBOs::ut_u_SeparateTransform };
-
-			entityCmp.initialize(GLSL_SSBOs::ub_EntityCmp, std::move(entitycmpItems));
-		}
-
-		{ // setup Material SSBO
-			auto& material = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> materialItems{ 
-				GLSL_SSBOs::ut_u_material, GLSL_SSBOs::ut_u_lightSize
-			};
-
-			material.initialize(GLSL_SSBOs::ub_Material, std::move(materialItems));
-		}
-
-		{ // setup TextureSmaplers SSBO
-			auto& textureSamplers = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> textureSamplersItems{ GLSL_SSBOs::ut_u_Color };
-
-			textureSamplers.initialize(GLSL_SSBOs::ub_TextureSamplers, std::move(textureSamplersItems));
-		}
-	}
-
-	void RendererBatch::setupShaders() {
-		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shaders...");
 
 		const char* vert = "resources/shaders/default.vert.glsl";
 
@@ -111,52 +69,40 @@ namespace marengine {
 	void RendererBatch::draw(const FMeshBatchStaticColor& staticColorBatch, const FPointLightBatch& pointLightBatch) const {
 		m_shaderColors.bind();
 
-		{ // pass camera
-			const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
-			cameraSSBO.bind();
-		}
-		{ // pass transforms
-			const FTransformsArray& transforms{ staticColorBatch.getTransforms() };
-			const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
+		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		cameraSSBO.bind();
 
-			entityShaderBuffer.bind();
-			entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-		}
-		{ // pass colors
-			const FColorsArray& colors{ staticColorBatch.getColors() };
-			const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_TextureSamplers);
-			textureShaderBuffer.bind();
+		const auto& batchPipeline{ PipelineStorage::Instance->getPipeline(staticColorBatch.getUniquePipelineID()) };
+		batchPipeline.bind();
 
-			textureShaderBuffer.update<float>(GLSL_SSBOs::ut_u_Color.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
-		}
-		{ // pass lights
-			const FPointLightsArray& pointLights{ pointLightBatch.getLights() };
-			const auto lightSize = (int32_t)pointLights.size();
-			const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
-			lightShaderBuffer.bind();
+		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(staticColorBatch.getTransformsSSBOindex()) };
+		transformsSSBO.bind();
 
-			lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
-			lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
-		}
-		
+		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(staticColorBatch.getColorsSSBOindex()) };
+		colorsSSBO.bind();
+
+		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(pointLightBatch.getPointLightSSBOindex()) };
+		pointLightSSBO.bind();
+
 		DrawingOpenGL::drawTriangles(staticColorBatch.getIndices().size());
-		RenderEvents::Instance().onDrawCall();
+		FRendererEvents::onDrawCall();
 	}
 
 	void RendererBatch::draw(const FMeshBatchStaticTexture2D& staticTexture2DBatch, const FPointLightBatch& pointLightBatch) const {
 		m_shaderTexture2D.bind();
 
-		{ // pass camera
-			const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
-			cameraSSBO.bind();
-		}
-		{ // pass transforms
-			const FTransformsArray& transforms{ staticTexture2DBatch.getTransforms() };
-			const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
+		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		cameraSSBO.bind();
 
-			entityShaderBuffer.bind();
-			entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-		}
+		const auto& batchPipeline{ PipelineStorage::Instance->getPipeline(staticTexture2DBatch.getUniquePipelineID()) };
+		batchPipeline.bind();
+
+		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(staticTexture2DBatch.getTransformsSSBOindex()) };
+		transformsSSBO.bind();
+
+		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(pointLightBatch.getPointLightSSBOindex()) };
+		pointLightSSBO.bind();
+
 		{ // pass textures 2d
 			const FTextureArray& textures{ staticTexture2DBatch.getTextures() };
 			std::for_each(textures.cbegin(), textures.cend(), [this](const TexturePair& texturePair) {
@@ -166,18 +112,9 @@ namespace marengine {
 				m_shaderTexture2D.setUniformSampler(GLSL_SSBOs::u_2D[texturePair.bindingIndex], texturePair.bindingIndex);
 			});
 		}
-		{ // pass lights
-			const FPointLightsArray& pointLights{ pointLightBatch.getLights() };
-			const auto lightSize = (int32_t)pointLights.size();
-			const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
-			lightShaderBuffer.bind();
-
-			lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
-			lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
-		}
 
 		DrawingOpenGL::drawTriangles(staticTexture2DBatch.getIndices().size());
-		RenderEvents::Instance().onDrawCall();
+		FRendererEvents::onDrawCall();
 	}
 
 

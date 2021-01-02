@@ -40,9 +40,13 @@ namespace marengine {
 
 		const FPointLightsArray& getLights() const;
 
+		uint32_t getPointLightSSBOindex() const;
+		void setPointLightSSBOindex(uint32_t index);
+
 	private:
 
 		FPointLightsArray m_lights;
+		uint32_t m_pointLightSSBOindex{ 0 };
 
 	};
 	

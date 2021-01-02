@@ -29,27 +29,57 @@
 
 namespace marengine {
 
+	class RenderCamera;
+	class Entity;
+
 
 	class FRenderManager {
 	public:
+
+		struct SubmitRenderableReturnInfo {
+			bool submitted{ false };
+			const FMeshBatchStatic* pMeshBatch{ nullptr };
+		};
+
 
 		static FRenderManager* Instance;
 
 		void reset();
 
 		void batchEntities(const std::vector<Entity>& entities);
-
-		void onContainersReadyToDraw();
+		SubmitRenderableReturnInfo submitEntityRenderableToBatch(const Entity& entity);
+		bool submitEntityLightToBatch(const Entity& entity);
+		bool submitEntityCamera(const Entity& entity);
 
 		const FMeshBatchStaticColor& getStaticColorBatch() const;
 		const FMeshBatchStaticTexture2D& getStaticTexture2DBatch() const;
 		const FPointLightBatch& getPointLightsBatch() const;
 
+		void setRenderCamera(const RenderCamera* renderCamera);
+
 	private:
+
+		bool containsMainCamera(const Entity& entity) const;
+
+		void onBatchesReadyToDraw();
+
+		void createBuffers();
+		void fillBuffers();
+
+		uint32_t createVertexIndexBuffers(FMeshBatchStatic* meshBatch) const;
+		uint32_t createTransformsSSBO() const;
+		uint32_t createColorSSBO() const;
+
+		uint32_t createPointLightSSBO() const;
+
+		uint32_t createCameraSSBO() const; 
+
 
 		FMeshBatchStaticColor m_staticColorMeshBatch;
 		FMeshBatchStaticTexture2D m_staticTexture2DMeshBatch;
 		FPointLightBatch m_pointLightBatch;
+
+		const RenderCamera* m_renderCamera;
 
 	};
 

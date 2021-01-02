@@ -21,7 +21,6 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "Scene.h"
-#include "../events/RenderEvents.h"
 #include "../events/ComponentEvents/EventsComponentEntity.h"
 #include "../graphics/RenderAPI/RenderManager.h"
 

@@ -19,8 +19,8 @@
 
 
 #include "EventsComponentEntity.h"
-#include "../RenderEvents.h"
-#include "../../graphics/RenderAPI/RenderPipeline.h"
+#include "../../graphics/RenderAPI/RenderManager.h"
+#include "../../graphics/RenderAPI/RenderManagerEvents.h"
 #include "../../ecs/SceneManager.h"
 #include "../../ecs/Scene.h"
 
@@ -37,7 +37,7 @@ namespace marengine {
 		auto updateCameraOperation = [&entity, &cameraComponent, this]() {
 			const auto& transform = entity.getComponent<TransformComponent>();
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			RenderEvents::Instance().onMainCameraUpdate(cameraComponent.renderCamera);
+			FRenderManagerEvents::onRenderCameraUpdate(&cameraComponent.renderCamera);
 		};
 
 		const bool userCheckingGameInPlayMode{
@@ -54,8 +54,7 @@ namespace marengine {
 	}
 
 	void FEventsComponentEntity::onEditorCameraSet(const RenderCamera* camera) const {
-		RenderPipeline::Instance->pushCameraToPipeline(camera);
-		RenderEvents::Instance().onMainCameraUpdate(*camera);
+		FRenderManager::Instance->setRenderCamera(camera);
 	}
 
 	void FEventsComponentEntity::onGameCameraSet() const {
@@ -68,8 +67,7 @@ namespace marengine {
 				
 				cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
 
-				RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
-				RenderEvents::Instance().onMainCameraUpdate(cameraComponent.renderCamera);
+				FRenderManager::Instance->setRenderCamera(&cameraComponent.renderCamera);
 			}
 		});
 	}
@@ -101,10 +99,9 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) const {
 		entity.addComponent<RenderableComponent>();
-		
-		if (entity.hasComponent<ColorComponent>()) {
-			//RenderPipeline::Instance->pushEntityToPipeline(entity);
-			//RenderEvents::Instance().onContainersReadyToDraw();
+		const auto submitReturnInfo{ FRenderManager::Instance->submitEntityRenderableToBatch(entity) };
+		if (submitReturnInfo.submitted) {
+			FRenderManagerEvents::onVertexIndexBuffersUpdate(*submitReturnInfo.pMeshBatch);
 		}
 	}
 
@@ -123,16 +120,14 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) const {
 		entity.addComponent<ColorComponent>();
-		
-		if (entity.hasComponent<RenderableComponent>()) {
-			//RenderPipeline::Instance->pushEntityToPipeline(entity);
-			//RenderEvents::Instance().onContainersReadyToDraw();
+		const auto submitReturnInfo{ FRenderManager::Instance->submitEntityRenderableToBatch(entity) };
+		if (submitReturnInfo.submitted) {
+			FRenderManagerEvents::onVertexIndexBuffersUpdate(*submitReturnInfo.pMeshBatch);
 		}
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const {
 		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-
 		//RenderEvents::Instance().onColorUpdate(colorComponent.texture, renderPipelineComponent);
 	}
 
@@ -147,10 +142,9 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<Texture2DComponent>(const Entity& entity) const {
 		entity.addComponent<Texture2DComponent>();
-
-		if (entity.hasComponent<RenderableComponent>()) {
-			//RenderPipeline::Instance->pushEntityToPipeline(entity);
-			//RenderEvents::Instance().onContainersReadyToDraw();
+		const auto submitReturnInfo{ FRenderManager::Instance->submitEntityRenderableToBatch(entity) };
+		if (submitReturnInfo.submitted) {
+			FRenderManagerEvents::onVertexIndexBuffersUpdate(*submitReturnInfo.pMeshBatch);
 		}
 	}
 

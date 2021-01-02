@@ -24,11 +24,10 @@
 
 #include "../../mar.h"
 #include "../Layer.h"
-#include "../../Core/graphics/RenderAPI/RenderPipeline.h"
 #include "../../Core/graphics/RenderAPI/RenderStatistics.h"
 #include "../../Core/graphics/RenderAPI/RenderManager.h"
 #include "../../Core/graphics/Renderer/RendererBatch.h"
-#include "../../Core/graphics/Renderer/RenderMemorizer.h"
+#include "../../Core/graphics/RenderAPI/RenderMemorizer.h"
 #include "../../Core/graphics/Renderer/ShaderBufferStorage.h"
 #include "../../Core/graphics/Renderer/PipelineStorage.h"
 
@@ -51,7 +50,6 @@ namespace marengine {
 	private:
 
 		RendererBatch m_renderer;
-		RenderPipeline m_renderPipeline;
 		RenderStatistics m_statistics;
 		ShaderBufferStorage m_shaderBufferStorage;
 		RenderMemorizer m_memorizer;

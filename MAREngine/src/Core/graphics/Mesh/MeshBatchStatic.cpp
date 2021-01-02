@@ -124,5 +124,13 @@ namespace marengine {
 		return p_uniquePipelineID;
 	}
 
+	uint32_t FMeshBatchStatic::getTransformsSSBOindex() const {
+		return p_transformsSSBOindex;
+	}
+
+	void FMeshBatchStatic::setTransformsSSBOindex(uint32_t index) {
+		p_transformsSSBOindex = index;
+	}
+
 
 }

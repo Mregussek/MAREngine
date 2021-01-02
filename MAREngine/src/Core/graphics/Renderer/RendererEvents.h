@@ -18,43 +18,22 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDER_PIPELINE_H
-#define MAR_ENGINE_GRAPHICS_RENDER_PIPELINE_H
-
-
-#include "../../../mar.h"
+#ifndef MAR_ENGINE_F_RENDERER_EVENTS_H
+#define MAR_ENGINE_F_RENDERER_EVENTS_H
 
 
 namespace marengine {
 
-	class RenderCamera;
-	class Entity; 
 
-
-	class RenderPipeline {
-
-		friend class RenderEvents;
-
+	class FRendererEvents {
 	public:
 
-		RenderPipeline() = default;
-
-		void pushCameraToPipeline(const RenderCamera* cam);
-
-		static RenderPipeline* Instance;
-
-		// ---- GETTERS for container ---- //
-
-		const RenderCamera* getCamera() const;
-
-	private:
-
-		const RenderCamera* m_camera{ nullptr };
+		static void onDrawCall();
 
 	};
 
 
-}
+};
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDER_PIPELINE_H
 
+#endif // !MAR_ENGINE_F_RENDERER_EVENTS_H

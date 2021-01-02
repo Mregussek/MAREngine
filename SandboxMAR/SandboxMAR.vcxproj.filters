@@ -30,6 +30,5 @@
   <ItemGroup>
     <None Include="imgui.ini" />
     <None Include="desktop.ini" />
-    <None Include="resources\shaders\texture2d.frag.glsl" />
   </ItemGroup>
 </Project>

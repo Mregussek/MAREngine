@@ -26,8 +26,8 @@
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/SetupOpenGL.h"
-#include "../../../Core/events/RenderEvents.h"
 #include "../../../Core/events/ComponentEvents/EventsComponentEntity.h"
+#include "../../../Core/graphics/RenderAPI/RenderManagerEvents.h"
 
 
 namespace marengine {
@@ -149,7 +149,7 @@ namespace marengine {
 				bool useInputInCamera = false;
 				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
 				if (m_camera.update(m_aspectRatio, useInputInCamera)) {
-					RenderEvents::Instance().onMainCameraUpdate(*m_camera.getCameraData());
+					FRenderManagerEvents::onRenderCameraUpdate(m_camera.getCameraData());
 				}
 			}
 		}

@@ -34,7 +34,6 @@ namespace marengine {
 
 		m_memorizer.Instance = &m_memorizer;
 		m_statistics.Instance = &m_statistics;
-		m_renderPipeline.Instance = &m_renderPipeline;
 		m_shaderBufferStorage.Instance = &m_shaderBufferStorage;
 		m_pipelineStorage.Instance = &m_pipelineStorage;
 		m_renderManager.Instance = &m_renderManager;

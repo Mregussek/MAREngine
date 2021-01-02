@@ -43,9 +43,6 @@ namespace marengine {
 
 	private:
 
-		void setupSSBOs();
-		void setupShaders();
-
 		ShaderOpenGL m_shaderColors;
 		ShaderOpenGL m_shaderTexture2D;
 

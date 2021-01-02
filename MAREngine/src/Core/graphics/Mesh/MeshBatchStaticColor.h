@@ -42,6 +42,9 @@ namespace marengine {
 
 		const FColorsArray& getColors() const;
 
+		uint32_t getColorsSSBOindex() const;
+		void setColorsSSBOindex(uint32_t index);
+
 	protected:
 
 		void submitColorComponent(const ColorComponent& colorComponent);
@@ -49,6 +52,7 @@ namespace marengine {
 	private:
 
 		FColorsArray m_colors;
+		uint32_t m_colorsSSBOindex{ 0 };
 
 	};
 

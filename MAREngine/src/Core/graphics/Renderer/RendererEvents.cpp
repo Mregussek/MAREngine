@@ -18,43 +18,18 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDER_EVENTS_H
-#define MAR_ENGINE_GRAPHICS_RENDER_EVENTS_H
-
-
-#include "../../mar.h"
+#include "RendererEvents.h"
+#include "../RenderAPI/RenderStatistics.h"
 
 
 namespace marengine {
 
-	class RenderCamera;
 
+	void FRendererEvents::onDrawCall() {
 
-	class RenderEvents {
+		RenderStatistics::Instance->drawCallsCount++;
 
-		typedef maths::vec3 vec3;
-		typedef maths::vec4 vec4;
-		typedef maths::mat4 mat4;
-
-	public:
-
-		static const RenderEvents& Instance();
-
-		void onDrawCall() const;
-
-		void onMainCameraUpdate(const RenderCamera& camera) const;
-
-	private:
-
-		void passCameraToSSBO(const RenderCamera& camera) const;
-
-
-		static RenderEvents s_instance;
-
-	};
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_GRAPHICS_RENDER_EVENTS_H

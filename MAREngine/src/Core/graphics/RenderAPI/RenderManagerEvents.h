@@ -18,23 +18,36 @@
 **/
 
 
-#include "RenderPipeline.h"
-#include "RenderCamera.h"
-#include "../GraphicsLogs.h"
+#ifndef MAR_ENGINE_F_RENDER_MANAGER_EVENTS_H
+#define MAR_ENGINE_F_RENDER_MANAGER_EVENTS_H
 
 
 namespace marengine {
 
+	class FMeshBatchStatic;
+	class FMeshBatchStaticColor;
+	class FMeshBatchStaticTexture2D;
+	class FPointLightBatch;
+	class RenderCamera;
 
-	RenderPipeline* RenderPipeline::Instance{ nullptr };
 
-	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
+	class FRenderManagerEvents {
+	public:
 
-	void RenderPipeline::pushCameraToPipeline(const RenderCamera* cam) {
-		m_camera = cam;
+		static void onVertexIndexBuffersUpdate(const FMeshBatchStatic& meshBatch);
+		static void onTransformsUpdate(const FMeshBatchStatic& meshBatch);
+		
+		static void onColorsUpdate(const FMeshBatchStaticColor& meshColorBatch);
 
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
-	}
+		static void onRenderCameraUpdate(const RenderCamera* renderCamera);
+
+		static void onPointLightUpdate(const FPointLightBatch& pointLightBatch);
+
+	};
 
 
 }
+
+
+
+#endif // !MAR_ENGINE_F_RENDER_MANAGER_EVENTS_H
