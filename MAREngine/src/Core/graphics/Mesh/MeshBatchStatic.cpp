@@ -37,6 +37,10 @@ namespace marengine {
 		p_uniquePipelineID = 0;
 	}
 
+	bool FMeshBatchStatic::hasAnythingToDraw() const {
+		return (bool)p_meshID;
+	}
+
 	bool FMeshBatchStatic::canBeBatched(const Entity& entity) const {
 		const bool entityDoesntHaveRenderable{ !entity.hasComponent<RenderableComponent>() };
 		if (entityDoesntHaveRenderable) {

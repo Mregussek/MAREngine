@@ -61,7 +61,6 @@ namespace marengine {
 
 		m_shaderColors.shutdown();
 		m_shaderTexture2D.shutdown();
-		TextureOpenGL::Instance()->shutdown();
 
 		GRAPHICS_INFO("RENDERER_BATCH: closed!");
 	}

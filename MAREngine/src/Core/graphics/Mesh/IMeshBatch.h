@@ -37,6 +37,8 @@ namespace marengine {
 
 		virtual void reset() = 0;
 
+		virtual bool hasAnythingToDraw() const = 0;
+
 		virtual bool canBeBatched(const Entity& entity) const = 0;
 		virtual void submitToBatch(const Entity& entity) = 0;
 

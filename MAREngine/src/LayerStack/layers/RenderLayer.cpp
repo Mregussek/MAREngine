@@ -19,6 +19,7 @@
 
 
 #include "RenderLayer.h"
+#include "../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../Window/Window.h"
 
 
@@ -49,10 +50,14 @@ namespace marengine {
 		const FPointLightBatch& batchPointLight{ m_renderManager.getPointLightsBatch() };
 
 		const FMeshBatchStaticColor& batchStaticColor{ m_renderManager.getStaticColorBatch() };
-		m_renderer.draw(batchStaticColor, batchPointLight);
-
+		if (batchStaticColor.hasAnythingToDraw()) {
+			m_renderer.draw(batchStaticColor, batchPointLight);
+		}
+		
 		const FMeshBatchStaticTexture2D& batchStaticTexture2D{ m_renderManager.getStaticTexture2DBatch() };
-		m_renderer.draw(batchStaticTexture2D, batchPointLight);
+		if (batchStaticTexture2D.hasAnythingToDraw()) {
+			m_renderer.draw(batchStaticTexture2D, batchPointLight);
+		}
 
 		m_statistics.update();
 	}
@@ -60,6 +65,7 @@ namespace marengine {
 	void RenderLayer::close() {
 		LAYER_TRACE("RENDER_LAYER: {} going to close...", p_debugName);
 	
+		TextureOpenGL::Instance()->shutdown();
 		m_shaderBufferStorage.close();
 		m_pipelineStorage.close();
 

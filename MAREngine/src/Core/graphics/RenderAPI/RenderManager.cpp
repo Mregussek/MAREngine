@@ -41,6 +41,7 @@ namespace marengine {
 		m_staticColorMeshBatch.reset();
 		m_staticTexture2DMeshBatch.reset();
 		m_pointLightBatch.reset();
+		m_renderCamera = nullptr;
 	}
 
 	void FRenderManager::batchEntities(const std::vector<Entity>& entities) {
