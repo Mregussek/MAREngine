@@ -42,11 +42,11 @@ namespace marengine {
 		}
 	}
 
-	void WInfoWidget::displayInfo() {
+	void WInfoWidget::openInfoWidget() {
 		shouldInfoBeDisplayed = true;
 	}
 
-	void WInfoWidget::displayInstruction() {
+	void WInfoWidget::openInstructionWidget() {
 		shouldInstructionBeDisplayed = true;
 	}
 

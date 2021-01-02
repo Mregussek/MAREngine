@@ -23,6 +23,7 @@
 
 // Log
 #include "../../src/Debug/Log.h"
+#include "../../src/Debug/Profiler.h"
 
 // Platforms
 #include "../../src/Platform/OpenGL/SetupOpenGL.h"

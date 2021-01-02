@@ -34,6 +34,7 @@
 #include "EntityPanels/SceneHierarchyWidget.h"
 #include "OtherPanels/ThemeWidget.h"
 #include "OtherPanels/StatisticsWidget.h"
+#include "OtherPanels/WindowSettingsWidget.h"
 
 
 namespace marengine {
@@ -55,6 +56,7 @@ namespace marengine {
 		WScenePropertiesWidget sceneProperties{};
 		WThemeWidget theme{};
 		WStatisticsWidget statistics{};
+		WWindowSettingsWidget windowSettings{};
 
 	};
 

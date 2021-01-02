@@ -19,6 +19,7 @@
 
 
 #include "EditorMAR.h"
+//#include "MAREngine/src/Debug/Profiler.h"
 
 
 namespace marengine {

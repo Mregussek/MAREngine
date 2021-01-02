@@ -20,6 +20,7 @@
 
 #include "StatisticsWidget.h"
 #include "../../../mar.h"
+#include "../../../Debug/Profiler.h"
 #include "../../../Core/graphics/RenderAPI/RenderStatistics.h"
 
 
