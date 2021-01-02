@@ -36,9 +36,9 @@ namespace marengine {
 
 		m_allEvents.entityEvents.Instance = &m_allEvents.entityEvents;
 
+		m_editorManager.pushPanel(&m_allWidgets.general);
 		m_editorManager.pushPanel(&m_allWidgets.textEditor);
 		m_editorManager.pushPanel(&m_allWidgets.viewport);
-		m_editorManager.pushPanel(&m_allWidgets.general);
 		m_editorManager.pushPanel(&m_allWidgets.theme);
 
 		// push filesystem panels
@@ -60,19 +60,17 @@ namespace marengine {
 	void EditorLayer::update() {
 		LAYER_TRACE("EDITOR_LAYER: {} going to display frame...", p_debugName);
 
+		m_allWidgets.viewport.dontRenderToViewport();
+		
 		m_editorManager.update();
+
+		m_allWidgets.viewport.renderToViewport();
 	}
 
 	void EditorLayer::close() {
 		LAYER_TRACE("EDITOR_LAYER: {} going to close...", p_debugName);
 
 		m_editorManager.destroy();
-	}
-
-	void EditorLayer::renderToViewport() {
-		LAYER_TRACE("EDITOR_LAYER: {} starting rendering to viewport in Viewport Panel", p_debugName);
-
-		m_allWidgets.viewport.bind(SceneManager::Instance->getScene()->getBackground());
 	}
 
 

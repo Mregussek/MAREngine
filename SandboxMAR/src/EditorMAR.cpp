@@ -56,37 +56,33 @@ namespace marengine {
 	*/
 	void EditorMAR::runProjectOnEngine() {
 		WindowInstance<GLFWwindow> displayWindow{};
-		LayerStack stack{};
+		LayerStack layerStack{};
 
 		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
 		//auto* scene = Filesystem::openFile("DefaultProject/Scenes/DefaultProject.marscene");
 		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");
-		stack.pushLayer(&renderLayer);
+		layerStack.pushLayer(&renderLayer);
 
 		SceneLayer sceneLayer("Scene Layer");
 		sceneLayer.passSceneToManager(scene);
-		stack.pushLayer(&sceneLayer);
+		layerStack.pushLayer(&sceneLayer);
 
 		EditorLayer editorLayer("Editor Layer");
-		stack.pushOverlay(&editorLayer);
+		layerStack.pushOverlay(&editorLayer);
 
 		displayWindow.initialize(1600, 900, m_engine.getName());
 
-		stack.initialize();
+		layerStack.initialize();
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
-			SetupOpenGL::clearScreen(scene->getBackground());
 
-			editorLayer.renderToViewport();
+			layerStack.update();
 
-			stack.update();
-
-			displayWindow.swapBuffers();
 		}
 
-		stack.close();
+		layerStack.close();
 		displayWindow.terminate();
 	}
 

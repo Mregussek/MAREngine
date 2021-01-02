@@ -39,14 +39,12 @@ namespace marengine {
 		virtual void create() override;
 		virtual void destroy() override;
 
-		virtual void beginFrame() override;
+		void dontRenderToViewport() const;
+		void renderToViewport() const;
+
 		virtual void updateFrame() override;
 
-		void bind(maths::vec3 backgroundColor) const;
-
 	private:
-
-		void unbind() const;
 
 		void updateAspectRatio();
 
