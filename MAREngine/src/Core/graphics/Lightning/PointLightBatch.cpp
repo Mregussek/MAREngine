@@ -19,6 +19,7 @@
 
 
 #include "PointLightBatch.h"
+#include "../GraphicLimits.h"
 #include "../../ecs/Components/LightComponents.h"
 #include "../../ecs/Entity/Entity.h"
 
@@ -31,7 +32,10 @@ namespace marengine {
 	}
 
 	bool FPointLightBatch::canBeBatched(const Entity& entityWithLight) const {
-		if (entityWithLight.hasComponent<LightComponent>()) {
+		const auto currentLightSize{ m_lights.size() };
+		const bool thereIsPlaceInBatch{ !(currentLightSize + 1 >= GraphicLimits::maxLights) };
+
+		if (thereIsPlaceInBatch && entityWithLight.hasComponent<LightComponent>()) {
 			return true;
 		}
 		else {

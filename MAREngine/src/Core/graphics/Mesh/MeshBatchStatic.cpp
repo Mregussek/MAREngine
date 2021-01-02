@@ -19,6 +19,7 @@
 
 
 #include "MeshBatchStatic.h"
+#include "../GraphicLimits.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 
@@ -34,6 +35,29 @@ namespace marengine {
 		p_meshID = 0;
 		p_indicesMaxValue = 0;
 		p_uniquePipelineID = 0;
+	}
+
+	bool FMeshBatchStatic::canBeBatched(const Entity& entity) const {
+		const bool entityDoesntHaveRenderable{ !entity.hasComponent<RenderableComponent>() };
+		if (entityDoesntHaveRenderable) {
+			return false;
+		}
+
+		const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+		const size_t verticesToPush{ renderableComponent.vertices.size() };
+		const size_t indicesToPush{ renderableComponent.indices.size() };
+
+		const size_t currentVerticesSize{ p_vertices.size() };
+		const size_t currentIndicesSize{ p_indices.size() };
+		const size_t currentTransformSize{ p_transforms.size() };
+
+		const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
+		const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
+		const bool cannotPushTransform = (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
+		
+		const bool placeInBatchExist{ !(cannotPushVertices || cannotPushIndices || cannotPushTransform) };
+
+		return placeInBatchExist; // true if there is placed
 	}
 
 	void FMeshBatchStatic::submitToBatch(const Entity& entity) {

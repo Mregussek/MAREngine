@@ -34,11 +34,12 @@ namespace marengine {
 	}
 
 	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
-		const bool entityContainsRenderableAndColor{
-			entity.hasComponent<ColorComponent>() && entity.hasComponent<RenderableComponent>()
-		};
-
-		return entityContainsRenderableAndColor;
+		if(entity.hasComponent<ColorComponent>() && FMeshBatchStatic::canBeBatched(entity)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {

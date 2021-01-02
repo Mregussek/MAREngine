@@ -32,7 +32,8 @@ namespace marengine {
 		
 		RenderStatistics() = default;
 
-		void resetStatistics();
+		void update();
+		void reset();
 		
 		static RenderStatistics* Instance;
 
@@ -40,10 +41,11 @@ namespace marengine {
 		uint32_t drawCallsCount{ 0 };
 		uint32_t verticesCount{ 0 };
 		uint32_t indicesCount{ 0 };
-		uint32_t shapesCount{ 0 };
 		uint32_t trianglesCount{ 0 };
 		uint32_t entitiesCount{ 0 };
-		uint32_t allEntitiesCount{ 0 };
+		uint32_t coloredEntitiesCount{ 0 };
+		uint32_t textured2dEntitiesCount{ 0 };
+		uint32_t allRendererEntitiesCount{ 0 };
 
 	};
 

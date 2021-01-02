@@ -19,6 +19,9 @@
 
 
 #include "RenderStatistics.h"
+#include "RenderManager.h"
+#include "../../ecs/SceneManager.h"
+#include "../../ecs/Scene.h"
 
 
 namespace marengine {
@@ -26,14 +29,41 @@ namespace marengine {
 
 	RenderStatistics* RenderStatistics::Instance{ nullptr };
 
-	void RenderStatistics::resetStatistics() {
+	void RenderStatistics::update() {
+		verticesCount = {
+			FRenderManager::Instance->getStaticColorBatch().getVertices().size() + 
+			FRenderManager::Instance->getStaticTexture2DBatch().getVertices().size()
+		};
+		indicesCount = {
+			FRenderManager::Instance->getStaticColorBatch().getIndices().size() +
+			FRenderManager::Instance->getStaticTexture2DBatch().getIndices().size()
+		};
+		trianglesCount = {
+			indicesCount / 3
+		};
+		coloredEntitiesCount = {
+			FRenderManager::Instance->getStaticColorBatch().getTransforms().size()
+		};
+		textured2dEntitiesCount = {
+			FRenderManager::Instance->getStaticTexture2DBatch().getTransforms().size()
+		};
+		allRendererEntitiesCount = {
+			coloredEntitiesCount + textured2dEntitiesCount
+		};
+		entitiesCount = {
+			SceneManager::Instance->getScene()->getEntities().size()
+		};
+	}
+
+	void RenderStatistics::reset() {
 		drawCallsCount = 0;
-		indicesCount = 0;
-		shapesCount = 0;
 		verticesCount = 0;
+		indicesCount = 0;
 		trianglesCount = 0;
 		entitiesCount = 0;
-		allEntitiesCount = 0;
+		coloredEntitiesCount = 0;
+		textured2dEntitiesCount = 0;
+		allRendererEntitiesCount = 0;
 	}
 
 

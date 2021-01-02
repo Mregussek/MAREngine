@@ -32,7 +32,8 @@ namespace marengine {
 	public:
 
 		virtual void reset() override;
-
+		
+		virtual bool canBeBatched(const Entity& entity) const override;
 		virtual void submitToBatch(const Entity& entity) override;
 
 		virtual const FVertexArray& getVertices() const override;

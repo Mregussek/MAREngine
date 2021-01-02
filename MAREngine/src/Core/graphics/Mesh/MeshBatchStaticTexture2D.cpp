@@ -33,11 +33,12 @@ namespace marengine {
 	}
 
 	bool FMeshBatchStaticTexture2D::canBeBatched(const Entity& entity) const {
-		const bool entityContainsRenderableAndTexture2D{
-			entity.hasComponent<Texture2DComponent>() && entity.hasComponent<RenderableComponent>()
-		};
-
-		return entityContainsRenderableAndTexture2D;
+		if (entity.hasComponent<Texture2DComponent>() && FMeshBatchStatic::canBeBatched(entity)) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	void FMeshBatchStaticTexture2D::submitToBatch(const Entity& entity) {

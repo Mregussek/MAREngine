@@ -45,7 +45,7 @@ namespace marengine {
 	void RenderLayer::update() {
 		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
 
-		m_statistics.resetStatistics();
+		m_statistics.reset();
 
 		const FPointLightBatch& batchPointLight{ m_renderManager.getPointLightsBatch() };
 
@@ -54,6 +54,8 @@ namespace marengine {
 
 		const FMeshBatchStaticTexture2D& batchStaticTexture2D{ m_renderManager.getStaticTexture2DBatch() };
 		m_renderer.draw(batchStaticTexture2D, batchPointLight);
+
+		m_statistics.update();
 	}
 
 	void RenderLayer::close() {
