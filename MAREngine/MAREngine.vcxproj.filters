@@ -249,9 +249,6 @@
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\Components\EngineOnlyComponents.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>

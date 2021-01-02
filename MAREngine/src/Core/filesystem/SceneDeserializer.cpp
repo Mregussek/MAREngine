@@ -161,9 +161,9 @@ namespace marengine {
 			cam.o_far = loadFloat("CameraComponent", "o_far");
 		}
 
-		if (jsonContains("ScriptComponent")) {
-			auto& script{ entity.addComponent<ScriptComponent>() };
-			setString(script.script, "ScriptComponent", "path");
+		if (jsonContains("PythonScriptComponent")) {
+			auto& script{ entity.addComponent<PythonScriptComponent>() };
+			setString(script.script, "PythonScriptComponent", "path");
 		}
 	}
 

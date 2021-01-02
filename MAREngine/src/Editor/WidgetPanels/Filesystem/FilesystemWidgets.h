@@ -29,7 +29,6 @@
 namespace marengine {
 
 	class Scene; 
-	struct ScriptComponent;
 
 
 	class WFilesystemWidgets : public IWidgetPanel {

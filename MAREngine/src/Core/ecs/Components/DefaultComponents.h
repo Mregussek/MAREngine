@@ -30,6 +30,7 @@ namespace marengine {
 
 
 	struct TagComponent {
+
 		std::string tag{ "empty" };
 
 		TagComponent() = default;
@@ -38,11 +39,10 @@ namespace marengine {
 			: tag(std::move(t))
 		{}
 
-		operator std::string& () { return tag; }
-		operator const std::string& () const { return tag; }
 	};
 
 	struct RenderableComponent {
+
 		std::string name{ "empty" };
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
@@ -58,27 +58,10 @@ namespace marengine {
 			indices(ind)
 		{}
 
-		operator const std::string& () const { return name; }
-		operator const std::vector<Vertex>& () const { return vertices; }
-		operator const std::vector<uint32_t>& () const { return indices; }
-	};
-
-	struct CollectionRenderableComponent {
-		std::string id{ "empty" };
-		uint32_t entitiesRenderableCount{ 0 };
-
-		CollectionRenderableComponent() = default;
-		CollectionRenderableComponent(const CollectionRenderableComponent& crc) = default;
-		CollectionRenderableComponent(std::string str, uint32_t count) : 
-			id(std::move(str)),
-			entitiesRenderableCount(count)
-		{}
-
-		operator std::string& () { return id; }
-		operator const std::string& () const { return id; }
 	};
 
 	struct TransformComponent {
+
 		maths::vec3 center{ 0.f, 0.f, 0.f };
 		maths::vec3 angles{ 0.f, 0.f, 0.f };
 		maths::vec3 scale{ 1.f, 1.f, 1.f };
@@ -92,6 +75,7 @@ namespace marengine {
 		{}
 
 		maths::mat4 getTransform() const;
+
 	};
 
 

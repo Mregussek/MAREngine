@@ -61,14 +61,9 @@ namespace marengine {
 	void FEventsComponentEntity::onGameCameraSet() const {
 		Scene* scene{ SceneManager::Instance->getScene() };
 
-		auto hasMainCamera = [&scene](entt::entity entity) {
-			const auto& cam = scene->getComponent<CameraComponent>(entity);
-			return cam.checkIfMain();
-		};
-
 		auto view = scene->getView<CameraComponent>();
 		view.each([&scene](entt::entity entt_entity, CameraComponent& cameraComponent) {
-			if (cameraComponent.checkIfMain()) {
+			if (cameraComponent.isMainCamera()) {
 				const auto& transform{ scene->getComponent<TransformComponent>(entt_entity) };
 				
 				cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
@@ -85,13 +80,12 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) const {
 		const auto& transform = entity.getComponent<TransformComponent>();
-		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
 
 		//RenderEvents::Instance().onTransformMat4Update(transform, rpc);
 
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& camera{ entity.getComponent<CameraComponent>() };
-			if (camera.checkIfMain()) { 
+			if (camera.isMainCamera()) { 
 				onMainCameraUpdate(entity); 
 			}
 		}
@@ -138,7 +132,6 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const {
 		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 
 		//RenderEvents::Instance().onColorUpdate(colorComponent.texture, renderPipelineComponent);
 	}
@@ -163,8 +156,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<Texture2DComponent>(const Entity& entity) const {
 		const auto& tex2DComponent{ entity.getComponent<Texture2DComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
-		
+
 		//RenderEvents::Instance().onTex2DUpdate(tex2DComponent.texture, renderPipelineComponent);
 	}
 
@@ -199,7 +191,6 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {
 		const maths::vec3& position{ entity.getComponent<TransformComponent>().center };
 		const auto& lightComponent{ entity.getComponent<LightComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 
 		//RenderEvents::Instance().onLightUpdate(position, lightComponent, renderPipelineComponent);
 	}
@@ -215,14 +206,14 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<CameraComponent>(const Entity& entity) const {
 		const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-		if (cameraComponent.checkIfMain()) {
+		if (cameraComponent.isMainCamera()) {
 			onMainCameraUpdate(entity);
 		}
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) const {
 		const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-		if (cameraComponent.checkIfMain()) {
+		if (cameraComponent.isMainCamera()) {
 			// cannot remove main camera!
 		}
 		else {

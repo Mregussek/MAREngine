@@ -24,7 +24,7 @@
 namespace marengine {
 
 
-	bool CameraComponent::checkIfMain() const {
+	bool CameraComponent::isMainCamera() const {
 		return id.find("main") != std::string::npos;
 	}
 

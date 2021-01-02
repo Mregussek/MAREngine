@@ -48,7 +48,6 @@ namespace marengine {
 		entity.addComponent<TagComponent>();
 		entity.addComponent<TransformComponent>();
 		entity.addComponent<ChildComponent>();
-		entity.addComponent<RenderPipelineComponent>();
 	}
 
 	void Entity::destroyYourself() const {

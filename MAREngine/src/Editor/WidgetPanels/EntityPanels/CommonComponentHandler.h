@@ -28,7 +28,7 @@
 namespace marengine {
 
 	struct TagComponent; 
-	struct ScriptComponent; 
+	struct PythonScriptComponent;
 	class Entity; 
 
 
@@ -42,7 +42,7 @@ namespace marengine {
 
 	private:
 
-		static void handleScriptComponent(ScriptComponent& script);
+		static void handleScriptComponent(PythonScriptComponent& script);
 
 	};
 

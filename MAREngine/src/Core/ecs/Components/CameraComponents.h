@@ -51,7 +51,8 @@ namespace marengine {
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent& cam) = default;
 
-		bool checkIfMain() const;
+		bool isMainCamera() const;
+
 	};
 
 

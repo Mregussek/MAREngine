@@ -160,7 +160,7 @@ namespace marengine {
 		{ // pass textures 2d
 			const FTextureArray& textures{ staticTexture2DBatch.getTextures() };
 			std::for_each(textures.cbegin(), textures.cend(), [this](const TexturePair& texturePair) {
-				const auto textureID = (int32_t)TextureOpenGL::Instance()->loadTexture(texturePair.texturePath);
+				const int32_t textureID{ (int32_t)TextureOpenGL::Instance()->loadTexture(texturePair.texturePath) };
 
 				TextureOpenGL::Instance()->bind2D(texturePair.bindingIndex, textureID);
 				m_shaderTexture2D.setUniformSampler(GLSL_SSBOs::u_2D[texturePair.bindingIndex], texturePair.bindingIndex);
