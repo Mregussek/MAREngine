@@ -23,14 +23,13 @@
 #include "RenderMemorizer.h"
 #include "PipelineStorage.h"
 #include "../GraphicsLogs.h"
-#include "../GraphicLimits.h"
-#include "../RenderAPI/RenderPipeline.h"
 #include "../../events/RenderEvents.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
 
 #include "../Mesh/MeshBatchStaticColor.h"
+#include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
 
 
@@ -82,27 +81,35 @@ namespace marengine {
 	void RendererBatch::setupShaders() {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shaders...");
 
-		const char* vert = "resources/shaders/batcher.vert.glsl";
+		const char* vert = "resources/shaders/default.vert.glsl";
+
+		{
+			const char* frag = "resources/shaders/color.frag.glsl";
+			const ShaderPaths shaderPaths(vert, frag, nullptr);
+
+			m_shaderColors.initialize(shaderPaths);
+		}
 		{
 			const char* frag = "resources/shaders/texture2d.frag.glsl";
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
-			m_shader2D.initialize(shaderPaths);
-			m_shader2D.setupShaderUniforms(GLSL_SSBOs::u_2D);
+			m_shaderTexture2D.initialize(shaderPaths);
+			m_shaderTexture2D.setupShaderUniforms(GLSL_SSBOs::u_2D);
 		}
 	}
 
 	void RendererBatch::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
-		m_shader2D.shutdown();
+		m_shaderColors.shutdown();
+		m_shaderTexture2D.shutdown();
 		TextureOpenGL::Instance()->shutdown();
 
 		GRAPHICS_INFO("RENDERER_BATCH: closed!");
 	}
 
 	void RendererBatch::draw(const FMeshBatchStaticColor& staticColorBatch, const FPointLightBatch& pointLightBatch) const {
-		m_shader2D.bind();
+		m_shaderColors.bind();
 
 		{ // pass camera
 			const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
@@ -133,6 +140,43 @@ namespace marengine {
 		}
 		
 		DrawingOpenGL::drawTriangles(staticColorBatch.getIndices().size());
+		RenderEvents::Instance().onDrawCall();
+	}
+
+	void RendererBatch::draw(const FMeshBatchStaticTexture2D& staticTexture2DBatch, const FPointLightBatch& pointLightBatch) const {
+		m_shaderTexture2D.bind();
+
+		{ // pass camera
+			const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+			cameraSSBO.bind();
+		}
+		{ // pass transforms
+			const FTransformsArray& transforms{ staticTexture2DBatch.getTransforms() };
+			const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
+
+			entityShaderBuffer.bind();
+			entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+		}
+		{ // pass textures 2d
+			const FTextureArray& textures{ staticTexture2DBatch.getTextures() };
+			std::for_each(textures.cbegin(), textures.cend(), [this](const TexturePair& texturePair) {
+				const auto textureID = (int32_t)TextureOpenGL::Instance()->loadTexture(texturePair.texturePath);
+
+				TextureOpenGL::Instance()->bind2D(texturePair.bindingIndex, textureID);
+				m_shaderTexture2D.setUniformSampler(GLSL_SSBOs::u_2D[texturePair.bindingIndex], texturePair.bindingIndex);
+			});
+		}
+		{ // pass lights
+			const FPointLightsArray& pointLights{ pointLightBatch.getLights() };
+			const auto lightSize = (int32_t)pointLights.size();
+			const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
+			lightShaderBuffer.bind();
+
+			lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
+			lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
+		}
+
+		DrawingOpenGL::drawTriangles(staticTexture2DBatch.getIndices().size());
 		RenderEvents::Instance().onDrawCall();
 	}
 

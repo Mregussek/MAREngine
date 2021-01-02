@@ -25,7 +25,9 @@ layout(std430, binding = 2) buffer Material {
 	int u_lightSize;
 } material;
 
-layout(binding = 4) uniform sampler2D u_2D[32];
+layout(std430, binding = 3) buffer TextureSamplers {
+	vec4 u_Color[32];
+} samplers;
 
 vec4 setProperColor(int index);
 vec4 computeAllLights(vec4 batchColor);
@@ -39,7 +41,7 @@ void main() {
 
 vec4 setProperColor(int index) {
 	if(index <= 31) { 
-		return texture(u_2D[index], v_texCoords2D);
+		return samplers.u_Color[index];
 	} 
 	else {
 		return vec4(0.5f, 0.5f, 0.5f, 1.0f);

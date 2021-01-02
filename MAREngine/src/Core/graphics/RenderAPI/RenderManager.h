@@ -23,6 +23,7 @@
 
 
 #include "../Mesh/MeshBatchStaticColor.h"
+#include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
 
 
@@ -41,11 +42,13 @@ namespace marengine {
 		void onContainersReadyToDraw();
 
 		const FMeshBatchStaticColor& getStaticColorBatch() const;
+		const FMeshBatchStaticTexture2D& getStaticTexture2DBatch() const;
 		const FPointLightBatch& getPointLightsBatch() const;
 
 	private:
 
 		FMeshBatchStaticColor m_staticColorMeshBatch;
+		FMeshBatchStaticTexture2D m_staticTexture2DMeshBatch;
 		FPointLightBatch m_pointLightBatch;
 
 	};

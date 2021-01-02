@@ -34,6 +34,7 @@ namespace marengine {
 
 	void FRenderManager::reset() {
 		m_staticColorMeshBatch.reset();
+		m_staticTexture2DMeshBatch.reset();
 		m_pointLightBatch.reset();
 	}
 
@@ -41,6 +42,10 @@ namespace marengine {
 		for (const Entity& entity : entities) {
 			if (m_staticColorMeshBatch.canBeBatched(entity)) {
 				m_staticColorMeshBatch.submitToBatch(entity);
+			}
+
+			if (m_staticTexture2DMeshBatch.canBeBatched(entity)) {
+				m_staticTexture2DMeshBatch.submitToBatch(entity);
 			}
 
 			if (m_pointLightBatch.canBeBatched(entity)) {
@@ -54,19 +59,24 @@ namespace marengine {
 	void FRenderManager::onContainersReadyToDraw() {
 		PipelineStorage::Instance->close();
 
-		auto createPipelineStorage = [](FMeshBatchStaticColor& batch) {
+		auto createPipelineStorage = [](FMeshBatchStatic* batch) {
 			auto& pipeline = PipelineStorage::Instance->createPipeline();
 			pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
 			pipeline.bind();
-			pipeline.update(batch.getVertices(), batch.getIndices());
-			batch.setUniquePipelineID(PipelineStorage::Instance->getPipelines().size() - 1);
+			pipeline.update(batch->getVertices(), batch->getIndices());
+			batch->setUniquePipelineID(PipelineStorage::Instance->getPipelines().size() - 1);
 		};
 
-		createPipelineStorage(m_staticColorMeshBatch);
+		createPipelineStorage(&m_staticColorMeshBatch);
+		createPipelineStorage(&m_staticTexture2DMeshBatch);
 	}
 
 	const FMeshBatchStaticColor& FRenderManager::getStaticColorBatch() const {
 		return m_staticColorMeshBatch;
+	}
+
+	const FMeshBatchStaticTexture2D& FRenderManager::getStaticTexture2DBatch() const {
+		return m_staticTexture2DMeshBatch;
 	}
 
 	const FPointLightBatch& FRenderManager::getPointLightsBatch() const {

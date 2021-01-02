@@ -47,10 +47,13 @@ namespace marengine {
 
 		m_statistics.resetStatistics();
 
-		const FMeshBatchStaticColor& batchStaticColor{ m_renderManager.getStaticColorBatch() };
 		const FPointLightBatch& batchPointLight{ m_renderManager.getPointLightsBatch() };
 
+		const FMeshBatchStaticColor& batchStaticColor{ m_renderManager.getStaticColorBatch() };
 		m_renderer.draw(batchStaticColor, batchPointLight);
+
+		const FMeshBatchStaticTexture2D& batchStaticTexture2D{ m_renderManager.getStaticTexture2DBatch() };
+		m_renderer.draw(batchStaticTexture2D, batchPointLight);
 	}
 
 	void RenderLayer::close() {

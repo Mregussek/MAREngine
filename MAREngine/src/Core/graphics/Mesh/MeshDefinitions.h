@@ -30,10 +30,23 @@ namespace marengine {
 
 	constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
 
+	struct TexturePair {
+
+		TexturePair(uint32_t i, std::string str) :
+			bindingIndex(i),
+			texturePath(str)
+		{}
+
+		uint32_t bindingIndex{ 0 };
+		std::string texturePath{};
+
+	};
+
 	typedef std::vector<Vertex> FVertexArray;
 	typedef std::vector<uint32_t> FIndicesArray;
 	typedef std::vector<maths::mat4> FTransformsArray;
 	typedef std::vector<maths::vec4> FColorsArray;
+	typedef std::vector<TexturePair> FTextureArray;
 
 
 }

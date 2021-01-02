@@ -28,34 +28,26 @@
 
 namespace marengine {
 
-	struct GLSL_SSBOs; 
-	class TextureOpenGL;
-	class RenderPipeline;
-	class RenderContainer;
-	class LightContainer;
-	struct LightMaterial;
-
 	class FMeshBatchStaticColor;
+	class FMeshBatchStaticTexture2D;
 	class FPointLightBatch;
 
 
 	class RendererBatch {
-
-		typedef ShaderOpenGL ShaderGL;
-		typedef TextureOpenGL TextureGL;
-
 	public:
 
 		void initialize();
 		void close();
 		void draw(const FMeshBatchStaticColor& staticColorBatch, const FPointLightBatch& pointLightBatch) const;
+		void draw(const FMeshBatchStaticTexture2D& staticTexture2DBatch, const FPointLightBatch& pointLightBatch) const;
 
 	private:
 
 		void setupSSBOs();
 		void setupShaders();
 
-		ShaderOpenGL m_shader2D;
+		ShaderOpenGL m_shaderColors;
+		ShaderOpenGL m_shaderTexture2D;
 
 	};
 

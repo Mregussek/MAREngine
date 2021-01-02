@@ -18,21 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_I_MESH_BATCH_STATIC_H
-#define MAR_ENGINE_I_MESH_BATCH_STATIC_H
+#ifndef MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE_2D_H
+#define MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE_2D_H
 
 
-#include "IMeshBatch.h"
+#include "MeshBatchStatic.h"
 
 
 namespace marengine {
 
+	struct Texture2DComponent;
 
-	class IMeshBatchStatic : public IMeshBatch { };
+
+	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
+	public:
+
+		virtual void reset() override;
+
+		virtual bool canBeBatched(const Entity& entity) const override;
+		virtual void submitToBatch(const Entity& entity) override;
+
+		const FTextureArray& getTextures() const;
+
+	protected:
+
+		void submitTexture2DComponent(uint32_t bindingIndex, const Texture2DComponent& texture2dComponent);
+
+	private:
+
+		FTextureArray m_textures;
+
+	};
 
 
 }
 
 
-
-#endif // !MAR_ENGINE_I_STATIC_MESH_BATCH_H
+#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE_2D_H

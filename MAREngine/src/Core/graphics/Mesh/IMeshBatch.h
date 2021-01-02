@@ -44,6 +44,9 @@ namespace marengine {
 		virtual const FIndicesArray& getIndices() const = 0;
 		virtual const FTransformsArray& getTransforms() const = 0;
 
+		virtual uint32_t getUniquePipelineID() const = 0;
+		virtual void setUniquePipelineID(uint32_t id) = 0;
+
 	protected:
 
 		virtual void submitRenderableComponent(const RenderableComponent& renderableComponent) = 0;

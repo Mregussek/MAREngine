@@ -18,7 +18,7 @@
 **/
 
 
-#include "MeshBatchStaticColor.h"
+#include "MeshBatchStaticTexture2D.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 
@@ -26,34 +26,33 @@
 namespace marengine {
 
 
-
-	void FMeshBatchStaticColor::reset() {
+	void FMeshBatchStaticTexture2D::reset() {
 		FMeshBatchStatic::reset();
 
-		m_colors.clear();
+		m_textures.clear();
 	}
 
-	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
-		const bool entityContainsRenderableAndColor{
-			entity.hasComponent<ColorComponent>() && entity.hasComponent<RenderableComponent>()
+	bool FMeshBatchStaticTexture2D::canBeBatched(const Entity& entity) const {
+		const bool entityContainsRenderableAndTexture2D{
+			entity.hasComponent<Texture2DComponent>() && entity.hasComponent<RenderableComponent>()
 		};
 
-		return entityContainsRenderableAndColor;
+		return entityContainsRenderableAndTexture2D;
 	}
 
-	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
+	void FMeshBatchStaticTexture2D::submitToBatch(const Entity& entity) {
 		FMeshBatchStatic::submitToBatch(entity);
 
-		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		submitColorComponent(colorComponent);
+		const auto& texture2dComponent{ entity.getComponent<Texture2DComponent>() };
+		submitTexture2DComponent((uint32_t)(p_meshID - 1.f), texture2dComponent);
 	}
 
-	void FMeshBatchStaticColor::submitColorComponent(const ColorComponent& colorComponent) {
-		m_colors.emplace_back(colorComponent.texture);
+	void FMeshBatchStaticTexture2D::submitTexture2DComponent(uint32_t bindingIndex, const Texture2DComponent& texture2dComponent) {
+		m_textures.emplace_back(bindingIndex, texture2dComponent.texture);
 	}
 
-	const FColorsArray& FMeshBatchStaticColor::getColors() const {
-		return m_colors;
+	const FTextureArray& FMeshBatchStaticTexture2D::getTextures() const {
+		return m_textures;
 	}
 
 

@@ -162,6 +162,7 @@
   <ItemGroup>
     <None Include="desktop.ini" />
     <None Include="imgui.ini" />
+    <None Include="resources\shaders\texture2d.frag.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
