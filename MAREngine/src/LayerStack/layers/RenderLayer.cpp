@@ -43,8 +43,6 @@ namespace marengine {
 	}
 
 	void RenderLayer::update() {
-		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
-
 		m_statistics.reset();
 
 		const FPointLightBatch& batchPointLight{ m_renderManager.getPointLightsBatch() };

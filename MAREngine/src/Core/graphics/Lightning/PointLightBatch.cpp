@@ -20,6 +20,7 @@
 
 #include "PointLightBatch.h"
 #include "../GraphicLimits.h"
+#include "../GraphicsLogs.h"
 #include "../../ecs/Components/LightComponents.h"
 #include "../../ecs/Entity/Entity.h"
 

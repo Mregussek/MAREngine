@@ -47,8 +47,6 @@ namespace marengine {
 	}
 
 	void SceneLayer::update() {
-		LAYER_TRACE("SCENE_LAYER: {} going to update...", p_debugName);
-
 		m_sceneManager.update();
 	}
 

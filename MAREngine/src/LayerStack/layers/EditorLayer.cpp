@@ -58,8 +58,6 @@ namespace marengine {
 	}
 
 	void EditorLayer::update() {
-		LAYER_TRACE("EDITOR_LAYER: {} going to display frame...", p_debugName);
-
 		m_allWidgets.viewport.dontRenderToViewport();
 		
 		m_editorManager.update();
