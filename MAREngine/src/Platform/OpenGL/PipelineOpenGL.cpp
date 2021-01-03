@@ -142,11 +142,11 @@ namespace marengine {
 			VertexBufferElement{ GL_FLOAT, 3, GL_FALSE },
 			VertexBufferElement{ GL_FLOAT, 3, GL_FALSE },
 			VertexBufferElement{ GL_FLOAT, 2, GL_FALSE },
-			VertexBufferElement{ GL_FLOAT, 1, GL_FALSE }
+			VertexBufferElement{ GL_UNSIGNED_INT, 1, GL_FALSE }
 		};
 		constexpr uint32_t stride{
 			3 * sizeof(GL_FLOAT) + 3 * sizeof(GL_FLOAT) +
-			2 * sizeof(GL_FLOAT) + 1 * sizeof(GL_FLOAT)
+			2 * sizeof(GL_FLOAT) + 1 * sizeof(GL_UNSIGNED_INT)
 		};
 
 		uint32_t offset = 0;

@@ -63,7 +63,7 @@ namespace marengine {
 		FIndicesArray p_indices;
 		FTransformsArray p_transforms;
 
-		float p_meshID{ 0.f };
+		uint32_t p_meshID{ 0 };
 		uint32_t p_indicesMaxValue{ 0 };
 		uint32_t p_uniquePipelineID{ 0 };
 		uint32_t p_transformsSSBOindex{ 0 };

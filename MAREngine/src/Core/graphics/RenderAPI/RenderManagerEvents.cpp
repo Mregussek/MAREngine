@@ -117,7 +117,7 @@ namespace marengine {
 		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		transformsSSBO.bind();
 		transformsSSBO.update<float>(offset, sizeof(maths::mat4), pPtrToTransform);
-
+		
 		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onTransformAtMeshUpdate, entity {}, uniqueTransformsSSBO index = {}, meshBatchComponent.transformIndex = {}", 
 			entity.getComponent<TagComponent>().tag, uniqueID, meshBatchComponent.transformIndex);
 	}
