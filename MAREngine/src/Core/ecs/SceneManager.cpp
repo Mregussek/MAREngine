@@ -21,7 +21,7 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "Scene.h"
-#include "../events/ComponentEvents/EventsComponentEntity.h"
+#include "Entity/EventsComponentEntity.h"
 #include "../graphics/RenderAPI/RenderManager.h"
 
 
@@ -32,7 +32,7 @@ namespace marengine {
 
 
 	void SceneManager::initialize() const {
-		ECS_TRACE("SCENE_MANAGER: going to initialize!");
+		ECS_TRACE("SCENE_MANAGER: initializing...");
 
 		const auto& entitiesVector = m_scene->getEntities();
 

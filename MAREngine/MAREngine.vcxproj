@@ -223,9 +223,8 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
     <ClInclude Include="src\Core\events\AllEvents.h" />
-    <ClInclude Include="src\Core\events\AllEventsScene.h" />
-    <ClInclude Include="src\Core\events\ComponentEvents\EventsComponentEntity.h" />
-    <ClInclude Include="src\Core\events\EntityEvents\IEntityEvents.h" />
+    <ClInclude Include="src\Core\ecs\Entity\EventsComponentEntity.h" />
+    <ClInclude Include="src\Core\ecs\Entity\IEntityEvents.h" />
     <ClInclude Include="src\Core\filesystem\FilesystemLogging.h" />
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h" />
     <ClInclude Include="src\Core\filesystem\SceneSerializer.h" />
@@ -404,7 +403,7 @@
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
     <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />
     <ClCompile Include="src\Editor\EditorManager.cpp" />
-    <ClCompile Include="src\Core\events\ComponentEvents\EventsComponentEntity.cpp" />
+    <ClCompile Include="src\Core\ecs\Entity\EventsComponentEntity.cpp" />
     <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.cpp" />

@@ -22,8 +22,8 @@
 #define MAR_ENGINE_T_EVENTS_COMPONENT_ENTITY_H
 
 
-#include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
+#include "Entity.h"
+#include "../Components/Components.h"
 
 
 namespace marengine {

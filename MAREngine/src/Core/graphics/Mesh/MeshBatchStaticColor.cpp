@@ -56,7 +56,7 @@ namespace marengine {
 		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
 		meshBatchComponent.materialIndex = m_colors.size() - 1;
 
-		GRAPHICS_INFO("F_MESH_BATCH_STATIC_COLOR: submitted to batch entity {}, meshBatchComponent.materialIndex = {}",
+		GRAPHICS_DEBUG("F_MESH_BATCH_STATIC_COLOR: submitted to batch entity {}, meshBatchComponent.materialIndex = {}",
 			entity.getComponent<TagComponent>().tag, meshBatchComponent.materialIndex);
 	}
 
@@ -65,7 +65,7 @@ namespace marengine {
 
 		m_colors.emplace_back(colorComponent.texture);
 
-		GRAPHICS_INFO("F_MESH_BATCH_STATIC_COLOR: submitted color component, current colors size = {}", m_colors.size());
+		GRAPHICS_DEBUG("F_MESH_BATCH_STATIC_COLOR: submitted color component, current colors size = {}", m_colors.size());
 	}
 
 	const FColorsArray& FMeshBatchStaticColor::getColors() const {

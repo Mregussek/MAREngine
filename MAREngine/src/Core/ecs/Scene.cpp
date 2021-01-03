@@ -32,10 +32,12 @@ namespace marengine {
 	{
 		m_sceneRegistry = SceneRegistry();
 
-		ECS_INFO("SCENE: scene is created, with entt::registry! (called constructor)");
+		ECS_INFO("SCENE: scene {} is created, with entt::registry! (called constructor)", m_name);
 	}
 
 	void Scene::shutdown() {
+		ECS_TRACE("SCENE: closing scene {}...", m_name);
+
 		std::for_each(m_container.m_entities.begin(), m_container.m_entities.end(), [this](const Entity& entity) {
 			destroyEntity(entity);
 		});
@@ -76,7 +78,7 @@ namespace marengine {
 		const Entity& entity{ m_container.m_entities.emplace_back(&m_sceneRegistry) };
 		Entity::fillEntityWithBasicComponents(entity);
 
-		ECS_INFO("SCENE: created entity {} at scene {}!", entity.m_entityHandle, m_name);
+		ECS_DEBUG("SCENE: created entity {} at scene {}, current entities size = {}!", entity.m_entityHandle, m_name, m_container.m_entities.size());
 
 		return entity;
 	}
@@ -85,10 +87,10 @@ namespace marengine {
 		ECS_TRACE("SCENE: trying to destroy entity {} at scene {}...", entity.m_entityHandle, m_name);
 
 		auto it = std::find_if(m_container.m_entities.begin(), m_container.m_entities.end(), [&entity](const Entity& iterator) {
-			return 	(iterator.m_entityHandle == entity.m_entityHandle);
+			return 	iterator.m_entityHandle == entity.m_entityHandle && iterator.m_sceneRegistry == entity.m_sceneRegistry && entity.isValid();
 		});
 
-		const bool canDestroyEntity{ it != m_container.m_entities.end() && (*it).isValid() };
+		const bool canDestroyEntity{ it != m_container.m_entities.end() };
 
 		if (canDestroyEntity) {
 			ECS_TRACE("SCENE: destroying entity {} at scene {}...", entity.m_entityHandle, m_name);

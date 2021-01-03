@@ -170,22 +170,33 @@ namespace marengine {
 	}
 
 	void FRenderManager::fillBuffers() {
+		GRAPHICS_TRACE("F_RENDER_MANAGER: filling buffers...");
+
 		if (m_staticColorMeshBatch.hasAnythingToDraw()) {
+			GRAPHICS_TRACE("F_RENDER_MANAGER: static color mesh batch has something to draw, filling buffers...");
+
 			FRenderManagerEvents::onVertexIndexBuffersUpdate(m_staticColorMeshBatch);
 			FRenderManagerEvents::onTransformsUpdate(m_staticColorMeshBatch);
 			FRenderManagerEvents::onColorsUpdate(m_staticColorMeshBatch);
 		}
 		if (m_staticTexture2DMeshBatch.hasAnythingToDraw()) {
+			GRAPHICS_TRACE("F_RENDER_MANAGER: static texture2D mesh batch has something to draw, filling buffers...");
+
 			FRenderManagerEvents::onVertexIndexBuffersUpdate(m_staticTexture2DMeshBatch);
 			FRenderManagerEvents::onTransformsUpdate(m_staticTexture2DMeshBatch);
 			// TODO: should add texture loading
 		}
-		{ // fill point light batch
+		if(m_pointLightBatch.hasAnythingToDraw()) {
+			GRAPHICS_TRACE("F_RENDER_MANAGER: point lights batch has something to draw, filling buffers...");
+
 			FRenderManagerEvents::onPointLightUpdate(m_pointLightBatch);
 		}
 		{ // fill camera ssbo
+			GRAPHICS_TRACE("F_RENDER_MANAGER: filling camera ssbo buffer...");
 			FRenderManagerEvents::onRenderCameraUpdate(m_renderCamera);
 		}
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER: filled buffers!");
 	}
 
 	uint32_t FRenderManager::createVertexIndexBuffers() const {

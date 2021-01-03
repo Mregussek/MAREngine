@@ -38,6 +38,8 @@ namespace marengine {
 
 		void reset();
 
+		bool hasAnythingToDraw() const;
+
 		bool canBeBatched(const Entity& entityWithLight) const;
 		void submitEntityWithLightning(const Entity& entity);
 

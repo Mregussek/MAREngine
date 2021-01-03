@@ -32,6 +32,10 @@ namespace marengine {
 		m_lights.clear();
 	}
 
+	bool FPointLightBatch::hasAnythingToDraw() const {
+		return !m_lights.empty();
+	}
+
 	bool FPointLightBatch::canBeBatched(const Entity& entityWithLight) const {
 		const auto currentLightSize{ m_lights.size() };
 		const bool thereIsPlaceInBatch{ !(currentLightSize + 1 >= GraphicLimits::maxLights) };
@@ -45,6 +49,8 @@ namespace marengine {
 	}
 
 	void FPointLightBatch::submitEntityWithLightning(const Entity& entity) {
+		GRAPHICS_TRACE("F_POINT_LIGHT_BATCH: submitting {} entity with point light...", entity.getComponent<TagComponent>().tag);
+
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		const auto& lightComponent{ entity.getComponent<LightComponent>() };
 
@@ -60,6 +66,10 @@ namespace marengine {
 
 		auto& lightBatchComponent{ entity.getComponent<LightBatchComponent>() };
 		lightBatchComponent.pointLightIndex = m_lights.size() - 1;
+
+		GRAPHICS_DEBUG("F_POINT_LIGHT_BATCH: submitted {} entity with pointLight, current lights size = {},"
+			"assigned lightBatchComponent.pointLightIndex {}",
+			entity.getComponent<TagComponent>().tag, m_lights.size(), lightBatchComponent.pointLightIndex);
 	}
 
 	const FPointLightsArray& FPointLightBatch::getLights() const {

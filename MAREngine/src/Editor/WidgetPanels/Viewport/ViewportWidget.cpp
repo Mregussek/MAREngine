@@ -26,7 +26,7 @@
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/SetupOpenGL.h"
-#include "../../../Core/events/ComponentEvents/EventsComponentEntity.h"
+#include "../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../../Core/graphics/RenderAPI/RenderManagerEvents.h"
 
 
