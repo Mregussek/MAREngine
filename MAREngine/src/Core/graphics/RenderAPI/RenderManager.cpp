@@ -164,33 +164,33 @@ namespace marengine {
 	}
 
 	uint32_t FRenderManager::createTransformsSSBO() const {
-		const std::vector<UniformItem> transformItems{ GLSL_SSBOs::ut_u_SeparateTransform };
+		const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
 		ShaderBufferStorageOpenGL& transformsSSBO{ ShaderBufferStorage::Instance->createShaderBufferStorage() };
-		transformsSSBO.initialize(GLSL_SSBOs::ub_EntityCmp, transformItems);
+		transformsSSBO.initialize(GLSLShaderInfo::TransformSSBO, transformItems);
 
 		return ShaderBufferStorage::Instance->getSSBOs().size() - 1;
 	}
 
 	uint32_t FRenderManager::createColorSSBO() const {
-		const std::vector<UniformItem> colorsItems{ GLSL_SSBOs::ut_u_Color };
+		const std::vector<UniformItem> colorsItems{ GLSLShaderInfo::Colors };
 		ShaderBufferStorageOpenGL& colorsSSBO{ ShaderBufferStorage::Instance->createShaderBufferStorage() };
-		colorsSSBO.initialize(GLSL_SSBOs::ub_TextureSamplers, colorsItems);
+		colorsSSBO.initialize(GLSLShaderInfo::ColorsSSBO, colorsItems);
 
 		return ShaderBufferStorage::Instance->getSSBOs().size() - 1;
 	}
 
 	uint32_t FRenderManager::createPointLightSSBO() const {
-		const std::vector<UniformItem> pointLightItems{ GLSL_SSBOs::ut_u_material, GLSL_SSBOs::ut_u_lightSize };
+		const std::vector<UniformItem> pointLightItems{ GLSLShaderInfo::LightMaterial, GLSLShaderInfo::LightMaterialSize };
 		ShaderBufferStorageOpenGL& pointLightSSBO{ ShaderBufferStorage::Instance->createShaderBufferStorage() };
-		pointLightSSBO.initialize(GLSL_SSBOs::ub_Material, pointLightItems);
+		pointLightSSBO.initialize(GLSLShaderInfo::PointLightSSBO, pointLightItems);
 
 		return ShaderBufferStorage::Instance->getSSBOs().size() - 1;
 	}
 
 	uint32_t FRenderManager::createCameraSSBO() const {
-		const std::vector<UniformItem> cameraItems{ GLSL_SSBOs::ut_u_MVP };
+		const std::vector<UniformItem> cameraItems{ GLSLShaderInfo::MVP };
 		ShaderBufferStorageOpenGL& cameraSSBO{ ShaderBufferStorage::Instance->createShaderBufferStorage() };
-		cameraSSBO.initialize(GLSL_SSBOs::ub_Camera, cameraItems);
+		cameraSSBO.initialize(GLSLShaderInfo::CameraSSBO, cameraItems);
 
 		return ShaderBufferStorage::Instance->getSSBOs().size() - 1;
 	}

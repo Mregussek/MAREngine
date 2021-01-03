@@ -44,21 +44,21 @@ namespace marengine {
 		const FTransformsArray& transforms{ meshBatch.getTransforms() };
 		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshBatch.getTransformsSSBOindex()) };
 		transformsSSBO.bind();
-		transformsSSBO.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+		transformsSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
 	}
 
 	void FRenderManagerEvents::onColorsUpdate(const FMeshBatchStaticColor& meshColorBatch) {
 		const FColorsArray& colors{ meshColorBatch.getColors() };
 		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshColorBatch.getColorsSSBOindex()) };
 		colorsSSBO.bind();
-		colorsSSBO.update<float>(GLSL_SSBOs::ut_u_Color.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
+		colorsSSBO.update<float>(GLSLShaderInfo::Colors.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
 	}
 
 	void FRenderManagerEvents::onRenderCameraUpdate(const RenderCamera* renderCamera) {
 		const auto& cameraMVP{ renderCamera->getMVP() };
 		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 		cameraSSBO.bind();
-		cameraSSBO.update<float>(GLSL_SSBOs::ut_u_MVP.offset, sizeof(maths::mat4), maths::mat4::value_ptr(cameraMVP));
+		cameraSSBO.update<float>(GLSLShaderInfo::MVP.offset, sizeof(maths::mat4), maths::mat4::value_ptr(cameraMVP));
 	}
 
 	void FRenderManagerEvents::onPointLightUpdate(const FPointLightBatch& pointLightBatch) {
@@ -66,8 +66,8 @@ namespace marengine {
 		const int32_t lightSize{ (int32_t)pointLights.size() };
 		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(pointLightBatch.getPointLightSSBOindex()) };
 		pointLightSSBO.bind();
-		pointLightSSBO.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
-		pointLightSSBO.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
+		pointLightSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
+		pointLightSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
 	}
 
 	void FRenderManagerEvents::onTransformAtMeshUpdate(const Entity& entity) {
@@ -77,7 +77,7 @@ namespace marengine {
 
 		instanceAtAssignedMesh = transformComponent.getTransform();
 
-		const uint32_t offset{ GLSL_SSBOs::ut_u_SeparateTransform.offset + meshBatchComponent.transformIndex };
+		const uint32_t offset{ GLSLShaderInfo::Transform.offset + meshBatchComponent.transformIndex };
 		const float* pPointerToInstance{ maths::mat4::value_ptr(instanceAtAssignedMesh) };
 
 		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshBatchComponent.assignedMesh->getTransformsSSBOindex()) };
@@ -94,7 +94,7 @@ namespace marengine {
 
 		instanceAtAssignedMesh = colorComponent.texture;
 
-		const uint32_t offset{ GLSL_SSBOs::ut_u_Color.offset + meshBatchComponent.materialIndex };
+		const uint32_t offset{ GLSLShaderInfo::Colors.offset + meshBatchComponent.materialIndex };
 		const float* pPointerToInstance{ maths::vec4::value_ptr(instanceAtAssignedMesh) };
 
 		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshColorBatch->getColorsSSBOindex()) };
@@ -128,7 +128,7 @@ namespace marengine {
 		lightInstanceAtBatch.constant = pointLightComponent.constant;
 		lightInstanceAtBatch.shininess = pointLightComponent.shininess;
 
-		const uint32_t offset{ GLSL_SSBOs::ut_u_material.offset + lightBatchComponent.pointLightIndex };
+		const uint32_t offset{ GLSLShaderInfo::LightMaterial.offset + lightBatchComponent.pointLightIndex };
 
 		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(FRenderManager::Instance->m_pointLightBatch.getPointLightSSBOindex()) };
 		pointLightSSBO.bind();

@@ -12,19 +12,19 @@ layout(location = 2) out vec2 v_texCoords2D;
 layout(location = 4) out flat int v_shapeIndex;
 
 
-layout(std430, binding = 0) buffer Camera {
-	mat4 u_MVP;
-} CameraUniforms;
+layout(std430, binding = 0) buffer CameraSSBO {
+	mat4 MVP;
+} Camera;
 
-layout(std430, binding = 1) buffer EntityCmp {
-	mat4 u_SeparateTransform[64];
-} components;
+layout(std430, binding = 1) buffer TransformSSBO {
+	mat4 Transform[64];
+} Transforms;
 
 void main() {
 	// Calculate all transformations
 	int index = int(shapeIndex);
-	vec4 vertexComputed = components.u_SeparateTransform[index] * vec4(position, 1.f);
-	gl_Position = CameraUniforms.u_MVP * vertexComputed;
+	vec4 vertexComputed = Transforms.Transform[index] * vec4(position, 1.f);
+	gl_Position = Camera.MVP * vertexComputed;
 
 	// Pass values to fragment shader
 	v_Position = vertexComputed.xyz;

@@ -52,7 +52,7 @@ namespace marengine {
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
 			m_shaderTexture2D.initialize(shaderPaths);
-			m_shaderTexture2D.setupShaderUniforms(GLSL_SSBOs::u_2D);
+			m_shaderTexture2D.setupShaderUniforms(GLSLShaderInfo::samplerTexture2DArray);
 		}
 	}
 
@@ -108,7 +108,7 @@ namespace marengine {
 				const int32_t textureID{ (int32_t)TextureOpenGL::Instance()->loadTexture(texturePair.texturePath) };
 
 				TextureOpenGL::Instance()->bind2D(texturePair.bindingIndex, textureID);
-				m_shaderTexture2D.setUniformSampler(GLSL_SSBOs::u_2D[texturePair.bindingIndex], texturePair.bindingIndex);
+				m_shaderTexture2D.setUniformSampler(GLSLShaderInfo::samplerTexture2DArray[texturePair.bindingIndex], texturePair.bindingIndex);
 			});
 		}
 

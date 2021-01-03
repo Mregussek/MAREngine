@@ -20,30 +20,20 @@ struct LightMaterial {
 	float shininess;							// 1 * 4 = 4		offset = 64
 }; 
 
-layout(std430, binding = 2) buffer Material {
-	LightMaterial u_material[32];
-	int u_lightSize;
-} material;
+layout(std430, binding = 2) buffer PointLightSSBO {
+	LightMaterial LightMaterial[32];
+	int LightMaterialSize;
+} PointLigts;
 
-layout(binding = 4) uniform sampler2D u_2D[32];
+layout(binding = 4) uniform sampler2D samplerTexture2D[32];
 
-vec4 setProperColor(int index);
 vec4 computeAllLights(vec4 batchColor);
 
 void main() {
-	vec4 batchColor = setProperColor(v_shapeIndex);
+	vec4 batchColor = texture(samplerTexture2D[v_shapeIndex], v_texCoords2D);
 	vec4 lightColor = computeAllLights(batchColor);
 
 	outColor = batchColor * lightColor;
-}
-
-vec4 setProperColor(int index) {
-	if(index <= 31) { 
-		return texture(u_2D[index], v_texCoords2D);
-	} 
-	else {
-		return vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	}
 }
 
 vec4 calculateLight(LightMaterial lightMaterial, vec3 batchedColor) {
@@ -71,11 +61,11 @@ vec4 calculateLight(LightMaterial lightMaterial, vec3 batchedColor) {
 }
 
 vec4 computeAllLights(vec4 batchColor) {
-	vec4 lightColor = calculateLight(material.u_material[0], batchColor.xyz);
+	vec4 lightColor = calculateLight(PointLigts.LightMaterial[0], batchColor.xyz);
 
 	for (int i = 1; i < 32; i++) {
-		if (i >= material.u_lightSize) break;
-		lightColor += calculateLight(material.u_material[i], batchColor.xyz);
+		if (i >= PointLigts.LightMaterialSize) break;
+		lightColor += calculateLight(PointLigts.LightMaterial[i], batchColor.xyz);
 	}
 
 	return lightColor;
