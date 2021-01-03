@@ -19,6 +19,7 @@
 
 
 #include "ShaderBufferStorage.h"
+#include "../GraphicsLogs.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
 
 
@@ -29,10 +30,14 @@ namespace marengine {
 
 
 	ShaderBufferStorageOpenGL& ShaderBufferStorage::createShaderBufferStorage() {
+		GRAPHICS_TRACE("SHADER_BUFFER_STORAGE: creating SSBO at index {}..., currentSSBOsize = {}", m_shaderBuffers.size(), m_shaderBuffers.size() + 1);
+
 		return m_shaderBuffers.emplace_back();
 	}
 
 	UniformBufferOpenGL& ShaderBufferStorage::createUniformBufferObject() {
+		GRAPHICS_TRACE("SHADER_BUFFER_STORAGE: creating UBO at index {}..., currentUBOsize = {}", m_uniformBuffers.size(), m_uniformBuffers.size() + 1);
+
 		return m_uniformBuffers.emplace_back();
 	}
 
@@ -57,14 +62,20 @@ namespace marengine {
 	}
 
 	ShaderBufferStorageOpenGL& ShaderBufferStorage::getSSBO(uint32_t index) {
+		GRAPHICS_TRACE("SHADER_BUFFER_STORAGE: returning SSBO at index = {}...", index);
+
 		return m_shaderBuffers.at(index);
 	}
 
 	UniformBufferOpenGL& ShaderBufferStorage::getUBO(uint32_t index) {
+		GRAPHICS_TRACE("SHADER_BUFFER_STORAGE: returning UBO at index = {}...", index);
+
 		return m_uniformBuffers.at(index);
 	}
 
 	void ShaderBufferStorage::close() {
+		GRAPHICS_TRACE("SHADER_BUFFER_STORAGE: closing...");
+
 		std::for_each(m_shaderBuffers.begin(), m_shaderBuffers.end(), [](ShaderBufferStorageOpenGL& shaderBuffer) {
 			shaderBuffer.close();
 		});
@@ -75,6 +86,8 @@ namespace marengine {
 
 		m_shaderBuffers.clear();
 		m_uniformBuffers.clear();
+
+		GRAPHICS_INFO("SHADER_BUFFER_STORAGE: closed!");
 	}
 
 

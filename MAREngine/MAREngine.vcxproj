@@ -271,7 +271,7 @@
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
     <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
-    <ClInclude Include="src\Core\graphics\GraphicLimits.h" />
+    <ClInclude Include="src\Core\graphics\GraphicsLimits.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticTexture2D.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshDefinitions.h" />

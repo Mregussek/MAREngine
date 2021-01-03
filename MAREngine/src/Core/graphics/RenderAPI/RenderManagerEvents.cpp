@@ -22,6 +22,7 @@
 #include "RenderCamera.h"
 #include "RenderManager.h"
 #include "RenderMemorizer.h"
+#include "../GraphicsLogs.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
@@ -35,12 +36,16 @@ namespace marengine {
 
 
 	void FRenderManagerEvents::onVertexIndexBuffersUpdate(const FMeshBatchStatic& meshBatch) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onVertexIndexBuffersUpdate");
+
 		const auto& pipeline{ PipelineStorage::Instance->getPipeline(meshBatch.getUniquePipelineID()) };
 		pipeline.bind();
 		pipeline.update(meshBatch.getVertices(), meshBatch.getIndices());
 	}
 
 	void FRenderManagerEvents::onTransformsUpdate(const FMeshBatchStatic& meshBatch) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onTransformsUpdate");
+
 		const FTransformsArray& transforms{ meshBatch.getTransforms() };
 		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshBatch.getTransformsSSBOindex()) };
 		transformsSSBO.bind();
@@ -48,6 +53,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onColorsUpdate(const FMeshBatchStaticColor& meshColorBatch) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onColorsUpdate");
+
 		const FColorsArray& colors{ meshColorBatch.getColors() };
 		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshColorBatch.getColorsSSBOindex()) };
 		colorsSSBO.bind();
@@ -55,6 +62,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onRenderCameraUpdate(const RenderCamera* renderCamera) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onRenderCameraUpdate");
+
 		const auto& cameraMVP{ renderCamera->getMVP() };
 		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 		cameraSSBO.bind();
@@ -62,6 +71,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onPointLightUpdate(const FPointLightBatch& pointLightBatch) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onPointLightUpdate");
+
 		const FPointLightsArray& pointLights{ pointLightBatch.getLights() };
 		const int32_t lightSize{ (int32_t)pointLights.size() };
 		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(pointLightBatch.getPointLightSSBOindex()) };
@@ -71,6 +82,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onTransformAtMeshUpdate(const Entity& entity) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onTransformAtMeshUpdate, updated {} entity", entity.getComponent<TagComponent>().tag);
+
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		const auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
 		maths::mat4& instanceAtAssignedMesh{ meshBatchComponent.assignedMesh->p_transforms[meshBatchComponent.transformIndex] };
@@ -86,6 +99,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onColorAtMeshUpdate(const Entity& entity) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onColorAtMeshUpdate, updated {} entity", entity.getComponent<TagComponent>().tag);
+
 		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
 		const auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
 
@@ -103,6 +118,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onTexture2DatMeshUpdate(const Entity& entity) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onTexture2DatMeshUpdate, updated {} entity", entity.getComponent<TagComponent>().tag);
+
 		const auto& texture2DComponent{ entity.getComponent<Texture2DComponent>() };
 		const auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
 
@@ -113,6 +130,8 @@ namespace marengine {
 	}
 
 	void FRenderManagerEvents::onPointLightAtBatchUpdate(const Entity& entity) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onPointLightAtBatchUpdate, updated {} entity", entity.getComponent<TagComponent>().tag);
+
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		const auto& pointLightComponent{ entity.getComponent<LightComponent>() };
 		const auto& lightBatchComponent{ entity.getComponent<LightBatchComponent>() };

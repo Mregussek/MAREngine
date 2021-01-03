@@ -19,7 +19,8 @@
 
 
 #include "MeshBatchStatic.h"
-#include "../GraphicLimits.h"
+#include "../GraphicsLogs.h"
+#include "../GraphicsLimits.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 
@@ -65,6 +66,8 @@ namespace marengine {
 	}
 
 	void FMeshBatchStatic::submitToBatch(const Entity& entity) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitting to batch entity {}...", entity.getComponent<TagComponent>().tag);
+
 		const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
 		submitRenderableComponent(renderableComponent);
 
@@ -72,18 +75,28 @@ namespace marengine {
 		submitTransformComponent(transformComponent);
 
 		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
+		meshBatchComponent.transformIndex = p_transforms.size() - 1;
 		meshBatchComponent.assignedMesh = this;
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted to batch entity {}, meshBatchComponent.transformIndex = {}", 
+			entity.getComponent<TagComponent>().tag, meshBatchComponent.transformIndex);
 	}
 
 	void FMeshBatchStatic::submitRenderableComponent(const RenderableComponent& renderableComponent) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitting renderable component...");
+
 		submitVertices(renderableComponent.vertices);
 		submitIndices(renderableComponent.indices);
 
 		p_indicesMaxValue += (renderableComponent.vertices.size() * sizeof(Vertex) / 4) / g_MeshStride;
 		p_meshID++;
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted renderable component, next mesh ID = {}, next indices extension = {}", p_meshID, p_indicesMaxValue);
 	}
 
 	void FMeshBatchStatic::submitVertices(const FVertexArray& vertices) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitting {} vertices with meshID = {} to batch...", vertices.size(), p_meshID);
+
 		p_vertices.insert(p_vertices.end(), vertices.begin(), vertices.end());
 
 		auto fromBeginOfInsertedVertices = p_vertices.end() - vertices.size();
@@ -93,9 +106,13 @@ namespace marengine {
 		};
 
 		std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted {} vertices, current batch vertices size = {}", vertices.size(), p_vertices.size());
 	}
 
 	void FMeshBatchStatic::submitIndices(const FIndicesArray& indices) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitting {} indices with extension = {} to batch...", indices.size(), p_indicesMaxValue);
+
 		p_indices.insert(p_indices.end(), indices.begin(), indices.end());
 
 		auto fromBeginOfInsertedIndices = p_indices.end() - indices.size();
@@ -105,10 +122,16 @@ namespace marengine {
 		};
 
 		std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted {} indices, current batch indices size = {}", indices.size(), p_indices.size());
 	}
 
 	void FMeshBatchStatic::submitTransformComponent(const TransformComponent& transformComponent) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitting transform matrix to batch...");
+
 		p_transforms.emplace_back(transformComponent.getTransform());
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted 1 transform, current batch transforms size = {}", p_transforms.size());
 	}
 
 	const FVertexArray& FMeshBatchStatic::getVertices() const {

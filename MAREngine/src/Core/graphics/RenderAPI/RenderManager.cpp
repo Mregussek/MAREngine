@@ -22,7 +22,8 @@
 #include "RenderManagerEvents.h"
 #include "RenderMemorizer.h"
 #include "RenderCamera.h"
-#include "../GraphicLimits.h"
+#include "../GraphicsLimits.h"
+#include "../GraphicsLogs.h"
 #include "../Renderer/PipelineStorage.h"
 #include "../Renderer/ShaderBufferStorage.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
@@ -48,26 +49,37 @@ namespace marengine {
 	}
 
 	void FRenderManager::batchEntities(const std::vector<Entity>& entities) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER: batching {} entities...", entities.size());
+
 		for (const Entity& entity : entities) {
 			submitEntityRenderableToBatch(entity);
 			submitEntityLightToBatch(entity);
 			submitEntityCamera(entity);
 		}
 
+		GRAPHICS_INFO("F_RENDER_MANAGER: {} entities are batched!", entities.size());
+
 		onBatchesReadyToDraw();
 	}
 
 	FRenderManager::SubmitRenderableReturnInfo FRenderManager::submitEntityRenderableToBatch(const Entity& entity) {
+		GRAPHICS_TRACE("F_RENDER_MANAGER: trying to submit {} entity with its renderable...", entity.getComponent<TagComponent>().tag);
+
 		if (m_staticColorMeshBatch.canBeBatched(entity)) {
+			GRAPHICS_TRACE("F_RENDER_MANAGER: {} entity will be submitted to static color mesh batch...", entity.getComponent<TagComponent>().tag);
+
 			m_staticColorMeshBatch.submitToBatch(entity);
 			return { true, &m_staticColorMeshBatch };
 		}
 
 		if (m_staticTexture2DMeshBatch.canBeBatched(entity)) {
+			GRAPHICS_TRACE("F_RENDER_MANAGER: {} entity will be submitted to static texture2D mesh batch...", entity.getComponent<TagComponent>().tag);
+
 			m_staticTexture2DMeshBatch.submitToBatch(entity);
 			return { true, &m_staticTexture2DMeshBatch };
 		}
 
+		GRAPHICS_TRACE("F_RENDER_MANAGER: {} entity will not be submitted as it cannot be batched...", entity.getComponent<TagComponent>().tag);
 		return { false, nullptr };
 	}
 
@@ -102,13 +114,17 @@ namespace marengine {
 	}
 
 	void FRenderManager::onBatchesReadyToDraw() {
+		GRAPHICS_TRACE("F_RENDER_MANAGER: batches are ready to draw, creating and filling buffers...");
+
 		createBuffers();
 		fillBuffers();
 	}
 
 	void FRenderManager::createBuffers() {
 		{ // handle static color mesh batches
-			const uint32_t uniquePipelineID{ createVertexIndexBuffers(&m_staticColorMeshBatch) };
+			GRAPHICS_TRACE("F_RENDER_MANAGER: creating pipelines and SSBOs for static color mesh batch...");
+
+			const uint32_t uniquePipelineID{ createVertexIndexBuffers() };
 			m_staticColorMeshBatch.setUniquePipelineID(uniquePipelineID);
 
 			const uint32_t uniqueTransformsSSBO{ createTransformsSSBO() };
@@ -116,24 +132,40 @@ namespace marengine {
 
 			const uint32_t uniqueColorsSSBO{ createColorSSBO() };
 			m_staticColorMeshBatch.setColorsSSBOindex(uniqueColorsSSBO);
+
+			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: VertexIndexBuffers - {}, TransformsSSBO - {}, ColorsSSBO - {} for static color mesh batch",
+				uniquePipelineID, uniqueTransformsSSBO, uniqueColorsSSBO);
 		}
 
 		{ // handle texture 2d static mesh batches
-			const uint32_t uniquePipelineID{ createVertexIndexBuffers(&m_staticTexture2DMeshBatch) };
+			GRAPHICS_TRACE("F_RENDER_MANAGER: creating pipelines and SSBOs for static texture2d mesh batch...");
+
+			const uint32_t uniquePipelineID{ createVertexIndexBuffers() };
 			m_staticTexture2DMeshBatch.setUniquePipelineID(uniquePipelineID);
 
 			const uint32_t uniqueTransformsSSBO{ createTransformsSSBO() };
 			m_staticTexture2DMeshBatch.setTransformsSSBOindex(uniqueTransformsSSBO);
+
+			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: VertexIndexBuffers - {}, TransformsSSBO - {} for static texture2D mesh batch",
+				uniquePipelineID, uniqueTransformsSSBO);
 		}
 
 		{ // handle point lights batches
+			GRAPHICS_TRACE("F_RENDER_MANAGER: creating SSBO for point lights batch...");
+
 			const uint32_t uniquePointLightSSBOindex{ createPointLightSSBO() };
 			m_pointLightBatch.setPointLightSSBOindex(uniquePointLightSSBOindex);
+
+			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: PointLightsSSBO - {} for point lights batch", uniquePointLightSSBOindex);
 		}
 
 		{ // handle camera
+			GRAPHICS_TRACE("F_RENDER_MANAGER: creating SSBO for render camera...");
+
 			const uint32_t uniqueCameraSSBO{ createCameraSSBO() };
 			RenderMemorizer::Instance->cameraSSBO = uniqueCameraSSBO;
+
+			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: CameraSSBO - {} for Render Camera", uniqueCameraSSBO);
 		}
 	}
 
@@ -156,7 +188,7 @@ namespace marengine {
 		}
 	}
 
-	uint32_t FRenderManager::createVertexIndexBuffers(FMeshBatchStatic* meshBatch) const {
+	uint32_t FRenderManager::createVertexIndexBuffers() const {
 		PipelineOpenGL& pipeline{ PipelineStorage::Instance->createPipeline() };
 		pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
 

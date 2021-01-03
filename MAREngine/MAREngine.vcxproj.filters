@@ -324,9 +324,6 @@
     <ClInclude Include="3rd_party\MARMaths\src\trig\trig.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\GraphicLimits.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\LayerStack\layers\RenderLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -481,6 +478,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\Renderer\RendererEvents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\GraphicsLimits.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

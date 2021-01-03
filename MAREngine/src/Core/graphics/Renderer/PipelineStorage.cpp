@@ -29,7 +29,7 @@ namespace marengine {
 
 
 	PipelineOpenGL& PipelineStorage::createPipeline() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: creating pipeline... current size {}", m_buffers.size() + 1);
+		GRAPHICS_TRACE("PIPELINE_STORAGE: creating pipeline at index {}... currentSize = {}", m_buffers.size(), m_buffers.size() + 1);
 
 		return m_buffers.emplace_back();
 	}
@@ -39,6 +39,8 @@ namespace marengine {
 	}
 
 	const PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
+		GRAPHICS_TRACE("PIPELINE_STORAGE: returning pipeline at index = {}...", index);
+
 		return m_buffers.at(index);
 	}
 

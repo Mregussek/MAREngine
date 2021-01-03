@@ -65,7 +65,6 @@ namespace marengine {
 		uint32_t m_vboAllocMemory{ 0 };
 		uint32_t m_eboAllocMemory{ 0 };
 
-		bool m_initialized{ false };
 	};	
 
 

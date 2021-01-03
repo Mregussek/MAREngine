@@ -27,11 +27,6 @@ namespace marengine {
 	// ---- PUBLIC METHODS ---- //
 
 	void PipelineOpenGL::initialize(uint32_t memoryVBO, uint32_t memoryEBO) {
-		if (m_initialized) {
-			PLATFORM_WARN("PIPELINE_OPENGL: is already initialized with VAO {} EBO {} VBO {}!", m_vao, m_ebo, m_vbo);
-			return;
-		}
-
 		m_vboAllocMemory = memoryVBO;
 		m_eboAllocMemory = memoryEBO;
 
@@ -39,23 +34,16 @@ namespace marengine {
 		createVAO();
 		createVBO();
 		processLayout();
-		
-		m_initialized = true;
 
-		PLATFORM_INFO("PIPELINE_OPENGL: initialized Pipeline!");
+		PLATFORM_INFO("PIPELINE_OPENGL: initialized Pipeline, VBO = {}, EBO = {}, VAO = {}", m_vbo, m_ebo, m_vao);
 	}
 
 	void PipelineOpenGL::close() {
-		if (!m_initialized) {
-			PLATFORM_WARN("PIPELINE_OPENGL: is not even initialized!");
-			return;
-		}
+		PLATFORM_TRACE("PIPELINE_OPENGL: closing VBO = {}, EBO = {}, VAO = {}", m_vbo, m_ebo, m_vao);
 
 		destroyVAO();
 		destroyVBO();
 		destroyEBO();
-
-		m_initialized = false;
 
 		PLATFORM_INFO("PIPELINE_OPENGL: pipeline is closed!");
 	}
@@ -67,14 +55,15 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vertSize, vertices.data()) );
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indiSize, indices.data()) );
 	
-		PLATFORM_TRACE("PIPELINE_OPENGL: updated vertices size = {} memory = {} and indices size = {} memory = {}", vertices.size(), vertSize, indices.size(), indiSize);
+		PLATFORM_TRACE("PIPELINE_OPENGL: updated vertices at VBO with size = {}, memory (bytes) = {} and indices at EBO size = {} memory (bytes) = {}", 
+			vertices.size(), vertSize, indices.size(), indiSize);
 	}
 
 	void PipelineOpenGL::reset() const {
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, 0, nullptr) );
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, 0, nullptr) );
 		
-		PLATFORM_TRACE("PIPELINE_OPENGL: reseting VBO {} and EBO {}", m_vbo, m_ebo);
+		PLATFORM_TRACE("PIPELINE_OPENGL: reseting data at VBO - {}, EBO - {}", m_vbo, m_ebo);
 	}
 
 	void PipelineOpenGL::bind() const {
@@ -82,7 +71,7 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_ARRAY_BUFFER, m_vbo) );
 		PLATFORM_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo) );
 
-		PLATFORM_TRACE("PIPELINE_OPENGL: bounded VAO {} VBO {} EBO {}", m_vao, m_vbo, m_ebo);
+		PLATFORM_TRACE("PIPELINE_OPENGL: bind(), VAO - {}, VBO - {}, EBO - {}", m_vao, m_vbo, m_ebo);
 	}
 
 	void PipelineOpenGL::unbind() const {
@@ -90,46 +79,52 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0) );
 		PLATFORM_GL_FUNC( glBindVertexArray(0) );
 
-		PLATFORM_TRACE("PIPELINE_OPENGL: unbounded");
+		PLATFORM_TRACE("PIPELINE_OPENGL: ubind(), VAO - {}, VBO - {}, EBO - {}", m_vao, m_vbo, m_ebo);
 	}
 
 	// ---- PRIVATE METHODS ---- //
 
 	void PipelineOpenGL::createVAO() {
+		PLATFORM_TRACE("PIPELINE_OPENGL: creating VAO...");
+
 		PLATFORM_GL_FUNC(glGenVertexArrays(1, &m_vao));
 		PLATFORM_GL_FUNC(glBindVertexArray(m_vao));
 
-		PLATFORM_TRACE("PIPELINE_OPENGL: initialized VAO {}!", m_vao);
+		PLATFORM_INFO("PIPELINE_OPENGL: initialized VAO {}!", m_vao);
 	}
 
 	void PipelineOpenGL::destroyVAO() {
-		PLATFORM_TRACE("PIPELINE_OPENGL: Closing VAO {}!", m_vao);
+		PLATFORM_TRACE("PIPELINE_OPENGL: closing VAO {}...", m_vao);
 		PLATFORM_GL_FUNC(glDeleteVertexArrays(1, &m_vao));
 	}
 
 	void PipelineOpenGL::createVBO() {
+		PLATFORM_TRACE("PIPELINE_OPENGL: creating VBO...");
+
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_vbo) );
 		PLATFORM_GL_FUNC( glBindBuffer(GL_ARRAY_BUFFER, m_vbo) );
 		PLATFORM_GL_FUNC( glBufferData(GL_ARRAY_BUFFER, m_vboAllocMemory, nullptr, GL_DYNAMIC_DRAW) );
 
-		PLATFORM_TRACE("PIPELINE_OPENGL: initialized VBO {} with memory {}!", m_vbo, m_vboAllocMemory);
+		PLATFORM_INFO("PIPELINE_OPENGL: initialized VBO {} and allocated {} bytes!", m_vbo, m_vboAllocMemory);
 	}
 
 	void PipelineOpenGL::destroyVBO() {
-		PLATFORM_TRACE("PIPELINE_OPENGL: closing VBO {}!", m_vbo);
+		PLATFORM_TRACE("PIPELINE_OPENGL: closing VBO {}...", m_vbo);
 		PLATFORM_GL_FUNC(glDeleteBuffers(1, &m_vbo));
 	}
 
 	void PipelineOpenGL::createEBO() {
+		PLATFORM_TRACE("PIPELINE_OPENGL: creating EBO...");
+
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ebo) );
 		PLATFORM_GL_FUNC( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo) );
 		PLATFORM_GL_FUNC( glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_eboAllocMemory, nullptr, GL_DYNAMIC_DRAW) );
 
-		PLATFORM_TRACE("PIPELINE_OPENGL: initialized EBO {} with memory {}!", m_ebo, m_eboAllocMemory);
+		PLATFORM_INFO("PIPELINE_OPENGL: initialized EBO {} and allocated {}!", m_ebo, m_eboAllocMemory);
 	}
 
 	void PipelineOpenGL::destroyEBO() {
-		PLATFORM_TRACE("PIPELINE_OPENGL: closing EBO {}!", m_ebo);
+		PLATFORM_TRACE("PIPELINE_OPENGL: closing EBO {}...", m_ebo);
 		PLATFORM_GL_FUNC(glDeleteBuffers(1, &m_ebo));
 	}
 

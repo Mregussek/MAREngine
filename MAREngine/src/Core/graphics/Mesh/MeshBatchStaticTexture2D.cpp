@@ -19,6 +19,7 @@
 
 
 #include "MeshBatchStaticTexture2D.h"
+#include "../GraphicsLogs.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 
@@ -42,6 +43,8 @@ namespace marengine {
 	}
 
 	void FMeshBatchStaticTexture2D::submitToBatch(const Entity& entity) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_TEXTURE2D: submitting {} entity to batching...", entity.getComponent<TagComponent>().tag);
+
 		FMeshBatchStatic::submitToBatch(entity);
 
 		const auto& texture2dComponent{ entity.getComponent<Texture2DComponent>() };
@@ -49,10 +52,17 @@ namespace marengine {
 
 		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
 		meshBatchComponent.materialIndex = m_textures.size() - 1;
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_TEXTURE2D: submitted to batch entity {}, meshBatchComponent.materialIndex = {}",
+			entity.getComponent<TagComponent>().tag, meshBatchComponent.materialIndex);
 	}
 
 	void FMeshBatchStaticTexture2D::submitTexture2DComponent(uint32_t bindingIndex, const Texture2DComponent& texture2dComponent) {
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_TEXTURE2D: submitting texture2D component...");
+
 		m_textures.emplace_back(bindingIndex, texture2dComponent.texture);
+
+		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_TEXTURE2D: submitted texture2D component, current texture2D size = {}", m_textures.size());
 	}
 
 	const FTextureArray& FMeshBatchStaticTexture2D::getTextures() const {

@@ -69,7 +69,7 @@ namespace marengine {
 		void createBuffers();
 		void fillBuffers();
 
-		uint32_t createVertexIndexBuffers(FMeshBatchStatic* meshBatch) const;
+		uint32_t createVertexIndexBuffers() const;
 		uint32_t createTransformsSSBO() const;
 		uint32_t createColorSSBO() const;
 
