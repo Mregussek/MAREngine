@@ -43,6 +43,7 @@
 #include "../../src/Core/ecs/Components/Components.h"
 
 // Rendering 
+#include "../../src/Core/graphics/Mesh/MeshCreator.h"
 #include "../../src/Core/graphics/Renderer/RendererBatch.h"
 
 // Scripting

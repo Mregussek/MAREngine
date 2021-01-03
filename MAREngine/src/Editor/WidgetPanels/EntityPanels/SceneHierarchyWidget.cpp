@@ -117,12 +117,12 @@ namespace marengine {
 				FEventsEntityWidget::Instance->onCreateEntity();
 			}
 
-			const auto& entity = WEntityWidgetPanel::Instance->getCurrentEntity();
+			const Entity& entity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
 			const bool entityExists = &entity != nullptr;
 
-			 if (entityExists) {
-				const char* entity_tag = entity.getComponent<TagComponent>().tag.c_str();
-				if (ImGui::MenuItem("Delete Selected Entity from Scene", entity_tag)) {
+			if (entityExists) {
+				const char* entityTag{ entity.getComponent<TagComponent>().tag.c_str() };
+				if (ImGui::MenuItem("Delete Selected Entity from Scene", entityTag)) {
 					FEventsEntityWidget::Instance->onDestroyEntity(entity);
 				}
 				

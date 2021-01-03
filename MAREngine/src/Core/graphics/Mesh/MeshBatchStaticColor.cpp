@@ -32,6 +32,8 @@ namespace marengine {
 		FMeshBatchStatic::reset();
 
 		m_colors.clear();
+
+		m_colorsSSBOindex = 0;
 	}
 
 	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {

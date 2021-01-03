@@ -71,28 +71,33 @@ namespace marengine {
 	// -------------------------------------------------------------
 
 	const Entity& Scene::createEntity() {
-		ECS_INFO("SCENE: going to create entity!");
+		ECS_TRACE("SCENE: creating entity at scene {}...", m_name);
 
 		const Entity& entity{ m_container.m_entities.emplace_back(&m_sceneRegistry) };
 		Entity::fillEntityWithBasicComponents(entity);
 
-		ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
+		ECS_INFO("SCENE: created entity {} at scene {}!", entity.m_entityHandle, m_name);
 
 		return entity;
 	}
 
 	void Scene::destroyEntity(const Entity& entity) {
-		ECS_INFO("SCENE: going to destroy entity at {}!", entity.m_entityHandle);
+		ECS_TRACE("SCENE: trying to destroy entity {} at scene {}...", entity.m_entityHandle, m_name);
 
 		auto it = std::find_if(m_container.m_entities.begin(), m_container.m_entities.end(), [&entity](const Entity& iterator) {
-			return 	&iterator == &entity;
+			return 	(iterator.m_entityHandle == entity.m_entityHandle);
 		});
 
 		const bool canDestroyEntity{ it != m_container.m_entities.end() && (*it).isValid() };
 
 		if (canDestroyEntity) {
+			ECS_TRACE("SCENE: destroying entity {} at scene {}...", entity.m_entityHandle, m_name);
+
 			(*it).destroyYourself();
 			m_container.m_entities.erase(it);
+		}
+		else {
+			ECS_WARN("SCENE: cannot find destroyable entity {} at scene {}..., won't be destroyed!", entity.m_entityHandle, m_name);
 		}
 	}
 
