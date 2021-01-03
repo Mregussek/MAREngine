@@ -78,7 +78,7 @@ namespace marengine {
 		meshBatchComponent.transformIndex = p_transforms.size() - 1;
 		meshBatchComponent.assignedMesh = this;
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted to batch entity {}, meshBatchComponent.transformIndex = {}", 
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC: submitted to batch entity {}, meshBatchComponent.transformIndex = {}", 
 			entity.getComponent<TagComponent>().tag, meshBatchComponent.transformIndex);
 	}
 
@@ -91,7 +91,7 @@ namespace marengine {
 		p_indicesMaxValue += (renderableComponent.vertices.size() * sizeof(Vertex) / 4) / g_MeshStride;
 		p_meshID++;
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted renderable component, next mesh ID = {}, next indices extension = {}", p_meshID, p_indicesMaxValue);
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC: submitted renderable component, next mesh ID = {}, next indices extension = {}", p_meshID, p_indicesMaxValue);
 	}
 
 	void FMeshBatchStatic::submitVertices(const FVertexArray& vertices) {
@@ -107,7 +107,7 @@ namespace marengine {
 
 		std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted {} vertices, current batch vertices size = {}", vertices.size(), p_vertices.size());
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC: submitted {} vertices, current batch vertices size = {}", vertices.size(), p_vertices.size());
 	}
 
 	void FMeshBatchStatic::submitIndices(const FIndicesArray& indices) {
@@ -123,7 +123,7 @@ namespace marengine {
 
 		std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted {} indices, current batch indices size = {}", indices.size(), p_indices.size());
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC: submitted {} indices, current batch indices size = {}", indices.size(), p_indices.size());
 	}
 
 	void FMeshBatchStatic::submitTransformComponent(const TransformComponent& transformComponent) {
@@ -131,7 +131,7 @@ namespace marengine {
 
 		p_transforms.emplace_back(transformComponent.getTransform());
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC: submitted 1 transform, current batch transforms size = {}", p_transforms.size());
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC: submitted 1 transform, current batch transforms size = {}", p_transforms.size());
 	}
 
 	const FVertexArray& FMeshBatchStatic::getVertices() const {

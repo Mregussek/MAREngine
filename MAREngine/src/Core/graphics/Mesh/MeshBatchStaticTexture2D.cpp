@@ -53,7 +53,7 @@ namespace marengine {
 		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
 		meshBatchComponent.materialIndex = m_textures.size() - 1;
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_TEXTURE2D: submitted to batch entity {}, meshBatchComponent.materialIndex = {}",
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC_TEXTURE2D: submitted to batch entity {}, meshBatchComponent.materialIndex = {}",
 			entity.getComponent<TagComponent>().tag, meshBatchComponent.materialIndex);
 	}
 
@@ -62,7 +62,7 @@ namespace marengine {
 
 		m_textures.emplace_back(bindingIndex, texture2dComponent.texture);
 
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_TEXTURE2D: submitted texture2D component, current texture2D size = {}", m_textures.size());
+		GRAPHICS_INFO("F_MESH_BATCH_STATIC_TEXTURE2D: submitted texture2D component, current texture2D size = {}", m_textures.size());
 	}
 
 	const FTextureArray& FMeshBatchStaticTexture2D::getTextures() const {

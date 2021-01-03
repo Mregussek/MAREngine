@@ -55,8 +55,11 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ARRAY_BUFFER, 0, vertSize, vertices.data()) );
 		PLATFORM_GL_FUNC( glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indiSize, indices.data()) );
 	
-		PLATFORM_TRACE("PIPELINE_OPENGL: updated vertices at VBO with size = {}, memory (bytes) = {} and indices at EBO size = {} memory (bytes) = {}", 
-			vertices.size(), vertSize, indices.size(), indiSize);
+		PLATFORM_INFO(
+			"PIPELINE_OPENGL: updated vertices at VBO with size = {}, sizeof(Vertex) = {}, memory (bytes) = {}"
+			"and indices at EBO size = {}, sizeof(indice) = {}, memory (bytes) = {}", 
+			vertices.size(), sizeof(Vertex), vertSize, indices.size(), sizeof(uint32_t), indiSize
+		);
 	}
 
 	void PipelineOpenGL::reset() const {
@@ -158,7 +161,7 @@ namespace marengine {
 				, m_vao, i, elements[i].count, elements[i].type, elements[i].normalized, stride, offset);
 		}
 
-		PLATFORM_INFO("PIPELINE_OPENGL: added layout {3, 3, 2, 1} to VAO {}", m_vao);
+		PLATFORM_INFO("PIPELINE_OPENGL: added layout 3, 3, 2, 1 to VAO {}", m_vao);
 	}
 
 

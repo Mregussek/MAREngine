@@ -133,7 +133,7 @@ namespace marengine {
 			const uint32_t uniqueColorsSSBO{ createColorSSBO() };
 			m_staticColorMeshBatch.setColorsSSBOindex(uniqueColorsSSBO);
 
-			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: VertexIndexBuffers - {}, TransformsSSBO - {}, ColorsSSBO - {} for static color mesh batch",
+			GRAPHICS_INFO("F_RENDER_MANAGER: created buffers with uniqueID: VertexIndexBuffers - {}, TransformsSSBO - {}, ColorsSSBO - {} for static color mesh batch",
 				uniquePipelineID, uniqueTransformsSSBO, uniqueColorsSSBO);
 		}
 
@@ -146,7 +146,7 @@ namespace marengine {
 			const uint32_t uniqueTransformsSSBO{ createTransformsSSBO() };
 			m_staticTexture2DMeshBatch.setTransformsSSBOindex(uniqueTransformsSSBO);
 
-			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: VertexIndexBuffers - {}, TransformsSSBO - {} for static texture2D mesh batch",
+			GRAPHICS_INFO("F_RENDER_MANAGER: created buffers with uniqueID: VertexIndexBuffers - {}, TransformsSSBO - {} for static texture2D mesh batch",
 				uniquePipelineID, uniqueTransformsSSBO);
 		}
 
@@ -156,7 +156,7 @@ namespace marengine {
 			const uint32_t uniquePointLightSSBOindex{ createPointLightSSBO() };
 			m_pointLightBatch.setPointLightSSBOindex(uniquePointLightSSBOindex);
 
-			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: PointLightsSSBO - {} for point lights batch", uniquePointLightSSBOindex);
+			GRAPHICS_INFO("F_RENDER_MANAGER: created buffers with uniqueID: PointLightsSSBO - {} for point lights batch", uniquePointLightSSBOindex);
 		}
 
 		{ // handle camera
@@ -165,7 +165,7 @@ namespace marengine {
 			const uint32_t uniqueCameraSSBO{ createCameraSSBO() };
 			RenderMemorizer::Instance->cameraSSBO = uniqueCameraSSBO;
 
-			GRAPHICS_TRACE("F_RENDER_MANAGER: created buffers with uniqueID: CameraSSBO - {} for Render Camera", uniqueCameraSSBO);
+			GRAPHICS_INFO("F_RENDER_MANAGER: created buffers with uniqueID: CameraSSBO - {} for Render Camera", uniqueCameraSSBO);
 		}
 	}
 

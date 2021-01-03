@@ -66,6 +66,8 @@ namespace marengine {
 	}
 
 	void RendererBatch::draw(const FMeshBatchStaticColor& staticColorBatch, const FPointLightBatch& pointLightBatch) const {
+		GRAPHICS_TRACE("RENDERER_BATCH: going to draw static color mesh batch with point lights...");
+
 		m_shaderColors.bind();
 
 		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
@@ -85,9 +87,13 @@ namespace marengine {
 
 		DrawingOpenGL::drawTriangles(staticColorBatch.getIndices().size());
 		FRendererEvents::onDrawCall();
+
+		GRAPHICS_INFO("RENDERER_BATCH: drawn static color mesh batch with point lights!");
 	}
 
 	void RendererBatch::draw(const FMeshBatchStaticTexture2D& staticTexture2DBatch, const FPointLightBatch& pointLightBatch) const {
+		GRAPHICS_TRACE("RENDERER_BATCH: going to draw static texture2D mesh batch with point lights...");
+
 		m_shaderTexture2D.bind();
 
 		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
@@ -114,6 +120,8 @@ namespace marengine {
 
 		DrawingOpenGL::drawTriangles(staticTexture2DBatch.getIndices().size());
 		FRendererEvents::onDrawCall();
+
+		GRAPHICS_INFO("RENDERER_BATCH: drawn static texture2D mesh batch with point lights!");
 	}
 
 

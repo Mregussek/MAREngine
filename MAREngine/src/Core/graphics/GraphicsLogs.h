@@ -26,16 +26,20 @@
 #ifdef MAR_ENGINE_GRAPHICS_LOGS
 
 #define GRAPHICS_TRACE(...) MAR_CORE_TRACE(__VA_ARGS__)
+#define GRAPHICS_DEBUG(...) MAR_CORE_DEBUG(__VA_ARGS__)
 #define GRAPHICS_INFO(...) MAR_CORE_INFO(__VA_ARGS__)
 #define GRAPHICS_ERROR(...) MAR_CORE_ERROR(__VA_ARGS__)
 #define GRAPHICS_WARN(...) MAR_CORE_WARN(__VA_ARGS__)
+#define GRAPHICS_CRITICAL(...) MAR_CORE_CRITICAL(__VA_ARGS__)
 
 #else
 
 #define GRAPHICS_TRACE(...)
+#define GRAPHICS_DEBUG(...)
 #define GRAPHICS_INFO(...) 
 #define GRAPHICS_ERROR(...)
 #define GRAPHICS_WARN(...) 
+#define GRAPHICS_CRITICAL(...)
 
 #endif
 

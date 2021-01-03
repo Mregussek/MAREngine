@@ -38,36 +38,51 @@ namespace marengine {
 	void FRenderManagerEvents::onVertexIndexBuffersUpdate(const FMeshBatchStatic& meshBatch) {
 		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onVertexIndexBuffersUpdate");
 
-		const auto& pipeline{ PipelineStorage::Instance->getPipeline(meshBatch.getUniquePipelineID()) };
+		const uint32_t uniqueID{ meshBatch.getUniquePipelineID() };
+		const auto& pipeline{ PipelineStorage::Instance->getPipeline(uniqueID) };
 		pipeline.bind();
 		pipeline.update(meshBatch.getVertices(), meshBatch.getIndices());
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onVertexIndexBuffersUpdate, uniquePipelineID = {}", uniqueID);
 	}
 
 	void FRenderManagerEvents::onTransformsUpdate(const FMeshBatchStatic& meshBatch) {
 		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onTransformsUpdate");
 
 		const FTransformsArray& transforms{ meshBatch.getTransforms() };
-		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshBatch.getTransformsSSBOindex()) };
+		const uint32_t uniqueID{ meshBatch.getTransformsSSBOindex() };
+
+		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		transformsSSBO.bind();
 		transformsSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onTransformsUpdate, uniqueTransformsSSBO index = {}", uniqueID);
 	}
 
 	void FRenderManagerEvents::onColorsUpdate(const FMeshBatchStaticColor& meshColorBatch) {
 		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onColorsUpdate");
 
 		const FColorsArray& colors{ meshColorBatch.getColors() };
-		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshColorBatch.getColorsSSBOindex()) };
+		const uint32_t uniqueID{ meshColorBatch.getColorsSSBOindex() };
+
+		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		colorsSSBO.bind();
 		colorsSSBO.update<float>(GLSLShaderInfo::Colors.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onColorsUpdate, uniqueColorsSSBO index = {}", uniqueID);
 	}
 
 	void FRenderManagerEvents::onRenderCameraUpdate(const RenderCamera* renderCamera) {
 		GRAPHICS_TRACE("F_RENDER_MANAGER_EVENTS: onRenderCameraUpdate");
 
 		const auto& cameraMVP{ renderCamera->getMVP() };
-		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		const uint32_t uniqueID{ RenderMemorizer::Instance->cameraSSBO };
+
+		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		cameraSSBO.bind();
 		cameraSSBO.update<float>(GLSLShaderInfo::MVP.offset, sizeof(maths::mat4), maths::mat4::value_ptr(cameraMVP));
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onRenderCameraUpdate, uniqueCameraSSBO index = {}", uniqueID);
 	}
 
 	void FRenderManagerEvents::onPointLightUpdate(const FPointLightBatch& pointLightBatch) {
@@ -75,10 +90,14 @@ namespace marengine {
 
 		const FPointLightsArray& pointLights{ pointLightBatch.getLights() };
 		const int32_t lightSize{ (int32_t)pointLights.size() };
-		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(pointLightBatch.getPointLightSSBOindex()) };
+		const uint32_t uniqueID{ pointLightBatch.getPointLightSSBOindex() };
+
+		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		pointLightSSBO.bind();
 		pointLightSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(LightMaterial) * pointLights.size(), &pointLights[0].position.x);
 		pointLightSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onPointLightUpdate, uniquePointLightsSSBO index = {}", uniqueID);
 	}
 
 	void FRenderManagerEvents::onTransformAtMeshUpdate(const Entity& entity) {
@@ -90,12 +109,16 @@ namespace marengine {
 
 		instanceAtAssignedMesh = transformComponent.getTransform();
 
-		const uint32_t offset{ GLSLShaderInfo::Transform.offset + meshBatchComponent.transformIndex };
+		const uint32_t offset{ GLSLShaderInfo::Transform.offset + (meshBatchComponent.transformIndex * sizeof(maths::mat4)) };
 		const float* pPointerToInstance{ maths::mat4::value_ptr(instanceAtAssignedMesh) };
+		const uint32_t uniqueID{ meshBatchComponent.assignedMesh->getTransformsSSBOindex() };
 
-		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshBatchComponent.assignedMesh->getTransformsSSBOindex()) };
+		const auto& transformsSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		transformsSSBO.bind();
 		transformsSSBO.update<float>(offset, sizeof(maths::mat4), pPointerToInstance);
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onTransformAtMeshUpdate, entity {}, uniqueTransformsSSBO index = {}, meshBatchComponent.transformIndex = {}", 
+			entity.getComponent<TagComponent>().tag, uniqueID, meshBatchComponent.transformIndex);
 	}
 
 	void FRenderManagerEvents::onColorAtMeshUpdate(const Entity& entity) {
@@ -109,12 +132,16 @@ namespace marengine {
 
 		instanceAtAssignedMesh = colorComponent.texture;
 
-		const uint32_t offset{ GLSLShaderInfo::Colors.offset + meshBatchComponent.materialIndex };
+		const uint32_t offset{ GLSLShaderInfo::Colors.offset + (meshBatchComponent.materialIndex * sizeof(maths::vec4)) };
 		const float* pPointerToInstance{ maths::vec4::value_ptr(instanceAtAssignedMesh) };
+		const uint32_t uniqueID{ meshColorBatch->getColorsSSBOindex() };
 
-		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(meshColorBatch->getColorsSSBOindex()) };
+		const auto& colorsSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		colorsSSBO.bind();
 		colorsSSBO.update<float>(offset, sizeof(maths::vec4), pPointerToInstance);
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onColorAtMeshUpdate, entity {}, uniqueColorsSSBO index = {}, meshBatchComponent.materialIndex = {}",
+			entity.getComponent<TagComponent>().tag, uniqueID, meshBatchComponent.materialIndex);
 	}
 
 	void FRenderManagerEvents::onTexture2DatMeshUpdate(const Entity& entity) {
@@ -127,6 +154,9 @@ namespace marengine {
 		std::string& instanceAtAssignedMesh{ meshColorBatch->m_textures[meshBatchComponent.materialIndex].texturePath };
 
 		instanceAtAssignedMesh = texture2DComponent.texture;
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onTexture2DatMeshUpdate, entity {}, meshBatchComponent.materialIndex = {}",
+			entity.getComponent<TagComponent>().tag, meshBatchComponent.materialIndex);
 	}
 
 	void FRenderManagerEvents::onPointLightAtBatchUpdate(const Entity& entity) {
@@ -147,11 +177,15 @@ namespace marengine {
 		lightInstanceAtBatch.constant = pointLightComponent.constant;
 		lightInstanceAtBatch.shininess = pointLightComponent.shininess;
 
-		const uint32_t offset{ GLSLShaderInfo::LightMaterial.offset + lightBatchComponent.pointLightIndex };
+		const uint32_t offset{ GLSLShaderInfo::LightMaterial.offset + (lightBatchComponent.pointLightIndex * sizeof(LightMaterial)) };
+		const uint32_t uniqueID{ FRenderManager::Instance->m_pointLightBatch.getPointLightSSBOindex() };
 
-		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(FRenderManager::Instance->m_pointLightBatch.getPointLightSSBOindex()) };
+		const auto& pointLightSSBO{ ShaderBufferStorage::Instance->getSSBO(uniqueID) };
 		pointLightSSBO.bind();
 		pointLightSSBO.update<float>(offset, sizeof(LightMaterial), &lightInstanceAtBatch.position.x);
+
+		GRAPHICS_DEBUG("F_RENDER_MANAGER_EVENTS: onPointLightAtBatchUpdate, entity {}, uniquePointLightsSSBO index = {}, lightBatchComponent.pointLightIndex = {}",
+			entity.getComponent<TagComponent>().tag, uniqueID, lightBatchComponent.pointLightIndex);
 	}
 
 
