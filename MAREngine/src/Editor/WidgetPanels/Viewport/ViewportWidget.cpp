@@ -24,7 +24,7 @@
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/SceneManager.h"
 #include "../../../Core/events/RenderEvents.h"
-#include "../../../Core/events/ComponentEvents/EventsComponentEntity.h"
+#include "../../../Core/ecs/Entity/EventsComponentEntity.h"
 
 
 namespace marengine {

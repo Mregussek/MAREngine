@@ -19,7 +19,7 @@
 
 
 #include "EventsComponentEntity.h"
-#include "../RenderEvents.h"
+#include "../../events/RenderEvents.h"
 #include "../../graphics/RenderAPI/RenderPipeline.h"
 #include "../../ecs/SceneManager.h"
 #include "../../ecs/Scene.h"

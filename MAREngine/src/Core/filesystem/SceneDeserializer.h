@@ -34,11 +34,14 @@ namespace marengine {
 	class FSceneDeserializer {
 	public:
 
+		static Scene* oldWayLoadingFile(const std::string& path);
 		static Scene* loadSceneFromFile(const std::string& path);
 
 	private:
 
 		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
+		static void loadScene(std::ifstream& file, Scene* scene);
+		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
 
 	};
 

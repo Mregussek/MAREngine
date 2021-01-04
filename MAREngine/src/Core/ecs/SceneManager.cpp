@@ -22,7 +22,7 @@
 #include "ECSLogs.h"
 #include "Scene.h"
 #include "../events/RenderEvents.h"
-#include "../events/ComponentEvents/EventsComponentEntity.h"
+#include "../ecs/Entity/EventsComponentEntity.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
 

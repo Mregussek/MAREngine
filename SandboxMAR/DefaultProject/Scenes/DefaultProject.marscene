@@ -4,6 +4,12 @@ MAREngine scene file
 #Scene_Name DefaultScene
 #Scene_Background 0.386681 0.677349 0.714286
 
+MAREngine scene file
+
+#SceneStart
+#Scene_Name DefaultScene
+#Scene_Background 0.386681 0.677349 0.714286
+
 #EntityStart
 #TagComponent DarkGreenCube
 #TransformComponent Begin
@@ -178,132 +184,5 @@ MAREngine scene file
 
 #EntityEnd
 
-#EntityStart
-#TagComponent DirtMinecraft1
-#TransformComponent Begin
-#center 8 -1.8 7.75
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#TextureCubemapComponent textures/dirt
-
-#EntityEnd
-
-#EntityStart
-#TagComponent GrassMinecraft1
-#TransformComponent Begin
-#center 8 0.2 7.75
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#TextureCubemapComponent textures/grass
-
-#EntityEnd
-
-#EntityStart
-#TagComponent DirtMinecraft2
-#TransformComponent Begin
-#center 8 0.2 9.75
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#TextureCubemapComponent textures/dirt
-
-#EntityEnd
-
-#EntityStart
-#TagComponent CobbleMinecraft
-#TransformComponent Begin
-#center 8 -1.8 9.75
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#TextureCubemapComponent textures/cobble
-
-#EntityEnd
-
-#EntityStart
-#TagComponent GrassMinecraft2
-#TransformComponent Begin
-#center 8 2.2 9.75
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#TextureCubemapComponent textures/grass
-
-#EntityEnd
-
-#EntityStart
-#TagComponent DiamondLight
-#TransformComponent Begin
-#center 8 -1.8 11.7
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#TextureCubemapComponent textures/diamond
-#LightComponent Begin
-#ambientlight 0.06 0.06 0.06 1
-#diffuselight 0.12 0.07 0.49 1
-#specularlight 0 0 1 1
-#constant 0.061
-#linear 0.023
-#quadratic 0.1
-#shininess 118
-
-#EntityEnd
-
-#EntityStart
-#TagComponent GrassOnGrassXD
-#TransformComponent Begin
-#center 8.6 3.65 9.15
-#angles 90 0 44.5
-#scale 0.01 0.35 0.04
-#RenderableComponent Wall
-#Texture2DComponent textures/grass_alpha.png
-
-#EntityEnd
-
-#EntityStart
-#TagComponent ScriptEntity
-#TransformComponent Begin
-#center 11.55 0.372738 1.05
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Cube
-#ColorComponent 0.104383 0.456417 0.204165 1
-#ScriptComponent scripts/Examples.py
-
-#EntityEnd
-
-#EntityStart
-#TagComponent NewScript
-#TransformComponent Begin
-#center 29.75 4.9 -8.6
-#angles 0 0 0
-#scale 1 1 1
-#RenderableComponent Pyramid
-#ColorComponent 1 0.917293 0.917293 1
-#LightComponent Begin
-#ambientlight 0.5 0.5 0.5 1
-#diffuselight 0.9 0.9 0.9 1
-#specularlight 0.5 0.5 0.5 1
-#constant 1
-#linear 0.045
-#quadratic 0.0075
-#shininess 64
-#ScriptComponent scripts/NewScript.py
-
-#EntityEnd
-
-#EntityStart
-#TagComponent empty
-#TransformComponent Begin
-#center 0 -20 0
-#angles 0 0 0
-#scale 1000 1 1000
-#RenderableComponent Surface
-#ColorComponent 0.203008 0.203005 0.203005 1
-
-#EntityEnd
 
 #SceneEnd

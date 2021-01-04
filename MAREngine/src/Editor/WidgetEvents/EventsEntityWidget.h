@@ -22,7 +22,7 @@
 #define MAR_ENGINE_F_EVENTS_ENTITY_WIDGET_H
 
 
-#include "../../Core/events/EntityEvents/IEntityEvents.h"
+#include "../../Core/ecs/Entity/IEntityEvents.h"
 
 
 namespace marengine {

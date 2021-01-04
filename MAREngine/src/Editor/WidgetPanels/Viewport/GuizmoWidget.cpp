@@ -20,7 +20,7 @@
 
 #include "GuizmoWidget.h"
 #include "../../Camera/Camera.h"
-#include "../../../Core/events/ComponentEvents/EventsComponentEntity.h"
+#include "../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Window/Window.h"
