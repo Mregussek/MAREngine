@@ -29,7 +29,7 @@
 namespace marengine {
 
 	class Scene; 
-	struct ScriptComponent;
+	struct PythonScriptComponent;
 
 
 	class WFilesystemWidgets : public IWidgetPanel {

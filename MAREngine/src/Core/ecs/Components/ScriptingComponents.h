@@ -29,19 +29,18 @@
 namespace marengine {
 
 
-	struct ScriptComponent {
+	struct PythonScriptComponent {
+
 		std::string script{ "empty" };
 		std::string source{ "empty" };
 		PythonScript pythonScript;
 
-		ScriptComponent() = default;
-		ScriptComponent(const ScriptComponent& sc) = default;
-		ScriptComponent(std::string s)
+		PythonScriptComponent() = default;
+		PythonScriptComponent(const PythonScriptComponent& sc) = default;
+		PythonScriptComponent(std::string s)
 			: script(std::move(s))
 		{}
 
-		operator std::string& () { return script; }
-		operator const std::string& () const { return script; }
 	};
 
 

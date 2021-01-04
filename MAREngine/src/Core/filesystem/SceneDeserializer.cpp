@@ -161,9 +161,9 @@ namespace marengine {
 			cam.o_far = loadFloat("CameraComponent", "o_far");
 		}
 
-		if (jsonContains("ScriptComponent")) {
-			auto& script{ entity.addComponent<ScriptComponent>() };
-			setString(script.script, "ScriptComponent", "path");
+		if (jsonContains("PythonScriptComponent")) {
+			auto& script{ entity.addComponent<PythonScriptComponent>() };
+			setString(script.script, "PythonScriptComponent", "path");
 		}
 	}
 
@@ -345,8 +345,8 @@ namespace marengine {
 				loadFloatGetline(cam.o_near, 5);	// #near - 5
 				loadFloatGetline(cam.o_far, 4);		// #far
 			}
-			else if (line.find("#ScriptComponent") != std::string::npos) {
-				auto& script{ entity.get_addComponent<ScriptComponent>() };
+			else if (line.find("#PythonScriptComponent") != std::string::npos) {
+				auto& script{ entity.get_addComponent<PythonScriptComponent>() };
 				loadString(script.script, 17);
 			}
 			else if (line.find("#EntityEnd") != std::string::npos) {

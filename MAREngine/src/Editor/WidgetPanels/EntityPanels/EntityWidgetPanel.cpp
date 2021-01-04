@@ -86,8 +86,8 @@ namespace marengine {
 			handleTransformComponent();
 		}
 
-		if (currentEntity->hasComponent<ScriptComponent>() && ImGui::CollapsingHeader("ScriptComponent")) {
-			CommonComponentHandler::handleScriptComponent(*currentEntity);
+		if (currentEntity->hasComponent<PythonScriptComponent>() && ImGui::CollapsingHeader("PythonScriptComponent")) {
+			CommonComponentHandler::handlePythonScriptComponent(*currentEntity);
 		}
 
 		if (currentEntity->hasComponent<RenderableComponent>() && ImGui::CollapsingHeader("RenderableComponent")) {
@@ -174,7 +174,7 @@ namespace marengine {
 		const bool hasRenderable{ currentEntity->hasComponent<RenderableComponent>() };
 		const bool hasLight{ currentEntity->hasComponent<LightComponent>() };
 		const bool hasCamera{ currentEntity->hasComponent<CameraComponent>() };
-		const bool hasScript{ currentEntity->hasComponent<ScriptComponent>() };
+		const bool hasScript{ currentEntity->hasComponent<PythonScriptComponent>() };
 		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>()
 			&& !currentEntity->hasComponent<Texture2DComponent>()
 			&& !currentEntity->hasComponent<TextureCubemapComponent>();
@@ -205,8 +205,8 @@ namespace marengine {
 			FEventsComponentEntity::Instance->onAdd<CameraComponent>(*currentEntity);
 		}
 
-		if (!hasScript && ImGui::MenuItem("Add ScriptComponent")) {
-			FEventsComponentEntity::Instance->onAdd<ScriptComponent>(*currentEntity);
+		if (!hasScript && ImGui::MenuItem("Add PythonScriptComponent")) {
+			FEventsComponentEntity::Instance->onAdd<PythonScriptComponent>(*currentEntity);
 		}
 	}
 
@@ -288,7 +288,7 @@ namespace marengine {
 	void WEntityWidgetPanel::handleCameraComponent() const {		
 		auto& camera = currentEntity->getComponent<CameraComponent>();
 
-		if (!camera.checkIfMain()) {
+		if (!camera.isMainCamera()) {
 			if (ImGui::Button("Remove Camera")) {
 				FEventsComponentEntity::Instance->onRemove<CameraComponent>(*currentEntity);
 				return;
@@ -339,7 +339,7 @@ namespace marengine {
 		}
 
 		if (updatedCamera) {
-			if (camera.checkIfMain()) {
+			if (camera.isMainCamera()) {
 				FEventsComponentEntity::Instance->onMainCameraUpdate(*currentEntity);
 			}
 		}

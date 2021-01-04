@@ -19,10 +19,12 @@
 
 
 #include "EventsComponentEntity.h"
+#include "Entity.h"
+#include "../SceneManager.h"
+#include "../Scene.h"
+#include "../Components/Components.h"
 #include "../../events/RenderEvents.h"
 #include "../../graphics/RenderAPI/RenderPipeline.h"
-#include "../../ecs/SceneManager.h"
-#include "../../ecs/Scene.h"
 
 
 namespace marengine {
@@ -63,12 +65,12 @@ namespace marengine {
 
 		auto hasMainCamera = [&scene](entt::entity entity) {
 			const auto& cam = scene->getComponent<CameraComponent>(entity);
-			return cam.checkIfMain();
+			return cam.isMainCamera();
 		};
 
 		auto view = scene->getView<CameraComponent>();
 		view.each([&scene](entt::entity entt_entity, CameraComponent& cameraComponent) {
-			if (cameraComponent.checkIfMain()) {
+			if (cameraComponent.isMainCamera()) {
 				const auto& transform{ scene->getComponent<TransformComponent>(entt_entity) };
 				
 				cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
@@ -91,7 +93,7 @@ namespace marengine {
 
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& camera{ entity.getComponent<CameraComponent>() };
-			if (camera.checkIfMain()) { 
+			if (camera.isMainCamera()) {
 				onMainCameraUpdate(entity); 
 			}
 		}
@@ -203,7 +205,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) const {
 		const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-		if (cameraComponent.checkIfMain()) {
+		if (cameraComponent.isMainCamera()) {
 			// cannot remove main camera!
 		}
 		else {

@@ -41,18 +41,18 @@ namespace marengine {
 		}
 	}
 
-	void CommonComponentHandler::handleScriptComponent(const Entity& entity) {
+	void CommonComponentHandler::handlePythonScriptComponent(const Entity& entity) {
 		if (ImGui::MenuItem("Remove Script")) {
-			entity.removeComponent<ScriptComponent>();
+			entity.removeComponent<PythonScriptComponent>();
 			WScriptIDE::Instance->reset();
 			return;
 		}
 
-		auto& script = entity.getComponent<ScriptComponent>();
-		handleScriptComponent(script);
+		auto& script = entity.getComponent<PythonScriptComponent>();
+		handlePythonScriptComponent(script);
 	}
 
-	void CommonComponentHandler::handleScriptComponent(ScriptComponent& script) {
+	void CommonComponentHandler::handlePythonScriptComponent(PythonScriptComponent& script) {
 		ImGui::Text("Current script: %s", script.script.c_str());
 
 		if (ImGui::Button("Create new script")) { WScriptIDE::Instance->setCreatingNewScript(); }

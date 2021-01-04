@@ -29,6 +29,7 @@ namespace marengine {
 
 
 	struct ColorComponent {
+
 		maths::vec4 texture{ 0.5f, 0.5f, 0.5f, 1.f };
 
 		ColorComponent() = default;
@@ -37,11 +38,10 @@ namespace marengine {
 			: texture(std::move(col))
 		{}
 
-		operator maths::vec4& () { return texture; }
-		operator const maths::vec4& () const { return texture; }
 	};
 
 	struct Texture2DComponent {
+
 		std::string texture{ "empty" };
 
 		Texture2DComponent() = default;
@@ -50,11 +50,10 @@ namespace marengine {
 			: texture(std::move(tex))
 		{}
 
-		operator std::string& () { return texture; }
-		operator const std::string& () const { return texture; }
 	};
 
 	struct TextureCubemapComponent {
+
 		std::string texture{ "empty" };
 
 		TextureCubemapComponent() = default;
@@ -63,8 +62,6 @@ namespace marengine {
 			: texture(std::move(cub))
 		{}
 
-		operator std::string& () { return texture; }
-		operator const std::string& () const { return texture; }
 	};
 
 

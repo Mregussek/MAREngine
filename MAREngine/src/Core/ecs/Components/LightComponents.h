@@ -43,36 +43,6 @@ namespace marengine {
 		LightComponent(const LightComponent& li) = default;
 	};
 
-	struct LightAttenuation {
-
-		float constant{ 1.0f };
-		float linear{ 0.045f };
-		float quadratic{ 0.0075f };
-
-	};
-
-	struct PointLight {
-
-		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
-		LightAttenuation attenuation;
-
-		PointLight() = default;
-		PointLight(const PointLight& pl) = default;
-
-	};
-
-	struct DirectionalLight {
-
-		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
-		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
-
-		LightAttenuation attenuation;
-
-		DirectionalLight() = default;
-		DirectionalLight(const DirectionalLight& dl) = default;
-
-	};
-
 
 }
 

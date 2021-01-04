@@ -26,14 +26,8 @@
 #include "TextureComponents.h"
 #include "ScriptingComponents.h"
 #include "CameraComponents.h"
-#include "LightComponents.h"
 #include "EngineOnlyComponents.h"
-
-
-namespace marengine {
-
-
-}
+#include "LightComponents.h"
 
 
 #endif // !MAR_ENGINE_ECS_COMPONENTS_H

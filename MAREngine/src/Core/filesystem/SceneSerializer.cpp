@@ -63,7 +63,7 @@ namespace marengine {
 	}
 
 	void FSceneSerializer::saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
-		const std::string& tag{ entity.getComponent<TagComponent>() };
+		const std::string& tag{ entity.getComponent<TagComponent>().tag };
 		auto saveString = [&json, &tag, &sceneName, index](const char* componentName, const char* value, const std::string& str) {
 			json["Scene"][sceneName]["Entity"][index][componentName][value] = str;
 		};
@@ -134,9 +134,9 @@ namespace marengine {
 			saveFloat("CameraComponent", "o_far", cam.o_far);
 		}
 
-		if (entity.hasComponent<ScriptComponent>()) {
-			const auto& script{ entity.getComponent<ScriptComponent>() };
-			saveString("ScriptComponent", "path", script.script);
+		if (entity.hasComponent<PythonScriptComponent>()) {
+			const auto& script{ entity.getComponent<PythonScriptComponent>() };
+			saveString("PythonScriptComponent", "path", script.script);
 		}
 	}
 

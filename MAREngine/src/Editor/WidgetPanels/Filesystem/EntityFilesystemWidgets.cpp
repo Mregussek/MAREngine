@@ -42,7 +42,7 @@ namespace marengine {
 
 		constexpr auto assignScriptCallback = [](const std::string& path, const std::string& filename) {
 			const auto& assetsPath{ MAREngine::Instance()->getAssetsPath() };
-			auto& scriptComponent{ WEntityWidgetPanel::Instance->getCurrentEntity().getComponent<ScriptComponent>() };
+			auto& scriptComponent{ WEntityWidgetPanel::Instance->getCurrentEntity().getComponent<PythonScriptComponent>() };
 
 			scriptComponent.script = path;
 
