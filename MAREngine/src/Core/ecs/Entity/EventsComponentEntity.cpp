@@ -31,9 +31,10 @@ namespace marengine {
 
 
 	const FEventsComponentEntity* FEventsComponentEntity::Instance{ nullptr };
+	const FEventsCameraEntity* FEventsCameraEntity::Instance{ nullptr };
 
 
-	void FEventsComponentEntity::onMainCameraUpdate(const Entity& entity) const {
+	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) const {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
 		auto updateCameraOperation = [&entity, &cameraComponent, this]() {
@@ -55,12 +56,12 @@ namespace marengine {
 		}
 	}
 
-	void FEventsComponentEntity::onEditorCameraSet(const RenderCamera* camera) const {
+	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* camera) const {
 		RenderPipeline::Instance->pushCameraToPipeline(camera);
 		RenderEvents::Instance().onMainCameraUpdate(*camera);
 	}
 
-	void FEventsComponentEntity::onGameCameraSet() const {
+	void FEventsCameraEntity::onGameCameraSet() const {
 		Scene* scene{ SceneManager::Instance->getScene() };
 
 		auto hasMainCamera = [&scene](entt::entity entity) {
@@ -94,7 +95,7 @@ namespace marengine {
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& camera{ entity.getComponent<CameraComponent>() };
 			if (camera.isMainCamera()) {
-				onMainCameraUpdate(entity); 
+				FEventsCameraEntity::Instance->onMainCameraUpdate(entity);
 			}
 		}
 

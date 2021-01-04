@@ -24,6 +24,7 @@
 
 #include "../../../mar.h"
 #include "../Mesh/Vertex.h"
+#include "../Mesh/MeshDefinitions.h"
 #include "RenderContainerDefinitions.h"
 
 

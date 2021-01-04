@@ -38,7 +38,7 @@ namespace marengine {
 
 		m_camera.initialize(m_aspectRatio);
 
-		FEventsComponentEntity::Instance->onEditorCameraSet(m_camera.getCameraData());
+		FEventsCameraEntity::Instance->onEditorCameraSet(m_camera.getCameraData());
 	}
 
 	void WViewportWidget::destroy() {
@@ -74,10 +74,10 @@ namespace marengine {
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
 					if (sceneManager->useEditorCamera) {
-						FEventsComponentEntity::Instance->onEditorCameraSet(camera.getCameraData());
+						FEventsCameraEntity::Instance->onEditorCameraSet(camera.getCameraData());
 					}
 					else {
-						FEventsComponentEntity::Instance->onGameCameraSet();
+						FEventsCameraEntity::Instance->onGameCameraSet();
 					}
 				}
 			}
@@ -87,7 +87,7 @@ namespace marengine {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
-					FEventsComponentEntity::Instance->onEditorCameraSet(camera.getCameraData());
+					FEventsCameraEntity::Instance->onEditorCameraSet(camera.getCameraData());
 				}
 			}
 

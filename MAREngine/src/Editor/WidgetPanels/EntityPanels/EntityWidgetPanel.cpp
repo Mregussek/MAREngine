@@ -340,7 +340,7 @@ namespace marengine {
 
 		if (updatedCamera) {
 			if (camera.isMainCamera()) {
-				FEventsComponentEntity::Instance->onMainCameraUpdate(*currentEntity);
+				FEventsCameraEntity::Instance->onMainCameraUpdate(*currentEntity);
 			}
 		}
 

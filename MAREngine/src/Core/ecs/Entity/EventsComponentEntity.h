@@ -31,15 +31,21 @@ namespace marengine {
 	class RenderCamera;
 
 
-	class FEventsComponentEntity {
+	class FEventsCameraEntity {
 	public:
 
-		static const FEventsComponentEntity* Instance;
-
+		static const FEventsCameraEntity* Instance;
 
 		void onMainCameraUpdate(const Entity& entity) const;
 		void onEditorCameraSet(const RenderCamera* camera) const;
 		void onGameCameraSet() const;
+
+	};
+
+	class FEventsComponentEntity {
+	public:
+
+		static const FEventsComponentEntity* Instance;
 
 		template<typename T> void onAdd(const Entity& entity) const { 
 			entity.template addComponent<T>();

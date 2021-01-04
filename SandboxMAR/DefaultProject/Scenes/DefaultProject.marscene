@@ -18,7 +18,7 @@ MAREngine scene file
 #scale 1 1 1
 #RenderableComponent Cube
 #ColorComponent 0.2 0.5 0.2 1
-#ScriptComponent scripts/RotateXY.py
+#PythonScriptComponent scripts/RotateXY.py
 
 #EntityEnd
 
@@ -169,7 +169,7 @@ MAREngine scene file
 #linear 0.015
 #quadratic 0.01
 #shininess 31.5
-#ScriptComponent scripts/LightMover.py
+#PythonScriptComponent scripts/LightMover.py
 
 #EntityEnd
 

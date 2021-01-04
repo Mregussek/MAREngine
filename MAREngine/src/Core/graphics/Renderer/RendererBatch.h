@@ -38,10 +38,6 @@ namespace marengine {
 
 
 	class RendererBatch {
-
-		typedef ShaderOpenGL ShaderGL;
-		typedef TextureOpenGL TextureGL;
-
 	public:
 
 		void initialize();
@@ -53,16 +49,17 @@ namespace marengine {
 		void setupSSBOs();
 		void setupShaders();
 
-		void drawWithShader(const ShaderGL& shader, const std::vector<LightContainer>& lights,
+		void drawWithShader(const ShaderOpenGL& shader, const std::vector<LightContainer>& lights,
 			const std::vector<RenderContainer>& containers) const;
 
 		void passTransformsToSSBO(const RenderContainer& container) const;
 		void passColorsToSSBO(const ColorVector& colors) const;
-		void passTexturesToShader(const ShaderGL& shader, const TextureVector& textures) const;
-		void passCubemapsToShader(const ShaderGL& shader, const TextureVector& cubemaps) const;
+		void passTexturesToShader(const ShaderOpenGL& shader, const TextureVector& textures) const;
+		void passCubemapsToShader(const ShaderOpenGL& shader, const TextureVector& cubemaps) const;
 		void passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const;
 
 
+		ShaderOpenGL m_shaderColors;
 		ShaderOpenGL m_shader2D;
 
 	};

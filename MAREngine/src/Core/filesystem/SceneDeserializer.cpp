@@ -347,7 +347,7 @@ namespace marengine {
 			}
 			else if (line.find("#PythonScriptComponent") != std::string::npos) {
 				auto& script{ entity.get_addComponent<PythonScriptComponent>() };
-				loadString(script.script, 17);
+				loadString(script.script, 23);
 			}
 			else if (line.find("#EntityEnd") != std::string::npos) {
 				return;

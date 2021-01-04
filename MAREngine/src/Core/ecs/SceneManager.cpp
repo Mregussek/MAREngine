@@ -78,7 +78,7 @@ namespace marengine {
 	void SceneManager::setPlayMode() { 
 		m_EditorMode = false; 
 		initPlayMode(); 
-		FEventsComponentEntity::Instance->onGameCameraSet();
+		FEventsCameraEntity::Instance->onGameCameraSet();
 	}
 
 	void SceneManager::setExitPlayMode() { 

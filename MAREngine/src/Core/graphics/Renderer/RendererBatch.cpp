@@ -116,7 +116,7 @@ namespace marengine {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
 
-	void RendererBatch::drawWithShader(const ShaderGL& shader, const std::vector<LightContainer>& lights, const std::vector<RenderContainer>& containers) const {
+	void RendererBatch::drawWithShader(const ShaderOpenGL& shader, const std::vector<LightContainer>& lights, const std::vector<RenderContainer>& containers) const {
 		auto pushContainerToLight = [&shader, &lights, this](const RenderContainer& container) {
 			passTransformsToSSBO(container);
 			passColorsToSSBO(container.getColors());
@@ -161,26 +161,26 @@ namespace marengine {
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");
 	}
 
-	void RendererBatch::passTexturesToShader(const ShaderGL& shader, const TextureVector& textures) const {
+	void RendererBatch::passTexturesToShader(const ShaderOpenGL& shader, const TextureVector& textures) const {
 		GRAPHICS_INFO("RENDERER_BATCH: passing textures data to shader!");
 
 		std::for_each(textures.cbegin(), textures.cend(), [&shader](const TexturePair& texture) {
-			const auto textureID = (int32_t)TextureGL::Instance()->loadTexture(texture.second);
+			const auto textureID = (int32_t)TextureOpenGL::Instance()->loadTexture(texture.second);
 			const auto samplerIndex = (uint32_t)texture.first;
 
-			TextureGL::Instance()->bind2D(samplerIndex, textureID);
+			TextureOpenGL::Instance()->bind2D(samplerIndex, textureID);
 			shader.setUniformSampler(GLSL_SSBOs::u_2D[samplerIndex], samplerIndex);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
 	}
 
-	void RendererBatch::passCubemapsToShader(const ShaderGL& shader, const TextureVector& cubemaps) const {
+	void RendererBatch::passCubemapsToShader(const ShaderOpenGL& shader, const TextureVector& cubemaps) const {
 		std::for_each(cubemaps.cbegin(), cubemaps.cend(), [&shader](const TexturePair& texture) {
-			const auto textureID = (int32_t)TextureGL::Instance()->loadCubemap(texture.second);
+			const auto textureID = (int32_t)TextureOpenGL::Instance()->loadCubemap(texture.second);
 			const auto samplerIndex = (uint32_t)texture.first;
 
-			TextureGL::Instance()->bindCube(samplerIndex, textureID);
+			TextureOpenGL::Instance()->bindCube(samplerIndex, textureID);
 			shader.setUniformSampler(GLSL_SSBOs::u_Cubemap[samplerIndex], samplerIndex);
 		});
 
