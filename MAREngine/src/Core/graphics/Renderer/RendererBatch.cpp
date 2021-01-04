@@ -55,7 +55,7 @@ namespace marengine {
 		{ // setup EntityCmp SSBO
 			auto& entityCmp = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			std::vector<UniformItem> entitycmpItems{ 
-				GLSL_SSBOs::ut_u_SeparateTransform, GLSL_SSBOs::ut_u_samplerTypes
+				GLSL_SSBOs::ut_u_SeparateTransform
 			};
 
 			entityCmp.initialize(GLSL_SSBOs::ub_EntityCmp, std::move(entitycmpItems));
@@ -83,6 +83,13 @@ namespace marengine {
 
 		const char* vert = "resources/shaders/batcher.vert.glsl";
 		{
+			const char* frag = "resources/shaders/color.frag.glsl";
+			const ShaderPaths shaderPaths(vert, frag, nullptr);
+
+			m_shaderColors.initialize(shaderPaths);
+			m_shaderColors.setupShaderUniforms(GLSL_SSBOs::u_2D);
+		}
+		{
 			const char* frag = "resources/shaders/texture2d.frag.glsl";
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
@@ -94,6 +101,7 @@ namespace marengine {
 	void RendererBatch::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
+		m_shaderColors.shutdown();
 		m_shader2D.shutdown();
 		TextureOpenGL::Instance()->shutdown();
 
@@ -108,8 +116,9 @@ namespace marengine {
 		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 		cameraSSBO.bind();
 
+		m_shaderColors.bind();
+		drawWithShader(m_shaderColors, lights, renderPipeline.getColorContainers());
 		m_shader2D.bind();
-		drawWithShader(m_shader2D, lights, renderPipeline.getColorContainers());
 		drawWithShader(m_shader2D, lights, renderPipeline.get2Dcontainers());
 		//drawWithShader(m_shader2D, lights, renderPipeline.getCubemapContainers());
 

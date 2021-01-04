@@ -141,8 +141,8 @@ namespace marengine {
 		PLATFORM_TRACE("SHADER_OPENGL: creating shader...");
 
 		PLATFORM_GL_FUNC( const GLuint shaderProgramId = glCreateProgram() );
-		const GLuint vs = compileShader(GL_VERTEX_SHADER, vertSrc);
-		const GLuint fs = compileShader(GL_FRAGMENT_SHADER, fragSrc);
+		const uint32_t vs{ compileShader(GL_VERTEX_SHADER, vertSrc) };
+		const uint32_t fs{ compileShader(GL_FRAGMENT_SHADER, fragSrc) };
 
 		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, vs) );
 		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, fs) );
