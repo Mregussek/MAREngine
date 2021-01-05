@@ -20,9 +20,8 @@
 
 #include "RenderPipeline.h"
 #include "RenderCamera.h"
-#include "RenderPipelineHelper.h"
 #include "../GraphicsLogs.h"
-#include "../GraphicLimits.h"
+#include "../GraphicsLimits.h"
 #include "../../ecs/Entity/Entity.h"
 
 
@@ -34,19 +33,17 @@ namespace marengine {
 
 	const std::vector<FMeshBatchStaticColor>& RenderPipeline::getColorBatches() const { return m_staticColorBatches; }
 	const std::vector<FMeshBatchStaticTexture2D>& RenderPipeline::getTexture2DBatches() const { return m_staticTexture2DBatches; }
-	const std::vector<LightContainer>& RenderPipeline::getLightContainers() const { return m_lights; }
+	const std::vector<FPointLightBatch>& RenderPipeline::getPointLightBatches() const { return m_pointLightBatches; }
 	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
 
 	void RenderPipeline::reset() {
 		for (auto& batch : m_staticColorBatches) { batch.reset(); }
 		for (auto& batch : m_staticTexture2DBatches) { batch.reset(); }
-		for (auto& container : m_containersCubemap) { container.reset(); }
-		for (auto& light : m_lights) { light.reset(); }
+		for (auto& light : m_pointLightBatches) { light.reset(); }
 
 		m_staticColorBatches.clear();
 		m_staticTexture2DBatches.clear();
-		m_containersCubemap.clear();
-		m_lights.clear();
+		m_pointLightBatches.clear();
 
 		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}
@@ -61,85 +58,73 @@ namespace marengine {
 		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
 
 		if (entity.hasComponent<ColorComponent>()) {
-			auto& availableBatch{ getAvailableColorBatch(entity) };
+			const uint32_t batchIndex{ getAvailableColorBatch(entity) };
+			auto& availableBatch{ m_staticColorBatches[batchIndex] };
 			availableBatch.submitToBatch(entity);
+
+			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
+			rpc.containerIndex = batchIndex;
 		}
 		if (entity.hasComponent<Texture2DComponent>()) {
-			auto& availableBatch{ getAvailableTexture2DBatch(entity) };
+			const uint32_t batchIndex{ getAvailableTexture2DBatch(entity) };
+			auto& availableBatch{ m_staticTexture2DBatches[batchIndex] };
 			availableBatch.submitToBatch(entity);
+
+			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
+			rpc.containerIndex = batchIndex;
+		}
+		if (entity.hasComponent<LightComponent>()) {
+			const uint32_t batchIndex{ getAvailablePointLightBatch(entity) };
+			auto& availableBatch{ m_pointLightBatches[batchIndex] };
+			availableBatch.submitEntityWithLightning(entity);
+
+			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
+			rpc.containerLightIndex = batchIndex;
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	FMeshBatchStaticColor& RenderPipeline::getAvailableColorBatch(const Entity& entity) {
+	uint32_t RenderPipeline::getAvailableColorBatch(const Entity& entity) {
 		auto canBatchEntity = [&entity](FMeshBatchStaticColor& batch) {
 			return batch.canBeBatched(entity);
 		};
 		const auto it = std::find_if(m_staticColorBatches.begin(), m_staticColorBatches.end(), canBatchEntity);
 		if (it != m_staticColorBatches.end()) {
-			return *it;
+			return std::distance(m_staticColorBatches.begin(), it);
 		}
 		else {
-			return m_staticColorBatches.emplace_back();
+			m_staticColorBatches.emplace_back();
+			return m_staticColorBatches.size() - 1;
 		}
 	}
 
-	FMeshBatchStaticTexture2D& RenderPipeline::getAvailableTexture2DBatch(const Entity& entity) {
+	uint32_t RenderPipeline::getAvailableTexture2DBatch(const Entity& entity) {
 		auto canBatchEntity = [&entity](FMeshBatchStaticTexture2D& batch) {
 			return batch.canBeBatched(entity);
 		};
 		const auto it = std::find_if(m_staticTexture2DBatches.begin(), m_staticTexture2DBatches.end(), canBatchEntity);
 		if (it != m_staticTexture2DBatches.end()) {
-			return *it;
+			return std::distance(m_staticTexture2DBatches.begin(), it);
 		}
 		else {
-			return m_staticTexture2DBatches.emplace_back();
+			m_staticTexture2DBatches.emplace_back();
+			return m_staticTexture2DBatches.size() - 1;
 		}
 	}
 
-	void RenderPipeline::pushLightToPipeline(const Entity& entity) {
-		const auto& tran = entity.getComponent<TransformComponent>();
-		auto& rpc = entity.getComponent<RenderPipelineComponent>();
-		const auto& light = entity.getComponent<LightComponent>();
-
-		setContainerLight(rpc);
-		rpc.lightIndex = submitLight(tran.center, light);
-	}
-
-	void RenderPipeline::setContainerLight(RenderPipelineComponent& rpc) {
-		m_lightPtr = nullptr;
-
-		const auto index = RenderPipelineHelper::findAvailableLightContainer(m_lights);
-		if (index != -1) {
-			m_lightPtr = &m_lights[index];
-			rpc.containerLightIndex = index;
+	uint32_t RenderPipeline::getAvailablePointLightBatch(const Entity& entity) {
+		auto canBatchEntity = [&entity](FPointLightBatch& batch) {
+			return batch.canBeBatched(entity);
+		};
+		const auto it = std::find_if(m_pointLightBatches.begin(), m_pointLightBatches.end(), canBatchEntity);
+		if (it != m_pointLightBatches.end()) {
+			return std::distance(m_pointLightBatches.begin(), it);;
 		}
 		else {
-			m_lightPtr = &m_lights.emplace_back();
-			rpc.containerLightIndex = m_lights.size() - 1;
+			m_pointLightBatches.emplace_back();
+			return m_pointLightBatches.size() - 1;
 		}
-	}
-
-	size_t RenderPipeline::submitLight(const maths::vec3& position, const LightComponent& light) {
-		if (!m_lightPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitLight(), m_lightPtr is nullptr!");
-			return -1;
-		}
-
-		auto& lightMaterial = m_lightPtr->m_lightMaterials.emplace_back();
-		lightMaterial.position = maths::vec4(position, 1.f);
-		lightMaterial.ambient = light.ambient;
-		lightMaterial.diffuse = light.diffuse;
-		lightMaterial.specular = light.specular;
-		lightMaterial.linear = light.linear;
-		lightMaterial.quadratic = light.quadratic;
-		lightMaterial.constant = light.constant;
-		lightMaterial.shininess = light.shininess;
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted light component with its center, current size = {}", m_lightPtr->m_lightMaterials.size());
-		
-		return m_lightPtr->m_lightMaterials.size() - 1;
 	}
 
 

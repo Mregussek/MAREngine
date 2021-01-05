@@ -87,9 +87,11 @@ namespace marengine {
     #define MAR_LOG_INIT() ::marengine::Log::init()
     
     #define MAR_CORE_TRACE(...) ::marengine::Log::getCoreLogger()->trace(__VA_ARGS__)
+    #define MAR_CORE_DEBUG(...) ::marengine::Log::getCoreLogger()->debug(__VA_ARGS__)
     #define MAR_CORE_INFO(...)  ::marengine::Log::getCoreLogger()->info(__VA_ARGS__)
     #define MAR_CORE_WARN(...)  ::marengine::Log::getCoreLogger()->warn(__VA_ARGS__)
     #define MAR_CORE_ERROR(...) ::marengine::Log::getCoreLogger()->error(__VA_ARGS__)
+    #define MAR_CORE_CRITICAL(...) ::marengine::Log::getCoreLogger()->critical(__VA_ARGS__)
     
     #define MAR_CORE_CHECK_FOR_ERROR()  ::marengine::Log::CheckGLError(__FILE__, __LINE__) 
     

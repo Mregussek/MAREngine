@@ -25,7 +25,7 @@
 #include "../../../mar.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
-#include "RenderContainer.h"
+#include "../Lightning/PointLightBatch.h"
 #include "../../ecs/Components/Components.h"
 
 
@@ -46,7 +46,6 @@ namespace marengine {
 		void reset();
 
 		void pushEntityToPipeline(const Entity& entity);
-		void pushLightToPipeline(const Entity& entity);
 		void pushCameraToPipeline(const RenderCamera* cam);
 
 		static RenderPipeline* Instance;
@@ -55,25 +54,18 @@ namespace marengine {
 	
 		const std::vector<FMeshBatchStaticColor>& getColorBatches() const;
 		const std::vector<FMeshBatchStaticTexture2D>& getTexture2DBatches() const;
-		const std::vector<LightContainer>& getLightContainers() const;
+		const std::vector<FPointLightBatch>& getPointLightBatches() const;
 		const RenderCamera* getCamera() const;
 
 	private:
 
-		FMeshBatchStaticColor& getAvailableColorBatch(const Entity& entity);
-		FMeshBatchStaticTexture2D& getAvailableTexture2DBatch(const Entity& entity);
-
-		void setContainerLight(RenderPipelineComponent& rpc);
-		size_t submitLight(const maths::vec3& position, const LightComponent& light);
-
+		uint32_t getAvailableColorBatch(const Entity& entity);
+		uint32_t getAvailableTexture2DBatch(const Entity& entity);
+		uint32_t getAvailablePointLightBatch(const Entity& entity);
 
 		std::vector<FMeshBatchStaticColor> m_staticColorBatches;
 		std::vector<FMeshBatchStaticTexture2D> m_staticTexture2DBatches;
-		std::vector<RenderContainer> m_containersCubemap;
-		std::vector<LightContainer> m_lights;
-
-		RenderContainer* m_containerPtr{ nullptr };
-		LightContainer* m_lightPtr{ nullptr };
+		std::vector<FPointLightBatch> m_pointLightBatches;
 
 		const RenderCamera* m_camera{ nullptr };
 

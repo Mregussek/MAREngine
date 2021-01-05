@@ -32,6 +32,10 @@ namespace marengine {
 	struct RenderableComponent;
 	struct TransformComponent;
 
+	enum class EMeshBatchStaticType {
+		NONE, COLOR, TEXTURE2D
+	};
+
 
 	class FMeshBatchStatic : public IMeshBatch {
 	public:

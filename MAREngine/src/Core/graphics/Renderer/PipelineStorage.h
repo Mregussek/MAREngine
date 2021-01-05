@@ -28,8 +28,6 @@
 
 namespace marengine {
 	
-	class RenderContainer;
-
 
 	class PipelineStorage {
 	public:
@@ -41,8 +39,6 @@ namespace marengine {
 		const std::vector<PipelineOpenGL>& getPipelines() const;
 
 		const PipelineOpenGL& getPipeline(uint32_t index) const;
-
-		void fillContainer(RenderContainer& container) const;
 
 		void close();
 

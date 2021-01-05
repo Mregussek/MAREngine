@@ -43,12 +43,6 @@ namespace marengine {
 			RenderPipeline::Instance->pushEntityToPipeline(entity);
 		});
 
-		const auto view{ m_scene->getView<LightComponent>() };
-		view.each([this](entt::entity entt_entity, const LightComponent& light) {
-			const Entity entity(entt_entity, m_scene->getRegistry());
-			RenderPipeline::Instance->pushLightToPipeline(entity);
-		});
-
 		RenderEvents::Instance().onContainersReadyToDraw();
 
 		ECS_INFO("SCENE_MANAGER: initialized!");

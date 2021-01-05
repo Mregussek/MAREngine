@@ -20,7 +20,7 @@
 
 #include "MeshBatchStatic.h"
 #include "../../ecs/Entity/Entity.h"
-#include "../GraphicLimits.h"
+#include "../GraphicsLimits.h"
 #include "../../ecs/Components/Components.h"
 
 

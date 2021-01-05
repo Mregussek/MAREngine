@@ -52,7 +52,7 @@ namespace marengine {
 
 		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
 		rpc.colorIndex = m_textures.size() - 1;
-		rpc.materialType = (size_t)MaterialRenderType::TEXTURE2D;
+		rpc.materialType = (size_t)s_meshBatchType;
 	}
 
 	void FMeshBatchStaticTexture2D::submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent) {

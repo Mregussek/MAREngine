@@ -23,10 +23,11 @@
 #include "RenderMemorizer.h"
 #include "PipelineStorage.h"
 #include "../GraphicsLogs.h"
-#include "../GraphicLimits.h"
+#include "../GraphicsLimits.h"
 #include "../RenderAPI/RenderPipeline.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
+#include "../Lightning/PointLightBatch.h"
 #include "../../events/RenderEvents.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
@@ -114,12 +115,12 @@ namespace marengine {
 			cameraSSBO.bind();
 		}
 		{
-			const auto& lights = renderPipeline->getLightContainers();
-			const auto& lightMaterials{ lights[0].getLightMaterials() };
-			const auto lightSize = (int32_t)lightMaterials.size();
+			const auto& lights = renderPipeline->getPointLightBatches();
+			const auto& pointLights{ lights[0].getLights() };
+			const auto lightSize = (int32_t)pointLights.size();
 			const auto& pointLightSSBO = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::PointLightSSBO);
 			pointLightSSBO.bind();
-			pointLightSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(LightMaterial) * lightMaterials.size(), &lightMaterials[0].position.x);
+			pointLightSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(FPointLight) * pointLights.size(), &pointLights[0].position.x);
 			pointLightSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
 		}
 		

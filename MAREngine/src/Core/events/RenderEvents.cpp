@@ -19,11 +19,12 @@
 
 
 #include "RenderEvents.h"
+#include "../graphics/Mesh/MeshBatchStatic.h"
 #include "../graphics/RenderAPI/RenderCamera.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 #include "../graphics/RenderAPI/RenderStatistics.h"
 #include "../graphics/GraphicsLogs.h"
-#include "../graphics/GraphicLimits.h"
+#include "../graphics/GraphicsLimits.h"
 #include "../graphics/Renderer/RenderMemorizer.h"
 #include "../graphics/Renderer/PipelineStorage.h"
 #include "../graphics/Renderer/ShaderBufferStorage.h"
@@ -65,10 +66,10 @@ namespace marengine {
 	}
 
 	void RenderEvents::onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const {
-		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+		if (rpc.materialType == (size_t)EMeshBatchStaticType::COLOR) {
 			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
 		}
-		else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+		else if (rpc.materialType == (size_t)EMeshBatchStaticType::TEXTURE2D) {
 			RenderPipeline::Instance->m_staticTexture2DBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 	}
@@ -79,23 +80,23 @@ namespace marengine {
 	}
 
 	void RenderEvents::onLightPositionUpdate(vec3 position, const RenderPipelineComponent& rpc) const {
-		RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex].position = maths::vec4(position, 1.f);
+		RenderPipeline::Instance->m_pointLightBatches[rpc.containerLightIndex].m_lights[rpc.lightIndex].position = maths::vec4(position, 1.f);
 	}
 
 	void RenderEvents::onLightComponentUpdate(const LightComponent& light, const RenderPipelineComponent& rpc) const {
-		auto& lightMaterial = RenderPipeline::Instance->m_lights[rpc.containerLightIndex].m_lightMaterials[rpc.lightIndex];
+		auto& pointLight{ RenderPipeline::Instance->m_pointLightBatches[rpc.containerLightIndex].m_lights[rpc.lightIndex] };
 
-		lightMaterial.ambient = light.ambient;
-		lightMaterial.diffuse = light.diffuse;
-		lightMaterial.specular = light.specular;
-		lightMaterial.linear = light.linear;
-		lightMaterial.quadratic = light.quadratic;
-		lightMaterial.constant = light.constant;
-		lightMaterial.shininess = light.shininess;
+		pointLight.ambient = light.ambient;
+		pointLight.diffuse = light.diffuse;
+		pointLight.specular = light.specular;
+		pointLight.linear = light.linear;
+		pointLight.quadratic = light.quadratic;
+		pointLight.constant = light.constant;
+		pointLight.shininess = light.shininess;
 	}
 
 	void RenderEvents::onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const {
-		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+		if (rpc.materialType == (size_t)EMeshBatchStaticType::COLOR) {
 			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].m_colors[rpc.colorIndex] = color;
 		}
 	}

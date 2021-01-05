@@ -18,33 +18,46 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDER_API_RENDER_PIPELINE_HELPER_H
-#define MAR_ENGINE_GRAPHICS_RENDER_API_RENDER_PIPELINE_HELPER_H
+#ifndef MAR_ENGINE_F_POINT_LIGHT_BATCH_H
+#define MAR_ENGINE_F_POINT_LIGHT_BATCH_H
 
 
-#include "../../../mar.h"
+#include "LightDefinitions.h"
 
 
 namespace marengine {
 
-	class RenderContainer;
-	class LightContainer;
+	class Entity;
 
 
-	class RenderPipelineHelper {
+	class FPointLightBatch {
+
+		friend class RenderEvents;
+
 	public:
 
-		static int32_t findAvailableRenderContainer(const std::vector<RenderContainer>& containers, uint32_t verticesToPush, uint32_t indicesToPush);
-		static int32_t findAvailableLightContainer(const std::vector<LightContainer>& containers);
+		void reset();
+
+		bool hasAnythingToDraw() const;
+
+		bool canBeBatched(const Entity& entityWithLight) const;
+		void submitEntityWithLightning(const Entity& entity);
+
+		const FPointLightsArray& getLights() const;
+
+		uint32_t getPointLightSSBOindex() const;
+		void setPointLightSSBOindex(uint32_t index);
 
 	private:
 
-		static bool canPushRenderableToContainer(const RenderContainer& container, uint32_t verticesToPush, uint32_t indicesToPush);
+		FPointLightsArray m_lights;
+		uint32_t m_pointLightSSBOindex{ 0 };
 
 	};
-
+	
 
 }
 
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDER_API_RENDER_PIPELINE_HELPER_H
+
+#endif // !MAR_ENGINE_F_POINT_LIGHT_BATCH_H

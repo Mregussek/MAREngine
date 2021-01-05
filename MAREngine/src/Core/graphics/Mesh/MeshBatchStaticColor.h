@@ -50,6 +50,7 @@ namespace marengine {
 
 
 		FColorsArray m_colors;
+		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::COLOR };
 
 	};
 

@@ -18,26 +18,35 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDER_CONTAINER_DEFINITIONS_H
-#define MAR_ENGINE_GRAPHICS_RENDER_CONTAINER_DEFINITIONS_H
+#ifndef MAR_ENGINE_LIGHT_DEFINITIONS_H
+#define MAR_ENGINE_LIGHT_DEFINITIONS_H
 
 
 #include "../../../mar.h"
-#include "../Mesh/Vertex.h"
 
 
 namespace marengine {
 
-	typedef std::pair<int32_t, maths::vec4> ColorPair;
-	typedef std::pair<int32_t, std::string> TexturePair;
 
-	typedef std::vector<Vertex> VertexVector;
-	typedef std::vector<uint32_t> IndicesVector;
-	typedef std::vector<maths::mat4> Mat4Vector;
-	typedef std::vector<ColorPair> ColorVector;
-	typedef std::vector<TexturePair> TextureVector;
-	typedef std::vector<float> FloatVector;
+	struct FPointLight {
+
+		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
+		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
+		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
+		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
+
+		float constant{ 1.0f };
+		float linear{ 0.045f };
+		float quadratic{ 0.0075f };
+		float shininess{ 64.0f };
+
+	};
+
+
+	typedef std::vector<FPointLight> FPointLightsArray;
+
 
 }
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDER_CONTAINER_DEFINITIONS_H
+
+#endif // !MAR_ENGINE_LIGHT_DEFINITIONS_H

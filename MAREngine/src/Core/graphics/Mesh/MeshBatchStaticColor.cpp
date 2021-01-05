@@ -19,7 +19,7 @@
 
 
 #include "MeshBatchStaticColor.h"
-#include "../GraphicLimits.h"
+#include "../GraphicsLimits.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 #include "../RenderAPI/RenderPipeline.h"
@@ -52,7 +52,7 @@ namespace marengine {
 
 		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
 		rpc.colorIndex = m_colors.size() - 1;
-		rpc.materialType = (size_t)MaterialRenderType::COLOR;
+		rpc.materialType = (size_t)s_meshBatchType;
 	}
 
 	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {

@@ -52,6 +52,7 @@ namespace marengine {
 
 
 		FTexturesArray m_textures;
+		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::TEXTURE2D };
 
 	};
 

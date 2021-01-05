@@ -183,8 +183,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<LightComponent>(const Entity& entity) const {
 		entity.addComponent<LightComponent>();
-
-		RenderPipeline::Instance->pushLightToPipeline(entity);
+		SceneManager::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {

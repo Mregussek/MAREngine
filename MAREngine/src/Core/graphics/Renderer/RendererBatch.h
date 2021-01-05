@@ -24,7 +24,6 @@
 
 #include "../../../mar.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "../RenderAPI/RenderContainerDefinitions.h"
 
 
 namespace marengine {

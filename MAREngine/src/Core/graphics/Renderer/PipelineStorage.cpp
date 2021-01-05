@@ -20,7 +20,6 @@
 
 #include "PipelineStorage.h"
 #include "../GraphicsLogs.h"
-#include "../RenderAPI/RenderContainer.h"
 
 
 namespace marengine {
@@ -41,10 +40,6 @@ namespace marengine {
 
 	const PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
 		return m_buffers.at(index);
-	}
-
-	void PipelineStorage::fillContainer(RenderContainer& container) const {
-		container.m_uniqueContainerID = m_buffers.size() - 1;
 	}
 
 	void PipelineStorage::close() {
