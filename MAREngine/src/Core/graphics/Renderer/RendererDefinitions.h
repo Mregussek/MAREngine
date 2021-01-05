@@ -18,38 +18,30 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
-#define MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
+#ifndef MAR_ENGINE_RENDERER_DEFINITIONS_H
+#define MAR_ENGINE_RENDERER_DEFINITIONS_H
 
 
-#include "../../../mar.h"
 #include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "../../../Platform/OpenGL/ShaderBufferStorageOpenGL.h"
+#include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
 
 
 namespace marengine {
-	
 
-	class PipelineStorage {
-	public:
 
-		static PipelineStorage* Instance;
+	typedef PipelineOpenGL FPipeline;
+	typedef std::vector<FPipeline> FPipelinesArray;
 
-		PipelineOpenGL& createPipeline();
+	typedef ShaderBufferStorageOpenGL FShaderStorageBuffer;
+	typedef std::vector<FShaderStorageBuffer> FShaderStorageBuffersArray;
 
-		const std::vector<PipelineOpenGL>& getPipelines() const;
-
-		const PipelineOpenGL& getPipeline(uint32_t index) const;
-
-		void close();
-
-	private:
-
-		std::vector<PipelineOpenGL> m_buffers;
-
-	};
+	typedef UniformBufferOpenGL FUniformBuffer;
+	typedef std::vector<FUniformBuffer> FUniformBuffersArray;
 
 
 }
 
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
+
+#endif // !MAR_ENGINE_RENDERER_DEFINITIONS_H

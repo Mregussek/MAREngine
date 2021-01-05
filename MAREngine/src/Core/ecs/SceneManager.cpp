@@ -21,7 +21,6 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "Scene.h"
-#include "../events/RenderEvents.h"
 #include "../ecs/Entity/EventsComponentEntity.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
@@ -43,7 +42,7 @@ namespace marengine {
 			RenderPipeline::Instance->pushEntityToPipeline(entity);
 		});
 
-		RenderEvents::Instance().onContainersReadyToDraw();
+		RenderPipeline::Instance->onBatchesReadyToDraw();
 
 		ECS_INFO("SCENE_MANAGER: initialized!");
 	}

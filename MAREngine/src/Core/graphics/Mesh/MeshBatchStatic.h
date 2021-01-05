@@ -33,7 +33,9 @@ namespace marengine {
 	struct TransformComponent;
 
 	enum class EMeshBatchStaticType {
-		NONE, COLOR, TEXTURE2D
+		NONE = -1,
+		COLOR = 1, 
+		TEXTURE2D = 2
 	};
 
 

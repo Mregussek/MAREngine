@@ -35,8 +35,7 @@ namespace marengine {
 		m_memorizer.Instance = &m_memorizer;
 		m_statistics.Instance = &m_statistics;
 		m_renderPipeline.Instance = &m_renderPipeline;
-		m_shaderBufferStorage.Instance = &m_shaderBufferStorage;
-		m_pipelineStorage.Instance = &m_pipelineStorage;
+		m_pipelineManager.Instance = &m_pipelineManager;
 		
 		m_renderer.initialize();
 	}
@@ -53,8 +52,7 @@ namespace marengine {
 		LAYER_TRACE("RENDER_LAYER: {} going to close...", p_debugName);
 	
 		m_renderPipeline.reset();
-		m_shaderBufferStorage.close();
-		m_pipelineStorage.close();
+		m_pipelineManager.close();
 
 		m_renderer.close();
 	}

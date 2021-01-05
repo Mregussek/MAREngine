@@ -18,49 +18,26 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_MESH_BATCH_STATIC_COLOR_H
-#define MAR_ENGINE_F_MESH_BATCH_STATIC_COLOR_H
-
-
-#include "MeshDefinitions.h"
-#include "MeshBatchStatic.h"
+#ifndef MAR_ENGINE_F_EVENTS_MESH_BATCH_STATIC_H
+#define MAR_ENGINE_F_EVENTS_MESH_BATCH_STATIC_H
 
 
 namespace marengine {
 
 	class Entity;
-	struct ColorComponent;
 
 
-	class FMeshBatchStaticColor : public FMeshBatchStatic {
-
-		friend class FEventsMeshBatchStatic;
-
+	class FEventsMeshBatchStatic {
 	public:
 
-		virtual void reset() override;
-		virtual bool canBeBatched(const Entity& entity) const override;
-		virtual void submitToBatch(const Entity& entity) override;
+		static void onTransformUpdate(const Entity& entity);
 
-		const FColorsArray& getColors() const;
-
-		uint32_t getUniqueColorsID() const;
-		void setUniqueColorsID(uint32_t id);
-
-	private:
-
-		void submitColor(const ColorComponent& colorComponent);
-
-
-		FColorsArray m_colors;
-		uint32_t m_uniqueColorsID{ 0 };
-		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::COLOR };
+		static void onColorUpdate(const Entity& entity);
 
 	};
-
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_COLOR_H
+#endif // !MAR_ENGINE_F_EVENTS_MESH_BATCH_STATIC_H

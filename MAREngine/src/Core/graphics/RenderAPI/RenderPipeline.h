@@ -37,7 +37,8 @@ namespace marengine {
 
 	class RenderPipeline {
 
-		friend class RenderEvents;
+		friend class FEventsMeshBatchStatic;
+		friend class FEventsLightBatch;
 
 	public:
 
@@ -48,14 +49,16 @@ namespace marengine {
 		void pushEntityToPipeline(const Entity& entity);
 		void pushCameraToPipeline(const RenderCamera* cam);
 
+		void onBatchesReadyToDraw();
+
 		static RenderPipeline* Instance;
 
 		// ---- GETTERS for container ---- //
 	
 		const std::vector<FMeshBatchStaticColor>& getColorBatches() const;
 		const std::vector<FMeshBatchStaticTexture2D>& getTexture2DBatches() const;
-		const std::vector<FPointLightBatch>& getPointLightBatches() const;
-		const RenderCamera* getCamera() const;
+		const FPointLightBatch& getPointLightBatch() const;
+		const RenderCamera* getRenderCamera() const;
 
 	private:
 
@@ -65,9 +68,9 @@ namespace marengine {
 
 		std::vector<FMeshBatchStaticColor> m_staticColorBatches;
 		std::vector<FMeshBatchStaticTexture2D> m_staticTexture2DBatches;
-		std::vector<FPointLightBatch> m_pointLightBatches;
+		FPointLightBatch m_pointLightBatch;
 
-		const RenderCamera* m_camera{ nullptr };
+		const RenderCamera* m_renderCamera{ nullptr };
 
 	};
 

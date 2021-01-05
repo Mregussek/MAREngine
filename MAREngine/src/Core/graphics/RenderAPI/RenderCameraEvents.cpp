@@ -18,46 +18,16 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_POINT_LIGHT_BATCH_H
-#define MAR_ENGINE_F_POINT_LIGHT_BATCH_H
-
-
-#include "LightDefinitions.h"
+#include "RenderCameraEvents.h"
+#include "RenderBufferManager.h"
 
 
 namespace marengine {
 
-	class Entity;
 
+	void FRenderCameraEvents::onMainCameraUpdate(const RenderCamera* renderCamera) {
+		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
+	}
 
-	class FPointLightBatch {
-
-		friend class FEventsLightBatch;
-
-	public:
-
-		void reset();
-
-		bool hasAnythingToDraw() const;
-
-		bool canBeBatched(const Entity& entityWithLight) const;
-		void submitEntityWithLightning(const Entity& entity);
-
-		const FPointLightsArray& getLights() const;
-
-		uint32_t getUniquePointLightID() const;
-		void setUniquePointLightID(uint32_t index);
-
-	private:
-
-		FPointLightsArray m_lights;
-		uint32_t m_uniquePointLightID{ 0 };
-
-	};
-	
 
 }
-
-
-
-#endif // !MAR_ENGINE_F_POINT_LIGHT_BATCH_H

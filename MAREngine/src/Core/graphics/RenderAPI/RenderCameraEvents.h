@@ -18,37 +18,25 @@
 **/
 
 
-#include "PipelineStorage.h"
-#include "../GraphicsLogs.h"
+#ifndef MAR_ENGINE_F_RENDER_CAMERA_EVENTS_H
+#define MAR_ENGINE_F_RENDER_CAMERA_EVENTS_H
 
 
 namespace marengine {
 
+	class RenderCamera;
 
-	PipelineStorage* PipelineStorage::Instance{ nullptr };
 
+	class FRenderCameraEvents {
+	public:
+		
+		static void onMainCameraUpdate(const RenderCamera* renderCamera);
 
-	PipelineOpenGL& PipelineStorage::createPipeline() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: creating pipeline... current size {}", m_buffers.size() + 1);
-
-		return m_buffers.emplace_back();
-	}
-
-	const std::vector<PipelineOpenGL>& PipelineStorage::getPipelines() const {
-		return m_buffers;
-	}
-
-	const PipelineOpenGL& PipelineStorage::getPipeline(uint32_t index) const {
-		return m_buffers.at(index);
-	}
-
-	void PipelineStorage::close() {
-		GRAPHICS_TRACE("PIPELINE_STORAGE: closing...");
-
-		for (auto& buffer : m_buffers) { buffer.close(); }
-
-		m_buffers.clear();
-	}
+	};
 
 
 }
+
+
+
+#endif // !MAR_ENGINE_F_RENDER_CAMERA_EVENTS_H

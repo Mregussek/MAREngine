@@ -19,6 +19,8 @@
 
 
 #include "RenderPipeline.h"
+#include "../Renderer/PipelineManager.h"
+#include "RenderBufferManager.h"
 #include "RenderCamera.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicsLimits.h"
@@ -31,25 +33,20 @@ namespace marengine {
 	RenderPipeline* RenderPipeline::Instance{ nullptr };
 
 
-	const std::vector<FMeshBatchStaticColor>& RenderPipeline::getColorBatches() const { return m_staticColorBatches; }
-	const std::vector<FMeshBatchStaticTexture2D>& RenderPipeline::getTexture2DBatches() const { return m_staticTexture2DBatches; }
-	const std::vector<FPointLightBatch>& RenderPipeline::getPointLightBatches() const { return m_pointLightBatches; }
-	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
-
 	void RenderPipeline::reset() {
 		for (auto& batch : m_staticColorBatches) { batch.reset(); }
 		for (auto& batch : m_staticTexture2DBatches) { batch.reset(); }
-		for (auto& light : m_pointLightBatches) { light.reset(); }
 
 		m_staticColorBatches.clear();
 		m_staticTexture2DBatches.clear();
-		m_pointLightBatches.clear();
+
+		m_pointLightBatch.reset();
 
 		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}
 
 	void RenderPipeline::pushCameraToPipeline(const RenderCamera* cam) {
-		m_camera = cam;
+		m_renderCamera = cam;
 
 		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
 	}
@@ -74,15 +71,27 @@ namespace marengine {
 			rpc.containerIndex = batchIndex;
 		}
 		if (entity.hasComponent<LightComponent>()) {
-			const uint32_t batchIndex{ getAvailablePointLightBatch(entity) };
-			auto& availableBatch{ m_pointLightBatches[batchIndex] };
-			availableBatch.submitEntityWithLightning(entity);
-
-			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-			rpc.containerLightIndex = batchIndex;
+			if (m_pointLightBatch.canBeBatched(entity)) {
+				m_pointLightBatch.submitEntityWithLightning(entity);
+			}
+		}
+		if (entity.hasComponent<CameraComponent>()) {
+			const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+			auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+			cameraComponent.renderCamera.calculateCameraTransforms(transformComponent, cameraComponent);
+			pushCameraToPipeline(&cameraComponent.renderCamera);
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
+	}
+
+	void RenderPipeline::onBatchesReadyToDraw() {
+		FPipelineManager::Instance->close();
+
+		FRenderBufferManager::onMeshBatchReadyToDraw(m_staticColorBatches);
+		FRenderBufferManager::onMeshBatchReadyToDraw(m_staticTexture2DBatches);
+		FRenderBufferManager::onCreatePointLightsSSBO(m_pointLightBatch);
+		FRenderBufferManager::onCreateRenderCameraSSBO(m_renderCamera);
 	}
 
 	uint32_t RenderPipeline::getAvailableColorBatch(const Entity& entity) {
@@ -113,18 +122,20 @@ namespace marengine {
 		}
 	}
 
-	uint32_t RenderPipeline::getAvailablePointLightBatch(const Entity& entity) {
-		auto canBatchEntity = [&entity](FPointLightBatch& batch) {
-			return batch.canBeBatched(entity);
-		};
-		const auto it = std::find_if(m_pointLightBatches.begin(), m_pointLightBatches.end(), canBatchEntity);
-		if (it != m_pointLightBatches.end()) {
-			return std::distance(m_pointLightBatches.begin(), it);;
-		}
-		else {
-			m_pointLightBatches.emplace_back();
-			return m_pointLightBatches.size() - 1;
-		}
+	const std::vector<FMeshBatchStaticColor>& RenderPipeline::getColorBatches() const { 
+		return m_staticColorBatches; 
+	}
+
+	const std::vector<FMeshBatchStaticTexture2D>& RenderPipeline::getTexture2DBatches() const { 
+		return m_staticTexture2DBatches;
+	}
+
+	const FPointLightBatch& RenderPipeline::getPointLightBatch() const { 
+		return m_pointLightBatch; 
+	}
+
+	const RenderCamera* RenderPipeline::getRenderCamera() const { 
+		return m_renderCamera;
 	}
 
 

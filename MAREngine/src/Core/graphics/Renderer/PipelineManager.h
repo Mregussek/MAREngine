@@ -18,41 +18,40 @@
 **/
 
 
-#ifndef MAR_ENGINE_LAYERS_RENDER_LAYER_H
-#define MAR_ENGINE_LAYERS_RENDER_LAYER_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Core/graphics/RenderAPI/RenderPipeline.h"
-#include "../../Core/graphics/RenderAPI/RenderStatistics.h"
-#include "../../Core/graphics/Renderer/RendererBatch.h"
-#include "../../Core/graphics/Renderer/RenderMemorizer.h"
-#include "../../Core/graphics/Renderer/PipelineManager.h"
+#include "RendererDefinitions.h"
 
 
 namespace marengine {
+	
 
-
-	class RenderLayer : public Layer {
+	class FPipelineManager {
 	public:
 
-		RenderLayer() = default;
-		RenderLayer(const char* name);
+		static FPipelineManager* Instance;
 
-		// --- OVERRIDED METHODS --- //
+		FPipeline& createPipeline();
+		FShaderStorageBuffer& createSSBO();
+		FUniformBuffer& createUBO();
 
-		void initialize() override;
-		void update() override;
-		void close() override;
+		const FPipelinesArray& getPipelines() const;
+		const FShaderStorageBuffersArray& getSSBOs() const;
+		const FUniformBuffersArray& getUBOs() const;
+
+		const FPipeline& getPipeline(uint32_t index) const;
+		const FShaderStorageBuffer& getSSBO(uint32_t index) const;
+		const FUniformBuffer& getUBO(uint32_t index) const;
+
+		void close();
 
 	private:
 
-		RendererBatch m_renderer;
-		RenderPipeline m_renderPipeline;
-		FPipelineManager m_pipelineManager;
-		RenderStatistics m_statistics;
-		RenderMemorizer m_memorizer;
+		FPipelinesArray m_pipelines;
+		FShaderStorageBuffersArray m_shaderStorageBuffers;
+		FUniformBuffersArray m_uniformBuffers;
 
 	};
 
@@ -60,4 +59,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_LAYERS_RENDER_LAYER_H
+#endif // !MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H

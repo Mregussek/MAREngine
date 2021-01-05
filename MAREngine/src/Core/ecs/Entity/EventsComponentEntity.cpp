@@ -23,8 +23,10 @@
 #include "../SceneManager.h"
 #include "../Scene.h"
 #include "../Components/Components.h"
-#include "../../events/RenderEvents.h"
+#include "../../graphics/Mesh/EventsMeshBatchStatic.h"
+#include "../../graphics/Lightning/EventsLightBatch.h"
 #include "../../graphics/RenderAPI/RenderPipeline.h"
+#include "../../graphics/RenderAPI/RenderBufferManager.h"
 
 
 namespace marengine {
@@ -40,7 +42,7 @@ namespace marengine {
 		auto updateCameraOperation = [&entity, &cameraComponent, this]() {
 			const auto& transform = entity.getComponent<TransformComponent>();
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			RenderEvents::Instance().onMainCameraUpdate(cameraComponent.renderCamera);
+			FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 		};
 
 		const bool userCheckingGameInPlayMode{
@@ -56,9 +58,9 @@ namespace marengine {
 		}
 	}
 
-	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* camera) const {
-		RenderPipeline::Instance->pushCameraToPipeline(camera);
-		RenderEvents::Instance().onMainCameraUpdate(*camera);
+	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* renderCamera) const {
+		RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
+		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() const {
@@ -77,7 +79,7 @@ namespace marengine {
 				cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
 
 				RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
-				RenderEvents::Instance().onMainCameraUpdate(cameraComponent.renderCamera);
+				FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 			}
 		});
 	}
@@ -88,19 +90,21 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) const {
 		const auto& transform = entity.getComponent<TransformComponent>();
-		const auto& rpc = entity.getComponent<RenderPipelineComponent>();
+		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 
-		RenderEvents::Instance().onTransformMat4Update(transform, rpc);
+		if (renderPipelineComponent.materialType > 0) { // need to check if it is rendered
+			FEventsMeshBatchStatic::onTransformUpdate(entity);
+		}
 
 		if (entity.hasComponent<CameraComponent>()) {
-			const auto& camera{ entity.getComponent<CameraComponent>() };
-			if (camera.isMainCamera()) {
-				FEventsCameraEntity::Instance->onMainCameraUpdate(entity);
+			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+			if (cameraComponent.isMainCamera()) {
+				FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 			}
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
-			RenderEvents::Instance().onLightPositionUpdate(transform.center, rpc);
+			FEventsLightBatch::onPointLightPositionUpdate(entity);
 		}
 	}
 
@@ -110,11 +114,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) const {
 		entity.addComponent<RenderableComponent>();
-		
-		if (entity.hasComponent<ColorComponent>()) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-			RenderEvents::Instance().onContainersReadyToDraw();
-		}
+		SceneManager::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) const {
@@ -132,18 +132,11 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) const {
 		entity.addComponent<ColorComponent>();
-		
-		if (entity.hasComponent<RenderableComponent>()) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-			RenderEvents::Instance().onContainersReadyToDraw();
-		}
+		SceneManager::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const {
-		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
-
-		RenderEvents::Instance().onColorUpdate(colorComponent.texture, renderPipelineComponent);
+		FEventsMeshBatchStatic::onColorUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const {
@@ -187,11 +180,7 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {
-		const maths::vec3& position{ entity.getComponent<TransformComponent>().center };
-		const auto& lightComponent{ entity.getComponent<LightComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
-
-		RenderEvents::Instance().onLightUpdate(position, lightComponent, renderPipelineComponent);
+		FEventsLightBatch::onPointLightUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const {

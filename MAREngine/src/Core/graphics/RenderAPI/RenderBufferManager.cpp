@@ -19,157 +19,127 @@
 
 
 #include "RenderBufferManager.h"
+#include "RenderCamera.h"
+#include "../Mesh/MeshBatchStatic.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
-#include "../Renderer/PipelineStorage.h"
-#include "../Renderer/ShaderBufferStorage.h"
+#include "../Renderer/PipelineManager.h"
 #include "../GraphicsLimits.h"
-#include "RenderCamera.h"
 #include "../Renderer/RenderMemorizer.h"
 
 
 namespace marengine {
 
 
-	template<typename TBatch>
-	void vertexIndexBuffersUpdated(const TBatch& batch) {
-		const auto& pipeline{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
-		pipeline.bind();
-		pipeline.update(batch.getVertices(), batch.getIndices());
-	}
-
-	template<typename TBatch>
-	void transformsUpdated(const TBatch& batch) {
-		const auto& transforms{ batch.getTransforms() };
-
-		const auto& transformSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueTransformsID()) };
-		transformSSBO.bind();
-		transformSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-	}
-
-	template<typename TBatch>
-	void colorsUpdated(const TBatch& batch) {
-		const auto& colors{ batch.getColors() };
-
-		const auto& colorSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueColorsID()) };
-		colorSSBO.bind();
-		colorSSBO.update<float>(GLSLShaderInfo::Colors.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
-	}
-
-	template<typename TBatch>
-	void pointLightsUpdated(const TBatch& batch) {
-		const auto& pointLights{ batch.getLights() };
-		const int32_t lightSize{ (int32_t)pointLights.size() };
-
-		const auto& pointLightsSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniquePointLightID()) };
-		pointLightsSSBO.bind();
-		pointLightsSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(FPointLight) * pointLights.size(), &pointLights[0].position.x);
-		pointLightsSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
-	}
-
-
-	template<typename TBatch>
-	void createVertexIndexBuffers(TBatch& batch) {
-		auto& pipeline = PipelineStorage::Instance->createPipeline();
-		pipeline.initialize(batch.getVertices().size() * sizeof(Vertex), batch.getIndices().size() * sizeof(uint32_t));
-		batch.setUniquePipelineID(PipelineStorage::Instance->getPipelines().size() - 1);
-
-		vertexIndexBuffersUpdated(batch);
-	}
-
-	template<typename TBatch>
-	void createColorsSSBO(TBatch& batch) {
-		const std::vector<UniformItem> colorItems{ GLSLShaderInfo::Colors };
-		auto& colorSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-		colorSSBO.initialize(GLSLShaderInfo::ColorsSSBO, colorItems);
-		batch.setUniqueColorsID(ShaderBufferStorage::Instance->getSSBOs().size() - 1);
-
-		colorsUpdated(batch);
-	}
-
-	template<typename TBatch>
-	void createPointLightsSSBO(TBatch& batch) {
-		const std::vector<UniformItem> pointLightsItems{ GLSLShaderInfo::LightMaterial, GLSLShaderInfo::LightMaterialSize };
-		auto& pointLightsSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-		pointLightsSSBO.initialize(GLSLShaderInfo::PointLightSSBO, pointLightsItems);
-		batch.setUniquePointLightID(ShaderBufferStorage::Instance->getSSBOs().size() - 1);
-
-		pointLightsUpdated(batch);
-	}
-
-
 	void FRenderBufferManager::onMeshBatchReadyToDraw(std::vector<FMeshBatchStaticColor>& colorBatches) {
 		for (auto& batch : colorBatches) {
-			createVertexIndexBuffers(batch);
-			{
-				const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
-				auto& transformSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-				transformSSBO.initialize(GLSLShaderInfo::TransformColorSSBO, transformItems);
-				batch.seUniqueTransformsID(ShaderBufferStorage::Instance->getSSBOs().size() - 1);
-
-				transformsUpdated(batch); 
-			}
-			createColorsSSBO(batch);
+			createPipeline(batch);
+			createTransformColorSSBO(batch);
+			onCreateColorSSBO(batch);
 		}
 	}
 
 	void FRenderBufferManager::onMeshBatchReadyToDraw(std::vector<FMeshBatchStaticTexture2D>& textureBatches) {
 		for (auto& batch : textureBatches) {
-			createVertexIndexBuffers(batch);
-			{
-				const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
-				auto& transformSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-				transformSSBO.initialize(GLSLShaderInfo::TransformTexture2DSSBO, transformItems);
-				batch.seUniqueTransformsID(ShaderBufferStorage::Instance->getSSBOs().size() - 1);
-
-				transformsUpdated(batch);
-			}
+			createPipeline(batch);
+			createTransformTexture2DSSBO(batch);
 		}
 	}
 
-	void FRenderBufferManager::onLightBatchReadyToDraw(std::vector<FPointLightBatch>& lightBatches) {
-		for (auto& batch : lightBatches) {
-			createPointLightsSSBO(batch);
-		}
+	void FRenderBufferManager::onPipelineUpdate(const FMeshBatchStatic& staticBatch) {
+		const auto& pipeline{ FPipelineManager::Instance->getPipeline(staticBatch.getUniquePipelineID()) };
+		pipeline.bind();
+		pipeline.update(staticBatch.getVertices(), staticBatch.getIndices());
 	}
 
-	void FRenderBufferManager::onRenderCameraReadyToDraw(const RenderCamera* renderCamera) {
+	void FRenderBufferManager::onTransformsUpdate(const FMeshBatchStatic& staticBatch) {
+		const auto& transforms{ staticBatch.getTransforms() };
+
+		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(staticBatch.getUniqueTransformsID()) };
+		transformSSBO.bind();
+		transformSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
+	}
+
+	void FRenderBufferManager::onCreateColorSSBO(FMeshBatchStaticColor& colorBatch) {
+		const std::vector<UniformItem> colorItems{ GLSLShaderInfo::Colors };
+		auto& colorSSBO = FPipelineManager::Instance->createSSBO();
+		colorSSBO.initialize(GLSLShaderInfo::ColorsSSBO, colorItems);
+		colorBatch.setUniqueColorsID(FPipelineManager::Instance->getSSBOs().size() - 1);
+
+		onColorUpdate(colorBatch);
+	}
+
+	void FRenderBufferManager::onColorUpdate(const FMeshBatchStaticColor& colorBatch) {
+		const auto& colors{ colorBatch.getColors() };
+
+		const auto& colorSSBO{ FPipelineManager::Instance->getSSBO(colorBatch.getUniqueColorsID()) };
+		colorSSBO.bind();
+		colorSSBO.update<float>(GLSLShaderInfo::Colors.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
+	}
+
+	void FRenderBufferManager::onCreatePointLightsSSBO(FPointLightBatch& pointLightBatch) {
+		const std::vector<UniformItem> pointLightsItems{ GLSLShaderInfo::LightMaterial, GLSLShaderInfo::LightMaterialSize };
+		auto& pointLightsSSBO = FPipelineManager::Instance->createSSBO();
+		pointLightsSSBO.initialize(GLSLShaderInfo::PointLightSSBO, pointLightsItems);
+		pointLightBatch.setUniquePointLightID(FPipelineManager::Instance->getSSBOs().size() - 1);
+
+		onPointLightUpdate(pointLightBatch);
+	}
+
+	void FRenderBufferManager::onPointLightUpdate(const FPointLightBatch& pointLightBatch) {
+		const auto& pointLights{ pointLightBatch.getLights() };
+		const int32_t lightSize{ (int32_t)pointLights.size() };
+
+		const auto& pointLightsSSBO{ FPipelineManager::Instance->getSSBO(pointLightBatch.getUniquePointLightID()) };
+		pointLightsSSBO.bind();
+		pointLightsSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(FPointLight) * pointLights.size(), &pointLights[0].position.x);
+		pointLightsSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
+	}
+
+	void FRenderBufferManager::onCreateRenderCameraSSBO(const RenderCamera* renderCamera) {
 		const std::vector<UniformItem> cameraItems{ GLSLShaderInfo::MVP };
-		auto& cameraSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-		RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
+		auto& cameraSSBO = FPipelineManager::Instance->createSSBO();
+		RenderMemorizer::Instance->cameraSSBO = FPipelineManager::Instance->getSSBOs().size() - 1;
 		cameraSSBO.initialize(GLSLShaderInfo::CameraSSBO, cameraItems);
-	}
 
-	void FRenderBufferManager::onPipelineUpdate(const FMeshBatchStaticColor& batch) {
-		vertexIndexBuffersUpdated(batch);
-	}
-
-	void FRenderBufferManager::onTransformsUpdate(const FMeshBatchStaticColor& batch) {
-		transformsUpdated(batch);
-	}
-
-	void FRenderBufferManager::onColorUpdate(const FMeshBatchStaticColor& batch) {
-		colorsUpdated(batch);
-	}
-
-	void FRenderBufferManager::onPipelineUpdate(const FMeshBatchStaticTexture2D& batch) {
-		vertexIndexBuffersUpdated(batch);
-	}
-
-	void FRenderBufferManager::onTransformsUpdate(const FMeshBatchStaticTexture2D& batch) {
-		transformsUpdated(batch);
-	}
-
-	void FRenderBufferManager::onLightUpdate(const FPointLightBatch& light) {
-		pointLightsUpdated(light);
+		onRenderCameraUpdate(renderCamera);
 	}
 
 	void FRenderBufferManager::onRenderCameraUpdate(const RenderCamera* renderCamera) {
-		auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		auto& cameraSSBO{ FPipelineManager::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 
 		cameraSSBO.bind();
 		cameraSSBO.update<float>(GLSLShaderInfo::MVP.offset, sizeof(maths::mat4), maths::mat4::value_ptr(renderCamera->getMVP()));
+	}
+
+	void FRenderBufferManager::createPipeline(FMeshBatchStatic& staticBatch) {
+		const uint32_t verticesMemory{ staticBatch.getVertices().size() * sizeof(Vertex) };
+		const uint32_t indicesMemory{ staticBatch.getIndices().size() * sizeof(uint32_t) };
+
+		auto& pipeline = FPipelineManager::Instance->createPipeline();
+		pipeline.initialize(verticesMemory, indicesMemory);
+		staticBatch.setUniquePipelineID(FPipelineManager::Instance->getPipelines().size() - 1);
+
+		onPipelineUpdate(staticBatch);
+	}
+
+	void FRenderBufferManager::createTransformColorSSBO(FMeshBatchStatic& staticBatch) {
+		const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
+		auto& transformSSBO = FPipelineManager::Instance->createSSBO();
+		transformSSBO.initialize(GLSLShaderInfo::TransformColorSSBO, transformItems);
+		staticBatch.seUniqueTransformsID(FPipelineManager::Instance->getSSBOs().size() - 1);
+
+		onTransformsUpdate(staticBatch);
+	}
+
+	void FRenderBufferManager::createTransformTexture2DSSBO(FMeshBatchStatic& staticBatch) {
+		const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
+		auto& transformSSBO = FPipelineManager::Instance->createSSBO();
+		transformSSBO.initialize(GLSLShaderInfo::TransformTexture2DSSBO, transformItems);
+		staticBatch.seUniqueTransformsID(FPipelineManager::Instance->getSSBOs().size() - 1);
+
+		onTransformsUpdate(staticBatch);
 	}
 
 

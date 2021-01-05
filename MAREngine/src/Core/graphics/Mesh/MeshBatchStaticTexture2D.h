@@ -34,7 +34,7 @@ namespace marengine {
 	
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
 
-		friend class RenderEvents;
+		friend class FEventsMeshBatchStatic;
 
 	public:
 

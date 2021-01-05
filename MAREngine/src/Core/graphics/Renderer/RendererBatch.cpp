@@ -19,17 +19,14 @@
 
 
 #include "RendererBatch.h"
-#include "ShaderBufferStorage.h"
+#include "PipelineManager.h"
 #include "RenderMemorizer.h"
-#include "PipelineStorage.h"
 #include "../GraphicsLogs.h"
-#include "../GraphicsLimits.h"
 #include "../RenderAPI/RenderPipeline.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
 #include "../RenderAPI/RenderBufferManager.h"
-#include "../../events/RenderEvents.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Platform/GLSL/ShaderUniforms.h"
@@ -78,11 +75,11 @@ namespace marengine {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
 		const RenderPipeline* renderPipeline( RenderPipeline::Instance );
 
-		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		const auto& cameraSSBO{ FPipelineManager::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 		cameraSSBO.bind();
 
-		const auto& lights = renderPipeline->getPointLightBatches();
-		const auto& pointLightSSBO = ShaderBufferStorage::Instance->getSSBO(lights[0].getUniquePointLightID());
+		const auto& pointLightBatch{ renderPipeline->getPointLightBatch() };
+		const auto& pointLightSSBO{ FPipelineManager::Instance->getSSBO(pointLightBatch.getUniquePointLightID()) };
 		pointLightSSBO.bind();
 		
 		m_shaderColors.bind();
@@ -94,21 +91,21 @@ namespace marengine {
 	}
 
 	void RendererBatch::drawColors(const FMeshBatchStaticColor& batch) const {
-		const auto& transformSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueTransformsID()) };
+		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueTransformsID()) };
 		transformSSBO.bind();
 
-		const auto& colorSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueColorsID()) };
+		const auto& colorSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueColorsID()) };
 		colorSSBO.bind();
 
-		const auto& pipeline{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
+		const auto& pipeline{ FPipelineManager::Instance->getPipeline(batch.getUniquePipelineID()) };
 		pipeline.bind();
 
 		DrawingOpenGL::drawTriangles(batch.getIndices().size());
-		RenderEvents::Instance().onDrawCall();
+		//RenderEvents::Instance().onDrawCall();
 	}
 
 	void RendererBatch::drawTextures2D(const FMeshBatchStaticTexture2D& batch) const {
-		const auto& transformSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueTransformsID()) };
+		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueTransformsID()) };
 		transformSSBO.bind();
 
 		const auto& textures{ batch.getTextures() };
@@ -118,11 +115,11 @@ namespace marengine {
 			m_shader2D.setUniformSampler(GLSLShaderInfo::samplerTexture2DArray[texture.bindingIndex], texture.bindingIndex);
 		});
 
-		const auto& pipeline{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
+		const auto& pipeline{ FPipelineManager::Instance->getPipeline(batch.getUniquePipelineID()) };
 		pipeline.bind();
 
 		DrawingOpenGL::drawTriangles(batch.getIndices().size());
-		RenderEvents::Instance().onDrawCall();
+		//RenderEvents::Instance().onDrawCall();
 	}
 
 

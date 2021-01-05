@@ -27,6 +27,7 @@
 
 namespace marengine {
 
+	class FMeshBatchStatic;
 	class FMeshBatchStaticColor;
 	class FMeshBatchStaticTexture2D;
 	class FPointLightBatch;
@@ -38,20 +39,25 @@ namespace marengine {
 
 		static void onMeshBatchReadyToDraw(std::vector<FMeshBatchStaticColor>& colorBatches);
 		static void onMeshBatchReadyToDraw(std::vector<FMeshBatchStaticTexture2D>& textureBatches);
-		static void onLightBatchReadyToDraw(std::vector<FPointLightBatch>& lightBatches);
-		static void onRenderCameraReadyToDraw(const RenderCamera* renderCamera);
+		
 
+		static void onPipelineUpdate(const FMeshBatchStatic& staticBatch);
+		static void onTransformsUpdate(const FMeshBatchStatic& staticBatch);
 
-		static void onPipelineUpdate(const FMeshBatchStaticColor& batch);
-		static void onTransformsUpdate(const FMeshBatchStaticColor& batch);
-		static void onColorUpdate(const FMeshBatchStaticColor& batch);
-
-		static void onPipelineUpdate(const FMeshBatchStaticTexture2D& batch);
-		static void onTransformsUpdate(const FMeshBatchStaticTexture2D& batch);
-
-		static void onLightUpdate(const FPointLightBatch& light);
-
+		static void onCreateColorSSBO(FMeshBatchStaticColor& colorBatch);
+		static void onColorUpdate(const FMeshBatchStaticColor& colorBatch);
+		
+		static void onCreateRenderCameraSSBO(const RenderCamera* renderCamera);
 		static void onRenderCameraUpdate(const RenderCamera* renderCamera);
+
+		static void onCreatePointLightsSSBO(FPointLightBatch& pointLightBatch);
+		static void onPointLightUpdate(const FPointLightBatch& light);
+
+	private:
+
+		static void createPipeline(FMeshBatchStatic& staticBatch);
+		static void createTransformColorSSBO(FMeshBatchStatic& staticBatch);
+		static void createTransformTexture2DSSBO(FMeshBatchStatic& staticBatch);
 
 	};
 
