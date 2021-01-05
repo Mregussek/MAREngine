@@ -41,10 +41,9 @@ namespace marengine {
 
 	private:
 
-		void drawColors(const std::vector<FMeshBatchStaticColor>& batches) const;
-		void drawTextures2D(const std::vector<FMeshBatchStaticTexture2D>& batches) const;
+		void drawColors(const FMeshBatchStaticColor& batches) const;
+		void drawTextures2D(const FMeshBatchStaticTexture2D& batches) const;
 
-		void setupSSBOs();
 		void setupShaders();
 
 

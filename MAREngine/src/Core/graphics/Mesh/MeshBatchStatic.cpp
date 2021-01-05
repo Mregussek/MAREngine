@@ -124,6 +124,14 @@ namespace marengine {
 		p_uniquePipelineID = id;
 	}
 
+	uint32_t FMeshBatchStatic::getUniqueTransformsID() const {
+		return p_transformsUniqueID;
+	}
+
+	void FMeshBatchStatic::seUniqueTransformsID(uint32_t id) {
+		p_transformsUniqueID = id;
+	}
+
 
 
 

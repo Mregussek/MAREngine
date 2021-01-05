@@ -47,6 +47,9 @@ namespace marengine {
 		virtual void setUniquePipelineID(uint32_t id) = 0;
 		virtual uint32_t getUniquePipelineID() const = 0;
 
+		virtual uint32_t getUniqueTransformsID() const = 0 ;
+		virtual void seUniqueTransformsID(uint32_t id) = 0;
+
 	protected:
 
 		virtual void submitRenderable(const RenderableComponent& renderableComponent) = 0;

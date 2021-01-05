@@ -63,5 +63,13 @@ namespace marengine {
 		return m_colors;
 	}
 
+	uint32_t FMeshBatchStaticColor::getUniqueColorsID() const {
+		return m_uniqueColorsID;
+	}
+
+	void FMeshBatchStaticColor::setUniqueColorsID(uint32_t id) {
+		m_uniqueColorsID = id;
+	}
+
 
 }

@@ -17,7 +17,7 @@ layout(std430, binding = 0) buffer CameraSSBO {
 } Camera;
 
 layout(std430, binding = 1) buffer TransformSSBO {
-	mat4 Transform[64];
+	mat4 Transform[32];
 } Transforms;
 
 void main() {

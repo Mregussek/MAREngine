@@ -44,12 +44,16 @@ namespace marengine {
 
 		const FColorsArray& getColors() const;
 
+		uint32_t getUniqueColorsID() const;
+		void setUniqueColorsID(uint32_t id);
+
 	private:
 
 		void submitColor(const ColorComponent& colorComponent);
 
 
 		FColorsArray m_colors;
+		uint32_t m_uniqueColorsID{ 0 };
 		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::COLOR };
 
 	};

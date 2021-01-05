@@ -53,6 +53,9 @@ namespace marengine {
 		virtual uint32_t getUniquePipelineID() const override;
 		virtual void setUniquePipelineID(uint32_t id) override;
 
+		virtual uint32_t getUniqueTransformsID() const override;
+		virtual void seUniqueTransformsID(uint32_t id) override;
+
 	protected:
 
 		virtual void submitRenderable(const RenderableComponent& renderableComponent) override;
@@ -68,6 +71,7 @@ namespace marengine {
 		float p_shapeID{ 0.f };
 		uint32_t p_indicesMaxValue{ 0 };
 		uint32_t p_uniquePipelineID{ 0 };
+		uint32_t p_transformsUniqueID{ 0 };
 
 	};
 

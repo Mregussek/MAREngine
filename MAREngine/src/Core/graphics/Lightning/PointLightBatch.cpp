@@ -76,12 +76,12 @@ namespace marengine {
 		return m_lights;
 	}
 
-	uint32_t FPointLightBatch::getPointLightSSBOindex() const {
-		return m_pointLightSSBOindex;
+	uint32_t FPointLightBatch::getUniquePointLightID() const {
+		return m_uniquePointLightID;
 	}
 
-	void FPointLightBatch::setPointLightSSBOindex(uint32_t index) {
-		m_pointLightSSBOindex = index;
+	void FPointLightBatch::setUniquePointLightID(uint32_t index) {
+		m_uniquePointLightID = index;
 	}
 
 

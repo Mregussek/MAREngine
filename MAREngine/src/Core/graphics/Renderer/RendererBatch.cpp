@@ -28,6 +28,7 @@
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
+#include "../RenderAPI/RenderBufferManager.h"
 #include "../../events/RenderEvents.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
@@ -40,54 +41,21 @@ namespace marengine {
 	void RendererBatch::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
 
-		setupSSBOs();
 		setupShaders();
-	}
-
-	void RendererBatch::setupSSBOs() {
-		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shader storage buffers...");
-
-		{ // setup Camera SSBO
-			const std::vector<UniformItem> cameraItems{ GLSLShaderInfo::MVP };
-			auto& cameraSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
-			
-			cameraSSBO.initialize(GLSLShaderInfo::CameraSSBO, cameraItems);
-		}
-
-		{ // setup EntityCmp SSBO
-			const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
-			auto& transformSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-
-			transformSSBO.initialize(GLSLShaderInfo::TransformSSBO, transformItems);
-		}
-
-		{ // setup Material SSBO
-			const std::vector<UniformItem> pointLightsItems{ GLSLShaderInfo::LightMaterial, GLSLShaderInfo::LightMaterialSize };
-			auto& pointLightsSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-
-			pointLightsSSBO.initialize(GLSLShaderInfo::PointLightSSBO, pointLightsItems);
-		}
-
-		{ // setup TextureSmaplers SSBO
-			const std::vector<UniformItem> colorItems{ GLSLShaderInfo::Colors };
-			auto& colorSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			
-			colorSSBO.initialize(GLSLShaderInfo::ColorsSSBO, colorItems);
-		}
 	}
 
 	void RendererBatch::setupShaders() {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shaders...");
 
-		const char* vert = "resources/shaders/default.vert.glsl";
 		{
+			const char* vert = "resources/shaders/color.vert.glsl";
 			const char* frag = "resources/shaders/color.frag.glsl";
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
 			m_shaderColors.initialize(shaderPaths);
 		}
 		{
+			const char* vert = "resources/shaders/texture2d.vert.glsl";
 			const char* frag = "resources/shaders/texture2d.frag.glsl";
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
@@ -110,78 +78,51 @@ namespace marengine {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
 		const RenderPipeline* renderPipeline( RenderPipeline::Instance );
 
-		{
-			const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
-			cameraSSBO.bind();
-		}
-		{
-			const auto& lights = renderPipeline->getPointLightBatches();
-			const auto& pointLights{ lights[0].getLights() };
-			const auto lightSize = (int32_t)pointLights.size();
-			const auto& pointLightSSBO = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::PointLightSSBO);
-			pointLightSSBO.bind();
-			pointLightSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(FPointLight) * pointLights.size(), &pointLights[0].position.x);
-			pointLightSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
-		}
+		const auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
+		cameraSSBO.bind();
+
+		const auto& lights = renderPipeline->getPointLightBatches();
+		const auto& pointLightSSBO = ShaderBufferStorage::Instance->getSSBO(lights[0].getUniquePointLightID());
+		pointLightSSBO.bind();
 		
-		drawColors(renderPipeline->getColorBatches());
-		drawTextures2D(renderPipeline->getTexture2DBatches());
+		m_shaderColors.bind();
+		drawColors(renderPipeline->getColorBatches()[0]);
+		m_shader2D.bind();
+		drawTextures2D(renderPipeline->getTexture2DBatches()[0]);
 
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
 
-	void RendererBatch::drawColors(const std::vector<FMeshBatchStaticColor>& batches) const {
-		m_shaderColors.bind();
+	void RendererBatch::drawColors(const FMeshBatchStaticColor& batch) const {
+		const auto& transformSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueTransformsID()) };
+		transformSSBO.bind();
 
-		std::for_each(batches.cbegin(), batches.cend(), [](const FMeshBatchStaticColor& batch) {
-			{
-				const auto& transforms{ batch.getTransforms() };
-				const auto& transformSSBO{ ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::TransformSSBO) };
-				transformSSBO.bind();
-				transformSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-			}
-			{
-				const auto& colors{ batch.getColors() };
-				const auto& colorSSBO{ ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::ColorsSSBO) };
-				colorSSBO.bind();
-				colorSSBO.update<float>(GLSLShaderInfo::Colors.offset, colors.size() * sizeof(maths::vec4), maths::vec4::value_ptr(colors));
-			}
-			{
-				const auto& containerBuffer{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
-				containerBuffer.bind();
-			}
+		const auto& colorSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueColorsID()) };
+		colorSSBO.bind();
 
-			DrawingOpenGL::drawTriangles(batch.getIndices().size());
-			RenderEvents::Instance().onDrawCall();
-		});
+		const auto& pipeline{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
+		pipeline.bind();
+
+		DrawingOpenGL::drawTriangles(batch.getIndices().size());
+		RenderEvents::Instance().onDrawCall();
 	}
 
-	void RendererBatch::drawTextures2D(const std::vector<FMeshBatchStaticTexture2D>& batches) const {
-		m_shader2D.bind();
+	void RendererBatch::drawTextures2D(const FMeshBatchStaticTexture2D& batch) const {
+		const auto& transformSSBO{ ShaderBufferStorage::Instance->getSSBO(batch.getUniqueTransformsID()) };
+		transformSSBO.bind();
 
-		std::for_each(batches.cbegin(), batches.cend(), [this](const FMeshBatchStaticTexture2D& batch) {
-			{
-				const auto& transforms{ batch.getTransforms() };
-				const auto& transformSSBO{ ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::TransformSSBO) };
-				transformSSBO.bind();
-				transformSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-			}
-			{
-				const auto& textures{ batch.getTextures() };
-				std::for_each(textures.cbegin(), textures.cend(), [this](const FTexturePair& texture) {
-					const auto textureID = (int32_t)TextureOpenGL::Instance()->loadTexture(texture.texturePath);
-					TextureOpenGL::Instance()->bind2D(texture.bindingIndex, textureID);
-					m_shader2D.setUniformSampler(GLSLShaderInfo::samplerTexture2DArray[texture.bindingIndex], texture.bindingIndex);
-				});
-			}
-			{
-				const auto& containerBuffer{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
-				containerBuffer.bind();
-			}
-
-			DrawingOpenGL::drawTriangles(batch.getIndices().size());
-			RenderEvents::Instance().onDrawCall();
+		const auto& textures{ batch.getTextures() };
+		std::for_each(textures.cbegin(), textures.cend(), [this](const FTexturePair& texture) {
+			const auto textureID = (int32_t)TextureOpenGL::Instance()->loadTexture(texture.texturePath);
+			TextureOpenGL::Instance()->bind2D(texture.bindingIndex, textureID);
+			m_shader2D.setUniformSampler(GLSLShaderInfo::samplerTexture2DArray[texture.bindingIndex], texture.bindingIndex);
 		});
+
+		const auto& pipeline{ PipelineStorage::Instance->getPipeline(batch.getUniquePipelineID()) };
+		pipeline.bind();
+
+		DrawingOpenGL::drawTriangles(batch.getIndices().size());
+		RenderEvents::Instance().onDrawCall();
 	}
 
 

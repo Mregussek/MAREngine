@@ -33,11 +33,6 @@ namespace marengine {
 
 
 	class RenderEvents {
-
-		typedef maths::vec3 vec3;
-		typedef maths::vec4 vec4;
-		typedef maths::mat4 mat4;
-
 	public:
 
 		static const RenderEvents& Instance();
@@ -47,10 +42,10 @@ namespace marengine {
 		void onContainersReadyToDraw() const;
 
 		void onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const;
-		void onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const;
+		void onColorUpdate(maths::vec4 color, const RenderPipelineComponent& rpc) const;
 
-		void onLightUpdate(vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const;
-		void onLightPositionUpdate(vec3 position, const RenderPipelineComponent& rpc) const;
+		void onLightUpdate(maths::vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const;
+		void onLightPositionUpdate(maths::vec3 position, const RenderPipelineComponent& rpc) const;
 		void onLightComponentUpdate(const LightComponent& light, const RenderPipelineComponent& rpc) const;
 		
 		void onMainCameraUpdate(const RenderCamera& camera) const;

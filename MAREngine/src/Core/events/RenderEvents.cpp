@@ -30,6 +30,7 @@
 #include "../graphics/Renderer/ShaderBufferStorage.h"
 #include "../ecs/Components/Components.h"
 #include "../../Platform/GLSL/ShaderUniforms.h"
+#include "../graphics/RenderAPI/RenderBufferManager.h"
 
 
 namespace marengine {
@@ -49,42 +50,41 @@ namespace marengine {
 
 	void RenderEvents::onContainersReadyToDraw() const {
 		PipelineStorage::Instance->close();
+		ShaderBufferStorage::Instance->close();
 
-		auto& staticColorBatches{ RenderPipeline::Instance->m_staticColorBatches };
-		auto& staticTexture2DBatches{ RenderPipeline::Instance->m_staticTexture2DBatches };
-
-		auto createPipelineStorage = [](FMeshBatchStatic& batch) {
-			auto& pipeline = PipelineStorage::Instance->createPipeline();
-			pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
-			pipeline.bind();
-			pipeline.update(batch.getVertices(), batch.getIndices());
-			batch.setUniquePipelineID(PipelineStorage::Instance->getPipelines().size() - 1);
-		};
-		
-		std::for_each(staticColorBatches.begin(), staticColorBatches.end(), createPipelineStorage);
-		std::for_each(staticTexture2DBatches.begin(), staticTexture2DBatches.end(), createPipelineStorage);
+		FRenderBufferManager::onMeshBatchReadyToDraw(RenderPipeline::Instance->m_staticColorBatches);
+		FRenderBufferManager::onMeshBatchReadyToDraw(RenderPipeline::Instance->m_staticTexture2DBatches);
+		FRenderBufferManager::onLightBatchReadyToDraw(RenderPipeline::Instance->m_pointLightBatches);
+		FRenderBufferManager::onRenderCameraReadyToDraw(RenderPipeline::Instance->m_camera);
 	}
 
 	void RenderEvents::onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)EMeshBatchStaticType::COLOR) {
-			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
+			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex] };
+			batch.p_transforms[rpc.transformIndex] = transform.getTransform();
+			FRenderBufferManager::onTransformsUpdate(batch);
 		}
 		else if (rpc.materialType == (size_t)EMeshBatchStaticType::TEXTURE2D) {
-			RenderPipeline::Instance->m_staticTexture2DBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
+			auto& batch{ RenderPipeline::Instance->m_staticTexture2DBatches[rpc.containerIndex] };
+			batch.p_transforms[rpc.transformIndex] = transform.getTransform();
+			FRenderBufferManager::onTransformsUpdate(batch);
 		}
 	}
 	
-	void RenderEvents::onLightUpdate(vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const{
+	void RenderEvents::onLightUpdate(maths::vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const{
 		onLightPositionUpdate(position, rpc);
 		onLightComponentUpdate(light, rpc);
 	}
 
-	void RenderEvents::onLightPositionUpdate(vec3 position, const RenderPipelineComponent& rpc) const {
-		RenderPipeline::Instance->m_pointLightBatches[rpc.containerLightIndex].m_lights[rpc.lightIndex].position = maths::vec4(position, 1.f);
+	void RenderEvents::onLightPositionUpdate(maths::vec3 position, const RenderPipelineComponent& rpc) const {
+		auto& batch{ RenderPipeline::Instance->m_pointLightBatches[rpc.containerLightIndex] };
+		batch.m_lights[rpc.lightIndex].position = maths::vec4(position, 1.f);
+		FRenderBufferManager::onLightUpdate(batch);
 	}
 
 	void RenderEvents::onLightComponentUpdate(const LightComponent& light, const RenderPipelineComponent& rpc) const {
-		auto& pointLight{ RenderPipeline::Instance->m_pointLightBatches[rpc.containerLightIndex].m_lights[rpc.lightIndex] };
+		auto& batch{ RenderPipeline::Instance->m_pointLightBatches[rpc.containerLightIndex] };
+		auto& pointLight{ batch.m_lights[rpc.lightIndex] };
 
 		pointLight.ambient = light.ambient;
 		pointLight.diffuse = light.diffuse;
@@ -93,11 +93,15 @@ namespace marengine {
 		pointLight.quadratic = light.quadratic;
 		pointLight.constant = light.constant;
 		pointLight.shininess = light.shininess;
+
+		FRenderBufferManager::onLightUpdate(batch);
 	}
 
-	void RenderEvents::onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const {
+	void RenderEvents::onColorUpdate(maths::vec4 color, const RenderPipelineComponent& rpc) const {
 		if (rpc.materialType == (size_t)EMeshBatchStaticType::COLOR) {
-			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].m_colors[rpc.colorIndex] = color;
+			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex] };
+			batch.m_colors[rpc.colorIndex] = color;
+			FRenderBufferManager::onColorUpdate(batch);
 		}
 	}
 	
@@ -108,10 +112,7 @@ namespace marengine {
 	void RenderEvents::passCameraToSSBO(const RenderCamera& camera) const {
 		GRAPHICS_INFO("RENDER_EVENTS: passing camera data to ssbo!");
 
-		auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
-
-		cameraSSBO.bind();
-		cameraSSBO.update<float>(GLSLShaderInfo::MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
+		FRenderBufferManager::onRenderCameraUpdate(&camera);
 	}
 
 
