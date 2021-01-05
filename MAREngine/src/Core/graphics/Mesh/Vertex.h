@@ -32,7 +32,7 @@ namespace marengine {
 		maths::vec3 position;
 		maths::vec3 lightNormal;
 		maths::vec2 textureCoordinates;
-		uint32_t shapeID{ 0 };
+		float shapeID{ 0.f };
 	};
 
 

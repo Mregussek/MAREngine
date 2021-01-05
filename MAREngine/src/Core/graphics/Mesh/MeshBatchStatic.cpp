@@ -33,7 +33,7 @@ namespace marengine {
 		p_indices.clear();
 		p_transforms.clear();
 
-		p_meshID = 0;
+		p_meshID = 0.f;
 		p_indicesMaxValue = 0;
 		p_uniquePipelineID = 0;
 		p_transformsSSBOindex = 0;

@@ -4,7 +4,7 @@
 layout(location = 0) in vec3 v_Position;
 layout(location = 1) in vec3 v_lightNormal;
 layout(location = 2) in vec2 v_texCoords2D;
-layout(location = 3) in flat uint v_shapeIndex;
+layout(location = 4) in flat int v_shapeIndex;
 
 layout(location = 0) out vec4 outColor;
 
