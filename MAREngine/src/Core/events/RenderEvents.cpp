@@ -131,7 +131,7 @@ namespace marengine {
 		auto& cameraSSBO{ ShaderBufferStorage::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
 
 		cameraSSBO.bind();
-		cameraSSBO.update<float>(GLSL_SSBOs::ut_u_MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
+		cameraSSBO.update<float>(GLSLShaderInfo::MVP.offset, sizeof(mat4), mat4::value_ptr(camera.getMVP()));
 	}
 
 

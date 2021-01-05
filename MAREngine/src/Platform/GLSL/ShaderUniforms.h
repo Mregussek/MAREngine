@@ -53,68 +53,66 @@ namespace marengine {
 		uint32_t memory;
 	};
 
-	struct GLSL_SSBOs {
+	struct GLSLShaderInfo {
 
 		// ------------- Camera Uniform Block
 
-		inline static const UniformItem ut_u_MVP{ "CameraUniforms.u_MVP", 0, sizeof(maths::mat4) };
-
-		inline static const UniformBuffer ub_Camera{ "Camera", 0, ut_u_MVP.memory };
+		inline static const UniformItem MVP{ "Camera.MVP", 0, sizeof(maths::mat4) };
+		inline static const UniformBuffer CameraSSBO{ "CameraSSBO", 0, MVP.memory };
 
 		// ------------ EntityCmp Uniform Block
 
-		inline static const UniformItem ut_u_SeparateTransform{ "components.u_SeparateTransform", 0, 64 * sizeof(maths::mat4) };
-		inline static const UniformItem ut_u_samplerTypes{ "components.u_samplerTypes", ut_u_SeparateTransform.memory, 64 * sizeof(float) };
-		inline static const UniformBuffer ub_EntityCmp{ "EntityCmp", 1,  ut_u_SeparateTransform.memory + ut_u_samplerTypes.memory };
+		inline static const UniformItem Transform{ "Transforms.Transform", 0, 64 * sizeof(maths::mat4) };
+		inline static const UniformBuffer TransformSSBO{ "TransformSSBO", 1,  Transform.memory };
 
 		// ------------ Material Uniform Block
 
-		inline static const UniformItem ut_u_material{ "material.u_material", 0,  32 * (4 * sizeof(maths::vec4) + 4 * sizeof(float)) };
-		inline static const UniformItem ut_u_lightSize{ "material.u_lightSize", ut_u_material.memory, sizeof(int32_t) };
-		inline static const UniformBuffer ub_Material{ "Material", 2, ut_u_material.memory + ut_u_lightSize.memory };
+		inline static const UniformItem LightMaterial{ "PointLigts.LightMaterial", 0,  32 * (4 * sizeof(maths::vec4) + 4 * sizeof(float)) };
+		inline static const UniformItem LightMaterialSize{ "PointLigts.LightMaterialSize", LightMaterial.memory, sizeof(int32_t) };
+		inline static const UniformBuffer PointLightSSBO{ "PointLightSSBO", 2, LightMaterial.memory + LightMaterialSize.memory };
 
 		// -------------- TextureSamplers Uniform Block
 
-		inline static const UniformItem ut_u_Color{ "samplers.u_Color", 0, 32 * sizeof(maths::vec4) };
-		inline static const UniformBuffer ub_TextureSamplers{ "TextureSamplers", 3, ut_u_Color.memory };
+		inline static const UniformItem Colors{ "Colors.Color", 0, 32 * sizeof(maths::vec4) };
+		inline static const UniformBuffer ColorsSSBO{ "ColorsSSBO", 3, Colors.memory };
 
 		// -------------- u_2D Uniform Block
 
-		inline static const UniformBuffer ub_u_2D{ "u_2D", 4, 32 * sizeof(int32_t) };
+		inline static const UniformBuffer samplerTexture2D{ "samplerTexture2D", 4, 32 * sizeof(int32_t) };
 
-		inline static const std::array<const char*, 32> u_2D = {
-			"u_2D[0]",
-			"u_2D[1]",
-			"u_2D[2]",
-			"u_2D[3]",
-			"u_2D[4]",
-			"u_2D[5]",
-			"u_2D[6]",
-			"u_2D[7]",
-			"u_2D[8]",
-			"u_2D[9]",
-			"u_2D[10]",
-			"u_2D[11]",
-			"u_2D[12]",
-			"u_2D[13]",
-			"u_2D[14]",
-			"u_2D[15]",
-			"u_2D[16]",
-			"u_2D[17]",
-			"u_2D[18]",
-			"u_2D[19]",
-			"u_2D[20]",
-			"u_2D[21]",
-			"u_2D[22]",
-			"u_2D[23]",
-			"u_2D[24]",
-			"u_2D[25]",
-			"u_2D[26]",
-			"u_2D[27]",
-			"u_2D[28]",
-			"u_2D[29]",
-			"u_2D[30]",
-			"u_2D[31]"
+		inline static const std::array<const char*, 32> samplerTexture2DArray = {
+			"samplerTexture2D[0]",
+			"samplerTexture2D[1]",
+			"samplerTexture2D[2]",
+			"samplerTexture2D[3]",
+			"samplerTexture2D[4]",
+			"samplerTexture2D[5]",
+			"samplerTexture2D[6]",
+			"samplerTexture2D[7]",
+			"samplerTexture2D[8]",
+			"samplerTexture2D[9]",
+			"samplerTexture2D[10]",
+			"samplerTexture2D[11]",
+			"samplerTexture2D[12]",
+			"samplerTexture2D[13]",
+			"samplerTexture2D[14]",
+			"samplerTexture2D[15]",
+			"samplerTexture2D[16]",
+			"samplerTexture2D[17]",
+			"samplerTexture2D[18]",
+			"samplerTexture2D[19]",
+			"samplerTexture2D[20]",
+			"samplerTexture2D[21]",
+			"samplerTexture2D[22]",
+			"samplerTexture2D[23]",
+			"samplerTexture2D[24]",
+			"samplerTexture2D[25]",
+			"samplerTexture2D[26]",
+			"samplerTexture2D[27]",
+			"samplerTexture2D[28]",
+			"samplerTexture2D[29]",
+			"samplerTexture2D[30]",
+			"samplerTexture2D[31]"
 		};
 
 		// -------------- u_2D Uniform Block

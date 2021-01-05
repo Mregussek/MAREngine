@@ -16,3 +16,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 **/
+
+
+#include "MeshBatchStaticColor.h"
+
+
+namespace marengine {
+
+
+	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
+
+	}
+
+	void FMeshBatchStaticColor::submitRenderable(const Entity& entity) {
+
+	}
+
+	void FMeshBatchStaticColor::submitVertices(const FVertexArray& vertices) {
+
+	}
+
+	void FMeshBatchStaticColor::submitIndices(const FIndicesArray& indices) {
+
+	}
+
+	void FMeshBatchStaticColor::submitTransform(const maths::mat4& transform) {
+
+	}
+
+	void FMeshBatchStaticColor::submitColor(const maths::vec4& color) {
+
+	}
+
+
+}

@@ -45,56 +45,52 @@ namespace marengine {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shader storage buffers...");
 
 		{ // setup Camera SSBO
-			const std::vector<UniformItem> cameraItems{ GLSL_SSBOs::ut_u_MVP };
-
-			auto& camera = ShaderBufferStorage::Instance->createShaderBufferStorage();
+			const std::vector<UniformItem> cameraItems{ GLSLShaderInfo::MVP };
+			auto& cameraSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
 			RenderMemorizer::Instance->cameraSSBO = ShaderBufferStorage::Instance->getSSBOs().size() - 1;
-			camera.initialize(GLSL_SSBOs::ub_Camera, cameraItems);
+			
+			cameraSSBO.initialize(GLSLShaderInfo::CameraSSBO, cameraItems);
 		}
 
 		{ // setup EntityCmp SSBO
-			auto& entityCmp = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> entitycmpItems{ 
-				GLSL_SSBOs::ut_u_SeparateTransform
-			};
+			const std::vector<UniformItem> transformItems{ GLSLShaderInfo::Transform };
+			auto& transformSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
 
-			entityCmp.initialize(GLSL_SSBOs::ub_EntityCmp, std::move(entitycmpItems));
+			transformSSBO.initialize(GLSLShaderInfo::TransformSSBO, transformItems);
 		}
 
 		{ // setup Material SSBO
-			auto& material = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> materialItems{ 
-				GLSL_SSBOs::ut_u_material, GLSL_SSBOs::ut_u_lightSize
-			};
+			const std::vector<UniformItem> pointLightsItems{ GLSLShaderInfo::LightMaterial, GLSLShaderInfo::LightMaterialSize };
+			auto& pointLightsSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
 
-			material.initialize(GLSL_SSBOs::ub_Material, std::move(materialItems));
+			pointLightsSSBO.initialize(GLSLShaderInfo::PointLightSSBO, pointLightsItems);
 		}
 
 		{ // setup TextureSmaplers SSBO
-			auto& textureSamplers = ShaderBufferStorage::Instance->createShaderBufferStorage();
-			std::vector<UniformItem> textureSamplersItems{ GLSL_SSBOs::ut_u_Color };
-
-			textureSamplers.initialize(GLSL_SSBOs::ub_TextureSamplers, std::move(textureSamplersItems));
+			const std::vector<UniformItem> colorItems{ GLSLShaderInfo::Colors };
+			auto& colorSSBO = ShaderBufferStorage::Instance->createShaderBufferStorage();
+			
+			colorSSBO.initialize(GLSLShaderInfo::ColorsSSBO, colorItems);
 		}
 	}
 
 	void RendererBatch::setupShaders() {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shaders...");
 
-		const char* vert = "resources/shaders/batcher.vert.glsl";
+		const char* vert = "resources/shaders/default.vert.glsl";
 		{
 			const char* frag = "resources/shaders/color.frag.glsl";
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
 			m_shaderColors.initialize(shaderPaths);
-			m_shaderColors.setupShaderUniforms(GLSL_SSBOs::u_2D);
+			//m_shaderColors.setupShaderUniforms(GLSLShaderInfo::samplerTexture2DArray);
 		}
 		{
 			const char* frag = "resources/shaders/texture2d.frag.glsl";
 			const ShaderPaths shaderPaths(vert, frag, nullptr);
 
 			m_shader2D.initialize(shaderPaths);
-			m_shader2D.setupShaderUniforms(GLSL_SSBOs::u_2D);
+			m_shader2D.setupShaderUniforms(GLSLShaderInfo::samplerTexture2DArray);
 		}
 	}
 
@@ -152,19 +148,18 @@ namespace marengine {
 		const auto& transforms = container.getTransforms();
 		const auto& samplerTypes = container.getSamplerTypes();
 
-		const auto& entityShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_EntityCmp);
+		const auto& transformSSBO = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::TransformSSBO);
 
-		entityShaderBuffer.bind();
-		entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_SeparateTransform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
-		entityShaderBuffer.update<float>(GLSL_SSBOs::ut_u_samplerTypes.offset, samplerTypes.size() * sizeof(float), samplerTypes);
+		transformSSBO.bind();
+		transformSSBO.update<float>(GLSLShaderInfo::Transform.offset, transforms.size() * sizeof(maths::mat4), maths::mat4::value_ptr(transforms));
 	}
 
 	void RendererBatch::passColorsToSSBO(const ColorVector& colors) const {
-		const auto& textureShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_TextureSamplers);
-		textureShaderBuffer.bind();
+		const auto& colorSSBO = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::ColorsSSBO);
+		colorSSBO.bind();
 
-		std::for_each(colors.cbegin(), colors.cend(), [&textureShaderBuffer](const ColorPair& color) {
-			textureShaderBuffer.update<float>(GLSL_SSBOs::ut_u_Color.offset + color.first * sizeof(maths::vec4), sizeof(maths::vec4), &color.second.x);
+		std::for_each(colors.cbegin(), colors.cend(), [&colorSSBO](const ColorPair& color) {
+			colorSSBO.update<float>(GLSLShaderInfo::Colors.offset + color.first * sizeof(maths::vec4), sizeof(maths::vec4), &color.second.x);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed colors to shader");
@@ -178,7 +173,7 @@ namespace marengine {
 			const auto samplerIndex = (uint32_t)texture.first;
 
 			TextureOpenGL::Instance()->bind2D(samplerIndex, textureID);
-			shader.setUniformSampler(GLSL_SSBOs::u_2D[samplerIndex], samplerIndex);
+			shader.setUniformSampler(GLSLShaderInfo::samplerTexture2DArray[samplerIndex], samplerIndex);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed textures 2d to shader");
@@ -190,7 +185,7 @@ namespace marengine {
 			const auto samplerIndex = (uint32_t)texture.first;
 
 			TextureOpenGL::Instance()->bindCube(samplerIndex, textureID);
-			shader.setUniformSampler(GLSL_SSBOs::u_Cubemap[samplerIndex], samplerIndex);
+			shader.setUniformSampler(GLSLShaderInfo::u_Cubemap[samplerIndex], samplerIndex);
 		});
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed texture cubemaps to shader");
@@ -200,12 +195,11 @@ namespace marengine {
 		GRAPHICS_INFO("RENDERER_BATCH: passing light data to shader!");
 
 		const auto lightSize = (int32_t)lightMaterials.size();
-		const auto& lightShaderBuffer = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSL_SSBOs::ub_Material);
+		const auto& pointLightSSBO = ShaderBufferStorage::Instance->getCorrectShaderBuffer(GLSLShaderInfo::PointLightSSBO);
 
-		lightShaderBuffer.bind();
-
-		lightShaderBuffer.update<float>(GLSL_SSBOs::ut_u_material.offset, sizeof(LightMaterial) * lightMaterials.size(), &lightMaterials[0].position.x);
-		lightShaderBuffer.update<int32_t>(GLSL_SSBOs::ut_u_lightSize.offset, sizeof(int32_t), &lightSize);
+		pointLightSSBO.bind();
+		pointLightSSBO.update<float>(GLSLShaderInfo::LightMaterial.offset, sizeof(LightMaterial) * lightMaterials.size(), &lightMaterials[0].position.x);
+		pointLightSSBO.update<int32_t>(GLSLShaderInfo::LightMaterialSize.offset, sizeof(int32_t), &lightSize);
 
 		GRAPHICS_INFO("RENDERER_BATCH: passed light to shader!");
 	}

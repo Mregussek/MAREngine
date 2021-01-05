@@ -27,11 +27,22 @@
 
 namespace marengine {
 
+	class Entity;
+
 
 	class FMeshBatchStaticColor {
 	public:
 
+		void submitToBatch(const Entity& entity);
+
 	private:
+
+		void submitRenderable(const Entity& entity);
+		void submitVertices(const FVertexArray& vertices);
+		void submitIndices(const FIndicesArray& indices);
+		void submitTransform(const maths::mat4& transform);
+		void submitColor(const maths::vec4& color);
+
 
 		FVertexArray m_vertices;
 		FIndicesArray m_indices;
