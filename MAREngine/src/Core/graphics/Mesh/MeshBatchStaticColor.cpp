@@ -29,111 +29,38 @@ namespace marengine {
 
 
 	void FMeshBatchStaticColor::reset() {
-		m_vertices.clear();
-		m_indices.clear();
-		m_transforms.clear();
+		FMeshBatchStatic::reset();
+
 		m_colors.clear();
-
-		m_shapeID = 0.f;
-		m_indicesMaxValue = 0;
-	}
-
-	const FVertexArray& FMeshBatchStaticColor::getVertices() const {
-		return m_vertices;
-	}
-
-	const FIndicesArray& FMeshBatchStaticColor::getIndices() const {
-		return m_indices;
-	}
-
-	const FTransformsArray& FMeshBatchStaticColor::getTransforms() const {
-		return m_transforms;
-	}
-
-	const FColorsArray& FMeshBatchStaticColor::getColors() const {
-		return m_colors;
-	}
-
-	uint32_t FMeshBatchStaticColor::getUniquePipelineID() const {
-		return m_uniquePipelineID;
-	}
-
-	void FMeshBatchStaticColor::setUniquePipelineID(uint32_t id) {
-		m_uniquePipelineID = id;
 	}
 
 	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
-		const bool entityDoesntHaveRenderable{ !entity.hasComponent<RenderableComponent>() };
-		if (entityDoesntHaveRenderable) {
+		const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
+
+		if (baseClassPermission && entity.hasComponent<ColorComponent>()) {
+			return true;
+		}
+		else {
 			return false;
 		}
-
-		const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
-		const size_t verticesToPush{ renderableComponent.vertices.size() };
-		const size_t indicesToPush{ renderableComponent.indices.size() };
-
-		const size_t currentVerticesSize{ m_vertices.size() };
-		const size_t currentIndicesSize{ m_indices.size() };
-		const size_t currentTransformSize{ m_transforms.size() };
-
-		const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
-		const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
-		const bool cannotPushTransform = (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
-
-		const bool placeInBatchExist{ !(cannotPushVertices || cannotPushIndices || cannotPushTransform) };
-
-		return placeInBatchExist; // true if there is placed
 	}
 
 	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
-		submitRenderable(entity.getComponent<RenderableComponent>());
-		submitTransform(entity.getComponent<TransformComponent>());
+		FMeshBatchStatic::submitToBatch(entity);
+
 		submitColor(entity.getComponent<ColorComponent>());
 
 		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
 		rpc.colorIndex = m_colors.size() - 1;
-		rpc.transformIndex = m_transforms.size() - 1;
 		rpc.materialType = (size_t)MaterialRenderType::COLOR;
-	}
-
-	void FMeshBatchStaticColor::submitRenderable(const RenderableComponent& renderableComponent) {
-		submitVertices(renderableComponent.vertices);
-		submitIndices(renderableComponent.indices);
-
-		m_indicesMaxValue += (renderableComponent.vertices.size() * sizeof(Vertex) / 4) / g_MeshStride;
-		m_shapeID++;
-	}
-
-	void FMeshBatchStaticColor::submitVertices(const FVertexArray& vertices) {
-		m_vertices.insert(m_vertices.end(), vertices.begin(), vertices.end());
-
-		auto fromBeginOfInsertedVertices = m_vertices.end() - vertices.size();
-		auto toItsEnd = m_vertices.end();
-		auto modifyShaderID = [this](Vertex& vertex) {
-			vertex.shapeID = m_shapeID;
-		};
-
-		std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
-	}
-
-	void FMeshBatchStaticColor::submitIndices(const FIndicesArray& indices) {
-		m_indices.insert(m_indices.end(), indices.begin(), indices.end());
-
-		auto fromBeginOfInsertedIndices = m_indices.end() - indices.size();
-		auto toItsEnd = m_indices.end();
-		auto extendIndices = [this](uint32_t& indice) {
-			indice += m_indicesMaxValue;
-		};
-
-		std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
-	}
-
-	void FMeshBatchStaticColor::submitTransform(const TransformComponent& transformComponent) {
-		m_transforms.emplace_back(transformComponent.getTransform());
 	}
 
 	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {
 		m_colors.emplace_back(colorComponent.texture);
+	}
+
+	const FColorsArray& FMeshBatchStaticColor::getColors() const {
+		return m_colors;
 	}
 
 

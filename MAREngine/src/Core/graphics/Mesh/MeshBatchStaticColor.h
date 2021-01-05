@@ -23,53 +23,33 @@
 
 
 #include "MeshDefinitions.h"
+#include "MeshBatchStatic.h"
 
 
 namespace marengine {
 
 	class Entity;
-	struct RenderableComponent;
-	struct TransformComponent;
 	struct ColorComponent;
 
 
-	class FMeshBatchStaticColor {
+	class FMeshBatchStaticColor : public FMeshBatchStatic {
 
 		friend class RenderEvents;
 
 	public:
 
-		void reset();
+		virtual void reset() override;
+		virtual bool canBeBatched(const Entity& entity) const override;
+		virtual void submitToBatch(const Entity& entity) override;
 
-		bool canBeBatched(const Entity& entity) const;
-
-		void submitToBatch(const Entity& entity);
-
-		const FVertexArray& getVertices() const;
-		const FIndicesArray& getIndices() const;
-		const FTransformsArray& getTransforms() const;
 		const FColorsArray& getColors() const;
-
-		uint32_t getUniquePipelineID() const;
-		void setUniquePipelineID(uint32_t id);
 
 	private:
 
-		void submitRenderable(const RenderableComponent& renderableComponent);
-		void submitVertices(const FVertexArray& vertices);
-		void submitIndices(const FIndicesArray& indices);
-		void submitTransform(const TransformComponent& transformComponent);
 		void submitColor(const ColorComponent& colorComponent);
 
 
-		FVertexArray m_vertices;
-		FIndicesArray m_indices;
-		FTransformsArray m_transforms;
 		FColorsArray m_colors;
-
-		float m_shapeID{ 0.f };
-		uint32_t m_indicesMaxValue{ 0 };
-		uint32_t m_uniquePipelineID{ 0 };
 
 	};
 

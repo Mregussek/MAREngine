@@ -229,6 +229,7 @@
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h" />
     <ClInclude Include="src\Core\filesystem\SceneSerializer.h" />
     <ClInclude Include="src\Core\filesystem\ScriptsFileManager.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\IMeshBatch.h" />
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\attr.h" />
     <ClInclude Include="3rd_party\pybind11\include\pybind11\buffer_info.h" />
@@ -271,6 +272,7 @@
     <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
     <ClInclude Include="src\Core\graphics\GraphicLimits.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStatic.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticColor.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshDefinitions.h" />
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h" />
@@ -376,6 +378,7 @@
     <ClCompile Include="src\Core\ecs\SceneManager.cpp" />
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp" />
+    <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStatic.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticColor.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp" />

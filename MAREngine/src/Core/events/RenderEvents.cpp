@@ -83,7 +83,7 @@ namespace marengine {
 		};
 
 		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
-			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 		else {
 			auto& containerTransform{ getTransformFromCorrectContainer() };
