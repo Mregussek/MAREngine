@@ -28,20 +28,38 @@
 namespace marengine {
 
 	class Entity;
+	struct RenderableComponent;
+	struct TransformComponent;
+	struct ColorComponent;
 
 
 	class FMeshBatchStaticColor {
+
+		friend class RenderEvents;
+
 	public:
+
+		void reset();
+
+		bool canBeBatched(const Entity& entity) const;
 
 		void submitToBatch(const Entity& entity);
 
+		const FVertexArray& getVertices() const;
+		const FIndicesArray& getIndices() const;
+		const FTransformsArray& getTransforms() const;
+		const FColorsArray& getColors() const;
+
+		uint32_t getUniquePipelineID() const;
+		void setUniquePipelineID(uint32_t id);
+
 	private:
 
-		void submitRenderable(const Entity& entity);
+		void submitRenderable(const RenderableComponent& renderableComponent);
 		void submitVertices(const FVertexArray& vertices);
 		void submitIndices(const FIndicesArray& indices);
-		void submitTransform(const maths::mat4& transform);
-		void submitColor(const maths::vec4& color);
+		void submitTransform(const TransformComponent& transformComponent);
+		void submitColor(const ColorComponent& colorComponent);
 
 
 		FVertexArray m_vertices;
@@ -51,6 +69,7 @@ namespace marengine {
 
 		float m_shapeID{ 0.f };
 		uint32_t m_indicesMaxValue{ 0 };
+		uint32_t m_uniquePipelineID{ 0 };
 
 	};
 

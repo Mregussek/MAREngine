@@ -32,19 +32,19 @@ namespace marengine {
 	RenderPipeline* RenderPipeline::Instance{ nullptr };
 
 
-	const std::vector<RenderContainer>& RenderPipeline::getColorContainers() const { return m_containersColor; }
+	const std::vector<FMeshBatchStaticColor>& RenderPipeline::getColorBatches() const { return m_staticColorBatches; }
 	const std::vector<RenderContainer>& RenderPipeline::get2Dcontainers() const { return m_containers2D; }
 	const std::vector<RenderContainer>& RenderPipeline::getCubemapContainers() const { return m_containersCubemap; }
 	const std::vector<LightContainer>& RenderPipeline::getLightContainers() const { return m_lights; }
 	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
 
 	void RenderPipeline::reset() {
-		for (auto& container : m_containersColor) { container.reset(); }
+		for (auto& batch : m_staticColorBatches) { batch.reset(); }
 		for (auto& container : m_containers2D) { container.reset(); }
 		for (auto& container : m_containersCubemap) { container.reset(); }
 		for (auto& light : m_lights) { light.reset(); }
 
-		m_containersColor.clear();
+		m_staticColorBatches.clear();
 		m_containers2D.clear();
 		m_containersCubemap.clear();
 		m_lights.clear();
@@ -76,11 +76,8 @@ namespace marengine {
 			const auto indiSize{ (uint32_t)renderable.indices.size() };
 
 			if (hasColor) {
-				setContainerRenderable(MaterialRenderType::COLOR, rpc, vertSize, indiSize);
-				rpc.transformIndex = submitRenderable(renderable, tran);
-
-				const auto& color = entity.getComponent<ColorComponent>();
-				rpc.colorIndex = submitColor((int32_t)rpc.transformIndex, color);
+				auto& availableBatch{ getAvailableBatch(entity) };
+				availableBatch.submitToBatch(entity);
 			}
 			else if (hasTexture2D) {
 				setContainerRenderable(MaterialRenderType::TEXTURE2D, rpc, vertSize, indiSize);
@@ -99,6 +96,18 @@ namespace marengine {
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
+	}
+
+	FMeshBatchStaticColor& RenderPipeline::getAvailableBatch(const Entity& entity) {
+		const auto it = std::find_if(m_staticColorBatches.begin(), m_staticColorBatches.end(), [&entity](FMeshBatchStaticColor& batch) {
+			return batch.canBeBatched(entity);
+		});
+		if (it != m_staticColorBatches.cend()) {
+			return *it;
+		}
+		else {
+			return m_staticColorBatches.emplace_back();
+		}
 	}
 
 	void RenderPipeline::pushLightToPipeline(const Entity& entity) {
@@ -130,10 +139,7 @@ namespace marengine {
 			m_containerPtr->m_materialRenderType = materialType;
 		};
 
-		if (materialType == MaterialRenderType::COLOR) {
-			selectContainerPtrProcedure(m_containersColor);
-		}
-		else if (materialType == MaterialRenderType::TEXTURE2D) {
+		if (materialType == MaterialRenderType::TEXTURE2D) {
 			selectContainerPtrProcedure(m_containers2D);
 		}
 		else if (materialType == MaterialRenderType::CUBEMAP) {

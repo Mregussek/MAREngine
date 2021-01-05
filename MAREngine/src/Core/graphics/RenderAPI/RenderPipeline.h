@@ -23,6 +23,7 @@
 
 
 #include "../../../mar.h"
+#include "../Mesh/MeshBatchStaticColor.h"
 #include "RenderContainer.h"
 #include "../../ecs/Components/Components.h"
 
@@ -51,13 +52,15 @@ namespace marengine {
 
 		// ---- GETTERS for container ---- //
 	
-		const std::vector<RenderContainer>& getColorContainers() const;
+		const std::vector<FMeshBatchStaticColor>& getColorBatches() const;
 		const std::vector<RenderContainer>& get2Dcontainers() const;
 		const std::vector<RenderContainer>& getCubemapContainers() const;
 		const std::vector<LightContainer>& getLightContainers() const;
 		const RenderCamera* getCamera() const;
 
 	private:
+
+		FMeshBatchStaticColor& getAvailableBatch(const Entity& entity);
 
 		void setContainerRenderable(MaterialRenderType materialType, RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush);
 		void setContainerLight(RenderPipelineComponent& rpc);
@@ -73,7 +76,7 @@ namespace marengine {
 		size_t submitLight(const maths::vec3& position, const LightComponent& light);
 
 
-		std::vector<RenderContainer> m_containersColor;
+		std::vector<FMeshBatchStaticColor> m_staticColorBatches;
 		std::vector<RenderContainer> m_containers2D;
 		std::vector<RenderContainer> m_containersCubemap;
 		std::vector<LightContainer> m_lights;

@@ -35,6 +35,7 @@ namespace marengine {
 	class RenderContainer;
 	class LightContainer;
 	struct LightMaterial;
+	class FMeshBatchStaticColor;
 
 
 	class RendererBatch {
@@ -46,17 +47,11 @@ namespace marengine {
 
 	private:
 
+		void drawColors(const std::vector<FMeshBatchStaticColor>& batches) const;
+		void drawTextures2D(const std::vector<RenderContainer>& containers) const;
+
 		void setupSSBOs();
 		void setupShaders();
-
-		void drawWithShader(const ShaderOpenGL& shader, const std::vector<LightContainer>& lights,
-			const std::vector<RenderContainer>& containers) const;
-
-		void passTransformsToSSBO(const RenderContainer& container) const;
-		void passColorsToSSBO(const ColorVector& colors) const;
-		void passTexturesToShader(const ShaderOpenGL& shader, const TextureVector& textures) const;
-		void passCubemapsToShader(const ShaderOpenGL& shader, const TextureVector& cubemaps) const;
-		void passLightToSSBO(const std::vector<LightMaterial>& lightMaterials) const;
 
 
 		ShaderOpenGL m_shaderColors;

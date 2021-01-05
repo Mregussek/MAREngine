@@ -49,7 +49,7 @@ namespace marengine {
 	void RenderEvents::onContainersReadyToDraw() const {
 		PipelineStorage::Instance->close();
 
-		auto& containersColor{ RenderPipeline::Instance->m_containersColor };
+		auto& staticColorBatches{ RenderPipeline::Instance->m_staticColorBatches };
 		auto& containers2D{ RenderPipeline::Instance->m_containers2D };
 		auto& containersCubemap{ RenderPipeline::Instance->m_containersCubemap };
 
@@ -61,17 +61,20 @@ namespace marengine {
 			PipelineStorage::Instance->fillContainer(container);
 		};
 		
-		std::for_each(containersColor.begin(), containersColor.end(), createPipelineStorage);
+		std::for_each(staticColorBatches.begin(), staticColorBatches.end(), [](FMeshBatchStaticColor& batch) {
+			auto& pipeline = PipelineStorage::Instance->createPipeline();
+			pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
+			pipeline.bind();
+			pipeline.update(batch.getVertices(), batch.getIndices());
+			batch.setUniquePipelineID(PipelineStorage::Instance->getPipelines().size() - 1);
+		});
 		std::for_each(containers2D.begin(), containers2D.end(), createPipelineStorage);
 		std::for_each(containersCubemap.begin(), containersCubemap.end(), createPipelineStorage);
 	}
 
 	void RenderEvents::onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const {
 		auto getTransformFromCorrectContainer = [&rpc]()->maths::mat4& {
-			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
-				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_transforms[rpc.transformIndex];
-			}
-			else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+			if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex];
 			}
 			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
@@ -79,8 +82,13 @@ namespace marengine {
 			}
 		};
 
-		auto& containerTransform{ getTransformFromCorrectContainer() };
-		containerTransform = transform.getTransform();
+		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].m_transforms[rpc.transformIndex] = transform.getTransform();
+		}
+		else {
+			auto& containerTransform{ getTransformFromCorrectContainer() };
+			containerTransform = transform.getTransform();
+		}
 	}
 	
 	void RenderEvents::onLightUpdate(vec3 position, const LightComponent& light, const RenderPipelineComponent& rpc) const{
@@ -106,10 +114,7 @@ namespace marengine {
 
 	void RenderEvents::onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const {
 		auto getColorFromCorrectContainer = [&rpc]()->maths::vec4& {
-			if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
-				return RenderPipeline::Instance->m_containersColor[rpc.containerIndex].m_colors[rpc.colorIndex].second;
-			}
-			else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+			if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
 				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second;
 			}
 			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
@@ -117,8 +122,13 @@ namespace marengine {
 			}
 		};
 
-		auto& containerColor{ getColorFromCorrectContainer() };
-		containerColor = color;
+		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
+			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].m_colors[rpc.colorIndex] = color;
+		}
+		else {
+			auto& containerColor{ getColorFromCorrectContainer() };
+			containerColor = color;
+		}
 	}
 	
 	void RenderEvents::onMainCameraUpdate(const RenderCamera& camera) const {

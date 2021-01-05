@@ -35,7 +35,7 @@ namespace marengine {
 		ImGui::Begin("Statistics Menu");
 
 		auto& stats{ *RenderStatistics::Instance };
-		const auto& containersColor{ RenderPipeline::Instance->getColorContainers() };
+		//const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
 		const auto& containers2D{ RenderPipeline::Instance->get2Dcontainers() };
 		const auto& containersCubemap{ RenderPipeline::Instance->getCubemapContainers() };
 
@@ -53,7 +53,7 @@ namespace marengine {
 			});
 		};
 
-		pushContainerDataToStats(containersColor);
+		//pushContainerDataToStats(containersColor);
 		pushContainerDataToStats(containers2D);
 		pushContainerDataToStats(containersCubemap);
 
