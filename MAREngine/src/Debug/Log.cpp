@@ -59,7 +59,7 @@ namespace marengine {
 			s_CoreLogger = spdlog::rotating_logger_mt("MAR ENGINE", filename, max_size, max_files);
 		}
 
-		s_CoreLogger->set_level(spdlog::level::trace);
+		s_CoreLogger->set_level(spdlog::level::warn);
 
 		s_initialized = true;
 	}
