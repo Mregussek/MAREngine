@@ -50,44 +50,26 @@ namespace marengine {
 		PipelineStorage::Instance->close();
 
 		auto& staticColorBatches{ RenderPipeline::Instance->m_staticColorBatches };
-		auto& containers2D{ RenderPipeline::Instance->m_containers2D };
-		auto& containersCubemap{ RenderPipeline::Instance->m_containersCubemap };
+		auto& staticTexture2DBatches{ RenderPipeline::Instance->m_staticTexture2DBatches };
 
-		auto createPipelineStorage = [](RenderContainer& container) {
-			auto& pipeline = PipelineStorage::Instance->createPipeline();
-			pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
-			pipeline.bind();
-			pipeline.update(container.getVertices(), container.getIndices());
-			PipelineStorage::Instance->fillContainer(container);
-		};
-		
-		std::for_each(staticColorBatches.begin(), staticColorBatches.end(), [](FMeshBatchStaticColor& batch) {
+		auto createPipelineStorage = [](FMeshBatchStatic& batch) {
 			auto& pipeline = PipelineStorage::Instance->createPipeline();
 			pipeline.initialize(GraphicLimits::sizeOfVertices, GraphicLimits::sizeOfIndices);
 			pipeline.bind();
 			pipeline.update(batch.getVertices(), batch.getIndices());
 			batch.setUniquePipelineID(PipelineStorage::Instance->getPipelines().size() - 1);
-		});
-		std::for_each(containers2D.begin(), containers2D.end(), createPipelineStorage);
-		std::for_each(containersCubemap.begin(), containersCubemap.end(), createPipelineStorage);
+		};
+		
+		std::for_each(staticColorBatches.begin(), staticColorBatches.end(), createPipelineStorage);
+		std::for_each(staticTexture2DBatches.begin(), staticTexture2DBatches.end(), createPipelineStorage);
 	}
 
 	void RenderEvents::onTransformMat4Update(const TransformComponent& transform, const RenderPipelineComponent& rpc) const {
-		auto getTransformFromCorrectContainer = [&rpc]()->maths::mat4& {
-			if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_transforms[rpc.transformIndex];
-			}
-			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-				return RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_transforms[rpc.transformIndex];
-			}
-		};
-
 		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
 			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
 		}
-		else {
-			auto& containerTransform{ getTransformFromCorrectContainer() };
-			containerTransform = transform.getTransform();
+		else if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
+			RenderPipeline::Instance->m_staticTexture2DBatches[rpc.containerIndex].p_transforms[rpc.transformIndex] = transform.getTransform();
 		}
 	}
 	
@@ -113,21 +95,8 @@ namespace marengine {
 	}
 
 	void RenderEvents::onColorUpdate(vec4 color, const RenderPipelineComponent& rpc) const {
-		auto getColorFromCorrectContainer = [&rpc]()->maths::vec4& {
-			if (rpc.materialType == (size_t)MaterialRenderType::TEXTURE2D) {
-				return RenderPipeline::Instance->m_containers2D[rpc.containerIndex].m_colors[rpc.colorIndex].second;
-			}
-			else if (rpc.materialType == (size_t)MaterialRenderType::CUBEMAP) {
-				return RenderPipeline::Instance->m_containersCubemap[rpc.containerIndex].m_colors[rpc.colorIndex].second;
-			}
-		};
-
 		if (rpc.materialType == (size_t)MaterialRenderType::COLOR) {
 			RenderPipeline::Instance->m_staticColorBatches[rpc.containerIndex].m_colors[rpc.colorIndex] = color;
-		}
-		else {
-			auto& containerColor{ getColorFromCorrectContainer() };
-			containerColor = color;
 		}
 	}
 	

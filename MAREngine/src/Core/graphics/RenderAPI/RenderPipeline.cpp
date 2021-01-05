@@ -33,19 +33,18 @@ namespace marengine {
 
 
 	const std::vector<FMeshBatchStaticColor>& RenderPipeline::getColorBatches() const { return m_staticColorBatches; }
-	const std::vector<RenderContainer>& RenderPipeline::get2Dcontainers() const { return m_containers2D; }
-	const std::vector<RenderContainer>& RenderPipeline::getCubemapContainers() const { return m_containersCubemap; }
+	const std::vector<FMeshBatchStaticTexture2D>& RenderPipeline::getTexture2DBatches() const { return m_staticTexture2DBatches; }
 	const std::vector<LightContainer>& RenderPipeline::getLightContainers() const { return m_lights; }
 	const RenderCamera* RenderPipeline::getCamera() const { return m_camera; }
 
 	void RenderPipeline::reset() {
 		for (auto& batch : m_staticColorBatches) { batch.reset(); }
-		for (auto& container : m_containers2D) { container.reset(); }
+		for (auto& batch : m_staticTexture2DBatches) { batch.reset(); }
 		for (auto& container : m_containersCubemap) { container.reset(); }
 		for (auto& light : m_lights) { light.reset(); }
 
 		m_staticColorBatches.clear();
-		m_containers2D.clear();
+		m_staticTexture2DBatches.clear();
 		m_containersCubemap.clear();
 		m_lights.clear();
 
@@ -61,52 +60,41 @@ namespace marengine {
 	void RenderPipeline::pushEntityToPipeline(const Entity& entity) {
 		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
 
-		const bool hasColor = entity.hasComponent<ColorComponent>();
-		const bool hasTexture2D = entity.hasComponent<Texture2DComponent>();
-		const bool hasCubemap = entity.hasComponent<TextureCubemapComponent>();
-		const bool hasAnyMaterial = hasColor || hasTexture2D || hasCubemap;
-		const bool hasRenderable = entity.hasComponent<RenderableComponent>();
-
-		if (hasRenderable && hasAnyMaterial) {
-			const auto& tran = entity.getComponent<TransformComponent>();
-			auto& renderable = entity.getComponent<RenderableComponent>();
-			auto& rpc = entity.getComponent<RenderPipelineComponent>();
-
-			const auto vertSize{ (uint32_t)renderable.vertices.size() };
-			const auto indiSize{ (uint32_t)renderable.indices.size() };
-
-			if (hasColor) {
-				auto& availableBatch{ getAvailableBatch(entity) };
-				availableBatch.submitToBatch(entity);
-			}
-			else if (hasTexture2D) {
-				setContainerRenderable(MaterialRenderType::TEXTURE2D, rpc, vertSize, indiSize);
-				rpc.transformIndex = submitRenderable(renderable, tran);
-
-				const auto& tex = entity.getComponent<Texture2DComponent>();
-				rpc.colorIndex = submitTexture2D((int32_t)rpc.transformIndex, tex);
-			}
-			else if (hasCubemap) {
-				setContainerRenderable(MaterialRenderType::CUBEMAP, rpc, vertSize, indiSize);
-				rpc.transformIndex = submitRenderable(renderable, tran);
-
-				const auto& cube = entity.getComponent<TextureCubemapComponent>();
-				rpc.colorIndex = submitCubemap((int32_t)rpc.transformIndex, cube);
-			}
+		if (entity.hasComponent<ColorComponent>()) {
+			auto& availableBatch{ getAvailableColorBatch(entity) };
+			availableBatch.submitToBatch(entity);
+		}
+		if (entity.hasComponent<Texture2DComponent>()) {
+			auto& availableBatch{ getAvailableTexture2DBatch(entity) };
+			availableBatch.submitToBatch(entity);
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
-	FMeshBatchStaticColor& RenderPipeline::getAvailableBatch(const Entity& entity) {
-		const auto it = std::find_if(m_staticColorBatches.begin(), m_staticColorBatches.end(), [&entity](FMeshBatchStaticColor& batch) {
+	FMeshBatchStaticColor& RenderPipeline::getAvailableColorBatch(const Entity& entity) {
+		auto canBatchEntity = [&entity](FMeshBatchStaticColor& batch) {
 			return batch.canBeBatched(entity);
-		});
-		if (it != m_staticColorBatches.cend()) {
+		};
+		const auto it = std::find_if(m_staticColorBatches.begin(), m_staticColorBatches.end(), canBatchEntity);
+		if (it != m_staticColorBatches.end()) {
 			return *it;
 		}
 		else {
 			return m_staticColorBatches.emplace_back();
+		}
+	}
+
+	FMeshBatchStaticTexture2D& RenderPipeline::getAvailableTexture2DBatch(const Entity& entity) {
+		auto canBatchEntity = [&entity](FMeshBatchStaticTexture2D& batch) {
+			return batch.canBeBatched(entity);
+		};
+		const auto it = std::find_if(m_staticTexture2DBatches.begin(), m_staticTexture2DBatches.end(), canBatchEntity);
+		if (it != m_staticTexture2DBatches.end()) {
+			return *it;
+		}
+		else {
+			return m_staticTexture2DBatches.emplace_back();
 		}
 	}
 
@@ -117,34 +105,6 @@ namespace marengine {
 
 		setContainerLight(rpc);
 		rpc.lightIndex = submitLight(tran.center, light);
-	}
-
-	void RenderPipeline::setContainerRenderable(MaterialRenderType materialType, RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush) {
-		m_containerPtr = nullptr;
-
-		auto selectContainerPtrProcedure = [&rpc, materialType, verticesToPush, indicesToPush, this](std::vector<RenderContainer>& containers) {
-			const auto index = RenderPipelineHelper::findAvailableRenderContainer(containers, verticesToPush, indicesToPush);
-			if (index != -1) {
-				GRAPHICS_TRACE("RENDER_PIPELINE: found render container with place for new renderable, index {}, materialType {}", index, materialType);
-				m_containerPtr = &containers[index];
-				rpc.containerIndex = index;
-			}
-			else {
-				GRAPHICS_TRACE("RENDER_PIPELINE: cannot find render container with place in it for materialType {}, creating new one...", index, materialType);
-				m_containerPtr = &containers.emplace_back();
-				rpc.containerIndex = containers.size() - 1;
-			}
-
-			rpc.materialType = (size_t)materialType;
-			m_containerPtr->m_materialRenderType = materialType;
-		};
-
-		if (materialType == MaterialRenderType::TEXTURE2D) {
-			selectContainerPtrProcedure(m_containers2D);
-		}
-		else if (materialType == MaterialRenderType::CUBEMAP) {
-			selectContainerPtrProcedure(m_containersCubemap);
-		}
 	}
 
 	void RenderPipeline::setContainerLight(RenderPipelineComponent& rpc) {
@@ -159,87 +119,6 @@ namespace marengine {
 			m_lightPtr = &m_lights.emplace_back();
 			rpc.containerLightIndex = m_lights.size() - 1;
 		}
-	}
-
-	size_t RenderPipeline::submitRenderable(const RenderableComponent& renderable, const TransformComponent& transform) {
-		if (!m_containerPtr) {
-			GRAPHICS_ERROR("RENDER_PIPELINE: submitRenderable(), m_containerPtr is nullptr!");
-			return -1;
-		}
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting renderable component...");
-
-		auto& indicesMax = m_containerPtr->m_indicesMax;
-		auto& shapeID = m_containerPtr->m_shapeID;
-
-		submitVertices(renderable.vertices, shapeID);
-		submitIndices(renderable.indices, indicesMax);
-		submitTransform(transform.getTransform());
-
-		indicesMax += (renderable.vertices.size() * sizeof(Vertex) / 4) / RenderContainer::getStride();
-		shapeID++;
-
-		MAR_CORE_ASSERT(m_containerPtr->m_transforms.size() == shapeID, "transform.size() and shapeID are not equal!");
-		return m_containerPtr->m_transforms.size() - 1;
-	}
-
-	void RenderPipeline::submitVertices(const std::vector<Vertex>& vertices, float shapeID) {
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting vertices and setting shapeID for batch renderer...");
-
-		auto& containerVertices{ m_containerPtr->m_vertices };
-		containerVertices.insert(containerVertices.end(), vertices.begin(), vertices.end());
-
-		auto fromBeginOfInsertedVertices = containerVertices.end() - vertices.size();
-		auto toItsEnd = containerVertices.end();
-		auto modifyShaderID = [shapeID](Vertex& vertex) {
-			vertex.shapeID = shapeID;
-		};
-
-		std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
-	}
-
-	void RenderPipeline::submitIndices(const std::vector<uint32_t>& indices, uint32_t indicesMax) {
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting indices and increasing every indice for batch renderer...");
-
-		auto& containerIndices{ m_containerPtr->m_indices };
-		containerIndices.insert(containerIndices.end(), indices.begin(), indices.end());
-
-		auto fromBeginOfInsertedIndices = containerIndices.end() - indices.size();
-		auto toItsEnd = containerIndices.end();
-		auto extendIndices = [extension = indicesMax](uint32_t& indice) {
-			indice += extension;
-		};
-
-		std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
-	}
-
-	void RenderPipeline::submitTransform(const maths::mat4& transform) {
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting transform...");
-
-		m_containerPtr->m_transforms.push_back(transform);
-	}
-	
-	size_t RenderPipeline::submitColor(int32_t entityIndex, const ColorComponent& color) {
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting color component, current size = {}, entity_index = {}", m_containerPtr->m_colors.size(), entityIndex);
-
-		m_containerPtr->m_colors.push_back({ entityIndex, color.texture });
-		m_containerPtr->m_samplerTypes.push_back(0.0f);
-		return m_containerPtr->m_colors.size() - 1;
-	}
-
-	size_t RenderPipeline::submitTexture2D(int32_t entityIndex, const Texture2DComponent& texture) {
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting texture2d component, current size = {}, entity_index = {}, texture2D = {}", m_containerPtr->m_tex2D.size(), entityIndex, texture.texture);
-
-		m_containerPtr->m_tex2D.push_back({ entityIndex, texture.texture });
-		m_containerPtr->m_samplerTypes.push_back(1.0f);
-		return m_containerPtr->m_tex2D.size() - 1;
-	}
-
-	size_t RenderPipeline::submitCubemap(int32_t entityIndex, const TextureCubemapComponent& cubemap) {
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitting texture cubemap component, current size = {}, entity_index = {}, textureCubemap = {}", m_containerPtr->m_cubes.size(), entityIndex, cubemap.texture);
-
-		m_containerPtr->m_cubes.push_back({ entityIndex, cubemap.texture });
-		m_containerPtr->m_samplerTypes.push_back(2.0f);
-		return m_containerPtr->m_cubes.size() - 1;
 	}
 
 	size_t RenderPipeline::submitLight(const maths::vec3& position, const LightComponent& light) {

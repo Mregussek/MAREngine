@@ -18,43 +18,45 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
-#define MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+#ifndef MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
+#define MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
 
 
-#include "../../../mar.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "../RenderAPI/RenderContainerDefinitions.h"
+#include "MeshBatchStatic.h"
+#include "MeshDefinitions.h"
 
 
 namespace marengine {
 
-	class FMeshBatchStaticColor;
-	class FMeshBatchStaticTexture2D;
+	class Entity;
+	struct Texture2DComponent;
 
+	
+	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
 
-	class RendererBatch {
+		friend class RenderEvents;
+
 	public:
 
-		void initialize();
-		void close();
-		void draw() const;
+		virtual void reset() override;
+
+		virtual bool canBeBatched(const Entity& entity) const override;
+
+		virtual void submitToBatch(const Entity& entity) override;
+
+		const FTexturesArray& getTextures() const;
 
 	private:
 
-		void drawColors(const std::vector<FMeshBatchStaticColor>& batches) const;
-		void drawTextures2D(const std::vector<FMeshBatchStaticTexture2D>& batches) const;
-
-		void setupSSBOs();
-		void setupShaders();
+		void submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent);
 
 
-		ShaderOpenGL m_shaderColors;
-		ShaderOpenGL m_shader2D;
+		FTexturesArray m_textures;
 
 	};
 
 
 }
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+
+#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H

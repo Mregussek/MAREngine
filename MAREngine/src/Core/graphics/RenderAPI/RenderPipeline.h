@@ -24,6 +24,7 @@
 
 #include "../../../mar.h"
 #include "../Mesh/MeshBatchStaticColor.h"
+#include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "RenderContainer.h"
 #include "../../ecs/Components/Components.h"
 
@@ -53,31 +54,21 @@ namespace marengine {
 		// ---- GETTERS for container ---- //
 	
 		const std::vector<FMeshBatchStaticColor>& getColorBatches() const;
-		const std::vector<RenderContainer>& get2Dcontainers() const;
-		const std::vector<RenderContainer>& getCubemapContainers() const;
+		const std::vector<FMeshBatchStaticTexture2D>& getTexture2DBatches() const;
 		const std::vector<LightContainer>& getLightContainers() const;
 		const RenderCamera* getCamera() const;
 
 	private:
 
-		FMeshBatchStaticColor& getAvailableBatch(const Entity& entity);
+		FMeshBatchStaticColor& getAvailableColorBatch(const Entity& entity);
+		FMeshBatchStaticTexture2D& getAvailableTexture2DBatch(const Entity& entity);
 
-		void setContainerRenderable(MaterialRenderType materialType, RenderPipelineComponent& rpc, uint32_t verticesToPush, uint32_t indicesToPush);
 		void setContainerLight(RenderPipelineComponent& rpc);
-
-		size_t submitRenderable(const RenderableComponent& renderable, const TransformComponent& transform);
-		void submitVertices(const std::vector<Vertex>& vertices, float shapeID);
-		void submitIndices(const std::vector<uint32_t>& indices, uint32_t indicesMax);
-		void submitTransform(const maths::mat4& transform);
-
-		size_t submitColor(int32_t entityIndex, const ColorComponent& color);
-		size_t submitTexture2D(int32_t entityIndex, const Texture2DComponent& texture);
-		size_t submitCubemap(int32_t entityIndex, const TextureCubemapComponent& cubemap);
 		size_t submitLight(const maths::vec3& position, const LightComponent& light);
 
 
 		std::vector<FMeshBatchStaticColor> m_staticColorBatches;
-		std::vector<RenderContainer> m_containers2D;
+		std::vector<FMeshBatchStaticTexture2D> m_staticTexture2DBatches;
 		std::vector<RenderContainer> m_containersCubemap;
 		std::vector<LightContainer> m_lights;
 

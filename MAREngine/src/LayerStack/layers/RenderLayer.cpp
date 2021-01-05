@@ -45,7 +45,7 @@ namespace marengine {
 		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
 
 		m_statistics.resetStatistics();
-		m_renderer.draw(m_renderPipeline);
+		m_renderer.draw();
 	}
 
 	void RenderLayer::close() {

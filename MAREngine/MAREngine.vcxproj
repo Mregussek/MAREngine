@@ -274,6 +274,7 @@
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStatic.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticColor.h" />
+    <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticTexture2D.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshDefinitions.h" />
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h" />
@@ -380,6 +381,7 @@
     <ClCompile Include="src\Core\ecs\SceneRegistry.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStatic.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticColor.cpp" />
+    <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticTexture2D.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderContainer.cpp" />
