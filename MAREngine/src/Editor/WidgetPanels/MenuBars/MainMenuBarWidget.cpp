@@ -28,6 +28,7 @@
 #include "../../../Core/ecs/Scene.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../OtherPanels/InfoWidget.h"
+#include "../OtherPanels/WindowSettingsWidget.h"
 #include "../Filesystem/SceneFilesystemWidgets.h"
 #include "../Filesystem/EntityFilesystemWidgets.h"
 #include "../../WidgetEvents/EventsEntityWidget.h"
@@ -72,6 +73,12 @@ namespace marengine {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Settings")) {
+				if (ImGui::MenuItem("Window Settings")) { m_settingsWindow = true; }
+
+				ImGui::EndMenu();
+			}
+
 			if (ImGui::BeginMenu("About")) {
 				if (ImGui::MenuItem("About Engine")) { m_infoWindow = true; }
 				if (ImGui::MenuItem("Instruction")) { m_instructionWindow = true; }
@@ -105,12 +112,16 @@ namespace marengine {
 			m_loadOBJfileWindow = false;
 		}
 		if (m_infoWindow) { 
-			WInfoWidget::Instance->displayInfo(); 
+			WInfoWidget::Instance->openInfoWidget(); 
 			m_infoWindow = false;
 		}
 		if (m_instructionWindow) { 
-			WInfoWidget::Instance->displayInstruction(); 
+			WInfoWidget::Instance->openInstructionWidget(); 
 			m_instructionWindow = false;
+		}
+		if (m_settingsWindow) {
+			WWindowSettingsWidget::Instance->openSettingsWindowWidget();
+			m_settingsWindow = false;
 		}
 	}
 

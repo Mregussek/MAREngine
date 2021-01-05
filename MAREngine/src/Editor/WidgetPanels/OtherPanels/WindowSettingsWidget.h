@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_W_INFO_WIDGET_H
-#define MAR_ENGINE_W_INFO_WIDGET_H
+#ifndef MAR_ENGINE_W_WINDOW_SETTINGS_WIDGET_H
+#define MAR_ENGINE_W_WINDOW_SETTINGS_WIDGET_H
 
 
 #include "../IWidgetPanel.h"
@@ -27,27 +27,23 @@
 
 namespace marengine {
 
-
-	class WInfoWidget : public IWidgetPanel {
+		
+	class WWindowSettingsWidget : public IWidgetPanel {
 	public:
 
-		static WInfoWidget* Instance;
+		static WWindowSettingsWidget* Instance;
 
 		virtual void create() override;
 
 		virtual void updateFrame() override;
 
-		void openInfoWidget();
-		void openInstructionWidget();
+		void openSettingsWindowWidget();
 
 	private:
 
-		bool actualDisplayInfoWindow() const;
-		bool actualDisplayInstructionWindow() const;
+		bool actualDisplaySettingsWindow() const;
 
-
-		bool shouldInfoBeDisplayed{ false };
-		bool shouldInstructionBeDisplayed{ false };
+		bool m_displaySettingsWindow{ false };
 
 	};
 
@@ -55,4 +51,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_W_INFO_WIDGET_H
+#endif // !MAR_ENGINE_W_WINDOW_SETTINGS_WIDGET_H

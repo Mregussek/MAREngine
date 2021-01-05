@@ -303,6 +303,7 @@
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h" />
     <ClInclude Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\StatisticsWidget.h" />
+    <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\WindowSettingsWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\ScenePropertiesPanel\ScenePropertiesWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\Viewport\GuizmoWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\Viewport\ViewportWidget.h" />
@@ -410,6 +411,7 @@
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.cpp" />
+    <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\WindowSettingsWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\StatisticsWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\ThemeWidget.cpp" />

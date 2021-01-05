@@ -33,6 +33,7 @@
 #include "EntityPanels/EntityWidgetPanel.h"
 #include "EntityPanels/SceneHierarchyWidget.h"
 #include "OtherPanels/ThemeWidget.h"
+#include "OtherPanels/WindowSettingsWidget.h"
 #include "OtherPanels/StatisticsWidget.h"
 
 
@@ -54,6 +55,7 @@ namespace marengine {
 		WScriptIDE textEditor{};
 		WScenePropertiesWidget sceneProperties{};
 		WThemeWidget theme{};
+		WWindowSettingsWidget windowSettings{};
 		WStatisticsWidget statistics{};
 
 	};

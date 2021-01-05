@@ -44,6 +44,7 @@ namespace marengine {
 		bool m_loadOBJfileWindow{ false };
 		bool m_infoWindow{ false };
 		bool m_instructionWindow{ false };
+		bool m_settingsWindow{ false };
 
 	};
 

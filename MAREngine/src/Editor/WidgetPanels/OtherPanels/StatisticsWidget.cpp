@@ -20,12 +20,8 @@
 
 #include "StatisticsWidget.h"
 #include "../../../mar.h"
-#include "../../EditorLogging.h"
-#include "../../../Core/ecs/Scene.h"
-#include "../../../Core/ecs/SceneManager.h"
-#include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Debug/Profiler.h"
 #include "../../../Core/graphics/RenderAPI/RenderStatistics.h"
-#include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
 
 
 namespace marengine {
@@ -34,14 +30,16 @@ namespace marengine {
 	void WStatisticsWidget::updateFrame() {
 		ImGui::Begin("Statistics Menu");
 
-		auto& stats{ *RenderStatistics::Instance };
+		const RenderStatistics* stats{ RenderStatistics::Instance };
 		
-		ImGui::Text("Draw Calls: %d", stats.drawCallsCount);
-		ImGui::Text("Vertices: %d", stats.verticesCount);
-		ImGui::Text("Indices: %d", stats.indicesCount);
-		ImGui::Text("Triangles: %d", stats.trianglesCount);
-		ImGui::Text("Entities: %d", stats.entitiesCount);
-		ImGui::Text("All Entities: %d", stats.allEntitiesCount);
+		ImGui::Text("Draw Calls: %d", stats->drawCallsCount);
+		ImGui::Text("Vertices: %d", stats->verticesCount);
+		ImGui::Text("Indices: %d", stats->indicesCount);
+		ImGui::Text("Triangles: %d", stats->trianglesCount);
+		ImGui::Text("Entities: %d", stats->entitiesCount);
+		ImGui::Text("Colored Entities: %d", stats->coloredEntitiesCount);
+		ImGui::Text("Textured2D Entities: %d", stats->textured2dEntitiesCount);
+		ImGui::Text("Rendered Entities: %d", stats->allRendererEntitiesCount);
 
 		ImGui::Separator();
 
@@ -49,8 +47,6 @@ namespace marengine {
 		ImGui::Text("ms/frame: %f", 1000.0f / ImGui::GetIO().Framerate);
 
 		ImGui::End();
-
-		EDITOR_TRACE("GUI: scene_statistics");
 	}
 
 

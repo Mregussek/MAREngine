@@ -52,6 +52,7 @@ namespace marengine {
 		m_editorManager.pushPanel(&m_allWidgets.statistics);
 		m_editorManager.pushPanel(&m_allWidgets.mainMenuBar);
 		m_editorManager.pushPanel(&m_allWidgets.sceneProperties);
+		m_editorManager.pushPanel(&m_allWidgets.windowSettings);
 
 		m_editorManager.create();
 	}
