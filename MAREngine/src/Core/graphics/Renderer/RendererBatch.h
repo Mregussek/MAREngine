@@ -30,10 +30,6 @@ namespace marengine {
 
 	class FMeshBatchStaticColor;
 	class FMeshBatchStaticTexture2D;
-<<<<<<< HEAD
-	class FPointLightBatch;
-=======
->>>>>>> renderissue
 
 
 	class RendererBatch {
@@ -41,15 +37,6 @@ namespace marengine {
 
 		void initialize();
 		void close();
-<<<<<<< HEAD
-		void draw(const FMeshBatchStaticColor& staticColorBatch, const FPointLightBatch& pointLightBatch) const;
-		void draw(const FMeshBatchStaticTexture2D& staticTexture2DBatch, const FPointLightBatch& pointLightBatch) const;
-
-	private:
-
-		ShaderOpenGL m_shaderColors;
-		ShaderOpenGL m_shaderTexture2D;
-=======
 		void draw() const;
 
 	private:
@@ -62,7 +49,6 @@ namespace marengine {
 
 		ShaderOpenGL m_shaderColors;
 		ShaderOpenGL m_shader2D;
->>>>>>> renderissue
 
 	};
 

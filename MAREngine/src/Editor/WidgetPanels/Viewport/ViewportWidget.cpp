@@ -45,18 +45,8 @@ namespace marengine {
 		m_framebuffer.close();
 	}
 
-	void WViewportWidget::dontRenderToViewport() const {
+	void WViewportWidget::beginFrame() {
 		m_framebuffer.unbind();
-	}
-	
-	void WViewportWidget::renderToViewport() const {
-		const maths::vec3& clearScreenColor{ SceneManager::Instance->getScene()->getBackground() };
-
-		Window::swapBuffers();
-		SetupOpenGL::clearScreen(clearScreenColor);
-
-		m_framebuffer.bind();
-		m_framebuffer.clear(clearScreenColor);
 	}
 
 	void WViewportWidget::updateFrame() {
@@ -150,6 +140,15 @@ namespace marengine {
 				}
 			}
 		}
+	}
+
+	void WViewportWidget::bind(maths::vec3 backgroundColor) const {
+		m_framebuffer.bind();
+		m_framebuffer.clear(backgroundColor);
+	}
+
+	void WViewportWidget::unbind() const {
+		m_framebuffer.unbind();
 	}
 
 	void WViewportWidget::updateAspectRatio() {

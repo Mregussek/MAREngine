@@ -26,20 +26,16 @@
 #ifdef MAR_ENGINE_EDITOR_LOGS
 
 #define EDITOR_TRACE(...) MAR_CORE_TRACE(__VA_ARGS__)
-#define EDITOR_DEBUG(...) MAR_CORE_DEBUG(__VA_ARGS__)
 #define EDITOR_INFO(...) MAR_CORE_INFO(__VA_ARGS__)
 #define EDITOR_ERROR(...) MAR_CORE_ERROR(__VA_ARGS__)
 #define EDITOR_WARN(...) MAR_CORE_WARN(__VA_ARGS__)
-#define EDITOR_CRITICAL(...) MAR_CORE_CRITICAL(__VA_ARGS__)
 
 #else
 
 #define EDITOR_TRACE(...)
-#define EDITOR_DEBUG(...)
 #define EDITOR_INFO(...) 
 #define EDITOR_ERROR(...)
 #define EDITOR_WARN(...) 
-#define EDITOR_CRITICAL(...)
 
 #endif
 

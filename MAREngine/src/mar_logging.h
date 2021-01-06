@@ -33,6 +33,24 @@ Logging is damaging perfomance, so it will be wise to comment it (Of course if y
 */
 #define MAR_ENGINE_DEBUG_MODE 1
 
+// set logging level
+//#define MAR_ENGINE_LOGS_LEVEL_TRACE
+//#define MAR_ENGINE_LOGS_LEVEL_INFO
+#define MAR_ENGINE_LOGS_LEVEL_WARN
+//#define MAR_ENGINE_LOGS_LEVEL_ERROR
+
+/*
+!!! Comment if logs should be in logs/log.txt file instead of printed on the terminal
+
+Normally MAREngine was developed with printed on terminal logs, in order to catch something red (such errors).
+Also it is needed to store somewhere loggings (let's say in release mode). I saw that, logging to file was not
+affecting actual perfomance of engine so much, so I created another option here. Leave uncommented in order to see
+every log on terminal.
+
+If MAR_ENGINE_DEBUG_MODE is commented, MAR_ENGINE_TERMINAL_LOGS will not affect anything.
+*/
+#define MAR_ENGINE_TERMINAL_LOGS
+
 
 /*
 !!! Uncomment to see Editor logs

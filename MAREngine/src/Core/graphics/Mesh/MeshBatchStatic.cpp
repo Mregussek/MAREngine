@@ -54,6 +54,7 @@ namespace marengine {
 		const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
 		const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
 		const bool cannotPushTransform = (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
+
 		const bool placeInBatchExist{ !(cannotPushVertices || cannotPushIndices || cannotPushTransform) };
 
 		return placeInBatchExist; // true if there is placed

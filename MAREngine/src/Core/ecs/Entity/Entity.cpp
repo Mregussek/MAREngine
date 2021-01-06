@@ -48,8 +48,7 @@ namespace marengine {
 		entity.addComponent<TagComponent>();
 		entity.addComponent<TransformComponent>();
 		entity.addComponent<ChildComponent>();
-		entity.addComponent<MeshBatchComponent>();
-		entity.addComponent<LightBatchComponent>();
+		entity.addComponent<RenderPipelineComponent>();
 	}
 
 	void Entity::destroyYourself() const {
@@ -93,14 +92,6 @@ namespace marengine {
 
 	const std::vector<Entity>& Entity::getChilds() const {
 		return getComponent<ChildComponent>().childs;
-	}
-
-	bool Entity::hasAnyMaterial() const {
-		return {
-			hasComponent<ColorComponent>() || 
-			hasComponent<Texture2DComponent>() || 
-			hasComponent<TextureCubemapComponent>()
-		};
 	}
 
 

@@ -38,8 +38,7 @@ namespace marengine {
 	}
 
 	void FEventsEntityWidget::onDestroyEntity(const Entity& entity) const {
-		Scene* scene{ SceneManager::Instance->getScene() };
-		scene->destroyEntity(entity);
+		SceneManager::Instance->getScene()->destroyEntity(entity);
 
 		WEntityWidgetPanel::Instance->reset();
 		SceneManager::Instance->initialize();

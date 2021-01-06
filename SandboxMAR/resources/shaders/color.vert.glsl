@@ -16,13 +16,8 @@ layout(std430, binding = 0) buffer CameraSSBO {
 	mat4 MVP;
 } Camera;
 
-<<<<<<< HEAD:SandboxMAR/resources/shaders/default.vert.glsl
-layout(std430, binding = 1) buffer TransformSSBO {
-	mat4 Transform[64];
-=======
 layout(std430, binding = 5) buffer TransformSSBO {
 	mat4 Transform[32];
->>>>>>> renderissue:SandboxMAR/resources/shaders/color.vert.glsl
 } Transforms;
 
 void main() {

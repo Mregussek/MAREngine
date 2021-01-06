@@ -35,7 +35,6 @@
 #include "OtherPanels/ThemeWidget.h"
 #include "OtherPanels/WindowSettingsWidget.h"
 #include "OtherPanels/StatisticsWidget.h"
-#include "OtherPanels/WindowSettingsWidget.h"
 
 
 namespace marengine {
@@ -58,7 +57,6 @@ namespace marengine {
 		WThemeWidget theme{};
 		WWindowSettingsWidget windowSettings{};
 		WStatisticsWidget statistics{};
-		WWindowSettingsWidget windowSettings{};
 
 	};
 

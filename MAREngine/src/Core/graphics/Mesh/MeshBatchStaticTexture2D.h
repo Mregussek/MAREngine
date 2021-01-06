@@ -28,31 +28,13 @@
 
 namespace marengine {
 
+	class Entity;
 	struct Texture2DComponent;
 
-
+	
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
 
 		friend class FEventsMeshBatchStatic;
-
-	public:
-
-		void reset();
-
-		bool hasAnythingToDraw() const;
-
-		bool canBeBatched(const Entity& entityWithLight) const;
-		void submitEntityWithLightning(const Entity& entity);
-
-		const FPointLightsArray& getLights() const;
-
-		uint32_t getPointLightSSBOindex() const;
-		void setPointLightSSBOindex(uint32_t index);
-
-	private:
-
-		FPointLightsArray m_lights;
-		uint32_t m_pointLightSSBOindex{ 0 };
 
 	public:
 
@@ -73,9 +55,9 @@ namespace marengine {
 		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::TEXTURE2D };
 
 	};
-	
+
+
 }
 
 
 #endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
-

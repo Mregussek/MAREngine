@@ -249,6 +249,9 @@
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\ecs\Components\EngineOnlyComponents.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\Vertex.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -337,6 +340,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h">
@@ -626,6 +632,9 @@
     <ClCompile Include="src\Core\ecs\Components\CameraComponents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\graphics\Renderer\RenderMemorizer.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
     <ClCompile Include="src\LayerStack\layers\RenderLayer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -639,6 +648,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderStatistics.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp">

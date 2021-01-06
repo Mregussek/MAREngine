@@ -19,7 +19,6 @@
 
 
 #include "RenderLayer.h"
-#include "../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../Window/Window.h"
 
 
@@ -42,19 +41,7 @@ namespace marengine {
 	}
 
 	void RenderLayer::update() {
-		m_statistics.reset();
-
-		const FPointLightBatch& batchPointLight{ m_renderManager.getPointLightsBatch() };
-
-		const FMeshBatchStaticColor& batchStaticColor{ m_renderManager.getStaticColorBatch() };
-		if (batchStaticColor.hasAnythingToDraw()) {
-			m_renderer.draw(batchStaticColor, batchPointLight);
-		}
-		
-		const FMeshBatchStaticTexture2D& batchStaticTexture2D{ m_renderManager.getStaticTexture2DBatch() };
-		if (batchStaticTexture2D.hasAnythingToDraw()) {
-			m_renderer.draw(batchStaticTexture2D, batchPointLight);
-		}
+		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
 
 		m_statistics.reset();
 		m_renderer.draw();

@@ -41,13 +41,10 @@ namespace marengine {
 		const FShaderStorageBuffersArray& getSSBOs() const;
 		const FUniformBuffersArray& getUBOs() const;
 
-<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/PipelineStorage.h
-=======
 		const FPipeline& getPipeline(uint32_t index) const;
 		const FShaderStorageBuffer& getSSBO(uint32_t index) const;
 		const FUniformBuffer& getUBO(uint32_t index) const;
 
->>>>>>> renderissue:MAREngine/src/Core/graphics/Renderer/PipelineManager.h
 		void close();
 
 	private:

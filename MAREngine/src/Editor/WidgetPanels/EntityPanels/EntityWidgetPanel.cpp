@@ -87,7 +87,7 @@ namespace marengine {
 		}
 
 		if (currentEntity->hasComponent<PythonScriptComponent>() && ImGui::CollapsingHeader("PythonScriptComponent")) {
-			CommonComponentHandler::handlePythonScriptComponent(*currentEntity);
+			CommonComponentHandler::handleScriptComponent(*currentEntity);
 		}
 
 		if (currentEntity->hasComponent<RenderableComponent>() && ImGui::CollapsingHeader("RenderableComponent")) {
@@ -231,69 +231,36 @@ namespace marengine {
 	}
 
 	void WEntityWidgetPanel::handleRenderableComponent() const {
-		auto& renderable = currentEntity->getComponent<RenderableComponent>();
-
-		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>()
-			&& !currentEntity->hasComponent<Texture2DComponent>()
-			&& !currentEntity->hasComponent<TextureCubemapComponent>();
-
-		auto modifyRenderableButtons = [this, &renderable]() {
-			bool userHasChosenRenderable{ false };
-			if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { userHasChosenRenderable = true; }
-			ImGui::SameLine();
-			if(Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { userHasChosenRenderable = true; }
-			ImGui::SameLine();
-			if(Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { userHasChosenRenderable = true; }
-			ImGui::SameLine();
-			if(Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { userHasChosenRenderable = true; }
-
-			if (userHasChosenRenderable) {
-				FEventsComponentEntity::Instance->onUpdate<RenderableComponent>(*currentEntity);
-			}
-		};
-		
-		// Actual Panel for Renderable
-		if (hasNeitherColorNorTexture) {
-			if (ImGui::MenuItem("Remove Renderable")) {
-				FEventsComponentEntity::Instance->onRemove<RenderableComponent>(*currentEntity);
-				return;
-			}
+		if (ImGui::MenuItem("Remove Renderable")) {
+			FEventsComponentEntity::Instance->onRemove<RenderableComponent>(*currentEntity);
+			return;
 		}
+		auto& renderable = currentEntity->getComponent<RenderableComponent>();
 
 		ImGui::Text("Type: %s", renderable.name.c_str());
 
-		if (hasNeitherColorNorTexture) {
-			ImGui::Text("WARNING: Object will be rendered black until you will add Color or Texture!");
-		}
-			
-		if (renderable.vertices.empty()) {
-			modifyRenderableButtons();
-		}
-		else {
-			static bool wantToModifyRenderable = false;
+		bool userHasChosenRenderable{ false };
+		if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { userHasChosenRenderable = true; }
+		ImGui::SameLine();
+		if (Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { userHasChosenRenderable = true; }
+		ImGui::SameLine();
+		if (Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { userHasChosenRenderable = true; }
+		ImGui::SameLine();
+		if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { userHasChosenRenderable = true; }
 
-			if (!wantToModifyRenderable) {
-				if (ImGui::Button("Modify Renderable")) { wantToModifyRenderable = true; }
-			}
-			else {
-				modifyRenderableButtons();
-				ImGui::SameLine();
-				if (ImGui::Button("Do not modify")) { wantToModifyRenderable = false; }
-			}
+		if (userHasChosenRenderable) {
+			FEventsComponentEntity::Instance->onUpdate<RenderableComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 	}
 
 	void WEntityWidgetPanel::handleCameraComponent() const {		
-		auto& camera = currentEntity->getComponent<CameraComponent>();
-
-		if (!camera.isMainCamera()) {
-			if (ImGui::Button("Remove Camera")) {
-				FEventsComponentEntity::Instance->onRemove<CameraComponent>(*currentEntity);
-				return;
-			}
+		if (ImGui::Button("Remove Camera")) {
+			FEventsComponentEntity::Instance->onRemove<CameraComponent>(*currentEntity);
+			return;
 		}
+		auto& camera = currentEntity->getComponent<CameraComponent>();
 
 		ImGui::Text("WARNING: To use camera in PlayMode please set Camera ID to \"main\"!");
 
@@ -339,9 +306,7 @@ namespace marengine {
 		}
 
 		if (updatedCamera) {
-			if (camera.isMainCamera()) {
-				FEventsCameraEntity::Instance->onMainCameraUpdate(*currentEntity);
-			}
+			FEventsComponentEntity::Instance->onUpdate<CameraComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
@@ -352,7 +317,6 @@ namespace marengine {
 			FEventsComponentEntity::Instance->onRemove<ColorComponent>(*currentEntity);
 			return;
 		}
-
 		auto& color = currentEntity->getComponent<ColorComponent>();
 
 		if (ImGui::ColorEdit4("- color", &color.texture.x)) {
@@ -363,50 +327,26 @@ namespace marengine {
 	}
 
 	void WEntityWidgetPanel::handleTexture2DComponent() const {
-		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
-
-		auto modifyCurrentTexture = [&texture = texture2D.texture, this]()->bool {
-			constexpr size_t inputSize{ 50 };
-			static char input[inputSize];
-			std::fill(std::begin(input), std::end(input), '\0');
-			std::copy(texture.begin(), texture.end(), input);
-
-			if (ImGui::InputText(" ex. .jpg / .png", input, inputSize)) {
-				texture = std::string(input);
-			}
-
-			if (ImGui::Button("Load Texture")) {
-				return true;
-			}
-
-			return false;
-		};
-
-		// Actual Texture2D Panel
 		if (ImGui::MenuItem("Remove Texture")) {
 			FEventsComponentEntity::Instance->onRemove<Texture2DComponent>(*currentEntity);
 			return;
 		}
+		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
 
 		ImGui::Text("Current Texture: %s", texture2D.texture.c_str());
 
 		if (TextureOpenGL::hasTexture(texture2D.texture)) {
 			ImGui::Image((ImTextureID)TextureOpenGL::getTexture(texture2D.texture), { 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-
-			static bool wantToModifyTexture = false;
-			if (!wantToModifyTexture) {
-				if (ImGui::Button("Modify current Texture")) { wantToModifyTexture = true; }
-			}
-			else {
-				if (modifyCurrentTexture()) { 
-					FEventsComponentEntity::Instance->onUpdate<Texture2DComponent>(*currentEntity); 
-				}
-				ImGui::SameLine();
-				if (ImGui::Button("Do not modify")) { wantToModifyTexture = false; }
-			}
 		}
-		else {
-			if (modifyCurrentTexture()) {
+
+		constexpr size_t inputSize{ 128 };
+		static char input[inputSize];
+		std::fill(std::begin(input), std::end(input), '\0');
+		std::copy(texture2D.texture.begin(), texture2D.texture.end(), input);
+
+		if (ImGui::InputText(" ex. .jpg / .png", input, inputSize)) {
+			texture2D.texture = std::string(input);
+			if (TextureOpenGL::hasTexture(texture2D.texture)) {
 				FEventsComponentEntity::Instance->onUpdate<Texture2DComponent>(*currentEntity);
 			}
 		}
@@ -415,44 +355,25 @@ namespace marengine {
 	}
 
 	void WEntityWidgetPanel::handleTextureCubemapComponent() const {
-		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
-
-		auto modifyCurrentCubemap = [&texture = cubemap.texture, this]() {
-			constexpr size_t inputSize{ 50 };
-			static char input[inputSize];
-			std::fill(std::begin(input), std::end(input), '\0');
-			std::copy(texture.begin(), texture.end(), input);
-
-			if (ImGui::InputText(" - path", input, inputSize)) {
-				texture = std::string(input);
-			}
-
-			if (ImGui::Button("Load Cubemap")) {
-				FEventsComponentEntity::Instance->onUpdate<TextureCubemapComponent>(*currentEntity);
-			}
-		};
-
-		// Actual TextureCubemap Panel
 		if (ImGui::MenuItem("Remove Cubemap")) {
 			FEventsComponentEntity::Instance->onRemove<TextureCubemapComponent>(*currentEntity);
 			return;
 		}
+		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
 
 		ImGui::Text("Current Cubemap: %s", cubemap.texture.c_str());
 
-		if (TextureOpenGL::hasCubemap(cubemap.texture)) {
-			static bool wantToModifyCubemap = false;
-			if (!wantToModifyCubemap) {
-				if (ImGui::Button("Modify current Texture")) { wantToModifyCubemap = true; }
-			}
-			else {
-				modifyCurrentCubemap();
-				ImGui::SameLine();
-				if (ImGui::Button("Do not modify")) { wantToModifyCubemap = false; }
-			}
+		constexpr size_t inputSize{ 50 };
+		static char input[inputSize];
+		std::fill(std::begin(input), std::end(input), '\0');
+		std::copy(cubemap.texture.begin(), cubemap.texture.end(), input);
+
+		if (ImGui::InputText(" - path", input, inputSize)) {
+			cubemap.texture = std::string(input);
 		}
-		else {
-			modifyCurrentCubemap();
+
+		if (ImGui::Button("Load Cubemap")) {
+			FEventsComponentEntity::Instance->onUpdate<TextureCubemapComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
@@ -463,14 +384,15 @@ namespace marengine {
 			FEventsComponentEntity::Instance->onRemove<LightComponent>(*currentEntity);
 			return;
 		}
-
 		auto& light = currentEntity->getComponent<LightComponent>();
 		bool updatedLight = false;
 
-		if (ImGui::DragFloat3("Ambient Light", &light.ambient.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
-		if (ImGui::DragFloat3("Diffuse Light", &light.diffuse.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
-		if (ImGui::DragFloat3("Specular Light", &light.specular.x, 0.01f, 0.f, 1.f)	) { updatedLight = true; }
-																					  						  
+		if (CommonComponentHandler::drawVec4Control("Ambient", light.ambient, 0.f, 100.f)) { updatedLight = true; }
+		if (CommonComponentHandler::drawVec4Control("Diffuse", light.diffuse, 0.f, 100.f)) { updatedLight = true; }
+		if (CommonComponentHandler::drawVec4Control("Specular", light.specular, 0.f, 100.f)) { updatedLight = true; }
+							  		
+		ImGui::NewLine();
+
 		if (ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f)			) { updatedLight = true; }
 		if (ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f)			) { updatedLight = true; }
 		if (ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f)		) { updatedLight = true; }

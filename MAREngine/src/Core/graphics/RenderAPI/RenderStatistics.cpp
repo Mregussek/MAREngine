@@ -19,11 +19,7 @@
 
 
 #include "RenderStatistics.h"
-<<<<<<< HEAD
-#include "RenderManager.h"
-=======
 #include "RenderPipeline.h"
->>>>>>> renderissue
 #include "../../ecs/SceneManager.h"
 #include "../../ecs/Scene.h"
 
@@ -34,28 +30,6 @@ namespace marengine {
 	RenderStatistics* RenderStatistics::Instance{ nullptr };
 
 	void RenderStatistics::update() {
-<<<<<<< HEAD
-		verticesCount = {
-			FRenderManager::Instance->getStaticColorBatch().getVertices().size() + 
-			FRenderManager::Instance->getStaticTexture2DBatch().getVertices().size()
-		};
-		indicesCount = {
-			FRenderManager::Instance->getStaticColorBatch().getIndices().size() +
-			FRenderManager::Instance->getStaticTexture2DBatch().getIndices().size()
-		};
-		trianglesCount = {
-			indicesCount / 3
-		};
-		coloredEntitiesCount = {
-			FRenderManager::Instance->getStaticColorBatch().getTransforms().size()
-		};
-		textured2dEntitiesCount = {
-			FRenderManager::Instance->getStaticTexture2DBatch().getTransforms().size()
-		};
-		allRendererEntitiesCount = {
-			coloredEntitiesCount + textured2dEntitiesCount
-		};
-=======
 		const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
 		std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
 			verticesCount += batch.getVertices().size();
@@ -74,7 +48,6 @@ namespace marengine {
 			allRendererEntitiesCount += textured2dEntitiesCount;
 		});
 
->>>>>>> renderissue
 		entitiesCount = {
 			SceneManager::Instance->getScene()->getEntities().size()
 		};

@@ -32,7 +32,9 @@ namespace marengine {
 
 
 	void SceneManager::initialize() const {
-		ECS_TRACE("SCENE_MANAGER: initializing...");
+		ECS_TRACE("SCENE_MANAGER: going to initialize!");
+
+		RenderPipeline::Instance->reset();
 
 		const auto& entitiesVector = m_scene->getEntities();
 

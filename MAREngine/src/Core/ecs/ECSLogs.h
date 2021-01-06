@@ -26,20 +26,16 @@
 #ifdef MAR_ENGINE_ECS_LOGS
 
 #define ECS_TRACE(...) MAR_CORE_TRACE(__VA_ARGS__)
-#define ECS_DEBUG(...) MAR_CORE_DEBUG(__VA_ARGS__)
 #define ECS_INFO(...) MAR_CORE_INFO(__VA_ARGS__)
 #define ECS_ERROR(...) MAR_CORE_ERROR(__VA_ARGS__)
 #define ECS_WARN(...) MAR_CORE_WARN(__VA_ARGS__)
-#define ECS_CRITICAL(...) MAR_CORE_CRITICAL(__VA_ARGS__)
 
 #else
 
 #define ECS_TRACE(...)
-#define ECS_DEBUG(...)
 #define ECS_INFO(...) 
 #define ECS_ERROR(...)
 #define ECS_WARN(...) 
-#define ECS_CRITICAL(...)
 
 #endif
 

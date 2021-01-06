@@ -18,36 +18,16 @@
 **/
 
 
-<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.h
-#ifndef MAR_ENGINE_F_RENDERER_EVENTS_H
-#define MAR_ENGINE_F_RENDERER_EVENTS_H
-=======
 #include "RenderCameraEvents.h"
 #include "RenderBufferManager.h"
->>>>>>> renderissue:MAREngine/src/Core/graphics/RenderAPI/RenderCameraEvents.cpp
 
 
 namespace marengine {
 
 
-<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.h
-	class FRendererEvents {
-	public:
-
-		static void onDrawCall();
-
-	};
-
-
-};
-
-
-#endif // !MAR_ENGINE_F_RENDERER_EVENTS_H
-=======
 	void FRenderCameraEvents::onMainCameraUpdate(const RenderCamera* renderCamera) {
 		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
 	}
 
 
 }
->>>>>>> renderissue:MAREngine/src/Core/graphics/RenderAPI/RenderCameraEvents.cpp

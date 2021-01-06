@@ -64,7 +64,6 @@ namespace marengine {
 		mat4 m_mvp;
 
 		vec3 m_position;
-
 	};
 
 

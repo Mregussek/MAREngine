@@ -39,6 +39,9 @@ namespace marengine {
 		dst.replaceComponent<TagComponent>(src.getComponent<TagComponent>());
 		dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
 
+		// Engine-Only Components Copy
+		addComponentIfContains<Entity, RenderPipelineComponent>(src, dst);
+
 		// User-Available Components Copy
 		addComponentIfContains<Entity, RenderableComponent>(src, dst);
 		addComponentIfContains<Entity, ColorComponent>(src, dst);

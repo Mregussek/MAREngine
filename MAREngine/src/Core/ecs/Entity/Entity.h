@@ -61,10 +61,8 @@ namespace marengine {
 		const std::vector<Entity>& getChilds() const;
 		const Entity& getChild(size_t index) const;
 
-		bool hasAnyMaterial() const;
-
 		template<typename T> 
-		MAR_NO_DISCARD bool hasComponent() const;
+		MAR_NO_DISCARD const bool hasComponent() const;
 
 		template<typename T, typename... Args> 
 		T& addComponent(Args&&... args) const;

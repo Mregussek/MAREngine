@@ -18,36 +18,32 @@
 **/
 
 
-<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.h
-#ifndef MAR_ENGINE_F_RENDERER_EVENTS_H
-#define MAR_ENGINE_F_RENDERER_EVENTS_H
-=======
-#include "RenderCameraEvents.h"
-#include "RenderBufferManager.h"
->>>>>>> renderissue:MAREngine/src/Core/graphics/RenderAPI/RenderCameraEvents.cpp
+#ifndef MAR_ENGINE_ECS_ENGINE_ONLY_COMPONENTS_H
+#define MAR_ENGINE_ECS_ENGINE_ONLY_COMPONENTS_H
+
+
+#include "../../../mar.h"
 
 
 namespace marengine {
 
 
-<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.h
-	class FRendererEvents {
-	public:
+	struct RenderPipelineComponent {
+		size_t containerIndex{ 0 };
+		size_t transformIndex{ 0 };
+		size_t colorIndex{ 0 };
 
-		static void onDrawCall();
+		size_t containerLightIndex{ 0 };
+		size_t lightIndex{ 0 };
 
+		size_t materialType{ 0 };
+
+		RenderPipelineComponent() = default;
+		RenderPipelineComponent(const RenderPipelineComponent& rpc) = default;
 	};
 
 
-};
-
-
-#endif // !MAR_ENGINE_F_RENDERER_EVENTS_H
-=======
-	void FRenderCameraEvents::onMainCameraUpdate(const RenderCamera* renderCamera) {
-		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
-	}
-
-
 }
->>>>>>> renderissue:MAREngine/src/Core/graphics/RenderAPI/RenderCameraEvents.cpp
+
+
+#endif // !MAR_ENGINE_ECS_ENGINE_ONLY_COMPONENTS_H

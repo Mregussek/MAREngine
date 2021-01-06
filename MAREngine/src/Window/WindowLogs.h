@@ -26,20 +26,16 @@
 #ifdef MAR_ENGINE_WINDOW_LOGS
 
 #define WINDOW_TRACE(...) MAR_CORE_TRACE(__VA_ARGS__)
-#define WINDOW_DEBUG(...) MAR_CORE_DEBUG(__VA_ARGS__)
 #define WINDOW_INFO(...) MAR_CORE_INFO(__VA_ARGS__)
 #define WINDOW_ERROR(...) MAR_CORE_ERROR(__VA_ARGS__)
 #define WINDOW_WARN(...) MAR_CORE_WARN(__VA_ARGS__)
-#define WINDOW_CRITICAL(...) MAR_CORE_CRITICAL(__VA_ARGS__)
 
 #else
 
 #define WINDOW_TRACE(...)
-#define WINDOW_DEBUG(...)
 #define WINDOW_INFO(...) 
 #define WINDOW_ERROR(...)
 #define WINDOW_WARN(...) 
-#define WINDOW_CRITICAL(...)
 
 #endif
 

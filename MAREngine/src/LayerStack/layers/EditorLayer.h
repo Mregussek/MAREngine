@@ -38,6 +38,8 @@ namespace marengine {
 		EditorLayer() = default;
 		EditorLayer(const char* name);
 
+		void renderToViewport();
+
 		// --- OVERRIDED METHODS --- // 
 
 		void initialize() override;

@@ -28,22 +28,6 @@
 namespace marengine {
 
 
-<<<<<<< HEAD
-	constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
-
-	struct TexturePair {
-
-		TexturePair(uint32_t i, std::string str) :
-			bindingIndex(i),
-			texturePath(str)
-		{}
-
-		uint32_t bindingIndex{ 0 };
-		std::string texturePath{};
-
-	};
-
-=======
 	struct FTexturePair {
 		FTexturePair(uint32_t bd, std::string tp) :
 			bindingIndex(bd),
@@ -55,27 +39,17 @@ namespace marengine {
 	};
 
 
->>>>>>> renderissue
 	typedef std::vector<Vertex> FVertexArray;
 	typedef std::vector<uint32_t> FIndicesArray;
 	typedef std::vector<maths::mat4> FTransformsArray;
 	typedef std::vector<maths::vec4> FColorsArray;
-<<<<<<< HEAD
-	typedef std::vector<TexturePair> FTextureArray;
-=======
 	typedef std::vector<FTexturePair> FTexturesArray;
 
 	constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
->>>>>>> renderissue
 
 
 }
 
 
 
-<<<<<<< HEAD
-
-#endif // !MAR_ENGINE_RENDER_API_DEFINITIONS_H
-=======
 #endif // !MAR_ENGINE_MESH_DEFINITIONS_H
->>>>>>> renderissue
