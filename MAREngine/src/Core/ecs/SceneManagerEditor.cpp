@@ -80,13 +80,10 @@ namespace marengine {
 
 		m_playStorage.clear();
 
-		const auto& entitiesVector{ m_scene->getEntities() };
-
-		auto saveEntityAtStorage = [&playStorage = m_playStorage](const Entity& entity) {
-			playStorage.pushEntityToStorage(entity);
-		};
-
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), saveEntityAtStorage);
+		const FEntityArray& entities{ m_scene->getEntities() };
+		for (const Entity& entity : entities) {
+			m_playStorage.pushEntityToStorage(entity);
+		}
 
 		auto initializeScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
@@ -144,12 +141,13 @@ namespace marengine {
 	void FSceneManagerEditor::exitPlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
-		const auto& entitiesVector{ m_scene->getEntities() };
+		const FEntityArray& entities{ m_scene->getEntities() };
 
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage](const Entity& entity) {
-			playStorage.loadEntityFromStorage(entity);
-		});
+		for (const Entity& entity : entities) {
+			m_playStorage.loadEntityFromStorage(entity);
+		}
 
+		m_playStorage.clear();
 		initialize();
 
 		ECS_INFO("SCENE_MANAGER: exited play mode!");
@@ -209,6 +207,10 @@ namespace marengine {
 
 	bool FSceneManagerEditor::usingEditorCamera() const {
 		return m_EditorCamera;
+	}
+
+	bool FSceneManagerEditor::usingGameCamera() const {
+		return !m_EditorCamera;
 	}
 
 

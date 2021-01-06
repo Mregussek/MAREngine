@@ -25,7 +25,6 @@
 #include "../../../mar.h"
 #include "EntityDefinitions.h"
 #include "../ECSLogs.h"
-#include "../SceneRegistry.h"
 #include "../Components/Components.h"
 
 
@@ -54,10 +53,10 @@ namespace marengine {
 			If m_sceneRegistry member will stay as nullptr value, Entity instance will immedietaly crash. 
 			During this constructor call entity is created.
 		*/
-		Entity(SceneRegistry* sceneRegistry);
+		Entity(entt::registry* sceneRegistry);
 
 		// Constructor for using already created entity and its sceneRegistry instance. Used mostly in entt::registry::view lambda.
-		Entity(entt::entity entt_entity, SceneRegistry* sceneRegistry);
+		Entity(entt::entity entt_entity, entt::registry* sceneRegistry);
 
 		// Default copy constructor.
 		Entity(const Entity& other) = default;
@@ -145,7 +144,7 @@ namespace marengine {
 
 	private:
 		
-		SceneRegistry* m_sceneRegistry{ nullptr };
+		entt::registry* m_sceneRegistry{ nullptr };
 		entt::entity m_entityHandle{ entt::null };
 
 	};

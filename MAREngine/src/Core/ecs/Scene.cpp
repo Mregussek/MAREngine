@@ -27,7 +27,7 @@ namespace marengine {
 
 	Scene::Scene(std::string name) :
 		m_name(std::move(name)),
-		m_sceneRegistry(SceneRegistry())
+		m_sceneRegistry(entt::registry())
 	{}
 
 	Scene* Scene::createEmptyScene(std::string name) {
@@ -58,7 +58,7 @@ namespace marengine {
 		}
 
 		m_entities.clear();
-		m_sceneRegistry.cleanup();
+		m_sceneRegistry.clear();
 
 		ECS_INFO("SCENE: registry is cleared! (called destructor)");
 	}
@@ -105,7 +105,7 @@ namespace marengine {
 		return m_backgroundColor;
 	}
 
-	MAR_NO_DISCARD SceneRegistry* Scene::getRegistry() { 
+	MAR_NO_DISCARD entt::registry* Scene::getRegistry() { 
 		return &m_sceneRegistry; 
 	}
 

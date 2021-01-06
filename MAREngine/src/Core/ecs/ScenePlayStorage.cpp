@@ -31,17 +31,12 @@ namespace marengine {
 		vec.erase(vec.begin());
 	}
 
-	void ScenePlayStorage::pushEntityToStorage(const Entity& entity) {
+	void FScenePlayStorage::pushEntityToStorage(const Entity& entity) {
 		auto& storage = m_entityStorage.emplace_back();
 		pushOperation(storage, entity);
 	}
 
-	void ScenePlayStorage::pushEntityToStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity) {
-		auto& storage = vectorStorage.emplace_back();
-		pushOperation(storage, entity);
-	}
-
-	void ScenePlayStorage::pushOperation(EntityStorage& storage, const Entity& entity) {
+	void FScenePlayStorage::pushOperation(EntityStorage& storage, const Entity& entity) {
 		storage.transform = entity.getComponent<TransformComponent>();
 		if (entity.hasComponent<PointLightComponent>()) {
 			storage.light = entity.getComponent<PointLightComponent>();
@@ -51,7 +46,7 @@ namespace marengine {
 		}
 	}
 
-	void ScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
+	void FScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
 		auto& storage = m_entityStorage.front();
 
 		loadOperation(storage, entity);
@@ -59,15 +54,7 @@ namespace marengine {
 		popFront(m_entityStorage);
 	}
 
-	void ScenePlayStorage::loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity) {
-		const auto& storage = vectorStorage.front();
-
-		loadOperation(storage, entity);
-
-		popFront(vectorStorage);
-	}
-
-	void ScenePlayStorage::loadOperation(const EntityStorage& storage, const Entity& entity) {
+	void FScenePlayStorage::loadOperation(const EntityStorage& storage, const Entity& entity) {
 		auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		transformComponent = storage.transform;
 
@@ -82,7 +69,7 @@ namespace marengine {
 		}
 	}
 
-	void ScenePlayStorage::clear() {
+	void FScenePlayStorage::clear() {
 		m_entityStorage.clear();
 	}
 

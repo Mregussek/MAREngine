@@ -31,7 +31,13 @@ namespace marengine {
 	class Entity;
 
 
-	class ScenePlayStorage {
+	/*
+		FScenePlayStorage - storage for play mode.
+		Because we want to only test game in play mode and then return to its
+		state afterwards we need to store somewhere the most important data. 
+		This is the place.
+	*/
+	class FScenePlayStorage {
 
 		struct EntityStorage {
 			TransformComponent transform;
@@ -41,20 +47,20 @@ namespace marengine {
 
 	public:
 
-		ScenePlayStorage() = default;
+		FScenePlayStorage() = default;
 
+		// Pushes entity to storage and saves it most important data
 		void pushEntityToStorage(const Entity& entity);
 
+		// Loads back most important data for passed entity
 		void loadEntityFromStorage(const Entity& entity);
 
+		// Clear all storages
 		void clear();
 
 	private:
 
-		void pushEntityToStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
 		void pushOperation(EntityStorage& storage, const Entity& entity);
-
-		void loadEntityFromStorage(std::vector<EntityStorage>& vectorStorage, const Entity& entity);
 		void loadOperation(const EntityStorage& storage, const Entity& entity);
 
 		std::vector<EntityStorage> m_entityStorage;

@@ -216,9 +216,6 @@
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\SceneRegistry.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\Components\Components.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -558,9 +555,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\ecs\SceneRegistry.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\FramebufferOpenGL.cpp">

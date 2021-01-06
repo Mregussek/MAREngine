@@ -273,7 +273,6 @@
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h" />
     <ClInclude Include="src\Core\ecs\SceneManagerEditor.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
-    <ClInclude Include="src\Core\ecs\SceneRegistry.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLogs.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStatic.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticColor.h" />
@@ -386,7 +385,6 @@
     <ClCompile Include="src\Core\ecs\Scene.cpp" />
     <ClCompile Include="src\Core\ecs\SceneManagerEditor.cpp" />
     <ClCompile Include="src\Core\ecs\ScenePlayStorage.cpp" />
-    <ClCompile Include="src\Core\ecs\SceneRegistry.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStatic.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticColor.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticTexture2D.cpp" />

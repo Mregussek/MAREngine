@@ -80,7 +80,7 @@ namespace marengine {
 		MAR_NO_DISCARD maths::vec3& getBackground();
 
 		// Returns scene registry. Non-const, because it will be used by entities. Please, use this carefully.
-		MAR_NO_DISCARD SceneRegistry* getRegistry();
+		MAR_NO_DISCARD entt::registry* getRegistry();
 		
 		// Returns view at all entities that contains TComponent. View can be iterated with lambda [](entt::entity entt_entity, TComponent& component) {};
 		template<typename TComponent> MAR_NO_DISCARD auto getView();
@@ -94,7 +94,8 @@ namespace marengine {
 		FEntityArray m_entities;
 
 		maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
-		SceneRegistry m_sceneRegistry;
+		//SceneRegistry m_sceneRegistry;
+		entt::registry m_sceneRegistry;
 
 	};
 
