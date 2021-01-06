@@ -28,21 +28,20 @@
 namespace marengine {
 
 	struct TagComponent; 
-	struct PythonScriptComponent;
+	struct PythonScriptComponent; 
 	class Entity; 
 
 
 	struct CommonComponentHandler {
 
 		static void handleTagComponent(TagComponent& tag);
-		static void handleScriptComponent(const Entity& entity);
+		static void handlePythonScriptComponent(const Entity& entity);
 
 		static bool drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth);
-		static bool drawVec4Control(const char* label, maths::vec4& values, float resetValue, float columnWidth);
 
 	private:
 
-		static void handleScriptComponent(PythonScriptComponent& script);
+		static void handlePythonScriptComponent(PythonScriptComponent& script);
 
 	};
 
