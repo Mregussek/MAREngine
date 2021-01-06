@@ -16,16 +16,16 @@
                 {
                     "ColorComponent": {
                         "texture": {
-                            "x": 0.2,
+                            "x": 0.20000000298023224,
                             "y": 0.5,
-                            "z": 0.2
+                            "z": 0.20000000298023224
                         }
+                    },
+                    "PythonScriptComponent": {
+                        "path": "scripts/RotateXY.py"
                     },
                     "RenderableComponent": {
                         "name": "Cube"
-                    },
-                    "ScriptComponent": {
-                        "path": "scripts/RotateXY.py"
                     },
                     "TagComponent": {
                         "tag": "DarkGreenCube"
@@ -152,7 +152,7 @@
                             "z": 1.0
                         }
                     },
-                    "LightComponent": {
+                    "PointLightComponent": {
                         "ambient": {
                             "x": 0.5,
                             "y": 0.5,
@@ -266,7 +266,7 @@
                         "o_left": -31.100000381469727,
                         "o_near": 80.5009994506836,
                         "o_right": 29.799999237060547,
-                        "o_top": 10.0,
+                        "o_top": 20.600000381469727,
                         "p_aspectRatio": 1.3333300352096558,
                         "p_far": 10000.0,
                         "p_fov": 45.0,
@@ -378,7 +378,7 @@
                     }
                 },
                 {
-                    "LightComponent": {
+                    "PointLightComponent": {
                         "ambient": {
                             "x": 0.5,
                             "y": 0.6100000143051147,
@@ -399,11 +399,11 @@
                             "z": 0.5
                         }
                     },
+                    "PythonScriptComponent": {
+                        "path": "scripts/LightMover.py"
+                    },
                     "RenderableComponent": {
                         "name": "Cube"
-                    },
-                    "ScriptComponent": {
-                        "path": "scripts/LightMover.py"
                     },
                     "TagComponent": {
                         "tag": "YellowTextureLight"
@@ -454,346 +454,6 @@
                             "x": 0.019999999552965164,
                             "y": 2.0,
                             "z": 0.15000000596046448
-                        }
-                    }
-                },
-                {
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "TagComponent": {
-                        "tag": "DirtMinecraft1"
-                    },
-                    "TextureCubemapComponent": {
-                        "name": "textures/dirt"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 8.0,
-                            "y": -1.7999999523162842,
-                            "z": 7.75
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "TagComponent": {
-                        "tag": "GrassMinecraft1"
-                    },
-                    "TextureCubemapComponent": {
-                        "name": "textures/grass"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 8.0,
-                            "y": 0.20000000298023224,
-                            "z": 7.75
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "TagComponent": {
-                        "tag": "DirtMinecraft2"
-                    },
-                    "TextureCubemapComponent": {
-                        "name": "textures/dirt"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 8.0,
-                            "y": 0.20000000298023224,
-                            "z": 9.75
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "TagComponent": {
-                        "tag": "CobbleMinecraft"
-                    },
-                    "TextureCubemapComponent": {
-                        "name": "textures/cobble"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 8.0,
-                            "y": -1.7999999523162842,
-                            "z": 9.75
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "TagComponent": {
-                        "tag": "GrassMinecraft2"
-                    },
-                    "TextureCubemapComponent": {
-                        "name": "textures/grass"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 8.0,
-                            "y": 2.200000047683716,
-                            "z": 9.75
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "LightComponent": {
-                        "ambient": {
-                            "x": 0.05999999865889549,
-                            "y": 0.05999999865889549,
-                            "z": 0.05999999865889549
-                        },
-                        "constant": 0.061000000685453415,
-                        "diffuse": {
-                            "x": 0.11999999731779099,
-                            "y": 0.07000000029802322,
-                            "z": 0.49000000953674316
-                        },
-                        "linear": 0.023000000044703484,
-                        "quadratic": 0.10000000149011612,
-                        "shininess": 118.0,
-                        "specular": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 1.0
-                        }
-                    },
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "TagComponent": {
-                        "tag": "DiamondLight"
-                    },
-                    "TextureCubemapComponent": {
-                        "name": "textures/diamond"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 8.0,
-                            "y": -1.7999999523162842,
-                            "z": 11.699999809265137
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "RenderableComponent": {
-                        "name": "Wall"
-                    },
-                    "TagComponent": {
-                        "tag": "GrassOnGrassXD"
-                    },
-                    "Texture2DComponent": {
-                        "name": "textures/grass_alpha.png"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 90.0,
-                            "y": 0.0,
-                            "z": 44.5
-                        },
-                        "center": {
-                            "x": 8.600000381469727,
-                            "y": 3.6500000953674316,
-                            "z": 9.149999618530273
-                        },
-                        "scale": {
-                            "x": 0.009999999776482582,
-                            "y": 0.3499999940395355,
-                            "z": 0.03999999910593033
-                        }
-                    }
-                },
-                {
-                    "ColorComponent": {
-                        "texture": {
-                            "x": 0.10438299924135208,
-                            "y": 0.4564169943332672,
-                            "z": 0.2041649967432022
-                        }
-                    },
-                    "RenderableComponent": {
-                        "name": "Cube"
-                    },
-                    "ScriptComponent": {
-                        "path": "scripts/Examples.py"
-                    },
-                    "TagComponent": {
-                        "tag": "ScriptEntity"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 11.550000190734863,
-                            "y": 0.3727380037307739,
-                            "z": 1.0499999523162842
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "ColorComponent": {
-                        "texture": {
-                            "x": 1.0,
-                            "y": 0.9172930121421814,
-                            "z": 0.9172930121421814
-                        }
-                    },
-                    "LightComponent": {
-                        "ambient": {
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
-                        },
-                        "constant": 1.0,
-                        "diffuse": {
-                            "x": 0.8999999761581421,
-                            "y": 0.8999999761581421,
-                            "z": 0.8999999761581421
-                        },
-                        "linear": 0.04500000178813934,
-                        "quadratic": 0.007499999832361937,
-                        "shininess": 64.0,
-                        "specular": {
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
-                        }
-                    },
-                    "RenderableComponent": {
-                        "name": "Pyramid"
-                    },
-                    "ScriptComponent": {
-                        "path": "scripts/NewScript.py"
-                    },
-                    "TagComponent": {
-                        "tag": "NewScript"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 29.75,
-                            "y": 4.900000095367432,
-                            "z": -8.600000381469727
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
-                    "ColorComponent": {
-                        "texture": {
-                            "x": 0.2030079960823059,
-                            "y": 0.20300500094890594,
-                            "z": 0.20300500094890594
-                        }
-                    },
-                    "RenderableComponent": {
-                        "name": "Surface"
-                    },
-                    "TagComponent": {
-                        "tag": "empty"
-                    },
-                    "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
-                            "x": 0.0,
-                            "y": -20.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1000.0,
-                            "y": 1.0,
-                            "z": 1000.0
                         }
                     }
                 }

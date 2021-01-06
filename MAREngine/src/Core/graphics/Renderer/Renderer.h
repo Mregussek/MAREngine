@@ -18,46 +18,41 @@
 **/
 
 
-#ifndef MAR_ENGINE_LAYERS_RENDER_LAYER_H
-#define MAR_ENGINE_LAYERS_RENDER_LAYER_H
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
 
 
-#include "../../mar.h"
-#include "../Layer.h"
-#include "../../Core/graphics/RenderAPI/RenderPipeline.h"
-#include "../../Core/graphics/RenderAPI/RenderStatistics.h"
-#include "../../Core/graphics/Renderer/Renderer.h"
-#include "../../Core/graphics/Renderer/RenderMemorizer.h"
-#include "../../Core/graphics/Renderer/PipelineManager.h"
+#include "../../../mar.h"
+#include "../../../Platform/OpenGL/ShaderOpenGL.h"
 
 
 namespace marengine {
 
+	class FMeshBatchStaticColor;
+	class FMeshBatchStaticTexture2D;
 
-	class RenderLayer : public Layer {
+
+	class FRenderer {
 	public:
 
-		RenderLayer() = default;
-		RenderLayer(const char* name);
-
-		// --- OVERRIDED METHODS --- //
-
-		void initialize() override;
-		void update() override;
-		void close() override;
+		void initialize();
+		void close();
+		void draw() const;
 
 	private:
 
-		FRenderer m_renderer;
-		RenderPipeline m_renderPipeline;
-		FPipelineManager m_pipelineManager;
-		RenderStatistics m_statistics;
-		RenderMemorizer m_memorizer;
+		void drawColors(const FMeshBatchStaticColor& batches) const;
+		void drawTextures2D(const FMeshBatchStaticTexture2D& batches) const;
+
+		void setupShaders();
+
+
+		ShaderOpenGL m_shaderColors;
+		ShaderOpenGL m_shader2D;
 
 	};
 
 
 }
 
-
-#endif // !MAR_ENGINE_LAYERS_RENDER_LAYER_H
+#endif // !MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H

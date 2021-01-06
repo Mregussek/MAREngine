@@ -284,9 +284,10 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h" />
     <ClInclude Include="src\Core\graphics\Renderer\PipelineManager.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererDefinitions.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\RendererEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderMemorizer.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h" />
-    <ClInclude Include="src\Core\graphics\Renderer\RendererBatch.h" />
+    <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
@@ -392,7 +393,8 @@
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderBufferManager.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\PipelineManager.cpp" />
-    <ClCompile Include="src\Core\graphics\Renderer\RendererBatch.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\Renderer.cpp" />
+    <ClCompile Include="src\Core\graphics\Renderer\RendererEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderMemorizer.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderStatistics.cpp" />

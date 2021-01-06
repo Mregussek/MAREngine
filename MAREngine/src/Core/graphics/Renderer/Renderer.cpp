@@ -18,7 +18,8 @@
 **/
 
 
-#include "RendererBatch.h"
+#include "Renderer.h"
+#include "RendererEvents.h"
 #include "PipelineManager.h"
 #include "RenderMemorizer.h"
 #include "../GraphicsLogs.h"
@@ -26,22 +27,20 @@
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
-#include "../RenderAPI/RenderBufferManager.h"
 #include "../../../Platform/OpenGL/DrawingOpenGL.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
-#include "../../../Platform/GLSL/ShaderUniforms.h"
 
 
 namespace marengine {
 
 
-	void RendererBatch::initialize() {
+	void FRenderer::initialize() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
 
 		setupShaders();
 	}
 
-	void RendererBatch::setupShaders() {
+	void FRenderer::setupShaders() {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shaders...");
 
 		{
@@ -61,7 +60,7 @@ namespace marengine {
 		}
 	}
 
-	void RendererBatch::close() {
+	void FRenderer::close() {
 		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
 
 		m_shaderColors.shutdown();
@@ -71,7 +70,7 @@ namespace marengine {
 		GRAPHICS_INFO("RENDERER_BATCH: closed!");
 	}
 
-	void RendererBatch::draw() const {
+	void FRenderer::draw() const {
 		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
 		const RenderPipeline* renderPipeline( RenderPipeline::Instance );
 
@@ -90,7 +89,7 @@ namespace marengine {
 		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
 
-	void RendererBatch::drawColors(const FMeshBatchStaticColor& batch) const {
+	void FRenderer::drawColors(const FMeshBatchStaticColor& batch) const {
 		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueTransformsID()) };
 		transformSSBO.bind();
 
@@ -101,10 +100,10 @@ namespace marengine {
 		pipeline.bind();
 
 		DrawingOpenGL::drawTriangles(batch.getIndices().size());
-		//RenderEvents::Instance().onDrawCall();
+		FRendererEvents::onDrawCall();
 	}
 
-	void RendererBatch::drawTextures2D(const FMeshBatchStaticTexture2D& batch) const {
+	void FRenderer::drawTextures2D(const FMeshBatchStaticTexture2D& batch) const {
 		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueTransformsID()) };
 		transformSSBO.bind();
 
@@ -119,7 +118,7 @@ namespace marengine {
 		pipeline.bind();
 
 		DrawingOpenGL::drawTriangles(batch.getIndices().size());
-		//RenderEvents::Instance().onDrawCall();
+		FRendererEvents::onDrawCall();
 	}
 
 

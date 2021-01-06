@@ -18,41 +18,22 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
-#define MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
-
-
-#include "../../../mar.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
+#ifndef MAR_ENGINE_F_RENDERER_EVENTS_H
+#define MAR_ENGINE_F_RENDERER_EVENTS_H
 
 
 namespace marengine {
 
-	class FMeshBatchStaticColor;
-	class FMeshBatchStaticTexture2D;
 
-
-	class RendererBatch {
+	class FRendererEvents {
 	public:
 
-		void initialize();
-		void close();
-		void draw() const;
-
-	private:
-
-		void drawColors(const FMeshBatchStaticColor& batches) const;
-		void drawTextures2D(const FMeshBatchStaticTexture2D& batches) const;
-
-		void setupShaders();
-
-
-		ShaderOpenGL m_shaderColors;
-		ShaderOpenGL m_shader2D;
+		static void onDrawCall();
 
 	};
 
 
 }
 
-#endif // !MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
+
+#endif // !MAR_ENGINE_F_RENDERER_EVENTS_H

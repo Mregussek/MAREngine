@@ -43,7 +43,7 @@
 
 // Rendering 
 #include "../../src/Core/graphics/RenderAPI/RenderPipeline.h"
-#include "../../src/Core/graphics/Renderer/RendererBatch.h"
+#include "../../src/Core/graphics/Renderer/Renderer.h"
 
 // Scripting
 #include "../../src/Core/scripting/PythonScript.h"
