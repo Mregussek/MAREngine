@@ -103,7 +103,7 @@ namespace marengine {
 			}
 		}
 
-		if (entity.hasComponent<LightComponent>()) {
+		if (entity.hasComponent<PointLightComponent>()) {
 			FEventsLightBatch::onPointLightPositionUpdate(entity);
 		}
 	}
@@ -174,17 +174,17 @@ namespace marengine {
 	***************************** LIGHT COMPONENT TEMPLATES ***************************************
 	***************************************************************************************************/
 
-	template<> void FEventsComponentEntity::onAdd<LightComponent>(const Entity& entity) const {
-		entity.addComponent<LightComponent>();
+	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity) const {
+		entity.addComponent<PointLightComponent>();
 		SceneManager::Instance->initialize();
 	}
 
-	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {
+	template<> void FEventsComponentEntity::onUpdate<PointLightComponent>(const Entity& entity) const {
 		FEventsLightBatch::onPointLightUpdate(entity);
 	}
 
-	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const {
-		entity.removeComponent<LightComponent>();
+	template<> void FEventsComponentEntity::onRemove<PointLightComponent>(const Entity& entity) const {
+		entity.removeComponent<PointLightComponent>();
 		SceneManager::Instance->initialize();
 	}
 

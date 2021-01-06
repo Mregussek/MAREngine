@@ -161,8 +161,8 @@ namespace marengine {
 	void SceneManager::updateEntityInPlaymode(const Entity& entity) {
 		FEventsComponentEntity::Instance->onUpdate<TransformComponent>(entity);
 
-		if (entity.hasComponent<LightComponent>()) {
-			FEventsComponentEntity::Instance->onUpdate<LightComponent>(entity);
+		if (entity.hasComponent<PointLightComponent>()) {
+			FEventsComponentEntity::Instance->onUpdate<PointLightComponent>(entity);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {

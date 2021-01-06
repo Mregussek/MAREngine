@@ -23,24 +23,19 @@
 
 
 #include "../../../mar.h"
+#include "../../graphics/Lightning/LightDefinitions.h"
 
 
 namespace marengine {
 
 
-	struct LightComponent {
-		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
-		maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
-		maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
+	struct PointLightComponent {
+		
+		FPointLight pointLight;
 
-		float constant{ 1.0f };
-		float linear{ 0.045f };
-		float quadratic{ 0.0075f };
+		PointLightComponent() = default;
+		PointLightComponent(const PointLightComponent& li) = default;
 
-		float shininess{ 64.0f };
-
-		LightComponent() = default;
-		LightComponent(const LightComponent& li) = default;
 	};
 
 

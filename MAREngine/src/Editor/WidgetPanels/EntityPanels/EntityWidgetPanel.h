@@ -60,7 +60,7 @@ namespace marengine {
 		void handleColorComponent() const;
 		void handleTexture2DComponent() const;
 		void handleTextureCubemapComponent() const;
-		void handleLightComponent() const;
+		void handlePointLightComponent() const;
 
 		template<typename T>
 		bool Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) const;

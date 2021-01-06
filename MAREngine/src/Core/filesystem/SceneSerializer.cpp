@@ -103,15 +103,16 @@ namespace marengine {
 			saveString("TextureCubemapComponent", "name", cube.texture);
 		}
 		
-		if (entity.hasComponent<LightComponent>()) {
-			const auto& light{ entity.getComponent<LightComponent>() };
-			saveVec3("LightComponent", "ambient", light.ambient);
-			saveVec3("LightComponent", "diffuse", light.diffuse);
-			saveVec3("LightComponent", "specular", light.specular);
-			saveFloat("LightComponent", "constant", light.constant);
-			saveFloat("LightComponent", "linear", light.linear);
-			saveFloat("LightComponent", "quadratic", light.quadratic);
-			saveFloat("LightComponent", "shininess", light.shininess);
+		if (entity.hasComponent<PointLightComponent>()) {
+			const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+	
+			saveVec3("PointLightComponent", "ambient", pointLightComponent.pointLight.ambient);
+			saveVec3("PointLightComponent", "diffuse", pointLightComponent.pointLight.diffuse);
+			saveVec3("PointLightComponent", "specular", pointLightComponent.pointLight.specular);
+			saveFloat("PointLightComponent", "constant", pointLightComponent.pointLight.constant);
+			saveFloat("PointLightComponent", "linear", pointLightComponent.pointLight.linear);
+			saveFloat("PointLightComponent", "quadratic", pointLightComponent.pointLight.quadratic);
+			saveFloat("PointLightComponent", "shininess", pointLightComponent.pointLight.shininess);
 		}
 
 		if (entity.hasComponent<CameraComponent>()) {

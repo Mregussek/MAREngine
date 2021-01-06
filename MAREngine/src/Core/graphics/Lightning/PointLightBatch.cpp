@@ -40,7 +40,7 @@ namespace marengine {
 		const auto currentLightSize{ m_lights.size() };
 		const bool thereIsPlaceInBatch{ !(currentLightSize + 1 >= GraphicLimits::maxLights) };
 
-		if (thereIsPlaceInBatch && entityWithLight.hasComponent<LightComponent>()) {
+		if (thereIsPlaceInBatch && entityWithLight.hasComponent<PointLightComponent>()) {
 			return true;
 		}
 		else {
@@ -52,17 +52,10 @@ namespace marengine {
 		GRAPHICS_TRACE("F_POINT_LIGHT_BATCH: submitting {} entity with point light...", entity.getComponent<TagComponent>().tag);
 
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		const auto& lightComponent{ entity.getComponent<LightComponent>() };
+		const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 
-		FPointLight& pointLightData{ m_lights.emplace_back() };
+		FPointLight& pointLightData{ m_lights.emplace_back(pointLightComponent.pointLight) };
 		pointLightData.position = maths::vec4(transformComponent.center, 1.f);
-		pointLightData.ambient = lightComponent.ambient;
-		pointLightData.diffuse = lightComponent.diffuse;
-		pointLightData.specular = lightComponent.specular;
-		pointLightData.linear = lightComponent.linear;
-		pointLightData.quadratic = lightComponent.quadratic;
-		pointLightData.constant = lightComponent.constant;
-		pointLightData.shininess = lightComponent.shininess;
 
 		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
 		rpc.lightIndex = m_lights.size() - 1;

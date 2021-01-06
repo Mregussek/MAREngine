@@ -51,9 +51,9 @@ namespace marengine {
         const auto& transform = entity.getComponent<TransformComponent>();
         m_module.attr("transform") = transform;
     
-        if (entity.hasComponent<LightComponent>()) {
-            const auto& light = entity.getComponent<LightComponent>();
-            m_module.attr("light") = light;
+        if (entity.hasComponent<PointLightComponent>()) {
+            const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+            m_module.attr("light") = pointLightComponent.pointLight;
         }
     
         if (entity.hasComponent<CameraComponent>()) {
@@ -78,9 +78,9 @@ namespace marengine {
         auto& transform = entity.getComponent<TransformComponent>();
         m_module.attr("transform") = transform;
     
-        if (entity.hasComponent<LightComponent>()) {
-            const auto& light = entity.getComponent<LightComponent>();
-            m_module.attr("light") = light;
+        if (entity.hasComponent<PointLightComponent>()) {
+            const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+            m_module.attr("light") = pointLightComponent.pointLight;
         }
     
         if (entity.hasComponent<CameraComponent>()) {
@@ -97,9 +97,9 @@ namespace marengine {
     
         transform = m_module.attr("transform").cast<TransformComponent>();
 
-        if (entity.hasComponent<LightComponent>()) {
-            auto& light = entity.getComponent<LightComponent>();
-            light = m_module.attr("light").cast<LightComponent>();
+        if (entity.hasComponent<PointLightComponent>()) {
+            auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+            pointLightComponent.pointLight = m_module.attr("light").cast<FPointLight>();
         }
     
         if (entity.hasComponent<CameraComponent>()) {

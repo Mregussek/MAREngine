@@ -70,7 +70,7 @@ namespace marengine {
 			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
 			rpc.containerIndex = batchIndex;
 		}
-		if (entity.hasComponent<LightComponent>()) {
+		if (entity.hasComponent<PointLightComponent>()) {
 			if (m_pointLightBatch.canBeBatched(entity)) {
 				m_pointLightBatch.submitEntityWithLightning(entity);
 			}

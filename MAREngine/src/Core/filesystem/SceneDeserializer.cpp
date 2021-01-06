@@ -131,15 +131,15 @@ namespace marengine {
 			setString(cube.texture, "TextureCubemapComponent", "name");
 		}
 
-		if (jsonContains("LightComponent")) {
-			auto& light{ entity.addComponent<LightComponent>() };
-			light.ambient = loadVec3("LightComponent", "ambient");
-			light.diffuse = loadVec3("LightComponent", "diffuse");
-			light.specular = loadVec3("LightComponent", "specular");
-			light.constant = loadFloat("LightComponent", "constant");
-			light.linear = loadFloat("LightComponent", "linear");
-			light.quadratic = loadFloat("LightComponent", "quadratic");
-			light.shininess = loadFloat("LightComponent", "shininess");
+		if (jsonContains("PointLightComponent")) {
+			auto& pointLightComponent{ entity.addComponent<PointLightComponent>() };
+			pointLightComponent.pointLight.ambient = loadVec3("PointLightComponent", "ambient");
+			pointLightComponent.pointLight.diffuse = loadVec3("PointLightComponent", "diffuse");
+			pointLightComponent.pointLight.specular = loadVec3("PointLightComponent", "specular");
+			pointLightComponent.pointLight.constant = loadFloat("PointLightComponent", "constant");
+			pointLightComponent.pointLight.linear = loadFloat("PointLightComponent", "linear");
+			pointLightComponent.pointLight.quadratic = loadFloat("PointLightComponent", "quadratic");
+			pointLightComponent.pointLight.shininess = loadFloat("PointLightComponent", "shininess");
 		}
 
 		if (jsonContains("CameraComponent")) {
@@ -307,17 +307,17 @@ namespace marengine {
 				auto& cubemap{ entity.get_addComponent<TextureCubemapComponent>() };
 				loadString(cubemap.texture, 25);
 			}
-			else if (line.find("#LightComponent") != std::string::npos) {
-				auto& light{ entity.get_addComponent<LightComponent>() };
+			else if (line.find("#PointLightComponent") != std::string::npos) {
+				auto& light{ entity.get_addComponent<PointLightComponent>() };
 
-				loadVec4Getline(light.ambient, 13);		// #ambientlight - 13
-				loadVec4Getline(light.diffuse, 13);		// #diffuselight - 13
-				loadVec4Getline(light.specular, 14);	// #specularlight - 14
+				loadVec4Getline(light.pointLight.ambient, 13);		// #ambientlight - 13
+				loadVec4Getline(light.pointLight.diffuse, 13);		// #diffuselight - 13
+				loadVec4Getline(light.pointLight.specular, 14);		// #specularlight - 14
 
-				loadFloatGetline(light.constant, 9);	// #constant - 9
-				loadFloatGetline(light.linear, 7);		// #linear - 7
-				loadFloatGetline(light.quadratic, 10);	// #quadratic - 10
-				loadFloatGetline(light.shininess, 10);	// #shininess - 10
+				loadFloatGetline(light.pointLight.constant, 9);		// #constant - 9
+				loadFloatGetline(light.pointLight.linear, 7);		// #linear - 7
+				loadFloatGetline(light.pointLight.quadratic, 10);	// #quadratic - 10
+				loadFloatGetline(light.pointLight.shininess, 10);	// #shininess - 10
 			}
 			else if (line.find("#CameraComponent") != std::string::npos) {
 				auto& cam{ entity.get_addComponent<CameraComponent>() };

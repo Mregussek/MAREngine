@@ -35,7 +35,7 @@ namespace marengine {
 
 		struct EntityStorage {
 			TransformComponent transform;
-			LightComponent light;
+			PointLightComponent light;
 			ColorComponent color;
 		};
 

@@ -43,8 +43,8 @@ namespace marengine {
 
 	void ScenePlayStorage::pushOperation(EntityStorage& storage, const Entity& entity) {
 		storage.transform = entity.getComponent<TransformComponent>();
-		if (entity.hasComponent<LightComponent>()) {
-			storage.light = entity.getComponent<LightComponent>();
+		if (entity.hasComponent<PointLightComponent>()) {
+			storage.light = entity.getComponent<PointLightComponent>();
 		}
 		if (entity.hasComponent<ColorComponent>()) {
 			storage.color = entity.getComponent<ColorComponent>();
@@ -68,27 +68,17 @@ namespace marengine {
 	}
 
 	void ScenePlayStorage::loadOperation(const EntityStorage& storage, const Entity& entity) {
-		auto& tran = entity.getComponent<TransformComponent>();
+		auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		transformComponent = storage.transform;
 
-		tran.center = storage.transform.center;
-		tran.angles = storage.transform.angles;
-		tran.scale = storage.transform.scale;
-
-		if (entity.hasComponent<LightComponent>()) {
-			auto& light = entity.getComponent<LightComponent>();
-
-			light.ambient = storage.light.ambient;
-			light.diffuse = storage.light.diffuse;
-			light.specular = storage.light.specular;
-			light.quadratic = storage.light.quadratic;
-			light.linear = storage.light.linear;
-			light.shininess = storage.light.shininess;
-			light.constant = storage.light.constant;
+		if (entity.hasComponent<PointLightComponent>()) {
+			auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+			pointLightComponent = storage.light;
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
-			auto& color = entity.getComponent<ColorComponent>();
-			color.texture = storage.color.texture;
+			auto& colorComponent = entity.getComponent<ColorComponent>();
+			colorComponent = storage.color;
 		}
 	}
 

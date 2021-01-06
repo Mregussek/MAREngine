@@ -50,16 +50,17 @@ namespace marengine {
 
 		{ // create Camera entity
 			const Entity& cameraEntity{ scene->createEntity() };
-			cameraEntity.addComponent<CameraComponent>();
+			CameraComponent& cameraComponent{ cameraEntity.addComponent<CameraComponent>() };
+			cameraComponent.id = "main";
 
-			TagComponent& tag = cameraEntity.getComponent<TagComponent>();
+			TagComponent& tag{ cameraEntity.getComponent<TagComponent>() };
 			tag.tag = "CameraEntity";
 		}
 		{ // create Light Entity
-			const Entity& lightEntity{ scene->createEntity() };
-			lightEntity.addComponent<LightComponent>();
+			const Entity& pointLightEntity{ scene->createEntity() };
+			pointLightEntity.addComponent<PointLightComponent>();
 
-			TagComponent& tag = lightEntity.getComponent<TagComponent>();
+			TagComponent& tag{ pointLightEntity.getComponent<TagComponent>() };
 			tag.tag = "LightEntity";
 		}
 

@@ -47,7 +47,7 @@ namespace marengine {
 		addComponentIfContains<Entity, ColorComponent>(src, dst);
 		addComponentIfContains<Entity, Texture2DComponent>(src, dst);
 		addComponentIfContains<Entity, TextureCubemapComponent>(src, dst);
-		addComponentIfContains<Entity, LightComponent>(src, dst);
+		addComponentIfContains<Entity, PointLightComponent>(src, dst);
 		addComponentIfContains<Entity, CameraComponent>(src, dst);
 		addComponentIfContains<Entity, PythonScriptComponent>(src, dst);
 	}

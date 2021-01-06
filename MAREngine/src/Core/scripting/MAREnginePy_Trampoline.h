@@ -33,7 +33,7 @@ namespace marengine {
 	class PyEntity {
 	public:
 		TransformComponent transform;
-		LightComponent light;
+		FPointLight light;
 		CameraComponent camera;
 		ColorComponent color;
 

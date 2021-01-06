@@ -292,15 +292,16 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def_readwrite("o_near",			&CameraComponent::o_near)
 		.def_readwrite("o_far",				&CameraComponent::o_far);
 
-	py::class_<LightComponent>(m, "Light")
+	py::class_<FPointLight>(m, "Light")
 		.def(py::init<>())
-		.def_readwrite("ambient",	&LightComponent::ambient)
-		.def_readwrite("diffuse",	&LightComponent::diffuse)
-		.def_readwrite("specular",	&LightComponent::specular)
-		.def_readwrite("constant",	&LightComponent::constant)
-		.def_readwrite("linear",	&LightComponent::linear)
-		.def_readwrite("quadratic", &LightComponent::quadratic)
-		.def_readwrite("shininess", &LightComponent::shininess);
+		.def_readwrite("position",	&FPointLight::position)
+		.def_readwrite("ambient",	&FPointLight::ambient)
+		.def_readwrite("diffuse",	&FPointLight::diffuse)
+		.def_readwrite("specular",	&FPointLight::specular)
+		.def_readwrite("constant",	&FPointLight::constant)
+		.def_readwrite("linear",	&FPointLight::linear)
+		.def_readwrite("quadratic", &FPointLight::quadratic)
+		.def_readwrite("shininess", &FPointLight::shininess);
 
 	// ---- ENTITY ---- //
 	py::class_<PyEntity, PyTrampoline>(m, "Entity")

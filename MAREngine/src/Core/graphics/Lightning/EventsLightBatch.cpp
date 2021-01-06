@@ -29,17 +29,11 @@ namespace marengine {
 
 
 	void FEventsLightBatch::onPointLightUpdate(const Entity& entity) {
-		const auto& pointLightComponent{ entity.getComponent<LightComponent>() };
+		const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
-		auto& pointLight{ RenderPipeline::Instance->m_pointLightBatch.m_lights[renderPipelineComponent.lightIndex] };
+		auto& pointLightAtBatch{ RenderPipeline::Instance->m_pointLightBatch.m_lights[renderPipelineComponent.lightIndex] };
 
-		pointLight.ambient = pointLightComponent.ambient;
-		pointLight.diffuse = pointLightComponent.diffuse;
-		pointLight.specular = pointLightComponent.specular;
-		pointLight.linear = pointLightComponent.linear;
-		pointLight.quadratic = pointLightComponent.quadratic;
-		pointLight.constant = pointLightComponent.constant;
-		pointLight.shininess = pointLightComponent.shininess;
+		pointLightAtBatch = pointLightComponent.pointLight;
 
 		FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
 	}
@@ -47,8 +41,9 @@ namespace marengine {
 	void FEventsLightBatch::onPointLightPositionUpdate(const Entity& entity) {
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
+		auto& pointLightAtBatch{ RenderPipeline::Instance->m_pointLightBatch.m_lights[renderPipelineComponent.lightIndex] };
 
-		RenderPipeline::Instance->m_pointLightBatch.m_lights[renderPipelineComponent.lightIndex].position = maths::vec4(transformComponent.center, 1.f);
+		pointLightAtBatch.position = maths::vec4(transformComponent.center, 1.f);
 
 		FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
 	}

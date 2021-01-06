@@ -110,8 +110,8 @@ namespace marengine {
 			handleTextureCubemapComponent();
 		}
 
-		if (currentEntity->hasComponent<LightComponent>() && ImGui::CollapsingHeader("LightComponent")) {
-			handleLightComponent();
+		if (currentEntity->hasComponent<PointLightComponent>() && ImGui::CollapsingHeader("PointLightComponent")) {
+			handlePointLightComponent();
 		}
 			
 		popUpMenu();
@@ -131,8 +131,8 @@ namespace marengine {
 			handleColorComponent();
 		}
 
-		if (currentEntity->hasComponent<LightComponent>()) {
-			handleLightComponent();
+		if (currentEntity->hasComponent<PointLightComponent>()) {
+			handlePointLightComponent();
 		}
 	}
 
@@ -172,7 +172,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::displayComponentPopMenu() const {
 		const bool hasRenderable{ currentEntity->hasComponent<RenderableComponent>() };
-		const bool hasLight{ currentEntity->hasComponent<LightComponent>() };
+		const bool hasLight{ currentEntity->hasComponent<PointLightComponent>() };
 		const bool hasCamera{ currentEntity->hasComponent<CameraComponent>() };
 		const bool hasScript{ currentEntity->hasComponent<PythonScriptComponent>() };
 		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>()
@@ -197,8 +197,8 @@ namespace marengine {
 			}
 		}
 
-		if (!hasLight && ImGui::MenuItem("Add LightComponent")) {
-			FEventsComponentEntity::Instance->onAdd<LightComponent>(*currentEntity);
+		if (!hasLight && ImGui::MenuItem("Add PointLightComponent")) {
+			FEventsComponentEntity::Instance->onAdd<PointLightComponent>(*currentEntity);
 		}
 
 		if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
@@ -379,27 +379,27 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
 	}
 
-	void WEntityWidgetPanel::handleLightComponent() const {
+	void WEntityWidgetPanel::handlePointLightComponent() const {
 		if (ImGui::MenuItem("Remove Light")) {
-			FEventsComponentEntity::Instance->onRemove<LightComponent>(*currentEntity);
+			FEventsComponentEntity::Instance->onRemove<PointLightComponent>(*currentEntity);
 			return;
 		}
-		auto& light = currentEntity->getComponent<LightComponent>();
+		auto& pointLight{ currentEntity->getComponent<PointLightComponent>().pointLight };
 		bool updatedLight = false;
 
-		if (CommonComponentHandler::drawVec4Control("Ambient", light.ambient, 0.f, 100.f)) { updatedLight = true; }
-		if (CommonComponentHandler::drawVec4Control("Diffuse", light.diffuse, 0.f, 100.f)) { updatedLight = true; }
-		if (CommonComponentHandler::drawVec4Control("Specular", light.specular, 0.f, 100.f)) { updatedLight = true; }
+		if (CommonComponentHandler::drawVec4Control("Ambient", pointLight.ambient, 0.f, 100.f)) { updatedLight = true; }
+		if (CommonComponentHandler::drawVec4Control("Diffuse", pointLight.diffuse, 0.f, 100.f)) { updatedLight = true; }
+		if (CommonComponentHandler::drawVec4Control("Specular", pointLight.specular, 0.f, 100.f)) { updatedLight = true; }
 							  		
 		ImGui::NewLine();
 
-		if (ImGui::DragFloat("Constant", &light.constant, 0.001f, 0.f, 2.f)			) { updatedLight = true; }
-		if (ImGui::DragFloat("Linear", &light.linear, 0.001f, 0.f, 0.5f)			) { updatedLight = true; }
-		if (ImGui::DragFloat("Quadratic", &light.quadratic, 0.001f, 0.f, 0.1f)		) { updatedLight = true; }
-		if (ImGui::DragFloat("Shininess", &light.shininess, 0.5f, 0.f, 256.f)		) { updatedLight = true; }
+		if (ImGui::DragFloat("Constant", &pointLight.constant, 0.001f, 0.f, 2.f)) { updatedLight = true; }
+		if (ImGui::DragFloat("Linear", &pointLight.linear, 0.001f, 0.f, 0.5f)) { updatedLight = true; }
+		if (ImGui::DragFloat("Quadratic", &pointLight.quadratic, 0.001f, 0.f, 0.1f)) { updatedLight = true; }
+		if (ImGui::DragFloat("Shininess", &pointLight.shininess, 0.5f, 0.f, 256.f)) { updatedLight = true; }
 
 		if (updatedLight) {
-			FEventsComponentEntity::Instance->onUpdate<LightComponent>(*currentEntity);
+			FEventsComponentEntity::Instance->onUpdate<PointLightComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
