@@ -19,7 +19,6 @@
 
 
 #include "EditorMAR.h"
-//#include "MAREngine/src/Debug/Profiler.h"
 
 
 namespace marengine {
@@ -54,36 +53,39 @@ namespace marengine {
 		window.terminate();
 	}
 	*/
-
 	void EditorMAR::runProjectOnEngine() {
 		WindowInstance<GLFWwindow> displayWindow{};
-		LayerStack layerStack{};
+		LayerStack stack{};
 
 		//auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
 		auto* scene = FSceneDeserializer::oldWayLoadingFile("DefaultProject/Scenes/DefaultProject.marscene");
 		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");
-		layerStack.pushLayer(&renderLayer);
+		stack.pushLayer(&renderLayer);
 
 		SceneLayer sceneLayer("Scene Layer");
 		sceneLayer.passSceneToManager(scene);
-		layerStack.pushLayer(&sceneLayer);
+		stack.pushLayer(&sceneLayer);
 
 		EditorLayer editorLayer("Editor Layer");
-		layerStack.pushOverlay(&editorLayer);
+		stack.pushOverlay(&editorLayer);
 
 		displayWindow.initialize(1600, 900, m_engine.getName());
 
-		layerStack.initialize();
+		stack.initialize();
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
+			SetupOpenGL::clearScreen(scene->getBackground());
 
-			layerStack.update();
+			editorLayer.renderToViewport();
 
+			stack.update();
+
+			displayWindow.swapBuffers();
 		}
 
-		layerStack.close();
+		stack.close();
 		displayWindow.terminate();
 	}
 
