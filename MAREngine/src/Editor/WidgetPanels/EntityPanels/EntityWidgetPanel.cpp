@@ -26,7 +26,7 @@
 #include "../../../Window/Window.h"
 #include "../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
 
@@ -62,7 +62,7 @@ namespace marengine {
 			return;
 		}
 
-		if (SceneManager::Instance->isPlayMode()) {
+		if (FSceneManagerEditor::Instance->isPlayMode()) {
 			displayPlayMode();
 			ImGui::End();
 

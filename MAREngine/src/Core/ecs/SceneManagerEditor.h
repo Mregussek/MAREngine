@@ -18,8 +18,8 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_SCENE_MANAGER_H
-#define MAR_ENGINE_ECS_SCENE_MANAGER_H
+#ifndef MAR_ENGINE_F_SCENE_MANAGER_EDITOR_H
+#define MAR_ENGINE_F_SCENE_MANAGER_EDITOR_H
 
 
 #include "../../mar.h"
@@ -32,56 +32,55 @@ namespace marengine {
 	class Entity;
 
 
-	class SceneManager {
+	class FSceneManagerEditor {
 	public:
 
-		static SceneManager* Instance;
+		static FSceneManagerEditor* Instance;
 
-		SceneManager() = default;
+		FSceneManagerEditor() = default;
 
 		void initialize() const;
-		void shutdown();
 		void update();
+		void close();
 
 		void setScene(Scene* scene);
 		Scene* getScene();
 
-		bool isEditorMode() const { return m_EditorMode; }
-		bool isPlayMode() const { return !m_EditorMode; }
-		bool isPauseMode() const { return m_PauseMode; }
+		void setEditorMode();
+		bool isEditorMode() const;
 
-		void setEditorMode() { m_EditorMode = true; }
 		void setPlayMode();
+		bool isPlayMode() const;
 		void setExitPlayMode();
-		void setPauseMode() { m_PauseMode = true; }
-		void unsetPauseMode() { m_PauseMode = false; }
 
-		// PUBLIC MEMBERS
-
-		bool useEditorCamera{ true };
+		void setPauseMode();
+		bool isPauseMode() const;
+		void setExitPauseMode();
+		
+		void useEditorCamera();
+		void useGameCamera();
+		bool usingEditorCamera() const;
 
 	private:
 
 		void initPlayMode();
-		void exitPlayMode();
-
-		void updateEditorMode();
 		void updatePlayMode();
 		void updatePauseMode();
-
 		void updateEntityInPlaymode(const Entity& entity);
+		void exitPlayMode();
 
 
 		ScenePlayStorage m_playStorage;
 		Scene* m_scene{ nullptr };
 		
-
+		bool m_EditorCamera{ true };
 		bool m_EditorMode{ true };
 		bool m_PauseMode{ false };
+
 	}; 
 
 
 }
 
 
-#endif //!MAR_ENGINE_ECS_SCENE_MANAGER_H
+#endif //!MAR_ENGINE_F_SCENE_MANAGER_EDITOR_H

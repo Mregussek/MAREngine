@@ -18,7 +18,7 @@
 **/
 
 
-#include "SceneManager.h"
+#include "SceneManagerEditor.h"
 #include "ECSLogs.h"
 #include "Scene.h"
 #include "../ecs/Entity/EventsComponentEntity.h"
@@ -28,10 +28,10 @@
 namespace marengine {
 
 
-	SceneManager* SceneManager::Instance{ nullptr };
+	FSceneManagerEditor* FSceneManagerEditor::Instance{ nullptr };
 
 
-	void SceneManager::initialize() const {
+	void FSceneManagerEditor::initialize() const {
 		ECS_TRACE("SCENE_MANAGER: going to initialize!");
 
 		RenderPipeline::Instance->reset();
@@ -47,7 +47,22 @@ namespace marengine {
 		ECS_INFO("SCENE_MANAGER: initialized!");
 	}
 
-	void SceneManager::shutdown() { 
+	void FSceneManagerEditor::update() {
+		ECS_TRACE("SCENE_MANAGER: going to update");
+
+		if (isPlayMode()) {
+			if (isPauseMode()) {
+				updatePauseMode();
+			}
+			else {
+				updatePlayMode();
+			}
+		}
+
+		ECS_INFO("SCENE_MANAGER: updated!");
+	}
+
+	void FSceneManagerEditor::close() { 
 		ECS_TRACE("SCENE_MANAGER: going to shutdown scene manager");
 
 		m_scene->close(); 
@@ -56,43 +71,11 @@ namespace marengine {
 		ECS_INFO("SCENE_MANAGER: called shutdown method");
 	}
 
-	void SceneManager::update() {
-		ECS_TRACE("SCENE_MANAGER: going to update");
-
-		if (m_EditorMode) { updateEditorMode(); }
-		else {
-			if (!m_PauseMode) { updatePlayMode(); }
-			else { updatePauseMode(); }	
-		}
-
-		ECS_INFO("SCENE_MANAGER: updated!");
-	}
-
-	void SceneManager::setPlayMode() { 
-		m_EditorMode = false; 
-		initPlayMode(); 
-		FEventsCameraEntity::onGameCameraSet();
-	}
-
-	void SceneManager::setExitPlayMode() { 
-		m_EditorMode = true; 
-		unsetPauseMode(); 
-		exitPlayMode(); 
-	}
-
-	// -------------------------------------------------------------
-	// EDITOR MODE
-	// -------------------------------------------------------------
-
-	void SceneManager::updateEditorMode() {
-
-	}
-
 	// -------------------------------------------------------------
 	// PLAY MODE
 	// -------------------------------------------------------------
 
-	void SceneManager::initPlayMode() {
+	void FSceneManagerEditor::initPlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to initialize play mode");
 
 		m_playStorage.clear();
@@ -114,24 +97,12 @@ namespace marengine {
 		const auto view{ m_scene->getView<PythonScriptComponent>() };
 		view.each(initializeScriptModule);
 
+		FEventsCameraEntity::onGameCameraSet();
+
 		ECS_INFO("SCENE_MANAGER: initialized play mode!");
 	}
 
-	void SceneManager::exitPlayMode() {
-		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
-
-		const auto& entitiesVector{ m_scene->getEntities() };
-
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage](const Entity& entity) {
-			playStorage.loadEntityFromStorage(entity);
-		});
-
-		initialize();
-
-		ECS_INFO("SCENE_MANAGER: exited play mode!");
-	}
-
-	void SceneManager::updatePlayMode() {
+	void FSceneManagerEditor::updatePlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
 		auto updateScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
@@ -146,7 +117,7 @@ namespace marengine {
 		ECS_INFO("SCENE_MANAGER: updated play mode");
 	}
 
-	void SceneManager::updatePauseMode() {
+	void FSceneManagerEditor::updatePauseMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
 		const auto view = m_scene->getView<PythonScriptComponent>();
@@ -158,7 +129,7 @@ namespace marengine {
 		ECS_INFO("SCENE_MANAGER: updated pause mode");
 	}
 
-	void SceneManager::updateEntityInPlaymode(const Entity& entity) {
+	void FSceneManagerEditor::updateEntityInPlaymode(const Entity& entity) {
 		FEventsComponentEntity::Instance->onUpdate<TransformComponent>(entity);
 
 		if (entity.hasComponent<PointLightComponent>()) {
@@ -170,16 +141,74 @@ namespace marengine {
 		}
 	}
 
-	// -------------------------------------------------------------
-	// GET / SET
-	// -------------------------------------------------------------
+	void FSceneManagerEditor::exitPlayMode() {
+		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
-	void SceneManager::setScene(Scene* scene) { 
+		const auto& entitiesVector{ m_scene->getEntities() };
+
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [&playStorage = m_playStorage](const Entity& entity) {
+			playStorage.loadEntityFromStorage(entity);
+		});
+
+		initialize();
+
+		ECS_INFO("SCENE_MANAGER: exited play mode!");
+	}
+
+	void FSceneManagerEditor::setScene(Scene* scene) { 
 		m_scene = scene; 
 	}
 
-	Scene* SceneManager::getScene() { 
+	Scene* FSceneManagerEditor::getScene() { 
 		return m_scene; 
+	}
+
+	void FSceneManagerEditor::setEditorMode() { 
+		m_EditorMode = true; 
+	}
+
+	bool FSceneManagerEditor::isEditorMode() const {
+		return m_EditorMode;
+	}
+
+	void FSceneManagerEditor::setPlayMode() {
+		m_EditorMode = false;
+		initPlayMode();
+	}
+
+	bool FSceneManagerEditor::isPlayMode() const {
+		return !m_EditorMode;
+	}
+
+	void FSceneManagerEditor::setExitPlayMode() {
+		m_EditorMode = true;
+		setExitPauseMode();
+		exitPlayMode();
+	}
+
+	void FSceneManagerEditor::setPauseMode() { 
+		m_PauseMode = true;
+	}
+
+	bool FSceneManagerEditor::isPauseMode() const { 
+		return m_PauseMode; 
+	}
+
+	void FSceneManagerEditor::setExitPauseMode() { 
+		m_PauseMode = false; 
+	}
+
+	void FSceneManagerEditor::useEditorCamera() {
+		m_EditorCamera = true;
+	}
+
+	void FSceneManagerEditor::useGameCamera() {
+		FEventsCameraEntity::onGameCameraSet();
+		m_EditorCamera = false;
+	}
+
+	bool FSceneManagerEditor::usingEditorCamera() const {
+		return m_EditorCamera;
 	}
 
 

@@ -24,7 +24,7 @@
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EntityOperation.h"
 #include "../../../Core/ecs/Components/Components.h"
-#include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../OtherPanels/InfoWidget.h"

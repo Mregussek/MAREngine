@@ -20,7 +20,7 @@
 
 #include "EditorLayer.h"
 #include "../LayerLogs.h"
-#include "../../Core/ecs/SceneManager.h"
+#include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Core/ecs/Scene.h"
 
 
@@ -72,7 +72,7 @@ namespace marengine {
 	void EditorLayer::renderToViewport() {
 		LAYER_TRACE("EDITOR_LAYER: {} starting rendering to viewport in Viewport Panel", p_debugName);
 
-		m_allWidgets.viewport.bind(SceneManager::Instance->getScene()->getBackground());
+		m_allWidgets.viewport.bind(FSceneManagerEditor::Instance->getScene()->getBackground());
 	}
 
 

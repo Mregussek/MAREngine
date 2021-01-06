@@ -22,7 +22,7 @@
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../../Core/graphics/RenderAPI/RenderBufferManager.h"
 
@@ -38,7 +38,9 @@ namespace marengine {
 
 		m_camera.initialize(m_aspectRatio);
 
-		FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
+		if(FSceneManagerEditor::Instance->usingEditorCamera()) {
+			FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
+		}
 	}
 
 	void WViewportWidget::destroy() {
@@ -69,42 +71,52 @@ namespace marengine {
 	}
 
 	void WViewportWidget::displayViewportControlPanel() {
-		auto displayEditorModeButtons = [&sceneManager = SceneManager::Instance, &camera = std::as_const(m_camera)]() {
-			if (ImGui::Button("PLAY")) { sceneManager->setPlayMode(); }
-			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
-				if (sceneManager->isEditorMode()) {
-					if (sceneManager->useEditorCamera) {
-						FEventsCameraEntity::onEditorCameraSet(camera.getCameraData());
-					}
-					else {
-						FEventsCameraEntity::onGameCameraSet();
-					}
+		auto displayEditorModeButtons = [&FSceneManagerEditor = FSceneManagerEditor::Instance, &camera = std::as_const(m_camera)]() {
+			if (ImGui::Button("PLAY")) { FSceneManagerEditor->setPlayMode(); }
+			ImGui::SameLine();
+			if (FSceneManagerEditor::Instance->usingEditorCamera()) {
+				if (ImGui::Button("Use Game Camera")) {
+					FSceneManagerEditor::Instance->useGameCamera();
+					FEventsCameraEntity::onGameCameraSet();
+				}
+			}
+			else {
+				if (ImGui::Button("Use Editor Camera")) {
+					FSceneManagerEditor::Instance->useEditorCamera();
+					FEventsCameraEntity::onEditorCameraSet(camera.getCameraData());
 				}
 			}
 		};
 
-		auto displayPlayModeButtons = [&sceneManager = SceneManager::Instance, &camera = std::as_const(m_camera)]() {
+		auto displayPlayModeButtons = [&FSceneManagerEditor = FSceneManagerEditor::Instance, &camera = std::as_const(m_camera)]() {
 			if (ImGui::Button("STOP")) {
-				sceneManager->setExitPlayMode();
-				if (sceneManager->useEditorCamera) {
+				FSceneManagerEditor->setExitPlayMode();
+				if (FSceneManagerEditor->usingEditorCamera()) {
 					FEventsCameraEntity::onEditorCameraSet(camera.getCameraData());
 				}
 			}
-
 			ImGui::SameLine();
-
-			if (!sceneManager->isPauseMode()) {
-				if (ImGui::Button("PAUSE")) { sceneManager->setPauseMode(); }
+			if (FSceneManagerEditor->isPauseMode()) {
+				if (ImGui::Button("RESUME")) { 
+					FSceneManagerEditor->setExitPauseMode(); 
+				}
+				
 			}
 			else {
-				if (ImGui::Button("RESUME")) { sceneManager->unsetPauseMode(); }
+				if (ImGui::Button("PAUSE")) { 
+					FSceneManagerEditor->setPauseMode();
+				}
 			}
 		};
 
 		ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
 		if (ImGui::BeginMenuBar()) {
-			if (SceneManager::Instance->isEditorMode()) { displayEditorModeButtons(); }
-			else { displayPlayModeButtons(); }
+			if (FSceneManagerEditor::Instance->isEditorMode()) { 
+				displayEditorModeButtons(); 
+			}
+			else {
+				displayPlayModeButtons(); 
+			}
 
 			ImGui::EndMenuBar();
 		}
@@ -125,12 +137,12 @@ namespace marengine {
 	}
 
 	void WViewportWidget::handleGuizmo() {
-		if (SceneManager::Instance->useEditorCamera) {
+		if (FSceneManagerEditor::Instance->usingEditorCamera()) {
 			const auto& currentEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
 			const bool entityExists = &currentEntity != nullptr;
 			m_guizmo.selectType();
 
-			if (SceneManager::Instance->isEditorMode()) {
+			if (FSceneManagerEditor::Instance->isEditorMode()) {
 				if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
 				bool useInputInCamera = false;

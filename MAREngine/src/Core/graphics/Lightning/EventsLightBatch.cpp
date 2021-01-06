@@ -29,10 +29,12 @@ namespace marengine {
 
 
 	void FEventsLightBatch::onPointLightUpdate(const Entity& entity) {
-		const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 		auto& pointLightAtBatch{ RenderPipeline::Instance->m_pointLightBatch.m_lights[renderPipelineComponent.lightIndex] };
 
+		pointLightComponent.pointLight.position = maths::vec4(transformComponent.position, 1.f);
 		pointLightAtBatch = pointLightComponent.pointLight;
 
 		FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);

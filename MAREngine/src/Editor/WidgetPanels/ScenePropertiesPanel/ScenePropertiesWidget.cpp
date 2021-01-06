@@ -19,7 +19,7 @@
 
 
 #include "ScenePropertiesWidget.h"
-#include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Scene.h"
 
 
@@ -29,7 +29,7 @@ namespace marengine {
 	void WScenePropertiesWidget::updateFrame() {
 		ImGui::Begin("Editor Properties");
 
-		auto& sceneBackground{ SceneManager::Instance->getScene()->getBackground() };
+		auto& sceneBackground{ FSceneManagerEditor::Instance->getScene()->getBackground() };
 		ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
 
 		ImGui::End();

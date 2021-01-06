@@ -25,7 +25,7 @@
 #include "../../mar.h"
 #include "../Layer.h"
 #include "../../Core/ecs/Entity/EventsComponentEntity.h"
-#include "../../Core/ecs/SceneManager.h"
+#include "../../Core/ecs/SceneManagerEditor.h"
 
 
 namespace marengine {
@@ -49,7 +49,7 @@ namespace marengine {
 
 	private:
 
-		SceneManager m_sceneManager;
+		FSceneManagerEditor m_FSceneManagerEditor;
 		FEventsComponentEntity m_eventsComponentEntity;
 
 	};

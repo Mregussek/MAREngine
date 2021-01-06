@@ -23,7 +23,7 @@
 #include "../../WidgetEvents/EventsEntityWidget.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Scene.h"
-#include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Window/Window.h"
 #include "../../EditorLogging.h"
 
@@ -36,10 +36,10 @@ namespace marengine {
 
 		buttonsAtPanel();
 
-		ImGui::Text("SCENE - %s", SceneManager::Instance->getScene()->getName().c_str());
+		ImGui::Text("SCENE - %s", FSceneManagerEditor::Instance->getScene()->getName().c_str());
 		ImGui::Separator();
 
-		const std::vector<Entity>& entities{ SceneManager::Instance->getScene()->getEntities() };
+		const std::vector<Entity>& entities{ FSceneManagerEditor::Instance->getScene()->getEntities() };
 		displayTreesForEntities(entities);
 
 		popUpMenu();
@@ -104,7 +104,7 @@ namespace marengine {
 	}
 
 	void WSceneHierarchyWidget::popUpMenu() const {
-		if (SceneManager::Instance->isEditorMode() && ImGui::IsWindowFocused()) {
+		if (FSceneManagerEditor::Instance->isEditorMode() && ImGui::IsWindowFocused()) {
 			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
 				ImGui::OpenPopup("SceneHierarchyPopUp");
 			}

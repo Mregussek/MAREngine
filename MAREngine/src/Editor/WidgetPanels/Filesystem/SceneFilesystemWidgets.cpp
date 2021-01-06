@@ -23,7 +23,7 @@
 #include "../ScriptEditor/ScriptIDEWidget.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../../../Core/ecs/Scene.h"
-#include "../../../Core/ecs/SceneManager.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/filesystem/SceneSerializer.h"
 #include "../../../Engine.h"
 
@@ -52,7 +52,7 @@ namespace marengine {
 		};
 
 		constexpr auto saveSceneCallback = [](const std::string& path, const std::string& filename) {
-			FSceneSerializer::saveSceneToFile(path.c_str(), SceneManager::Instance->getScene());
+			FSceneSerializer::saveSceneToFile(path.c_str(), FSceneManagerEditor::Instance->getScene());
 		};
 
 		constexpr auto loadSceneCallback = [](const std::string& path, const std::string& filename) {

@@ -24,7 +24,7 @@
 #include "RenderCamera.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicsLimits.h"
-#include "../../ecs/SceneManager.h"
+#include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Entity/EventsComponentEntity.h"
 
@@ -79,8 +79,8 @@ namespace marengine {
 		}
 		if (entity.hasComponent<CameraComponent>()) {
 			if (m_renderCamera) {
-				const bool userCheckingGameInPlayMode{ SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode() };
-				const bool userModifyingGameCameraInEditorMode{ SceneManager::Instance->isEditorMode() && !SceneManager::Instance->useEditorCamera };
+				const bool userCheckingGameInPlayMode{ FSceneManagerEditor::Instance->isPlayMode() || FSceneManagerEditor::Instance->isPauseMode() };
+				const bool userModifyingGameCameraInEditorMode{ FSceneManagerEditor::Instance->isEditorMode() && !FSceneManagerEditor::Instance->usingEditorCamera() };
 				if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
 					pushEntityCameraToPipeline(entity);
 				}

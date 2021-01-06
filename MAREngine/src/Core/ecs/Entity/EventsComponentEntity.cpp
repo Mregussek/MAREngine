@@ -20,7 +20,7 @@
 
 #include "EventsComponentEntity.h"
 #include "Entity.h"
-#include "../SceneManager.h"
+#include "../SceneManagerEditor.h"
 #include "../Scene.h"
 #include "../Components/Components.h"
 #include "../../graphics/Mesh/EventsMeshBatchStatic.h"
@@ -44,8 +44,8 @@ namespace marengine {
 			FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 		};
 
-		const bool userCheckingGameInPlayMode{ SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode() };
-		const bool userModifyingGameCameraInEditorMode{ SceneManager::Instance->isEditorMode() && !SceneManager::Instance->useEditorCamera };
+		const bool userCheckingGameInPlayMode{ FSceneManagerEditor::Instance->isPlayMode() || FSceneManagerEditor::Instance->isPauseMode() };
+		const bool userModifyingGameCameraInEditorMode{ FSceneManagerEditor::Instance->isEditorMode() && !FSceneManagerEditor::Instance->usingEditorCamera() };
 
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
 			updateCameraOperation();
@@ -58,7 +58,7 @@ namespace marengine {
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() {
-		Scene* scene{ SceneManager::Instance->getScene() };
+		Scene* scene{ FSceneManagerEditor::Instance->getScene() };
 
 		auto hasMainCamera = [&scene](entt::entity entity) {
 			const auto& cam = scene->getComponent<CameraComponent>(entity);
@@ -107,16 +107,16 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) const {
 		entity.addComponent<RenderableComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) const {
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity) const {
 		entity.removeComponent<RenderableComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	/**************************************************************************************************
@@ -125,7 +125,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) const {
 		entity.addComponent<ColorComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const {
@@ -134,7 +134,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const {
 		entity.removeComponent<ColorComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	/**************************************************************************************************
@@ -142,12 +142,12 @@ namespace marengine {
 	***************************************************************************************************/
 
 	template<> void FEventsComponentEntity::onUpdate<Texture2DComponent>(const Entity& entity) const {
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const {
 		entity.removeComponent<Texture2DComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	/**************************************************************************************************
@@ -155,12 +155,12 @@ namespace marengine {
 	***************************************************************************************************/
 
 	template<> void FEventsComponentEntity::onUpdate<TextureCubemapComponent>(const Entity& entity) const {
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity) const {
 		entity.removeComponent<TextureCubemapComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	/**************************************************************************************************
@@ -169,7 +169,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity) const {
 		entity.addComponent<PointLightComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<PointLightComponent>(const Entity& entity) const {
@@ -178,7 +178,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onRemove<PointLightComponent>(const Entity& entity) const {
 		entity.removeComponent<PointLightComponent>();
-		SceneManager::Instance->initialize();
+		FSceneManagerEditor::Instance->initialize();
 	}
 
 	/**************************************************************************************************

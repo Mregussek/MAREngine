@@ -20,7 +20,7 @@
 
 #include "RenderStatistics.h"
 #include "RenderPipeline.h"
-#include "../../ecs/SceneManager.h"
+#include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Scene.h"
 
 
@@ -49,7 +49,7 @@ namespace marengine {
 		});
 
 		entitiesCount = {
-			SceneManager::Instance->getScene()->getEntities().size()
+			FSceneManagerEditor::Instance->getScene()->getEntities().size()
 		};
 	}
 

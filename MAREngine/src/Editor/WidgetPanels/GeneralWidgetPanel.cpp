@@ -22,7 +22,7 @@
 #include "../EditorLogging.h"
 #include "../Camera/Camera.h"
 #include "../../Core/ecs/Scene.h"
-#include "../../Core/ecs/SceneManager.h"
+#include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Window/Window.h"
 
 
@@ -39,7 +39,7 @@ namespace marengine {
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-		SceneManager::Instance->useEditorCamera = true;
+		FSceneManagerEditor::Instance->useEditorCamera();
 
 		EDITOR_INFO("GUI: initialized properly!");
 	}
