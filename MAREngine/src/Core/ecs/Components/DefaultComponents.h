@@ -80,20 +80,6 @@ namespace marengine {
 
 	};
 
-	struct MeshBatchComponent {
-
-		FMeshBatchStatic* assignedMesh{ nullptr };
-		uint32_t materialIndex{ 0 };
-		uint32_t transformIndex{ 0 };
-		
-	};
-
-	struct LightBatchComponent {
-
-		uint32_t pointLightIndex{ 0 };
-
-	};
-
 
 }
 

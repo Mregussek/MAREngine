@@ -37,33 +37,30 @@ namespace marengine {
 
 		virtual void reset() = 0;
 
-		virtual bool hasAnythingToDraw() const = 0;
-
-		virtual bool canBeBatched(const Entity& entity) const = 0;
-		virtual void submitToBatch(const Entity& entity) = 0;
-
 		virtual const FVertexArray& getVertices() const = 0;
 		virtual const FIndicesArray& getIndices() const = 0;
 		virtual const FTransformsArray& getTransforms() const = 0;
 
-		virtual uint32_t getUniquePipelineID() const = 0;
-		virtual void setUniquePipelineID(uint32_t id) = 0;
+		virtual bool canBeBatched(const Entity& entity) const = 0;
+		virtual void submitToBatch(const Entity& entity) = 0;
 
-		virtual uint32_t getTransformsSSBOindex() const = 0;
-		virtual void setTransformsSSBOindex(uint32_t index) = 0;
+		virtual void setUniquePipelineID(uint32_t id) = 0;
+		virtual uint32_t getUniquePipelineID() const = 0;
+
+		virtual uint32_t getUniqueTransformsID() const = 0 ;
+		virtual void seUniqueTransformsID(uint32_t id) = 0;
 
 	protected:
 
-		virtual void submitRenderableComponent(const RenderableComponent& renderableComponent) = 0;
+		virtual void submitRenderable(const RenderableComponent& renderableComponent) = 0;
 		virtual void submitVertices(const FVertexArray& vertices) = 0;
 		virtual void submitIndices(const FIndicesArray& indices) = 0;
-		virtual void submitTransformComponent(const TransformComponent& transformComponent) = 0;
+		virtual void submitTransform(const TransformComponent& transformComponent) = 0;
 
 	};
-
+	
 
 }
-
 
 
 #endif // !MAR_ENGINE_I_MESH_BATCH_H

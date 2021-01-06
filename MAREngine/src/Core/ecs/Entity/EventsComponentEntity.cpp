@@ -19,23 +19,31 @@
 
 
 #include "EventsComponentEntity.h"
-#include "../ECSLogs.h"
-#include "../../graphics/RenderAPI/RenderManager.h"
-#include "../../graphics/RenderAPI/RenderManagerEvents.h"
+#include "Entity.h"
 #include "../SceneManager.h"
 #include "../Scene.h"
+#include "../Components/Components.h"
+#include "../../graphics/Mesh/EventsMeshBatchStatic.h"
+#include "../../graphics/Lightning/EventsLightBatch.h"
+#include "../../graphics/RenderAPI/RenderPipeline.h"
+#include "../../graphics/RenderAPI/RenderBufferManager.h"
 
 
 namespace marengine {
 
 
 	const FEventsComponentEntity* FEventsComponentEntity::Instance{ nullptr };
+	const FEventsCameraEntity* FEventsCameraEntity::Instance{ nullptr };
 
 
-	void FEventsComponentEntity::onMainCameraUpdate(const Entity& entity) const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: onMainCameraUpdate, entity {}", entity.getComponent<TagComponent>().tag);
-
+	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) const {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+
+		auto updateCameraOperation = [&entity, &cameraComponent, this]() {
+			const auto& transform = entity.getComponent<TransformComponent>();
+			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
+			FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
+		};
 
 		const bool userCheckingGameInPlayMode{
 			SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode()
@@ -57,25 +65,27 @@ namespace marengine {
 		}
 	}
 
-	void FEventsComponentEntity::onEditorCameraSet(const RenderCamera* camera) const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: onEditorCameraSet");
-
-		FRenderManager::Instance->setRenderCamera(camera);
+	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* renderCamera) const {
+		RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
+		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
 	}
 
-	void FEventsComponentEntity::onGameCameraSet() const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: onGameCameraSet");
-
+	void FEventsCameraEntity::onGameCameraSet() const {
 		Scene* scene{ SceneManager::Instance->getScene() };
+
+		auto hasMainCamera = [&scene](entt::entity entity) {
+			const auto& cam = scene->getComponent<CameraComponent>(entity);
+			return cam.isMainCamera();
+		};
 
 		auto view = scene->getView<CameraComponent>();
 		view.each([&scene](entt::entity entt_entity, CameraComponent& cameraComponent) {
 			if (cameraComponent.isMainCamera()) {
-				ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: onGameCameraSet, found main in-game cameraComponent, setting...");
-
 				const auto& transform{ scene->getComponent<TransformComponent>(entt_entity) };
 				cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-				FRenderManager::Instance->setRenderCamera(&cameraComponent.renderCamera);
+
+				RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
+				FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 			}
 		});
 	}
@@ -85,21 +95,22 @@ namespace marengine {
 	***************************************************************************************************/
 
 	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: updating transform component of entity {}", entity.getComponent<TagComponent>().tag);
+		const auto& transform = entity.getComponent<TransformComponent>();
+		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
+
+		if (renderPipelineComponent.materialType > 0) { // need to check if it is rendered
+			FEventsMeshBatchStatic::onTransformUpdate(entity);
+		}
 
 		if (entity.hasComponent<CameraComponent>()) {
-			const auto& camera{ entity.getComponent<CameraComponent>() };
-			if (camera.isMainCamera()) { 
-				onMainCameraUpdate(entity); 
+			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+			if (cameraComponent.isMainCamera()) {
+				FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 			}
 		}
 
 		if (entity.hasComponent<LightComponent>()) {
-			FRenderManagerEvents::onPointLightAtBatchUpdate(entity);
-		}
-
-		if (entity.hasComponent<RenderableComponent>() && entity.hasAnyMaterial()) {
-			FRenderManagerEvents::onTransformAtMeshUpdate(entity);
+			FEventsLightBatch::onPointLightPositionUpdate(entity);
 		}
 	}
 
@@ -111,6 +122,7 @@ namespace marengine {
 		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: adding renderable component to entity {}...", entity.getComponent<TagComponent>().tag);
 
 		entity.addComponent<RenderableComponent>();
+		SceneManager::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) const {
@@ -139,9 +151,7 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: updated color component at entity {}", entity.getComponent<TagComponent>().tag);
-
-		FRenderManagerEvents::onColorAtMeshUpdate(entity);
+		FEventsMeshBatchStatic::onColorUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const {
@@ -193,16 +203,12 @@ namespace marengine {
 	***************************************************************************************************/
 
 	template<> void FEventsComponentEntity::onAdd<LightComponent>(const Entity& entity) const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: adding LightComponent component to entity {}...", entity.getComponent<TagComponent>().tag);
-
 		entity.addComponent<LightComponent>();
 		SceneManager::Instance->initialize();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<LightComponent>(const Entity& entity) const {
-		ECS_DEBUG("F_EVENTS_COMPONENT_ENTITY: updated LightComponent component at entity {}...", entity.getComponent<TagComponent>().tag);
-
-		FRenderManagerEvents::onPointLightAtBatchUpdate(entity);
+		FEventsLightBatch::onPointLightUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<LightComponent>(const Entity& entity) const {

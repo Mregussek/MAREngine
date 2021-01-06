@@ -18,18 +18,41 @@
 **/
 
 
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.cpp
 #include "RendererEvents.h"
 #include "../RenderAPI/RenderStatistics.h"
+=======
+#ifndef MAR_ENGINE_F_EVENTS_LIGHT_BATCH_H
+#define MAR_ENGINE_F_EVENTS_LIGHT_BATCH_H
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Lightning/EventsLightBatch.h
 
 
 namespace marengine {
 
+	class Entity;
 
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.cpp
 	void FRendererEvents::onDrawCall() {
 
 		RenderStatistics::Instance->drawCallsCount++;
 
 	}
+=======
 
+	class FEventsLightBatch {
+	public:
 
+		static void onPointLightUpdate(const Entity& entity);
+		static void onPointLightPositionUpdate(const Entity& entity);
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Lightning/EventsLightBatch.h
+
+	};
+
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.cpp
 }
+=======
+}
+
+
+#endif // !MAR_ENGINE_F_EVENTS_LIGHT_BATCH_H
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Lightning/EventsLightBatch.h

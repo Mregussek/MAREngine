@@ -22,8 +22,8 @@
 #define MAR_ENGINE_F_MESH_BATCH_STATIC_COLOR_H
 
 
-#include "MeshBatchStatic.h"
 #include "MeshDefinitions.h"
+#include "MeshBatchStatic.h"
 
 
 namespace marengine {
@@ -34,28 +34,27 @@ namespace marengine {
 
 	class FMeshBatchStaticColor : public FMeshBatchStatic {
 
-		friend class FRenderManagerEvents;
+		friend class FEventsMeshBatchStatic;
 
 	public:
 
 		virtual void reset() override;
-
 		virtual bool canBeBatched(const Entity& entity) const override;
 		virtual void submitToBatch(const Entity& entity) override;
 
 		const FColorsArray& getColors() const;
 
-		uint32_t getColorsSSBOindex() const;
-		void setColorsSSBOindex(uint32_t index);
-
-	protected:
-
-		void submitColorComponent(const ColorComponent& colorComponent);
+		uint32_t getUniqueColorsID() const;
+		void setUniqueColorsID(uint32_t id);
 
 	private:
 
+		void submitColor(const ColorComponent& colorComponent);
+
+
 		FColorsArray m_colors;
-		uint32_t m_colorsSSBOindex{ 0 };
+		uint32_t m_uniqueColorsID{ 0 };
+		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::COLOR };
 
 	};
 

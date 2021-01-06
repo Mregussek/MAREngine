@@ -35,10 +35,9 @@ namespace marengine {
 
 		m_memorizer.Instance = &m_memorizer;
 		m_statistics.Instance = &m_statistics;
-		m_shaderBufferStorage.Instance = &m_shaderBufferStorage;
-		m_pipelineStorage.Instance = &m_pipelineStorage;
-		m_renderManager.Instance = &m_renderManager;
-
+		m_renderPipeline.Instance = &m_renderPipeline;
+		m_pipelineManager.Instance = &m_pipelineManager;
+		
 		m_renderer.initialize();
 	}
 
@@ -57,15 +56,16 @@ namespace marengine {
 			m_renderer.draw(batchStaticTexture2D, batchPointLight);
 		}
 
+		m_statistics.reset();
+		m_renderer.draw();
 		m_statistics.update();
 	}
 
 	void RenderLayer::close() {
 		LAYER_TRACE("RENDER_LAYER: {} going to close...", p_debugName);
 	
-		TextureOpenGL::Instance()->shutdown();
-		m_shaderBufferStorage.close();
-		m_pipelineStorage.close();
+		m_renderPipeline.reset();
+		m_pipelineManager.close();
 
 		m_renderer.close();
 	}

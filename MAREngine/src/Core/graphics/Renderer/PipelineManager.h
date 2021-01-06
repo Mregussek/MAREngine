@@ -1,0 +1,65 @@
+/**
+ *           MAREngine - open source 3D game engine
+ * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+ * All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+**/
+
+
+#ifndef MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
+#define MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
+
+
+#include "RendererDefinitions.h"
+
+
+namespace marengine {
+	
+
+	class FPipelineManager {
+	public:
+
+		static FPipelineManager* Instance;
+
+		FPipeline& createPipeline();
+		FShaderStorageBuffer& createSSBO();
+		FUniformBuffer& createUBO();
+
+		const FPipelinesArray& getPipelines() const;
+		const FShaderStorageBuffersArray& getSSBOs() const;
+		const FUniformBuffersArray& getUBOs() const;
+
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/PipelineStorage.h
+=======
+		const FPipeline& getPipeline(uint32_t index) const;
+		const FShaderStorageBuffer& getSSBO(uint32_t index) const;
+		const FUniformBuffer& getUBO(uint32_t index) const;
+
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Renderer/PipelineManager.h
+		void close();
+
+	private:
+
+		FPipelinesArray m_pipelines;
+		FShaderStorageBuffersArray m_shaderStorageBuffers;
+		FUniformBuffersArray m_uniformBuffers;
+
+	};
+
+
+}
+
+
+#endif // !MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H

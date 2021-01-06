@@ -18,35 +18,24 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_SCENE_DESERIALIZER_H
-#define MAR_ENGINE_F_SCENE_DESERIALIZER_H
-
-
-#include "../../mar.h"
+#ifndef MAR_ENGINE_F_EVENTS_LIGHT_BATCH_H
+#define MAR_ENGINE_F_EVENTS_LIGHT_BATCH_H
 
 
 namespace marengine {
 
-	class Scene;
 	class Entity;
 
 
-	class FSceneDeserializer {
+	class FEventsLightBatch {
 	public:
 
-		static Scene* oldWayLoadingFile(const std::string& path);
-		static Scene* loadSceneFromFile(const std::string& path);
-
-	private:
-
-		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
-		static void loadScene(std::ifstream& file, Scene* scene);
-		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
+		static void onPointLightUpdate(const Entity& entity);
+		static void onPointLightPositionUpdate(const Entity& entity);
 
 	};
-
 
 }
 
 
-#endif // !MAR_ENGINE_F_SCENE_DESERIALIZER_H
+#endif // !MAR_ENGINE_F_EVENTS_LIGHT_BATCH_H

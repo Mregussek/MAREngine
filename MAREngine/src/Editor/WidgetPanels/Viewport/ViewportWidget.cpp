@@ -23,11 +23,8 @@
 #include "../../EditorLogging.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/SceneManager.h"
-#include "../../../Core/ecs/Scene.h"
-#include "../../../Window/Window.h"
-#include "../../../Platform/OpenGL/SetupOpenGL.h"
 #include "../../../Core/ecs/Entity/EventsComponentEntity.h"
-#include "../../../Core/graphics/RenderAPI/RenderManagerEvents.h"
+#include "../../../Core/graphics/RenderAPI/RenderBufferManager.h"
 
 
 namespace marengine {
@@ -41,7 +38,7 @@ namespace marengine {
 
 		m_camera.initialize(m_aspectRatio);
 
-		FEventsComponentEntity::Instance->onEditorCameraSet(m_camera.getCameraData());
+		FEventsCameraEntity::Instance->onEditorCameraSet(m_camera.getCameraData());
 	}
 
 	void WViewportWidget::destroy() {
@@ -87,10 +84,10 @@ namespace marengine {
 			if (ImGui::Checkbox("UseCameraEditor", &sceneManager->useEditorCamera)) {
 				if (sceneManager->isEditorMode()) {
 					if (sceneManager->useEditorCamera) {
-						FEventsComponentEntity::Instance->onEditorCameraSet(camera.getCameraData());
+						FEventsCameraEntity::Instance->onEditorCameraSet(camera.getCameraData());
 					}
 					else {
-						FEventsComponentEntity::Instance->onGameCameraSet();
+						FEventsCameraEntity::Instance->onGameCameraSet();
 					}
 				}
 			}
@@ -100,7 +97,7 @@ namespace marengine {
 			if (ImGui::Button("STOP")) {
 				sceneManager->setExitPlayMode();
 				if (sceneManager->useEditorCamera) {
-					FEventsComponentEntity::Instance->onEditorCameraSet(camera.getCameraData());
+					FEventsCameraEntity::Instance->onEditorCameraSet(camera.getCameraData());
 				}
 			}
 
@@ -149,7 +146,7 @@ namespace marengine {
 				bool useInputInCamera = false;
 				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
 				if (m_camera.update(m_aspectRatio, useInputInCamera)) {
-					FRenderManagerEvents::onRenderCameraUpdate(m_camera.getCameraData());
+					FRenderBufferManager::onRenderCameraUpdate(m_camera.getCameraData());
 				}
 			}
 		}

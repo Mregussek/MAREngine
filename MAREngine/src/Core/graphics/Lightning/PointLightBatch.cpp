@@ -54,34 +54,34 @@ namespace marengine {
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		const auto& lightComponent{ entity.getComponent<LightComponent>() };
 
-		LightMaterial& lightMaterial{ m_lights.emplace_back() };
-		lightMaterial.position = maths::vec4(transformComponent.center, 1.f);
-		lightMaterial.ambient = lightComponent.ambient;
-		lightMaterial.diffuse = lightComponent.diffuse;
-		lightMaterial.specular = lightComponent.specular;
-		lightMaterial.linear = lightComponent.linear;
-		lightMaterial.quadratic = lightComponent.quadratic;
-		lightMaterial.constant = lightComponent.constant;
-		lightMaterial.shininess = lightComponent.shininess;
+		FPointLight& pointLightData{ m_lights.emplace_back() };
+		pointLightData.position = maths::vec4(transformComponent.center, 1.f);
+		pointLightData.ambient = lightComponent.ambient;
+		pointLightData.diffuse = lightComponent.diffuse;
+		pointLightData.specular = lightComponent.specular;
+		pointLightData.linear = lightComponent.linear;
+		pointLightData.quadratic = lightComponent.quadratic;
+		pointLightData.constant = lightComponent.constant;
+		pointLightData.shininess = lightComponent.shininess;
 
-		auto& lightBatchComponent{ entity.getComponent<LightBatchComponent>() };
-		lightBatchComponent.pointLightIndex = m_lights.size() - 1;
+		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
+		rpc.lightIndex = m_lights.size() - 1;
 
 		GRAPHICS_DEBUG("F_POINT_LIGHT_BATCH: submitted {} entity with pointLight, current lights size = {},"
-			"assigned lightBatchComponent.pointLightIndex {}",
-			entity.getComponent<TagComponent>().tag, m_lights.size(), lightBatchComponent.pointLightIndex);
+			"assigned rpc.lightIndex {}",
+			entity.getComponent<TagComponent>().tag, m_lights.size(), rpc.lightIndex);
 	}
 
 	const FPointLightsArray& FPointLightBatch::getLights() const {
 		return m_lights;
 	}
 
-	uint32_t FPointLightBatch::getPointLightSSBOindex() const {
-		return m_pointLightSSBOindex;
+	uint32_t FPointLightBatch::getUniquePointLightID() const {
+		return m_uniquePointLightID;
 	}
 
-	void FPointLightBatch::setPointLightSSBOindex(uint32_t index) {
-		m_pointLightSSBOindex = index;
+	void FPointLightBatch::setUniquePointLightID(uint32_t index) {
+		m_uniquePointLightID = index;
 	}
 
 

@@ -30,5 +30,6 @@
   <ItemGroup>
     <None Include="imgui.ini" />
     <None Include="desktop.ini" />
+    <None Include="resources\shaders\color.vert.glsl" />
   </ItemGroup>
 </Project>

@@ -60,23 +60,24 @@ namespace marengine {
 		inline static const UniformItem MVP{ "Camera.MVP", 0, sizeof(maths::mat4) };
 		inline static const UniformBuffer CameraSSBO{ "CameraSSBO", 0, MVP.memory };
 
-		// ------------ EntityCmp Uniform Block
+		// ------------ Transform Uniform Block
 
-		inline static const UniformItem Transform{ "Transforms.Transform", 0, 64 * sizeof(maths::mat4) };
-		inline static const UniformBuffer TransformSSBO{ "TransformSSBO", 1,  Transform.memory };
+		inline static const UniformItem Transform{ "Transforms.Transform", 0, 32 * sizeof(maths::mat4) };
+		inline static const UniformBuffer TransformColorSSBO{ "TransformColorSSBO", 5,  Transform.memory };
+		inline static const UniformBuffer TransformTexture2DSSBO{ "TransformTexture2DSSBO", 1,  Transform.memory };
 
-		// ------------ Material Uniform Block
+		// ------------ Point Light Uniform Block
 
 		inline static const UniformItem LightMaterial{ "PointLigts.LightMaterial", 0,  32 * (4 * sizeof(maths::vec4) + 4 * sizeof(float)) };
 		inline static const UniformItem LightMaterialSize{ "PointLigts.LightMaterialSize", LightMaterial.memory, sizeof(int32_t) };
 		inline static const UniformBuffer PointLightSSBO{ "PointLightSSBO", 2, LightMaterial.memory + LightMaterialSize.memory };
 
-		// -------------- TextureSamplers Uniform Block
+		// -------------- Color Uniform Block
 
 		inline static const UniformItem Colors{ "Colors.Color", 0, 32 * sizeof(maths::vec4) };
 		inline static const UniformBuffer ColorsSSBO{ "ColorsSSBO", 3, Colors.memory };
 
-		// -------------- u_2D Uniform Block
+		// -------------- Texture2D Uniform Block
 
 		inline static const UniformBuffer samplerTexture2D{ "samplerTexture2D", 4, 32 * sizeof(int32_t) };
 
@@ -115,7 +116,7 @@ namespace marengine {
 			"samplerTexture2D[31]"
 		};
 
-		// -------------- u_2D Uniform Block
+		// -------------- Cubemap Uniform Block
 
 		inline static const UniformBuffer ub_u_Cubemap{ "u_Cubemap", 4, 32 * sizeof(int32_t) };
 

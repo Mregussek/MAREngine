@@ -28,7 +28,7 @@
 namespace marengine {
 
 
-	struct LightMaterial {
+	struct FPointLight {
 
 		maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
 		maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
@@ -43,7 +43,7 @@ namespace marengine {
 	};
 
 
-	typedef std::vector<LightMaterial> FPointLightsArray;
+	typedef std::vector<FPointLight> FPointLightsArray;
 
 
 }

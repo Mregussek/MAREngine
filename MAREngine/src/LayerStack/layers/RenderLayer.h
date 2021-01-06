@@ -27,9 +27,8 @@
 #include "../../Core/graphics/RenderAPI/RenderStatistics.h"
 #include "../../Core/graphics/RenderAPI/RenderManager.h"
 #include "../../Core/graphics/Renderer/RendererBatch.h"
-#include "../../Core/graphics/RenderAPI/RenderMemorizer.h"
-#include "../../Core/graphics/Renderer/ShaderBufferStorage.h"
-#include "../../Core/graphics/Renderer/PipelineStorage.h"
+#include "../../Core/graphics/Renderer/RenderMemorizer.h"
+#include "../../Core/graphics/Renderer/PipelineManager.h"
 
 
 namespace marengine {
@@ -50,8 +49,6 @@ namespace marengine {
 	private:
 
 		RendererBatch m_renderer;
-		RenderStatistics m_statistics;
-		ShaderBufferStorage m_shaderBufferStorage;
 		RenderMemorizer m_memorizer;
 		PipelineStorage m_pipelineStorage;
 		FRenderManager m_renderManager;

@@ -18,40 +18,36 @@
 **/
 
 
-#ifndef MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
-#define MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
-
-
-#include "../../../mar.h"
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.h
+#ifndef MAR_ENGINE_F_RENDERER_EVENTS_H
+#define MAR_ENGINE_F_RENDERER_EVENTS_H
+=======
+#include "RenderCameraEvents.h"
+#include "RenderBufferManager.h"
+>>>>>>> renderissue:MAREngine/src/Core/graphics/RenderAPI/RenderCameraEvents.cpp
 
 
 namespace marengine {
-	
-	class RenderContainer;
 
 
-	class PipelineStorage {
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Renderer/RendererEvents.h
+	class FRendererEvents {
 	public:
 
-		static PipelineStorage* Instance;
-
-		PipelineOpenGL& createPipeline();
-
-		const std::vector<PipelineOpenGL>& getPipelines() const;
-
-		const PipelineOpenGL& getPipeline(uint32_t index) const;
-
-		void close();
-
-	private:
-
-		std::vector<PipelineOpenGL> m_buffers;
+		static void onDrawCall();
 
 	};
 
 
+};
+
+
+#endif // !MAR_ENGINE_F_RENDERER_EVENTS_H
+=======
+	void FRenderCameraEvents::onMainCameraUpdate(const RenderCamera* renderCamera) {
+		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
+	}
+
+
 }
-
-
-#endif // !MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
+>>>>>>> renderissue:MAREngine/src/Core/graphics/RenderAPI/RenderCameraEvents.cpp

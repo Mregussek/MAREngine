@@ -306,7 +306,7 @@ namespace marengine {
 		}
 
 		if (updatedCamera) {
-			FEventsComponentEntity::Instance->onMainCameraUpdate(*currentEntity);
+			FEventsComponentEntity::Instance->onUpdate<CameraComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");

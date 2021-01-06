@@ -21,8 +21,8 @@
 #include "SceneManager.h"
 #include "ECSLogs.h"
 #include "Scene.h"
-#include "Entity/EventsComponentEntity.h"
-#include "../graphics/RenderAPI/RenderManager.h"
+#include "../ecs/Entity/EventsComponentEntity.h"
+#include "../graphics/RenderAPI/RenderPipeline.h"
 
 
 namespace marengine {
@@ -36,8 +36,11 @@ namespace marengine {
 
 		const auto& entitiesVector = m_scene->getEntities();
 
-		FRenderManager::Instance->reset();
-		FRenderManager::Instance->batchEntities(entitiesVector);
+		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
+			RenderPipeline::Instance->pushEntityToPipeline(entity);
+		});
+
+		RenderPipeline::Instance->onBatchesReadyToDraw();
 
 		ECS_INFO("SCENE_MANAGER: initialized!");
 	}
@@ -66,7 +69,7 @@ namespace marengine {
 	void SceneManager::setPlayMode() { 
 		m_EditorMode = false; 
 		initPlayMode(); 
-		FEventsComponentEntity::Instance->onGameCameraSet();
+		FEventsCameraEntity::Instance->onGameCameraSet();
 	}
 
 	void SceneManager::setExitPlayMode() { 

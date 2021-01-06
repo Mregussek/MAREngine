@@ -62,7 +62,11 @@ namespace marengine {
 		LayerStack layerStack{};
 
 		//auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
+<<<<<<< HEAD
 		auto* scene = oldFileLoading("DefaultProject/Scenes/only_colors.marscene");
+=======
+		auto* scene = FSceneDeserializer::oldWayLoadingFile("DefaultProject/Scenes/DefaultProject.marscene");
+>>>>>>> renderissue
 		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");

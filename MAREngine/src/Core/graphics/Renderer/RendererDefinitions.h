@@ -18,35 +18,30 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_SCENE_DESERIALIZER_H
-#define MAR_ENGINE_F_SCENE_DESERIALIZER_H
+#ifndef MAR_ENGINE_RENDERER_DEFINITIONS_H
+#define MAR_ENGINE_RENDERER_DEFINITIONS_H
 
 
-#include "../../mar.h"
+#include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "../../../Platform/OpenGL/ShaderBufferStorageOpenGL.h"
+#include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
 
 
 namespace marengine {
 
-	class Scene;
-	class Entity;
 
+	typedef PipelineOpenGL FPipeline;
+	typedef std::vector<FPipeline> FPipelinesArray;
 
-	class FSceneDeserializer {
-	public:
+	typedef ShaderBufferStorageOpenGL FShaderStorageBuffer;
+	typedef std::vector<FShaderStorageBuffer> FShaderStorageBuffersArray;
 
-		static Scene* oldWayLoadingFile(const std::string& path);
-		static Scene* loadSceneFromFile(const std::string& path);
-
-	private:
-
-		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
-		static void loadScene(std::ifstream& file, Scene* scene);
-		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
-
-	};
+	typedef UniformBufferOpenGL FUniformBuffer;
+	typedef std::vector<FUniformBuffer> FUniformBuffersArray;
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_SCENE_DESERIALIZER_H
+
+#endif // !MAR_ENGINE_RENDERER_DEFINITIONS_H

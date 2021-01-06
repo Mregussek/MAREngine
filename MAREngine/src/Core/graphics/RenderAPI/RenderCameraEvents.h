@@ -18,30 +18,19 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_SCENE_DESERIALIZER_H
-#define MAR_ENGINE_F_SCENE_DESERIALIZER_H
-
-
-#include "../../mar.h"
+#ifndef MAR_ENGINE_F_RENDER_CAMERA_EVENTS_H
+#define MAR_ENGINE_F_RENDER_CAMERA_EVENTS_H
 
 
 namespace marengine {
 
-	class Scene;
-	class Entity;
+	class RenderCamera;
 
 
-	class FSceneDeserializer {
+	class FRenderCameraEvents {
 	public:
-
-		static Scene* oldWayLoadingFile(const std::string& path);
-		static Scene* loadSceneFromFile(const std::string& path);
-
-	private:
-
-		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
-		static void loadScene(std::ifstream& file, Scene* scene);
-		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
+		
+		static void onMainCameraUpdate(const RenderCamera* renderCamera);
 
 	};
 
@@ -49,4 +38,5 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_F_SCENE_DESERIALIZER_H
+
+#endif // !MAR_ENGINE_F_RENDER_CAMERA_EVENTS_H

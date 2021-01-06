@@ -23,22 +23,29 @@
 
 
 #include "IMeshBatch.h"
+#include "MeshDefinitions.h"
 
 
 namespace marengine {
 
+	class Entity;
+	struct RenderableComponent;
+	struct TransformComponent;
+
+	enum class EMeshBatchStaticType {
+		NONE = -1,
+		COLOR = 1, 
+		TEXTURE2D = 2
+	};
+
 
 	class FMeshBatchStatic : public IMeshBatch {
-
-		friend class FRenderManagerEvents;
-
 	public:
 
 		virtual void reset() override;
-		
-		virtual bool hasAnythingToDraw() const override;
 
 		virtual bool canBeBatched(const Entity& entity) const override;
+
 		virtual void submitToBatch(const Entity& entity) override;
 
 		virtual const FVertexArray& getVertices() const override;
@@ -48,25 +55,25 @@ namespace marengine {
 		virtual uint32_t getUniquePipelineID() const override;
 		virtual void setUniquePipelineID(uint32_t id) override;
 
-		virtual uint32_t getTransformsSSBOindex() const override;
-		virtual void setTransformsSSBOindex(uint32_t index) override;
+		virtual uint32_t getUniqueTransformsID() const override;
+		virtual void seUniqueTransformsID(uint32_t id) override;
 
 	protected:
 
-		virtual void submitRenderableComponent(const RenderableComponent& renderableComponent) override;
+		virtual void submitRenderable(const RenderableComponent& renderableComponent) override;
 		virtual void submitVertices(const FVertexArray& vertices) override;
 		virtual void submitIndices(const FIndicesArray& indices) override;
-		virtual void submitTransformComponent(const TransformComponent& transformComponent) override;
+		virtual void submitTransform(const TransformComponent& transformComponent) override;
 
 
 		FVertexArray p_vertices;
 		FIndicesArray p_indices;
 		FTransformsArray p_transforms;
 
-		float p_meshID{ 0 };
+		float p_shapeID{ 0.f };
 		uint32_t p_indicesMaxValue{ 0 };
 		uint32_t p_uniquePipelineID{ 0 };
-		uint32_t p_transformsSSBOindex{ 0 };
+		uint32_t p_transformsUniqueID{ 0 };
 
 	};
 
@@ -74,5 +81,4 @@ namespace marengine {
 }
 
 
-
-#endif // !MAR_ENGINE_I_STATIC_MESH_BATCH_H
+#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_H

@@ -18,21 +18,53 @@
 **/
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Lightning/PointLightBatch.h
+=======
+>>>>>>> renderissue
 #ifndef MAR_ENGINE_F_POINT_LIGHT_BATCH_H
 #define MAR_ENGINE_F_POINT_LIGHT_BATCH_H
 
 
 #include "LightDefinitions.h"
+<<<<<<< HEAD
+=======
+#ifndef MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
+#define MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
+
+
+#include "MeshBatchStatic.h"
+#include "MeshDefinitions.h"
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Mesh/MeshBatchStaticTexture2D.h
+=======
+>>>>>>> renderissue
 
 
 namespace marengine {
 
 	class Entity;
+<<<<<<< HEAD
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Lightning/PointLightBatch.h
+=======
+	struct Texture2DComponent;
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Mesh/MeshBatchStaticTexture2D.h
+
+	
+	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
+
+		friend class FEventsMeshBatchStatic;
+
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Lightning/PointLightBatch.h
+	class FPointLightBatch {
+
+		friend class FRenderManagerEvents;
+=======
 
 
 	class FPointLightBatch {
 
-		friend class FRenderManagerEvents;
+		friend class FEventsLightBatch;
+>>>>>>> renderissue
 
 	public:
 
@@ -45,13 +77,41 @@ namespace marengine {
 
 		const FPointLightsArray& getLights() const;
 
+<<<<<<< HEAD
 		uint32_t getPointLightSSBOindex() const;
 		void setPointLightSSBOindex(uint32_t index);
+=======
+		uint32_t getUniquePointLightID() const;
+		void setUniquePointLightID(uint32_t index);
+>>>>>>> renderissue
 
 	private:
 
 		FPointLightsArray m_lights;
+<<<<<<< HEAD
 		uint32_t m_pointLightSSBOindex{ 0 };
+=======
+	public:
+
+		virtual void reset() override;
+
+		virtual bool canBeBatched(const Entity& entity) const override;
+
+		virtual void submitToBatch(const Entity& entity) override;
+
+		const FTexturesArray& getTextures() const;
+
+	private:
+
+		void submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent);
+
+
+		FTexturesArray m_textures;
+		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::TEXTURE2D };
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Mesh/MeshBatchStaticTexture2D.h
+=======
+		uint32_t m_uniquePointLightID{ 0 };
+>>>>>>> renderissue
 
 	};
 	
@@ -59,5 +119,14 @@ namespace marengine {
 }
 
 
+<<<<<<< HEAD
+<<<<<<< HEAD:MAREngine/src/Core/graphics/Lightning/PointLightBatch.h
 
 #endif // !MAR_ENGINE_F_POINT_LIGHT_BATCH_H
+=======
+#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
+>>>>>>> renderissue:MAREngine/src/Core/graphics/Mesh/MeshBatchStaticTexture2D.h
+=======
+
+#endif // !MAR_ENGINE_F_POINT_LIGHT_BATCH_H
+>>>>>>> renderissue

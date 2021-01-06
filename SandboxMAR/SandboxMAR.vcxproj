@@ -162,6 +162,7 @@
   <ItemGroup>
     <None Include="desktop.ini" />
     <None Include="imgui.ini" />
+    <None Include="resources\shaders\color.vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

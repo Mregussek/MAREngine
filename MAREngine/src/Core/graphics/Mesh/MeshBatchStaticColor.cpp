@@ -19,25 +19,25 @@
 
 
 #include "MeshBatchStaticColor.h"
-#include "../GraphicsLogs.h"
+#include "../GraphicsLimits.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
+#include "../RenderAPI/RenderPipeline.h"
 
 
 namespace marengine {
-
 
 
 	void FMeshBatchStaticColor::reset() {
 		FMeshBatchStatic::reset();
 
 		m_colors.clear();
-
-		m_colorsSSBOindex = 0;
 	}
 
 	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
-		if(entity.hasComponent<ColorComponent>() && FMeshBatchStatic::canBeBatched(entity)) {
+		const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
+
+		if (baseClassPermission && entity.hasComponent<ColorComponent>()) {
 			return true;
 		}
 		else {
@@ -46,38 +46,29 @@ namespace marengine {
 	}
 
 	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_COLOR: submitting {} entity to batching...", entity.getComponent<TagComponent>().tag);
-
 		FMeshBatchStatic::submitToBatch(entity);
 
-		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		submitColorComponent(colorComponent);
+		submitColor(entity.getComponent<ColorComponent>());
 
-		auto& meshBatchComponent{ entity.getComponent<MeshBatchComponent>() };
-		meshBatchComponent.materialIndex = m_colors.size() - 1;
-
-		GRAPHICS_DEBUG("F_MESH_BATCH_STATIC_COLOR: submitted to batch entity {}, meshBatchComponent.materialIndex = {}",
-			entity.getComponent<TagComponent>().tag, meshBatchComponent.materialIndex);
+		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
+		rpc.colorIndex = m_colors.size() - 1;
+		rpc.materialType = (size_t)s_meshBatchType;
 	}
 
-	void FMeshBatchStaticColor::submitColorComponent(const ColorComponent& colorComponent) {
-		GRAPHICS_TRACE("F_MESH_BATCH_STATIC_COLOR: submitting color component...");
-
+	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {
 		m_colors.emplace_back(colorComponent.texture);
-
-		GRAPHICS_DEBUG("F_MESH_BATCH_STATIC_COLOR: submitted color component, current colors size = {}", m_colors.size());
 	}
 
 	const FColorsArray& FMeshBatchStaticColor::getColors() const {
 		return m_colors;
 	}
 
-	uint32_t FMeshBatchStaticColor::getColorsSSBOindex() const {
-		return m_colorsSSBOindex;
+	uint32_t FMeshBatchStaticColor::getUniqueColorsID() const {
+		return m_uniqueColorsID;
 	}
 
-	void FMeshBatchStaticColor::setColorsSSBOindex(uint32_t index) {
-		m_colorsSSBOindex = index;
+	void FMeshBatchStaticColor::setUniqueColorsID(uint32_t id) {
+		m_uniqueColorsID = id;
 	}
 
 

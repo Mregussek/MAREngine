@@ -18,11 +18,12 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE_2D_H
-#define MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE_2D_H
+#ifndef MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
+#define MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
 
 
 #include "MeshBatchStatic.h"
+#include "MeshDefinitions.h"
 
 
 namespace marengine {
@@ -32,29 +33,49 @@ namespace marengine {
 
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
 
-		friend class FRenderManagerEvents;
+		friend class FEventsMeshBatchStatic;
+
+	public:
+
+		void reset();
+
+		bool hasAnythingToDraw() const;
+
+		bool canBeBatched(const Entity& entityWithLight) const;
+		void submitEntityWithLightning(const Entity& entity);
+
+		const FPointLightsArray& getLights() const;
+
+		uint32_t getPointLightSSBOindex() const;
+		void setPointLightSSBOindex(uint32_t index);
+
+	private:
+
+		FPointLightsArray m_lights;
+		uint32_t m_pointLightSSBOindex{ 0 };
 
 	public:
 
 		virtual void reset() override;
 
 		virtual bool canBeBatched(const Entity& entity) const override;
+
 		virtual void submitToBatch(const Entity& entity) override;
 
-		const FTextureArray& getTextures() const;
-
-	protected:
-
-		void submitTexture2DComponent(uint32_t bindingIndex, const Texture2DComponent& texture2dComponent);
+		const FTexturesArray& getTextures() const;
 
 	private:
 
-		FTextureArray m_textures;
+		void submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent);
+
+
+		FTexturesArray m_textures;
+		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::TEXTURE2D };
 
 	};
-
-
+	
 }
 
 
-#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE_2D_H
+#endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_TEXTURE2D_H
+

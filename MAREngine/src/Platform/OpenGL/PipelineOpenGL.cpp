@@ -145,12 +145,13 @@ namespace marengine {
 			VertexBufferElement{ GL_FLOAT, 1, GL_FALSE }
 		};
 		constexpr uint32_t stride{
-			3 * sizeof(GL_FLOAT) + 3 * sizeof(GL_FLOAT) +
-			2 * sizeof(GL_FLOAT) + 1 * sizeof(GL_FLOAT)
+			elements[0].count * sizeof(elements[0].type) +
+			elements[1].count * sizeof(elements[1].type) +
+			elements[2].count * sizeof(elements[2].type) +
+			elements[3].count * sizeof(elements[3].type)
 		};
 
 		uint32_t offset = 0;
-
 		for (uint32_t i = 0; i < elements.size(); i++) {
 			PLATFORM_GL_FUNC( glVertexAttribPointer(i, elements[i].count, elements[i].type, elements[i].normalized, stride, (const void*)offset) );
 			PLATFORM_GL_FUNC( glEnableVertexAttribArray(i) );

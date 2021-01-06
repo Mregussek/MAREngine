@@ -40,8 +40,7 @@ namespace marengine {
 		LAYER_TRACE("SCENE_LAYER: {} going to initialize...", p_debugName);
 
 		m_eventsComponentEntity.Instance = &m_eventsComponentEntity;
-
-		SceneManager::Instance = &m_sceneManager;
+		m_sceneManager.Instance = &m_sceneManager;
 
 		m_sceneManager.initialize();
 	}
