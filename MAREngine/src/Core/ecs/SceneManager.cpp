@@ -36,9 +36,9 @@ namespace marengine {
 
 		RenderPipeline::Instance->reset();
 
-		const auto& entitiesVector = m_scene->getEntities();
+		const auto& entities{ m_scene->getEntities() };
 
-		std::for_each(entitiesVector.cbegin(), entitiesVector.cend(), [](const Entity& entity) {
+		std::for_each(entities.cbegin(), entities.cend(), [](const Entity& entity) {
 			RenderPipeline::Instance->pushEntityToPipeline(entity);
 		});
 
@@ -71,7 +71,7 @@ namespace marengine {
 	void SceneManager::setPlayMode() { 
 		m_EditorMode = false; 
 		initPlayMode(); 
-		FEventsCameraEntity::Instance->onGameCameraSet();
+		FEventsCameraEntity::onGameCameraSet();
 	}
 
 	void SceneManager::setExitPlayMode() { 
@@ -107,7 +107,7 @@ namespace marengine {
 
 		auto initializeScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
 			const Entity entity(entt_entity, m_scene->getRegistry());
-			script.pythonScript.loadScript(script.script);
+			script.pythonScript.loadScript(script.scriptsPath);
 			script.pythonScript.start(entity);
 		};
 

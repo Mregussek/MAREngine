@@ -56,7 +56,7 @@ namespace marengine {
 	}
 
 	void FMeshBatchStaticTexture2D::submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent) {
-		m_textures.emplace_back(bindingIndex, textureComponent.texture);
+		m_textures.emplace_back(bindingIndex, textureComponent.texturePath);
 	}
 
 	const FTexturesArray& FMeshBatchStaticTexture2D::getTextures() const {

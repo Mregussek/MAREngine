@@ -25,9 +25,28 @@
 namespace marengine {
 
 
+	TagComponent::TagComponent(std::string t) :
+		tag(std::move(t))
+	{}
+
+	RenderableComponent::RenderableComponent(std::string i) : 
+		name(std::move(i))
+	{}
+	RenderableComponent::RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind)
+		: name(std::move(i)),
+		vertices(ver),
+		indices(ind)
+	{}
+
+	TransformComponent::TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale) :
+		position(newCenter),
+		rotation(newAngles),
+		scale(newScale)
+	{}
+
 	maths::mat4 TransformComponent::getTransform() const {
 		maths::mat4 tran;
-		maths::mat4::recompose(tran, center, angles, scale);
+		maths::mat4::recompose(tran, position, rotation, scale);
 		return tran;
 	}
 

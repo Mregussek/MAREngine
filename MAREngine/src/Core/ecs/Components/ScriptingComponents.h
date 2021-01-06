@@ -29,17 +29,22 @@
 namespace marengine {
 
 
+	/*
+		PythonScriptComponent - used for working with python scripting in MAREngine.
+		Contains PythonScript instance, for loading module and updating entity during execution.
+		Also there is scriptsPath member, which should contain correct path to script (ended with .py extension for file)
+		and sourceCode with which we can modify current module and save it file after modification.
+	*/
 	struct PythonScriptComponent {
 
-		std::string script{ "empty" };
-		std::string source{ "empty" };
 		PythonScript pythonScript;
+		std::string scriptsPath{ "empty" };
+		std::string sourceCode{ "empty" };
+
 
 		PythonScriptComponent() = default;
-		PythonScriptComponent(const PythonScriptComponent& sc) = default;
-		PythonScriptComponent(std::string s)
-			: script(std::move(s))
-		{}
+		PythonScriptComponent(const PythonScriptComponent & sc) = default;
+		PythonScriptComponent(std::string s);
 
 	};
 

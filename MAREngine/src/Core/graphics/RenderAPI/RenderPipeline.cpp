@@ -24,7 +24,9 @@
 #include "RenderCamera.h"
 #include "../GraphicsLogs.h"
 #include "../GraphicsLimits.h"
+#include "../../ecs/SceneManager.h"
 #include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Entity/EventsComponentEntity.h"
 
 
 namespace marengine {
@@ -76,10 +78,16 @@ namespace marengine {
 			}
 		}
 		if (entity.hasComponent<CameraComponent>()) {
-			const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-			auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-			cameraComponent.renderCamera.calculateCameraTransforms(transformComponent, cameraComponent);
-			pushCameraToPipeline(&cameraComponent.renderCamera);
+			if (m_renderCamera) {
+				const bool userCheckingGameInPlayMode{ SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode() };
+				const bool userModifyingGameCameraInEditorMode{ SceneManager::Instance->isEditorMode() && !SceneManager::Instance->useEditorCamera };
+				if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
+					pushEntityCameraToPipeline(entity);
+				}
+			}
+			else {
+				pushEntityCameraToPipeline(entity);
+			}
 		}
 
 		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
@@ -119,6 +127,16 @@ namespace marengine {
 		else {
 			m_staticTexture2DBatches.emplace_back();
 			return m_staticTexture2DBatches.size() - 1;
+		}
+	}
+
+	void RenderPipeline::pushEntityCameraToPipeline(const Entity& entity) {
+		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+		if (cameraComponent.isMainCamera()) {
+			const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+			RenderCamera* renderCamera{ &cameraComponent.renderCamera };
+			renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
+			RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
 		}
 	}
 

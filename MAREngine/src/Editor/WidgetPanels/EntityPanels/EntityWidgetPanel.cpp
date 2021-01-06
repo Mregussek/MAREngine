@@ -216,8 +216,8 @@ namespace marengine {
 		{ // Sliders
 			bool updatedTransform = false;
 
-			if (CommonComponentHandler::drawVec3Control("Position", tran.center, 0.f, 100.f)) { updatedTransform = true; }
-			if (CommonComponentHandler::drawVec3Control("Rotation", tran.angles, 0.f, 100.f)) { updatedTransform = true; }
+			if (CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f)) { updatedTransform = true; }
+			if (CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f)) { updatedTransform = true; }
 			if (CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f)) { updatedTransform = true; }
 
 			ImGui::NewLine();
@@ -319,7 +319,7 @@ namespace marengine {
 		}
 		auto& color = currentEntity->getComponent<ColorComponent>();
 
-		if (ImGui::ColorEdit4("- color", &color.texture.x)) {
+		if (ImGui::ColorEdit4("- color", &color.color.x)) {
 			FEventsComponentEntity::Instance->onUpdate<ColorComponent>(*currentEntity);
 		}
 			
@@ -333,20 +333,22 @@ namespace marengine {
 		}
 		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
 
-		ImGui::Text("Current Texture: %s", texture2D.texture.c_str());
+		ImGui::Text("Current Texture: %s", texture2D.texturePath.c_str());
 
-		if (TextureOpenGL::hasTexture(texture2D.texture)) {
-			ImGui::Image((ImTextureID)TextureOpenGL::getTexture(texture2D.texture), { 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		if (TextureOpenGL::hasTexture(texture2D.texturePath)) {
+			ImGui::Image((ImTextureID)TextureOpenGL::getTexture(texture2D.texturePath), { 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		}
 
 		constexpr size_t inputSize{ 128 };
 		static char input[inputSize];
 		std::fill(std::begin(input), std::end(input), '\0');
-		std::copy(texture2D.texture.begin(), texture2D.texture.end(), input);
+		std::copy(texture2D.texturePath.begin(), texture2D.texturePath.end(), input);
 
 		if (ImGui::InputText(" ex. .jpg / .png", input, inputSize)) {
-			texture2D.texture = std::string(input);
-			if (TextureOpenGL::hasTexture(texture2D.texture)) {
+			texture2D.texturePath = std::string(input);
+			
+			// here need to try loading the texture, not only checking if it is already loaded
+			if (TextureOpenGL::hasTexture(texture2D.texturePath)) {
 				FEventsComponentEntity::Instance->onUpdate<Texture2DComponent>(*currentEntity);
 			}
 		}
@@ -361,17 +363,18 @@ namespace marengine {
 		}
 		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
 
-		ImGui::Text("Current Cubemap: %s", cubemap.texture.c_str());
+		ImGui::Text("Current Cubemap: %s", cubemap.texturePath.c_str());
 
 		constexpr size_t inputSize{ 50 };
 		static char input[inputSize];
 		std::fill(std::begin(input), std::end(input), '\0');
-		std::copy(cubemap.texture.begin(), cubemap.texture.end(), input);
+		std::copy(cubemap.texturePath.begin(), cubemap.texturePath.end(), input);
 
 		if (ImGui::InputText(" - path", input, inputSize)) {
-			cubemap.texture = std::string(input);
+			cubemap.texturePath = std::string(input);
 		}
 
+		// here need to try loading the texture, not only checking if it is already loaded
 		if (ImGui::Button("Load Cubemap")) {
 			FEventsComponentEntity::Instance->onUpdate<TextureCubemapComponent>(*currentEntity);
 		}

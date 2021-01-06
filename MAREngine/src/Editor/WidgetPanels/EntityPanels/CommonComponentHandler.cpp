@@ -53,7 +53,7 @@ namespace marengine {
 	}
 
 	void CommonComponentHandler::handleScriptComponent(PythonScriptComponent& script) {
-		ImGui::Text("Current script: %s", script.script.c_str());
+		ImGui::Text("Current script: %s", script.scriptsPath.c_str());
 
 		if (ImGui::Button("Create new script")) { WScriptIDE::Instance->setCreatingNewScript(); }
 

@@ -59,20 +59,20 @@ namespace marengine {
 		ECS_INFO("ENTITY: destroyed yourself!");
 	}
 
-	void Entity::assignChild(const Entity& entity) const {
+	void Entity::assignChild(const Entity& child) const {
 		auto& childs{ getComponent<ChildComponent>().childs };
-		childs.push_back(entity);
+		childs.push_back(child);
 	}
 
 	void Entity::removeChild(size_t index) const {
 		removeChild(getChild(index));
 	}
 
-	void Entity::removeChild(const Entity& entity) const {
+	void Entity::removeChild(const Entity& child) const {
 		auto& childs{ getComponent<ChildComponent>().childs };
 
-		auto it = std::find_if(childs.begin(), childs.end(), [&entity](const Entity& iterator) {
-			return 	&iterator == &entity;
+		auto it = std::find_if(childs.begin(), childs.end(), [&child](const Entity& iterator) {
+			return 	&iterator == &child;
 		});
 
 		const bool canRemoveChild{ it != childs.end() };

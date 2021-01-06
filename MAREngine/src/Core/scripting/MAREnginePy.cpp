@@ -272,12 +272,12 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 	py::class_<TransformComponent>(m, "Transform")
 		.def(py::init<>())
 		.def_readwrite("scale", &TransformComponent::scale)
-		.def_readwrite("center", &TransformComponent::center)
-		.def_readwrite("angles", &TransformComponent::angles);
+		.def_readwrite("center", &TransformComponent::position)
+		.def_readwrite("angles", &TransformComponent::rotation);
 
 	py::class_<ColorComponent>(m, "Color")
 		.def(py::init<>())
-		.def_readwrite("texture", &ColorComponent::texture);
+		.def_readwrite("texture", &ColorComponent::color);
 
 	py::class_<CameraComponent>(m, "Camera")
 		.def(py::init<>())

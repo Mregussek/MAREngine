@@ -66,8 +66,8 @@ namespace marengine {
 
 		if (ImGuizmo::IsUsing()) {
 			vec3 rot;
-			mat4::decompose(matrix, transform.center, rot, transform.scale);
-			transform.angles = vec3(trig::toDegrees(rot.x), trig::toDegrees(rot.y), trig::toDegrees(rot.z));
+			mat4::decompose(matrix, transform.position, rot, transform.scale);
+			transform.rotation = vec3(trig::toDegrees(rot.x), trig::toDegrees(rot.y), trig::toDegrees(rot.z));
 
 			return true;
 		}

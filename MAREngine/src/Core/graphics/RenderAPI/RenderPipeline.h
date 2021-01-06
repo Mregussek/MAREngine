@@ -62,9 +62,11 @@ namespace marengine {
 
 	private:
 
+		void pushEntityCameraToPipeline(const Entity& entity);
+
 		uint32_t getAvailableColorBatch(const Entity& entity);
 		uint32_t getAvailableTexture2DBatch(const Entity& entity);
-		uint32_t getAvailablePointLightBatch(const Entity& entity);
+
 
 		std::vector<FMeshBatchStaticColor> m_staticColorBatches;
 		std::vector<FMeshBatchStaticTexture2D> m_staticTexture2DBatches;

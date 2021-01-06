@@ -43,7 +43,7 @@ namespace marengine {
 		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
 		auto& pointLightAtBatch{ RenderPipeline::Instance->m_pointLightBatch.m_lights[renderPipelineComponent.lightIndex] };
 
-		pointLightAtBatch.position = maths::vec4(transformComponent.center, 1.f);
+		pointLightAtBatch.position = maths::vec4(transformComponent.position, 1.f);
 
 		FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
 	}

@@ -30,17 +30,17 @@ namespace marengine {
 	void RenderCamera::calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera) {
 		GRAPHICS_TRACE("RENDER_CAMERA: going to calculate camera transform");
 
-		const auto yRad{ trig::toRadians(transform.angles.y) };
-		const auto xRad{ trig::toRadians(transform.angles.x) };
+		const auto yRad{ trig::toRadians(transform.rotation.y) };
+		const auto xRad{ trig::toRadians(transform.rotation.x) };
 		const vec3 front{ 
 			trig::cosine(yRad) * trig::cosine(xRad), 
 			trig::sine(xRad),
 			trig::sine(yRad) * trig::cosine(xRad) 
 		};
-		const vec3 eyeToCenter{ transform.center + vec3::normalize(front) };
+		const vec3 eyeToCenter{ transform.position + vec3::normalize(front) };
 
 		calculateModel({ 0.f, 0.f, 0.f });
-		calculateView(transform.center, eyeToCenter, { 0.f, 1.0f, 0.f });
+		calculateView(transform.position, eyeToCenter, { 0.f, 1.0f, 0.f });
 
 		if (camera.Perspective) { calculatePerspective(camera.p_fov, camera.p_aspectRatio, camera.p_near, camera.p_far); }
 		else { calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far); }

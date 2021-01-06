@@ -28,39 +28,44 @@
 namespace marengine {
 
 
+	/*
+		ColorComponent - contains maths::vec4 color instance, that describes entity with
+		some color. vec4::x stands for R, y for G, z for B and w for A.
+	*/
 	struct ColorComponent {
 
-		maths::vec4 texture{ 0.5f, 0.5f, 0.5f, 1.f };
+		maths::vec4 color{ 0.5f, 0.5f, 0.5f, 1.f };
 
 		ColorComponent() = default;
 		ColorComponent(const ColorComponent& cc) = default;
-		ColorComponent(maths::vec4 col)
-			: texture(std::move(col))
-		{}
+		ColorComponent(maths::vec4 c);
 
 	};
 
+	/*
+		Texture2DComponent - contains texturePath string instance, that describes entity
+		with some texture2D. texturePath should have end with .jpg extension.
+	*/
 	struct Texture2DComponent {
 
-		std::string texture{ "empty" };
+		std::string texturePath{ "empty" };
 
 		Texture2DComponent() = default;
 		Texture2DComponent(const Texture2DComponent& tex) = default;
-		Texture2DComponent(std::string tex)
-			: texture(std::move(tex))
-		{}
+		Texture2DComponent(std::string tex);
 
 	};
 
+	/*
+		TextureCubemapComponent - should not be used for now.
+	*/
 	struct TextureCubemapComponent {
 
-		std::string texture{ "empty" };
+		std::string texturePath{ "empty" };
 
 		TextureCubemapComponent() = default;
 		TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
-		TextureCubemapComponent(std::string cub)
-			: texture(std::move(cub))
-		{}
+		TextureCubemapComponent(std::string cub);
 
 	};
 

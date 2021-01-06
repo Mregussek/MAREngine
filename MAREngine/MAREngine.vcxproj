@@ -370,6 +370,8 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="src\Core\ecs\Components\ScriptingComponents.cpp" />
+    <ClCompile Include="src\Core\ecs\Components\TextureComponents.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp" />
     <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp" />

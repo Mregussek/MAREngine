@@ -18,32 +18,23 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
-#define MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
-
-
-#include "../../../mar.h"
-#include "../../graphics/Lightning/LightDefinitions.h"
+#include "TextureComponents.h"
 
 
 namespace marengine {
 
 
-	/*
-		PointLightComponent - component with FPointLight member,
-		that can be pushed to FPointLightBatch.
-	*/
-	struct PointLightComponent {
-		
-		FPointLight pointLight;
+	ColorComponent::ColorComponent(maths::vec4 c)
+		: color(std::move(c))
+	{}
 
-		PointLightComponent() = default;
-		PointLightComponent(const PointLightComponent& li) = default;
+	Texture2DComponent::Texture2DComponent(std::string tex)
+		: texturePath(std::move(tex))
+	{}
 
-	};
+	TextureCubemapComponent::TextureCubemapComponent(std::string cub)
+		: texturePath(std::move(cub))
+	{}
 
 
 }
-
-
-#endif // !MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H

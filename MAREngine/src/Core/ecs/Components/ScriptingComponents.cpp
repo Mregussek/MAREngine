@@ -18,32 +18,15 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
-#define MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
-
-
-#include "../../../mar.h"
-#include "../../graphics/Lightning/LightDefinitions.h"
+#include "ScriptingComponents.h"
 
 
 namespace marengine {
 
 
-	/*
-		PointLightComponent - component with FPointLight member,
-		that can be pushed to FPointLightBatch.
-	*/
-	struct PointLightComponent {
-		
-		FPointLight pointLight;
-
-		PointLightComponent() = default;
-		PointLightComponent(const PointLightComponent& li) = default;
-
-	};
+	PythonScriptComponent::PythonScriptComponent(std::string s) :
+		scriptsPath(std::move(s))
+	{}
 
 
 }
-
-
-#endif // !MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H

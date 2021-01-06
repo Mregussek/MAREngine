@@ -51,7 +51,7 @@ namespace marengine {
 
 		if (renderPipelineComponent.materialType == (size_t)EMeshBatchStaticType::COLOR) {
 			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[renderPipelineComponent.containerIndex] };
-			batch.m_colors[renderPipelineComponent.colorIndex] = colorComponent.texture;
+			batch.m_colors[renderPipelineComponent.colorIndex] = colorComponent.color;
 			FRenderBufferManager::onColorUpdate(batch);
 		}
 	}

@@ -33,37 +33,31 @@ namespace marengine {
 
 
 	const FEventsComponentEntity* FEventsComponentEntity::Instance{ nullptr };
-	const FEventsCameraEntity* FEventsCameraEntity::Instance{ nullptr };
 
 
-	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) const {
+	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
-		auto updateCameraOperation = [&entity, &cameraComponent, this]() {
+		auto updateCameraOperation = [&entity, &cameraComponent]() {
 			const auto& transform = entity.getComponent<TransformComponent>();
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
 			FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
 		};
 
-		const bool userCheckingGameInPlayMode{
-			SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode()
-		};
-
-		const bool userModifyingGameCameraInEditorMode{
-			SceneManager::Instance->isEditorMode() && !SceneManager::Instance->useEditorCamera
-		};
+		const bool userCheckingGameInPlayMode{ SceneManager::Instance->isPlayMode() || SceneManager::Instance->isPauseMode() };
+		const bool userModifyingGameCameraInEditorMode{ SceneManager::Instance->isEditorMode() && !SceneManager::Instance->useEditorCamera };
 
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
 			updateCameraOperation();
 		}
 	}
 
-	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* renderCamera) const {
+	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* renderCamera) {
 		RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
 		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
 	}
 
-	void FEventsCameraEntity::onGameCameraSet() const {
+	void FEventsCameraEntity::onGameCameraSet() {
 		Scene* scene{ SceneManager::Instance->getScene() };
 
 		auto hasMainCamera = [&scene](entt::entity entity) {
@@ -74,12 +68,11 @@ namespace marengine {
 		auto view = scene->getView<CameraComponent>();
 		view.each([&scene](entt::entity entt_entity, CameraComponent& cameraComponent) {
 			if (cameraComponent.isMainCamera()) {
-				const auto& transform{ scene->getComponent<TransformComponent>(entt_entity) };
-				
-				cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-
-				RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
-				FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
+				const auto& transformComponent{ scene->getComponent<TransformComponent>(entt_entity) };
+				RenderCamera* renderCamera{ &cameraComponent.renderCamera };
+				renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
+				RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
+				FRenderBufferManager::onRenderCameraUpdate(renderCamera);
 			}
 		});
 	}
@@ -99,7 +92,7 @@ namespace marengine {
 		if (entity.hasComponent<CameraComponent>()) {
 			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 			if (cameraComponent.isMainCamera()) {
-				FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
+				FEventsCameraEntity::onMainCameraUpdate(entity);
 			}
 		}
 

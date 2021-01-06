@@ -29,13 +29,21 @@
 namespace marengine {
 
 
-	// p_... stands for perspective parameters, o_... orthographic
+	/*
+		CameraComponent - component with RenderCamera instance and parameters,
+		with which we can choose how to create Projection Matrix. (p_ prefix stands for perspective, o_ for orthographic)
+		RenderCamera can be pushed to rendering with FEventsCameraEntity::onGameCameraSet()
+		only if it is main renderCamera for scene. You can check if it is main camera by using isMainCamera() method.
+	*/
 	struct CameraComponent {
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent & cam) = default;
+
 
 		RenderCamera renderCamera;
 		std::string id{ "secondary" };
-		bool Perspective{ true }; // true - perspective / false - orthographic
-
+		
 		float p_fov{ 45.f };
 		float p_aspectRatio{ 4.f / 3.f };
 		float p_near{ 0.01f };
@@ -48,9 +56,11 @@ namespace marengine {
 		float o_near{ 0.01f };
 		float o_far{ 100.0f };
 
-		CameraComponent() = default;
-		CameraComponent(const CameraComponent& cam) = default;
-
+		bool Perspective{ true }; // true - perspective / false - orthographic
+		
+		/*
+			Method returns true, if renderCamera instance is main camera for current scene.
+		*/
 		bool isMainCamera() const;
 
 	};

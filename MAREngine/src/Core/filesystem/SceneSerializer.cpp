@@ -63,44 +63,43 @@ namespace marengine {
 	}
 
 	void FSceneSerializer::saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
-		const std::string& tag{ entity.getComponent<TagComponent>().tag };
-		auto saveString = [&json, &tag, &sceneName, index](const char* componentName, const char* value, const std::string& str) {
+		
+		auto saveString = [&json, &sceneName, index](const char* componentName, const char* value, const std::string& str) {
 			json["Scene"][sceneName]["Entity"][index][componentName][value] = str;
 		};
-		auto saveFloat = [&json, &tag, &sceneName, index](const char* componentName, const char* value, float f) {
+		auto saveFloat = [&json, &sceneName, index](const char* componentName, const char* value, float f) {
 			json["Scene"][sceneName]["Entity"][index][componentName][value] = f;
 		};
-		auto saveVec3 = [&json, &tag, &sceneName, index](const char* componentName, const char* value, const maths::vec3& v) {
+		auto saveVec3 = [&json, &sceneName, index](const char* componentName, const char* value, const maths::vec3& v) {
 			json["Scene"][sceneName]["Entity"][index][componentName][value]["x"] = v.x;
 			json["Scene"][sceneName]["Entity"][index][componentName][value]["y"] = v.y;
 			json["Scene"][sceneName]["Entity"][index][componentName][value]["z"] = v.z;
 		};
 
-		saveString("TagComponent", "tag", tag);
+		const auto& tagComponent{ entity.getComponent<TagComponent>() };
+		saveString("TagComponent", "tag", tagComponent.tag);
 
-		// Save transformComponent
-		const auto& transform{ entity.getComponent<TransformComponent>() };
-
-		saveVec3("TransformComponent", "center", transform.center);
-		saveVec3("TransformComponent", "angles", transform.angles);
-		saveVec3("TransformComponent", "scale", transform.scale);
+		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		saveVec3("TransformComponent", "center", transformComponent.position);
+		saveVec3("TransformComponent", "angles", transformComponent.rotation);
+		saveVec3("TransformComponent", "scale", transformComponent.scale);
 
 		if (entity.hasComponent<RenderableComponent>()) {
-			const auto& renderable{ entity.getComponent<RenderableComponent>() };
-			saveString("RenderableComponent", "name", renderable.name);
+			const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+			saveString("RenderableComponent", "name", renderableComponent.name);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
-			const auto& color{ entity.getComponent<ColorComponent>() };
-			saveVec3("ColorComponent", "texture", color.texture);
+			const auto& colorComponent{ entity.getComponent<ColorComponent>() };
+			saveVec3("ColorComponent", "texture", colorComponent.color);
 		}
 		else if (entity.hasComponent<Texture2DComponent>()) {
-			const auto& tex{ entity.getComponent<Texture2DComponent>() };
-			saveString("Texture2DComponent", "name", tex.texture);
+			const auto& texture2DComponent{ entity.getComponent<Texture2DComponent>() };
+			saveString("Texture2DComponent", "name", texture2DComponent.texturePath);
 		}
 		else if (entity.hasComponent<TextureCubemapComponent>()) {
-			const auto& cube{ entity.getComponent<TextureCubemapComponent>() };
-			saveString("TextureCubemapComponent", "name", cube.texture);
+			const auto& cubemapComponent{ entity.getComponent<TextureCubemapComponent>() };
+			saveString("TextureCubemapComponent", "name", cubemapComponent.texturePath);
 		}
 		
 		if (entity.hasComponent<PointLightComponent>()) {
@@ -116,28 +115,28 @@ namespace marengine {
 		}
 
 		if (entity.hasComponent<CameraComponent>()) {
-			const auto& cam{ entity.getComponent<CameraComponent>() };
-			saveString("CameraComponent", "id", cam.id);
-			saveFloat("CameraComponent", "Perspective", cam.Perspective ? 1.f : 0.f);
+			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+			saveString("CameraComponent", "id", cameraComponent.id);
+			saveFloat("CameraComponent", "Perspective", cameraComponent.Perspective ? 1.f : 0.f);
 
 			// Perspective camera save
-			saveFloat("CameraComponent", "p_fov", cam.p_fov);
-			saveFloat("CameraComponent", "p_aspectRatio", cam.p_aspectRatio);
-			saveFloat("CameraComponent", "p_near", cam.p_near);
-			saveFloat("CameraComponent", "p_far", cam.p_far);
+			saveFloat("CameraComponent", "p_fov", cameraComponent.p_fov);
+			saveFloat("CameraComponent", "p_aspectRatio", cameraComponent.p_aspectRatio);
+			saveFloat("CameraComponent", "p_near", cameraComponent.p_near);
+			saveFloat("CameraComponent", "p_far", cameraComponent.p_far);
 
 			// Orthographic camera save
-			saveFloat("CameraComponent", "o_left", cam.o_left);
-			saveFloat("CameraComponent", "o_right", cam.o_right);
-			saveFloat("CameraComponent", "o_top", cam.o_top);
-			saveFloat("CameraComponent", "o_bottom", cam.o_bottom);
-			saveFloat("CameraComponent", "o_near", cam.o_near);
-			saveFloat("CameraComponent", "o_far", cam.o_far);
+			saveFloat("CameraComponent", "o_left", cameraComponent.o_left);
+			saveFloat("CameraComponent", "o_right", cameraComponent.o_right);
+			saveFloat("CameraComponent", "o_top", cameraComponent.o_top);
+			saveFloat("CameraComponent", "o_bottom", cameraComponent.o_bottom);
+			saveFloat("CameraComponent", "o_near", cameraComponent.o_near);
+			saveFloat("CameraComponent", "o_far", cameraComponent.o_far);
 		}
 
 		if (entity.hasComponent<PythonScriptComponent>()) {
-			const auto& script{ entity.getComponent<PythonScriptComponent>() };
-			saveString("PythonScriptComponent", "path", script.script);
+			const auto& pythonScriptComponent{ entity.getComponent<PythonScriptComponent>() };
+			saveString("PythonScriptComponent", "path", pythonScriptComponent.scriptsPath);
 		}
 	}
 

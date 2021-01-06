@@ -55,7 +55,7 @@ namespace marengine {
 		const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 
 		FPointLight& pointLightData{ m_lights.emplace_back(pointLightComponent.pointLight) };
-		pointLightData.position = maths::vec4(transformComponent.center, 1.f);
+		pointLightData.position = maths::vec4(transformComponent.position, 1.f);
 
 		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
 		rpc.lightIndex = m_lights.size() - 1;

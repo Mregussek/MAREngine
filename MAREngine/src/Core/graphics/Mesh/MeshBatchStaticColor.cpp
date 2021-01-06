@@ -56,7 +56,7 @@ namespace marengine {
 	}
 
 	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {
-		m_colors.emplace_back(colorComponent.texture);
+		m_colors.emplace_back(colorComponent.color);
 	}
 
 	const FColorsArray& FMeshBatchStaticColor::getColors() const {

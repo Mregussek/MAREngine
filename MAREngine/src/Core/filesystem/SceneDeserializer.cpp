@@ -102,33 +102,33 @@ namespace marengine {
 			};
 		};
 
-		auto& tag{ entity.getComponent<TagComponent>().tag };
-		setString(tag, "TagComponent", "tag");
+		auto& tagComponent{ entity.getComponent<TagComponent>() };
+		setString(tagComponent.tag, "TagComponent", "tag");
 
-		auto& transform{ entity.getComponent<TransformComponent>() };
-		transform.center = loadVec3("TransformComponent", "center");
-		transform.angles = loadVec3("TransformComponent", "angles");
-		transform.scale = loadVec3("TransformComponent", "scale");
+		auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		transformComponent.position = loadVec3("TransformComponent", "center");
+		transformComponent.rotation = loadVec3("TransformComponent", "angles");
+		transformComponent.scale = loadVec3("TransformComponent", "scale");
 
 		if (jsonContains("RenderableComponent")) {
-			auto& renderable{ entity.addComponent<RenderableComponent>() };
-			setString(renderable.name, "RenderableComponent", "name");
-			fillRenderable(renderable);
+			auto& renderableComponent{ entity.addComponent<RenderableComponent>() };
+			setString(renderableComponent.name, "RenderableComponent", "name");
+			fillRenderable(renderableComponent);
 		}
 
 		if (jsonContains("ColorComponent")) {
-			auto& color{ entity.addComponent<ColorComponent>() };
-			color.texture = loadVec3("ColorComponent", "texture");
+			auto& colorComponent{ entity.addComponent<ColorComponent>() };
+			colorComponent.color = loadVec3("ColorComponent", "texture");
 		}
 
 		if (jsonContains("Texture2DComponent")) {
-			auto& tex{ entity.addComponent<Texture2DComponent>() };
-			setString(tex.texture, "Texture2DComponent", "name");
+			auto& texture2DComponent{ entity.addComponent<Texture2DComponent>() };
+			setString(texture2DComponent.texturePath, "Texture2DComponent", "name");
 		}
 
 		if (jsonContains("TextureCubemapComponent")) {
-			auto& cube{ entity.addComponent<TextureCubemapComponent>() };
-			setString(cube.texture, "TextureCubemapComponent", "name");
+			auto& cubemapComponent{ entity.addComponent<TextureCubemapComponent>() };
+			setString(cubemapComponent.texturePath, "TextureCubemapComponent", "name");
 		}
 
 		if (jsonContains("PointLightComponent")) {
@@ -143,27 +143,27 @@ namespace marengine {
 		}
 
 		if (jsonContains("CameraComponent")) {
-			auto& cam{ entity.addComponent<CameraComponent>() };
-			setString(cam.id, "CameraComponent", "id");
-			cam.Perspective = loadFloat("CameraComponent", "Perspective") == 1.0f ? true : false;
+			auto& cameraComponent{ entity.addComponent<CameraComponent>() };
+			setString(cameraComponent.id, "CameraComponent", "id");
+			cameraComponent.Perspective = loadFloat("CameraComponent", "Perspective") == 1.0f ? true : false;
 
 			// Perspective parameters loading
-			cam.p_fov = loadFloat("CameraComponent", "p_fov");
-			cam.p_aspectRatio = loadFloat("CameraComponent", "p_aspectRatio");
-			cam.p_near = loadFloat("CameraComponent", "p_near");
-			cam.p_far = loadFloat("CameraComponent", "p_far");
+			cameraComponent.p_fov = loadFloat("CameraComponent", "p_fov");
+			cameraComponent.p_aspectRatio = loadFloat("CameraComponent", "p_aspectRatio");
+			cameraComponent.p_near = loadFloat("CameraComponent", "p_near");
+			cameraComponent.p_far = loadFloat("CameraComponent", "p_far");
 
 			// Orthographic parameters loading
-			cam.o_left = loadFloat("CameraComponent", "o_left");
-			cam.o_right = loadFloat("CameraComponent", "o_right");
-			cam.o_bottom = loadFloat("CameraComponent", "o_bottom");
-			cam.o_near = loadFloat("CameraComponent", "o_near");
-			cam.o_far = loadFloat("CameraComponent", "o_far");
+			cameraComponent.o_left = loadFloat("CameraComponent", "o_left");
+			cameraComponent.o_right = loadFloat("CameraComponent", "o_right");
+			cameraComponent.o_bottom = loadFloat("CameraComponent", "o_bottom");
+			cameraComponent.o_near = loadFloat("CameraComponent", "o_near");
+			cameraComponent.o_far = loadFloat("CameraComponent", "o_far");
 		}
 
 		if (jsonContains("PythonScriptComponent")) {
-			auto& script{ entity.addComponent<PythonScriptComponent>() };
-			setString(script.script, "PythonScriptComponent", "path");
+			auto& pythonScriptComponent{ entity.addComponent<PythonScriptComponent>() };
+			setString(pythonScriptComponent.scriptsPath, "PythonScriptComponent", "path");
 		}
 	}
 
@@ -267,8 +267,8 @@ namespace marengine {
 			else if (line.find("#TransformComponent") != std::string::npos) {
 				auto& tran = entity.getComponent<TransformComponent>();
 
-				loadVec3Getline(tran.center, 7); // #center - 7 letters
-				loadVec3Getline(tran.angles, 7); // #angles - 7 letters
+				loadVec3Getline(tran.position, 7); // #center - 7 letters
+				loadVec3Getline(tran.rotation, 7); // #angles - 7 letters
 				loadVec3Getline(tran.scale, 6);  // #scale  - 6  letters
 			}
 			else if (line.find("#RenderableComponent") != std::string::npos) {
@@ -297,15 +297,15 @@ namespace marengine {
 			}
 			else if (line.find("#ColorComponent") != std::string::npos) {
 				auto& color{ entity.get_addComponent<ColorComponent>() };
-				loadVec4(color.texture, 16);
+				loadVec4(color.color, 16);
 			}
 			else if (line.find("Texture2DComponent") != std::string::npos) {
 				auto& texture{ entity.get_addComponent<Texture2DComponent>() };
-				loadString(texture.texture, 19);
+				loadString(texture.texturePath, 19);
 			}
 			else if (line.find("#TextureCubemapComponent") != std::string::npos) {
 				auto& cubemap{ entity.get_addComponent<TextureCubemapComponent>() };
-				loadString(cubemap.texture, 25);
+				loadString(cubemap.texturePath, 25);
 			}
 			else if (line.find("#PointLightComponent") != std::string::npos) {
 				auto& light{ entity.get_addComponent<PointLightComponent>() };
@@ -347,7 +347,7 @@ namespace marengine {
 			}
 			else if (line.find("#PythonScriptComponent") != std::string::npos) {
 				auto& script{ entity.get_addComponent<PythonScriptComponent>() };
-				loadString(script.script, 23);
+				loadString(script.scriptsPath, 23);
 			}
 			else if (line.find("#EntityEnd") != std::string::npos) {
 				return;

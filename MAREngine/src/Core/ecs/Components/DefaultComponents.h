@@ -28,21 +28,26 @@
 
 namespace marengine {
 
-	class FMeshBatchStatic;
 
-
+	/*
+		TagComponent - some unique name for entity, that can be more readable to user.
+	*/
 	struct TagComponent {
 
 		std::string tag{ "empty" };
 
 		TagComponent() = default;
 		TagComponent(const TagComponent& id) = default;
-		TagComponent(std::string t)
-			: tag(std::move(t))
-		{}
+		TagComponent(std::string t);
 
 	};
 
+	/*
+		RenderableComponent - contains vertices and indices, that can be pushed to batches.
+		RenderableComponent::name is a unique name for renderable that component contains. For instance,
+		for default MAREngine shapes it can have value "Cube", "Surface", but for loaded external files 
+		it should have path to that file.
+	*/
 	struct RenderableComponent {
 
 		std::string name{ "empty" };
@@ -51,31 +56,30 @@ namespace marengine {
 
 		RenderableComponent() = default;
 		RenderableComponent(const RenderableComponent& ren) = default;
-		RenderableComponent(std::string i)
-			: name(std::move(i))
-		{}
-		RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind)
-			: name(std::move(i)),
-			vertices(ver),
-			indices(ind)
-		{}
+		RenderableComponent(std::string i);
+		RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind);
 
 	};
 
+	/*
+		TransformComponent - contains information about current position, rotation and scale of entity.
+		Returns maths::mat4 transform by getTransform method.
+
+		TransformComponent is used by batches, position member value is also used by LightComponents.
+	*/
 	struct TransformComponent {
 
-		maths::vec3 center{ 0.f, 0.f, 0.f };
-		maths::vec3 angles{ 0.f, 0.f, 0.f };
+		maths::vec3 position{ 0.f, 0.f, 0.f };
+		maths::vec3 rotation{ 0.f, 0.f, 0.f };
 		maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& tc) = default;
-		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale) :
-			center(std::move(newCenter)),
-			angles(std::move(newAngles)),
-			scale(std::move(newScale))
-		{}
+		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale);
 
+		/*
+			Method returns maths::mat4 transform recomposed with current member values.
+		*/
 		maths::mat4 getTransform() const;
 
 	};
