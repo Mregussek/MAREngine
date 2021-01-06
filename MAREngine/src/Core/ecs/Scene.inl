@@ -18,26 +18,29 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_ENTITY_CONTAINER_H
-#define MAR_ENGINE_ECS_ENTITY_CONTAINER_H
+#ifndef MAR_ENGINE_SCENE_INL
+#define MAR_ENGINE_SCENE_INL
 
 
-#include "../../../mar.h"
-#include "Entity.h"
+#include "Scene.h"
 
 
 namespace marengine {
 
 
-	class EntityContainer {
+	template<typename TComponent>
+	MAR_NO_DISCARD auto Scene::getView() {
+		return m_sceneRegistry.m_registry.view<TComponent>();
+	}
 
-		friend class Scene;
-
-		std::vector<Entity> m_entities;
-
-	};
+	template<typename TComponent>
+	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
+		MAR_CORE_ASSERT(m_sceneRegistry.m_registry.has<TComponent>(entt_entity), "SCENE: Passed entity {} does not have component {}", entt_entity, typeid(TComponent).name());
+		return m_sceneRegistry.m_registry.get<TComponent>(entt_entity);
+	}
 
 
 }
 
-#endif // !MAR_ENGINE_ECS_ENTITY_CONTAINER_H
+
+#endif // !MAR_ENGINE_SCENE_INL

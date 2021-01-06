@@ -19,31 +19,16 @@
 
 
 #include "Scene.h"
-#include "Components/Components.h"
-#include "Entity/Entity.h"
 #include "ECSLogs.h"
 
 
 namespace marengine {
 
 
-	Scene::Scene(std::string name)
-		: m_name(std::move(name))
-	{
-		m_sceneRegistry = SceneRegistry();
-
-		ECS_INFO("SCENE: scene is created, with entt::registry! (called constructor)");
-	}
-
-	void Scene::shutdown() {
-		std::for_each(m_container.m_entities.begin(), m_container.m_entities.end(), [this](const Entity& entity) {
-			destroyEntity(entity);
-		});
-
-		m_sceneRegistry.cleanup();
-
-		ECS_INFO("SCENE: registry is cleared! (called destructor)");
-	}
+	Scene::Scene(std::string name) :
+		m_name(std::move(name)),
+		m_sceneRegistry(SceneRegistry())
+	{}
 
 	Scene* Scene::createEmptyScene(std::string name) {
 		Scene* scene = new Scene(std::move(name));
@@ -67,14 +52,21 @@ namespace marengine {
 		return scene;
 	}
 
-	// -------------------------------------------------------------
-	// ENTITIES MANAGEMENT
-	// -------------------------------------------------------------
+	void Scene::close() {
+		for (const auto& entity : m_entities) {
+			destroyEntity(entity);
+		}
+
+		m_entities.clear();
+		m_sceneRegistry.cleanup();
+
+		ECS_INFO("SCENE: registry is cleared! (called destructor)");
+	}
 
 	const Entity& Scene::createEntity() {
 		ECS_INFO("SCENE: going to create entity!");
 
-		const Entity& entity{ m_container.m_entities.emplace_back(&m_sceneRegistry) };
+		const Entity& entity{ m_entities.emplace_back(&m_sceneRegistry) };
 		Entity::fillEntityWithBasicComponents(entity);
 
 		ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
@@ -85,20 +77,40 @@ namespace marengine {
 	void Scene::destroyEntity(const Entity& entity) {
 		ECS_INFO("SCENE: going to destroy entity at {}!", entity.m_entityHandle);
 
-		auto it = std::find_if(m_container.m_entities.begin(), m_container.m_entities.end(), [&entity](const Entity& iterator) {
+		auto it = std::find_if(m_entities.begin(), m_entities.end(), [&entity](const Entity& iterator) {
 			return 	&iterator == &entity;
 		});
 
-		const bool canDestroyEntity{ it != m_container.m_entities.end() && (*it).isValid() };
+		const bool canDestroyEntity{ it != m_entities.end() && (*it).isValid() };
 
 		if (canDestroyEntity) {
-			(*it).destroyYourself();
-			m_container.m_entities.erase(it);
+			it->destroyYourself();
+			m_entities.erase(it);
 		}
 	}
 
-	const std::vector<Entity>& Scene::getEntities() const { 
-		return m_container.m_entities;
+	void Scene::setName(std::string newSceneName) {
+		m_name = std::move(newSceneName);
+	}
+
+	void Scene::setBackground(maths::vec3 newSceneBackgroundColor) {
+		m_backgroundColor = newSceneBackgroundColor;
+	}
+
+	MAR_NO_DISCARD const std::string& Scene::getName() const { 
+		return m_name; 
+	}
+
+	MAR_NO_DISCARD maths::vec3& Scene::getBackground() { 
+		return m_backgroundColor;
+	}
+
+	MAR_NO_DISCARD SceneRegistry* Scene::getRegistry() { 
+		return &m_sceneRegistry; 
+	}
+
+	const FEntityArray& Scene::getEntities() const { 
+		return m_entities;
 	}
 
 

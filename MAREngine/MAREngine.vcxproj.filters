@@ -243,9 +243,6 @@
     <ClInclude Include="src\Core\ecs\Entity\Entity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -484,6 +481,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\Lightning\EventsLightBatch.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ecs\Entity\EntityDefinitions.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -783,6 +783,9 @@
     <None Include="resources\shaders\entityCubemap.shader.glsl" />
     <None Include="resources\shaders\entityTexture2D.shader.glsl" />
     <None Include="src\Core\ecs\Entity\Entity.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Core\ecs\Scene.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
   </ItemGroup>

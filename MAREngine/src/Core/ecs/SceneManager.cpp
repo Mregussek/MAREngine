@@ -50,7 +50,7 @@ namespace marengine {
 	void SceneManager::shutdown() { 
 		ECS_TRACE("SCENE_MANAGER: going to shutdown scene manager");
 
-		m_scene->shutdown(); 
+		m_scene->close(); 
 		delete m_scene;
 
 		ECS_INFO("SCENE_MANAGER: called shutdown method");

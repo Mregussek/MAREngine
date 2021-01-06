@@ -18,11 +18,12 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_ENTITY_H
-#define MAR_ENGINE_ECS_ENTITY_H
+#ifndef MAR_ENGINE_ENTITY_H
+#define MAR_ENGINE_ENTITY_H
 
 
 #include "../../../mar.h"
+#include "EntityDefinitions.h"
 #include "../ECSLogs.h"
 #include "../SceneRegistry.h"
 #include "../Components/Components.h"
@@ -40,7 +41,7 @@ namespace marengine {
 		friend class Scene;
 
 		struct ChildComponent {
-			std::vector<Entity> childs;
+			FEntityArray childs;
 		};
 
 	public:
@@ -55,14 +56,10 @@ namespace marengine {
 		*/
 		Entity(SceneRegistry* sceneRegistry);
 
-		/*
-			Constructor for using already created entity and its sceneRegistry instance. Used mostly in entt::registry::view lambda.
-		*/
+		// Constructor for using already created entity and its sceneRegistry instance. Used mostly in entt::registry::view lambda.
 		Entity(entt::entity entt_entity, SceneRegistry* sceneRegistry);
 
-		/*
-			Default copy constructor.
-		*/
+		// Default copy constructor.
 		Entity(const Entity& other) = default;
 
 		/*
@@ -80,14 +77,10 @@ namespace marengine {
 		*/
 		void destroyYourself() const;
 
-		/*
-			Method returns true if entity is valid (it exists and is fine).
-		*/
+		// Method returns true if entity is valid (it exists and is fine).
 		MAR_NO_DISCARD const bool isValid() const;
 
-		/*
-			Assigns child to current entity. Places child to array at ChildComponent.
-		*/
+		// Assigns child to current entity. Places child to array at ChildComponent.
 		void assignChild(const Entity& child) const;
 
 		/*
@@ -102,24 +95,20 @@ namespace marengine {
 		*/
 		void removeChild(const Entity& child) const;
 
-		/*
-			Returns true, if current entity contains any childs.
-		*/
+
+		// Returns true, if current entity contains any childs.
 		MAR_NO_DISCARD bool hasChilds() const;
 
-		/*
-			Returns all childs of current entity.
-		*/
-		MAR_NO_DISCARD const std::vector<Entity>& getChilds() const;
+
+		// Returns all childs of current entity.
+		MAR_NO_DISCARD const FEntityArray& getChilds() const;
 		
-		/*
-			Returns child by its index in array.
-		*/
+
+		// Returns child by its index in array.
 		MAR_NO_DISCARD const Entity& getChild(size_t index) const;
 
-		/*
-			Checks, wheter entity contains some component. True, if has component.
-		*/
+
+		// Checks, wheter entity contains some component. True, if has component.
 		template<typename TComponent> MAR_NO_DISCARD const bool hasComponent() const;
 
 		/*
@@ -131,9 +120,8 @@ namespace marengine {
 		*/
 		template<typename TComponent, typename... Args> TComponent& addComponent(Args&&... args) const;
 
-		/*
-			Method returns TComponent, that current entity should contain. If it has not, debugbreak is called.
-		*/
+
+		// Method returns TComponent, that current entity should contain. If it has not, debugbreak is called.
 		template<typename TComponent> MAR_NO_DISCARD TComponent& getComponent() const;
 
 		/*
@@ -148,14 +136,11 @@ namespace marengine {
 		*/
 		template<typename TComponent> TComponent& replaceComponent(const TComponent& other) const;
 
-		/*
-			Method should be used, if you don't know whether entity has TComponent or do not. It adds it or just returns it.
-		*/
+
+		// Method should be used, if you don't know whether entity has TComponent or do not. It adds it or just returns it.
 		template<typename TComponent, typename... Args> MAR_NO_DISCARD TComponent& get_addComponent(Args&&... args) const;
 
-		/*
-			Method removes TComponent from current entity.
-		*/
+		// Method removes TComponent from current entity.
 		template<typename TComponent> void removeComponent() const;
 
 	private:

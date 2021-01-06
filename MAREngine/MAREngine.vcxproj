@@ -222,6 +222,7 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="src\Core\ecs\Entity\EntityDefinitions.h" />
     <ClInclude Include="src\Core\events\AllEvents.h" />
     <ClInclude Include="src\Core\ecs\Entity\EventsComponentEntity.h" />
     <ClInclude Include="src\Core\ecs\Entity\IEntityEvents.h" />
@@ -269,7 +270,6 @@
     <ClInclude Include="src\Core\ecs\Components\ScriptingComponents.h" />
     <ClInclude Include="src\Core\ecs\Components\TextureComponents.h" />
     <ClInclude Include="src\Core\ecs\ECSLogs.h" />
-    <ClInclude Include="src\Core\ecs\Entity\EntityContainer.h" />
     <ClInclude Include="src\Core\ecs\Entity\EntityOperation.h" />
     <ClInclude Include="src\Core\ecs\SceneManager.h" />
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h" />
@@ -466,6 +466,7 @@
     <None Include="resources\shaders\entityCubemap.shader.glsl" />
     <None Include="resources\shaders\entityTexture2D.shader.glsl" />
     <None Include="src\Core\ecs\Entity\Entity.inl" />
+    <None Include="src\Core\ecs\Scene.inl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\cmake_generate.jpg" />

@@ -18,59 +18,80 @@
 **/
 
 
-#ifndef MAR_ENGINE_ECS_SCENE_H
-#define MAR_ENGINE_ECS_SCENE_H
+#ifndef MAR_ENGINE_SCENE_H
+#define MAR_ENGINE_SCENE_H
 
 
 #include "../../mar.h"
-#include "Entity/EntityContainer.h"
+#include "Components/Components.h"
+#include "Entity/EntityDefinitions.h"
+#include "Entity/Entity.h"
 
 
 namespace marengine {
 
 
+	/*
+		Scene has information about all important entities, has abilities to create and destroy entities,
+		contains main class that rule them all - SceneRegistry. You can consider Scene as the game itself.
+		If you want to create a new game, just create some entities, attach components to them and push them
+		to rendering engine.
+	*/
 	class Scene {
-		
-		friend class Entity;
-
 	public:
 
-		Scene() = default;
+		// Default Constructor deleted, because we want to create registry explicitly
+		Scene() = delete;
+		
+		// Default Constructor, with which we assign sceneName and create scene registry
 		Scene(std::string name);
 
-		MAR_NO_DISCARD static Scene* createEmptyScene(std::string name);
-		void shutdown();
+		/*
+			Creates empty scene with 2 entities:
+				- cameraEntity (main camera assigned)
+				- lightEntity (pointLight assigned)
 
+			Scene is created on the heap using 'new', make sure to delete it when the job is done!
+		*/
+		MAR_NO_DISCARD static Scene* createEmptyScene(std::string name);
+
+		// Method is responsible for whole cleanup. It destroys all entities and registry itself.
+		void close();
+
+		// Method creates Entity at m_entities, assigns to it some basic components and returns it.
 		MAR_NO_DISCARD const Entity& createEntity();
+
+		// Method checks if given entity exists in m_entities, if so entity is being destroyed and popped from m_entities.
 		void destroyEntity(const Entity& entity);
 
-		// --- SET METHODS --- //
+		// Method returns all entities.
+		MAR_NO_DISCARD const FEntityArray& getEntities() const;
 
-		void setName(std::string name) { m_name = std::move(name); }
-		void setBackground(maths::vec3 v) { m_backgroundColor = std::move(v); }
+		// Sets new scene name
+		void setName(std::string newSceneName);
+
+		// Returns scene name
+		MAR_NO_DISCARD const std::string& getName() const;
+
+		// Sets scene background color value
+		void setBackground(maths::vec3 newSceneBackgroundColor);
+
+		// Returns scene background color value. Non-const method, because we want to modify it in widget panels
+		MAR_NO_DISCARD maths::vec3& getBackground();
+
+		// Returns scene registry. Non-const, because it will be used by entities. Please, use this carefully.
+		MAR_NO_DISCARD SceneRegistry* getRegistry();
 		
-		// --- GET METHODS --- //
+		// Returns view at all entities that contains TComponent. View can be iterated with lambda [](entt::entity entt_entity, TComponent& component) {};
+		template<typename TComponent> MAR_NO_DISCARD auto getView();
 
-		MAR_NO_DISCARD const std::string& getName() const { return m_name; }
-		MAR_NO_DISCARD maths::vec3& getBackground() { return m_backgroundColor; }
-		MAR_NO_DISCARD SceneRegistry* getRegistry() { return &m_sceneRegistry; }
-		MAR_NO_DISCARD const std::vector<Entity>& getEntities() const;
-
-		template<typename T> 
-		MAR_NO_DISCARD auto getView() {
-			return m_sceneRegistry.m_registry.view<T>();
-		}
-
-		template<typename T> 
-		MAR_NO_DISCARD T& getComponent(entt::entity entity) {
-			MAR_CORE_ASSERT(m_sceneRegistry.m_registry.has<T>(entity), "Passed entity does not have component");
-			return m_sceneRegistry.m_registry.get<T>(entity);
-		}
+		// Returns component from entt::entity. Used only in lambda methods at view.
+		template<typename TComponent> MAR_NO_DISCARD TComponent& getComponent(entt::entity entt_entity);
 
 	private:
 
 		std::string m_name{ "Empty Scene" };
-		EntityContainer m_container;
+		FEntityArray m_entities;
 
 		maths::vec3 m_backgroundColor{ 0.22f, 0.69f, 0.87f };
 		SceneRegistry m_sceneRegistry;
@@ -79,6 +100,9 @@ namespace marengine {
 
 
 }
+
+
+#include "Scene.inl"
 
 
 #endif // !MAR_ENGINE_ECS_SCENE_H

@@ -18,32 +18,21 @@
 **/
 
 
-#ifndef MAR_ENGINE_ENGINE_ONLY_COMPONENTS_H
-#define MAR_ENGINE_ENGINE_ONLY_COMPONENTS_H
+#ifndef MAR_ENGINE_ENTITY_DEFINITIONS_H
+#define MAR_ENGINE_ENTITY_DEFINITIONS_H
 
 
-#include "../../../mar.h"
+#include <vector>
 
 
 namespace marengine {
 
+	class Entity;
+	
 
-	struct RenderPipelineComponent {
-		size_t containerIndex{ 0 };
-		size_t transformIndex{ 0 };
-		size_t colorIndex{ 0 };
-
-		size_t containerLightIndex{ 0 };
-		size_t lightIndex{ 0 };
-
-		size_t materialType{ 0 };
-
-		RenderPipelineComponent() = default;
-		RenderPipelineComponent(const RenderPipelineComponent& rpc) = default;
-	};
-
+	typedef std::vector<Entity> FEntityArray;
 
 }
 
 
-#endif // !MAR_ENGINE_ECS_ENGINE_ONLY_COMPONENTS_H
+#endif // !MAR_ENGINE_ENTITY_DEFINITIONS_H

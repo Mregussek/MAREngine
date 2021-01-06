@@ -28,15 +28,11 @@
 
 namespace marengine {
 
-	class SceneEvents;
 	class Scene;
 	class Entity;
 
 
 	class SceneManager {
-
-		friend class SceneEvents;
-
 	public:
 
 		static SceneManager* Instance;
