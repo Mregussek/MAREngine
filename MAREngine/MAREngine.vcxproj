@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\json\include;$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\pugixml-1.11\src;$(SolutionDir)MAREngine\3rd_party\json\include;$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
@@ -144,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\json\include;$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\pugixml-1.11\src;$(SolutionDir)MAREngine\3rd_party\json\include;$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -222,6 +222,8 @@
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
     <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="3rd_party\pugixml-1.11\src\pugiconfig.hpp" />
+    <ClInclude Include="3rd_party\pugixml-1.11\src\pugixml.hpp" />
     <ClInclude Include="src\Core\ecs\Entity\EntityDefinitions.h" />
     <ClInclude Include="src\Core\events\AllEvents.h" />
     <ClInclude Include="src\Core\ecs\Entity\EventsComponentEntity.h" />
@@ -369,6 +371,7 @@
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="3rd_party\pugixml-1.11\src\pugixml.cpp" />
     <ClCompile Include="src\Core\ecs\Components\ScriptingComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Components\TextureComponents.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />

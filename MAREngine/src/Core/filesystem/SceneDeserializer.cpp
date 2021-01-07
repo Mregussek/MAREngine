@@ -35,7 +35,6 @@ namespace marengine {
 			FILESYSTEM_ERROR("FILESYSTEM: path extension is not json! Found {} in given path {}", extension, path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
-
 		
 		std::ifstream file(path);
 		if (!file.is_open()) {
@@ -164,6 +163,128 @@ namespace marengine {
 		if (jsonContains("PythonScriptComponent")) {
 			auto& pythonScriptComponent{ entity.addComponent<PythonScriptComponent>() };
 			setString(pythonScriptComponent.scriptsPath, "PythonScriptComponent", "path");
+		}
+	}
+
+	Scene* FSceneDeserializer::xmlLoadScene(const std::string& path) {
+		const std::string extension{ path.substr(path.find_last_of(".") + 1) };
+		if (extension != "xml") {
+			FILESYSTEM_ERROR("FILESYSTEM: path extension is not xml! Found {} in given path {}", extension, path);
+			return Scene::createEmptyScene("EmptySceneNotLoaded");
+		}
+
+		pugi::xml_document doc;
+		pugi::xml_parse_result result = doc.load_file(path.c_str());
+
+		auto loadVec3 = [](pugi::xml_node& node, const char* childName)->maths::vec3 {
+			return {
+				node.child(childName).attribute("x").as_float(),
+				node.child(childName).attribute("y").as_float(),
+				node.child(childName).attribute("z").as_float()
+			};
+		};
+
+		auto sceneChild = doc.child("MAREngineScene").child("Scene");
+		const std::string sceneName{ sceneChild.child("SceneName").attribute("value").value() };
+		const uint32_t entitiesSize{ sceneChild.child("EntitiesCount").attribute("value").as_uint() };
+		const maths::vec3 sceneBackground{ loadVec3(sceneChild, "SceneBackground") };
+
+		Scene* scene{ new Scene("Default") };
+		scene->setName(sceneName);
+		scene->setBackground(sceneBackground);
+
+		auto entitiesChild = doc.child("MAREngineScene").child("Entities");
+		for (uint32_t i = 0; i < entitiesSize; i++) {
+			const Entity& entity{ scene->createEntity() };
+			const std::string entityStr{ "Entity" + std::to_string(i) };
+			auto entityChild{ entitiesChild.child(entityStr.c_str()) };
+			loadEntity(entity, i, entityChild);
+		}
+
+		return scene;
+	}
+
+	void FSceneDeserializer::loadEntity(const Entity& entity, uint32_t index, pugi::xml_node& node) {
+		auto currentComponent = [](pugi::xml_node& node, std::string componentName)->bool {
+			return (node.name() == componentName);
+		};
+		auto loadEasyString = [](pugi::xml_node& node, const char* valueName)->std::string {
+			return node.attribute(valueName).as_string();
+		};
+		auto loadString = [](pugi::xml_node & node, const char* valueName)->std::string {
+			return node.child(valueName).attribute("value").as_string();
+		};
+		auto loadFloat = [](pugi::xml_node& node, const char* valueName)->float {
+			return node.child(valueName).attribute("value").as_float();
+		};
+		auto loadVec3 = [](pugi::xml_node& node, const char* valueName)->maths::vec3 {
+			auto childName = node.child(valueName);
+			return {
+				childName.attribute("x").as_float(),
+				childName.attribute("y").as_float(),
+				childName.attribute("z").as_float()
+			};
+		};
+
+		for (auto componentNode : node.children()) {
+			if (currentComponent(componentNode, "TagComponent")) {
+				auto& tagComponent{ entity.getComponent<TagComponent>() };
+				tagComponent.tag = loadEasyString(componentNode, "tag");
+			}
+			else if (currentComponent(componentNode, "TransformComponent")) {
+				auto& component{ entity.getComponent<TransformComponent>() };
+				component.position = loadVec3(node, "position");
+				component.rotation = loadVec3(node, "rotation");
+				component.scale = loadVec3(node, "scale");
+			}
+			else if (currentComponent(componentNode, "RenderableComponent")) {
+				auto& component{ entity.addComponent<RenderableComponent>() };
+				component.name = loadEasyString(componentNode, "name");
+				fillRenderable(component);
+			}
+			else if (currentComponent(componentNode, "ColorComponent")) {
+				auto& component{ entity.addComponent<ColorComponent>() };
+				component.color = maths::vec4(loadVec3(componentNode, "color"), 1.f);
+			}
+			else if (currentComponent(componentNode, "Texture2DComponent")) {
+				auto& component{ entity.addComponent<Texture2DComponent>() };
+				component.texturePath = loadEasyString(componentNode, "path");
+			}
+			else if (currentComponent(componentNode, "TextureCubemapComponent")) {
+				auto& component{ entity.addComponent<TextureCubemapComponent>() };
+				component.texturePath = loadEasyString(componentNode, "path");
+			}
+			else if (currentComponent(componentNode, "PointLightComponent")) {
+				auto& component{ entity.addComponent<PointLightComponent>() };
+				component.pointLight.ambient = maths::vec4(loadVec3(node, "ambient"), 1.f);
+				component.pointLight.diffuse = maths::vec4(loadVec3(node, "diffuse"), 1.f);
+				component.pointLight.specular = maths::vec4(loadVec3(node, "specular"), 1.f);
+				component.pointLight.constant = loadFloat(node, "constant");
+				component.pointLight.linear = loadFloat(node, "linear");
+				component.pointLight.quadratic = loadFloat(node, "quadratic");
+				component.pointLight.shininess = loadFloat(node, "shininess");
+			}
+			else if (currentComponent(componentNode, "CameraComponent")) {
+				auto& component{ entity.addComponent<CameraComponent>() };
+				component.id = loadString(componentNode, "id");
+				component.Perspective = loadFloat(componentNode, "Perspective") == 1.f ? true : false;
+				
+				component.p_fov = loadFloat(componentNode, "p_fov");
+				component.p_aspectRatio = loadFloat(componentNode, "p_aspectRatio");
+				component.p_near = loadFloat(componentNode, "p_near");
+				component.p_far = loadFloat(componentNode, "p_far");
+
+				component.o_left = loadFloat(componentNode, "o_left");
+				component.o_right = loadFloat(componentNode, "o_right");
+				component.o_top = loadFloat(componentNode, "o_top");
+				component.o_bottom = loadFloat(componentNode, "o_bottom");
+				component.o_near = loadFloat(componentNode, "o_near");
+				component.o_far = loadFloat(componentNode, "o_far");
+			}
+			else if (currentComponent(componentNode, "PythonScriptComponent")) {
+				auto& component{ entity.addComponent<PythonScriptComponent>() };
+				component.scriptsPath = loadEasyString(componentNode, "path");
+			}
 		}
 	}
 

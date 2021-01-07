@@ -29,6 +29,7 @@
 
 // Filesystem
 #include "../../src/Core/filesystem/SceneDeserializer.h"
+#include "../../src/Core/filesystem/SceneSerializer.h"
 
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"

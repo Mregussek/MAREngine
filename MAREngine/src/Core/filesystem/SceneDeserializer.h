@@ -36,10 +36,12 @@ namespace marengine {
 
 		static Scene* oldWayLoadingFile(const std::string& path);
 		static Scene* loadSceneFromFile(const std::string& path);
+		static Scene* xmlLoadScene(const std::string& path);
 
 	private:
 
 		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
+		static void loadEntity(const Entity& entity, uint32_t index, pugi::xml_node& node);
 		static void loadScene(std::ifstream& file, Scene* scene);
 		static void loadEntity(std::ifstream& file, Scene* scene, const Entity& entity);
 
