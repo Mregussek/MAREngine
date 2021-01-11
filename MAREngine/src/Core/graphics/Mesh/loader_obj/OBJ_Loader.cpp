@@ -368,7 +368,7 @@ namespace marengine::loader_obj {
 					return tVerts[i - 1];
 				}();
 
-				const auto pCurrent{ tVerts[i] };
+				const auto& pCurrent{ tVerts[i] };
 
 				const auto pNext = [i, &tVerts]()->Vertex {
 					if (i == (tVerts.size() - 1)) {

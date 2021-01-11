@@ -22,76 +22,27 @@
 #define MAR_ENGINE_F_EVENTS_COMPONENT_ENTITY_H
 
 
-#include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
-
-
 namespace marengine {
 
-	class RenderCamera;
+	class Entity;
 
-
-	class FEventsCameraEntity {
-	public:
-
-		static void onMainCameraUpdate(const Entity& entity);
-		static void onEditorCameraSet(const RenderCamera* renderCamera);
-		static void onGameCameraSet();
-
-	};
-
+	
 	class FEventsComponentEntity {
 	public:
 
-		static const FEventsComponentEntity* Instance;
+		template<typename T> static void onAdd(const Entity& entity);
 
-		template<typename T> void onAdd(const Entity& entity) const { 
-			entity.template addComponent<T>();
-		}
+		template<typename T> static void onUpdate(const Entity& entity);
 
-		template<typename T> void onUpdate(const Entity& entity) const { 
-		
-		}
-
-		template<typename T> void onRemove(const Entity& entity) const { 
-			entity.template removeComponent<T>();
-		}
+		template<typename T> static void onRemove(const Entity& entity);
 
 	};
 
-	// Here add declarations for specific component event implementations ...
-
-	// TransformComponent
-	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) const;
-
-	// RenderableComponent
-	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity) const;
-
-	// ColorComponent
-	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) const;
-
-	// Texture2D Component
-	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) const;
-
-	// Texture CubemapComponent
-	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity) const;
-
-	// Light Component
-	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onUpdate<PointLightComponent>(const Entity& entity) const;
-	template<> void FEventsComponentEntity::onRemove<PointLightComponent>(const Entity& entity) const;
-
-	// CameraComponent
-	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) const;
-
 
 }
+
+
+#include "EventsComponentEntity.inl"
 
 
 #endif // !MAR_ENGINE_F_COMPONENT_WIDGET_EVENTS_H

@@ -66,7 +66,7 @@ namespace marengine {
 		bool Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) const;
 
 
-		const Entity* currentEntity;
+		const Entity* currentEntity{ nullptr };
 
 	};
 

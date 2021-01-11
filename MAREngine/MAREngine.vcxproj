@@ -225,6 +225,7 @@
     <ClInclude Include="3rd_party\pugixml-1.11\src\pugiconfig.hpp" />
     <ClInclude Include="3rd_party\pugixml-1.11\src\pugixml.hpp" />
     <ClInclude Include="src\Core\ecs\Entity\EntityDefinitions.h" />
+    <ClInclude Include="src\Core\ecs\Entity\EventsCameraEntity.h" />
     <ClInclude Include="src\Core\events\AllEvents.h" />
     <ClInclude Include="src\Core\ecs\Entity\EventsComponentEntity.h" />
     <ClInclude Include="src\Core\ecs\Entity\IEntityEvents.h" />
@@ -374,6 +375,7 @@
     <ClCompile Include="3rd_party\pugixml-1.11\src\pugixml.cpp" />
     <ClCompile Include="src\Core\ecs\Components\ScriptingComponents.cpp" />
     <ClCompile Include="src\Core\ecs\Components\TextureComponents.cpp" />
+    <ClCompile Include="src\Core\ecs\Entity\EventsCameraEntity.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp" />
     <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp" />
@@ -467,6 +469,7 @@
     <None Include="resources\shaders\entityCubemap.shader.glsl" />
     <None Include="resources\shaders\entityTexture2D.shader.glsl" />
     <None Include="src\Core\ecs\Entity\Entity.inl" />
+    <None Include="src\Core\ecs\Entity\EventsComponentEntity.inl" />
     <None Include="src\Core\ecs\Scene.inl" />
   </ItemGroup>
   <ItemGroup>

@@ -489,6 +489,9 @@
     <ClInclude Include="3rd_party\pugixml-1.11\src\pugixml.hpp">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\ecs\Entity\EventsCameraEntity.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -764,6 +767,9 @@
     <ClCompile Include="3rd_party\pugixml-1.11\src\pugixml.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\ecs\Entity\EventsCameraEntity.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cmake\FindGLFW3.cmake" />
@@ -789,6 +795,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </None>
     <None Include="src\Core\ecs\Scene.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Core\ecs\Entity\EventsComponentEntity.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
   </ItemGroup>

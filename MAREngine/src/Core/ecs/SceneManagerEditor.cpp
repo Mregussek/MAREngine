@@ -21,7 +21,8 @@
 #include "SceneManagerEditor.h"
 #include "ECSLogs.h"
 #include "Scene.h"
-#include "../ecs/Entity/EventsComponentEntity.h"
+#include "Entity/EventsComponentEntity.h"
+#include "Entity/EventsCameraEntity.h"
 #include "../graphics/RenderAPI/RenderPipeline.h"
 
 
@@ -127,14 +128,14 @@ namespace marengine {
 	}
 
 	void FSceneManagerEditor::updateEntityInPlaymode(const Entity& entity) {
-		FEventsComponentEntity::Instance->onUpdate<TransformComponent>(entity);
+		FEventsComponentEntity::onUpdate<TransformComponent>(entity);
 
 		if (entity.hasComponent<PointLightComponent>()) {
-			FEventsComponentEntity::Instance->onUpdate<PointLightComponent>(entity);
+			FEventsComponentEntity::onUpdate<PointLightComponent>(entity);
 		}
 
 		if (entity.hasComponent<ColorComponent>()) {
-			FEventsComponentEntity::Instance->onUpdate<ColorComponent>(entity);
+			FEventsComponentEntity::onUpdate<ColorComponent>(entity);
 		}
 	}
 

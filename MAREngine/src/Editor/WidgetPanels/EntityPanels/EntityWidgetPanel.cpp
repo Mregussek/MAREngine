@@ -180,33 +180,33 @@ namespace marengine {
 			&& !currentEntity->hasComponent<TextureCubemapComponent>();
 
 		if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
-			FEventsComponentEntity::Instance->onAdd<RenderableComponent>(*currentEntity);
+			FEventsComponentEntity::onAdd<RenderableComponent>(*currentEntity);
 		}
 
 		if (hasNeitherColorNorTexture) {
 			if (ImGui::MenuItem("Add ColorComponent")) {
-				FEventsComponentEntity::Instance->onAdd<ColorComponent>(*currentEntity);
+				FEventsComponentEntity::onAdd<ColorComponent>(*currentEntity);
 			}
 
 			if (ImGui::MenuItem("Add Texture2DComponent")) {
-				FEventsComponentEntity::Instance->onAdd<Texture2DComponent>(*currentEntity);
+				FEventsComponentEntity::onAdd<Texture2DComponent>(*currentEntity);
 			}
 
 			if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-				FEventsComponentEntity::Instance->onAdd<TextureCubemapComponent>(*currentEntity);
+				FEventsComponentEntity::onAdd<TextureCubemapComponent>(*currentEntity);
 			}
 		}
 
 		if (!hasLight && ImGui::MenuItem("Add PointLightComponent")) {
-			FEventsComponentEntity::Instance->onAdd<PointLightComponent>(*currentEntity);
+			FEventsComponentEntity::onAdd<PointLightComponent>(*currentEntity);
 		}
 
 		if (!hasCamera && ImGui::MenuItem("Add CameraComponent")) {
-			FEventsComponentEntity::Instance->onAdd<CameraComponent>(*currentEntity);
+			FEventsComponentEntity::onAdd<CameraComponent>(*currentEntity);
 		}
 
 		if (!hasScript && ImGui::MenuItem("Add PythonScriptComponent")) {
-			FEventsComponentEntity::Instance->onAdd<PythonScriptComponent>(*currentEntity);
+			FEventsComponentEntity::onAdd<PythonScriptComponent>(*currentEntity);
 		}
 	}
 
@@ -223,7 +223,7 @@ namespace marengine {
 			ImGui::NewLine();
 
 			if (updatedTransform) {
-				FEventsComponentEntity::Instance->onUpdate<TransformComponent>(*currentEntity);
+				FEventsComponentEntity::onUpdate<TransformComponent>(*currentEntity);
 			}
 		}
 
@@ -232,7 +232,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleRenderableComponent() const {
 		if (ImGui::MenuItem("Remove Renderable")) {
-			FEventsComponentEntity::Instance->onRemove<RenderableComponent>(*currentEntity);
+			FEventsComponentEntity::onRemove<RenderableComponent>(*currentEntity);
 			return;
 		}
 		auto& renderable = currentEntity->getComponent<RenderableComponent>();
@@ -249,7 +249,7 @@ namespace marengine {
 		if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { userHasChosenRenderable = true; }
 
 		if (userHasChosenRenderable) {
-			FEventsComponentEntity::Instance->onUpdate<RenderableComponent>(*currentEntity);
+			FEventsComponentEntity::onUpdate<RenderableComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
@@ -257,7 +257,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleCameraComponent() const {		
 		if (ImGui::Button("Remove Camera")) {
-			FEventsComponentEntity::Instance->onRemove<CameraComponent>(*currentEntity);
+			FEventsComponentEntity::onRemove<CameraComponent>(*currentEntity);
 			return;
 		}
 		auto& camera = currentEntity->getComponent<CameraComponent>();
@@ -306,7 +306,7 @@ namespace marengine {
 		}
 
 		if (updatedCamera) {
-			FEventsComponentEntity::Instance->onUpdate<CameraComponent>(*currentEntity);
+			FEventsComponentEntity::onUpdate<CameraComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
@@ -314,13 +314,13 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleColorComponent() const {
 		if (ImGui::MenuItem("Remove Color")) {
-			FEventsComponentEntity::Instance->onRemove<ColorComponent>(*currentEntity);
+			FEventsComponentEntity::onRemove<ColorComponent>(*currentEntity);
 			return;
 		}
 		auto& color = currentEntity->getComponent<ColorComponent>();
 
 		if (ImGui::ColorEdit4("- color", &color.color.x)) {
-			FEventsComponentEntity::Instance->onUpdate<ColorComponent>(*currentEntity);
+			FEventsComponentEntity::onUpdate<ColorComponent>(*currentEntity);
 		}
 			
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
@@ -328,7 +328,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleTexture2DComponent() const {
 		if (ImGui::MenuItem("Remove Texture")) {
-			FEventsComponentEntity::Instance->onRemove<Texture2DComponent>(*currentEntity);
+			FEventsComponentEntity::onRemove<Texture2DComponent>(*currentEntity);
 			return;
 		}
 		auto& texture2D = currentEntity->getComponent<Texture2DComponent>();
@@ -349,7 +349,7 @@ namespace marengine {
 			
 			// here need to try loading the texture, not only checking if it is already loaded
 			if (TextureOpenGL::hasTexture(texture2D.texturePath)) {
-				FEventsComponentEntity::Instance->onUpdate<Texture2DComponent>(*currentEntity);
+				FEventsComponentEntity::onUpdate<Texture2DComponent>(*currentEntity);
 			}
 		}
 
@@ -358,7 +358,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handleTextureCubemapComponent() const {
 		if (ImGui::MenuItem("Remove Cubemap")) {
-			FEventsComponentEntity::Instance->onRemove<TextureCubemapComponent>(*currentEntity);
+			FEventsComponentEntity::onRemove<TextureCubemapComponent>(*currentEntity);
 			return;
 		}
 		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
@@ -376,7 +376,7 @@ namespace marengine {
 
 		// here need to try loading the texture, not only checking if it is already loaded
 		if (ImGui::Button("Load Cubemap")) {
-			FEventsComponentEntity::Instance->onUpdate<TextureCubemapComponent>(*currentEntity);
+			FEventsComponentEntity::onUpdate<TextureCubemapComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
@@ -384,7 +384,7 @@ namespace marengine {
 
 	void WEntityWidgetPanel::handlePointLightComponent() const {
 		if (ImGui::MenuItem("Remove Light")) {
-			FEventsComponentEntity::Instance->onRemove<PointLightComponent>(*currentEntity);
+			FEventsComponentEntity::onRemove<PointLightComponent>(*currentEntity);
 			return;
 		}
 		auto& pointLight{ currentEntity->getComponent<PointLightComponent>().pointLight };
@@ -402,7 +402,7 @@ namespace marengine {
 		if (ImGui::DragFloat("Shininess", &pointLight.shininess, 0.5f, 0.f, 256.f)) { updatedLight = true; }
 
 		if (updatedLight) {
-			FEventsComponentEntity::Instance->onUpdate<PointLightComponent>(*currentEntity);
+			FEventsComponentEntity::onUpdate<PointLightComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");

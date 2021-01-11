@@ -18,37 +18,22 @@
 **/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_VIEWPORT_GUIZMO_H
-#define MAR_ENGINE_EDITOR_GUI_VIEWPORT_GUIZMO_H
-
-
-#include "../../../mar.h"
+#ifndef MAR_ENGINE_F_EVENTS_CAMERA_ENTITY_H
+#define MAR_ENGINE_F_EVENTS_CAMERA_ENTITY_H
 
 
 namespace marengine {
 
-	class Camera;
-	class Entity; 
-	struct TransformComponent;
+	class RenderCamera;
+	class Entity;
 
 
-	class GUI_Guizmo {
+	class FEventsCameraEntity {
 	public:
 
-		GUI_Guizmo() = default;
-
-		void selectType();
-		void draw(const Camera& editorCamera, const Entity& currentEntity) const;
-
-	private:
-
-		bool draw(const Camera& editorCamera, TransformComponent& transform) const;
-
-		void setTranslation();
-		void setRotation();
-		void setScale();
-
-		ImGuizmo::OPERATION m_operation{ ImGuizmo::OPERATION::TRANSLATE };
+		static void onMainCameraUpdate(const Entity& entity);
+		static void onEditorCameraSet(const RenderCamera* renderCamera);
+		static void onGameCameraSet();
 
 	};
 
@@ -56,5 +41,4 @@ namespace marengine {
 }
 
 
-
-#endif // !MAR_ENGINE_EDITOR_GUI_VIEWPORT_GUIZMO_H
+#endif // !MAR_ENGINE_F_EVENTS_CAMERA_ENTITY_H

@@ -42,7 +42,7 @@ namespace marengine {
 		const bool userUsedGuizmo{ draw(editorCamera, transform) };
 
 		if (userUsedGuizmo) {
-			FEventsComponentEntity::Instance->onUpdate<TransformComponent>(currentEntity);
+			FEventsComponentEntity::onUpdate<TransformComponent>(currentEntity);
 		}
 	}
 

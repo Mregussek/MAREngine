@@ -21,9 +21,9 @@
 #include "ViewportWidget.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../../EditorLogging.h"
-#include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../Core/ecs/Entity/EventsComponentEntity.h"
+#include "../../../Core/ecs/Entity/Entity.h"
+#include "../../../Core/ecs/Entity/EventsCameraEntity.h"
 #include "../../../Core/graphics/RenderAPI/RenderBufferManager.h"
 
 
