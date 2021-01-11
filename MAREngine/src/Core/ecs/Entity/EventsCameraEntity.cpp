@@ -29,13 +29,17 @@
 namespace marengine {
 
 
+	void FEventsCameraEntity::onMainCameraUpdate(const RenderCamera* renderCamera) {
+		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
+	}
+
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
 		auto updateCameraOperation = [&entity, &cameraComponent]() {
 			const auto& transform = entity.getComponent<TransformComponent>();
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			FRenderBufferManager::onRenderCameraUpdate(&cameraComponent.renderCamera);
+			onMainCameraUpdate(&cameraComponent.renderCamera);
 		};
 
 		const bool userCheckingGameInPlayMode{ FSceneManagerEditor::Instance->isPlayMode() || FSceneManagerEditor::Instance->isPauseMode() };
@@ -48,7 +52,7 @@ namespace marengine {
 
 	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* renderCamera) {
 		RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
-		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
+		onMainCameraUpdate(renderCamera);
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() {
@@ -66,7 +70,7 @@ namespace marengine {
 				RenderCamera* renderCamera{ &cameraComponent.renderCamera };
 				renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
 				RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
-				FRenderBufferManager::onRenderCameraUpdate(renderCamera);
+				onMainCameraUpdate(renderCamera);
 			}
 		});
 	}

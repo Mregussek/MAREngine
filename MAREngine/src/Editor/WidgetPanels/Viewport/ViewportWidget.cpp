@@ -24,7 +24,6 @@
 #include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Entity/EventsCameraEntity.h"
-#include "../../../Core/graphics/RenderAPI/RenderBufferManager.h"
 
 
 namespace marengine {
@@ -148,7 +147,7 @@ namespace marengine {
 				bool useInputInCamera = false;
 				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
 				if (m_camera.update(m_aspectRatio, useInputInCamera)) {
-					FRenderBufferManager::onRenderCameraUpdate(m_camera.getCameraData());
+					FEventsCameraEntity::onMainCameraUpdate(m_camera.getCameraData());
 				}
 			}
 		}

@@ -30,6 +30,8 @@
 namespace marengine {
 	
 
+	// Default implementations
+	
 	template<typename T> static void FEventsComponentEntity::onAdd(const Entity& entity) {
 		entity.template addComponent<T>();
 	}

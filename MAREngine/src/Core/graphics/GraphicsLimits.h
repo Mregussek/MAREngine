@@ -29,16 +29,16 @@
 namespace marengine {
 
 
-	struct GraphicLimits {
+	namespace GraphicLimits {
 			
-		const static inline uint32_t maxTrianglesCount{ 100000 };
-		const static inline uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
-		const static inline uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
-		const static inline uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
-		const static inline uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
+		constexpr uint32_t maxTrianglesCount{ 100000 };
+		constexpr uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
+		constexpr uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
+		constexpr uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
+		constexpr uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
 
-		const static inline uint32_t maxTransforms{ 32 };
-		const static inline uint32_t maxLights{ 32 };
+		constexpr uint32_t maxTransforms{ 32 };
+		constexpr uint32_t maxLights{ 32 };
 
 	};
 
