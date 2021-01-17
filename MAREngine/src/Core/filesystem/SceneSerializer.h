@@ -35,12 +35,10 @@ namespace marengine {
 	public:
 
 		static void saveSceneToFile(const char* path, Scene* scene);
-		static void saveSceneToXML(const char* path, Scene* scene);
 
 	private:
 
 		static void saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
-		static void saveEntityToXml(const Entity& entity, uint32_t index, pugi::xml_node& node);
 
 	};
 

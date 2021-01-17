@@ -369,9 +369,6 @@
     <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\StatisticsWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\ThemeWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -483,13 +480,13 @@
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\pugixml-1.11\src\pugiconfig.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="3rd_party\pugixml-1.11\src\pugixml.hpp">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\Entity\EventsCameraEntity.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetPanels\DebugPanels\SceneDebugWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetPanels\DebugPanels\StatisticsWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -674,9 +671,6 @@
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\StatisticsWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\ThemeWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -764,10 +758,13 @@
     <ClCompile Include="src\Core\graphics\Renderer\Renderer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="3rd_party\pugixml-1.11\src\pugixml.cpp">
+    <ClCompile Include="src\Core\ecs\Entity\EventsCameraEntity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\ecs\Entity\EventsCameraEntity.cpp">
+    <ClCompile Include="src\Editor\WidgetPanels\DebugPanels\SceneDebugWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetPanels\DebugPanels\StatisticsWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

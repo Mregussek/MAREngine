@@ -15,7 +15,8 @@
             "Entity": [
                 {
                     "ColorComponent": {
-                        "texture": {
+                        "color": {
+                            "w": 1.0,
                             "x": 0.20000000298023224,
                             "y": 0.5,
                             "z": 0.20000000298023224
@@ -31,15 +32,15 @@
                         "tag": "DarkGreenCube"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 65.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 22.059999465942383,
                             "y": 0.5400000214576721,
                             "z": 4.550000190734863
+                        },
+                        "rotation": {
+                            "x": 65.0,
+                            "y": 0.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 1.0,
@@ -50,7 +51,8 @@
                 },
                 {
                     "ColorComponent": {
-                        "texture": {
+                        "color": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.8999999761581421,
                             "z": 0.25
@@ -63,15 +65,15 @@
                         "tag": "GreenPyramid"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 25.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 21.049999237060547,
                             "y": 0.699999988079071,
                             "z": 2.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 25.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 3.0,
@@ -82,7 +84,8 @@
                 },
                 {
                     "ColorComponent": {
-                        "texture": {
+                        "color": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.20000000298023224,
                             "z": 0.8999999761581421
@@ -95,14 +98,14 @@
                         "tag": "SurfacePurple"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 21.299999237060547,
                             "y": -1.850000023841858,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
                             "z": 0.0
                         },
                         "scale": {
@@ -114,7 +117,8 @@
                 },
                 {
                     "ColorComponent": {
-                        "texture": {
+                        "color": {
+                            "w": 1.0,
                             "x": 0.8999999761581421,
                             "y": 0.20000000298023224,
                             "z": 0.30000001192092896
@@ -127,15 +131,15 @@
                         "tag": "RedWall"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": -99.69000244140625,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 21.799999237060547,
                             "y": -2.1500000953674316,
                             "z": -7.829999923706055
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -99.69000244140625,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 1.0,
@@ -146,7 +150,8 @@
                 },
                 {
                     "ColorComponent": {
-                        "texture": {
+                        "color": {
+                            "w": 1.0,
                             "x": 1.0,
                             "y": 1.0,
                             "z": 1.0
@@ -154,20 +159,29 @@
                     },
                     "PointLightComponent": {
                         "ambient": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.5,
                             "z": 0.5
                         },
                         "constant": 1.0,
                         "diffuse": {
+                            "w": 1.0,
                             "x": 0.8999999761581421,
                             "y": 0.8999999761581421,
                             "z": 0.8999999761581421
                         },
                         "linear": 0.0,
+                        "position": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
                         "quadratic": 0.0,
                         "shininess": 64.0,
                         "specular": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.5,
                             "z": 0.5
@@ -180,15 +194,15 @@
                         "tag": "LightCube"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": -31.5,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 17.690000534057617,
                             "y": 22.56999969482422,
                             "z": 7.699999809265137
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -31.5,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 0.7509989738464355,
@@ -199,7 +213,8 @@
                 },
                 {
                     "ColorComponent": {
-                        "texture": {
+                        "color": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.5,
                             "z": 0.5
@@ -212,15 +227,15 @@
                         "tag": "FlyingGrayRectangle"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 265.8500061035156,
-                            "y": 210.4600067138672,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 20.93000030517578,
                             "y": 3.2300000190734863,
                             "z": -3.700000047683716
+                        },
+                        "rotation": {
+                            "x": 265.8500061035156,
+                            "y": 210.4600067138672,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 1.0,
@@ -237,18 +252,18 @@
                         "tag": "RedBrickWall"
                     },
                     "Texture2DComponent": {
-                        "name": "textures/red-brick.jpg"
+                        "texturePath": "textures/red-brick.jpg"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": -0.11999999731779099
-                        },
-                        "center": {
+                        "position": {
                             "x": 30.760000228881836,
                             "y": -1.7000000476837158,
                             "z": 4.019999980926514
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": -0.11999999731779099
                         },
                         "scale": {
                             "x": 1.0,
@@ -276,15 +291,15 @@
                         "tag": "CameraSavedFile"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": -12.5,
-                            "y": -90.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": -1.9552500247955322,
                             "y": 29.997400283813477,
                             "z": 85.66000366210938
+                        },
+                        "rotation": {
+                            "x": -12.5,
+                            "y": -90.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 0.9999979734420776,
@@ -301,18 +316,18 @@
                         "tag": "MRtextureFirst"
                     },
                     "Texture2DComponent": {
-                        "name": "textures/mr.jpg"
+                        "texturePath": "textures/mr.jpg"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 1.0,
-                            "y": -62.5,
-                            "z": -5.5
-                        },
-                        "center": {
+                        "position": {
                             "x": 16.649999618530273,
                             "y": -1.5,
                             "z": -5.400000095367432
+                        },
+                        "rotation": {
+                            "x": 1.0,
+                            "y": -62.5,
+                            "z": -5.5
                         },
                         "scale": {
                             "x": 1.0,
@@ -329,18 +344,18 @@
                         "tag": "WallTexture"
                     },
                     "Texture2DComponent": {
-                        "name": "textures/wall.jpg"
+                        "texturePath": "textures/wall.jpg"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 15.350000381469727,
                             "y": -1.850000023841858,
                             "z": -2.799999952316284
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 1.0,
@@ -357,17 +372,17 @@
                         "tag": "GrassSurface"
                     },
                     "Texture2DComponent": {
-                        "name": "textures/grass-texture.jpg"
+                        "texturePath": "textures/grass-texture.jpg"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": -8.649999618530273,
                             "y": -1.850000023841858,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
                             "z": 0.0
                         },
                         "scale": {
@@ -380,20 +395,29 @@
                 {
                     "PointLightComponent": {
                         "ambient": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.6100000143051147,
                             "z": 0.6800000071525574
                         },
                         "constant": 0.35600000619888306,
                         "diffuse": {
+                            "w": 1.0,
                             "x": 0.6299999952316284,
                             "y": 0.8999999761581421,
                             "z": 0.8999999761581421
                         },
                         "linear": 0.014999999664723873,
+                        "position": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
                         "quadratic": 0.009999999776482582,
                         "shininess": 31.5,
                         "specular": {
+                            "w": 1.0,
                             "x": 0.5,
                             "y": 0.5,
                             "z": 0.5
@@ -409,18 +433,18 @@
                         "tag": "YellowTextureLight"
                     },
                     "Texture2DComponent": {
-                        "name": "textures/yellow-texture.jpg"
+                        "texturePath": "textures/yellow-texture.jpg"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": -2.549999952316284,
                             "y": -1.4500000476837158,
                             "z": 0.550000011920929
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 1.0,
@@ -437,18 +461,18 @@
                         "tag": "AlphaGrassPNG"
                     },
                     "Texture2DComponent": {
-                        "name": "textures/grass_alpha.png"
+                        "texturePath": "textures/grass_alpha.png"
                     },
                     "TransformComponent": {
-                        "angles": {
-                            "x": 90.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "center": {
+                        "position": {
                             "x": 2.3499999046325684,
                             "y": -1.2999999523162842,
                             "z": -6.400000095367432
+                        },
+                        "rotation": {
+                            "x": 90.0,
+                            "y": 0.0,
+                            "z": 0.0
                         },
                         "scale": {
                             "x": 0.019999999552965164,

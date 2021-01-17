@@ -36,23 +36,30 @@ namespace marengine {
 
 		m_allEvents.entityEvents.Instance = &m_allEvents.entityEvents;
 
+		// push most important widgets
+		// textEditor must be pushed first, viewport second and general window as third
 		m_editorManager.pushPanel(&m_allWidgets.textEditor);
 		m_editorManager.pushPanel(&m_allWidgets.viewport);
 		m_editorManager.pushPanel(&m_allWidgets.general);
 		m_editorManager.pushPanel(&m_allWidgets.theme);
+
+		// push debug panels
+		m_editorManager.pushPanel(&m_allWidgets.statistics);
+		m_editorManager.pushPanel(&m_allWidgets.sceneDebug);
+
+		// push window panels
+		m_editorManager.pushPanel(&m_allWidgets.mainMenuBar);
+		m_editorManager.pushPanel(&m_allWidgets.windowSettings);
 
 		// push filesystem panels
 		m_editorManager.pushPanel(&m_allWidgets.filesystem);
 		m_editorManager.pushPanel(&m_allWidgets.sceneFilesystem);
 		m_editorManager.pushPanel(&m_allWidgets.entityFilesystem);
 
+		// push scene / entities panels
 		m_editorManager.pushPanel(&m_allWidgets.sceneHierarchy);
 		m_editorManager.pushPanel(&m_allWidgets.entity);
-
-		m_editorManager.pushPanel(&m_allWidgets.statistics);
-		m_editorManager.pushPanel(&m_allWidgets.mainMenuBar);
 		m_editorManager.pushPanel(&m_allWidgets.sceneProperties);
-		m_editorManager.pushPanel(&m_allWidgets.windowSettings);
 
 		m_editorManager.create();
 	}

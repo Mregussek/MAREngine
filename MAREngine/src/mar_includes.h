@@ -138,14 +138,6 @@
 	#error "MAR ENGINE: Cannot import json.hpp!"
 #endif
 
-#if __has_include("pugixml.hpp")
-	#include "pugixml.hpp"
-	#include "pugiconfig.hpp"
-	#define MAR_ENGINE_PUGIXML_LIB_IMPORTED
-#else
-	#error "MAR ENGINE: Cannot import pugixml.hpp!"
-#endif
-
 #if __has_include(<pybind11/pybind11.h>)
 	#include <pybind11/pybind11.h>
 	#include <pybind11/embed.h>
