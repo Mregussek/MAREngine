@@ -75,13 +75,19 @@ namespace marengine {
 			json["Scene"][sceneName]["Entity"][index][componentName][value]["y"] = v.y;
 			json["Scene"][sceneName]["Entity"][index][componentName][value]["z"] = v.z;
 		};
+		auto saveVec4 = [&json, &sceneName, index](const char* componentName, const char* value, const maths::vec4& v) {
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["x"] = v.x;
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["y"] = v.y;
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["z"] = v.z;
+			json["Scene"][sceneName]["Entity"][index][componentName][value]["w"] = v.w;
+		};
 
 		const auto& tagComponent{ entity.getComponent<TagComponent>() };
 		saveString("TagComponent", "tag", tagComponent.tag);
 
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		saveVec3("TransformComponent", "center", transformComponent.position);
-		saveVec3("TransformComponent", "angles", transformComponent.rotation);
+		saveVec3("TransformComponent", "position", transformComponent.position);
+		saveVec3("TransformComponent", "rotation", transformComponent.rotation);
 		saveVec3("TransformComponent", "scale", transformComponent.scale);
 
 		if (entity.hasComponent<RenderableComponent>()) {
@@ -91,23 +97,24 @@ namespace marengine {
 
 		if (entity.hasComponent<ColorComponent>()) {
 			const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-			saveVec3("ColorComponent", "texture", colorComponent.color);
+			saveVec4("ColorComponent", "color", colorComponent.color);
 		}
 		else if (entity.hasComponent<Texture2DComponent>()) {
 			const auto& texture2DComponent{ entity.getComponent<Texture2DComponent>() };
-			saveString("Texture2DComponent", "name", texture2DComponent.texturePath);
+			saveString("Texture2DComponent", "texturePath", texture2DComponent.texturePath);
 		}
 		else if (entity.hasComponent<TextureCubemapComponent>()) {
 			const auto& cubemapComponent{ entity.getComponent<TextureCubemapComponent>() };
-			saveString("TextureCubemapComponent", "name", cubemapComponent.texturePath);
+			saveString("TextureCubemapComponent", "texturePath", cubemapComponent.texturePath);
 		}
 		
 		if (entity.hasComponent<PointLightComponent>()) {
 			const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-	
-			saveVec3("PointLightComponent", "ambient", pointLightComponent.pointLight.ambient);
-			saveVec3("PointLightComponent", "diffuse", pointLightComponent.pointLight.diffuse);
-			saveVec3("PointLightComponent", "specular", pointLightComponent.pointLight.specular);
+			
+			saveVec4("PointLightComponent", "position", pointLightComponent.pointLight.position);
+			saveVec4("PointLightComponent", "ambient", pointLightComponent.pointLight.ambient);
+			saveVec4("PointLightComponent", "diffuse", pointLightComponent.pointLight.diffuse);
+			saveVec4("PointLightComponent", "specular", pointLightComponent.pointLight.specular);
 			saveFloat("PointLightComponent", "constant", pointLightComponent.pointLight.constant);
 			saveFloat("PointLightComponent", "linear", pointLightComponent.pointLight.linear);
 			saveFloat("PointLightComponent", "quadratic", pointLightComponent.pointLight.quadratic);
@@ -132,144 +139,6 @@ namespace marengine {
 			saveFloat("CameraComponent", "o_bottom", cameraComponent.o_bottom);
 			saveFloat("CameraComponent", "o_near", cameraComponent.o_near);
 			saveFloat("CameraComponent", "o_far", cameraComponent.o_far);
-		}
-
-		if (entity.hasComponent<PythonScriptComponent>()) {
-			const auto& pythonScriptComponent{ entity.getComponent<PythonScriptComponent>() };
-			saveString("PythonScriptComponent", "path", pythonScriptComponent.scriptsPath);
-		}
-	}
-
-	void FSceneSerializer::saveSceneToXML(const char* path, Scene* scene) {
-		const char* appName{ "DefaultApplication" };
-		const char* appVersion{ "v0.0.1" };
-		const char* engineName{ "MAREngine" };
-		const char* engineVersion{ "v0.0.1" };
-
-		auto pushString = [](pugi::xml_node& node, const char* childName, const char* strValue) {
-			auto xml{ node.append_child(childName) };
-			xml.append_attribute("value").set_value(strValue);
-		};
-
-		auto pushUint = [](pugi::xml_node& node, const char* childName, uint32_t uintValue) {
-			auto xml{ node.append_child(childName) };
-			xml.append_attribute("value").set_value(uintValue);
-		};
-
-		auto pushVec3 = [](pugi::xml_node& node, const char* childName, maths::vec3& v) {
-			auto xml{ node.append_child(childName) };
-			xml.append_attribute("x").set_value(v.x);
-			xml.append_attribute("y").set_value(v.y);
-			xml.append_attribute("z").set_value(v.z);
-		};
-
-		pugi::xml_document xmlParser;
-		auto marengineSceneXml{ xmlParser.append_child("MAREngineScene") };
-		{ // documentation
-			auto documentationXml{ marengineSceneXml.append_child("Documentation") };
-			pushString(documentationXml, "App", appName);
-			pushString(documentationXml, "AppVersion", appVersion);
-			pushString(documentationXml, "Engine", engineName);
-			pushString(documentationXml, "EngineVersion", engineVersion);
-		}
-		{ // scene info
-			auto sceneXml{ marengineSceneXml.append_child("Scene") };
-			pushString(sceneXml, "SceneName", scene->getName().c_str());
-			pushVec3(sceneXml, "SceneBackground", scene->getBackground());
-			pushUint(sceneXml, "EntitiesCount", scene->getEntities().size());
-		}
-		{ // entities
-			auto entitiesXml{ marengineSceneXml.append_child("Entities") };
-			const FEntityArray& entities{ scene->getEntities() };
-			for (uint32_t i = 0; i < entities.size(); i++) {
-				const std::string entityStr{ "Entity" + std::to_string(i) };
-				auto entityXml{ entitiesXml.append_child(entityStr.c_str()) };
-				saveEntityToXml(entities[i], i, entityXml);
-			}
-		}
-
-		xmlParser.save_file(path, "\t");
-	}
-
-	void FSceneSerializer::saveEntityToXml(const Entity& entity, uint32_t index, pugi::xml_node& node) {
-		auto saveString = [&node](const char* componentName, const char* valueName, const std::string& strValue) {
-			auto xml{ node.append_child(componentName) };
-			xml.append_attribute(valueName).set_value(strValue.c_str());
-		};
-		auto saveStringXml = [](pugi::xml_node& node, const char* valueName, const std::string& strValue) {
-			auto xml{ node.append_child(valueName) };
-			xml.append_attribute("value").set_value(strValue.c_str());
-		};
-		auto saveFloat = [](pugi::xml_node& node, const char* valueName, float f) {
-			auto xml{ node.append_child(valueName) };
-			xml.append_attribute("value").set_value(f);
-		};
-		auto saveVec3 = [](pugi::xml_node& node, const char* valueName, const maths::vec3& v) {
-			auto xml{ node.append_child(valueName) };
-			xml.append_attribute("x").set_value(v.x);
-			xml.append_attribute("y").set_value(v.y);
-			xml.append_attribute("z").set_value(v.z);
-		};
-
-		const auto& tagComponent{ entity.getComponent<TagComponent>() };
-		saveString("TagComponent", "tag", tagComponent.tag);
-
-		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		auto transformXml{ node.append_child("TransformComponent") };
-		saveVec3(transformXml, "position", transformComponent.position);
-		saveVec3(transformXml, "rotation", transformComponent.rotation);
-		saveVec3(transformXml, "scale", transformComponent.scale);
-
-		if (entity.hasComponent<RenderableComponent>()) {
-			const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
-			saveString("RenderableComponent", "name", renderableComponent.name);
-		}
-
-		if (entity.hasComponent<ColorComponent>()) {
-			const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-			auto xml{ node.append_child("ColorComponent") };
-			saveVec3(xml, "color", colorComponent.color);
-		}
-		else if (entity.hasComponent<Texture2DComponent>()) {
-			const auto& texture2DComponent{ entity.getComponent<Texture2DComponent>() };
-			saveString("Texture2DComponent", "path", texture2DComponent.texturePath);
-		}
-		else if (entity.hasComponent<TextureCubemapComponent>()) {
-			const auto& cubemapComponent{ entity.getComponent<TextureCubemapComponent>() };
-			saveString("TextureCubemapComponent", "path", cubemapComponent.texturePath);
-		}
-
-		if (entity.hasComponent<PointLightComponent>()) {
-			const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-			auto xml{ node.append_child("PointLightComponent") };
-			saveVec3(xml, "ambient", pointLightComponent.pointLight.ambient);
-			saveVec3(xml, "diffuse", pointLightComponent.pointLight.diffuse);
-			saveVec3(xml, "specular", pointLightComponent.pointLight.specular);
-			saveFloat(xml, "constant", pointLightComponent.pointLight.constant);
-			saveFloat(xml, "linear", pointLightComponent.pointLight.linear);
-			saveFloat(xml, "quadratic", pointLightComponent.pointLight.quadratic);
-			saveFloat(xml, "shininess", pointLightComponent.pointLight.shininess);
-		}
-
-		if (entity.hasComponent<CameraComponent>()) {
-			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-			auto xml{ node.append_child("CameraComponent") };
-			saveStringXml(xml, "id", cameraComponent.id);
-			saveFloat(xml, "Perspective", cameraComponent.Perspective ? 1.f : 0.f);
-
-			// Perspective camera save
-			saveFloat(xml, "p_fov", cameraComponent.p_fov);
-			saveFloat(xml, "p_aspectRatio", cameraComponent.p_aspectRatio);
-			saveFloat(xml, "p_near", cameraComponent.p_near);
-			saveFloat(xml, "p_far", cameraComponent.p_far);
-
-			// Orthographic camera save
-			saveFloat(xml, "o_left", cameraComponent.o_left);
-			saveFloat(xml, "o_right", cameraComponent.o_right);
-			saveFloat(xml, "o_top", cameraComponent.o_top);
-			saveFloat(xml, "o_bottom", cameraComponent.o_bottom);
-			saveFloat(xml, "o_near", cameraComponent.o_near);
-			saveFloat(xml, "o_far", cameraComponent.o_far);
 		}
 
 		if (entity.hasComponent<PythonScriptComponent>()) {

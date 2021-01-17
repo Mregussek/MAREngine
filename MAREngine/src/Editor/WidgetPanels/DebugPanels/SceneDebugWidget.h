@@ -18,11 +18,11 @@
 **/
 
 
-#ifndef MAR_ENGINE_F_SCENE_DESERIALIZER_H
-#define MAR_ENGINE_F_SCENE_DESERIALIZER_H
+#ifndef MAR_ENGINE_W_SCENE_DEBUG_WIDGET_H
+#define MAR_ENGINE_W_SCENE_DEBUG_WIDGET_H
 
 
-#include "../../mar.h"
+#include "../IWidgetPanel.h"
 
 
 namespace marengine {
@@ -31,14 +31,18 @@ namespace marengine {
 	class Entity;
 
 
-	class FSceneDeserializer {
+	class WSceneDebugWidget : public IWidgetPanel {
 	public:
 
-		static Scene* loadSceneFromFile(const std::string& path);
+		static WSceneDebugWidget* Instance;
+
+		virtual void create() override;
+		virtual void updateFrame() override;
 
 	private:
 
-		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
+		void displayInfoAbout(Scene* scene) const;
+		void displayInfoAbout(const Entity& entity) const;
 
 	};
 
@@ -46,4 +50,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_F_SCENE_DESERIALIZER_H
+#endif // !MAR_ENGINE_W_SCENE_DEBUG_WIDGET_H
