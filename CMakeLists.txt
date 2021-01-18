@@ -4,9 +4,10 @@
 #
 
 cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
-set(CMAKE_GENERATOR_PLATFORM win32)
-project(MAREngine)
+set(CMAKE_GENERATOR_PLATFORM Win32 CACHE INTERNAL "Force 32-bit compilation")
+project(MAREngine CXX C)
 set(MARENGINE_NAME "MAREngine")
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 list(APPEND MAR_ENGINE_INCLUDE_DIRS ".")
 list(APPEND MAR_ENGINE_INCLUDE_LIBS ".")
@@ -16,35 +17,39 @@ list(APPEND MAR_ENGINE_INCLUDE_LIBS ".")
 # -------------------------------------------------------------
 set(SANDBOXMAR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR)
 set(SANDBOXMAR_NAME "SandboxMAR")
-file(GLOB_RECURSE SANDBOXMAR_SOURCE_FILES
+file(GLOB_RECURSE ${SANDBOXMAR_NAME}_SRC
+	LIST_DIRECTORIES false
 	${SANDBOXMAR_PATH}/src/*.c
 	${SANDBOXMAR_PATH}/src/*.cpp
+	${SANDBOXMAR_PATH}/main.cpp
 )
 
-file(GLOB_RECURSE SANDBOXMAR_HEADER_FILES 
+file(GLOB_RECURSE ${SANDBOXMAR_NAME}_HEADERS
+	LIST_DIRECTORIES false
 	${SANDBOXMAR_PATH}/src/*.h
 	${SANDBOXMAR_PATH}/src/*.hpp
 )
 
-set(MAIN_SANDBOXMAR_FILE ${SANDBOXMAR_PATH}/main.cpp)
-set(SANDBOXMAR_FILES ${SANDBOXMAR_SOURCE_FILES} ${SANDBOXMAR_HEADER_FILES} ${MAIN_SANDBOXMAR_FILE}) 
+set(SANDBOXMAR_FILES ${${SANDBOXMAR_NAME}_SRC} ${${SANDBOXMAR_NAME}_HEADERS} ${MAIN_SANDBOXMAR_FILE}) 
 
 # -------------------------------------------------------------
 # MAREngine source files
 # -------------------------------------------------------------
 set(MARENGINE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/MAREngine)
-file(GLOB_RECURSE SOURCE_FILES 
+file(GLOB_RECURSE ${MARENGINE_NAME}_SRC
+	LIST_DIRECTORIES false
 	${MARENGINE_PATH}/src/*.c
 	${MARENGINE_PATH}/src/*.cpp)
 	
-file(GLOB_RECURSE HEADER_FILES 
+file(GLOB_RECURSE ${MARENGINE_NAME}_HEADERS 
+	LIST_DIRECTORIES false
 	${MARENGINE_PATH}/src/*.h
 	${MARENGINE_PATH}/src/*.hpp)
 
-set(MAR_ENGINE_FILES ${SOURCE_FILES} ${HEADER_FILES})
+set(MARENGINE_FILES ${${MARENGINE_NAME}_SRC} ${${MARENGINE_NAME}_HEADERS})
 set(MARENGINE_INCLUDE_DIR "${MARENGINE_PATH}/include")
 
-list(APPEND MAR_ENGINE_ALL_FILES ${MAR_ENGINE_FILES})
+list(APPEND MAR_ENGINE_ALL_FILES ${MARENGINE_FILES})
 list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MARENGINE_INCLUDE_DIR})
 
 # -------------------------------------------------------------
@@ -92,27 +97,6 @@ list(APPEND MAR_ENGINE_INCLUDE_DIRS ${GLAD_INCLUDE_DIR})
 list(APPEND MAR_ENGINE_ALL_FILES ${GLAD_FILES})
 
 # -------------------------------------------------------------
-# GLFW
-# -------------------------------------------------------------
-message("Looking for: GLFW")
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-find_package(GLFW3 REQUIRED)
-if(GLFW3_FOUND)
-	message(STATUS "GLFW_INDLUCE_DIR:= ${GLFW3_INCLUDE_DIR}")
-	message(STATUS "GLFW3_LIBRARY:= ${GLFW3_LIBRARY}")
-	set(MAR_GLFW_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/include")
-	message(STATUS "MAR_GLFW_DIR:= ${MAR_GLFW_DIR}")
-else()
-	message(STATUS "Error: Cannot find GLFW3!")
-endif()
-
-list(APPEND MAR_ENGINE_ALL_LIBS ${GLFW3_LIBRARY})
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MAR_GLFW_DIR})
-list(APPEND MAR_ENGINE_INCLUDE_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/lib-vc2019")
-
-# -------------------------------------------------------------
 # SDL2
 # -------------------------------------------------------------
 message("Looing for: SDL2")
@@ -133,61 +117,26 @@ list(APPEND MAR_ENGINE_ALL_LIBS SDL2 SDL2main SDL2test)
 list(APPEND MAR_ENGINE_INCLUDE_DIRS ${SDL_INCLUDE_DIR})
 list(APPEND MAR_ENGINE_INCLUDE_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/SDL2-2.0.12/lib/x86")
 
-
 # -------------------------------------------------------------
-# spdlog
+# GLFW
 # -------------------------------------------------------------
-message("Looking for: SPDLOG")
-add_subdirectory(MAREngine/3rd_party/spdlog)
-set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/spdlog/include")
-message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
+message("Looking for: GLFW")
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+find_package(GLFW3 REQUIRED)
+if(GLFW3_FOUND)
+	message(STATUS "GLFW_INDLUCE_DIR:= ${GLFW3_INCLUDE_DIR}")
+	message(STATUS "GLFW3_LIBRARY:= ${GLFW3_LIBRARY}")
+	set(MAR_GLFW_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/include")
+	message(STATUS "MAR_GLFW_DIR:= ${MAR_GLFW_DIR}")
+else()
+	message(STATUS "Error: Cannot find GLFW3!")
+endif()
 
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${SPDLOG_INCLUDE_DIR})
-
-# -------------------------------------------------------------
-# pybind11
-# -------------------------------------------------------------
-message("Looking for: pybind11")
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11)
-set(PYBIND11_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11/include")
-message(STATUS "PYBIND11_INCLUDE_DIR:= ${PYBIND11_INCLUDE_DIR}")
-
-list(APPEND MAR_ENGINE_ALL_LIBS pybind11::embed)
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${PYBIND11_INCLUDE_DIR})
-
-# -------------------------------------------------------------
-# python 3.8.5
-# -------------------------------------------------------------
-message("Looking for: python 3.8.5")
-set(PYTHON385_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/include")
-set(PYTHON385_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs")
-message(STATUS "PYTHON385_INCLUDE_DIR:= ${PYTHON385_INCLUDE_DIR}")
-message(STATUS "PYTHON385_LIB_DIR:= ${PYTHON385_LIB_DIR}")
-
-list(APPEND MAR_ENGINE_ALL_LIBS python38)
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${PYTHON385_INCLUDE_DIR})
-list(APPEND MAR_ENGINE_INCLUDE_LIBS ${PYTHON385_LIB_DIR})
-
-# -------------------------------------------------------------
-# MARMaths
-# -------------------------------------------------------------
-message("Looking for: MARMaths")
-set(MAR_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/MARMaths/include")
-set(MAR_MATH_INCLUDE_FILE ${MAR_MATH_INCLUDE_DIR}/MARMaths.h)
-set(MAR_MATH_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/MARMaths/src")
-file(GLOB_RECURSE MAR_MATH_LIB_SOURCE_FILES 
-	${MAR_MATH_DIRECTORY}/*.c
-	${MAR_MATH_DIRECTORY}/*.cpp
-)
-file(GLOB_RECURSE MAR_MATH_LIB_HEADER_FILES 
-	${MAR_MATH_DIRECTORY}/*.h
-	${MAR_MATH_DIRECTORY}/*.hpp
-)
-set(MAR_MATH_FILES ${MAR_MATH_LIB_SOURCE_FILES} ${MAR_MATH_LIB_HEADER_FILES} ${MAR_MATH_INCLUDE_FILE})
-message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
-
-list(APPEND MAR_ENGINE_ALL_FILES ${MAR_MATH_FILES})
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MAR_MATH_INCLUDE_DIR})
+list(APPEND MAR_ENGINE_ALL_LIBS ${GLFW3_LIBRARY})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MAR_GLFW_DIR})
+list(APPEND MAR_ENGINE_INCLUDE_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/GLFW/lib-vc2019")
 
 # -------------------------------------------------------------
 # stb_image
@@ -260,28 +209,6 @@ list(APPEND MAR_ENGINE_ALL_FILES ${IMGUICOLORTEXTEDIT_FILES})
 list(APPEND MAR_ENGINE_INCLUDE_DIRS ${IMGUICOLORTEXTEDIT_INCLUDE_DIR})
 
 # -------------------------------------------------------------
-# entt
-# -------------------------------------------------------------
-message("Looking for: entt")
-set(ENTT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/entt/include")
-set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
-message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
-
-list(APPEND MAR_ENGINE_ALL_FILES ${ENTT_FILES})
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${ENTT_INCLUDE_DIR})
-
-# -------------------------------------------------------------
-# OBJ-Loader
-# -------------------------------------------------------------
-message("Looking for: OBJ-Loader")
-set(OBJ_LOADER_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/OBJ-Loader")
-set(OBJ_LOADER_FILES ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.h ${OBJ_LOADER_INCLUDE_DIR}/Source/OBJ_Loader.cpp)
-message(STATUS "OBJ_LOADER_INCLUDE_DIR:= ${OBJ_LOADER_INCLUDE_DIR}")
-
-list(APPEND MAR_ENGINE_ALL_FILES ${OBJ_LOADER_FILES})
-list(APPEND MAR_ENGINE_INCLUDE_DIRS ${OBJ_LOADER_INCLUDE_DIR})
-
-# -------------------------------------------------------------
 # ImGuiFileDialog
 # -------------------------------------------------------------
 message("Looking for: ImGuiFileBrowser")
@@ -295,6 +222,84 @@ message(STATUS "IMGUI_FILE_BROWSER_INCLUDE_DIR:= ${IMGUI_FILE_BROWSER_INCLUDE_DI
 
 list(APPEND MAR_ENGINE_ALL_FILES ${IMGUI_FILE_BROWSER_FILES})
 list(APPEND MAR_ENGINE_INCLUDE_DIRS ${IMGUI_FILE_BROWSER_INCLUDE_DIR})
+
+# -------------------------------------------------------------
+# spdlog
+# -------------------------------------------------------------
+message("Looking for: SPDLOG")
+add_subdirectory(MAREngine/3rd_party/spdlog)
+set(SPDLOG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/spdlog/include")
+message(STATUS "SPDLOG_INCLUDE_DIR:= ${SPDLOG_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${SPDLOG_INCLUDE_DIR})
+
+# -------------------------------------------------------------
+# entt
+# -------------------------------------------------------------
+message("Looking for: entt")
+set(ENTT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/entt/include")
+set(ENTT_FILES ${ENTT_INCLUDE_DIR}/entt/entt.hpp)
+message(STATUS "ENTT_INCLUDE_DIR:= ${ENTT_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_FILES ${ENTT_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${ENTT_INCLUDE_DIR})
+
+# -------------------------------------------------------------
+# json
+# -------------------------------------------------------------
+message("Looking for: json")
+set(JSON_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/json/include")
+set(JSON_FILES ${JSON_INCLUDE_DIR}/json.hpp)
+message(STATUS "JSON_INCLUDE_DIR:= ${JSON_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_FILES ${JSON_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${JSON_INCLUDE_DIR})
+
+# -------------------------------------------------------------
+# pybind11
+# -------------------------------------------------------------
+message("Looking for: pybind11")
+set(PYBIND11_FINDPYTHON True)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11)
+set(PYBIND11_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/pybind11/include")
+message(STATUS "PYBIND11_INCLUDE_DIR:= ${PYBIND11_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_LIBS pybind11::embed)
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${PYBIND11_INCLUDE_DIR})
+
+# -------------------------------------------------------------
+# python 3.8.5
+# -------------------------------------------------------------
+message("Looking for: python 3.8.5")
+set(PYTHON385_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/include")
+set(PYTHON385_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/libs")
+message(STATUS "PYTHON385_INCLUDE_DIR:= ${PYTHON385_INCLUDE_DIR}")
+message(STATUS "PYTHON385_LIB_DIR:= ${PYTHON385_LIB_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_LIBS python38)
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${PYTHON385_INCLUDE_DIR})
+list(APPEND MAR_ENGINE_INCLUDE_LIBS ${PYTHON385_LIB_DIR})
+
+# -------------------------------------------------------------
+# MARMaths
+# -------------------------------------------------------------
+message("Looking for: MARMaths")
+set(MAR_MATH_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/MARMaths/include")
+set(MAR_MATH_INCLUDE_FILE ${MAR_MATH_INCLUDE_DIR}/MARMaths.h)
+set(MAR_MATH_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine/3rd_party/MARMaths/src")
+file(GLOB_RECURSE MAR_MATH_LIB_SOURCE_FILES 
+	${MAR_MATH_DIRECTORY}/*.c
+	${MAR_MATH_DIRECTORY}/*.cpp
+)
+file(GLOB_RECURSE MAR_MATH_LIB_HEADER_FILES 
+	${MAR_MATH_DIRECTORY}/*.h
+	${MAR_MATH_DIRECTORY}/*.hpp
+)
+set(MAR_MATH_FILES ${MAR_MATH_LIB_SOURCE_FILES} ${MAR_MATH_LIB_HEADER_FILES} ${MAR_MATH_INCLUDE_FILE})
+message(STATUS "MAR_MATH_INCLUDE_DIR:= ${MAR_MATH_INCLUDE_DIR}")
+
+list(APPEND MAR_ENGINE_ALL_FILES ${MAR_MATH_FILES})
+list(APPEND MAR_ENGINE_INCLUDE_DIRS ${MAR_MATH_INCLUDE_DIR})
 
 # -------------------------------------------------------------
 # Set includes for MAREngine (mar_includes.h file)
@@ -323,7 +328,7 @@ message("Creating ${SANDBOXMAR_NAME} executable...")
 add_executable(${SANDBOXMAR_NAME} ${SANDBOXMAR_FILES} ${MARENGINE_INCLUDE_DIR})
 message("Linking libraries to ${SANDBOXMAR_NAME}")
 target_compile_features(${SANDBOXMAR_NAME} PRIVATE cxx_std_17)
-target_link_libraries ( ${SANDBOXMAR_NAME} PRIVATE ${MARENGINE_NAME})
+target_link_libraries(${SANDBOXMAR_NAME} PRIVATE ${MARENGINE_NAME})
 
 if(MSVC)
 # -------------------------------------------------------------
@@ -364,22 +369,7 @@ if(MSVC)
 # -------------------------------------------------------------
 # Organize files in Visual Studio
 # -------------------------------------------------------------
-	# Macro to preserve source files hierarchy in the IDE
-	macro(GroupSources curdir)
-		file(GLOB children RELATIVE ${PROJECT_SOURCE_DIR}/${curdir} ${PROJECT_SOURCE_DIR}/${curdir}/*)
-
-		foreach(child ${children})
-			if(IS_DIRECTORY ${PROJECT_SOURCE_DIR}/${curdir}/${child})
-				GroupSources(${curdir}/${child})
-			else()
-				string(REPLACE "/" "\\" groupname ${curdir})
-				string(REPLACE "src" "Sources" groupname ${groupname})
-				source_group(${groupname} FILES ${PROJECT_SOURCE_DIR}/${curdir}/${child})
-			endif()
-		endforeach()
-	endmacro()
-
-	# Run macro
-	GroupSources(src)
+	source_group(TREE ${MARENGINE_PATH} FILES ${MARENGINE_FILES})
+	source_group(TREE ${SANDBOXMAR_PATH} FILES ${SANDBOXMAR_FILES})
 	
 endif()
