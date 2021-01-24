@@ -29,10 +29,3 @@
 
 
 #define MAR_NO_DISCARD [[nodiscard]]
-
-
-/**
- * @namespace marengine
- * @brief main MAREngine's namespace
- */
-namespace marengine { }
