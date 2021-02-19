@@ -35,9 +35,51 @@ namespace marengine {
 			const GLchar* message,
 			const void* userParam)
 	{
-		fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-			(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
-			type, severity, message);
+		constexpr bool displayDebugTypeOther{ false };
+		if constexpr (!displayDebugTypeOther) {
+			if (type == GL_DEBUG_TYPE_OTHER) {
+				return;
+			}
+		}
+
+		std::cout << "GL_CALLBACK [";
+		switch (type) {
+		case GL_DEBUG_TYPE_ERROR:
+			std::cout << "ERROR";
+			break;
+		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			std::cout << "DEPRECATED_BEHAVIOR";
+			break;
+		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			std::cout << "UNDEFINED_BEHAVIOR";
+			break;
+		case GL_DEBUG_TYPE_PORTABILITY:
+			std::cout << "PORTABILITY";
+			break;
+		case GL_DEBUG_TYPE_PERFORMANCE:
+			std::cout << "PERFORMANCE";
+			break;
+		case GL_DEBUG_TYPE_OTHER:
+			std::cout << "OTHER";
+			break;
+		}
+	
+		std::cout << "] id=" << id << " severity=";
+		switch (severity) {
+		case GL_DEBUG_SEVERITY_LOW:
+			std::cout << "LOW";
+			break;
+		case GL_DEBUG_SEVERITY_MEDIUM:
+			std::cout << "MEDIUM";
+			break;
+		case GL_DEBUG_SEVERITY_HIGH:
+			std::cout << "HIGH";
+			break;
+		default:
+			std::cout << "OTHER";
+			break;
+		}
+		std::cout << " message: " << message << "\n-------------------------\n";
 	}
 
 	bool SetupOpenGL::init() {

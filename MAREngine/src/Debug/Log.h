@@ -39,90 +39,62 @@ namespace marengine {
 		static std::shared_ptr<spdlog::logger> s_CoreLogger;
 
 	public:
+
 		static void init();
 
-           static std::string GetGLErrorStr(GLenum err) {
-               switch (err) {
-               case GL_NO_ERROR:          return "No error";
-               case GL_INVALID_ENUM:      return "Invalid enum";
-               case GL_INVALID_VALUE:     return "Invalid value";
-               case GL_INVALID_OPERATION: return "Invalid operation";
-               case GL_STACK_OVERFLOW:    return "Stack overflow";
-               case GL_STACK_UNDERFLOW:   return "Stack underflow";
-               case GL_OUT_OF_MEMORY:     return "Out of memory";
-               default:                   return "Unknown error";
-               }
-           }
+		static std::string GetGLErrorStr(GLenum err);
 
-           static void CheckGLError(const char* file, int line) {
-               while (true) {
-                   GLenum err = glGetError();
-                   if (GL_NO_ERROR == err)
-                       return;
+		static void CheckGLError(const char* file, int line);
 
-                   getCoreLogger()->error(GetGLErrorStr(err));
-                   getCoreLogger()->error(file);
-                   getCoreLogger()->error(line);
-               }
-           }
+		static void clearError();
 
-           static void clearError() {
-               while (glGetError() != GL_NO_ERROR);
-           }
+		static bool checkForOpenGLError(const char* function, const char* file, int line);
 
-           static bool checkForOpenGLError(const char* function, const char* file, int line) {
-               while (GLenum err = glGetError()) {
-                   getCoreLogger()->error("[OpenGL Error] {} {} {} \n{}", GetGLErrorStr(err), function, file, line);
-                   return false;
-               }
+		static spdlog::logger* getCoreLogger();
 
-               return true;
-           }
-
-		inline static spdlog::logger* getCoreLogger() { return s_CoreLogger.get(); }
 	};
 
-		
+
 }
 
 
-    #define MAR_LOG_INIT() ::marengine::Log::init()
-    
-    #define MAR_CORE_TRACE(...) ::marengine::Log::getCoreLogger()->trace(__VA_ARGS__)
-    #define MAR_CORE_DEBUG(...) ::marengine::Log::getCoreLogger()->debug(__VA_ARGS__)
-    #define MAR_CORE_INFO(...)  ::marengine::Log::getCoreLogger()->info(__VA_ARGS__)
-    #define MAR_CORE_WARN(...)  ::marengine::Log::getCoreLogger()->warn(__VA_ARGS__)
-    #define MAR_CORE_ERROR(...) ::marengine::Log::getCoreLogger()->error(__VA_ARGS__)
-    #define MAR_CORE_CRITICAL(...) ::marengine::Log::getCoreLogger()->critical(__VA_ARGS__)
-    
-    #define MAR_CORE_CHECK_FOR_ERROR()  ::marengine::Log::CheckGLError(__FILE__, __LINE__) 
-    
-    #define ASSERT_NO_MSG(x) if(!(x)) __debugbreak()
+#define MAR_LOG_INIT() ::marengine::Log::init()
 
-    #define ASSERT(x, ...) if(!(x)) MAR_CORE_ERROR(__VA_ARGS__);\
-                           ASSERT_NO_MSG(x)
-                           
-    #define MAR_CORE_ASSERT(x, ...) ASSERT(x, __VA_ARGS__)
-    
-    #define MAR_CORE_GL_FUNC(x) ::marengine::Log::clearError();\
-                                x;\
-                                ASSERT_NO_MSG(::marengine::Log::checkForOpenGLError(#x, __FILE__, __LINE__))
+#define MAR_CORE_TRACE(...) ::marengine::Log::getCoreLogger()->trace(__VA_ARGS__)
+#define MAR_CORE_DEBUG(...) ::marengine::Log::getCoreLogger()->debug(__VA_ARGS__)
+#define MAR_CORE_INFO(...)  ::marengine::Log::getCoreLogger()->info(__VA_ARGS__)
+#define MAR_CORE_WARN(...)  ::marengine::Log::getCoreLogger()->warn(__VA_ARGS__)
+#define MAR_CORE_ERROR(...) ::marengine::Log::getCoreLogger()->error(__VA_ARGS__)
+#define MAR_CORE_CRITICAL(...) ::marengine::Log::getCoreLogger()->critical(__VA_ARGS__)
+
+#define MAR_CORE_CHECK_FOR_ERROR()  ::marengine::Log::CheckGLError(__FILE__, __LINE__) 
+
+#define ASSERT_NO_MSG(x) if(!(x)) __debugbreak()
+
+#define ASSERT(x, ...) if(!(x)) MAR_CORE_ERROR(__VA_ARGS__);\
+                       ASSERT_NO_MSG(x)
+
+#define MAR_CORE_ASSERT(x, ...) ASSERT(x, __VA_ARGS__)
+
+#define MAR_CORE_GL_FUNC(x) ::marengine::Log::clearError();\
+                            x;\
+                            ASSERT_NO_MSG(::marengine::Log::checkForOpenGLError(#x, __FILE__, __LINE__))
 
 #else
 
-    #define ASSERT(...)
-    #define MAR_CORE_ASSERT(...)
-    
-    #define MAR_LOG_INIT()
-    
-    #define MAR_CORE_TRACE(...) 
-    #define MAR_CORE_INFO(...)  
-    #define MAR_CORE_WARN(...)  
-    #define MAR_CORE_ERROR(...) 
-    
-    #define MAR_CORE_CHECK_FOR_ERROR()  
-    
-    #define MAR_CORE_GL_FUNC(x) x;
+#define ASSERT(...)
+#define MAR_CORE_ASSERT(...)
+
+#define MAR_LOG_INIT()
+
+#define MAR_CORE_TRACE(...) 
+#define MAR_CORE_INFO(...)  
+#define MAR_CORE_WARN(...)  
+#define MAR_CORE_ERROR(...) 
+
+#define MAR_CORE_CHECK_FOR_ERROR()  
+
+#define MAR_CORE_GL_FUNC(x) x;
 
 #endif
 

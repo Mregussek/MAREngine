@@ -66,6 +66,49 @@ namespace marengine {
 		s_initialized = true;
 	}
 
+	std::string Log::GetGLErrorStr(GLenum err) {
+		switch (err) {
+		case GL_NO_ERROR:          return "No error";
+		case GL_INVALID_ENUM:      return "Invalid enum";
+		case GL_INVALID_VALUE:     return "Invalid value";
+		case GL_INVALID_OPERATION: return "Invalid operation";
+		case GL_STACK_OVERFLOW:    return "Stack overflow";
+		case GL_STACK_UNDERFLOW:   return "Stack underflow";
+		case GL_OUT_OF_MEMORY:     return "Out of memory";
+		default:                   return "Unknown error";
+		}
+	}
+
+	void Log::CheckGLError(const char* file, int line) {
+		while (true) {
+			GLenum err = glGetError();
+			if (GL_NO_ERROR == err) {
+				return;
+			}
+
+			getCoreLogger()->error(GetGLErrorStr(err));
+			getCoreLogger()->error(file);
+			getCoreLogger()->error(line);
+		}
+	}
+
+	void Log::clearError() {
+		while (glGetError() != GL_NO_ERROR);
+	}
+
+	bool Log::checkForOpenGLError(const char* function, const char* file, int line) {
+		while (GLenum err = glGetError()) {
+			getCoreLogger()->error("[OpenGL Error] {} {} {} \n{}", GetGLErrorStr(err), function, file, line);
+			return false;
+		}
+
+		return true;
+	}
+
+	spdlog::logger* Log::getCoreLogger() {
+		return s_CoreLogger.get();
+	}
+
 
 }
 

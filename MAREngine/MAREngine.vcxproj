@@ -91,7 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\pugixml-1.11\src;$(SolutionDir)MAREngine\3rd_party\json\include;$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)MAREngine\3rd_party\json\include;$(SolutionDir)MAREngine\3rd_party\SDL2-2.0.12\include;$(SolutionDir)MAREngine\3rd_party\ImGui-Addons;$(SolutionDir)MAREngine\3rd_party\ImGuiFileDialog;$(SolutionDir)MAREngine\3rd_party\ImGuiColorTextEdit;$(SolutionDir)MAREngine\3rd_party\python3.8.5\include;$(SolutionDir)MAREngine\3rd_party\stb_image\include;$(SolutionDir)MAREngine\3rd_party\spdlog\include;$(SolutionDir)MAREngine\3rd_party\pybind11\include;$(SolutionDir)MAREngine\3rd_party\MARMaths\include;$(SolutionDir)MAREngine\3rd_party\ImGuizmo;$(SolutionDir)MAREngine\3rd_party\imgui;$(SolutionDir)MAREngine\3rd_party\GLFW\include;$(SolutionDir)MAREngine\3rd_party\GLAD\include;$(SolutionDir)MAREngine\3rd_party\entt\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <CompileAsManaged>false</CompileAsManaged>
@@ -201,9 +201,9 @@
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.h" />
     <ClInclude Include="3rd_party\ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="3rd_party\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_glfw.h" />
-    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_opengl3.h" />
-    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_sdl.h" />
+    <ClInclude Include="3rd_party\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="3rd_party\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="3rd_party\imgui\backends\imgui_impl_sdl.h" />
     <ClInclude Include="3rd_party\imgui\imconfig.h" />
     <ClInclude Include="3rd_party\imgui\imgui.h" />
     <ClInclude Include="3rd_party\imgui\imgui_internal.h" />
@@ -293,7 +293,6 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h" />
     <ClInclude Include="src\Core\scripting\ScriptingLogs.h" />
     <ClInclude Include="src\Core\IWidget.h" />
-    <ClInclude Include="src\Debug\Profiler.h" />
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h" />
     <ClInclude Include="src\Editor\Camera\StandardCamera.h" />
     <ClInclude Include="src\Editor\EditorManager.h" />
@@ -358,12 +357,13 @@
     <ClCompile Include="3rd_party\ImGui-Addons\FileBrowser\ImGuiFileBrowser.cpp" />
     <ClCompile Include="3rd_party\ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="3rd_party\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_glfw.cpp" />
-    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_sdl.cpp" />
+    <ClCompile Include="3rd_party\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="3rd_party\imgui\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="3rd_party\imgui\backends\imgui_impl_sdl.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_demo.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_draw.cpp" />
+    <ClCompile Include="3rd_party\imgui\imgui_tables.cpp" />
     <ClCompile Include="3rd_party\imgui\imgui_widgets.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\math_func\basic.cpp" />
     <ClCompile Include="3rd_party\MARMaths\src\mat\mat4.cpp" />
@@ -404,7 +404,6 @@
     <ClCompile Include="src\Core\IWidget.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
-    <ClCompile Include="src\Debug\Profiler.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp" />
     <ClCompile Include="src\Editor\Camera\StandardCamera.cpp" />

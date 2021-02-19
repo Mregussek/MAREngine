@@ -288,13 +288,13 @@
     <ClInclude Include="3rd_party\imgui\imstb_truetype.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_sdl.h">
+    <ClInclude Include="3rd_party\imgui\backends\imgui_impl_sdl.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_opengl3.h">
+    <ClInclude Include="3rd_party\imgui\backends\imgui_impl_opengl3.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\imgui\examples\imgui_impl_glfw.h">
+    <ClInclude Include="3rd_party\imgui\backends\imgui_impl_glfw.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h">
@@ -450,9 +450,6 @@
     <ClInclude Include="src\Core\graphics\GraphicsLimits.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Debug\Profiler.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderBufferManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -593,13 +590,13 @@
     <ClCompile Include="3rd_party\imgui\imgui_widgets.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_sdl.cpp">
+    <ClCompile Include="3rd_party\imgui\backends\imgui_impl_sdl.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_opengl3.cpp">
+    <ClCompile Include="3rd_party\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="3rd_party\imgui\examples\imgui_impl_glfw.cpp">
+    <ClCompile Include="3rd_party\imgui\backends\imgui_impl_glfw.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="3rd_party\imgui\imgui_demo.cpp">
@@ -728,9 +725,6 @@
     <ClCompile Include="src\Core\graphics\Lightning\PointLightBatch.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Debug\Profiler.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderBufferManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -765,6 +759,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\WidgetPanels\DebugPanels\StatisticsWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="3rd_party\imgui\imgui_tables.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
