@@ -31,7 +31,7 @@ namespace marengine {
 
 	class Entity;
 	
-
+	
 	typedef std::vector<Entity> FEntityArray;
 
 }

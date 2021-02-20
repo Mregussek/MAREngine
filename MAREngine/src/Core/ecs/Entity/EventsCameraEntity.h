@@ -30,32 +30,38 @@ namespace marengine {
 	class Entity;
 
 
-	/*
-		FEventsCameraEntity is events class for updating camera, with which we can watch
-		scene during gameplay. Should contain only static methods!
-	*/
+	/**
+	 * @class FEventsCameraEntity EventsCameraEntity.h "Core/ecs/Entity/EventsCameraEntity.h"
+	 * @brief is events class for updating camera, with which we can watch
+	 * scene during gameplay. Should contain only static methods!
+	 */
 	class FEventsCameraEntity {
 	public:
 
-		/*
-			Updates main camera during editor / game mode. You have to pass only RenderCamera.
-			Then method will update needed buffers and use passed camera.
-		*/
+		/**
+		 * @brief Updates main camera during editor / game mode. You have to pass only pointer to RenderCamera.
+		 * Then method will update needed buffers and use passed camera.
+		 * @param renderCamera pointer to renderCamera that we want to be used.
+		 */
 		static void onMainCameraUpdate(const RenderCamera* renderCamera);
 
-		/*
-			Updates main camera with given entity, only if it can be updated (FSceneManager must allow it).
-			WARNING: Method assumes that entity contains main camera, it does not check if it is main one!
-		*/
+		/**
+		 * @brief Updates main camera with given entity, only if it can be updated (FSceneManager must allow it).
+		 * @warning Method assumes that entity contains main camera, it does not check if it is main one!
+		 * @param entity entity, which must contain main renderCamera at its CameraComponent
+		 */
 		static void onMainCameraUpdate(const Entity& entity);
 
-		// Methed sets editor camera and pushes it to render pipeline.
+		/**
+		 * @brief Methed sets editor camera and pushes it to render pipeline.
+		 * @param renderCamera pointer to editor's renderCamera, which will be pushed to pipeline and used.
+		 */
 		static void onEditorCameraSet(const RenderCamera* renderCamera);
 
-		/*
-		Method looks for main game camera (looks for entity with cameraComponent, which is main one) 
-		and then pushes it to render pipeline.
-		*/
+		/**
+		 * @brief Method looks for main game camera (looks for entity with cameraComponent, which is main one)
+		 * and then pushes it to render pipeline.
+		 */
 		static void onGameCameraSet();
 
 	};
