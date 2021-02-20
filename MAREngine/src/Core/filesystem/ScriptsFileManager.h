@@ -30,10 +30,26 @@
 namespace marengine {
 
 
+	/**
+	 * @class FScriptsFileManager ScriptsFileManager.h "Core/filesystem/ScriptsFileManager.h"
+	 * @brief Class responsible for working with scripts file, needed for play mode in MAREngine.
+	 */
 	class FScriptsFileManager {
 	public:
 
+		/**
+		 * @brief Method loads script from given path and saves it into given 
+		 * stringToFill variable.
+		 * @param stringToFill string variable, at which loaded script will be saved
+		 * @param path path, from which script will be loaded.
+		 */
 		static void loadScript(std::string& stringToFill, const char* path);
+
+		/**
+		 * @brief Method saves script given at sourceCode variable to given path.
+		 * @param sourceCode string variable containg all the sourceCode of the script
+		 * @param path path at which script will be saved.
+		 */
 		static void saveScript(const std::string& sourceCode, const char* path);
 
 	};

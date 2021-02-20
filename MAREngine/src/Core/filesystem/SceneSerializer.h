@@ -33,9 +33,20 @@ namespace marengine {
 	class Entity;
 
 
+	/**
+	 * @class FSceneSerializer SceneSerializer.h "Core/filesystem/SceneSerializer.h"
+	 * @brief Class reponsible for serializing scene into small parts and saving theme into file.
+	 */
 	class FSceneSerializer {
 	public:
 
+		/**
+		 * @brief Serializes given scene and then saves it into given path. Make sure that path
+		 * is ending with .marscene.json extension.
+		 * @warning if path is incorrect, it immedietaly returns and displays error.
+		 * @param path path at which scene will be saved
+		 * @param scene scene, that will be saved
+		 */
 		static void saveSceneToFile(const char* path, Scene* scene);
 
 	private:
