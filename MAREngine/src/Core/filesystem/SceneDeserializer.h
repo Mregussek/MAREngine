@@ -33,9 +33,20 @@ namespace marengine {
 	class Entity;
 
 
+	/**
+	 * @class FSceneDeserializer SceneDeserializer.h "Core/filesystem/SceneDeserializer.h"
+	 * @brief Class responsible for deserializing and loading whole scene from path.
+	 */
 	class FSceneDeserializer {
 	public:
 
+		/**
+		 * @brief Method loads scene from given path. Make sure that it is correct path with
+		 * .marscene.json extension.
+		 * @warning If path is not correct, returns empty scene.
+		 * @param path path, at which .marscene.json file should exist and it should be correct one.
+		 * @return Returns loaded scene, if path was correct. Empty scene otherwise.
+		 */
 		static Scene* loadSceneFromFile(const std::string& path);
 
 	private:
