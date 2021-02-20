@@ -36,7 +36,6 @@ namespace marengine {
 	/**
 	* @class Scene Scene.h "Core/ecs/Scene.h"
 	* @brief Scene has information about all important entities, has abilities to create and destroy entities
-	* 
 	* Scene contains main class that rule them all - SceneRegistry. You can consider Scene as the game itself.
 	* If you want to create a new game, just create some entities, attach components to them and push them
 	* to rendering engine.
@@ -52,12 +51,10 @@ namespace marengine {
 		
 		/**
 		* @brief Creates empty scene with cameraEntity and lightEntity.
-		* 
 		* Two created entities by default:
 		* - cameraEntity (main camera assigned)
 		* - lightEntity (pointLight assigned)
 		* Scene is created on the heap using 'new', make sure to delete it when the job is done!
-		* 
 		* @param sceneName name of the new created scene
 		* @return scene created scene with "new" operator
 		*/
@@ -105,7 +102,6 @@ namespace marengine {
 		/**
 		* @brief Returns scene background color value.
 		* Non-const method, because we want to modify it during editor mode / game mode
-		* 
 		* @return m_backgroundColor current background color
 		*/
 		MAR_NO_DISCARD maths::vec3& getBackground();
@@ -113,7 +109,6 @@ namespace marengine {
 		/**
 		* @brief Returns pointer to scene registry.
 		* Non-const, because it will be used by entities. Please, use this carefully.
-		* 
 		* @return m_sceneRegistry pointer to registry of the scene
 		*/
 		MAR_NO_DISCARD entt::registry* getRegistry();
@@ -121,7 +116,6 @@ namespace marengine {
 		/**
 		* @brief Returns view at all entities that contains TComponent. 
 		* View can be iterated with lambda [](entt::entity entt_entity, TComponent& component) {};
-		* 
 		* @return entt::basic_view view for given TComponent
 		*/
 		template<typename TComponent> MAR_NO_DISCARD auto getView();

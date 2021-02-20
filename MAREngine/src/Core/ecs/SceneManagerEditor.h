@@ -34,72 +34,94 @@ namespace marengine {
 	class Entity;
 
 	
-	/*
-		FSceneManagerEditor - Scene Manager for Editor mode. With this manager
-		you manage Editor / Game camera display, Editor / Play mode on Viewport.
-		In SceneLayer static member Instance is set.
-	*/
+	/**
+	 * @class FSceneManagerEditor SceneManagerEditor.h "Core/ecs/SceneManagerEditor.h"
+	 * @brief Scene Manager for Editor mode. With this manager
+	 * you manage Editor / Game camera display, Editor / Play mode on Viewport.
+	 * In SceneLayer static member Instance is set.
+	 */
 	class FSceneManagerEditor {
 	public:
 
 		static FSceneManagerEditor* Instance;
 
-		// default constructor
+		/// @brief Default constructor
 		FSceneManagerEditor() = default;
 
-		// Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
+		/// @brief Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
 		void initialize() const;
 
-		/*
-			Updates Scene in SceneManager's state. During EditorMode there is no need to update the scene,
-			everything should operate on events. During PlayMode we need to call update PythonScripts and then update buffers
-			every time.
-		*/
+		/**
+		 * @brief Updates Scene in SceneManager's state. During EditorMode there is no need to update the scene,
+		 * everything should operate on events. During PlayMode we need to call update PythonScripts and then 
+		 * update buffers every time.
+		 */
 		void update();
 
-		// Closes SceneManager
+		/// @brief Closes SceneManager
 		void close();
 
-		// Sets scene, that we should manage.
+		/**
+		 * @brief Sets given scene, which will be then managed.
+		 * @param scene scene, which will be managed
+		 */
 		void setScene(Scene* scene);
 		
-		// Returns scene that is managed.
+		/**
+		 * @brief Method returns scene that is managed.
+		 * @return Returns currently managed scene
+		 */
 		Scene* getScene();
 
-		// Sets Editor Mode (for update state)
+		/// @brief Sets Editor Mode (for update state)
 		void setEditorMode();
 
-		// Returns true if scene is in editor mode
+		/**
+		 * @brief Returns value of m_EditorMode variable.
+		 * @return Returns true, if scene is in editor mode 
+		 */
 		bool isEditorMode() const;
 
-		// Returns true if scene is in play mode
+		/**
+		 * @brief Returns value of !m_EditorMode variable.
+		 * @return Returns true, if scene is in play mode 
+		 */
 		bool isPlayMode() const;
 
-		// Returns true if scene is in pause mode
+		/**
+		 * @brief Returns value of m_PauseMode variable.
+		 * @return Returns true, if scene is in pause mode 
+		 */
 		bool isPauseMode() const;
 
-		// Sets Play mode
+		/// @brief Sets Play mode
 		void setPlayMode();
 		
-		// Set exit play mode state
+		/// @brief Set exit play mode state
 		void setExitPlayMode();
 
-		// Set Pause mode
+		/// @brief Set Pause mode
 		void setPauseMode();
 		
-		// Set exit pause mode state
+		/// @brief Set exit pause mode state
 		void setExitPauseMode();
 		
-		// Use Editor Camera to watch scene at viewport
+		/// @brief Use Editor Camera to watch scene at viewport
 		void useEditorCamera();
 
-		// Use Game Camera to watch scene at viewport
+		/// @brief Use Game Camera to watch scene at viewport
 		void useGameCamera();
 
-		// Returns true if using editor camera to watch scene at viewport
+		/**
+		 * @brief 
+		 * @return Returns true, if using editor camera to watch scene at viewport 
+		 */
 		bool usingEditorCamera() const;
 
-		// Returns true if using game camera to watch scene at viewport
+		/**
+		 * @brief Returns value of !m_EditorCamera variable.
+		 * @return Returns true, if using game camera to watch scene at viewport 
+		 */
 		bool usingGameCamera() const;
 
 	private:
