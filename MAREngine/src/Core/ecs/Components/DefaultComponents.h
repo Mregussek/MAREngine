@@ -31,9 +31,10 @@
 namespace marengine {
 
 
-	/*
-		TagComponent - some unique name for entity, that can be more readable to user.
-	*/
+	/**
+	 * @struct TagComponent 
+	 * @brief some unique name for entity, that can be more readable to user.
+	 */
 	struct TagComponent {
 
 		std::string tag{ "empty" };
@@ -44,12 +45,14 @@ namespace marengine {
 
 	};
 
-	/*
-		RenderableComponent - contains vertices and indices, that can be pushed to batches.
-		RenderableComponent::name is a unique name for renderable that component contains. For instance,
-		for default MAREngine shapes it can have value "Cube", "Surface", but for loaded external files 
-		it should have path to that file.
-	*/
+
+	/**
+	 * @struct RenderableComponent DefaultComponents.h "Core/ecs/Components/DefaultComponents.h"
+	 * @brief contains vertices and indices, that can be pushed to batches.
+	 * RenderableComponent::name is a unique name for renderable that component contains. For instance,
+	 * for default MAREngine shapes it can have value "Cube", "Surface", but for loaded external files
+	 * it should have path to that file.
+	 */
 	struct RenderableComponent {
 
 		std::string name{ "empty" };
@@ -63,12 +66,13 @@ namespace marengine {
 
 	};
 
-	/*
-		TransformComponent - contains information about current position, rotation and scale of entity.
-		Returns maths::mat4 transform by getTransform method.
 
-		TransformComponent is used by batches, position member value is also used by LightComponents.
-	*/
+	/**
+	 * @struct TransformComponent DefaultComponents.h "Core/ecs/Components/DefaultComponents.h"
+	 * @brief contains information about current position, rotation and scale of entity.
+	 * Returns maths::mat4 transform by getTransform method.
+	 * TransformComponent is used by batches, position member value is also used by LightComponents.
+	 */
 	struct TransformComponent {
 
 		maths::vec3 position{ 0.f, 0.f, 0.f };
