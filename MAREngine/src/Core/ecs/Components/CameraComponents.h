@@ -46,7 +46,7 @@ namespace marengine {
 
 		/**
 		 * @brief Method checks, if renderCamera is a main one for current scene and returns result.
-		 * @return isMainCamera returns true, if renderCamera instance is main camera for current scene.
+		 * @return returns true, if renderCamera instance is main camera for current scene.
 		 */
 		bool isMainCamera() const;
 

@@ -33,10 +33,12 @@
 namespace marengine {
 
 
-	/*
-		The entity is a general purpose object. It only consists of a unique ID (uint32_t, which can found at entt::entity) and m_sceneRegistry. 
-		Every entity is a container, where components can be attached. Entities are the base of all objects, that can be found in the scene.
-	*/
+	/**
+	 * @class Entity Entity.h "Core/ecs/Entity/Entity.h" 
+	 * @brief The entity is a general purpose object.
+	 * It only consists of a unique ID (uint32_t, which can found at entt::entity) and m_sceneRegistry.
+	 * Every entity is a container, where components can be attached. Entities are the base of all objects, that can be found in the scene.
+	 */
 	class Entity {
 
 		friend class Scene;
@@ -47,101 +49,150 @@ namespace marengine {
 
 	public:
 
-		// Entity default constructor is disabled, because we don't want to store nullptr at m_registry!
+		/// @brief Entity default constructor is disabled, because we don't want to store nullptr at m_registry!
 		Entity() = delete;
 
-		/*
-			This is default constructor for Entity class, because we need to initialize m_sceneRegistry member! 
-			If m_sceneRegistry member will stay as nullptr value, Entity instance will immedietaly crash. 
-			During this constructor call entity is created.
-		*/
+		/**
+		 * @brief This is default constructor for Entity class, because we need to initialize m_sceneRegistry member!
+		 * If m_sceneRegistry member will stay as nullptr value, Entity instance will immedietaly crash.
+		 * During this constructor call entity is created.
+		 * @param sceneRegistry valid entt::registry pointer to which entity will belong to.
+		 */
 		Entity(entt::registry* sceneRegistry);
 
-		// Constructor for using already created entity and its sceneRegistry instance. Used mostly in entt::registry::view lambda.
+		/**
+		 * @brief Constructor for using already created entity and its sceneRegistry instance.
+		 * Used mostly in entt::registry::view lambda.
+		 * @param entt_entity valid entt::entity, which can be reassigned to new entity object
+		 * @param sceneRegistry valid entt::registry, to which entt_entity belongs to.
+		 */
 		Entity(entt::entity entt_entity, entt::registry* sceneRegistry);
 
-		// Default copy constructor.
+		/// @brief Default copy constructor.
 		Entity(const Entity& other) = default;
 
-		/*
-			Static method for filling entity with basic components. By default it needs:
-				- TagComponent (we want to have human readable tag for every entity)
-				- TransformComponent (we want every entity to have its own position, rotation, scale)
-				- RenderPipelineComponent (engine-only component, it remembers batches that other components are stored in, optimization)
-				- ChildComponent (used to store some childs, that will be relative to base entity - parent)
-		*/
+		/**
+		 * @brief Static method for filling entity with basic components. By default it needs:
+		 * - TagComponent (we want to have human readable tag for every entity)
+		 * - TransformComponent (we want every entity to have its own position, rotation, scale)
+		 * - RenderPipelineComponent (engine-only component, it remembers batches that other components are stored in, optimization)
+		 * - ChildComponent (used to store some childs, that will be relative to base entity - parent)
+		 * @param entity entity, which will be filled with basic components
+		 */
 		static void fillEntityWithBasicComponents(const Entity& entity);
 
-		/*
-			Method that has ability to destroy current entity. Remember to delete destroyed entity 
-			array that it is stored in, it can cause a lot of damage.
-		*/
+		/**
+		 * @brief Method that has ability to destroy current entity. Remember to delete destroyed entity
+		 * array that it is stored in, it can cause a lot of damage.
+		 */
 		void destroyYourself() const;
 
-		// Method returns true if entity is valid (it exists and is fine).
+		/**
+		 * @brief Method checks, if enitty is valid one and returns result.
+		 * @return returns true if entity is valid (it exists and is fine).
+		 */
 		MAR_NO_DISCARD const bool isValid() const;
 
-		// Assigns child to current entity. Places child to array at ChildComponent.
+		/**
+		 * @brief Assigns child to current entity. Places child to array at ChildComponent.
+		 * @warning Make sure that child is a valid entity!
+		 * @param child valid entity, which will be assigned as child
+		 */
 		void assignChild(const Entity& child) const;
 
-		/*
-			Removes child from ChildComponent by its index in array.
-			WARNING: child is not destroyed, only removed from array!
-		*/
+		/**
+		 * @brief Removes child from ChildComponent by its index in array.
+		 * @warning child is not destroyed, only removed from array!
+		 * @param index index at which child will be removed
+		 */
 		void removeChild(size_t index) const;
 
-		/*
-			Removes child from ChildComponent.
-			WARNING: child is not destroyed, only removed from array!
-		*/
+		/**
+		 * @brief Removes child from ChildComponent, only if child is assigned to entity.
+		 * @warning child is not destroyed, only removed from array!
+		 * @param child child, which we want to be removed from array
+		 */
 		void removeChild(const Entity& child) const;
 
-
-		// Returns true, if current entity contains any childs.
+		/**
+		 * @brief Method checks, if current entity contains childs and returns result.
+		 * @return Returns true, if current entity contains any childs.
+		 */
 		MAR_NO_DISCARD bool hasChilds() const;
 
-
-		// Returns all childs of current entity.
+		/**
+		 * @brief Returns childs assigned to an entity in array.
+		 * @return Returns all childs of current entity.
+		 */
 		MAR_NO_DISCARD const FEntityArray& getChilds() const;
 		
-
-		// Returns child by its index in array.
+		/**
+		 * @brief Returns child by its index in array.
+		 * @warning Method does not check if it is valid entity! If index is too large, it may cause overflow.
+		 * @param index index of child
+		 * @return child instance at given index
+		 */
 		MAR_NO_DISCARD const Entity& getChild(size_t index) const;
 
-
-		// Checks, wheter entity contains some component. True, if has component.
+		/**
+		 * @brief Checks, if current entity has TComponent assigned and returns result.
+		 * @tparam TComponent structure type of component
+		 * @return returns true, if entity contains component
+		 */
 		template<typename TComponent> MAR_NO_DISCARD const bool hasComponent() const;
 
-		/*
-			Method adds component to current entity. TComponent stands for component class, args
-			are just arguments, that can be moved during creation. Make sure that component
-			has constructor for given args.
-			
-			Returns newly created component.
-		*/
+		/**
+		 * @brief Method emplaces TComponent object at current entity instance and returns reference
+		 * to newly created object. If needed you can pass arguments, but then please make sure that
+		 * TComponent contains constructor that takes those arguments.
+		 * @tparam TComponent structure type of component
+		 * @tparam Args variadic template, which gives ability to call specific constructor during creation
+		 * @param args variadic parameter, pass all args that TComponent needs during creation
+		 * @return Returns newly created component.
+		 */
 		template<typename TComponent, typename... Args> TComponent& addComponent(Args&&... args) const;
 
-
-		// Method returns TComponent, that current entity should contain. If it has not, debugbreak is called.
+		/**
+		 * @brief Method returns TComponent, that current entity should contain.
+		 * @warning If current entity does not contain TComponent debugbreak is called.
+		 * @tparam TComponent structure type of component
+		 * @return TComponent's instance assigned to current entity
+		 */
 		template<typename TComponent> MAR_NO_DISCARD TComponent& getComponent() const;
 
-		/*
-			Method replaces current entity's component with other entity component's values.
-			Make sure that, before this method current and other entities have TComponent.
-		*/
+		/**
+		 * @brief Method replaces current entity's component with other entity component's values.
+		 * Make sure that, before this method current and other entities have TComponent.
+		 * @tparam TComponent structure type of component
+		 * @param other entity, from which we want component to be copied to current entity
+		 * @return Returns newly created object at current entity (copied from given entity) 
+		 */
 		template<typename TComponent> TComponent& replaceComponent(const Entity& other) const;
 
-		/*
-			Method replaces current entity's component with passed TComponent argument.
-			Make sure that, before this method current entity has TComponent.
-		*/
+		/**
+		 * @brief Method replaces current entity's component with passed TComponent argument.
+		 * Make sure that, before this method current entity has TComponent.
+		 * @tparam TComponent structure type of component
+		 * @param other component, which will be copied to current entity
+		 * @return Returns newly created object at current entity (copied given component) 
+		 */
 		template<typename TComponent> TComponent& replaceComponent(const TComponent& other) const;
 
-
-		// Method should be used, if you don't know whether entity has TComponent or do not. It adds it or just returns it.
+		/**
+		 * @brief Method should be used, if you don't know whether entity has TComponent or do not. It adds it or just returns it.
+		 * Remember that, you should know, when entity can contain TComponent.
+		 * @tparam TComponent structure type of component
+		 * @tparam Args variadic template, which gives ability to call specific constructor during creation
+		 * @param args variadic parameter, pass all args that TComponent needs during creation
+		 * @return Returns newly created component or already existing
+		 */
 		template<typename TComponent, typename... Args> MAR_NO_DISCARD TComponent& get_addComponent(Args&&... args) const;
 
-		// Method removes TComponent from current entity.
+		/**
+		 * @brief Method removes TComponent from current entity.
+		 * @warning Method does not check if entity contains component, it just removes it!
+		 * @tparam TComponent structure type of component
+		 */
 		template<typename TComponent> void removeComponent() const;
 
 	private:
@@ -158,4 +209,4 @@ namespace marengine {
 #include "Entity.inl"
 
 
-#endif // !MAR_ENGINE_ECS_ENTITY_H
+#endif // !MAR_ENGINE_ENTITY_H
