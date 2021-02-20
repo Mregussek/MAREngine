@@ -33,12 +33,13 @@ namespace marengine {
 	class Entity;
 
 
-	/*
-		FScenePlayStorage - storage for play mode.
-		Because we want to only test game in play mode and then return to its
-		state afterwards we need to store somewhere the most important data. 
-		This is the place.
-	*/
+	/**
+	 * @class FScenePlayStorage ScenePlayStorage.h "Core/ecs/ScenePlayStorage.h"
+	 * @brief storage for play mode.
+	 * Because we want to only test game in play mode and then return to its
+	 * state afterwards we need to store somewhere the most important data.
+	 * This is the place.
+	 */
 	class FScenePlayStorage {
 
 		struct EntityStorage {
@@ -49,15 +50,22 @@ namespace marengine {
 
 	public:
 
+		/// @brief default constructor
 		FScenePlayStorage() = default;
 
-		// Pushes entity to storage and saves it most important data
+		/**
+		 * @brief Pushes entity to storage and saves it most important data
+		 * @param entity entity, that user wants to be saved
+		 */
 		void pushEntityToStorage(const Entity& entity);
 
-		// Loads back most important data for passed entity
+		/**
+		 * @brief Loads back most important data for passed entity
+		 * @param entity entity, that user wants to be loaded
+		 */
 		void loadEntityFromStorage(const Entity& entity);
 
-		// Clear all storages
+		/// @brief Clear all storages
 		void clear();
 
 	private:
