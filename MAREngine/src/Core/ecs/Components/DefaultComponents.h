@@ -37,11 +37,11 @@ namespace marengine {
 	 */
 	struct TagComponent {
 
-		std::string tag{ "empty" };
-
 		TagComponent() = default;
 		TagComponent(const TagComponent& id) = default;
 		TagComponent(std::string t);
+
+		std::string tag{ "empty" };
 
 	};
 
@@ -55,14 +55,14 @@ namespace marengine {
 	 */
 	struct RenderableComponent {
 
-		std::string name{ "empty" };
-		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
-
 		RenderableComponent() = default;
 		RenderableComponent(const RenderableComponent& ren) = default;
 		RenderableComponent(std::string i);
 		RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind);
+
+		std::string name{ "empty" };
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
 
 	};
 
@@ -75,18 +75,19 @@ namespace marengine {
 	 */
 	struct TransformComponent {
 
-		maths::vec3 position{ 0.f, 0.f, 0.f };
-		maths::vec3 rotation{ 0.f, 0.f, 0.f };
-		maths::vec3 scale{ 1.f, 1.f, 1.f };
-
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent& tc) = default;
 		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale);
 
-		/*
-			Method returns maths::mat4 transform recomposed with current member values.
-		*/
+		/**
+		 * @brief Calculates transform matrix from position, rotation and scale vec3's and returns it.
+		 * @return maths::mat4 calculated transform matrix
+		 */
 		maths::mat4 getTransform() const;
+
+		maths::vec3 position{ 0.f, 0.f, 0.f };
+		maths::vec3 rotation{ 0.f, 0.f, 0.f };
+		maths::vec3 scale{ 1.f, 1.f, 1.f };
 
 	};
 
@@ -94,4 +95,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_DEFAULT_COMPONENTS_H
+#endif // !MAR_ENGINE_DEFAULT_COMPONENTS_H

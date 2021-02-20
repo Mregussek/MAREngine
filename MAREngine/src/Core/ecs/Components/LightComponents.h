@@ -31,16 +31,16 @@
 namespace marengine {
 
 
-	/*
-		PointLightComponent - component with FPointLight member,
-		that can be pushed to FPointLightBatch.
-	*/
+	/**
+	 * @struct PointLightComponent LightComponents.h "Core/ecs/Components/LightComponents.h"
+	 * @brief component with FPointLight member, that can be pushed to FPointLightBatch.
+	 */
 	struct PointLightComponent {
 		
-		FPointLight pointLight;
-
 		PointLightComponent() = default;
 		PointLightComponent(const PointLightComponent& li) = default;
+
+		FPointLight pointLight;
 
 	};
 
@@ -48,4 +48,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_LIGHT_COMPONENTS_H
+#endif // !MAR_ENGINE_LIGHT_COMPONENTS_H

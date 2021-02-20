@@ -32,4 +32,4 @@
 #include "LightComponents.h"
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_H
+#endif // !MAR_ENGINE_COMPONENTS_H

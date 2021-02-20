@@ -73,4 +73,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_CAMERA_COMPONENTS_H
+#endif // !MAR_ENGINE_CAMERA_COMPONENTS_H

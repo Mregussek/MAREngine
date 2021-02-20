@@ -30,44 +30,49 @@
 namespace marengine {
 
 
-	/*
-		ColorComponent - contains maths::vec4 color instance, that describes entity with
-		some color. vec4::x stands for R, y for G, z for B and w for A.
-	*/
+	/**
+	 * @struct ColorComponent TextureComponents.h "Core/ecs/Components/TextureComponents.h"
+	 * @brief contains maths::vec4 color instance, that describes entity with
+	 * some color. vec4::x stands for R, y for G, z for B and w for A.
+	 */
 	struct ColorComponent {
-
-		maths::vec4 color{ 0.5f, 0.5f, 0.5f, 1.f };
 
 		ColorComponent() = default;
 		ColorComponent(const ColorComponent& cc) = default;
 		ColorComponent(maths::vec4 c);
 
+		maths::vec4 color{ 0.5f, 0.5f, 0.5f, 1.f };
+
 	};
 
-	/*
-		Texture2DComponent - contains texturePath string instance, that describes entity
-		with some texture2D. texturePath should have end with .jpg extension.
-	*/
-	struct Texture2DComponent {
 
-		std::string texturePath{ "empty" };
+	/**
+	 * @struct Texture2DComponent TextureComponents.h "Core/ecs/Components/TextureComponents.h"
+	 * @brief contains texturePath string instance, that describes entity
+	 * with some texture2D. texturePath should have end with .jpg extension.
+	 */
+	struct Texture2DComponent {
 
 		Texture2DComponent() = default;
 		Texture2DComponent(const Texture2DComponent& tex) = default;
 		Texture2DComponent(std::string tex);
 
+		std::string texturePath{ "empty" };
+
 	};
 
-	/*
-		TextureCubemapComponent - should not be used for now.
-	*/
-	struct TextureCubemapComponent {
 
-		std::string texturePath{ "empty" };
+	/**
+	 * @struct TextureCubemapComponent TextureComponents.h "Core/ecs/Components/TextureComponents.h"
+	 * @brief should not be used for now.
+	 */
+	struct TextureCubemapComponent {
 
 		TextureCubemapComponent() = default;
 		TextureCubemapComponent(const TextureCubemapComponent& cub) = default;
 		TextureCubemapComponent(std::string cub);
+
+		std::string texturePath{ "empty" };
 
 	};
 
@@ -75,4 +80,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_ECS_COMPONENTS_TEXTURE_COMPONENTS_H
+#endif // !MAR_ENGINE_TEXTURE_COMPONENTS_H
