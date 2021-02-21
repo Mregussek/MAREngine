@@ -35,7 +35,7 @@ namespace marengine {
 	// Default implementations
 	
 	template<typename TComponent> static void FEventsComponentEntity::onAdd(const Entity& entity) {
-		entity.template addComponent<T>();
+		entity.template addComponent<TComponent>();
 	}
 
 	template<typename TComponent> static void FEventsComponentEntity::onUpdate(const Entity& entity) {
@@ -43,7 +43,7 @@ namespace marengine {
 	}
 
 	template<typename TComponent> static void FEventsComponentEntity::onRemove(const Entity& entity) {
-		entity.template removeComponent<T>();
+		entity.template removeComponent<TComponent>();
 	}
 
 

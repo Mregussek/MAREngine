@@ -59,10 +59,7 @@ namespace marengine {
 		WindowInstance<GLFWwindow> displayWindow{};
 		LayerStack stack{};
 
-		//auto* scene = FSceneDeserializer::xmlLoadScene("DefaultProject/Scenes/work.marscene.xml");
 		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
-		//auto* scene = FSceneDeserializer::oldWayLoadingFile("DefaultProject/Scenes/DefaultProject.marscene");
-		//auto* scene = Scene::createEmptyScene("EmptyScene");
 
 		RenderLayer renderLayer("Render Layer");
 		stack.pushLayer(&renderLayer);
