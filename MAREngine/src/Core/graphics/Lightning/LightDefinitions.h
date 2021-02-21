@@ -45,6 +45,13 @@ namespace marengine {
 	};
 
 
+	enum class ELightBatchType {
+		NONE = -1,
+		POINTLIGHT = 1,
+		DIRECTIONALLIGHT = 2
+	};
+
+
 	typedef std::vector<FPointLight> FPointLightsArray;
 
 

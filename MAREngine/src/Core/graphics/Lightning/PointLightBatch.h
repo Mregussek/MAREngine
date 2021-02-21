@@ -50,6 +50,8 @@ namespace marengine {
 		uint32_t getUniquePointLightID() const;
 		void setUniquePointLightID(uint32_t index);
 
+		ELightBatchType getBatchType() const;
+
 	private:
 
 		FPointLightsArray m_lights;

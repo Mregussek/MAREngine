@@ -65,9 +65,6 @@ namespace marengine {
 	void FMeshBatchStatic::submitToBatch(const Entity& entity) {
 		submitRenderable(entity.getComponent<RenderableComponent>());
 		submitTransform(entity.getComponent<TransformComponent>());
-
-		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-		rpc.transformIndex = p_transforms.size() - 1;
 	}
 
 	void FMeshBatchStatic::submitRenderable(const RenderableComponent& renderableComponent) {
@@ -132,6 +129,10 @@ namespace marengine {
 
 	void FMeshBatchStatic::seUniqueTransformsID(uint32_t id) {
 		p_transformsUniqueID = id;
+	}
+
+	EMeshBatchStaticType FMeshBatchStatic::getBatchType() const {
+		return EMeshBatchStaticType::NONE;
 	}
 
 

@@ -34,14 +34,11 @@ namespace marengine {
 	struct RenderableComponent;
 	struct TransformComponent;
 
-	enum class EMeshBatchStaticType {
-		NONE = -1,
-		COLOR = 1, 
-		TEXTURE2D = 2
-	};
-
-
+	
 	class FMeshBatchStatic : public IMeshBatch {
+
+		friend class FEventsMeshBatchStatic;
+
 	public:
 
 		virtual void reset() override;
@@ -59,6 +56,8 @@ namespace marengine {
 
 		virtual uint32_t getUniqueTransformsID() const override;
 		virtual void seUniqueTransformsID(uint32_t id) override;
+
+		virtual EMeshBatchStaticType getBatchType() const;
 
 	protected:
 

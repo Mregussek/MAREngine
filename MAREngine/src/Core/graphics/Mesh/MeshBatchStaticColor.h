@@ -49,6 +49,8 @@ namespace marengine {
 		uint32_t getUniqueColorsID() const;
 		void setUniqueColorsID(uint32_t id);
 
+		virtual EMeshBatchStaticType getBatchType() const override;
+
 	private:
 
 		void submitColor(const ColorComponent& colorComponent);
@@ -56,7 +58,6 @@ namespace marengine {
 
 		FColorsArray m_colors;
 		uint32_t m_uniqueColorsID{ 0 };
-		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::COLOR };
 
 	};
 

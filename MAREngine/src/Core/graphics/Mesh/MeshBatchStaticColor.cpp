@@ -52,9 +52,8 @@ namespace marengine {
 
 		submitColor(entity.getComponent<ColorComponent>());
 
-		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-		rpc.colorIndex = m_colors.size() - 1;
-		rpc.materialType = (size_t)s_meshBatchType;
+		auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+		meshBatchInfoComponent.indexAtBatch = p_transforms.size() - 1;
 	}
 
 	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {
@@ -71,6 +70,10 @@ namespace marengine {
 
 	void FMeshBatchStaticColor::setUniqueColorsID(uint32_t id) {
 		m_uniqueColorsID = id;
+	}
+
+	EMeshBatchStaticType FMeshBatchStaticColor::getBatchType() const {
+		return EMeshBatchStaticType::COLOR;
 	}
 
 

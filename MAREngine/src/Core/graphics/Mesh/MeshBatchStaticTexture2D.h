@@ -35,9 +35,6 @@ namespace marengine {
 
 	
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
-
-		friend class FEventsMeshBatchStatic;
-
 	public:
 
 		virtual void reset() override;
@@ -48,13 +45,14 @@ namespace marengine {
 
 		const FTexturesArray& getTextures() const;
 
+		virtual EMeshBatchStaticType getBatchType() const override;
+
 	private:
 
 		void submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent);
 
 
 		FTexturesArray m_textures;
-		static const EMeshBatchStaticType s_meshBatchType{ EMeshBatchStaticType::TEXTURE2D };
 
 	};
 

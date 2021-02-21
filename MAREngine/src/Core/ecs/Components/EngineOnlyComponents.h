@@ -25,23 +25,35 @@
 
 
 #include "../../../mar.h"
+#include "../../graphics/Mesh/MeshDefinitions.h"
+#include "../../graphics/Lightning/LightDefinitions.h"
 
 
 namespace marengine {
 
 
-	struct RenderPipelineComponent {
-		size_t containerIndex{ 0 };
-		size_t transformIndex{ 0 };
-		size_t colorIndex{ 0 };
+	struct MeshBatchInfoComponent {
 
-		size_t containerLightIndex{ 0 };
-		size_t lightIndex{ 0 };
+		int32_t beginVertices{ -1 };
+		int32_t endVertices{ -1 };
 
-		size_t materialType{ 0 };
+		int32_t beginIndices{ -1 };
+		int32_t endIndices{ -1 };
 
-		RenderPipelineComponent() = default;
-		RenderPipelineComponent(const RenderPipelineComponent& rpc) = default;
+		int32_t indexAtBatch{ -1 };
+
+		int32_t batchIndex{ -1 };
+		EMeshBatchStaticType batchType{ EMeshBatchStaticType::NONE };
+
+	};
+
+	
+	struct LightBatchInfoComponent {
+
+		int32_t indexAtBatch{ -1 };
+
+		ELightBatchType batchType{ ELightBatchType::NONE };
+
 	};
 
 

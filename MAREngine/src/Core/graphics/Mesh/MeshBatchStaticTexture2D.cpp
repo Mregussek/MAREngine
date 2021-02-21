@@ -52,9 +52,8 @@ namespace marengine {
 		const uint32_t bindingIndex{ ((uint32_t)p_shapeID - 1) };
 		submitTexture(bindingIndex, entity.getComponent<Texture2DComponent>());
 
-		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-		rpc.colorIndex = m_textures.size() - 1;
-		rpc.materialType = (size_t)s_meshBatchType;
+		auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+		meshBatchInfoComponent.indexAtBatch = p_transforms.size() - 1;
 	}
 
 	void FMeshBatchStaticTexture2D::submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent) {
@@ -63,6 +62,10 @@ namespace marengine {
 
 	const FTexturesArray& FMeshBatchStaticTexture2D::getTextures() const {
 		return m_textures;
+	}
+
+	EMeshBatchStaticType FMeshBatchStaticTexture2D::getBatchType() const {
+		return EMeshBatchStaticType::TEXTURE2D;
 	}
 
 

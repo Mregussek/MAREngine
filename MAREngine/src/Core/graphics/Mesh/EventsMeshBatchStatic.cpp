@@ -33,27 +33,33 @@ namespace marengine {
 
 	void FEventsMeshBatchStatic::onTransformUpdate(const Entity& entity) {
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
+		const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
-		if (renderPipelineComponent.materialType == (size_t)EMeshBatchStaticType::COLOR) {
-			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[renderPipelineComponent.containerIndex] };
-			batch.p_transforms[renderPipelineComponent.transformIndex] = transformComponent.getTransform();
-			FRenderBufferManager::onTransformsUpdate(batch);
-		}
-		else if (renderPipelineComponent.materialType == (size_t)EMeshBatchStaticType::TEXTURE2D) {
-			auto& batch{ RenderPipeline::Instance->m_staticTexture2DBatches[renderPipelineComponent.containerIndex] };
-			batch.p_transforms[renderPipelineComponent.transformIndex] = transformComponent.getTransform();
-			FRenderBufferManager::onTransformsUpdate(batch);
+		FMeshBatchStatic* batch = [&meshBatchInfoComponent]()->FMeshBatchStatic* {
+			if (meshBatchInfoComponent.batchType == EMeshBatchStaticType::COLOR) {
+				return &RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex];
+			}
+			else if (meshBatchInfoComponent.batchType == EMeshBatchStaticType::TEXTURE2D) {
+				return &RenderPipeline::Instance->m_staticTexture2DBatches[meshBatchInfoComponent.batchIndex];
+			}
+			else {
+				return nullptr;
+			}
+		}();
+
+		if (batch) {
+			batch->p_transforms[meshBatchInfoComponent.indexAtBatch] = transformComponent.getTransform();
+			FRenderBufferManager::onTransformsUpdate(*batch);
 		}
 	}
 
 	void FEventsMeshBatchStatic::onColorUpdate(const Entity& entity) {
 		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
+		const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
-		if (renderPipelineComponent.materialType == (size_t)EMeshBatchStaticType::COLOR) {
-			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[renderPipelineComponent.containerIndex] };
-			batch.m_colors[renderPipelineComponent.colorIndex] = colorComponent.color;
+		if (meshBatchInfoComponent.batchType == EMeshBatchStaticType::COLOR) {
+			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex] };
+			batch.m_colors[meshBatchInfoComponent.indexAtBatch] = colorComponent.color;
 			FRenderBufferManager::onColorUpdate(batch);
 		}
 	}

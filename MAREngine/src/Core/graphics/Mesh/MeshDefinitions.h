@@ -31,6 +31,7 @@ namespace marengine {
 
 
 	struct FTexturePair {
+
 		FTexturePair(uint32_t bd, std::string tp) :
 			bindingIndex(bd),
 			texturePath(std::move(tp))
@@ -38,6 +39,13 @@ namespace marengine {
 
 		uint32_t bindingIndex{ 0 };
 		std::string texturePath{ "" };
+	};
+
+
+	enum class EMeshBatchStaticType {
+		NONE = -1,
+		COLOR = 1,
+		TEXTURE2D = 2
 	};
 
 

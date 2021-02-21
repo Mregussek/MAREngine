@@ -63,20 +63,25 @@ namespace marengine {
 			auto& availableBatch{ m_staticColorBatches[batchIndex] };
 			availableBatch.submitToBatch(entity);
 
-			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-			rpc.containerIndex = batchIndex;
+			auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+			meshBatchInfoComponent.batchIndex = batchIndex;
+			meshBatchInfoComponent.batchType = m_staticColorBatches[batchIndex].getBatchType();
 		}
 		if (entity.hasComponent<Texture2DComponent>()) {
 			const uint32_t batchIndex{ getAvailableTexture2DBatch(entity) };
 			auto& availableBatch{ m_staticTexture2DBatches[batchIndex] };
 			availableBatch.submitToBatch(entity);
 
-			auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-			rpc.containerIndex = batchIndex;
+			auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+			meshBatchInfoComponent.batchIndex = batchIndex;
+			meshBatchInfoComponent.batchType = m_staticTexture2DBatches[batchIndex].getBatchType();
 		}
 		if (entity.hasComponent<PointLightComponent>()) {
 			if (m_pointLightBatch.canBeBatched(entity)) {
 				m_pointLightBatch.submitEntityWithLightning(entity);
+
+				auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
+				lightBatchInfoComponent.batchType = m_pointLightBatch.getBatchType();
 			}
 		}
 		if (entity.hasComponent<CameraComponent>()) {

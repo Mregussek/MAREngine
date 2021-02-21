@@ -42,7 +42,8 @@ namespace marengine {
 		dst.replaceComponent<TransformComponent>(src.getComponent<TransformComponent>());
 
 		// Engine-Only Components Copy
-		addComponentIfContains<Entity, RenderPipelineComponent>(src, dst);
+		addComponentIfContains<Entity, LightBatchInfoComponent>(src, dst);
+		addComponentIfContains<Entity, MeshBatchInfoComponent>(src, dst);
 
 		// User-Available Components Copy
 		addComponentIfContains<Entity, RenderableComponent>(src, dst);

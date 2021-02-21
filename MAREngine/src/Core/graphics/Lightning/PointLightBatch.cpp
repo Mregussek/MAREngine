@@ -59,12 +59,12 @@ namespace marengine {
 		FPointLight& pointLightData{ m_lights.emplace_back(pointLightComponent.pointLight) };
 		pointLightData.position = maths::vec4(transformComponent.position, 1.f);
 
-		auto& rpc{ entity.getComponent<RenderPipelineComponent>() };
-		rpc.lightIndex = m_lights.size() - 1;
+		auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
+		lightBatchInfoComponent.indexAtBatch = m_lights.size() - 1;
 
-		GRAPHICS_DEBUG("F_POINT_LIGHT_BATCH: submitted {} entity with pointLight, current lights size = {},"
-			"assigned rpc.lightIndex {}",
-			entity.getComponent<TagComponent>().tag, m_lights.size(), rpc.lightIndex);
+		GRAPHICS_DEBUG("F_POINT_LIGHT_BATCH: submitted {} entity with pointLight, current lights size = {}, assigned rpc.lightIndex {}",
+			entity.getComponent<TagComponent>().tag, m_lights.size(), lightBatchInfoComponent.indexAtBatch
+		);
 	}
 
 	const FPointLightsArray& FPointLightBatch::getLights() const {
@@ -77,6 +77,10 @@ namespace marengine {
 
 	void FPointLightBatch::setUniquePointLightID(uint32_t index) {
 		m_uniquePointLightID = index;
+	}
+
+	ELightBatchType FPointLightBatch::getBatchType() const {
+		return ELightBatchType::POINTLIGHT;
 	}
 
 

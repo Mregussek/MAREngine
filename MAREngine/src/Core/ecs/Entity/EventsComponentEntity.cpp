@@ -36,9 +36,15 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) {
 		const auto& transform = entity.getComponent<TransformComponent>();
-		const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
+		const auto& meshBachInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
-		if (renderPipelineComponent.materialType > 0) { // need to check if it is rendered
+		const bool isEntityRendered = [&meshBachInfoComponent]()->bool {
+			const bool hasAssignedBatch{ meshBachInfoComponent.batchType != EMeshBatchStaticType::NONE };
+			const bool indexAtBatchIsCorrect{ meshBachInfoComponent.batchIndex != -1 };
+			return hasAssignedBatch && indexAtBatchIsCorrect;
+		}();
+
+		if (isEntityRendered) {
 			FEventsMeshBatchStatic::onTransformUpdate(entity);
 		}
 

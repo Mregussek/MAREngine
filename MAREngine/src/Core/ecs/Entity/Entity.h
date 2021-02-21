@@ -75,7 +75,8 @@ namespace marengine {
 		 * @brief Static method for filling entity with basic components. By default it needs:
 		 * - TagComponent (we want to have human readable tag for every entity)
 		 * - TransformComponent (we want every entity to have its own position, rotation, scale)
-		 * - RenderPipelineComponent (engine-only component, it remembers batches that other components are stored in, optimization)
+		 * - LightBatchInfoComponent (engine-only component, it remembers light batches that other components are stored in, optimization)
+		 * - MeshBatchInfoComponent (engine-only component, it remembers mesh batches that other components are stored in, optimization)
 		 * - ChildComponent (used to store some childs, that will be relative to base entity - parent)
 		 * @param entity entity, which will be filled with basic components
 		 */

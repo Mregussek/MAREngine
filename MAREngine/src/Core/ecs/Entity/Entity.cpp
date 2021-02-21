@@ -50,7 +50,8 @@ namespace marengine {
 		entity.addComponent<TagComponent>();
 		entity.addComponent<TransformComponent>();
 		entity.addComponent<ChildComponent>();
-		entity.addComponent<RenderPipelineComponent>();
+		entity.addComponent<LightBatchInfoComponent>();
+		entity.addComponent<MeshBatchInfoComponent>();
 	}
 
 	void Entity::destroyYourself() const {

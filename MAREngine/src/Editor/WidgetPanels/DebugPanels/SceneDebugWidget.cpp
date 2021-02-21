@@ -72,13 +72,18 @@ namespace marengine {
 			ImGui::Text("hasChilds: %i", entity.hasChilds());
 			ImGui::Text("ChildsCount: %i", entity.getChilds().size());
 
-			const auto& renderPipelineComponent{ entity.getComponent<RenderPipelineComponent>() };
-			ImGui::Text("RenderPipeline.containerIndex: %i", renderPipelineComponent.containerIndex);
-			ImGui::Text("RenderPipeline.transformIndex: %i", renderPipelineComponent.transformIndex);
-			ImGui::Text("RenderPipeline.colorIndex: %i", renderPipelineComponent.colorIndex);
-			ImGui::Text("RenderPipeline.containerLightIndex: %i", renderPipelineComponent.containerLightIndex);
-			ImGui::Text("RenderPipeline.lightIndex: %i", renderPipelineComponent.lightIndex);
-			ImGui::Text("RenderPipeline.materialType: %i", renderPipelineComponent.materialType);
+			const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+			ImGui::Text("meshBatchInfoComponent.batchIndex: %i", meshBatchInfoComponent.batchIndex);
+			ImGui::Text("meshBatchInfoComponent.indexAtBatch: %i", meshBatchInfoComponent.indexAtBatch);
+			ImGui::Text("meshBatchInfoComponent.batchType: %i", meshBatchInfoComponent.batchType);
+			ImGui::Text("meshBatchInfoComponent.beginVertices: %i", meshBatchInfoComponent.beginVertices);
+			ImGui::Text("meshBatchInfoComponent.endVertices: %i", meshBatchInfoComponent.endVertices);
+			ImGui::Text("meshBatchInfoComponent.beginIndices: %i", meshBatchInfoComponent.beginIndices);
+			ImGui::Text("meshBatchInfoComponent.endIndices: %i", meshBatchInfoComponent.endIndices);
+
+			const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
+			ImGui::Text("lightBatchInfoComponent.indexAtBatch: %i", lightBatchInfoComponent.indexAtBatch);
+			ImGui::Text("lightBatchInfoComponent.batchType: %i", lightBatchInfoComponent.batchType);
 
 			const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 			displayVec3("Transform.center: <%f , %f , %f>", transformComponent.position);
