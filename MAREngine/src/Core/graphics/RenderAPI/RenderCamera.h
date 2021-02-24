@@ -33,7 +33,7 @@ namespace marengine {
 	struct CameraComponent;
 
 
-	class RenderCamera{
+	class RenderCamera {
 
 		typedef maths::trig trig;
 		typedef maths::vec3 vec3;
@@ -66,6 +66,7 @@ namespace marengine {
 		mat4 m_mvp;
 
 		vec3 m_position;
+		
 	};
 
 
