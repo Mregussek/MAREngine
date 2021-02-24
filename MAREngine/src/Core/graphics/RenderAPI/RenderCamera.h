@@ -51,11 +51,11 @@ namespace marengine {
 
 		void calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera);
 
-		const mat4& getProjection() const { return m_projection; }
-		const mat4& getView() const { return m_view; }
-		const mat4& getModel() const { return m_model; }
-		const mat4& getMVP() const { return m_mvp; }
-		const vec3& getPosition() const { return m_position; }
+		MAR_NO_DISCARD const mat4& getProjection() const;
+		MAR_NO_DISCARD const mat4& getView() const;
+		MAR_NO_DISCARD const mat4& getModel() const;
+		MAR_NO_DISCARD const mat4& getMVP() const;
+		MAR_NO_DISCARD const vec3& getPosition() const;
 
 	private:
 
@@ -75,4 +75,4 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_RENDER_CAMERA_H
+#endif // !MAR_ENGINE_GRAPHICS_RENDER_CAMERA_H

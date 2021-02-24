@@ -32,8 +32,9 @@ namespace marengine {
 	void RenderCamera::calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera) {
 		GRAPHICS_TRACE("RENDER_CAMERA: going to calculate camera transform");
 
-		const auto yRad{ trig::toRadians(transform.rotation.y) };
-		const auto xRad{ trig::toRadians(transform.rotation.x) };
+		const float xRad{ trig::toRadians(transform.rotation.x) };
+		const float yRad{ trig::toRadians(transform.rotation.y) };
+		
 		const vec3 front{ 
 			trig::cosine(yRad) * trig::cosine(xRad), 
 			trig::sine(xRad),
@@ -81,6 +82,26 @@ namespace marengine {
 		m_mvp = m_projection * m_view;
 
 		GRAPHICS_TRACE("RENDER_CAMERA: recalculated Model-View-Projection Matrix!");
+	}
+
+	const maths::mat4& RenderCamera::getProjection() const { 
+		return m_projection; 
+	}
+
+	const maths::mat4& RenderCamera::getView() const { 
+		return m_view; 
+	}
+
+	const maths::mat4& RenderCamera::getModel() const { 
+		return m_model; 
+	}
+
+	const maths::mat4& RenderCamera::getMVP() const {
+		return m_mvp;
+	}
+
+	const maths::vec3& RenderCamera::getPosition() const { 
+		return m_position; 
 	}
 
 
