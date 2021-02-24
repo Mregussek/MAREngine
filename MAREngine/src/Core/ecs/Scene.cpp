@@ -115,5 +115,9 @@ namespace marengine {
 		return m_entities;
 	}
 
+	const bool Scene::isValid(entt::entity enttEntity) const {
+		return m_sceneRegistry.valid(enttEntity);
+	}
+
 
 }

@@ -127,6 +127,12 @@ namespace marengine {
 		*/
 		template<typename TComponent> MAR_NO_DISCARD TComponent& getComponent(entt::entity entt_entity);
 
+		/**
+		 * @brief Method checks, if entt::entity is valid one and returns result.
+		 * @return returns true if entt::entity is valid (it exists and is fine).
+		 */
+		MAR_NO_DISCARD const bool isValid(entt::entity enttEntity) const;
+
 	private:
 
 		std::string m_name{ "Empty Scene" };

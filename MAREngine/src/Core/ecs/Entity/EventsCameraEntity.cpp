@@ -31,15 +31,15 @@
 namespace marengine {
 
 
-	void FEventsCameraEntity::onMainCameraUpdate(const RenderCamera* renderCamera) {
-		FRenderBufferManager::onRenderCameraUpdate(renderCamera);
+	void FEventsCameraEntity::onMainCameraUpdate(const RenderCamera* pRenderCamera) {
+		FRenderBufferManager::onRenderCameraUpdate(pRenderCamera);
 	}
 
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
 		auto updateCameraOperation = [&entity, &cameraComponent]() {
-			const auto& transform = entity.getComponent<TransformComponent>();
+			const auto& transform{ entity.getComponent<TransformComponent>() };
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
 			onMainCameraUpdate(&cameraComponent.renderCamera);
 		};
@@ -52,29 +52,34 @@ namespace marengine {
 		}
 	}
 
-	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* renderCamera) {
-		RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
-		onMainCameraUpdate(renderCamera);
+	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* pRenderCamera) {
+		RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
+		onMainCameraUpdate(pRenderCamera);
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() {
-		Scene* scene{ FSceneManagerEditor::Instance->getScene() };
+		Scene* pScene{ FSceneManagerEditor::Instance->getScene() };
+		entt::entity foundEnttEntity{ entt::null };
 
-		auto hasMainCamera = [&scene](entt::entity entity) {
-			const auto& cam = scene->getComponent<CameraComponent>(entity);
-			return cam.isMainCamera();
-		};
-
-		auto view = scene->getView<CameraComponent>();
-		view.each([&scene](entt::entity entt_entity, CameraComponent& cameraComponent) {
+		auto entityWithCameraComponentAndLookForMainRenderCamera = [&foundEnttEntity](entt::entity enttEntity, CameraComponent& cameraComponent) {
 			if (cameraComponent.isMainCamera()) {
-				const auto& transformComponent{ scene->getComponent<TransformComponent>(entt_entity) };
-				RenderCamera* renderCamera{ &cameraComponent.renderCamera };
-				renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
-				RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
-				onMainCameraUpdate(renderCamera);
+				foundEnttEntity = enttEntity;
+				return;
 			}
-		});
+		};
+		auto viewOver{ pScene->getView<CameraComponent>() };
+
+		viewOver.each(entityWithCameraComponentAndLookForMainRenderCamera);
+
+		if (pScene->isValid(foundEnttEntity)) {
+			auto& cameraComponent{ pScene->getComponent<CameraComponent>(foundEnttEntity) };
+			const auto& transformComponent{ pScene->getComponent<TransformComponent>(foundEnttEntity) };
+			RenderCamera* pRenderCamera{ &cameraComponent.renderCamera };
+
+			pRenderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
+			RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
+			onMainCameraUpdate(pRenderCamera);
+		}
 	}
 
 

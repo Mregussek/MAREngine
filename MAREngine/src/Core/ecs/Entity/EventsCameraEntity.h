@@ -43,7 +43,7 @@ namespace marengine {
 		 * Then method will update needed buffers and use passed camera.
 		 * @param renderCamera pointer to renderCamera that we want to be used.
 		 */
-		static void onMainCameraUpdate(const RenderCamera* renderCamera);
+		static void onMainCameraUpdate(const RenderCamera* pRenderCamera);
 
 		/**
 		 * @brief Updates main camera with given entity, only if it can be updated (FSceneManager must allow it).
@@ -56,7 +56,7 @@ namespace marengine {
 		 * @brief Methed sets editor camera and pushes it to render pipeline.
 		 * @param renderCamera pointer to editor's renderCamera, which will be pushed to pipeline and used.
 		 */
-		static void onEditorCameraSet(const RenderCamera* renderCamera);
+		static void onEditorCameraSet(const RenderCamera* pRenderCamera);
 
 		/**
 		 * @brief Method looks for main game camera (looks for entity with cameraComponent, which is main one)

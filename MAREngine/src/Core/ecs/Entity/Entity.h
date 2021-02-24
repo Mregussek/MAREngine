@@ -93,7 +93,7 @@ namespace marengine {
 		void destroyYourself() const;
 
 		/**
-		 * @brief Method checks, if enitty is valid one and returns result.
+		 * @brief Method checks, if entity is valid one and returns result.
 		 * @return returns true if entity is valid (it exists and is fine).
 		 */
 		MAR_NO_DISCARD const bool isValid() const;
