@@ -26,16 +26,16 @@
 namespace marengine {
 
 
-	Entity::Entity(entt::registry* sceneRegistry) :
-		m_sceneRegistry(sceneRegistry),
-		m_entityHandle(m_sceneRegistry->create())
+	Entity::Entity(entt::registry* pSceneRegistry) :
+		m_pSceneRegistry(pSceneRegistry),
+		m_entityHandle(m_pSceneRegistry->create())
 	{
 		ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
 	}
 
-	Entity::Entity(entt::entity entt_entity, entt::registry* sceneRegistry) :
-		m_sceneRegistry(sceneRegistry),
-		m_entityHandle(entt_entity)
+	Entity::Entity(entt::entity enttEntity, entt::registry* pSceneRegistry) :
+		m_pSceneRegistry(pSceneRegistry),
+		m_entityHandle(enttEntity)
 	{
 		ECS_TRACE("ENTITY: {} is constructed from entt::entity!", m_entityHandle);
 	}
@@ -43,7 +43,7 @@ namespace marengine {
 	const bool Entity::isValid() const {
 		ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
 
-		return m_sceneRegistry->valid(m_entityHandle);
+		return m_pSceneRegistry->valid(m_entityHandle);
 	}
 
 	void Entity::fillEntityWithBasicComponents(const Entity& entity) {
@@ -57,7 +57,7 @@ namespace marengine {
 	void Entity::destroyYourself() const {
 		ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
 
-		m_sceneRegistry->destroy(m_entityHandle);
+		m_pSceneRegistry->destroy(m_entityHandle);
 
 		ECS_INFO("ENTITY: destroyed yourself!");
 	}

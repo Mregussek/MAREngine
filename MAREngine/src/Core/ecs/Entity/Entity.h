@@ -56,17 +56,21 @@ namespace marengine {
 		 * @brief This is default constructor for Entity class, because we need to initialize m_sceneRegistry member!
 		 * If m_sceneRegistry member will stay as nullptr value, Entity instance will immedietaly crash.
 		 * During this constructor call entity is created.
-		 * @param sceneRegistry valid entt::registry pointer to which entity will belong to.
+		 * @warning Constructor does not check, if pSceneRegistry is valid. It creates Entity in place, ensure that
+		 * given pointer is correct.
+		 * @param pSceneRegistry valid entt::registry pointer to which entity will belong to.
 		 */
-		Entity(entt::registry* sceneRegistry);
+		Entity(entt::registry* pSceneRegistry);
 
 		/**
 		 * @brief Constructor for using already created entity and its sceneRegistry instance.
 		 * Used mostly in entt::registry::view lambda.
+		 * @warning Constructor does not check, if pSceneRegistry is valid. It creates Entity in place, ensure that
+		 * given pointer is correct.
 		 * @param entt_entity valid entt::entity, which can be reassigned to new entity object
 		 * @param sceneRegistry valid entt::registry, to which entt_entity belongs to.
 		 */
-		Entity(entt::entity entt_entity, entt::registry* sceneRegistry);
+		Entity(entt::entity enttEntity, entt::registry* pSceneRegistry);
 
 		/// @brief Default copy constructor.
 		Entity(const Entity& other) = default;
@@ -198,7 +202,7 @@ namespace marengine {
 
 	private:
 		
-		entt::registry* m_sceneRegistry{ nullptr };
+		entt::registry* m_pSceneRegistry{ nullptr };
 		entt::entity m_entityHandle{ entt::null };
 
 	};
