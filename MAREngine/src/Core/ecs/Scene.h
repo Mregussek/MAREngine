@@ -56,7 +56,7 @@ namespace marengine {
 		* - lightEntity (pointLight assigned)
 		* Scene is created on the heap using 'new', make sure to delete it when the job is done!
 		* @param sceneName name of the new created scene
-		* @return scene created scene with "new" operator
+		* @return created scene with "new" operator
 		*/
 		MAR_NO_DISCARD static Scene* createEmptyScene(std::string sceneName);
 
@@ -65,13 +65,13 @@ namespace marengine {
 
 		/**
 		* @brief Method creates Entity at m_entities, assigns to it some basic components and returns it.
-		* @return entity created entity pushed to scene
+		* @return created entity pushed to scene
 		*/
 		MAR_NO_DISCARD const Entity& createEntity();
 
 		/**
 		* @brief Method checks if given entity exists in m_entities, if so entity is being destroyed and popped from m_entities.
-		* @param entity entity that will be deleted from current scene
+		* @param entity that will be deleted from current scene
 		*/
 		void destroyEntity(const Entity& entity);
 
@@ -83,47 +83,47 @@ namespace marengine {
 
 		/**
 		* @brief Sets new scene name
-		* @param newSceneName new name for current scene
+		* @param new name for current scene
 		*/
 		void setName(std::string newSceneName);
 
 		/**
 		* @brief Returns current scene name
-		* @return  m_name current name scene
+		* @return current name scene
 		*/
 		MAR_NO_DISCARD const std::string& getName() const;
 
 		/**
 		* @brief Sets scene background color value
-		* @param newSceneBackgroundColor new vec3 background color for current scene
+		* @param new vec3 background color for current scene
 		*/
 		void setBackground(maths::vec3 newSceneBackgroundColor);
 
 		/**
 		* @brief Returns scene background color value.
 		* Non-const method, because we want to modify it during editor mode / game mode
-		* @return m_backgroundColor current background color
+		* @return current background color
 		*/
 		MAR_NO_DISCARD maths::vec3& getBackground();
 
 		/**
 		* @brief Returns pointer to scene registry.
 		* Non-const, because it will be used by entities. Please, use this carefully.
-		* @return m_sceneRegistry pointer to registry of the scene
+		* @return pointer to registry of the scene
 		*/
 		MAR_NO_DISCARD entt::registry* getRegistry();
 		
 		/**
 		* @brief Returns view at all entities that contains TComponent. 
 		* View can be iterated with lambda [](entt::entity entt_entity, TComponent& component) {};
-		* @return entt::basic_view view for given TComponent
+		* @return view for given TComponent
 		*/
 		template<typename TComponent> MAR_NO_DISCARD auto getView();
 
 		/**
 		* @brief Returns component from entt::entity. Used only in lambda methods at view.
 		* @param entt_entity entity's unique index
-		* @return TComponent_instance reference to instance of entt_entity's TComponent
+		* @return reference to instance of entt_entity's TComponent
 		*/
 		template<typename TComponent> MAR_NO_DISCARD TComponent& getComponent(entt::entity entt_entity);
 

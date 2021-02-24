@@ -38,17 +38,13 @@ namespace marengine {
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
-		auto updateCameraOperation = [&entity, &cameraComponent]() {
-			const auto& transform{ entity.getComponent<TransformComponent>() };
-			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			onMainCameraUpdate(&cameraComponent.renderCamera);
-		};
-
 		const bool userCheckingGameInPlayMode{ FSceneManagerEditor::Instance->isPlayMode() || FSceneManagerEditor::Instance->isPauseMode() };
 		const bool userModifyingGameCameraInEditorMode{ FSceneManagerEditor::Instance->isEditorMode() && !FSceneManagerEditor::Instance->usingEditorCamera() };
 
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
-			updateCameraOperation();
+			const auto& transform{ entity.getComponent<TransformComponent>() };
+			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
+			onMainCameraUpdate(&cameraComponent.renderCamera);
 		}
 	}
 

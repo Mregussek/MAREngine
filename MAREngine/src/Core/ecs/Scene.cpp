@@ -33,10 +33,10 @@ namespace marengine {
 	{}
 
 	Scene* Scene::createEmptyScene(std::string sceneName) {
-		Scene* scene = new Scene(std::move(sceneName));
+		Scene* pScene{ new Scene(std::move(sceneName)) };
 
 		{ // create Camera entity
-			const Entity& cameraEntity{ scene->createEntity() };
+			const Entity& cameraEntity{ pScene->createEntity() };
 			CameraComponent& cameraComponent{ cameraEntity.addComponent<CameraComponent>() };
 			cameraComponent.id = "main";
 
@@ -44,14 +44,14 @@ namespace marengine {
 			tag.tag = "CameraEntity";
 		}
 		{ // create Light Entity
-			const Entity& pointLightEntity{ scene->createEntity() };
+			const Entity& pointLightEntity{ pScene->createEntity() };
 			pointLightEntity.addComponent<PointLightComponent>();
 
 			TagComponent& tag{ pointLightEntity.getComponent<TagComponent>() };
 			tag.tag = "LightEntity";
 		}
 
-		return scene;
+		return pScene;
 	}
 
 	void Scene::close() {

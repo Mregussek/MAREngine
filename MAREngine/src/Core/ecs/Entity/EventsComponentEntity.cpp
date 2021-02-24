@@ -35,7 +35,7 @@ namespace marengine {
 	/***************************** TRANSFORM COMPONENT TEMPLATES ***************************************/
 
 	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) {
-		const auto& transform = entity.getComponent<TransformComponent>();
+		const auto& transform{ entity.getComponent<TransformComponent>() };
 		const auto& meshBachInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
 		const bool isEntityRendered = [&meshBachInfoComponent]()->bool {
