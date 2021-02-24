@@ -83,7 +83,7 @@ namespace marengine {
 		 * @brief Calculates transform matrix from position, rotation and scale vec3's and returns it.
 		 * @return calculated transform matrix
 		 */
-		maths::mat4 getTransform() const;
+		MAR_NO_DISCARD maths::mat4 getTransform() const;
 
 		maths::vec3 position{ 0.f, 0.f, 0.f };
 		maths::vec3 rotation{ 0.f, 0.f, 0.f };

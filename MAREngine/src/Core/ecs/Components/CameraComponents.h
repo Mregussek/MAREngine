@@ -48,7 +48,7 @@ namespace marengine {
 		 * @brief Method checks, if renderCamera is a main one for current scene and returns result.
 		 * @return returns true, if renderCamera instance is main camera for current scene.
 		 */
-		bool isMainCamera() const;
+		MAR_NO_DISCARD bool isMainCamera() const;
 
 		RenderCamera renderCamera;
 		std::string id{ "secondary" };   // must contain "main" to be main camera
