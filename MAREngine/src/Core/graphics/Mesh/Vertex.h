@@ -30,11 +30,19 @@
 namespace marengine {
 
 
+	/**
+	 * @struct Vertex Vertex.h "Core/graphics/Mesh/Vertex.h"
+	 * @brief Structure defining Vertex in MAREngine.
+	 * Contains position (3 floats), lightNormal (3 floats),
+	 * textureCoordinates (2 floats) and shapeID (1 float).
+	 */
 	struct Vertex {
+
 		maths::vec3 position;
 		maths::vec3 lightNormal;
 		maths::vec2 textureCoordinates;
 		float shapeID{ 0.f };
+
 	};
 
 
