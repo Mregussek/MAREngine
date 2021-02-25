@@ -27,52 +27,40 @@
 namespace marengine {
 
 
-	template<typename T>
-	static void popFront(std::vector<T>& vec) {
-		MAR_CORE_ASSERT(!vec.empty(), "Cannot pop front, vec is empty!");
-		vec.erase(vec.begin());
-	}
-
 	void FScenePlayStorage::pushEntityToStorage(const Entity& entity) {
-		auto& storage = m_entityStorage.emplace_back();
-		pushOperation(storage, entity);
+		typedef PlayModeStorageComponent::ComponentType ComType;
+
+		auto& playModeComponent{ entity.addComponent<PlayModeStorageComponent>() };
+
+		playModeComponent.components.insert({ ComType::TRANSFORM, entity.getComponent<TransformComponent>() });
+		if (entity.hasComponent<ColorComponent>()) {
+			playModeComponent.components.insert({ ComType::COLOR, entity.getComponent<ColorComponent>() });
+		}
+		if (entity.hasComponent<PointLightComponent>()) {
+			playModeComponent.components.insert({ ComType::POINTLIGHT, entity.getComponent<PointLightComponent>() });
+		}
 	}
 
-	void FScenePlayStorage::pushOperation(EntityStorage& storage, const Entity& entity) {
-		storage.transform = entity.getComponent<TransformComponent>();
-		if (entity.hasComponent<PointLightComponent>()) {
-			storage.light = entity.getComponent<PointLightComponent>();
-		}
-		if (entity.hasComponent<ColorComponent>()) {
-			storage.color = entity.getComponent<ColorComponent>();
+	template<PlayModeStorageComponent::ComponentType componentType, typename TComponent>
+	static void loadComponent(const Entity& entity) {
+		auto& playModeComponent{ entity.getComponent<PlayModeStorageComponent>() };
+
+		auto search{ playModeComponent.components.find(componentType) };
+		if (search != playModeComponent.components.cend()) {
+			auto& tcomponent{ entity.getComponent<TComponent>() };
+			tcomponent = std::get<TComponent>(search->second);
+			playModeComponent.components.erase(search);
 		}
 	}
 
 	void FScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
-		auto& storage = m_entityStorage.front();
+		typedef PlayModeStorageComponent::ComponentType ComType;
 
-		loadOperation(storage, entity);
+		loadComponent<ComType::TRANSFORM, TransformComponent>(entity);
+		loadComponent<ComType::COLOR, ColorComponent>(entity);
+		loadComponent<ComType::POINTLIGHT, PointLightComponent>(entity);
 
-		popFront(m_entityStorage);
-	}
-
-	void FScenePlayStorage::loadOperation(const EntityStorage& storage, const Entity& entity) {
-		auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		transformComponent = storage.transform;
-
-		if (entity.hasComponent<PointLightComponent>()) {
-			auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-			pointLightComponent = storage.light;
-		}
-
-		if (entity.hasComponent<ColorComponent>()) {
-			auto& colorComponent = entity.getComponent<ColorComponent>();
-			colorComponent = storage.color;
-		}
-	}
-
-	void FScenePlayStorage::clear() {
-		m_entityStorage.clear();
+		entity.removeComponent<PlayModeStorageComponent>();
 	}
 
 

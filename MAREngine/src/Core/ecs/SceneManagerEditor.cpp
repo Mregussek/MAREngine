@@ -39,7 +39,7 @@ namespace marengine {
 
 		RenderPipeline::Instance->reset();
 
-		const auto& entities{ m_scene->getEntities() };
+		const auto& entities{ m_pScene->getEntities() };
 
 		std::for_each(entities.cbegin(), entities.cend(), [](const Entity& entity) {
 			RenderPipeline::Instance->pushEntityToPipeline(entity);
@@ -68,8 +68,8 @@ namespace marengine {
 	void FSceneManagerEditor::close() { 
 		ECS_TRACE("SCENE_MANAGER: going to shutdown scene manager");
 
-		m_scene->close(); 
-		delete m_scene;
+		m_pScene->close(); 
+		delete m_pScene;
 
 		ECS_INFO("SCENE_MANAGER: called shutdown method");
 	}
@@ -81,20 +81,18 @@ namespace marengine {
 	void FSceneManagerEditor::initPlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to initialize play mode");
 
-		m_playStorage.clear();
-
-		const FEntityArray& entities{ m_scene->getEntities() };
+		const FEntityArray& entities{ m_pScene->getEntities() };
 		for (const Entity& entity : entities) {
-			m_playStorage.pushEntityToStorage(entity);
+			FScenePlayStorage::pushEntityToStorage(entity);
 		}
 
 		auto initializeScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
-			const Entity entity(entt_entity, m_scene->getRegistry());
+			const Entity entity(entt_entity, m_pScene->getRegistry());
 			script.pythonScript.loadScript(script.scriptsPath);
 			script.pythonScript.start(entity);
 		};
 
-		const auto view{ m_scene->getView<PythonScriptComponent>() };
+		const auto view{ m_pScene->getView<PythonScriptComponent>() };
 		view.each(initializeScriptModule);
 
 		FEventsCameraEntity::onGameCameraSet();
@@ -106,12 +104,12 @@ namespace marengine {
 		ECS_TRACE("SCENE_MANAGER: going to update play mode");
 
 		auto updateScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
-			const Entity entity(entt_entity, m_scene->getRegistry());
+			const Entity entity(entt_entity, m_pScene->getRegistry());
 			script.pythonScript.update(entity);
 			updateEntityInPlaymode(entity);
 		};
 
-		const auto view{ m_scene->getView<PythonScriptComponent>() };
+		const auto view{ m_pScene->getView<PythonScriptComponent>() };
 		view.each(updateScriptModule);
 
 		ECS_INFO("SCENE_MANAGER: updated play mode");
@@ -120,9 +118,9 @@ namespace marengine {
 	void FSceneManagerEditor::updatePauseMode() {
 		ECS_TRACE("SCENE_MANAGER: going to update pause mode");
 
-		const auto view = m_scene->getView<PythonScriptComponent>();
+		const auto view = m_pScene->getView<PythonScriptComponent>();
 		view.each([this](entt::entity entt_entity, const PythonScriptComponent& script) {
-			const Entity entity(entt_entity, m_scene->getRegistry());
+			const Entity entity(entt_entity, m_pScene->getRegistry());
 			updateEntityInPlaymode(entity);
 		});
 
@@ -144,24 +142,23 @@ namespace marengine {
 	void FSceneManagerEditor::exitPlayMode() {
 		ECS_TRACE("SCENE_MANAGER: going to exit play mode");
 
-		const FEntityArray& entities{ m_scene->getEntities() };
+		const FEntityArray& entities{ m_pScene->getEntities() };
 
 		for (const Entity& entity : entities) {
-			m_playStorage.loadEntityFromStorage(entity);
+			FScenePlayStorage::loadEntityFromStorage(entity);
 		}
 
-		m_playStorage.clear();
 		initialize();
 
 		ECS_INFO("SCENE_MANAGER: exited play mode!");
 	}
 
 	void FSceneManagerEditor::setScene(Scene* scene) { 
-		m_scene = scene; 
+		m_pScene = scene; 
 	}
 
 	Scene* FSceneManagerEditor::getScene() { 
-		return m_scene; 
+		return m_pScene; 
 	}
 
 	void FSceneManagerEditor::setEditorMode() { 

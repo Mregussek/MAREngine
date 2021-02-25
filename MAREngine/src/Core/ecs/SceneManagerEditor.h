@@ -133,8 +133,7 @@ namespace marengine {
 		void exitPlayMode();
 
 
-		FScenePlayStorage m_playStorage;
-		Scene* m_scene{ nullptr };
+		Scene* m_pScene{ nullptr };
 		
 		bool m_EditorCamera{ true };
 		bool m_EditorMode{ true };

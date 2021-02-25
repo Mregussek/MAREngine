@@ -27,11 +27,20 @@
 #include "../../../mar.h"
 #include "../../graphics/Mesh/MeshDefinitions.h"
 #include "../../graphics/Lightning/LightDefinitions.h"
+#include "DefaultComponents.h"
+#include "LightComponents.h"
+#include "TextureComponents.h"
 
 
 namespace marengine {
 
 
+	/**
+	 * @struct MeshBatchInfoComponent EngineOnlyComponents.h "Core/ecs/Components/EngineOnlyComponents.h"
+	 * @brief Structure used as memorizer for information about mesh batching. We want to remember, at which mesh
+	 * batch current entity is stored, where its vertices / indices are beginning & ending and so on.
+	 * Used as optimization for RenderAPI.
+	 */
 	struct MeshBatchInfoComponent {
 
 		int32_t beginVertices{ -1 };
@@ -48,11 +57,39 @@ namespace marengine {
 	};
 
 	
+	/**
+	 * @struct LightBatchInfoComponent EngineOnlyComponents.h "Core/ecs/Components/EngineOnlyComponents.h"
+	 * @brief Structure used as memorizer for information about light batching. We want to remember, at which light
+	 * batch current entity is stored. Used as optimization for RenderAPI.
+	 */
 	struct LightBatchInfoComponent {
 
 		int32_t indexAtBatch{ -1 };
 
 		ELightBatchType batchType{ ELightBatchType::NONE };
+
+	};
+
+	
+	/**
+	 * @struct PlayModeStorageComponent EngineOnlyComponents.h "Core/ecs/Components/EngineOnlyComponents.h"
+	 * @brief Structure used as storage for components, that can change during play mode. While using 
+	 * editor of MAREngine, we want to try game in real-life and then come back to editor state. Component
+	 * should be used as storage for play mode components during real-time check with MAREngine's editor.
+	 */
+	struct PlayModeStorageComponent {
+
+		typedef std::variant<TransformComponent, ColorComponent, PointLightComponent> ComponentVariant;
+
+		enum class ComponentType {
+			NONE = -1,
+			TRANSFORM = 1,
+			COLOR = 2,
+			POINTLIGHT = 3
+		};
+
+
+		std::unordered_map<ComponentType, ComponentVariant> components;
 
 	};
 

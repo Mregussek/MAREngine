@@ -41,39 +41,19 @@ namespace marengine {
 	 * This is the place.
 	 */
 	class FScenePlayStorage {
-
-		struct EntityStorage {
-			TransformComponent transform;
-			PointLightComponent light;
-			ColorComponent color;
-		};
-
 	public:
-
-		/// @brief default constructor
-		FScenePlayStorage() = default;
 
 		/**
 		 * @brief Pushes entity to storage and saves it most important data
 		 * @param entity entity, that user wants to be saved
 		 */
-		void pushEntityToStorage(const Entity& entity);
+		static void pushEntityToStorage(const Entity& entity);
 
 		/**
 		 * @brief Loads back most important data for passed entity
 		 * @param entity entity, that user wants to be loaded
 		 */
-		void loadEntityFromStorage(const Entity& entity);
-
-		/// @brief Clear all storages
-		void clear();
-
-	private:
-
-		void pushOperation(EntityStorage& storage, const Entity& entity);
-		void loadOperation(const EntityStorage& storage, const Entity& entity);
-
-		std::vector<EntityStorage> m_entityStorage;
+		static void loadEntityFromStorage(const Entity& entity);
 
 	};
 
