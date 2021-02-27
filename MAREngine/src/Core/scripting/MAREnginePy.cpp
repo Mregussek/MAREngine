@@ -50,40 +50,39 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def_readwrite("y", &vec3::y)
 		.def_readwrite("z", &vec3::z)
 		.def("add",
-			(vec3 & (vec3::*)(float f)) & vec3::add,
+			(vec3 (vec3::*)(float f) const) & vec3::add,
 			py::arg("f"))
 		.def("subtract",
-			(vec3 & (vec3::*)(float f)) & vec3::subtract,
+			(vec3 (vec3::*)(float f) const) & vec3::subtract,
 			py::arg("f"))
 		.def("multiply",
-			(vec3 & (vec3::*)(float f)) & vec3::multiply,
+			(vec3 (vec3::*)(float f) const) & vec3::multiply,
 			py::arg("f"))
 		.def("divide",
-			(vec3 & (vec3::*)(float f)) & vec3::divide,
+			(vec3 (vec3::*)(float f) const) & vec3::divide,
 			py::arg("f"))
 		.def("add",
-			(vec3 & (vec3::*)(const vec3 & other)) & vec3::add,
+			(vec3 (vec3::*)(vec3 other) const) & vec3::add,
 			py::arg("other"))
 		.def("subtract",
-			(vec3 & (vec3::*)(const vec3 & other)) & vec3::subtract,
+			(vec3 (vec3::*)(vec3 other) const) & vec3::subtract,
 			py::arg("other"))
 		.def("multiply",
-			(vec3 & (vec3::*)(const vec3 & other)) & vec3::multiply,
+			(vec3 (vec3::*)(vec3 other) const) & vec3::multiply,
 			py::arg("other"))
 		.def("divide",
-			(vec3 & (vec3::*)(const vec3 & other)) & vec3::divide,
+			(vec3 (vec3::*)(vec3 other) const) & vec3::divide,
 			py::arg("other"))
 		.def("cross",
-			(vec3(vec3::*)(const vec3 & other) const) & vec3::cross,
+			(vec3 (vec3::*)(vec3 other) const) & vec3::cross,
 			py::arg("other"))
 		.def("dot",
-			(float (vec3::*)(const vec3 & other) const) & vec3::dot,
+			(float (vec3::*)(vec3 other) const) & vec3::dot,
 			py::arg("other"))
 		.def("length",
 			(float (vec3::*)() const) & vec3::length)
-		.def_static("normalize",
-			&vec3::normalize,
-			py::arg("other"))
+		.def("normalize",
+			(vec3 (vec3::*)() const)&vec3::normalize)
 		// ---- VEC3 + - * / FLOAT 
 		.def("__add__",
 			[](vec3 left, float right) { return left + right; },
@@ -99,23 +98,23 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 			py::is_operator())
 		// ---- VEC3 + - * / VEC3 
 		.def("__add__",
-			[](vec3 left, const vec3& right) { return left + right; },
+			[](vec3 left, vec3 right) { return left + right; },
 			py::is_operator())
 		.def("__sub__",
-			[](vec3 left, const vec3& right) { return left - right; },
+			[](vec3 left, vec3 right) { return left - right; },
 			py::is_operator())
 		.def("__mul__",
-			[](vec3 left, const vec3& right) { return left * right; },
+			[](vec3 left, vec3 right) { return left * right; },
 			py::is_operator())
 		.def("__floordiv__",
-			[](vec3 left, const vec3& right) { return left / right; },
+			[](vec3 left, vec3 right) { return left / right; },
 			py::is_operator())
 		// ---- EQUAL OPERATORS
 		.def("__eq__",
-			[](vec3& left, const vec3& other) { return left == other; },
+			[](vec3 left, vec3 other) { return left == other; },
 			py::is_operator())
 		.def("__ne__",
-			[](vec3& left, const vec3& other) { return left != other; },
+			[](vec3 left, vec3 other) { return left != other; },
 			py::is_operator());
 
 
@@ -131,37 +130,36 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def_readwrite("z", &vec4::z)
 		.def_readwrite("w", &vec4::w)
 		.def("add",
-			(vec4 & (vec4::*)(float f)) & vec4::add,
+			(vec4 (vec4::*)(float f) const) & vec4::add,
 			py::arg("f"))
 		.def("subtract",
-			(vec4 & (vec4::*)(float f)) & vec4::subtract,
+			(vec4 (vec4::*)(float f) const) & vec4::subtract,
 			py::arg("f"))
 		.def("multiply",
-			(vec4 & (vec4::*)(float f)) & vec4::multiply,
+			(vec4 (vec4::*)(float f) const) & vec4::multiply,
 			py::arg("f"))
 		.def("divide",
-			(vec4 & (vec4::*)(float f)) & vec4::divide,
+			(vec4 (vec4::*)(float f) const) & vec4::divide,
 			py::arg("f"))
 		.def("add",
-			(vec4 & (vec4::*)(const vec4 & other)) & vec4::add,
+			(vec4 (vec4::*)(vec4 other) const) & vec4::add,
 			py::arg("other"))
 		.def("subtract",
-			(vec4 & (vec4::*)(const vec4 & other)) & vec4::subtract,
+			(vec4 (vec4::*)(vec4 other) const) & vec4::subtract,
 			py::arg("other"))
 		.def("multiply",
-			(vec4 & (vec4::*)(const vec4 & other)) & vec4::multiply,
+			(vec4 (vec4::*)(vec4 other) const) & vec4::multiply,
 			py::arg("other"))
 		.def("divide",
-			(vec4 & (vec4::*)(const vec4 & other)) & vec4::divide,
+			(vec4 (vec4::*)(vec4 other) const) & vec4::divide,
 			py::arg("other"))
 		.def("dot",
-			(float (vec4::*)(const vec4 & other) const) & vec4::dot,
+			(float (vec4::*)(vec4 other) const) & vec4::dot,
 			py::arg("other"))
 		.def("length",
 			(float (vec4::*)() const) & vec4::length)
-		.def_static("normalize",
-			&vec4::normalize,
-			py::arg("other"))
+		.def("normalize",
+			(vec4 (vec4::*)() const) & vec4::normalize)
 		// ---- vec4 + - * / FLOAT 
 		.def("__add__",
 			[](vec4 left, float right) { return left + right; },
@@ -177,23 +175,23 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 			py::is_operator())
 		// ---- vec4 + - * / vec4 
 		.def("__add__",
-			[](vec4 left, const vec4& right) { return left + right; },
+			[](vec4 left, vec4 right) { return left + right; },
 			py::is_operator())
 		.def("__sub__",
-			[](vec4 left, const vec4& right) { return left - right; },
+			[](vec4 left, vec4 right) { return left - right; },
 			py::is_operator())
 		.def("__mul__",
-			[](vec4 left, const vec4& right) { return left * right; },
+			[](vec4 left, vec4 right) { return left * right; },
 			py::is_operator())
 		.def("__floordiv__",
-			[](vec4 left, const vec4& right) { return left / right; },
+			[](vec4 left, vec4 right) { return left / right; },
 			py::is_operator())
 		// ---- EQUAL OPERATORS
 		.def("__eq__",
-			[](vec4& left, const vec4& other) { return left == other; },
+			[](vec4 left, vec4 other) { return left == other; },
 			py::is_operator())
 		.def("__ne__",
-			[](vec4& left, const vec4& other) { return left != other; },
+			[](vec4 left, vec4 other) { return left != other; },
 			py::is_operator());
 
 

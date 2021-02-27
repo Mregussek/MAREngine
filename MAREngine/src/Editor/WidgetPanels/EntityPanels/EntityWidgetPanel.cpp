@@ -218,9 +218,15 @@ namespace marengine {
 		{ // Sliders
 			bool updatedTransform = false;
 
-			if (CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f)) { updatedTransform = true; }
-			if (CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f)) { updatedTransform = true; }
-			if (CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f)) { updatedTransform = true; }
+			if (CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f)) { 
+				updatedTransform = true; 
+			}
+			if (CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f, 0.f, 360.f)) { 
+				updatedTransform = true; 
+			}
+			if (CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f)) { 
+				updatedTransform = true; 
+			}
 
 			ImGui::NewLine();
 

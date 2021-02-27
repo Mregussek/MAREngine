@@ -49,19 +49,19 @@ namespace marengine {
             }();
 
             if (Window::isKeyPressed(MAR_KEY_W)) {
-                camera->m_position += camera->m_front * velocity;
+                camera->m_position = camera->m_position + (camera->m_front * velocity);
                 userPressedSth = true;
             }
             if (Window::isKeyPressed(MAR_KEY_S)) {
-                camera->m_position -= camera->m_front * velocity;
+                camera->m_position = camera->m_position - (camera->m_front * velocity);
                 userPressedSth = true;
             }
             if (Window::isKeyPressed(MAR_KEY_A)) {
-                camera->m_position -= camera->m_right * velocity;
+                camera->m_position = camera->m_position - (camera->m_right * velocity);
                 userPressedSth = true;
             }
             if (Window::isKeyPressed(MAR_KEY_D)) {
-                camera->m_position += camera->m_right * velocity;
+                camera->m_position = camera->m_position + (camera->m_right * velocity);
                 userPressedSth = true;
             }
 

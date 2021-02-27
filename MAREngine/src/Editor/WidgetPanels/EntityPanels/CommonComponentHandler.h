@@ -39,7 +39,7 @@ namespace marengine {
 		static void handleTagComponent(TagComponent& tag);
 		static void handleScriptComponent(const Entity& entity);
 
-		static bool drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth);
+		static bool drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth, float minValue, float maxValue);
 		static bool drawVec4Control(const char* label, maths::vec4& values, float resetValue, float columnWidth);
 
 	private:

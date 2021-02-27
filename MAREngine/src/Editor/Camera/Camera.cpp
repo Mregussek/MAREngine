@@ -41,7 +41,7 @@ namespace marengine {
     }
     
     bool Camera::update(float aspectRatio, bool useInput) {       
-        auto updatePerspectiveIfNeeded = [this, aspectRatio]()->bool {
+        auto perspectiveUpdateWasNeeded = [this, aspectRatio]()->bool {
             if (m_aspectRatio != aspectRatio) {
                 m_aspectRatio = aspectRatio;
                 m_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, m_near, m_far);
@@ -51,22 +51,31 @@ namespace marengine {
             return false;
         };
 
-        auto recalculateMatrixAfterUserInput = [this, &updatePerspectiveIfNeeded]() {
-            updateCameraVectors();
-            updatePerspectiveIfNeeded();
-            m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
-            m_renderCamera.recalculateMVP();
-        };
-
         if (useInput) {
+            auto recalculateMatrixAfterUserInput = [this, &perspectiveUpdateWasNeeded]() {
+                updateCameraVectors();
+                perspectiveUpdateWasNeeded();
+                m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
+                m_renderCamera.recalculateMVP();
+            };
+
             const bool userPressedSomeKey{ processInput() };
-            if (userPressedSomeKey) { recalculateMatrixAfterUserInput(); return true; }
+            if (userPressedSomeKey) {
+                recalculateMatrixAfterUserInput(); 
+                return true; 
+            }
             else {
-                if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); return true; }
+                if (perspectiveUpdateWasNeeded()) { 
+                    m_renderCamera.recalculateMVP(); 
+                    return true;
+                }
             }
         }
         else {
-            if (updatePerspectiveIfNeeded()) { m_renderCamera.recalculateMVP(); return true; }
+            if (perspectiveUpdateWasNeeded()) { 
+                m_renderCamera.recalculateMVP(); 
+                return true; 
+            }
         }
 
         return false;
@@ -89,6 +98,7 @@ namespace marengine {
     }
 
     void Camera::updateCameraVectors() {
+        typedef maths::vec3 vec3;
         typedef maths::trig tri;
 
         const maths::vec3 worldUp{ 0.f, 1.f, 0.f };
@@ -101,9 +111,9 @@ namespace marengine {
             {tri::sine(yawRad) * tri::cosine(pitchRad)}
         };
 
-        m_front = maths::vec3::normalize(front);
-        m_right = maths::vec3::normalize(maths::vec3::cross(m_front, worldUp));
-        m_up = maths::vec3::normalize(maths::vec3::cross(m_right, m_front));
+        m_front = vec3::normalize(front);
+        m_right = vec3::normalize(vec3::cross(m_front, worldUp));
+        m_up = vec3::normalize(vec3::cross(m_right, m_front));
     }
 
     const RenderCamera* Camera::getCameraData() const { 

@@ -34,8 +34,8 @@ namespace marengine {
 	RenderableComponent::RenderableComponent(std::string i) : 
 		name(std::move(i))
 	{}
-	RenderableComponent::RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind)
-		: name(std::move(i)),
+	RenderableComponent::RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind) :
+		name(std::move(i)),
 		vertices(ver),
 		indices(ind)
 	{}

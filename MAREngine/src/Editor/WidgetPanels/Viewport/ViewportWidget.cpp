@@ -148,7 +148,9 @@ namespace marengine {
 
 				bool useInputInCamera = false;
 				if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
-				if (m_camera.update(m_aspectRatio, useInputInCamera)) {
+
+				const bool cameraWasRecalculated{ m_camera.update(m_aspectRatio, useInputInCamera) };
+				if (cameraWasRecalculated) {
 					FEventsCameraEntity::onMainCameraUpdate(m_camera.getCameraData());
 				}
 			}

@@ -70,7 +70,7 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
 	}
 
-	bool CommonComponentHandler::drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth) {
+	bool CommonComponentHandler::drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth, float minValue, float maxValue) {
 		bool pressedSomeButton{ false };
 
 		const ImGuiIO& io{ ImGui::GetIO() };
@@ -103,7 +103,7 @@ namespace marengine {
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f")) {
+		if (ImGui::DragFloat("##X", &values.x, 0.1f, minValue, maxValue, "%.2f")) {
 			pressedSomeButton = true;
 		}
 		ImGui::PopItemWidth();
@@ -124,7 +124,7 @@ namespace marengine {
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f")) {
+		if (ImGui::DragFloat("##Y", &values.y, 0.1f, minValue, maxValue, "%.2f")) {
 			pressedSomeButton = true;
 		}
 		ImGui::PopItemWidth();
@@ -144,7 +144,7 @@ namespace marengine {
 		ImGui::PopStyleColor(3);
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f")) {
+		if (ImGui::DragFloat("##Z", &values.z, 0.1f, minValue, maxValue, "%.2f")) {
 			pressedSomeButton = true;
 		}
 		ImGui::PopItemWidth();
