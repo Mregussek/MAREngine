@@ -215,24 +215,27 @@ namespace marengine {
 	void WEntityWidgetPanel::handleTransformComponent() const {
 		auto& tran = currentEntity->getComponent<TransformComponent>();
 
-		{ // Sliders
-			bool updatedTransform = false;
+		const bool updatedTransform = [&tran]()->bool {
+			maths::vec3 rotation{ tran.rotation * MARMATH_RAD2DEG };
 
-			if (CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f)) { 
-				updatedTransform = true; 
+			const bool updatedPosition{ CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f) };
+			const bool updatedRotation{ CommonComponentHandler::drawVec3Control("Rotation", rotation, 0.f, 100.f, 0.f, 360.f) };
+			const bool updatedScale{ CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f) };
+			
+			if (updatedRotation) {
+				tran.rotation = rotation * MARMATH_DEG2RAD;
+				return true;
 			}
-			if (CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f, 0.f, 360.f)) { 
-				updatedTransform = true; 
-			}
-			if (CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f)) { 
-				updatedTransform = true; 
+			else if (updatedPosition || updatedScale) {
+				return true;
 			}
 
-			ImGui::NewLine();
+			return false;
+		}();
 
-			if (updatedTransform) {
-				FEventsComponentEntity::onUpdate<TransformComponent>(*currentEntity);
-			}
+		ImGui::NewLine();
+		if (updatedTransform) {
+			FEventsComponentEntity::onUpdate<TransformComponent>(*currentEntity);
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
