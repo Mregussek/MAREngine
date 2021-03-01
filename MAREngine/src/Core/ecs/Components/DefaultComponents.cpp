@@ -23,13 +23,6 @@
 #include "DefaultComponents.h"
 #include "../ECSLogs.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/quaternion.hpp>
-#include "glm/mat4x4.hpp"
-#include "glm/gtx/matrix_decompose.hpp"
-#include "glm/gtc/type_ptr.hpp"
-#include <glm/gtc/matrix_transform.hpp>
-
 
 namespace marengine {
 
@@ -55,36 +48,8 @@ namespace marengine {
 
 	maths::mat4 TransformComponent::getTransform() const {
 		maths::mat4 tran;
-		//maths::mat4::recompose(tran, position, rotation, scale);
-		//return tran;
-
-		glm::vec3 pos{
-			position.x,
-			position.y,
-			position.z
-		};
-		glm::vec3 rot{
-			rotation.x,
-			rotation.y,
-			rotation.z
-		};
-		glm::vec3 scal{
-			scale.x,
-			scale.y,
-			scale.z
-		};
-		glm::mat4 glmTran{
-			glm::translate(glm::mat4(1.f), pos)
-			* glm::toMat4(glm::quat(rot))
-			* glm::scale(glm::mat4(1.f), scal)
-		};
-		float* pGlmTran{ glm::value_ptr(glmTran) };
-		for (size_t i = 0; i < 16; i++) {
-			tran.elements[i] = pGlmTran[i];
-		}
-
+		tran.recompose(position, maths::quat(rotation), scale);
 		return tran;
-
 	}
 
 

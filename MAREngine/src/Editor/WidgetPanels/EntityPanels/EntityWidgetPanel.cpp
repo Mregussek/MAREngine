@@ -216,17 +216,11 @@ namespace marengine {
 		auto& tran = currentEntity->getComponent<TransformComponent>();
 
 		const bool updatedTransform = [&tran]()->bool {
-			maths::vec3 rotation{ tran.rotation * MARMATH_RAD2DEG };
-
 			const bool updatedPosition{ CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f) };
-			const bool updatedRotation{ CommonComponentHandler::drawVec3Control("Rotation", rotation, 0.f, 100.f, 0.f, 360.f) };
+			const bool updatedRotation{ CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f, 0.f, 10.f) };
 			const bool updatedScale{ CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f) };
 			
-			if (updatedRotation) {
-				tran.rotation = rotation * MARMATH_DEG2RAD;
-				return true;
-			}
-			else if (updatedPosition || updatedScale) {
+			if (updatedPosition || updatedRotation || updatedScale) {
 				return true;
 			}
 
