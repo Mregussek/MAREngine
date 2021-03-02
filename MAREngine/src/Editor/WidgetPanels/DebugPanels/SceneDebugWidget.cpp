@@ -25,6 +25,7 @@
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/Scene.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
+#include "../EntityPanels/EntityWidgetPanel.h"
 
 
 namespace marengine {
@@ -138,5 +139,20 @@ namespace marengine {
 			ImGui::TreePop();
 		}
 	}
+
+	void WSceneDebugWidget::displayMat4Transform(const char* name, const maths::mat4& transform) const {
+		ImGui::Begin(name);
+
+		ImGui::Text("--- %s ---", name);
+		
+		for (size_t i = 0; i < 4; i++) {
+			ImGui::Text("%f %f %f %f", transform[0 + i * 4], transform[1 + i * 4], transform[2 + i * 4], transform[3 + i * 4]);
+		}
+
+		ImGui::Text("--- %s ---", name);
+
+		ImGui::End();
+	}
+
 
 }

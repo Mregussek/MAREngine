@@ -24,6 +24,7 @@
 #define MAR_ENGINE_W_SCENE_DEBUG_WIDGET_H
 
 
+#include "../../../mar.h"
 #include "../IWidgetPanel.h"
 
 
@@ -40,6 +41,8 @@ namespace marengine {
 
 		virtual void create() override;
 		virtual void updateFrame() override;
+
+		void displayMat4Transform(const char* name, const maths::mat4& transform) const;
 
 	private:
 

@@ -26,6 +26,7 @@
 #include "../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Window/Window.h"
+#include "../DebugPanels/SceneDebugWidget.h"
 
 
 namespace marengine {
@@ -72,9 +73,11 @@ namespace marengine {
 		ImGuizmo::Manipulate(pView, pProjection, m_operation, ImGuizmo::MODE::LOCAL, pTransform);
 
 		if (ImGuizmo::IsUsing()) {
-			vec3 rot;
-			mat4::decompose(transform, transformComponent.position, rot, transformComponent.scale);
+			vec3 pos, rot, sca;
+			mat4::decompose(transform, pos, rot, sca);
+			transformComponent.position = pos;
 			transformComponent.rotation = transformComponent.rotation + (rot - transformComponent.rotation); // + deltaRotation, fighting with GimbleLock
+			transformComponent.scale = sca;
 			return true;
 		}
 
