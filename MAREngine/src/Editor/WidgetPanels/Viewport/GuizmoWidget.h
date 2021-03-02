@@ -49,12 +49,12 @@ namespace marengine {
 		void setTranslation();
 		void setRotation();
 		void setScale();
+		void setNoGuizmo();
 
-		bool isRotationGuizmo() const;
-		bool isTranslateGuizmo() const;
-		bool isScaleGuizmo() const;
+		bool userDontWantToDrawGuizmo() const;
 
-		ImGuizmo::OPERATION m_operation{ ImGuizmo::OPERATION::TRANSLATE };
+
+		ImGuizmo::OPERATION m_operation{ -1 };
 
 	};
 

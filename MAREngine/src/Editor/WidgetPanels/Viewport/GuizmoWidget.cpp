@@ -37,13 +37,17 @@ namespace marengine {
 			if (Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
 			if (Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
 			if (Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
+			if (Window::isKeyPressed(MAR_KEY_V)) { setNoGuizmo(); }
 		}
 	}
 
 	void GUI_Guizmo::draw(const Camera& editorCamera, const Entity& currentEntity) const {
 		auto& transform = currentEntity.getComponent<TransformComponent>();
-		const bool userUsedGuizmo{ draw(editorCamera, transform) };
+		if (userDontWantToDrawGuizmo()) {
+			return;
+		}
 
+		const bool userUsedGuizmo{ draw(editorCamera, transform) };
 		if (userUsedGuizmo) {
 			FEventsComponentEntity::onUpdate<TransformComponent>(currentEntity);
 		}
@@ -73,11 +77,9 @@ namespace marengine {
 		ImGuizmo::Manipulate(pView, pProjection, m_operation, ImGuizmo::MODE::LOCAL, pTransform);
 
 		if (ImGuizmo::IsUsing()) {
-			vec3 pos, rot, sca;
-			mat4::decompose(transform, pos, rot, sca);
-			transformComponent.position = pos;
+			vec3 rot;
+			mat4::decompose(transform, transformComponent.position, rot, transformComponent.scale);
 			transformComponent.rotation = transformComponent.rotation + (rot - transformComponent.rotation); // + deltaRotation, fighting with GimbleLock
-			transformComponent.scale = sca;
 			return true;
 		}
 
@@ -96,16 +98,12 @@ namespace marengine {
 		m_operation = ImGuizmo::OPERATION::SCALE;
 	}
 
-	bool GUI_Guizmo::isRotationGuizmo() const {
-		return m_operation == ImGuizmo::OPERATION::ROTATE;
+	void GUI_Guizmo::setNoGuizmo() {
+		m_operation = ImGuizmo::OPERATION::NONE;
 	}
 
-	bool GUI_Guizmo::isTranslateGuizmo() const {
-		return m_operation == ImGuizmo::OPERATION::TRANSLATE;
-	}
-
-	bool GUI_Guizmo::isScaleGuizmo() const {
-		return m_operation == ImGuizmo::OPERATION::SCALE;
+	bool GUI_Guizmo::userDontWantToDrawGuizmo() const {
+		return m_operation == ImGuizmo::OPERATION::NONE;
 	}
 
 
