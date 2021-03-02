@@ -72,7 +72,9 @@ namespace marengine {
 		ImGuizmo::Manipulate(pView, pProjection, m_operation, ImGuizmo::MODE::LOCAL, pTransform);
 
 		if (ImGuizmo::IsUsing()) {
-			mat4::decompose(transform, transformComponent.position, transformComponent.rotation, transformComponent.scale);
+			vec3 rot;
+			mat4::decompose(transform, transformComponent.position, rot, transformComponent.scale);
+			transformComponent.rotation = transformComponent.rotation + (rot - transformComponent.rotation); // + deltaRotation, fighting with GimbleLock
 			return true;
 		}
 
@@ -90,5 +92,18 @@ namespace marengine {
 	void GUI_Guizmo::setScale() {
 		m_operation = ImGuizmo::OPERATION::SCALE;
 	}
+
+	bool GUI_Guizmo::isRotationGuizmo() const {
+		return m_operation == ImGuizmo::OPERATION::ROTATE;
+	}
+
+	bool GUI_Guizmo::isTranslateGuizmo() const {
+		return m_operation == ImGuizmo::OPERATION::TRANSLATE;
+	}
+
+	bool GUI_Guizmo::isScaleGuizmo() const {
+		return m_operation == ImGuizmo::OPERATION::SCALE;
+	}
+
 
 }

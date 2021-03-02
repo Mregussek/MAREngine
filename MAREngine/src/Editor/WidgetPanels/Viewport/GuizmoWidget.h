@@ -50,6 +50,10 @@ namespace marengine {
 		void setRotation();
 		void setScale();
 
+		bool isRotationGuizmo() const;
+		bool isTranslateGuizmo() const;
+		bool isScaleGuizmo() const;
+
 		ImGuizmo::OPERATION m_operation{ ImGuizmo::OPERATION::TRANSLATE };
 
 	};

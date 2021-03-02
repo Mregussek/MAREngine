@@ -4,9 +4,6 @@
 [submodule "MAREngine/3rd_party/ImGuiColorTextEdit"]
 	path = MAREngine/3rd_party/ImGuiColorTextEdit
 	url = https://github.com/BalazsJako/ImGuiColorTextEdit.git
-[submodule "MAREngine/3rd_party/ImGuizmo"]
-	path = MAREngine/3rd_party/ImGuizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo.git
 [submodule "MAREngine/3rd_party/MARMaths"]
 	path = MAREngine/3rd_party/MARMaths
 	url = https://github.com/Mregussek/MARMaths.git
