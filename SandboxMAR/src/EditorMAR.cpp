@@ -27,39 +27,17 @@ namespace marengine {
 
 
 	void EditorMAR::initialize() {
-		m_engine.initialize();
+		const std::string projectName = "DefaultProject";
+		const std::string sceneName = "default.marscene.json";
 
-		//projectSelectionWindow();
+		m_engine.initialize(projectName, sceneName);
 	}
-	/*
-	void EditorMAR::projectSelectionWindow() {
-		window::Window<GLFWwindow> window{};
-		window.initialize(1200, 700, "MAREngine - Project Manager - (C) 2020-present Mateusz Rzeczyca");
 
-		editor::ProjectSelectionGUI gui;
-
-		gui.initialize("#version 330");
-
-		while (!window.isGoingToClose())
-		{
-			platforms::SetupOpenGL::clearScreen({0.f, 1.0f, 1.0f});
-
-			gui.prepare();
-			gui.update();
-			gui.render();
-
-			window.swapBuffers();
-		}
-
-		gui.shutdown();
-		window.terminate();
-	}
-	*/
 	void EditorMAR::runProjectOnEngine() {
 		WindowInstance<GLFWwindow> displayWindow{};
 		LayerStack stack{};
 
-		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getPathToLoad());
+		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getStartupSceneFilename());
 
 		RenderLayer renderLayer("Render Layer");
 		stack.pushLayer(&renderLayer);
@@ -71,7 +49,7 @@ namespace marengine {
 		EditorLayer editorLayer("Editor Layer");
 		stack.pushOverlay(&editorLayer);
 
-		displayWindow.initialize(1600, 900, m_engine.getName());
+		displayWindow.initialize(1600, 900, m_engine.getWindowName().c_str());
 
 		stack.initialize();
 

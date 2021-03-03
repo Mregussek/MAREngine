@@ -22,15 +22,13 @@
 
 #include "EntityWidgetPanel.h"
 #include "CommonComponentHandler.h"
-#include "../../WidgetEvents/EventsEntityWidget.h"
-#include "../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../EditorLogging.h"
-#include "../../../Window/Window.h"
-#include "../../../Platform/OpenGL/TextureOpenGL.h"
-#include "../../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../Core/ecs/Entity/Entity.h"
-#include "../../../Core/ecs/Components/Components.h"
+#include "../../WidgetEvents/EventsEntityWidget.h" // for child management in current entity
+#include "../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
+#include "../../../Window/Window.h" // isMousePressed()
+#include "../../../Platform/OpenGL/TextureOpenGL.h" // for texture index in TextureComponents
+#include "../../../Core/graphics/Mesh/MeshCreator.h" // for correct renderable load
+#include "../../../Core/ecs/SceneManagerEditor.h" // isPlayMode
 
 
 namespace marengine {
@@ -60,61 +58,31 @@ namespace marengine {
 
 		if (!currentEntity) {
 			ImGui::Text("No entity selected!");
-			ImGui::End();
-			return;
+			EDITOR_TRACE("GUI: scene_entity_modify end (NO ENTITY)");
 		}
-
-		if (FSceneManagerEditor::Instance->isPlayMode()) {
+		else if (FSceneManagerEditor::Instance->isPlayMode()) {
 			displayPlayMode();
-			ImGui::End();
-
 			EDITOR_TRACE("GUI: scene_entity_modify end (PLAY MODE)");
-			return;
+		}
+		else {
+			displayEditorMode();
+			EDITOR_TRACE("GUI: scene_entity_modify end (EDITOR MODE)");
 		}
 
-		displayEditorMode();
 		ImGui::End();
-
-		EDITOR_TRACE("GUI: scene_entity_modify");
 	}
 
 	void WEntityWidgetPanel::displayEditorMode() const {
-		if (ImGui::CollapsingHeader("TagComponent")) {
-			auto& tag = currentEntity->getComponent<TagComponent>();
-			CommonComponentHandler::handleTagComponent(tag);
-		}
 
-		if (ImGui::CollapsingHeader("TransformComponent")) {
-			handleTransformComponent();
-		}
-
-		if (currentEntity->hasComponent<PythonScriptComponent>() && ImGui::CollapsingHeader("PythonScriptComponent")) {
-			CommonComponentHandler::handleScriptComponent(*currentEntity);
-		}
-
-		if (currentEntity->hasComponent<RenderableComponent>() && ImGui::CollapsingHeader("RenderableComponent")) {
-			handleRenderableComponent();
-		}
-
-		if (currentEntity->hasComponent<CameraComponent>() && ImGui::CollapsingHeader("CameraComponent")) {
-			handleCameraComponent();
-		}
-
-		if (currentEntity->hasComponent<ColorComponent>() && ImGui::CollapsingHeader("ColorComponent")) {
-			handleColorComponent();
-		}
-
-		if (currentEntity->hasComponent<Texture2DComponent>() && ImGui::CollapsingHeader("Texture2DComponent")) {
-			handleTexture2DComponent();
-		}
-
-		if (currentEntity->hasComponent<TextureCubemapComponent>() && ImGui::CollapsingHeader("TextureCubemapComponent")) {
-			handleTextureCubemapComponent();
-		}
-
-		if (currentEntity->hasComponent<PointLightComponent>() && ImGui::CollapsingHeader("PointLightComponent")) {
-			handlePointLightComponent();
-		}
+		handle<TagComponent>("TagComponent");
+		handle<TransformComponent>("TransformComponent");
+		handle<PythonScriptComponent>("PythonScriptComponent");
+		handle<RenderableComponent>("RenderableComponent");
+		handle<CameraComponent>("CameraComponent");
+		handle<ColorComponent>("ColorComponent");
+		handle<Texture2DComponent>("Texture2DComponent");
+		handle<TextureCubemapComponent>("TextureCubemapComponent");
+		handle<PointLightComponent>("PointLightComponent");
 			
 		popUpMenu();
 	}
@@ -122,43 +90,30 @@ namespace marengine {
 	void WEntityWidgetPanel::displayPlayMode() const {
 		ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
 
-		if (currentEntity->hasComponent<TransformComponent>()) {
-			handleTransformComponent();
-		}
-
-		if (currentEntity->hasComponent<CameraComponent>())
-			handleCameraComponent();
-
-		if (currentEntity->hasComponent<ColorComponent>()) {
-			handleColorComponent();
-		}
-
-		if (currentEntity->hasComponent<PointLightComponent>()) {
-			handlePointLightComponent();
-		}
+		handle<TransformComponent>("TransformComponent");
+		handle<CameraComponent>("CameraComponent");
+		handle<ColorComponent>("ColorComponent");
+		handle<PointLightComponent>("PointLightComponent");
 	}
 
 	void WEntityWidgetPanel::popUpMenu() const {
-		if (ImGui::IsWindowFocused()) {
-			if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
-				ImGui::OpenPopup("SceneEntityModifyPopUp");
-			}
+		if (ImGui::IsWindowFocused() && Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+			ImGui::OpenPopup("SceneEntityModifyPopUp");
 		}
 
-		{ // Actual PopUp menu
-			if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
-				if (ImGui::BeginMenu("Childs")) {
-					displayChildsPopMenu();
-					ImGui::EndMenu();
-				}
-				
-				if (ImGui::BeginMenu("Components")) {
-					displayComponentPopMenu();
-					ImGui::EndMenu();
-				}
-
-				ImGui::EndPopup();
+		// Actual PopUp menu
+		if (ImGui::BeginPopup("SceneEntityModifyPopUp")) {
+			if (ImGui::BeginMenu("Childs")) {
+				displayChildsPopMenu();
+				ImGui::EndMenu();
 			}
+			
+			if (ImGui::BeginMenu("Components")) {
+				displayComponentPopMenu();
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndPopup();
 		}
 	}
 
@@ -212,7 +167,16 @@ namespace marengine {
 		}
 	}
 
-	void WEntityWidgetPanel::handleTransformComponent() const {
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<TagComponent>() const {
+		auto& tagComponent{ currentEntity->getComponent<TagComponent>() };
+		CommonComponentHandler::drawStringInputPanel<70>(tagComponent.tag);
+
+		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling tag component");
+	}
+
+	template<> 
+	void WEntityWidgetPanel::displayComponentPanel<TransformComponent>() const {
 		auto& tran = currentEntity->getComponent<TransformComponent>();
 
 		const bool updatedTransform = [&tran]()->bool {
@@ -235,23 +199,69 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling transform component");
 	}
 
-	void WEntityWidgetPanel::handleRenderableComponent() const {
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<PythonScriptComponent>() const {
+		if (ImGui::MenuItem("Remove Script")) {
+			currentEntity->removeComponent<PythonScriptComponent>();
+
+			return;
+		}
+
+		auto& pythonScriptComponent{ currentEntity->getComponent<PythonScriptComponent>() };
+		ImGui::Text("Current script: %s", pythonScriptComponent.scriptsPath.c_str());
+
+		if (ImGui::Button("Open in Script Editor")) {
+
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Create new file and assign it as script")) {
+			
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Assign existing script")) {
+
+		}
+
+		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
+	}
+
+	template<typename T>
+	bool Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) {
+		if (ImGui::Button(buttonName)) {
+			renderable.name = T::getID();
+			renderable.vertices = T::getVertices();
+			renderable.indices = T::getIndices();
+			return true;
+		}
+
+		return false;
+	}
+
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<RenderableComponent>() const {
 		if (ImGui::MenuItem("Remove Renderable")) {
 			FEventsComponentEntity::onRemove<RenderableComponent>(*currentEntity);
 			return;
 		}
-		auto& renderable = currentEntity->getComponent<RenderableComponent>();
 
+		auto& renderable = currentEntity->getComponent<RenderableComponent>();
 		ImGui::Text("Type: %s", renderable.name.c_str());
 
-		bool userHasChosenRenderable{ false };
-		if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { userHasChosenRenderable = true; }
-		ImGui::SameLine();
-		if (Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { userHasChosenRenderable = true; }
-		ImGui::SameLine();
-		if (Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { userHasChosenRenderable = true; }
-		ImGui::SameLine();
-		if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { userHasChosenRenderable = true; }
+		const bool userHasChosenRenderable = [&renderable]()->bool {
+			if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { return true; }
+			ImGui::SameLine();
+			if (Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { return true; }
+			ImGui::SameLine();
+			if (Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { return true; }
+			ImGui::SameLine();
+			if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { return true; }
+
+			return false;
+		}();
 
 		if (userHasChosenRenderable) {
 			FEventsComponentEntity::onUpdate<RenderableComponent>(*currentEntity);
@@ -260,7 +270,8 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling renderable component");
 	}
 
-	void WEntityWidgetPanel::handleCameraComponent() const {		
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<CameraComponent>() const {
 		if (ImGui::Button("Remove Camera")) {
 			FEventsComponentEntity::onRemove<CameraComponent>(*currentEntity);
 			return;
@@ -317,7 +328,8 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling camera component");
 	}
 
-	void WEntityWidgetPanel::handleColorComponent() const {
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<ColorComponent>() const {
 		if (ImGui::MenuItem("Remove Color")) {
 			FEventsComponentEntity::onRemove<ColorComponent>(*currentEntity);
 			return;
@@ -331,7 +343,8 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling color component");
 	}
 
-	void WEntityWidgetPanel::handleTexture2DComponent() const {
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<Texture2DComponent>() const {
 		if (ImGui::MenuItem("Remove Texture")) {
 			FEventsComponentEntity::onRemove<Texture2DComponent>(*currentEntity);
 			return;
@@ -361,33 +374,8 @@ namespace marengine {
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling texture2D component");
 	}
 
-	void WEntityWidgetPanel::handleTextureCubemapComponent() const {
-		if (ImGui::MenuItem("Remove Cubemap")) {
-			FEventsComponentEntity::onRemove<TextureCubemapComponent>(*currentEntity);
-			return;
-		}
-		auto& cubemap = currentEntity->getComponent<TextureCubemapComponent>();
-
-		ImGui::Text("Current Cubemap: %s", cubemap.texturePath.c_str());
-
-		constexpr size_t inputSize{ 50 };
-		static char input[inputSize];
-		std::fill(std::begin(input), std::end(input), '\0');
-		std::copy(cubemap.texturePath.begin(), cubemap.texturePath.end(), input);
-
-		if (ImGui::InputText(" - path", input, inputSize)) {
-			cubemap.texturePath = std::string(input);
-		}
-
-		// here need to try loading the texture, not only checking if it is already loaded
-		if (ImGui::Button("Load Cubemap")) {
-			FEventsComponentEntity::onUpdate<TextureCubemapComponent>(*currentEntity);
-		}
-
-		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling TextureCubemap component");
-	}
-
-	void WEntityWidgetPanel::handlePointLightComponent() const {
+	template<>
+	void WEntityWidgetPanel::displayComponentPanel<PointLightComponent>() const {
 		if (ImGui::MenuItem("Remove Light")) {
 			FEventsComponentEntity::onRemove<PointLightComponent>(*currentEntity);
 			return;
@@ -411,22 +399,6 @@ namespace marengine {
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling light component");
-	}
-
-	// --------------------------------------------
-	// TEMPLATES TO WRITE MORE REUSABLE CODE
-	// --------------------------------------------
-
-	template<typename T>
-	bool WEntityWidgetPanel::Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) const {
-		if (ImGui::Button(buttonName)) {
-			renderable.name = T::getID();
-			renderable.vertices = T::getVertices();
-			renderable.indices = T::getIndices();
-			return true;
-		}
-
-		return false;
 	}
 
 

@@ -28,17 +28,37 @@
 namespace marengine {
 
 		
-	MAREngine* MAREngine::s_instance{ nullptr };
+	MAREngine* MAREngine::Instance{ nullptr };
 
 
-	void MAREngine::initialize() {
-		s_instance = this;
+	void MAREngine::initialize(std::string projectName, std::string sceneToLoadAtStartup) {
+		Instance = this;
+		m_projectManager.Instance = &m_projectManager;
+		m_projectManager.fillProjectInfo(projectName, sceneToLoadAtStartup);
 
 		MAR_LOG_INIT();
 
 		PythonScript::appendCurrentPath();
+	}
 
-		m_editorName = m_pathLoad + " --- MAREngine";
+	MAR_NO_DISCARD const bool MAREngine::shouldEngineRestart() const {
+		return m_shouldRestart;
+	}
+
+	MAR_NO_DISCARD const std::string& MAREngine::getStartupSceneFilename() const {
+		return m_projectManager.getProjectInfo().sceneToLoadAtStartup;
+	}
+
+	MAR_NO_DISCARD const std::string& MAREngine::getWindowName() const {
+		return m_projectManager.getProjectInfo().windowName;
+	}
+
+	void MAREngine::setRestart() {
+		m_shouldRestart = true; 
+	}
+
+	void MAREngine::setNoRestart() {
+		m_shouldRestart = false; 
 	}
 
 

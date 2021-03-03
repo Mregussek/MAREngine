@@ -23,7 +23,7 @@
 #include "PythonScript.h"
 #include "MAREnginePy.cpp"
 #include "ScriptingLogs.h"
-#include "../../Engine.h"
+#include "../../ProjectManager.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Components/Components.h"
 
@@ -130,7 +130,7 @@ namespace marengine {
     }
     
     std::string PythonScript::changeSlashesToDots(std::string script) {
-        const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
+        const auto& assetsPath = ProjectManager::Instance->getAssetsPath();
         std::string rtn = assetsPath + script;
     
         size_t pos = rtn.find("/");

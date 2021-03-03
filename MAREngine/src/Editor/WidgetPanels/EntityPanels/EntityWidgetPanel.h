@@ -30,8 +30,7 @@
 
 namespace marengine {
 
-	class Entity; 
-	struct RenderableComponent;
+	class Entity;
 
 
 	class WEntityWidgetPanel : public IWidgetPanel {
@@ -56,16 +55,11 @@ namespace marengine {
 		void displayChildsPopMenu() const;
 		void displayComponentPopMenu() const;
 
-		void handleTransformComponent() const;
-		void handleRenderableComponent() const;
-		void handleCameraComponent() const;
-		void handleColorComponent() const;
-		void handleTexture2DComponent() const;
-		void handleTextureCubemapComponent() const;
-		void handlePointLightComponent() const;
+		template<typename TComponent>
+		void handle(const char* componentName) const;
 
-		template<typename T>
-		bool Button_ChooseRenderable(RenderableComponent& renderable, const char* buttonName) const;
+		template<typename TComponent>
+		void displayComponentPanel() const;
 
 
 		const Entity* currentEntity{ nullptr };
@@ -73,8 +67,10 @@ namespace marengine {
 	};
 
 
-
 }
+
+
+#include "EntityWidgetPanel.inl"
 
 
 #endif // !MAR_ENGINE_W_ENTITY_WIDGET_PANEL_H

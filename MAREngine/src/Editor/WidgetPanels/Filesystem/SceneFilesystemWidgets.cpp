@@ -28,6 +28,7 @@
 #include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/filesystem/SceneSerializer.h"
 #include "../../../Engine.h"
+#include "../../../ProjectManager.h"
 
 
 namespace marengine {
@@ -45,12 +46,12 @@ namespace marengine {
 			FSceneSerializer::saveSceneToFile(path.c_str(), newScene);
 			delete newScene;
 
-			MAREngine::Instance()->setLoadPath(path);
+			ProjectManager::Instance->addNewSceneToCurrentProject(filename);
 
 			WEntityWidgetPanel::Instance->reset();
 			WScriptIDE::Instance->reset();
 
-			MAREngine::Instance()->setRestart();
+			MAREngine::Instance->setRestart();
 		};
 
 		constexpr auto saveSceneCallback = [](const std::string& path, const std::string& filename) {
@@ -58,12 +59,12 @@ namespace marengine {
 		};
 
 		constexpr auto loadSceneCallback = [](const std::string& path, const std::string& filename) {
-			MAREngine::Instance()->setLoadPath(path);
+			ProjectManager::Instance->setNewSceneToLoad(filename);
 
 			WEntityWidgetPanel::Instance->reset();
 			WScriptIDE::Instance->reset();
 
-			MAREngine::Instance()->setRestart();
+			MAREngine::Instance->setRestart();
 		};
 
 		WFilesystemWidgets::Instance->displaySaveWidget(m_newSceneName, extensions, newSceneCallback);

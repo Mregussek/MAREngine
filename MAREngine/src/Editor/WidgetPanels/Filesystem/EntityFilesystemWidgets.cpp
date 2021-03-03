@@ -23,7 +23,7 @@
 #include "EntityFilesystemWidgets.h"
 #include "FilesystemWidgets.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
-#include "../../../Engine.h"
+#include "../../../ProjectManager.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
@@ -52,7 +52,7 @@ namespace marengine {
 		};
 
 		constexpr auto assignScriptCallback = [](const std::string& path, const std::string& filename) {
-			const auto& assetsPath{ MAREngine::Instance()->getAssetsPath() };
+			const std::string& assetsPath{ ProjectManager::Instance->getAssetsPath() };
 			auto& pythonScriptComponent{ WEntityWidgetPanel::Instance->getCurrentEntity().getComponent<PythonScriptComponent>() };
 
 			pythonScriptComponent.scriptsPath = path;

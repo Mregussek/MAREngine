@@ -340,6 +340,7 @@
     <ClInclude Include="src\LayerStack\LayerStack.h" />
     <ClInclude Include="src\Debug\Log.h" />
     <ClInclude Include="src\Platform\SDL\ContextSDL.h" />
+    <ClInclude Include="src\ProjectManager.h" />
     <ClInclude Include="src\Window\buttons_def.h" />
     <ClInclude Include="src\Platform\OpenGL\FramebufferOpenGL.h" />
     <ClInclude Include="src\Core\graphics\Mesh\MeshCreator.h" />
@@ -446,6 +447,7 @@
     <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp" />
     <ClCompile Include="src\Platform\SDL\ContextSDL.cpp" />
     <ClCompile Include="src\Platform\SDL\WindowSDL.cpp" />
+    <ClCompile Include="src\ProjectManager.cpp" />
     <ClCompile Include="src\Window\Window.cpp" />
     <ClCompile Include="src\Window\WindowInstance.cpp" />
   </ItemGroup>
@@ -471,6 +473,8 @@
     <None Include="src\Core\ecs\Entity\Entity.inl" />
     <None Include="src\Core\ecs\Entity\EventsComponentEntity.inl" />
     <None Include="src\Core\ecs\Scene.inl" />
+    <None Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.inl" />
+    <None Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.inl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="img\cmake_generate.jpg" />

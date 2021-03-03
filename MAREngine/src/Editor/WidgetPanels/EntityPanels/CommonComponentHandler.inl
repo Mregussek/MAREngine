@@ -20,35 +20,30 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_EDITOR_GUI_ENTITY_PANEL_COMMON_COMPONENT_HANDLER_H
-#define MAR_ENGINE_EDITOR_GUI_ENTITY_PANEL_COMMON_COMPONENT_HANDLER_H
+#ifndef MAR_ENGINE_COMMON_COMPONENT_HANDLER_H
+#define MAR_ENGINE_COMMON_COMPONENT_HANDLER_H
 
 
-#include "../../../mar.h"
+#include "CommonComponentHandler.h"
 
 
 namespace marengine {
 
-	struct TagComponent; 
-	struct PythonScriptComponent;
-	class Entity; 
 
+	template<size_t inputSize>
+	void CommonComponentHandler::drawStringInputPanel(std::string& displayStr) {
+		char strRealTimeModify[inputSize]{ "" };
 
-	struct CommonComponentHandler {
+		std::fill(std::begin(strRealTimeModify), std::end(strRealTimeModify), '\0');
+		std::copy(displayStr.begin(), displayStr.end(), strRealTimeModify);
 
-		template<size_t inputSize>
-		static void drawStringInputPanel(std::string& displayStr);
-		
-		static bool drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth, float minValue, float maxValue);
-		static bool drawVec4Control(const char* label, maths::vec4& values, float resetValue, float columnWidth);
-
-	};
+		if (ImGui::InputText(" - tag", strRealTimeModify, inputSize)) {
+			displayStr = std::string(strRealTimeModify);
+		}
+	}
 
 
 }
 
 
-#include "CommonComponentHandler.inl"
-
-
-#endif // !MAR_ENGINE_EDITOR_GUI_ENTITY_PANEL_COMMON_COMPONENT_HANDLER_H
+#endif // !MAR_ENGINE_COMMON_COMPONENT_HANDLER_H

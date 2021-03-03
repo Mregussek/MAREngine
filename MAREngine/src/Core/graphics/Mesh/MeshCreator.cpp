@@ -144,7 +144,7 @@ namespace marengine {
             renderable.indices = Loader.LoadedMeshes[0].Indices;
         }
         else {
-            auto passLoadedMeshToEntityAtCollection = [&entity, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
+            auto passLoadedMeshToEntity = [&entity, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
                 const Entity& child = entity.assignChild(FSceneManagerEditor::Instance->getScene()->createEntity());
 
                 auto& tag{ child.getComponent<TagComponent>() };
@@ -160,7 +160,7 @@ namespace marengine {
                 renderable.vertices = mesh.Vertices;
                 renderable.indices = mesh.Indices;
             };
-            std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
+            std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntity);
         }
     }
 

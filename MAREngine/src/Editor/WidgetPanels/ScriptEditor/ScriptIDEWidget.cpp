@@ -24,7 +24,7 @@
 #include "../Filesystem/EntityFilesystemWidgets.h"
 #include "../../../Core/filesystem/ScriptsFileManager.h"
 #include "../../../Core/ecs/Components/ScriptingComponents.h"
-#include "../../../Engine.h"
+#include "../../../ProjectManager.h"
 
 
 namespace marengine {
@@ -142,7 +142,7 @@ namespace marengine {
 	void WScriptIDE::createNewScriptWindow() {
 		ImGui::Begin("Create New Script");
 
-		const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
+		const auto& assetsPath = ProjectManager::Instance->getAssetsPath();
 		static char moduleName[50]{ "empty" };
 
 		ImGui::InputText(".py", moduleName, 50);
@@ -168,7 +168,7 @@ namespace marengine {
 	void WScriptIDE::openScriptWindow() {
 		ImGui::Begin("Open Script Menu");
 
-		const auto& assetsPath = MAREngine::Instance()->getAssetsPath();
+		const auto& assetsPath = ProjectManager::Instance->getAssetsPath();
 		static char moduleName[50]{ "empty" };
 
 		ImGui::InputText(".py", moduleName, 30);

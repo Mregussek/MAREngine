@@ -31,45 +31,6 @@
 namespace marengine {
 
 
-	void CommonComponentHandler::handleTagComponent(TagComponent& tag) {
-		constexpr size_t inputSize = 50;
-		static char collectionName[inputSize]{ "" };
-
-		std::fill(std::begin(collectionName), std::end(collectionName), '\0');
-		std::copy(tag.tag.begin(), tag.tag.end(), collectionName);
-
-		if (ImGui::InputText(" - tag", collectionName, inputSize)) {
-			tag.tag = std::string(collectionName);
-		}
-	}
-
-	void CommonComponentHandler::handleScriptComponent(const Entity& entity) {
-		if (ImGui::MenuItem("Remove Script")) {
-			entity.removeComponent<PythonScriptComponent>();
-			WScriptIDE::Instance->reset();
-			return;
-		}
-
-		auto& script = entity.getComponent<PythonScriptComponent>();
-		handleScriptComponent(script);
-	}
-
-	void CommonComponentHandler::handleScriptComponent(PythonScriptComponent& script) {
-		ImGui::Text("Current script: %s", script.scriptsPath.c_str());
-
-		if (ImGui::Button("Create new script")) { WScriptIDE::Instance->setCreatingNewScript(); }
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Load from file")) { WScriptIDE::Instance->setLoadingScript(); }
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Assign script to entity")) { WEntityFilesystemWidgets::Instance->openAssignPythonScriptWidget(); }
-
-		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
-	}
-
 	bool CommonComponentHandler::drawVec3Control(const char* label, maths::vec3& values, float resetValue, float columnWidth, float minValue, float maxValue) {
 		bool pressedSomeButton{ false };
 

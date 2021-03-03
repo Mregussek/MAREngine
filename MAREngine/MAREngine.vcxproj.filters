@@ -489,6 +489,9 @@
     <ClInclude Include="3rd_party\MARMaths\src\quat.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\ProjectManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Debug\Log.cpp">
@@ -770,6 +773,9 @@
     <ClCompile Include="3rd_party\MARMaths\src\quat.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\ProjectManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cmake\FindGLFW3.cmake" />
@@ -797,6 +803,12 @@
       <Filter>Pliki nagłówkowe</Filter>
     </None>
     <None Include="src\Core\ecs\Entity\EventsComponentEntity.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
   </ItemGroup>

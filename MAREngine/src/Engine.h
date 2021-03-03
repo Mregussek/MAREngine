@@ -25,6 +25,7 @@
 
 
 #include "mar.h"
+#include "ProjectManager.h"
 
 
 namespace marengine {
@@ -33,47 +34,23 @@ namespace marengine {
 	class MAREngine {
 	public:
 
-		MAREngine() = default;
+		static MAREngine* Instance;
 
-		// --- STATE CHECKS --- // 
 
-		const bool shouldEngineRestart() const { return m_shouldRestart; }
+		MAR_NO_DISCARD const bool shouldEngineRestart() const;
+		MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
+		MAR_NO_DISCARD const std::string& getWindowName() const;
 
-		// --- GET METHODS --- //
+		void setRestart();
+		void setNoRestart();
 
-		static MAREngine* Instance() { return s_instance; }
-		const char* getName() const { return m_editorName.c_str(); }
-		const std::string& getPathToLoad() const { return m_pathLoad; }
-		const std::string& getProjectName() const { return m_projectName; }
-		const std::string& getProjectPath() const { return m_projectPath; }
-		const std::string& getAssetsPath() const { return m_assetsPath; }
-		const std::string& getScenesPath() const { return m_scenesPath; }
-
-		// --- SET METHODS --- //
-
-		void setRestart() { m_shouldRestart = true; }
-		void setNoRestart() { m_shouldRestart = false; }
-		void setLoadPath(std::string path) { m_pathLoad = path; }
-		void setProjectName(std::string name) { m_projectName = name; }
-		void setProjectPath(std::string path) { 
-			m_projectPath = path; 
-			m_assetsPath = path + "Assets/";
-			m_scenesPath = path + "Scenes/";
-		}
-
-		void initialize();
+		void initialize(std::string projectName, std::string sceneToLoadAtStartup);
 		
 	private:
 
-		std::string m_projectName{ "DefaultProject" };
-		std::string m_projectPath{ "DefaultProject/" };
-		std::string m_assetsPath{ "DefaultProject/Assets/" };
-		std::string m_scenesPath{ "DefaultProject/Scenes/" };
-		std::string m_pathLoad{ "DefaultProject/Scenes/default.marscene.json" };
-		std::string m_editorName{ "EditorMAR" };
-		bool m_shouldRestart{ false };
+		ProjectManager m_projectManager;
 
-		static MAREngine* s_instance;
+		bool m_shouldRestart{ false };
 
 	};
 
