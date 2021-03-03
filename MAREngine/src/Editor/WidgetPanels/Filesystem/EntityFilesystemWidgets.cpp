@@ -26,6 +26,11 @@
 #include "../../../Engine.h"
 #include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
+#include "../../../Core/ecs/Scene.h"
+#include "../../../Core/graphics/Mesh/MeshCreator.h"
+#include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
+#include "../../WidgetEvents/EventsEntityWidget.h"
 
 
 namespace marengine {
@@ -39,7 +44,11 @@ namespace marengine {
 
 	void WEntityFilesystemWidgets::updateFrame() {
 		constexpr auto loadOBJcallback = [](const std::string& path, const std::string& filename) {
-
+			const Entity& entity{ FSceneManagerEditor::Instance->getScene()->createEntity() };
+			MeshCreator::loadOBJ(filename, path, entity);
+			FEventsEntityWidget::Instance->onSelectedEntity(entity);
+			RenderPipeline::Instance->pushEntityToPipeline(entity);
+			RenderPipeline::Instance->onBatchesReadyToDraw();
 		};
 
 		constexpr auto assignScriptCallback = [](const std::string& path, const std::string& filename) {

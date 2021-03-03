@@ -62,9 +62,9 @@ namespace marengine {
 		ECS_INFO("ENTITY: destroyed yourself!");
 	}
 
-	void Entity::assignChild(const Entity& child) const {
+	const Entity& Entity::assignChild(const Entity& child) const {
 		auto& childs{ getComponent<ChildComponent>().childs };
-		childs.push_back(child);
+		return childs.emplace_back(child);
 	}
 
 	void Entity::removeChild(size_t index) const {

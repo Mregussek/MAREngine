@@ -103,7 +103,7 @@ namespace marengine {
 		 * @warning Make sure that child is a valid entity!
 		 * @param child valid entity, which will be assigned as child
 		 */
-		void assignChild(const Entity& child) const;
+		const Entity& assignChild(const Entity& child) const;
 
 		/**
 		 * @brief Removes child from ChildComponent by its index in array.

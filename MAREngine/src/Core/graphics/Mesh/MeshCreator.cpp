@@ -22,6 +22,9 @@
 
 #include "MeshCreator.h"
 #include "loader_obj/OBJ_Loader.h"
+#include "../../ecs/Entity/Entity.h"
+#include "../../ecs/SceneManagerEditor.h"
+#include "../../ecs/Scene.h"
 #include "../GraphicsLogs.h"
 
 
@@ -122,8 +125,7 @@ namespace marengine {
         };
     }
     
-    /*
-    void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const EntityCollection& collection) {
+    void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const Entity& entity) {
         loader_obj::Loader Loader{};
         const bool loadout{ Loader.LoadFile(path) };
     
@@ -134,28 +136,33 @@ namespace marengine {
 
         GRAPHICS_TRACE("MESH_CREATOR: loaded {}, pushing to collection...", path);
 
-        auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
-            const auto& entity = collection.createEntity();
-            auto& tag = entity.getComponent<TagComponent>();
-            auto& renderable = entity.addComponent<RenderableComponent>();
+        if (Loader.LoadedMeshes.size() == 1) {
+            auto& renderable{ entity.addComponent<RenderableComponent>() };
             entity.addComponent<ColorComponent>();
-
-            tag.tag = [&mesh, &filename]()->std::string {
-                if (mesh.MeshName.empty()) { return filename; }
-                else { return mesh.MeshName; }
-            }();
-            
             renderable.name = filename;
-            renderable.vertices = mesh.Vertices;
-            renderable.indices = mesh.Indices;
-        };
+            renderable.vertices = Loader.LoadedMeshes[0].Vertices;
+            renderable.indices = Loader.LoadedMeshes[0].Indices;
+        }
+        else {
+            auto passLoadedMeshToEntityAtCollection = [&entity, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
+                const Entity& child = entity.assignChild(FSceneManagerEditor::Instance->getScene()->createEntity());
 
-        std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
+                auto& tag{ child.getComponent<TagComponent>() };
+                auto& renderable{ child.addComponent<RenderableComponent>() };
+                child.addComponent<ColorComponent>();
 
-        auto& tag{ collection.getComponent<TagComponent>() };
-        tag.tag = filename;
-        auto& crc{ collection.addComponent<CollectionRenderableComponent>(path, Loader.LoadedMeshes.size()) };
+                tag.tag = [&mesh, &filename]()->std::string {
+                    if (mesh.MeshName.empty()) { return filename; }
+                    else { return mesh.MeshName; }
+                }();
+
+                renderable.name = filename;
+                renderable.vertices = mesh.Vertices;
+                renderable.indices = mesh.Indices;
+            };
+            std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntityAtCollection);
+        }
     }
-    */
+
 
 }
