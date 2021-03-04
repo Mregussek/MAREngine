@@ -36,22 +36,30 @@ namespace marengine {
 
 		static WEntityFilesystemWidgets* Instance;
 
+		WEntityFilesystemWidgets() = default;
+
 		virtual void create() override;
 
 		virtual void updateFrame() override;
 
-		
-		void openLoadOBJWidget() const;
-		void openAssignPythonScriptWidget() const;
 
+		void openLoadOBJWidget() const;
+		void openCreateAndAssignPythonScriptWidget() const;
+		void openAssignPythonScriptWidget() const;
+		
 	private:
 
-		const std::string m_loadOBJname{ "Load .obj for entity" };
-		const std::string m_objExtension{ ".obj" };
-
-		const std::string m_assignScriptName{ "Assign Python Script to Entity" };
-		const std::string m_pythonExtension{ ".py" };
-
+		struct {
+			const std::string loadObj{ "Load .obj for entity" };
+			const std::string createAndAssignPythonScript{ "Create Python Script and assign it to Entity" };
+			const std::string assignPythonScript{ "Assign Python Script to Entity" };
+		} WidgetNames;
+		
+		struct {
+			const std::string obj{ ".obj" };
+			const std::string py{ ".py" };
+		} FileExtensions;
+		
 	};
 
 

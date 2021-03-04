@@ -390,9 +390,6 @@
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\filesystem\ScriptsFileManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -490,6 +487,12 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\ProjectManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\ScriptIDEFilesystemWidgets.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\filesystem\FileManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -686,9 +689,6 @@
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -774,6 +774,12 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\ProjectManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\ScriptIDEFilesystemWidgets.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\filesystem\FileManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

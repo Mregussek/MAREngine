@@ -46,7 +46,6 @@ namespace marengine {
 
 		PythonScript pythonScript;
 		std::string scriptsPath{ "empty" };
-		std::string sourceCode{ "empty" };
 
 	};
 

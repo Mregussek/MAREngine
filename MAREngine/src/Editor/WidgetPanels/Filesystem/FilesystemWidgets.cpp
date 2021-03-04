@@ -39,13 +39,15 @@ namespace marengine {
 	}
 
 	void WFilesystemWidgets::displaySaveWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename)) {
-		if (m_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, { 1200, 800 }, extensions)) {
+		const bool userSelectedFile{ m_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::SAVE, { 1200, 800 }, extensions) };
+		if (userSelectedFile) {
 			callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
 		}
 	}
 
 	void WFilesystemWidgets::displayOpenWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename)) {
-		if (m_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, {1200, 800 }, extensions)) {
+		const bool userSelectedFile{ m_fileDialog.showFileDialog(name, imgui_addons::ImGuiFileBrowser::DialogMode::OPEN, { 1200, 800 }, extensions) };
+		if (userSelectedFile) {
 			callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
 		}
 	}

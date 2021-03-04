@@ -22,6 +22,9 @@
 
 #include "EntityWidgetPanel.h"
 #include "CommonComponentHandler.h"
+#include "../Filesystem/EntityFilesystemWidgets.h" // script load, assign, create to entity
+#include "../ScriptEditor/ScriptIDEWidget.h" // script to entity load
+#include "../../../Core/filesystem/FileManager.h" // file loading
 #include "../../EditorLogging.h"
 #include "../../WidgetEvents/EventsEntityWidget.h" // for child management in current entity
 #include "../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
@@ -72,7 +75,7 @@ namespace marengine {
 		ImGui::End();
 	}
 
-	void WEntityWidgetPanel::displayEditorMode() const {
+	void WEntityWidgetPanel::displayEditorMode() {
 
 		handle<TagComponent>("TagComponent");
 		handle<TransformComponent>("TransformComponent");
@@ -87,13 +90,24 @@ namespace marengine {
 		popUpMenu();
 	}
 
-	void WEntityWidgetPanel::displayPlayMode() const {
+	void WEntityWidgetPanel::displayPlayMode() {
 		ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
 
 		handle<TransformComponent>("TransformComponent");
 		handle<CameraComponent>("CameraComponent");
 		handle<ColorComponent>("ColorComponent");
 		handle<PointLightComponent>("PointLightComponent");
+	}
+
+	void WEntityWidgetPanel::handleInputs() {
+		if (m_newScriptWindow) {
+			WEntityFilesystemWidgets::Instance->openCreateAndAssignPythonScriptWidget();
+			m_newScriptWindow = false;
+		}
+		if (m_assignScriptWindow) {
+			WEntityFilesystemWidgets::Instance->openAssignPythonScriptWidget();
+			m_assignScriptWindow = false;
+		}
 	}
 
 	void WEntityWidgetPanel::popUpMenu() const {
@@ -132,9 +146,11 @@ namespace marengine {
 		const bool hasLight{ currentEntity->hasComponent<PointLightComponent>() };
 		const bool hasCamera{ currentEntity->hasComponent<CameraComponent>() };
 		const bool hasScript{ currentEntity->hasComponent<PythonScriptComponent>() };
-		const bool hasNeitherColorNorTexture = !currentEntity->hasComponent<ColorComponent>()
+		const bool hasNeitherColorNorTexture{
+			!currentEntity->hasComponent<ColorComponent>()
 			&& !currentEntity->hasComponent<Texture2DComponent>()
-			&& !currentEntity->hasComponent<TextureCubemapComponent>();
+			&& !currentEntity->hasComponent<TextureCubemapComponent>()
+		};
 
 		if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
 			FEventsComponentEntity::onAdd<RenderableComponent>(*currentEntity);
@@ -168,7 +184,7 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<TagComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<TagComponent>() {
 		auto& tagComponent{ currentEntity->getComponent<TagComponent>() };
 		CommonComponentHandler::drawStringInputPanel<70>(tagComponent.tag);
 
@@ -176,7 +192,7 @@ namespace marengine {
 	}
 
 	template<> 
-	void WEntityWidgetPanel::displayComponentPanel<TransformComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<TransformComponent>() {
 		auto& tran = currentEntity->getComponent<TransformComponent>();
 
 		const bool updatedTransform = [&tran]()->bool {
@@ -200,30 +216,30 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<PythonScriptComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<PythonScriptComponent>() {
 		if (ImGui::MenuItem("Remove Script")) {
-			currentEntity->removeComponent<PythonScriptComponent>();
-
+			FEventsComponentEntity::onRemove<PythonScriptComponent>(*currentEntity);
 			return;
 		}
 
 		auto& pythonScriptComponent{ currentEntity->getComponent<PythonScriptComponent>() };
 		ImGui::Text("Current script: %s", pythonScriptComponent.scriptsPath.c_str());
 
-		if (ImGui::Button("Open in Script Editor")) {
-
+		if (ImGui::Button("*** Open in Script Editor")) {
+			std::string sourceCode;
+			FFileManager::loadFile(sourceCode, pythonScriptComponent.scriptsPath.c_str());
+			const std::string restoredFilename{ pythonScriptComponent.scriptsPath }; // TODO! restore filename from path
+			WScriptIDE::Instance->setEditorTitle(restoredFilename);
+			WScriptIDE::Instance->setEditorCode(sourceCode);
+			WScriptIDE::Instance->setPathToScript(pythonScriptComponent.scriptsPath);
 		}
 
-		ImGui::SameLine();
-
-		if (ImGui::Button("Create new file and assign it as script")) {
-			
+		if (ImGui::Button("*** Create new file and assign it as script")) {
+			m_newScriptWindow = true;
 		}
 
-		ImGui::SameLine();
-
-		if (ImGui::Button("Assign existing script")) {
-
+		if (ImGui::Button("*** Assign existing script to entity")) {
+			m_assignScriptWindow = true;
 		}
 
 		EDITOR_TRACE("GUI: SELECTED-ENTITY: handling script component");
@@ -242,7 +258,7 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<RenderableComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<RenderableComponent>() {
 		if (ImGui::MenuItem("Remove Renderable")) {
 			FEventsComponentEntity::onRemove<RenderableComponent>(*currentEntity);
 			return;
@@ -271,7 +287,7 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<CameraComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<CameraComponent>() {
 		if (ImGui::Button("Remove Camera")) {
 			FEventsComponentEntity::onRemove<CameraComponent>(*currentEntity);
 			return;
@@ -329,7 +345,7 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<ColorComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<ColorComponent>() {
 		if (ImGui::MenuItem("Remove Color")) {
 			FEventsComponentEntity::onRemove<ColorComponent>(*currentEntity);
 			return;
@@ -344,7 +360,7 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<Texture2DComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<Texture2DComponent>() {
 		if (ImGui::MenuItem("Remove Texture")) {
 			FEventsComponentEntity::onRemove<Texture2DComponent>(*currentEntity);
 			return;
@@ -375,7 +391,7 @@ namespace marengine {
 	}
 
 	template<>
-	void WEntityWidgetPanel::displayComponentPanel<PointLightComponent>() const {
+	void WEntityWidgetPanel::displayComponentPanel<PointLightComponent>() {
 		if (ImGui::MenuItem("Remove Light")) {
 			FEventsComponentEntity::onRemove<PointLightComponent>(*currentEntity);
 			return;

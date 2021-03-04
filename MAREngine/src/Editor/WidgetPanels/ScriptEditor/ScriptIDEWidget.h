@@ -41,26 +41,21 @@ namespace marengine {
 
 		void reset();
 
-		void setPathToSave(std::string s);
-		void setEditorText(std::string s);
-		void setEditorTitle(std::string new_title);
+		void setEditorTitle(std::string newTitle);
+		void setEditorCode(std::string sourceCode);
+		void setPathToScript(std::string pathToScript);
 
-		void setCreatingNewScript() { m_createNewScriptWindow = true;  }
-		void setLoadingScript() { m_openScriptWindow = true; }
+		std::string getEditorSourceCode() const;
+		static const std::string& getDefaultEditorSourceCode();
+
+		bool isEditorCurrentlyUsed() const;
 
 	private:
 
-		// --- private methods --- //
-
 		std::string replaceOcurrences(std::string str, const std::string& from, const std::string& to);
 		
-		void createNewScriptWindow();
-		void openScriptWindow();
 		void displayMainMenuBar();
 		void editorRender();
-
-		void createNewFile(const std::string& scriptPath, const std::string& moduleName);
-		void openFile(const std::string& scriptPath, const std::string& moduleName);
 
 		void definePythonLanguage();
 
@@ -69,15 +64,14 @@ namespace marengine {
 
 		TextEditor editor;
 
-		std::string m_title{ defaultTitle };
-		std::string m_pathToSave;
+		std::string m_title{ s_defaultTitle };
+		std::string m_pathToScript{ "" };
 
-		bool m_createNewScriptWindow{ false };
-		bool m_openScriptWindow{ false };
-		bool m_saveAsScriptWindow{ false };
+		static const std::string s_titleNull;
+		static const std::string s_editorTextNull;
 
-		static const std::string defaultScript;
-		static const std::string defaultTitle;
+		static const std::string s_defaultScript;
+		static const std::string s_defaultTitle;
 
 	};
 

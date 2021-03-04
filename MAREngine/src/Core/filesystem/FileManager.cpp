@@ -20,38 +20,19 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
-#define MAR_ENGINE_W_FILESYSTEM_WIDGETS_H
-
-
-#include "../../../mar.h"
-#include "../IWidgetPanel.h"
+#include "FileManager.h"
 
 
 namespace marengine {
 
 
-	class WFilesystemWidgets : public IWidgetPanel {
-	public:
+	void FFileManager::loadFile(std::string& stringToFill, const char* path) {
 
-		static WFilesystemWidgets* Instance;
+	}
 
-		virtual void create() override;
+	void FFileManager::saveAsFile(const std::string& sourceCode, const char* path) {
 
-		void openWidget(const char* widgetName) const;
-
-		void displayOpenWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename));
-
-		void displaySaveWidget(const std::string& name, const std::string& extensions, void(*callback)(const std::string& path, const std::string& filename));
-
-	private:
-
-		imgui_addons::ImGuiFileBrowser m_fileDialog;
-
-	};
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_W_FILESYSTEM_WIDGETS_H

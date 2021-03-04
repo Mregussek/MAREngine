@@ -36,6 +36,7 @@ namespace marengine {
 
 	WSceneFilesystemWidgets* WSceneFilesystemWidgets::Instance{ nullptr };
 
+
 	void WSceneFilesystemWidgets::create() {
 		Instance = this;
 	}

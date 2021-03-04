@@ -21,9 +21,8 @@
 
 
 #include "ScriptIDEWidget.h"
-#include "../Filesystem/EntityFilesystemWidgets.h"
-#include "../../../Core/filesystem/ScriptsFileManager.h"
-#include "../../../Core/ecs/Components/ScriptingComponents.h"
+#include "../Filesystem/ScriptIDEFilesystemWidgets.h"
+#include "../../../Core/filesystem/FileManager.h"
 #include "../../../ProjectManager.h"
 
 
@@ -31,8 +30,10 @@ namespace marengine {
 
 
 	WScriptIDE* WScriptIDE::Instance{ nullptr };
-	const std::string WScriptIDE::defaultTitle{ "EmptyModule" };
-	const std::string WScriptIDE::defaultScript =
+	const std::string WScriptIDE::s_titleNull{ "" };
+	const std::string WScriptIDE::s_editorTextNull{ "" };
+	const std::string WScriptIDE::s_defaultTitle{ "EmptyModule" };
+	const std::string WScriptIDE::s_defaultScript =
 		"import MAREnginePy as mar\n"
 		"\n"
 		"class <put here name>(mar.Entity):\n"
@@ -60,18 +61,14 @@ namespace marengine {
 		ImGui::Begin("Script Editor", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
 
 		displayMainMenuBar();
-		
-		if (m_createNewScriptWindow) { createNewScriptWindow(); }
-		if (m_openScriptWindow) { openScriptWindow(); }
-
 		editorRender();
 
 		ImGui::End();
 	}
 
 	void WScriptIDE::reset() {
-		setEditorText(defaultScript);
-		setEditorTitle(defaultTitle);
+		editor.SetText(s_editorTextNull);
+		setEditorTitle(s_titleNull);
 	}
 
 	void WScriptIDE::editorRender() {
@@ -93,10 +90,18 @@ namespace marengine {
 	void WScriptIDE::displayMainMenuBar() {
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
-				if (ImGui::MenuItem("New", "Ctrl-N")) { m_createNewScriptWindow = true; }
-				if (ImGui::MenuItem("Open", "Ctrl-O")) { m_openScriptWindow = true; }
-				if (ImGui::MenuItem("Save", "Ctrl-S")) { FScriptsFileManager::saveScript(editor.GetText(), m_pathToSave.c_str()); }
-				if (ImGui::MenuItem("Save as")) { m_saveAsScriptWindow = true; }
+				if (ImGui::MenuItem("New", "Ctrl-N")) { 
+					WScriptIDEFilesystemWidgets::Instance->openCreateNewEditorScriptWidget();
+				}
+				if (ImGui::MenuItem("Open", "Ctrl-O")) { 
+					
+				}
+				if (ImGui::MenuItem("Save", "Ctrl-S")) { 
+					FFileManager::saveAsFile(editor.GetText(), m_pathToScript.c_str());
+				}
+				if (ImGui::MenuItem("Save as")) { 
+					WScriptIDEFilesystemWidgets::Instance->openSaveAsEditorScriptWidget();
+				}
 
 				ImGui::EndMenu();
 			}
@@ -138,58 +143,30 @@ namespace marengine {
 			ImGui::EndMenuBar();
 		}
 	}
-	
-	void WScriptIDE::createNewScriptWindow() {
-		ImGui::Begin("Create New Script");
 
-		const auto& assetsPath = ProjectManager::Instance->getAssetsPath();
-		static char moduleName[50]{ "empty" };
-
-		ImGui::InputText(".py", moduleName, 50);
-
-		const auto moduleNameStr = std::string(moduleName);
-		const auto savePath = assetsPath + moduleNameStr + ".py";
-
-		ImGui::Separator();
-
-		ImGui::Text("Creating to: %s", savePath.c_str());
-
-		ImGui::Separator();
-
-		if (ImGui::Button("Create")) { createNewFile(savePath, moduleNameStr); }
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Close")) { m_createNewScriptWindow = false; }
-			
-		ImGui::End();
+	void WScriptIDE::setEditorTitle(std::string newTitle) {
+		m_title = std::move(newTitle);
 	}
 
-	void WScriptIDE::openScriptWindow() {
-		ImGui::Begin("Open Script Menu");
-
-		const auto& assetsPath = ProjectManager::Instance->getAssetsPath();
-		static char moduleName[50]{ "empty" };
-
-		ImGui::InputText(".py", moduleName, 30);
-
-		ImGui::Separator();
-
-		const auto moduleNameStr = std::string(moduleName);
-		const auto loadPath = assetsPath + moduleNameStr + ".py";
-
-		ImGui::Text("Opening: %s", loadPath.c_str());
-
-		ImGui::Separator();
-
-		if (ImGui::Button("Open")) { openFile(loadPath, moduleNameStr); }
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Close")) { m_openScriptWindow = false; }
-
-		ImGui::End();
+	void WScriptIDE::setEditorCode(std::string sourceCode) {
+		editor.SetText(sourceCode);
 	}
+
+	void WScriptIDE::setPathToScript(std::string pathToScript) {
+		m_pathToScript = std::move(pathToScript);
+	}
+
+	std::string WScriptIDE::getEditorSourceCode() const {
+		return editor.GetText();
+	}
+
+	const std::string& WScriptIDE::getDefaultEditorSourceCode() {
+		return s_defaultScript;
+	}
+
+	bool WScriptIDE::isEditorCurrentlyUsed() const {
+		return (m_title == s_titleNull) && (editor.GetText() == s_editorTextNull);
+	};
 
 	std::string WScriptIDE::replaceOcurrences(std::string str, const std::string& from, const std::string& to) {
 		size_t start_pos = 0;
@@ -200,43 +177,6 @@ namespace marengine {
 		}
 
 		return str;
-	}
-
-	void WScriptIDE::createNewFile(const std::string& scriptPath, const std::string& moduleName) {
-		const std::string toReplace = "<put here name>";
-
-		const auto scriptSource = replaceOcurrences(defaultScript, toReplace, moduleName);
-
-		FScriptsFileManager::saveScript(scriptSource, scriptPath.c_str());
-
-		setEditorTitle(moduleName);
-		setEditorText(scriptSource);
-		setPathToSave(scriptPath);
-		
-		m_createNewScriptWindow = false;
-	}
-
-	void WScriptIDE::openFile(const std::string& scriptPath, const std::string& moduleName) {
-		std::string sourceCode;
-		FScriptsFileManager::loadScript(sourceCode, scriptPath.c_str());
-		
-		setEditorTitle(moduleName);
-		setPathToSave(scriptPath);
-		setEditorText(sourceCode);
-
-		m_openScriptWindow = false;
-	}
-
-	void WScriptIDE::setPathToSave(std::string s) {
-		m_pathToSave = std::move(s); 
-	}
-
-	void WScriptIDE::setEditorText(std::string s) {
-		editor.SetText(std::move(s)); 
-	}
-
-	void WScriptIDE::setEditorTitle(std::string new_title) {
-		m_title = std::move(new_title); 
 	}
 
 	void WScriptIDE::definePythonLanguage() {

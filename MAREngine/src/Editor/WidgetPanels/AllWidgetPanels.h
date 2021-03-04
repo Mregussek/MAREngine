@@ -29,6 +29,7 @@
 #include "Filesystem/EntityFilesystemWidgets.h"
 #include "Filesystem/SceneFilesystemWidgets.h"
 #include "Filesystem/FilesystemWidgets.h"
+#include "Filesystem/ScriptIDEFilesystemWidgets.h"
 #include "ScriptEditor/ScriptIDEWidget.h"
 #include "Viewport/ViewportWidget.h"
 #include "ScenePropertiesPanel/ScenePropertiesWidget.h"
@@ -49,6 +50,7 @@ namespace marengine {
 
 		WEntityFilesystemWidgets entityFilesystem{};
 		WSceneFilesystemWidgets sceneFilesystem{};
+		WScriptIDEFilesystemWidgets scriptIDEFilesystem{};
 		WGeneralWidgetPanel general{};
 		WViewportWidget viewport{};
 		WMainMenuBarWidget mainMenuBar{};

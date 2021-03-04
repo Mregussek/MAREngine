@@ -22,15 +22,16 @@
 
 #include "EntityFilesystemWidgets.h"
 #include "FilesystemWidgets.h"
+#include "../../EditorLogging.h"
 #include "../EntityPanels/EntityWidgetPanel.h"
 #include "../../../ProjectManager.h"
-#include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/ecs/Components/Components.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Scene.h"
+#include "../../../Core/ecs/Entity/Entity.h"
 #include "../../../Core/graphics/Mesh/MeshCreator.h"
-#include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
 #include "../../WidgetEvents/EventsEntityWidget.h"
+#include "../../../Core/graphics/RenderAPI/RenderPipeline.h"
 
 
 namespace marengine {
@@ -38,12 +39,15 @@ namespace marengine {
 
 	WEntityFilesystemWidgets* WEntityFilesystemWidgets::Instance{ nullptr };
 
+
 	void WEntityFilesystemWidgets::create() {
 		Instance = this;
 	}
 
 	void WEntityFilesystemWidgets::updateFrame() {
 		constexpr auto loadOBJcallback = [](const std::string& path, const std::string& filename) {
+			EDITOR_TRACE("WEntityFilesystemWidgets:49:EntityFilesystemWidgets.cpp: Loading object {} {} and assining to newly created entity", path, filename);
+			
 			const Entity& entity{ FSceneManagerEditor::Instance->getScene()->createEntity() };
 			MeshCreator::loadOBJ(filename, path, entity);
 			FEventsEntityWidget::Instance->onSelectedEntity(entity);
@@ -52,28 +56,36 @@ namespace marengine {
 		};
 
 		constexpr auto assignScriptCallback = [](const std::string& path, const std::string& filename) {
+			const Entity& entity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
+			EDITOR_WARN("WEntityFilesystemWidgets:59:EntityFilesystemWidgets.cpp: Assigning script {} {} to entity {} ", path, filename, entity.getComponent<TagComponent>().tag);
+
 			const std::string& assetsPath{ ProjectManager::Instance->getAssetsPath() };
-			auto& pythonScriptComponent{ WEntityWidgetPanel::Instance->getCurrentEntity().getComponent<PythonScriptComponent>() };
-
-			pythonScriptComponent.scriptsPath = path;
-
-			// Erase assets path substring from loaded path
-			size_t pos = std::string::npos;
-			while ((pos = pythonScriptComponent.scriptsPath.find(assetsPath)) != std::string::npos) {
-				pythonScriptComponent.scriptsPath.erase(pos, assetsPath.length());
-			}
+			auto& pythonScriptComponent{ entity.getComponent<PythonScriptComponent>() };
 		};
 
-		WFilesystemWidgets::Instance->displayOpenWidget(m_loadOBJname, m_objExtension, loadOBJcallback);
-		WFilesystemWidgets::Instance->displayOpenWidget(m_assignScriptName, m_pythonExtension, assignScriptCallback);
+		constexpr auto createAndAssignScriptCallback = [](const std::string& path, const std::string& filename) {
+			const Entity& entity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
+			EDITOR_WARN("WEntityFilesystemWidgets:67:EntityFilesystemWidgets.cpp: creating and assigning {} {} to entity {} ", path, filename, entity.getComponent<TagComponent>().tag);
+
+			const std::string& assetsPath{ ProjectManager::Instance->getAssetsPath() };
+			auto& pythonScriptComponent{ entity.getComponent<PythonScriptComponent>() };
+		};
+
+		WFilesystemWidgets::Instance->displayOpenWidget(WidgetNames.loadObj, FileExtensions.obj, loadOBJcallback);
+		WFilesystemWidgets::Instance->displayOpenWidget(WidgetNames.assignPythonScript, FileExtensions.py, assignScriptCallback);
+		WFilesystemWidgets::Instance->displayOpenWidget(WidgetNames.createAndAssignPythonScript, FileExtensions.py, createAndAssignScriptCallback);
 	}
 
 	void WEntityFilesystemWidgets::openLoadOBJWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_loadOBJname.c_str());
+		WFilesystemWidgets::Instance->openWidget(WidgetNames.loadObj.c_str());
+	}
+
+	void WEntityFilesystemWidgets::openCreateAndAssignPythonScriptWidget() const {
+		WFilesystemWidgets::Instance->openWidget(WidgetNames.createAndAssignPythonScript.c_str());
 	}
 
 	void WEntityFilesystemWidgets::openAssignPythonScriptWidget() const {
-		WFilesystemWidgets::Instance->openWidget(m_assignScriptName.c_str());
+		WFilesystemWidgets::Instance->openWidget(WidgetNames.assignPythonScript.c_str());
 	}
 
 

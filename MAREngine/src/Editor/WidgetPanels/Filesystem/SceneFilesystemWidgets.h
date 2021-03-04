@@ -48,6 +48,7 @@ namespace marengine {
 		const std::string m_newSceneName{ "Create new scene" };
 		const std::string m_saveSceneName{ "Save current scene" };
 		const std::string m_loadSceneName{ "Load scene from file" };
+
 		const std::string extensions{ ".json" };
 
 	};

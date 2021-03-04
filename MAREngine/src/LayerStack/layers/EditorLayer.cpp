@@ -54,9 +54,10 @@ namespace marengine {
 		m_editorManager.pushPanel(&m_allWidgets.windowSettings);
 
 		// push filesystem panels
-		m_editorManager.pushPanel(&m_allWidgets.filesystem);
 		m_editorManager.pushPanel(&m_allWidgets.sceneFilesystem);
 		m_editorManager.pushPanel(&m_allWidgets.entityFilesystem);
+		m_editorManager.pushPanel(&m_allWidgets.scriptIDEFilesystem);
+		m_editorManager.pushPanel(&m_allWidgets.filesystem);
 
 		// push scene / entities panels
 		m_editorManager.pushPanel(&m_allWidgets.sceneHierarchy);

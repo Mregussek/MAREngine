@@ -48,21 +48,26 @@ namespace marengine {
 
 	private:
 
-		void displayPlayMode() const;
-		void displayEditorMode() const;
+		void displayPlayMode();
+		void displayEditorMode();
 
 		void popUpMenu() const;
 		void displayChildsPopMenu() const;
 		void displayComponentPopMenu() const;
 
-		template<typename TComponent>
-		void handle(const char* componentName) const;
+		void handleInputs();
 
 		template<typename TComponent>
-		void displayComponentPanel() const;
+		void handle(const char* componentName);
+
+		template<typename TComponent>
+		void displayComponentPanel();
 
 
 		const Entity* currentEntity{ nullptr };
+
+		bool m_newScriptWindow{ false };
+		bool m_assignScriptWindow{ false };
 
 	};
 

@@ -232,7 +232,7 @@
     <ClInclude Include="src\Core\filesystem\FilesystemLogging.h" />
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h" />
     <ClInclude Include="src\Core\filesystem\SceneSerializer.h" />
-    <ClInclude Include="src\Core\filesystem\ScriptsFileManager.h" />
+    <ClInclude Include="src\Core\filesystem\FileManager.h" />
     <ClInclude Include="src\Core\graphics\GraphicsLimits.h" />
     <ClInclude Include="src\Core\graphics\Lightning\EventsLightBatch.h" />
     <ClInclude Include="src\Core\graphics\Lightning\LightDefinitions.h" />
@@ -304,6 +304,7 @@
     <ClInclude Include="src\Editor\WidgetPanels\DebugPanels\SceneDebugWidget.h" />
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.h" />
     <ClInclude Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.h" />
+    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\ScriptIDEFilesystemWidgets.h" />
     <ClInclude Include="src\Editor\WidgetPanels\IWidgetPanel.h" />
     <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h" />
     <ClInclude Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.h" />
@@ -380,7 +381,7 @@
     <ClCompile Include="src\Core\ecs\Entity\EventsCameraEntity.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp" />
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp" />
-    <ClCompile Include="src\Core\filesystem\ScriptsFileManager.cpp" />
+    <ClCompile Include="src\Core\filesystem\FileManager.cpp" />
     <ClCompile Include="src\Core\graphics\Lightning\EventsLightBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Lightning\PointLightBatch.cpp" />
     <ClCompile Include="src\Core\graphics\Mesh\EventsMeshBatchStatic.cpp" />
@@ -420,6 +421,7 @@
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgets.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.cpp" />
+    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\ScriptIDEFilesystemWidgets.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.cpp" />
     <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.cpp" />

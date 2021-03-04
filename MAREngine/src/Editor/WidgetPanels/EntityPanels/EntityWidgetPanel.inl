@@ -33,28 +33,28 @@ namespace marengine {
 
 	
 	template<typename TComponent>
-	void WEntityWidgetPanel::handle(const char* componentName) const {
+	void WEntityWidgetPanel::handle(const char* componentName) {
 		if (currentEntity->hasComponent<TComponent>() && ImGui::CollapsingHeader(componentName)) {
 			displayComponentPanel<TComponent>();
 		}
 	}
 
 	template<typename TComponent>
-	void WEntityWidgetPanel::displayComponentPanel() const {
+	void WEntityWidgetPanel::displayComponentPanel() {
 		ImGui::Text("This component is not yet supported!");
 	}
 
 
 	// Here add declarations for specific component event implementations ...
 
-	template<> void WEntityWidgetPanel::displayComponentPanel<TagComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<TransformComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<PythonScriptComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<RenderableComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<CameraComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<ColorComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<Texture2DComponent>() const;
-	template<> void WEntityWidgetPanel::displayComponentPanel<PointLightComponent>() const;
+	template<> void WEntityWidgetPanel::displayComponentPanel<TagComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<TransformComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<PythonScriptComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<RenderableComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<CameraComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<ColorComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<Texture2DComponent>();
+	template<> void WEntityWidgetPanel::displayComponentPanel<PointLightComponent>();
 
 
 }

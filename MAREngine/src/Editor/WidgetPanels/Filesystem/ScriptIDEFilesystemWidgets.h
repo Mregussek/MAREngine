@@ -20,19 +20,41 @@
 ************************************************************************/
 
 
-#include "ScriptsFileManager.h"
+#ifndef MAR_ENGINE_SCRIPT_IDE_FILESYSTEM_WIDGETS_H
+#define MAR_ENGINE_SCRIPT_IDE_FILESYSTEM_WIDGETS_H
+
+
+#include "../IWidgetPanel.h"
+#include <string>
 
 
 namespace marengine {
 
 
-	void FScriptsFileManager::loadScript(std::string& stringToFill, const char* path) {
+	class WScriptIDEFilesystemWidgets : public IWidgetPanel {
+	public:
 
-	}
+		static WScriptIDEFilesystemWidgets* Instance;
 
-	void FScriptsFileManager::saveScript(const std::string& sourceCode, const char* path) {
+		virtual void create() override;
+		virtual void updateFrame() override;
 
-	}
+		void openCreateNewEditorScriptWidget() const;
+		void openSaveAsEditorScriptWidget() const;
+		void openOpenInEditorScriptWidget() const;
+
+	private:
+
+		const std::string createNewEditorScript{ "Create New Python Script On Text Editor" };
+		const std::string saveAsEditorScript{ "Save As Python Script on Text Editor" };
+		const std::string openInEditorScript{ "Open In Editor Python Script" };
+
+		const std::string py{ ".py" };
+
+	};
 
 
 }
+
+
+#endif // !MAR_ENGINE_SCRIPT_IDE_FILESYSTEM_WIDGETS_H
