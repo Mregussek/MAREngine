@@ -24,7 +24,6 @@
 #define MAR_ENGINE_LIGHT_COMPONENTS_H
 
 
-#include "../../../mar.h"
 #include "../../graphics/Lightning/LightDefinitions.h"
 
 

@@ -24,7 +24,7 @@
 #define MAR_ENGINE_SCRIPTING_COMPONENTS_H
 
 
-#include "../../../mar.h"
+#include <string>
 #include "../../scripting/PythonScript.h"
 
 

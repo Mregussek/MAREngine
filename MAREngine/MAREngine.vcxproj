@@ -473,7 +473,6 @@
     <None Include="resources\shaders\entityColor.shader.glsl" />
     <None Include="resources\shaders\entityCubemap.shader.glsl" />
     <None Include="resources\shaders\entityTexture2D.shader.glsl" />
-    <None Include="src\Core\ecs\Entity\Entity.inl" />
     <None Include="src\Core\ecs\Entity\EventsComponentEntity.inl" />
     <None Include="src\Core\ecs\Scene.inl" />
     <None Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.inl" />

@@ -7,6 +7,7 @@ logs
 bin
 other
 python38.dll
+cmake-build-debug
 
 ### ---- Created By Visual Studio ---- ###
 ## Ignore Visual Studio temporary files, build results, and

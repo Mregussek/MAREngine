@@ -802,9 +802,6 @@
     <None Include="resources\shaders\entityColor.shader.glsl" />
     <None Include="resources\shaders\entityCubemap.shader.glsl" />
     <None Include="resources\shaders\entityTexture2D.shader.glsl" />
-    <None Include="src\Core\ecs\Entity\Entity.inl">
-      <Filter>Pliki nagłówkowe</Filter>
-    </None>
     <None Include="src\Core\ecs\Scene.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>

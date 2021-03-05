@@ -27,9 +27,6 @@
 #include "../../../mar.h"
 #include "../../graphics/Mesh/MeshDefinitions.h"
 #include "../../graphics/Lightning/LightDefinitions.h"
-#include "DefaultComponents.h"
-#include "LightComponents.h"
-#include "TextureComponents.h"
 
 
 namespace marengine {
@@ -69,6 +66,12 @@ namespace marengine {
 		ELightBatchType batchType{ ELightBatchType::NONE };
 
 	};
+
+
+	// Just declarations for PlayModeStorageComponent ComponentVariant
+	struct TrasformComponent;
+	struct ColorComponent;
+	struct PointLightComponent;
 
 	
 	/**

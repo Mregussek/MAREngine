@@ -21,7 +21,6 @@
 
 
 #include "DefaultComponents.h"
-#include "../ECSLogs.h"
 
 
 namespace marengine {
