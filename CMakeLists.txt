@@ -65,7 +65,7 @@ if(MSVC)
 	)
 
 	MSVC_SetTargetPropertiesMAREngine(MAREngineLibrary)
-	MSVC_SetTargetPropertiesMAREngine(SandboxMAR)
+	#MSVC_SetTargetPropertiesMAREngine(MAREngine)
 
 	# Organize files in Visual Studio
 	message(STATUS "Configuring source_group for ${MAREnginePath} ${MAREngineAllFiles}")

@@ -19,11 +19,16 @@
 #
 #***********************************************************************
 
-project(MAREngineLibrary CXX C)
+
+set_property(GLOBAL PROPERTY MAREngineLibraryProperty "MAREngineLibrary")
+get_property(MAREngineLibrary GLOBAL PROPERTY MAREngineLibraryProperty)
+
+project(${MAREngineLibrary} CXX C)
 
 
 set(MAREngineSourcesPath ${MAREnginePath}/src)
-set(MAREngineIncludeDir ${MAREnginePath}/include)
+set_property(GLOBAL PROPERTY MAREngineIncludeDirProperty "${MAREnginePath}/include")
+get_property(MAREngineIncludeDir GLOBAL PROPERTY MAREngineIncludeDirProperty)
 
 
 message(STATUS "Looking for all MAREngine Core files at ${MAREngineSourcesPath} ...")
@@ -55,16 +60,17 @@ get_property(MAREngineIncludeLibraries GLOBAL PROPERTY MAREngineIncludeLibraries
 get_property(MAREngineIncludeDirectories GLOBAL PROPERTY MAREngineIncludeDirectoriesProperty)
 get_property(MAREngine3rdPartyLibraries GLOBAL PROPERTY MAREngine3rdPartyLibrariesProperty)
 
+# Traces messages, don't need during release build
 message(STATUS "Setting all include directories...")
 message(STATUS " *** ${MAREngineSourcesPath}")
 message(STATUS " *** ${MAREngineIncludeDirectories}")
 message(STATUS " *** ${MAREngineIncludeLibraries}")
 message(STATUS " *** ${MAREngine3rdPartyLibraries}")
 
-include_directories(${MAREngineSourcesPath} ${MAREngineIncludeDirectories})
+include_directories(${MAREngineSourcesPath} ${MAREngineIncludeDirectories} ${MAREngineIncludeDir})
 link_directories(${MAREngineIncludeLibraries})
 
 message(STATUS "Creating static MAREngine.lib library...")
-add_library(MAREngineLibrary ${MAREngineAllFiles})
-target_compile_features(MAREngineLibrary PRIVATE cxx_std_17)
-target_link_libraries(MAREngineLibrary PRIVATE ${MAREngine3rdPartyLibraries})
+add_library(${MAREngineLibrary} ${MAREngineAllFiles})
+target_compile_features(${MAREngineLibrary} PRIVATE cxx_std_17)
+target_link_libraries(${MAREngineLibrary} PRIVATE ${MAREngine3rdPartyLibraries})
