@@ -19,37 +19,52 @@
 #
 #***********************************************************************
 
-project(MAREngineLibrary)
-
-# path to MAREngine sources
-set(MAREnginePath ${CMAKE_CURRENT_SOURCE_DIR})
-# List name with all MAREngine files, that must be compiled
-set(MAREngineAllFiles MAREngineAllFilesList)
-# List name with all 3rd_party libraries directories
-set(MAREngineIncludeLibraries MAREngineIncludeLibsList)
-# List name with all 3rd_party sources directories
-set(MAREngineIncludeDirectories MAREngineIncludeDirsList)
-# List name with all 3rd_party compiled libraries (.lib files)
-set(MAREngine3rdPartyLibraries MAREngine3rdPartyLibsList)
+project(MAREngineLibrary CXX C)
 
 
+set(MAREngineSourcesPath ${MAREnginePath}/src)
+set(MAREngineIncludeDir ${MAREnginePath}/include)
+
+
+message(STATUS "Looking for all MAREngine Core files at ${MAREngineSourcesPath} ...")
 file(
     GLOB_RECURSE MAREngineSources
 	LIST_DIRECTORIES false
-	${MAREnginePath}/src/*.c
-	${MAREnginePath}/src/*.cpp
+	${MAREngineSourcesPath}/*.c
+	${MAREngineSourcesPath}/*.cpp
 )
 file(
     GLOB_RECURSE MAREngineHeaders
 	LIST_DIRECTORIES false
-	${MAREnginePath}/src/*.h
-    ${MAREnginePath}/src/*.inl
-	${MAREnginePath}/src/*.hpp
+	${MAREngineSourcesPath}/*.h
+    ${MAREngineSourcesPath}/*.inl
+	${MAREngineSourcesPath}/*.hpp
 )
 
-list(APPEND ${MAREngineAllFiles} ${MAREngineSources} ${MAREngineHeaders})
+set(
+    MAREngineAllFiles
+    ${MAREngineSources}
+    ${MAREngineHeaders}
+    ${MAREngineIncludeDir}/MAREngine/MAREngine.h
+)
+set_property(GLOBAL PROPERTY MAREngineAllFilesProperty ${MAREngineAllFiles})
 
-list(APPEND ${MAREngineIncludeLibraries} ".")
-list(APPEND ${MAREngineIncludeDirectories} ".")
+add_subdirectory(${MAREnginePath}/3rd_party)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rd_party)
+get_property(MAREngineIncludeLibraries GLOBAL PROPERTY MAREngineIncludeLibrariesProperty)
+get_property(MAREngineIncludeDirectories GLOBAL PROPERTY MAREngineIncludeDirectoriesProperty)
+get_property(MAREngine3rdPartyLibraries GLOBAL PROPERTY MAREngine3rdPartyLibrariesProperty)
+
+message(STATUS "Setting all include directories...")
+message(STATUS " *** ${MAREngineSourcesPath}")
+message(STATUS " *** ${MAREngineIncludeDirectories}")
+message(STATUS " *** ${MAREngineIncludeLibraries}")
+message(STATUS " *** ${MAREngine3rdPartyLibraries}")
+
+include_directories(${MAREngineSourcesPath} ${MAREngineIncludeDirectories})
+link_directories(${MAREngineIncludeLibraries})
+
+message(STATUS "Creating static MAREngine.lib library...")
+add_library(MAREngineLibrary ${MAREngineAllFiles})
+target_compile_features(MAREngineLibrary PRIVATE cxx_std_17)
+target_link_libraries(MAREngineLibrary PRIVATE ${MAREngine3rdPartyLibraries})

@@ -23,6 +23,9 @@
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 
 
+get_property(MAREngineAllFiles GLOBAL PROPERTY MAREngineAllFilesProperty)
+
+
 message("Looking for: OpenGL")
 find_package(OpenGL REQUIRED)
 if(OPENGL_FOUND)
@@ -34,7 +37,7 @@ else()
     message("Error: Cannot find OpenGL!")
 endif()
 
-list(APPEND ${MAREngine3rdPartyLibraries} ${OPENGL_gl_LIBRARY})
+set(MAREngine3rdPartyLibraries ${MAREngine3rdPartyLibraries} ${OPENGL_gl_LIBRARY})
 
 
 message("Looking for: GLAD")
@@ -45,8 +48,8 @@ set(GLADHeaders ${GLADDirectory}/include/glad/glad.h ${GLADDirectory}/include/KH
 set(GLADFiles ${GLADSources} ${GLADHeaders})
 message(STATUS "GLADIncludeDirectory:= ${GLADIncludeDirectory}")
 
-list(APPEND ${MAREngineIncludeDirectories} ${GLADIncludeDirectory})
-list(APPEND ${MAREngineAllFiles} ${GLADFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${GLADIncludeDirectory})
+set(MAREngineAllFiles ${MAREngineAllFiles} ${GLADFiles})
 
 
 message("Looing for: SDL2")
@@ -64,10 +67,10 @@ file(
 set(SDLFiles ${SDLSources} ${SDLHeaders})
 message(STATUS "SDLIncludeDirectory:= ${SDLIncludeDirectory}")
 
-list(APPEND ${MAREngineAllFiles} ${SDLFiles})
-list(APPEND ${MAREngine3rdPartyLibraries} SDL2 SDL2main SDL2test)
-list(APPEND ${MAREngineIncludeDirectories} ${SDLIncludeDirectory})
-list(APPEND ${MAREngineIncludeLibraries} ${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.0.12/lib/x86)
+set(MAREngineAllFiles ${MAREngineAllFiles} ${SDLFiles})
+set(MAREngine3rdPartyLibraries ${MAREngine3rdPartyLibraries} SDL2 SDL2main SDL2test)
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${SDLIncludeDirectory})
+set(MAREngineIncludeLibraries ${MAREngineIncludeLibraries} ${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.0.12/lib/x86)
 
 
 message("Looking for: GLFW")
@@ -84,9 +87,9 @@ else()
 	message(STATUS "Error: Cannot find GLFW3!")
 endif()
 
-list(APPEND ${MAREngine3rdPartyLibraries} ${GLFW3_LIBRARY})
-list(APPEND ${MAREngineIncludeDirectories} ${GLFWDirectory})
-list(APPEND ${MAREngineIncludeLibraries} ${CMAKE_CURRENT_SOURCE_DIR}/GLFW/lib-vc2019)
+set(MAREngine3rdPartyLibraries ${MAREngine3rdPartyLibraries} ${GLFW3_LIBRARY})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${GLFWDirectory})
+set(MAREngineIncludeLibraries ${MAREngineIncludeLibraries} ${CMAKE_CURRENT_SOURCE_DIR}/GLFW/lib-vc2019)
 
 
 message("Looking for: stb_image")
@@ -96,8 +99,8 @@ set(STBImageSources ${STBImageIncludeDirectory}/stb_image/stb_image.cpp)
 set(STBImageFiles ${STBImageSources} ${STBImageHeaders})
 message(STATUS "STBImageIncludeDirectory:= ${STBImageIncludeDirectory}")
 
-list(APPEND ${MAREngineAllFiles} ${STBImageFiles})
-list(APPEND ${MAREngineIncludeDirectories} ${STBImageIncludeDirectory})
+set(MAREngineAllFiles ${MAREngineAllFiles} ${STBImageFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${STBImageIncludeDirectory})
 
 
 message("Looking for: Dear ImGui")
@@ -128,8 +131,8 @@ set(
 set(ImGuiFiles ${ImGuiSources} ${ImGuiHeaders})
 message(STATUS "ImGuiIncludeDirectory:= ${ImGuiIncludeDirectory}")
 
-list(APPEND ${MAREngineAllFiles} ${ImGuiFiles})
-list(APPEND ${MAREngineIncludeDirectories} ${ImGuiIncludeDirectory})
+set(MAREngineAllFiles ${MAREngineAllFiles} ${ImGuiFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${ImGuiIncludeDirectory})
 
 
 message("Looking for: ImGuizmo")
@@ -139,6 +142,120 @@ set(ImGuizmoSources ${ImGuizmoIncludeDirectory}/ImGuizmo.cpp)
 set(ImGuizmoFiles ${ImGuizmoSources} ${ImGuizmoHeaders})
 message(STATUS "ImGuizmoIncludeDirectory:= ${ImGuizmoIncludeDirectory}")
 
-list(APPEND ${MAREngineAllFiles} ${ImGuizmoFiles})
-list(APPEND ${MAREngineIncludeDirectories} ${ImGuizmoIncludeDirectory})
+set(MAREngineAllFiles ${MAREngineAllFiles} ${ImGuizmoFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${ImGuizmoIncludeDirectory})
 
+
+message("Looking for: ImGuiColorTextEdit")
+set(ImGuiColorTextEditIncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/ImGuiColorTextEdit)
+set(
+    ImGuiColorTextEditFiles
+    ${ImGuiColorTextEditIncludeDirectory}/TextEditor.cpp
+    ${ImGuiColorTextEditIncludeDirectory}/TextEditor.h
+)
+message(STATUS "ImGuiColorTextEditIncludeDirectory:= ${ImGuiColorTextEditIncludeDirectory}")
+
+set(MAREngineAllFiles ${MAREngineAllFiles} ${ImGuiColorTextEditFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${ImGuiColorTextEditIncludeDirectory})
+
+
+message("Looking for: ImGuiAddons")
+set(ImGuiAddonsIncludeDirectory "${CMAKE_CURRENT_SOURCE_DIR}/ImGui-Addons")
+set(ImGuiAddonsFiles
+	${ImGuiAddonsIncludeDirectory}/FileBrowser/ImGuiFileBrowser.h
+	${ImGuiAddonsIncludeDirectory}/FileBrowser/ImGuiFileBrowser.cpp
+	${ImGuiAddonsIncludeDirectory}/FileBrowser/Dirent/dirent.h
+)
+message(STATUS "ImGuiAddonsIncludeDirectory:= ${ImGuiAddonsIncludeDirectory}")
+
+set(MAREngineAllFiles ${MAREngineAllFiles} ${ImGuiAddonsFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${ImGuiAddonsIncludeDirectory})
+
+
+message("Looking for: spdlog")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/spdlog)
+set(spdlogIncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/include)
+message(STATUS "spdlogIncludeDirectory:= ${spdlogIncludeDirectory}")
+
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${spdlogIncludeDirectory})
+
+
+message("Looking for: entt")
+set(enttIncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/entt/include)
+set(enttFiles ${enttIncludeDirectory}/entt/entt.hpp)
+message(STATUS "enttIncludeDirectory:= ${enttIncludeDirectory}")
+
+set(MAREngineAllFiles ${MAREngineAllFiles} ${enttFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${enttIncludeDirectory})
+
+
+message("Looking for: json")
+set(jsonIncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/json/include)
+set(jsonFiles ${jsonIncludeDirectory}/json.hpp)
+message(STATUS "jsonIncludeDirectory:= ${jsonIncludeDirectory}")
+
+set(MAREngineAllFiles ${MAREngineAllFiles} ${jsonFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${jsonIncludeDirectory})
+
+
+message("Looking for: python 3.8.5")
+set(Python385IncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/python3.8.5/include)
+set(Python385IncludeLibraries ${CMAKE_CURRENT_SOURCE_DIR}/python3.8.5/libs)
+set(
+	PYTHON_INCLUDE_DIR
+	${Python385IncludeDirectory}
+	${CMAKE_CURRENT_SOURCE_DIR}/python3.8.5/python-3.8.8-embed-win32
+)
+set(
+	PYTHON_LIBRARY
+	${Python385IncludeLibraries}
+	${CMAKE_CURRENT_SOURCE_DIR}/python3.8.5/python-3.8.8-embed-win32
+)
+set(PYTHON_EXECUTABLE ${CMAKE_CURRENT_SOURCE_DIR}/python3.8.5/python-3.8.8-embed-win32/python.exe)
+message(STATUS "Python385IncludeDirectory:= ${Python385IncludeDirectory}")
+message(STATUS "Python385IncludeLibraries:= ${Python385IncludeLibraries}")
+
+set(MAREngine3rdPartyLibraries ${MAREngine3rdPartyLibraries} python38)
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${Python385IncludeDirectory})
+set(MAREngineIncludeLibraries ${MAREngineIncludeLibraries} ${Python385IncludeLibraries})
+
+
+message("Looking for: pybind11")
+set(PYBIND11_PYTHON_VERSION "3.8")
+set(PYBIND11_NOPYTHON True)
+set(PYBIND11_FINDPYTHON False)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/pybind11)
+set(pybind11IncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/pybind11/include)
+message(STATUS "pybind11IncludeDirectory:= ${pybind11IncludeDirectory}")
+
+set(MAREngine3rdPartyLibraries ${MAREngine3rdPartyLibraries} pybind11::embed)
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${pybind11IncludeDirectory})
+
+
+message("Looking for: MARMaths")
+set(MARMathsIncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/MARMaths/include)
+set(MARMathsSourcesDir ${CMAKE_CURRENT_SOURCE_DIR}/MARMaths/src)
+file(
+    GLOB_RECURSE
+    MARMathsSources
+	${MARMathsSourcesDir}/*.c
+	${MARMathsSourcesDir}/*.cpp
+)
+file(
+    GLOB_RECURSE
+    MARMathsHeaders
+	${MARMathsSourcesDir}/*.h
+	${MARMathsSourcesDir}/*.hpp
+)
+set(MARMathsFiles ${MARMathsIncludeDirectory}/MARMaths.h ${MARMathsSources} ${MARMathsHeaders})
+message(STATUS "MARMathsIncludeDirectory:= ${MARMathsIncludeDirectory}")
+
+set(MAREngineAllFiles ${MAREngineAllFiles} ${MARMathsFiles})
+set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${MARMathsIncludeDirectory})
+
+
+
+set_property(GLOBAL PROPERTY MAREngineIncludeLibrariesProperty ${MAREngineIncludeLibraries})
+set_property(GLOBAL PROPERTY MAREngineIncludeDirectoriesProperty ${MAREngineIncludeDirectories})
+set_property(GLOBAL PROPERTY MAREngine3rdPartyLibrariesProperty ${MAREngine3rdPartyLibraries})
+set_property(GLOBAL PROPERTY MAREngineAllFilesProperty ${MAREngineAllFiles})
