@@ -72,6 +72,8 @@ namespace marengine {
 			EDITOR_TRACE("GUI: scene_entity_modify end (EDITOR MODE)");
 		}
 
+		handleInputs();
+
 		ImGui::End();
 	}
 
@@ -196,9 +198,15 @@ namespace marengine {
 		auto& tran = currentEntity->getComponent<TransformComponent>();
 
 		const bool updatedTransform = [&tran]()->bool {
-			const bool updatedPosition{ CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f) };
-			const bool updatedRotation{ CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f, 0.f, 10.f) };
-			const bool updatedScale{ CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f) };
+			const bool updatedPosition{ 
+				CommonComponentHandler::drawVec3Control("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f)
+			};
+			const bool updatedRotation{ 
+				CommonComponentHandler::drawVec3Control("Rotation", tran.rotation, 0.f, 100.f, 0.f, 10.f)
+			};
+			const bool updatedScale{
+				CommonComponentHandler::drawVec3Control("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f)
+			};
 			
 			if (updatedPosition || updatedRotation || updatedScale) {
 				return true;

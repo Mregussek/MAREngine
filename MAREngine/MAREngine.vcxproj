@@ -74,6 +74,7 @@
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformName)\Engine\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Configuration)\$(PlatformName)\Engine\</IntDir>
     <EnableClangTidyCodeAnalysis>false</EnableClangTidyCodeAnalysis>
+    <EnableMicrosoftCodeAnalysis>true</EnableMicrosoftCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
