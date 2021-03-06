@@ -69,3 +69,30 @@ message("Creating SandboxMAR executable...")
 add_executable(SandboxMAR ${SandboxMARFiles} ${MAREngineIncludeDir})
 target_compile_features(SandboxMAR PRIVATE cxx_std_17)
 target_link_libraries(SandboxMAR PRIVATE ${MAREngineLibrary})
+
+
+function(CopySubDirToBuildDirectory SubDirName)
+    add_custom_command(
+        TARGET SandboxMAR POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${SandboxMARPath}/${SubDirName} $<TARGET_FILE_DIR:SandboxMAR>/${SubDirName}
+        COMMENT "Copying ${SandboxMARPath}/${SubDirName} => $<TARGET_FILE_DIR:SandboxMAR>/${SubDirName}"
+    )
+endfunction()
+
+CopySubDirToBuildDirectory("resources")
+CopySubDirToBuildDirectory("DefaultProject")
+
+
+function(CopyFileToBuildDirectory Filename)
+    add_custom_command(
+        TARGET SandboxMAR POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${Filename} $<TARGET_FILE_DIR:SandboxMAR>
+        COMMENT "Copying ${Filename} => $<TARGET_FILE_DIR:SandboxMAR>"
+    )
+endfunction()
+
+set(Python38DLLPath ${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/python-3.8.8-embed-win32/python38.dll)
+CopyFileToBuildDirectory(${Python38DLLPath})
+
+set(imguiConfigFiles ${SandboxMARPath}/imgui.ini ${SandboxMARPath}/desktop.ini)
+CopyFileToBuildDirectory(${imguiConfigFiles})

@@ -24,6 +24,10 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 project(MAREngine CXX C)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 set_property(GLOBAL PROPERTY MAREnginePathProperty "${CMAKE_CURRENT_SOURCE_DIR}/MAREngine")
 get_property(MAREnginePath GLOBAL PROPERTY MAREnginePathProperty)
 
@@ -32,6 +36,7 @@ add_subdirectory(${MAREnginePath})
 
 set_property(GLOBAL PROPERTY SandboxMARProperty "${CMAKE_CURRENT_SOURCE_DIR}/SandboxMAR")
 get_property(SandboxMARPath GLOBAL PROPERTY SandboxMARProperty)
+
 message(STATUS "Adding subdirectory ${SandboxMARPath} ...")
 add_subdirectory(${SandboxMARPath})
 
