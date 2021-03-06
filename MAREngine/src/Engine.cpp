@@ -31,8 +31,8 @@ namespace marengine {
 	MAREngine* MAREngine::Instance{ nullptr };
 
 
-	void MAREngine::initialize(std::string projectName, std::string sceneToLoadAtStartup) {
-		Instance = this;
+    void MAREngine::initialize(std::string projectName, std::string sceneToLoadAtStartup) {
+        Instance = this;
 		m_projectManager.Instance = &m_projectManager;
 		m_projectManager.fillProjectInfo(projectName, sceneToLoadAtStartup);
 

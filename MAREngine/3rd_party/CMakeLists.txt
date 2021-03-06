@@ -23,9 +23,6 @@
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/)
 
 
-get_property(MAREngineAllFiles GLOBAL PROPERTY MAREngineAllFilesProperty)
-
-
 message("Looking for: OpenGL")
 find_package(OpenGL REQUIRED)
 if(OPENGL_FOUND)
@@ -42,9 +39,9 @@ set(MAREngine3rdPartyLibraries ${MAREngine3rdPartyLibraries} ${OPENGL_gl_LIBRARY
 
 message("Looking for: GLAD")
 set(GLADDirectory ${CMAKE_CURRENT_SOURCE_DIR}/GLAD)
-set(GLADIncludeDirectory ${CMAKE_CURRENT_SOURCE_DIR}/GLAD/include)
+set(GLADIncludeDirectory ${GLADDirectory}/include)
 set(GLADSources ${GLADDirectory}/src/glad.c)
-set(GLADHeaders ${GLADDirectory}/include/glad/glad.h ${GLADDirectory}/include/KHR/khrplatform.h)
+set(GLADHeaders ${GLADIncludeDirectory}/glad/glad.h ${GLADIncludeDirectory}/KHR/khrplatform.h)
 set(GLADFiles ${GLADSources} ${GLADHeaders})
 message(STATUS "GLADIncludeDirectory:= ${GLADIncludeDirectory}")
 
@@ -52,7 +49,7 @@ set(MAREngineIncludeDirectories ${MAREngineIncludeDirectories} ${GLADIncludeDire
 set(MAREngineAllFiles ${MAREngineAllFiles} ${GLADFiles})
 
 
-message("Looing for: SDL2")
+message("Looking for: SDL2")
 set(SDLIncludeDirectory "${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.0.12/include")
 file(
     GLOB_RECURSE SDLSources 
@@ -79,7 +76,7 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 find_package(GLFW3 REQUIRED)
 if(GLFW3_FOUND)
-	message(STATUS "GLFW_INDLUCE_DIR:= ${GLFW3_INCLUDE_DIR}")
+	message(STATUS "GLFW3_INCLUDE_DIR:= ${GLFW3_INCLUDE_DIR}")
 	message(STATUS "GLFW3_LIBRARY:= ${GLFW3_LIBRARY}")
 	set(GLFWDirectory ${CMAKE_CURRENT_SOURCE_DIR}/GLFW/include)
 	message(STATUS "GLFWDirectory:= ${GLFWDirectory}")

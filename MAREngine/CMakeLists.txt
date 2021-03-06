@@ -46,15 +46,19 @@ file(
 	${MAREngineSourcesPath}/*.hpp
 )
 
+set_property(GLOBAL PROPERTY MAREngineAllFilesProperty MAREngineAllFiles)
+
+add_subdirectory(${MAREnginePath}/3rd_party)
+
+get_property(MAREngineAllFiles GLOBAL PROPERTY MAREngineAllFilesProperty)
+
 set(
     MAREngineAllFiles
+    ${MAREngineAllFiles}
     ${MAREngineSources}
     ${MAREngineHeaders}
     ${MAREngineIncludeDir}/MAREngine/MAREngine.h
 )
-set_property(GLOBAL PROPERTY MAREngineAllFilesProperty ${MAREngineAllFiles})
-
-add_subdirectory(${MAREnginePath}/3rd_party)
 
 get_property(MAREngineIncludeLibraries GLOBAL PROPERTY MAREngineIncludeLibrariesProperty)
 get_property(MAREngineIncludeDirectories GLOBAL PROPERTY MAREngineIncludeDirectoriesProperty)
