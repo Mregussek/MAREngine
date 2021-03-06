@@ -83,6 +83,16 @@ CopySubDirToBuildDirectory("resources")
 CopySubDirToBuildDirectory("DefaultProject")
 
 
+function(CopyFilesFromSubDirToBuildDir SubDirName)
+	add_custom_command(
+			TARGET SandboxMAR POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${SubDirName} $<TARGET_FILE_DIR:SandboxMAR>
+			COMMENT "Copying ${SubDirName} => $<TARGET_FILE_DIR:SandboxMAR>"
+	)
+endfunction()
+
+CopyFilesFromSubDirToBuildDir(${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/python-3.8.8-embed-win32/)
+
 function(CopyFileToBuildDirectory Filename)
     add_custom_command(
         TARGET SandboxMAR POST_BUILD
@@ -91,8 +101,5 @@ function(CopyFileToBuildDirectory Filename)
     )
 endfunction()
 
-set(Python38DLLPath ${CMAKE_SOURCE_DIR}/MAREngine/3rd_party/python3.8.5/python-3.8.8-embed-win32/python38.dll)
-CopyFileToBuildDirectory(${Python38DLLPath})
-
-set(imguiConfigFiles ${SandboxMARPath}/imgui.ini ${SandboxMARPath}/desktop.ini)
-CopyFileToBuildDirectory(${imguiConfigFiles})
+CopyFileToBuildDirectory(${SandboxMARPath}/imgui.ini)
+CopyFileToBuildDirectory(${SandboxMARPath}/desktop.ini)
