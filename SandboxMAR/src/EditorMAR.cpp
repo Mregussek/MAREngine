@@ -37,21 +37,22 @@ namespace marengine {
 		WindowInstance<GLFWwindow> displayWindow{};
 		LayerStack stack{};
 
+		displayWindow.initialize(1600, 900, m_engine.getWindowName().c_str());
+
 		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getStartupSceneFilename());
 
 		RenderLayer renderLayer("Render Layer");
+		renderLayer.initialize();
 		stack.pushLayer(&renderLayer);
 
 		SceneLayer sceneLayer("Scene Layer");
 		sceneLayer.passSceneToManager(scene);
+		sceneLayer.initialize();
 		stack.pushLayer(&sceneLayer);
 
-		EditorLayer editorLayer("Editor Layer");
+		FImGuiEditorLayer editorLayer;
+        editorLayer.create(sceneLayer.getSceneManager(), renderLayer.getRenderStats());
 		stack.pushOverlay(&editorLayer);
-
-		displayWindow.initialize(1600, 900, m_engine.getWindowName().c_str());
-
-		stack.initialize();
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
 			SetupOpenGL::clearScreen(scene->getBackground());

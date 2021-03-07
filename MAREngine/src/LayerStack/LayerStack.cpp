@@ -32,15 +32,6 @@ namespace marengine {
 
 	Layer* LayerStack::operator[](uint32_t index) { return m_layers[index]; }
 
-	void LayerStack::initialize() {
-		LAYER_TRACE("LAYER_STACK: going to call initialize() on layers");
-
-		for (auto& layer : m_layers)
-			layer->initialize();
-
-		LAYER_INFO("LAYER_STACK: initialized layers");
-	}
-
 	void LayerStack::update() {
 		LAYER_TRACE("LAYER_STACK: going to call update() on layers");
 

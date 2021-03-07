@@ -48,9 +48,11 @@ namespace marengine {
 		void update() override;
 		void close() override;
 
+		FSceneManagerEditor* getSceneManager();
+
 	private:
 
-		FSceneManagerEditor m_FSceneManagerEditor;
+		FSceneManagerEditor m_sceneManagerEditor;
 
 	};
 

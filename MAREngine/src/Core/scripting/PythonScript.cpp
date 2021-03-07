@@ -21,7 +21,6 @@
 
 
 #include "PythonScript.h"
-#include "MAREnginePy.cpp"
 #include "ScriptingLogs.h"
 #include "../../ProjectManager.h"
 #include "../ecs/Entity/Entity.h"

@@ -20,37 +20,25 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
-
-
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "ImGuiEditorWidgetsLocator.h"
 
 
 namespace marengine {
 
 
-	class FEditorManager {
-	public:
+	void FImGuiEditorWidgetsLocator::registerImGuiWidgets() {
+		m_imguiWidgetsRegistry = entt::registry();
+		m_imguiWidgetsContainer = m_imguiWidgetsRegistry.create();
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
-
-		void onCreate() const;
-
-		void update() const;
-		void destroy() const;
-
-	private:
-
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
-
-	};
+		emplace<FScriptImGuiEditorWidgetImpl>();
+		emplace<FViewportImGuiEditorWidgetImpl>();
+		emplace<FMainImGuiEditorWidgetImpl>();
+		emplace<FDebugImGuiEditorWidgetImpl>();
+		emplace<FMainMenuBarImGuiEditorWidgetImpl>();
+		emplace<FSceneHierarchyImGuiEditorWidgetImpl>();
+		emplace<FEnvironmentPropertiesImGuiEditorWidgetImpl>();
+		emplace<FInspectorImGuiEditorWidgetImpl>();
+	}
 
 
 }
-
-
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H

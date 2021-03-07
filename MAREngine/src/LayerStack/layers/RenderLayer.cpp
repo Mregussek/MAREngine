@@ -59,5 +59,9 @@ namespace marengine {
 		m_renderer.close();
 	}
 
+    const RenderStatistics* RenderLayer::getRenderStats() const {
+	    return &m_statistics;
+	}
+
 
 }

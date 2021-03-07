@@ -27,14 +27,14 @@
 namespace marengine {
 
 	
-	void FEditorManager::pushPanel(IWidgetPanel* panel) {
+	void FEditorManager::pushPanel(IEditorWidget* panel) {
 		EDITOR_TRACE("F_EDITOR_MANAGER: pushing panel {}", panel->getTag());
 
 		m_widgetPanels.emplace(m_widgetPanels.begin() + m_insertValue, panel);
 		m_insertValue++;
 	}
 
-	void FEditorManager::popPanel(IWidgetPanel* panel) {
+	void FEditorManager::popPanel(IEditorWidget* panel) {
 		EDITOR_TRACE("F_EDITOR_MANAGER: popping panel {}", panel->getTag());
 
 		auto it = std::find(m_widgetPanels.begin(), m_widgetPanels.begin() + m_insertValue, panel);
@@ -48,31 +48,30 @@ namespace marengine {
 		}
 	}
 
-	void FEditorManager::create() const {
-		EDITOR_TRACE("F_EDITOR_MANAGER: creating all panels...");
-		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IWidgetPanel* panel) {
-			panel->create();
-			panel->onCreation();
-		});
-	}
+    void FEditorManager::onCreate() const {
+        EDITOR_TRACE("F_EDITOR_MANAGER: destroying all panels...");
+        std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IEditorWidget* panel) {
+            panel->onCreation();
+        });
+    }
 
 	void FEditorManager::update() const {
 		EDITOR_TRACE("F_EDITOR_MANAGER: updating all panels...");
 
 		EDITOR_TRACE("F_EDITOR_MANAGER: calling beginFrame for all panels...");
-		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IWidgetPanel* panel) {
+		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IEditorWidget* panel) {
 			panel->beginFrame();
 			panel->onBeginFrame();
 		});
 
 		EDITOR_TRACE("F_EDITOR_MANAGER: calling updateFrame for all panels...");
-		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IWidgetPanel* panel) {
+		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IEditorWidget* panel) {
 			panel->updateFrame();
 			panel->onUpdateFrame();
 		});
 
 		EDITOR_TRACE("F_EDITOR_MANAGER: calling endFrame for all panels...");
-		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IWidgetPanel* panel) {
+		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IEditorWidget* panel) {
 			panel->endFrame();
 			panel->onEndFrame();
 		});
@@ -80,7 +79,7 @@ namespace marengine {
 
 	void FEditorManager::destroy() const {
 		EDITOR_TRACE("F_EDITOR_MANAGER: destroying all panels...");
-		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IWidgetPanel* panel) {
+		std::for_each(m_widgetPanels.begin(), m_widgetPanels.end(), [](IEditorWidget* panel) {
 			panel->destroy();
 			panel->onDestruction();
 		});

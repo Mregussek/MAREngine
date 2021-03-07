@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_WWIDGET_H
-#define MAR_ENGINE_WWIDGET_H
+#ifndef MAR_ENGINE_IWIDGET_H
+#define MAR_ENGINE_IWIDGET_H
 
 
 namespace marengine {
@@ -30,12 +30,6 @@ namespace marengine {
 	class IWidget {
 	public:
 
-		IWidget() = default;
-		IWidget(const char* tag);
-
-		const char* getTag() const;
-
-		virtual void create() { }
 		virtual void destroy() { }
 
 		virtual void beginFrame() { }
@@ -57,14 +51,10 @@ namespace marengine {
 		virtual void onDragDetected() const { }
 		virtual void onDrop() const { }
 
-	protected:
-
-		const char* p_tag{ "DefaultName" };
-
 	};
 
 
 }
 
 
-#endif // !MAR_ENGINE_WWIDGET_H
+#endif // !MAR_ENGINE_IWIDGET_H

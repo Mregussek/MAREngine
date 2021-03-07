@@ -35,27 +35,31 @@ namespace marengine {
 	void SceneLayer::passSceneToManager(Scene* scene) {
 		LAYER_TRACE("SCENE_LAYER: passing to Scene to FSceneManagerEditor in {}!", p_debugName);
 
-		m_FSceneManagerEditor.setScene(scene);
+        m_sceneManagerEditor.setScene(scene);
 	}
 
 	void SceneLayer::initialize() {
 		LAYER_TRACE("SCENE_LAYER: {} going to initialize...", p_debugName);
 
-		m_FSceneManagerEditor.Instance = &m_FSceneManagerEditor;
+        m_sceneManagerEditor.Instance = &m_sceneManagerEditor;
 
-		m_FSceneManagerEditor.initialize();
+        m_sceneManagerEditor.initialize();
 	}
 
 	void SceneLayer::update() {
 		LAYER_TRACE("SCENE_LAYER: {} going to update...", p_debugName);
 
-		m_FSceneManagerEditor.update();
+        m_sceneManagerEditor.update();
 	}
 
 	void SceneLayer::close() {
 		LAYER_TRACE("SCENE_LAYER: {} going to close...", p_debugName);
 
-		m_FSceneManagerEditor.close();
+        m_sceneManagerEditor.close();
+	}
+
+	FSceneManagerEditor* SceneLayer::getSceneManager() {
+		return &m_sceneManagerEditor;
 	}
 
 

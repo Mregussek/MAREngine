@@ -35,7 +35,7 @@
 
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"
-#include "../../src/LayerStack/layers/EditorLayer.h"
+#include "../../src/LayerStack/layers/ImGuiEditorLayer.h"
 #include "../../src/LayerStack/layers/SceneLayer.h"
 #include "../../src/LayerStack/layers/RenderLayer.h"
 

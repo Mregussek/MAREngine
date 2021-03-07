@@ -20,37 +20,37 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#define MARENGINE_FMAINIMGUIEDITORWIDGET_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "../../IMainEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
 
-	class FEditorManager {
-	public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+    class FMainImGuiEditorWidgetImpl : public IMainEditorWidget {
+    public:
 
-		void onCreate() const;
+        void create(FSceneManagerEditor* pSceneManagerEditor);
+        void destroy() override;
 
-		void update() const;
-		void destroy() const;
+        void beginFrame() override;
+        void endFrame() override;
 
-	private:
+    private:
 
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        bool m_dockspaceOpen{ true };
+        bool m_fullscreenPersistent{ true };
 
-	};
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+#endif //MARENGINE_FMAINIMGUIEDITORWIDGET_H

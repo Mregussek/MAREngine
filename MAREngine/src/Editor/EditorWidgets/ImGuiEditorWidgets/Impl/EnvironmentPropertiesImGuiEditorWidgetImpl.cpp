@@ -20,37 +20,26 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
-
-
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "EnvironmentPropertiesImGuiEditorWidgetImpl.h"
+#include "../../../../Core/ecs/SceneManagerEditor.h"
+#include "../../../../Core/ecs/Scene.h"
 
 
 namespace marengine {
 
 
-	class FEditorManager {
-	public:
+    void FEnvironmentPropertiesImGuiEditorWidgetImpl::create(FSceneManagerEditor* pSceneManagerEditor) {
+        m_pSceneManagerEditor = pSceneManagerEditor;
+    }
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+    void FEnvironmentPropertiesImGuiEditorWidgetImpl::updateFrame() {
+        ImGui::Begin("Environment Properties");
 
-		void onCreate() const;
+        maths::vec3& sceneBackground{ m_pSceneManagerEditor->getScene()->getBackground() };
+        ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
 
-		void update() const;
-		void destroy() const;
-
-	private:
-
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
-
-	};
+        ImGui::End();
+    }
 
 
 }
-
-
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H

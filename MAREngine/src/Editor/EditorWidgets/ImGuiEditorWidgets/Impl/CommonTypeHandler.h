@@ -20,37 +20,33 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_COMMONTYPEHANDLER_H
+#define MARENGINE_COMMONTYPEHANDLER_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include <string>
 
 
 namespace marengine {
 
 
-	class FEditorManager {
-	public:
+    class FCommonTypeHandler {
+    public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+        template<size_t TSize>
+        static bool drawStringInputPanel(std::string& strToInput);
 
-		void onCreate() const;
+        template<typename TVector>
+        static bool drawVectorInputPanel(const char* label, TVector& vectorToInput, float resetValue,
+                                         float columnWidth, float minValue, float maxValue);
 
-		void update() const;
-		void destroy() const;
-
-	private:
-
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
-
-	};
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+#include "CommonTypeHandler.inl"
+
+
+#endif //MARENGINE_COMMONTYPEHANDLER_H

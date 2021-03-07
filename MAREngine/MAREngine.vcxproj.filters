@@ -303,9 +303,6 @@
     <ClInclude Include="src\LayerStack\layers\SceneLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\LayerStack\layers\EditorLayer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -324,55 +321,10 @@
     <ClInclude Include="src\Core\filesystem\FilesystemLogging.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\EditorManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\IWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\GeneralWidgetPanel.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\IWidgetPanel.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\AllWidgetPanels.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgets.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\ThemeWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Viewport\ViewportWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Viewport\GuizmoWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\ScenePropertiesPanel\ScenePropertiesWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\AllWidgetEvents.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h">
@@ -388,12 +340,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\filesystem\SceneDeserializer.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\ecs\Entity\IEntityEvents.h">
@@ -415,9 +361,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\Mesh\MeshBatchStaticTexture2D.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\OtherPanels\WindowSettingsWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\Lightning\PointLightBatch.h">
@@ -459,12 +402,6 @@
     <ClInclude Include="src\Core\ecs\Entity\EventsCameraEntity.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\DebugPanels\SceneDebugWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\DebugPanels\StatisticsWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="3rd_party\MARMaths\src\vec4.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -489,10 +426,70 @@
     <ClInclude Include="src\ProjectManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\WidgetPanels\Filesystem\ScriptIDEFilesystemWidgets.h">
+    <ClInclude Include="src\Core\filesystem\FileManager.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\filesystem\FileManager.h">
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\CommonTypeHandler.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\DebugImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\EnvironmentPropertiesImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\GuizmoEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainMenuBarImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\SceneHierarchyImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ScriptImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ViewportImGuiEditorWidgetImpl.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorWidgetsLocator.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IDebugEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IEnvironmentPropertiesEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IInspectorEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IMainEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IMainMenuBarEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ISceneHierarchyEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IScriptEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\IViewportEditorWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LayerStack\layers\ImGuiEditorLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -623,9 +620,6 @@
     <ClCompile Include="src\LayerStack\layers\SceneLayer.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\LayerStack\layers\EditorLayer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -638,46 +632,7 @@
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\EditorManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\IWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\GeneralWidgetPanel.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\MenuBars\MainMenuBarWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\FilesystemWidgets.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\InfoWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\ThemeWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\Viewport\ViewportWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\Viewport\GuizmoWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\ScenePropertiesPanel\ScenePropertiesWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\EntityPanels\SceneHierarchyWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\ScriptEditor\ScriptIDEWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp">
@@ -687,12 +642,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\filesystem\SceneDeserializer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\SceneFilesystemWidgets.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\EntityFilesystemWidgets.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\ecs\Entity\EventsComponentEntity.cpp">
@@ -705,9 +654,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Mesh\MeshBatchStaticTexture2D.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\OtherPanels\WindowSettingsWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Lightning\PointLightBatch.cpp">
@@ -743,12 +689,6 @@
     <ClCompile Include="src\Core\ecs\Entity\EventsCameraEntity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\DebugPanels\SceneDebugWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\DebugPanels\StatisticsWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="3rd_party\imgui\imgui_tables.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -776,10 +716,43 @@
     <ClCompile Include="src\ProjectManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\WidgetPanels\Filesystem\ScriptIDEFilesystemWidgets.cpp">
+    <ClCompile Include="src\Core\filesystem\FileManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\filesystem\FileManager.cpp">
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\CommonTypeHandler.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\DebugImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\EnvironmentPropertiesImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\GuizmoEditorWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainMenuBarImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\SceneHierarchyImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ScriptImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ViewportImGuiEditorWidgetImpl.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LayerStack\layers\ImGuiEditorLayer.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorWidgetsLocator.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -808,10 +781,16 @@
     <None Include="src\Core\ecs\Entity\EventsComponentEntity.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
-    <None Include="src\Editor\WidgetPanels\EntityPanels\EntityWidgetPanel.inl">
+    <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\CommonTypeHandler.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
-    <None Include="src\Editor\WidgetPanels\EntityPanels\CommonComponentHandler.inl">
+    <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiEditorWidgetImpl.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorWidgetsLocator.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Core\ecs\Entity\Entity.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
   </ItemGroup>

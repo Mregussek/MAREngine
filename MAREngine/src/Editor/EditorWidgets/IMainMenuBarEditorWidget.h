@@ -20,37 +20,20 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_IMAINMENUBAREDITORWIDGET_H
+#define MARENGINE_IMAINMENUBAREDITORWIDGET_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "IEditorWidget.h"
 
 
 namespace marengine {
 
 
-	class FEditorManager {
-	public:
-
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
-
-		void onCreate() const;
-
-		void update() const;
-		void destroy() const;
-
-	private:
-
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
-
-	};
+    class IMainMenuBarEditorWidget : public IEditorWidget { };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+#endif //MARENGINE_IMAINMENUBAREDITORWIDGET_H

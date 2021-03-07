@@ -39,8 +39,6 @@ namespace marengine {
 
 		Layer* operator[](uint32_t index);
 
-		void initialize();
-
 		void close();
 
 		void update();

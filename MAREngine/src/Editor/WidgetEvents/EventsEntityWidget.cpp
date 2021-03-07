@@ -21,11 +21,7 @@
 
 
 #include "EventsEntityWidget.h"
-#include "../WidgetPanels/EntityPanels/EntityWidgetPanel.h"
 #include "../../Core/ecs/Entity/Entity.h"
-#include "../../Core/ecs/Entity/EntityOperation.h"
-#include "../../Core/ecs/SceneManagerEditor.h"
-#include "../../Core/ecs/Scene.h"
 
 
 namespace marengine {
@@ -35,19 +31,19 @@ namespace marengine {
 
 
 	void FEventsEntityWidget::onCreateEntity() const {
-		const Entity& createdEntity{ FSceneManagerEditor::Instance->getScene()->createEntity() };
-		onSelectedEntity(createdEntity);
+		//const Entity& createdEntity{ FSceneManagerEditor::Instance->getScene()->createEntity() };
+		//onSelectedEntity(createdEntity);
 	}
 
 	void FEventsEntityWidget::onDestroyEntity(const Entity& entity) const {
-		FSceneManagerEditor::Instance->getScene()->destroyEntity(entity);
-
-		WEntityWidgetPanel::Instance->reset();
-		FSceneManagerEditor::Instance->initialize();
+		//FSceneManagerEditor::Instance->getScene()->destroyEntity(entity);
+		//
+		//WEntityWidgetPanel::Instance->reset();
+		//FSceneManagerEditor::Instance->initialize();
 	}
 
 	void FEventsEntityWidget::onSelectedEntity(const Entity& entity) const {
-		WEntityWidgetPanel::Instance->setCurrentEntity(entity);
+		//WEntityWidgetPanel::Instance->setCurrentEntity(entity);
 	}
 
 	void FEventsEntityWidget::onUnselectedEntity(const Entity& entity) const {
@@ -55,12 +51,12 @@ namespace marengine {
 	}
 
 	void FEventsEntityWidget::onCopyEntity(const Entity& entity) const {
-		onCreateEntity();
-		
-		// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
-		const auto& createdEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
-		EntityOperation::copyEntity(entity, createdEntity);
-		FSceneManagerEditor::Instance->initialize();
+		//onCreateEntity();
+		//
+		//// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
+		//const auto& createdEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
+		//EntityOperation::copyEntity(entity, createdEntity);
+		//FSceneManagerEditor::Instance->initialize();
 	}
 
 	void FEventsEntityWidget::onSetVisibleEntity(const Entity& entity) const {
@@ -72,18 +68,18 @@ namespace marengine {
 	}
 
 	void FEventsEntityWidget::onAssignChild(const Entity& entity, const Entity& child) const {
-		entity.assignChild(child);
-		onSelectedEntity(child);
+		//entity.assignChild(child);
+		//onSelectedEntity(child);
 	}
 
 	void FEventsEntityWidget::onRemoveChild(const Entity& entity, const Entity& child) const {
-		entity.removeChild(child);
-		onUnselectedEntity(child);
+		//entity.removeChild(child);
+		//onUnselectedEntity(child);
 	}
 
 	void FEventsEntityWidget::onCreateChild(const Entity& entity) const {
-		const Entity& createdChild{ FSceneManagerEditor::Instance->getScene()->createEntity() };
-		onAssignChild(entity, createdChild);
+		//const Entity& createdChild{ FSceneManagerEditor::Instance->getScene()->createEntity() };
+		//onAssignChild(entity, createdChild);
 	}
 
 	void FEventsEntityWidget::onDestroyChild(const Entity& entity, const Entity& child) const {

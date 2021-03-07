@@ -20,37 +20,45 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_GUIZMOEDITORWIDGET_H
+#define MARENGINE_GUIZMOEDITORWIDGET_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
+    class Camera;
+    class Entity;
+    struct TransformComponent;
 
-	class FEditorManager {
-	public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+    class FGuizmoEditorWidget {
+    public:
 
-		void onCreate() const;
+        void selectType();
+        void draw(const Camera& editorCamera, const Entity& currentEntity) const;
 
-		void update() const;
-		void destroy() const;
+    private:
 
-	private:
+        bool draw(const Camera& editorCamera, TransformComponent& transform) const;
 
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
+        void setTranslation();
+        void setRotation();
+        void setScale();
+        void setNoGuizmo();
 
-	};
+        bool userDontWantToDrawGuizmo() const;
+
+
+        ImGuizmo::OPERATION m_operation{ -1 };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+
+#endif //MARENGINE_GUIZMOEDITORWIDGET_H

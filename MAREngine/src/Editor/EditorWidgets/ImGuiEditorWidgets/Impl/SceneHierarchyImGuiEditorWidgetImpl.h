@@ -20,37 +20,39 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_SCENEHIERARCHYIMGUIEDITORWIDGETIMPL_H
+#define MARENGINE_SCENEHIERARCHYIMGUIEDITORWIDGETIMPL_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "../../ISceneHierarchyEditorWidget.h"
+#include "../../../../Core/ecs/Entity/EntityDefinitions.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
 
-	class FEditorManager {
-	public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+    class FSceneHierarchyImGuiEditorWidgetImpl : public ISceneHierarchyEditorWidget {
+    public:
 
-		void onCreate() const;
+        void create(FSceneManagerEditor* pSceneManagerEditor);
+        void updateFrame() override;
 
-		void update() const;
-		void destroy() const;
+    private:
 
-	private:
+        void treesFor(const FEntityArray& entities) const;
+        void buttonsAtPanel() const;
+        void popUpMenu() const;
 
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
 
-	};
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+
+#endif //MARENGINE_SCENEHIERARCHYIMGUIEDITORWIDGETIMPL_H

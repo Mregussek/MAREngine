@@ -48,6 +48,8 @@ namespace marengine {
 		void update() override;
 		void close() override;
 
+		const RenderStatistics* getRenderStats() const;
+
 	private:
 
 		FRenderer m_renderer;

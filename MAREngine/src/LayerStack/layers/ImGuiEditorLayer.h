@@ -20,37 +20,41 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_IMGUIEDITORLAYER_H
+#define MARENGINE_IMGUIEDITORLAYER_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "../Layer.h"
+#include "../../Editor/EditorManager.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorWidgetsLocator.h"
 
 
 namespace marengine {
 
+    struct RenderStatistics;
+    class FSceneManagerEditor;
 
-	class FEditorManager {
-	public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+    class FImGuiEditorLayer : public Layer {
+    public:
 
-		void onCreate() const;
+        void create(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistic);
 
-		void update() const;
-		void destroy() const;
+        void update() override;
+        void close() override;
 
-	private:
+        void renderToViewport();
 
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
+    private:
 
-	};
+        FEditorManager m_editorManager;
+        FImGuiEditorWidgetsLocator m_serviceLocator;
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+#endif //MARENGINE_IMGUIEDITORLAYER_H

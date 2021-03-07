@@ -20,37 +20,39 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
+#ifndef MARENGINE_DEBUGIMGUIEDITORWIDGETIMPL_H
+#define MARENGINE_DEBUGIMGUIEDITORWIDGETIMPL_H
 
 
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#include "../../IDebugEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class Scene;
+    class Entity;
+    struct RenderStatistics;
 
-	class FEditorManager {
-	public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+    class FDebugImGuiEditorWidgetImpl : public IDebugEditorWidget {
+    public:
 
-		void onCreate() const;
+        void create(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics);
+        void updateFrame() override;
 
-		void update() const;
-		void destroy() const;
+    private:
 
-	private:
+        void displayInfoAbout(Scene* pScene) const;
+        void displayInfoAbout(const Entity& entity) const;
 
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        const RenderStatistics* m_pRenderStatistics{ nullptr };
 
-	};
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+#endif //MARENGINE_DEBUGIMGUIEDITORWIDGETIMPL_H
