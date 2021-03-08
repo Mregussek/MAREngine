@@ -20,26 +20,33 @@
 ************************************************************************/
 
 
-#include "EnvironmentPropertiesImGuiEditorWidgetImpl.h"
-#include "../../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../../Core/ecs/Scene.h"
+#ifndef MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
+#define MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
+
+
+#include "../../IEnvironmentPropertiesEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
 
-    void FEnvironmentPropertiesImGuiEditorWidgetImpl::create(FSceneManagerEditor* pSceneManagerEditor) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
-    }
 
-    void FEnvironmentPropertiesImGuiEditorWidgetImpl::updateFrame() {
-        ImGui::Begin("Environment Properties");
+    class FEnvironmentPropertiesImGuiWidget : public IEnvironmentPropertiesEditorWidget {
+    public:
 
-        maths::vec3& sceneBackground{ m_pSceneManagerEditor->getScene()->getBackground() };
-        ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
+        void create(FSceneManagerEditor* pSceneManagerEditor);
 
-        ImGui::End();
-    }
+        void updateFrame() override;
+
+    private:
+
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+
+    };
 
 
 }
+
+
+#endif //MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H

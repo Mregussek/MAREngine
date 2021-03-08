@@ -20,32 +20,33 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_FMAINIMGUIEDITORWIDGET_H
-#define MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#ifndef MARENGINE_MAINMENUBARIMGUIWIDGET_H
+#define MARENGINE_MAINMENUBARIMGUIWIDGET_H
 
 
-#include "../../IMainEditorWidget.h"
+#include "../../IMainMenuBarEditorWidget.h"
 
 
 namespace marengine {
 
-    class FSceneManagerEditor;
 
-
-    class FMainImGuiEditorWidgetImpl : public IMainEditorWidget {
+    class FMainMenuBarImGuiWidget : public IMainMenuBarEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor);
-        void destroy() override;
-
-        void beginFrame() override;
-        void endFrame() override;
+        void create();
+        void updateFrame() override;
 
     private:
 
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        bool m_dockspaceOpen{ true };
-        bool m_fullscreenPersistent{ true };
+        void displaySceneManagementTab();
+        void displayEntitiesManagementTab();
+        void displaySettingsTab();
+        void displayAboutTab();
+
+
+        bool m_infoAboutAuthorDisplay{ false };
+        bool m_infoAboutEngineDisplay{ false };
+        bool m_windowSettingsDisplay{ false };
 
     };
 
@@ -53,4 +54,5 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_FMAINIMGUIEDITORWIDGET_H
+
+#endif //MARENGINE_MAINMENUBARIMGUIWIDGET_H

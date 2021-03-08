@@ -24,7 +24,7 @@
 #define MARENGINE_INSPECTOREDITORWIDGET_INL
 
 
-#include "InspectorImGuiEditorWidgetImpl.h"
+#include "InspectorImGuiWidget.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Components/Components.h"
 
@@ -33,28 +33,28 @@ namespace marengine {
 
 
     template<typename TComponent>
-    void FInspectorImGuiEditorWidgetImpl::handle(const char* componentName) {
+    void FInspectorImGuiWidget::handle(const char* componentName) {
         if (m_inspectedEntity->hasComponent<TComponent>() && ImGui::CollapsingHeader(componentName)) {
             displayComponentPanel<TComponent>();
         }
     }
 
     template<typename TComponent>
-    void FInspectorImGuiEditorWidgetImpl::displayComponentPanel() {
+    void FInspectorImGuiWidget::displayComponentPanel() {
         ImGui::Text("This component is not yet supported!");
     }
 
 
     // Here add declarations for specific component event implementations ...
 
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<TagComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<TransformComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<PythonScriptComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<RenderableComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<CameraComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<ColorComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<Texture2DComponent>();
-    template<> void FInspectorImGuiEditorWidgetImpl::displayComponentPanel<PointLightComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<TagComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<TransformComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<PythonScriptComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<RenderableComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<CameraComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<ColorComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<Texture2DComponent>();
+    template<> void FInspectorImGuiWidget::displayComponentPanel<PointLightComponent>();
 
 
 }

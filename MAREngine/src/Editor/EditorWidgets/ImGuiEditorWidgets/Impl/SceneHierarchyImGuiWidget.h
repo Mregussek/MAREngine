@@ -20,34 +20,33 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_DEBUGIMGUIEDITORWIDGETIMPL_H
-#define MARENGINE_DEBUGIMGUIEDITORWIDGETIMPL_H
+#ifndef MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
+#define MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
 
 
-#include "../../IDebugEditorWidget.h"
+#include "../../ISceneHierarchyEditorWidget.h"
+#include "../../../../Core/ecs/Entity/EntityDefinitions.h"
 
 
 namespace marengine {
 
     class FSceneManagerEditor;
-    class Scene;
-    class Entity;
-    struct RenderStatistics;
 
 
-    class FDebugImGuiEditorWidgetImpl : public IDebugEditorWidget {
+    class FSceneHierarchyImGuiWidget : public ISceneHierarchyEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics);
+        void create(FSceneManagerEditor* pSceneManagerEditor);
         void updateFrame() override;
 
     private:
 
-        void displayInfoAbout(Scene* pScene) const;
-        void displayInfoAbout(const Entity& entity) const;
+        void treesFor(const FEntityArray& entities) const;
+        void buttonsAtPanel() const;
+        void popUpMenu() const;
+
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        const RenderStatistics* m_pRenderStatistics{ nullptr };
 
     };
 
@@ -55,4 +54,5 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_DEBUGIMGUIEDITORWIDGETIMPL_H
+
+#endif //MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H

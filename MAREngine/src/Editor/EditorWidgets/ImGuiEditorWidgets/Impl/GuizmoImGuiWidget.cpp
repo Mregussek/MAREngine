@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "GuizmoEditorWidget.h"
+#include "GuizmoImGuiWidget.h"
 #include "../../../Camera/Camera.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../../../Core/ecs/Components/DefaultComponents.h"
@@ -31,7 +31,7 @@
 namespace marengine {
 
 
-    void FGuizmoEditorWidget::selectType() {
+    void FGuizmoImGuiWidget::selectType() {
         if (Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
             if (Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
             if (Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
@@ -40,7 +40,7 @@ namespace marengine {
         }
     }
 
-    void FGuizmoEditorWidget::draw(const Camera& editorCamera, const Entity& currentEntity) const {
+    void FGuizmoImGuiWidget::draw(const Camera& editorCamera, const Entity& currentEntity) const {
         auto& transform = currentEntity.getComponent<TransformComponent>();
         if (userDontWantToDrawGuizmo()) {
             return;
@@ -52,7 +52,7 @@ namespace marengine {
         }
     }
 
-    bool FGuizmoEditorWidget::draw(const Camera& editorCamera, TransformComponent& transformComponent) const {
+    bool FGuizmoImGuiWidget::draw(const Camera& editorCamera, TransformComponent& transformComponent) const {
         using namespace maths;
 
         mat4 transform{ transformComponent.getTransform() };
@@ -85,23 +85,23 @@ namespace marengine {
         return false;
     }
 
-    void FGuizmoEditorWidget::setTranslation() {
+    void FGuizmoImGuiWidget::setTranslation() {
         m_operation = ImGuizmo::OPERATION::TRANSLATE;
     }
 
-    void FGuizmoEditorWidget::setRotation() {
+    void FGuizmoImGuiWidget::setRotation() {
         m_operation = ImGuizmo::OPERATION::ROTATE;
     }
 
-    void FGuizmoEditorWidget::setScale() {
+    void FGuizmoImGuiWidget::setScale() {
         m_operation = ImGuizmo::OPERATION::SCALE;
     }
 
-    void FGuizmoEditorWidget::setNoGuizmo() {
+    void FGuizmoImGuiWidget::setNoGuizmo() {
         m_operation = ImGuizmo::OPERATION::NONE;
     }
 
-    bool FGuizmoEditorWidget::userDontWantToDrawGuizmo() const {
+    bool FGuizmoImGuiWidget::userDontWantToDrawGuizmo() const {
         return m_operation == ImGuizmo::OPERATION::NONE;
     }
 

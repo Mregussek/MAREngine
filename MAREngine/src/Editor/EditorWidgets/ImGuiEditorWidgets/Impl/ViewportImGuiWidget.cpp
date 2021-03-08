@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "ViewportImGuiEditorWidgetImpl.h"
+#include "ViewportImGuiWidget.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Entity/EventsCameraEntity.h"
@@ -29,7 +29,7 @@
 namespace marengine {
 
 
-    void FViewportImGuiEditorWidgetImpl::create(FSceneManagerEditor* pSceneManager) {
+    void FViewportImGuiWidget::create(FSceneManagerEditor* pSceneManager) {
         m_pSceneManagerEditor = pSceneManager;
 
         constexpr float xDefault = 800.f;
@@ -44,15 +44,15 @@ namespace marengine {
         }
     }
 
-    void FViewportImGuiEditorWidgetImpl::destroy() {
+    void FViewportImGuiWidget::destroy() {
         m_framebuffer.close();
     }
 
-    void FViewportImGuiEditorWidgetImpl::beginFrame() {
+    void FViewportImGuiWidget::beginFrame() {
         m_framebuffer.unbind();
     }
 
-    void FViewportImGuiEditorWidgetImpl::updateFrame() {
+    void FViewportImGuiWidget::updateFrame() {
         displayViewportControlPanel();
 
         auto& style{ ImGui::GetStyle() };
@@ -69,7 +69,7 @@ namespace marengine {
         style.WindowPadding = rememberDefaultVal;
     }
 
-    void FViewportImGuiEditorWidgetImpl::displayViewportControlPanel() {
+    void FViewportImGuiWidget::displayViewportControlPanel() {
         auto displayEditorModeButtons = [this]() {
             if (ImGui::Button("PLAY")) { m_pSceneManagerEditor->setPlayMode(); }
             ImGui::SameLine();
@@ -122,7 +122,7 @@ namespace marengine {
         ImGui::End();
     }
 
-    void FViewportImGuiEditorWidgetImpl::displayActualViewport() {
+    void FViewportImGuiWidget::displayActualViewport() {
         const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
         const auto size = m_framebuffer.getSize();
 
@@ -135,37 +135,34 @@ namespace marengine {
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
     }
 
-    void FViewportImGuiEditorWidgetImpl::handleGuizmo() {
+    void FViewportImGuiWidget::handleGuizmo() {
         if (m_pSceneManagerEditor->usingEditorCamera()) {
             // TODO: bring back imguizmo
             //const auto& currentEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
             //const bool entityExists = &currentEntity != nullptr;
             //m_guizmo.selectType();
 
-            //if (FSceneManagerEditor::Instance->isEditorMode()) {
+            if (FSceneManagerEditor::Instance->isEditorMode()) {
             //    if (entityExists) { m_guizmo.draw(m_camera, currentEntity); }
 
-            //    bool useInputInCamera = false;
-            //    if (ImGui::IsWindowFocused()) { useInputInCamera = true; }
-
-            //    const bool cameraWasRecalculated{ m_camera.update(m_aspectRatio, useInputInCamera) };
-            //    if (cameraWasRecalculated) {
-            //        FEventsCameraEntity::onMainCameraUpdate(m_camera.getCameraData());
-            //    }
-            //}
+                const bool cameraWasRecalculated{ m_camera.update(m_aspectRatio, ImGui::IsWindowFocused()) };
+                if (cameraWasRecalculated) {
+                    FEventsCameraEntity::onMainCameraUpdate(m_camera.getCameraData());
+                }
+            }
         }
     }
 
-    void FViewportImGuiEditorWidgetImpl::bind(maths::vec3 backgroundColor) const {
+    void FViewportImGuiWidget::bind(maths::vec3 backgroundColor) const {
         m_framebuffer.bind();
         m_framebuffer.clear(backgroundColor);
     }
 
-    void FViewportImGuiEditorWidgetImpl::unbind() const {
+    void FViewportImGuiWidget::unbind() const {
         m_framebuffer.unbind();
     }
 
-    void FViewportImGuiEditorWidgetImpl::updateAspectRatio() {
+    void FViewportImGuiWidget::updateAspectRatio() {
         const auto size = m_framebuffer.getSize();
         m_aspectRatio = size.x / size.y;
     }

@@ -34,7 +34,7 @@ namespace marengine {
     class FSceneManagerEditor;
 
 
-    class FInspectorImGuiEditorWidgetImpl : public IInspectorEditorWidget {
+    class FInspectorImGuiWidget : public IInspectorEditorWidget {
     public:
 
         void create(FSceneManagerEditor* pSceneManagerEditor);
@@ -76,7 +76,7 @@ namespace marengine {
 }
 
 
-#include "InspectorImGuiEditorWidgetImpl.inl"
+#include "InspectorImGuiWidget.inl"
 
 
 #endif //MARENGINE_INSPECTOREDITORWIDGET_H

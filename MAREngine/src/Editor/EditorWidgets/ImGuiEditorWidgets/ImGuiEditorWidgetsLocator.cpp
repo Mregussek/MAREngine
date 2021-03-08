@@ -30,14 +30,14 @@ namespace marengine {
 		m_imguiWidgetsRegistry = entt::registry();
 		m_imguiWidgetsContainer = m_imguiWidgetsRegistry.create();
 
-		emplace<FScriptImGuiEditorWidgetImpl>();
-		emplace<FViewportImGuiEditorWidgetImpl>();
-		emplace<FMainImGuiEditorWidgetImpl>();
-		emplace<FDebugImGuiEditorWidgetImpl>();
-		emplace<FMainMenuBarImGuiEditorWidgetImpl>();
-		emplace<FSceneHierarchyImGuiEditorWidgetImpl>();
-		emplace<FEnvironmentPropertiesImGuiEditorWidgetImpl>();
-		emplace<FInspectorImGuiEditorWidgetImpl>();
+		emplace<FScriptImGuiWidget>();
+		emplace<FViewportImGuiWidget>();
+		emplace<FMainImGuiWidget>();
+		emplace<FDebugImGuiWidget>();
+		emplace<FMainMenuBarImGuiWidget>();
+		emplace<FSceneHierarchyImGuiWidget>();
+		emplace<FEnvironmentPropertiesImGuiWidget>();
+		emplace<FInspectorImGuiWidget>();
 	}
 
 

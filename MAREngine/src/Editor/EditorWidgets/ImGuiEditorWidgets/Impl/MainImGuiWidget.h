@@ -20,47 +20,32 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_SCRIPTIMGUIEDITORWIDGETIMPL_H
-#define MARENGINE_SCRIPTIMGUIEDITORWIDGETIMPL_H
+#ifndef MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#define MARENGINE_FMAINIMGUIEDITORWIDGET_H
 
 
-#include "../../IScriptEditorWidget.h"
-#include "../../../../mar.h"
+#include "../../IMainEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
 
-    class FScriptImGuiEditorWidgetImpl : public IScriptEditorWidget {
+
+    class FMainImGuiWidget : public IMainEditorWidget {
     public:
 
-        void create();
-        void reset();
+        void create(FSceneManagerEditor* pSceneManagerEditor);
+        void destroy() override;
 
-        void updateFrame() override;
-
-        void setEditorTitle(std::string newTitle);
-        void setEditorCode(std::string sourceCode);
-        void setPathToScript(std::string pathToScript);
-
-        std::string getEditorSourceCode() const;
-        std::string getDefaultEditorSourceCode() const;
-        std::string getDefaultEditorTitle() const;
-
-        bool isEditorCurrentlyUsed() const;
+        void beginFrame() override;
+        void endFrame() override;
 
     private:
 
-        void displayMainMenuBar();
-        void editorRender();
-        void definePythonLanguage();
-
-
-        TextEditor::LanguageDefinition m_languageDefinition;
-        TextEditor editor;
-
-        std::string m_title;
-        std::string m_pathToScript;
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        bool m_dockspaceOpen{ true };
+        bool m_fullscreenPersistent{ true };
 
     };
 
@@ -68,6 +53,4 @@ namespace marengine {
 }
 
 
-
-
-#endif //MARENGINE_SCRIPTIMGUIEDITORWIDGETIMPL_H
+#endif //MARENGINE_FMAINIMGUIEDITORWIDGET_H

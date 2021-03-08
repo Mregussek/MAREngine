@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_GUIZMOEDITORWIDGET_H
-#define MARENGINE_GUIZMOEDITORWIDGET_H
+#ifndef MARENGINE_GUIZMOIMGUIWIDGET_H
+#define MARENGINE_GUIZMOIMGUIWIDGET_H
 
 
 #include "../../../../mar.h"
@@ -34,7 +34,7 @@ namespace marengine {
     struct TransformComponent;
 
 
-    class FGuizmoEditorWidget {
+    class FGuizmoImGuiWidget {
     public:
 
         void selectType();
@@ -61,4 +61,4 @@ namespace marengine {
 
 
 
-#endif //MARENGINE_GUIZMOEDITORWIDGET_H
+#endif //MARENGINE_GUIZMOIMGUIWIDGET_H

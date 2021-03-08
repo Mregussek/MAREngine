@@ -23,14 +23,14 @@
 #include "ImGuiEditorLayer.h"
 
 // Implementations...
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/DebugImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/EnvironmentPropertiesImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/InspectorImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/MainImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/MainMenuBarImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/SceneHierarchyImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/ScriptImGuiEditorWidgetImpl.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/ViewportImGuiEditorWidgetImpl.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/DebugImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/EnvironmentPropertiesImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/InspectorImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/MainImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/MainMenuBarImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/SceneHierarchyImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/ScriptImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/ViewportImGuiWidget.h"
 
 #include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorWidgetsLocator.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
@@ -45,34 +45,34 @@ namespace marengine {
 
         m_serviceLocator.registerImGuiWidgets();
 
-        auto* script = m_serviceLocator.retrieve<FScriptImGuiEditorWidgetImpl>();
+        auto* script = m_serviceLocator.retrieve<FScriptImGuiWidget>();
         m_editorManager.pushPanel((IEditorWidget*)script);
 
-        auto* viewport = m_serviceLocator.retrieve<FViewportImGuiEditorWidgetImpl>();
+        auto* viewport = m_serviceLocator.retrieve<FViewportImGuiWidget>();
         viewport->create(m_pSceneManagerEditor);
         m_editorManager.pushPanel((IEditorWidget*)viewport);
 
-        auto* mainWidget = m_serviceLocator.retrieve<FMainImGuiEditorWidgetImpl>();
+        auto* mainWidget = m_serviceLocator.retrieve<FMainImGuiWidget>();
         mainWidget->create(m_pSceneManagerEditor);
         m_editorManager.pushPanel((IEditorWidget*)mainWidget);
 
-        auto* debug = m_serviceLocator.retrieve<FDebugImGuiEditorWidgetImpl>();
+        auto* debug = m_serviceLocator.retrieve<FDebugImGuiWidget>();
         debug->create(m_pSceneManagerEditor, pRenderStatistics);
         m_editorManager.pushPanel((IEditorWidget*)debug);
 
-        auto* mainMenuBar = m_serviceLocator.retrieve<FMainMenuBarImGuiEditorWidgetImpl>();
+        auto* mainMenuBar = m_serviceLocator.retrieve<FMainMenuBarImGuiWidget>();
         mainMenuBar->create();
         m_editorManager.pushPanel((IEditorWidget*)mainMenuBar);
 
-        auto* sceneHierarchy = m_serviceLocator.retrieve<FSceneHierarchyImGuiEditorWidgetImpl>();
+        auto* sceneHierarchy = m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>();
         sceneHierarchy->create(m_pSceneManagerEditor);
         m_editorManager.pushPanel((IEditorWidget*)sceneHierarchy);
 
-        auto* envProperties = m_serviceLocator.retrieve<FEnvironmentPropertiesImGuiEditorWidgetImpl>();
+        auto* envProperties = m_serviceLocator.retrieve<FEnvironmentPropertiesImGuiWidget>();
         envProperties->create(m_pSceneManagerEditor);
         m_editorManager.pushPanel((IEditorWidget*)envProperties);
 
-        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiEditorWidgetImpl>();
+        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiWidget>();
         inspector->create(m_pSceneManagerEditor);
         m_editorManager.pushPanel((IEditorWidget*)inspector);
 
@@ -88,7 +88,7 @@ namespace marengine {
     }
 
     void FImGuiEditorLayer::renderToViewport() {
-        m_serviceLocator.retrieve<FViewportImGuiEditorWidgetImpl>()->bind(m_pSceneManagerEditor->getScene()->getBackground());
+        m_serviceLocator.retrieve<FViewportImGuiWidget>()->bind(m_pSceneManagerEditor->getScene()->getBackground());
     }
 
 

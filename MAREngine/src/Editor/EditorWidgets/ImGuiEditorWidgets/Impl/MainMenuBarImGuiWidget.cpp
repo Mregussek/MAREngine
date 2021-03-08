@@ -22,7 +22,7 @@
 
 #include "../../../../mar.h"
 #include "../../../../Window/Window.h"
-#include "MainMenuBarImGuiEditorWidgetImpl.h"
+#include "MainMenuBarImGuiWidget.h"
 
 
 namespace marengine {
@@ -33,11 +33,11 @@ namespace marengine {
     static bool displayEngineInstructions();
     static bool displayWindowSettings();
 
-    void FMainMenuBarImGuiEditorWidgetImpl::create() {
+    void FMainMenuBarImGuiWidget::create() {
         setDefaultMAREngineDarkTheme();
     }
 
-    void FMainMenuBarImGuiEditorWidgetImpl::updateFrame() {
+    void FMainMenuBarImGuiWidget::updateFrame() {
         if (ImGui::BeginMainMenuBar()) {
 
             displaySceneManagementTab();
@@ -59,7 +59,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiEditorWidgetImpl::displaySceneManagementTab() {
+    void FMainMenuBarImGuiWidget::displaySceneManagementTab() {
         // TODO: add scene filesystem management options to main menu bar
         if (ImGui::BeginMenu("Scene")) {
             if (ImGui::MenuItem("New Scene")) { }
@@ -73,7 +73,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiEditorWidgetImpl::displayEntitiesManagementTab() {
+    void FMainMenuBarImGuiWidget::displayEntitiesManagementTab() {
         // TODO: add entities management options to main menu bar
         if (ImGui::BeginMenu("Entities")) {
             if (ImGui::MenuItem("Load external .obj file")) { }
@@ -83,7 +83,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiEditorWidgetImpl::displaySettingsTab() {
+    void FMainMenuBarImGuiWidget::displaySettingsTab() {
         // TODO: add settings menu options
         if (ImGui::BeginMenu("Settings")) {
             if (ImGui::MenuItem("Window Settings")) { m_windowSettingsDisplay = true; }
@@ -92,7 +92,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiEditorWidgetImpl::displayAboutTab() {
+    void FMainMenuBarImGuiWidget::displayAboutTab() {
         if (ImGui::BeginMenu("About")) {
             if (ImGui::MenuItem("About Engine")) { m_infoAboutAuthorDisplay = true; }
             if (ImGui::MenuItem("Instruction")) { m_infoAboutEngineDisplay = true; }

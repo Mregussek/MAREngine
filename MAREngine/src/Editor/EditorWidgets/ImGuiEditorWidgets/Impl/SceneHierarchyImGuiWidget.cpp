@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "SceneHierarchyImGuiEditorWidgetImpl.h"
+#include "SceneHierarchyImGuiWidget.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
@@ -30,11 +30,11 @@
 namespace marengine {
 
 
-    void FSceneHierarchyImGuiEditorWidgetImpl::create(FSceneManagerEditor *pSceneManagerEditor) {
+    void FSceneHierarchyImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor) {
         m_pSceneManagerEditor = pSceneManagerEditor;
     }
 
-    void FSceneHierarchyImGuiEditorWidgetImpl::updateFrame() {
+    void FSceneHierarchyImGuiWidget::updateFrame() {
         ImGui::Begin("Scene Hierarchy");
 
         buttonsAtPanel();
@@ -50,7 +50,7 @@ namespace marengine {
         ImGui::End();
     }
 
-    void FSceneHierarchyImGuiEditorWidgetImpl::treesFor(const FEntityArray& entities) const {
+    void FSceneHierarchyImGuiWidget::treesFor(const FEntityArray& entities) const {
         auto displayTreeOrMenuItemRecursively = [this](const Entity& entity) {
             constexpr ImGuiTreeNodeFlags treeNodeFlags{
                     ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth
@@ -81,7 +81,7 @@ namespace marengine {
         std::for_each(entities.cbegin(), entities.cend(), displayTreeOrMenuItemRecursively);
     }
 
-    void FSceneHierarchyImGuiEditorWidgetImpl::buttonsAtPanel() const {
+    void FSceneHierarchyImGuiWidget::buttonsAtPanel() const {
         if (ImGui::Button("+ E")) {
             // TODO: add create entity option on scene hierarchy panel
             //FEventsEntityWidget::Instance->onCreateEntity();
@@ -108,7 +108,7 @@ namespace marengine {
         //}
     }
 
-    void FSceneHierarchyImGuiEditorWidgetImpl::popUpMenu() const {
+    void FSceneHierarchyImGuiWidget::popUpMenu() const {
         if (m_pSceneManagerEditor->isEditorMode() && ImGui::IsWindowFocused()) {
             if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
                 ImGui::OpenPopup("SceneHierarchyPopUp");

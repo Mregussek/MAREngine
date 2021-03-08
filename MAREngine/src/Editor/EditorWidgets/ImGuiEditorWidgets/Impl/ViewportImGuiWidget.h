@@ -20,13 +20,13 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_VIEWPORTIMGUIEDITORWIDGETIMPL_H
-#define MARENGINE_VIEWPORTIMGUIEDITORWIDGETIMPL_H
+#ifndef MARENGINE_VIEWPORTIMGUIWIDGET_H
+#define MARENGINE_VIEWPORTIMGUIWIDGET_H
 
 
 #include "../../IViewportEditorWidget.h"
 #include "../../../Camera/Camera.h"
-#include "GuizmoEditorWidget.h"
+#include "GuizmoImGuiWidget.h"
 #include "../../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
@@ -35,7 +35,7 @@ namespace marengine {
     class FSceneManagerEditor;
 
 
-    class FViewportImGuiEditorWidgetImpl : public IViewportEditorWidget {
+    class FViewportImGuiWidget : public IViewportEditorWidget {
     public:
 
         void create(FSceneManagerEditor* pSceneManagerEditor);
@@ -60,7 +60,7 @@ namespace marengine {
         FramebufferOpenGL m_framebuffer;
         Camera m_camera;
         float m_aspectRatio{ 1.33f };
-        FGuizmoEditorWidget m_guizmo;
+        FGuizmoImGuiWidget m_guizmo;
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
 
     };
@@ -70,4 +70,4 @@ namespace marengine {
 
 
 
-#endif //MARENGINE_VIEWPORTIMGUIEDITORWIDGETIMPL_H
+#endif //MARENGINE_VIEWPORTIMGUIWIDGET_H

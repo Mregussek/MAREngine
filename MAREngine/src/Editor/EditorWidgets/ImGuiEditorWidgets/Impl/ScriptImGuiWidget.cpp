@@ -20,25 +20,25 @@
 ************************************************************************/
 
 
-#include "ScriptImGuiEditorWidgetImpl.h"
+#include "ScriptImGuiWidget.h"
 
 
 namespace marengine {
 
 
-    void FScriptImGuiEditorWidgetImpl::create() {
+    void FScriptImGuiWidget::create() {
         definePythonLanguage();
         editor.SetLanguageDefinition(m_languageDefinition);
 
         reset();
     }
 
-    void FScriptImGuiEditorWidgetImpl::reset() {
+    void FScriptImGuiWidget::reset() {
         editor.SetText("");
         setEditorTitle("");
     }
 
-    void FScriptImGuiEditorWidgetImpl::updateFrame() {
+    void FScriptImGuiWidget::updateFrame() {
         ImGui::Begin("Script Editor", nullptr, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_MenuBar);
 
         displayMainMenuBar();
@@ -47,7 +47,7 @@ namespace marengine {
         ImGui::End();
     }
 
-    void FScriptImGuiEditorWidgetImpl::editorRender() {
+    void FScriptImGuiWidget::editorRender() {
         const auto cursorPosition{ editor.GetCursorPosition() };
 
         ImGui::Text("%6d/%-6d %6d lines  | %s | %s | %s | %s",
@@ -63,7 +63,7 @@ namespace marengine {
         editor.Render(m_title.c_str());
     }
 
-    void FScriptImGuiEditorWidgetImpl::displayMainMenuBar() {
+    void FScriptImGuiWidget::displayMainMenuBar() {
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("New", "Ctrl-N")) {
@@ -123,23 +123,23 @@ namespace marengine {
         }
     }
 
-    void FScriptImGuiEditorWidgetImpl::setEditorTitle(std::string newTitle) {
+    void FScriptImGuiWidget::setEditorTitle(std::string newTitle) {
         m_title = std::move(newTitle);
     }
 
-    void FScriptImGuiEditorWidgetImpl::setEditorCode(std::string sourceCode) {
+    void FScriptImGuiWidget::setEditorCode(std::string sourceCode) {
         editor.SetText(std::move(sourceCode));
     }
 
-    void FScriptImGuiEditorWidgetImpl::setPathToScript(std::string pathToScript) {
+    void FScriptImGuiWidget::setPathToScript(std::string pathToScript) {
         m_pathToScript = std::move(pathToScript);
     }
 
-    std::string FScriptImGuiEditorWidgetImpl::getEditorSourceCode() const {
+    std::string FScriptImGuiWidget::getEditorSourceCode() const {
         return editor.GetText();
     }
 
-    std::string FScriptImGuiEditorWidgetImpl::getDefaultEditorSourceCode() const {
+    std::string FScriptImGuiWidget::getDefaultEditorSourceCode() const {
         static const std::string defaultScript =
                 "import MAREnginePy as mar\n"
                 "\n"
@@ -156,16 +156,16 @@ namespace marengine {
         return defaultScript;
     }
 
-    std::string FScriptImGuiEditorWidgetImpl::getDefaultEditorTitle() const {
+    std::string FScriptImGuiWidget::getDefaultEditorTitle() const {
         static const std::string defaultTitle{ "EmptyModule" };
         return defaultTitle;
     }
 
-    bool FScriptImGuiEditorWidgetImpl::isEditorCurrentlyUsed() const {
+    bool FScriptImGuiWidget::isEditorCurrentlyUsed() const {
         return (m_title == "") && (editor.GetText() == "");
     };
 
-    void FScriptImGuiEditorWidgetImpl::definePythonLanguage() {
+    void FScriptImGuiWidget::definePythonLanguage() {
         const char* const keywords[] = {
                 "False", "None", "True", "and", "as", "assert", "async", "await", "break",
                 "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "or", "global", "if", "import",

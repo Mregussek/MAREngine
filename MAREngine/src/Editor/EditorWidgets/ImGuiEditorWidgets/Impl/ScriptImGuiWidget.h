@@ -20,33 +20,47 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_MAINMENUBARIMGUIEDITORWIDGETIMPL_H
-#define MARENGINE_MAINMENUBARIMGUIEDITORWIDGETIMPL_H
+#ifndef MARENGINE_SCRIPTIMGUIWIDGET_H
+#define MARENGINE_SCRIPTIMGUIWIDGET_H
 
 
-#include "../../IMainMenuBarEditorWidget.h"
+#include "../../IScriptEditorWidget.h"
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
 
-    class FMainMenuBarImGuiEditorWidgetImpl : public IMainMenuBarEditorWidget {
+    class FScriptImGuiWidget : public IScriptEditorWidget {
     public:
 
         void create();
+        void reset();
+
         void updateFrame() override;
+
+        void setEditorTitle(std::string newTitle);
+        void setEditorCode(std::string sourceCode);
+        void setPathToScript(std::string pathToScript);
+
+        std::string getEditorSourceCode() const;
+        std::string getDefaultEditorSourceCode() const;
+        std::string getDefaultEditorTitle() const;
+
+        bool isEditorCurrentlyUsed() const;
 
     private:
 
-        void displaySceneManagementTab();
-        void displayEntitiesManagementTab();
-        void displaySettingsTab();
-        void displayAboutTab();
+        void displayMainMenuBar();
+        void editorRender();
+        void definePythonLanguage();
 
 
-        bool m_infoAboutAuthorDisplay{ false };
-        bool m_infoAboutEngineDisplay{ false };
-        bool m_windowSettingsDisplay{ false };
+        TextEditor::LanguageDefinition m_languageDefinition;
+        TextEditor editor;
+
+        std::string m_title;
+        std::string m_pathToScript;
 
     };
 
@@ -55,4 +69,5 @@ namespace marengine {
 
 
 
-#endif //MARENGINE_MAINMENUBARIMGUIEDITORWIDGETIMPL_H
+
+#endif //MARENGINE_SCRIPTIMGUIWIDGET_H

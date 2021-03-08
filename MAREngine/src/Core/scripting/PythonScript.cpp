@@ -25,6 +25,7 @@
 #include "../../ProjectManager.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Components/Components.h"
+#include "MAREnginePy.cpp"
 
 
 namespace marengine {

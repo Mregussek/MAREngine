@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "MainImGuiEditorWidgetImpl.h"
+#include "MainImGuiWidget.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../mar.h"
 #include "../../../../Window/Window.h"
@@ -29,7 +29,7 @@
 namespace marengine {
 
 
-    void FMainImGuiEditorWidgetImpl::create(FSceneManagerEditor *pSceneManagerEditor) {
+    void FMainImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor) {
         m_pSceneManagerEditor = pSceneManagerEditor;
 
         ImGui::CreateContext();
@@ -44,13 +44,13 @@ namespace marengine {
         m_pSceneManagerEditor->useEditorCamera();
     }
 
-    void FMainImGuiEditorWidgetImpl::destroy() {
+    void FMainImGuiWidget::destroy() {
         ImGui_ImplOpenGL3_Shutdown();
         Window::imguiTerminate();
         ImGui::DestroyContext();
     }
 
-    void FMainImGuiEditorWidgetImpl::beginFrame() {
+    void FMainImGuiWidget::beginFrame() {
         ImGui_ImplOpenGL3_NewFrame();
         Window::imguiNewFrame();
         ImGui::NewFrame();
@@ -91,7 +91,7 @@ namespace marengine {
         //ImGui::ShowDemoWindow();
     }
 
-    void FMainImGuiEditorWidgetImpl::endFrame() {
+    void FMainImGuiWidget::endFrame() {
         ImGui::End();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
