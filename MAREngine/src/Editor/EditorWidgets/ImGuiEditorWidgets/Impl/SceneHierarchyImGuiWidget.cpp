@@ -21,6 +21,8 @@
 
 
 #include "SceneHierarchyImGuiWidget.h"
+#include "InspectorImGuiWidget.h"
+#include "../Events/EventsEntityImGuiWidget.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
@@ -30,8 +32,9 @@
 namespace marengine {
 
 
-    void FSceneHierarchyImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor) {
+    void FSceneHierarchyImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget) {
         m_pSceneManagerEditor = pSceneManagerEditor;
+        m_pInspectorWidget = pInspectorWidget;
     }
 
     void FSceneHierarchyImGuiWidget::updateFrame() {
@@ -60,8 +63,8 @@ namespace marengine {
             if (entity.hasChilds()) { // if entity has children we want tree nodes
                 const bool isTreeOpen{ ImGui::TreeNodeEx(entityTag, treeNodeFlags) };
                 if (ImGui::IsItemClicked()) {
-                    // TODO: add selected entity option on scene hierarchy panel
-                    //FEventsEntityWidget::Instance->onSelectedEntity(entity);
+                    FEventsEntityImGuiWidgets::onSelectedEntity(entity);
+
                 }
                 if (isTreeOpen) {
                     const FEntityArray& children{ entity.getChilds() };
@@ -72,8 +75,7 @@ namespace marengine {
             }
             else { // if not normal menu item
                 if (ImGui::MenuItem(entityTag)) {
-                    // TODO: add selected entity option on scene hierarchy panel
-                    //FEventsEntityWidget::Instance->onSelectedEntity(entity);
+                    FEventsEntityImGuiWidgets::onSelectedEntity(entity);
                 }
             }
         };
@@ -83,29 +85,24 @@ namespace marengine {
 
     void FSceneHierarchyImGuiWidget::buttonsAtPanel() const {
         if (ImGui::Button("+ E")) {
-            // TODO: add create entity option on scene hierarchy panel
-            //FEventsEntityWidget::Instance->onCreateEntity();
+            FEventsEntityImGuiWidgets::onCreateEntity();
         }
 
         ImGui::SameLine();
 
-        // TODO: Add reference to entity inspector panel for currently inspecting entity
-        //const auto& entity = WEntityWidgetPanel::Instance->getCurrentEntity();
-        //const bool entityExists = &entity != nullptr;
+        if(m_pInspectorWidget->isInspectedEntityValid()) {
+            ImGui::SameLine();
 
-        //if (entityExists) {
-        //    ImGui::SameLine();
+            if(ImGui::Button("Copy - E")) {
+                FEventsEntityImGuiWidgets::onCopyEntity(m_pInspectorWidget->getInspectedEntity());
+            }
 
-        //    if (ImGui::Button("Copy - E")) {
-        //        FEventsEntityWidget::Instance->onCopyEntity(entity);
-        //    }
+            ImGui::SameLine();
 
-        //    ImGui::SameLine();
-
-        //    if (ImGui::Button("- E")) {
-        //        FEventsEntityWidget::Instance->onDestroyEntity(entity);
-        //    }
-        //}
+            if(ImGui::Button("- E")) {
+                FEventsEntityImGuiWidgets::onDestroyEntity(m_pInspectorWidget->getInspectedEntity());
+            }
+        }
     }
 
     void FSceneHierarchyImGuiWidget::popUpMenu() const {
@@ -117,21 +114,15 @@ namespace marengine {
 
         if (ImGui::BeginPopup("SceneHierarchyPopUp")) {
             if (ImGui::MenuItem("Add Entity to scene")) {
-                // TODO: add back entity create event
-                //FEventsEntityWidget::Instance->onCreateEntity();
+                FEventsEntityImGuiWidgets::onCreateEntity();
             }
-
-            // TODO: add back delete entity from scene event
-            //const Entity& entity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
-            //const bool entityExists = &entity != nullptr;
-
-            //if (entityExists) {
-            //    const char* entityTag{ entity.getComponent<TagComponent>().tag.c_str() };
-            //    if (ImGui::MenuItem("Delete Selected Entity from Scene", entityTag)) {
-            //        FEventsEntityWidget::Instance->onDestroyEntity(entity);
-            //    }
-
-            //}
+            if(m_pInspectorWidget->isInspectedEntityValid()) {
+                const Entity& entity{ m_pInspectorWidget->getInspectedEntity() };
+                const char* tag{ entity.getComponent<TagComponent>().tag.c_str() };
+                if(ImGui::MenuItem("Delete Selected Entity from Scene", tag)) {
+                    FEventsEntityImGuiWidgets::onDestroyEntity(entity);
+                }
+            }
 
             ImGui::EndPopup();
         }

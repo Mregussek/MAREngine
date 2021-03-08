@@ -22,6 +22,7 @@
 
 #include "InspectorImGuiWidget.h"
 #include "CommonTypeHandler.h"
+#include "../Events/EventsEntityImGuiWidget.h"
 #include "../../../../Window/Window.h" // isMousePressed()
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
@@ -134,8 +135,7 @@ namespace marengine {
 
     void FInspectorImGuiWidget::displayChildrenPopMenu() const {
         if (ImGui::MenuItem("Create and assign child")) {
-            // TODO: add onCreateChild event
-            //FEventsEntityWidget::Instance->onCreateChild(getInspectedEntity());
+            FEventsEntityImGuiWidgets::onCreateChild(getInspectedEntity());
         }
 
         if (ImGui::MenuItem("Assign new child")) {

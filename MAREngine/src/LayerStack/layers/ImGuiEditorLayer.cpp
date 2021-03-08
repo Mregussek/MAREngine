@@ -21,18 +21,7 @@
 
 
 #include "ImGuiEditorLayer.h"
-
-// Implementations...
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/DebugImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/EnvironmentPropertiesImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/InspectorImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/MainImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/MainMenuBarImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/SceneHierarchyImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/ScriptImGuiWidget.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Impl/ViewportImGuiWidget.h"
-
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorWidgetsLocator.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Events/EventsEntityImGuiWidget.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Core/ecs/Scene.h"
 
@@ -64,17 +53,19 @@ namespace marengine {
         mainMenuBar->create();
         m_editorManager.pushPanel((IEditorWidget*)mainMenuBar);
 
+        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiWidget>();
+        inspector->create(m_pSceneManagerEditor);
+        m_editorManager.pushPanel((IEditorWidget*)inspector);
+
         auto* sceneHierarchy = m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>();
-        sceneHierarchy->create(m_pSceneManagerEditor);
+        sceneHierarchy->create(m_pSceneManagerEditor, inspector);
         m_editorManager.pushPanel((IEditorWidget*)sceneHierarchy);
 
         auto* envProperties = m_serviceLocator.retrieve<FEnvironmentPropertiesImGuiWidget>();
         envProperties->create(m_pSceneManagerEditor);
         m_editorManager.pushPanel((IEditorWidget*)envProperties);
 
-        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiWidget>();
-        inspector->create(m_pSceneManagerEditor);
-        m_editorManager.pushPanel((IEditorWidget*)inspector);
+        FEventsEntityImGuiWidgets::create(m_pSceneManagerEditor, inspector);
 
         m_editorManager.onCreate();
     }
