@@ -31,13 +31,17 @@ namespace marengine {
 
 	/**
 	 * @class IEntityEvents IEntityEvents.h "Core/ecs/Entity/IEntityEvents.h"
-	 * @brief Base class for all Entity Events.
+	 * @brief Base class for all Entity Events. It is based on CRTP - Curiously recurring template pattern.
+	 * You can use derived classes with Derived::onCreateEntity() call. It is that simple.
+	 * How to use it? class Derived : IEntityEvents<Derived> and then implement all methods to override them.
+	 * @tparam TEntityEventImpl
 	 */
+	template<typename TEntityEventImpl>
 	class IEntityEvents {
 	public:
 
 		/// @brief Overrided methods should call create Entity function on Scene and invoke other needed events.
-		virtual void onCreateEntity() const = 0;
+		static void onCreateEntity() { TEntityEventImpl::onCreateEntity(); }
 
 		/**
 		 * @brief Overrided methods should call destroy Entity function on Scene and invoke other needed events.
@@ -45,14 +49,14 @@ namespace marengine {
 		 * Then he can just destroy it.
 		 * @param entity entity, that will be destroyed
 		 */
-		virtual void onDestroyEntity(const Entity& entity) const = 0;
+		static void onDestroyEntity(const Entity& entity) { TEntityEventImpl::onDestroyEntity(entity); }
 
 		/**
 		 * @brief Overrided methods should invoke all events when entity is selected.
 		 * Imagine situation, when user wants to pick some entity from scene, then this event can be called.
 		 * @param entity entity, which is selected by user, game etc.
 		 */
-		virtual void onSelectedEntity(const Entity& entity) const = 0;
+        static void onSelectedEntity(const Entity& entity) { TEntityEventImpl::onSelectedEntity(entity); }
 
 		/**
 		 * @brief Overrided methods should invoke all events when entity is unselected.
@@ -60,22 +64,22 @@ namespace marengine {
 		 * On entity, which is unselected can be called this event.
 		 * @param entity entity, which is already unselected
 		 */
-		virtual void onUnselectedEntity(const Entity& entity) const = 0;
+        static void onUnselectedEntity(const Entity& entity) { TEntityEventImpl::onUnselectedEntity(entity); }
 
 		/**
 		 * @brief Overrided methods should call copy Entity function on Scene and invoke other needed events.
 		 * There are some situation, when entity can be copied, there is possibility to create duplicates by this event.
 		 * @param entity entity, that will be copied to newly created entity instance
 		 */
-		virtual void onCopyEntity(const Entity& entity) const = 0;
+        static void onCopyEntity(const Entity& entity) { TEntityEventImpl::onCopyEntity(entity); }
 
-		/**
+        /**
 		 * @brief Overrided methods should call set visible Entity function on Scene and invoke other needed events.
 		 * When Entity has RenderableComponent and some material, then it can be rendered. By calling this function
 		 * we can be sure that entity will be visible.
 		 * @param entity entity, which we want to see during runtime.
 		 */
-		virtual void onSetVisibleEntity(const Entity& entity) const = 0;
+        static void onSetVisibleEntity(const Entity& entity) { TEntityEventImpl::onSetVisibleEntity(entity); }
 
 		/**
 		 * @brief Overrided methods should call set invisible Entity function on Scene and invoke other needed events.
@@ -83,7 +87,7 @@ namespace marengine {
 		 * be sure, that entity won't be visible anymore.
 		 * @param entity entity, which we want to not be visible during runtime.
 		 */
-		virtual void onSetInvisibleEntity(const Entity& entity) const = 0;
+        static void onSetInvisibleEntity(const Entity& entity) { TEntityEventImpl::onSetInvisibleEntity(entity); }
 
 		/**
 		 * @brief Overrided methods should call assign child to entity Entity function and invoke other needed events.
@@ -92,7 +96,7 @@ namespace marengine {
 		 * @param entity entity, to which given child will be assigned
 		 * @param child child, which will be assigned to given entity
 		 */
-		virtual void onAssignChild(const Entity& entity, const Entity& child) const = 0;
+        static void onAssignChild(const Entity& entity, const Entity& child) { TEntityEventImpl::onAssignChild(entity, child); }
 
 		/**
 		 * @brief Overrided methods should call remove child from entity Entity function and invoke other needed events.
@@ -101,14 +105,14 @@ namespace marengine {
 		 * @param entity entity, from which given child will be taken
 		 * @param child child, which will be taken from given entity
 		 */
-		virtual void onRemoveChild(const Entity& entity, const Entity& child) const = 0;
+        static void onRemoveChild(const Entity& entity, const Entity& child) { TEntityEventImpl::onRemoveChild(entity, child); }
 
 		/**
 		 * @brief Overrided methods should call create child Entity function when child is created. Then automatically
 		 * child is assigned to given entity.
 		 * @param entity entity, to which will be newly created child assigned.
 		 */
-		virtual void onCreateChild(const Entity& entity) const = 0;
+        static void onCreateChild(const Entity& entity) { TEntityEventImpl::onCreateChild(entity); }
 
 		/**
 		 * @brief Overrided methods should call destroy child Entity function when child is destroyed. Then automatically
@@ -116,7 +120,7 @@ namespace marengine {
 		 * @param entity entity, from which will be child removed
 		 * @param child child, that will be firstly removed from given entity, then destroyed
 		 */
-		virtual void onDestroyChild(const Entity& entity, const Entity& child) const = 0;
+        static void onDestroyChild(const Entity& entity, const Entity& child) { TEntityEventImpl::onDestroyChild(entity, child); }
 
 	};
 

@@ -24,7 +24,7 @@
 #define MARENGINE_ENTITYIMGUIEDITOREVENTS_H
 
 
-#include "Core/ecs/Entity/IEntityEvents.h"
+#include "../../../../Core/ecs/Entity/IEntityEvents.h"
 
 
 namespace marengine {
@@ -34,32 +34,32 @@ namespace marengine {
 	class Entity;
 
 
-	class FEntityImGuiEditorEvents : public IEntityEvents {
+	class FEventsEntityImGuiWidgets : public IEntityEvents<FEventsEntityImGuiWidgets> {
 	public:
 
-	    void create(FSceneManagerEditor* pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget);
+	    static void create(FSceneManagerEditor* pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget);
 
-		void onCreateEntity() const override;
-		void onDestroyEntity(const Entity& entity) const override;
+        static void onCreateEntity();
+        static void onDestroyEntity(const Entity& entity);
 
-		void onSelectedEntity(const Entity& entity) const override;
-		void onUnselectedEntity(const Entity& entity) const override;
+        static void onSelectedEntity(const Entity& entity);
+        static void onUnselectedEntity(const Entity& entity);
 
-		void onCopyEntity(const Entity& entity) const override;
+        static void onCopyEntity(const Entity& entity);
 
-		void onSetVisibleEntity(const Entity& entity) const override;
-		void onSetInvisibleEntity(const Entity& entity) const override;
+        static void onSetVisibleEntity(const Entity& entity);
+        static void onSetInvisibleEntity(const Entity& entity);
 
-		void onAssignChild(const Entity& entity, const Entity& child) const override;
-		void onRemoveChild(const Entity& entity, const Entity& child) const override;
+        static void onAssignChild(const Entity& entity, const Entity& child);
+        static void onRemoveChild(const Entity& entity, const Entity& child);
 
-		void onCreateChild(const Entity& entity) const override;
-		void onDestroyChild(const Entity& entity, const Entity& child) const override;
+        static void onCreateChild(const Entity& entity);
+        static void onDestroyChild(const Entity& entity, const Entity& child);
 
 	private:
 
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
+        static FSceneManagerEditor* s_pSceneManagerEditor;
+        static FInspectorImGuiWidget* s_pInspectorWidget;
 
 	};
 
