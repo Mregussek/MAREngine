@@ -37,8 +37,12 @@ namespace marengine {
         auto* script = m_serviceLocator.retrieve<FScriptImGuiWidget>();
         m_editorManager.pushPanel((IEditorWidget*)script);
 
+        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiWidget>();
+        inspector->create(m_pSceneManagerEditor);
+        m_editorManager.pushPanel((IEditorWidget*)inspector);
+
         auto* viewport = m_serviceLocator.retrieve<FViewportImGuiWidget>();
-        viewport->create(m_pSceneManagerEditor);
+        viewport->create(m_pSceneManagerEditor, inspector);
         m_editorManager.pushPanel((IEditorWidget*)viewport);
 
         auto* mainWidget = m_serviceLocator.retrieve<FMainImGuiWidget>();
@@ -52,10 +56,6 @@ namespace marengine {
         auto* mainMenuBar = m_serviceLocator.retrieve<FMainMenuBarImGuiWidget>();
         mainMenuBar->create();
         m_editorManager.pushPanel((IEditorWidget*)mainMenuBar);
-
-        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiWidget>();
-        inspector->create(m_pSceneManagerEditor);
-        m_editorManager.pushPanel((IEditorWidget*)inspector);
 
         auto* sceneHierarchy = m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>();
         sceneHierarchy->create(m_pSceneManagerEditor, inspector);

@@ -33,12 +33,13 @@
 namespace marengine {
 
     class FSceneManagerEditor;
+    class FInspectorImGuiWidget;
 
 
     class FViewportImGuiWidget : public IViewportEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor);
+        void create(FSceneManagerEditor* pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget);
         void destroy() override;
 
         void beginFrame() override;
@@ -62,6 +63,8 @@ namespace marengine {
         float m_aspectRatio{ 1.33f };
         FGuizmoImGuiWidget m_guizmo;
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        /// @brief Used only for ImGuizmo, we need to retrieve currently edited Entity
+        FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
 
     };
 
