@@ -20,26 +20,43 @@
 ************************************************************************/
 
 
-#include "ImGuiEditorWidgetsLocator.h"
+#ifndef MARENGINE_FILESYSTEMPOPUPIMGUIWIDGET_H
+#define MARENGINE_FILESYSTEMPOPUPIMGUIWIDGET_H
+
+
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
 
-	void FImGuiEditorWidgetsLocator::registerImGuiWidgets() {
-		m_imguiWidgetsRegistry = entt::registry();
-		m_imguiWidgetsContainer = m_imguiWidgetsRegistry.create();
+    class FFilesystemPopUpImGuiWidget {
 
-		emplace<FScriptImGuiWidget>();
-		emplace<FViewportImGuiWidget>();
-		emplace<FMainImGuiWidget>();
-		emplace<FDebugImGuiWidget>();
-		emplace<FMainMenuBarImGuiWidget>();
-		emplace<FSceneHierarchyImGuiWidget>();
-		emplace<FEnvironmentPropertiesImGuiWidget>();
-		emplace<FInspectorImGuiWidget>();
-		emplace<FFilesystemPopUpImGuiWidget>();
-	}
+        typedef imgui_addons::ImGuiFileBrowser::DialogMode DialogMode;
+        typedef void (*CallbackFunc)(const std::string &path, const std::string &filename);
+
+    public:
+
+
+        void openWidget(const std::string& widgetName) const;
+
+        void displaySaveWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
+
+        void displayOpenWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
+
+    private:
+
+        void displayWidget(const std::string& widgetName, const std::string& extensions, DialogMode dialogMode,
+                           CallbackFunc callback);
+
+
+        imgui_addons::ImGuiFileBrowser m_fileDialog;
+
+    };
 
 
 }
+
+
+
+#endif //MARENGINE_FILESYSTEMPOPUPIMGUIWIDGET_H

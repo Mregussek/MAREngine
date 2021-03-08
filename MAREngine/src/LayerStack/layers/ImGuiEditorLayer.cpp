@@ -34,6 +34,8 @@ namespace marengine {
 
         m_serviceLocator.registerImGuiWidgets();
 
+        auto* filesystem = m_serviceLocator.retrieve<FFilesystemPopUpImGuiWidget>();
+
         auto* script = m_serviceLocator.retrieve<FScriptImGuiWidget>();
         m_editorManager.pushPanel((IEditorWidget*)script);
 
@@ -54,7 +56,7 @@ namespace marengine {
         m_editorManager.pushPanel((IEditorWidget*)debug);
 
         auto* mainMenuBar = m_serviceLocator.retrieve<FMainMenuBarImGuiWidget>();
-        mainMenuBar->create();
+        mainMenuBar->create(filesystem);
         m_editorManager.pushPanel((IEditorWidget*)mainMenuBar);
 
         auto* sceneHierarchy = m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>();

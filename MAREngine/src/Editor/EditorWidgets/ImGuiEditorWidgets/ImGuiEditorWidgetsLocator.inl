@@ -27,6 +27,7 @@
 #include "ImGuiEditorWidgetsLocator.h"
 
 // Implementations
+#include "Impl/FilesystemPopUpImGuiWidget.h"
 #include "Impl/DebugImGuiWidget.h"
 #include "Impl/EnvironmentPropertiesImGuiWidget.h"
 #include "Impl/InspectorImGuiWidget.h"

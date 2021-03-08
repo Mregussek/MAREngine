@@ -23,6 +23,7 @@
 #include "../../../../mar.h"
 #include "../../../../Window/Window.h"
 #include "MainMenuBarImGuiWidget.h"
+#include "FilesystemPopUpImGuiWidget.h"
 
 
 namespace marengine {
@@ -33,7 +34,9 @@ namespace marengine {
     static bool displayEngineInstructions();
     static bool displayWindowSettings();
 
-    void FMainMenuBarImGuiWidget::create() {
+
+    void FMainMenuBarImGuiWidget::create(FFilesystemPopUpImGuiWidget* pFilesystem) {
+        m_pFilesystem = pFilesystem;
         setDefaultMAREngineDarkTheme();
     }
 
@@ -57,14 +60,62 @@ namespace marengine {
         if(m_windowSettingsDisplay) {
             m_windowSettingsDisplay = displayWindowSettings();
         }
+        if(m_newSceneDisplay) {
+            m_pFilesystem->openWidget(newSceneName);
+            m_newSceneDisplay = false;
+        }
+        if(m_openSceneDisplay) {
+            m_pFilesystem->openWidget(openSceneName);
+            m_openSceneDisplay = false;
+        }
+        if(m_saveSceneDisplay) {
+            m_pFilesystem->openWidget(saveSceneName);
+            m_saveSceneDisplay = false;
+        }
+
+        constexpr auto newSceneCallback = [](const std::string& path, const std::string& filename) {
+            //Scene* newScene = Scene::createEmptyScene(filename);
+            //FSceneSerializer::saveSceneToFile(path.c_str(), newScene);
+            //delete newScene;
+
+            //ProjectManager::Instance->addNewSceneToCurrentProject(filename);
+
+            //WEntityWidgetPanel::Instance->reset();
+            //WScriptIDE::Instance->reset();
+
+            //MAREngine::Instance->setRestart();
+        };
+
+        constexpr auto saveSceneCallback = [](const std::string& path, const std::string& filename) {
+            //FSceneSerializer::saveSceneToFile(path.c_str(), FSceneManagerEditor::Instance->getScene());
+        };
+
+        constexpr auto openSceneCallback = [](const std::string& path, const std::string& filename) {
+            //ProjectManager::Instance->setNewSceneToLoad(filename);
+
+            //WEntityWidgetPanel::Instance->reset();
+            //WScriptIDE::Instance->reset();
+
+            //MAREngine::Instance->setRestart();
+        };
+
+        m_pFilesystem->displaySaveWidget(newSceneName, extMarscene, newSceneCallback);
+        m_pFilesystem->displayOpenWidget(openSceneName, extMarscene, openSceneCallback);
+        m_pFilesystem->displaySaveWidget(saveSceneName, extMarscene, saveSceneCallback);
     }
 
     void FMainMenuBarImGuiWidget::displaySceneManagementTab() {
         // TODO: add scene filesystem management options to main menu bar
         if (ImGui::BeginMenu("Scene")) {
-            if (ImGui::MenuItem("New Scene")) { }
-            if (ImGui::MenuItem("Open Scene")) { }
-            if (ImGui::MenuItem("Save Scene")) { }
+            if (ImGui::MenuItem("New Scene")) {
+                m_newSceneDisplay = true;
+            }
+            if (ImGui::MenuItem("Open Scene")) {
+                m_openSceneDisplay = true;
+            }
+            if (ImGui::MenuItem("Save Scene")) {
+                m_saveSceneDisplay = true;
+            }
             if (ImGui::MenuItem("Exit")) {
                 Window::endRenderLoop();
             }
@@ -110,7 +161,7 @@ namespace marengine {
                 "You can download MAREngine completely freely and release your creativity - create games you imagine.";
 
         const char* aboutAuthor =
-                "Mateusz Rzeczyca is C++ / Python programmer and ethusiast of Augmented Reality and Machine Learning.\n"
+                "Mateusz Rzeczyca is C++ / Python programmer and enthusiast of Augmented Reality and Machine Learning.\n"
                 "\n"
                 "I am delighted that you are using MAREngine! Thank you!";
 

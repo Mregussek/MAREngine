@@ -24,16 +24,19 @@
 #define MARENGINE_MAINMENUBARIMGUIWIDGET_H
 
 
+#include <string>
 #include "../../IMainMenuBarEditorWidget.h"
 
 
 namespace marengine {
 
+    class FFilesystemPopUpImGuiWidget;
+
 
     class FMainMenuBarImGuiWidget : public IMainMenuBarEditorWidget {
     public:
 
-        void create();
+        void create(FFilesystemPopUpImGuiWidget* pFilesystem);
         void updateFrame() override;
 
     private:
@@ -43,6 +46,16 @@ namespace marengine {
         void displaySettingsTab();
         void displayAboutTab();
 
+
+        std::string newSceneName{"New Scene Widget" };
+        bool m_newSceneDisplay{ false };
+        std::string openSceneName{ "Open Scene Widget" };
+        bool m_openSceneDisplay{ false };
+        std::string saveSceneName{ "Save Scene Widget" };
+        bool m_saveSceneDisplay{ false };
+        std::string extMarscene{ ".json" };
+
+        FFilesystemPopUpImGuiWidget* m_pFilesystem{ nullptr };
 
         bool m_infoAboutAuthorDisplay{ false };
         bool m_infoAboutEngineDisplay{ false };
