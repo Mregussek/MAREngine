@@ -22,6 +22,7 @@
 
 #include "ViewportImGuiWidget.h"
 #include "InspectorImGuiWidget.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Entity/EventsCameraEntity.h"
@@ -30,9 +31,9 @@
 namespace marengine {
 
 
-    void FViewportImGuiWidget::create(FSceneManagerEditor* pSceneManager, FInspectorImGuiWidget* pInspectorWidget) {
-        m_pSceneManagerEditor = pSceneManager;
-        m_pInspectorWidget = pInspectorWidget;
+    void FViewportImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
 
         constexpr float xDefault = 800.f;
         constexpr float yDefault = 600.f;

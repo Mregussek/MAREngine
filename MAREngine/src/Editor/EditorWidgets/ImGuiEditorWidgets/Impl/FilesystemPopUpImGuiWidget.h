@@ -37,7 +37,6 @@ namespace marengine {
 
     public:
 
-
         void openWidget(const std::string& widgetName) const;
 
         void displaySaveWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);

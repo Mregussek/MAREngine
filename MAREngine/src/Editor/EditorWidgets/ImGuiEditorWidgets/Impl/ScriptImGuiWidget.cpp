@@ -21,12 +21,13 @@
 
 
 #include "ScriptImGuiWidget.h"
+#include "../ImGuiEditorServiceLocator.h"
 
 
 namespace marengine {
 
 
-    void FScriptImGuiWidget::create() {
+    void FScriptImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         definePythonLanguage();
         editor.SetLanguageDefinition(m_languageDefinition);
 

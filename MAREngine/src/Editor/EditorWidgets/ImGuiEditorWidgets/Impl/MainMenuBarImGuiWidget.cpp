@@ -22,6 +22,7 @@
 
 #include "../../../../mar.h"
 #include "../../../../Window/Window.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "MainMenuBarImGuiWidget.h"
 #include "FilesystemPopUpImGuiWidget.h"
 
@@ -35,8 +36,8 @@ namespace marengine {
     static bool displayWindowSettings();
 
 
-    void FMainMenuBarImGuiWidget::create(FFilesystemPopUpImGuiWidget* pFilesystem) {
-        m_pFilesystem = pFilesystem;
+    void FMainMenuBarImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pFilesystem = serviceLocator->retrieve<FFilesystemPopUpImGuiWidget>();
         setDefaultMAREngineDarkTheme();
     }
 

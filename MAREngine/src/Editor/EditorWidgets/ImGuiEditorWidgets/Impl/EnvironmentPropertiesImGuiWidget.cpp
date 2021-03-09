@@ -21,6 +21,7 @@
 
 
 #include "EnvironmentPropertiesImGuiWidget.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 
@@ -28,8 +29,8 @@
 namespace marengine {
 
 
-    void FEnvironmentPropertiesImGuiWidget::create(FSceneManagerEditor* pSceneManagerEditor) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
+    void FEnvironmentPropertiesImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
     }
 
     void FEnvironmentPropertiesImGuiWidget::updateFrame() {

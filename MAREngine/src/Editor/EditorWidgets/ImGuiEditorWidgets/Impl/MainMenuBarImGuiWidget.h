@@ -31,12 +31,13 @@
 namespace marengine {
 
     class FFilesystemPopUpImGuiWidget;
+    class FImGuiEditorServiceLocator;
 
 
     class FMainMenuBarImGuiWidget : public IMainMenuBarEditorWidget {
     public:
 
-        void create(FFilesystemPopUpImGuiWidget* pFilesystem);
+        void create(FImGuiEditorServiceLocator* serviceLocator);
         void updateFrame() override;
 
     private:

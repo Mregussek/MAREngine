@@ -20,39 +20,39 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IMGUIEDITORWIDGETSLOCATOR_H
-#define MARENGINE_IMGUIEDITORWIDGETSLOCATOR_H
+#ifndef MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
+#define MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
 
 
-#include "../../../mar.h"
+#include "ImGuiEditorServiceLocator.h"
+
+// Implementations
+#include "Impl/FilesystemPopUpImGuiWidget.h"
+#include "Impl/DebugImGuiWidget.h"
+#include "Impl/EnvironmentPropertiesImGuiWidget.h"
+#include "Impl/InspectorImGuiWidget.h"
+#include "Impl/MainImGuiWidget.h"
+#include "Impl/MainMenuBarImGuiWidget.h"
+#include "Impl/SceneHierarchyImGuiWidget.h"
+#include "Impl/ScriptImGuiWidget.h"
+#include "Impl/ViewportImGuiWidget.h"
 
 
 namespace marengine {
 
 
-    class FImGuiEditorWidgetsLocator {
-    public:
+	template<typename TImGuiService>
+    TImGuiService* FImGuiEditorServiceLocator::retrieve() {
+		return &m_imguiWidgetsRegistry.get<TImGuiService>(m_imguiWidgetsContainer);
+	}
 
-        void registerImGuiWidgets();
-
-        template<typename TImGuiEditorWidget>
-        MAR_NO_DISCARD TImGuiEditorWidget* retrieve();
-
-    private:
-
-        template<typename TImGuiEditorWidget>
-        TImGuiEditorWidget* emplace();
-
-        entt::registry m_imguiWidgetsRegistry;
-        entt::entity m_imguiWidgetsContainer{ entt::null };
-
-    };
+	template<typename TImGuiService>
+    TImGuiService* FImGuiEditorServiceLocator::emplace() {
+		return &m_imguiWidgetsRegistry.emplace<TImGuiService>(m_imguiWidgetsContainer);
+	}
 
 
 }
 
 
-#include "ImGuiEditorWidgetsLocator.inl"
-
-
-#endif //MARENGINE_IMGUIEDITORWIDGETSLOCATOR_H
+#endif //MARENGINE_IMGUIEDITORSERVICELOCATOR_INL

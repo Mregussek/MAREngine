@@ -30,6 +30,7 @@
 namespace marengine {
 
     class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
     class Scene;
     class Entity;
     struct RenderStatistics;
@@ -38,7 +39,7 @@ namespace marengine {
     class FDebugImGuiWidget : public IDebugEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics);
+        void create(FImGuiEditorServiceLocator* serviceLocator);
         void updateFrame() override;
 
     private:

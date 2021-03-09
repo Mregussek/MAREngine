@@ -21,6 +21,7 @@
 
 
 #include "DebugImGuiWidget.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/graphics/RenderAPI/RenderStatistics.h"
@@ -29,9 +30,9 @@
 namespace marengine {
 
 
-    void FDebugImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor, const RenderStatistics* pRenderStatistics) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
-        m_pRenderStatistics = pRenderStatistics;
+    void FDebugImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pRenderStatistics = serviceLocator->retrieve<FImGuiTypeHolder<const RenderStatistics*>>()->pInstance;
     }
 
     void FDebugImGuiWidget::updateFrame() {

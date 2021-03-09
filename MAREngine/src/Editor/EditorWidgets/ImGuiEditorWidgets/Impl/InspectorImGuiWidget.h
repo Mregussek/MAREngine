@@ -32,12 +32,13 @@ namespace marengine {
 
     class Entity;
     class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
 
 
     class FInspectorImGuiWidget : public IInspectorEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor);
+        void create(FImGuiEditorServiceLocator* serviceLocator);
 
         void resetInspectedEntity();
         void setEntityToInspect(const Entity& entityToInspect);

@@ -22,6 +22,7 @@
 
 #include "InspectorImGuiWidget.h"
 #include "CommonTypeHandler.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
 #include "../../../../Window/Window.h" // isMousePressed()
 #include "../../../../Core/ecs/SceneManagerEditor.h"
@@ -33,8 +34,8 @@
 namespace marengine {
 
 
-    void FInspectorImGuiWidget::create(FSceneManagerEditor* pSceneManagerEditor) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
+    void FInspectorImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
     }
 
     void FInspectorImGuiWidget::resetInspectedEntity() {

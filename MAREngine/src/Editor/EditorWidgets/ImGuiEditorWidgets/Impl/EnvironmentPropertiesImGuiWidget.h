@@ -30,12 +30,13 @@
 namespace marengine {
 
     class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
 
 
     class FEnvironmentPropertiesImGuiWidget : public IEnvironmentPropertiesEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor);
+        void create(FImGuiEditorServiceLocator* serviceLocator);
 
         void updateFrame() override;
 

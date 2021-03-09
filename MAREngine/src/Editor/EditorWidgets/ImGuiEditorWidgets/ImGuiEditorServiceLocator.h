@@ -20,39 +20,51 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IMGUIEDITORWIDGETSLOCATOR_INL
-#define MARENGINE_IMGUIEDITORWIDGETSLOCATOR_INL
+#ifndef MARENGINE_IMGUIEDITORSERVICELOCATOR_H
+#define MARENGINE_IMGUIEDITORSERVICELOCATOR_H
 
 
-#include "ImGuiEditorWidgetsLocator.h"
-
-// Implementations
-#include "Impl/FilesystemPopUpImGuiWidget.h"
-#include "Impl/DebugImGuiWidget.h"
-#include "Impl/EnvironmentPropertiesImGuiWidget.h"
-#include "Impl/InspectorImGuiWidget.h"
-#include "Impl/MainImGuiWidget.h"
-#include "Impl/MainMenuBarImGuiWidget.h"
-#include "Impl/SceneHierarchyImGuiWidget.h"
-#include "Impl/ScriptImGuiWidget.h"
-#include "Impl/ViewportImGuiWidget.h"
+#include "../../../mar.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    struct RenderStatistics;
+    template<typename TTypeToHold> struct FImGuiTypeHolder;
 
-	template<typename TImGuiEditorWidget>
-	TImGuiEditorWidget* FImGuiEditorWidgetsLocator::retrieve() {
-		return &m_imguiWidgetsRegistry.get<TImGuiEditorWidget>(m_imguiWidgetsContainer);
-	}
 
-	template<typename TImGuiEditorWidget>
-	TImGuiEditorWidget* FImGuiEditorWidgetsLocator::emplace() {
-		return &m_imguiWidgetsRegistry.emplace<TImGuiEditorWidget>(m_imguiWidgetsContainer);
-	}
+    class FImGuiEditorServiceLocator {
+    public:
+
+        void registerServices(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics);
+
+        template<typename TImGuiService>
+        MAR_NO_DISCARD TImGuiService* retrieve();
+
+    private:
+
+        template<typename TImGuiService>
+        TImGuiService* emplace();
+
+        entt::registry m_imguiWidgetsRegistry;
+        entt::entity m_imguiWidgetsContainer{ entt::null };
+
+    };
+
+
+    template<typename TTypeToHold>
+    struct FImGuiTypeHolder {
+
+        TTypeToHold pInstance;
+
+    };
 
 
 }
 
 
-#endif //MARENGINE_IMGUIEDITORWIDGETSLOCATOR_INL
+#include "ImGuiEditorServiceLocator.inl"
+
+
+#endif //MARENGINE_IMGUIEDITORSERVICELOCATOR_H

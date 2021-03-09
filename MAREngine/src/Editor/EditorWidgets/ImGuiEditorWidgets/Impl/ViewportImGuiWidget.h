@@ -34,12 +34,13 @@ namespace marengine {
 
     class FSceneManagerEditor;
     class FInspectorImGuiWidget;
+    class FImGuiEditorServiceLocator;
 
 
     class FViewportImGuiWidget : public IViewportEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget);
+        void create(FImGuiEditorServiceLocator* serviceLocator);
         void destroy() override;
 
         void beginFrame() override;

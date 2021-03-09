@@ -32,12 +32,13 @@ namespace marengine {
 
     class FSceneManagerEditor;
     class FInspectorImGuiWidget;
+    class FImGuiEditorServiceLocator;
 
 
     class FSceneHierarchyImGuiWidget : public ISceneHierarchyEditorWidget {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget);
+        void create(FImGuiEditorServiceLocator* serviceLocator);
         void updateFrame() override;
 
     private:

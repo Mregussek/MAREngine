@@ -21,6 +21,7 @@
 
 
 #include "MainImGuiWidget.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../mar.h"
 #include "../../../../Window/Window.h"
@@ -29,8 +30,8 @@
 namespace marengine {
 
 
-    void FMainImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
+    void FMainImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
 
         ImGui::CreateContext();
         Window::imguiInit();

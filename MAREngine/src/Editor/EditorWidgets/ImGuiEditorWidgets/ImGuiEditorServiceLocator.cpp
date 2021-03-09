@@ -20,15 +20,22 @@
 ************************************************************************/
 
 
-#include "ImGuiEditorWidgetsLocator.h"
+#include "ImGuiEditorServiceLocator.h"
+#include "../../../Core/ecs/SceneManagerEditor.h"
 
 
 namespace marengine {
 
 
-	void FImGuiEditorWidgetsLocator::registerImGuiWidgets() {
+	void FImGuiEditorServiceLocator::registerServices(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics) {
 		m_imguiWidgetsRegistry = entt::registry();
 		m_imguiWidgetsContainer = m_imguiWidgetsRegistry.create();
+
+        auto* sceneHolder = emplace<FImGuiTypeHolder<FSceneManagerEditor*>>();
+        sceneHolder->pInstance = pSceneManagerEditor;
+
+        auto* renderStatsHolder = emplace<FImGuiTypeHolder<const RenderStatistics*>>();
+        renderStatsHolder->pInstance = pRenderStatistics;
 
 		emplace<FScriptImGuiWidget>();
 		emplace<FViewportImGuiWidget>();

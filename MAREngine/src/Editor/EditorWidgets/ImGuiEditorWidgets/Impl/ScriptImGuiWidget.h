@@ -30,11 +30,13 @@
 
 namespace marengine {
 
+    class FImGuiEditorServiceLocator;
+
 
     class FScriptImGuiWidget : public IScriptEditorWidget {
     public:
 
-        void create();
+        void create(FImGuiEditorServiceLocator* serviceLocator);
         void reset();
 
         void updateFrame() override;

@@ -22,6 +22,7 @@
 
 #include "SceneHierarchyImGuiWidget.h"
 #include "InspectorImGuiWidget.h"
+#include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
@@ -32,9 +33,9 @@
 namespace marengine {
 
 
-    void FSceneHierarchyImGuiWidget::create(FSceneManagerEditor *pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
-        m_pInspectorWidget = pInspectorWidget;
+    void FSceneHierarchyImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
     }
 
     void FSceneHierarchyImGuiWidget::updateFrame() {
