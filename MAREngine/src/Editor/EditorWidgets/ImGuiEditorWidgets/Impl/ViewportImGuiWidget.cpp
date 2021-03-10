@@ -58,8 +58,8 @@ namespace marengine {
     void FViewportImGuiWidget::updateFrame() {
         displayViewportControlPanel();
 
-        auto& style{ ImGui::GetStyle() };
-        const auto rememberDefaultVal{ style.WindowPadding };
+        ImGuiStyle& style{ ImGui::GetStyle() };
+        const ImVec2 rememberDefaultVal{ style.WindowPadding };
         style.WindowPadding = ImVec2(1.f, 1.f);
 
         ImGui::Begin("ViewPort", nullptr);

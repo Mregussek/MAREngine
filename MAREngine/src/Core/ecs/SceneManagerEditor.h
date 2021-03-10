@@ -71,7 +71,7 @@ namespace marengine {
 		 * @brief Method returns scene that is managed.
 		 * @return Returns currently managed scene
 		 */
-		Scene* getScene();
+		MAR_NO_DISCARD Scene* getScene();
 
 		/// @brief Sets Editor Mode (for update state)
 		void setEditorMode();
@@ -80,19 +80,19 @@ namespace marengine {
 		 * @brief Returns value of m_EditorMode variable.
 		 * @return Returns true, if scene is in editor mode 
 		 */
-		bool isEditorMode() const;
+        MAR_NO_DISCARD bool isEditorMode() const;
 
 		/**
 		 * @brief Returns value of !m_EditorMode variable.
 		 * @return Returns true, if scene is in play mode 
 		 */
-		bool isPlayMode() const;
+        MAR_NO_DISCARD bool isPlayMode() const;
 
 		/**
 		 * @brief Returns value of m_PauseMode variable.
 		 * @return Returns true, if scene is in pause mode 
 		 */
-		bool isPauseMode() const;
+        MAR_NO_DISCARD bool isPauseMode() const;
 
 		/// @brief Sets Play mode
 		void setPlayMode();
@@ -116,13 +116,13 @@ namespace marengine {
 		 * @brief 
 		 * @return Returns true, if using editor camera to watch scene at viewport 
 		 */
-		bool usingEditorCamera() const;
+        MAR_NO_DISCARD bool usingEditorCamera() const;
 
 		/**
 		 * @brief Returns value of !m_EditorCamera variable.
 		 * @return Returns true, if using game camera to watch scene at viewport 
 		 */
-		bool usingGameCamera() const;
+        MAR_NO_DISCARD bool usingGameCamera() const;
 
 	private:
 
