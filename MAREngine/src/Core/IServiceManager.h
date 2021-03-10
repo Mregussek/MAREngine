@@ -20,37 +20,41 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_F_EDITOR_MANAGER_H
-#define MAR_ENGINE_F_EDITOR_MANAGER_H
-
-
-#include "../mar.h"
-#include "EditorWidgets/IEditorWidget.h"
+#ifndef MARENGINE_ISERVICEMANAGER_H
+#define MARENGINE_ISERVICEMANAGER_H
 
 
 namespace marengine {
 
 
-	class FEditorManager {
-	public:
+    template<typename TDerivedServiceManager, typename TServiceType>
+    class IServiceManager {
+    public:
 
-		void pushPanel(IEditorWidget* panel);
-		void popPanel(IEditorWidget* panel);
+        virtual void emplace(TServiceType* service) {
+            static_cast<TDerivedServiceManager*>(this)->emplace(service);
+        }
 
-		void onCreate() const;
+        virtual void pop(TServiceType* service) {
+            static_cast<TDerivedServiceManager*>(this)->pop(service);
+        }
 
-		void update() const;
-		void destroy() const;
+        virtual void onCreate() const {
+            static_cast<const TDerivedServiceManager*>(this)->onCreate();
+        }
 
-	private:
+        virtual void onUpdate() const {
+            static_cast<const TDerivedServiceManager*>(this)->onUpdate();
+        }
 
-		std::vector<IEditorWidget*> m_widgetPanels;
-		uint32_t m_insertValue{ 0 };
+        virtual void onDestroy() const {
+            static_cast<const TDerivedServiceManager*>(this)->onDestroy();
+        }
 
-	};
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_F_EDITOR_MANAGER_H
+#endif //MARENGINE_ISERVICEMANAGER_H

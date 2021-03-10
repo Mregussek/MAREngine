@@ -20,39 +20,38 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
-#define MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
+#ifndef MARENGINE_EDITORWIDGETSSERVICEMANAGER_H
+#define MARENGINE_EDITORWIDGETSSERVICEMANAGER_H
 
 
-#include "ImGuiEditorServiceLocator.h"
-
-// Implementations
-#include "Impl/FilesystemPopUpImGuiWidget.h"
-#include "Impl/DebugImGuiWidget.h"
-#include "Impl/EnvironmentPropertiesImGuiWidget.h"
-#include "Impl/InspectorImGuiWidget.h"
-#include "Impl/MainImGuiWidget.h"
-#include "Impl/MainMenuBarImGuiWidget.h"
-#include "Impl/SceneHierarchyImGuiWidget.h"
-#include "Impl/ScriptImGuiWidget.h"
-#include "Impl/ViewportImGuiWidget.h"
+#include "../../mar.h"
+#include "IEditorWidget.h"
+#include "../../Core/IServiceManager.h"
 
 
 namespace marengine {
 
 
-	template<typename TImGuiService>
-    TImGuiService* FImGuiEditorServiceLocator::retrieve() {
-		return &m_imguiRegistry.get<TImGuiService>(m_imguiEntity);
-	}
+    class FEditorWidgetsServiceManager : IServiceManager<FEditorWidgetsServiceManager, IEditorWidget> {
+    public:
 
-	template<typename TImGuiService>
-    TImGuiService* FImGuiEditorServiceLocator::emplace() {
-		return &m_imguiRegistry.emplace<TImGuiService>(m_imguiEntity);
-	}
+        void emplace(IEditorWidget* service);
+        void pop(IEditorWidget* service);
+
+        void onCreate() const;
+        void onUpdate() const;
+        void onDestroy() const;
+
+    private:
+
+        std::array<IEditorWidget*, 8> m_services;
+        size_t m_insertValue{ 0 };
+
+    };
 
 
 }
 
 
-#endif //MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
+
+#endif //MARENGINE_EDITORWIDGETSSERVICEMANAGER_H

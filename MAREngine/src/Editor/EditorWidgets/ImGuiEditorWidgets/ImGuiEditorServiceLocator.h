@@ -38,6 +38,7 @@ namespace marengine {
     public:
 
         void registerServices(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics);
+        void close();
 
         template<typename TImGuiService>
         MAR_NO_DISCARD TImGuiService* retrieve();
@@ -47,8 +48,8 @@ namespace marengine {
         template<typename TImGuiService>
         TImGuiService* emplace();
 
-        entt::registry m_imguiWidgetsRegistry;
-        entt::entity m_imguiWidgetsContainer{ entt::null };
+        entt::registry m_imguiRegistry;
+        entt::entity m_imguiEntity{ entt::null };
 
     };
 

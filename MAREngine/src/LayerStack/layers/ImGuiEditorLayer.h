@@ -25,7 +25,7 @@
 
 
 #include "../Layer.h"
-#include "../../Editor/EditorManager.h"
+#include "../../Editor/EditorWidgets/EditorWidgetsServiceManager.h"
 #include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorServiceLocator.h"
 
 
@@ -47,7 +47,7 @@ namespace marengine {
 
     private:
 
-        FEditorManager m_editorManager;
+        FEditorWidgetsServiceManager m_editorServiceManager;
         FImGuiEditorServiceLocator m_serviceLocator;
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
 

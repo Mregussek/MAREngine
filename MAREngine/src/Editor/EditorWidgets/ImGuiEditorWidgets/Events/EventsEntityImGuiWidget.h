@@ -31,13 +31,14 @@ namespace marengine {
 
     class FSceneManagerEditor;
     class FInspectorImGuiWidget;
+    class FImGuiEditorServiceLocator;
 	class Entity;
 
 
 	class FEventsEntityImGuiWidgets : public IEntityEvents<FEventsEntityImGuiWidgets> {
 	public:
 
-	    static void create(FSceneManagerEditor* pSceneManagerEditor, FInspectorImGuiWidget* pInspectorWidget);
+	    static void create(FImGuiEditorServiceLocator* serviceLocator);
 
         static void onCreateEntity();
         static void onDestroyEntity(const Entity& entity);

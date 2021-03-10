@@ -33,50 +33,28 @@ namespace marengine {
         m_pSceneManagerEditor = pSceneManagerEditor;
         m_serviceLocator.registerServices(pSceneManagerEditor, pRenderStatistics);
 
-        auto* script = m_serviceLocator.retrieve<FScriptImGuiWidget>();
-
-        auto* inspector = m_serviceLocator.retrieve<FInspectorImGuiWidget>();
-        inspector->create(&m_serviceLocator);
-
-        auto* viewport = m_serviceLocator.retrieve<FViewportImGuiWidget>();
-        viewport->create(&m_serviceLocator);
-
-        auto* mainWidget = m_serviceLocator.retrieve<FMainImGuiWidget>();
-        mainWidget->create(&m_serviceLocator);
-
-        auto* debug = m_serviceLocator.retrieve<FDebugImGuiWidget>();
-        debug->create(&m_serviceLocator);
-
-        auto* mainMenuBar = m_serviceLocator.retrieve<FMainMenuBarImGuiWidget>();
-        mainMenuBar->create(&m_serviceLocator);
-
-        auto* sceneHierarchy = m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>();
-        sceneHierarchy->create(&m_serviceLocator);
-
-        auto* envProperties = m_serviceLocator.retrieve<FEnvironmentPropertiesImGuiWidget>();
-        envProperties->create(&m_serviceLocator);
-
         // In what order should every window be rendered (sometimes it matters, last window will show up first)
-        m_editorManager.pushPanel((IEditorWidget*)script);
-        m_editorManager.pushPanel((IEditorWidget*)viewport);
-        m_editorManager.pushPanel((IEditorWidget*)mainWidget);
-        m_editorManager.pushPanel((IEditorWidget*)debug);
-        m_editorManager.pushPanel((IEditorWidget*)inspector);
-        m_editorManager.pushPanel((IEditorWidget*)mainMenuBar);
-        m_editorManager.pushPanel((IEditorWidget*)sceneHierarchy);
-        m_editorManager.pushPanel((IEditorWidget*)envProperties);
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FScriptImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FViewportImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FMainImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FDebugImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FInspectorImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FMainMenuBarImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FEnvironmentPropertiesImGuiWidget>());
 
-        FEventsEntityImGuiWidgets::create(m_pSceneManagerEditor, inspector);
+        FEventsEntityImGuiWidgets::create(&m_serviceLocator);
 
-        m_editorManager.onCreate();
+        m_editorServiceManager.onCreate();
     }
 
     void FImGuiEditorLayer::update() {
-        m_editorManager.update();
+        m_editorServiceManager.onUpdate();
     }
 
     void FImGuiEditorLayer::close() {
-        m_editorManager.destroy();
+        m_editorServiceManager.onDestroy();
+        m_serviceLocator.close();
     }
 
     void FImGuiEditorLayer::renderToViewport() {

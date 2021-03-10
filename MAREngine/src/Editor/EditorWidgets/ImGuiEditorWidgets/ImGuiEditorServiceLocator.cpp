@@ -28,24 +28,41 @@ namespace marengine {
 
 
 	void FImGuiEditorServiceLocator::registerServices(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics) {
-		m_imguiWidgetsRegistry = entt::registry();
-		m_imguiWidgetsContainer = m_imguiWidgetsRegistry.create();
+		// Create registry and entity that will hold everything as components
+	    m_imguiRegistry = entt::registry();
+		m_imguiEntity = m_imguiRegistry.create();
 
+		// Create type holders, which must remember pointers
         auto* sceneHolder = emplace<FImGuiTypeHolder<FSceneManagerEditor*>>();
         sceneHolder->pInstance = pSceneManagerEditor;
 
         auto* renderStatsHolder = emplace<FImGuiTypeHolder<const RenderStatistics*>>();
         renderStatsHolder->pInstance = pRenderStatistics;
 
-		emplace<FScriptImGuiWidget>();
-		emplace<FViewportImGuiWidget>();
-		emplace<FMainImGuiWidget>();
-		emplace<FDebugImGuiWidget>();
-		emplace<FMainMenuBarImGuiWidget>();
-		emplace<FSceneHierarchyImGuiWidget>();
-		emplace<FEnvironmentPropertiesImGuiWidget>();
-		emplace<FInspectorImGuiWidget>();
+        // create instance of every widget
+        auto* script = emplace<FScriptImGuiWidget>();
+        auto* viewport = emplace<FViewportImGuiWidget>();
+        auto* mainWidget = emplace<FMainImGuiWidget>();
+        auto* debug = emplace<FDebugImGuiWidget>();
+        auto* mainMenuBar = emplace<FMainMenuBarImGuiWidget>();
+        auto* sceneHierarchy = emplace<FSceneHierarchyImGuiWidget>();
+        auto* envProperties = emplace<FEnvironmentPropertiesImGuiWidget>();
+        auto* inspector = emplace<FInspectorImGuiWidget>();
 		emplace<FFilesystemPopUpImGuiWidget>();
+
+		// call create method, so that widgets are ready to use
+        inspector->create(this);
+        viewport->create(this);
+        mainWidget->create(this);
+        debug->create(this);
+        mainMenuBar->create(this);
+        sceneHierarchy->create(this);
+        envProperties->create(this);
+	}
+
+	void FImGuiEditorServiceLocator::close() {
+        m_imguiRegistry.destroy(m_imguiEntity);
+        m_imguiRegistry.clear();
 	}
 
 
