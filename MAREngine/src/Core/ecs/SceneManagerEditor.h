@@ -113,7 +113,7 @@ namespace marengine {
 		void useGameCamera();
 
 		/**
-		 * @brief 
+		 * @brief Returns value of m_EditorCamera variable.
 		 * @return Returns true, if using editor camera to watch scene at viewport 
 		 */
         MAR_NO_DISCARD bool usingEditorCamera() const;

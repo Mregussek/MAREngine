@@ -39,7 +39,7 @@ namespace marengine {
 
 		RenderPipeline::Instance->reset();
 
-		const auto& entities{ m_pScene->getEntities() };
+		const FEntityArray& entities{ m_pScene->getEntities() };
 
 		std::for_each(entities.cbegin(), entities.cend(), [](const Entity& entity) {
 			RenderPipeline::Instance->pushEntityToPipeline(entity);
