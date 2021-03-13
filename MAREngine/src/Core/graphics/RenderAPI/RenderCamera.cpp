@@ -23,15 +23,12 @@
 #include "RenderCamera.h"
 #include "../../ecs/Components/DefaultComponents.h"
 #include "../../ecs/Components/CameraComponents.h"
-#include "../GraphicsLogs.h"
 
 
 namespace marengine {
 
 
 	void RenderCamera::calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera) {
-		GRAPHICS_TRACE("RENDER_CAMERA: going to calculate camera transform");
-
 		const float xRad{ trig::toRadians(transform.rotation.x) };
 		const float yRad{ trig::toRadians(transform.rotation.y) };
 		
@@ -49,39 +46,27 @@ namespace marengine {
 		else { calculateOrthographic(camera.o_left, camera.o_right, camera.o_top, camera.o_bottom, camera.o_near, camera.o_far); }
 
 		recalculateMVP();
-	
-		GRAPHICS_INFO("RENDER_CAMERA: calculated new camera transfroms");
 	}
 
 	void RenderCamera::calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane) {
 		m_projection = mat4::perspective(trig::toRadians(zoom), aspectRatio, nearPlane, farPlane);
-
-		GRAPHICS_TRACE("RENDER_CAMERA: calculated new projection matrix : perspective");
 	}
 
 	void RenderCamera::calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane) {
 		m_projection = mat4::orthographic(left, right, top, bottom, nearPlane, farPlane);
-
-		GRAPHICS_TRACE("RENDER_CAMERA: calculated new projection matrix : orthographic");
 	}
 
 	void RenderCamera::calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up) {
 		m_position = position;
 		m_view = mat4::lookAt(position, lookAt, up);
-
-		GRAPHICS_TRACE("RENDER_CAMERA: calculated new view transform, lookAt matrix");
 	}
 
 	void RenderCamera::calculateModel(maths::vec3 arg) {
 		m_model = mat4::translation(arg);
-
-		GRAPHICS_TRACE("RENDER_CAMERA: calculated new model transform");
 	}
 
 	void RenderCamera::recalculateMVP() {
 		m_mvp = m_projection * m_view;
-
-		GRAPHICS_TRACE("RENDER_CAMERA: recalculated Model-View-Projection Matrix!");
 	}
 
 	const maths::mat4& RenderCamera::getProjection() const { 

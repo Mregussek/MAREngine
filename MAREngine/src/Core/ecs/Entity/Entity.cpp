@@ -30,19 +30,15 @@ namespace marengine {
 		m_pSceneRegistry(pSceneRegistry),
 		m_entityHandle(m_pSceneRegistry->create())
 	{
-		ECS_TRACE("ENTITY: {} is constructed!", m_entityHandle);
 	}
 
 	Entity::Entity(entt::entity enttEntity, entt::registry* pSceneRegistry) :
 		m_pSceneRegistry(pSceneRegistry),
 		m_entityHandle(enttEntity)
 	{
-		ECS_TRACE("ENTITY: {} is constructed from entt::entity!", m_entityHandle);
 	}
 
 	const bool Entity::isValid() const {
-		ECS_TRACE("ENTITY: {} checking if is valid!", m_entityHandle);
-
 		return m_pSceneRegistry->valid(m_entityHandle);
 	}
 
@@ -55,11 +51,7 @@ namespace marengine {
 	}
 
 	void Entity::destroyYourself() const {
-		ECS_TRACE("ENTITY: {} is going to destroy yourself!", m_entityHandle);
-
 		m_pSceneRegistry->destroy(m_entityHandle);
-
-		ECS_INFO("ENTITY: destroyed yourself!");
 	}
 
 	const Entity& Entity::assignChild(const Entity& child) const {

@@ -22,7 +22,6 @@
 
 #include "PointLightBatch.h"
 #include "../GraphicsLimits.h"
-#include "../GraphicsLogs.h"
 #include "../../ecs/Components/LightComponents.h"
 #include "../../ecs/Entity/Entity.h"
 
@@ -51,8 +50,6 @@ namespace marengine {
 	}
 
 	void FPointLightBatch::submitEntityWithLightning(const Entity& entity) {
-		GRAPHICS_TRACE("F_POINT_LIGHT_BATCH: submitting {} entity with point light...", entity.getComponent<TagComponent>().tag);
-
 		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
 		const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 
@@ -61,10 +58,6 @@ namespace marengine {
 
 		auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
 		lightBatchInfoComponent.indexAtBatch = m_lights.size() - 1;
-
-		GRAPHICS_DEBUG("F_POINT_LIGHT_BATCH: submitted {} entity with pointLight, current lights size = {}, assigned rpc.lightIndex {}",
-			entity.getComponent<TagComponent>().tag, m_lights.size(), lightBatchInfoComponent.indexAtBatch
-		);
 	}
 
 	const FPointLightsArray& FPointLightBatch::getLights() const {

@@ -25,7 +25,6 @@
 
 
 #include "../../mar.h"
-#include "../PlatformLogs.h"
 
 
 namespace marengine {

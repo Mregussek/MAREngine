@@ -87,7 +87,6 @@ namespace marengine {
 			const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
 			if (!isGLAD_OK) {
-				MAR_CORE_ERROR("SETUP_OPENGL: gladLoadGLLoader with GLFW failed!");
 				return false;
 			}
 		}
@@ -95,12 +94,10 @@ namespace marengine {
 			const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 
 			if (!isGLAD_OK) {
-				MAR_CORE_ERROR("SETUP_OPENGL: gladLoadGLLoader with SDL failed!");
 				return false;
 			}
 		}
 		else {
-			MAR_CORE_ERROR("SETUP_OPENGL: Cannot initialize OpenGL, unsupported platform!");
 			return false;
 		}
 

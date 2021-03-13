@@ -26,6 +26,7 @@
 
 #include "mar.h"
 #include "ProjectManager.h"
+#include "Debug/Log.h"
 
 
 namespace marengine {
@@ -37,7 +38,7 @@ namespace marengine {
 		static MAREngine* Instance;
 
 
-		MAR_NO_DISCARD const bool shouldEngineRestart() const;
+		MAR_NO_DISCARD bool shouldEngineRestart() const;
 		MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
 		MAR_NO_DISCARD const std::string& getWindowName() const;
 
@@ -49,6 +50,7 @@ namespace marengine {
 	private:
 
 		ProjectManager m_projectManager;
+		LoggerType<std::shared_ptr<spdlog::logger>> m_logger;
 
 		bool m_shouldRestart{ false };
 

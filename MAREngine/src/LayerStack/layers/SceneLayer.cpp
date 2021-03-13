@@ -21,7 +21,6 @@
 
 
 #include "SceneLayer.h"
-#include "../LayerLogs.h"
 #include "../../Core/ecs/Scene.h"
 
 
@@ -33,28 +32,20 @@ namespace marengine {
 	}
 	
 	void SceneLayer::passSceneToManager(Scene* scene) {
-		LAYER_TRACE("SCENE_LAYER: passing to Scene to FSceneManagerEditor in {}!", p_debugName);
-
         m_sceneManagerEditor.setScene(scene);
 	}
 
 	void SceneLayer::initialize() {
-		LAYER_TRACE("SCENE_LAYER: {} going to initialize...", p_debugName);
-
         m_sceneManagerEditor.Instance = &m_sceneManagerEditor;
 
         m_sceneManagerEditor.initialize();
 	}
 
 	void SceneLayer::update() {
-		LAYER_TRACE("SCENE_LAYER: {} going to update...", p_debugName);
-
         m_sceneManagerEditor.update();
 	}
 
 	void SceneLayer::close() {
-		LAYER_TRACE("SCENE_LAYER: {} going to close...", p_debugName);
-
         m_sceneManagerEditor.close();
 	}
 

@@ -25,7 +25,6 @@
 
 
 #include "../mar.h"
-#include "LayerLogs.h"
 
 
 namespace marengine {

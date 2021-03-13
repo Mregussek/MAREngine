@@ -31,8 +31,6 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glStencilMask(0xFF) );
 
 		PLATFORM_GL_FUNC( glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, nullptr) );
-
-		PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 	}
 
 	void DrawingOpenGL::drawLineLoops(size_t indices_count, float line_width) {
@@ -41,8 +39,6 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glDrawElements(GL_LINE_LOOP, indices_count, GL_UNSIGNED_INT, nullptr) );
 						  
 		PLATFORM_GL_FUNC( glLineWidth(1.0f) );
-
-		PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 	}
 
 	void DrawingOpenGL::drawOutline(size_t indices_count) {
@@ -56,8 +52,6 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glStencilFunc(GL_ALWAYS, 1, 0xFF) );
 		PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) );
 		PLATFORM_GL_FUNC( glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE) );
-
-		PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 	}
 
 

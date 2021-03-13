@@ -37,7 +37,6 @@ namespace marengine {
 
 	template<typename TComponent>
 	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		MAR_CORE_ASSERT(m_sceneRegistry.has<TComponent>(entt_entity), "SCENE: Passed entity {} does not have component {}", entt_entity, typeid(TComponent).name());
 		return m_sceneRegistry.get<TComponent>(entt_entity);
 	}
 

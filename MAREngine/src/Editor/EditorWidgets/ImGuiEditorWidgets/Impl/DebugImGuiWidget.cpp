@@ -132,12 +132,12 @@ namespace marengine {
 
             if (entity.hasComponent<Texture2DComponent>()) {
                 const auto& textureComponent{ entity.getComponent<Texture2DComponent>() };
-                ImGui::Text("Texture2D.texturePath: %s", textureComponent.texturePath);
+                ImGui::Text("Texture2D.texturePath: %s", textureComponent.texturePath.c_str());
             }
 
             if (entity.hasComponent<TextureCubemapComponent>()) {
                 const auto& textureComponent{ entity.getComponent<TextureCubemapComponent>() };
-                ImGui::Text("TextureCubemap.texturePath: %s", textureComponent.texturePath);
+                ImGui::Text("TextureCubemap.texturePath: %s", textureComponent.texturePath.c_str());
             }
 
             if (entity.hasComponent<PointLightComponent>()) {

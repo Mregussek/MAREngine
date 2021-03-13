@@ -21,7 +21,6 @@
 
 
 #include "SceneDeserializer.h"
-#include "FilesystemLogging.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
 #include "../graphics/Mesh/MeshCreator.h"
@@ -34,13 +33,11 @@ namespace marengine {
 	Scene* FSceneDeserializer::loadSceneFromFile(const std::string& path) {
 		const std::string extension{ path.substr(path.find_last_of(".") + 1) };
 		if (extension != "json") {
-			FILESYSTEM_ERROR("FILESYSTEM: path extension is not json! Found {} in given path {}", extension, path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
 		
 		std::ifstream file(path);
 		if (!file.is_open()) {
-			FILESYSTEM_ERROR("FILESYSTEM: cannot open file at given path {}!", path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
 		nlohmann::json json{ nlohmann::json::parse(file) };

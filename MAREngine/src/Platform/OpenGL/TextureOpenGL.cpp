@@ -42,8 +42,6 @@ namespace marengine {
 
 		s_2d.clear();
 		s_cubemaps.clear();
-
-		PLATFORM_INFO("TEXTURE_OPENGL: deleting all textures");
 	}
 
 	uint32_t TextureOpenGL::genNewTexture(const char* path) {
@@ -68,7 +66,6 @@ namespace marengine {
 				dataFormat = GL_RGB;
 			}
 			else {
-				PLATFORM_ERROR("TEXTURE_OPENGL: Format from texture is not supported! bitPerPixel: {0:d}",  bitPerPixel);
 				return 0;
 			}
 
@@ -86,12 +83,8 @@ namespace marengine {
 
 			stbi_image_free(localBuffer);
 
-			PLATFORM_TRACE("TEXTURE_OPENGL: {} 2D texture loaded successfully - assigned to: {}!", path, id);
-
 			return id;
 		}
-
-		PLATFORM_ERROR("TEXTURE_OPENGL: Failed to load {}", path);
 
 		return 0;
 	}
@@ -100,7 +93,6 @@ namespace marengine {
 		const auto search = s_2d.find(std::move(path));
 
 		if (search != s_2d.cend()) {
-			PLATFORM_TRACE("TEXTURE_OPENGL: Assigning loaded 2D texture {} - {}!", search->first, search->second);
 			return search->second;
 		}
 
@@ -137,7 +129,6 @@ namespace marengine {
 				stbi_image_free(localBuffer);
 			}
 			else {
-				PLATFORM_ERROR("TEXTURE_OPENGL: Cubemap texture failed to load! Path: {}, Face: {}", path, faces[i]);
 				stbi_image_free(localBuffer);
 			}
 		}
@@ -149,8 +140,6 @@ namespace marengine {
 		PLATFORM_GL_FUNC ( glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
 		PLATFORM_GL_FUNC ( glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE) );
 
-		PLATFORM_TRACE("TEXTURE_OPENGL: {} cubemap loaded successfully and assigned to: {}!", path, id);
-
 		return id;
 	}
 
@@ -158,7 +147,6 @@ namespace marengine {
 		const auto search = s_cubemaps.find(std::move(path));
 
 		if (search != s_cubemaps.cend()) {
-			PLATFORM_TRACE("TEXTURE_OPENGL: Assigning loaded cubemap {} - {}!", search->first, search->second);
 			return search->second;
 		}
 
@@ -196,15 +184,11 @@ namespace marengine {
 	void TextureOpenGL::bind2D(uint32_t unit, uint32_t tex_id) const {
 		PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, tex_id) );
-
-		PLATFORM_TRACE("TEXTURE_OPENGL: Binding2D - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_2D, {})", unit, tex_id);
 	}
 
 	void TextureOpenGL::bindCube(uint32_t unit, uint32_t cube_id) const {
 		PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP , cube_id));
-
-		PLATFORM_TRACE("TEXTURE_OPENGL: BindingCube - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_CUBE_MAP, {})", unit, cube_id);
 	}
 
 	void TextureOpenGL::unbind(const std::vector<float>& texture_types) const {
@@ -218,8 +202,6 @@ namespace marengine {
 				PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP, 0) );
 			}
 		}
-
-		PLATFORM_TRACE("TEXTURE_OPENGL: Unbinding texture");
 	}
 
 

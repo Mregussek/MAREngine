@@ -23,94 +23,85 @@
 #include "Log.h"
 
 
-#ifdef MAR_ENGINE_DEBUG_MODE
-
-
 namespace marengine {
 
-	bool Log::s_initialized{ false };
-	std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
+    ILoggerType* Logger::s_loggerType{ nullptr };
 
 
-	void Log::init() {
-		if (s_initialized) {
-			return;
-		}
+    void ILoggerType::create() {
+        static_assert(true, "Cannot call ILoggerType::create()!!!");
+    }
 
+
+    void Logger::init(ILoggerType* loggerType) {
+        s_loggerType = loggerType;
+        s_loggerType->create();
+    }
+
+
+    template<>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::create() {
 		spdlog::set_pattern("%^[%T] %n: %v%$");
-
-		constexpr bool terminalLogging{ true };
-
-		if constexpr (terminalLogging) {
-			s_CoreLogger = spdlog::stdout_color_mt("MAR ENGINE");
-		}
-		else {
-			struct tm ltm;
-			time_t now = time(0);
-			localtime_s(&ltm, &now);
-			std::string filename = // we got format logs/log<year><month><day>_<hour><min><sec>.txt Ex. logs/log20200730_23546.txt
-				"logs/log" +
-				std::to_string(1900 + ltm.tm_year) + std::to_string(1 + ltm.tm_mon) + std::to_string(ltm.tm_mday) +
-				"_" +
-				std::to_string(ltm.tm_hour) + std::to_string(1 + ltm.tm_min) + std::to_string(1 + ltm.tm_sec) +
-				".txt";
-
-			auto max_size = 1048576 * 35;
-			auto max_files = 10;
-
-			s_CoreLogger = spdlog::rotating_logger_mt("MAR ENGINE", filename, max_size, max_files);
-		}
-
-		s_CoreLogger->set_level(spdlog::level::warn);
-
-		s_initialized = true;
+        m_loggerType = spdlog::stdout_color_mt("MAR ENGINE");
+        m_loggerType->set_level(spdlog::level::warn);
 	}
 
-	std::string Log::GetGLErrorStr(GLenum err) {
-		switch (err) {
-		case GL_NO_ERROR:          return "No error";
-		case GL_INVALID_ENUM:      return "Invalid enum";
-		case GL_INVALID_VALUE:     return "Invalid value";
-		case GL_INVALID_OPERATION: return "Invalid operation";
-		case GL_STACK_OVERFLOW:    return "Stack overflow";
-		case GL_STACK_UNDERFLOW:   return "Stack underflow";
-		case GL_OUT_OF_MEMORY:     return "Out of memory";
-		default:                   return "Unknown error";
-		}
-	}
+    template<> template<typename... Args>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::trace(std::string message, Args&&... args) {
+        m_loggerType->template trace(std::move(message), std::forward<Args>(args)...);
+    }
 
-	void Log::CheckGLError(const char* file, int line) {
-		while (true) {
-			GLenum err = glGetError();
-			if (GL_NO_ERROR == err) {
-				return;
-			}
+    template<> template<typename... Args>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::debug(std::string message, Args&&... args) {
+        m_loggerType->template debug(std::move(message), std::forward<Args>(args)...);
+    }
 
-			getCoreLogger()->error(GetGLErrorStr(err));
-			getCoreLogger()->error(file);
-			getCoreLogger()->error(line);
-		}
-	}
+    template<> template<typename... Args>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::info(std::string message, Args&&... args) {
+        m_loggerType->template info(std::move(message), std::forward<Args>(args)...);
+    }
 
-	void Log::clearError() {
-		while (glGetError() != GL_NO_ERROR);
-	}
+    template<> template<typename... Args>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::warn(std::string message, Args&&... args) {
+        m_loggerType->template warn(std::move(message), std::forward<Args>(args)...);
+    }
 
-	bool Log::checkForOpenGLError(const char* function, const char* file, int line) {
-		while (GLenum err = glGetError()) {
-			getCoreLogger()->error("[OpenGL Error] {} {} {} \n{}", GetGLErrorStr(err), function, file, line);
-			return false;
-		}
+    template<> template<typename... Args>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::err(std::string message, Args&&... args) {
+        m_loggerType->template error(std::move(message), std::forward<Args>(args)...);
+    }
 
-		return true;
-	}
+    template<> template<typename... Args>
+    void LoggerType<std::shared_ptr<spdlog::logger>>::critic(std::string message, Args&&... args) {
+        m_loggerType->template critical(std::move(message), std::forward<Args>(args)...);
+    }
 
-	spdlog::logger* Log::getCoreLogger() {
-		return s_CoreLogger.get();
-	}
+
+    void Logger::clearErrorOpenGL() {
+        while (glGetError() != GL_NO_ERROR);
+    }
+
+    bool Logger::checkErrorOpenGL(const char* function, const char* file, int line) {
+        while (GLenum issue = glGetError()) {
+            //Logger::err(std::string("[OpenGL Error] {} {} {} \n{}"), getOccuredErrorOpenGl(issue), function, file, line);
+            return false;
+        }
+
+        return true;
+    }
+
+    const char* Logger::getOccuredErrorOpenGl(GLenum issue) {
+        switch (issue) {
+            case GL_NO_ERROR:          return "No error";
+            case GL_INVALID_ENUM:      return "Invalid enum";
+            case GL_INVALID_VALUE:     return "Invalid value";
+            case GL_INVALID_OPERATION: return "Invalid operation";
+            case GL_STACK_OVERFLOW:    return "Stack overflow";
+            case GL_STACK_UNDERFLOW:   return "Stack underflow";
+            case GL_OUT_OF_MEMORY:     return "Out of memory";
+            default:                   return "Unknown error";
+        }
+    }
 
 
 }
-
-
-#endif

@@ -21,7 +21,6 @@
 
 
 #include "PythonScript.h"
-#include "ScriptingLogs.h"
 #include "../../ProjectManager.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Components/Components.h"
@@ -42,8 +41,6 @@ namespace marengine {
         }
     
         m_module = m_scriptModule.attr(what.c_str())();
-    
-        SCRIPTING_INFO("PYTHON_SCRIPT: Loaded script {} from {}", what, from);
     }
     
     void PythonScript::start(const Entity& entity) const {
@@ -69,8 +66,6 @@ namespace marengine {
         }
     
         m_module.attr("start")();
-    
-        SCRIPTING_TRACE("PYTHON_SCRIPT: Calling start method at python script");
     }
     
     void PythonScript::update(const Entity& entity) const {
@@ -113,8 +108,6 @@ namespace marengine {
             auto& color = entity.getComponent<ColorComponent>();
             color = m_module.attr("color").cast<ColorComponent>();
         }
-    
-        SCRIPTING_TRACE("PYTHON_SCRIPT: Calling update method at python script");
     }
     
     void PythonScript::appendCurrentPath() {
@@ -125,8 +118,6 @@ namespace marengine {
     
         auto sys = py::module::import("sys");
         sys.attr("path").attr("insert")(0, path);
-    
-        SCRIPTING_TRACE("PYTHON_SCRIPT: Appending current path to PyInterpreter");
     }
     
     std::string PythonScript::changeSlashesToDots(std::string script) {
@@ -142,17 +133,13 @@ namespace marengine {
     
         rtn = rtn.substr(0, rtn.size() - 3);
     
-        SCRIPTING_TRACE("PYTHON_SCRIPT: changing slashes {} to dots {}", script, rtn);
-    
         return rtn;
     }
     
     std::string PythonScript::getModuleFromPath(std::string script) {
         const std::string filename = script.substr(script.find_last_of("/") + 1, script.size());
         const std::string deletedDotPyFromPath = filename.substr(0, filename.size() - 3);
-    
-        SCRIPTING_TRACE("PYTHON_SCRIPT: returning module {} from path {}", script, rtn);
-    
+
         return deletedDotPyFromPath;
     }
 

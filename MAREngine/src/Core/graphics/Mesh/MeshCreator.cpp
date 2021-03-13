@@ -25,7 +25,6 @@
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Scene.h"
-#include "../GraphicsLogs.h"
 
 
 namespace marengine {
@@ -130,11 +129,8 @@ namespace marengine {
         const bool loadout{ Loader.LoadFile(path) };
     
         if (!loadout) {
-            GRAPHICS_WARN("MESH_CREATOR: could not load .obj file {}", path);
             return;
         }
-
-        GRAPHICS_TRACE("MESH_CREATOR: loaded {}, pushing to collection...", path);
 
         if (Loader.LoadedMeshes.size() == 1) {
             auto& renderable{ entity.addComponent<RenderableComponent>() };

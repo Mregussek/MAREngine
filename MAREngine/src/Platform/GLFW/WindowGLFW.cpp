@@ -28,6 +28,11 @@
 namespace marengine {
 
 
+    template<>
+    void WindowInstance<GLFWwindow>::setVerticalSync(int32_t setter) const {
+        glfwSwapInterval(setter);
+    }
+
 	template<>
 	bool WindowInstance<GLFWwindow>::initialize(int32_t width, int32_t height, const char* name) {
 		s_instance = this;
@@ -37,7 +42,6 @@ namespace marengine {
 		const int32_t glfw_init = glfwInit();
 
 		if (glfw_init != GLFW_TRUE) {
-			PLATFORM_ERROR("WINDOW_GLFW: glfwInit() failure!");
 			return false;
 		}
 
@@ -47,12 +51,9 @@ namespace marengine {
 		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 		glfwWindowHint(GLFW_SAMPLES, 4);
 
-		PLATFORM_INFO("WINDOW_GLFW: GLFW has been initialized successfully!");
-
 		m_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
 		if (!m_window) {
 			glfwTerminate();
-			PLATFORM_ERROR("WINDOW_GLFW: glfwCreateWindow() failure!");
 			return false;
 		}
 
@@ -64,13 +65,10 @@ namespace marengine {
 		glfwSetScrollCallback(m_window, callbacks::scrollCallback);
 		glfwSetMouseButtonCallback(m_window, callbacks::mouseButtonCallback);
 
-		PLATFORM_INFO("WINDOW_GLFW: set all callbacks!");
-
 		setVerticalSync(1);
 
 		const bool isOpenGL_OK = SetupOpenGL::init();
 		if (!isOpenGL_OK) {
-			MAR_CORE_ERROR("MARENGINE: Cannot initialize OpenGL!");
 			const char c = getchar();
 			return false;
 		}
@@ -86,15 +84,6 @@ namespace marengine {
 	template<>
 	void WindowInstance<GLFWwindow>::terminate() {
 		glfwTerminate();
-
-		PLATFORM_INFO("WINDOW_GLFW: window terminated");
-	}
-
-	template<>
-	void WindowInstance<GLFWwindow>::setVerticalSync(int32_t setter) const {
-		glfwSwapInterval(setter);
-
-		PLATFORM_INFO("WINDOW_GLFW: is vertical synchronization used - {}", setter);
 	}
 
 	template<>
@@ -109,8 +98,6 @@ namespace marengine {
 
 		glfwPollEvents();
 		glfwSwapBuffers(m_window);
-
-		PLATFORM_TRACE("WINDOW_GLFW: window has swapped buffers");
 	}
 
 	template<>

@@ -35,8 +35,6 @@ namespace marengine {
 	class LayerStack {
 	public:
 
-		LayerStack();
-
 		Layer* operator[](uint32_t index);
 
 		void close();

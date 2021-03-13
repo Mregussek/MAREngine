@@ -21,7 +21,6 @@
 
 
 #include "SceneSerializer.h"
-#include "FilesystemLogging.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Components/Components.h"
@@ -33,7 +32,6 @@ namespace marengine {
 	void FSceneSerializer::saveSceneToFile(const char* path, Scene* scene) {
 		std::ofstream ss(path, std::ios::out | std::ios::trunc);
 		if (!ss.is_open()) {
-			FILESYSTEM_ERROR("FILESSYTEM: Cannot open file {} and save scene at {}!", name, filename);
 			return;
 		}
 

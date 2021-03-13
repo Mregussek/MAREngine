@@ -25,7 +25,6 @@
 
 
 #include "../../mar.h"
-#include "../PlatformLogs.h"
 #include "../GLSL/ShaderUniforms.h"
 
 
@@ -48,17 +47,11 @@ namespace marengine {
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
-			PLATFORM_TRACE("SHADER_STORAGE_BUFFER_OPENGL: updating SSBO {} with vector<{}>, offset = {}, memory = {}, data.size() = {}",
-				m_ssbo, typeid(T).name(), offset, memory, data.size());
-
 			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data.data()) );
 		}
 
 		template<typename T>
 		void update(uint32_t offset, uint32_t memory, const T* data) const {
-			PLATFORM_TRACE("SHADER_STORAGE_BUFFER_OPENGL: updating SSBO {} with const {}*, offset = {}, memory = {}",
-				m_ssbo, typeid(T).name(), offset, memory);
-
 			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data) );
 		}
 

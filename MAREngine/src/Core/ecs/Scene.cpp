@@ -21,7 +21,6 @@
 
 
 #include "Scene.h"
-#include "ECSLogs.h"
 
 
 namespace marengine {
@@ -61,24 +60,16 @@ namespace marengine {
 
 		m_entities.clear();
 		m_sceneRegistry.clear();
-
-		ECS_INFO("SCENE: registry is cleared! (called destructor)");
 	}
 
 	const Entity& Scene::createEntity() {
-		ECS_INFO("SCENE: going to create entity!");
-
 		const Entity& entity{ m_entities.emplace_back(&m_sceneRegistry) };
 		Entity::fillEntityWithBasicComponents(entity);
-
-		ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
 
 		return entity;
 	}
 
 	void Scene::destroyEntity(const Entity& entity) {
-		ECS_INFO("SCENE: going to destroy entity at {}!", entity.m_entityHandle);
-
 		auto it = std::find_if(m_entities.begin(), m_entities.end(), [&entity](const Entity& iterator) {
 			return 	&iterator == &entity;
 		});

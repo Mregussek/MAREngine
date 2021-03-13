@@ -21,7 +21,6 @@
 
 
 #include "RenderLayer.h"
-#include "../../Window/Window.h"
 
 
 namespace marengine {
@@ -32,8 +31,6 @@ namespace marengine {
 	}
 
 	void RenderLayer::initialize() {
-		LAYER_TRACE("RENDER_LAYER: {} going to initialize...", p_debugName);
-
 		m_memorizer.Instance = &m_memorizer;
 		m_statistics.Instance = &m_statistics;
 		m_renderPipeline.Instance = &m_renderPipeline;
@@ -43,16 +40,12 @@ namespace marengine {
 	}
 
 	void RenderLayer::update() {
-		LAYER_TRACE("RENDER_LAYER: {} going to update...", p_debugName);
-
 		m_statistics.reset();
 		m_renderer.draw();
 		m_statistics.update();
 	}
 
 	void RenderLayer::close() {
-		LAYER_TRACE("RENDER_LAYER: {} going to close...", p_debugName);
-	
 		m_renderPipeline.reset();
 		m_pipelineManager.close();
 

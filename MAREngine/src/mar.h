@@ -28,4 +28,7 @@
 #define MAR_ENGINE_USE_SDL_WINDOW 0
 
 
+#define PLATFORM_GL_FUNC(x) x
+
+
 #define MAR_NO_DISCARD [[nodiscard]]

@@ -21,6 +21,8 @@
 
 
 #include "Engine.h"
+
+#include <utility>
 #include "Debug/Log.h"
 #include "Core/scripting/PythonScript.h"
 
@@ -33,15 +35,15 @@ namespace marengine {
 
     void MAREngine::initialize(std::string projectName, std::string sceneToLoadAtStartup) {
         Instance = this;
-		m_projectManager.Instance = &m_projectManager;
-		m_projectManager.fillProjectInfo(projectName, sceneToLoadAtStartup);
+        m_projectManager.fillProjectInfo(std::move(projectName), std::move(sceneToLoadAtStartup));
+		ProjectManager::Instance = &m_projectManager;
 
-		MAR_LOG_INIT();
+		Logger::init(&m_logger);
 
 		PythonScript::appendCurrentPath();
 	}
 
-	MAR_NO_DISCARD const bool MAREngine::shouldEngineRestart() const {
+	MAR_NO_DISCARD bool MAREngine::shouldEngineRestart() const {
 		return m_shouldRestart;
 	}
 

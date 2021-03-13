@@ -25,7 +25,6 @@
 
 
 #include "../../mar.h"
-#include "../PlatformLogs.h"
 
 
 namespace marengine::callbacks {
@@ -46,7 +45,7 @@ namespace marengine::callbacks {
 	
 
 	static void windowErrorCallback(int32_t error, const char* description) {
-		PLATFORM_ERROR("WINDOW_GLFW: Error number: {}, description: {}", error, description);
+
 	}
 	
 	static void framebufferSizeCallback(GLFWwindow* window, int32_t w, int32_t h) {

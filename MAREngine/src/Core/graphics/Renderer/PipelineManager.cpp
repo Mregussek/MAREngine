@@ -21,7 +21,6 @@
 
 
 #include "PipelineManager.h"
-#include "../GraphicsLogs.h"
 
 
 namespace marengine {
@@ -31,17 +30,14 @@ namespace marengine {
 
 
 	FPipeline& FPipelineManager::createPipeline() {
-		GRAPHICS_TRACE("F_PIPELINE_MANAGER: creating pipeline... current size {}", m_pipelines.size() + 1);
 		return m_pipelines.emplace_back();
 	}
 
 	FShaderStorageBuffer& FPipelineManager::createSSBO() {
-		GRAPHICS_TRACE("F_PIPELINE_MANAGER: creating pipeline... current size {}", m_shaderStorageBuffers.size() + 1);
 		return m_shaderStorageBuffers.emplace_back();
 	}
 
 	FUniformBuffer& FPipelineManager::createUBO() {
-		GRAPHICS_TRACE("F_PIPELINE_MANAGER: creating pipeline... current size {}", m_uniformBuffers.size() + 1);
 		return m_uniformBuffers.emplace_back();
 	}
 
@@ -70,8 +66,6 @@ namespace marengine {
 	}
 
 	void FPipelineManager::close() {
-		GRAPHICS_TRACE("F_PIPELINE_MANAGER: closing...");
-
 		for (auto& pipeline : m_pipelines) {
 			pipeline.close();
 		}

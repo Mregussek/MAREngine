@@ -27,75 +27,106 @@
 #include "../mar.h"
 
 
-#ifdef MAR_ENGINE_DEBUG_MODE
-
-
 namespace marengine {
 
 
-	class Log {
+    class ILoggerType {
+    public:
 
-		static bool s_initialized;
-		static std::shared_ptr<spdlog::logger> s_CoreLogger;
+        virtual void create();
 
-	public:
+        template<typename TLogger, typename... Args>
+        void trace(std::string message, Args&&... args);
 
-		static void init();
+        template<typename TLogger, typename... Args>
+        void debug(std::string message, Args&&... args);
 
-		static std::string GetGLErrorStr(GLenum err);
+        template<typename TLogger, typename... Args>
+        void info(std::string message, Args&&... args);
 
-		static void CheckGLError(const char* file, int line);
+        template<typename TLogger, typename... Args>
+        void warn(std::string message, Args&&... args);
 
-		static void clearError();
+        template<typename TLogger, typename... Args>
+        void err(std::string message, Args&&... args);
 
-		static bool checkForOpenGLError(const char* function, const char* file, int line);
+        template<typename TLogger, typename... Args>
+        void critic(std::string message, Args&&... args);
 
-		static spdlog::logger* getCoreLogger();
+    };
 
-	};
+
+    template<typename T>
+    class LoggerType : public ILoggerType {
+    public:
+
+        void create() override;
+
+        template<typename... Args>
+        void trace(std::string message, Args&&... args);
+
+        template<typename... Args>
+        void debug(std::string message, Args&&... args);
+
+        template<typename... Args>
+        void info(std::string message, Args&&... args);
+
+        template<typename... Args>
+        void warn(std::string message, Args&&... args);
+
+        template<typename... Args>
+        void err(std::string message, Args&&... args);
+
+        template<typename... Args>
+        void critic(std::string message, Args&&... args);
+
+    private:
+
+        T m_loggerType;
+
+    };
+
+
+    class Logger {
+    public:
+
+        static void init(ILoggerType* loggerType);
+
+        template<typename... Args>
+        static void trace(std::string message, Args&&... args);
+
+        template<typename... Args>
+        static void debug(std::string message, Args&&... args);
+
+        template<typename... Args>
+        static void info(std::string message, Args&&... args);
+
+        template<typename... Args>
+        static void warn(std::string message, Args&&... args);
+
+        template<typename... Args>
+        static void err(std::string message, Args&&... args);
+
+        template<typename... Args>
+        static void critic(std::string message, Args&&... args);
+
+        static void clearErrorOpenGL();
+
+        static bool checkErrorOpenGL(const char* function, const char* file, int line);
+
+        static const char* getOccuredErrorOpenGl(GLenum issue);
+
+    private:
+
+        static ILoggerType* s_loggerType;
+
+    };
 
 
 }
 
 
-#define MAR_LOG_INIT() ::marengine::Log::init()
+#include "Logger.inl"
 
-#define MAR_CORE_TRACE(...) ::marengine::Log::getCoreLogger()->trace(__VA_ARGS__)
-#define MAR_CORE_DEBUG(...) ::marengine::Log::getCoreLogger()->debug(__VA_ARGS__)
-#define MAR_CORE_INFO(...)  ::marengine::Log::getCoreLogger()->info(__VA_ARGS__)
-#define MAR_CORE_WARN(...)  ::marengine::Log::getCoreLogger()->warn(__VA_ARGS__)
-#define MAR_CORE_ERROR(...) ::marengine::Log::getCoreLogger()->error(__VA_ARGS__)
-#define MAR_CORE_CRITICAL(...) ::marengine::Log::getCoreLogger()->critical(__VA_ARGS__)
-
-#define MAR_CORE_CHECK_FOR_ERROR()  ::marengine::Log::CheckGLError(__FILE__, __LINE__) 
-
-#define ASSERT_NO_MSG(x) if(!(x)) __debugbreak()
-
-#define ASSERT(x, ...) if(!(x)) MAR_CORE_ERROR(__VA_ARGS__);\
-                       ASSERT_NO_MSG(x)
-
-#define MAR_CORE_ASSERT(x, ...) ASSERT(x, __VA_ARGS__)
-
-#define MAR_CORE_GL_FUNC(x) ::marengine::Log::clearError();\
-                            x;\
-                            ASSERT_NO_MSG(::marengine::Log::checkForOpenGLError(#x, __FILE__, __LINE__))
-
-#else
-
-#define ASSERT(...)
-#define MAR_CORE_ASSERT(...)
-
-#define MAR_LOG_INIT()
-
-#define MAR_CORE_TRACE(...) 
-#define MAR_CORE_INFO(...)  
-#define MAR_CORE_WARN(...)  
-#define MAR_CORE_ERROR(...) 
-
-#define MAR_CORE_CHECK_FOR_ERROR()  
-
-#define MAR_CORE_GL_FUNC(x) x;
-
-#endif
 
 #endif // !MAR_ENGINE_DEBUG_LOG_H

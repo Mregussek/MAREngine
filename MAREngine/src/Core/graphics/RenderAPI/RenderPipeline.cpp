@@ -24,7 +24,6 @@
 #include "../Renderer/PipelineManager.h"
 #include "RenderBufferManager.h"
 #include "RenderCamera.h"
-#include "../GraphicsLogs.h"
 #include "../GraphicsLimits.h"
 #include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Entity/Entity.h"
@@ -45,19 +44,13 @@ namespace marengine {
 		m_staticTexture2DBatches.clear();
 
 		m_pointLightBatch.reset();
-
-		GRAPHICS_INFO("RENDER_PIPELINE: all data was resetted!");
 	}
 
 	void RenderPipeline::pushCameraToPipeline(const RenderCamera* cam) {
 		m_renderCamera = cam;
-
-		GRAPHICS_TRACE("RENDER_PIPELINE: submitted Camera!");
 	}
 
 	void RenderPipeline::pushEntityToPipeline(const Entity& entity) {
-		GRAPHICS_INFO("RENDER_PIPELINE: going to submit entity into pipeline...");
-
 		if (entity.hasComponent<ColorComponent>()) {
 			const uint32_t batchIndex{ getAvailableColorBatch(entity) };
 			auto& availableBatch{ m_staticColorBatches[batchIndex] };
@@ -96,8 +89,6 @@ namespace marengine {
 				pushEntityCameraToPipeline(entity);
 			}
 		}
-
-		GRAPHICS_INFO("RENDER_PIPELINE: submitted entity into pipeline");
 	}
 
 	void RenderPipeline::onBatchesReadyToDraw() {

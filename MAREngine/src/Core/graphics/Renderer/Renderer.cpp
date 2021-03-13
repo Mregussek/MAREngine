@@ -24,7 +24,6 @@
 #include "RendererEvents.h"
 #include "PipelineManager.h"
 #include "RenderMemorizer.h"
-#include "../GraphicsLogs.h"
 #include "../RenderAPI/RenderPipeline.h"
 #include "../Mesh/MeshBatchStaticColor.h"
 #include "../Mesh/MeshBatchStaticTexture2D.h"
@@ -37,14 +36,10 @@ namespace marengine {
 
 
 	void FRenderer::initialize() {
-		GRAPHICS_INFO("RENDERER_BATCH: going to initialize!");
-
 		setupShaders();
 	}
 
 	void FRenderer::setupShaders() {
-		GRAPHICS_TRACE("RENDERER_BATCH: going to setup shaders...");
-
 		{
 			const char* vert = "resources/shaders/color.vert.glsl";
 			const char* frag = "resources/shaders/color.frag.glsl";
@@ -63,17 +58,12 @@ namespace marengine {
 	}
 
 	void FRenderer::close() {
-		GRAPHICS_INFO("RENDERER_BATCH: going to close!");
-
 		m_shaderColors.shutdown();
 		m_shader2D.shutdown();
 		TextureOpenGL::Instance()->shutdown();
-
-		GRAPHICS_INFO("RENDERER_BATCH: closed!");
 	}
 
 	void FRenderer::draw() const {
-		GRAPHICS_TRACE("RENDERER_BATCH: going to draw render pipeline!");
 		const RenderPipeline* renderPipeline( RenderPipeline::Instance );
 
 		const auto& cameraSSBO{ FPipelineManager::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
@@ -87,8 +77,6 @@ namespace marengine {
 		drawColors(renderPipeline->getColorBatches()[0]);
 		m_shader2D.bind();
 		drawTextures2D(renderPipeline->getTexture2DBatches()[0]);
-
-		GRAPHICS_INFO("RENDERER_BATCH: drawn data given from render pipeline!");
 	}
 
 	void FRenderer::drawColors(const FMeshBatchStaticColor& batch) const {
