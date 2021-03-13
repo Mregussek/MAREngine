@@ -50,7 +50,6 @@ namespace marengine {
 	private:
 
 		ProjectManager m_projectManager;
-		LoggerType<std::shared_ptr<spdlog::logger>> m_logger;
 
 		bool m_shouldRestart{ false };
 

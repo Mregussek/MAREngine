@@ -30,85 +30,34 @@
 namespace marengine {
 
 
-    class ILoggerType {
-    public:
-
-        virtual void create();
-
-        template<typename TLogger, typename... Args>
-        void trace(std::string message, Args&&... args);
-
-        template<typename TLogger, typename... Args>
-        void debug(std::string message, Args&&... args);
-
-        template<typename TLogger, typename... Args>
-        void info(std::string message, Args&&... args);
-
-        template<typename TLogger, typename... Args>
-        void warn(std::string message, Args&&... args);
-
-        template<typename TLogger, typename... Args>
-        void err(std::string message, Args&&... args);
-
-        template<typename TLogger, typename... Args>
-        void critic(std::string message, Args&&... args);
-
-    };
-
-
-    template<typename T>
-    class LoggerType : public ILoggerType {
-    public:
-
-        void create() override;
-
-        template<typename... Args>
-        void trace(std::string message, Args&&... args);
-
-        template<typename... Args>
-        void debug(std::string message, Args&&... args);
-
-        template<typename... Args>
-        void info(std::string message, Args&&... args);
-
-        template<typename... Args>
-        void warn(std::string message, Args&&... args);
-
-        template<typename... Args>
-        void err(std::string message, Args&&... args);
-
-        template<typename... Args>
-        void critic(std::string message, Args&&... args);
-
-    private:
-
-        T m_loggerType;
-
+    enum class ELoggerType {
+        EDITOR, GRAPHICS, ECS, SCRIPTS, FILESYSTEM, PLATFORMS,
+        WINDOW, LAYERS
     };
 
 
     class Logger {
     public:
 
-        static void init(ILoggerType* loggerType);
+        static void init();
 
-        template<typename... Args>
-        static void trace(std::string message, Args&&... args);
+        template<ELoggerType TLoggerType, typename... TArgs>
+        static void trace(std::string message, TArgs&&... args);
 
-        template<typename... Args>
-        static void debug(std::string message, Args&&... args);
+        template<ELoggerType TLoggerType, typename... TArgs>
+        static void debug(std::string message, TArgs&&... args);
 
-        template<typename... Args>
-        static void info(std::string message, Args&&... args);
+        template<ELoggerType TLoggerType, typename... TArgs>
+        static void info(std::string message, TArgs&&... args);
 
-        template<typename... Args>
-        static void warn(std::string message, Args&&... args);
+        template<ELoggerType TLoggerType, typename... TArgs>
+        static void warn(std::string message, TArgs&&... args);
 
-        template<typename... Args>
-        static void err(std::string message, Args&&... args);
+        template<ELoggerType TLoggerType, typename... TArgs>
+        static void err(std::string message, TArgs&&... args);
 
-        template<typename... Args>
-        static void critic(std::string message, Args&&... args);
+        template<ELoggerType TLoggerType, typename... TArgs>
+        static void critic(std::string message, TArgs&&... args);
 
         static void clearErrorOpenGL();
 
@@ -118,7 +67,10 @@ namespace marengine {
 
     private:
 
-        static ILoggerType* s_loggerType;
+        template<ELoggerType TLoggerType>
+        static bool checkIfCanBeLogged();
+
+        static std::shared_ptr<spdlog::logger> s_logger;
 
     };
 

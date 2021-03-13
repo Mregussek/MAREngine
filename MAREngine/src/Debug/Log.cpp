@@ -25,65 +25,43 @@
 
 namespace marengine {
 
-    ILoggerType* Logger::s_loggerType{ nullptr };
+    std::shared_ptr<spdlog::logger> Logger::s_logger{ nullptr };
 
 
-    void ILoggerType::create() {
-        static_assert(true, "Cannot call ILoggerType::create()!!!");
+    void Logger::init() {
+        spdlog::set_pattern("%^[%T] %n: %v%$");
+        s_logger = spdlog::stdout_color_mt("MAR ENGINE");
+
+        if constexpr(MARENGINE_LOGGING_LEVEL == 0) {
+            s_logger->set_level(spdlog::level::trace);
+        }
+        else if constexpr(MARENGINE_LOGGING_LEVEL == 1) {
+            s_logger->set_level(spdlog::level::debug);
+        }
+        else if constexpr(MARENGINE_LOGGING_LEVEL == 2) {
+            s_logger->set_level(spdlog::level::info);
+        }
+        else if constexpr(MARENGINE_LOGGING_LEVEL == 3) {
+            s_logger->set_level(spdlog::level::warn);
+        }
+        else if constexpr(MARENGINE_LOGGING_LEVEL == 4) {
+            s_logger->set_level(spdlog::level::err);
+        }
+        else if constexpr(MARENGINE_LOGGING_LEVEL == 5) {
+            s_logger->set_level(spdlog::level::critical);
+        }
+        else if constexpr(MARENGINE_LOGGING_LEVEL == 6) {
+            s_logger->set_level(spdlog::level::off);
+        }
     }
-
-
-    void Logger::init(ILoggerType* loggerType) {
-        s_loggerType = loggerType;
-        s_loggerType->create();
-    }
-
-
-    template<>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::create() {
-		spdlog::set_pattern("%^[%T] %n: %v%$");
-        m_loggerType = spdlog::stdout_color_mt("MAR ENGINE");
-        m_loggerType->set_level(spdlog::level::warn);
-	}
-
-    template<> template<typename... Args>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::trace(std::string message, Args&&... args) {
-        m_loggerType->template trace(std::move(message), std::forward<Args>(args)...);
-    }
-
-    template<> template<typename... Args>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::debug(std::string message, Args&&... args) {
-        m_loggerType->template debug(std::move(message), std::forward<Args>(args)...);
-    }
-
-    template<> template<typename... Args>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::info(std::string message, Args&&... args) {
-        m_loggerType->template info(std::move(message), std::forward<Args>(args)...);
-    }
-
-    template<> template<typename... Args>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::warn(std::string message, Args&&... args) {
-        m_loggerType->template warn(std::move(message), std::forward<Args>(args)...);
-    }
-
-    template<> template<typename... Args>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::err(std::string message, Args&&... args) {
-        m_loggerType->template error(std::move(message), std::forward<Args>(args)...);
-    }
-
-    template<> template<typename... Args>
-    void LoggerType<std::shared_ptr<spdlog::logger>>::critic(std::string message, Args&&... args) {
-        m_loggerType->template critical(std::move(message), std::forward<Args>(args)...);
-    }
-
 
     void Logger::clearErrorOpenGL() {
         while (glGetError() != GL_NO_ERROR);
     }
 
     bool Logger::checkErrorOpenGL(const char* function, const char* file, int line) {
-        while (GLenum issue = glGetError()) {
-            //Logger::err(std::string("[OpenGL Error] {} {} {} \n{}"), getOccuredErrorOpenGl(issue), function, file, line);
+        while (const GLenum issue = glGetError()) {
+            Logger::err<ELoggerType::PLATFORMS>("[OpenGL Error] {} {} {} \n{}", getOccuredErrorOpenGl(issue), function, file, line);
             return false;
         }
 

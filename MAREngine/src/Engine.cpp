@@ -21,9 +21,6 @@
 
 
 #include "Engine.h"
-
-#include <utility>
-#include "Debug/Log.h"
 #include "Core/scripting/PythonScript.h"
 
 
@@ -38,7 +35,7 @@ namespace marengine {
         m_projectManager.fillProjectInfo(std::move(projectName), std::move(sceneToLoadAtStartup));
 		ProjectManager::Instance = &m_projectManager;
 
-		Logger::init(&m_logger);
+		Logger::init();
 
 		PythonScript::appendCurrentPath();
 	}
