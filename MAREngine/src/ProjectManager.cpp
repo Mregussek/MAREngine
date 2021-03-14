@@ -22,63 +22,83 @@
 
 #include "ProjectManager.h"
 
+#include <utility>
+
 
 namespace marengine {
 
 
-	ProjectManager* ProjectManager::Instance{ nullptr };
+    FProjectManager* FProjectManager::s_pInstance{ nullptr };
 
 
-	void ProjectManager::fillProjectInfo(std::string newProjectName, std::string newSceneToLoadAtStartup) {
+	void FProjectManager::init(FProjectManager* pProjectManagerInstance, std::string newProjectName, std::string newSceneToLoadAtStartup) {
+        s_pInstance = pProjectManagerInstance;
 
-		m_projectInfo.projectName = newProjectName;
-		m_projectInfo.projectPath = m_projectInfo.projectName + "/";
-		m_projectInfo.assetsPath = m_projectInfo.projectPath + "Assets/";
-		m_projectInfo.scenesPath = m_projectInfo.projectPath + "Scenes/";
-		m_projectInfo.sceneToLoadAtStartup = m_projectInfo.scenesPath + newSceneToLoadAtStartup;
-		m_projectInfo.windowName = m_projectInfo.projectName + " --- " + newSceneToLoadAtStartup + " --- MAREngine";
+		setProjectName(std::move(newProjectName));
+        setSceneToLoadAtStartup(std::move(newSceneToLoadAtStartup));
+	}
+
+	void FProjectManager::addNewSceneToCurrentProject(std::string newSceneFilenameToProject) {
+
+		setNewSceneToLoad(std::move(newSceneFilenameToProject));
 
 	}
 
-	void ProjectManager::addNewSceneToCurrentProject(const std::string& newSceneFilenameToProject) {
+	void FProjectManager::setNewSceneToLoad(std::string sceneFilenameToLoad) {
 
-		setNewSceneToLoad(newSceneFilenameToProject);
-
-	}
-
-	void ProjectManager::setNewSceneToLoad(const std::string& sceneFilenameToLoad) {
-
-		m_projectInfo.sceneToLoadAtStartup = m_projectInfo.scenesPath + sceneFilenameToLoad;
-		m_projectInfo.windowName = m_projectInfo.projectName + " --- " + sceneFilenameToLoad + " --- MAREngine";
+        setSceneToLoadAtStartup(std::move(sceneFilenameToLoad));
 
 	}
 
-	const ProjectInfo& ProjectManager::getProjectInfo() const {
-		return m_projectInfo;
+	const FProjectInfo& FProjectManager::getProjectInfo() {
+		return s_pInstance->m_projectInfo;
 	}
 
-	const std::string& ProjectManager::getProjectName() const {
-		return m_projectInfo.projectName;
+	const std::string& FProjectManager::getProjectName() {
+		return s_pInstance->m_projectInfo.projectName;
 	}
 
-	const std::string& ProjectManager::getProjectPath() const {
-		return m_projectInfo.projectPath;
+	const std::string& FProjectManager::getProjectPath() {
+		return s_pInstance->m_projectInfo.projectPath;
 	}
 
-	const std::string& ProjectManager::getAssetsPath() const {
-		return m_projectInfo.assetsPath;
+	const std::string& FProjectManager::getAssetsPath() {
+		return s_pInstance->m_projectInfo.assetsPath;
 	}
 
-	const std::string& ProjectManager::getScenesPath() const {
-		return m_projectInfo.scenesPath;
+	const std::string& FProjectManager::getScenesPath() {
+		return s_pInstance->m_projectInfo.scenesPath;
 	}
 
-	const std::string& ProjectManager::getSceneToLoadAtStartup() const {
-		return m_projectInfo.sceneToLoadAtStartup;
+	const std::string& FProjectManager::getSceneToLoadAtStartup() {
+		return s_pInstance->m_projectInfo.sceneToLoadAtStartup;
 	}
 
-	const std::string& ProjectManager::getWindowName() const {
-		return m_projectInfo.windowName;
+	const std::string& FProjectManager::getWindowName() {
+		return s_pInstance->m_projectInfo.windowName;
+	}
+
+    void FProjectManager::setProjectName(std::string newProjectName) {
+        s_pInstance->m_projectInfo.projectName = std::move(newProjectName);
+
+        s_pInstance->m_projectInfo.projectPath = s_pInstance->m_projectInfo.projectName + "/";
+        s_pInstance->m_projectInfo.assetsPath =  s_pInstance->m_projectInfo.projectPath + "Assets/";
+        s_pInstance->m_projectInfo.scenesPath =  s_pInstance->m_projectInfo.projectPath + "Scenes/";
+
+        setWindowName();
+	}
+
+    void FProjectManager::setSceneToLoadAtStartup(std::string newSceneToLoad) {
+        s_pInstance->m_projectInfo.sceneToLoadAtStartup = s_pInstance->m_projectInfo.scenesPath + newSceneToLoad;
+        setWindowName();
+	}
+
+	void FProjectManager::setWindowName() {
+        s_pInstance->m_projectInfo.windowName =
+                s_pInstance->m_projectInfo.projectName
+                + " --- "
+                + s_pInstance->m_projectInfo.sceneToLoadAtStartup
+                + " --- MAREngine";
 	}
 
 

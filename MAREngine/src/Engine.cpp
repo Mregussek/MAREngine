@@ -21,23 +21,16 @@
 
 
 #include "Engine.h"
-#include "Core/scripting/PythonScript.h"
+#include "Core/scripting/PythonInterpreter.h"
 
 
 namespace marengine {
 
-		
-	MAREngine* MAREngine::Instance{ nullptr };
-
 
     void MAREngine::initialize(std::string projectName, std::string sceneToLoadAtStartup) {
-        Instance = this;
-        m_projectManager.fillProjectInfo(std::move(projectName), std::move(sceneToLoadAtStartup));
-		ProjectManager::Instance = &m_projectManager;
-
-		Logger::init();
-
-		PythonScript::appendCurrentPath();
+        FLogger::init();
+        FProjectManager::init(&m_projectManager, std::move(projectName), std::move(sceneToLoadAtStartup));
+		FPythonInterpreter::init();
 	}
 
 	MAR_NO_DISCARD bool MAREngine::shouldEngineRestart() const {
@@ -45,11 +38,11 @@ namespace marengine {
 	}
 
 	MAR_NO_DISCARD const std::string& MAREngine::getStartupSceneFilename() const {
-		return m_projectManager.getProjectInfo().sceneToLoadAtStartup;
+		return FProjectManager::getProjectInfo().sceneToLoadAtStartup;
 	}
 
 	MAR_NO_DISCARD const std::string& MAREngine::getWindowName() const {
-		return m_projectManager.getProjectInfo().windowName;
+		return FProjectManager::getProjectInfo().windowName;
 	}
 
 	void MAREngine::setRestart() {

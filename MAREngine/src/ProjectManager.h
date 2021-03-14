@@ -33,11 +33,10 @@ namespace marengine {
 
 	/**
 	 * @struct ProjectInfo ProjectManager.h "ProjectManager.h"
-	 * @brief ProjectInfo is a structure containg all information about currently
-	 * running project on MAREngine. It contains all members that are mandatory for proper
-	 * MAREngine.
+	 * @brief ProjectInfo is a structure containing all information about currently running project
+	 * on MAREngine. It contains all members that are mandatory for proper MAREngine run.
 	 */
-	struct ProjectInfo {
+	struct FProjectInfo {
 
 		std::string projectName;
 		std::string projectPath;
@@ -49,29 +48,34 @@ namespace marengine {
 	};
 
 	
-	class ProjectManager {
+	class FProjectManager {
 	public:
 
-		static ProjectManager* Instance;
+	    static void init(FProjectManager* pProjectManagerInstance, std::string newProjectName,
+                         std::string newSceneToLoadAtStartup);
 
-		void fillProjectInfo(std::string newProjectName, std::string newSceneToLoadAtStartup);
-		
-		void addNewSceneToCurrentProject(const std::string& newSceneFilenameToProject);
+		static void addNewSceneToCurrentProject(std::string newSceneFilenameToProject);
 
-		void setNewSceneToLoad(const std::string& sceneFilenameToLoad);
+		static void setNewSceneToLoad(std::string sceneFilenameToLoad);
 
-		MAR_NO_DISCARD const ProjectInfo& getProjectInfo() const;
+		MAR_NO_DISCARD static const FProjectInfo& getProjectInfo();
 
-		MAR_NO_DISCARD const std::string& getProjectName() const;
-		MAR_NO_DISCARD const std::string& getProjectPath() const;
-		MAR_NO_DISCARD const std::string& getAssetsPath() const;
-		MAR_NO_DISCARD const std::string& getScenesPath() const;
-		MAR_NO_DISCARD const std::string& getSceneToLoadAtStartup() const;
-		MAR_NO_DISCARD const std::string& getWindowName() const;
+		MAR_NO_DISCARD static const std::string& getProjectName();
+		MAR_NO_DISCARD static const std::string& getProjectPath();
+		MAR_NO_DISCARD static const std::string& getAssetsPath();
+		MAR_NO_DISCARD static const std::string& getScenesPath();
+		MAR_NO_DISCARD static const std::string& getSceneToLoadAtStartup();
+		MAR_NO_DISCARD static const std::string& getWindowName();
 
 	private:
 
-		ProjectInfo m_projectInfo;
+	    static void setProjectName(std::string newProjectName);
+	    static void setSceneToLoadAtStartup(std::string newSceneToLoad);
+        static void setWindowName();
+
+
+	    static FProjectManager* s_pInstance;
+        FProjectInfo m_projectInfo;
 
 	};
 

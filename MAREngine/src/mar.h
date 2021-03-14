@@ -21,14 +21,23 @@
 
 
 #include "mar_includes.h"
-#include "mar_logging.h"
 
 
+// MAREngine Logging level
+#define MARENGINE_LOGGING_LEVEL 4           // 0 - no logs, 1 - trace, 2 - debug, 3 - info, 4 - warn, 5 - err, 6 - crit
+#define MARENGINE_DISPLAY_EDITOR_LOGS 0     // 0 - no logs, 1 - display editor logs
+#define MARENGINE_DISPLAY_GRAPHICS_LOGS 1   // 0 - no logs, 1 - display graphics logs
+#define MARENGINE_DISPLAY_ECS_LOGS 1        // 0 - no logs, 1 - display ecs logs
+#define MARENGINE_DISPLAY_SCRIPTS_LOGS 0    // 0 - no logs, 1 - display scripts logs
+#define MARENGINE_DISPLAY_FILESYSTEM_LOGS 1 // 0 - no logs, 1 - display filesystem logs
+#define MARENGINE_DISPLAY_LAYERS_LOGS 0     // 0 - no logs, 1 - display layers logs
+#define MARENGINE_DISPLAY_WINDOW_LOGS 0     // 0 - no logs, 1 - display window logs
+#define MARENGINE_DISPLAY_PLATFORMS_LOGS 1  // 0 - no logs, 1 - display platforms logs
+
+// MAREngine window library
 #define MAR_ENGINE_USE_GLFW_WINDOW 1
 #define MAR_ENGINE_USE_SDL_WINDOW 0
 
-
 #define PLATFORM_GL_FUNC(x) x
-
 
 #define MAR_NO_DISCARD [[nodiscard]]

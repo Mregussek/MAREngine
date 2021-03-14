@@ -25,10 +25,10 @@
 
 namespace marengine {
 
-    std::shared_ptr<spdlog::logger> Logger::s_logger{ nullptr };
+    std::shared_ptr<spdlog::logger> FLogger::s_logger{ nullptr };
 
 
-    void Logger::init() {
+    void FLogger::init() {
         spdlog::set_pattern("%^[%T] %n: %v%$");
         s_logger = spdlog::stdout_color_mt("MAR ENGINE");
 
@@ -55,20 +55,20 @@ namespace marengine {
         }
     }
 
-    void Logger::clearErrorOpenGL() {
+    void FLogger::clearErrorOpenGL() {
         while (glGetError() != GL_NO_ERROR);
     }
 
-    bool Logger::checkErrorOpenGL(const char* function, const char* file, int line) {
+    bool FLogger::checkErrorOpenGL(const char* function, const char* file, int line) {
         while (const GLenum issue = glGetError()) {
-            Logger::err<ELoggerType::PLATFORMS>("[OpenGL Error] {} {} {} \n{}", getOccuredErrorOpenGl(issue), function, file, line);
+            FLogger::err<ELoggerType::PLATFORMS>("[OpenGL Error] {} {} {} \n{}", getOccuredErrorOpenGl(issue), function, file, line);
             return false;
         }
 
         return true;
     }
 
-    const char* Logger::getOccuredErrorOpenGl(GLenum issue) {
+    const char* FLogger::getOccuredErrorOpenGl(GLenum issue) {
         switch (issue) {
             case GL_NO_ERROR:          return "No error";
             case GL_INVALID_ENUM:      return "Invalid enum";

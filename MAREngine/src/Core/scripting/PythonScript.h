@@ -44,11 +44,6 @@ namespace marengine {
 
         void update(const Entity& entity) const;
 
-        static void appendCurrentPath();
-
-        static std::string changeSlashesToDots(std::string script);
-        static std::string getModuleFromPath(std::string script);
-
     private:
 
         py::module m_scriptModule;

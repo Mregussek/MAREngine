@@ -96,7 +96,7 @@ namespace marengine {
 			return search->second;
 		}
 
-		const std::string assetsTexturePath{ ProjectManager::Instance->getAssetsPath() + path };
+		const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
 		const uint32_t id = genNewTexture(assetsTexturePath.c_str());
 		s_2d.insert({ path, id });
 		return id;
@@ -150,7 +150,7 @@ namespace marengine {
 			return search->second;
 		}
 
-		const std::string assetsTexturePath{ ProjectManager::Instance->getAssetsPath() + path };
+		const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
 		const uint32_t id = genNewCubemap(assetsTexturePath);
 		s_cubemaps.insert({ path, id });
 

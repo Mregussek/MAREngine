@@ -35,9 +35,6 @@ namespace marengine {
 	class MAREngine {
 	public:
 
-		static MAREngine* Instance;
-
-
 		MAR_NO_DISCARD bool shouldEngineRestart() const;
 		MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
 		MAR_NO_DISCARD const std::string& getWindowName() const;
@@ -49,7 +46,7 @@ namespace marengine {
 		
 	private:
 
-		ProjectManager m_projectManager;
+        FProjectManager m_projectManager;
 
 		bool m_shouldRestart{ false };
 

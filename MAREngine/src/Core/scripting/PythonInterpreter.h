@@ -20,14 +20,30 @@
 ************************************************************************/
 
 
-// 0 - trace, 1 - debug, 2 - info, 3 - warn, 4 - err, 5 - crit, 6 - no logs
-#define MARENGINE_LOGGING_LEVEL 3
+#ifndef MARENGINE_PYTHONINTERPRETER_H
+#define MARENGINE_PYTHONINTERPRETER_H
 
-#define MARENGINE_DISPLAY_EDITOR_LOGS 0
-#define MARENGINE_DISPLAY_GRAPHICS_LOGS 1
-#define MARENGINE_DISPLAY_ECS_LOGS 1
-#define MARENGINE_DISPLAY_SCRIPTS_LOGS 0
-#define MARENGINE_DISPLAY_FILESYSTEM_LOGS 1
-#define MARENGINE_DISPLAY_LAYERS_LOGS 0
-#define MARENGINE_DISPLAY_WINDOW_LOGS 0
-#define MARENGINE_DISPLAY_PLATFORMS_LOGS 1
+
+#include <string>
+
+
+namespace marengine {
+
+
+    class FPythonInterpreter {
+    public:
+
+        static void init();
+
+        static std::string changeSlashesToDots(std::string script);
+
+        static std::string getModuleFromPath(std::string script);
+
+    };
+
+
+}
+
+
+
+#endif //MARENGINE_PYTHONINTERPRETER_H

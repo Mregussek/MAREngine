@@ -56,8 +56,7 @@
 #pragma warning( disable : 4099		) 
 
 #if __has_include(<glad/glad.h>)
-	#include <glad/glad.h> 
-	#define MAR_ENGINE_GLAD_LIB_IMPORTED
+	#include <glad/glad.h>
 #else
 	#error "MAR ENGINE: Cannot import glad/glad.h!"
 #endif
@@ -65,21 +64,18 @@
 #if __has_include(<SDL.h>)
 	#define HAVE_M_PI
 	#include <SDL.h>
-	#define MAR_ENGINE_SDL_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import SDL2.h!"
 #endif
 
 #if __has_include(<GLFW/glfw3.h>)
 	#include <GLFW/glfw3.h>
-	#define MAR_ENGINE_GLFW_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import GLFW/glfw3.h!"
 #endif
 
 #if __has_include("stb_image/stb_image.h")
 	#include "stb_image/stb_image.h"
-	#define MAR_ENGINE_STB_IMAGE_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import stb_image/stb_image.h!"
 #endif
@@ -90,28 +86,24 @@
 	#include "backends/imgui_impl_glfw.h"
 	#include "backends/imgui_impl_opengl3.h"
 	#include "backends/imgui_impl_sdl.h"
-	#define MAR_ENGINE_IMGUI_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import imgui.h!"
 #endif
 
 #if __has_include("ImGuizmo.h")
 	#include "ImGuizmo.h"
-	#define MAR_ENGINE_IMGUIZMO_LIB
 #else
 	#error "MAR ENGINE: Cannot import ImGuizmo.h!"
 #endif
 
 #if __has_include("TextEditor.h")
 	#include "TextEditor.h"
-	#define MAR_ENGINE_IMGUI_COLOR_TEXT_EDIT_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import ImGuiColorTextEdit lib : TextEditor.h !"
 #endif
 
 #if __has_include("FileBrowser/ImGuiFileBrowser.h")
 	#include "FileBrowser/ImGuiFileBrowser.h"
-	#define MAR_ENGINE_IMGUI_FILE_BROWSER_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import ImGuiFileBrowser lib : FileBrowser/ImGuiFileBrowser.h !"
 #endif
@@ -121,21 +113,18 @@
 	#include "spdlog/sinks/stdout_color_sinks.h"
 	#include "spdlog/sinks/rotating_file_sink.h"
 	#include "spdlog/sinks/basic_file_sink.h"
-	#define MAR_ENGINE_SPDLOG_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import spdlog/spdlog.h!"
 #endif
 
 #if __has_include("entt/entt.hpp")
 	#include "entt/entt.hpp"
-	#define MAR_ENGINE_ENTT_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import entt/entt.hpp!"
 #endif
 
 #if __has_include("json.hpp")
 	#include "json.hpp"
-	#define MAR_ENGINE_JSON_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import json.hpp!"
 #endif
@@ -153,7 +142,6 @@
 
 #if __has_include("MARMaths.h")
 	#include "MARMaths.h"
-	#define MAR_ENGINE_MAR_MATHS_LIB_IMPORTED
 #else
 	#error "MAR ENGINE: Cannot import MARMaths.h!"
 #endif

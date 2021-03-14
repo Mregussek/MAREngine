@@ -21,6 +21,7 @@
 
 
 #include "PythonScript.h"
+#include "PythonInterpreter.h"
 #include "../../ProjectManager.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Components/Components.h"
@@ -31,8 +32,8 @@ namespace marengine {
 
     
     void PythonScript::loadScript(std::string path_to_script) {
-        const std::string from = changeSlashesToDots(path_to_script);
-        const std::string what = getModuleFromPath(path_to_script);
+        const std::string from = FPythonInterpreter::changeSlashesToDots(path_to_script);
+        const std::string what = FPythonInterpreter::getModuleFromPath(path_to_script);
     
         if (m_initialized) { m_scriptModule.reload(); }
         else { 
@@ -108,39 +109,6 @@ namespace marengine {
             auto& color = entity.getComponent<ColorComponent>();
             color = m_module.attr("color").cast<ColorComponent>();
         }
-    }
-    
-    void PythonScript::appendCurrentPath() {
-        static pybind11::scoped_interpreter guard{};
-    
-        auto os = py::module::import("os");
-        auto path = os.attr("path").attr("abspath")(os.attr("getcwd")());
-    
-        auto sys = py::module::import("sys");
-        sys.attr("path").attr("insert")(0, path);
-    }
-    
-    std::string PythonScript::changeSlashesToDots(std::string script) {
-        const auto& assetsPath = ProjectManager::Instance->getAssetsPath();
-        std::string rtn = assetsPath + script;
-    
-        size_t pos = rtn.find("/");
-    
-        while (pos != std::string::npos) {
-            rtn.replace(pos, 1, ".");
-            pos = rtn.find("/", pos + 1);
-        }
-    
-        rtn = rtn.substr(0, rtn.size() - 3);
-    
-        return rtn;
-    }
-    
-    std::string PythonScript::getModuleFromPath(std::string script) {
-        const std::string filename = script.substr(script.find_last_of("/") + 1, script.size());
-        const std::string deletedDotPyFromPath = filename.substr(0, filename.size() - 3);
-
-        return deletedDotPyFromPath;
     }
 
 

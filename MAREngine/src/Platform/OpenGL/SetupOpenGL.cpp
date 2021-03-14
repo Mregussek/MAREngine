@@ -101,7 +101,7 @@ namespace marengine {
 			return false;
 		}
 
-		if constexpr (MAR_ENGINE_DEBUG_MODE) {
+		if constexpr (MARENGINE_LOGGING_LEVEL != 0) {
 			PLATFORM_GL_FUNC( glEnable(GL_DEBUG_OUTPUT) );
 			PLATFORM_GL_FUNC( glDebugMessageCallback(MessageCallback, 0) );
 		}

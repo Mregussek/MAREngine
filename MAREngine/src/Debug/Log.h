@@ -36,7 +36,7 @@ namespace marengine {
     };
 
 
-    class Logger {
+    class FLogger {
     public:
 
         static void init();
