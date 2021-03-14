@@ -21,6 +21,8 @@
 
 
 #include "PipelineOpenGL.h"
+#include "../../Core/graphics/Mesh/Vertex.h"
+#include "../../Debug/Logger.h"
 
 
 namespace marengine {

@@ -21,6 +21,7 @@
 
 
 #include "FramebufferOpenGL.h"
+#include "../../Debug/Logger.h"
 
 
 namespace marengine {

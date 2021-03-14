@@ -26,6 +26,7 @@
 
 #include "../../mar.h"
 #include "../GLSL/ShaderUniforms.h"
+#include "../../Debug/Logger.h"
 
 
 namespace marengine {

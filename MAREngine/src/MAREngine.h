@@ -26,7 +26,7 @@
 
 #include "mar.h"
 #include "ProjectManager.h"
-#include "Debug/Log.h"
+#include "Debug/Logger.h"
 
 
 namespace marengine {
@@ -43,7 +43,7 @@ namespace marengine {
 		void setNoRestart();
 
 		void initialize(std::string projectName, std::string sceneToLoadAtStartup);
-		
+
 	private:
 
         FProjectManager m_projectManager;

@@ -24,7 +24,7 @@
 
 
 // MAREngine Logging level
-#define MARENGINE_LOGGING_LEVEL 4           // 0 - no logs, 1 - trace, 2 - debug, 3 - info, 4 - warn, 5 - err, 6 - crit
+#define MARENGINE_LOGGING_LEVEL 1           // 0 - no logs, 1 - trace, 2 - debug, 3 - info, 4 - warn, 5 - err, 6 - critical
 #define MARENGINE_DISPLAY_EDITOR_LOGS 0     // 0 - no logs, 1 - display editor logs
 #define MARENGINE_DISPLAY_GRAPHICS_LOGS 1   // 0 - no logs, 1 - display graphics logs
 #define MARENGINE_DISPLAY_ECS_LOGS 1        // 0 - no logs, 1 - display ecs logs
@@ -37,7 +37,5 @@
 // MAREngine window library
 #define MAR_ENGINE_USE_GLFW_WINDOW 1
 #define MAR_ENGINE_USE_SDL_WINDOW 0
-
-#define PLATFORM_GL_FUNC(x) x
 
 #define MAR_NO_DISCARD [[nodiscard]]

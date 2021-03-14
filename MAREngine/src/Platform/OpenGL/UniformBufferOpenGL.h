@@ -25,6 +25,7 @@
 
 
 #include "../../mar.h"
+#include "../../Debug/Logger.h"
 #include "../GLSL/ShaderUniforms.h"
 
 

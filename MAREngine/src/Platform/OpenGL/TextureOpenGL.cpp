@@ -21,6 +21,7 @@
 
 
 #include "TextureOpenGL.h"
+#include "../../Debug/Logger.h"
 #include "../../ProjectManager.h"
 
 

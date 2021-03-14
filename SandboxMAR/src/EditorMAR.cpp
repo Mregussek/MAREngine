@@ -34,10 +34,10 @@ namespace marengine {
 	}
 
 	void EditorMAR::runProjectOnEngine() {
-		WindowInstance<GLFWwindow> displayWindow{};
+        WindowInstance<GLFWwindow> displayWindow{};
 		LayerStack stack{};
 
-		displayWindow.initialize(1600, 900, m_engine.getWindowName().c_str());
+        displayWindow.initialize(1600, 900, m_engine.getWindowName().c_str());
 
 		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getStartupSceneFilename());
 

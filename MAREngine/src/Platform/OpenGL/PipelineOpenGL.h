@@ -25,10 +25,11 @@
 
 
 #include "../../mar.h"
-#include "../../Core/graphics/Mesh/Vertex.h"
 
 
 namespace marengine {
+
+    struct Vertex;
 
 
 	class PipelineOpenGL {

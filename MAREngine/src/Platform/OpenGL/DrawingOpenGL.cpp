@@ -21,6 +21,7 @@
 
 
 #include "DrawingOpenGL.h"
+#include "../../Debug/Logger.h"
 
 
 namespace marengine {

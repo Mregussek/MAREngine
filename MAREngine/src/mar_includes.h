@@ -30,12 +30,20 @@
 #endif
 
 // --- OS Specific libraries --- //
-#ifdef WIN32
-	#if __has_include(<crtdbg.h>)
+#if defined(_WIN32) || defined(WIN32)
+    #if __has_include(<crtdbg.h>)
 		#include <crtdbg.h>
 	#else	
 		#error "MAR ENGINE: Cannot import crtdbg.h for Windows Platform!"
-	#endif
+    #endif
+    #if __has_include(<windows.h>)
+        #include <windows.h>
+    #else
+        #error "MAR ENGINE: Cannot import windows.h for Windows Platform!"
+    #endif
+#endif
+#if defined(__unix__) || defined(linux)
+    #error "MARENGINE does not support linux yet!"
 #endif
 
 // --- Include 3rd_party libs --- //
@@ -109,6 +117,9 @@
 #endif
 
 #if __has_include("spdlog/spdlog.h")
+    #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+    #define SPDLOG_DEBUG_ON
+    #define SPDLOG_TRACE_ON
 	#include "spdlog/spdlog.h"
 	#include "spdlog/sinks/stdout_color_sinks.h"
 	#include "spdlog/sinks/rotating_file_sink.h"

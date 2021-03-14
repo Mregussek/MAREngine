@@ -21,6 +21,8 @@
 
 
 #include "SetupOpenGL.h"
+#include "../../Debug/Logger.h"
+#include "../ShellTerminal/TerminalAPI.h"
 
 
 namespace marengine {
@@ -111,6 +113,11 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glEnable(GL_STENCIL_TEST) ); // Enable STENCIL, outliner
 		PLATFORM_GL_FUNC( glEnable(GL_BLEND) ); // Enable loading PNG files and transparency
 		PLATFORM_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
+
+        const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
+        const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+        TerminalAPI::clearScreen();
+        MARLOG_INFO(ELoggerType::PLATFORMS, "\nVendor: {}\nRenderer: {}", vendor, renderer);
 
 		return true;
 	}
