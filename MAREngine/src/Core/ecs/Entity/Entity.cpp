@@ -55,7 +55,7 @@ namespace marengine {
 	}
 
 	const Entity& Entity::assignChild(const Entity& child) const {
-		auto& childs{ getComponent<ChildComponent>().childs };
+		auto& childs{ getComponent<ChildComponent>().children };
 		return childs.emplace_back(child);
 	}
 
@@ -64,7 +64,7 @@ namespace marengine {
 	}
 
 	void Entity::removeChild(const Entity& child) const {
-		auto& childs{ getComponent<ChildComponent>().childs };
+		auto& childs{ getComponent<ChildComponent>().children };
 
 		auto it = std::find_if(childs.begin(), childs.end(), [&child](const Entity& iterator) {
 			return 	&iterator == &child;
@@ -77,16 +77,16 @@ namespace marengine {
 		}
 	}
 
-	bool Entity::hasChilds() const {
-		return !getComponent<ChildComponent>().childs.empty();
+	bool Entity::hasChildren() const {
+		return !getComponent<ChildComponent>().children.empty();
 	}
 
 	const Entity& Entity::getChild(size_t index) const {
-		return getComponent<ChildComponent>().childs[index];
+		return getComponent<ChildComponent>().children[index];
 	}
 
-	const std::vector<Entity>& Entity::getChilds() const {
-		return getComponent<ChildComponent>().childs;
+	const std::vector<Entity>& Entity::getChildren() const {
+		return getComponent<ChildComponent>().children;
 	}
 
 

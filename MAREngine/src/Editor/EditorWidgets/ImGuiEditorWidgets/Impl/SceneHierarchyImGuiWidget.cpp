@@ -61,14 +61,14 @@ namespace marengine {
             };
             const char* entityTag{ entity.getComponent<TagComponent>().tag.c_str() };
 
-            if (entity.hasChilds()) { // if entity has children we want tree nodes
+            if (entity.hasChildren()) { // if entity has children we want tree nodes
                 const bool isTreeOpen{ ImGui::TreeNodeEx(entityTag, treeNodeFlags) };
                 if (ImGui::IsItemClicked()) {
                     FEventsEntityImGuiWidgets::onSelectedEntity(entity);
 
                 }
                 if (isTreeOpen) {
-                    const FEntityArray& children{ entity.getChilds() };
+                    const FEntityArray& children{ entity.getChildren() };
                     treesFor(children);
 
                     ImGui::TreePop();

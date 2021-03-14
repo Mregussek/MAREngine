@@ -87,8 +87,8 @@ namespace marengine {
                 ImGui::Text(label, v.x, v.y, v.z, v.w);
             };
 
-            ImGui::Text("hasChildren: %i", entity.hasChilds());
-            ImGui::Text("ChildrenCount: %i", entity.getChilds().size());
+            ImGui::Text("hasChildren: %i", entity.hasChildren());
+            ImGui::Text("ChildrenCount: %i", entity.getChildren().size());
 
             const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
             ImGui::Text("meshBatchInfoComponent.batchIndex: %i", meshBatchInfoComponent.batchIndex);

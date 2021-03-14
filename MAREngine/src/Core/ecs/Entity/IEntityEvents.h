@@ -91,7 +91,7 @@ namespace marengine {
 
 		/**
 		 * @brief Overrided methods should call assign child to entity Entity function and invoke other needed events.
-		 * When we want some entities to be relative to other, we need to make parents and childs.
+		 * When we want some entities to be relative to other, we need to make parents and children.
 		 * When a child is created, we should use this method.
 		 * @param entity entity, to which given child will be assigned
 		 * @param child child, which will be assigned to given entity

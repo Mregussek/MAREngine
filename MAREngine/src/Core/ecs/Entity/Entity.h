@@ -36,14 +36,15 @@ namespace marengine {
 	 * @class Entity Entity.h "Core/ecs/Entity/Entity.h" 
 	 * @brief The entity is a general purpose object.
 	 * It only consists of a unique ID (uint32_t, which can found at entt::entity) and m_sceneRegistry.
-	 * Every entity is a container, where components can be attached. Entities are the base of all objects, that can be found in the scene.
+	 * Every entity is a container, where components can be attached. Entities are the base of all objects,
+	 * that can be found in the scene.
 	 */
 	class Entity {
 
 		friend class Scene;
 
 		struct ChildComponent {
-			FEntityArray childs;
+			FEntityArray children;
 		};
 
 	public:
@@ -53,7 +54,7 @@ namespace marengine {
 
 		/**
 		 * @brief This is default constructor for Entity class, because we need to initialize m_sceneRegistry member!
-		 * If m_sceneRegistry member will stay as nullptr value, Entity instance will immedietaly crash.
+		 * If m_sceneRegistry member will stay as nullptr value, Entity instance will immediately crash.
 		 * During this constructor call entity is created.
 		 * @warning Constructor does not check, if pSceneRegistry is valid. It creates Entity in place, ensure that
 		 * given pointer is correct.
@@ -80,7 +81,7 @@ namespace marengine {
 		 * - TransformComponent (we want every entity to have its own position, rotation, scale)
 		 * - LightBatchInfoComponent (engine-only component, it remembers light batches that other components are stored in, optimization)
 		 * - MeshBatchInfoComponent (engine-only component, it remembers mesh batches that other components are stored in, optimization)
-		 * - ChildComponent (used to store some childs, that will be relative to base entity - parent)
+		 * - ChildComponent (used to store some children, that will be relative to base entity - parent)
 		 * @param entity entity, which will be filled with basic components
 		 */
 		static void fillEntityWithBasicComponents(const Entity& entity);
@@ -119,16 +120,16 @@ namespace marengine {
 		void removeChild(const Entity& child) const;
 
 		/**
-		 * @brief Method checks, if current entity contains childs and returns result.
-		 * @return Returns true, if current entity contains any childs.
+		 * @brief Method checks, if current entity contains children and returns result.
+		 * @return Returns true, if current entity contains any children.
 		 */
-		MAR_NO_DISCARD bool hasChilds() const;
+		MAR_NO_DISCARD bool hasChildren() const;
 
 		/**
-		 * @brief Returns childs assigned to an entity in array.
-		 * @return Returns all childs of current entity.
+		 * @brief Returns children assigned to an entity in array.
+		 * @return Returns all children of current entity.
 		 */
-		MAR_NO_DISCARD const FEntityArray& getChilds() const;
+		MAR_NO_DISCARD const FEntityArray& getChildren() const;
 		
 		/**
 		 * @brief Returns child by its index in array.
@@ -158,7 +159,7 @@ namespace marengine {
 
 		/**
 		 * @brief Method returns TComponent, that current entity should contain.
-		 * @warning If current entity does not contain TComponent debugbreak is called.
+		 * @warning If current entity does not contain TComponent debug_break is called.
 		 * @tparam TComponent structure type of component
 		 * @return TComponent's instance assigned to current entity
 		 */
