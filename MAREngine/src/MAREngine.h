@@ -26,7 +26,6 @@
 
 #include "mar.h"
 #include "ProjectManager.h"
-#include "Debug/Logger.h"
 
 
 namespace marengine {

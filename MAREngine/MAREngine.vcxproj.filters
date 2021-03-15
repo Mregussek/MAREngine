@@ -240,7 +240,7 @@
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\Dirent\dirent.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.h">
+    <ClInclude Include="src\Platform\OpenGL\FShaderStorageBufferOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Window\WindowInstance.h">
@@ -285,7 +285,7 @@
     <ClInclude Include="3rd_party\imgui\backends\imgui_impl_glfw.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h">
+    <ClInclude Include="src\Platform\OpenGL\FUniformBufferOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h">
@@ -593,7 +593,7 @@
     <ClCompile Include="3rd_party\GLAD\src\glad.c">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.cpp">
+    <ClCompile Include="src\Platform\OpenGL\FShaderStorageBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\SDL\WindowSDL.cpp">
@@ -629,7 +629,7 @@
     <ClCompile Include="src\Window\Window.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp">
+    <ClCompile Include="src\Platform\OpenGL\FUniformBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp">

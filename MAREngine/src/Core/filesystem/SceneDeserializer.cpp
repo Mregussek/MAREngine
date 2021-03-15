@@ -21,6 +21,7 @@
 
 
 #include "SceneDeserializer.h"
+#include "../../Logging/Logger.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
 #include "../graphics/Mesh/MeshCreator.h"
@@ -30,16 +31,29 @@
 namespace marengine {
 
 
+    static bool doesntContainJsonExtension(const std::string& path, std::string&& extension) {
+        const std::string currentExtension{ path.substr(path.find_last_of('.') + 1) };
+        if(currentExtension != extension) {
+            MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
+            return true;
+        }
+
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
+        return false;
+    }
+
 	Scene* FSceneDeserializer::loadSceneFromFile(const std::string& path) {
-		const std::string extension{ path.substr(path.find_last_of(".") + 1) };
-		if (extension != "json") {
+		if (doesntContainJsonExtension(path, "json")) {
+		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to marscene file!", path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
 		
 		std::ifstream file(path);
 		if (!file.is_open()) {
+            MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} cannot be opened!", path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
+
 		nlohmann::json json{ nlohmann::json::parse(file) };
 		file.close();
 
@@ -59,6 +73,7 @@ namespace marengine {
 			i++;
 		}
 
+		MARLOG_INFO(ELoggerType::FILESYSTEM, "Loaded scene {}\n-Scene {}\n-Entities {}", path, scene->getName(), scene->getEntities().size());
 		return scene;
 	}
 
@@ -151,7 +166,7 @@ namespace marengine {
 		if (jsonContains("CameraComponent")) {
 			auto& cameraComponent{ entity.addComponent<CameraComponent>() };
 			setString(cameraComponent.id, "CameraComponent", "id");
-			cameraComponent.Perspective = loadFloat("CameraComponent", "Perspective") == 1.0f ? true : false;
+			cameraComponent.Perspective = loadFloat("CameraComponent", "Perspective") == 1.0f;
 
 			// Perspective parameters loading
 			cameraComponent.p_fov = loadFloat("CameraComponent", "p_fov");

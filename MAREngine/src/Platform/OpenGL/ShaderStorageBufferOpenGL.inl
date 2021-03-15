@@ -20,30 +20,29 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_RENDERER_DEFINITIONS_H
-#define MAR_ENGINE_RENDERER_DEFINITIONS_H
+#ifndef MARENGINE_SHADERSTORAGEBUFFEROPENGL_INL
+#define MARENGINE_SHADERSTORAGEBUFFEROPENGL_INL
 
 
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
-#include "../../../Platform/OpenGL/ShaderStorageBufferOpenGL.h"
-#include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
+#include "ShaderStorageBufferOpenGL.h"
+#include "../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
-	typedef PipelineOpenGL FPipeline;
-	typedef std::vector<FPipeline> FPipelinesArray;
+    template<typename T>
+    void FShaderStorageBufferOpenGL::update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
+        PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data.data()) );
+    }
 
-	typedef FShaderStorageBufferOpenGL FShaderStorageBuffer;
-	typedef std::vector<FShaderStorageBuffer> FShaderStorageBuffersArray;
-
-	typedef FUniformBufferOpenGL FUniformBuffer;
-	typedef std::vector<FUniformBuffer> FUniformBuffersArray;
+    template<typename T>
+    void FShaderStorageBufferOpenGL::update(uint32_t offset, uint32_t memory, const T* data) const {
+        PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data) );
+    }
 
 
 }
 
 
-
-#endif // !MAR_ENGINE_RENDERER_DEFINITIONS_H
+#endif //MARENGINE_SHADERSTORAGEBUFFEROPENGL_INL

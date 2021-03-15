@@ -22,6 +22,7 @@
 
 #include "MAREngine.h"
 #include "Core/scripting/PythonInterpreter.h"
+#include "Logging/Logger.h"
 
 
 namespace marengine {

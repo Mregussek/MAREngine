@@ -21,7 +21,7 @@
 
 
 #include "SetupOpenGL.h"
-#include "../../Debug/Logger.h"
+#include "../../Logging/Logger.h"
 #include "../ShellTerminal/TerminalAPI.h"
 
 

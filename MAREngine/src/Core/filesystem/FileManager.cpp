@@ -27,11 +27,11 @@ namespace marengine {
 
 
 	void FFileManager::loadFile(std::string& stringToFill, const char* path) {
-
+        // TODO: implement it
 	}
 
 	void FFileManager::saveAsFile(const std::string& sourceCode, const char* path) {
-
+        // TODO: implement it
 	}
 
 

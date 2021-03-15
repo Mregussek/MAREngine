@@ -21,8 +21,7 @@
 
 
 #include "PipelineOpenGL.h"
-#include "../../Core/graphics/Mesh/Vertex.h"
-#include "../../Debug/Logger.h"
+#include "../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -46,7 +45,7 @@ namespace marengine {
 		destroyEBO();
 	}
 
-	void PipelineOpenGL::update(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) const {
+	void PipelineOpenGL::update(const FVertexArray& vertices, const FIndicesArray& indices) const {
 		const uint32_t vertSize{ vertices.size() * sizeof(Vertex) };
 		const uint32_t indiSize{ indices.size() * sizeof(uint32_t) };
 

@@ -140,9 +140,6 @@ namespace marengine {
 
     void FViewportImGuiWidget::handleGuizmo() {
         if (m_pSceneManagerEditor->usingEditorCamera()) {
-            // TODO: bring back imguizmo
-            //const auto& currentEntity{ WEntityWidgetPanel::Instance->getCurrentEntity() };
-            //const bool entityExists = &currentEntity != nullptr;
             m_guizmo.selectType();
 
             if (FSceneManagerEditor::Instance->isEditorMode()) {

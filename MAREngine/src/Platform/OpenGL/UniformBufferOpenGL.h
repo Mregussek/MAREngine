@@ -25,7 +25,6 @@
 
 
 #include "../../mar.h"
-#include "../../Debug/Logger.h"
 #include "../GLSL/ShaderUniforms.h"
 
 
@@ -34,7 +33,7 @@ namespace marengine {
 	class ShaderBufferStorage;
 
 
-	class UniformBufferOpenGL {
+	class FUniformBufferOpenGL {
 
 		friend class ShaderBufferStorage;
 
@@ -47,14 +46,10 @@ namespace marengine {
 		void unbind() const;
 
 		template<typename T>
-		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data.data()) );
-		}
+		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const;
 
 		template<typename T>
-		void update(uint32_t offset, uint32_t memory, const T* data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, offset, memory, data) );
-		}
+		void update(uint32_t offset, uint32_t memory, const T* data) const;
 
 		void reset() const;
 
@@ -67,6 +62,9 @@ namespace marengine {
 
 
 }
+
+
+#include "UniformBufferOpenGL.inl"
 
 
 #endif // !MAR_ENGINE_PLATFORMS_UNIFORM_BUFFER_OPENGL_H

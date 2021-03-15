@@ -24,7 +24,7 @@
 #include "../../src/mar.h"
 
 // Log
-#include "../../src/Debug/Logger.h"
+#include "../../src/Logging/Logger.h"
 
 // Platforms
 #include "../../src/Platform/OpenGL/SetupOpenGL.h"

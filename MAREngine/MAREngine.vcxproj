@@ -345,8 +345,8 @@
     <ClInclude Include="src\LayerStack\LayerLogs.h" />
     <ClInclude Include="src\LayerStack\layers\SceneLayer.h" />
     <ClInclude Include="src\mar_includes.h" />
-    <ClInclude Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.h" />
-    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\FShaderStorageBufferOpenGL.h" />
+    <ClInclude Include="src\Platform\OpenGL\FUniformBufferOpenGL.h" />
     <ClInclude Include="src\Platform\PlatformLogs.h" />
     <ClInclude Include="src\LayerStack\Layer.h" />
     <ClInclude Include="src\LayerStack\LayerStack.h" />
@@ -457,8 +457,8 @@
     <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp" />
     <ClCompile Include="src\Platform\OpenGL\TextureOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\ShaderBufferStorageOpenGL.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\FShaderStorageBufferOpenGL.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\FUniformBufferOpenGL.cpp" />
     <ClCompile Include="src\Platform\SDL\ContextSDL.cpp" />
     <ClCompile Include="src\Platform\SDL\WindowSDL.cpp" />
     <ClCompile Include="src\ProjectManager.cpp" />

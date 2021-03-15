@@ -20,13 +20,13 @@
 ************************************************************************/
 
 
-#include "ShaderBufferStorageOpenGL.h"
+#include "ShaderStorageBufferOpenGL.h"
 
 
 namespace marengine {
 
 
-	void ShaderBufferStorageOpenGL::initialize(const UniformBuffer& uniformBuffer, const std::vector<UniformItem>& items) {
+	void FShaderStorageBufferOpenGL::initialize(const UniformBuffer& uniformBuffer, const std::vector<UniformItem>& items) {
 		m_uniformBuffer = uniformBuffer;
 		m_uniformItems = items;
 
@@ -36,20 +36,20 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glBindBufferBase(GL_SHADER_STORAGE_BUFFER, m_uniformBuffer.bindingPoint, m_ssbo) );
 	}
 
-	void ShaderBufferStorageOpenGL::close() {
+	void FShaderStorageBufferOpenGL::close() {
 		m_uniformItems.clear();
 		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ssbo) );
 	}
 
-	void ShaderBufferStorageOpenGL::reset() const {
+	void FShaderStorageBufferOpenGL::reset() const {
 		PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, 0, nullptr) );
 	}
 
-	void ShaderBufferStorageOpenGL::bind() const {
+	void FShaderStorageBufferOpenGL::bind() const {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_ssbo) );
 	}
 
-	void ShaderBufferStorageOpenGL::unbind() const {
+	void FShaderStorageBufferOpenGL::unbind() const {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0) );
 	}
 

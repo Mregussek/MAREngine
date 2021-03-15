@@ -26,7 +26,7 @@
 namespace marengine {
 
 
-	void UniformBufferOpenGL::initialize(const UniformBuffer& uniformBuffer) {
+	void FUniformBufferOpenGL::initialize(const UniformBuffer& uniformBuffer) {
 		m_uniformBuffer = uniformBuffer;
 
 		PLATFORM_GL_FUNC( glGenBuffers(1, &m_ubo) );
@@ -35,19 +35,19 @@ namespace marengine {
 		PLATFORM_GL_FUNC( glBindBufferBase(GL_UNIFORM_BUFFER, m_uniformBuffer.bindingPoint, m_ubo) );
 	}
 
-	void UniformBufferOpenGL::close() {
+	void FUniformBufferOpenGL::close() {
 		PLATFORM_GL_FUNC( glDeleteBuffers(1, &m_ubo) );
 	}
 
-	void UniformBufferOpenGL::reset() const {
+	void FUniformBufferOpenGL::reset() const {
 		PLATFORM_GL_FUNC( glBufferSubData(GL_UNIFORM_BUFFER, 0, 0, nullptr) );
 	}
 
-	void UniformBufferOpenGL::bind() const {
+	void FUniformBufferOpenGL::bind() const {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, m_ubo) );
 	}
 
-	void UniformBufferOpenGL::unbind() const {
+	void FUniformBufferOpenGL::unbind() const {
 		PLATFORM_GL_FUNC( glBindBuffer(GL_UNIFORM_BUFFER, 0) );
 	}
 

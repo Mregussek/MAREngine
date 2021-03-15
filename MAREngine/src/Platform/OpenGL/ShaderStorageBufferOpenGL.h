@@ -20,13 +20,12 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_PLATFORMS_SHADER_BUFFER_STORAGE_OPENGL_H
-#define MAR_ENGINE_PLATFORMS_SHADER_BUFFER_STORAGE_OPENGL_H
+#ifndef MARENGINE_SHADERSTORAGEBUFFEROPENGL_H
+#define MARENGINE_SHADERSTORAGEBUFFEROPENGL_H
 
 
 #include "../../mar.h"
 #include "../GLSL/ShaderUniforms.h"
-#include "../../Debug/Logger.h"
 
 
 namespace marengine {
@@ -34,7 +33,7 @@ namespace marengine {
 	class ShaderBufferStorage;
 
 
-	class ShaderBufferStorageOpenGL {
+	class FShaderStorageBufferOpenGL {
 
 		friend class ShaderBufferStorage;
 
@@ -47,14 +46,10 @@ namespace marengine {
 		void unbind() const;
 
 		template<typename T>
-		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data.data()) );
-		}
+		void update(uint32_t offset, uint32_t memory, const std::vector<T>& data) const;
 
 		template<typename T>
-		void update(uint32_t offset, uint32_t memory, const T* data) const {
-			PLATFORM_GL_FUNC( glBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, memory, data) );
-		}
+		void update(uint32_t offset, uint32_t memory, const T* data) const;
 
 		void reset() const;
 
@@ -70,4 +65,7 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_PLATFORMS_SHADER_BUFFER_STORAGE_OPENGL_H
+#include "ShaderStorageBufferOpenGL.inl"
+
+
+#endif // !MARENGINE_SHADERSTORAGEBUFFEROPENGL_H
