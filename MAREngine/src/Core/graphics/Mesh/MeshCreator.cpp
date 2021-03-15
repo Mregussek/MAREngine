@@ -133,11 +133,10 @@ namespace marengine {
         }
 
         if (Loader.LoadedMeshes.size() == 1) {
-            auto& renderable{ entity.addComponent<RenderableComponent>() };
-            entity.addComponent<ColorComponent>();
-            renderable.name = filename;
-            renderable.vertices = Loader.LoadedMeshes[0].Vertices;
-            renderable.indices = Loader.LoadedMeshes[0].Indices;
+            auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+            renderableComponent.name = filename;
+            renderableComponent.vertices = Loader.LoadedMeshes[0].Vertices;
+            renderableComponent.indices = Loader.LoadedMeshes[0].Indices;
         }
         else {
             auto passLoadedMeshToEntity = [&entity, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {

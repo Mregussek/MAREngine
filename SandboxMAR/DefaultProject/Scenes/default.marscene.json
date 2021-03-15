@@ -524,7 +524,7 @@
                         }
                     },
                     "RenderableComponent": {
-                        "name": "monkey.obj"
+                        "name": "objects/monkey.obj"
                     },
                     "TagComponent": {
                         "tag": "SuzanneMonkey"

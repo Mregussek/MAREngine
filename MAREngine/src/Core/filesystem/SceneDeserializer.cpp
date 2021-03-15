@@ -22,6 +22,7 @@
 
 #include "SceneDeserializer.h"
 #include "../../Logging/Logger.h"
+#include "../../ProjectManager.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
 #include "../graphics/Mesh/MeshCreator.h"
@@ -31,19 +32,19 @@
 namespace marengine {
 
 
-    static bool doesntContainJsonExtension(const std::string& path, std::string&& extension) {
+    static bool doesContainExtension(const std::string& path, std::string&& extension) {
         const std::string currentExtension{ path.substr(path.find_last_of('.') + 1) };
-        if(currentExtension != extension) {
-            MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
+        if(currentExtension == extension) {
+            MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
             return true;
         }
 
-        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
         return false;
     }
 
 	Scene* FSceneDeserializer::loadSceneFromFile(const std::string& path) {
-		if (doesntContainJsonExtension(path, "json")) {
+		if (!doesContainExtension(path, "json")) {
 		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to marscene file!", path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
@@ -77,23 +78,34 @@ namespace marengine {
 		return scene;
 	}
 
-	void fillRenderable(RenderableComponent& renderable) {
+	static bool fillRenderable(const Entity& entity, RenderableComponent& renderable) {
 		if (renderable.name.find("Cube") != std::string::npos) {
 			renderable.vertices = MeshCreator::Cube::getVertices();
 			renderable.indices = MeshCreator::Cube::getIndices();
+			return true;
 		}
 		else if (renderable.name.find("Surface") != std::string::npos) {
 			renderable.vertices = MeshCreator::Surface::getVertices();
 			renderable.indices = MeshCreator::Surface::getIndices();
+            return true;
 		}
 		else if (renderable.name.find("Wall") != std::string::npos) {
 			renderable.vertices = MeshCreator::Wall::getVertices();
 			renderable.indices = MeshCreator::Wall::getIndices();
+            return true;
 		}
 		else if (renderable.name.find("Pyramid") != std::string::npos) {
 			renderable.vertices = MeshCreator::Pyramid::getVertices();
 			renderable.indices = MeshCreator::Pyramid::getIndices();
+            return true;
 		}
+		else if(doesContainExtension(renderable.name, "obj")) {
+            const std::string modelPath{ FProjectManager::getAssetsPath() + renderable.name };
+            MeshCreator::loadOBJ(renderable.name, modelPath, entity);
+            return true;
+        }
+
+		return false;
 	}
 
 	void FSceneDeserializer::loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
@@ -133,7 +145,7 @@ namespace marengine {
 		if (jsonContains("RenderableComponent")) {
 			auto& renderableComponent{ entity.addComponent<RenderableComponent>() };
 			setString(renderableComponent.name, "RenderableComponent", "name");
-			fillRenderable(renderableComponent);
+            fillRenderable(entity, renderableComponent);
 		}
 
 		if (jsonContains("ColorComponent")) {
