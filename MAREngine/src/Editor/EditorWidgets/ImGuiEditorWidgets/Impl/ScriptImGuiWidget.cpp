@@ -35,7 +35,7 @@ namespace marengine {
     }
 
     void FScriptImGuiWidget::reset() {
-        editor.SetText("");
+        editor.SetText(getDefaultEditorSourceCode());
         setEditorTitle("");
     }
 

@@ -31,7 +31,7 @@ namespace marengine {
 
 	RenderStatistics* RenderStatistics::Instance{ nullptr };
 
-	void RenderStatistics::update() {
+	void RenderStatistics::update(FSceneManagerEditor* pSceneManagerEditor) {
 		const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
 		std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
 			verticesCount += batch.getVertices().size();
@@ -50,9 +50,7 @@ namespace marengine {
 			allRendererEntitiesCount += textured2dEntitiesCount;
 		});
 
-		entitiesCount = {
-			FSceneManagerEditor::Instance->getScene()->getEntities().size()
-		};
+		entitiesCount = pSceneManagerEditor->getScene()->getEntities().size();
 	}
 
 	void RenderStatistics::reset() {

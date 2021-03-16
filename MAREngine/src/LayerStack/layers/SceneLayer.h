@@ -44,7 +44,7 @@ namespace marengine {
 
 		// --- OVERRIDED METHODS --- //
 
-		void initialize() override;
+		void create(const std::string& scenePath);
 		void update() override;
 		void close() override;
 

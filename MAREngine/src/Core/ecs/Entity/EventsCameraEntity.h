@@ -28,6 +28,7 @@ namespace marengine {
 
 	class RenderCamera;
 	class Entity;
+	class FSceneManagerEditor;
 
 
 	/**
@@ -38,12 +39,11 @@ namespace marengine {
 	class FEventsCameraEntity {
 	public:
 
-		/**
-		 * @brief Updates main camera during editor / game mode. You have to pass only pointer to RenderCamera.
-		 * Then method will update needed buffers and use passed camera.
-		 * @param renderCamera pointer to renderCamera that we want to be used.
-		 */
-		static void onMainCameraUpdate(const RenderCamera* pRenderCamera);
+	    /**
+	     * @brief Creates FEventsCameraEntity, so that it can be used from everywhere.
+	     * @param pSceneManagerEditor dependency of this class is instance of SceneManagerEditor
+	     */
+	    static void create(FSceneManagerEditor* pSceneManagerEditor);
 
 		/**
 		 * @brief Updates main camera with given entity, only if it can be updated (FSceneManager must allow it).
@@ -53,7 +53,7 @@ namespace marengine {
 		static void onMainCameraUpdate(const Entity& entity);
 
 		/**
-		 * @brief Methed sets editor camera and pushes it to render pipeline.
+		 * @brief Method sets editor camera and pushes it to render pipeline.
 		 * @param renderCamera pointer to editor's renderCamera, which will be pushed to pipeline and used.
 		 */
 		static void onEditorCameraSet(const RenderCamera* pRenderCamera);
@@ -63,6 +63,10 @@ namespace marengine {
 		 * and then pushes it to render pipeline.
 		 */
 		static void onGameCameraSet();
+
+	private:
+
+        static FSceneManagerEditor* s_pSceneManagerEditor;
 
 	};
 

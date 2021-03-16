@@ -142,14 +142,14 @@ namespace marengine {
         if (m_pSceneManagerEditor->usingEditorCamera()) {
             m_guizmo.selectType();
 
-            if (FSceneManagerEditor::Instance->isEditorMode()) {
+            if (m_pSceneManagerEditor->isEditorMode()) {
                 if (m_pInspectorWidget->isInspectedEntityValid()) {
                     m_guizmo.draw(m_camera, m_pInspectorWidget->getInspectedEntity());
                 }
 
                 const bool cameraWasRecalculated{ m_camera.update(m_aspectRatio, ImGui::IsWindowFocused()) };
                 if (cameraWasRecalculated) {
-                    FEventsCameraEntity::onMainCameraUpdate(m_camera.getCameraData());
+                    FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
                 }
             }
         }

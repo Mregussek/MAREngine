@@ -39,15 +39,12 @@ namespace marengine {
 
         displayWindow.initialize(1600, 900, m_engine.getWindowName().c_str());
 
-		auto* scene = FSceneDeserializer::loadSceneFromFile(m_engine.getStartupSceneFilename());
-
 		RenderLayer renderLayer("Render Layer");
 		renderLayer.initialize();
 		stack.pushLayer(&renderLayer);
 
 		SceneLayer sceneLayer("Scene Layer");
-		sceneLayer.passSceneToManager(scene);
-		sceneLayer.initialize();
+		sceneLayer.create(m_engine.getStartupSceneFilename());
 		stack.pushLayer(&sceneLayer);
 
 		FImGuiEditorLayer editorLayer;
@@ -55,8 +52,6 @@ namespace marengine {
 		stack.pushOverlay(&editorLayer);
 
 		while (!displayWindow.isGoingToClose() && !m_engine.shouldEngineRestart()) {
-			SetupOpenGL::clearScreen(scene->getBackground());
-
 			editorLayer.renderToViewport();
 
 			stack.update();

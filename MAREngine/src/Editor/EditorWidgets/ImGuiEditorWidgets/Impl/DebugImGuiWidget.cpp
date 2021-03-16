@@ -32,7 +32,7 @@ namespace marengine {
 
     void FDebugImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
-        m_pRenderStatistics = serviceLocator->retrieve<FImGuiTypeHolder<const RenderStatistics*>>()->pInstance;
+        m_pRenderStatistics = serviceLocator->retrieve<FImGuiTypeHolder<RenderStatistics*>>()->pInstance;
     }
 
     void FDebugImGuiWidget::updateFrame() {
@@ -52,6 +52,8 @@ namespace marengine {
         ImGui::End();
 
         ImGui::Begin("Statistics Menu");
+
+        m_pRenderStatistics->update(m_pSceneManagerEditor);
 
         ImGui::Text("Draw Calls: %d", m_pRenderStatistics->drawCallsCount);
         ImGui::Text("Vertices: %d", m_pRenderStatistics->verticesCount);

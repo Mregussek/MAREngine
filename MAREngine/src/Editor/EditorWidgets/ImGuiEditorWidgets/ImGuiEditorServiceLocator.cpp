@@ -27,7 +27,7 @@
 namespace marengine {
 
 
-	void FImGuiEditorServiceLocator::registerServices(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics) {
+	void FImGuiEditorServiceLocator::registerServices(FSceneManagerEditor* pSceneManagerEditor, RenderStatistics* pRenderStatistics) {
 		// Create registry and entity that will hold everything as components
 	    m_imguiRegistry = entt::registry();
 		m_imguiEntity = m_imguiRegistry.create();
@@ -36,7 +36,7 @@ namespace marengine {
         auto* sceneHolder = emplace<FImGuiTypeHolder<FSceneManagerEditor*>>();
         sceneHolder->pInstance = pSceneManagerEditor;
 
-        auto* renderStatsHolder = emplace<FImGuiTypeHolder<const RenderStatistics*>>();
+        auto* renderStatsHolder = emplace<FImGuiTypeHolder<RenderStatistics*>>();
         renderStatsHolder->pInstance = pRenderStatistics;
 
         // create instance of every widget

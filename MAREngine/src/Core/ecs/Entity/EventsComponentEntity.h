@@ -27,6 +27,7 @@
 namespace marengine {
 
 	class Entity;
+    class FSceneManagerEditor;
 
 	
 	/**
@@ -36,6 +37,8 @@ namespace marengine {
 	 */
 	class FEventsComponentEntity {
 	public:
+
+	    static void create(FSceneManagerEditor* pSceneManagerEditor);
 
 		/**
 		 * @brief Event called everytime, when TComponent is added to entity. Remember, method actually adds component!
@@ -59,6 +62,10 @@ namespace marengine {
 		 * @param entity entity, at which remove component event is called
 		 */
 		template<typename TComponent> static void onRemove(const Entity& entity);
+
+	private:
+
+	    static FSceneManagerEditor* s_pSceneManagerEditor;
 
 	};
 

@@ -47,8 +47,8 @@ namespace marengine {
 
 		auto search{ playModeComponent.components.find(componentType) };
 		if (search != playModeComponent.components.cend()) {
-			auto& tcomponent{ entity.getComponent<TComponent>() };
-			tcomponent = std::get<TComponent>(search->second);
+			auto& component{ entity.getComponent<TComponent>() };
+            component = std::get<TComponent>(search->second);
 			playModeComponent.components.erase(search);
 		}
 	}

@@ -30,31 +30,32 @@
 
 namespace marengine {
 
+    FSceneManagerEditor* FEventsCameraEntity::s_pSceneManagerEditor{ nullptr };
 
-	void FEventsCameraEntity::onMainCameraUpdate(const RenderCamera* pRenderCamera) {
-		FRenderBufferManager::onRenderCameraUpdate(pRenderCamera);
-	}
+
+    void FEventsCameraEntity::create(FSceneManagerEditor* pSceneManagerEditor) {
+        s_pSceneManagerEditor = pSceneManagerEditor;
+    }
 
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
 		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
 
-		const bool userCheckingGameInPlayMode{ FSceneManagerEditor::Instance->isPlayMode() || FSceneManagerEditor::Instance->isPauseMode() };
-		const bool userModifyingGameCameraInEditorMode{ FSceneManagerEditor::Instance->isEditorMode() && !FSceneManagerEditor::Instance->usingEditorCamera() };
+		const bool userCheckingGameInPlayMode{ s_pSceneManagerEditor->isPlayMode() || s_pSceneManagerEditor->isPauseMode() };
+		const bool userModifyingGameCameraInEditorMode{ s_pSceneManagerEditor->isEditorMode() && s_pSceneManagerEditor->usingGameCamera() };
 
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
 			const auto& transform{ entity.getComponent<TransformComponent>() };
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			onMainCameraUpdate(&cameraComponent.renderCamera);
+            RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
 		}
 	}
 
 	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* pRenderCamera) {
 		RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
-		onMainCameraUpdate(pRenderCamera);
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() {
-		Scene* pScene{ FSceneManagerEditor::Instance->getScene() };
+		Scene* pScene{ s_pSceneManagerEditor->getScene() };
 		entt::entity foundEnttEntity{ entt::null };
 
 		auto entityWithCameraComponentAndLookForMainRenderCamera = [&foundEnttEntity](entt::entity enttEntity, CameraComponent& cameraComponent) {
@@ -74,7 +75,6 @@ namespace marengine {
 
 			pRenderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
 			RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
-			onMainCameraUpdate(pRenderCamera);
 		}
 	}
 

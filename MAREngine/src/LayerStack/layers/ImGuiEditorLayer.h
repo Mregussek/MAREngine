@@ -38,7 +38,7 @@ namespace marengine {
     class FImGuiEditorLayer : public Layer {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistic);
+        void create(FSceneManagerEditor* pSceneManagerEditor, RenderStatistics* pRenderStatistic);
 
         void update() override;
         void close() override;

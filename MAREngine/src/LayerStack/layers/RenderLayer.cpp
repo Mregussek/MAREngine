@@ -42,7 +42,6 @@ namespace marengine {
 	void RenderLayer::update() {
 		m_statistics.reset();
 		m_renderer.draw();
-		m_statistics.update();
 	}
 
 	void RenderLayer::close() {
@@ -52,7 +51,7 @@ namespace marengine {
 		m_renderer.close();
 	}
 
-    const RenderStatistics* RenderLayer::getRenderStats() const {
+    RenderStatistics* RenderLayer::getRenderStats() {
 	    return &m_statistics;
 	}
 

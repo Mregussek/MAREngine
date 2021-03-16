@@ -27,6 +27,7 @@
 #include "../GraphicsLimits.h"
 #include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Entity/EventsCameraEntity.h"
 #include "../../ecs/Entity/EventsComponentEntity.h"
 
 
@@ -47,7 +48,8 @@ namespace marengine {
 	}
 
 	void RenderPipeline::pushCameraToPipeline(const RenderCamera* cam) {
-		m_renderCamera = cam;
+        m_pRenderCamera = cam;
+        FRenderBufferManager::onRenderCameraUpdate(m_pRenderCamera);
 	}
 
 	void RenderPipeline::pushEntityToPipeline(const Entity& entity) {
@@ -78,15 +80,15 @@ namespace marengine {
 			}
 		}
 		if (entity.hasComponent<CameraComponent>()) {
-			if (m_renderCamera) {
-				const bool userCheckingGameInPlayMode{ FSceneManagerEditor::Instance->isPlayMode() || FSceneManagerEditor::Instance->isPauseMode() };
-				const bool userModifyingGameCameraInEditorMode{ FSceneManagerEditor::Instance->isEditorMode() && !FSceneManagerEditor::Instance->usingEditorCamera() };
-				if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
-					pushEntityCameraToPipeline(entity);
-				}
+		    auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+			if (m_pRenderCamera && cameraComponent.isMainCamera()) {
+			    FEventsCameraEntity::onMainCameraUpdate(entity);
 			}
-			else {
-				pushEntityCameraToPipeline(entity);
+			else if(cameraComponent.isMainCamera()){
+			    const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+			    RenderCamera* renderCamera{ &cameraComponent.renderCamera };
+			    renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
+			    m_pRenderCamera = renderCamera;
 			}
 		}
 	}
@@ -97,7 +99,7 @@ namespace marengine {
 		FRenderBufferManager::onMeshBatchReadyToDraw(m_staticColorBatches);
 		FRenderBufferManager::onMeshBatchReadyToDraw(m_staticTexture2DBatches);
 		FRenderBufferManager::onCreatePointLightsSSBO(m_pointLightBatch);
-		FRenderBufferManager::onCreateRenderCameraSSBO(m_renderCamera);
+		FRenderBufferManager::onCreateRenderCameraSSBO(m_pRenderCamera);
 	}
 
 	uint32_t RenderPipeline::getAvailableColorBatch(const Entity& entity) {
@@ -128,16 +130,6 @@ namespace marengine {
 		}
 	}
 
-	void RenderPipeline::pushEntityCameraToPipeline(const Entity& entity) {
-		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-		if (cameraComponent.isMainCamera()) {
-			const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-			RenderCamera* renderCamera{ &cameraComponent.renderCamera };
-			renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
-			RenderPipeline::Instance->pushCameraToPipeline(renderCamera);
-		}
-	}
-
 	const std::vector<FMeshBatchStaticColor>& RenderPipeline::getColorBatches() const { 
 		return m_staticColorBatches; 
 	}
@@ -151,7 +143,7 @@ namespace marengine {
 	}
 
 	const RenderCamera* RenderPipeline::getRenderCamera() const { 
-		return m_renderCamera;
+		return m_pRenderCamera;
 	}
 
 

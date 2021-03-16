@@ -43,11 +43,6 @@ namespace marengine {
 	class FSceneManagerEditor {
 	public:
 
-		static FSceneManagerEditor* Instance;
-
-		/// @brief Default constructor
-		FSceneManagerEditor() = default;
-
 		/// @brief Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
 		void initialize() const;
 

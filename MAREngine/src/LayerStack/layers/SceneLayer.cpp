@@ -22,6 +22,9 @@
 
 #include "SceneLayer.h"
 #include "../../Core/ecs/Scene.h"
+#include "../../Core/ecs/Entity/EventsCameraEntity.h"
+#include "../../Core/ecs/Entity/EventsComponentEntity.h"
+#include "../../Core/filesystem/SceneDeserializer.h"
 
 
 namespace marengine {
@@ -30,13 +33,14 @@ namespace marengine {
 	SceneLayer::SceneLayer(const char* debugname) {
 		p_debugName = debugname;
 	}
-	
-	void SceneLayer::passSceneToManager(Scene* scene) {
-        m_sceneManagerEditor.setScene(scene);
-	}
 
-	void SceneLayer::initialize() {
-        m_sceneManagerEditor.Instance = &m_sceneManagerEditor;
+	void SceneLayer::create(const std::string& scenePath) {
+        Scene* scene = FSceneDeserializer::loadSceneFromFile(scenePath);
+
+        m_sceneManagerEditor.setScene(scene);
+
+        FEventsCameraEntity::create(&m_sceneManagerEditor);
+        FEventsComponentEntity::create(&m_sceneManagerEditor);
 
         m_sceneManagerEditor.initialize();
 	}

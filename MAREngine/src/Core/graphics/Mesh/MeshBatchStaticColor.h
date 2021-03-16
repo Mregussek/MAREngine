@@ -32,6 +32,10 @@ namespace marengine {
 
 	class Entity;
 	struct ColorComponent;
+	class FMeshBatchStaticColor;
+
+
+	typedef std::vector<FMeshBatchStaticColor> FMeshBatchStaticColorArray;
 
 
 	class FMeshBatchStaticColor : public FMeshBatchStatic {

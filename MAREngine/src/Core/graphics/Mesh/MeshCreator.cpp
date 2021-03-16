@@ -127,7 +127,6 @@ namespace marengine {
     void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const Entity& entity) {
         loader_obj::Loader Loader{};
         const bool loadout{ Loader.LoadFile(path) };
-    
         if (!loadout) {
             return;
         }
@@ -137,25 +136,6 @@ namespace marengine {
             renderableComponent.name = filename;
             renderableComponent.vertices = Loader.LoadedMeshes[0].Vertices;
             renderableComponent.indices = Loader.LoadedMeshes[0].Indices;
-        }
-        else {
-            auto passLoadedMeshToEntity = [&entity, &filename = std::as_const(filename)](const loader_obj::Mesh& mesh) {
-                const Entity& child = entity.assignChild(FSceneManagerEditor::Instance->getScene()->createEntity());
-
-                auto& tag{ child.getComponent<TagComponent>() };
-                auto& renderable{ child.addComponent<RenderableComponent>() };
-                child.addComponent<ColorComponent>();
-
-                tag.tag = [&mesh, &filename]()->std::string {
-                    if (mesh.MeshName.empty()) { return filename; }
-                    else { return mesh.MeshName; }
-                }();
-
-                renderable.name = filename;
-                renderable.vertices = mesh.Vertices;
-                renderable.indices = mesh.Indices;
-            };
-            std::for_each(Loader.LoadedMeshes.cbegin(), Loader.LoadedMeshes.cend(), passLoadedMeshToEntity);
         }
     }
 

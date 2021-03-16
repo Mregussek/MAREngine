@@ -57,14 +57,12 @@ namespace marengine {
 
 		// ---- GETTERS for container ---- //
 	
-		const std::vector<FMeshBatchStaticColor>& getColorBatches() const;
-		const std::vector<FMeshBatchStaticTexture2D>& getTexture2DBatches() const;
-		const FPointLightBatch& getPointLightBatch() const;
-		const RenderCamera* getRenderCamera() const;
+		MAR_NO_DISCARD const std::vector<FMeshBatchStaticColor>& getColorBatches() const;
+		MAR_NO_DISCARD const std::vector<FMeshBatchStaticTexture2D>& getTexture2DBatches() const;
+		MAR_NO_DISCARD const FPointLightBatch& getPointLightBatch() const;
+		MAR_NO_DISCARD const RenderCamera* getRenderCamera() const;
 
 	private:
-
-		void pushEntityCameraToPipeline(const Entity& entity);
 
 		uint32_t getAvailableColorBatch(const Entity& entity);
 		uint32_t getAvailableTexture2DBatch(const Entity& entity);
@@ -74,7 +72,7 @@ namespace marengine {
 		std::vector<FMeshBatchStaticTexture2D> m_staticTexture2DBatches;
 		FPointLightBatch m_pointLightBatch;
 
-		const RenderCamera* m_renderCamera{ nullptr };
+		const RenderCamera* m_pRenderCamera{ nullptr };
 
 	};
 

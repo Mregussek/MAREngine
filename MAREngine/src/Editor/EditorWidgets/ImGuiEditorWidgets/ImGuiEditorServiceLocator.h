@@ -37,7 +37,7 @@ namespace marengine {
     class FImGuiEditorServiceLocator {
     public:
 
-        void registerServices(FSceneManagerEditor* pSceneManagerEditor, const RenderStatistics* pRenderStatistics);
+        void registerServices(FSceneManagerEditor* pSceneManagerEditor, RenderStatistics* pRenderStatistics);
         void close();
 
         template<typename TImGuiService>

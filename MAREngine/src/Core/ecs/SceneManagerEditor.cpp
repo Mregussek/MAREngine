@@ -30,9 +30,6 @@
 namespace marengine {
 
 
-	FSceneManagerEditor* FSceneManagerEditor::Instance{ nullptr };
-
-
 	void FSceneManagerEditor::initialize() const {
 		RenderPipeline::Instance->reset();
 

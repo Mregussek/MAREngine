@@ -29,7 +29,7 @@
 namespace marengine {
 
 
-    void FImGuiEditorLayer::create(FSceneManagerEditor *pSceneManagerEditor, const RenderStatistics* pRenderStatistics) {
+    void FImGuiEditorLayer::create(FSceneManagerEditor *pSceneManagerEditor, RenderStatistics* pRenderStatistics) {
         m_pSceneManagerEditor = pSceneManagerEditor;
         m_serviceLocator.registerServices(pSceneManagerEditor, pRenderStatistics);
 

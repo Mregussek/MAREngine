@@ -29,12 +29,12 @@
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+
 
 	struct RenderStatistics {
-		
-		RenderStatistics() = default;
 
-		void update();
+		void update(FSceneManagerEditor* pSceneManagerEditor);
 		void reset();
 		
 		static RenderStatistics* Instance;

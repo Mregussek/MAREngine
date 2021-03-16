@@ -48,7 +48,7 @@ namespace marengine {
         void displayInfoAbout(const Entity& entity) const;
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        const RenderStatistics* m_pRenderStatistics{ nullptr };
+        RenderStatistics* m_pRenderStatistics{ nullptr };
 
     };
 

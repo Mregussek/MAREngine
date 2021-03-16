@@ -69,7 +69,7 @@ namespace marengine {
 
 
 	// Just declarations for PlayModeStorageComponent ComponentVariant
-	struct TrasformComponent;
+	struct TransformComponent;
 	struct ColorComponent;
 	struct PointLightComponent;
 
