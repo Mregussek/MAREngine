@@ -27,7 +27,7 @@
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
-#include "../../../../Window/Window.h"
+#include "Window/IWindow.h"
 
 
 namespace marengine {
@@ -35,6 +35,7 @@ namespace marengine {
 
     void FSceneHierarchyImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<IWindow*>>()->pInstance;
         m_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
     }
 
@@ -108,7 +109,7 @@ namespace marengine {
 
     void FSceneHierarchyImGuiWidget::popUpMenu() const {
         if (m_pSceneManagerEditor->isEditorMode() && ImGui::IsWindowFocused()) {
-            if (Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+            if (m_pWindow->isMousePressed(MAR_MOUSE_BUTTON_2)) {
                 ImGui::OpenPopup("SceneHierarchyPopUp");
             }
         }

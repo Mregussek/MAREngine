@@ -24,18 +24,16 @@
 #define MAR_ENGINE_EDITOR_SPHERICAL_CAMERA_H
 
 
-#include "../../mar.h"
-
-
 namespace marengine {
 
 	class Camera;
+	class IWindow;
 
 
 	class SphericalCamera {
 	public:
 
-		bool processFrame(Camera* camera, float deltaTime);
+		bool processFrame(Camera* pCamera, IWindow* pWindow, float deltaTime);
 
 	};
 

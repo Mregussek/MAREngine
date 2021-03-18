@@ -31,13 +31,15 @@ namespace marengine {
 
     class FSceneManagerEditor;
     struct RenderStatistics;
+    class IWindow;
     template<typename TTypeToHold> struct FImGuiTypeHolder;
 
 
     class FImGuiEditorServiceLocator {
     public:
 
-        void registerServices(FSceneManagerEditor* pSceneManagerEditor, RenderStatistics* pRenderStatistics);
+        void registerServices(IWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
+                              RenderStatistics* pRenderStatistics);
         void close();
 
         template<typename TImGuiService>

@@ -20,36 +20,22 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IMGUIEDITORLAYER_H
-#define MARENGINE_IMGUIEDITORLAYER_H
+#ifndef MARENGINE_IRENDERCONTEXT_H
+#define MARENGINE_IRENDERCONTEXT_H
 
 
-#include "../Layer.h"
-#include "../../Editor/EditorWidgets/EditorWidgetsServiceManager.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorServiceLocator.h"
+#include "../../../mar.h"
 
 
 namespace marengine {
 
-    struct RenderStatistics;
-    class FSceneManagerEditor;
 
-
-    class FImGuiEditorLayer : public Layer {
+    class IRenderApiContext {
     public:
 
-        void create(FSceneManagerEditor* pSceneManagerEditor, RenderStatistics* pRenderStatistic);
+        virtual bool create() = 0;
 
-        void update() override;
-        void close() override;
-
-        void renderToViewport();
-
-    private:
-
-        FEditorWidgetsServiceManager m_editorServiceManager;
-        FImGuiEditorServiceLocator m_serviceLocator;
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        virtual void clearScreen(maths::vec3 backgroundColor) = 0;
 
     };
 
@@ -57,4 +43,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_IMGUIEDITORLAYER_H
+#endif //MARENGINE_IRENDERCONTEXT_H

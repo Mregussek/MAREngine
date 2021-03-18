@@ -20,13 +20,24 @@
 ************************************************************************/
 
 
-#include "src/EditorMAR.h"
+#include "MAREngine/MAREngine.h"
+
+
+using namespace marengine;
 
 
 int main() {
-	marengine::EditorMAR editor;
 
-	editor.initialize();
-	editor.runProjectOnEngine();
-	editor.shutdown();
+    MAREngine engine;
+    FMAREngineBuilder_ImGui_OpenGL_GLFW builder;
+    const std::string projectName = "DefaultProject";
+    const std::string sceneName = "default.marscene.json";
+
+    engine.initAtStartup(projectName, sceneName);
+
+    while(engine.shouldEngineRestart()) {
+        engine.buildAndRun((IMAREngineBuilder*)&builder);
+    }
+
+    return 0;
 }

@@ -22,18 +22,18 @@
 
 #include "SphericalCamera.h"
 #include "Camera.h"
-#include "../../Window/Window.h"
+#include "Window/IWindow.h"
 
 
 namespace marengine {
 
 
-	bool SphericalCamera::processFrame(Camera* camera, float deltaTime) {
+	bool SphericalCamera::processFrame(Camera* pCamera, IWindow* pWindow, float deltaTime) {
         bool userRotatedCamera = false;
 
-        if (Window::isMousePressed(MAR_MOUSE_BUTTON_3)) {
-            const float posX = Window::getMousePositionX();
-            const float posY = Window::getMousePositionY();
+        if (pWindow->isMousePressed(MAR_MOUSE_BUTTON_3)) {
+            const float posX = pWindow->getMousePositionX();
+            const float posY = pWindow->getMousePositionY();
 
             std::cout << posX << ", " << posY << "\n";
 

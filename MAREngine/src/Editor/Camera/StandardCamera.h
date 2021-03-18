@@ -24,24 +24,21 @@
 #define MAR_ENGINE_EDITOR_STANDARD_CAMERA_H
 
 
-#include "../../mar.h"
-
-
 namespace marengine {
 
-	class Window;
+	class IWindow;
 	class Camera;
 
 
 	class StandardCamera {
 	public:
 
-		bool processFrame(Camera* camera, float deltaTime) const;
+		bool processFrame(Camera* pCamera, IWindow* pWindow, float deltaTime) const;
 
 	private:
 
-		float checkForSpeedUpdate(Camera* camera, float scroll) const;
-		bool processMousePosition(Camera* camera, bool firstMouse) const;
+		float checkForSpeedUpdate(Camera* pCamera, IWindow* pWindow, float scroll) const;
+		bool processMousePosition(Camera* pCamera, IWindow* pWindow, bool firstMouse) const;
 
 	};
 

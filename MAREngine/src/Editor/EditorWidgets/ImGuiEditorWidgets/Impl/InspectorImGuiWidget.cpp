@@ -24,7 +24,7 @@
 #include "CommonTypeHandler.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
-#include "../../../../Window/Window.h" // isMousePressed()
+#include "Window/IWindow.h" // isMousePressed()
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
 #include "../../../../Core/graphics/Mesh/MeshCreator.h" // for correct renderable load
@@ -36,6 +36,7 @@ namespace marengine {
 
     void FInspectorImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<IWindow*>>()->pInstance;
     }
 
     void FInspectorImGuiWidget::resetInspectedEntity() {
@@ -114,7 +115,7 @@ namespace marengine {
     void FInspectorImGuiWidget::popUpMenu() const {
         constexpr char popMenuName[]{ "SceneEntityModifyPopUp" };
 
-        if (ImGui::IsWindowFocused() && Window::isMousePressed(MAR_MOUSE_BUTTON_2)) {
+        if (ImGui::IsWindowFocused() && m_pWindow->isMousePressed(MAR_MOUSE_BUTTON_2)) {
             ImGui::OpenPopup(popMenuName);
         }
 

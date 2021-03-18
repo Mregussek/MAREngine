@@ -26,16 +26,13 @@
 // Log
 #include "../../src/Logging/Logger.h"
 
-// Platforms
-#include "../../src/Platform/OpenGL/SetupOpenGL.h"
-
 // Filesystem
 #include "../../src/Core/filesystem/SceneDeserializer.h"
 #include "../../src/Core/filesystem/SceneSerializer.h"
 
 // Layers	 
 #include "../../src/LayerStack/LayerStack.h"
-#include "../../src/LayerStack/layers/ImGuiEditorLayer.h"
+#include "../../src/LayerStack/layers/EditorLayer.h"
 #include "../../src/LayerStack/layers/SceneLayer.h"
 #include "../../src/LayerStack/layers/RenderLayer.h"
 
@@ -52,8 +49,9 @@
 #include "../../src/Core/scripting/PythonScript.h"
 
 // Window && Input
-#include "../../src/Window/Window.h"
-#include "../../src/Window/WindowInstance.h"
+#include "../../src/Window/GLFW/WindowGLFW.h"
+#include "../../src/Window/IWindow.h"
 
 // Engine	 
 #include "../../src/MAREngine.h"
+#include "../../src/MAREngineBuilder.h"

@@ -27,6 +27,7 @@
 #include "../GraphicsLimits.h"
 #include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Entity/Entity.h"
+#include "../../ecs/Scene.h"
 #include "../../ecs/Entity/EventsCameraEntity.h"
 #include "../../ecs/Entity/EventsComponentEntity.h"
 
@@ -36,6 +37,18 @@ namespace marengine {
 
 	RenderPipeline* RenderPipeline::Instance{ nullptr };
 
+
+	void RenderPipeline::create(Scene* pScene) {
+        reset();
+
+        const FEntityArray& entities{ pScene->getEntities() };
+
+        std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
+            pushEntityToPipeline(entity);
+        });
+
+        onBatchesReadyToDraw();
+	}
 
 	void RenderPipeline::reset() {
 		for (auto& batch : m_staticColorBatches) { batch.reset(); }

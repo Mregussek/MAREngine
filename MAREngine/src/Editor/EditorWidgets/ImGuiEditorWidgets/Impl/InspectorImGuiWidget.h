@@ -33,6 +33,7 @@ namespace marengine {
     class Entity;
     class FSceneManagerEditor;
     class FImGuiEditorServiceLocator;
+    class IWindow;
 
 
     class FInspectorImGuiWidget : public IInspectorEditorWidget {
@@ -67,6 +68,7 @@ namespace marengine {
 
         const Entity* m_inspectedEntity{ nullptr };
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        IWindow* m_pWindow{ nullptr };
 
         bool m_newScriptWindow{ false };
         bool m_assignScriptWindow{ false };

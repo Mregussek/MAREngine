@@ -23,16 +23,71 @@
 #include "MAREngine.h"
 #include "Core/scripting/PythonInterpreter.h"
 #include "Logging/Logger.h"
+#include "MAREngineBuilder.h"
+#include "Window/IWindow.h"
+#include "LayerStack/layers/RenderLayer.h"
+#include "LayerStack/layers/SceneLayer.h"
+#include "LayerStack/layers/EditorLayer.h"
 
 
 namespace marengine {
 
 
-    void MAREngine::initialize(std::string projectName, std::string sceneToLoadAtStartup) {
+    void MAREngine::initAtStartup(std::string projectName, std::string sceneToLoadAtStartup) {
+        static bool initializedAtStartup{ false };
+        if(initializedAtStartup) {
+            return;
+        }
+
         FLogger::init();
         FProjectManager::init(&m_projectManager, std::move(projectName), std::move(sceneToLoadAtStartup));
 		FPythonInterpreter::init();
-	}
+
+        initializedAtStartup = true;
+        setRestart();
+    }
+
+    void MAREngine::buildAndRun(IMAREngineBuilder* pBuilder) {
+        setNoRestart();
+
+        IWindow* window = pBuilder->createWindow();
+        FRenderLayer* renderLayer = pBuilder->createRenderLayer();
+        FSceneLayer* sceneLayer = pBuilder->createSceneLayer();
+        FEditorLayer* editorLayer = pBuilder->createEditorLayer();
+        IRenderApiContext* renderApiContext = pBuilder->createRenderApiContext();
+        FLayerStack layerStack = pBuilder->createLayerStack();
+
+        const bool isWindowCreated = window->open(1600, 900, getWindowName().c_str());
+        if(!isWindowCreated) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window!");
+            return;
+        }
+
+        const bool isRenderApiCreated = renderApiContext->create();
+        if(!isRenderApiCreated) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Render API!");
+            return;
+        }
+
+        renderLayer->create();
+        sceneLayer->create(getStartupSceneFilename());
+        editorLayer->create(window, sceneLayer->getSceneManager(), renderLayer->getRenderStats());
+
+        layerStack.pushLayer(renderLayer);
+        layerStack.pushLayer(sceneLayer);
+        layerStack.pushLayer(editorLayer);
+
+        while(!window->isGoingToClose() && !shouldEngineRestart()) {
+            editorLayer->renderToViewport();
+
+            layerStack.update();
+
+            window->swapBuffers();
+        }
+
+        layerStack.close();
+        window->terminateLibrary();
+    }
 
 	MAR_NO_DISCARD bool MAREngine::shouldEngineRestart() const {
 		return m_shouldRestart;

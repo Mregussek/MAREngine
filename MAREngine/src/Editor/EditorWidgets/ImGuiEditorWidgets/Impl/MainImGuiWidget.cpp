@@ -24,7 +24,7 @@
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../mar.h"
-#include "../../../../Window/Window.h"
+#include "Window/IWindow.h"
 
 
 namespace marengine {
@@ -32,9 +32,10 @@ namespace marengine {
 
     void FMainImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<IWindow*>>()->pInstance;
 
         ImGui::CreateContext();
-        Window::imguiInit();
+        m_pWindow->initEditorGuiLibrary();
         ImGui_ImplOpenGL3_Init("#version 450");
 
         ImGuiIO& io = ImGui::GetIO();
@@ -47,13 +48,13 @@ namespace marengine {
 
     void FMainImGuiWidget::destroy() {
         ImGui_ImplOpenGL3_Shutdown();
-        Window::imguiTerminate();
+        m_pWindow->terminateEditorGuiLibrary();
         ImGui::DestroyContext();
     }
 
     void FMainImGuiWidget::beginFrame() {
         ImGui_ImplOpenGL3_NewFrame();
-        Window::imguiNewFrame();
+        m_pWindow->beginNewFrameEditorGuiLibrary();
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
 
@@ -71,7 +72,7 @@ namespace marengine {
             windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
         }
 
-        if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
+        if constexpr (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
             windowFlags |= ImGuiWindowFlags_NoBackground;
         }
 

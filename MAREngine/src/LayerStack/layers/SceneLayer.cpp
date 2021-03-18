@@ -30,30 +30,24 @@
 namespace marengine {
 
 
-	SceneLayer::SceneLayer(const char* debugname) {
-		p_debugName = debugname;
-	}
-
-	void SceneLayer::create(const std::string& scenePath) {
-        Scene* scene = FSceneDeserializer::loadSceneFromFile(scenePath);
-
-        m_sceneManagerEditor.setScene(scene);
+	void FSceneLayer::create(const std::string& scenePath) {
+        Scene* pScene = FSceneDeserializer::loadSceneFromFile(scenePath);
 
         FEventsCameraEntity::create(&m_sceneManagerEditor);
         FEventsComponentEntity::create(&m_sceneManagerEditor);
 
-        m_sceneManagerEditor.initialize();
+        m_sceneManagerEditor.initialize(pScene);
 	}
 
-	void SceneLayer::update() {
+	void FSceneLayer::update() {
         m_sceneManagerEditor.update();
 	}
 
-	void SceneLayer::close() {
+	void FSceneLayer::close() {
         m_sceneManagerEditor.close();
 	}
 
-	FSceneManagerEditor* SceneLayer::getSceneManager() {
+	FSceneManagerEditor* FSceneLayer::getSceneManager() {
 		return &m_sceneManagerEditor;
 	}
 

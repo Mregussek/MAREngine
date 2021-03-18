@@ -23,6 +23,7 @@
 #include "ViewportImGuiWidget.h"
 #include "InspectorImGuiWidget.h"
 #include "../ImGuiEditorServiceLocator.h"
+#include "../../../../Window/IWindow.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Entity/EventsCameraEntity.h"
@@ -34,6 +35,7 @@ namespace marengine {
     void FViewportImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
+        m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<IWindow*>>()->pInstance;
 
         constexpr float xDefault = 800.f;
         constexpr float yDefault = 600.f;
@@ -140,14 +142,14 @@ namespace marengine {
 
     void FViewportImGuiWidget::handleGuizmo() {
         if (m_pSceneManagerEditor->usingEditorCamera()) {
-            m_guizmo.selectType();
+            m_guizmo.selectType(m_pWindow);
 
             if (m_pSceneManagerEditor->isEditorMode()) {
                 if (m_pInspectorWidget->isInspectedEntityValid()) {
                     m_guizmo.draw(m_camera, m_pInspectorWidget->getInspectedEntity());
                 }
 
-                const bool cameraWasRecalculated{ m_camera.update(m_aspectRatio, ImGui::IsWindowFocused()) };
+                const bool cameraWasRecalculated{ m_camera.update(m_pWindow, m_aspectRatio, ImGui::IsWindowFocused()) };
                 if (cameraWasRecalculated) {
                     FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
                 }

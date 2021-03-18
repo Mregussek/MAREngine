@@ -23,8 +23,7 @@
 #ifndef MAR_ENGINE_ENTITY_LAYER_H
 #define MAR_ENGINE_ENTITY_LAYER_H
 
-
-#include "../../mar.h"
+#include <string>
 #include "../Layer.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 
@@ -34,17 +33,11 @@ namespace marengine {
 	class Scene;
 
 
-	class SceneLayer : public Layer {
+	class FSceneLayer : public ILayer {
 	public:
 
-		SceneLayer() = default;
-		SceneLayer(const char* debugname);
-		
-		void passSceneToManager(Scene* scene);
-
-		// --- OVERRIDED METHODS --- //
-
 		void create(const std::string& scenePath);
+
 		void update() override;
 		void close() override;
 

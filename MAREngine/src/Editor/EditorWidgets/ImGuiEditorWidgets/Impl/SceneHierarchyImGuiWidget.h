@@ -33,6 +33,7 @@ namespace marengine {
     class FSceneManagerEditor;
     class FInspectorImGuiWidget;
     class FImGuiEditorServiceLocator;
+    class IWindow;
 
 
     class FSceneHierarchyImGuiWidget : public ISceneHierarchyEditorWidget {
@@ -50,6 +51,7 @@ namespace marengine {
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
         FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
+        IWindow* m_pWindow{ nullptr };
 
     };
 

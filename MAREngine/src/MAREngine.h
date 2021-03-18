@@ -30,6 +30,8 @@
 
 namespace marengine {
 
+    class IMAREngineBuilder;
+
 
 	class MAREngine {
 	public:
@@ -41,7 +43,9 @@ namespace marengine {
 		void setRestart();
 		void setNoRestart();
 
-		void initialize(std::string projectName, std::string sceneToLoadAtStartup);
+		void initAtStartup(std::string projectName, std::string sceneToLoadAtStartup);
+
+		void buildAndRun(IMAREngineBuilder* pBuilder);
 
 	private:
 

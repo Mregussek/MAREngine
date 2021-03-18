@@ -20,27 +20,36 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_PLATFORMS_OPENGL_INITIALIZATION_H
-#define MAR_ENGINE_PLATFORMS_OPENGL_INITIALIZATION_H
-
-
-#include "../../mar.h"
+#include "MAREngineBuilder.h"
 
 
 namespace marengine {
 
 
-	class SetupOpenGL {
-	public:
+    FLayerStack IMAREngineBuilder::createLayerStack() const {
+        return FLayerStack();
+    }
 
-		static bool init();
 
-		static void clearScreen(maths::vec3 background);
+    IWindow* FMAREngineBuilder_ImGui_OpenGL_GLFW::createWindow() const {
+        return (IWindow*)&m_window;
+    }
 
-	};
+    FRenderLayer* FMAREngineBuilder_ImGui_OpenGL_GLFW::createRenderLayer() {
+        return (FRenderLayer*)&m_renderLayer;
+    }
+
+    FSceneLayer* FMAREngineBuilder_ImGui_OpenGL_GLFW::createSceneLayer() {
+        return &m_sceneLayer;
+    }
+
+    FEditorLayer* FMAREngineBuilder_ImGui_OpenGL_GLFW::createEditorLayer() {
+        return (FEditorLayer*)&m_editorLayer;
+    }
+
+    IRenderApiContext* FMAREngineBuilder_ImGui_OpenGL_GLFW::createRenderApiContext() {
+        return (IRenderApiContext*)&m_renderApiContext;
+    }
 
 
 }
-
-
-#endif // !MAR_ENGINE_PLATFORMS_OPENGL_INITIALIZATION_H

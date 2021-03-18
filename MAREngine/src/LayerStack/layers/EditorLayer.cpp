@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "ImGuiEditorLayer.h"
+#include "EditorLayer.h"
 #include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Events/EventsEntityImGuiWidget.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Core/ecs/Scene.h"
@@ -29,9 +29,11 @@
 namespace marengine {
 
 
-    void FImGuiEditorLayer::create(FSceneManagerEditor *pSceneManagerEditor, RenderStatistics* pRenderStatistics) {
+    void FEditorLayerImGui::create(IWindow* pWindow, FSceneManagerEditor *pSceneManagerEditor,
+                                   RenderStatistics* pRenderStatistics) {
         m_pSceneManagerEditor = pSceneManagerEditor;
-        m_serviceLocator.registerServices(pSceneManagerEditor, pRenderStatistics);
+        m_pWindow = pWindow;
+        m_serviceLocator.registerServices(pWindow, pSceneManagerEditor, pRenderStatistics);
 
         // In what order should every window be rendered (sometimes it matters, last window will show up first)
         m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FScriptImGuiWidget>());
@@ -48,16 +50,16 @@ namespace marengine {
         m_editorServiceManager.onCreate();
     }
 
-    void FImGuiEditorLayer::update() {
+    void FEditorLayerImGui::update() {
         m_editorServiceManager.onUpdate();
     }
 
-    void FImGuiEditorLayer::close() {
+    void FEditorLayerImGui::close() {
         m_editorServiceManager.onDestroy();
         m_serviceLocator.close();
     }
 
-    void FImGuiEditorLayer::renderToViewport() {
+    void FEditorLayerImGui::renderToViewport() {
         m_serviceLocator.retrieve<FViewportImGuiWidget>()->bind(m_pSceneManagerEditor->getScene()->getBackground());
     }
 

@@ -21,7 +21,7 @@
 
 
 #include "../../../../mar.h"
-#include "../../../../Window/Window.h"
+#include "Window/IWindow.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "MainMenuBarImGuiWidget.h"
 #include "FilesystemPopUpImGuiWidget.h"
@@ -33,11 +33,12 @@ namespace marengine {
     static void setDefaultMAREngineDarkTheme();
     static bool displayInfoAboutEngineAuthor();
     static bool displayEngineInstructions();
-    static bool displayWindowSettings();
+    static bool displayWindowSettings(IWindow* pWindow);
 
 
     void FMainMenuBarImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pFilesystem = serviceLocator->retrieve<FFilesystemPopUpImGuiWidget>();
+        m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<IWindow*>>()->pInstance;
         setDefaultMAREngineDarkTheme();
     }
 
@@ -59,7 +60,7 @@ namespace marengine {
             m_infoAboutEngineDisplay = displayEngineInstructions();
         }
         if(m_windowSettingsDisplay) {
-            m_windowSettingsDisplay = displayWindowSettings();
+            m_windowSettingsDisplay = displayWindowSettings(m_pWindow);
         }
         if(m_newSceneDisplay) {
             m_pFilesystem->openWidget(newSceneName);
@@ -118,7 +119,7 @@ namespace marengine {
                 m_saveSceneDisplay = true;
             }
             if (ImGui::MenuItem("Exit")) {
-                Window::endRenderLoop();
+                m_pWindow->close();
             }
 
             ImGui::EndMenu();
@@ -195,17 +196,17 @@ namespace marengine {
         return true;
     }
 
-    static bool displayWindowSettings() {
+    static bool displayWindowSettings(IWindow* pWindow) {
         ImGui::Begin("Window Settings");
 
         static bool verticalSync{ true };
         ImGui::Checkbox("Window Vertical Synchronization (when turned off increases FPS)", &verticalSync);
 
         if (verticalSync) {
-            Window::setVerticalSync(1);
+            pWindow->setVerticalSync(1);
         }
         else {
-            Window::setVerticalSync(0);
+            pWindow->setVerticalSync(0);
         }
 
         if (ImGui::Button("Close")) {

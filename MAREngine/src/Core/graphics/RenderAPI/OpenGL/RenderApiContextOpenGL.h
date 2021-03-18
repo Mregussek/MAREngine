@@ -20,34 +20,27 @@
 ************************************************************************/
 
 
-#include "ContextSDL.h"
+#ifndef MARENGINE_RENDERAPICONTEXTOPENGL_H
+#define MARENGINE_RENDERAPICONTEXTOPENGL_H
+
+
+#include "../../../../mar.h"
+#include "../IRenderApiContext.h"
 
 
 namespace marengine {
 
 
-	SDL_GLContext ContextSDL::s_context;
-	bool ContextSDL::windowGoingToClose{ false };
+    class FRenderApiContextOpenGL : public IRenderApiContext {
+    public:
 
+        bool create() final;
+        void clearScreen(maths::vec3 backgroundColor) final;
 
-	bool ContextSDL::create(SDL_Window* window) {
-		s_context = SDL_GL_CreateContext(window);
-		const int32_t isCurrentContext_OK = SDL_GL_MakeCurrent(window, s_context);
-		if (isCurrentContext_OK == SDL_TRUE) {
-			return false;
-		}
-
-		return true;
-	}
-
-	void ContextSDL::destroy() {
-		SDL_GL_DeleteContext(s_context);
-	}
-
-	SDL_GLContext* ContextSDL::getContext() {
-		return &s_context; 
-	}
-
+    };
 
 
 }
+
+
+#endif //MARENGINE_RENDERAPICONTEXTOPENGL_H

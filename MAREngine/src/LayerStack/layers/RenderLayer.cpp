@@ -26,33 +26,30 @@
 namespace marengine {
 
 
-	RenderLayer::RenderLayer(const char* name) {
-		p_debugName = name;
-	}
+    RenderStatistics* FRenderLayer::getRenderStats() {
+        return &p_statistics;
+    }
 
-	void RenderLayer::initialize() {
-		m_memorizer.Instance = &m_memorizer;
-		m_statistics.Instance = &m_statistics;
-		m_renderPipeline.Instance = &m_renderPipeline;
-		m_pipelineManager.Instance = &m_pipelineManager;
+
+	void FRenderLayerOpenGL::create() {
+		RenderMemorizer::Instance = &m_memorizer;
+		RenderStatistics::Instance = &p_statistics;
+		RenderPipeline::Instance = &m_renderPipeline;
+		FPipelineManager::Instance = &m_pipelineManager;
 		
 		m_renderer.initialize();
 	}
 
-	void RenderLayer::update() {
-		m_statistics.reset();
+	void FRenderLayerOpenGL::update() {
+        p_statistics.reset();
 		m_renderer.draw();
 	}
 
-	void RenderLayer::close() {
+	void FRenderLayerOpenGL::close() {
 		m_renderPipeline.reset();
 		m_pipelineManager.close();
 
 		m_renderer.close();
-	}
-
-    RenderStatistics* RenderLayer::getRenderStats() {
-	    return &m_statistics;
 	}
 
 

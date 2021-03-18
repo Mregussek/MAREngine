@@ -25,18 +25,18 @@
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
-#include "../../../../Window/Window.h"
+#include "Window/IWindow.h"
 
 
 namespace marengine {
 
 
-    void FGuizmoImGuiWidget::selectType() {
-        if (Window::isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
-            if (Window::isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
-            if (Window::isKeyPressed(MAR_KEY_X)) { setRotation(); }
-            if (Window::isKeyPressed(MAR_KEY_C)) { setScale(); }
-            if (Window::isKeyPressed(MAR_KEY_V)) { setNoGuizmo(); }
+    void FGuizmoImGuiWidget::selectType(IWindow* pWindow) {
+        if (pWindow->isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
+            if (pWindow->isKeyPressed(MAR_KEY_Z)) { setTranslation(); }
+            if (pWindow->isKeyPressed(MAR_KEY_X)) { setRotation(); }
+            if (pWindow->isKeyPressed(MAR_KEY_C)) { setScale(); }
+            if (pWindow->isKeyPressed(MAR_KEY_V)) { setNoGuizmo(); }
         }
     }
 

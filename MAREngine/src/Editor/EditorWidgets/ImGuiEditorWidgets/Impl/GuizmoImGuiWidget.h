@@ -32,12 +32,13 @@ namespace marengine {
     class Camera;
     class Entity;
     struct TransformComponent;
+    class IWindow;
 
 
     class FGuizmoImGuiWidget {
     public:
 
-        void selectType();
+        void selectType(IWindow* pWindow);
         void draw(const Camera& editorCamera, const Entity& currentEntity) const;
 
     private:

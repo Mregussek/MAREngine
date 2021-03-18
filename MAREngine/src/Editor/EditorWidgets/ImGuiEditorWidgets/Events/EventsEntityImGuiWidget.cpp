@@ -48,7 +48,8 @@ namespace marengine {
 	void FEventsEntityImGuiWidgets::onDestroyEntity(const Entity& entity) {
         s_pSceneManagerEditor->getScene()->destroyEntity(entity);
         s_pInspectorWidget->resetInspectedEntity();
-        s_pSceneManagerEditor->initialize();
+        // TODO: optimize it, because we don't need to reinitialize the whole render pipeline during entity destruction
+        s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
 	void FEventsEntityImGuiWidgets::onSelectedEntity(const Entity& entity) {
@@ -64,7 +65,8 @@ namespace marengine {
 		// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
 		const Entity& createdEntity{ s_pInspectorWidget->getInspectedEntity() };
 		EntityOperation::copyEntity(entity, createdEntity);
-        s_pSceneManagerEditor->initialize();
+		// TODO: during entity copy we don't need to reinitialize the whole scene
+        s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
 	void FEventsEntityImGuiWidgets::onSetVisibleEntity(const Entity& entity) {

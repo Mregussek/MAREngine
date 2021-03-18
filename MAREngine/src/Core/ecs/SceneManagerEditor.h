@@ -44,7 +44,10 @@ namespace marengine {
 	public:
 
 		/// @brief Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
-		void initialize() const;
+		void initialize(Scene* pScene);
+
+		/// @brief Pushes all Scene's data to RenderPipeline
+		void pushSceneToPipeline();
 
 		/**
 		 * @brief Updates Scene in SceneManager's state. During EditorMode there is no need to update the scene,
@@ -56,12 +59,6 @@ namespace marengine {
 		/// @brief Closes SceneManager
 		void close();
 
-		/**
-		 * @brief Sets given scene, which will be then managed.
-		 * @param scene scene, which will be managed
-		 */
-		void setScene(Scene* scene);
-		
 		/**
 		 * @brief Method returns scene that is managed.
 		 * @return Returns currently managed scene

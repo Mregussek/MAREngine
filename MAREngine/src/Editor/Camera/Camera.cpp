@@ -23,7 +23,7 @@
 #include "Camera.h"
 #include "StandardCamera.h"
 #include "SphericalCamera.h"
-#include "../../Window/Window.h"
+#include "Window/IWindow.h"
 
 
 namespace marengine {
@@ -40,7 +40,7 @@ namespace marengine {
         m_renderCamera.recalculateMVP();
     }
     
-    bool Camera::update(float aspectRatio, bool useInput) {       
+    bool Camera::update(IWindow* pWindow, float aspectRatio, bool useInput) {
         auto perspectiveUpdateWasNeeded = [this, aspectRatio]()->bool {
             if (m_aspectRatio != aspectRatio) {
                 m_aspectRatio = aspectRatio;
@@ -59,20 +59,20 @@ namespace marengine {
                 m_renderCamera.recalculateMVP();
             };
 
-            const bool userPressedSomeKey{ processInput() };
+            const bool userPressedSomeKey{ processInput(pWindow) };
             if (userPressedSomeKey) {
                 recalculateMatrixAfterUserInput(); 
                 return true; 
             }
             else {
-                if (perspectiveUpdateWasNeeded()) { 
+                if (perspectiveUpdateWasNeeded()) {
                     m_renderCamera.recalculateMVP(); 
                     return true;
                 }
             }
         }
         else {
-            if (perspectiveUpdateWasNeeded()) { 
+            if (perspectiveUpdateWasNeeded()) {
                 m_renderCamera.recalculateMVP(); 
                 return true; 
             }
@@ -83,7 +83,7 @@ namespace marengine {
     
     // ---- PRIVATE METHODS ---- //
 
-    bool Camera::processInput() {
+    bool Camera::processInput(IWindow* pWindow) {
         static float lastTime{ 0.0f };
         bool userPressedSth{ false };
     
@@ -91,8 +91,8 @@ namespace marengine {
         const float deltaTime{ currentFrame - lastTime };
         lastTime = currentFrame;
         
-        if (m_standard.processFrame(this, deltaTime)) { userPressedSth = true; }
-        if (m_spherical.processFrame(this, deltaTime)) { userPressedSth = true; }
+        if (m_standard.processFrame(this, pWindow, deltaTime)) { userPressedSth = true; }
+        if (m_spherical.processFrame(this, pWindow, deltaTime)) { userPressedSth = true; }
 
         return userPressedSth;
     }

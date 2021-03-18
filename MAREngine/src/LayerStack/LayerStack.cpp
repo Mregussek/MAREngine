@@ -27,41 +27,41 @@
 namespace marengine {
 
 
-	Layer* LayerStack::operator[](uint32_t index) { return m_layers[index]; }
-
-	void LayerStack::update() {
-		for (auto& layer : m_layers) {
-            layer->update();
+	void FLayerStack::update() {
+		for (ILayer* pLayer : m_layers) {
+            pLayer->update();
         }
 	}
 
-	void LayerStack::close() {
-		for (auto& layer : m_layers) {
-			layer->close();
+	void FLayerStack::close() {
+		for (ILayer* pLayer : m_layers) {
+            pLayer->close();
 		}
 	}
 
-	void LayerStack::pushLayer(Layer* layer) {
-		m_layers.emplace(m_layers.begin() + m_layerInsert, layer);
-		m_layerInsert++;
+	void FLayerStack::pushLayer(ILayer* pLayer) {
+		m_layers.emplace(m_layers.begin() + m_insertValue, pLayer);
+		m_insertValue++;
 	}
 
-	void LayerStack::pushOverlay(Layer* overlay) {
-		m_layers.emplace_back(overlay);
+	void FLayerStack::pushOverlay(ILayer* pOverlay) {
+		m_layers.emplace_back(pOverlay);
 	}
 
-	void LayerStack::popLayer(Layer* layer) {
-		auto it = std::find(m_layers.begin(), m_layers.begin() + m_layerInsert, layer);
-		if (it != m_layers.begin() + m_layerInsert) {
+	void FLayerStack::popLayer(ILayer* pLayer) {
+	    const auto itLayersEnd = m_layers.begin() + m_insertValue;
+
+		auto it = std::find(m_layers.begin(), itLayersEnd, pLayer);
+		if (it != itLayersEnd) {
 			m_layers.erase(it);
-			m_layerInsert--;
+            m_insertValue--;
 
 			return;
 		}
 	}
 
-	void LayerStack::popOverlay(Layer* overlay) {
-		auto it = std::find(m_layers.begin() + m_layerInsert, m_layers.end(), overlay);
+	void FLayerStack::popOverlay(ILayer* pOverlay) {
+		auto it = std::find(m_layers.begin() + m_insertValue, m_layers.end(), pOverlay);
 		if (it != m_layers.end()) {
 			m_layers.erase(it);
 			return;

@@ -35,6 +35,7 @@ namespace marengine {
 
 	class RenderCamera;
 	class Entity; 
+    class Scene;
 
 
 	class RenderPipeline {
@@ -44,7 +45,7 @@ namespace marengine {
 
 	public:
 
-		RenderPipeline() = default;
+		void create(Scene* scene);
 
 		void reset();
 

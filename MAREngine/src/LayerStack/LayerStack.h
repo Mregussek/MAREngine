@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_LAYER_STACK_H
-#define MAR_ENGINE_LAYER_STACK_H
+#ifndef MARENGINE_LAYERSTACK_H
+#define MARENGINE_LAYERSTACK_H
 
 
 #include "../mar.h"
@@ -29,30 +29,25 @@
 
 namespace marengine {
 
-	class Layer;
+	class ILayer;
 
 
-	class LayerStack {
+	class FLayerStack {
 	public:
 
-		Layer* operator[](uint32_t index);
-
+        void update();
 		void close();
 
-		void update();
+		void pushLayer(ILayer* pLayer);
+        void popLayer(ILayer* pLayer);
 
-		void pushLayer(Layer* layer);
-
-		void pushOverlay(Layer* overlay);
-
-		void popLayer(Layer* layer);
-
-		void popOverlay(Layer* overlay);
+		void pushOverlay(ILayer* pOverlay);
+		void popOverlay(ILayer* pOverlay);
 
 	private:
 
-		std::vector<Layer*> m_layers;
-		uint32_t m_layerInsert{ 0 };
+		std::vector<ILayer*> m_layers;
+		uint32_t m_insertValue{ 0 };
 
 	};
 
@@ -60,5 +55,5 @@ namespace marengine {
 }
 
 
-#endif // !MAR_ENGINE_LAYER_STACK_H
+#endif // !MARENGINE_LAYERSTACK_H
 

@@ -36,26 +36,32 @@
 namespace marengine {
 
 
-	class RenderLayer : public Layer {
+    class FRenderLayer : public ILayer {
+    public:
+
+        virtual void create() = 0;
+
+        MAR_NO_DISCARD RenderStatistics* getRenderStats();
+
+    protected:
+
+        RenderStatistics p_statistics;
+
+    };
+
+
+	class FRenderLayerOpenGL : public FRenderLayer {
 	public:
 
-		RenderLayer() = default;
-		RenderLayer(const char* name);
-
-		// --- OVERRIDED METHODS --- //
-
-		void initialize() override;
+	    void create() override;
 		void update() override;
 		void close() override;
-
-		RenderStatistics* getRenderStats();
 
 	private:
 
 		FRenderer m_renderer;
 		RenderPipeline m_renderPipeline;
 		FPipelineManager m_pipelineManager;
-		RenderStatistics m_statistics;
 		RenderMemorizer m_memorizer;
 
 	};

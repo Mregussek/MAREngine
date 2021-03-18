@@ -20,35 +20,50 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_FMAINIMGUIEDITORWIDGET_H
-#define MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#ifndef MARENGINE_EDITORLAYER_H
+#define MARENGINE_EDITORLAYER_H
 
 
-#include "../../IMainEditorWidget.h"
+#include "../Layer.h"
+#include "../../Editor/EditorWidgets/EditorWidgetsServiceManager.h"
+#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorServiceLocator.h"
 
 
 namespace marengine {
 
+    struct RenderStatistics;
     class FSceneManagerEditor;
-    class FImGuiEditorServiceLocator;
     class IWindow;
 
 
-    class FMainImGuiWidget : public IMainEditorWidget {
+    class FEditorLayer : public ILayer {
     public:
 
-        void create(FImGuiEditorServiceLocator* serviceLocator);
-        void destroy() override;
+        virtual void create(IWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
+                            RenderStatistics* pRenderStatistic) = 0;
 
-        void beginFrame() override;
-        void endFrame() override;
+        virtual void renderToViewport() = 0;
+    };
+
+
+    class FEditorLayerImGui : public FEditorLayer {
+    public:
+
+        void create(IWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
+                    RenderStatistics* pRenderStatistic) override;
+
+        void update() override;
+        void close() override;
+
+        void renderToViewport() override;
 
     private:
 
+        FEditorWidgetsServiceManager m_editorServiceManager;
+        FImGuiEditorServiceLocator m_serviceLocator;
+
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
         IWindow* m_pWindow{ nullptr };
-        bool m_dockspaceOpen{ true };
-        bool m_fullscreenPersistent{ true };
 
     };
 
@@ -56,4 +71,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#endif //MARENGINE_EDITORLAYER_H

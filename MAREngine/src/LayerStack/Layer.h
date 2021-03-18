@@ -20,36 +20,18 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_LAYER_H
-#define MAR_ENGINE_LAYER_H
-
-
-#include "../mar.h"
+#ifndef MARENGINE_LAYER_H
+#define MARENGINE_LAYER_H
 
 
 namespace marengine {
 
-	class LayerStack;
 
-
-	class Layer {
-
-		friend class LayerStack;
-
+	class ILayer {
 	public:
 
-		Layer() = default;
-		Layer(const char* name) : p_debugName(name) { }
-
-		virtual void initialize() { }
-
-		virtual void update() { }
-
-		virtual void close() { }
-
-	protected:
-		
-		const char* p_debugName{ "Default_Debug_Name" };
+		virtual void update() = 0;
+		virtual void close() = 0;
 
 	};
 

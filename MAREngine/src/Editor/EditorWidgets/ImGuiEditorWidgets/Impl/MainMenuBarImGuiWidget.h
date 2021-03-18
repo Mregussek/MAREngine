@@ -32,6 +32,7 @@ namespace marengine {
 
     class FFilesystemPopUpImGuiWidget;
     class FImGuiEditorServiceLocator;
+    class IWindow;
 
 
     class FMainMenuBarImGuiWidget : public IMainMenuBarEditorWidget {
@@ -57,6 +58,7 @@ namespace marengine {
         std::string extMarscene{ ".json" };
 
         FFilesystemPopUpImGuiWidget* m_pFilesystem{ nullptr };
+        IWindow* m_pWindow{ nullptr };
 
         bool m_infoAboutAuthorDisplay{ false };
         bool m_infoAboutEngineDisplay{ false };

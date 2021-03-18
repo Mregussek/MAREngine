@@ -32,6 +32,8 @@
 
 namespace marengine {
 
+    class IWindow;
+
 
     class Camera {
 
@@ -43,13 +45,13 @@ namespace marengine {
         Camera() = default;
 
         void initialize(float aspectRatio);
-        bool update(float aspectRatio, bool useInput);
+        bool update(IWindow* pWindow, float aspectRatio, bool useInput);
 
-        const RenderCamera* getCameraData() const;
+        MAR_NO_DISCARD const RenderCamera* getCameraData() const;
 
     private:
 
-        bool processInput();
+        bool processInput(IWindow* pWindow);
         void updateCameraVectors();
 
 

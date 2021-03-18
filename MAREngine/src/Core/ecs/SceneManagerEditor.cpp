@@ -30,16 +30,13 @@
 namespace marengine {
 
 
-	void FSceneManagerEditor::initialize() const {
-		RenderPipeline::Instance->reset();
+	void FSceneManagerEditor::initialize(Scene* pScene) {
+	    m_pScene = pScene;
+		pushSceneToPipeline();
+	}
 
-		const FEntityArray& entities{ m_pScene->getEntities() };
-
-		std::for_each(entities.cbegin(), entities.cend(), [](const Entity& entity) {
-			RenderPipeline::Instance->pushEntityToPipeline(entity);
-		});
-
-		RenderPipeline::Instance->onBatchesReadyToDraw();
+    void FSceneManagerEditor::pushSceneToPipeline() {
+        RenderPipeline::Instance->create(getScene());
 	}
 
 	void FSceneManagerEditor::update() {
@@ -114,11 +111,7 @@ namespace marengine {
 			FScenePlayStorage::loadEntityFromStorage(entity);
 		}
 
-		initialize();
-	}
-
-	void FSceneManagerEditor::setScene(Scene* scene) { 
-		m_pScene = scene; 
+        pushSceneToPipeline();
 	}
 
 	Scene* FSceneManagerEditor::getScene() { 
