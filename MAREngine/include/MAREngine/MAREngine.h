@@ -43,6 +43,7 @@
 
 // Rendering 
 #include "../../src/Core/graphics/RenderAPI/RenderPipeline.h"
+#include "../../src/Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 #include "../../src/Core/graphics/Renderer/Renderer.h"
 
 // Scripting
@@ -50,6 +51,7 @@
 
 // Window && Input
 #include "../../src/Window/GLFW/WindowGLFW.h"
+#include "../../src/Window/SDL/WindowSDL.h"
 #include "../../src/Window/IWindow.h"
 
 // Engine	 

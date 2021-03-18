@@ -35,7 +35,9 @@
 #define MARENGINE_DISPLAY_PLATFORMS_LOGS 1  // 0 - no logs, 1 - display platforms logs
 
 // MAREngine window library
-#define MAR_ENGINE_USE_GLFW_WINDOW 1
-#define MAR_ENGINE_USE_SDL_WINDOW 0
+#define MARENGINE_USE_GLFW_WINDOW 1
+#define MARENGINE_USE_SDL_WINDOW 0
+// MAREngine RenderAPI
+#define MARENGINE_USE_OPENGL_RENDERAPI 1
 
 #define MAR_NO_DISCARD [[nodiscard]]

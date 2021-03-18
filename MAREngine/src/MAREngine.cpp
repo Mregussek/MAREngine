@@ -89,15 +89,15 @@ namespace marengine {
         window->terminateLibrary();
     }
 
-	MAR_NO_DISCARD bool MAREngine::shouldEngineRestart() const {
+	bool MAREngine::shouldEngineRestart() const {
 		return m_shouldRestart;
 	}
 
-	MAR_NO_DISCARD const std::string& MAREngine::getStartupSceneFilename() const {
+	const std::string& MAREngine::getStartupSceneFilename() const {
 		return FProjectManager::getProjectInfo().sceneToLoadAtStartup;
 	}
 
-	MAR_NO_DISCARD const std::string& MAREngine::getWindowName() const {
+	const std::string& MAREngine::getWindowName() const {
 		return FProjectManager::getProjectInfo().windowName;
 	}
 

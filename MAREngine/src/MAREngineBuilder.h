@@ -26,6 +26,7 @@
 
 #include "LayerStack/LayerStack.h"
 #include "Window/GLFW/WindowGLFW.h"
+#include "Window/SDL/WindowSDL.h"
 #include "Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 #include "LayerStack/layers/EditorLayer.h"
 #include "LayerStack/layers/SceneLayer.h"
@@ -38,7 +39,7 @@ namespace marengine {
     class IMAREngineBuilder {
     public:
 
-        MAR_NO_DISCARD FLayerStack createLayerStack() const;
+        MAR_NO_DISCARD virtual FLayerStack createLayerStack() const = 0;
 
         MAR_NO_DISCARD virtual IWindow* createWindow() const = 0;
 
@@ -51,27 +52,33 @@ namespace marengine {
     };
 
 
-    class FMAREngineBuilder_ImGui_OpenGL_GLFW : public IMAREngineBuilder {
+    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
+    class FMAREngineBuilder : public IMAREngineBuilder {
     public:
 
-        MAR_NO_DISCARD IWindow* createWindow() const override;
-        MAR_NO_DISCARD FRenderLayer* createRenderLayer() override;
-        MAR_NO_DISCARD FSceneLayer* createSceneLayer() override;
-        MAR_NO_DISCARD FEditorLayer* createEditorLayer() override;
-        MAR_NO_DISCARD IRenderApiContext* createRenderApiContext() override;
+        MAR_NO_DISCARD FLayerStack createLayerStack() const final;
+        MAR_NO_DISCARD IWindow* createWindow() const final;
+        MAR_NO_DISCARD FRenderLayer* createRenderLayer() final;
+        MAR_NO_DISCARD FSceneLayer* createSceneLayer() final;
+        MAR_NO_DISCARD FEditorLayer* createEditorLayer() final;
+        MAR_NO_DISCARD IRenderApiContext* createRenderApiContext() final;
 
     private:
 
-        FWindowGLFWImGui m_window;
-        FEditorLayerImGui m_editorLayer;
-        FRenderLayerOpenGL m_renderLayer;
+        TWindow m_window;
+        TEditorLayer m_editorLayer;
+        TRenderLayer m_renderLayer;
+        TRenderApi m_renderApiContext;
+
         FSceneLayer m_sceneLayer;
-        FRenderApiContextOpenGL m_renderApiContext;
 
     };
 
 
 }
+
+
+#include "MAREngineBuilder.inl"
 
 
 #endif //MARENGINE_MARENGINEBUILDER_H

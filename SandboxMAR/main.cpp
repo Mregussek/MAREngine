@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "MAREngine/MAREngine.h"
+#include <MAREngine/MAREngine.h>
 
 
 using namespace marengine;
@@ -28,14 +28,21 @@ using namespace marengine;
 
 int main() {
 
-    MAREngine engine;
-    FMAREngineBuilder_ImGui_OpenGL_GLFW builder;
     const std::string projectName = "DefaultProject";
     const std::string sceneName = "default.marscene.json";
 
+    MAREngine engine;
     engine.initAtStartup(projectName, sceneName);
 
-    while(engine.shouldEngineRestart()) {
+    FMAREngineBuilder<
+            FWindowGLFWImGui,
+            FRenderApiContextOpenGL,
+            FRenderLayerOpenGL,
+            FEditorLayerImGui
+            > builder;
+
+    while(engine.shouldEngineRestart())
+    {
         engine.buildAndRun((IMAREngineBuilder*)&builder);
     }
 

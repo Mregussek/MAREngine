@@ -22,6 +22,7 @@
 
 #include "WindowGLFW.h"
 #include "WindowCallbacks.h"
+#include "../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -33,6 +34,8 @@ namespace marengine {
         const int32_t glfw_init = glfwInit();
 
         if (glfw_init != GLFW_TRUE) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize GLFW library!");
+            FLogger::callDebugBreak(true);
             return false;
         }
 
@@ -45,6 +48,9 @@ namespace marengine {
         p_pWindowContext = glfwCreateWindow(width, height, name, nullptr, nullptr);
         if (!p_pWindowContext) {
             terminateLibrary();
+
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot create GLFW window!");
+            FLogger::callDebugBreak(true);
             return false;
         }
 
@@ -57,6 +63,8 @@ namespace marengine {
         glfwSetMouseButtonCallback(p_pWindowContext, callbacks::mouseButtonCallback);
 
         setVerticalSync(1);
+
+        return true;
 	}
 
     void FWindowGLFW::close() {
@@ -120,7 +128,13 @@ namespace marengine {
     }
 
     void FWindowGLFWImGui::initEditorGuiLibrary() {
-        ImGui_ImplGlfw_InitForOpenGL(p_pWindowContext, true);
+        if constexpr (MARENGINE_USE_OPENGL_RENDERAPI) {
+            ImGui_ImplGlfw_InitForOpenGL(p_pWindowContext, true);
+        }
+        else {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot create ImGui in GLFW window, because RenderAPI is not supported!");
+            FLogger::callDebugBreak(true);
+        }
     }
 
     void FWindowGLFWImGui::beginNewFrameEditorGuiLibrary() {

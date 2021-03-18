@@ -86,14 +86,14 @@ namespace marengine {
 
 
     bool FRenderApiContextOpenGL::create() {
-        if constexpr (MAR_ENGINE_USE_GLFW_WINDOW) {
+        if constexpr (MARENGINE_USE_GLFW_WINDOW) {
             const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
             if (!isGLAD_OK) {
                 return false;
             }
         }
-        else if constexpr (MAR_ENGINE_USE_SDL_WINDOW) {
+        else if constexpr (MARENGINE_USE_SDL_WINDOW) {
             const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 
             if (!isGLAD_OK) {
