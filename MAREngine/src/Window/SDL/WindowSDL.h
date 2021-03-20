@@ -36,6 +36,7 @@ namespace marengine {
         bool open(uint32_t width, uint32_t height, const char* name) final;
         void close() final;
 
+        bool initializeLibrary() final;
         void terminateLibrary() final;
 
         MAR_NO_DISCARD bool isGoingToClose() final;

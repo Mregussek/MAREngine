@@ -30,34 +30,29 @@
 namespace marengine {
 
 
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
-    FLayerStack FMAREngineBuilder<TWindow, TRenderApi, TRenderLayer, TEditorLayer>::createLayerStack() const {
+    template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
+    FLayerStack FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createLayerStack() const {
         return FLayerStack();
     }
 
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
-    IWindow* FMAREngineBuilder<TWindow, TRenderApi, TRenderLayer, TEditorLayer>::createWindow() const {
+    template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
+    IWindow* FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createWindow() const {
         return (IWindow*)&m_window;
     }
 
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
-    FRenderLayer* FMAREngineBuilder<TWindow, TRenderApi, TRenderLayer, TEditorLayer>::createRenderLayer() {
+    template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
+    FRenderLayer* FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createRenderLayer() {
         return (FRenderLayer*)&m_renderLayer;
     }
 
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
-    FSceneLayer* FMAREngineBuilder<TWindow, TRenderApi, TRenderLayer, TEditorLayer>::createSceneLayer() {
+    template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
+    FSceneLayer* FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createSceneLayer() {
         return &m_sceneLayer;
     }
 
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
-    FEditorLayer* FMAREngineBuilder<TWindow, TRenderApi, TRenderLayer, TEditorLayer>::createEditorLayer() {
+    template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
+    FEditorLayer* FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createEditorLayer() {
         return (FEditorLayer*)&m_editorLayer;
-    }
-
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
-    IRenderApiContext* FMAREngineBuilder<TWindow, TRenderApi, TRenderLayer, TEditorLayer>::createRenderApiContext() {
-        return (IRenderApiContext*)&m_renderApiContext;
     }
 
 

@@ -47,12 +47,10 @@ namespace marengine {
         MAR_NO_DISCARD virtual FSceneLayer* createSceneLayer() = 0;
         MAR_NO_DISCARD virtual FEditorLayer* createEditorLayer() = 0;
 
-        MAR_NO_DISCARD virtual IRenderApiContext* createRenderApiContext() = 0;
-
     };
 
 
-    template<typename TWindow, typename TRenderApi, typename TRenderLayer, typename TEditorLayer>
+    template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
     class FMAREngineBuilder : public IMAREngineBuilder {
     public:
 
@@ -61,14 +59,12 @@ namespace marengine {
         MAR_NO_DISCARD FRenderLayer* createRenderLayer() final;
         MAR_NO_DISCARD FSceneLayer* createSceneLayer() final;
         MAR_NO_DISCARD FEditorLayer* createEditorLayer() final;
-        MAR_NO_DISCARD IRenderApiContext* createRenderApiContext() final;
 
     private:
 
         TWindow m_window;
         TEditorLayer m_editorLayer;
         TRenderLayer m_renderLayer;
-        TRenderApi m_renderApiContext;
 
         FSceneLayer m_sceneLayer;
 

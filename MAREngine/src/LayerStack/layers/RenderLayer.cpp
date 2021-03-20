@@ -32,6 +32,12 @@ namespace marengine {
 
 
 	void FRenderLayerOpenGL::create() {
+        const bool isRenderApiCreated = m_renderApiContext.create();
+        if(!isRenderApiCreated) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Render API!");
+            return;
+        }
+
 		RenderMemorizer::Instance = &m_memorizer;
 		RenderStatistics::Instance = &p_statistics;
 		RenderPipeline::Instance = &m_renderPipeline;

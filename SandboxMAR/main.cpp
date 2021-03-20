@@ -38,7 +38,6 @@ int main() {
     {
         FMAREngineBuilder<
                 FWindowGLFWImGui,
-                FRenderApiContextOpenGL,
                 FRenderLayerOpenGL,
                 FEditorLayerImGui
         > builder;

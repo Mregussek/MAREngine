@@ -31,6 +31,7 @@
 #include "../../Core/graphics/Renderer/Renderer.h"
 #include "../../Core/graphics/Renderer/RenderMemorizer.h"
 #include "../../Core/graphics/Renderer/PipelineManager.h"
+#include "../../Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 
 
 namespace marengine {
@@ -63,6 +64,7 @@ namespace marengine {
 		RenderPipeline m_renderPipeline;
 		FPipelineManager m_pipelineManager;
 		RenderMemorizer m_memorizer;
+        FRenderApiContextOpenGL m_renderApiContext;
 
 	};
 

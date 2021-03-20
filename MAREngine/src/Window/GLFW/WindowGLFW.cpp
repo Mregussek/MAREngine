@@ -29,16 +29,6 @@ namespace marengine {
 
 
     bool FWindowGLFW::open(uint32_t width, uint32_t height, const char* name) {
-        glfwSetErrorCallback(callbacks::windowErrorCallback);
-
-        const int32_t glfw_init = glfwInit();
-
-        if (glfw_init != GLFW_TRUE) {
-            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize GLFW library!");
-            FLogger::callDebugBreak(true);
-            return false;
-        }
-
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -70,6 +60,20 @@ namespace marengine {
     void FWindowGLFW::close() {
         glfwSetWindowShouldClose(p_pWindowContext, true);
 	}
+
+	bool FWindowGLFW::initializeLibrary() {
+        glfwSetErrorCallback(callbacks::windowErrorCallback);
+
+        const int32_t glfw_init = glfwInit();
+
+        if (glfw_init != GLFW_TRUE) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize GLFW library!");
+            FLogger::callDebugBreak(true);
+            return false;
+        }
+
+        return true;
+    }
 
     void FWindowGLFW::terminateLibrary() {
         glfwTerminate();

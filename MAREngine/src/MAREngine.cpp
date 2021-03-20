@@ -54,18 +54,17 @@ namespace marengine {
         FRenderLayer* renderLayer = pBuilder->createRenderLayer();
         FSceneLayer* sceneLayer = pBuilder->createSceneLayer();
         FEditorLayer* editorLayer = pBuilder->createEditorLayer();
-        IRenderApiContext* renderApiContext = pBuilder->createRenderApiContext();
         FLayerStack layerStack = pBuilder->createLayerStack();
+
+        const bool isWindowLibraryInitialized = window->initializeLibrary();
+        if(!isWindowLibraryInitialized) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window library!");
+            return;
+        }
 
         const bool isWindowCreated = window->open(1600, 900, getWindowName().c_str());
         if(!isWindowCreated) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window!");
-            return;
-        }
-
-        const bool isRenderApiCreated = renderApiContext->create();
-        if(!isRenderApiCreated) {
-            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Render API!");
             return;
         }
 
