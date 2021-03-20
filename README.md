@@ -23,7 +23,7 @@ MAREngine is an educational 3D game engine written in modern C++. It is created 
 
 ## Documentation
 
-You can learn everything about the engine at the [documentation page](https://marengine-docs.readthedocs.io/).
+You can learn everything about the engine at the [documentation page](https://marengine.readthedocs.io/).
 
 ## Get MAREngine
 

@@ -1,27 +1,30 @@
-/**
- *           MAREngine - open source 3D game engine
- * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
-**/
+/***********************************************************************
+* @internal @copyright
+*
+*  				MAREngine - open source 3D game engine
+*
+* Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+* All rights reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+************************************************************************/
 
 
 #include "DrawingOpenGL.h"
+#include "../../Logging/Logger.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	void DrawingOpenGL::drawTriangles(size_t indices_count) {
@@ -29,8 +32,6 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glStencilMask(0xFF) );
 
 		PLATFORM_GL_FUNC( glDrawElements(GL_TRIANGLES, indices_count, GL_UNSIGNED_INT, nullptr) );
-
-		PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 	}
 
 	void DrawingOpenGL::drawLineLoops(size_t indices_count, float line_width) {
@@ -39,8 +40,6 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glDrawElements(GL_LINE_LOOP, indices_count, GL_UNSIGNED_INT, nullptr) );
 						  
 		PLATFORM_GL_FUNC( glLineWidth(1.0f) );
-
-		PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 	}
 
 	void DrawingOpenGL::drawOutline(size_t indices_count) {
@@ -54,8 +53,6 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( glStencilFunc(GL_ALWAYS, 1, 0xFF) );
 		PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) );
 		PLATFORM_GL_FUNC( glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE) );
-
-		PLATFORM_INFO("DRAWING_OPENGL: draw call with indices_count = {}", indices_count);
 	}
 
 

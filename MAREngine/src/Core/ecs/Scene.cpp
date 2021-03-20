@@ -1,144 +1,113 @@
-/**
- *           MAREngine - open source 3D game engine
- * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
-**/
+/***********************************************************************
+* @internal @copyright
+*
+*  				MAREngine - open source 3D game engine
+*
+* Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+* All rights reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+************************************************************************/
 
 
 #include "Scene.h"
-#include "Components/Components.h"
-#include "Entity/Entity.h"
-#include "Entity/EntityCollection.h"
-#include "ECSLogs.h"
 
 
-namespace mar::ecs {
+namespace marengine {
 
 
-	Scene::Scene(std::string name)
-		: m_name(std::move(name))
-	{
-		m_sceneRegistry = SceneRegistry();
+	Scene::Scene(std::string name) :
+		m_name(std::move(name)),
+		m_sceneRegistry(entt::registry())
+	{}
 
-		ECS_INFO("SCENE: scene is created, with entt::registry! (called constructor)");
-	}
-
-	void Scene::shutdown() {
-		std::for_each(m_container.m_entities.begin(), m_container.m_entities.end(), [this](const Entity& entity) {
-			destroyEntity(entity);
-		});
-
-		std::for_each(m_container.m_collections.begin(), m_container.m_collections.end(), [this](const EntityCollection& collection) {
-			destroyCollection(collection);
-		});
-
-		m_sceneRegistry.cleanup();
-
-		ECS_INFO("SCENE: registry is cleared! (called destructor)");
-	}
-
-	Scene* Scene::createEmptyScene(std::string name) {
-		Scene* scene = new Scene(std::move(name));
+	Scene* Scene::createEmptyScene(std::string sceneName) {
+		Scene* pScene{ new Scene(std::move(sceneName)) };
 
 		{ // create Camera entity
-			const auto& entity = scene->createEntity();
-			entity.addComponent<CameraComponent>();
+			const Entity& cameraEntity{ pScene->createEntity() };
+			CameraComponent& cameraComponent{ cameraEntity.addComponent<CameraComponent>() };
+			cameraComponent.id = "main";
 
-			auto& cam = entity.getComponent<TagComponent>();
-			cam.tag = "Camera";
+			TagComponent& tag{ cameraEntity.getComponent<TagComponent>() };
+			tag.tag = "CameraEntity";
 		}
 		{ // create Light Entity
-			const auto& entity = scene->createEntity();
-			entity.addComponent<LightComponent>();
+			const Entity& pointLightEntity{ pScene->createEntity() };
+			pointLightEntity.addComponent<PointLightComponent>();
 
-			auto& light = entity.getComponent<TagComponent>();
-			light.tag = "Light";
+			TagComponent& tag{ pointLightEntity.getComponent<TagComponent>() };
+			tag.tag = "LightEntity";
 		}
 
-		return scene;
+		return pScene;
 	}
 
-	// -------------------------------------------------------------
-	// ENTITIES MANAGEMENT
-	// -------------------------------------------------------------
+	void Scene::close() {
+		for (const auto& entity : m_entities) {
+			destroyEntity(entity);
+		}
+
+		m_entities.clear();
+		m_sceneRegistry.clear();
+	}
 
 	const Entity& Scene::createEntity() {
-		ECS_INFO("SCENE: going to create entity!");
-
-		const auto& entity = m_container.m_entities.emplace_back(&m_sceneRegistry);
-
-		entity.addDefault();
-		entity.addComponent<TagComponent>();
-		entity.addComponent<TransformComponent>();
-
-		ECS_INFO("SCENE: created entity {} at sceme {}!", entity.m_entityHandle, m_name);
+		const Entity& entity{ m_entities.emplace_back(&m_sceneRegistry) };
+		Entity::fillEntityWithBasicComponents(entity);
 
 		return entity;
 	}
 
 	void Scene::destroyEntity(const Entity& entity) {
-		ECS_INFO("SCENE: going to destroy entity at {}!", entity.m_entityHandle);
-
-		auto it = std::find_if(m_container.m_entities.begin(), m_container.m_entities.end(), [&entity](const Entity& iterator) {
+		auto it = std::find_if(m_entities.begin(), m_entities.end(), [&entity](const Entity& iterator) {
 			return 	&iterator == &entity;
 		});
 
-		if (it != m_container.m_entities.end() && (*it).isValid()) {
-			(*it).destroyYourself();
-			m_container.m_entities.erase(it);
+		const bool canDestroyEntity{ it != m_entities.end() && (*it).isValid() };
+
+		if (canDestroyEntity) {
+			it->destroyYourself();
+			m_entities.erase(it);
 		}
 	}
 
-	const std::vector<Entity>& Scene::getEntities() const { 
-		return m_container.m_entities;
+	void Scene::setName(std::string newSceneName) {
+		m_name = std::move(newSceneName);
 	}
 
-	// -------------------------------------------------------------
-	// ENTITIES COLLECTIONS MANAGEMENT
-	// -------------------------------------------------------------
-
-	const EntityCollection& Scene::createCollection() {
-		ECS_INFO("SCENE: going to create entity collection!");
-
-		const auto& collection = m_container.m_collections.emplace_back(&m_sceneRegistry);
-
-		collection.addComponent<EntityCollectionComponent>();
-		collection.addComponent<TagComponent>("DefaultName");
-		collection.addComponent<TransformComponent>();
-
-		ECS_TRACE("SCENE: create collection {} at scene {}", collection.m_collectionHandle, m_name);
-
-		return collection;
+	void Scene::setBackground(maths::vec3 newSceneBackgroundColor) {
+		m_backgroundColor = newSceneBackgroundColor;
 	}
 
-	void Scene::destroyCollection(const EntityCollection& collection) {
-		ECS_INFO("SCENE: going to destroy collection at {}!", collection.m_collectionHandle);
-
-		auto it = std::find_if(m_container.m_collections.begin(), m_container.m_collections.end(), [&collection](const EntityCollection& iterator) {
-			return 	&iterator == &collection;
-		});
-
-		if (it != m_container.m_collections.end() && (*it).isValid()) {
-			(*it).destroyYourself();
-			m_container.m_collections.erase(it);
-		}
+	MAR_NO_DISCARD const std::string& Scene::getName() const { 
+		return m_name; 
 	}
 
-	const std::vector<EntityCollection>& Scene::getCollections() const { 
-		return m_container.m_collections;
+	MAR_NO_DISCARD maths::vec3& Scene::getBackground() { 
+		return m_backgroundColor;
+	}
+
+	MAR_NO_DISCARD entt::registry* Scene::getRegistry() { 
+		return &m_sceneRegistry; 
+	}
+
+	const FEntityArray& Scene::getEntities() const { 
+		return m_entities;
+	}
+
+	const bool Scene::isValid(entt::entity enttEntity) const {
+		return m_sceneRegistry.valid(enttEntity);
 	}
 
 

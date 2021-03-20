@@ -1,28 +1,31 @@
-/**
- *           MAREngine - open source 3D game engine
- * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
-**/
+/***********************************************************************
+* @internal @copyright
+*
+*  				MAREngine - open source 3D game engine
+*
+* Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+* All rights reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+************************************************************************/
 
 
 #include "TextureOpenGL.h"
-#include "../../Engine.h"
+#include "../../Logging/Logger.h"
+#include "../../ProjectManager.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	std::unordered_map<std::string, uint32_t> TextureOpenGL::s_2d;
@@ -40,8 +43,6 @@ namespace mar::platforms {
 
 		s_2d.clear();
 		s_cubemaps.clear();
-
-		PLATFORM_INFO("TEXTURE_OPENGL: deleting all textures");
 	}
 
 	uint32_t TextureOpenGL::genNewTexture(const char* path) {
@@ -66,7 +67,6 @@ namespace mar::platforms {
 				dataFormat = GL_RGB;
 			}
 			else {
-				PLATFORM_ERROR("TEXTURE_OPENGL: Format from texture is not supported! bitPerPixel: {0:d}",  bitPerPixel);
 				return 0;
 			}
 
@@ -84,12 +84,8 @@ namespace mar::platforms {
 
 			stbi_image_free(localBuffer);
 
-			PLATFORM_TRACE("TEXTURE_OPENGL: {} 2D texture loaded successfully - assigned to: {}!", path, id);
-
 			return id;
 		}
-
-		PLATFORM_ERROR("TEXTURE_OPENGL: Failed to load {}", path);
 
 		return 0;
 	}
@@ -98,11 +94,10 @@ namespace mar::platforms {
 		const auto search = s_2d.find(std::move(path));
 
 		if (search != s_2d.cend()) {
-			PLATFORM_TRACE("TEXTURE_OPENGL: Assigning loaded 2D texture {} - {}!", search->first, search->second);
 			return search->second;
 		}
 
-		const auto assetsTexturePath = engine::MAREngine::Instance()->getAssetsPath() + path;
+		const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
 		const uint32_t id = genNewTexture(assetsTexturePath.c_str());
 		s_2d.insert({ path, id });
 		return id;
@@ -135,7 +130,6 @@ namespace mar::platforms {
 				stbi_image_free(localBuffer);
 			}
 			else {
-				PLATFORM_ERROR("TEXTURE_OPENGL: Cubemap texture failed to load! Path: {}, Face: {}", path, faces[i]);
 				stbi_image_free(localBuffer);
 			}
 		}
@@ -147,8 +141,6 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC ( glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
 		PLATFORM_GL_FUNC ( glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE) );
 
-		PLATFORM_TRACE("TEXTURE_OPENGL: {} cubemap loaded successfully and assigned to: {}!", path, id);
-
 		return id;
 	}
 
@@ -156,11 +148,10 @@ namespace mar::platforms {
 		const auto search = s_cubemaps.find(std::move(path));
 
 		if (search != s_cubemaps.cend()) {
-			PLATFORM_TRACE("TEXTURE_OPENGL: Assigning loaded cubemap {} - {}!", search->first, search->second);
 			return search->second;
 		}
 
-		const auto assetsTexturePath = engine::MAREngine::Instance()->getAssetsPath() + path;
+		const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
 		const uint32_t id = genNewCubemap(assetsTexturePath);
 		s_cubemaps.insert({ path, id });
 
@@ -194,15 +185,11 @@ namespace mar::platforms {
 	void TextureOpenGL::bind2D(uint32_t unit, uint32_t tex_id) const {
 		PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_2D, tex_id) );
-
-		PLATFORM_TRACE("TEXTURE_OPENGL: Binding2D - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_2D, {})", unit, tex_id);
 	}
 
 	void TextureOpenGL::bindCube(uint32_t unit, uint32_t cube_id) const {
 		PLATFORM_GL_FUNC( glActiveTexture(GL_TEXTURE0 + unit) );
 		PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP , cube_id));
-
-		PLATFORM_TRACE("TEXTURE_OPENGL: BindingCube - glActiveTexture(GL_TEXTURE0 + {}) - glBindTexture(GL_TEXTURE_CUBE_MAP, {})", unit, cube_id);
 	}
 
 	void TextureOpenGL::unbind(const std::vector<float>& texture_types) const {
@@ -216,8 +203,6 @@ namespace mar::platforms {
 				PLATFORM_GL_FUNC( glBindTexture(GL_TEXTURE_CUBE_MAP, 0) );
 			}
 		}
-
-		PLATFORM_TRACE("TEXTURE_OPENGL: Unbinding texture");
 	}
 
 

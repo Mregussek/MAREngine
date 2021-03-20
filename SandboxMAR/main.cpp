@@ -1,47 +1,48 @@
-/**
- *           MAREngine - open source 3D game engine
- * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
-**/
+/***********************************************************************
+* @internal @copyright
+*
+*  				MAREngine - open source 3D game engine
+*
+* Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+* All rights reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+************************************************************************/
 
 
-#include "src/SandboxMAR.h"
-#include "src/EditorMAR.h"
+#include <MAREngine/MAREngine.h>
 
 
-#define USE_EDITOR_MAR_ENGINE 1
-
-
-using mar::EditorMAR;
-using mar::SandboxMAR;
+using namespace marengine;
 
 
 int main() {
-	if constexpr (USE_EDITOR_MAR_ENGINE) {
-		EditorMAR editor;
 
-		editor.initialize();
-		editor.runProjectOnEngine();
-		editor.shutdown();
-	}
-	else {
-		SandboxMAR sandbox;
+    const std::string projectName = "DefaultProject";
+    const std::string sceneName = "default.marscene.json";
 
-		sandbox.initialize();
-		sandbox.run();
-		sandbox.shutdown();
-	}
+    MAREngine engine;
+    engine.initAtStartup(projectName, sceneName);
+
+    while(engine.shouldEngineRestart())
+    {
+        FMAREngineBuilder<
+                FWindowGLFWImGui,
+                FRenderLayerOpenGL,
+                FEditorLayerImGui
+        > builder;
+        engine.buildAndRun((IMAREngineBuilder*)&builder);
+    }
+
+    return 0;
 }

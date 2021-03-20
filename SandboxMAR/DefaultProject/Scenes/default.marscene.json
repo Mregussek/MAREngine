@@ -1,0 +1,554 @@
+{
+    "Documentation": {
+        "App": "DefaultApplication",
+        "AppVersion": "v1.0.0",
+        "Engine": "MAREngine",
+        "EngineVersion": "v0.0.1"
+    },
+    "Scene": {
+        "DefaultScene": {
+            "Background": {
+                "x": 0.3866809904575348,
+                "y": 0.6773489713668823,
+                "z": 0.7142860293388367
+            },
+            "Entity": [
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.20000000298023224,
+                            "y": 0.5,
+                            "z": 0.20000000298023224
+                        }
+                    },
+                    "PythonScriptComponent": {
+                        "path": "scripts/RotateXY.py"
+                    },
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "DarkGreenCube"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 14.621967315673828,
+                            "y": 10.871379852294922,
+                            "z": 7.191351413726807
+                        },
+                        "rotation": {
+                            "x": -0.05915641412138939,
+                            "y": -0.14840804040431976,
+                            "z": -0.44159170985221863
+                        },
+                        "scale": {
+                            "x": 8.47159194946289,
+                            "y": 1.8998816013336182,
+                            "z": 8.071975708007813
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.8999999761581421,
+                            "z": 0.25
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Pyramid"
+                    },
+                    "TagComponent": {
+                        "tag": "GreenPyramid"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 21.049999237060547,
+                            "y": 0.699999988079071,
+                            "z": 2.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.4359999895095825,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 3.0,
+                            "y": 3.5,
+                            "z": 3.0
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.20000000298023224,
+                            "z": 0.8999999761581421
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Surface"
+                    },
+                    "TagComponent": {
+                        "tag": "SurfacePurple"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 21.299999237060547,
+                            "y": -1.850000023841858,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.8999999761581421,
+                            "y": 0.20000000298023224,
+                            "z": 0.30000001192092896
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Wall"
+                    },
+                    "TagComponent": {
+                        "tag": "RedWall"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 21.132192611694336,
+                            "y": -2.1500000953674316,
+                            "z": -11.762802124023438
+                        },
+                        "rotation": {
+                            "x": -3.141592502593994,
+                            "y": -1.4025959968566895,
+                            "z": -3.141592502593994
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    },
+                    "PointLightComponent": {
+                        "ambient": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "constant": 1.0,
+                        "diffuse": {
+                            "w": 1.0,
+                            "x": 0.8999999761581421,
+                            "y": 0.8999999761581421,
+                            "z": 0.8999999761581421
+                        },
+                        "linear": 0.0,
+                        "position": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "quadratic": 0.0,
+                        "shininess": 64.0,
+                        "specular": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "LightCube"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 23.356468200683594,
+                            "y": 9.251102447509766,
+                            "z": 4.233645439147949
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -0.5490003228187561,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.7509992122650146,
+                            "y": 1.5,
+                            "z": 0.7509992122650146
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "FlyingGrayRectangle"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 20.93000030517578,
+                            "y": 3.2300000190734863,
+                            "z": -3.700000047683716
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 2.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Wall"
+                    },
+                    "TagComponent": {
+                        "tag": "RedBrickWall"
+                    },
+                    "Texture2DComponent": {
+                        "texturePath": "textures/red-brick.jpg"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 30.760000228881836,
+                            "y": -1.7000000476837158,
+                            "z": 4.019999980926514
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "CameraComponent": {
+                        "Perspective": 1.0,
+                        "id": "main",
+                        "o_bottom": -20.0,
+                        "o_far": 80.5009994506836,
+                        "o_left": -31.100000381469727,
+                        "o_near": 80.5009994506836,
+                        "o_right": 29.799999237060547,
+                        "o_top": 10.0,
+                        "p_aspectRatio": 1.3333300352096558,
+                        "p_far": 10000.0,
+                        "p_fov": 45.0,
+                        "p_near": 0.10000000149011612
+                    },
+                    "TagComponent": {
+                        "tag": "CameraSavedFile"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": -60.471405029296875,
+                            "y": 10.223848342895508,
+                            "z": -9.296303749084473
+                        },
+                        "rotation": {
+                            "x": -3.141592502593994,
+                            "y": -1.105197548866272,
+                            "z": 3.141592502593994
+                        },
+                        "scale": {
+                            "x": 0.9999897480010986,
+                            "y": 0.9999967217445374,
+                            "z": 0.9999909400939941
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "MRtextureFirst"
+                    },
+                    "Texture2DComponent": {
+                        "texturePath": "textures/mr.jpg"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 16.649999618530273,
+                            "y": -0.4994739294052124,
+                            "z": -5.400000095367432
+                        },
+                        "rotation": {
+                            "x": -1.1968712954057992e-07,
+                            "y": 0.9938307404518127,
+                            "z": -1.0009276962819058e-07
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Pyramid"
+                    },
+                    "TagComponent": {
+                        "tag": "WallTexture"
+                    },
+                    "Texture2DComponent": {
+                        "texturePath": "textures/wall.jpg"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 15.350000381469727,
+                            "y": -1.850000023841858,
+                            "z": -2.799999952316284
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Surface"
+                    },
+                    "TagComponent": {
+                        "tag": "GrassSurface"
+                    },
+                    "Texture2DComponent": {
+                        "texturePath": "textures/grass-texture.jpg"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": -8.649999618530273,
+                            "y": -1.850000023841858,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "PointLightComponent": {
+                        "ambient": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.6100000143051147,
+                            "z": 0.6800000071525574
+                        },
+                        "constant": 0.35600000619888306,
+                        "diffuse": {
+                            "w": 1.0,
+                            "x": 0.6299999952316284,
+                            "y": 0.8999999761581421,
+                            "z": 0.8999999761581421
+                        },
+                        "linear": 0.014999999664723873,
+                        "position": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "quadratic": 0.009999999776482582,
+                        "shininess": 31.5,
+                        "specular": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "PythonScriptComponent": {
+                        "path": "scripts/LightMover.py"
+                    },
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "YellowTextureLight"
+                    },
+                    "Texture2DComponent": {
+                        "texturePath": "textures/yellow-texture.jpg"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": -2.549999952316284,
+                            "y": -1.4500000476837158,
+                            "z": 0.550000011920929
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "GrayWall"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 43.66530990600586,
+                            "y": 3.616335868835449,
+                            "z": 1.8452324867248535
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 7.042384147644043,
+                            "y": 7.441262722015381,
+                            "z": 31.71002769470215
+                        }
+                    }
+                },
+                {
+                    "RenderableComponent": {
+                        "name": "Cube"
+                    },
+                    "TagComponent": {
+                        "tag": "RedHugeWall"
+                    },
+                    "Texture2DComponent": {
+                        "texturePath": "textures/red-texture.jpg"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 12.511967658996582,
+                            "y": 2.4450936317443848,
+                            "z": -25.45551109313965
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": -0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 23.669721603393555,
+                            "y": 4.658797740936279,
+                            "z": 11.463357925415039
+                        }
+                    }
+                },
+                {
+                    "ColorComponent": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "RenderableComponent": {
+                        "name": "objects/monkey.obj"
+                    },
+                    "TagComponent": {
+                        "tag": "SuzanneMonkey"
+                    },
+                    "TransformComponent": {
+                        "position": {
+                            "x": 11.461607933044434,
+                            "y": 0.7525012493133545,
+                            "z": 11.171736717224121
+                        },
+                        "rotation": {
+                            "x": 1.583577036857605,
+                            "y": -1.2173774242401123,
+                            "z": 3.0634241104125977
+                        },
+                        "scale": {
+                            "x": 4.23335075378418,
+                            "y": 2.6868557929992676,
+                            "z": 3.183659315109253
+                        }
+                    }
+                }
+            ]
+        },
+        "Name": "DefaultScene"
+    }
+}

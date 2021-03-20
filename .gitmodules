@@ -4,9 +4,6 @@
 [submodule "MAREngine/3rd_party/ImGuiColorTextEdit"]
 	path = MAREngine/3rd_party/ImGuiColorTextEdit
 	url = https://github.com/BalazsJako/ImGuiColorTextEdit.git
-[submodule "MAREngine/3rd_party/ImGuizmo"]
-	path = MAREngine/3rd_party/ImGuizmo
-	url = https://github.com/CedricGuillemet/ImGuizmo.git
 [submodule "MAREngine/3rd_party/MARMaths"]
 	path = MAREngine/3rd_party/MARMaths
 	url = https://github.com/Mregussek/MARMaths.git
@@ -16,12 +13,15 @@
 [submodule "MAREngine/3rd_party/spdlog"]
 	path = MAREngine/3rd_party/spdlog
 	url = https://github.com/gabime/spdlog.git
-[submodule "MAREngine/3rd_party/OBJ-Loader"]
-	path = MAREngine/3rd_party/OBJ-Loader
-	url = https://github.com/Mregussek/OBJ-Loader.git
 [submodule "MAREngine/3rd_party/ImGui-Addons"]
 	path = MAREngine/3rd_party/ImGui-Addons
 	url = https://github.com/gallickgunner/ImGui-Addons.git
 [submodule "MAREngine/3rd_party/volk"]
 	path = MAREngine/3rd_party/volk
 	url = https://github.com/zeux/volk
+[submodule "docs"]
+	path = docs
+	url = https://github.com/Mregussek/MAREngine-docs.git
+[submodule "MAREngine\\3rd_party\\ImGuizmo"]
+	path = MAREngine\\3rd_party\\ImGuizmo
+	url = https://github.com/Mregussek/ImGuizmo.git

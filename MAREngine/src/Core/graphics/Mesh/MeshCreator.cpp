@@ -1,31 +1,33 @@
-/**
- *           MAREngine - open source 3D game engine
- * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
-**/
+/***********************************************************************
+* @internal @copyright
+*
+*  				MAREngine - open source 3D game engine
+*
+* Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+* All rights reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+************************************************************************/
 
 
 #include "MeshCreator.h"
-#include "../GraphicsLogs.h"
-#include "../../ecs/Entity/EntityCollection.h"
+#include "loader_obj/OBJ_Loader.h"
 #include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
+#include "../../ecs/SceneManagerEditor.h"
+#include "../../ecs/Scene.h"
 
 
-namespace mar::graphics {
+namespace marengine {
 
 
     std::vector<Vertex> MeshCreator::Cube::getVertices() {
@@ -122,42 +124,18 @@ namespace mar::graphics {
         };
     }
     
-    void MeshCreator::loadOBJ(std::string filename, std::string path, const ecs::EntityCollection& collection) {
-        objl::Loader Loader{};
-        const bool loadout = Loader.LoadFile(path);
-    
-        if (loadout) {
-            auto passLoadedMeshToEntityAtCollection = [&collection, &filename = std::as_const(filename)](objl::Mesh& mesh) {
-                const auto& entity = collection.createEntity();
-                auto& tag = entity.getComponent<ecs::TagComponent>();
-                auto& renderable = entity.addComponent<ecs::RenderableComponent>();
-                auto& color = entity.addComponent<ecs::ColorComponent>();
-
-                if (mesh.MeshName.empty()) {
-                    tag.tag = filename;
-                    renderable.name = filename;
-                }
-                else {
-                    tag.tag = mesh.MeshName;
-                    renderable.name = mesh.MeshName;
-                }
-
-                for (size_t j = 0; j < mesh.Vertices.size(); j++) {
-                    renderable.vertices.push_back(Vertex{
-                        {mesh.Vertices[j].Position.X, mesh.Vertices[j].Position.Y, mesh.Vertices[j].Position.Z},
-                        {mesh.Vertices[j].Normal.X, mesh.Vertices[j].Normal.Y, mesh.Vertices[j].Normal.Z},
-                        {mesh.Vertices[j].TextureCoordinate.X, mesh.Vertices[j].TextureCoordinate.Y},
-                        {0.0f}
-                        });
-                }
-
-                renderable.indices = mesh.Indices;
-            };
-
-            std::for_each(Loader.LoadedMeshes.begin(), Loader.LoadedMeshes.end(), passLoadedMeshToEntityAtCollection);
+    void MeshCreator::loadOBJ(const std::string& filename, const std::string& path, const Entity& entity) {
+        loader_obj::Loader Loader{};
+        const bool loadout{ Loader.LoadFile(path) };
+        if (!loadout) {
+            return;
         }
-        else {
-            GRAPHICS_ERROR("MESH_CREATOR: could not load .obj file {}", path);
+
+        if (Loader.LoadedMeshes.size() == 1) {
+            auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+            renderableComponent.name = filename;
+            renderableComponent.vertices = Loader.LoadedMeshes[0].Vertices;
+            renderableComponent.indices = Loader.LoadedMeshes[0].Indices;
         }
     }
 

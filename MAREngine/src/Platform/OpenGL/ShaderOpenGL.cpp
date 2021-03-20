@@ -1,36 +1,36 @@
-/**
- *           MAREngine - open source 3D game engine
- * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
- * All rights reserved.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
-**/
+/***********************************************************************
+* @internal @copyright
+*
+*  				MAREngine - open source 3D game engine
+*
+* Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
+* All rights reserved.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+************************************************************************/
 
 
 #include "ShaderOpenGL.h"
-#include "ShaderUniforms.h"
-#include "../../Core/graphics/Renderer/RenderContainer.h"
+#include "../../Logging/Logger.h"
 
 
-namespace mar::platforms {
+namespace marengine {
 
 
 	// ---- PUBLIC METHODS ---- //
 
 	void ShaderOpenGL::initialize(ShaderPaths shaderPaths) {
 		if (m_initialized) {
-			PLATFORM_TRACE("SHADER_OPENGL: Cannot re-initialize once compiled shader! loaded Shader - {}", m_id);
 			return;
 		}
 
@@ -48,21 +48,15 @@ namespace mar::platforms {
 	}
 
 	void ShaderOpenGL::shutdown() {
-		PLATFORM_TRACE("SHADER_OPENGL: Deleting shader {}", m_id);
-
 		PLATFORM_GL_FUNC( glDeleteProgram(m_id) );
 	}
 
 	void ShaderOpenGL::bind() const {
 		PLATFORM_GL_FUNC( glUseProgram(m_id) );
-
-		PLATFORM_TRACE("SHADER_OPENGL: Binding shader {}", m_id);
 	}
 
 	void ShaderOpenGL::unbind() const {
 		PLATFORM_GL_FUNC( glUseProgram(0) );
-
-		PLATFORM_TRACE("SHADER_OPENGL: Unbind shader {}", m_id);
 	}
 
 	void ShaderOpenGL::setUniformSampler(const char* name, int32_t sampler) const {
@@ -70,16 +64,12 @@ namespace mar::platforms {
 	}
 
 	void ShaderOpenGL::setupShaderUniforms(const std::array<const char*, 32>& shaderUniforms) {
-		using namespace ShaderUniforms;
-
 		auto pushUniformToMap = [this](const char* uniform) {
 			PLATFORM_GL_FUNC( const int32_t location = glGetUniformLocation(m_id, uniform) );
 			m_uniformLocation[uniform] = location;
 		};
 
 		std::for_each(shaderUniforms.begin(), shaderUniforms.end(), pushUniformToMap);
-
-		PLATFORM_TRACE("SHADER_OPENGL: initialized all uniforms!");
 	}
 
 	// ---- PRIVATE METHODS ---- //
@@ -92,7 +82,8 @@ namespace mar::platforms {
 		PLATFORM_GL_FUNC( const int32_t location = glGetUniformLocation(m_id, name) );
 
 		if (location == -1) {
-			PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
+		    // TODO: give back issue
+			//PLATFORM_ERROR("SHADER_OPENGL: Uniform {} does not exist!", name);
 		}
 
 		return location;
@@ -110,32 +101,28 @@ namespace mar::platforms {
 
 	uint32_t ShaderOpenGL::compileShader(uint32_t type, const std::string& sourceCode) const {
 		PLATFORM_GL_FUNC( const GLuint id = glCreateShader(type) );
-		const char* src = sourceCode.c_str();
+		const char* src{ sourceCode.c_str() };
 		PLATFORM_GL_FUNC( glShaderSource(id, 1, &src, nullptr) );
 		PLATFORM_GL_FUNC( glCompileShader(id) );
 
-		GLint compiledSucessfully;
+		GLint compiledSucessfully{};
 		PLATFORM_GL_FUNC( glGetShaderiv(id, GL_COMPILE_STATUS, &compiledSucessfully) );
 
 		if (!compiledSucessfully) {
 			GLchar message[256];
 			glGetShaderInfoLog(id, sizeof(message), nullptr, message);
 
-			PLATFORM_ERROR("SHADER_OPENGL: Failed to compile shader: {} - {}", (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), message);
-
 			PLATFORM_GL_FUNC( glDeleteShader(id) );
 			return 0;
 		}
-
-		PLATFORM_TRACE("SHADER_OPENGL: {} - {} compiled successfully!", (type == GL_VERTEX_SHADER ? "vertex" : "fragment"), id);
 
 		return id;
 	}
 
 	uint32_t ShaderOpenGL::createShader(const std::string& vertSrc, const std::string& fragSrc) const {
 		PLATFORM_GL_FUNC( const GLuint shaderProgramId = glCreateProgram() );
-		const GLuint vs = compileShader(GL_VERTEX_SHADER, vertSrc);
-		const GLuint fs = compileShader(GL_FRAGMENT_SHADER, fragSrc);
+		const uint32_t vs{ compileShader(GL_VERTEX_SHADER, vertSrc) };
+		const uint32_t fs{ compileShader(GL_FRAGMENT_SHADER, fragSrc) };
 
 		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, vs) );
 		PLATFORM_GL_FUNC( glAttachShader(shaderProgramId, fs) );
@@ -149,8 +136,6 @@ namespace mar::platforms {
 			GLchar message[256];
 			glGetProgramInfoLog(shaderProgramId, sizeof(message), nullptr, message);
 
-			PLATFORM_ERROR("SHADER_OPENGL: Failed to load shader: \n{}\n{}", m_shaderPaths.vertexPath, m_shaderPaths.fragmentPath, message);
-
 			return 0;
 		}
 
@@ -158,8 +143,6 @@ namespace mar::platforms {
 
 		glDeleteShader(vs);
 		glDeleteShader(fs);
-
-		PLATFORM_TRACE("SHADER_OPENGL: \n{}\n{} - {} created successfully!", m_shaderPaths.vertexPath, m_shaderPaths.fragmentPath, shaderProgramId);
 
 		return shaderProgramId;
 	}
