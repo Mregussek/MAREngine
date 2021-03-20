@@ -13,27 +13,37 @@ namespace mar {
 	class ContextVulkan {
     public:
 
-        static ContextVulkan* Instance();
+        static uint32_t getApiVersion();
 
-        void create();
-        void close() const;
+        void initialize();
+        void terminate() const;
 
-        const VkInstance& get() const;
+        void endPendingJobs() const;
 
     private:
 
-        uint32_t getVulkanApiVersion();
-
-        void fillNeededInstanceExtensions(std::vector<const char*>& extensionToEnable) const;
-        void fillNeededLayers(std::vector<const char*>& layersToEnable) const;
-
         void registerDebugCallback();
 
+        void createInstance();
+        void createPhysicalDevice();
+        void createLogicalDevice();
 
-        static ContextVulkan* s_instance;
+
+        // Instance stuff
 
         VkInstance m_instance{ VK_NULL_HANDLE };
         VkDebugReportCallbackEXT m_callback{ VK_NULL_HANDLE };
+
+        // Physical Device stuff
+
+        VkPhysicalDevice m_physicalDevice{ VK_NULL_HANDLE };
+        VkQueueFamilyProperties m_familyQueueProperties{ VK_NULL_HANDLE };
+        VkPhysicalDeviceMemoryProperties m_memoryProperties{ VK_NULL_HANDLE };
+        uint32_t m_familyIndex{ 0 };
+
+        // Logical Device stuff
+
+        VkDevice m_device{ VK_NULL_HANDLE };
 
 	};
 

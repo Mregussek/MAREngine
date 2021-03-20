@@ -2,8 +2,6 @@
 #include "VulkanInclude.h"
 #include "VulkanLogging.h"
 #include "src/Vulkan/ContextVulkan.h"
-#include "src/Vulkan/PhysicalDevVulkan.h"
-#include "src/Vulkan/LogicalDevVulkan.h"
 #include "src/Vulkan/SwapchainVulkan.h"
 #include "src/Vulkan/BufferVulkan.h"
 #include "src/Vulkan/WindowSurfaceVulkan.h"
@@ -21,13 +19,7 @@ int main(void) {
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
 
     mar::ContextVulkan contextVk{};
-    contextVk.create();
-    
-    mar::PhysicalDevVulkan physicalDevVk{};
-    physicalDevVk.create();
-
-    mar::LogicalDevVulkan deviceVk{};
-    deviceVk.create();
+    contextVk.initialize();
 
     mar::WindowSurfaceVulkan windowSurfaceVk{};
     windowSurfaceVk.create();
@@ -111,12 +103,12 @@ int main(void) {
 
         deviceQueueVk.draw(commandManagerVk.m_commandBuffer, swapchainVk.swapchain, imageIndex);
         
-        deviceVk.endPendingJobs();
+        contextVk.endPendingJobs();
 
         window.pollEvents();
     }
 
-    deviceVk.endPendingJobs();
+    contextVk.endPendingJobs();
 
     vertexBuffer.close();
     indexBuffer.close();
@@ -133,9 +125,7 @@ int main(void) {
 
     windowSurfaceVk.close();
 
-    deviceVk.close();
-
-    contextVk.close();
+    contextVk.terminate();
 
     window.terminate();
 

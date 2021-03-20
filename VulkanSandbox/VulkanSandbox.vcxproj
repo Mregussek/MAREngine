@@ -179,12 +179,12 @@
     <ClCompile Include="src\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Vulkan\BufferVulkan.cpp" />
     <ClCompile Include="src\Vulkan\CommandManagerVulkan.cpp" />
+    <ClCompile Include="src\Vulkan\ContextInstance.cpp" />
+    <ClCompile Include="src\Vulkan\ContextLogicalDevice.cpp" />
+    <ClCompile Include="src\Vulkan\ContextPhysicalDevice.cpp" />
     <ClCompile Include="src\Vulkan\ContextVulkan.cpp" />
     <ClCompile Include="src\Vulkan\DeviceQueueVulkan.cpp" />
-    <ClCompile Include="src\Vulkan\ExtensionFiller.cpp" />
     <ClCompile Include="src\Vulkan\GraphicsPipelineVulkan.cpp" />
-    <ClCompile Include="src\Vulkan\LogicalDevVulkan.cpp" />
-    <ClCompile Include="src\Vulkan\PhysicalDevVulkan.cpp" />
     <ClCompile Include="src\Vulkan\ShaderVulkan.cpp" />
     <ClCompile Include="src\Vulkan\SwapchainVulkan.cpp" />
     <ClCompile Include="src\Vulkan\WindowSurfaceVulkan.cpp" />
@@ -206,10 +206,7 @@
     <ClInclude Include="src\Vulkan\CommandManagerVulkan.h" />
     <ClInclude Include="src\Vulkan\ContextVulkan.h" />
     <ClInclude Include="src\Vulkan\DeviceQueueVulkan.h" />
-    <ClInclude Include="src\Vulkan\ExtensionFiller.h" />
     <ClInclude Include="src\Vulkan\GraphicsPipelineVulkan.h" />
-    <ClInclude Include="src\Vulkan\LogicalDevVulkan.h" />
-    <ClInclude Include="src\Vulkan\PhysicalDevVulkan.h" />
     <ClInclude Include="src\Vulkan\ShaderVulkan.h" />
     <ClInclude Include="src\Vulkan\SwapchainVulkan.h" />
     <ClInclude Include="src\Vulkan\WindowSurfaceVulkan.h" />

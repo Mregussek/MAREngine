@@ -14,9 +14,6 @@ namespace mar {
 
 		m_size = size;
 
-		VkPhysicalDeviceMemoryProperties memoryProperties;
-		vkGetPhysicalDeviceMemoryProperties(PhysicalDevVulkan::Instance()->getPhyDev(), &memoryProperties);
-
 		VkBufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
 		createInfo.size = m_size;
 		createInfo.usage = useFlags;
