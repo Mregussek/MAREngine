@@ -166,10 +166,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="3rd_party\MARMaths\src\mat\mat4.cpp" />
-    <ClCompile Include="3rd_party\MARMaths\src\vec\vec2.cpp" />
-    <ClCompile Include="3rd_party\MARMaths\src\vec\vec3.cpp" />
-    <ClCompile Include="3rd_party\MARMaths\src\vec\vec4.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\basic.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\mat4.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\quat.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\trig.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec2.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec3.cpp" />
+    <ClCompile Include="3rd_party\MARMaths\src\vec4.cpp" />
     <ClCompile Include="3rd_party\OBJ_Loader\OBJ_Loader.cpp" />
     <ClCompile Include="3rd_party\volk\volk.c" />
     <ClCompile Include="main.cpp" />
@@ -188,14 +191,14 @@
     <ClCompile Include="src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="3rd_party\MARMaths\include\MARMaths.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\basic.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\mat4.h" />
     <ClInclude Include="3rd_party\MARMaths\src\maths.h" />
-    <ClInclude Include="3rd_party\MARMaths\src\math_func\Basic_Math.h" />
-    <ClInclude Include="3rd_party\MARMaths\src\mat\mat4.h" />
-    <ClInclude Include="3rd_party\MARMaths\src\trig\trigonometric.h" />
-    <ClInclude Include="3rd_party\MARMaths\src\vec\vec2.h" />
-    <ClInclude Include="3rd_party\MARMaths\src\vec\vec3.h" />
-    <ClInclude Include="3rd_party\MARMaths\src\vec\vec4.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\quat.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\trig.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec2.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec3.h" />
+    <ClInclude Include="3rd_party\MARMaths\src\vec4.h" />
     <ClInclude Include="3rd_party\OBJ_Loader\OBJ_Loader.h" />
     <ClInclude Include="3rd_party\volk\volk.h" />
     <ClInclude Include="src\Mesh\Mesh.h" />

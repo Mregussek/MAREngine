@@ -22,7 +22,7 @@
 
 #include "SphericalCamera.h"
 #include "Camera.h"
-#include "Window/IWindow.h"
+#include "../../Window/IWindow.h"
 
 
 namespace marengine {

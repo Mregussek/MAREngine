@@ -32,7 +32,7 @@
 namespace marengine {
 
 
-    class FEditorWidgetsServiceManager : IServiceManager<FEditorWidgetsServiceManager, IEditorWidget> {
+    class FEditorWidgetsServiceManager : public IServiceManager<FEditorWidgetsServiceManager, IEditorWidget> {
     public:
 
         void emplace(IEditorWidget* service);

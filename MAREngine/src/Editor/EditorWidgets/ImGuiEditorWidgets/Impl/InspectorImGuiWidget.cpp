@@ -24,7 +24,7 @@
 #include "CommonTypeHandler.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
-#include "Window/IWindow.h" // isMousePressed()
+#include "../../../../Window/IWindow.h" // isMousePressed()
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
 #include "../../../../Core/graphics/Mesh/MeshCreator.h" // for correct renderable load

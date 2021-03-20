@@ -25,7 +25,7 @@
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../../../Core/ecs/Components/DefaultComponents.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
-#include "Window/IWindow.h"
+#include "../../../../Window/IWindow.h"
 
 
 namespace marengine {

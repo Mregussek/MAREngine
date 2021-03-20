@@ -18,9 +18,6 @@
     <ClInclude Include="src\mar.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Debug\Log.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Window\buttons_def.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -60,25 +57,16 @@
     <ClInclude Include="src\Editor\Camera\Camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Engine.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="include\MAREngine\MAREngine.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\LayerStack\LayerLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Window\WindowLogs.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\ShaderOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\TextureOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\PlatformLogs.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\mar_logging.h">
@@ -192,12 +180,6 @@
     <ClInclude Include="src\Platform\OpenGL\DrawingOpenGL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\GLFW\WindowCallbacks.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\SetupOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\ecs\ScenePlayStorage.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -240,15 +222,6 @@
     <ClInclude Include="3rd_party\ImGui-Addons\FileBrowser\Dirent\dirent.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\FShaderStorageBufferOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window\WindowInstance.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Window\Window.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\SDL\ContextSDL.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -285,9 +258,6 @@
     <ClInclude Include="3rd_party\imgui\backends\imgui_impl_glfw.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\FUniformBufferOpenGL.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\Camera\SphericalCamera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -321,13 +291,7 @@
     <ClInclude Include="src\Core\filesystem\FilesystemLogging.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\EditorManager.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\IWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\WidgetEvents\EventsEntityWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\events\AllEvents.h">
@@ -432,36 +396,6 @@
     <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\CommonTypeHandler.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\DebugImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\EnvironmentPropertiesImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\GuizmoEditorWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainMenuBarImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\SceneHierarchyImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ScriptImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ViewportImGuiEditorWidgetImpl.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorWidgetsLocator.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\EditorWidgets\IDebugEditorWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -487,9 +421,6 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\EditorWidgets\IViewportEditorWidget.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LayerStack\layers\ImGuiEditorLayer.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\DebugImGuiWidget.h">
@@ -522,21 +453,69 @@
     <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Events\EventsEntityImGuiWidget.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="3rd_party\volk\volk.h">
+    <ClInclude Include="src\Core\graphics\RenderAPI\OpenGL\RenderApiContextOpenGL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\graphics\RenderAPI\IRenderApiContext.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\scripting\PythonInterpreter.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\IServiceManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\FilesystemPopUpImGuiWidget.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorServiceLocator.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorWidgets\EditorWidgetsServiceManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LayerStack\layers\EditorLayer.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LayerStack\ILayer.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Logging\Logger.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\ShaderStorageBufferOpenGL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\UniformBufferOpenGL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\ShellTerminal\TerminalAPI.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\GLFW\WindowCallbacks.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\GLFW\WindowGLFW.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\SDL\WindowSDL.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Window\IWindow.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MAREngine.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MAREngineBuilder.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Debug\Log.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="3rd_party\stb_image\include\stb_image\stb_image.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\Mesh\MeshCreator.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Engine.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\ShaderOpenGL.cpp">
@@ -560,9 +539,6 @@
     <ClCompile Include="src\Core\ecs\Scene.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\GLFW\WindowGLFW.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\Camera\Camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -581,9 +557,6 @@
     <ClCompile Include="src\Platform\OpenGL\DrawingOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\SetupOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\ecs\Entity\Entity.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -594,15 +567,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="3rd_party\GLAD\src\glad.c">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\FShaderStorageBufferOpenGL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\SDL\WindowSDL.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Window\WindowInstance.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\SDL\ContextSDL.cpp">
@@ -627,12 +591,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="3rd_party\imgui\imgui_demo.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Window\Window.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\FUniformBufferOpenGL.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Camera\SphericalCamera.cpp">
@@ -663,12 +621,6 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorManager.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\WidgetEvents\EventsEntityWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\filesystem\SceneSerializer.cpp">
@@ -755,39 +707,6 @@
     <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\CommonTypeHandler.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\DebugImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\EnvironmentPropertiesImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\GuizmoEditorWidget.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\MainMenuBarImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\SceneHierarchyImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ScriptImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\ViewportImGuiEditorWidgetImpl.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LayerStack\layers\ImGuiEditorLayer.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorWidgetsLocator.cpp">
-      <Filter>Pliki źródłowe</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\DebugImGuiWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
@@ -818,7 +737,43 @@
     <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Events\EventsEntityImGuiWidget.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="3rd_party\volk\volk.c">
+    <ClCompile Include="src\Core\graphics\RenderAPI\OpenGL\RenderApiContextOpenGL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\scripting\PythonInterpreter.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\FilesystemPopUpImGuiWidget.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorServiceLocator.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\EditorWidgets\EditorWidgetsServiceManager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LayerStack\layers\EditorLayer.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Logging\Logger.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\ShaderStorageBufferOpenGL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\UniformBufferOpenGL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\ShellTerminal\TerminalAPI.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\GLFW\WindowGLFW.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window\SDL\WindowSDL.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MAREngine.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -853,13 +808,25 @@
     <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiEditorWidgetImpl.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
-    <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorWidgetsLocator.inl">
-      <Filter>Pliki nagłówkowe</Filter>
-    </None>
     <None Include="src\Core\ecs\Entity\Entity.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
     <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\Impl\InspectorImGuiWidget.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Editor\EditorWidgets\ImGuiEditorWidgets\ImGuiEditorServiceLocator.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Logging\Logger.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Platform\OpenGL\ShaderStorageBufferOpenGL.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\Platform\OpenGL\UniformBufferOpenGL.inl">
+      <Filter>Pliki nagłówkowe</Filter>
+    </None>
+    <None Include="src\MAREngineBuilder.inl">
       <Filter>Pliki nagłówkowe</Filter>
     </None>
   </ItemGroup>

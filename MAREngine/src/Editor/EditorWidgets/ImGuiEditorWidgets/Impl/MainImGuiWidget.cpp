@@ -24,7 +24,7 @@
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../mar.h"
-#include "Window/IWindow.h"
+#include "../../../../Window/IWindow.h"
 
 
 namespace marengine {
