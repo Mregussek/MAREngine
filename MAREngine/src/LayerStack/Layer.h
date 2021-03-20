@@ -30,7 +30,9 @@ namespace marengine {
 	class ILayer {
 	public:
 
+	    virtual void begin() = 0;
 		virtual void update() = 0;
+		virtual void end() = 0;
 		virtual void close() = 0;
 
 	};

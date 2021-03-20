@@ -54,9 +54,11 @@ namespace marengine {
 	class FRenderLayerOpenGL : public FRenderLayer {
 	public:
 
-	    void create() override;
-		void update() override;
-		void close() override;
+	    void create() final;
+		void begin() final;
+	    void update() final;
+	    void end() final;
+		void close() final;
 
 	private:
 

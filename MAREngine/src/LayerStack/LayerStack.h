@@ -35,7 +35,9 @@ namespace marengine {
 	class FLayerStack {
 	public:
 
+	    void begin();
         void update();
+        void end();
 		void close();
 
 		void pushLayer(ILayer* pLayer);

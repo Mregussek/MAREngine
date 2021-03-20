@@ -42,6 +42,8 @@ namespace marengine {
         virtual void create(IWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
                             RenderStatistics* pRenderStatistic) = 0;
 
+    protected:
+
         virtual void renderToViewport() = 0;
     };
 
@@ -50,14 +52,17 @@ namespace marengine {
     public:
 
         void create(IWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                    RenderStatistics* pRenderStatistic) override;
+                    RenderStatistics* pRenderStatistic) final;
 
-        void update() override;
-        void close() override;
-
-        void renderToViewport() override;
+        void begin() final;
+        void update() final;
+        void end() final;
+        void close() final;
 
     private:
+
+        void renderToViewport() final;
+
 
         FEditorWidgetsServiceManager m_editorServiceManager;
         FImGuiEditorServiceLocator m_serviceLocator;

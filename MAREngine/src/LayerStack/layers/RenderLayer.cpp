@@ -46,10 +46,18 @@ namespace marengine {
 		m_renderer.initialize();
 	}
 
+	void FRenderLayerOpenGL::begin() {
+
+    }
+
 	void FRenderLayerOpenGL::update() {
         p_statistics.reset();
 		m_renderer.draw();
 	}
+
+	void FRenderLayerOpenGL::end() {
+
+    }
 
 	void FRenderLayerOpenGL::close() {
 		m_renderPipeline.reset();

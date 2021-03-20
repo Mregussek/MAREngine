@@ -50,8 +50,16 @@ namespace marengine {
         m_editorServiceManager.onCreate();
     }
 
+    void FEditorLayerImGui::begin() {
+        renderToViewport();
+    }
+
     void FEditorLayerImGui::update() {
         m_editorServiceManager.onUpdate();
+    }
+
+    void FEditorLayerImGui::end() {
+
     }
 
     void FEditorLayerImGui::close() {

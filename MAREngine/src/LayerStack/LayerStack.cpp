@@ -27,11 +27,23 @@
 namespace marengine {
 
 
+    void FLayerStack::begin() {
+        for (ILayer* pLayer : m_layers) {
+            pLayer->begin();
+        }
+    }
+
 	void FLayerStack::update() {
 		for (ILayer* pLayer : m_layers) {
             pLayer->update();
         }
 	}
+
+    void FLayerStack::end() {
+        for (ILayer* pLayer : m_layers) {
+            pLayer->end();
+        }
+    }
 
 	void FLayerStack::close() {
 		for (ILayer* pLayer : m_layers) {

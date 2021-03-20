@@ -38,8 +38,10 @@ namespace marengine {
 
 		void create(const std::string& scenePath);
 
-		void update() override;
-		void close() override;
+		void begin() final;
+		void update() final;
+		void end() final;
+		void close() final;
 
 		FSceneManagerEditor* getSceneManager();
 

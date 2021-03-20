@@ -39,8 +39,16 @@ namespace marengine {
         m_sceneManagerEditor.initialize(pScene);
 	}
 
+	void FSceneLayer::begin() {
+
+	}
+
 	void FSceneLayer::update() {
         m_sceneManagerEditor.update();
+	}
+
+	void FSceneLayer::end() {
+
 	}
 
 	void FSceneLayer::close() {

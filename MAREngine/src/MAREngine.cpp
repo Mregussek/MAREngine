@@ -77,9 +77,9 @@ namespace marengine {
         layerStack.pushLayer(editorLayer);
 
         while(!window->isGoingToClose() && !shouldEngineRestart()) {
-            editorLayer->renderToViewport();
-
+            layerStack.begin();
             layerStack.update();
+            layerStack.end();
 
             window->swapBuffers();
         }
