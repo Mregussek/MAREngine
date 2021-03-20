@@ -24,7 +24,7 @@
 #define MARENGINE_EDITORLAYER_H
 
 
-#include "../Layer.h"
+#include "../ILayer.h"
 #include "../../Editor/EditorWidgets/EditorWidgetsServiceManager.h"
 #include "../../Editor/EditorWidgets/ImGuiEditorWidgets/ImGuiEditorServiceLocator.h"
 
@@ -45,6 +45,7 @@ namespace marengine {
     protected:
 
         virtual void renderToViewport() = 0;
+
     };
 
 

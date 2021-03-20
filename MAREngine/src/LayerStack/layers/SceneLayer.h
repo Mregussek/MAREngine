@@ -24,7 +24,7 @@
 #define MAR_ENGINE_ENTITY_LAYER_H
 
 #include <string>
-#include "../Layer.h"
+#include "../ILayer.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 
 

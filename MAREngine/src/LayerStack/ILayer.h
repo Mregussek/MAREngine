@@ -20,19 +20,31 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_LAYER_H
-#define MARENGINE_LAYER_H
+#ifndef MARENGINE_ILAYER_H
+#define MARENGINE_ILAYER_H
 
 
 namespace marengine {
 
 
+    /**
+     * @class ILayer ILayer.h "LayerStack/ILayer.h"
+     * @brief ILayer is an interface for all layers. Used especially as a convention plan
+     * so that LayerStack can use any implementation of layer.
+     */
 	class ILayer {
 	public:
 
-	    virtual void begin() = 0;
-		virtual void update() = 0;
+        /// @brief Should be interpreted as beginFrame method. Called every frame before update().
+        virtual void begin() = 0;
+
+        /// @brief Update Frame method. Called every frame.
+        virtual void update() = 0;
+
+        /// @brief End Frame method. Called every frame after update().
 		virtual void end() = 0;
+
+		/// @brief Implementations should terminate all layers, its members and so on. Called once at the end of engine run.
 		virtual void close() = 0;
 
 	};

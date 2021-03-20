@@ -24,7 +24,7 @@
 #define MARENGINE_LAYERSTACK_H
 
 
-#include "../mar.h"
+#include <vector>
 
 
 namespace marengine {
@@ -32,18 +32,49 @@ namespace marengine {
 	class ILayer;
 
 
+	/**
+	 * @class FLayerStack LayerStack.h "LayerStack/LayerStack.h"
+	 * @brief FLayerStack is a class responsible for layers management in MAREngine. It operates as a stack
+	 * and with this engine can push layer and then during every frame call its begin / update / end methods.
+	 */
 	class FLayerStack {
 	public:
 
+	    /// @brief Iterates over all layers stored in stack and calls its begin() method.
 	    void begin();
+
+        /// @brief Iterates over all layers stored in stack and calls its update() method.
         void update();
+
+        /// @brief Iterates over all layers stored in stack and calls its end() method.
         void end();
+
+        /// @brief Iterates over all layers stored in stack and calls its close() method.
 		void close();
 
+		/**
+		 * @brief Push already existing layer to stack.
+		 * @param pLayer Layer that will be emplaced at stack
+		 */
 		void pushLayer(ILayer* pLayer);
+
+		/**
+		 * @brief Pop already existing layer from stack. It looks, if given layer exists at stack
+		 * and then removes it.
+		 * @param pLayer Layer that will be removed from stack
+		 */
         void popLayer(ILayer* pLayer);
 
+        /**
+         * @brief Push already existing layer to stack and make it as overlay (place it at the end of the stack).
+         * @param pOverlay Layer that will be emplaced at stack as overlay.
+         */
 		void pushOverlay(ILayer* pOverlay);
+
+		/**
+		 * @brief Pop already existing overlay from stack.
+		 * @param pOverlay Layer that will removed from stack.
+		 */
 		void popOverlay(ILayer* pOverlay);
 
 	private:
