@@ -8,6 +8,8 @@
 
 namespace mar {
 
+    class ContextVulkan;
+
 
     class BufferVulkan {
     public:
@@ -17,7 +19,7 @@ namespace mar {
         VkDeviceSize m_size{ VK_NULL_HANDLE };
         void* m_data{ nullptr };
 
-        void create(VkDeviceSize size, VkBufferUsageFlags useFlags);
+        void create(ContextVulkan* pContext, VkDeviceSize size, VkBufferUsageFlags useFlags);
         void close();
 
         template<typename T>
@@ -28,6 +30,9 @@ namespace mar {
     private:
 
         uint32_t getMemoryTypeIndex(const VkPhysicalDeviceMemoryProperties& memoryProperties, uint32_t memoryTypeBits, VkMemoryPropertyFlags flags) const;
+
+
+        ContextVulkan* m_pContext{ nullptr };
 
     };
 

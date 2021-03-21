@@ -10,19 +10,20 @@
 namespace mar {
 
 	class ShaderCollectionVulkan;
+	class ContextVulkan;
 
 
 	class GraphicsPipelineVulkan {
 	public:
 
-		void create(ShaderCollectionVulkan& shaderCollection, VkRenderPass renderPass, VkViewport viewport, VkRect2D scissor);
+		void create(ContextVulkan* pContext, ShaderCollectionVulkan& shaderCollection);
 		void close();
 
 	private:
 
 		void createDescriptorSetLayout();
 		void createPipelineLayout();
-		void createGraphicsPipeline(ShaderCollectionVulkan& shaderCollection, VkRenderPass renderPass, VkViewport viewport, VkRect2D scissor);
+		void createGraphicsPipeline(ShaderCollectionVulkan& shaderCollection);
 
 	public:
 
@@ -30,6 +31,7 @@ namespace mar {
 		VkDescriptorSetLayout m_descriptorSetLayout{ VK_NULL_HANDLE };
 		VkPipelineLayout m_pipelineLayout{ VK_NULL_HANDLE };
 		VkPipeline m_pipeline{ VK_NULL_HANDLE };
+		ContextVulkan* m_pContext{ nullptr };
 
 	};
 

@@ -1,22 +1,24 @@
 
 
 #include "GraphicsPipelineVulkan.h"
+#include "ContextVulkan.h"
 #include "../../VulkanLogging.h"
-#include "LogicalDevVulkan.h"
 #include "ShaderVulkan.h"
 
 
 namespace mar {
 
 
-    void GraphicsPipelineVulkan::create(ShaderCollectionVulkan& shaderCollection, VkRenderPass renderPass, VkViewport viewport, VkRect2D scissor) {
+    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, ShaderCollectionVulkan& shaderCollection) {
+        m_pContext = pContext;
+
         createDescriptorSetLayout();
         createPipelineLayout();
-        createGraphicsPipeline(shaderCollection, renderPass, viewport, scissor);
+        createGraphicsPipeline(shaderCollection);
     }
 
     void GraphicsPipelineVulkan::close() {
-        const auto& device = LogicalDevVulkan::Instance()->getDev();
+        const auto& device = m_pContext->getLogicalDevice();
 
         vkDestroyDescriptorSetLayout(device, m_descriptorSetLayout, nullptr);
 
@@ -39,7 +41,7 @@ namespace mar {
         setLayoutCreateInfo.bindingCount = setBindings.size();
         setLayoutCreateInfo.pBindings = setBindings.data();
 
-        VK_CHECK( vkCreateDescriptorSetLayout(LogicalDevVulkan::Instance()->getDev(), &setLayoutCreateInfo, nullptr, &m_descriptorSetLayout) );
+        VK_CHECK( vkCreateDescriptorSetLayout(m_pContext->getLogicalDevice(), &setLayoutCreateInfo, nullptr, &m_descriptorSetLayout) );
     }
 
     void GraphicsPipelineVulkan::createPipelineLayout() {
@@ -47,10 +49,10 @@ namespace mar {
         createInfo.setLayoutCount = 1;
         createInfo.pSetLayouts = &m_descriptorSetLayout;
 
-        VK_CHECK( vkCreatePipelineLayout(LogicalDevVulkan::Instance()->getDev(), &createInfo, nullptr, &m_pipelineLayout) );
+        VK_CHECK( vkCreatePipelineLayout(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_pipelineLayout) );
     }
 
-    void GraphicsPipelineVulkan::createGraphicsPipeline(ShaderCollectionVulkan& shaderCollection, VkRenderPass renderPass, VkViewport viewport, VkRect2D scissor) {
+    void GraphicsPipelineVulkan::createGraphicsPipeline(ShaderCollectionVulkan& shaderCollection) {
         VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
@@ -59,9 +61,9 @@ namespace mar {
 
         VkPipelineViewportStateCreateInfo viewportState{ VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO };
         viewportState.viewportCount = 1;
-        viewportState.pViewports = &viewport;
+        viewportState.pViewports = &m_pContext->getViewport();
         viewportState.scissorCount = 1;
-        viewportState.pScissors = &scissor;
+        viewportState.pScissors = &m_pContext->getScissor();
 
         VkPipelineRasterizationStateCreateInfo rasterizationState{ VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO };
         rasterizationState.lineWidth = 1.f;
@@ -113,9 +115,9 @@ namespace mar {
         createInfo.pColorBlendState = &colorBlendState;
         createInfo.pDynamicState = &dynamicState;
         createInfo.layout = m_pipelineLayout;
-        createInfo.renderPass = renderPass;
+        createInfo.renderPass = m_pContext->getRenderPass();
 
-        VK_CHECK( vkCreateGraphicsPipelines(LogicalDevVulkan::Instance()->getDev(), m_pipelineCache, 1, &createInfo, nullptr, &m_pipeline) );
+        VK_CHECK( vkCreateGraphicsPipelines(m_pContext->getLogicalDevice(), m_pipelineCache, 1, &createInfo, nullptr, &m_pipeline) );
     }
 
 

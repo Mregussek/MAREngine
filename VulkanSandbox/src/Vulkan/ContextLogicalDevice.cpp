@@ -43,6 +43,10 @@ namespace mar {
         VK_CHECK(vkCreateDevice(m_physicalDevice, &createInfo, nullptr, &m_device));
     }
 
+    void ContextVulkan::closeLogicalDevice() const {
+        vkDestroyDevice(m_device, nullptr);
+    }
+
 
 
     void fillDeviceNeededExtensions(VkPhysicalDevice physicalDevice,

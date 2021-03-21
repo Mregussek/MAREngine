@@ -21,9 +21,6 @@
     <ClCompile Include="3rd_party\OBJ_Loader\OBJ_Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\SwapchainVulkan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan\ContextVulkan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,19 +36,10 @@
     <ClCompile Include="3rd_party\volk\volk.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Vulkan\DeviceQueueVulkan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\WindowSurfaceVulkan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Vulkan\ShaderVulkan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Vulkan\GraphicsPipelineVulkan.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Vulkan\CommandManagerVulkan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="3rd_party\MARMaths\src\basic.cpp">
@@ -84,15 +72,27 @@
     <ClCompile Include="src\Vulkan\ContextLogicalDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Vulkan\ContextWindowSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\ContextRenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\ContextCommands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\ContextDeviceQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vulkan\ContextSwapchain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VulkanInclude.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="3rd_party\OBJ_Loader\OBJ_Loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vulkan\SwapchainVulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VulkanLogging.h">
@@ -113,19 +113,10 @@
     <ClInclude Include="3rd_party\volk\volk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Vulkan\DeviceQueueVulkan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vulkan\WindowSurfaceVulkan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Vulkan\ShaderVulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vulkan\GraphicsPipelineVulkan.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Vulkan\CommandManagerVulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="3rd_party\MARMaths\src\basic.h">

@@ -1,17 +1,15 @@
 
 
 #include "BufferVulkan.h"
-#include "PhysicalDevVulkan.h"
-#include "LogicalDevVulkan.h"
+#include "ContextVulkan.h"
 #include "../../VulkanLogging.h"
 
 
 namespace mar {
 
 
-	void BufferVulkan::create(VkDeviceSize size, VkBufferUsageFlags useFlags) {
-		const auto& device = LogicalDevVulkan::Instance()->getDev();
-
+	void BufferVulkan::create(ContextVulkan* pContext, VkDeviceSize size, VkBufferUsageFlags useFlags) {
+		m_pContext = pContext;
 		m_size = size;
 
 		VkBufferCreateInfo createInfo{ VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO };
@@ -19,13 +17,13 @@ namespace mar {
 		createInfo.usage = useFlags;
 		createInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
-		VK_CHECK( vkCreateBuffer(device, &createInfo, nullptr, &m_buffer) );
+		VK_CHECK( vkCreateBuffer(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_buffer) );
 	
 		VkMemoryRequirements memoryReqs;
-		vkGetBufferMemoryRequirements(device, m_buffer, &memoryReqs);
+		vkGetBufferMemoryRequirements(m_pContext->getLogicalDevice(), m_buffer, &memoryReqs);
 
 		constexpr VkMemoryPropertyFlags requiredMemoryFlags{ VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT };
-		const auto memoryTypeIndex = getMemoryTypeIndex(memoryProperties, memoryReqs.memoryTypeBits, requiredMemoryFlags);
+		const auto memoryTypeIndex = getMemoryTypeIndex(m_pContext->getMemoryProperties(), memoryReqs.memoryTypeBits, requiredMemoryFlags);
 
 		VkMemoryAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
 		allocateInfo.allocationSize = memoryReqs.size;
@@ -34,19 +32,17 @@ namespace mar {
 		constexpr VkDeviceSize memoryOffset{ VK_NULL_HANDLE };
 		constexpr VkMemoryMapFlags memoryMapFlags{ VK_NULL_HANDLE };
 
-		VK_CHECK( vkAllocateMemory(device, &allocateInfo, nullptr, &m_deviceMemory) );
+		VK_CHECK( vkAllocateMemory(m_pContext->getLogicalDevice(), &allocateInfo, nullptr, &m_deviceMemory) );
 
-		VK_CHECK( vkBindBufferMemory(device, m_buffer, m_deviceMemory, memoryOffset) );
+		VK_CHECK( vkBindBufferMemory(m_pContext->getLogicalDevice(), m_buffer, m_deviceMemory, memoryOffset) );
 
-		VK_CHECK( vkMapMemory(device, m_deviceMemory, memoryOffset, m_size, memoryMapFlags, &m_data) );
+		VK_CHECK( vkMapMemory(m_pContext->getLogicalDevice(), m_deviceMemory, memoryOffset, m_size, memoryMapFlags, &m_data) );
 	}
 
 	void BufferVulkan::close() {
-		const auto& device = LogicalDevVulkan::Instance()->getDev();
+		vkFreeMemory(m_pContext->getLogicalDevice(), m_deviceMemory, nullptr);
 
-		vkFreeMemory(device, m_deviceMemory, nullptr);
-
-		vkDestroyBuffer(device, m_buffer, nullptr);
+		vkDestroyBuffer(m_pContext->getLogicalDevice(), m_buffer, nullptr);
 	}
 
 	// can contain also optionalFlags, with which app may still run! Now we say, that there is only one way to do that

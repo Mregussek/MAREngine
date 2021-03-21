@@ -106,6 +106,13 @@ namespace mar {
         VK_CHECK(vkCreateDebugReportCallbackEXT(m_instance, &createInfo, nullptr, &m_callback));
     }
 
+    void ContextVulkan::closeInstance() const {
+        auto vkDestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(m_instance, "vkDestroyDebugReportCallbackEXT");
+        vkDestroyDebugReportCallbackEXT(m_instance, m_callback, nullptr);
+
+        vkDestroyInstance(m_instance, nullptr);
+    }
+
 
     template<typename TVkProperties>
     void fillNeeded(std::vector<const char*>& toEnable, const std::vector<const char*>& propertiesToLookFor) {

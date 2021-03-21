@@ -1,14 +1,16 @@
 
 
 #include "ShaderVulkan.h"
-#include "LogicalDevVulkan.h"
+#include "ContextVulkan.h"
 #include "../../VulkanLogging.h"
 
 
 namespace mar {
 
 
-	void ShaderVulkan::load(const char* path) {
+	void ShaderVulkan::load(ContextVulkan* pContext, const char* path) {
+        m_pContext = pContext;
+
         FILE* file = fopen(path, "rb");
         fseek(file, 0, SEEK_END);
         const long length = ftell(file);
@@ -23,13 +25,13 @@ namespace mar {
         createInfo.codeSize = length;
         createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
         
-        VK_CHECK( vkCreateShaderModule(LogicalDevVulkan::Instance()->getDev(), &createInfo, nullptr, &m_shaderModule));
+        VK_CHECK( vkCreateShaderModule(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_shaderModule));
 	    
         m_path = std::string(path);
     }
 	
 	void ShaderVulkan::close() const {
-        vkDestroyShaderModule(LogicalDevVulkan::Instance()->getDev(), m_shaderModule, nullptr);
+        vkDestroyShaderModule(m_pContext->getLogicalDevice(), m_shaderModule, nullptr);
 	}
 
     ShaderVulkan& ShaderCollectionVulkan::getVertex() {

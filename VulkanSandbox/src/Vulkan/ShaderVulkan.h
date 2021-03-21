@@ -9,6 +9,8 @@
 
 namespace mar {
 
+	class ContextVulkan;
+
 
 	class ShaderVulkan {
 
@@ -16,13 +18,14 @@ namespace mar {
 
 	public:
 
-		void load(const char* path);
+		void load(ContextVulkan* pContext, const char* path);
 		void close() const;
 
 	private:
 
 		VkShaderModule m_shaderModule{ VK_NULL_HANDLE };
 		std::string m_path;
+		ContextVulkan* m_pContext{ nullptr };
 
 	};
 
