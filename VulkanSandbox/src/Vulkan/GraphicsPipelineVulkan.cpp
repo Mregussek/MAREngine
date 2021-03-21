@@ -9,12 +9,12 @@
 namespace mar {
 
 
-    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, ShaderCollectionVulkan& shaderCollection) {
+    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, const ShadersVulkan* pShaders) {
         m_pContext = pContext;
 
         createDescriptorSetLayout();
         createPipelineLayout();
-        createGraphicsPipeline(shaderCollection);
+        createGraphicsPipeline(pShaders);
     }
 
     void GraphicsPipelineVulkan::close() {
@@ -52,7 +52,7 @@ namespace mar {
         VK_CHECK( vkCreatePipelineLayout(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_pipelineLayout) );
     }
 
-    void GraphicsPipelineVulkan::createGraphicsPipeline(ShaderCollectionVulkan& shaderCollection) {
+    void GraphicsPipelineVulkan::createGraphicsPipeline(const ShadersVulkan* pShaders) {
         VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
@@ -97,10 +97,10 @@ namespace mar {
             VkPipelineShaderStageCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO }
         };
         stages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-        stages[0].module = shaderCollection.getVertex().m_shaderModule;
+        stages[0].module = pShaders->m_modules.vertex;
         stages[0].pName = "main";
         stages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        stages[1].module = shaderCollection.getFragment().m_shaderModule;
+        stages[1].module = pShaders->m_modules.fragment;
         stages[1].pName = "main";
 
         VkGraphicsPipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO };

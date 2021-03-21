@@ -17,14 +17,13 @@ int main(void) {
     mar::ContextVulkan contextVk{};
     contextVk.initialize(&window);
 
-    mar::ShaderCollectionVulkan shaderCollectionVk{};
-    auto& vertexShader = shaderCollectionVk.getVertex();
-    vertexShader.load(&contextVk, "resources/triangle.vert.spv");
-    auto& fragmentShader = shaderCollectionVk.getFragment();
-    fragmentShader.load(&contextVk, "resources/triangle.frag.spv");
+    mar::ShadersVulkan shaders{};
+    shaders.loadVertex("resources/triangle.vert.spv");
+    shaders.loadFragment("resources/triangle.frag.spv");
+    shaders.create(&contextVk);
 
     mar::GraphicsPipelineVulkan graphicsPipelineVk{};
-    graphicsPipelineVk.create(&contextVk, shaderCollectionVk);
+    graphicsPipelineVk.create(&contextVk, &shaders);
 
     mar::Mesh mesh{};
     mesh.loadFromFile("resources/monkey.obj");
@@ -72,7 +71,7 @@ int main(void) {
 
     graphicsPipelineVk.close();
 
-    shaderCollectionVk.close();
+    shaders.close();
 
     contextVk.terminate();
 

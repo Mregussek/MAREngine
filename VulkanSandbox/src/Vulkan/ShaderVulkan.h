@@ -12,37 +12,35 @@ namespace mar {
 	class ContextVulkan;
 
 
-	class ShaderVulkan {
+	class ShadersVulkan {
 
 		friend class GraphicsPipelineVulkan;
 
 	public:
 
-		void load(ContextVulkan* pContext, const char* path);
-		void close() const;
+		void loadVertex(const char* path);
+		void loadFragment(const char* path);
 
-	private:
-
-		VkShaderModule m_shaderModule{ VK_NULL_HANDLE };
-		std::string m_path;
-		ContextVulkan* m_pContext{ nullptr };
-
-	};
-
-	class ShaderCollectionVulkan {
-
-	public:
-
-		ShaderVulkan& getVertex();
-		ShaderVulkan& getFragment();
-
+		void create(ContextVulkan* pContext);
 		void close();
 
 	private:
 
-		ShaderVulkan m_vertexShader;
-		ShaderVulkan m_fragmentShader;
-	
+		void load(VkShaderModule& shaderModule, const char* path) const;
+
+
+		struct ShaderPaths {
+			const char* vertex{ nullptr };
+			const char* fragment{ nullptr };
+		} m_paths;
+
+		struct ShaderModules {
+			VkShaderModule vertex;
+			VkShaderModule fragment;
+		} m_modules;
+
+		ContextVulkan* m_pContext;
+
 	};
 
 }

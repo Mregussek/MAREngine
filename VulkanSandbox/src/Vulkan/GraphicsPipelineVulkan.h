@@ -9,21 +9,21 @@
 
 namespace mar {
 
-	class ShaderCollectionVulkan;
+	class ShadersVulkan;
 	class ContextVulkan;
 
 
 	class GraphicsPipelineVulkan {
 	public:
 
-		void create(ContextVulkan* pContext, ShaderCollectionVulkan& shaderCollection);
+		void create(ContextVulkan* pContext, const ShadersVulkan* shaderCollection);
 		void close();
 
 	private:
 
 		void createDescriptorSetLayout();
 		void createPipelineLayout();
-		void createGraphicsPipeline(ShaderCollectionVulkan& shaderCollection);
+		void createGraphicsPipeline(const ShadersVulkan* shaderCollection);
 
 	public:
 
