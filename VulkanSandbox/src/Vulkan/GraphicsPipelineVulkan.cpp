@@ -12,15 +12,12 @@ namespace mar {
     void GraphicsPipelineVulkan::create(ContextVulkan* pContext, const ShadersVulkan* pShaders) {
         m_pContext = pContext;
 
-        createDescriptorSetLayout();
-        createPipelineLayout();
+        createPipelineLayout(pShaders);
         createGraphicsPipeline(pShaders);
     }
 
     void GraphicsPipelineVulkan::close() {
         const auto& device = m_pContext->getLogicalDevice();
-
-        vkDestroyDescriptorSetLayout(device, m_descriptorSetLayout, nullptr);
 
         vkDestroyPipeline(device, m_pipeline, nullptr);
 
@@ -29,25 +26,10 @@ namespace mar {
         vkDestroyPipelineCache(device, m_pipelineCache, nullptr);
     }
 
-    void GraphicsPipelineVulkan::createDescriptorSetLayout() {
-        std::array<VkDescriptorSetLayoutBinding, 1> setBindings;
-        setBindings[0].binding = 0;
-        setBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-        setBindings[0].descriptorCount = 1;
-        setBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-
-        VkDescriptorSetLayoutCreateInfo setLayoutCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-        setLayoutCreateInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
-        setLayoutCreateInfo.bindingCount = setBindings.size();
-        setLayoutCreateInfo.pBindings = setBindings.data();
-
-        VK_CHECK( vkCreateDescriptorSetLayout(m_pContext->getLogicalDevice(), &setLayoutCreateInfo, nullptr, &m_descriptorSetLayout) );
-    }
-
-    void GraphicsPipelineVulkan::createPipelineLayout() {
+    void GraphicsPipelineVulkan::createPipelineLayout(const ShadersVulkan* pShaders) {
         VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
         createInfo.setLayoutCount = 1;
-        createInfo.pSetLayouts = &m_descriptorSetLayout;
+        createInfo.pSetLayouts = &pShaders->m_descriptorSetLayout;
 
         VK_CHECK( vkCreatePipelineLayout(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_pipelineLayout) );
     }

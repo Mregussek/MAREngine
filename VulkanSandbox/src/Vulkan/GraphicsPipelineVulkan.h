@@ -16,19 +16,17 @@ namespace mar {
 	class GraphicsPipelineVulkan {
 	public:
 
-		void create(ContextVulkan* pContext, const ShadersVulkan* shaderCollection);
+		void create(ContextVulkan* pContext, const ShadersVulkan* pShaders);
 		void close();
 
 	private:
 
-		void createDescriptorSetLayout();
-		void createPipelineLayout();
-		void createGraphicsPipeline(const ShadersVulkan* shaderCollection);
+		void createPipelineLayout(const ShadersVulkan* pShaders);
+		void createGraphicsPipeline(const ShadersVulkan* pShaders);
 
 	public:
 
 		const VkPipelineCache m_pipelineCache{ VK_NULL_HANDLE }; // critical for perfomance
-		VkDescriptorSetLayout m_descriptorSetLayout{ VK_NULL_HANDLE };
 		VkPipelineLayout m_pipelineLayout{ VK_NULL_HANDLE };
 		VkPipeline m_pipeline{ VK_NULL_HANDLE };
 		ContextVulkan* m_pContext{ nullptr };

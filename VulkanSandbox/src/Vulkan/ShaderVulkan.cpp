@@ -26,6 +26,8 @@ namespace mar {
         if (m_paths.fragment != nullptr) {
             load(m_modules.fragment, m_paths.fragment);
         }
+
+        createDescriptorSetLayout();
     }
 
     void ShadersVulkan::close() {
@@ -35,6 +37,8 @@ namespace mar {
         if (m_paths.fragment != nullptr) {
             vkDestroyShaderModule(m_pContext->getLogicalDevice(), m_modules.fragment, nullptr);
         }
+
+        closeDescriptorSetLayout();
     }
 
     void ShadersVulkan::load(VkShaderModule& shaderModule, const char* path) const {
@@ -53,6 +57,25 @@ namespace mar {
         createInfo.pCode = reinterpret_cast<const uint32_t*>(buffer.data());
 
         VK_CHECK( vkCreateShaderModule(m_pContext->getLogicalDevice(), &createInfo, nullptr, &shaderModule) );
+    }
+
+    void ShadersVulkan::createDescriptorSetLayout() {
+        std::array<VkDescriptorSetLayoutBinding, 1> setBindings;
+        setBindings[0].binding = 0;
+        setBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        setBindings[0].descriptorCount = 1;
+        setBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+        VkDescriptorSetLayoutCreateInfo setLayoutCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
+        setLayoutCreateInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
+        setLayoutCreateInfo.bindingCount = setBindings.size();
+        setLayoutCreateInfo.pBindings = setBindings.data();
+
+        VK_CHECK( vkCreateDescriptorSetLayout(m_pContext->getLogicalDevice(), &setLayoutCreateInfo, nullptr, &m_descriptorSetLayout) );
+    }
+
+    void ShadersVulkan::closeDescriptorSetLayout() {
+        vkDestroyDescriptorSetLayout(m_pContext->getLogicalDevice(), m_descriptorSetLayout, nullptr);
     }
 
 

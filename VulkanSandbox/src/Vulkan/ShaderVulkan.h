@@ -28,6 +28,9 @@ namespace mar {
 
 		void load(VkShaderModule& shaderModule, const char* path) const;
 
+		void createDescriptorSetLayout();
+		void closeDescriptorSetLayout();
+
 
 		struct ShaderPaths {
 			const char* vertex{ nullptr };
@@ -38,6 +41,8 @@ namespace mar {
 			VkShaderModule vertex;
 			VkShaderModule fragment;
 		} m_modules;
+
+		VkDescriptorSetLayout m_descriptorSetLayout{ VK_NULL_HANDLE };
 
 		ContextVulkan* m_pContext;
 
