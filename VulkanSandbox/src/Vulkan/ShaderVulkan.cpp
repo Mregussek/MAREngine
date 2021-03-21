@@ -60,22 +60,11 @@ namespace mar {
     }
 
     void ShadersVulkan::createDescriptorSetLayout() {
-        std::array<VkDescriptorSetLayoutBinding, 1> setBindings;
-        setBindings[0].binding = 0;
-        setBindings[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-        setBindings[0].descriptorCount = 1;
-        setBindings[0].stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-        VkDescriptorSetLayoutCreateInfo setLayoutCreateInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO };
-        setLayoutCreateInfo.flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR;
-        setLayoutCreateInfo.bindingCount = setBindings.size();
-        setLayoutCreateInfo.pBindings = setBindings.data();
-
-        VK_CHECK( vkCreateDescriptorSetLayout(m_pContext->getLogicalDevice(), &setLayoutCreateInfo, nullptr, &m_descriptorSetLayout) );
     }
 
     void ShadersVulkan::closeDescriptorSetLayout() {
-        vkDestroyDescriptorSetLayout(m_pContext->getLogicalDevice(), m_descriptorSetLayout, nullptr);
+       
     }
 
 

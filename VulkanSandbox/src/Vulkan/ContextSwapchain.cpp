@@ -78,6 +78,18 @@ namespace mar {
         *this = swapchainToReplace;
     }
 
+    void ContextVulkan::Swapchain::prepareFrame(ContextVulkan* pContext) {
+        const bool windowSizeHasChanged = !(
+            extent.width == pContext->m_surfaceCaps.currentExtent.width &&
+            extent.height == pContext->m_surfaceCaps.currentExtent.height);
+
+        if (windowSizeHasChanged) {
+            resize(pContext);
+        }
+
+        VK_CHECK(vkAcquireNextImageKHR(pContext->m_device, swapchainKHR, UINT64_MAX, pContext->m_acquireSemaphore, VK_NULL_HANDLE, &pContext->m_imageIndex));
+    }
+
 	void ContextVulkan::Swapchain::close(ContextVulkan* pContext) {
         for (const VkImageView& imageView : imageViews) {
             vkDestroyImageView(pContext->m_device, imageView, nullptr);

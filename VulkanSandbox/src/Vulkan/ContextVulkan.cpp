@@ -44,16 +44,7 @@ namespace mar {
 
     void ContextVulkan::beginFrame() {
         updateWindowSurface();
-
-        const bool windowSizeHasChanged = !(
-            m_swapchain.extent.width == m_surfaceCaps.currentExtent.width &&
-            m_swapchain.extent.height == m_surfaceCaps.currentExtent.height
-        );
-        if (windowSizeHasChanged) {
-            m_swapchain.resize(this);
-        }
-
-        VK_CHECK( vkAcquireNextImageKHR(m_device, m_swapchain.swapchainKHR, UINT64_MAX, m_acquireSemaphore, VK_NULL_HANDLE, &m_imageIndex) );
+        m_swapchain.prepareFrame(this);
 
         VK_CHECK( vkResetCommandPool(m_device, m_commandPool, 0) );
 
@@ -62,10 +53,6 @@ namespace mar {
     
         vkCmdSetViewport(m_commandBuffer, 0, 1, &m_viewport);
         vkCmdSetScissor(m_commandBuffer, 0, 1, &m_scissor);
-    }
-
-    void ContextVulkan::updateFrame() {
-        
     }
 
     void ContextVulkan::endFrame() {
@@ -126,6 +113,10 @@ namespace mar {
 
     const VkPhysicalDeviceMemoryProperties& ContextVulkan::getMemoryProperties() const {
         return m_memoryProperties;
+    }
+
+    uint32_t ContextVulkan::getImagesCount() const {
+        return m_swapchain.imageCount;
     }
 
 }

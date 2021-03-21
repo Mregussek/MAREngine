@@ -13,6 +13,9 @@ namespace mar {
 
 
 	class ContextVulkan {
+
+        friend class GraphicsPipelineVulkan;
+
     public:
 
         static uint32_t getApiVersion();
@@ -21,7 +24,6 @@ namespace mar {
         void terminate();
 
         void beginFrame();
-        void updateFrame();
         void endFrame();
 
         void endPendingJobs() const;
@@ -32,6 +34,7 @@ namespace mar {
         const VkRect2D& getScissor() const;
         const VkDevice& getLogicalDevice() const;
         const VkPhysicalDeviceMemoryProperties& getMemoryProperties() const;
+        uint32_t getImagesCount() const;
 
     private:
 
@@ -107,6 +110,8 @@ namespace mar {
             void fill(ContextVulkan* pContext);
             void resize(ContextVulkan* pContext);
             void close(ContextVulkan* pContext);
+
+            void prepareFrame(ContextVulkan* pContext);
 
             VkSwapchainKHR swapchainKHR{ VK_NULL_HANDLE };
             VkSwapchainKHR oldSwapchainKHR{ VK_NULL_HANDLE };

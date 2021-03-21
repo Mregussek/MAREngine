@@ -27,6 +27,11 @@ namespace mar {
             memcpy(m_data, data.data(), data.size() * sizeof(T));
         }
 
+        template<typename T>
+        void update(const T* data, uint32_t size) {
+            memcpy(m_data, data, size);
+        }
+
     private:
 
         uint32_t getMemoryTypeIndex(const VkPhysicalDeviceMemoryProperties& memoryProperties, uint32_t memoryTypeBits, VkMemoryPropertyFlags flags) const;

@@ -2,6 +2,7 @@
 
 #include "GraphicsPipelineVulkan.h"
 #include "ContextVulkan.h"
+#include "BufferVulkan.h"
 #include "../../VulkanLogging.h"
 #include "ShaderVulkan.h"
 
@@ -9,25 +10,51 @@
 namespace mar {
 
 
-    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, const ShadersVulkan* pShaders) {
+    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, const ShadersVulkan* pShaders, const std::vector<BufferVulkan>& ubos) {
         m_pContext = pContext;
 
+        createDescriptorLayout();
         createPipelineLayout();
         createGraphicsPipeline(pShaders);
+        createDescriptorPool();
+        createDescriptorSets(ubos);
+    }
+
+    void GraphicsPipelineVulkan::bind() {
+        vkCmdBindPipeline(m_pContext->getCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
     }
 
     void GraphicsPipelineVulkan::close() {
-        const auto& device = m_pContext->getLogicalDevice();
+        const VkDevice& device{ m_pContext->getLogicalDevice() };
 
+        vkDestroyDescriptorPool(device, m_descriptorPool, nullptr);
+        vkDestroyDescriptorSetLayout(device, m_descriptorSetLayout, nullptr);
         vkDestroyPipeline(device, m_pipeline, nullptr);
-
         vkDestroyPipelineLayout(device, m_pipelineLayout, nullptr);
-
         vkDestroyPipelineCache(device, m_pipelineCache, nullptr);
+    }
+
+    void GraphicsPipelineVulkan::createDescriptorLayout() {
+        VkDescriptorSetLayoutBinding uboLayoutBinding{};
+        uboLayoutBinding.binding = 0;
+        uboLayoutBinding.descriptorCount = 1;
+        uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        uboLayoutBinding.pImmutableSamplers = nullptr;
+        uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+        VkDescriptorSetLayoutCreateInfo layoutInfo{};
+        layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+        layoutInfo.bindingCount = 1;
+        layoutInfo.pBindings = &uboLayoutBinding;
+
+        VK_CHECK(vkCreateDescriptorSetLayout(m_pContext->getLogicalDevice(), &layoutInfo, nullptr, &m_descriptorSetLayout));
     }
 
     void GraphicsPipelineVulkan::createPipelineLayout() {
         VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
+        createInfo.setLayoutCount = 1;
+        createInfo.pSetLayouts = &m_descriptorSetLayout;
+
         VK_CHECK( vkCreatePipelineLayout(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_pipelineLayout) );
     }
 
@@ -122,6 +149,57 @@ namespace mar {
         createInfo.renderPass = m_pContext->getRenderPass();
 
         VK_CHECK( vkCreateGraphicsPipelines(m_pContext->getLogicalDevice(), m_pipelineCache, 1, &createInfo, nullptr, &m_pipeline) );
+    }
+
+    void GraphicsPipelineVulkan::createDescriptorPool() {
+        VkDescriptorPoolSize poolSize{};
+        poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        poolSize.descriptorCount = m_pContext->m_swapchain.images.size();
+
+        VkDescriptorPoolCreateInfo poolInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO };
+        poolInfo.poolSizeCount = 1;
+        poolInfo.pPoolSizes = &poolSize;
+        poolInfo.maxSets = m_pContext->m_swapchain.images.size();
+
+        VK_CHECK(vkCreateDescriptorPool(m_pContext->getLogicalDevice(), &poolInfo, nullptr, &m_descriptorPool));
+    }
+
+    void GraphicsPipelineVulkan::createDescriptorSets(const std::vector<BufferVulkan>& ubos) {
+        std::vector<VkDescriptorSetLayout> layouts(m_pContext->m_swapchain.images.size(), m_descriptorSetLayout);
+        VkDescriptorSetAllocateInfo allocInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+        allocInfo.descriptorPool = m_descriptorPool;
+        allocInfo.descriptorSetCount = layouts.size();
+        allocInfo.pSetLayouts = layouts.data();
+
+        m_descriptorSets.resize(layouts.size());
+        
+        VK_CHECK(vkAllocateDescriptorSets(m_pContext->getLogicalDevice(), &allocInfo, m_descriptorSets.data()));
+
+        for (size_t i = 0; i < layouts.size(); i++) {
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = ubos[i].m_buffer;
+            bufferInfo.offset = 0;
+            bufferInfo.range = ubos[i].m_size;
+        
+            VkWriteDescriptorSet descriptorWrite{};
+            descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            descriptorWrite.dstSet = m_descriptorSets[i];
+            descriptorWrite.dstBinding = 0;
+            descriptorWrite.dstArrayElement = 0;
+            descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            descriptorWrite.descriptorCount = 1;
+            descriptorWrite.pBufferInfo = &bufferInfo;
+        
+            vkUpdateDescriptorSets(m_pContext->getLogicalDevice(), 1, &descriptorWrite, 0, nullptr);
+        }
+    }
+
+    const VkPipelineLayout& GraphicsPipelineVulkan::getPipelineLayout() const {
+        return m_pipelineLayout;
+    }
+
+    const std::vector<VkDescriptorSet>& GraphicsPipelineVulkan::getDescriptorSets() const {
+        return m_descriptorSets;
     }
 
 
