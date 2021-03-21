@@ -23,11 +23,10 @@ namespace mar {
 		vkGetBufferMemoryRequirements(m_pContext->getLogicalDevice(), m_buffer, &memoryReqs);
 
 		constexpr VkMemoryPropertyFlags requiredMemoryFlags{ VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT };
-		const auto memoryTypeIndex = getMemoryTypeIndex(m_pContext->getMemoryProperties(), memoryReqs.memoryTypeBits, requiredMemoryFlags);
 
 		VkMemoryAllocateInfo allocateInfo{ VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO };
 		allocateInfo.allocationSize = memoryReqs.size;
-		allocateInfo.memoryTypeIndex = memoryTypeIndex;
+		allocateInfo.memoryTypeIndex = getMemoryTypeIndex(m_pContext->getMemoryProperties(), memoryReqs.memoryTypeBits, requiredMemoryFlags);
 
 		constexpr VkDeviceSize memoryOffset{ VK_NULL_HANDLE };
 		constexpr VkMemoryMapFlags memoryMapFlags{ VK_NULL_HANDLE };

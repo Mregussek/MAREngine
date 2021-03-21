@@ -12,7 +12,7 @@ namespace mar {
     void GraphicsPipelineVulkan::create(ContextVulkan* pContext, const ShadersVulkan* pShaders) {
         m_pContext = pContext;
 
-        createPipelineLayout(pShaders);
+        createPipelineLayout();
         createGraphicsPipeline(pShaders);
     }
 
@@ -26,16 +26,38 @@ namespace mar {
         vkDestroyPipelineCache(device, m_pipelineCache, nullptr);
     }
 
-    void GraphicsPipelineVulkan::createPipelineLayout(const ShadersVulkan* pShaders) {
+    void GraphicsPipelineVulkan::createPipelineLayout() {
         VkPipelineLayoutCreateInfo createInfo{ VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO };
-        createInfo.setLayoutCount = 1;
-        createInfo.pSetLayouts = &pShaders->m_descriptorSetLayout;
-
         VK_CHECK( vkCreatePipelineLayout(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_pipelineLayout) );
     }
 
     void GraphicsPipelineVulkan::createGraphicsPipeline(const ShadersVulkan* pShaders) {
+        VkVertexInputBindingDescription bindingDescription{};
+        bindingDescription.binding = 0;
+        bindingDescription.stride = sizeof(objl::Vertex);
+        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+        attributeDescriptions[0].binding = 0;
+        attributeDescriptions[0].location = 0;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[0].offset = offsetof(objl::Vertex, objl::Vertex::Position);
+
+        attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].location = 1;
+        attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[1].offset = offsetof(objl::Vertex, objl::Vertex::Normal);
+
+        attributeDescriptions[2].binding = 0;
+        attributeDescriptions[2].location = 2;
+        attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+        attributeDescriptions[2].offset = offsetof(objl::Vertex, objl::Vertex::TextureCoordinate);
+
         VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
+        vertexInput.vertexBindingDescriptionCount = 1;
+        vertexInput.pVertexBindingDescriptions = &bindingDescription;
+        vertexInput.vertexAttributeDescriptionCount = attributeDescriptions.size();
+        vertexInput.pVertexAttributeDescriptions = attributeDescriptions.data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;

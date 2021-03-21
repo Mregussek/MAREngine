@@ -21,7 +21,7 @@ namespace mar {
 
 	private:
 
-		void createPipelineLayout(const ShadersVulkan* pShaders);
+		void createPipelineLayout();
 		void createGraphicsPipeline(const ShadersVulkan* pShaders);
 
 	public:

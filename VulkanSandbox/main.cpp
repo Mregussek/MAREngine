@@ -29,7 +29,7 @@ int main(void) {
     mesh.loadFromFile("resources/monkey.obj");
 
     mar::BufferVulkan vertexBuffer{};
-    vertexBuffer.create(&contextVk, 128 * 1024 * 1024, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
+    vertexBuffer.create(&contextVk, 128 * 1024 * 1024, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT);
     vertexBuffer.update(mesh.m_vertices);
 
     mar::BufferVulkan indexBuffer{};
@@ -40,21 +40,9 @@ int main(void) {
         contextVk.beginFrame();
 
         vkCmdBindPipeline(contextVk.getCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipelineVk.m_pipeline);
-
-        VkDescriptorBufferInfo bufferInfo;
-        bufferInfo.buffer = vertexBuffer.m_buffer;
-        bufferInfo.offset = 0;
-        bufferInfo.range = vertexBuffer.m_size;
-
-        std::array<VkWriteDescriptorSet, 1> descriptors{ VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET };
-        descriptors[0].dstBinding = 0;
-        descriptors[0].descriptorCount = 1;
-        descriptors[0].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-        descriptors[0].pBufferInfo = &bufferInfo;
-        descriptors[0].pNext = nullptr;
-
-        vkCmdPushDescriptorSetKHR(contextVk.getCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipelineVk.m_pipelineLayout, 0, descriptors.size(), descriptors.data());
-
+        
+        VkDeviceSize offsets[] = { 0 };
+        vkCmdBindVertexBuffers(contextVk.getCommandBuffer(), 0, 1, &vertexBuffer.m_buffer, offsets);
         vkCmdBindIndexBuffer(contextVk.getCommandBuffer(), indexBuffer.m_buffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(contextVk.getCommandBuffer(), (uint32_t)mesh.m_indices.size(), 1, 0, 0, 0);
 
