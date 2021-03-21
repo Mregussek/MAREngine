@@ -44,8 +44,8 @@ namespace mar {
 
         VkRenderPassBeginInfo passBeginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO };
         passBeginInfo.renderPass = m_renderPass;
-        passBeginInfo.framebuffer = m_framebuffers[m_imageIndex];
-        passBeginInfo.renderArea.extent = m_extent;
+        passBeginInfo.framebuffer = m_swapchain.framebuffers[m_imageIndex];
+        passBeginInfo.renderArea.extent = m_swapchain.extent;
         passBeginInfo.clearValueCount = 1;
         passBeginInfo.pClearValues = &clearValue;
 

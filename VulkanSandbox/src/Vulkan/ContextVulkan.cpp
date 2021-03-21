@@ -11,6 +11,9 @@ namespace mar {
     void ContextVulkan::initialize(Window* pWindow) {
         m_pWindow = pWindow;
 
+        m_viewport = { 0.f , (float)m_pWindow->getHeight(), (float)m_pWindow->getWidth(), -(float)m_pWindow->getHeight(), 0.f, 1.f };
+        m_scissor = { {0, 0 }, { (uint32_t)m_pWindow->getWidth() , (uint32_t)m_pWindow->getHeight() } };
+
         createInstance();
         createPhysicalDevice();
         createLogicalDevice();
@@ -19,16 +22,12 @@ namespace mar {
         createCommandPool();
         createCommandBuffer();
         createDeviceQueue();
-
-        m_viewport = { 0.f , (float)m_pWindow->getHeight(), (float)m_pWindow->getWidth(), -(float)m_pWindow->getHeight(), 0.f, 1.f };
-        m_scissor = { {0, 0 }, { (uint32_t)m_pWindow->getWidth() , (uint32_t)m_pWindow->getHeight() } };
-
-        createSwapchain();
+        m_swapchain.create(this);
     }
 
     void ContextVulkan::terminate() {
 
-        closeSwapchain();
+        m_swapchain.close(this);
         closeDeviceQueue();
         closeCommandPool();
         closeRenderPass();
@@ -47,14 +46,14 @@ namespace mar {
         updateWindowSurface();
 
         const bool windowSizeHasChanged = !(
-            m_extent.width == m_surfaceCaps.currentExtent.width &&
-            m_extent.height == m_surfaceCaps.currentExtent.height
+            m_swapchain.extent.width == m_surfaceCaps.currentExtent.width &&
+            m_swapchain.extent.height == m_surfaceCaps.currentExtent.height
         );
         if (windowSizeHasChanged) {
-            resizeSwapchain();
+            m_swapchain.resize(this);
         }
 
-        VK_CHECK( vkAcquireNextImageKHR(m_device, m_swapchain, UINT64_MAX, m_acquireSemaphore, VK_NULL_HANDLE, &m_imageIndex) );
+        VK_CHECK( vkAcquireNextImageKHR(m_device, m_swapchain.swapchainKHR, UINT64_MAX, m_acquireSemaphore, VK_NULL_HANDLE, &m_imageIndex) );
 
         VK_CHECK( vkResetCommandPool(m_device, m_commandPool, 0) );
 
@@ -88,7 +87,7 @@ namespace mar {
 
         VkPresentInfoKHR presentInfo{ VK_STRUCTURE_TYPE_PRESENT_INFO_KHR };
         presentInfo.swapchainCount = 1;
-        presentInfo.pSwapchains = &m_swapchain;
+        presentInfo.pSwapchains = &m_swapchain.swapchainKHR;
         presentInfo.pImageIndices = &m_imageIndex;
         presentInfo.waitSemaphoreCount = 1;
         presentInfo.pWaitSemaphores = &m_releaseSemaphore;

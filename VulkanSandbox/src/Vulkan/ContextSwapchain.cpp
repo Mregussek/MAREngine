@@ -7,21 +7,20 @@ namespace mar {
 
     static VkImageView createImageView(const VkDevice& device, VkImage image, VkFormat format);
     static VkFramebuffer createFramebuffer(VkDevice device, VkRenderPass renderPass, VkImageView imageView, VkExtent2D extent);
-    static void fillSwapchain(const VkRenderPass& renderPass, VkFormat format);
 
 
 
-	void ContextVulkan::createSwapchain() {
-        m_extent = m_surfaceCaps.currentExtent;
+	void ContextVulkan::Swapchain::create(ContextVulkan* pContext) {
+        extent = pContext->m_surfaceCaps.currentExtent;
 
-        const auto surfaceComposite = [this]()->VkCompositeAlphaFlagBitsKHR {
-            if (m_surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) {
+        const auto surfaceComposite = [&surfaceCaps = pContext->m_surfaceCaps]()->VkCompositeAlphaFlagBitsKHR {
+            if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR) {
                 return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR };
             }
-            else if (m_surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR) {
+            else if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR) {
                 return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_PRE_MULTIPLIED_BIT_KHR };
             }
-            else if (m_surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR) {
+            else if (surfaceCaps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR) {
                 return VkCompositeAlphaFlagBitsKHR{ VK_COMPOSITE_ALPHA_POST_MULTIPLIED_BIT_KHR };
             }
             else {
@@ -30,65 +29,69 @@ namespace mar {
         }();
 
         VkSwapchainCreateInfoKHR createInfo{ VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR };
-        createInfo.surface = m_surface;
-        createInfo.minImageCount = std::max(2u, m_surfaceCaps.minImageCount);
-        createInfo.imageFormat = m_format;
+        createInfo.surface = pContext->m_surface;
+        createInfo.minImageCount = std::max(2u, pContext->m_surfaceCaps.minImageCount);
+        createInfo.imageFormat = pContext->m_format;
         createInfo.imageColorSpace = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
-        createInfo.imageExtent = m_extent;
+        createInfo.imageExtent = extent;
         createInfo.imageArrayLayers = 1;
         createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
         createInfo.queueFamilyIndexCount = 1;
-        createInfo.pQueueFamilyIndices = &m_familyIndex;
+        createInfo.pQueueFamilyIndices = &pContext->m_familyIndex;
         createInfo.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
         createInfo.compositeAlpha = surfaceComposite;
-        createInfo.presentMode = m_presentMode;
-        createInfo.oldSwapchain = m_oldSwapchain;
+        createInfo.presentMode = pContext->m_presentMode;
+        createInfo.oldSwapchain = oldSwapchainKHR;
 
-        VK_CHECK( vkCreateSwapchainKHR(m_device, &createInfo, nullptr, &m_swapchain) );
+        VK_CHECK( vkCreateSwapchainKHR(pContext->m_device, &createInfo, nullptr, &swapchainKHR) );
 
-        fillSwapchain();
+        fill(pContext);
 	}
 
-    void ContextVulkan::fillSwapchain() {
-        VK_CHECK(vkGetSwapchainImagesKHR(m_device, m_swapchain, &m_imageCount, nullptr));
+    void ContextVulkan::Swapchain::fill(ContextVulkan* pContext) {
+        VK_CHECK(vkGetSwapchainImagesKHR(pContext->m_device, swapchainKHR, &imageCount, nullptr));
 
-        m_images.resize(m_imageCount);
-        m_imageViews.resize(m_imageCount);
-        m_framebuffers.resize(m_imageCount);
+        images.resize(imageCount);
+        imageViews.resize(imageCount);
+        framebuffers.resize(imageCount);
 
-        VK_CHECK(vkGetSwapchainImagesKHR(m_device, m_swapchain, &m_imageCount, m_images.data()));
+        VK_CHECK(vkGetSwapchainImagesKHR(pContext->m_device, swapchainKHR, &imageCount, images.data()));
 
-        for (uint32_t i = 0; i < m_imageCount; i++) {
-            m_imageViews[i] = createImageView(m_device, m_images[i], m_format);
+        for (uint32_t i = 0; i < imageCount; i++) {
+            imageViews[i] = createImageView(pContext->m_device, images[i], pContext->m_format);
         }
 
-        for (uint32_t i = 0; i < m_imageCount; i++) {
-            m_framebuffers[i] = createFramebuffer(m_device, m_renderPass, m_imageViews[i], m_extent);
+        for (uint32_t i = 0; i < imageCount; i++) {
+            framebuffers[i] = createFramebuffer(pContext->m_device, pContext->m_renderPass, imageViews[i], extent);
         }
     }
 
-    void ContextVulkan::resizeSwapchain() {
-        m_oldSwapchain = m_swapchain;
+    void ContextVulkan::Swapchain::resize(ContextVulkan* pContext) {
+        Swapchain swapchainToReplace;
 
-        closeSwapchain();
-        createSwapchain();
-        endPendingJobs();
+        swapchainToReplace.oldSwapchainKHR = swapchainKHR;
+        swapchainToReplace.create(pContext);
+        pContext->endPendingJobs();
+
+        close(pContext);
+
+        *this = swapchainToReplace;
     }
 
-	void ContextVulkan::closeSwapchain() {
-        for (VkImageView& imageView : m_imageViews) {
-            vkDestroyImageView(m_device, imageView, nullptr);
+	void ContextVulkan::Swapchain::close(ContextVulkan* pContext) {
+        for (const VkImageView& imageView : imageViews) {
+            vkDestroyImageView(pContext->m_device, imageView, nullptr);
         }
 
-        for (VkFramebuffer& framebuffer : m_framebuffers) {
-            vkDestroyImageView(m_device, framebuffer, nullptr);
+        for (const VkFramebuffer& framebuffer : framebuffers) {
+            vkDestroyFramebuffer(pContext->m_device, framebuffer, nullptr);
         }
 
-        vkDestroySwapchainKHR(m_device, m_swapchain, nullptr);
+        vkDestroySwapchainKHR(pContext->m_device, swapchainKHR, nullptr);
 
-        m_images.clear();
-        m_imageViews.clear();
-        m_framebuffers.clear();
+        images.clear();
+        imageViews.clear();
+        framebuffers.clear();
 	}
 
 

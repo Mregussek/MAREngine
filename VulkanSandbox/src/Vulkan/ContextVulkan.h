@@ -63,11 +63,6 @@ namespace mar {
         void createDeviceQueue();
         void closeDeviceQueue() const;
 
-        void createSwapchain();
-        void resizeSwapchain();
-        void fillSwapchain();
-        void closeSwapchain();
-
 
         // Instance members
 
@@ -106,15 +101,24 @@ namespace mar {
 
         // Swapchain members
 
-        VkSwapchainKHR m_swapchain{ VK_NULL_HANDLE };
-        VkSwapchainKHR m_oldSwapchain{ VK_NULL_HANDLE };
+        struct Swapchain {
 
-        std::vector<VkImage> m_images;
-        std::vector<VkImageView> m_imageViews;
-        std::vector<VkFramebuffer> m_framebuffers;
+            void create(ContextVulkan* pContext);
+            void fill(ContextVulkan* pContext);
+            void resize(ContextVulkan* pContext);
+            void close(ContextVulkan* pContext);
 
-        uint32_t m_imageCount{ 0 };
-        VkExtent2D m_extent;
+            VkSwapchainKHR swapchainKHR{ VK_NULL_HANDLE };
+            VkSwapchainKHR oldSwapchainKHR{ VK_NULL_HANDLE };
+
+            std::vector<VkImage> images;
+            std::vector<VkImageView> imageViews;
+            std::vector<VkFramebuffer> framebuffers;
+
+            uint32_t imageCount{ 0 };
+            VkExtent2D extent;
+
+        } m_swapchain;
 
         // Other
 

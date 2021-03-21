@@ -36,16 +36,34 @@ namespace mar {
 
 		VK_CHECK( vkBeginCommandBuffer(m_commandBuffer, &beginInfo) );
 
-		const auto beginBarrier{ beginRenderBarrier(m_images[m_imageIndex]) };
-		vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-			VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 1, &beginBarrier);
+		const auto beginBarrier{ beginRenderBarrier(m_swapchain.images[m_imageIndex]) };
+		vkCmdPipelineBarrier(m_commandBuffer,
+			VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+			VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+			VK_DEPENDENCY_BY_REGION_BIT,
+			0,
+			nullptr,
+			0,
+			nullptr,
+			1,
+			&beginBarrier
+		);
 	}
 
 	void ContextVulkan::endCommandBuffer() {
-		const auto endBarrier{ endRenderBarrier(m_images[m_imageIndex]) };
+		const auto endBarrier{ endRenderBarrier(m_swapchain.images[m_imageIndex]) };
 
-		vkCmdPipelineBarrier(m_commandBuffer, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-			VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 1, &endBarrier);
+		vkCmdPipelineBarrier(m_commandBuffer,
+			VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+			VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+			VK_DEPENDENCY_BY_REGION_BIT,
+			0,
+			nullptr,
+			0,
+			nullptr,
+			1,
+			&endBarrier
+		);
 
 		VK_CHECK(vkEndCommandBuffer(m_commandBuffer));
 	}
