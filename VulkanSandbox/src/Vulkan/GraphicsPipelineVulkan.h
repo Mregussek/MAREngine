@@ -17,7 +17,7 @@ namespace mar {
 	class GraphicsPipelineVulkan {
 	public:
 
-		void create(ContextVulkan* pContext, const ShadersVulkan* pShaders, const std::vector<BufferVulkan>& ubos);
+		void create(ContextVulkan* pContext, ShadersVulkan* pShaders, const std::vector<BufferVulkan>& ubos);
 		void bind();
 		void close();
 
@@ -28,7 +28,7 @@ namespace mar {
 
 		void createDescriptorLayout();
 		void createPipelineLayout();
-		void createGraphicsPipeline(const ShadersVulkan* pShaders);
+		void createGraphicsPipeline(ShadersVulkan* pShaders);
 		void createDescriptorPool();
 		void createDescriptorSets(const std::vector<BufferVulkan>& ubos);
 

@@ -28,9 +28,6 @@ namespace mar {
 
 		void load(VkShaderModule& shaderModule, const char* path) const;
 
-		void createDescriptorSetLayout();
-		void closeDescriptorSetLayout();
-
 
 		struct ShaderPaths {
 			const char* vertex{ nullptr };

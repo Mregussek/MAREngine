@@ -10,7 +10,7 @@
 namespace mar {
 
 
-    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, const ShadersVulkan* pShaders, const std::vector<BufferVulkan>& ubos) {
+    void GraphicsPipelineVulkan::create(ContextVulkan* pContext, ShadersVulkan* pShaders, const std::vector<BufferVulkan>& ubos) {
         m_pContext = pContext;
 
         createDescriptorLayout();
@@ -58,7 +58,7 @@ namespace mar {
         VK_CHECK( vkCreatePipelineLayout(m_pContext->getLogicalDevice(), &createInfo, nullptr, &m_pipelineLayout) );
     }
 
-    void GraphicsPipelineVulkan::createGraphicsPipeline(const ShadersVulkan* pShaders) {
+    void GraphicsPipelineVulkan::createGraphicsPipeline(ShadersVulkan* pShaders) {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
         bindingDescription.stride = sizeof(objl::Vertex);
@@ -149,6 +149,8 @@ namespace mar {
         createInfo.renderPass = m_pContext->getRenderPass();
 
         VK_CHECK( vkCreateGraphicsPipelines(m_pContext->getLogicalDevice(), m_pipelineCache, 1, &createInfo, nullptr, &m_pipeline) );
+
+        pShaders->close();
     }
 
     void GraphicsPipelineVulkan::createDescriptorPool() {

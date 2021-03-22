@@ -26,19 +26,17 @@ namespace mar {
         if (m_paths.fragment != nullptr) {
             load(m_modules.fragment, m_paths.fragment);
         }
-
-        createDescriptorSetLayout();
     }
 
     void ShadersVulkan::close() {
         if (m_paths.vertex != nullptr) {
             vkDestroyShaderModule(m_pContext->getLogicalDevice(), m_modules.vertex, nullptr);
+            m_paths.vertex = nullptr;
         }
         if (m_paths.fragment != nullptr) {
             vkDestroyShaderModule(m_pContext->getLogicalDevice(), m_modules.fragment, nullptr);
+            m_paths.fragment = nullptr;
         }
-
-        closeDescriptorSetLayout();
     }
 
     void ShadersVulkan::load(VkShaderModule& shaderModule, const char* path) const {
@@ -58,15 +56,6 @@ namespace mar {
 
         VK_CHECK( vkCreateShaderModule(m_pContext->getLogicalDevice(), &createInfo, nullptr, &shaderModule) );
     }
-
-    void ShadersVulkan::createDescriptorSetLayout() {
-
-    }
-
-    void ShadersVulkan::closeDescriptorSetLayout() {
-       
-    }
-
 
 
 }
