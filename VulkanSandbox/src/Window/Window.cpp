@@ -16,25 +16,17 @@ namespace mar {
 	}
 	
 
-	Window* Window::s_instance{ nullptr };
-
-	Window* Window::Instance() {
-		return s_instance;
-	}
-
-
 	void Window::initialize(const char* name, int32_t width, int32_t height) {
 		m_name = name;
 		m_width = width;
 		m_height = height;
-		s_instance = this;
 
 		glfwSetErrorCallback(error_callback);
 
 		if (!glfwInit()) { exit(EXIT_FAILURE); }
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		//glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
 		m_window = glfwCreateWindow(m_width, m_height, m_name, nullptr, nullptr);
 		if (!m_window) {
@@ -42,6 +34,7 @@ namespace mar {
 			exit(EXIT_FAILURE);
 		}
 
+		glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		glfwSetKeyCallback(m_window, key_callback);
 		//glfwMakeContextCurrent(m_window); // No OpenGLContext!!! We use Vulkan
 
@@ -77,6 +70,17 @@ namespace mar {
 
 	bool Window::isKeyPressed(int32_t key) const {
 		return glfwGetKey(m_window, key) == GLFW_PRESS || glfwGetKey(m_window, key) == GLFW_REPEAT;
+	}
+
+	bool Window::isMousePressed(int32_t key) const {
+		return glfwGetMouseButton(m_window, key) == GLFW_PRESS || glfwGetMouseButton(m_window, key) == GLFW_REPEAT;
+	}
+
+	std::pair<float, float> Window::getMousePosition() const {
+		double xpos{ 0.0 };
+		double ypos{ 0.0 };
+		glfwGetCursorPos(m_window, &xpos, &ypos);
+		return std::make_pair<float, float>((float)xpos, (float)ypos);
 	}
 
 

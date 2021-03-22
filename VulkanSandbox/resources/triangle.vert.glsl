@@ -12,7 +12,7 @@ layout(binding = 0) uniform CameraUBO {
 } ubo;
 
 void main() {
-	gl_Position = vec4(inPosition, 1.f) * ubo.mvp;
+	gl_Position = ubo.mvp * vec4(inPosition, 1.f);
 
 	v_Color = vec4(inNormal * 0.5f + vec3(0.5f), 1.f);
 }

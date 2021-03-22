@@ -16,6 +16,44 @@ class Camera {
 public:
 
     maths::mat4 handleCamera(mar::Window* pWindow) {
+        using namespace maths;
+
+        static bool firstMouse{ true };
+        static bool holdingRightMouseButton{ false };
+        const bool userPressedRightMouseButton{ pWindow->isMousePressed(GLFW_MOUSE_BUTTON_2) };
+
+        if (userPressedRightMouseButton) {
+            if (!holdingRightMouseButton) { firstMouse = true; }
+            processInput(pWindow);
+            if (processMousePosition(pWindow, firstMouse)) {
+                firstMouse = false;
+            }
+        }
+        else {
+            firstMouse = true;
+        }
+
+        holdingRightMouseButton = userPressedRightMouseButton;
+
+        const maths::vec3 worldUp{ 0.f, 1.f, 0.f };
+        const auto yawRad{ trig::toRadians(m_yaw) };
+        const auto pitchRad{ trig::toRadians(m_pitch) };
+        const maths::vec3 front{
+            {trig::cosine(yawRad) * trig::cosine(pitchRad)},
+            {trig::sine(pitchRad)},
+            {trig::sine(yawRad) * trig::cosine(pitchRad)}
+        };
+
+        m_front = vec3::normalize(front);
+        m_right = vec3::normalize(vec3::cross(m_front, worldUp));
+        m_up = vec3::normalize(vec3::cross(m_right, m_front));
+
+        auto view = mat4::lookAt(m_pos, m_pos + m_front, m_up);
+        auto proj = mat4::perspective(45.f, 1.333f, 0.01f, 100.f);
+        return proj * view;
+    }
+
+    void processInput(mar::Window* pWindow) {
         static float lastTime{ 0.0f };
         const float currentFrame{ (float)glfwGetTime() };
         const float deltaTime{ currentFrame - lastTime };
@@ -33,10 +71,39 @@ public:
         if (pWindow->isKeyPressed(GLFW_KEY_D)) {
             m_pos = m_pos + (m_right * deltaTime);
         }
+    }
 
-        auto view = maths::mat4::lookAt(m_pos, m_pos + m_front.normalize(), { 0.f, 1.f, 0.f });
-        auto proj = maths::mat4::perspective(45.f, 1.333f, 0.01f, 100.f);
-        return proj * view;
+    bool processMousePosition(mar::Window* pWindow, bool firstMouse) {
+        static float lastX{ 0.f };
+        static float lastY{ 0.f };
+
+        const auto [xoffset, yoffset] = pWindow->getMousePosition();
+
+        if (lastX == xoffset && lastY == yoffset) { return false; }
+
+        if (firstMouse) {
+            lastX = xoffset;
+            lastY = yoffset;
+        }
+
+        constexpr float mouseSensitivity{ 0.2f };
+
+        const float x_position = (xoffset - lastX) * mouseSensitivity;
+        const float y_position = (lastY - yoffset) * mouseSensitivity;
+
+        lastX = xoffset;
+        lastY = yoffset;
+
+        m_yaw += x_position;
+        m_pitch += y_position;
+
+        constexpr bool constrainPaith{ true };
+        if constexpr (constrainPaith) {
+            if (m_pitch > 89.0f) { m_pitch = 89.0f; }
+            if (m_pitch < -89.f) { m_pitch = -89.f; };
+        }
+
+        return true;
     }
 
 private:
@@ -44,11 +111,11 @@ private:
     maths::vec3 m_pos{ 0.f, 0.f, 0.f };
     maths::vec3 m_front{ 0.f, 0.f, 1.f };
     maths::vec3 m_right{ 1.f, 0.f, 0.f };
+    maths::vec3 m_up{ 0.f, 1.f, 0.f };
+    float m_pitch{ 0.f };
+    float m_yaw{ 0.f };
 
 };
-
-
-
 
 
 int main(void) {
@@ -75,8 +142,8 @@ int main(void) {
     indexBuffer.update(mesh.m_indices);
 
     Camera camera;
-    auto trans = maths::mat4::translation({0.f, 0.f, 2.f});
-    auto mvp = camera.handleCamera(&window);
+    auto trans = maths::mat4::translation({0.f, 0.f, 0.f});
+    auto mvp = camera.handleCamera(&window) * trans;
     
     std::vector<mar::BufferVulkan> cameraUBOs(contextVk.getImagesCount());
     for (size_t i = 0; i < contextVk.getImagesCount(); i++) {
@@ -88,7 +155,7 @@ int main(void) {
     graphicsPipelineVk.create(&contextVk, &shaders, cameraUBOs);
 
     while (window.shouldClose()) {
-        mvp = camera.handleCamera(&window);
+        mvp = camera.handleCamera(&window) * trans;
         for (size_t i = 0; i < contextVk.getImagesCount(); i++) {
             cameraUBOs[i].update(maths::mat4::value_ptr(mvp), sizeof(mvp));
         }

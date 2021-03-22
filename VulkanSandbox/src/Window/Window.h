@@ -12,9 +12,6 @@ namespace mar {
 	class Window {
 	public:
 
-		static Window* Instance();
-
-
 		void initialize(const char* name, int32_t width, int32_t height);
 
 		void pollEvents();
@@ -30,13 +27,11 @@ namespace mar {
 		int32_t getHeight() const;
 
 		bool isKeyPressed(int32_t key) const;
+		bool isMousePressed(int32_t key) const;
+		std::pair<float, float> getMousePosition() const;
 
 	private:
-		
-
-		static Window* s_instance;
-
-
+	
 		const char* m_name{ "Vulkan Window" };
 		int32_t m_width{ 1200 };
 		int32_t m_height{ 800 };
