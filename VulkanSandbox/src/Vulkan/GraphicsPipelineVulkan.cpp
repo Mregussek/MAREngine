@@ -101,7 +101,7 @@ namespace mar {
         rasterizationState.depthClampEnable = VK_FALSE;
         rasterizationState.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizationState.cullMode = VK_CULL_MODE_BACK_BIT;
-        rasterizationState.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        rasterizationState.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizationState.depthBiasEnable = VK_FALSE;
 
         VkPipelineMultisampleStateCreateInfo multisampleState{ VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO };
