@@ -29,6 +29,8 @@ namespace mar {
 
 		int32_t getHeight() const;
 
+		bool isKeyPressed(int32_t key) const;
+
 	private:
 		
 

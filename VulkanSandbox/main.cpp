@@ -12,6 +12,45 @@
 using namespace marengine;
 
 
+class Camera {
+public:
+
+    maths::mat4 handleCamera(mar::Window* pWindow) {
+        static float lastTime{ 0.0f };
+        const float currentFrame{ (float)glfwGetTime() };
+        const float deltaTime{ currentFrame - lastTime };
+        lastTime = currentFrame;
+
+        if (pWindow->isKeyPressed(GLFW_KEY_W)) {
+            m_pos = m_pos + (m_front * deltaTime);
+        }
+        if (pWindow->isKeyPressed(GLFW_KEY_S)) {
+            m_pos = m_pos - (m_front * deltaTime);
+        }
+        if (pWindow->isKeyPressed(GLFW_KEY_A)) {
+            m_pos = m_pos - (m_right * deltaTime);
+        }
+        if (pWindow->isKeyPressed(GLFW_KEY_D)) {
+            m_pos = m_pos + (m_right * deltaTime);
+        }
+
+        auto view = maths::mat4::lookAt(m_pos, m_pos + m_front.normalize(), { 0.f, 1.f, 0.f });
+        auto proj = maths::mat4::perspective(45.f, 1.333f, 0.01f, 100.f);
+        return proj * view;
+    }
+
+private:
+
+    maths::vec3 m_pos{ 0.f, 0.f, 0.f };
+    maths::vec3 m_front{ 0.f, 0.f, 1.f };
+    maths::vec3 m_right{ 1.f, 0.f, 0.f };
+
+};
+
+
+
+
+
 int main(void) {
     mar::Window window{};
     window.initialize("MAREngine Vulkan Renderer", 1200, 800);
@@ -35,11 +74,10 @@ int main(void) {
     indexBuffer.create(&contextVk, 128 * 1024 * 1024, VK_BUFFER_USAGE_INDEX_BUFFER_BIT);
     indexBuffer.update(mesh.m_indices);
 
+    Camera camera;
     auto trans = maths::mat4::translation({0.f, 0.f, 2.f});
-    auto view = maths::mat4::lookAt({ 0.f, 0.0f, 0.0f }, { 0.f, 0.f, 1.f }, { 0.f, 1.f, 0.f });
-    auto proj = maths::mat4::perspective(45.f, 1.333f, 0.01f, 100.f);
-    auto mvp = proj * view * trans;
-
+    auto mvp = camera.handleCamera(&window);
+    
     std::vector<mar::BufferVulkan> cameraUBOs(contextVk.getImagesCount());
     for (size_t i = 0; i < contextVk.getImagesCount(); i++) {
         cameraUBOs[i].create(&contextVk, sizeof(mvp), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
@@ -50,6 +88,11 @@ int main(void) {
     graphicsPipelineVk.create(&contextVk, &shaders, cameraUBOs);
 
     while (window.shouldClose()) {
+        mvp = camera.handleCamera(&window);
+        for (size_t i = 0; i < contextVk.getImagesCount(); i++) {
+            cameraUBOs[i].update(maths::mat4::value_ptr(mvp), sizeof(mvp));
+        }
+        
         contextVk.beginFrame();
 
         graphicsPipelineVk.bind();

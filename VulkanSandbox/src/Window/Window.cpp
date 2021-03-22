@@ -75,5 +75,9 @@ namespace mar {
 		return m_height;
 	}
 
+	bool Window::isKeyPressed(int32_t key) const {
+		return glfwGetKey(m_window, key) == GLFW_PRESS || glfwGetKey(m_window, key) == GLFW_REPEAT;
+	}
+
 
 }
