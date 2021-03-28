@@ -56,7 +56,7 @@ int main(void) {
     indexBuffer.update(mesh.m_indices);
 
     auto getEntityTransform = []()->maths::mat4 {
-        return maths::mat4::translation({ 2.f, 0.f, 0.f })* maths::mat4::rotation((float)glfwGetTime(), { 1.f, 1.f, 0.f });
+        return maths::mat4::translation({ 2.f, 0.f, 0.f }) * maths::mat4::rotation((float)glfwGetTime(), { 1.f, 1.f, 0.f });
     };
 
     Camera camera;
@@ -81,8 +81,8 @@ int main(void) {
 
         graphicsPipelineVk.bind();
         
-        VkDeviceSize offsets[] = { 0 };
-        vkCmdBindVertexBuffers(contextVk.getCommandBuffer(), 0, 1, &vertexBuffer.m_buffer, offsets);
+        constexpr VkDeviceSize offset{ 0 };
+        vkCmdBindVertexBuffers(contextVk.getCommandBuffer(), 0, 1, &vertexBuffer.m_buffer, &offset);
         vkCmdBindIndexBuffer(contextVk.getCommandBuffer(), indexBuffer.m_buffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdBindDescriptorSets(contextVk.getCommandBuffer(), VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipelineVk.getPipelineLayout(), 0, 1, graphicsPipelineVk.getDescriptorSets().data(), 0, nullptr);
 
@@ -158,17 +158,19 @@ void Camera::processInput(mar::Window* pWindow) {
     const float deltaTime{ currentFrame - lastTime };
     lastTime = currentFrame;
 
+    const float velocity{ deltaTime * 5.f };
+
     if (pWindow->isKeyPressed(GLFW_KEY_W)) {
-        m_pos = m_pos + (m_front * deltaTime);
+        m_pos = m_pos + (m_front * velocity);
     }
     if (pWindow->isKeyPressed(GLFW_KEY_S)) {
-        m_pos = m_pos - (m_front * deltaTime);
+        m_pos = m_pos - (m_front * velocity);
     }
     if (pWindow->isKeyPressed(GLFW_KEY_A)) {
-        m_pos = m_pos - (m_right * deltaTime);
+        m_pos = m_pos - (m_right * velocity);
     }
     if (pWindow->isKeyPressed(GLFW_KEY_D)) {
-        m_pos = m_pos + (m_right * deltaTime);
+        m_pos = m_pos + (m_right * velocity);
     }
 }
 

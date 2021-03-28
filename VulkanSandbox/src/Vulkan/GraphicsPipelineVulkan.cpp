@@ -59,32 +59,32 @@ namespace mar {
     }
 
     void GraphicsPipelineVulkan::createGraphicsPipeline(ShadersVulkan* pShaders) {
-        VkVertexInputBindingDescription bindingDescription{};
-        bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(objl::Vertex);
-        bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+        VkVertexInputBindingDescription vertexBindingDescription{};
+        vertexBindingDescription.binding = 0;
+        vertexBindingDescription.stride = sizeof(objl::Vertex);
+        vertexBindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
-        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
-        attributeDescriptions[0].binding = 0;
-        attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-        attributeDescriptions[0].offset = offsetof(objl::Vertex, objl::Vertex::Position);
+        std::array<VkVertexInputAttributeDescription, 3> vertexInputsDescriptions{};
+        vertexInputsDescriptions[0].binding = 0;
+        vertexInputsDescriptions[0].location = 0;
+        vertexInputsDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+        vertexInputsDescriptions[0].offset = offsetof(objl::Vertex, objl::Vertex::Position);
 
-        attributeDescriptions[1].binding = 0;
-        attributeDescriptions[1].location = 1;
-        attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(objl::Vertex, objl::Vertex::Normal);
+        vertexInputsDescriptions[1].binding = 0;
+        vertexInputsDescriptions[1].location = 1;
+        vertexInputsDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
+        vertexInputsDescriptions[1].offset = offsetof(objl::Vertex, objl::Vertex::Normal);
 
-        attributeDescriptions[2].binding = 0;
-        attributeDescriptions[2].location = 2;
-        attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[2].offset = offsetof(objl::Vertex, objl::Vertex::TextureCoordinate);
+        vertexInputsDescriptions[2].binding = 0;
+        vertexInputsDescriptions[2].location = 2;
+        vertexInputsDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+        vertexInputsDescriptions[2].offset = offsetof(objl::Vertex, objl::Vertex::TextureCoordinate);
 
         VkPipelineVertexInputStateCreateInfo vertexInput{ VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO };
         vertexInput.vertexBindingDescriptionCount = 1;
-        vertexInput.pVertexBindingDescriptions = &bindingDescription;
-        vertexInput.vertexAttributeDescriptionCount = attributeDescriptions.size();
-        vertexInput.pVertexAttributeDescriptions = attributeDescriptions.data();
+        vertexInput.pVertexBindingDescriptions = &vertexBindingDescription;
+        vertexInput.vertexAttributeDescriptionCount = vertexInputsDescriptions.size();
+        vertexInput.pVertexAttributeDescriptions = vertexInputsDescriptions.data();
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{ VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO };
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -112,6 +112,7 @@ namespace mar {
 
         VkPipelineColorBlendAttachmentState colorAttachmentState{};
         colorAttachmentState.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+        colorAttachmentState.blendEnable = VK_FALSE;
 
         VkPipelineColorBlendStateCreateInfo colorBlendState{ VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO };
         colorBlendState.attachmentCount = 1;
