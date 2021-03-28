@@ -36,8 +36,8 @@ namespace marengine {
     }
 
     template<typename TWindow, typename TRenderLayer, typename TEditorLayer>
-    IWindow* FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createWindow() const {
-        return (IWindow*)&m_window;
+    FWindow* FMAREngineBuilder<TWindow, TRenderLayer, TEditorLayer>::createWindow() const {
+        return (FWindow*)&m_window;
     }
 
     template<typename TWindow, typename TRenderLayer, typename TEditorLayer>

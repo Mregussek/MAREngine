@@ -20,51 +20,35 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_FWINDOWGLFW_H
-#define MARENGINE_FWINDOWGLFW_H
-
-
-#include "../IWindow.h"
+#include "IWindow.h"
 
 
 namespace marengine {
 
 
-	class FWindowGLFW : public FWindow {
-	public:
+    int32_t FWindow::getSizeX() const {
+        return p_currentInfo.width;
+    }
 
-	    bool open(uint32_t width, uint32_t height, const char* name) final;
-	    void close() final;
+    int32_t FWindow::getSizeY() const {
+        return p_currentInfo.height;
+    }
 
-	    bool initializeLibrary() final;
-	    void terminateLibrary() final;
+    float FWindow::getMousePositionX() const {
+        return p_currentInfo.xMousePos;
+    }
 
-	    MAR_NO_DISCARD bool isGoingToClose() final;
+    float FWindow::getMousePositionY() const {
+        return p_currentInfo.yMousePos;
+    }
 
-	    void setVerticalSync(int32_t vsSetValue) final;
-	    void swapBuffers() final;
+    float FWindow::getScrollX() const {
+        return p_currentInfo.xScroll;
+    }
 
-        MAR_NO_DISCARD bool isKeyPressed(int32_t key) const final;
-        MAR_NO_DISCARD bool isMousePressed(int32_t key) const final;
-
-	protected:
-
-        GLFWwindow* p_pWindowContext{ nullptr };
-
-	};
-
-
-	class FWindowGLFWImGui : public FWindowGLFW {
-	public:
-
-        void initEditorGuiLibrary() final;
-        void beginNewFrameEditorGuiLibrary() final;
-        void terminateEditorGuiLibrary() final;
-
-    };
+    float FWindow::getScrollY() const {
+        return p_currentInfo.yScroll;
+    }
 
 
 }
-
-
-#endif // !MARENGINE_FWINDOWGLFW_H

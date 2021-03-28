@@ -41,7 +41,7 @@ namespace marengine {
 
         MAR_NO_DISCARD virtual FLayerStack createLayerStack() const = 0;
 
-        MAR_NO_DISCARD virtual IWindow* createWindow() const = 0;
+        MAR_NO_DISCARD virtual FWindow* createWindow() const = 0;
 
         MAR_NO_DISCARD virtual FRenderLayer* createRenderLayer() = 0;
         MAR_NO_DISCARD virtual FSceneLayer* createSceneLayer() = 0;
@@ -55,7 +55,7 @@ namespace marengine {
     public:
 
         MAR_NO_DISCARD FLayerStack createLayerStack() const final;
-        MAR_NO_DISCARD IWindow* createWindow() const final;
+        MAR_NO_DISCARD FWindow* createWindow() const final;
         MAR_NO_DISCARD FRenderLayer* createRenderLayer() final;
         MAR_NO_DISCARD FSceneLayer* createSceneLayer() final;
         MAR_NO_DISCARD FEditorLayer* createEditorLayer() final;

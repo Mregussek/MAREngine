@@ -50,7 +50,7 @@ namespace marengine {
     void MAREngine::buildAndRun(IMAREngineBuilder* pBuilder) {
         setNoRestart();
 
-        IWindow* window = pBuilder->createWindow();
+        FWindow* window = pBuilder->createWindow();
         FRenderLayer* renderLayer = pBuilder->createRenderLayer();
         FSceneLayer* sceneLayer = pBuilder->createSceneLayer();
         FEditorLayer* editorLayer = pBuilder->createEditorLayer();

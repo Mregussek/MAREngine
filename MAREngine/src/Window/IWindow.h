@@ -162,6 +162,33 @@ namespace marengine {
     };
 
 
+    /**
+     * @class FWindow IWindow.h "Window/IWindow.h"
+     * @brief FWindow class is first implementation of IWindow, that other implementations of IWindow
+     * should derive from.
+     */
+    class FWindow : public IWindow {
+    public:
+
+        MAR_NO_DISCARD int32_t getSizeX() const final;
+
+        MAR_NO_DISCARD int32_t getSizeY() const final;
+
+        MAR_NO_DISCARD float getMousePositionX() const final;
+
+        MAR_NO_DISCARD float getMousePositionY() const final;
+
+        MAR_NO_DISCARD float getScrollX() const final;
+
+        MAR_NO_DISCARD float getScrollY() const final;
+
+    protected:
+
+        FWindowCurrentInfo p_currentInfo;
+
+    };
+
+
 }
 
 

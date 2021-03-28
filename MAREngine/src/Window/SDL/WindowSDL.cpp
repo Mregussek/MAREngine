@@ -113,36 +113,12 @@ namespace marengine {
         }
     }
 
-    int32_t FWindowSDL::getSizeX() const {
-        return p_currentInfo.width;
-    }
-
-    int32_t FWindowSDL::getSizeY() const {
-        return p_currentInfo.height;
-    }
-
     bool FWindowSDL::isKeyPressed(int32_t key) const {
         return false;
     }
 
     bool FWindowSDL::isMousePressed(int32_t key) const {
         return false;
-    }
-
-    float FWindowSDL::getMousePositionX() const {
-        return p_currentInfo.xMousePos;
-    }
-
-    float FWindowSDL::getMousePositionY() const {
-        return p_currentInfo.yMousePos;
-    }
-
-    float FWindowSDL::getScrollX() const {
-        return p_currentInfo.xScroll;
-    }
-
-    float FWindowSDL::getScrollY() const {
-        return p_currentInfo.yScroll;
     }
 
 

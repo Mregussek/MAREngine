@@ -30,7 +30,7 @@
 namespace marengine {
 
 
-    class FWindowSDL : public IWindow {
+    class FWindowSDL : public FWindow {
     public:
 
         bool open(uint32_t width, uint32_t height, const char* name) final;
@@ -44,20 +44,13 @@ namespace marengine {
         void setVerticalSync(int32_t vsSetValue) final;
         void swapBuffers() final;
 
-        MAR_NO_DISCARD int32_t getSizeX() const final;
-        MAR_NO_DISCARD int32_t getSizeY() const final;
         MAR_NO_DISCARD bool isKeyPressed(int32_t key) const final;
         MAR_NO_DISCARD bool isMousePressed(int32_t key) const final;
-        MAR_NO_DISCARD float getMousePositionX() const final;
-        MAR_NO_DISCARD float getMousePositionY() const final;
-        MAR_NO_DISCARD float getScrollX() const final;
-        MAR_NO_DISCARD float getScrollY() const final;
 
     protected:
 
         SDL_Window* p_pWindow{ nullptr };
-        SDL_GLContext p_context;
-        FWindowCurrentInfo p_currentInfo;
+        SDL_GLContext p_context{};
         bool p_shouldWindowClose{ false };
     };
 

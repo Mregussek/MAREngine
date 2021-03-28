@@ -90,21 +90,13 @@ namespace marengine {
     void FWindowGLFW::swapBuffers() {
         p_currentInfo.width = callbacks::window_width;
         p_currentInfo.height = callbacks::window_height;
-        p_currentInfo.xMousePos = (float)callbacks::mouse_xpos;
-        p_currentInfo.yMousePos = (float)callbacks::mouse_ypos;
-        p_currentInfo.xScroll = (float)callbacks::scroll_x;
-        p_currentInfo.yScroll = (float)callbacks::scroll_y;
+        p_currentInfo.xMousePos = (float) callbacks::mouse_xpos;
+        p_currentInfo.yMousePos = (float) callbacks::mouse_ypos;
+        p_currentInfo.xScroll = (float) callbacks::scroll_x;
+        p_currentInfo.yScroll = (float) callbacks::scroll_y;
 
         glfwPollEvents();
         glfwSwapBuffers(p_pWindowContext);
-	}
-
-    int32_t FWindowGLFW::getSizeX() const {
-        return p_currentInfo.width;
-    }
-
-    int32_t FWindowGLFW::getSizeY() const {
-        return p_currentInfo.height;
     }
 
     bool FWindowGLFW::isKeyPressed(int32_t key) const {
@@ -115,21 +107,6 @@ namespace marengine {
         return glfwGetMouseButton(p_pWindowContext, key) == GLFW_PRESS || glfwGetMouseButton(p_pWindowContext, key) == GLFW_REPEAT;
     }
 
-    float FWindowGLFW::getMousePositionX() const {
-        return p_currentInfo.xMousePos;
-    }
-
-    float FWindowGLFW::getMousePositionY() const {
-        return p_currentInfo.yMousePos;
-    }
-
-    float FWindowGLFW::getScrollX() const {
-        return p_currentInfo.xScroll;
-    }
-
-    float FWindowGLFW::getScrollY() const {
-        return p_currentInfo.yScroll;
-    }
 
     void FWindowGLFWImGui::initEditorGuiLibrary() {
         if constexpr (MARENGINE_USE_OPENGL_RENDERAPI) {
