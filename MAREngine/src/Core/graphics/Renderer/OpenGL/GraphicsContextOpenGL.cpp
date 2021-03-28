@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "RenderApiContextOpenGL.h"
+#include "GraphicsContextOpenGL.h"
 #include "../../../../Logging/Logger.h"
 #include "../../../../Platform/ShellTerminal/TerminalAPI.h"
 
@@ -85,7 +85,9 @@ namespace marengine {
     }
 
 
-    bool FRenderApiContextOpenGL::create() {
+    bool FGraphicsContextOpenGL::create(FWindow* pWindow) {
+        m_pWindow = pWindow;
+
         if constexpr (MARENGINE_USE_GLFW_WINDOW) {
             const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
@@ -123,9 +125,18 @@ namespace marengine {
         return true;
     }
 
-    void FRenderApiContextOpenGL::clearScreen(maths::vec3 backgroundColor) {
+    void FGraphicsContextOpenGL::close() {
+
+    }
+
+    void FGraphicsContextOpenGL::prepareFrame() {
+        const maths::vec3 backgroundColor{ 0.5f, 0.5f, 0.5f };
         PLATFORM_GL_FUNC( glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, 1.0f) );
         PLATFORM_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) );
+    }
+
+    void FGraphicsContextOpenGL::endFrame() {
+
     }
 
 

@@ -31,7 +31,7 @@ namespace marengine {
     }
 
 
-	void FRenderLayerOpenGL::create() {
+	void FRenderLayerOpenGL::create(FWindow* pWindow) {
         const bool isRenderApiCreated = m_renderApiContext.create();
         if(!isRenderApiCreated) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Render API!");
@@ -65,6 +65,27 @@ namespace marengine {
 
 		m_renderer.close();
 	}
+
+
+    void FRenderLayerOpenGL2::create(FWindow* pWindow) {
+        m_context.create(pWindow);
+    }
+
+    void FRenderLayerOpenGL2::begin() {
+        m_context.prepareFrame();
+    }
+
+    void FRenderLayerOpenGL2::update() {
+        p_statistics.reset();
+    }
+
+    void FRenderLayerOpenGL2::end() {
+
+    }
+
+    void FRenderLayerOpenGL2::close() {
+
+    }
 
 
 }

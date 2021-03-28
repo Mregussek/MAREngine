@@ -29,39 +29,39 @@ namespace marengine {
 	FPipelineManager* FPipelineManager::Instance{ nullptr };
 
 
-	FPipeline& FPipelineManager::createPipeline() {
+    PipelineOpenGL& FPipelineManager::createPipeline() {
 		return m_pipelines.emplace_back();
 	}
 
-	FShaderStorageBuffer& FPipelineManager::createSSBO() {
+    FShaderStorageBufferOpenGL& FPipelineManager::createSSBO() {
 		return m_shaderStorageBuffers.emplace_back();
 	}
 
-	FUniformBuffer& FPipelineManager::createUBO() {
+    FUniformBufferOpenGL& FPipelineManager::createUBO() {
 		return m_uniformBuffers.emplace_back();
 	}
 
-	const FPipelinesArray& FPipelineManager::getPipelines() const {
+	const std::vector<PipelineOpenGL>& FPipelineManager::getPipelines() const {
 		return m_pipelines;
 	}
 
-	const FShaderStorageBuffersArray& FPipelineManager::getSSBOs() const {
+	const std::vector<FShaderStorageBufferOpenGL>& FPipelineManager::getSSBOs() const {
 		return m_shaderStorageBuffers;
 	}
 
-	const FUniformBuffersArray& FPipelineManager::getUBOs() const {
+	const std::vector<FUniformBufferOpenGL>& FPipelineManager::getUBOs() const {
 		return m_uniformBuffers;
 	}
 
-	const FPipeline& FPipelineManager::getPipeline(uint32_t index) const {
+	const PipelineOpenGL& FPipelineManager::getPipeline(uint32_t index) const {
 		return m_pipelines.at(index);
 	}
 
-	const FShaderStorageBuffer& FPipelineManager::getSSBO(uint32_t index) const {
+	const FShaderStorageBufferOpenGL& FPipelineManager::getSSBO(uint32_t index) const {
 		return m_shaderStorageBuffers.at(index);
 	}
 
-	const FUniformBuffer& FPipelineManager::getUBO(uint32_t index) const {
+	const FUniformBufferOpenGL& FPipelineManager::getUBO(uint32_t index) const {
 		return m_uniformBuffers.at(index);
 	}
 

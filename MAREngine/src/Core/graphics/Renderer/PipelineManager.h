@@ -24,7 +24,9 @@
 #define MAR_ENGINE_GRAPHICS_RENDERER_PIPELINE_STORAGE_H
 
 
-#include "RendererDefinitions.h"
+#include "../../../Platform/OpenGL/PipelineOpenGL.h"
+#include "../../../Platform/OpenGL/ShaderStorageBufferOpenGL.h"
+#include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
 
 
 namespace marengine {
@@ -35,25 +37,25 @@ namespace marengine {
 
 		static FPipelineManager* Instance;
 
-		FPipeline& createPipeline();
-		FShaderStorageBuffer& createSSBO();
-		FUniformBuffer& createUBO();
+		PipelineOpenGL& createPipeline();
+		FShaderStorageBufferOpenGL& createSSBO();
+		FUniformBufferOpenGL& createUBO();
 
-		const FPipelinesArray& getPipelines() const;
-		const FShaderStorageBuffersArray& getSSBOs() const;
-		const FUniformBuffersArray& getUBOs() const;
+		const std::vector<PipelineOpenGL>& getPipelines() const;
+		const std::vector<FShaderStorageBufferOpenGL>& getSSBOs() const;
+		const std::vector<FUniformBufferOpenGL>& getUBOs() const;
 
-		const FPipeline& getPipeline(uint32_t index) const;
-		const FShaderStorageBuffer& getSSBO(uint32_t index) const;
-		const FUniformBuffer& getUBO(uint32_t index) const;
+		const PipelineOpenGL& getPipeline(uint32_t index) const;
+		const FShaderStorageBufferOpenGL& getSSBO(uint32_t index) const;
+		const FUniformBufferOpenGL& getUBO(uint32_t index) const;
 
 		void close();
 
 	private:
 
-		FPipelinesArray m_pipelines;
-		FShaderStorageBuffersArray m_shaderStorageBuffers;
-		FUniformBuffersArray m_uniformBuffers;
+		std::vector<PipelineOpenGL> m_pipelines;
+		std::vector<FShaderStorageBufferOpenGL> m_shaderStorageBuffers;
+        std::vector<FUniformBufferOpenGL> m_uniformBuffers;
 
 	};
 

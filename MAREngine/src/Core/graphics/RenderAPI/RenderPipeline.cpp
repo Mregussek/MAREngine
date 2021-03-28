@@ -42,10 +42,9 @@ namespace marengine {
         reset();
 
         const FEntityArray& entities{ pScene->getEntities() };
-
-        std::for_each(entities.cbegin(), entities.cend(), [this](const Entity& entity) {
+        for(const Entity& entity : entities) {
             pushEntityToPipeline(entity);
-        });
+        }
 
         onBatchesReadyToDraw();
 	}

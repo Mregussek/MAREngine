@@ -20,30 +20,36 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_RENDERER_DEFINITIONS_H
-#define MAR_ENGINE_RENDERER_DEFINITIONS_H
-
-
-#include "../../../Platform/OpenGL/PipelineOpenGL.h"
-#include "../../../Platform/OpenGL/ShaderStorageBufferOpenGL.h"
-#include "../../../Platform/OpenGL/UniformBufferOpenGL.h"
+#include "IBuffer.h"
 
 
 namespace marengine {
 
 
-	typedef PipelineOpenGL FPipeline;
-	typedef std::vector<FPipeline> FPipelinesArray;
+    void FBuffer::create(uint64_t memoryToAllocate, uint32_t bindingPoint) {
+        p_allocatedMemory = memoryToAllocate;
+        p_bindingPoint = bindingPoint;
+    }
 
-	typedef FShaderStorageBufferOpenGL FShaderStorageBuffer;
-	typedef std::vector<FShaderStorageBuffer> FShaderStorageBuffersArray;
 
-	typedef FUniformBufferOpenGL FUniformBuffer;
-	typedef std::vector<FUniformBuffer> FUniformBuffersArray;
+
+    void FVertexBuffer::passLayout(const FVertexLayoutArray& vertexLayout) {
+        uint32_t stride{ 0 };
+        for(const auto& vertexElem : vertexLayout) {
+            uint32_t sizeOfType = [&vertexElem]()->uint32_t {
+                if(vertexElem.inputType == EVertexInputType::FLOAT) {
+                    return sizeof(float);
+                }
+
+                return 0;
+            }();
+
+            stride += vertexElem.count * sizeOfType;
+        }
+
+        p_vertexLayoutArray = vertexLayout;
+        p_stride = stride;
+    }
 
 
 }
-
-
-
-#endif // !MAR_ENGINE_RENDERER_DEFINITIONS_H

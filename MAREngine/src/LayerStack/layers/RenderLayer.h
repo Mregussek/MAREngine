@@ -33,14 +33,20 @@
 #include "../../Core/graphics/Renderer/PipelineManager.h"
 #include "../../Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 
+#include "../../Core/graphics/Renderer/OpenGL/GraphicsContextOpenGL.h"
+
+
+
 
 namespace marengine {
+
+    class FWindow;
 
 
     class FRenderLayer : public ILayer {
     public:
 
-        virtual void create() = 0;
+        virtual void create(FWindow* pWindow) = 0;
 
         MAR_NO_DISCARD RenderStatistics* getRenderStats();
 
@@ -54,7 +60,7 @@ namespace marengine {
 	class FRenderLayerOpenGL : public FRenderLayer {
 	public:
 
-	    void create() final;
+	    void create(FWindow* pWindow) final;
 		void begin() final;
 	    void update() final;
 	    void end() final;
@@ -67,6 +73,22 @@ namespace marengine {
 		FPipelineManager m_pipelineManager;
 		RenderMemorizer m_memorizer;
         FRenderApiContextOpenGL m_renderApiContext;
+
+	};
+
+
+	class FRenderLayerOpenGL2 : public FRenderLayer {
+    public:
+
+        void create(FWindow* pWindow) final;
+        void begin() final;
+        void update() final;
+        void end() final;
+        void close() final;
+
+	private:
+
+	    FGraphicsContextOpenGL m_context;
 
 	};
 
