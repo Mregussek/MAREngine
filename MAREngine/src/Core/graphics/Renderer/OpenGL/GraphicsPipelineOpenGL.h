@@ -29,70 +29,15 @@
 
 namespace marengine {
 
-    class FVertexBufferOpenGL;
-    class FIndexBufferOpenGL;
-    class FVertexShaderOpenGL;
-    class FFragmentShaderOpenGL;
-    class FTransformBufferOpenGL;
-    class FColorBufferOpenGL;
-    class FTextureSamplesOpenGL;
-    class FCameraBufferOpenGL;
 
-
-    class FGraphicsPipelineColorMeshOpenGL :
-            public FGraphicsPipelineColorMesh<FGraphicsPipelineColorMeshOpenGL> {
+    class FGraphicsPipelineColorMeshOpenGL : public FGraphicsPipelineColorMesh {
     public:
-
-        void passVertexShader(FVertexShaderOpenGL* pVertexShader);
-        void passFragmentShader(FFragmentShaderOpenGL* pFragmentShader);
-        void passVertexBuffer(FVertexBufferOpenGL* pVertexBuffer);
-        void passIndexBuffer(FIndexBufferOpenGL* pIndexBuffer);
-        void passTransformBuffer(FTransformBufferOpenGL* pTransformBuffer);
-        void passCameraBuffer(FCameraBufferOpenGL* pCameraBuffer);
-        void passColorBuffer(FColorBufferOpenGL* pColorBuffer);
-
-        void create();
-        void close();
-
-    private:
-
-        FVertexBufferOpenGL* m_pVertexShader{ nullptr };
-        FIndexBufferOpenGL* m_pFragmentShader{ nullptr };
-        FVertexShaderOpenGL* m_pVertexBuffer{ nullptr };
-        FFragmentShaderOpenGL* m_pIndexBuffer{ nullptr };
-        FCameraBufferOpenGL* m_pCameraBuffer{ nullptr };
-        FTransformBufferOpenGL* m_pTransformBuffer{ nullptr };
-
-        FColorBufferOpenGL* m_pColorBuffer{ nullptr };
 
     };
 
 
-    class FGraphicsPipelineTexture2DMeshOpenGL :
-            public FGraphicsPipelineTexture2DMesh<FGraphicsPipelineTexture2DMeshOpenGL> {
+    class FGraphicsPipelineTexture2DMeshOpenGL : public FGraphicsPipelineTexture2DMesh {
     public:
-
-        void passVertexShader(FVertexShaderOpenGL* pVertexShader);
-        void passFragmentShader(FFragmentShaderOpenGL* pFragmentShader);
-        void passVertexBuffer(FVertexBufferOpenGL* pVertexBuffer);
-        void passIndexBuffer(FIndexBufferOpenGL* pIndexBuffer);
-        void passTransformBuffer(FTransformBufferOpenGL* pTransformBuffer);
-        void passCameraBuffer(FCameraBufferOpenGL* pCameraBuffer);
-        void passTextureSamples(FTextureSamplesOpenGL* pTextureSamples);
-
-        void create();
-        void close();
-
-    private:
-
-        FVertexBufferOpenGL* m_pVertexShader{ nullptr };
-        FIndexBufferOpenGL* m_pFragmentShader{ nullptr };
-        FVertexShaderOpenGL* m_pVertexBuffer{ nullptr };
-        FFragmentShaderOpenGL* m_pIndexBuffer{ nullptr };
-        FCameraBufferOpenGL* m_pCameraBuffer{ nullptr };
-        FTransformBufferOpenGL* m_pTransformBuffer{ nullptr };
-
-        FTextureSamplesOpenGL* m_pTextureSamples{ nullptr };
 
     };
 

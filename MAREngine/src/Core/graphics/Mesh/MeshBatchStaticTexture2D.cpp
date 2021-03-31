@@ -64,8 +64,8 @@ namespace marengine {
 		return m_textures;
 	}
 
-	EMeshBatchStaticType FMeshBatchStaticTexture2D::getBatchType() const {
-		return EMeshBatchStaticType::TEXTURE2D;
+	EMeshBatchType FMeshBatchStaticTexture2D::getBatchType() const {
+		return EMeshBatchType::STATIC_TEXTURE2D;
 	}
 
 

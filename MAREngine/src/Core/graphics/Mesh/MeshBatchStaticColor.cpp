@@ -72,8 +72,8 @@ namespace marengine {
 		m_uniqueColorsID = id;
 	}
 
-	EMeshBatchStaticType FMeshBatchStaticColor::getBatchType() const {
-		return EMeshBatchStaticType::COLOR;
+	EMeshBatchType FMeshBatchStaticColor::getBatchType() const {
+		return EMeshBatchType::STATIC_COLOR;
 	}
 
 

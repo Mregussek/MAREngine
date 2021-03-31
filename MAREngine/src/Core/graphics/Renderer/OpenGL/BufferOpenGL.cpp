@@ -30,7 +30,7 @@ namespace marengine {
     void FBufferOpenGL::createGL(uint32_t bufferType, uint64_t memoryToAllocate) {
         PLATFORM_GL_FUNC( glGenBuffers(1, &p_id) );
         PLATFORM_GL_FUNC( glBindBuffer(bufferType, p_id) );
-        PLATFORM_GL_FUNC( glBufferData(bufferType, memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
+        PLATFORM_GL_FUNC( glBufferData(bufferType, (long)memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
     }
 
     void FBufferOpenGL::freeGL(uint32_t bufferType) const {

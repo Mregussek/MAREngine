@@ -44,16 +44,16 @@ namespace marengine {
 
 	public:
 
-		virtual void reset() override;
-		virtual bool canBeBatched(const Entity& entity) const override;
-		virtual void submitToBatch(const Entity& entity) override;
+		void reset() override;
+        MAR_NO_DISCARD bool canBeBatched(const Entity& entity) const override;
+		void submitToBatch(const Entity& entity) override;
 
-		const FColorsArray& getColors() const;
+        MAR_NO_DISCARD const FColorsArray& getColors() const;
 
-		uint32_t getUniqueColorsID() const;
+        MAR_NO_DISCARD uint32_t getUniqueColorsID() const;
 		void setUniqueColorsID(uint32_t id);
 
-		virtual EMeshBatchStaticType getBatchType() const override;
+		MAR_NO_DISCARD EMeshBatchType getBatchType() const override;
 
 	private:
 

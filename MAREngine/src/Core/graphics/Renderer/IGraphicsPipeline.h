@@ -37,202 +37,26 @@ namespace marengine {
     };
 
 
-    template<typename TDerivedPipeline>
     class IGraphicsPipeline {
     public:
 
-        template<typename TVertexShader>
-        void passVertexShader(TVertexShader* pVertexShader) {
-            static_cast<TDerivedPipeline*>(this)->passVertexShader(pVertexShader);
-        }
+    };
 
-        template<typename TFragmentShader>
-        void passFragmentShader(TFragmentShader* pFragmentShader) {
-            static_cast<TDerivedPipeline*>(this)->passFragmentShader(pFragmentShader);
-        }
 
-        template<typename TVertexBuffer>
-        void passVertexBuffer(TVertexBuffer* pVertexBuffer) {
-            static_cast<TDerivedPipeline*>(this)->passVertexBuffer(pVertexBuffer);
-        }
-
-        template<typename TIndexBuffer>
-        void passIndexBuffer(TIndexBuffer* pIndexBuffer) {
-            static_cast<TDerivedPipeline*>(this)->passIndexBuffer(pIndexBuffer);
-        }
-
-        template<typename TCameraBuffer>
-        void passCameraBuffer(TCameraBuffer* pCameraBuffer) {
-            static_cast<TDerivedPipeline*>(this)->passCameraBuffer(pCameraBuffer);
-        }
-
-        void create() {
-            static_cast<TDerivedPipeline*>(this)->create();
-        }
-
-        void close() {
-            static_cast<TDerivedPipeline*>(this)->close();
-        }
+    class FGraphicsPipelineMesh : public IGraphicsPipeline {
+    public:
 
     };
 
 
-    template<typename TMeshTypePipeline>
-    class FGraphicsPipelineMesh :
-            public IGraphicsPipeline<FGraphicsPipelineMesh<TMeshTypePipeline>> {
+    class FGraphicsPipelineColorMesh : public FGraphicsPipelineMesh {
     public:
-
-        // What FGraphicsPipelineMesh brings to Derived classes...
-
-        template<typename TTransformBuffer>
-        void passTransformBuffer(TTransformBuffer* pTransformBuffer) {
-            static_cast<TMeshTypePipeline*>(this)->passTransformBuffer(pTransformBuffer);
-        }
-
-        // Copy paste ...
-
-        template<typename TVertexShader>
-        void passVertexShader(TVertexShader* pVertexShader) {
-            static_cast<TMeshTypePipeline*>(this)->passVertexShader(pVertexShader);
-        }
-
-        template<typename TFragmentShader>
-        void passFragmentShader(TFragmentShader* pFragmentShader) {
-            static_cast<TMeshTypePipeline*>(this)->passFragmentShader(pFragmentShader);
-        }
-
-        template<typename TVertexBuffer>
-        void passVertexBuffer(TVertexBuffer* pVertexBuffer) {
-            static_cast<TMeshTypePipeline*>(this)->passVertexBuffer(pVertexBuffer);
-        }
-
-        template<typename TIndexBuffer>
-        void passIndexBuffer(TIndexBuffer* pIndexBuffer) {
-            static_cast<TMeshTypePipeline*>(this)->passIndexBuffer(pIndexBuffer);
-        }
-
-        template<typename TCameraBuffer>
-        void passCameraBuffer(TCameraBuffer* pCameraBuffer) {
-            static_cast<TMeshTypePipeline*>(this)->passCameraBuffer(pCameraBuffer);
-        }
-
-        void create() {
-            static_cast<TMeshTypePipeline*>(this)->create();
-        }
-
-        void close() {
-            static_cast<TMeshTypePipeline*>(this)->close();
-        }
 
     };
 
 
-    template<typename TLibraryDependentPipeline>
-    class FGraphicsPipelineColorMesh :
-            public FGraphicsPipelineMesh<FGraphicsPipelineColorMesh<TLibraryDependentPipeline>> {
+    class FGraphicsPipelineTexture2DMesh : public FGraphicsPipelineMesh {
     public:
-
-        // What FGraphicsPipelineColorMesh brings to Derived classes...
-
-        template<typename TColorBuffer>
-        void passColorBuffer(TColorBuffer* pColorBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passColorBuffer(pColorBuffer);
-        }
-
-        // Copy paste ...
-
-        template<typename TTransformBuffer>
-        void passTransformBuffer(TTransformBuffer* pTransformBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passTransformBuffer(pTransformBuffer);
-        }
-
-        template<typename TVertexShader>
-        void passVertexShader(TVertexShader* pVertexShader) {
-            static_cast<TLibraryDependentPipeline*>(this)->passVertexShader(pVertexShader);
-        }
-
-        template<typename TFragmentShader>
-        void passFragmentShader(TFragmentShader* pFragmentShader) {
-            static_cast<TLibraryDependentPipeline*>(this)->passFragmentShader(pFragmentShader);
-        }
-
-        template<typename TVertexBuffer>
-        void passVertexBuffer(TVertexBuffer* pVertexBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passVertexBuffer(pVertexBuffer);
-        }
-
-        template<typename TIndexBuffer>
-        void passIndexBuffer(TIndexBuffer* pIndexBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passIndexBuffer(pIndexBuffer);
-        }
-
-        template<typename TCameraBuffer>
-        void passCameraBuffer(TCameraBuffer* pCameraBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passCameraBuffer(pCameraBuffer);
-        }
-
-        void create() {
-            static_cast<TLibraryDependentPipeline*>(this)->create();
-        }
-
-        void close() {
-            static_cast<TLibraryDependentPipeline*>(this)->close();
-        }
-
-    };
-
-
-    template<typename TLibraryDependentPipeline>
-    class FGraphicsPipelineTexture2DMesh :
-            public FGraphicsPipelineMesh<FGraphicsPipelineTexture2DMesh<TLibraryDependentPipeline>> {
-    public:
-
-        // What FGraphicsPipelineTexture2DMesh brings to Derived classes...
-
-        template<typename TTextureSamples>
-        void passTextureSamples(TTextureSamples* pTextureSamples) {
-            static_cast<TLibraryDependentPipeline*>(this)->passTextureSamples(pTextureSamples);
-        }
-
-        // Copy paste ...
-
-        template<typename TTransformBuffer>
-        void passTransformBuffer(TTransformBuffer* pTransformBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passTransformBuffer(pTransformBuffer);
-        }
-
-        template<typename TVertexShader>
-        void passVertexShader(TVertexShader* pVertexShader) {
-            static_cast<TLibraryDependentPipeline*>(this)->passVertexShader(pVertexShader);
-        }
-
-        template<typename TFragmentShader>
-        void passFragmentShader(TFragmentShader* pFragmentShader) {
-            static_cast<TLibraryDependentPipeline*>(this)->passFragmentShader(pFragmentShader);
-        }
-
-        template<typename TVertexBuffer>
-        void passVertexBuffer(TVertexBuffer* pVertexBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passVertexBuffer(pVertexBuffer);
-        }
-
-        template<typename TIndexBuffer>
-        void passIndexBuffer(TIndexBuffer* pIndexBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passIndexBuffer(pIndexBuffer);
-        }
-
-        template<typename TCameraBuffer>
-        void passCameraBuffer(TCameraBuffer* pCameraBuffer) {
-            static_cast<TLibraryDependentPipeline*>(this)->passCameraBuffer(pCameraBuffer);
-        }
-
-        void create() {
-            static_cast<TLibraryDependentPipeline*>(this)->create();
-        }
-
-        void close() {
-            static_cast<TLibraryDependentPipeline*>(this)->close();
-        }
 
     };
 

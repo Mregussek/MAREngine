@@ -42,10 +42,11 @@ namespace marengine {
 	};
 
 
-	enum class EMeshBatchStaticType {
+	enum class EMeshBatchType {
 		NONE = -1,
-		COLOR = 1,
-		TEXTURE2D = 2
+		STATIC = 0,
+		STATIC_COLOR = 1,
+		STATIC_TEXTURE2D = 2
 	};
 
 

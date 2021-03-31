@@ -49,7 +49,7 @@ namespace marengine {
 		int32_t indexAtBatch{ -1 };
 
 		int32_t batchIndex{ -1 };
-		EMeshBatchStaticType batchType{ EMeshBatchStaticType::NONE };
+		EMeshBatchType batchType{ EMeshBatchType::NONE };
 
 	};
 

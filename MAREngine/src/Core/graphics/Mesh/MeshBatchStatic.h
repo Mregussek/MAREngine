@@ -41,30 +41,30 @@ namespace marengine {
 
 	public:
 
-		virtual void reset() override;
+		void reset() override;
 
-		virtual bool canBeBatched(const Entity& entity) const override;
+		MAR_NO_DISCARD bool canBeBatched(const Entity& entity) const override;
 
-		virtual void submitToBatch(const Entity& entity) override;
+		void submitToBatch(const Entity& entity) override;
 
-		virtual const FVertexArray& getVertices() const override;
-		virtual const FIndicesArray& getIndices() const override;
-		virtual const FTransformsArray& getTransforms() const override;
+		MAR_NO_DISCARD const FVertexArray& getVertices() const override;
+		MAR_NO_DISCARD const FIndicesArray& getIndices() const override;
+		MAR_NO_DISCARD const FTransformsArray& getTransforms() const override;
 
-		virtual uint32_t getUniquePipelineID() const override;
-		virtual void setUniquePipelineID(uint32_t id) override;
+        MAR_NO_DISCARD uint32_t getUniquePipelineID() const override;
+		void setUniquePipelineID(uint32_t id) override;
 
-		virtual uint32_t getUniqueTransformsID() const override;
-		virtual void seUniqueTransformsID(uint32_t id) override;
+        MAR_NO_DISCARD uint32_t getUniqueTransformsID() const override;
+		void seUniqueTransformsID(uint32_t id) override;
 
-		virtual EMeshBatchStaticType getBatchType() const;
+        MAR_NO_DISCARD EMeshBatchType getBatchType() const override;
 
 	protected:
 
-		virtual void submitRenderable(const RenderableComponent& renderableComponent) override;
-		virtual void submitVertices(const FVertexArray& vertices) override;
-		virtual void submitIndices(const FIndicesArray& indices) override;
-		virtual void submitTransform(const TransformComponent& transformComponent) override;
+		void submitRenderable(const RenderableComponent& renderableComponent) override;
+		void submitVertices(const FVertexArray& vertices) override;
+		void submitIndices(const FIndicesArray& indices) override;
+		void submitTransform(const TransformComponent& transformComponent) override;
 
 
 		FVertexArray p_vertices;

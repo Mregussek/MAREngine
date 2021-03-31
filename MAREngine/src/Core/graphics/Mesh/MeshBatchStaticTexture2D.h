@@ -37,15 +37,15 @@ namespace marengine {
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
 	public:
 
-		virtual void reset() override;
+		void reset() override;
 
-		virtual bool canBeBatched(const Entity& entity) const override;
+        MAR_NO_DISCARD bool canBeBatched(const Entity& entity) const override;
 
-		virtual void submitToBatch(const Entity& entity) override;
+		void submitToBatch(const Entity& entity) override;
 
-		const FTexturesArray& getTextures() const;
+        MAR_NO_DISCARD const FTexturesArray& getTextures() const;
 
-		virtual EMeshBatchStaticType getBatchType() const override;
+		MAR_NO_DISCARD EMeshBatchType getBatchType() const override;
 
 	private:
 

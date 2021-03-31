@@ -62,7 +62,7 @@ namespace marengine {
 		/**
 		 * @brief Method should return all transform matrices batched together
 		 * @warning To render we need also FVerticesArray and FIndicesArray !
-		 * @return FTransformsArrray object ready to render
+		 * @return FTransformsArray object ready to render
 		 */
 		virtual const FTransformsArray& getTransforms() const = 0;
 
@@ -95,7 +95,7 @@ namespace marengine {
 		virtual void setUniquePipelineID(uint32_t id) = 0;
 
 		/**
-		 * @brief Method should return previosly assigned unique pipeline id.
+		 * @brief Method should return previously assigned unique pipeline id.
 		 * @return Assigned pipeline id.
 		 */
 		virtual uint32_t getUniquePipelineID() const = 0;
@@ -110,10 +110,16 @@ namespace marengine {
 		virtual void seUniqueTransformsID(uint32_t id) = 0;
 
 		/**
-		 * @brief Method should return previosly assigned unique transform id.
+		 * @brief Method should return previously assigned unique transform id.
 		 * @return Assigned transform id.
 		 */
 		virtual uint32_t getUniqueTransformsID() const = 0 ;
+
+		/**
+		 * @brief Returns batch type
+		 * @return
+		 */
+        virtual EMeshBatchType getBatchType() const = 0;
 
 	protected:
 

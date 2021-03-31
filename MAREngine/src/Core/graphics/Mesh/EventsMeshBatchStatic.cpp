@@ -36,10 +36,10 @@ namespace marengine {
 		const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
 		FMeshBatchStatic* batch = [&meshBatchInfoComponent]()->FMeshBatchStatic* {
-			if (meshBatchInfoComponent.batchType == EMeshBatchStaticType::COLOR) {
+			if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_COLOR) {
 				return &RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex];
 			}
-			else if (meshBatchInfoComponent.batchType == EMeshBatchStaticType::TEXTURE2D) {
+			else if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_TEXTURE2D) {
 				return &RenderPipeline::Instance->m_staticTexture2DBatches[meshBatchInfoComponent.batchIndex];
 			}
 			else {
@@ -57,7 +57,7 @@ namespace marengine {
 		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
 		const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
-		if (meshBatchInfoComponent.batchType == EMeshBatchStaticType::COLOR) {
+		if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_COLOR) {
 			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex] };
 			batch.m_colors[meshBatchInfoComponent.indexAtBatch] = colorComponent.color;
 			FRenderBufferManager::onColorUpdate(batch);

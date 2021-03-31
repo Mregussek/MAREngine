@@ -81,7 +81,6 @@ namespace marengine {
 
         FVertexLayoutArray p_vertexLayoutArray;
         uint32_t p_stride{ 0 };
-        static constexpr EBufferType p_bufferType{ EBufferType::VERTEX };
 
     };
 
@@ -91,25 +90,15 @@ namespace marengine {
 
         virtual void update(const FIndicesArray& indices) = 0;
 
-    protected:
-
-        static constexpr EBufferType p_bufferType{ EBufferType::INDEX };
-
     };
 
 
     class FShaderStorageBuffer : public FBuffer {
-    protected:
-
-        static constexpr EBufferType p_bufferType{ EBufferType::SSBO };
 
     };
 
 
     class FUniformBuffer : public FBuffer {
-    protected:
-
-        static constexpr EBufferType p_bufferType{ EBufferType::UBO };
 
     };
 

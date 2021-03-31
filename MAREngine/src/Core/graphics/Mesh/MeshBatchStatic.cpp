@@ -131,8 +131,8 @@ namespace marengine {
 		p_transformsUniqueID = id;
 	}
 
-	EMeshBatchStaticType FMeshBatchStatic::getBatchType() const {
-		return EMeshBatchStaticType::NONE;
+	EMeshBatchType FMeshBatchStatic::getBatchType() const {
+		return EMeshBatchType::STATIC;
 	}
 
 
