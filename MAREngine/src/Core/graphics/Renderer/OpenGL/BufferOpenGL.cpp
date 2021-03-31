@@ -27,7 +27,7 @@
 namespace marengine {
 
 
-    void FBufferOpenGL::createGL(uint32_t bufferType, uint64_t memoryToAllocate) {
+    void FBufferOpenGL::createGL(uint32_t bufferType, int64_t memoryToAllocate) {
         PLATFORM_GL_FUNC( glGenBuffers(1, &p_id) );
         PLATFORM_GL_FUNC( glBindBuffer(bufferType, p_id) );
         PLATFORM_GL_FUNC( glBufferData(bufferType, (long)memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
@@ -62,7 +62,7 @@ namespace marengine {
 
 
 
-    void FVertexBufferOpenGL::create(uint64_t memoryToAllocate, uint32_t bindingPoint) {
+    void FVertexBufferOpenGL::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
         FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
     }
@@ -89,7 +89,7 @@ namespace marengine {
 
 
 
-    void FIndexBufferOpenGL::create(uint64_t memoryToAllocate, uint32_t bindingPoint) {
+    void FIndexBufferOpenGL::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
         FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
     }
@@ -116,7 +116,7 @@ namespace marengine {
 
 
 
-    void FShaderStorageBufferOpenGL2::create(uint64_t memoryToAllocate, uint32_t bindingPoint) {
+    void FShaderStorageBufferOpenGL2::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
         FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
         PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, p_id) );
@@ -140,7 +140,7 @@ namespace marengine {
 
 
 
-    void FUniformBufferOpenGL2::create(uint64_t memoryToAllocate, uint32_t bindingPoint) {
+    void FUniformBufferOpenGL2::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
         FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
         PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, p_id) );

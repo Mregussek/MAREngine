@@ -26,7 +26,7 @@
 namespace marengine {
 
 
-    void FBuffer::create(uint64_t memoryToAllocate, uint32_t bindingPoint) {
+    void FBuffer::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         p_allocatedMemory = memoryToAllocate;
         p_bindingPoint = bindingPoint;
     }

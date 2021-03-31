@@ -49,7 +49,7 @@ namespace marengine {
     class IBuffer {
     public:
 
-        virtual void create(uint64_t memoryToAllocate, uint32_t bindingPoint) = 0;
+        virtual void create(int64_t memoryToAllocate, uint32_t bindingPoint) = 0;
         virtual void free() = 0;
         virtual void destroy() = 0;
 
@@ -62,11 +62,11 @@ namespace marengine {
     class FBuffer : public IBuffer {
     protected:
 
-        void create(uint64_t memoryToAllocate, uint32_t bindingPoint) override;
+        void create(int64_t memoryToAllocate, uint32_t bindingPoint) override;
 
 
         uint32_t p_bindingPoint{ 0 };
-        uint64_t p_allocatedMemory{ 0 };
+        int64_t p_allocatedMemory{ 0 };
 
     };
 
