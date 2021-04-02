@@ -27,139 +27,153 @@
 namespace marengine {
 
 
-    void FBufferOpenGL::createGL(uint32_t bufferType, int64_t memoryToAllocate) {
-        PLATFORM_GL_FUNC( glGenBuffers(1, &p_id) );
-        PLATFORM_GL_FUNC( glBindBuffer(bufferType, p_id) );
-        PLATFORM_GL_FUNC( glBufferData(bufferType, (long)memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
+    template<GLenum TBufferType>
+    static void bindGL(uint32_t id) {
+        PLATFORM_GL_FUNC( glBindBuffer(TBufferType, id) );
     }
 
-    void FBufferOpenGL::freeGL(uint32_t bufferType) const {
-        bindGL(bufferType);
-        PLATFORM_GL_FUNC( glBufferSubData(bufferType, 0, 0, nullptr) );
+    template<GLenum TBufferType>
+    static void unbindGL() {
+        PLATFORM_GL_FUNC( glBindBuffer(TBufferType, 0) );
     }
 
-    void FBufferOpenGL::closeGL() {
-        PLATFORM_GL_FUNC( glDeleteBuffers(1, &p_id) );
+    template<GLenum TBufferType>
+    static void createGL(uint32_t& id, int64_t memoryToAllocate) {
+        PLATFORM_GL_FUNC( glGenBuffers(1, &id) );
+        PLATFORM_GL_FUNC( glBindBuffer(TBufferType, id) );
+        PLATFORM_GL_FUNC( glBufferData(TBufferType, (long)memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
     }
 
-    void FBufferOpenGL::bindGL(uint32_t bufferType) const {
-        PLATFORM_GL_FUNC( glBindBuffer(bufferType, p_id) );
+    template<GLenum TBufferType>
+    static void freeGL(uint32_t id) {
+        bindGL<TBufferType>(id);
+        PLATFORM_GL_FUNC( glBufferSubData(TBufferType, 0, 0, nullptr) );
     }
 
-    void FBufferOpenGL::unbindGL(uint32_t bufferType) const {
-        PLATFORM_GL_FUNC( glBindBuffer(bufferType, 0) );
+    static void closeGL(uint32_t& id) {
+        PLATFORM_GL_FUNC( glDeleteBuffers(1, &id) );
     }
 
-    void FBufferOpenGL::updateGL(uint32_t bufferType, const float* data, size_t offset, size_t sizeOfData) const {
-        bindGL(bufferType);
-        PLATFORM_GL_FUNC( glBufferSubData(bufferType, offset, sizeOfData, data) );
+    template<GLenum TBufferType>
+    static void updateGL(const float* data, size_t offset, size_t sizeOfData) {
+        PLATFORM_GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
-    void FBufferOpenGL::updateGL(uint32_t bufferType, const uint32_t* data, size_t offset, size_t sizeOfData) const {
-        bindGL(bufferType);
-        PLATFORM_GL_FUNC( glBufferSubData(bufferType, offset, sizeOfData, data) );
+    template<GLenum TBufferType>
+    static void updateGL(const uint32_t* data, size_t offset, size_t sizeOfData) {
+        PLATFORM_GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
 
 
     void FVertexBufferOpenGL::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
-        FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
+        createGL<m_glBufferType>(m_id, p_allocatedMemory);
     }
 
     void FVertexBufferOpenGL::free() {
-        FBufferOpenGL::freeGL(m_glBufferType);
+        freeGL<m_glBufferType>(m_id);
     }
 
     void FVertexBufferOpenGL::destroy() {
-        FBufferOpenGL::closeGL();
+        closeGL(m_id);
     }
 
     void FVertexBufferOpenGL::update(const FVertexArray& vertices) {
-        FBufferOpenGL::updateGL(m_glBufferType, &vertices[0].position.x, 0, vertices.size() * sizeof(vertices[0]) );
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(&vertices[0].position.x, 0, vertices.size() * sizeof(vertices[0]) );
     }
 
     void FVertexBufferOpenGL::update(const float* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FVertexBufferOpenGL::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 
 
     void FIndexBufferOpenGL::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
-        FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
+        createGL<m_glBufferType>(m_id, p_allocatedMemory);
     }
 
     void FIndexBufferOpenGL::free() {
-        FBufferOpenGL::freeGL(m_glBufferType);
+        freeGL<m_glBufferType>(m_id);
     }
 
     void FIndexBufferOpenGL::destroy() {
-        FBufferOpenGL::closeGL();
+        closeGL(m_id);
     }
 
     void FIndexBufferOpenGL::update(const FIndicesArray& indices) {
-        FBufferOpenGL::updateGL(m_glBufferType, indices.data(), 0, indices.size() * sizeof(indices[0]));
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(indices.data(), 0, indices.size() * sizeof(indices[0]));
     }
 
     void FIndexBufferOpenGL::update(const float* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FIndexBufferOpenGL::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 
 
     void FShaderStorageBufferOpenGL2::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
-        FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
-        PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, p_id) );
+        createGL<m_glBufferType>(m_id, p_allocatedMemory);
+        PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, m_id) );
     }
 
     void FShaderStorageBufferOpenGL2::free() {
-        FBufferOpenGL::freeGL(m_glBufferType);
+        freeGL<m_glBufferType>(m_id);
     }
 
     void FShaderStorageBufferOpenGL2::destroy() {
-        FBufferOpenGL::closeGL();
+        closeGL(m_id);
     }
 
     void FShaderStorageBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FShaderStorageBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 
 
     void FUniformBufferOpenGL2::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
-        FBufferOpenGL::createGL(m_glBufferType, p_allocatedMemory);
-        PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, p_id) );
+        createGL<m_glBufferType>(m_id, p_allocatedMemory);
+        PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, m_id) );
     }
 
     void FUniformBufferOpenGL2::free() {
-        FBufferOpenGL::freeGL(m_glBufferType);
+        freeGL<m_glBufferType>(m_id);
     }
 
     void FUniformBufferOpenGL2::destroy() {
-        FBufferOpenGL::closeGL();
+        closeGL(m_id);
     }
 
     void FUniformBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FUniformBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        FBufferOpenGL::updateGL(m_glBufferType, data, offset, sizeOfData);
+        bindGL<m_glBufferType>(m_id);
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 

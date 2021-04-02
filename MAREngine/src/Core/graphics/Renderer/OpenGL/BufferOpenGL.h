@@ -30,25 +30,7 @@
 namespace marengine {
 
 
-    class FBufferOpenGL {
-    protected:
-
-        void createGL(uint32_t bufferType, int64_t memoryToAllocate);
-        void freeGL(uint32_t bufferType) const;
-        void closeGL();
-
-        void bindGL(uint32_t bufferType) const;
-        void unbindGL(uint32_t bufferType) const;
-
-        void updateGL(uint32_t bufferType, const float* data, size_t offset, size_t sizeOfData) const;
-        void updateGL(uint32_t bufferType, const uint32_t* data, size_t offset, size_t sizeOfData) const;
-
-        uint32_t p_id{ 0 };
-
-    };
-
-
-    class FVertexBufferOpenGL : public FVertexBuffer, FBufferOpenGL {
+    class FVertexBufferOpenGL : public FVertexBuffer {
     public:
 
         void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
@@ -61,12 +43,13 @@ namespace marengine {
 
     private:
 
-        static constexpr uint32_t m_glBufferType{ GL_ARRAY_BUFFER };
+        static constexpr GLenum m_glBufferType{ GL_ARRAY_BUFFER };
+        uint32_t m_id{ 0 };
 
     };
 
 
-    class FIndexBufferOpenGL : public FIndexBuffer, FBufferOpenGL {
+    class FIndexBufferOpenGL : public FIndexBuffer {
     public:
 
         void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
@@ -79,12 +62,13 @@ namespace marengine {
 
     private:
 
-        static constexpr uint32_t m_glBufferType{ GL_ELEMENT_ARRAY_BUFFER };
+        static constexpr GLenum m_glBufferType{ GL_ELEMENT_ARRAY_BUFFER };
+        uint32_t m_id{ 0 };
 
     };
 
 
-    class FShaderStorageBufferOpenGL2 : public FShaderStorageBuffer, FBufferOpenGL {
+    class FShaderStorageBufferOpenGL2 : public FShaderStorageBuffer {
     public:
 
         void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
@@ -96,12 +80,13 @@ namespace marengine {
 
     private:
 
-        static constexpr uint32_t m_glBufferType{ GL_SHADER_STORAGE_BUFFER };
+        static constexpr GLenum m_glBufferType{ GL_SHADER_STORAGE_BUFFER };
+        uint32_t m_id{ 0 };
 
     };
 
 
-    class FUniformBufferOpenGL2 : public FUniformBuffer, FBufferOpenGL {
+    class FUniformBufferOpenGL2 : public FUniformBuffer {
     public:
 
         void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
@@ -113,7 +98,8 @@ namespace marengine {
 
     private:
 
-        static constexpr uint32_t m_glBufferType{ GL_UNIFORM_BUFFER };
+        static constexpr GLenum m_glBufferType{ GL_UNIFORM_BUFFER };
+        uint32_t m_id{ 0 };
 
     };
 
