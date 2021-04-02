@@ -44,45 +44,41 @@ namespace marengine {
             }
         }
 
-        std::cout << "GL_CALLBACK [";
-        switch (type) {
+        const char* errorType = [type]()->const char* {
+            switch (type) {
             case GL_DEBUG_TYPE_ERROR:
-                std::cout << "ERROR";
-                break;
+                return "ERROR";
             case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                std::cout << "DEPRECATED_BEHAVIOR";
-                break;
+                return "DEPRECATED_BEHAVIOR";
             case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-                std::cout << "UNDEFINED_BEHAVIOR";
-                break;
+                return "UNDEFINED_BEHAVIOR";
             case GL_DEBUG_TYPE_PORTABILITY:
-                std::cout << "PORTABILITY";
-                break;
+                return "PORTABILITY";
             case GL_DEBUG_TYPE_PERFORMANCE:
-                std::cout << "PERFORMANCE";
-                break;
+                return "PERFORMANCE";
             case GL_DEBUG_TYPE_OTHER:
-                std::cout << "OTHER";
-                break;
-        }
-
-        std::cout << "] id=" << id << " severity=";
-        switch (severity) {
-            case GL_DEBUG_SEVERITY_LOW:
-                std::cout << "LOW";
-                break;
-            case GL_DEBUG_SEVERITY_MEDIUM:
-                std::cout << "MEDIUM";
-                break;
-            case GL_DEBUG_SEVERITY_HIGH:
-                std::cout << "HIGH";
-                break;
+                return "OTHER";
             default:
-                std::cout << "OTHER";
-                break;
-        }
-        std::cout << " message: " << message << "\n-------------------------\n";
-    }
+                return "UNKNOWN";
+            }
+        }();
+
+        const char* severityType = [severity]()->const char* {
+            switch (severity) {
+            case GL_DEBUG_SEVERITY_LOW:
+                return "LOW";
+            case GL_DEBUG_SEVERITY_MEDIUM:
+                return "MEDIUM";
+            case GL_DEBUG_SEVERITY_HIGH:
+                return "HIGH";
+            default:
+                return "OTHER";
+            }
+        }();
+
+        MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL[{}] id={}, severity={}, message: {}",
+                                            errorType, id, severityType, message);
+     }
 
 
     bool FGraphicsContextOpenGL::create(FWindow* pWindow) {
@@ -112,13 +108,13 @@ namespace marengine {
         }
 
         PLATFORM_GL_FUNC( glEnable(GL_MULTISAMPLE) );
-        PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) ); // Enable DEPTH, in other words 3D
-        PLATFORM_GL_FUNC( glEnable(GL_STENCIL_TEST) ); // Enable STENCIL, outliner
-        PLATFORM_GL_FUNC( glEnable(GL_BLEND) ); // Enable loading PNG files and transparency
+        PLATFORM_GL_FUNC( glEnable(GL_DEPTH_TEST) );
+        PLATFORM_GL_FUNC( glEnable(GL_STENCIL_TEST) );
+        PLATFORM_GL_FUNC( glEnable(GL_BLEND) );
         PLATFORM_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
-        const GLubyte* vendor = glGetString(GL_VENDOR); // Returns the vendor
-        const GLubyte* renderer = glGetString(GL_RENDERER); // Returns a hint to the model
+        const GLubyte* vendor = glGetString(GL_VENDOR);
+        const GLubyte* renderer = glGetString(GL_RENDERER);
         TerminalAPI::clearScreen();
         MARLOG_INFO(ELoggerType::PLATFORMS, "\nVendor: {}\nRenderer: {}", vendor, renderer);
 
