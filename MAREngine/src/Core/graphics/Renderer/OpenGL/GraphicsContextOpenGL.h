@@ -25,11 +25,12 @@
 
 
 #include "../../../../mar.h"
-#include "../IRendererInterfaces.h"
-#include "BufferOpenGL.h"
+#include "../IGraphicsContext.h"
 
 
 namespace marengine {
+
+    class FWindow;
 
 
     class FGraphicsContextOpenGL : public FGraphicsContext {

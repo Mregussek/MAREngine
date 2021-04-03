@@ -20,39 +20,34 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_SHADER_H
-#define MARENGINE_SHADER_H
-
-
-#include "IRendererInterfaces.h"
+#include "ShaderPipeline.h"
 
 
 namespace marengine {
 
+    
+    void FShaderPipeline::passVertexShader(const char* vertexShader) {
+        p_vertexShader = vertexShader;
+    }
 
-    class FShaderPipeline : public IShaderPipeline {
-    public:
+    void FShaderPipeline::passFragmentShader(const char* fragmentShader) {
+        p_fragmentShader = fragmentShader;
+    }
 
-        void passVertexShader(const char* vertexShader) final;
-        void passTesselationEvalShader(const char* tesselationEvalShader) final;
-        void passTesselationControlShader(const char* tesselationControlhader) final;
-        void passGeometryShader(const char* geometryShader) final;
-        void passComputeShader(const char* computeShader) final;
-        void passFragmentShader(const char* fragmentShader) final;
+    void FShaderPipeline::passGeometryShader(const char* geometryShader) {
+        p_geometryShader = geometryShader;
+    }
 
-    protected:
+    void FShaderPipeline::passComputeShader(const char* computeShader) {
+        p_computeShader = computeShader;
+    }
 
-        const char* p_vertexShader{ nullptr };
-        const char* p_fragmentShader{ nullptr };
-        const char* p_geometryShader{ nullptr };
-        const char* p_tesselationEvalShader{ nullptr };
-        const char* p_tesselationControlShader{ nullptr };
-        const char* p_computeShader{ nullptr };
+    void FShaderPipeline::passTesselationEvalShader(const char* tesselationEvalShader) {
+        p_tesselationEvalShader = tesselationEvalShader;
+    }
 
-    };
-
+    void FShaderPipeline::passTesselationControlShader(const char* tesselationControlShader) {
+        p_tesselationControlShader = tesselationControlShader;
+    }
 
 }
-
-
-#endif //MARENGINE_SHADER_H

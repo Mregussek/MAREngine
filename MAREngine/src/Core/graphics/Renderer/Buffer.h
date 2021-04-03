@@ -24,7 +24,7 @@
 #define MARENGINE_IBUFFER_H
 
 
-#include "IRendererInterfaces.h"
+#include "IRenderResource.h"
 
 
 namespace marengine {

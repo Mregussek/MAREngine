@@ -20,17 +20,17 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IGRAPHICSPIPELINE_H
-#define MARENGINE_IGRAPHICSPIPELINE_H
+#ifndef MARENGINE_GRAPHICSPIPELINE_H
+#define MARENGINE_GRAPHICSPIPELINE_H
 
 
-#include "../../../mar.h"
+#include "IGraphicsContext.h"
 
 
 namespace marengine {
 
    
-    class FGraphicsPipeline {
+    class FGraphicsPipeline : public IGraphicsPipeline {
     public:
 
     };

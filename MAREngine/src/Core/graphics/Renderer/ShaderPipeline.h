@@ -20,24 +20,34 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_SHADEROPENGL_H
-#define MARENGINE_SHADEROPENGL_H
+#ifndef MARENGINE_SHADER_H
+#define MARENGINE_SHADER_H
 
 
-#include "../ShaderPipeline.h"
+#include "IRenderResource.h"
 
 
 namespace marengine {
 
 
-    class FShaderPipelineOpenGL : public FShaderPipeline {
+    class FShaderPipeline : public IShaderPipeline {
     public:
 
-        void compile() final;
+        void passVertexShader(const char* vertexShader) final;
+        void passTesselationEvalShader(const char* tesselationEvalShader) final;
+        void passTesselationControlShader(const char* tesselationControlhader) final;
+        void passGeometryShader(const char* geometryShader) final;
+        void passComputeShader(const char* computeShader) final;
+        void passFragmentShader(const char* fragmentShader) final;
 
-    private:
+    protected:
 
-        GLuint m_id{ GL_FALSE };
+        const char* p_vertexShader{ nullptr };
+        const char* p_fragmentShader{ nullptr };
+        const char* p_geometryShader{ nullptr };
+        const char* p_tesselationEvalShader{ nullptr };
+        const char* p_tesselationControlShader{ nullptr };
+        const char* p_computeShader{ nullptr };
 
     };
 
@@ -45,4 +55,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_SHADEROPENGL_H
+#endif //MARENGINE_SHADER_H

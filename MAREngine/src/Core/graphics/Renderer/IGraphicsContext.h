@@ -20,34 +20,53 @@
 ************************************************************************/
 
 
-#include "Shader.h"
+#ifndef MARENGINE_IGRAPHICSCONTEXT_H
+#define MARENGINE_IGRAPHICSCONTEXT_H
 
 
 namespace marengine {
 
+    class FWindow;
+
+
+    enum class EGraphicsContextType {
+        NONE, OPENGL, VULKAN
+    };
+
+    enum class EGraphicsPipelineType {
+        NONE, MESH_COLOR, MESH_TEXTURE2D
+    };
+
+
+
+    class IGraphicsContext {
+    public:
+
+        virtual bool create(FWindow* pWindow) = 0;
+
+        virtual void close() = 0;
+
+        virtual void prepareFrame() = 0;
+
+        virtual void endFrame() = 0;
+
+        virtual EGraphicsContextType getType() const = 0;
+
+    };
     
-    void FShaderPipeline::passVertexShader(const char* vertexShader) {
-        p_vertexShader = vertexShader;
-    }
 
-    void FShaderPipeline::passFragmentShader(const char* fragmentShader) {
-        p_fragmentShader = fragmentShader;
-    }
 
-    void FShaderPipeline::passGeometryShader(const char* geometryShader) {
-        p_geometryShader = geometryShader;
-    }
+    class FGraphicsContext : public IGraphicsContext { };
 
-    void FShaderPipeline::passComputeShader(const char* computeShader) {
-        p_computeShader = computeShader;
-    }
+    
 
-    void FShaderPipeline::passTesselationEvalShader(const char* tesselationEvalShader) {
-        p_tesselationEvalShader = tesselationEvalShader;
-    }
+    class IGraphicsPipeline {
+    public:
 
-    void FShaderPipeline::passTesselationControlShader(const char* tesselationControlShader) {
-        p_tesselationControlShader = tesselationControlShader;
-    }
-
+    };
+    
+    
 }
+
+
+#endif //MARENGINE_IGRAPHICSCONTEXT_H
