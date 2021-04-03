@@ -29,39 +29,39 @@ namespace marengine {
 
     template<GLenum TBufferType>
     static void bindGL(uint32_t id) {
-        PLATFORM_GL_FUNC( glBindBuffer(TBufferType, id) );
+        GL_FUNC( glBindBuffer(TBufferType, id) );
     }
 
     template<GLenum TBufferType>
     static void unbindGL() {
-        PLATFORM_GL_FUNC( glBindBuffer(TBufferType, 0) );
+        GL_FUNC( glBindBuffer(TBufferType, 0) );
     }
 
     template<GLenum TBufferType>
     static void createGL(uint32_t& id, int64_t memoryToAllocate) {
-        PLATFORM_GL_FUNC( glGenBuffers(1, &id) );
-        PLATFORM_GL_FUNC( glBindBuffer(TBufferType, id) );
-        PLATFORM_GL_FUNC( glBufferData(TBufferType, (long)memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
+        GL_FUNC( glGenBuffers(1, &id) );
+        GL_FUNC( glBindBuffer(TBufferType, id) );
+        GL_FUNC( glBufferData(TBufferType, (long)memoryToAllocate, nullptr, GL_DYNAMIC_DRAW) );
     }
 
     template<GLenum TBufferType>
     static void freeGL(uint32_t id) {
         bindGL<TBufferType>(id);
-        PLATFORM_GL_FUNC( glBufferSubData(TBufferType, 0, 0, nullptr) );
+        GL_FUNC( glBufferSubData(TBufferType, 0, 0, nullptr) );
     }
 
     static void closeGL(uint32_t& id) {
-        PLATFORM_GL_FUNC( glDeleteBuffers(1, &id) );
+        GL_FUNC( glDeleteBuffers(1, &id) );
     }
 
     template<GLenum TBufferType>
     static void updateGL(const float* data, size_t offset, size_t sizeOfData) {
-        PLATFORM_GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
+        GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
     template<GLenum TBufferType>
     static void updateGL(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        PLATFORM_GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
+        GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
 
@@ -129,7 +129,7 @@ namespace marengine {
     void FShaderStorageBufferOpenGL2::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
         createGL<m_glBufferType>(m_id, p_allocatedMemory);
-        PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, m_id) );
+        GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, m_id) );
     }
 
     void FShaderStorageBufferOpenGL2::free() {
@@ -155,7 +155,7 @@ namespace marengine {
     void FUniformBufferOpenGL2::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
         FBuffer::create(memoryToAllocate, bindingPoint);
         createGL<m_glBufferType>(m_id, p_allocatedMemory);
-        PLATFORM_GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, m_id) );
+        GL_FUNC( glBindBufferBase(m_glBufferType, p_bindingPoint, m_id) );
     }
 
     void FUniformBufferOpenGL2::free() {

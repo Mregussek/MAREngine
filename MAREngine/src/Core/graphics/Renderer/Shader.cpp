@@ -20,29 +20,34 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_GRAPHICSPIPELINEOPENGL_H
-#define MARENGINE_GRAPHICSPIPELINEOPENGL_H
-
-
-#include "../GraphicsPipeline.h"
+#include "Shader.h"
 
 
 namespace marengine {
 
+    
+    void FShaderPipeline::passVertexShader(const char* vertexShader) {
+        p_vertexShader = vertexShader;
+    }
 
-    class FGraphicsPipelineColorMeshOpenGL : public FGraphicsPipelineColorMesh {
-    public:
+    void FShaderPipeline::passFragmentShader(const char* fragmentShader) {
+        p_fragmentShader = fragmentShader;
+    }
 
-    };
+    void FShaderPipeline::passGeometryShader(const char* geometryShader) {
+        p_geometryShader = geometryShader;
+    }
 
+    void FShaderPipeline::passComputeShader(const char* computeShader) {
+        p_computeShader = computeShader;
+    }
 
-    class FGraphicsPipelineTexture2DMeshOpenGL : public FGraphicsPipelineTexture2DMesh {
-    public:
+    void FShaderPipeline::passTesselationEvalShader(const char* tesselationEvalShader) {
+        p_tesselationEvalShader = tesselationEvalShader;
+    }
 
-    };
-
+    void FShaderPipeline::passTesselationControlShader(const char* tesselationControlShader) {
+        p_tesselationControlShader = tesselationControlShader;
+    }
 
 }
-
-
-#endif //MARENGINE_GRAPHICSPIPELINEOPENGL_H

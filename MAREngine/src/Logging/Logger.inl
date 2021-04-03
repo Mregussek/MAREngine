@@ -93,6 +93,16 @@ SPDLOG_LOGGER_CRITICAL(::marengine::FLogger::getLogger(), msg, __VA_ARGS__);    
                                      function;                                                 \
                                      FLogger::callDebugBreak(FLogger::checkErrorOpenGL());
 
+#define GL_FUNC_ASSIGN(function)    FLogger::clearErrorOpenGL();                              \
+                                    function;                                                 \
+                                    FLogger::callDebugBreak(FLogger::checkErrorOpenGL());
+
+#define GL_FUNC(function)   {                                                           \
+                                FLogger::clearErrorOpenGL();                            \
+                                function;                                               \
+                                FLogger::callDebugBreak(FLogger::checkErrorOpenGL());   \
+                            }
+
 #define MAR_ASSERT(function, ...)    const bool issueOccurred{ !(function) }; \
                                      if(issueOccurred) {                      \
                                         FLogger::err(__VA_ARGS__);            \

@@ -24,39 +24,10 @@
 #define MARENGINE_IBUFFER_H
 
 
-#include "../Mesh/MeshDefinitions.h"
+#include "IRendererInterfaces.h"
 
 
 namespace marengine {
-
-
-    enum class EBufferType {
-        NONE, VERTEX, INDEX, SSBO, UBO
-    };
-
-    enum class EVertexInputType {
-        NONE, FLOAT
-    };
-
-    struct FVertexLayoutElement {
-        EVertexInputType inputType{ EVertexInputType::NONE };
-        uint32_t count{ 0 };
-    };
-
-    typedef std::vector<FVertexLayoutElement> FVertexLayoutArray;
-
-
-    class IBuffer {
-    public:
-
-        virtual void create(int64_t memoryToAllocate, uint32_t bindingPoint) = 0;
-        virtual void free() = 0;
-        virtual void destroy() = 0;
-
-        virtual void update(const float* data, size_t offset, size_t sizeOfData) = 0;
-        virtual void update(const uint32_t* data, size_t offset, size_t sizeOfData) = 0;
-
-    };
 
 
     class FBuffer : public IBuffer {
@@ -94,11 +65,15 @@ namespace marengine {
 
 
     class FShaderStorageBuffer : public FBuffer {
+    public:
+
 
     };
 
 
     class FUniformBuffer : public FBuffer {
+    public:
+
 
     };
 

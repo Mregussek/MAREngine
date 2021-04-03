@@ -20,23 +20,35 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_GRAPHICSPIPELINEOPENGL_H
-#define MARENGINE_GRAPHICSPIPELINEOPENGL_H
+#ifndef MARENGINE_IGRAPHICSPIPELINE_H
+#define MARENGINE_IGRAPHICSPIPELINE_H
 
 
-#include "../GraphicsPipeline.h"
+#include "../../../mar.h"
 
 
 namespace marengine {
 
-
-    class FGraphicsPipelineColorMeshOpenGL : public FGraphicsPipelineColorMesh {
+   
+    class FGraphicsPipeline {
     public:
 
     };
 
 
-    class FGraphicsPipelineTexture2DMeshOpenGL : public FGraphicsPipelineTexture2DMesh {
+    class FGraphicsPipelineMesh : public FGraphicsPipeline {
+    public:
+
+    };
+
+
+    class FGraphicsPipelineColorMesh : public FGraphicsPipelineMesh {
+    public:
+
+    };
+
+
+    class FGraphicsPipelineTexture2DMesh : public FGraphicsPipelineMesh {
     public:
 
     };
@@ -45,4 +57,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_GRAPHICSPIPELINEOPENGL_H
+#endif //MARENGINE_IGRAPHICSPIPELINE_H

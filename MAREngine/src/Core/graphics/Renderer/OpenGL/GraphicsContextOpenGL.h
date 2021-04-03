@@ -25,24 +25,25 @@
 
 
 #include "../../../../mar.h"
-#include "../IGraphicsContext.h"
+#include "../IRendererInterfaces.h"
 #include "BufferOpenGL.h"
-#include "GraphicsPipelineOpenGL.h"
 
 
 namespace marengine {
 
 
-    class FGraphicsContextOpenGL : public FGraphicsContext<FGraphicsContextOpenGL> {
+    class FGraphicsContextOpenGL : public FGraphicsContext {
     public:
 
-        bool create(FWindow* pWindow);
+        bool create(FWindow* pWindow) override;
 
-        void close();
+        void close() override;
 
-        void prepareFrame();
+        void prepareFrame() override;
 
-        void endFrame();
+        void endFrame() override;
+
+        EGraphicsContextType getType() const final;
 
     private:
 

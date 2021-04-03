@@ -20,43 +20,34 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IGRAPHICSPIPELINE_H
-#define MARENGINE_IGRAPHICSPIPELINE_H
+#ifndef MARENGINE_SHADER_H
+#define MARENGINE_SHADER_H
 
 
-#include "../../../mar.h"
+#include "IRendererInterfaces.h"
 
 
 namespace marengine {
 
-    class FWindow;
 
-
-    enum class EGraphicsPipelineType {
-        NONE, COLOR, TEXTURE2D
-    };
-
-
-    class IGraphicsPipeline {
+    class FShaderPipeline : public IShaderPipeline {
     public:
 
-    };
+        void passVertexShader(const char* vertexShader) final;
+        void passTesselationEvalShader(const char* tesselationEvalShader) final;
+        void passTesselationControlShader(const char* tesselationControlhader) final;
+        void passGeometryShader(const char* geometryShader) final;
+        void passComputeShader(const char* computeShader) final;
+        void passFragmentShader(const char* fragmentShader) final;
 
+    protected:
 
-    class FGraphicsPipelineMesh : public IGraphicsPipeline {
-    public:
-
-    };
-
-
-    class FGraphicsPipelineColorMesh : public FGraphicsPipelineMesh {
-    public:
-
-    };
-
-
-    class FGraphicsPipelineTexture2DMesh : public FGraphicsPipelineMesh {
-    public:
+        const char* p_vertexShader{ nullptr };
+        const char* p_fragmentShader{ nullptr };
+        const char* p_geometryShader{ nullptr };
+        const char* p_tesselationEvalShader{ nullptr };
+        const char* p_tesselationControlShader{ nullptr };
+        const char* p_computeShader{ nullptr };
 
     };
 
@@ -64,4 +55,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_IGRAPHICSPIPELINE_H
+#endif //MARENGINE_SHADER_H

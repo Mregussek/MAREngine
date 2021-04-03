@@ -41,3 +41,6 @@
 #define MARENGINE_USE_OPENGL_RENDERAPI 1
 
 #define MAR_NO_DISCARD [[nodiscard]]
+
+
+#include "mar.inl"

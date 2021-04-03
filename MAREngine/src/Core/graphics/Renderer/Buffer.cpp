@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "IBuffer.h"
+#include "Buffer.h"
 
 
 namespace marengine {

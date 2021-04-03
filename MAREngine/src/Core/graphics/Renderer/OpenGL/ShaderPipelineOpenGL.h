@@ -20,24 +20,24 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_GRAPHICSPIPELINEOPENGL_H
-#define MARENGINE_GRAPHICSPIPELINEOPENGL_H
+#ifndef MARENGINE_SHADEROPENGL_H
+#define MARENGINE_SHADEROPENGL_H
 
 
-#include "../GraphicsPipeline.h"
+#include "../Shader.h"
 
 
 namespace marengine {
 
 
-    class FGraphicsPipelineColorMeshOpenGL : public FGraphicsPipelineColorMesh {
+    class FShaderPipelineOpenGL : public FShaderPipeline {
     public:
 
-    };
+        void compile() final;
 
+    private:
 
-    class FGraphicsPipelineTexture2DMeshOpenGL : public FGraphicsPipelineTexture2DMesh {
-    public:
+        GLuint m_id{ GL_FALSE };
 
     };
 
@@ -45,4 +45,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_GRAPHICSPIPELINEOPENGL_H
+#endif //MARENGINE_SHADEROPENGL_H

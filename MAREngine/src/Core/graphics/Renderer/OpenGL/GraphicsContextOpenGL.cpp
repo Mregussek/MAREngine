@@ -76,7 +76,7 @@ namespace marengine {
             }
         }();
 
-        MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL[{}] id={}, severity={}, message: {}",
+        MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL type={}, id={}, severity={}, message:\n{}",
                                             errorType, id, severityType, message);
      }
 
@@ -133,6 +133,10 @@ namespace marengine {
 
     void FGraphicsContextOpenGL::endFrame() {
 
+    }
+
+    EGraphicsContextType FGraphicsContextOpenGL::getType() const {
+        return EGraphicsContextType::OPENGL;
     }
 
 

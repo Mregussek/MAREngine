@@ -24,7 +24,7 @@
 #define MARENGINE_BUFFEROPENGL_H
 
 
-#include "../IBuffer.h"
+#include "../Buffer.h"
 
 
 namespace marengine {
