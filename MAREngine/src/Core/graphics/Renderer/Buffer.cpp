@@ -26,29 +26,20 @@
 namespace marengine {
 
 
-    void FBuffer::create(int64_t memoryToAllocate, uint32_t bindingPoint) {
-        p_allocatedMemory = memoryToAllocate;
-        p_bindingPoint = bindingPoint;
+    FShaderBufferItem& FShaderBuffer::emplaceItem() {
+        return p_inputLayoutInfo.items.emplace_back();
+    }
+    
+    const FShaderInputLayoutInfo& FShaderBuffer::getInputLayoutInfo() const {
+        return p_inputLayoutInfo;
     }
 
+    FVertexInputLayoutInfo& FVertexBuffer::emplaceInputLayoutInfoElement() {
+        return p_inputDescription.layoutArray.emplace_back();
+    }
 
-
-    void FVertexBuffer::passLayout(const FVertexLayoutArray& vertexLayout) {
-        uint32_t stride{ 0 };
-        for(const auto& vertexElem : vertexLayout) {
-            uint32_t sizeOfType = [&vertexElem]()->uint32_t {
-                if(vertexElem.inputType == EVertexInputType::FLOAT) {
-                    return sizeof(float);
-                }
-
-                return 0;
-            }();
-
-            stride += vertexElem.count * sizeOfType;
-        }
-
-        p_vertexLayoutArray = vertexLayout;
-        p_stride = stride;
+    const FVertexInputDescription& FVertexBuffer::getInputDescription() const {
+        return p_inputDescription;
     }
 
 

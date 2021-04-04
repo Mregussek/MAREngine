@@ -25,9 +25,15 @@
 
 
 #include "IGraphicsContext.h"
+#include <vector>
 
 
 namespace marengine {
+
+    class FVertexBuffer;
+    class FIndexBuffer;
+    class FShaderBuffer;
+    class FShaderPipeline;
 
    
     class FGraphicsPipeline : public IGraphicsPipeline {
@@ -39,17 +45,27 @@ namespace marengine {
     class FGraphicsPipelineMesh : public FGraphicsPipeline {
     public:
 
+        virtual void passVertexBuffer(FVertexBuffer* pVertexBuffer) final;
+        virtual void passIndexBuffer(FIndexBuffer* pIndexBuffer) final;
+        virtual void passShaderBuffers(std::vector<FShaderBuffer>* pShaderBuffers) final;
+        virtual void passShaderPipeline(FShaderPipeline* pShaderPipeline) final;
+
+    protected:
+
+        std::vector<FShaderBuffer>* p_pShaderBuffers{ nullptr };
+        FShaderPipeline* p_pShaderPipeline{ nullptr };
+        FVertexBuffer* p_pVertexBuffer{ nullptr };
+        FIndexBuffer* p_pIndexBuffer{ nullptr };
+
     };
 
 
     class FGraphicsPipelineColorMesh : public FGraphicsPipelineMesh {
-    public:
 
     };
 
 
     class FGraphicsPipelineTexture2DMesh : public FGraphicsPipelineMesh {
-    public:
 
     };
 

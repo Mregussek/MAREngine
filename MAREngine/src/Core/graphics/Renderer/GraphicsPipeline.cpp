@@ -20,38 +20,28 @@
 ************************************************************************/
 
 
+#include "GraphicsPipeline.h"
+#include "Buffer.h"
 #include "ShaderPipeline.h"
 
 
 namespace marengine {
 
+
+    void FGraphicsPipelineMesh::passVertexBuffer(FVertexBuffer* pVertexBuffer) {
+        p_pVertexBuffer = pVertexBuffer;
+    }
+
+    void FGraphicsPipelineMesh::passIndexBuffer(FIndexBuffer* pIndexBuffer) {
+        p_pIndexBuffer = pIndexBuffer;
+    }
     
-    void FShaderPipeline::passVertexShader(const char* vertexShader) {
-        p_vertexShader = vertexShader;
+    void FGraphicsPipelineMesh::passShaderBuffers(std::vector<FShaderBuffer>* pShaderBuffers) {
+        p_pShaderBuffers = pShaderBuffers;
     }
 
-    void FShaderPipeline::passFragmentShader(const char* fragmentShader) {
-        p_fragmentShader = fragmentShader;
-    }
-
-    void FShaderPipeline::passGeometryShader(const char* geometryShader) {
-        p_geometryShader = geometryShader;
-    }
-
-    void FShaderPipeline::passComputeShader(const char* computeShader) {
-        p_computeShader = computeShader;
-    }
-
-    void FShaderPipeline::passTesselationEvalShader(const char* tesselationEvalShader) {
-        p_tesselationEvalShader = tesselationEvalShader;
-    }
-
-    void FShaderPipeline::passTesselationControlShader(const char* tesselationControlShader) {
-        p_tesselationControlShader = tesselationControlShader;
-    }
-
-    void FShaderPipeline::passInputDescription(const FShaderInputDescription& inputDescription) {
-        p_inputDescription = inputDescription;
+    void FGraphicsPipelineMesh::passShaderPipeline(FShaderPipeline* pShaderPipeline) {
+        p_pShaderPipeline = pShaderPipeline;
     }
 
 

@@ -35,13 +35,15 @@ namespace marengine {
 
         void passVertexShader(const char* vertexShader) final;
         void passTesselationEvalShader(const char* tesselationEvalShader) final;
-        void passTesselationControlShader(const char* tesselationControlhader) final;
+        void passTesselationControlShader(const char* tesselationControlShader) final;
         void passGeometryShader(const char* geometryShader) final;
         void passComputeShader(const char* computeShader) final;
         void passFragmentShader(const char* fragmentShader) final;
+        void passInputDescription(const FShaderInputDescription& inputDescription) final;
 
     protected:
 
+        FShaderInputDescription p_inputDescription{};
         const char* p_vertexShader{ nullptr };
         const char* p_fragmentShader{ nullptr };
         const char* p_geometryShader{ nullptr };

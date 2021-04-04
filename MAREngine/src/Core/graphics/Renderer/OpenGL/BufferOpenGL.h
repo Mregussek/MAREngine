@@ -33,7 +33,7 @@ namespace marengine {
     class FVertexBufferOpenGL : public FVertexBuffer {
     public:
 
-        void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
+        void create(int64_t memoryToAllocate) final;
         void free() final;
         void destroy() final;
 
@@ -52,7 +52,7 @@ namespace marengine {
     class FIndexBufferOpenGL : public FIndexBuffer {
     public:
 
-        void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
+        void create(int64_t memoryToAllocate) final;
         void free() final;
         void destroy() final;
 
@@ -71,7 +71,7 @@ namespace marengine {
     class FShaderStorageBufferOpenGL2 : public FShaderStorageBuffer {
     public:
 
-        void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
+        void create(int64_t memoryToAllocate) final;
         void free() final;
         void destroy() final;
 
@@ -89,7 +89,7 @@ namespace marengine {
     class FUniformBufferOpenGL2 : public FUniformBuffer {
     public:
 
-        void create(int64_t memoryToAllocate, uint32_t bindingPoint) final;
+        void create(int64_t memoryToAllocate) final;
         void free() final;
         void destroy() final;
 

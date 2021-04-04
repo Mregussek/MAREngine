@@ -27,6 +27,7 @@
 namespace marengine {
 
     class FWindow;
+    class FShaderPipeline;
 
 
     enum class EGraphicsContextType {
@@ -55,13 +56,14 @@ namespace marengine {
     };
     
 
-
     class FGraphicsContext : public IGraphicsContext { };
 
     
 
     class IGraphicsPipeline {
     public:
+
+        virtual void bind() = 0;
 
     };
     

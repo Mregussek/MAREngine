@@ -33,11 +33,20 @@ namespace marengine {
     class FBuffer : public IBuffer {
     protected:
 
-        void create(int64_t memoryToAllocate, uint32_t bindingPoint) override;
-
-
-        uint32_t p_bindingPoint{ 0 };
         int64_t p_allocatedMemory{ 0 };
+
+    };
+
+    
+    class FShaderBuffer : public FBuffer {
+    public:
+
+        virtual FShaderBufferItem& emplaceItem() final;
+        virtual const FShaderInputLayoutInfo& getInputLayoutInfo() const final;
+
+    protected:
+
+        FShaderInputLayoutInfo p_inputLayoutInfo;
 
     };
 
@@ -45,13 +54,14 @@ namespace marengine {
     class FVertexBuffer : public FBuffer {
     public:
 
-        virtual void passLayout(const FVertexLayoutArray& vertexLayout) final;
+        virtual FVertexInputLayoutInfo& emplaceInputLayoutInfoElement() final;
+        virtual const FVertexInputDescription& getInputDescription() const final;
+
         virtual void update(const FVertexArray& vertices) = 0;
 
     protected:
 
-        FVertexLayoutArray p_vertexLayoutArray;
-        uint32_t p_stride{ 0 };
+        FVertexInputDescription p_inputDescription;
 
     };
 
@@ -64,16 +74,12 @@ namespace marengine {
     };
 
 
-    class FShaderStorageBuffer : public FBuffer {
-    public:
-
+    class FShaderStorageBuffer : public FShaderBuffer {
 
     };
 
 
-    class FUniformBuffer : public FBuffer {
-    public:
-
+    class FUniformBuffer : public FShaderBuffer {
 
     };
 
