@@ -25,8 +25,7 @@
 
 
 #include "../../../mar.h"
-#include "../Mesh/MeshBatchStaticColor.h"
-#include "../Mesh/MeshBatchStaticTexture2D.h"
+#include "../Mesh/MeshBatchStatic.h"
 #include "../Lightning/PointLightBatch.h"
 #include "../../ecs/Components/Components.h"
 

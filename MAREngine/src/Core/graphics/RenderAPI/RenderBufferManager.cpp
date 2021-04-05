@@ -23,8 +23,6 @@
 #include "RenderBufferManager.h"
 #include "RenderCamera.h"
 #include "../Mesh/MeshBatchStatic.h"
-#include "../Mesh/MeshBatchStaticColor.h"
-#include "../Mesh/MeshBatchStaticTexture2D.h"
 #include "../Lightning/PointLightBatch.h"
 #include "../Renderer/PipelineManager.h"
 #include "../GraphicsLimits.h"

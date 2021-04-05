@@ -21,8 +21,8 @@
 
 
 #include "MeshBatchStatic.h"
-#include "../../ecs/Entity/Entity.h"
 #include "../GraphicsLimits.h"
+#include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 
 
@@ -135,6 +135,94 @@ namespace marengine {
 		return EMeshBatchType::STATIC;
 	}
 
+
+
+	void FMeshBatchStaticColor::reset() {
+		FMeshBatchStatic::reset();
+
+		m_colors.clear();
+	}
+
+	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
+		const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
+
+		if (baseClassPermission && entity.hasComponent<ColorComponent>()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
+		FMeshBatchStatic::submitToBatch(entity);
+
+		submitColor(entity.getComponent<ColorComponent>());
+
+		auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+		meshBatchInfoComponent.indexAtBatch = p_transforms.size() - 1;
+	}
+
+	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {
+		m_colors.emplace_back(colorComponent.color);
+	}
+
+	const FColorsArray& FMeshBatchStaticColor::getColors() const {
+		return m_colors;
+	}
+
+	uint32_t FMeshBatchStaticColor::getUniqueColorsID() const {
+		return m_uniqueColorsID;
+	}
+
+	void FMeshBatchStaticColor::setUniqueColorsID(uint32_t id) {
+		m_uniqueColorsID = id;
+	}
+
+	EMeshBatchType FMeshBatchStaticColor::getBatchType() const {
+		return EMeshBatchType::STATIC_COLOR;
+	}
+
+
+
+	void FMeshBatchStaticTexture2D::reset() {
+		FMeshBatchStatic::reset();
+
+		m_textures.clear();
+	}
+
+	bool FMeshBatchStaticTexture2D::canBeBatched(const Entity& entity) const {
+		const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
+
+		if (baseClassPermission && entity.hasComponent<Texture2DComponent>()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	void FMeshBatchStaticTexture2D::submitToBatch(const Entity& entity) {
+		FMeshBatchStatic::submitToBatch(entity);
+
+		const uint32_t bindingIndex{ ((uint32_t)p_shapeID - 1) };
+		submitTexture(bindingIndex, entity.getComponent<Texture2DComponent>());
+
+		auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+		meshBatchInfoComponent.indexAtBatch = p_transforms.size() - 1;
+	}
+
+	void FMeshBatchStaticTexture2D::submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent) {
+		m_textures.emplace_back(bindingIndex, textureComponent.texturePath);
+	}
+
+	const FTexturesArray& FMeshBatchStaticTexture2D::getTextures() const {
+		return m_textures;
+	}
+
+	EMeshBatchType FMeshBatchStaticTexture2D::getBatchType() const {
+		return EMeshBatchType::STATIC_TEXTURE2D;
+	}
 
 
 
