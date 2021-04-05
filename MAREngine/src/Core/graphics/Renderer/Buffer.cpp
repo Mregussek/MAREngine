@@ -30,7 +30,7 @@ namespace marengine {
         return p_inputLayoutInfo.items.emplace_back();
     }
     
-    const FShaderInputLayoutInfo& FShaderBuffer::getInputLayoutInfo() const {
+    FShaderInputLayoutInfo& FShaderBuffer::getInputLayoutInfo() {
         return p_inputLayoutInfo;
     }
 
@@ -38,7 +38,7 @@ namespace marengine {
         return p_inputDescription.layoutArray.emplace_back();
     }
 
-    const FVertexInputDescription& FVertexBuffer::getInputDescription() const {
+    FVertexInputDescription& FVertexBuffer::getInputDescription() {
         return p_inputDescription;
     }
 

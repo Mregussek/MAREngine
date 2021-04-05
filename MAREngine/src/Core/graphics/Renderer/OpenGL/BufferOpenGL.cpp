@@ -64,6 +64,14 @@ namespace marengine {
         GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
+    static int64_t getMemoryUsed(FShaderBufferItemsArray& itemsArray) {
+        int64_t sum = 0;
+        for(const auto& item : itemsArray) {
+            sum += item.memoryUsed;
+        }
+        return sum;
+    }
+
 
 
     void FVertexBufferOpenGL::create(int64_t memoryToAllocate) {
@@ -79,18 +87,22 @@ namespace marengine {
         closeGL(m_id);
     }
 
-    void FVertexBufferOpenGL::update(const FVertexArray& vertices) {
+    void FVertexBufferOpenGL::bind() {
         bindGL<m_glBufferType>(m_id);
+    }
+
+    void FVertexBufferOpenGL::update(const FVertexArray& vertices) {
+        bind();
         updateGL<m_glBufferType>(&vertices[0].position.x, 0, vertices.size() * sizeof(vertices[0]) );
     }
 
     void FVertexBufferOpenGL::update(const float* data, size_t offset, size_t sizeOfData) {
-        bindGL<m_glBufferType>(m_id);
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FVertexBufferOpenGL::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        bindGL<m_glBufferType>(m_id);
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
@@ -109,26 +121,30 @@ namespace marengine {
         closeGL(m_id);
     }
 
-    void FIndexBufferOpenGL::update(const FIndicesArray& indices) {
+    void FIndexBufferOpenGL::bind() {
         bindGL<m_glBufferType>(m_id);
+    }
+
+    void FIndexBufferOpenGL::update(const FIndicesArray& indices) {
+        bind();
         updateGL<m_glBufferType>(indices.data(), 0, indices.size() * sizeof(indices[0]));
     }
 
     void FIndexBufferOpenGL::update(const float* data, size_t offset, size_t sizeOfData) {
-        bindGL<m_glBufferType>(m_id);
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FIndexBufferOpenGL::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        bindGL<m_glBufferType>(m_id);
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 
 
-    void FShaderStorageBufferOpenGL2::create(int64_t memoryToAllocate) {
-        p_allocatedMemory = memoryToAllocate;
-        createGL<m_glBufferType>(m_id, p_allocatedMemory);
+    void FShaderStorageBufferOpenGL2::create() {
+        const int64_t memoryUsed{ getMemoryUsed(p_inputLayoutInfo.items) };
+        createGL<m_glBufferType>(m_id, memoryUsed);
         GL_FUNC( glBindBufferBase(m_glBufferType, p_inputLayoutInfo.binding, m_id) );
     }
 
@@ -140,21 +156,25 @@ namespace marengine {
         closeGL(m_id);
     }
 
-    void FShaderStorageBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
+    void FShaderStorageBufferOpenGL2::bind() {
         bindGL<m_glBufferType>(m_id);
+    }
+
+    void FShaderStorageBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FShaderStorageBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        bindGL<m_glBufferType>(m_id);
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 
 
-    void FUniformBufferOpenGL2::create(int64_t memoryToAllocate) {
-        p_allocatedMemory = memoryToAllocate;
-        createGL<m_glBufferType>(m_id, p_allocatedMemory);
+    void FUniformBufferOpenGL2::create() {
+        const int64_t memoryUsed{ getMemoryUsed(p_inputLayoutInfo.items) };
+        createGL<m_glBufferType>(m_id, memoryUsed);
         GL_FUNC( glBindBufferBase(m_glBufferType, p_inputLayoutInfo.binding, m_id) );
     }
 
@@ -166,13 +186,17 @@ namespace marengine {
         closeGL(m_id);
     }
 
-    void FUniformBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
+    void FUniformBufferOpenGL2::bind() {
         bindGL<m_glBufferType>(m_id);
+    }
+
+    void FUniformBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
     void FUniformBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
-        bindGL<m_glBufferType>(m_id);
+        bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 

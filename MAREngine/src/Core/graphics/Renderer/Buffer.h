@@ -30,19 +30,15 @@
 namespace marengine {
 
 
-    class FBuffer : public IBuffer {
-    protected:
-
-        int64_t p_allocatedMemory{ 0 };
-
-    };
+    class FBuffer : public IBuffer { };
 
     
     class FShaderBuffer : public FBuffer {
     public:
 
+        virtual void create() = 0;
         virtual FShaderBufferItem& emplaceItem() final;
-        virtual const FShaderInputLayoutInfo& getInputLayoutInfo() const final;
+        virtual FShaderInputLayoutInfo& getInputLayoutInfo() final;
 
     protected:
 
@@ -54,14 +50,16 @@ namespace marengine {
     class FVertexBuffer : public FBuffer {
     public:
 
+        virtual void create(int64_t memoryToAllocate) = 0;
         virtual FVertexInputLayoutInfo& emplaceInputLayoutInfoElement() final;
-        virtual const FVertexInputDescription& getInputDescription() const final;
+        virtual FVertexInputDescription& getInputDescription() final;
 
         virtual void update(const FVertexArray& vertices) = 0;
 
     protected:
 
         FVertexInputDescription p_inputDescription;
+        int64_t p_allocatedMemory{ 0 };
 
     };
 
@@ -69,8 +67,12 @@ namespace marengine {
     class FIndexBuffer : public FBuffer {
     public:
 
+        virtual void create(int64_t memoryToAllocate) = 0;
         virtual void update(const FIndicesArray& indices) = 0;
+    
+    protected:
 
+        int64_t p_allocatedMemory{ 0 };
     };
 
 

@@ -17,7 +17,7 @@ namespace marengine {
     };
 
     enum class EBufferInputType {
-        NONE, FLOAT, VEC3, VEC2, MAT4
+        NONE, FLOAT, VEC4, VEC3, VEC2, MAT4
     };
 
     enum class EShaderStage {
@@ -70,9 +70,9 @@ namespace marengine {
     class IBuffer : public IRenderResource {
     public:
 
-        virtual void create(int64_t memoryToAllocate) = 0;
         virtual void free() = 0;
         virtual void destroy() = 0;
+        virtual void bind() = 0;
 
         virtual void update(const float* data, size_t offset, size_t sizeOfData) = 0;
         virtual void update(const uint32_t* data, size_t offset, size_t sizeOfData) = 0;
@@ -93,6 +93,8 @@ namespace marengine {
         virtual void passInputDescription(const FShaderInputDescription& inputDescription) = 0;
 
         virtual void compile() = 0;
+        virtual void close() = 0;
+        virtual void bind() = 0;
 
     };
 

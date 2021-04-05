@@ -59,7 +59,7 @@ namespace marengine {
 	class FRenderer2 : public IRenderer {
 	public:
 
-		
+
 
 	};
 

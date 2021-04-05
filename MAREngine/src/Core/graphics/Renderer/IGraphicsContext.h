@@ -45,22 +45,29 @@ namespace marengine {
         NONE, MESH_COLOR, MESH_TEXTURE2D
     };
 
+    template<typename TEmplacedType>
+    struct FContextEmplacedInfo {
+        TEmplacedType* pType{ nullptr };
+        size_t index{ 0 };
+    };
+
 
 
     class IGraphicsFactory { };
     class IGraphics { };
+    class IGraphicsManager : public IGraphics { };
 
 
     class IGraphicsContextFactory : public IGraphicsFactory {
     public:
 
-        virtual FShaderBuffer* emplaceSSBO() = 0;
-        virtual FShaderBuffer* emplaceUBO() = 0;
-        virtual FVertexBuffer* emplaceVertexBuffer() = 0;
-        virtual FIndexBuffer* emplaceIndexBuffer() = 0;
-        virtual FShaderPipeline* emplaceShaderPipeline() = 0;
-        virtual FGraphicsPipelineColorMesh* emplaceGraphicsPipelineColorMesh() = 0;
-        virtual FGraphicsPipelineTexture2DMesh* emplaceGraphicsPipelineTexture2DMesh() = 0;
+        virtual FContextEmplacedInfo<FShaderBuffer> emplaceShaderStorageBuffer() = 0;
+        virtual FContextEmplacedInfo<FShaderBuffer> emplaceUniformBuffer() = 0;
+        virtual FContextEmplacedInfo<FVertexBuffer> emplaceVertexBuffer() = 0;
+        virtual FContextEmplacedInfo<FIndexBuffer> emplaceIndexBuffer() = 0;
+        virtual FContextEmplacedInfo<FShaderPipeline> emplaceShaderPipeline() = 0;
+        virtual FContextEmplacedInfo<FGraphicsPipelineColorMesh> emplaceGraphicsPipelineColorMesh() = 0;
+        virtual FContextEmplacedInfo<FGraphicsPipelineTexture2DMesh> emplaceGraphicsPipelineTexture2DMesh() = 0;
         virtual FRenderer2* emplaceRenderer() = 0;
 
         virtual FShaderBuffer* retrieveSSBO(size_t index) = 0;
@@ -103,6 +110,8 @@ namespace marengine {
     class IGraphicsPipeline : public IGraphics {
     public:
 
+        virtual void create() = 0;
+        virtual void close() = 0;
         virtual void bind() = 0;
 
     };
@@ -113,6 +122,11 @@ namespace marengine {
 
     };
 
+
+
+    class IRenderManager : public IGraphicsManager {
+
+    };
 
 }
 

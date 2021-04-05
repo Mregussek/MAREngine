@@ -97,32 +97,53 @@ namespace marengine {
 
 
 
-    FShaderBuffer* FGraphicsContextFactoryOpenGL::emplaceSSBO() {
-        return (FShaderBuffer*)&m_shaderStorageBuffers.emplace_back();
+    FContextEmplacedInfo<FShaderBuffer> FGraphicsContextFactoryOpenGL::emplaceShaderStorageBuffer() {
+        FContextEmplacedInfo<FShaderBuffer> emplacedInfo;
+        emplacedInfo.pType = (FShaderBuffer*)&m_shaderStorageBuffers.emplace_back();
+        emplacedInfo.index = m_shaderStorageBuffers.size() - 1;
+        return emplacedInfo;
     }
 
-    FShaderBuffer* FGraphicsContextFactoryOpenGL::emplaceUBO() {
-        return (FShaderBuffer*)&m_uniformBuffers.emplace_back();
+    FContextEmplacedInfo<FShaderBuffer> FGraphicsContextFactoryOpenGL::emplaceUniformBuffer() {
+        FContextEmplacedInfo<FShaderBuffer> emplacedInfo;
+        emplacedInfo.pType = (FShaderBuffer*)&m_uniformBuffers.emplace_back();
+        emplacedInfo.index = m_uniformBuffers.size() - 1;
+        return emplacedInfo;
     }
 
-    FVertexBuffer* FGraphicsContextFactoryOpenGL::emplaceVertexBuffer() {
-        return (FVertexBuffer*)&m_vertexBuffers.emplace_back();
+    FContextEmplacedInfo<FVertexBuffer> FGraphicsContextFactoryOpenGL::emplaceVertexBuffer() {
+        FContextEmplacedInfo<FVertexBuffer> emplacedInfo;
+        emplacedInfo.pType = (FVertexBuffer*)&m_vertexBuffers.emplace_back();
+        emplacedInfo.index = m_vertexBuffers.size() - 1;
+        return emplacedInfo;
     }
 
-    FIndexBuffer* FGraphicsContextFactoryOpenGL::emplaceIndexBuffer() {
-        return (FIndexBuffer*)&m_indexBuffers.emplace_back();
+    FContextEmplacedInfo<FIndexBuffer> FGraphicsContextFactoryOpenGL::emplaceIndexBuffer() {
+        FContextEmplacedInfo<FIndexBuffer> emplacedInfo;
+        emplacedInfo.pType = (FIndexBuffer*)&m_indexBuffers.emplace_back();
+        emplacedInfo.index = m_indexBuffers.size() - 1;
+        return emplacedInfo;
     }
 
-    FShaderPipeline* FGraphicsContextFactoryOpenGL::emplaceShaderPipeline() {
-        return (FShaderPipeline*)&m_shaderPipelines.emplace_back();
+    FContextEmplacedInfo<FShaderPipeline> FGraphicsContextFactoryOpenGL::emplaceShaderPipeline() {
+        FContextEmplacedInfo<FShaderPipeline> emplacedInfo;
+        emplacedInfo.pType = (FShaderPipeline*)&m_shaderPipelines.emplace_back();
+        emplacedInfo.index = m_shaderPipelines.size() - 1;
+        return emplacedInfo;
     }
 
-    FGraphicsPipelineColorMesh* FGraphicsContextFactoryOpenGL::emplaceGraphicsPipelineColorMesh() {
-        return (FGraphicsPipelineColorMesh*)&m_pipelinesColorMesh.emplace_back();
+    FContextEmplacedInfo<FGraphicsPipelineColorMesh> FGraphicsContextFactoryOpenGL::emplaceGraphicsPipelineColorMesh() {
+        FContextEmplacedInfo<FGraphicsPipelineColorMesh> emplacedInfo;
+        emplacedInfo.pType = (FGraphicsPipelineColorMesh*)&m_pipelinesColorMesh.emplace_back();
+        emplacedInfo.index = m_pipelinesColorMesh.size() - 1;
+        return emplacedInfo;
     }
 
-    FGraphicsPipelineTexture2DMesh* FGraphicsContextFactoryOpenGL::emplaceGraphicsPipelineTexture2DMesh() {
-        return (FGraphicsPipelineTexture2DMesh*)&m_pipelinesTexture2DMesh.emplace_back();
+    FContextEmplacedInfo<FGraphicsPipelineTexture2DMesh> FGraphicsContextFactoryOpenGL::emplaceGraphicsPipelineTexture2DMesh() {
+        FContextEmplacedInfo<FGraphicsPipelineTexture2DMesh> emplacedInfo;
+        emplacedInfo.pType = (FGraphicsPipelineTexture2DMesh*)&m_pipelinesTexture2DMesh.emplace_back();
+        emplacedInfo.index = m_pipelinesTexture2DMesh.size() - 1;
+        return emplacedInfo;
     }
 
     FRenderer2* FGraphicsContextFactoryOpenGL::emplaceRenderer() {

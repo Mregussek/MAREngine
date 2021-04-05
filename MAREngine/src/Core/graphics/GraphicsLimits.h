@@ -36,8 +36,8 @@ namespace marengine {
 		constexpr uint32_t maxTrianglesCount{ 100000 };
 		constexpr uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
 		constexpr uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
-		constexpr uint32_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
-		constexpr uint32_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
+		constexpr int64_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
+		constexpr int64_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
 
 		constexpr uint32_t maxTransforms{ 32 };
 		constexpr uint32_t maxLights{ 32 };

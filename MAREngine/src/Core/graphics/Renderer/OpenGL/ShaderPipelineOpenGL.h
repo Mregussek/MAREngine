@@ -34,6 +34,8 @@ namespace marengine {
     public:
 
         void compile() final;
+        void close() final;
+        void bind() final;
 
     private:
 

@@ -121,5 +121,13 @@ namespace marengine {
         m_id = shaderPipelineID;
     }
 
+    void FShaderPipelineOpenGL::close() {
+        GL_FUNC( glDeleteProgram(m_id) );
+    }
+
+    void FShaderPipelineOpenGL::bind() {
+        GL_FUNC( glUseProgram(m_id) );
+    }
+
 
 }

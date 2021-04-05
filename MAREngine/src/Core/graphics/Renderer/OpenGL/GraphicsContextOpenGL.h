@@ -40,13 +40,13 @@ namespace marengine {
     class FGraphicsContextFactoryOpenGL : public FGraphicsContextFactory {
     public:
 
-        FShaderBuffer* emplaceSSBO() final;
-        FShaderBuffer* emplaceUBO() final;
-        FVertexBuffer* emplaceVertexBuffer() final;
-        FIndexBuffer* emplaceIndexBuffer() final;
-        FShaderPipeline* emplaceShaderPipeline() final;
-        FGraphicsPipelineColorMesh* emplaceGraphicsPipelineColorMesh() final;
-        FGraphicsPipelineTexture2DMesh* emplaceGraphicsPipelineTexture2DMesh() final;
+        FContextEmplacedInfo<FShaderBuffer> emplaceShaderStorageBuffer() final;
+        FContextEmplacedInfo<FShaderBuffer> emplaceUniformBuffer() final;
+        FContextEmplacedInfo<FVertexBuffer> emplaceVertexBuffer() final;
+        FContextEmplacedInfo<FIndexBuffer> emplaceIndexBuffer() final;
+        FContextEmplacedInfo<FShaderPipeline> emplaceShaderPipeline() final;
+        FContextEmplacedInfo<FGraphicsPipelineColorMesh> emplaceGraphicsPipelineColorMesh() final;
+        FContextEmplacedInfo<FGraphicsPipelineTexture2DMesh> emplaceGraphicsPipelineTexture2DMesh() final;
         FRenderer2* emplaceRenderer() final;
 
         FShaderBuffer* retrieveSSBO(size_t index) final;

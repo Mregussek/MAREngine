@@ -37,30 +37,38 @@ namespace marengine {
 
    
     class FGraphicsPipeline : public IGraphicsPipeline {
-    public:
 
     };
 
 
-    class FGraphicsPipelineMesh : public FGraphicsPipeline {
+    class FGraphicsPipelineMesh : public FGraphicsPipeline { 
     public:
 
-        virtual void passVertexBuffer(FVertexBuffer* pVertexBuffer) final;
         virtual void passIndexBuffer(FIndexBuffer* pIndexBuffer) final;
-        virtual void passShaderBuffers(std::vector<FShaderBuffer>* pShaderBuffers) final;
-        virtual void passShaderPipeline(FShaderPipeline* pShaderPipeline) final;
+        virtual void passCameraSSBO(FShaderBuffer* pCameraBuffer) final;
 
     protected:
 
-        std::vector<FShaderBuffer>* p_pShaderBuffers{ nullptr };
-        FShaderPipeline* p_pShaderPipeline{ nullptr };
-        FVertexBuffer* p_pVertexBuffer{ nullptr };
         FIndexBuffer* p_pIndexBuffer{ nullptr };
+        FShaderBuffer* p_pCameraBuffer{ nullptr };
 
     };
 
 
     class FGraphicsPipelineColorMesh : public FGraphicsPipelineMesh {
+    public:
+
+        virtual void passVertexBuffer(FVertexBuffer* pVertexBuffer) final;
+        virtual void passTransformSSBO(FShaderBuffer* pTransformsBuffer) final;
+        virtual void passColorSSBO(FShaderBuffer* pColorsBuffer) final;
+        virtual void passShaderPipeline(FShaderPipeline* pShaderPipeline) final;
+
+    protected:
+
+        FVertexBuffer* p_pVertexBuffer{ nullptr };
+        FShaderBuffer* p_pTransformsBuffer{ nullptr };
+        FShaderBuffer* p_pColorsBuffer{ nullptr };
+        FShaderPipeline* p_pShaderPipeline{ nullptr };
 
     };
 

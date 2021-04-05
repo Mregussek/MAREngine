@@ -28,19 +28,28 @@
 namespace marengine {
 
 
-    void FGraphicsPipelineMesh::passVertexBuffer(FVertexBuffer* pVertexBuffer) {
-        p_pVertexBuffer = pVertexBuffer;
-    }
-
     void FGraphicsPipelineMesh::passIndexBuffer(FIndexBuffer* pIndexBuffer) {
         p_pIndexBuffer = pIndexBuffer;
     }
-    
-    void FGraphicsPipelineMesh::passShaderBuffers(std::vector<FShaderBuffer>* pShaderBuffers) {
-        p_pShaderBuffers = pShaderBuffers;
+
+    void FGraphicsPipelineMesh::passCameraSSBO(FShaderBuffer* pCameraBuffer) {
+        p_pCameraBuffer = pCameraBuffer;
     }
 
-    void FGraphicsPipelineMesh::passShaderPipeline(FShaderPipeline* pShaderPipeline) {
+
+    void FGraphicsPipelineColorMesh::passVertexBuffer(FVertexBuffer* pVertexBuffer) {
+        p_pVertexBuffer = pVertexBuffer;
+    }
+    
+    void FGraphicsPipelineColorMesh::passTransformSSBO(FShaderBuffer* pTransformsBuffer) {
+        p_pTransformsBuffer = pTransformsBuffer;
+    }
+
+    void FGraphicsPipelineColorMesh::passColorSSBO(FShaderBuffer* pColorsBuffer) {
+        p_pColorsBuffer = pColorsBuffer;
+    }
+
+    void FGraphicsPipelineColorMesh::passShaderPipeline(FShaderPipeline* pShaderPipeline) {
         p_pShaderPipeline = pShaderPipeline;
     }
 

@@ -37,6 +37,7 @@ namespace marengine {
         void free() final;
         void destroy() final;
 
+        void bind() final;
         void update(const FVertexArray& vertices) final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
@@ -56,6 +57,7 @@ namespace marengine {
         void free() final;
         void destroy() final;
 
+        void bind() final;
         void update(const FIndicesArray& indices) final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
@@ -71,10 +73,11 @@ namespace marengine {
     class FShaderStorageBufferOpenGL2 : public FShaderStorageBuffer {
     public:
 
-        void create(int64_t memoryToAllocate) final;
+        void create() final;
         void free() final;
         void destroy() final;
 
+        void bind() final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
 
@@ -89,10 +92,11 @@ namespace marengine {
     class FUniformBufferOpenGL2 : public FUniformBuffer {
     public:
 
-        void create(int64_t memoryToAllocate) final;
+        void create() final;
         void free() final;
         void destroy() final;
 
+        void bind() final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
 
