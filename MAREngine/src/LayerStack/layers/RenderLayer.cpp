@@ -73,7 +73,7 @@ namespace marengine {
     }
 
     void FRenderLayerOpenGL2::begin() {
-        m_context.prepareFrame();
+        //m_context.prepareFrame();
     }
 
     void FRenderLayerOpenGL2::update() {

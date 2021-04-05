@@ -28,6 +28,13 @@ namespace marengine {
 
 	void FFileManager::loadFile(std::string& stringToFill, const char* path) {
         // TODO: implement it
+		FILE* file = fopen(path, "rb");
+		fseek(file, 0, SEEK_END);
+		const long length = ftell(file);
+		fseek(file, 0, SEEK_SET);
+		stringToFill.resize(length);
+		size_t rc = fread(stringToFill.data(), 1, length, file);
+		fclose(file);
 	}
 
 	void FFileManager::saveAsFile(const std::string& sourceCode, const char* path) {

@@ -63,6 +63,7 @@ namespace marengine {
     template<GLenum TShaderType>
     static GLuint compileThenAttachGL(GLuint shaderPipelineID, const char* path) {
         const GLuint id{ validateThenCompileGL<TShaderType>(path) };
+        
         if(id != GL_FALSE) {
             GL_FUNC( glAttachShader(shaderPipelineID, id) );
         }
