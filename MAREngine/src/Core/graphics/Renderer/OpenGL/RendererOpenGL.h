@@ -1,7 +1,7 @@
 /***********************************************************************
 * @internal @copyright
 *
-*  				MAREngine - open source 3D game engine
+*       MAREngine - open source 3D game engine
 *
 * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
 * All rights reserved.
@@ -20,19 +20,22 @@
 ************************************************************************/
 
 
-#include "GraphicsPipelineOpenGL.h"
+#ifndef MARENGINE_RENDEREROPENGL_H
+#define MARENGINE_RENDEREROPENGL_H
+
+
+#include "../Renderer.h"
 
 
 namespace marengine {
 
 
-    void FGraphicsPipelineColorMeshOpenGL::bind() {
+    class FRendererOpenGL : public FRenderer2 {
 
-    }
-
-    void FGraphicsPipelineTexture2DMeshOpenGL::bind() {
-        
-    }
+    };
 
 
 }
+
+
+#endif //MARENGINE_RENDEREROPENGL_H

@@ -33,11 +33,15 @@ namespace marengine {
     class FGraphicsPipelineColorMeshOpenGL : public FGraphicsPipelineColorMesh {
     public:
 
+        void bind() final;
+
     };
 
 
     class FGraphicsPipelineTexture2DMeshOpenGL : public FGraphicsPipelineTexture2DMesh {
     public:
+
+        void bind() final;
 
     };
 

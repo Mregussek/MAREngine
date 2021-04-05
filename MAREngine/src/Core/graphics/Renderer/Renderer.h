@@ -26,6 +26,7 @@
 
 #include "../../../mar.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
+#include "IGraphicsContext.h"
 
 
 namespace marengine {
@@ -51,6 +52,14 @@ namespace marengine {
 
 		ShaderOpenGL m_shaderColors;
 		ShaderOpenGL m_shader2D;
+
+	};
+
+
+	class FRenderer2 : public IRenderer {
+	public:
+
+		
 
 	};
 

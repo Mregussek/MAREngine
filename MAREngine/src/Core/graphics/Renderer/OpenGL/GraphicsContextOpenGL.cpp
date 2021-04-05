@@ -28,57 +28,9 @@
 namespace marengine {
 
 
-    static void GLAPIENTRY
-    MessageCallback(GLenum source,
-                    GLenum type,
-                    GLuint id,
-                    GLenum severity,
-                    GLsizei length,
-                    const GLchar* message,
-                    const void* userParam)
-    {
-        constexpr bool displayDebugTypeOther{ false };
-        if constexpr (!displayDebugTypeOther) {
-            if (type == GL_DEBUG_TYPE_OTHER) {
-                return;
-            }
-        }
-
-        const char* errorType = [type]()->const char* {
-            switch (type) {
-            case GL_DEBUG_TYPE_ERROR:
-                return "ERROR";
-            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                return "DEPRECATED_BEHAVIOR";
-            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-                return "UNDEFINED_BEHAVIOR";
-            case GL_DEBUG_TYPE_PORTABILITY:
-                return "PORTABILITY";
-            case GL_DEBUG_TYPE_PERFORMANCE:
-                return "PERFORMANCE";
-            case GL_DEBUG_TYPE_OTHER:
-                return "OTHER";
-            default:
-                return "UNKNOWN";
-            }
-        }();
-
-        const char* severityType = [severity]()->const char* {
-            switch (severity) {
-            case GL_DEBUG_SEVERITY_LOW:
-                return "LOW";
-            case GL_DEBUG_SEVERITY_MEDIUM:
-                return "MEDIUM";
-            case GL_DEBUG_SEVERITY_HIGH:
-                return "HIGH";
-            default:
-                return "OTHER";
-            }
-        }();
-
-        MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL type={}, id={}, severity={}, message:\n{}",
-                                            errorType, id, severityType, message);
-     }
+    static void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
+                                           GLenum severity, GLsizei length,
+                                           const GLchar* message, const void* userParam);
 
 
     bool FGraphicsContextOpenGL::create(FWindow* pWindow) {
@@ -138,6 +90,131 @@ namespace marengine {
     EGraphicsContextType FGraphicsContextOpenGL::getType() const {
         return EGraphicsContextType::OPENGL;
     }
+
+    FGraphicsContextFactory* FGraphicsContextOpenGL::getFactory() {
+        return (FGraphicsContextFactory*)&m_factory;
+    }
+
+
+
+    FShaderBuffer* FGraphicsContextFactoryOpenGL::emplaceSSBO() {
+        return (FShaderBuffer*)&m_shaderStorageBuffers.emplace_back();
+    }
+
+    FShaderBuffer* FGraphicsContextFactoryOpenGL::emplaceUBO() {
+        return (FShaderBuffer*)&m_uniformBuffers.emplace_back();
+    }
+
+    FVertexBuffer* FGraphicsContextFactoryOpenGL::emplaceVertexBuffer() {
+        return (FVertexBuffer*)&m_vertexBuffers.emplace_back();
+    }
+
+    FIndexBuffer* FGraphicsContextFactoryOpenGL::emplaceIndexBuffer() {
+        return (FIndexBuffer*)&m_indexBuffers.emplace_back();
+    }
+
+    FShaderPipeline* FGraphicsContextFactoryOpenGL::emplaceShaderPipeline() {
+        return (FShaderPipeline*)&m_shaderPipelines.emplace_back();
+    }
+
+    FGraphicsPipelineColorMesh* FGraphicsContextFactoryOpenGL::emplaceGraphicsPipelineColorMesh() {
+        return (FGraphicsPipelineColorMesh*)&m_pipelinesColorMesh.emplace_back();
+    }
+
+    FGraphicsPipelineTexture2DMesh* FGraphicsContextFactoryOpenGL::emplaceGraphicsPipelineTexture2DMesh() {
+        return (FGraphicsPipelineTexture2DMesh*)&m_pipelinesTexture2DMesh.emplace_back();
+    }
+
+    FRenderer2* FGraphicsContextFactoryOpenGL::emplaceRenderer() {
+        return (FRenderer2*)&m_renderer;
+    }
+
+    template<typename TReturn, typename TVector>
+    static TReturn* validateAndRetrieve(TVector& vec, size_t index) {
+        if(index >= vec.size()) {
+            return nullptr;
+        }
+        else {
+            return (TReturn*)&vec.at(index);
+        }
+    }
+
+    FShaderBuffer* FGraphicsContextFactoryOpenGL::retrieveSSBO(size_t index) {
+        return validateAndRetrieve<FShaderBuffer>(m_shaderStorageBuffers, index);
+    }
+
+    FShaderBuffer* FGraphicsContextFactoryOpenGL::retrieveUBO(size_t index) {
+        return validateAndRetrieve<FShaderBuffer>(m_uniformBuffers, index);
+    }
+
+    FVertexBuffer* FGraphicsContextFactoryOpenGL::retrieveVertexBuffer(size_t index) {
+        return validateAndRetrieve<FVertexBuffer>(m_vertexBuffers, index);
+    }
+
+    FIndexBuffer* FGraphicsContextFactoryOpenGL::retrieveIndexBuffer(size_t index) {
+        return validateAndRetrieve<FIndexBuffer>(m_indexBuffers, index);
+    }
+
+    FShaderPipeline* FGraphicsContextFactoryOpenGL::retrieveShaderPipeline(size_t index) {
+        return validateAndRetrieve<FShaderPipeline>(m_shaderPipelines, index);
+    }
+
+    FGraphicsPipelineColorMesh* FGraphicsContextFactoryOpenGL::retrieveGraphicsPipelineColorMesh(size_t index) {
+        return validateAndRetrieve<FGraphicsPipelineColorMesh>(m_pipelinesColorMesh, index);
+    }
+
+    FGraphicsPipelineTexture2DMesh* FGraphicsContextFactoryOpenGL::retrieveGraphicsPipelineTexture2DMesh(size_t index) {
+        return validateAndRetrieve<FGraphicsPipelineTexture2DMesh>(m_pipelinesTexture2DMesh, index);
+    }
+
+
+
+    static void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
+                                           GLenum severity, GLsizei length,
+                                           const GLchar* message, const void* userParam)
+    {
+        constexpr bool displayDebugTypeOther{ false };
+        if constexpr (!displayDebugTypeOther) {
+            if (type == GL_DEBUG_TYPE_OTHER) {
+                return;
+            }
+        }
+
+        const char* errorType = [type]()->const char* {
+            switch (type) {
+            case GL_DEBUG_TYPE_ERROR:
+                return "ERROR";
+            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+                return "DEPRECATED_BEHAVIOR";
+            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+                return "UNDEFINED_BEHAVIOR";
+            case GL_DEBUG_TYPE_PORTABILITY:
+                return "PORTABILITY";
+            case GL_DEBUG_TYPE_PERFORMANCE:
+                return "PERFORMANCE";
+            case GL_DEBUG_TYPE_OTHER:
+                return "OTHER";
+            default:
+                return "UNKNOWN";
+            }
+        }();
+
+        const char* severityType = [severity]()->const char* {
+            switch (severity) {
+            case GL_DEBUG_SEVERITY_LOW:
+                return "LOW";
+            case GL_DEBUG_SEVERITY_MEDIUM:
+                return "MEDIUM";
+            case GL_DEBUG_SEVERITY_HIGH:
+                return "HIGH";
+            default:
+                return "OTHER";
+            }
+        }();
+
+        MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL type={}, id={}, severity={}, message:\n{}",
+                                            errorType, id, severityType, message);
+     }
 
 
 }

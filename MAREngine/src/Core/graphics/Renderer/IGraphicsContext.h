@@ -28,6 +28,13 @@ namespace marengine {
 
     class FWindow;
     class FShaderPipeline;
+    class FShaderBuffer;
+    class FVertexBuffer;
+    class FIndexBuffer;
+    class FShaderPipeline;
+    class FGraphicsPipelineColorMesh;
+    class FGraphicsPipelineTexture2DMesh;
+    class FRenderer2;
 
 
     enum class EGraphicsContextType {
@@ -40,7 +47,38 @@ namespace marengine {
 
 
 
-    class IGraphicsContext {
+    class IGraphicsFactory { };
+    class IGraphics { };
+
+
+    class IGraphicsContextFactory : public IGraphicsFactory {
+    public:
+
+        virtual FShaderBuffer* emplaceSSBO() = 0;
+        virtual FShaderBuffer* emplaceUBO() = 0;
+        virtual FVertexBuffer* emplaceVertexBuffer() = 0;
+        virtual FIndexBuffer* emplaceIndexBuffer() = 0;
+        virtual FShaderPipeline* emplaceShaderPipeline() = 0;
+        virtual FGraphicsPipelineColorMesh* emplaceGraphicsPipelineColorMesh() = 0;
+        virtual FGraphicsPipelineTexture2DMesh* emplaceGraphicsPipelineTexture2DMesh() = 0;
+        virtual FRenderer2* emplaceRenderer() = 0;
+
+        virtual FShaderBuffer* retrieveSSBO(size_t index) = 0;
+        virtual FShaderBuffer* retrieveUBO(size_t index) = 0;
+        virtual FVertexBuffer* retrieveVertexBuffer(size_t index) = 0;
+        virtual FIndexBuffer* retrieveIndexBuffer(size_t index) = 0;
+        virtual FShaderPipeline* retrieveShaderPipeline(size_t index) = 0;
+        virtual FGraphicsPipelineColorMesh* retrieveGraphicsPipelineColorMesh(size_t index) = 0;
+        virtual FGraphicsPipelineTexture2DMesh* retrieveGraphicsPipelineTexture2DMesh(size_t index) = 0;
+
+    };
+
+
+    class FGraphicsContextFactory : public IGraphicsContextFactory { };
+
+
+
+    class IGraphicsContext : public IGraphics {
     public:
 
         virtual bool create(FWindow* pWindow) = 0;
@@ -53,21 +91,29 @@ namespace marengine {
 
         virtual EGraphicsContextType getType() const = 0;
 
+        virtual FGraphicsContextFactory* getFactory() = 0;
+
     };
-    
+
 
     class FGraphicsContext : public IGraphicsContext { };
 
-    
 
-    class IGraphicsPipeline {
+
+    class IGraphicsPipeline : public IGraphics {
     public:
 
         virtual void bind() = 0;
 
     };
-    
-    
+
+
+
+    class IRenderer : public IGraphics {
+
+    };
+
+
 }
 
 

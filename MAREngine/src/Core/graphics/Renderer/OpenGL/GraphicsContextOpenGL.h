@@ -1,7 +1,7 @@
 /***********************************************************************
 * @internal @copyright
 *
-*  				MAREngine - open source 3D game engine
+*       MAREngine - open source 3D game engine
 *
 * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
 * All rights reserved.
@@ -26,11 +26,50 @@
 
 #include "../../../../mar.h"
 #include "../IGraphicsContext.h"
+#include "RendererOpenGL.h"
+#include "BufferOpenGL.h"
+#include "GraphicsPipelineOpenGL.h"
+#include "ShaderPipelineOpenGL.h"
 
 
 namespace marengine {
 
     class FWindow;
+
+
+    class FGraphicsContextFactoryOpenGL : public FGraphicsContextFactory {
+    public:
+
+        FShaderBuffer* emplaceSSBO() final;
+        FShaderBuffer* emplaceUBO() final;
+        FVertexBuffer* emplaceVertexBuffer() final;
+        FIndexBuffer* emplaceIndexBuffer() final;
+        FShaderPipeline* emplaceShaderPipeline() final;
+        FGraphicsPipelineColorMesh* emplaceGraphicsPipelineColorMesh() final;
+        FGraphicsPipelineTexture2DMesh* emplaceGraphicsPipelineTexture2DMesh() final;
+        FRenderer2* emplaceRenderer() final;
+
+        FShaderBuffer* retrieveSSBO(size_t index) final;
+        FShaderBuffer* retrieveUBO(size_t index) final;
+        FVertexBuffer* retrieveVertexBuffer(size_t index) final;
+        FIndexBuffer* retrieveIndexBuffer(size_t index) final;
+        FShaderPipeline* retrieveShaderPipeline(size_t index) final;
+        FGraphicsPipelineColorMesh* retrieveGraphicsPipelineColorMesh(size_t index) final;
+        FGraphicsPipelineTexture2DMesh* retrieveGraphicsPipelineTexture2DMesh(size_t index) final;
+
+    private:
+
+        std::vector<FShaderStorageBufferOpenGL2> m_shaderStorageBuffers;
+        std::vector<FUniformBufferOpenGL2> m_uniformBuffers;
+        std::vector<FVertexBufferOpenGL> m_vertexBuffers;
+        std::vector<FIndexBufferOpenGL> m_indexBuffers;
+        std::vector<FShaderPipelineOpenGL> m_shaderPipelines;
+        std::vector<FGraphicsPipelineColorMeshOpenGL> m_pipelinesColorMesh;
+        std::vector<FGraphicsPipelineTexture2DMeshOpenGL> m_pipelinesTexture2DMesh;
+        FRendererOpenGL m_renderer;
+
+    };
+
 
 
     class FGraphicsContextOpenGL : public FGraphicsContext {
@@ -46,8 +85,11 @@ namespace marengine {
 
         EGraphicsContextType getType() const final;
 
+        FGraphicsContextFactory* getFactory() final;
+
     private:
 
+        FGraphicsContextFactoryOpenGL m_factory;
         FWindow* m_pWindow{ nullptr };
 
     };
