@@ -17,7 +17,7 @@ namespace marengine {
     };
 
     enum class EBufferInputType {
-        NONE, FLOAT, VEC4, VEC3, VEC2, MAT4
+        NONE, FLOAT, INT, VEC4, VEC3, VEC2, MAT4, OTHER
     };
 
     enum class EShaderStage {
@@ -76,6 +76,7 @@ namespace marengine {
 
         virtual void update(const float* data, size_t offset, size_t sizeOfData) = 0;
         virtual void update(const uint32_t* data, size_t offset, size_t sizeOfData) = 0;
+        virtual void update(const int32_t* data, size_t offset, size_t sizeOfData) = 0;
 
     };
 

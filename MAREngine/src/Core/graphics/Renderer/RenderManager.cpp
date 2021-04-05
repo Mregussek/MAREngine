@@ -53,6 +53,10 @@ namespace marengine {
 
     static uint32_t createCameraSSBO(FGraphicsContextFactory* pFactory, const RenderCamera* pRenderCamera);
 
+    static uint32_t createPointLightSSBO(FGraphicsContextFactory* pFactory,
+                                         const FPointLightBatch& pointLightBatch);
+
+
 
     void FRenderManager::create(FGraphicsContext* pGraphicsContext, Scene* pScene) {
         m_pGraphicsContext = pGraphicsContext;
@@ -86,21 +90,21 @@ namespace marengine {
     void FRenderManager::pushEntityToRender(const Entity& entity) {
         if (entity.hasComponent<ColorComponent>()) {
 			const uint32_t batchIndex{ getAvailableBatch(m_meshesBatchColor, entity) };
-			auto& availableBatch{ m_meshesBatchColor[batchIndex] };
+			auto& availableBatch{ m_meshesBatchColor.at(batchIndex) };
 			availableBatch.submitToBatch(entity);
 
 			auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 			meshBatchInfoComponent.batchIndex = batchIndex;
-			meshBatchInfoComponent.batchType = m_meshesBatchColor[batchIndex].getBatchType();
+			meshBatchInfoComponent.batchType = availableBatch.getBatchType();
 		}
 		if (entity.hasComponent<Texture2DComponent>()) {
 			const uint32_t batchIndex{ getAvailableBatch(m_meshesBatchTexture2D, entity) };
-			auto& availableBatch{ m_meshesBatchTexture2D[batchIndex] };
+			auto& availableBatch{ m_meshesBatchTexture2D.at(batchIndex) };
 			availableBatch.submitToBatch(entity);
 
 			auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 			meshBatchInfoComponent.batchIndex = batchIndex;
-			meshBatchInfoComponent.batchType = m_meshesBatchTexture2D[batchIndex].getBatchType();
+			meshBatchInfoComponent.batchType = availableBatch.getBatchType();
 		}
 		if (entity.hasComponent<PointLightComponent>()) {
 			if (m_pointLightBatch.canBeBatched(entity)) {
@@ -135,6 +139,7 @@ namespace marengine {
         FGraphicsContextFactory* pFactory{ m_pGraphicsContext->getFactory() };
 
         m_cameraIndex = createCameraSSBO(pFactory, m_pRenderCamera);
+        m_pointLightIndex = createPointLightSSBO(pFactory, m_pointLightBatch);
 
         for(FMeshBatchStaticColor& batch : m_meshesBatchColor) {
             FStoredPipelineInfo& pipelineInfo{ m_pipelines.emplace_back() };
@@ -288,10 +293,10 @@ namespace marengine {
                                      const RenderCamera* pRenderCamera) {
         FContextEmplacedInfo<FShaderBuffer> cameraInfo{ pFactory->emplaceShaderStorageBuffer() };
 
-        FShaderInputLayoutInfo& cameraLayoutInfo{ cameraInfo.pType->getInputLayoutInfo() };
-        cameraLayoutInfo.binding = 0;
-        cameraLayoutInfo.shaderStage = EShaderStage::VERTEX;
-        cameraLayoutInfo.bufferType = EBufferType::SSBO;
+        FShaderInputLayoutInfo& layoutInfo{ cameraInfo.pType->getInputLayoutInfo() };
+        layoutInfo.binding = 0;
+        layoutInfo.shaderStage = EShaderStage::VERTEX;
+        layoutInfo.bufferType = EBufferType::SSBO;
 
         FShaderBufferItem& cameraMvpItem{ cameraInfo.pType->emplaceItem() };
         cameraMvpItem.count = 1;
@@ -302,9 +307,45 @@ namespace marengine {
 
         const maths::mat4& mvp{ pRenderCamera->getMVP() };
         cameraInfo.pType->create();
-        cameraInfo.pType->update(maths::mat4::value_ptr(mvp), 0, sizeof(maths::mat4));
+        cameraInfo.pType->update(maths::mat4::value_ptr(mvp), cameraMvpItem.offset, sizeof(maths::mat4));
 
         return cameraInfo.index;
+    }
+
+    uint32_t createPointLightSSBO(FGraphicsContextFactory* pFactory,
+                                  const FPointLightBatch& pointLightBatch) {
+        FContextEmplacedInfo<FShaderBuffer> lightInfo{ pFactory->emplaceShaderStorageBuffer() };
+
+        FShaderInputLayoutInfo& layoutInfo{ lightInfo.pType->getInputLayoutInfo() };
+        layoutInfo.binding = 2;
+        layoutInfo.shaderStage = EShaderStage::FRAGMENT;
+        layoutInfo.bufferType = EBufferType::SSBO;
+
+        FShaderBufferItem& pointLightMaterialItem{ lightInfo.pType->emplaceItem() };
+        pointLightMaterialItem.count = 32;
+        pointLightMaterialItem.inputType = EBufferInputType::OTHER;
+        pointLightMaterialItem.name = "PointLigts.LightMaterial[32]";
+        pointLightMaterialItem.offset = 0;
+        pointLightMaterialItem.memoryUsed = 32 * sizeof(FPointLight);
+
+        FShaderBufferItem& materialSizeItem{ lightInfo.pType->emplaceItem() };
+        materialSizeItem.count = 1;
+        materialSizeItem.inputType = EBufferInputType::INT;
+        materialSizeItem.name = "PointLigts.LightMaterialSize";
+        materialSizeItem.offset = pointLightMaterialItem.memoryUsed;
+        materialSizeItem.memoryUsed = 1 * sizeof(int32_t);
+
+        const auto& pointLights{ pointLightBatch.getLights() };
+        const int32_t lightSize{ (int32_t)pointLights.size() };
+        lightInfo.pType->create();
+        lightInfo.pType->update(&pointLights.at(0).position.x,
+                                pointLightMaterialItem.offset,
+                                lightSize * sizeof(FPointLight));
+        lightInfo.pType->update(&lightSize,
+                                materialSizeItem.offset,
+                                sizeof(int32_t));
+
+        return lightInfo.index;
     }
 
 

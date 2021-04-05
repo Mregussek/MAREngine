@@ -67,7 +67,8 @@ namespace marengine {
         FPointLightBatch m_pointLightBatch;
         const RenderCamera* m_pRenderCamera{ nullptr };
         FGraphicsContext* m_pGraphicsContext{ nullptr };
-        uint32_t m_cameraIndex{ 0 };
+        int32_t m_cameraIndex{ -1 };
+        int32_t m_pointLightIndex{ -1 };
 
     };
 

@@ -54,13 +54,8 @@ namespace marengine {
         GL_FUNC( glDeleteBuffers(1, &id) );
     }
 
-    template<GLenum TBufferType>
-    static void updateGL(const float* data, size_t offset, size_t sizeOfData) {
-        GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
-    }
-
-    template<GLenum TBufferType>
-    static void updateGL(const uint32_t* data, size_t offset, size_t sizeOfData) {
+    template<GLenum TBufferType, typename TDataType>
+    static void updateGL(const TDataType* data, size_t offset, size_t sizeOfData) {
         GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
@@ -106,6 +101,11 @@ namespace marengine {
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
+    void FVertexBufferOpenGL::update(const int32_t* data, size_t offset, size_t sizeOfData) {
+        bind();
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
+    }
+
 
 
     void FIndexBufferOpenGL::create(int64_t memoryToAllocate) {
@@ -140,6 +140,10 @@ namespace marengine {
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
+    void FIndexBufferOpenGL::update(const int32_t* data, size_t offset, size_t sizeOfData) {
+        bind();
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
+    }
 
 
     void FShaderStorageBufferOpenGL2::create() {
@@ -170,6 +174,11 @@ namespace marengine {
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
+    void FShaderStorageBufferOpenGL2::update(const int32_t* data, size_t offset, size_t sizeOfData) {
+        bind();
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
+    }
+
 
 
     void FUniformBufferOpenGL2::create() {
@@ -196,6 +205,11 @@ namespace marengine {
     }
 
     void FUniformBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
+        bind();
+        updateGL<m_glBufferType>(data, offset, sizeOfData);
+    }
+
+    void FUniformBufferOpenGL2::update(const int32_t* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }

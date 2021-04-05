@@ -40,6 +40,7 @@ namespace marengine {
         void bind() final;
         void update(const FVertexArray& vertices) final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
+        void update(const int32_t* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
 
     private:
@@ -60,6 +61,7 @@ namespace marengine {
         void bind() final;
         void update(const FIndicesArray& indices) final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
+        void update(const int32_t* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
 
     private:
@@ -79,6 +81,7 @@ namespace marengine {
 
         void bind() final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
+        void update(const int32_t* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
 
     private:
@@ -98,6 +101,7 @@ namespace marengine {
 
         void bind() final;
         void update(const float* data, size_t offset, size_t sizeOfData) final;
+        void update(const int32_t* data, size_t offset, size_t sizeOfData) final;
         void update(const uint32_t* data, size_t offset, size_t sizeOfData) final;
 
     private:
