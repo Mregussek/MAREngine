@@ -32,23 +32,23 @@ namespace marengine {
 	RenderStatistics* RenderStatistics::Instance{ nullptr };
 
 	void RenderStatistics::update(FSceneManagerEditor* pSceneManagerEditor) {
-		const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
-		std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
-			verticesCount += batch.getVertices().size();
-			indicesCount += batch.getIndices().size();
-			trianglesCount += (indicesCount / 3);
-			coloredEntitiesCount += batch.getTransforms().size();
-			allRendererEntitiesCount += coloredEntitiesCount;
-		});
+		//const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
+		//std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
+		//	verticesCount += batch.getVertices().size();
+		//	indicesCount += batch.getIndices().size();
+		//	trianglesCount += (indicesCount / 3);
+		//	coloredEntitiesCount += batch.getTransforms().size();
+		//	allRendererEntitiesCount += coloredEntitiesCount;
+		//});
 
-		const auto& texture2DBatches{ RenderPipeline::Instance->getTexture2DBatches() };
-		std::for_each(texture2DBatches.cbegin(), texture2DBatches.cend(), [this](const FMeshBatchStaticTexture2D& batch) {
-			verticesCount += batch.getVertices().size();
-			indicesCount += batch.getIndices().size();
-			trianglesCount += (indicesCount / 3);
-			textured2dEntitiesCount += batch.getTransforms().size();
-			allRendererEntitiesCount += textured2dEntitiesCount;
-		});
+		//const auto& texture2DBatches{ RenderPipeline::Instance->getTexture2DBatches() };
+		//std::for_each(texture2DBatches.cbegin(), texture2DBatches.cend(), [this](const FMeshBatchStaticTexture2D& batch) {
+		//	verticesCount += batch.getVertices().size();
+		//	indicesCount += batch.getIndices().size();
+		//	trianglesCount += (indicesCount / 3);
+		//	textured2dEntitiesCount += batch.getTransforms().size();
+		//	allRendererEntitiesCount += textured2dEntitiesCount;
+		//});
 
 		entitiesCount = pSceneManagerEditor->getScene()->getEntities().size();
 	}

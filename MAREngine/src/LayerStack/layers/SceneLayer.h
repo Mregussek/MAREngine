@@ -31,12 +31,13 @@
 namespace marengine {
 
 	class Scene;
+	class FRenderManager;
 
 
 	class FSceneLayer : public ILayer {
 	public:
 
-		void create(const std::string& scenePath);
+		void create(const std::string& scenePath, FRenderManager* pRenderManager);
 
 		void begin() final;
 		void update() final;

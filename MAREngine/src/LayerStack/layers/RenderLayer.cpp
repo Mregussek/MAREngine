@@ -69,6 +69,7 @@ namespace marengine {
 
     void FRenderLayerOpenGL2::create(FWindow* pWindow) {
         m_context.create(pWindow);
+        m_manager.create((FGraphicsContext*)&m_context);
     }
 
     void FRenderLayerOpenGL2::begin() {
@@ -77,6 +78,11 @@ namespace marengine {
 
     void FRenderLayerOpenGL2::update() {
         p_statistics.reset();
+
+        const auto& pipelines{ m_manager.getPipelines() };
+        for(const auto& pipeline : pipelines) {
+            m_renderer.draw(m_context.getFactory(), &pipeline);
+        }
     }
 
     void FRenderLayerOpenGL2::end() {
@@ -85,6 +91,10 @@ namespace marengine {
 
     void FRenderLayerOpenGL2::close() {
 
+    }
+
+    FRenderManager* FRenderLayerOpenGL2::getRenderManager() {
+        return &m_manager;
     }
 
 

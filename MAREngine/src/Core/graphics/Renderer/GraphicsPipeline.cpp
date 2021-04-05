@@ -28,29 +28,42 @@
 namespace marengine {
 
 
-    void FGraphicsPipelineMesh::passIndexBuffer(FIndexBuffer* pIndexBuffer) {
-        p_pIndexBuffer = pIndexBuffer;
-    }
-
-    void FGraphicsPipelineMesh::passCameraSSBO(FShaderBuffer* pCameraBuffer) {
-        p_pCameraBuffer = pCameraBuffer;
+    void FGraphicsPipeline::passFactory(FGraphicsFactory* pFactory) {
+        p_pFactory = pFactory;
     }
 
 
-    void FGraphicsPipelineColorMesh::passVertexBuffer(FVertexBuffer* pVertexBuffer) {
-        p_pVertexBuffer = pVertexBuffer;
+    void FGraphicsPipelineMesh::passIndexBuffer(int32_t i) {
+        p_indexBufferIndex = i;
+    }
+
+    void FGraphicsPipelineMesh::passCameraSSBO(int32_t i) {
+        p_cameraBufferIndex = i;
+    }
+
+     void FGraphicsPipelineMesh::passPointLightSSBO(int32_t i) {
+        p_pointLightBufferIndex = i;
+    }
+
+    uint32_t FGraphicsPipelineMesh::getIndicesCount() const {
+        return p_pFactory->getIBO(p_indexBufferIndex)->getIndicesCount();
+    }
+
+
+    void FGraphicsPipelineColorMesh::passVertexBuffer(int32_t i) {
+        p_vertexBufferIndex = i;
     }
     
-    void FGraphicsPipelineColorMesh::passTransformSSBO(FShaderBuffer* pTransformsBuffer) {
-        p_pTransformsBuffer = pTransformsBuffer;
+    void FGraphicsPipelineColorMesh::passTransformSSBO(int32_t i) {
+        p_transformBufferIndex = i;
     }
 
-    void FGraphicsPipelineColorMesh::passColorSSBO(FShaderBuffer* pColorsBuffer) {
-        p_pColorsBuffer = pColorsBuffer;
+    void FGraphicsPipelineColorMesh::passColorSSBO(int32_t i) {
+        p_colorBufferIndex = i;
     }
 
-    void FGraphicsPipelineColorMesh::passShaderPipeline(FShaderPipeline* pShaderPipeline) {
-        p_pShaderPipeline = pShaderPipeline;
+    void FGraphicsPipelineColorMesh::passShaderPipeline(int32_t i) {
+        p_shaderPipelineIndex = i;
     }
 
 

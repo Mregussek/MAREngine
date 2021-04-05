@@ -26,20 +26,38 @@
 namespace marengine {
 
 
-    FShaderBufferItem& FShaderBuffer::emplaceItem() {
-        return p_inputLayoutInfo.items.emplace_back();
+    void FShaderBuffer::pushItem(const FShaderBufferItem& item) {
+        p_inputLayoutInfo.items.push_back(item);
     }
     
-    FShaderInputLayoutInfo& FShaderBuffer::getInputLayoutInfo() {
+    const FShaderInputLayoutInfo& FShaderBuffer::getInputLayoutInfo() const {
         return p_inputLayoutInfo;
     }
 
-    FVertexInputLayoutInfo& FVertexBuffer::emplaceInputLayoutInfoElement() {
-        return p_inputDescription.layoutArray.emplace_back();
+    void FShaderBuffer::setInputLayoutInfo(const FShaderInputLayoutInfo& inputLayout) {
+        p_inputLayoutInfo = inputLayout;
     }
 
-    FVertexInputDescription& FVertexBuffer::getInputDescription() {
+
+    void FVertexBuffer::pushInputElement(const FVertexInputLayoutInfo& inputLayout) {
+        p_inputDescription.layoutArray.push_back(inputLayout);
+    }
+
+    const FVertexInputDescription& FVertexBuffer::getInputDescription() const {
         return p_inputDescription;
+    }
+
+    void FVertexBuffer::setInputDescription(const FVertexInputDescription& inputDescription) {
+        p_inputDescription = inputDescription;
+    }
+
+
+    void FIndexBuffer::passIndicesCount(uint32_t indicesCount) {
+        p_indicesCount = indicesCount;
+    }
+
+    uint32_t FIndexBuffer::getIndicesCount() const {
+        return p_indicesCount;
     }
 
 

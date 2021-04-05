@@ -32,6 +32,7 @@ namespace marengine {
 
 	class Scene;
 	class Entity;
+	class FRenderManager;
 
 	
 	/**
@@ -44,7 +45,8 @@ namespace marengine {
 	public:
 
 		/// @brief Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
-		void initialize(Scene* pScene);
+		// TODO: add param docs
+		void initialize(Scene* pScene, FRenderManager* pRenderManager);
 
 		/// @brief Pushes all Scene's data to RenderPipeline
 		void pushSceneToPipeline();
@@ -126,6 +128,7 @@ namespace marengine {
 
 
 		Scene* m_pScene{ nullptr };
+		FRenderManager* m_pRenderManager{ nullptr };
 		
 		bool m_EditorCamera{ true };
 		bool m_EditorMode{ true };

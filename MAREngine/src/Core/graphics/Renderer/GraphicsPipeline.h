@@ -35,8 +35,15 @@ namespace marengine {
     class FShaderBuffer;
     class FShaderPipeline;
 
-   
+
     class FGraphicsPipeline : public IGraphicsPipeline {
+    public:
+
+        virtual void passFactory(FGraphicsFactory* pFactory) final;
+
+    protected:
+
+        FGraphicsFactory* p_pFactory{ nullptr };
 
     };
 
@@ -44,13 +51,16 @@ namespace marengine {
     class FGraphicsPipelineMesh : public FGraphicsPipeline { 
     public:
 
-        virtual void passIndexBuffer(FIndexBuffer* pIndexBuffer) final;
-        virtual void passCameraSSBO(FShaderBuffer* pCameraBuffer) final;
+        virtual void passIndexBuffer(int32_t i) final;
+        virtual void passCameraSSBO(int32_t i) final;
+        virtual void passPointLightSSBO(int32_t i) final;
+        virtual uint32_t getIndicesCount() const final;
 
     protected:
 
-        FIndexBuffer* p_pIndexBuffer{ nullptr };
-        FShaderBuffer* p_pCameraBuffer{ nullptr };
+        int32_t p_indexBufferIndex{ -1 };
+        int32_t p_cameraBufferIndex{ -1 };
+        int32_t p_pointLightBufferIndex{ -1 };
 
     };
 
@@ -58,17 +68,17 @@ namespace marengine {
     class FGraphicsPipelineColorMesh : public FGraphicsPipelineMesh {
     public:
 
-        virtual void passVertexBuffer(FVertexBuffer* pVertexBuffer) final;
-        virtual void passTransformSSBO(FShaderBuffer* pTransformsBuffer) final;
-        virtual void passColorSSBO(FShaderBuffer* pColorsBuffer) final;
-        virtual void passShaderPipeline(FShaderPipeline* pShaderPipeline) final;
+        virtual void passVertexBuffer(int32_t i) final;
+        virtual void passTransformSSBO(int32_t i) final;
+        virtual void passColorSSBO(int32_t i) final;
+        virtual void passShaderPipeline(int32_t i) final;
 
     protected:
 
-        FVertexBuffer* p_pVertexBuffer{ nullptr };
-        FShaderBuffer* p_pTransformsBuffer{ nullptr };
-        FShaderBuffer* p_pColorsBuffer{ nullptr };
-        FShaderPipeline* p_pShaderPipeline{ nullptr };
+        int32_t p_vertexBufferIndex{ -1 };
+        int32_t p_transformBufferIndex{ -1 };
+        int32_t p_colorBufferIndex{ -1 };
+        int32_t p_shaderPipelineIndex{ -1 };
 
     };
 

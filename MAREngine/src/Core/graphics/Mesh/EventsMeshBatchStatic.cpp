@@ -32,36 +32,36 @@ namespace marengine {
 
 
 	void FEventsMeshBatchStatic::onTransformUpdate(const Entity& entity) {
-		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+		//const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		//const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
-		FMeshBatchStatic* batch = [&meshBatchInfoComponent]()->FMeshBatchStatic* {
-			if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_COLOR) {
-				return &RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex];
-			}
-			else if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_TEXTURE2D) {
-				return &RenderPipeline::Instance->m_staticTexture2DBatches[meshBatchInfoComponent.batchIndex];
-			}
-			else {
-				return nullptr;
-			}
-		}();
+		//FMeshBatchStatic* batch = [&meshBatchInfoComponent]()->FMeshBatchStatic* {
+		//	if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_COLOR) {
+		//		return &RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex];
+		//	}
+		//	else if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_TEXTURE2D) {
+		//		return &RenderPipeline::Instance->m_staticTexture2DBatches[meshBatchInfoComponent.batchIndex];
+		//	}
+		//	else {
+		//		return nullptr;
+		//	}
+		//}();
 
-		if (batch) {
-			batch->p_transforms[meshBatchInfoComponent.indexAtBatch] = transformComponent.getTransform();
-			FRenderBufferManager::onTransformsUpdate(*batch);
-		}
+		//if (batch) {
+		//	batch->p_transforms[meshBatchInfoComponent.indexAtBatch] = transformComponent.getTransform();
+		//	FRenderBufferManager::onTransformsUpdate(*batch);
+		//}
 	}
 
 	void FEventsMeshBatchStatic::onColorUpdate(const Entity& entity) {
-		const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-		const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+		//const auto& colorComponent{ entity.getComponent<ColorComponent>() };
+		//const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
-		if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_COLOR) {
-			auto& batch{ RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex] };
-			batch.m_colors[meshBatchInfoComponent.indexAtBatch] = colorComponent.color;
-			FRenderBufferManager::onColorUpdate(batch);
-		}
+		//if (meshBatchInfoComponent.batchType == EMeshBatchType::STATIC_COLOR) {
+		//	auto& batch{ RenderPipeline::Instance->m_staticColorBatches[meshBatchInfoComponent.batchIndex] };
+		//	batch.m_colors[meshBatchInfoComponent.indexAtBatch] = colorComponent.color;
+		//	FRenderBufferManager::onColorUpdate(batch);
+		//}
 	}
 
 

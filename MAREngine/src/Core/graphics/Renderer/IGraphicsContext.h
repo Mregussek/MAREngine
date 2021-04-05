@@ -32,6 +32,7 @@ namespace marengine {
     class FVertexBuffer;
     class FIndexBuffer;
     class FShaderPipeline;
+    class FGraphicsPipelineMesh;
     class FGraphicsPipelineColorMesh;
     class FGraphicsPipelineTexture2DMesh;
     class FRenderer2;
@@ -53,36 +54,49 @@ namespace marengine {
 
 
 
-    class IGraphicsFactory { };
     class IGraphics { };
     class IGraphicsManager : public IGraphics { };
 
-
-    class IGraphicsContextFactory : public IGraphicsFactory {
+    class IGraphicsFactory : public IGraphics { 
     public:
 
-        virtual FContextEmplacedInfo<FShaderBuffer> emplaceShaderStorageBuffer() = 0;
-        virtual FContextEmplacedInfo<FShaderBuffer> emplaceUniformBuffer() = 0;
-        virtual FContextEmplacedInfo<FVertexBuffer> emplaceVertexBuffer() = 0;
-        virtual FContextEmplacedInfo<FIndexBuffer> emplaceIndexBuffer() = 0;
-        virtual FContextEmplacedInfo<FShaderPipeline> emplaceShaderPipeline() = 0;
-        virtual FContextEmplacedInfo<FGraphicsPipelineColorMesh> emplaceGraphicsPipelineColorMesh() = 0;
-        virtual FContextEmplacedInfo<FGraphicsPipelineTexture2DMesh> emplaceGraphicsPipelineTexture2DMesh() = 0;
-        virtual FRenderer2* emplaceRenderer() = 0;
+        // TODO: THIS IS HORRIBLE! need to learn how to implement it better in multi inheritance
 
-        virtual FShaderBuffer* retrieveSSBO(size_t index) = 0;
-        virtual FShaderBuffer* retrieveUBO(size_t index) = 0;
-        virtual FVertexBuffer* retrieveVertexBuffer(size_t index) = 0;
-        virtual FIndexBuffer* retrieveIndexBuffer(size_t index) = 0;
-        virtual FShaderPipeline* retrieveShaderPipeline(size_t index) = 0;
-        virtual FGraphicsPipelineColorMesh* retrieveGraphicsPipelineColorMesh(size_t index) = 0;
-        virtual FGraphicsPipelineTexture2DMesh* retrieveGraphicsPipelineTexture2DMesh(size_t index) = 0;
+        virtual FShaderBuffer* emplaceSSBO() = 0;
+        virtual FShaderBuffer* emplaceUBO() = 0;
+        virtual FVertexBuffer* emplaceVBO() = 0;
+        virtual FIndexBuffer* emplaceIBO() = 0;
+        virtual FShaderPipeline* emplaceShaderPipeline() = 0;
+        virtual FGraphicsPipelineColorMesh* emplacePipelineColorMesh() = 0;
+        virtual FGraphicsPipelineTexture2DMesh* emplacePipelineTexture2DMesh() = 0;
+        
+        virtual size_t getCountSSBO() const = 0;
+        virtual size_t getCountUBO() const = 0;
+        virtual size_t getCountVBO() const = 0;
+        virtual size_t getCountIBO() const = 0;
+        virtual size_t getCountShaderPipeline() const = 0;
+        virtual size_t getCountPipelineColorMesh() const = 0;
+        virtual size_t getCountPipelineTexture2DMesh() const = 0;
+
+        virtual FShaderBuffer* getSSBO(size_t index) = 0;
+        virtual FShaderBuffer* getUBO(size_t index) = 0;
+        virtual FVertexBuffer* getVBO(size_t index) = 0;
+        virtual FIndexBuffer* getIBO(size_t index) = 0;
+        virtual FShaderPipeline* getShaderPipeline(size_t index) = 0;
+        virtual FGraphicsPipelineColorMesh* getPipelineColorMesh(size_t index) = 0;
+        virtual FGraphicsPipelineTexture2DMesh* getPipelineTexture2DMesh(size_t index) = 0;
+
+        virtual FRenderer2* getRenderer() = 0;
+
+        virtual FGraphicsPipelineMesh* retrieveCorrectPipeline(EGraphicsPipelineType type,
+                                                               size_t index) = 0;
+
+        virtual void reset() = 0;
 
     };
 
 
-    class FGraphicsContextFactory : public IGraphicsContextFactory { };
-
+    class FGraphicsFactory : public IGraphicsFactory { };
 
 
     class IGraphicsContext : public IGraphics {
@@ -98,7 +112,7 @@ namespace marengine {
 
         virtual EGraphicsContextType getType() const = 0;
 
-        virtual FGraphicsContextFactory* getFactory() = 0;
+        virtual FGraphicsFactory* getFactory() = 0;
 
     };
 
@@ -106,10 +120,13 @@ namespace marengine {
     class FGraphicsContext : public IGraphicsContext { };
 
 
+    
+
 
     class IGraphicsPipeline : public IGraphics {
     public:
 
+        virtual void passFactory(FGraphicsFactory* pFactory) = 0;
         virtual void create() = 0;
         virtual void close() = 0;
         virtual void bind() = 0;

@@ -29,6 +29,7 @@ namespace marengine {
 	class RenderCamera;
 	class Entity;
 	class FSceneManagerEditor;
+	class FRenderManager;
 
 
 	/**
@@ -42,8 +43,9 @@ namespace marengine {
 	    /**
 	     * @brief Creates FEventsCameraEntity, so that it can be used from everywhere.
 	     * @param pSceneManagerEditor dependency of this class is instance of SceneManagerEditor
+		 * TODO: add param docs
 	     */
-	    static void create(FSceneManagerEditor* pSceneManagerEditor);
+	    static void create(FSceneManagerEditor* pSceneManagerEditor, FRenderManager* pRenderManager);
 
 		/**
 		 * @brief Updates main camera with given entity, only if it can be updated (FSceneManager must allow it).
@@ -67,6 +69,7 @@ namespace marengine {
 	private:
 
         static FSceneManagerEditor* s_pSceneManagerEditor;
+		static FRenderManager* s_pRenderManager;
 
 	};
 

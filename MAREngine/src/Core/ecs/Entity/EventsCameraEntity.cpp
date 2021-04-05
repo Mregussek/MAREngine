@@ -24,17 +24,20 @@
 #include "Entity.h"
 #include "../Scene.h"
 #include "../SceneManagerEditor.h"
-#include "../../graphics/RenderAPI/RenderBufferManager.h"
-#include "../../graphics/RenderAPI/RenderPipeline.h"
+//#include "../../graphics/RenderAPI/RenderBufferManager.h"
+//#include "../../graphics/RenderAPI/RenderPipeline.h"
+#include "../../graphics/Renderer/RenderManager.h"
 
 
 namespace marengine {
 
     FSceneManagerEditor* FEventsCameraEntity::s_pSceneManagerEditor{ nullptr };
+	FRenderManager* FEventsCameraEntity::s_pRenderManager{ nullptr };
 
 
-    void FEventsCameraEntity::create(FSceneManagerEditor* pSceneManagerEditor) {
+    void FEventsCameraEntity::create(FSceneManagerEditor* pSceneManagerEditor, FRenderManager* pRenderManager) {
         s_pSceneManagerEditor = pSceneManagerEditor;
+		s_pRenderManager = pRenderManager;
     }
 
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
@@ -46,12 +49,14 @@ namespace marengine {
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
 			const auto& transform{ entity.getComponent<TransformComponent>() };
 			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-            RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
+			s_pRenderManager->pushCameraToRender(&cameraComponent.renderCamera);
+            //RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
 		}
 	}
 
 	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* pRenderCamera) {
-		RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
+		s_pRenderManager->pushCameraToRender(pRenderCamera);
+		//RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() {
@@ -74,7 +79,8 @@ namespace marengine {
 			RenderCamera* pRenderCamera{ &cameraComponent.renderCamera };
 
 			pRenderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
-			RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
+			s_pRenderManager->pushCameraToRender(pRenderCamera);
+			//RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
 		}
 	}
 

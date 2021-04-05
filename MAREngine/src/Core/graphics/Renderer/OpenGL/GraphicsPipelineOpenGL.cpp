@@ -36,28 +36,23 @@ namespace marengine {
     }
 
 
-
     void FGraphicsPipelineColorMeshOpenGL::create() {
-        createVAO(m_vao, p_pVertexBuffer->getInputDescription());
+        createVAO(m_vao, p_pFactory->getVBO(p_vertexBufferIndex)->getInputDescription());
     }
 
     void FGraphicsPipelineColorMeshOpenGL::close() {
         GL_FUNC( glDeleteVertexArrays(1, &m_vao) );
-        closeBuffer(p_pVertexBuffer);
-        closeBuffer(p_pIndexBuffer);
-        closeBuffer(p_pTransformsBuffer);
-        closeBuffer(p_pColorsBuffer);
-        p_pShaderPipeline->close();
     }
 
     void FGraphicsPipelineColorMeshOpenGL::bind() {
         GL_FUNC( glBindVertexArray(m_vao) );
-        p_pVertexBuffer->bind();
-        p_pIndexBuffer->bind();
-        p_pTransformsBuffer->bind();
-        p_pColorsBuffer->bind();
-        p_pCameraBuffer->bind();
-        p_pShaderPipeline->bind();
+        p_pFactory->getVBO(p_vertexBufferIndex)->bind();
+        p_pFactory->getIBO(p_indexBufferIndex)->bind();
+        p_pFactory->getSSBO(p_transformBufferIndex)->bind();
+        p_pFactory->getSSBO(p_colorBufferIndex)->bind();
+        p_pFactory->getSSBO(p_cameraBufferIndex)->bind();
+        p_pFactory->getSSBO(p_pointLightBufferIndex)->bind();
+        p_pFactory->getShaderPipeline(p_shaderPipelineIndex)->bind();
     }
 
 

@@ -1,7 +1,7 @@
 /***********************************************************************
 * @internal @copyright
 *
-*  				MAREngine - open source 3D game engine
+*       MAREngine - open source 3D game engine
 *
 * Copyright (C) 2020-present Mateusz Rzeczyca <info@mateuszrzeczyca.pl>
 * All rights reserved.
@@ -20,29 +20,29 @@
 ************************************************************************/
 
 
-#include <MAREngine/MAREngine.h>
+#include "RendererOpenGL.h"
+#include "../RenderManager.h"
+#include "../../../../Logging/Logger.h"
 
 
-using namespace marengine;
+namespace marengine {
 
 
-int main() {
+    void FRendererOpenGL::draw(FGraphicsFactory* pFactory,
+                               const FGraphicsPipelineAtManagerInfo* pPipelineInfo) {
+        FGraphicsPipelineMesh* pPipeline{ 
+            pFactory->retrieveCorrectPipeline(pPipelineInfo->type, pPipelineInfo->index)
+        };
+        pPipeline->bind();
 
-    const std::string projectName = "DefaultProject";
-    const std::string sceneName = "default.marscene.json";
+        GL_FUNC( glStencilFunc(GL_ALWAYS, 1, 0xFF) );
+		GL_FUNC( glStencilMask(0xFF) );
 
-    MAREngine engine;
-    engine.initAtStartup(projectName, sceneName);
-
-    while(engine.shouldEngineRestart())
-    {
-        FMAREngineBuilder<
-                FWindowGLFWImGui,
-                FRenderLayerOpenGL2,
-                FEditorLayerImGui
-        > builder;
-        engine.buildAndRun((IMAREngineBuilder*)&builder);
+        GL_FUNC( glDrawElements(GL_TRIANGLES,
+                                pPipeline->getIndicesCount(),
+                                GL_UNSIGNED_INT,
+                                nullptr) );
     }
 
-    return 0;
+
 }

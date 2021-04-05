@@ -33,12 +33,23 @@ namespace marengine {
     class FBuffer : public IBuffer { };
 
     
-    class FShaderBuffer : public FBuffer {
+    class IShaderBuffer : public FBuffer {
     public:
 
         virtual void create() = 0;
-        virtual FShaderBufferItem& emplaceItem() final;
-        virtual FShaderInputLayoutInfo& getInputLayoutInfo() final;
+        virtual void pushItem(const FShaderBufferItem& item) = 0;
+        virtual const FShaderInputLayoutInfo& getInputLayoutInfo() const = 0;
+        virtual void setInputLayoutInfo(const FShaderInputLayoutInfo& inputLayout) = 0;
+
+    };
+    
+    
+    class FShaderBuffer : public IShaderBuffer {
+    public:
+
+        void pushItem(const FShaderBufferItem& item) final;
+        const FShaderInputLayoutInfo& getInputLayoutInfo() const final;
+        void setInputLayoutInfo(const FShaderInputLayoutInfo& inputLayout) final;
 
     protected:
 
@@ -51,8 +62,9 @@ namespace marengine {
     public:
 
         virtual void create(int64_t memoryToAllocate) = 0;
-        virtual FVertexInputLayoutInfo& emplaceInputLayoutInfoElement() final;
-        virtual FVertexInputDescription& getInputDescription() final;
+        virtual void pushInputElement(const FVertexInputLayoutInfo& inputLayout) final;
+        virtual const FVertexInputDescription& getInputDescription() const final;
+        virtual void setInputDescription(const FVertexInputDescription& inputDescription) final;
 
         virtual void update(const FVertexArray& vertices) = 0;
 
@@ -69,10 +81,14 @@ namespace marengine {
 
         virtual void create(int64_t memoryToAllocate) = 0;
         virtual void update(const FIndicesArray& indices) = 0;
-    
+        virtual void passIndicesCount(uint32_t indicesCount) final;
+        virtual uint32_t getIndicesCount() const final;
+
     protected:
 
         int64_t p_allocatedMemory{ 0 };
+        uint32_t p_indicesCount{ 0 };
+
     };
 
 

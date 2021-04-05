@@ -24,19 +24,22 @@
 #include "Scene.h"
 #include "Entity/EventsComponentEntity.h"
 #include "Entity/EventsCameraEntity.h"
-#include "../graphics/RenderAPI/RenderPipeline.h"
+#include "../graphics/Renderer/RenderManager.h"
+//#include "../graphics/RenderAPI/RenderPipeline.h"
 
 
 namespace marengine {
 
 
-	void FSceneManagerEditor::initialize(Scene* pScene) {
+	void FSceneManagerEditor::initialize(Scene* pScene, FRenderManager* pRenderManager) {
 	    m_pScene = pScene;
+		m_pRenderManager = pRenderManager;
 		pushSceneToPipeline();
 	}
 
     void FSceneManagerEditor::pushSceneToPipeline() {
-        RenderPipeline::Instance->create(getScene());
+		m_pRenderManager->pushSceneToRender(m_pScene);
+        //RenderPipeline::Instance->create(getScene());
 	}
 
 	void FSceneManagerEditor::update() {

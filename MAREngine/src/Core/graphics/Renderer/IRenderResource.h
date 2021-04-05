@@ -61,7 +61,7 @@ namespace marengine {
         FShaderInputLayoutInfoArray* pInputLayoutInfoArray;
     };
 
-    
+
 
     class IRenderResource { };
 

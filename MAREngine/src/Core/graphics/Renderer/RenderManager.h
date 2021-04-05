@@ -25,6 +25,7 @@
 
 
 #include "IGraphicsContext.h"
+#include "GraphicsPipeline.h"
 #include "../Mesh/MeshBatchStatic.h"
 #include "../Lightning/PointLightBatch.h"
 
@@ -38,35 +39,39 @@ namespace marengine {
     class FGraphicsPipelineMesh;
 
 
-    struct FStoredPipelineInfo {
-        FGraphicsPipelineMesh* pPipeline{ nullptr };
+    struct FGraphicsPipelineAtManagerInfo {
         EGraphicsPipelineType type{ EGraphicsPipelineType::NONE };
         uint32_t index{ 0 };
     };
 
-    typedef std::vector<FStoredPipelineInfo> FStoredPipelinesArray;
+    typedef std::vector<FGraphicsPipelineAtManagerInfo> FGraphicsPipelinesAtManagerArray;
 
 
     class FRenderManager : public IRenderManager {
     public:
 
-        void create(FGraphicsContext* pGraphicsContext, Scene* pScene);
+        void create(FGraphicsContext* pGraphicsContext);
         void reset();
 
         void pushSceneToRender(Scene* pScene);
         void pushEntityToRender(const Entity& entity);
         void pushCameraToRender(const RenderCamera* pRenderCamera);
 
+        const FGraphicsPipelinesAtManagerArray& getPipelines() const;
+
     private:
 
         void onBatchesReadyToDraw();
 
+
         FMeshBatchStaticColorArray m_meshesBatchColor;
         FMeshBatchStaticTexture2DArray m_meshesBatchTexture2D;
-        FStoredPipelinesArray m_pipelines;
+        FGraphicsPipelinesAtManagerArray m_pipelines;
         FPointLightBatch m_pointLightBatch;
+
         const RenderCamera* m_pRenderCamera{ nullptr };
         FGraphicsContext* m_pGraphicsContext{ nullptr };
+
         int32_t m_cameraIndex{ -1 };
         int32_t m_pointLightIndex{ -1 };
 

@@ -34,6 +34,8 @@
 #include "../../Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 
 #include "../../Core/graphics/Renderer/OpenGL/GraphicsContextOpenGL.h"
+#include "../../Core/graphics/Renderer/RenderManager.h"
+#include "../../Core/graphics/Renderer/OpenGL/RendererOpenGL.h"
 
 
 
@@ -49,6 +51,7 @@ namespace marengine {
         virtual void create(FWindow* pWindow) = 0;
 
         MAR_NO_DISCARD RenderStatistics* getRenderStats();
+		virtual MAR_NO_DISCARD FRenderManager* getRenderManager() = 0;
 
     protected:
 
@@ -65,6 +68,10 @@ namespace marengine {
 	    void update() final;
 	    void end() final;
 		void close() final;
+
+		MAR_NO_DISCARD FRenderManager* getRenderManager() {
+			return nullptr;
+		}
 
 	private:
 
@@ -86,9 +93,13 @@ namespace marengine {
         void end() final;
         void close() final;
 
+		MAR_NO_DISCARD FRenderManager* getRenderManager();
+
 	private:
 
 	    FGraphicsContextOpenGL m_context;
+		FRenderManager m_manager;
+		FRendererOpenGL m_renderer;
 
 	};
 

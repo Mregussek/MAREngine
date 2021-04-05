@@ -31,31 +31,31 @@ namespace marengine {
 
 
 	void FEventsLightBatch::onPointLightUpdate(const Entity& entity) {
-		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
-		auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+		//const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		//const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
+		//auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 
-		auto& pointLightAtBatch{
-			RenderPipeline::Instance->m_pointLightBatch.m_lights[lightBatchInfoComponent.indexAtBatch]
-		};
+		//auto& pointLightAtBatch{
+		//	RenderPipeline::Instance->m_pointLightBatch.m_lights[lightBatchInfoComponent.indexAtBatch]
+		//};
 
-		pointLightComponent.pointLight.position = maths::vec4(transformComponent.position, 1.f);
-		pointLightAtBatch = pointLightComponent.pointLight;
+		//pointLightComponent.pointLight.position = maths::vec4(transformComponent.position, 1.f);
+		//pointLightAtBatch = pointLightComponent.pointLight;
 
-		FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
+		//FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
 	}
 
 	void FEventsLightBatch::onPointLightPositionUpdate(const Entity& entity) {
-		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
+		//const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		//const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
 
-		auto& pointLightAtBatch{
-			RenderPipeline::Instance->m_pointLightBatch.m_lights[lightBatchInfoComponent.indexAtBatch]
-		};
+		//auto& pointLightAtBatch{
+		//	RenderPipeline::Instance->m_pointLightBatch.m_lights[lightBatchInfoComponent.indexAtBatch]
+		//};
 
-		pointLightAtBatch.position = maths::vec4(transformComponent.position, 1.f);
+		//pointLightAtBatch.position = maths::vec4(transformComponent.position, 1.f);
 
-		FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
+		//FRenderBufferManager::onPointLightUpdate(RenderPipeline::Instance->m_pointLightBatch);
 	}
 
 
