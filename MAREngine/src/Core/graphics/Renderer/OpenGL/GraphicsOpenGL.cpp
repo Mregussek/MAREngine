@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "GraphicsContextOpenGL.h"
+#include "GraphicsOpenGL.h"
 #include "../../../../Logging/Logger.h"
 #include "../../../../Platform/ShellTerminal/TerminalAPI.h"
 
@@ -95,8 +95,6 @@ namespace marengine {
         return (FGraphicsFactory*)&m_factory;
     }
 
-
-
     static void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
                                            GLenum severity, GLsizei length,
                                            const GLchar* message, const void* userParam)
@@ -143,6 +141,110 @@ namespace marengine {
         MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL type={}, id={}, severity={}, message:\n{}",
                                             errorType, id, severityType, message);
      }
+
+
+    FShaderBuffer* const FGraphicsFactoryOpenGL::emplaceSSBO() {
+        return &m_ssbos.emplace_back();
+    }
+    FShaderBuffer* const FGraphicsFactoryOpenGL::emplaceUBO() {
+        return &m_ubos.emplace_back();
+    }
+    FVertexBuffer* const FGraphicsFactoryOpenGL::emplaceVBO() {
+        return &m_vbos.emplace_back();
+    }
+    FIndexBuffer* const FGraphicsFactoryOpenGL::emplaceIBO() {
+        return &m_ibos.emplace_back();
+    }
+    FShaderPipeline* const FGraphicsFactoryOpenGL::emplaceShaderPipeline() {
+        return &m_shaderPipelines.emplace_back();
+    }
+    FGraphicsPipelineColorMesh* const FGraphicsFactoryOpenGL::emplacePipelineColorMesh() {
+        return &m_pipelinesColorMesh.emplace_back();
+    }
+    FGraphicsPipelineTexture2DMesh* const FGraphicsFactoryOpenGL::emplacePipelineTexture2DMesh() {
+        return &m_pipelinesTexture2DMesh.emplace_back();
+    }
+
+    size_t FGraphicsFactoryOpenGL::getCountSSBO() const {
+        return m_ssbos.size();
+    }
+    size_t FGraphicsFactoryOpenGL::getCountUBO() const {
+        return m_ubos.size();
+    }
+    size_t FGraphicsFactoryOpenGL::getCountVBO() const {
+        return m_vbos.size();
+    }
+    size_t FGraphicsFactoryOpenGL::getCountIBO() const {
+        return m_ibos.size();
+    }
+    size_t FGraphicsFactoryOpenGL::getCountShaderPipeline() const {
+        return m_shaderPipelines.size();
+    }
+    size_t FGraphicsFactoryOpenGL::getCountPipelineColorMesh() const {
+        return m_pipelinesColorMesh.size();
+    }
+    size_t FGraphicsFactoryOpenGL::getCountPipelineTexture2DMesh() const {
+        return m_pipelinesTexture2DMesh.size();
+    }
+
+    FShaderBuffer* const FGraphicsFactoryOpenGL::getSSBO(size_t index) const {
+        return (FShaderBuffer* const)&m_ssbos.at(index);
+    }
+    FShaderBuffer* const FGraphicsFactoryOpenGL::getUBO(size_t index) const {
+        return (FShaderBuffer* const)&m_ubos.at(index);
+    }
+    FVertexBuffer* const FGraphicsFactoryOpenGL::getVBO(size_t index) const {
+        return (FVertexBuffer* const)&m_vbos.at(index);
+    }
+    FIndexBuffer* const FGraphicsFactoryOpenGL::getIBO(size_t index) const {
+        return (FIndexBuffer* const)&m_ibos.at(index);
+    }
+    FShaderPipeline* const FGraphicsFactoryOpenGL::getShaderPipeline(size_t index) const {
+        return (FShaderPipeline* const)&m_shaderPipelines.at(index);
+    }
+    FGraphicsPipelineColorMesh* const FGraphicsFactoryOpenGL::getPipelineColorMesh(size_t index) const {
+        return (FGraphicsPipelineColorMesh* const)&m_pipelinesColorMesh.at(index);
+    }
+    FGraphicsPipelineTexture2DMesh* const FGraphicsFactoryOpenGL::getPipelineTexture2DMesh(size_t index) const {
+        return (FGraphicsPipelineTexture2DMesh* const)&m_pipelinesTexture2DMesh.at(index);
+    }
+    FRenderer2* const FGraphicsFactoryOpenGL::getRenderer() const {
+        return (FRenderer2* const)&m_renderer;
+    }
+
+    FGraphicsPipelineMesh* const FGraphicsFactoryOpenGL::retrieveCorrectPipeline(EGraphicsPipelineType type,
+                                                                                 size_t index) const {
+        if (type == EGraphicsPipelineType::MESH_COLOR) {
+            return getPipelineColorMesh(index);
+        }
+        if (type == EGraphicsPipelineType::MESH_TEXTURE2D) {
+            return getPipelineTexture2DMesh(index);
+        }
+
+        return nullptr;
+    }
+
+    void FGraphicsFactoryOpenGL::reset() {
+        auto clearBuffer = [](FBuffer* pBuffer){
+            pBuffer->free();
+            pBuffer->destroy();
+        };
+        for(auto& buffer : m_ssbos) { clearBuffer(&buffer); }
+        for(auto& buffer : m_ubos) { clearBuffer(&buffer); }
+        for(auto& buffer : m_vbos) { clearBuffer(&buffer); }
+        for(auto& buffer : m_ibos) { clearBuffer(&buffer); }
+        for(auto& type : m_shaderPipelines) { type.close(); }
+        for(auto& type : m_pipelinesColorMesh) { type.close(); }
+        for(auto& type : m_pipelinesTexture2DMesh) { type.close(); }
+
+        m_ssbos.clear();
+        m_ubos.clear();
+        m_vbos.clear();
+        m_ibos.clear();
+        m_shaderPipelines.clear();
+        m_pipelinesColorMesh.clear();
+        m_pipelinesTexture2DMesh.clear();
+    }
 
 
 }

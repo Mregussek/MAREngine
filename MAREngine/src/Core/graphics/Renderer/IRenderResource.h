@@ -63,9 +63,9 @@ namespace marengine {
 
 
 
-    class IRenderResource { };
+    class IRenderResource {
 
-
+    };
 
     class IBuffer : public IRenderResource {
     public:
@@ -79,8 +79,6 @@ namespace marengine {
         virtual void update(const int32_t* data, size_t offset, size_t sizeOfData) = 0;
 
     };
-
-
 
     class IShaderPipeline : public IRenderResource {
     public:
@@ -98,8 +96,6 @@ namespace marengine {
         virtual void bind() = 0;
 
     };
-
-
 
     class IMaterial : public IRenderResource {
     public:

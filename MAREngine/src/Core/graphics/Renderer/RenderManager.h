@@ -24,7 +24,7 @@
 #define MARENGINE_RENDERMANAGER_H
 
 
-#include "IGraphicsContext.h"
+#include "IGraphics.h"
 #include "GraphicsPipeline.h"
 #include "../Mesh/MeshBatchStatic.h"
 #include "../Lightning/PointLightBatch.h"
@@ -62,6 +62,8 @@ namespace marengine {
     private:
 
         void onBatchesReadyToDraw();
+
+
 
 
         FMeshBatchStaticColorArray m_meshesBatchColor;

@@ -30,11 +30,6 @@ namespace marengine {
 
     static void createVAO(uint32_t& vao, const FVertexInputDescription& inputDescription);
 
-    static void closeBuffer(FBuffer* pBuffer) {
-        pBuffer->free();
-        pBuffer->destroy();
-    }
-
 
     void FGraphicsPipelineColorMeshOpenGL::create() {
         createVAO(m_vao, p_pFactory->getVBO(p_vertexBufferIndex)->getInputDescription());

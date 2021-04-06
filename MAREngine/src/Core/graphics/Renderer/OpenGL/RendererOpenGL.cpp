@@ -30,7 +30,7 @@ namespace marengine {
 
     void FRendererOpenGL::draw(FGraphicsFactory* pFactory,
                                const FGraphicsPipelineAtManagerInfo* pPipelineInfo) {
-        FGraphicsPipelineMesh* pPipeline{ 
+        FGraphicsPipelineMesh* const pPipeline{
             pFactory->retrieveCorrectPipeline(pPipelineInfo->type, pPipelineInfo->index)
         };
         pPipeline->bind();

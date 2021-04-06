@@ -26,7 +26,7 @@
 
 #include "../../../mar.h"
 #include "../../../Platform/OpenGL/ShaderOpenGL.h"
-#include "IGraphicsContext.h"
+#include "IGraphics.h"
 
 
 namespace marengine {

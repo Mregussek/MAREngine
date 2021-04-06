@@ -133,7 +133,7 @@ namespace marengine {
     void FRenderManager::pushCameraToRender(const RenderCamera* pRenderCamera) {
         m_pRenderCamera = pRenderCamera;
         const maths::mat4& mvp{ m_pRenderCamera->getMVP() };
-        FShaderBuffer* cameraSSBO{ m_pGraphicsContext->getFactory()->getSSBO(m_cameraIndex) };
+        FShaderBuffer* const cameraSSBO{ m_pGraphicsContext->getFactory()->getSSBO(m_cameraIndex) };
         cameraSSBO->update(maths::mat4::value_ptr(mvp), 0, sizeof(maths::mat4));
     }
 
@@ -162,14 +162,16 @@ namespace marengine {
 
     template<typename TMeshBatch>
     uint32_t getAvailableBatch(std::vector<TMeshBatch>& batches, const Entity& entity) {
-        auto canBatchEntity = [&entity](TMeshBatch& batch) {
+        auto canBatchEntity = [&entity](TMeshBatch& batch)->bool {
 			return batch.canBeBatched(entity);
 		};
-		const auto it = std::find_if(batches.begin(), batches.end(), canBatchEntity);
-		if (it != batches.end()) {
-			return std::distance(batches.begin(), it);
+		const auto validBatchIt = std::find_if(batches.begin(), batches.end(), canBatchEntity);
+		if (validBatchIt != batches.end()) {
+			return std::distance(batches.begin(), validBatchIt);
 		}
 
+		// If cannot find valid batch with place for Entity, emplace new one
+		// This will cause a new draw call!
 		batches.emplace_back();
 		return batches.size() - 1;
     }
@@ -208,7 +210,7 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineVBO(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FVertexBuffer* vertexBuffer{ pFactory->emplaceVBO() };
+        FVertexBuffer* const vertexBuffer{ pFactory->emplaceVBO() };
         fillDefaultVertexLayout(vertexBuffer);
         vertexBuffer->create(GraphicLimits::sizeOfVertices);
         vertexBuffer->update(batch.getVertices());
@@ -219,7 +221,7 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineIBO(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FIndexBuffer* indexBuffer{ pFactory->emplaceIBO() };
+        FIndexBuffer* const indexBuffer{ pFactory->emplaceIBO() };
         const FIndicesArray& indices{ batch.getIndices() };
         indexBuffer->create(GraphicLimits::sizeOfIndices);
         indexBuffer->update(indices);
@@ -246,7 +248,7 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineTransforms(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FShaderBuffer* transformSSBO{ pFactory->emplaceSSBO() };
+        FShaderBuffer* const transformSSBO{ pFactory->emplaceSSBO() };
         fillDefaultTransformSSBO(transformSSBO, 5);
         const FTransformsArray& transforms{ batch.getTransforms() };
         transformSSBO->create();
@@ -277,7 +279,7 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineColor(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FShaderBuffer* colorSSBO{ pFactory->emplaceSSBO() };
+        FShaderBuffer* const colorSSBO{ pFactory->emplaceSSBO() };
         fillDefaultColorSSBO(colorSSBO, 3);
         const FColorsArray& colors{ batch.getColors() };
         colorSSBO->create();
@@ -297,7 +299,7 @@ namespace marengine {
     void createPipelineForBatch<FMeshBatchStaticColor>(FGraphicsFactory* pFactory,
                                                        FGraphicsPipelineAtManagerInfo& pipelineInfo,
                                                        FMeshBatchStaticColor& batch) {
-        FGraphicsPipelineColorMesh* graphicsPipeline{ pFactory->emplacePipelineColorMesh() };
+        FGraphicsPipelineColorMesh* const graphicsPipeline{ pFactory->emplacePipelineColorMesh() };
         
         createPipelineVBO(pFactory, graphicsPipeline, batch);
         createPipelineIBO(pFactory, graphicsPipeline, batch);
@@ -326,7 +328,7 @@ namespace marengine {
 
     static uint32_t createCameraSSBO(FGraphicsFactory* pFactory,
                                      const RenderCamera* pRenderCamera) {
-        FShaderBuffer* cameraSSBO{ pFactory->emplaceSSBO() };
+        FShaderBuffer* const cameraSSBO{ pFactory->emplaceSSBO() };
 
         FShaderInputLayoutInfo layoutInfo;
         layoutInfo.binding = 0;
@@ -352,7 +354,7 @@ namespace marengine {
 
     uint32_t createPointLightSSBO(FGraphicsFactory* pFactory,
                                   const FPointLightBatch& pointLightBatch) {
-        FShaderBuffer* lightSSBO{ pFactory->emplaceSSBO() };
+        FShaderBuffer* const lightSSBO{ pFactory->emplaceSSBO() };
 
         FShaderInputLayoutInfo layoutInfo;
         layoutInfo.binding = 2;

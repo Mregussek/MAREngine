@@ -24,7 +24,7 @@
 #define MARENGINE_GRAPHICSPIPELINE_H
 
 
-#include "IGraphicsContext.h"
+#include "IGraphics.h"
 #include <vector>
 
 

@@ -20,14 +20,13 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IGRAPHICSCONTEXT_H
-#define MARENGINE_IGRAPHICSCONTEXT_H
+#ifndef MARENGINE_IGRAPHICS_H
+#define MARENGINE_IGRAPHICS_H
 
 
 namespace marengine {
 
     class FWindow;
-    class FShaderPipeline;
     class FShaderBuffer;
     class FVertexBuffer;
     class FIndexBuffer;
@@ -46,29 +45,27 @@ namespace marengine {
         NONE, MESH_COLOR, MESH_TEXTURE2D
     };
 
-    template<typename TEmplacedType>
-    struct FContextEmplacedInfo {
-        TEmplacedType* pType{ nullptr };
-        size_t index{ 0 };
+
+    class IGraphics {
+
     };
 
+    class IGraphicsManager : public IGraphics {
 
-
-    class IGraphics { };
-    class IGraphicsManager : public IGraphics { };
+    };
 
     class IGraphicsFactory : public IGraphics { 
     public:
 
         // TODO: THIS IS HORRIBLE! need to learn how to implement it better in multi inheritance
 
-        virtual FShaderBuffer* emplaceSSBO() = 0;
-        virtual FShaderBuffer* emplaceUBO() = 0;
-        virtual FVertexBuffer* emplaceVBO() = 0;
-        virtual FIndexBuffer* emplaceIBO() = 0;
-        virtual FShaderPipeline* emplaceShaderPipeline() = 0;
-        virtual FGraphicsPipelineColorMesh* emplacePipelineColorMesh() = 0;
-        virtual FGraphicsPipelineTexture2DMesh* emplacePipelineTexture2DMesh() = 0;
+        virtual FShaderBuffer* const emplaceSSBO() = 0;
+        virtual FShaderBuffer* const emplaceUBO() = 0;
+        virtual FVertexBuffer* const emplaceVBO() = 0;
+        virtual FIndexBuffer* const emplaceIBO() = 0;
+        virtual FShaderPipeline* const emplaceShaderPipeline() = 0;
+        virtual FGraphicsPipelineColorMesh* const emplacePipelineColorMesh() = 0;
+        virtual FGraphicsPipelineTexture2DMesh* const emplacePipelineTexture2DMesh() = 0;
         
         virtual size_t getCountSSBO() const = 0;
         virtual size_t getCountUBO() const = 0;
@@ -78,50 +75,43 @@ namespace marengine {
         virtual size_t getCountPipelineColorMesh() const = 0;
         virtual size_t getCountPipelineTexture2DMesh() const = 0;
 
-        virtual FShaderBuffer* getSSBO(size_t index) = 0;
-        virtual FShaderBuffer* getUBO(size_t index) = 0;
-        virtual FVertexBuffer* getVBO(size_t index) = 0;
-        virtual FIndexBuffer* getIBO(size_t index) = 0;
-        virtual FShaderPipeline* getShaderPipeline(size_t index) = 0;
-        virtual FGraphicsPipelineColorMesh* getPipelineColorMesh(size_t index) = 0;
-        virtual FGraphicsPipelineTexture2DMesh* getPipelineTexture2DMesh(size_t index) = 0;
+        virtual FShaderBuffer* const getSSBO(size_t index) const = 0;
+        virtual FShaderBuffer* const getUBO(size_t index) const = 0;
+        virtual FVertexBuffer* const getVBO(size_t index) const = 0;
+        virtual FIndexBuffer* const getIBO(size_t index) const = 0;
+        virtual FShaderPipeline* const getShaderPipeline(size_t index) const = 0;
+        virtual FGraphicsPipelineColorMesh* const getPipelineColorMesh(size_t index) const = 0;
+        virtual FGraphicsPipelineTexture2DMesh* const getPipelineTexture2DMesh(size_t index) const = 0;
+        virtual FRenderer2* const getRenderer() const = 0;
 
-        virtual FRenderer2* getRenderer() = 0;
-
-        virtual FGraphicsPipelineMesh* retrieveCorrectPipeline(EGraphicsPipelineType type,
-                                                               size_t index) = 0;
+        virtual FGraphicsPipelineMesh* const retrieveCorrectPipeline(EGraphicsPipelineType type,
+                                                                     size_t index) const = 0;
 
         virtual void reset() = 0;
 
     };
 
+    class FGraphicsFactory : public IGraphicsFactory {
 
-    class FGraphicsFactory : public IGraphicsFactory { };
-
+    };
 
     class IGraphicsContext : public IGraphics {
     public:
 
         virtual bool create(FWindow* pWindow) = 0;
-
         virtual void close() = 0;
 
         virtual void prepareFrame() = 0;
-
         virtual void endFrame() = 0;
 
         virtual EGraphicsContextType getType() const = 0;
-
         virtual FGraphicsFactory* getFactory() = 0;
 
     };
 
+    class FGraphicsContext : public IGraphicsContext {
 
-    class FGraphicsContext : public IGraphicsContext { };
-
-
-    
-
+    };
 
     class IGraphicsPipeline : public IGraphics {
     public:
@@ -133,19 +123,16 @@ namespace marengine {
 
     };
 
-
-
     class IRenderer : public IGraphics {
 
     };
-
-
 
     class IRenderManager : public IGraphicsManager {
 
     };
 
+
 }
 
 
-#endif //MARENGINE_IGRAPHICSCONTEXT_H
+#endif //MARENGINE_IGRAPHICS_H

@@ -30,7 +30,8 @@
 namespace marengine {
 
 
-    class FGraphicsPipelineColorMeshOpenGL : public FGraphicsPipelineColorMesh {
+    class FGraphicsPipelineColorMeshOpenGL :
+            public FGraphicsPipelineColorMesh {
     public:
 
         void create() final;
@@ -44,7 +45,8 @@ namespace marengine {
     };
 
 
-    class FGraphicsPipelineTexture2DMeshOpenGL : public FGraphicsPipelineTexture2DMesh {
+    class FGraphicsPipelineTexture2DMeshOpenGL :
+            public FGraphicsPipelineTexture2DMesh {
     public:
 
         void create() final;

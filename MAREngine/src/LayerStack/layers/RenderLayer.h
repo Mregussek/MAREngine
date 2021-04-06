@@ -33,7 +33,7 @@
 #include "../../Core/graphics/Renderer/PipelineManager.h"
 #include "../../Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 
-#include "../../Core/graphics/Renderer/OpenGL/GraphicsContextOpenGL.h"
+#include "../../Core/graphics/Renderer/OpenGL/GraphicsOpenGL.h"
 #include "../../Core/graphics/Renderer/RenderManager.h"
 #include "../../Core/graphics/Renderer/OpenGL/RendererOpenGL.h"
 
