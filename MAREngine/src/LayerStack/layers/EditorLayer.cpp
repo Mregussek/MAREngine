@@ -30,7 +30,7 @@ namespace marengine {
 
 
     void FEditorLayerImGui::create(IWindow* pWindow, FSceneManagerEditor *pSceneManagerEditor,
-                                   RenderStatistics* pRenderStatistics) {
+                                   FRenderStatistics* pRenderStatistics) {
         m_pSceneManagerEditor = pSceneManagerEditor;
         m_pWindow = pWindow;
         m_serviceLocator.registerServices(pWindow, pSceneManagerEditor, pRenderStatistics);

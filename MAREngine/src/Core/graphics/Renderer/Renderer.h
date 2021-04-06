@@ -25,43 +25,50 @@
 
 
 #include "../../../mar.h"
-#include "../../../Platform/OpenGL/ShaderOpenGL.h"
 #include "IGraphics.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
 	class FMeshBatchStaticColor;
 	class FMeshBatchStaticTexture2D;
 
 
-	class FRenderer {
-	public:
-
-		void initialize();
-		void close();
-		void draw() const;
-
-	private:
-
-		void drawColors(const FMeshBatchStaticColor& batches) const;
-		void drawTextures2D(const FMeshBatchStaticTexture2D& batches) const;
-
-		void setupShaders();
-
-
-		ShaderOpenGL m_shaderColors;
-		ShaderOpenGL m_shader2D;
-
-	};
-
-
-	class FRenderer2 : public IRenderer {
+	class FRenderer : public IRenderer {
 	public:
 
 
 
 	};
+
+
+	struct FRenderStatsStorage {
+
+        uint32_t drawCallsCount{ 0 };
+        uint32_t verticesCount{ 0 };
+        uint32_t indicesCount{ 0 };
+        uint32_t trianglesCount{ 0 };
+        uint32_t entitiesCount{ 0 };
+        uint32_t coloredEntitiesCount{ 0 };
+        uint32_t textured2dEntitiesCount{ 0 };
+        uint32_t allRendererEntitiesCount{ 0 };
+
+	};
+
+    class FRenderStatistics {
+    public:
+
+        void update(FSceneManagerEditor* pSceneManagerEditor);
+        void reset();
+
+        MAR_NO_DISCARD const FRenderStatsStorage& getStorage() const;
+
+    private:
+
+        FRenderStatsStorage m_storage;
+
+    };
 
 
 }

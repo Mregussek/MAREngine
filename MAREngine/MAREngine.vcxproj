@@ -290,7 +290,7 @@
     <ClInclude Include="src\Core\graphics\Renderer\RendererDefinitions.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RendererEvents.h" />
     <ClInclude Include="src\Core\graphics\Renderer\RenderMemorizer.h" />
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h" />
+    <ClInclude Include="src\Core\graphics\RenderAPI\FRenderStatistics.h" />
     <ClInclude Include="src\Core\graphics\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\ecs\Entity\Entity.h" />
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h" />
@@ -415,7 +415,7 @@
     <ClCompile Include="src\Core\graphics\Renderer\RendererEvents.cpp" />
     <ClCompile Include="src\Core\graphics\Renderer\RenderMemorizer.cpp" />
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp" />
-    <ClCompile Include="src\Core\graphics\RenderAPI\RenderStatistics.cpp" />
+    <ClCompile Include="src\Core\graphics\RenderAPI\FRenderStatistics.cpp" />
     <ClCompile Include="src\Core\scripting\PythonScript.cpp" />
     <ClCompile Include="src\Debug\Log.cpp" />
     <ClCompile Include="src\Editor\Camera\Camera.cpp" />

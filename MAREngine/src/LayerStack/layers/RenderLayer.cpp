@@ -26,57 +26,21 @@
 namespace marengine {
 
 
-    RenderStatistics* FRenderLayer::getRenderStats() {
+    FRenderStatistics* FRenderLayer::getRenderStats() {
         return &p_statistics;
     }
 
 
-	void FRenderLayerOpenGL::create(FWindow* pWindow) {
-        const bool isRenderApiCreated = m_renderApiContext.create();
-        if(!isRenderApiCreated) {
-            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Render API!");
-            return;
-        }
-
-		RenderMemorizer::Instance = &m_memorizer;
-		RenderStatistics::Instance = &p_statistics;
-		RenderPipeline::Instance = &m_renderPipeline;
-		FPipelineManager::Instance = &m_pipelineManager;
-		
-		m_renderer.initialize();
-	}
-
-	void FRenderLayerOpenGL::begin() {
-
-    }
-
-	void FRenderLayerOpenGL::update() {
-        p_statistics.reset();
-		m_renderer.draw();
-	}
-
-	void FRenderLayerOpenGL::end() {
-
-    }
-
-	void FRenderLayerOpenGL::close() {
-		m_renderPipeline.reset();
-		m_pipelineManager.close();
-
-		m_renderer.close();
-	}
-
-
-    void FRenderLayerOpenGL2::create(FWindow* pWindow) {
+    void FRenderLayerOpenGL::create(FWindow* pWindow) {
         m_context.create(pWindow);
         m_manager.create((FGraphicsContext*)&m_context);
     }
 
-    void FRenderLayerOpenGL2::begin() {
+    void FRenderLayerOpenGL::begin() {
         //m_context.prepareFrame();
     }
 
-    void FRenderLayerOpenGL2::update() {
+    void FRenderLayerOpenGL::update() {
         p_statistics.reset();
 
         const auto& pipelines{ m_manager.getPipelines() };
@@ -85,15 +49,15 @@ namespace marengine {
         }
     }
 
-    void FRenderLayerOpenGL2::end() {
+    void FRenderLayerOpenGL::end() {
 
     }
 
-    void FRenderLayerOpenGL2::close() {
+    void FRenderLayerOpenGL::close() {
 
     }
 
-    FRenderManager* FRenderLayerOpenGL2::getRenderManager() {
+    FRenderManager* FRenderLayerOpenGL::getRenderManager() {
         return &m_manager;
     }
 

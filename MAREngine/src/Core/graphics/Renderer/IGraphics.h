@@ -34,7 +34,7 @@ namespace marengine {
     class FGraphicsPipelineMesh;
     class FGraphicsPipelineColorMesh;
     class FGraphicsPipelineTexture2DMesh;
-    class FRenderer2;
+    class FRenderer;
 
 
     enum class EGraphicsContextType {
@@ -59,14 +59,14 @@ namespace marengine {
 
         // TODO: THIS IS HORRIBLE! need to learn how to implement it better in multi inheritance
 
-        virtual FShaderBuffer* const emplaceSSBO() = 0;
-        virtual FShaderBuffer* const emplaceUBO() = 0;
-        virtual FVertexBuffer* const emplaceVBO() = 0;
-        virtual FIndexBuffer* const emplaceIBO() = 0;
-        virtual FShaderPipeline* const emplaceShaderPipeline() = 0;
-        virtual FGraphicsPipelineColorMesh* const emplacePipelineColorMesh() = 0;
-        virtual FGraphicsPipelineTexture2DMesh* const emplacePipelineTexture2DMesh() = 0;
-        
+        virtual FShaderBuffer* emplaceSSBO() = 0;
+        virtual FShaderBuffer* emplaceUBO() = 0;
+        virtual FVertexBuffer* emplaceVBO() = 0;
+        virtual FIndexBuffer* emplaceIBO() = 0;
+        virtual FShaderPipeline* emplaceShaderPipeline() = 0;
+        virtual FGraphicsPipelineColorMesh* emplacePipelineColorMesh() = 0;
+        virtual FGraphicsPipelineTexture2DMesh* emplacePipelineTexture2DMesh() = 0;
+
         virtual size_t getCountSSBO() const = 0;
         virtual size_t getCountUBO() const = 0;
         virtual size_t getCountVBO() const = 0;
@@ -75,17 +75,17 @@ namespace marengine {
         virtual size_t getCountPipelineColorMesh() const = 0;
         virtual size_t getCountPipelineTexture2DMesh() const = 0;
 
-        virtual FShaderBuffer* const getSSBO(size_t index) const = 0;
-        virtual FShaderBuffer* const getUBO(size_t index) const = 0;
-        virtual FVertexBuffer* const getVBO(size_t index) const = 0;
-        virtual FIndexBuffer* const getIBO(size_t index) const = 0;
-        virtual FShaderPipeline* const getShaderPipeline(size_t index) const = 0;
-        virtual FGraphicsPipelineColorMesh* const getPipelineColorMesh(size_t index) const = 0;
-        virtual FGraphicsPipelineTexture2DMesh* const getPipelineTexture2DMesh(size_t index) const = 0;
-        virtual FRenderer2* const getRenderer() const = 0;
+        virtual FShaderBuffer* getSSBO(size_t index) const = 0;
+        virtual FShaderBuffer* getUBO(size_t index) const = 0;
+        virtual FVertexBuffer* getVBO(size_t index) const = 0;
+        virtual FIndexBuffer* getIBO(size_t index) const = 0;
+        virtual FShaderPipeline* getShaderPipeline(size_t index) const = 0;
+        virtual FGraphicsPipelineColorMesh* getPipelineColorMesh(size_t index) const = 0;
+        virtual FGraphicsPipelineTexture2DMesh* getPipelineTexture2DMesh(size_t index) const = 0;
+        virtual FRenderer* getRenderer() const = 0;
 
-        virtual FGraphicsPipelineMesh* const retrieveCorrectPipeline(EGraphicsPipelineType type,
-                                                                     size_t index) const = 0;
+        virtual FGraphicsPipelineMesh* retrieveCorrectPipeline(EGraphicsPipelineType type,
+                                                               size_t index) const = 0;
 
         virtual void reset() = 0;
 

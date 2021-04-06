@@ -32,7 +32,7 @@ namespace marengine {
     struct FGraphicsPipelineAtManagerInfo;
 
 
-    class FRendererOpenGL : public FRenderer2 {
+    class FRendererOpenGL : public FRenderer {
     public:
 
         void draw(FGraphicsFactory* pFactory,

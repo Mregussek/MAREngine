@@ -21,8 +21,6 @@
 
 
 #include "EventsLightBatch.h"
-#include"../RenderAPI/RenderBufferManager.h"
-#include "../RenderAPI/RenderPipeline.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 

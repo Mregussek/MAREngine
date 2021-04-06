@@ -143,25 +143,25 @@ namespace marengine {
      }
 
 
-    FShaderBuffer* const FGraphicsFactoryOpenGL::emplaceSSBO() {
+    FShaderBuffer* FGraphicsFactoryOpenGL::emplaceSSBO() {
         return &m_ssbos.emplace_back();
     }
-    FShaderBuffer* const FGraphicsFactoryOpenGL::emplaceUBO() {
+    FShaderBuffer* FGraphicsFactoryOpenGL::emplaceUBO() {
         return &m_ubos.emplace_back();
     }
-    FVertexBuffer* const FGraphicsFactoryOpenGL::emplaceVBO() {
+    FVertexBuffer* FGraphicsFactoryOpenGL::emplaceVBO() {
         return &m_vbos.emplace_back();
     }
-    FIndexBuffer* const FGraphicsFactoryOpenGL::emplaceIBO() {
+    FIndexBuffer* FGraphicsFactoryOpenGL::emplaceIBO() {
         return &m_ibos.emplace_back();
     }
-    FShaderPipeline* const FGraphicsFactoryOpenGL::emplaceShaderPipeline() {
+    FShaderPipeline* FGraphicsFactoryOpenGL::emplaceShaderPipeline() {
         return &m_shaderPipelines.emplace_back();
     }
-    FGraphicsPipelineColorMesh* const FGraphicsFactoryOpenGL::emplacePipelineColorMesh() {
+    FGraphicsPipelineColorMesh* FGraphicsFactoryOpenGL::emplacePipelineColorMesh() {
         return &m_pipelinesColorMesh.emplace_back();
     }
-    FGraphicsPipelineTexture2DMesh* const FGraphicsFactoryOpenGL::emplacePipelineTexture2DMesh() {
+    FGraphicsPipelineTexture2DMesh* FGraphicsFactoryOpenGL::emplacePipelineTexture2DMesh() {
         return &m_pipelinesTexture2DMesh.emplace_back();
     }
 
@@ -187,33 +187,33 @@ namespace marengine {
         return m_pipelinesTexture2DMesh.size();
     }
 
-    FShaderBuffer* const FGraphicsFactoryOpenGL::getSSBO(size_t index) const {
-        return (FShaderBuffer* const)&m_ssbos.at(index);
+    FShaderBuffer* FGraphicsFactoryOpenGL::getSSBO(size_t index) const {
+        return (FShaderBuffer*)&m_ssbos.at(index);
     }
-    FShaderBuffer* const FGraphicsFactoryOpenGL::getUBO(size_t index) const {
-        return (FShaderBuffer* const)&m_ubos.at(index);
+    FShaderBuffer* FGraphicsFactoryOpenGL::getUBO(size_t index) const {
+        return (FShaderBuffer*)&m_ubos.at(index);
     }
-    FVertexBuffer* const FGraphicsFactoryOpenGL::getVBO(size_t index) const {
-        return (FVertexBuffer* const)&m_vbos.at(index);
+    FVertexBuffer* FGraphicsFactoryOpenGL::getVBO(size_t index) const {
+        return (FVertexBuffer*)&m_vbos.at(index);
     }
-    FIndexBuffer* const FGraphicsFactoryOpenGL::getIBO(size_t index) const {
-        return (FIndexBuffer* const)&m_ibos.at(index);
+    FIndexBuffer* FGraphicsFactoryOpenGL::getIBO(size_t index) const {
+        return (FIndexBuffer*)&m_ibos.at(index);
     }
-    FShaderPipeline* const FGraphicsFactoryOpenGL::getShaderPipeline(size_t index) const {
-        return (FShaderPipeline* const)&m_shaderPipelines.at(index);
+    FShaderPipeline* FGraphicsFactoryOpenGL::getShaderPipeline(size_t index) const {
+        return (FShaderPipeline*)&m_shaderPipelines.at(index);
     }
-    FGraphicsPipelineColorMesh* const FGraphicsFactoryOpenGL::getPipelineColorMesh(size_t index) const {
-        return (FGraphicsPipelineColorMesh* const)&m_pipelinesColorMesh.at(index);
+    FGraphicsPipelineColorMesh* FGraphicsFactoryOpenGL::getPipelineColorMesh(size_t index) const {
+        return (FGraphicsPipelineColorMesh*)&m_pipelinesColorMesh.at(index);
     }
-    FGraphicsPipelineTexture2DMesh* const FGraphicsFactoryOpenGL::getPipelineTexture2DMesh(size_t index) const {
-        return (FGraphicsPipelineTexture2DMesh* const)&m_pipelinesTexture2DMesh.at(index);
+    FGraphicsPipelineTexture2DMesh* FGraphicsFactoryOpenGL::getPipelineTexture2DMesh(size_t index) const {
+        return (FGraphicsPipelineTexture2DMesh*)&m_pipelinesTexture2DMesh.at(index);
     }
-    FRenderer2* const FGraphicsFactoryOpenGL::getRenderer() const {
-        return (FRenderer2* const)&m_renderer;
+    FRenderer* FGraphicsFactoryOpenGL::getRenderer() const {
+        return (FRenderer*)&m_renderer;
     }
 
-    FGraphicsPipelineMesh* const FGraphicsFactoryOpenGL::retrieveCorrectPipeline(EGraphicsPipelineType type,
-                                                                                 size_t index) const {
+    FGraphicsPipelineMesh* FGraphicsFactoryOpenGL::retrieveCorrectPipeline(EGraphicsPipelineType type,
+                                                                           size_t index) const {
         if (type == EGraphicsPipelineType::MESH_COLOR) {
             return getPipelineColorMesh(index);
         }

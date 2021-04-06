@@ -24,7 +24,7 @@
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
-#include "../../../../Core/graphics/RenderAPI/RenderStatistics.h"
+#include "../../../../Core/graphics/Renderer/Renderer.h"
 
 
 namespace marengine {
@@ -32,7 +32,7 @@ namespace marengine {
 
     void FDebugImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
-        m_pRenderStatistics = serviceLocator->retrieve<FImGuiTypeHolder<RenderStatistics*>>()->pInstance;
+        m_pRenderStatistics = serviceLocator->retrieve<FImGuiTypeHolder<FRenderStatistics*>>()->pInstance;
     }
 
     void FDebugImGuiWidget::updateFrame() {
@@ -50,19 +50,19 @@ namespace marengine {
         }
 
         ImGui::End();
-
         ImGui::Begin("Statistics Menu");
 
         m_pRenderStatistics->update(m_pSceneManagerEditor);
+        const FRenderStatsStorage& storage{ m_pRenderStatistics->getStorage() };
 
-        ImGui::Text("Draw Calls: %d", m_pRenderStatistics->drawCallsCount);
-        ImGui::Text("Vertices: %d", m_pRenderStatistics->verticesCount);
-        ImGui::Text("Indices: %d", m_pRenderStatistics->indicesCount);
-        ImGui::Text("Triangles: %d", m_pRenderStatistics->trianglesCount);
-        ImGui::Text("Entities: %d", m_pRenderStatistics->entitiesCount);
-        ImGui::Text("Colored Entities: %d", m_pRenderStatistics->coloredEntitiesCount);
-        ImGui::Text("Textured2D Entities: %d", m_pRenderStatistics->textured2dEntitiesCount);
-        ImGui::Text("Rendered Entities: %d", m_pRenderStatistics->allRendererEntitiesCount);
+        ImGui::Text("Draw Calls: %d", storage.drawCallsCount);
+        ImGui::Text("Vertices: %d", storage.verticesCount);
+        ImGui::Text("Indices: %d", storage.indicesCount);
+        ImGui::Text("Triangles: %d", storage.trianglesCount);
+        ImGui::Text("Entities: %d", storage.entitiesCount);
+        ImGui::Text("Colored Entities: %d", storage.coloredEntitiesCount);
+        ImGui::Text("Textured2D Entities: %d", storage.textured2dEntitiesCount);
+        ImGui::Text("Rendered Entities: %d", storage.allRendererEntitiesCount);
 
         ImGui::Separator();
 

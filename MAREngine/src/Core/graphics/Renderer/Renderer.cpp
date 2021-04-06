@@ -21,94 +21,49 @@
 
 
 #include "Renderer.h"
-#include "RendererEvents.h"
-#include "PipelineManager.h"
-#include "RenderMemorizer.h"
-#include "../RenderAPI/RenderPipeline.h"
-#include "../Mesh/MeshBatchStatic.h"
-#include "../Lightning/PointLightBatch.h"
-#include "../../../Platform/OpenGL/DrawingOpenGL.h"
-#include "../../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../ecs/SceneManagerEditor.h"
+#include "../../ecs/Scene.h"
 
 
 namespace marengine {
 
 
-	void FRenderer::initialize() {
-		setupShaders();
-	}
+    void FRenderStatistics::update(FSceneManagerEditor* pSceneManagerEditor) {
+        //const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
+        //std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
+        //	verticesCount += batch.getVertices().size();
+        //	indicesCount += batch.getIndices().size();
+        //	trianglesCount += (indicesCount / 3);
+        //	coloredEntitiesCount += batch.getTransforms().size();
+        //	allRendererEntitiesCount += coloredEntitiesCount;
+        //});
 
-	void FRenderer::setupShaders() {
-		{
-			const char* vert = "resources/shaders/color.vert.glsl";
-			const char* frag = "resources/shaders/color.frag.glsl";
-			const ShaderPaths shaderPaths(vert, frag, nullptr);
+        //const auto& texture2DBatches{ RenderPipeline::Instance->getTexture2DBatches() };
+        //std::for_each(texture2DBatches.cbegin(), texture2DBatches.cend(), [this](const FMeshBatchStaticTexture2D& batch) {
+        //	verticesCount += batch.getVertices().size();
+        //	indicesCount += batch.getIndices().size();
+        //	trianglesCount += (indicesCount / 3);
+        //	textured2dEntitiesCount += batch.getTransforms().size();
+        //	allRendererEntitiesCount += textured2dEntitiesCount;
+        //});
 
-			m_shaderColors.initialize(shaderPaths);
-		}
-		{
-			const char* vert = "resources/shaders/texture2d.vert.glsl";
-			const char* frag = "resources/shaders/texture2d.frag.glsl";
-			const ShaderPaths shaderPaths(vert, frag, nullptr);
+        m_storage.entitiesCount = pSceneManagerEditor->getScene()->getEntities().size();
+    }
 
-			m_shader2D.initialize(shaderPaths);
-			m_shader2D.setupShaderUniforms(GLSLShaderInfo::samplerTexture2DArray);
-		}
-	}
+    void FRenderStatistics::reset() {
+        m_storage.drawCallsCount = 0;
+        m_storage.verticesCount = 0;
+        m_storage.indicesCount = 0;
+        m_storage.trianglesCount = 0;
+        m_storage.entitiesCount = 0;
+        m_storage.coloredEntitiesCount = 0;
+        m_storage.textured2dEntitiesCount = 0;
+        m_storage.allRendererEntitiesCount = 0;
+    }
 
-	void FRenderer::close() {
-		m_shaderColors.shutdown();
-		m_shader2D.shutdown();
-		TextureOpenGL::Instance()->shutdown();
-	}
-
-	void FRenderer::draw() const {
-		const RenderPipeline* renderPipeline( RenderPipeline::Instance );
-
-		const auto& cameraSSBO{ FPipelineManager::Instance->getSSBO(RenderMemorizer::Instance->cameraSSBO) };
-		cameraSSBO.bind();
-
-		const auto& pointLightBatch{ renderPipeline->getPointLightBatch() };
-		const auto& pointLightSSBO{ FPipelineManager::Instance->getSSBO(pointLightBatch.getUniquePointLightID()) };
-		pointLightSSBO.bind();
-		
-		m_shaderColors.bind();
-		drawColors(renderPipeline->getColorBatches()[0]);
-		m_shader2D.bind();
-		drawTextures2D(renderPipeline->getTexture2DBatches()[0]);
-	}
-
-	void FRenderer::drawColors(const FMeshBatchStaticColor& batch) const {
-		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueTransformsID()) };
-		transformSSBO.bind();
-
-		const auto& colorSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueColorsID()) };
-		colorSSBO.bind();
-
-		const auto& pipeline{ FPipelineManager::Instance->getPipeline(batch.getUniquePipelineID()) };
-		pipeline.bind();
-
-		DrawingOpenGL::drawTriangles(batch.getIndices().size());
-		FRendererEvents::onDrawCall();
-	}
-
-	void FRenderer::drawTextures2D(const FMeshBatchStaticTexture2D& batch) const {
-		const auto& transformSSBO{ FPipelineManager::Instance->getSSBO(batch.getUniqueTransformsID()) };
-		transformSSBO.bind();
-
-		const auto& textures{ batch.getTextures() };
-		std::for_each(textures.cbegin(), textures.cend(), [this](const FTexturePair& texture) {
-			const auto textureID = (int32_t)TextureOpenGL::Instance()->loadTexture(texture.texturePath);
-			TextureOpenGL::Instance()->bind2D(texture.bindingIndex, textureID);
-			m_shader2D.setUniformSampler(GLSLShaderInfo::samplerTexture2DArray[texture.bindingIndex], texture.bindingIndex);
-		});
-
-		const auto& pipeline{ FPipelineManager::Instance->getPipeline(batch.getUniquePipelineID()) };
-		pipeline.bind();
-
-		DrawingOpenGL::drawTriangles(batch.getIndices().size());
-		FRendererEvents::onDrawCall();
-	}
+    const FRenderStatsStorage& FRenderStatistics::getStorage() const {
+        return m_storage;
+    }
 
 
 }

@@ -26,18 +26,10 @@
 
 #include "../../mar.h"
 #include "../ILayer.h"
-#include "../../Core/graphics/RenderAPI/RenderPipeline.h"
-#include "../../Core/graphics/RenderAPI/RenderStatistics.h"
 #include "../../Core/graphics/Renderer/Renderer.h"
-#include "../../Core/graphics/Renderer/RenderMemorizer.h"
-#include "../../Core/graphics/Renderer/PipelineManager.h"
-#include "../../Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
-
-#include "../../Core/graphics/Renderer/OpenGL/GraphicsOpenGL.h"
 #include "../../Core/graphics/Renderer/RenderManager.h"
+#include "../../Core/graphics/Renderer/OpenGL/GraphicsOpenGL.h"
 #include "../../Core/graphics/Renderer/OpenGL/RendererOpenGL.h"
-
-
 
 
 namespace marengine {
@@ -50,41 +42,17 @@ namespace marengine {
 
         virtual void create(FWindow* pWindow) = 0;
 
-        MAR_NO_DISCARD RenderStatistics* getRenderStats();
-		virtual MAR_NO_DISCARD FRenderManager* getRenderManager() = 0;
+        MAR_NO_DISCARD FRenderStatistics* getRenderStats();
+		MAR_NO_DISCARD virtual FRenderManager* getRenderManager() = 0;
 
     protected:
 
-        RenderStatistics p_statistics;
+        FRenderStatistics p_statistics;
 
     };
 
 
 	class FRenderLayerOpenGL : public FRenderLayer {
-	public:
-
-	    void create(FWindow* pWindow) final;
-		void begin() final;
-	    void update() final;
-	    void end() final;
-		void close() final;
-
-		MAR_NO_DISCARD FRenderManager* getRenderManager() {
-			return nullptr;
-		}
-
-	private:
-
-		FRenderer m_renderer;
-		RenderPipeline m_renderPipeline;
-		FPipelineManager m_pipelineManager;
-		RenderMemorizer m_memorizer;
-        FRenderApiContextOpenGL m_renderApiContext;
-
-	};
-
-
-	class FRenderLayerOpenGL2 : public FRenderLayer {
     public:
 
         void create(FWindow* pWindow) final;

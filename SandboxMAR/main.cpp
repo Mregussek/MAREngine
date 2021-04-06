@@ -38,7 +38,7 @@ int main() {
     {
         FMAREngineBuilder<
                 FWindowGLFWImGui,
-                FRenderLayerOpenGL2,
+                FRenderLayerOpenGL,
                 FEditorLayerImGui
         > builder;
         engine.buildAndRun((IMAREngineBuilder*)&builder);

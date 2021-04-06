@@ -21,8 +21,8 @@
 
 
 #include "RenderCamera.h"
-#include "../../ecs/Components/DefaultComponents.h"
-#include "../../ecs/Components/CameraComponents.h"
+#include "Core/ecs/Components/DefaultComponents.h"
+#include "Core/ecs/Components/CameraComponents.h"
 
 
 namespace marengine {

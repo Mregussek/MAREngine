@@ -24,7 +24,7 @@
 #include "Buffer.h"
 #include "ShaderPipeline.h"
 #include "GraphicsPipeline.h"
-#include "../RenderAPI/RenderCamera.h"
+#include "RenderCamera.h"
 #include "../GraphicsLimits.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Scene.h"

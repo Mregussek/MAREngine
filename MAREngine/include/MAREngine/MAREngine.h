@@ -41,9 +41,7 @@
 #include "../../src/Core/ecs/Entity/Entity.h"
 #include "../../src/Core/ecs/Components/Components.h"
 
-// Rendering 
-#include "../../src/Core/graphics/RenderAPI/RenderPipeline.h"
-#include "../../src/Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
+// Rendering
 #include "../../src/Core/graphics/Renderer/Renderer.h"
 
 // Scripting

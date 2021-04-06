@@ -27,7 +27,6 @@
 #include "LayerStack/LayerStack.h"
 #include "Window/GLFW/WindowGLFW.h"
 #include "Window/SDL/WindowSDL.h"
-#include "Core/graphics/RenderAPI/OpenGL/RenderApiContextOpenGL.h"
 #include "LayerStack/layers/EditorLayer.h"
 #include "LayerStack/layers/SceneLayer.h"
 #include "LayerStack/layers/RenderLayer.h"

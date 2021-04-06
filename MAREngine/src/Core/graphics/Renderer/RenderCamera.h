@@ -44,7 +44,8 @@ namespace marengine {
 		RenderCamera() = default;
 
 		void calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane);
-		void calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane);
+		void calculateOrthographic(float left, float right, float top, float bottom,
+                                   float nearPlane, float farPlane);
 		void calculateView(vec3 position, vec3 lookAt, vec3 up);
 		void calculateModel(vec3 arg);
 		void recalculateMVP();

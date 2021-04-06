@@ -306,7 +306,7 @@
     <ClInclude Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderStatistics.h">
+    <ClInclude Include="src\Core\graphics\RenderAPI\FRenderStatistics.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h">
@@ -653,7 +653,7 @@
     <ClCompile Include="src\Core\graphics\Mesh\loader_obj\OBJ_Loader.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\graphics\RenderAPI\RenderStatistics.cpp">
+    <ClCompile Include="src\Core\graphics\RenderAPI\FRenderStatistics.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp">
