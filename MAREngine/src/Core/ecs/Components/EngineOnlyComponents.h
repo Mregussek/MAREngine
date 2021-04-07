@@ -25,7 +25,6 @@
 
 
 #include "../../../mar.h"
-#include "../../graphics/Mesh/MeshDefinitions.h"
 #include "../../graphics/Lightning/LightDefinitions.h"
 
 
@@ -49,7 +48,7 @@ namespace marengine {
 		int32_t indexAtBatch{ -1 };
 
 		int32_t batchIndex{ -1 };
-		EMeshBatchType batchType{ EMeshBatchType::NONE };
+		EBatchType batchType{ EBatchType::NONE };
 
 	};
 

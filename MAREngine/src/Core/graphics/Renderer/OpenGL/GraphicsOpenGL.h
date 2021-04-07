@@ -25,11 +25,11 @@
 
 
 #include "../../../../mar.h"
-#include "../IGraphics.h"
+#include "../IRender.h"
 #include "RendererOpenGL.h"
 #include "BufferOpenGL.h"
-#include "GraphicsPipelineOpenGL.h"
-#include "ShaderPipelineOpenGL.h"
+#include "PipelineOpenGL.h"
+#include "ShadersOpenGL.h"
 
 
 namespace marengine {
@@ -37,54 +37,7 @@ namespace marengine {
     class FWindow;
 
 
-    class FGraphicsFactoryOpenGL : public FGraphicsFactory {
-    public:
-
-        MAR_NO_DISCARD FShaderBuffer* emplaceSSBO() final;
-        MAR_NO_DISCARD FShaderBuffer* emplaceUBO() final;
-        MAR_NO_DISCARD FVertexBuffer* emplaceVBO() final;
-        MAR_NO_DISCARD FIndexBuffer* emplaceIBO() final;
-        MAR_NO_DISCARD FShaderPipeline* emplaceShaderPipeline() final;
-        MAR_NO_DISCARD FGraphicsPipelineColorMesh* emplacePipelineColorMesh() final;
-        MAR_NO_DISCARD FGraphicsPipelineTexture2DMesh* emplacePipelineTexture2DMesh() final;
-
-        MAR_NO_DISCARD size_t getCountSSBO() const final;
-        MAR_NO_DISCARD size_t getCountUBO() const final;
-        MAR_NO_DISCARD size_t getCountVBO() const final;
-        MAR_NO_DISCARD size_t getCountIBO() const final;
-        MAR_NO_DISCARD size_t getCountShaderPipeline() const final;
-        MAR_NO_DISCARD size_t getCountPipelineColorMesh() const final;
-        MAR_NO_DISCARD size_t getCountPipelineTexture2DMesh() const final;
-
-        MAR_NO_DISCARD FShaderBuffer* getSSBO(size_t index) const final;
-        MAR_NO_DISCARD FShaderBuffer* getUBO(size_t index) const final;
-        MAR_NO_DISCARD FVertexBuffer* getVBO(size_t index) const final;
-        MAR_NO_DISCARD FIndexBuffer* getIBO(size_t index) const final;
-        MAR_NO_DISCARD FShaderPipeline* getShaderPipeline(size_t index) const final;
-        MAR_NO_DISCARD FGraphicsPipelineColorMesh* getPipelineColorMesh(size_t index) const final;
-        MAR_NO_DISCARD FGraphicsPipelineTexture2DMesh* getPipelineTexture2DMesh(size_t index) const final;
-        MAR_NO_DISCARD FRenderer* getRenderer() const final;
-
-        MAR_NO_DISCARD FGraphicsPipelineMesh* retrieveCorrectPipeline(EGraphicsPipelineType type,
-                                                                      size_t index) const final;
-
-        void reset() final;
-
-    private:
-
-        std::vector<FShaderStorageBufferOpenGL2> m_ssbos;
-        std::vector<FUniformBufferOpenGL2> m_ubos;
-        std::vector<FVertexBufferOpenGL> m_vbos;
-        std::vector<FIndexBufferOpenGL> m_ibos;
-        std::vector<FShaderPipelineOpenGL> m_shaderPipelines;
-        std::vector<FGraphicsPipelineColorMeshOpenGL> m_pipelinesColorMesh;
-        std::vector<FGraphicsPipelineTexture2DMeshOpenGL> m_pipelinesTexture2DMesh;
-        FRendererOpenGL m_renderer;
-
-    };
-
-
-    class FGraphicsContextOpenGL : public FGraphicsContext {
+    class FRenderContextOpenGL : public FRenderContext {
     public:
 
         bool create(FWindow* pWindow) final;
@@ -93,12 +46,22 @@ namespace marengine {
         void prepareFrame() final;
         void endFrame() final;
 
-        MAR_NO_DISCARD EGraphicsContextType getType() const final;
-        MAR_NO_DISCARD FGraphicsFactory* getFactory() final;
+        MAR_NO_DISCARD ERenderContextType getType() const final;
+
+        MAR_NO_DISCARD FBufferStorage* getBufferStorage() final;
+        MAR_NO_DISCARD FShadersStorage* getShadersStorage() final;
+        MAR_NO_DISCARD FPipelineStorage* getPipelineStorage() final;
+
+        MAR_NO_DISCARD FBufferFactory* getBufferFactory() final;
+        MAR_NO_DISCARD FShadersFactory* getShadersFactory() final;
+        MAR_NO_DISCARD FPipelineFactory* getPipelineFactory() final;
 
     private:
 
-        FGraphicsFactoryOpenGL m_factory;
+        FPipelineFactoryOpenGL m_pipelineFactory;
+        FShadersFactoryOpenGL m_shadersFactory;
+        FBufferFactoryOpenGL m_bufferFactory;
+
         FWindow* m_pWindow{ nullptr };
 
     };

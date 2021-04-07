@@ -33,7 +33,7 @@ namespace marengine {
 
     void FRenderLayerOpenGL::create(FWindow* pWindow) {
         m_context.create(pWindow);
-        m_manager.create((FGraphicsContext*)&m_context);
+        m_manager.create((FRenderContext*)&m_context);
     }
 
     void FRenderLayerOpenGL::begin() {
@@ -43,9 +43,10 @@ namespace marengine {
     void FRenderLayerOpenGL::update() {
         p_statistics.reset();
 
-        const auto& pipelines{ m_manager.getPipelines() };
-        for(const auto& pipeline : pipelines) {
-            m_renderer.draw(m_context.getFactory(), &pipeline);
+        const uint32_t colorMeshesCount{ m_context.getPipelineStorage()->getCountColorMesh() };
+
+        for(uint32_t i = 0; i < colorMeshesCount; i++) {
+            m_renderCmds.draw(m_context.getPipelineStorage()->getColorMesh(i));
         }
     }
 

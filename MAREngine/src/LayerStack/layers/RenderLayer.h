@@ -61,13 +61,13 @@ namespace marengine {
         void end() final;
         void close() final;
 
-		MAR_NO_DISCARD FRenderManager* getRenderManager();
+		MAR_NO_DISCARD FRenderManager* getRenderManager() final;
 
 	private:
 
-	    FGraphicsContextOpenGL m_context;
+	    FRenderContextOpenGL m_context;
 		FRenderManager m_manager;
-		FRendererOpenGL m_renderer;
+		FRenderCommandOpenGL m_renderCmds;
 
 	};
 

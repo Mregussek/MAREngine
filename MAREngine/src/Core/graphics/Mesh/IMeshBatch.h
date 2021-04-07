@@ -24,7 +24,7 @@
 #define MAR_ENGINE_I_MESH_BATCH_H
 
 
-#include "MeshDefinitions.h"
+#include "../Renderer/IRender.h"
 
 
 namespace marengine {
@@ -119,7 +119,7 @@ namespace marengine {
 		 * @brief Returns batch type
 		 * @return
 		 */
-        virtual EMeshBatchType getBatchType() const = 0;
+        virtual EBatchType getBatchType() const = 0;
 
 	protected:
 

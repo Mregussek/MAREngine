@@ -59,10 +59,10 @@ namespace marengine {
         GL_FUNC( glBufferSubData(TBufferType, offset, sizeOfData, data) );
     }
 
-    static int64_t getMemoryUsed(FShaderBufferItemsArray& itemsArray) {
+    static int64_t getMemoryUsed(FShaderInputDescription& description) {
         int64_t sum = 0;
-        for(const auto& item : itemsArray) {
-            sum += item.memoryUsed;
+        for(const auto& var : description.inputVariables) {
+            sum += var.memoryUsed;
         }
         return sum;
     }
@@ -146,72 +146,129 @@ namespace marengine {
     }
 
 
-    void FShaderStorageBufferOpenGL2::create() {
-        const int64_t memoryUsed{ getMemoryUsed(p_inputLayoutInfo.items) };
+    void FShaderStorageBufferOpenGL::create() {
+        const int64_t memoryUsed{ getMemoryUsed(p_inputDescription) };
         createGL<m_glBufferType>(m_id, memoryUsed);
-        GL_FUNC( glBindBufferBase(m_glBufferType, p_inputLayoutInfo.binding, m_id) );
+        GL_FUNC( glBindBufferBase(m_glBufferType, p_inputDescription.binding, m_id) );
     }
 
-    void FShaderStorageBufferOpenGL2::free() {
+    void FShaderStorageBufferOpenGL::free() {
         freeGL<m_glBufferType>(m_id);
     }
 
-    void FShaderStorageBufferOpenGL2::destroy() {
+    void FShaderStorageBufferOpenGL::destroy() {
         closeGL(m_id);
     }
 
-    void FShaderStorageBufferOpenGL2::bind() {
+    void FShaderStorageBufferOpenGL::bind() {
         bindGL<m_glBufferType>(m_id);
     }
 
-    void FShaderStorageBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
+    void FShaderStorageBufferOpenGL::update(const float* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
-    void FShaderStorageBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
+    void FShaderStorageBufferOpenGL::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
-    void FShaderStorageBufferOpenGL2::update(const int32_t* data, size_t offset, size_t sizeOfData) {
+    void FShaderStorageBufferOpenGL::update(const int32_t* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
 
 
-    void FUniformBufferOpenGL2::create() {
-        const int64_t memoryUsed{ getMemoryUsed(p_inputLayoutInfo.items) };
+    void FUniformBufferOpenGL::create() {
+        const int64_t memoryUsed{ getMemoryUsed(p_inputDescription) };
         createGL<m_glBufferType>(m_id, memoryUsed);
-        GL_FUNC( glBindBufferBase(m_glBufferType, p_inputLayoutInfo.binding, m_id) );
+        GL_FUNC( glBindBufferBase(m_glBufferType, p_inputDescription.binding, m_id) );
     }
 
-    void FUniformBufferOpenGL2::free() {
+    void FUniformBufferOpenGL::free() {
         freeGL<m_glBufferType>(m_id);
     }
 
-    void FUniformBufferOpenGL2::destroy() {
+    void FUniformBufferOpenGL::destroy() {
         closeGL(m_id);
     }
 
-    void FUniformBufferOpenGL2::bind() {
+    void FUniformBufferOpenGL::bind() {
         bindGL<m_glBufferType>(m_id);
     }
 
-    void FUniformBufferOpenGL2::update(const float* data, size_t offset, size_t sizeOfData) {
+    void FUniformBufferOpenGL::update(const float* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
-    void FUniformBufferOpenGL2::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
+    void FUniformBufferOpenGL::update(const uint32_t* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
     }
 
-    void FUniformBufferOpenGL2::update(const int32_t* data, size_t offset, size_t sizeOfData) {
+    void FUniformBufferOpenGL::update(const int32_t* data, size_t offset, size_t sizeOfData) {
         bind();
         updateGL<m_glBufferType>(data, offset, sizeOfData);
+    }
+
+
+    size_t FBufferStorageOpenGL::getCountSSBO() const {
+        return m_ssbos.size();
+    }
+    size_t FBufferStorageOpenGL::getCountUBO() const {
+        return m_ubos.size();
+    }
+    size_t FBufferStorageOpenGL::getCountVBO() const {
+        return m_vbos.size();
+    }
+    size_t FBufferStorageOpenGL::getCountIBO() const {
+        return m_ibos.size();
+    }
+
+    FShaderBuffer* FBufferStorageOpenGL::getSSBO(size_t index) const {
+        return (FShaderBuffer*)&m_ssbos.at(index);
+    }
+    FShaderBuffer* FBufferStorageOpenGL::getUBO(size_t index) const {
+        return (FShaderBuffer*)&m_ubos.at(index);
+    }
+    FVertexBuffer* FBufferStorageOpenGL::getVBO(size_t index) const {
+        return (FVertexBuffer*)&m_vbos.at(index);
+    }
+    FIndexBuffer* FBufferStorageOpenGL::getIBO(size_t index) const {
+        return (FIndexBuffer*)&m_ibos.at(index);
+    }
+
+    template<typename TBufferArray>
+    void clearBuffers(TBufferArray& buffers) {
+        for (auto& buffer : buffers) {
+            buffer.free();
+            buffer.destroy();
+        }
+        buffers.clear();
+    }
+
+    void FBufferStorageOpenGL::reset() {
+        clearBuffers(m_ssbos);
+        clearBuffers(m_ubos);
+        clearBuffers(m_vbos);
+        clearBuffers(m_ibos);
+    }
+
+
+    FShaderBuffer* FBufferFactoryOpenGL::emplaceSSBO() {
+        return &(m_storage.m_ssbos.emplace_back());
+    }
+    FShaderBuffer* FBufferFactoryOpenGL::emplaceUBO() {
+        return &m_storage.m_ubos.emplace_back();
+    }
+    FVertexBuffer* FBufferFactoryOpenGL::emplaceVBO() {
+        return &m_storage.m_vbos.emplace_back();
+    }
+    FIndexBuffer* FBufferFactoryOpenGL::emplaceIBO() {
+        return &m_storage.m_ibos.emplace_back();
     }
 
 

@@ -22,8 +22,8 @@
 
 #include "RenderManager.h"
 #include "Buffer.h"
-#include "ShaderPipeline.h"
-#include "GraphicsPipeline.h"
+#include "Shaders.h"
+#include "Pipeline.h"
 #include "RenderCamera.h"
 #include "../GraphicsLimits.h"
 #include "../../ecs/Entity/Entity.h"
@@ -37,29 +37,26 @@ namespace marengine {
     static uint32_t getAvailableBatch(std::vector<TMeshBatch>& batch, const Entity& entity);
 
     template<typename TMeshBatch>
-    static void createPipelineForBatch(FGraphicsFactory* pFactory,
-                                       FGraphicsPipelineAtManagerInfo& pipelineInfo,
-                                       TMeshBatch& batch);
+    [[maybe_unused]] static void createPipelineForBatch(FRenderContext* pContext,
+                                                        TMeshBatch& batch);
     
     template<>
-    static void createPipelineForBatch<FMeshBatchStaticColor>(FGraphicsFactory* pFactory,
-                                                              FGraphicsPipelineAtManagerInfo& pipelineInfo,
+    static void createPipelineForBatch<FMeshBatchStaticColor>(FRenderContext* pContext,
                                                               FMeshBatchStaticColor& batch);
     
     template<>
-    static void createPipelineForBatch<FMeshBatchStaticTexture2D>(FGraphicsFactory* pFactory,
-                                                                  FGraphicsPipelineAtManagerInfo& pipelineInfo,
+    static void createPipelineForBatch<FMeshBatchStaticTexture2D>(FRenderContext* pContext,
                                                                   FMeshBatchStaticTexture2D& batch);
 
-    static uint32_t createCameraSSBO(FGraphicsFactory* pFactory, const RenderCamera* pRenderCamera);
+    static uint32_t createCameraSSBO(FRenderContext* pContext, const RenderCamera* pRenderCamera);
 
-    static uint32_t createPointLightSSBO(FGraphicsFactory* pFactory,
+    static uint32_t createPointLightSSBO(FRenderContext* pContext,
                                          const FPointLightBatch& pointLightBatch);
 
 
 
-    void FRenderManager::create(FGraphicsContext* pGraphicsContext) {
-        m_pGraphicsContext = pGraphicsContext;
+    void FRenderManager::create(FRenderContext* pContext) {
+        m_pContext = pContext;
     }
 
     template<typename TMeshBatch>
@@ -74,10 +71,9 @@ namespace marengine {
 
 		m_pointLightBatch.reset();
 
-        FGraphicsFactory* pFactory{ m_pGraphicsContext->getFactory() };
-        pFactory->reset();
-
-        m_pipelines.clear();
+		m_pContext->getBufferStorage()->reset();
+		m_pContext->getPipelineStorage()->reset();
+		m_pContext->getShadersStorage()->reset();
     }
 
     void FRenderManager::pushSceneToRender(Scene* pScene) {
@@ -133,29 +129,20 @@ namespace marengine {
     void FRenderManager::pushCameraToRender(const RenderCamera* pRenderCamera) {
         m_pRenderCamera = pRenderCamera;
         const maths::mat4& mvp{ m_pRenderCamera->getMVP() };
-        FShaderBuffer* const cameraSSBO{ m_pGraphicsContext->getFactory()->getSSBO(m_cameraIndex) };
+        FShaderBuffer* const cameraSSBO{ m_pContext->getBufferStorage()->getSSBO(m_cameraIndex) };
         cameraSSBO->update(maths::mat4::value_ptr(mvp), 0, sizeof(maths::mat4));
     }
 
     void FRenderManager::onBatchesReadyToDraw() {
-        FGraphicsFactory* pFactory{ m_pGraphicsContext->getFactory() };
+        m_cameraIndex = createCameraSSBO(m_pContext, m_pRenderCamera);
+        m_pointLightIndex = createPointLightSSBO(m_pContext, m_pointLightBatch);
 
-        m_cameraIndex = createCameraSSBO(pFactory, m_pRenderCamera);
-        m_pointLightIndex = createPointLightSSBO(pFactory, m_pointLightBatch);
-
-        for(FMeshBatchStaticColor& batch : m_meshesBatchColor) {
-            FGraphicsPipelineAtManagerInfo& pipelineInfo{ m_pipelines.emplace_back() };
-            createPipelineForBatch(pFactory, pipelineInfo, batch);
-            pFactory->getPipelineColorMesh(pipelineInfo.index)->passCameraSSBO(m_cameraIndex);
-            pFactory->getPipelineColorMesh(pipelineInfo.index)->passPointLightSSBO(m_pointLightIndex);
+        for (size_t i = 0; i < m_meshesBatchColor.size(); i++) {
+            createPipelineForBatch(m_pContext, m_meshesBatchColor.at(i));
+            FPipelineMeshColor* pPipeline{ m_pContext->getPipelineStorage()->getColorMesh(i) };
+            pPipeline->passCameraSSBO(m_cameraIndex);
+            pPipeline->passPointLightSSBO(m_pointLightIndex);
         }
-        //for(FMeshBatchStaticTexture2D& batch : m_meshesBatchTexture2D) {
-        //    createPipelineForBatch(pFactory, batch);
-        //}
-    }
-
-    const FGraphicsPipelinesAtManagerArray& FRenderManager::getPipelines() const {
-        return m_pipelines;
     }
 
 
@@ -176,24 +163,24 @@ namespace marengine {
 		return batches.size() - 1;
     }
 
-    static void fillDefaultVertexLayout(FVertexBuffer* pVertexBuffer) {
-        FVertexInputLayoutInfo positionInfo;
-        positionInfo.inputType = EBufferInputType::VEC3;
+    static void fillDefaultVertexLayout(FVertexBuffer* const pVertexBuffer) {
+        FVertexInputVariableInfo positionInfo;
+        positionInfo.inputType = EInputType::VEC3;
         positionInfo.location = 0;
         positionInfo.offset = offsetof(Vertex, Vertex::position);
 
-        FVertexInputLayoutInfo normalInfo;
-        normalInfo.inputType = EBufferInputType::VEC3;
+        FVertexInputVariableInfo normalInfo;
+        normalInfo.inputType = EInputType::VEC3;
         normalInfo.location = 1;
         normalInfo.offset = offsetof(Vertex, Vertex::lightNormal);
 
-        FVertexInputLayoutInfo texCoordsInfo;
-        texCoordsInfo.inputType = EBufferInputType::VEC2;
+        FVertexInputVariableInfo texCoordsInfo;
+        texCoordsInfo.inputType = EInputType::VEC2;
         texCoordsInfo.location = 2;
         texCoordsInfo.offset = offsetof(Vertex, Vertex::textureCoordinates);
 
-        FVertexInputLayoutInfo shapeIndexInfo;
-        shapeIndexInfo.inputType = EBufferInputType::FLOAT;
+        FVertexInputVariableInfo shapeIndexInfo;
+        shapeIndexInfo.inputType = EInputType::FLOAT;
         shapeIndexInfo.location = 3;
         shapeIndexInfo.offset = offsetof(Vertex, Vertex::shapeID);
 
@@ -202,194 +189,211 @@ namespace marengine {
         inputDescription.stride = sizeof(Vertex);
 
         pVertexBuffer->setInputDescription(inputDescription);
-        pVertexBuffer->pushInputElement(positionInfo);
-        pVertexBuffer->pushInputElement(normalInfo);
-        pVertexBuffer->pushInputElement(texCoordsInfo);
-        pVertexBuffer->pushInputElement(shapeIndexInfo);
+        pVertexBuffer->pushVariableInfo(positionInfo);
+        pVertexBuffer->pushVariableInfo(normalInfo);
+        pVertexBuffer->pushVariableInfo(texCoordsInfo);
+        pVertexBuffer->pushVariableInfo(shapeIndexInfo);
     }
 
     template<typename TMeshBatch, typename TPipeline>
-    static void createPipelineVBO(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FVertexBuffer* const vertexBuffer{ pFactory->emplaceVBO() };
+    static void createPipelineVBO(FRenderContext* pContext,
+                                  TPipeline* pPipeline, TMeshBatch& batch) {
+        FVertexBuffer* const vertexBuffer{ pContext->getBufferFactory()->emplaceVBO() };
+        const uint32_t vertexID{ pContext->getBufferStorage()->getCountVBO() - 1 };
+
         fillDefaultVertexLayout(vertexBuffer);
+
         vertexBuffer->create(GraphicLimits::sizeOfVertices);
         vertexBuffer->update(batch.getVertices());
-        const uint32_t vertexID{ pFactory->getCountVBO() - 1 };
+
         batch.setUniquePipelineID(vertexID);
         pPipeline->passVertexBuffer(vertexID);
     }
 
     template<typename TMeshBatch, typename TPipeline>
-    static void createPipelineIBO(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FIndexBuffer* const indexBuffer{ pFactory->emplaceIBO() };
+    static void createPipelineIBO(FRenderContext* pContext,
+                                  TPipeline* pPipeline, TMeshBatch& batch) {
+        FIndexBuffer* const indexBuffer{ pContext->getBufferFactory()->emplaceIBO() };
+        const uint32_t indexID{ pContext->getBufferStorage()->getCountIBO() - 1 };
+
         const FIndicesArray& indices{ batch.getIndices() };
         indexBuffer->create(GraphicLimits::sizeOfIndices);
         indexBuffer->update(indices);
         indexBuffer->passIndicesCount(indices.size());
-        pPipeline->passIndexBuffer(pFactory->getCountIBO() - 1);
+
+        pPipeline->passIndexBuffer(indexID);
     }
 
     static void fillDefaultTransformSSBO(FShaderBuffer* pTransformBuffer, uint32_t bindingPoint) {
-        FShaderInputLayoutInfo layoutInfo;
-        layoutInfo.binding = bindingPoint;
-        layoutInfo.shaderStage = EShaderStage::VERTEX;
-        layoutInfo.bufferType = EBufferType::SSBO;
+        FShaderInputDescription description;
+        description.binding = bindingPoint;
+        description.shaderStage = EShaderStage::VERTEX;
+        description.bufferType = EBufferType::SSBO;
 
-        FShaderBufferItem item;
-        item.count = 32;
-        item.inputType = EBufferInputType::MAT4;
-        item.name = "Transforms.Transform[32]";
-        item.offset = 0;
-        item.memoryUsed = 32 * sizeof(maths::mat4);
+        FShaderInputVariableInfo inputInfo;
+        inputInfo.count = 32;
+        inputInfo.inputType = EInputType::MAT4;
+        inputInfo.name = "Transforms.Transform[32]";
+        inputInfo.offset = 0;
+        inputInfo.memoryUsed = 32 * sizeof(maths::mat4);
 
-        pTransformBuffer->setInputLayoutInfo(layoutInfo);
-        pTransformBuffer->pushItem(item);
+        pTransformBuffer->setInputDescription(description);
+        pTransformBuffer->pushVariableInfo(inputInfo);
     }
 
     template<typename TMeshBatch, typename TPipeline>
-    static void createPipelineTransforms(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FShaderBuffer* const transformSSBO{ pFactory->emplaceSSBO() };
+    static void createPipelineTransforms(FRenderContext* pContext,
+                                         TPipeline* pPipeline, TMeshBatch& batch) {
+        FShaderBuffer* const transformSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
+        const uint32_t transformID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
+
         fillDefaultTransformSSBO(transformSSBO, 5);
         const FTransformsArray& transforms{ batch.getTransforms() };
         transformSSBO->create();
         transformSSBO->update(
-            maths::mat4::value_ptr(transforms), 0, transforms.size() * sizeof(maths::mat4)
+            maths::mat4::value_ptr(transforms),
+            0,
+            transforms.size() * sizeof(maths::mat4)
         );
-        const uint32_t transformID{ pFactory->getCountSSBO() - 1 };
+
         batch.seUniqueTransformsID(transformID);
         pPipeline->passTransformSSBO(transformID);
     }
 
     static void fillDefaultColorSSBO(FShaderBuffer* pColorBuffer, uint32_t bindingPoint) {
-        FShaderInputLayoutInfo layoutInfo;
-        layoutInfo.binding = bindingPoint;
-        layoutInfo.shaderStage = EShaderStage::FRAGMENT;
-        layoutInfo.bufferType = EBufferType::SSBO;
+        FShaderInputDescription description;
+        description.binding = bindingPoint;
+        description.shaderStage = EShaderStage::FRAGMENT;
+        description.bufferType = EBufferType::SSBO;
 
-        FShaderBufferItem item;
-        item.count = 32;
-        item.inputType = EBufferInputType::VEC4;
-        item.name = "Colors.Color[32]";
-        item.offset = 0;
-        item.memoryUsed = 32 * sizeof(maths::vec4);
+        FShaderInputVariableInfo inputInfo;
+        inputInfo.count = 32;
+        inputInfo.inputType = EInputType::VEC4;
+        inputInfo.name = "Colors.Color[32]";
+        inputInfo.offset = 0;
+        inputInfo.memoryUsed = 32 * sizeof(maths::vec4);
 
-        pColorBuffer->setInputLayoutInfo(layoutInfo);
-        pColorBuffer->pushItem(item);
+        pColorBuffer->setInputDescription(description);
+        pColorBuffer->pushVariableInfo(inputInfo);
     }
 
     template<typename TMeshBatch, typename TPipeline>
-    static void createPipelineColor(FGraphicsFactory* pFactory, TPipeline* pPipeline, TMeshBatch& batch) {
-        FShaderBuffer* const colorSSBO{ pFactory->emplaceSSBO() };
+    static void createPipelineColor(FRenderContext* pContext, TPipeline* pPipeline,
+                                    TMeshBatch& batch) {
+        FShaderBuffer* const colorSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
+        const uint32_t colorID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
+
         fillDefaultColorSSBO(colorSSBO, 3);
         const FColorsArray& colors{ batch.getColors() };
         colorSSBO->create();
         colorSSBO->update(
-            maths::vec4::value_ptr(colors), 0, colors.size() * sizeof(maths::vec4)
+            maths::vec4::value_ptr(colors),
+            0,
+            colors.size() * sizeof(maths::vec4)
         );
-        const uint32_t colorID{ pFactory->getCountSSBO() - 1 };
+
         batch.setUniqueColorsID(colorID);
         pPipeline->passColorSSBO(colorID);
     }
 
     template<typename TMeshBatch>
-    void createPipelineForBatch(FGraphicsFactory* pFactory,
-                                FGraphicsPipelineAtManagerInfo& pipelineInfo, TMeshBatch& batch) { }
+    [[maybe_unused]] void createPipelineForBatch(FRenderContext* pContext, TMeshBatch& batch) { }
 
     template<>
-    void createPipelineForBatch<FMeshBatchStaticColor>(FGraphicsFactory* pFactory,
-                                                       FGraphicsPipelineAtManagerInfo& pipelineInfo,
+    void createPipelineForBatch<FMeshBatchStaticColor>(FRenderContext* pContext,
                                                        FMeshBatchStaticColor& batch) {
-        FGraphicsPipelineColorMesh* const graphicsPipeline{ pFactory->emplacePipelineColorMesh() };
+        FPipelineMeshColor* const pPipeline =
+                pContext->getPipelineFactory()->emplaceColorMesh();
         
-        createPipelineVBO(pFactory, graphicsPipeline, batch);
-        createPipelineIBO(pFactory, graphicsPipeline, batch);
-        createPipelineTransforms(pFactory, graphicsPipeline, batch);
-        createPipelineColor(pFactory, graphicsPipeline, batch);
+        createPipelineVBO(pContext, pPipeline, batch);
+        createPipelineIBO(pContext, pPipeline, batch);
+        createPipelineTransforms(pContext, pPipeline, batch);
+        createPipelineColor(pContext, pPipeline, batch);
         
-        FShaderPipeline* shaderPipeline{ pFactory->emplaceShaderPipeline() };
-        shaderPipeline->passVertexShader("resources/shaders/color.vert.glsl");
-        shaderPipeline->passFragmentShader("resources/shaders/color.frag.glsl");
-        shaderPipeline->compile();
-        graphicsPipeline->passShaderPipeline(pFactory->getCountShaderPipeline() - 1);
+        FShaders* pShaders{ pContext->getShadersFactory()->emplace() };
+        const uint32_t shadersID{ pContext->getShadersStorage()->getCount() - 1 };
+        pShaders->passVertex("resources/shaders/color.vert.glsl");
+        pShaders->passFragment("resources/shaders/color.frag.glsl");
+        pShaders->compile();
+        pPipeline->passShaderPipeline(shadersID);
 
-        graphicsPipeline->passFactory(pFactory);
-        graphicsPipeline->create();
-
-        pipelineInfo.type = EGraphicsPipelineType::MESH_COLOR;
-        pipelineInfo.index = pFactory->getCountPipelineColorMesh() - 1;
+        pPipeline->passBufferStorage(pContext->getBufferStorage());
+        pPipeline->passShadersStorage(pContext->getShadersStorage());
+        pPipeline->create();
     }
 
     template<>
-    void createPipelineForBatch<FMeshBatchStaticTexture2D>(FGraphicsFactory* pFactory,
-                                                           FGraphicsPipelineAtManagerInfo& pipelineInfo,
+    void createPipelineForBatch<FMeshBatchStaticTexture2D>(FRenderContext* pContext,
                                                            FMeshBatchStaticTexture2D& batch) {
 
     }
 
-    static uint32_t createCameraSSBO(FGraphicsFactory* pFactory,
+    static uint32_t createCameraSSBO(FRenderContext* pContext,
                                      const RenderCamera* pRenderCamera) {
-        FShaderBuffer* const cameraSSBO{ pFactory->emplaceSSBO() };
+        FShaderBuffer* const cameraSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
+        const uint32_t camID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
 
-        FShaderInputLayoutInfo layoutInfo;
-        layoutInfo.binding = 0;
-        layoutInfo.shaderStage = EShaderStage::VERTEX;
-        layoutInfo.bufferType = EBufferType::SSBO;
+        FShaderInputDescription description;
+        description.binding = 0;
+        description.shaderStage = EShaderStage::VERTEX;
+        description.bufferType = EBufferType::SSBO;
 
-        FShaderBufferItem cameraMvpItem;
-        cameraMvpItem.count = 1;
-        cameraMvpItem.inputType = EBufferInputType::MAT4;
-        cameraMvpItem.name = "Camera.MVP";
-        cameraMvpItem.offset = 0;
-        cameraMvpItem.memoryUsed = sizeof(maths::mat4);
+        FShaderInputVariableInfo mvpInfo;
+        mvpInfo.count = 1;
+        mvpInfo.inputType = EInputType::MAT4;
+        mvpInfo.name = "Camera.MVP";
+        mvpInfo.offset = 0;
+        mvpInfo.memoryUsed = sizeof(maths::mat4);
 
-        cameraSSBO->setInputLayoutInfo(layoutInfo);
-        cameraSSBO->pushItem(cameraMvpItem);
+        cameraSSBO->setInputDescription(description);
+        cameraSSBO->pushVariableInfo(mvpInfo);
 
         const maths::mat4& mvp{ pRenderCamera->getMVP() };
         cameraSSBO->create();
-        cameraSSBO->update(maths::mat4::value_ptr(mvp), cameraMvpItem.offset, sizeof(maths::mat4));
+        cameraSSBO->update(maths::mat4::value_ptr(mvp), mvpInfo.offset, sizeof(maths::mat4));
 
-        return pFactory->getCountSSBO() - 1;
+        return camID;
     }
 
-    uint32_t createPointLightSSBO(FGraphicsFactory* pFactory,
+    uint32_t createPointLightSSBO(FRenderContext* pContext,
                                   const FPointLightBatch& pointLightBatch) {
-        FShaderBuffer* const lightSSBO{ pFactory->emplaceSSBO() };
+        FShaderBuffer* const lightSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
+        const uint32_t lightID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
 
-        FShaderInputLayoutInfo layoutInfo;
-        layoutInfo.binding = 2;
-        layoutInfo.shaderStage = EShaderStage::FRAGMENT;
-        layoutInfo.bufferType = EBufferType::SSBO;
+        FShaderInputDescription description;
+        description.binding = 2;
+        description.shaderStage = EShaderStage::FRAGMENT;
+        description.bufferType = EBufferType::SSBO;
 
-        FShaderBufferItem materialItem;
-        materialItem.count = 32;
-        materialItem.inputType = EBufferInputType::OTHER;
-        materialItem.name = "PointLigts.LightMaterial[32]";
-        materialItem.offset = 0;
-        materialItem.memoryUsed = 32 * sizeof(FPointLight);
+        FShaderInputVariableInfo materialInfo;
+        materialInfo.count = 32;
+        materialInfo.inputType = EInputType::OTHER;
+        materialInfo.name = "PointLigts.LightMaterial[32]";
+        materialInfo.offset = 0;
+        materialInfo.memoryUsed = 32 * sizeof(FPointLight);
 
-        FShaderBufferItem materialSizeItem;
-        materialSizeItem.count = 1;
-        materialSizeItem.inputType = EBufferInputType::INT;
-        materialSizeItem.name = "PointLigts.LightMaterialSize";
-        materialSizeItem.offset = materialItem.memoryUsed;
-        materialSizeItem.memoryUsed = 1 * sizeof(int32_t);
+        FShaderInputVariableInfo sizeInfo;
+        sizeInfo.count = 1;
+        sizeInfo.inputType = EInputType::INT;
+        sizeInfo.name = "PointLigts.LightMaterialSize";
+        sizeInfo.offset = materialInfo.memoryUsed;
+        sizeInfo.memoryUsed = 1 * sizeof(int32_t);
 
-        lightSSBO->setInputLayoutInfo(layoutInfo);
-        lightSSBO->pushItem(materialItem);
-        lightSSBO->pushItem(materialSizeItem);
+        lightSSBO->setInputDescription(description);
+        lightSSBO->pushVariableInfo(materialInfo);
+        lightSSBO->pushVariableInfo(sizeInfo);
 
         const auto& pointLights{ pointLightBatch.getLights() };
         const int32_t lightSize{ (int32_t)pointLights.size() };
         lightSSBO->create();
         lightSSBO->update(&pointLights.at(0).position.x,
-                                materialItem.offset,
-                                lightSize * sizeof(FPointLight));
+                          materialInfo.offset,
+                          lightSize * sizeof(FPointLight));
         lightSSBO->update(&lightSize,
-                                materialSizeItem.offset,
-                                sizeof(int32_t));
+                          sizeInfo.offset,
+                          sizeof(int32_t));
 
-        return pFactory->getCountSSBO() - 1;
+        return lightID;
     }
 
 

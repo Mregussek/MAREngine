@@ -20,31 +20,36 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_SHADEROPENGL_H
-#define MARENGINE_SHADEROPENGL_H
-
-
-#include "../ShaderPipeline.h"
+#include "Shaders.h"
 
 
 namespace marengine {
 
+    
+    void FShaders::passVertex(const char* path) {
+        p_vertexPath = path;
+    }
 
-    class FShaderPipelineOpenGL : public FShaderPipeline {
-    public:
+    void FShaders::passTessEval(const char* path) {
+        p_tessEvalPath = path;
+    }
 
-        void compile() final;
-        void close() final;
-        void bind() final;
+    void FShaders::passTessControl(const char* path) {
+        p_tessControlPath = path;
+    }
 
-    private:
+    void FShaders::passGeometry(const char* path) {
+        p_geometryPath = path;
+    }
 
-        GLuint m_id{ GL_FALSE };
+    void FShaders::passCompute(const char* path) {
+        p_computePath = path;
+    }
 
-    };
+    void FShaders::passFragment(const char* path) {
+        p_fragPath = path;
+
+    }
 
 
 }
-
-
-#endif //MARENGINE_SHADEROPENGL_H

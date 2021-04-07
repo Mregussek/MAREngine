@@ -24,21 +24,16 @@
 #define MAR_ENGINE_GRAPHICS_RENDERER_BATCH_H
 
 
-#include "../../../mar.h"
-#include "IGraphics.h"
+#include "IRender.h"
 
 
 namespace marengine {
 
     class FSceneManagerEditor;
-	class FMeshBatchStaticColor;
-	class FMeshBatchStaticTexture2D;
 
 
-	class FRenderer : public IRenderer {
+	class FRenderCommand : public IRenderCommand {
 	public:
-
-
 
 	};
 
@@ -55,6 +50,7 @@ namespace marengine {
         uint32_t allRendererEntitiesCount{ 0 };
 
 	};
+
 
     class FRenderStatistics {
     public:

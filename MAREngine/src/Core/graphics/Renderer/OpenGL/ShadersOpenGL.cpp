@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "ShaderPipelineOpenGL.h"
+#include "ShadersOpenGL.h"
 #include "../../../filesystem/FileManager.h"
 #include "../../../../Logging/Logger.h"
 
@@ -72,21 +72,21 @@ namespace marengine {
 
 
 
-    void FShaderPipelineOpenGL::compile() {
+    void FShadersOpenGL::compile() {
         GL_FUNC_ASSIGN( GLuint shaderPipelineID = glCreateProgram() );
 
         const GLuint vertexID =
-            compileThenAttachGL<GL_VERTEX_SHADER>(shaderPipelineID, p_vertexShader);
+            compileThenAttachGL<GL_VERTEX_SHADER>(shaderPipelineID, p_vertexPath);
         const GLuint fragmentID =
-            compileThenAttachGL<GL_FRAGMENT_SHADER>(shaderPipelineID, p_fragmentShader);
+            compileThenAttachGL<GL_FRAGMENT_SHADER>(shaderPipelineID, p_fragPath);
         const GLuint computeID =
-            compileThenAttachGL<GL_COMPUTE_SHADER>(shaderPipelineID, p_computeShader);
+            compileThenAttachGL<GL_COMPUTE_SHADER>(shaderPipelineID, p_computePath);
         const GLuint tessEvalID =
-            compileThenAttachGL<GL_TESS_EVALUATION_SHADER>(shaderPipelineID, p_tesselationEvalShader);
+            compileThenAttachGL<GL_TESS_EVALUATION_SHADER>(shaderPipelineID, p_tessEvalPath);
         const GLuint tessControlID =
-            compileThenAttachGL<GL_TESS_CONTROL_SHADER>(shaderPipelineID, p_tesselationControlShader);
+            compileThenAttachGL<GL_TESS_CONTROL_SHADER>(shaderPipelineID, p_tessControlPath);
         const GLuint geometryID =
-            compileThenAttachGL<GL_GEOMETRY_SHADER>(shaderPipelineID, p_geometryShader);
+            compileThenAttachGL<GL_GEOMETRY_SHADER>(shaderPipelineID, p_geometryPath);
 
         GL_FUNC( glLinkProgram(shaderPipelineID) );
         GL_FUNC( glValidateProgram(shaderPipelineID) );
@@ -122,12 +122,33 @@ namespace marengine {
         m_id = shaderPipelineID;
     }
 
-    void FShaderPipelineOpenGL::close() {
+    void FShadersOpenGL::close() {
         GL_FUNC( glDeleteProgram(m_id) );
     }
 
-    void FShaderPipelineOpenGL::bind() {
+    void FShadersOpenGL::bind() {
         GL_FUNC( glUseProgram(m_id) );
+    }
+
+
+    size_t FShadersStorageOpenGL::getCount() const {
+        return m_shadersArray.size();
+    }
+
+    FShaders* FShadersStorageOpenGL::get(size_t index) const {
+        return (FShaders*)&m_shadersArray.at(index);
+    }
+
+    void FShadersStorageOpenGL::reset() {
+        for(auto& shaders : m_shadersArray) {
+            shaders.close();
+        }
+        m_shadersArray.clear();
+    }
+
+
+    FShaders* FShadersFactoryOpenGL::emplace() {
+        return (FShaders*)&m_storage.m_shadersArray.emplace_back();
     }
 
 

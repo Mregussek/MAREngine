@@ -20,18 +20,17 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_GRAPHICSPIPELINEOPENGL_H
-#define MARENGINE_GRAPHICSPIPELINEOPENGL_H
+#ifndef MARENGINE_PIPELINEOPENGL_H
+#define MARENGINE_PIPELINEOPENGL_H
 
 
-#include "../GraphicsPipeline.h"
+#include "../Pipeline.h"
 
 
 namespace marengine {
 
 
-    class FGraphicsPipelineColorMeshOpenGL :
-            public FGraphicsPipelineColorMesh {
+    class FPipelineMeshColorOpenGL : public FPipelineMeshColor {
     public:
 
         void create() final;
@@ -45,8 +44,7 @@ namespace marengine {
     };
 
 
-    class FGraphicsPipelineTexture2DMeshOpenGL :
-            public FGraphicsPipelineTexture2DMesh {
+    class FPipelineMeshTex2DOpenGL : public FPipelineMeshTex2D {
     public:
 
         void create() final;
@@ -56,7 +54,44 @@ namespace marengine {
     };
 
 
+    class FPipelineStorageOpenGL : public FPipelineStorage {
+
+        friend class FPipelineFactoryOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD FPipelineMeshColor* getColorMesh(size_t index) const final;
+        MAR_NO_DISCARD FPipelineMeshTex2D* getTex2DMesh(size_t index) const final;
+
+        MAR_NO_DISCARD size_t getCountColorMesh() const final;
+        MAR_NO_DISCARD size_t getCountTex2DMesh() const final;
+
+        void reset() final;
+
+    private:
+
+        std::vector<FPipelineMeshColorOpenGL> m_colors;
+        std::vector<FPipelineMeshTex2DOpenGL> m_texs2D;
+
+    };
+
+
+    class FPipelineFactoryOpenGL : public FPipelineFactory {
+
+        friend class FRenderContextOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD FPipelineMeshColor* emplaceColorMesh() final;
+        MAR_NO_DISCARD FPipelineMeshTex2D* emplaceTex2DMesh() final;
+
+    private:
+
+        FPipelineStorageOpenGL m_storage;
+
+    };
+
 }
 
 
-#endif //MARENGINE_GRAPHICSPIPELINEOPENGL_H
+#endif //MARENGINE_PIPELINEOPENGL_H

@@ -25,7 +25,7 @@
 
 
 #include "IMeshBatch.h"
-#include "MeshDefinitions.h"
+#include "../Renderer/IRender.h"
 
 
 namespace marengine {
@@ -35,12 +35,6 @@ namespace marengine {
 	struct TransformComponent;
 	struct ColorComponent;
 	struct Texture2DComponent;
-	class FMeshBatchStaticColor;
-	class FMeshBatchStaticTexture2D;
-
-	typedef std::vector<FMeshBatchStaticColor> FMeshBatchStaticColorArray;
-	typedef std::vector<FMeshBatchStaticTexture2D> FMeshBatchStaticTexture2DArray;
-
 
 
 	class FMeshBatchStatic : public IMeshBatch {
@@ -55,9 +49,9 @@ namespace marengine {
 
 		void submitToBatch(const Entity& entity) override;
 
-		MAR_NO_DISCARD const FVertexArray& getVertices() const override;
-		MAR_NO_DISCARD const FIndicesArray& getIndices() const override;
-		MAR_NO_DISCARD const FTransformsArray& getTransforms() const override;
+		MAR_NO_DISCARD const FVertexArray& getVertices() const final;
+		MAR_NO_DISCARD const FIndicesArray& getIndices() const final;
+		MAR_NO_DISCARD const FTransformsArray& getTransforms() const final;
 
         MAR_NO_DISCARD uint32_t getUniquePipelineID() const override;
 		void setUniquePipelineID(uint32_t id) override;
@@ -65,14 +59,12 @@ namespace marengine {
         MAR_NO_DISCARD uint32_t getUniqueTransformsID() const override;
 		void seUniqueTransformsID(uint32_t id) override;
 
-        MAR_NO_DISCARD EMeshBatchType getBatchType() const override;
-
 	protected:
 
-		void submitRenderable(const RenderableComponent& renderableComponent) override;
-		void submitVertices(const FVertexArray& vertices) override;
-		void submitIndices(const FIndicesArray& indices) override;
-		void submitTransform(const TransformComponent& transformComponent) override;
+		void submitRenderable(const RenderableComponent& renderableComponent) final;
+		void submitVertices(const FVertexArray& vertices) final;
+		void submitIndices(const FIndicesArray& indices) final;
+		void submitTransform(const TransformComponent& transformComponent) final;
 
 
 		FVertexArray p_vertices;
@@ -84,7 +76,7 @@ namespace marengine {
 		uint32_t p_uniquePipelineID{ 0 };
 		uint32_t p_transformsUniqueID{ 0 };
 
-	};
+    };
 
 
 	class FMeshBatchStaticColor : public FMeshBatchStatic {
@@ -94,15 +86,18 @@ namespace marengine {
 	public:
 
 		void reset() override;
+
         MAR_NO_DISCARD bool canBeBatched(const Entity& entity) const override;
+
 		void submitToBatch(const Entity& entity) override;
 
         MAR_NO_DISCARD const FColorsArray& getColors() const;
 
         MAR_NO_DISCARD uint32_t getUniqueColorsID() const;
+
 		void setUniqueColorsID(uint32_t id);
 
-		MAR_NO_DISCARD EMeshBatchType getBatchType() const override;
+		MAR_NO_DISCARD EBatchType getBatchType() const override;
 
 	private:
 
@@ -114,6 +109,7 @@ namespace marengine {
 	
 	};
 
+    typedef std::vector<FMeshBatchStaticColor> FMeshBatchStaticColorArray;
 
 
 	class FMeshBatchStaticTexture2D : public FMeshBatchStatic {
@@ -127,7 +123,7 @@ namespace marengine {
 
         MAR_NO_DISCARD const FTexturesArray& getTextures() const;
 
-		MAR_NO_DISCARD EMeshBatchType getBatchType() const override;
+		MAR_NO_DISCARD EBatchType getBatchType() const override;
 
 	private:
 
@@ -137,6 +133,8 @@ namespace marengine {
 		FTexturesArray m_textures;
 
 	};
+
+    typedef std::vector<FMeshBatchStaticTexture2D> FMeshBatchStaticTexture2DArray;
 
 
 }

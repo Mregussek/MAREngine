@@ -26,21 +26,8 @@
 namespace marengine {
 
 
-    void FShaderBuffer::pushItem(const FShaderBufferItem& item) {
-        p_inputLayoutInfo.items.push_back(item);
-    }
-    
-    const FShaderInputLayoutInfo& FShaderBuffer::getInputLayoutInfo() const {
-        return p_inputLayoutInfo;
-    }
-
-    void FShaderBuffer::setInputLayoutInfo(const FShaderInputLayoutInfo& inputLayout) {
-        p_inputLayoutInfo = inputLayout;
-    }
-
-
-    void FVertexBuffer::pushInputElement(const FVertexInputLayoutInfo& inputLayout) {
-        p_inputDescription.layoutArray.push_back(inputLayout);
+    void FVertexBuffer::pushVariableInfo(const FVertexInputVariableInfo& info) {
+        p_inputDescription.inputVariables.push_back(info);
     }
 
     const FVertexInputDescription& FVertexBuffer::getInputDescription() const {
@@ -58,6 +45,19 @@ namespace marengine {
 
     uint32_t FIndexBuffer::getIndicesCount() const {
         return p_indicesCount;
+    }
+
+
+    void FShaderBuffer::pushVariableInfo(const FShaderInputVariableInfo& info) {
+        p_inputDescription.inputVariables.push_back(info);
+    }
+    
+    const FShaderInputDescription& FShaderBuffer::getInputDescription() const {
+        return p_inputDescription;
+    }
+
+    void FShaderBuffer::setInputDescription(const FShaderInputDescription& inputDescription) {
+        p_inputDescription = inputDescription;
     }
 
 

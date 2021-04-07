@@ -20,47 +20,64 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_MESH_DEFINITIONS_H
-#define MAR_ENGINE_MESH_DEFINITIONS_H
+#ifndef MARENGINE_SHADEROPENGL_H
+#define MARENGINE_SHADEROPENGL_H
 
 
-#include "Vertex.h"
+#include "../Shaders.h"
 
 
 namespace marengine {
 
 
-	struct FTexturePair {
+    class FShadersOpenGL : public FShaders {
+    public:
 
-		FTexturePair(uint32_t bd, std::string tp) :
-			bindingIndex(bd),
-			texturePath(std::move(tp))
-		{}
+        void compile() final;
+        void close() final;
+        void bind() final;
 
-		uint32_t bindingIndex{ 0 };
-		std::string texturePath{ "" };
-	};
+    private:
 
+        GLuint m_id{ GL_FALSE };
 
-	enum class EMeshBatchType {
-		NONE = -1,
-		STATIC = 0,
-		STATIC_COLOR = 1,
-		STATIC_TEXTURE2D = 2
-	};
+    };
 
 
-	typedef std::vector<Vertex> FVertexArray;
-	typedef std::vector<uint32_t> FIndicesArray;
-	typedef std::vector<maths::mat4> FTransformsArray;
-	typedef std::vector<maths::vec4> FColorsArray;
-	typedef std::vector<FTexturePair> FTexturesArray;
+    class FShadersStorageOpenGL : public FShadersStorage {
 
-	constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
+        friend class FShadersFactoryOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD size_t getCount() const final;
+        MAR_NO_DISCARD FShaders* get(size_t index) const final;
+
+        void reset() final;
+
+    private:
+
+        std::vector<FShadersOpenGL> m_shadersArray;
+
+    };
+
+
+    class FShadersFactoryOpenGL : public FShadersFactory {
+
+        friend class FRenderContextOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD FShaders* emplace() final;
+
+    private:
+
+        FShadersStorageOpenGL m_storage;
+
+    };
 
 
 }
 
 
-
-#endif // !MAR_ENGINE_MESH_DEFINITIONS_H
+#endif //MARENGINE_SHADEROPENGL_H

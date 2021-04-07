@@ -25,11 +25,12 @@
 
 
 #include "../../mar.h"
-#include "Mesh/Vertex.h"
+#include "Renderer/IRender.h"
 
 
 namespace marengine {
 
+    constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
 
 	namespace GraphicLimits {
 			

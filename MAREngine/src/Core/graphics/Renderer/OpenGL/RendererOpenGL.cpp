@@ -21,18 +21,14 @@
 
 
 #include "RendererOpenGL.h"
-#include "../RenderManager.h"
+#include "PipelineOpenGL.h"
 #include "../../../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
-    void FRendererOpenGL::draw(FGraphicsFactory* pFactory,
-                               const FGraphicsPipelineAtManagerInfo* pPipelineInfo) {
-        FGraphicsPipelineMesh* const pPipeline{
-            pFactory->retrieveCorrectPipeline(pPipelineInfo->type, pPipelineInfo->index)
-        };
+    void FRenderCommandOpenGL::draw(FPipelineMesh* pPipeline) {
         pPipeline->bind();
 
         GL_FUNC( glStencilFunc(GL_ALWAYS, 1, 0xFF) );

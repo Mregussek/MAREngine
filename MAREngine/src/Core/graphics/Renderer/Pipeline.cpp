@@ -20,38 +20,53 @@
 ************************************************************************/
 
 
-#include "ShaderPipeline.h"
+#include "Pipeline.h"
+#include "Buffer.h"
 
 
 namespace marengine {
 
+
+    void FPipeline::passBufferStorage(FBufferStorage* pStorage) {
+        p_pBufferStorage = pStorage;
+    }
+
+    void FPipeline::passShadersStorage(FShadersStorage* pStorage) {
+        p_pShadersStorage = pStorage;
+    }
+
+
+    void FPipelineMesh::passIndexBuffer(int32_t i) {
+        p_iboIndex = i;
+    }
+
+    void FPipelineMesh::passCameraSSBO(int32_t i) {
+        p_camIndex = i;
+    }
+
+     void FPipelineMesh::passPointLightSSBO(int32_t i) {
+         p_pointLightIndex = i;
+    }
+
+    uint32_t FPipelineMesh::getIndicesCount() const {
+        return p_pBufferStorage->getIBO(p_iboIndex)->getIndicesCount();
+    }
+
+
+    void FPipelineMeshColor::passVertexBuffer(int32_t i) {
+        p_vboIndex = i;
+    }
     
-    void FShaderPipeline::passVertexShader(const char* vertexShader) {
-        p_vertexShader = vertexShader;
+    void FPipelineMeshColor::passTransformSSBO(int32_t i) {
+        p_transformIndex = i;
     }
 
-    void FShaderPipeline::passFragmentShader(const char* fragmentShader) {
-        p_fragmentShader = fragmentShader;
+    void FPipelineMeshColor::passColorSSBO(int32_t i) {
+        p_colorIndex = i;
     }
 
-    void FShaderPipeline::passGeometryShader(const char* geometryShader) {
-        p_geometryShader = geometryShader;
-    }
-
-    void FShaderPipeline::passComputeShader(const char* computeShader) {
-        p_computeShader = computeShader;
-    }
-
-    void FShaderPipeline::passTesselationEvalShader(const char* tesselationEvalShader) {
-        p_tesselationEvalShader = tesselationEvalShader;
-    }
-
-    void FShaderPipeline::passTesselationControlShader(const char* tesselationControlShader) {
-        p_tesselationControlShader = tesselationControlShader;
-    }
-
-    void FShaderPipeline::passInputDescription(const FShaderInputDescription& inputDescription) {
-        p_inputDescription = inputDescription;
+    void FPipelineMeshColor::passShaderPipeline(int32_t i) {
+        p_shaderIndex = i;
     }
 
 

@@ -24,36 +24,44 @@
 #define MARENGINE_IBUFFER_H
 
 
-#include "IRenderResource.h"
+#include "IRender.h"
+#include "Shaders.h"
 
 
 namespace marengine {
 
 
-    class FBuffer : public IBuffer { };
+    struct FVertexInputVariableInfo {
+        EInputType inputType{ EInputType::NONE };
+        uint32_t location{ 0 };
+        uint32_t offset{ 0 };
+    };
 
-    
-    class IShaderBuffer : public FBuffer {
+    struct FVertexInputDescription {
+        std::vector<FVertexInputVariableInfo> inputVariables;
+        uint32_t binding{ 0 };
+        uint32_t stride{ 0 };
+    };
+
+
+    class IBuffer : public IRenderResource {
     public:
 
-        virtual void create() = 0;
-        virtual void pushItem(const FShaderBufferItem& item) = 0;
-        virtual const FShaderInputLayoutInfo& getInputLayoutInfo() const = 0;
-        virtual void setInputLayoutInfo(const FShaderInputLayoutInfo& inputLayout) = 0;
+        virtual void free() = 0;
+        virtual void destroy() = 0;
+        virtual void bind() = 0;
+
+        virtual void update(const float* data, size_t offset, size_t sizeOfData) = 0;
+        virtual void update(const uint32_t* data, size_t offset, size_t sizeOfData) = 0;
+        virtual void update(const int32_t* data, size_t offset, size_t sizeOfData) = 0;
 
     };
-    
-    
-    class FShaderBuffer : public IShaderBuffer {
+
+
+    class FBuffer : public IBuffer {
     public:
 
-        void pushItem(const FShaderBufferItem& item) final;
-        const FShaderInputLayoutInfo& getInputLayoutInfo() const final;
-        void setInputLayoutInfo(const FShaderInputLayoutInfo& inputLayout) final;
-
-    protected:
-
-        FShaderInputLayoutInfo p_inputLayoutInfo;
+        virtual void create(int64_t memoryToAllocate) = 0;
 
     };
 
@@ -61,10 +69,9 @@ namespace marengine {
     class FVertexBuffer : public FBuffer {
     public:
 
-        virtual void create(int64_t memoryToAllocate) = 0;
-        virtual void pushInputElement(const FVertexInputLayoutInfo& inputLayout) final;
-        virtual const FVertexInputDescription& getInputDescription() const final;
+        MAR_NO_DISCARD virtual const FVertexInputDescription& getInputDescription() const final;
         virtual void setInputDescription(const FVertexInputDescription& inputDescription) final;
+        virtual void pushVariableInfo(const FVertexInputVariableInfo& info) final;
 
         virtual void update(const FVertexArray& vertices) = 0;
 
@@ -79,15 +86,40 @@ namespace marengine {
     class FIndexBuffer : public FBuffer {
     public:
 
-        virtual void create(int64_t memoryToAllocate) = 0;
+
         virtual void update(const FIndicesArray& indices) = 0;
         virtual void passIndicesCount(uint32_t indicesCount) final;
-        virtual uint32_t getIndicesCount() const final;
+        MAR_NO_DISCARD virtual uint32_t getIndicesCount() const final;
 
     protected:
 
         int64_t p_allocatedMemory{ 0 };
         uint32_t p_indicesCount{ 0 };
+
+    };
+
+
+    class IShaderBuffer : public IBuffer {
+    public:
+
+        virtual void create() = 0;
+        virtual void setInputDescription(const FShaderInputDescription& inputDescription) = 0;
+        virtual void pushVariableInfo(const FShaderInputVariableInfo& info) = 0;
+        virtual const FShaderInputDescription& getInputDescription() const = 0;
+
+    };
+
+
+    class FShaderBuffer : public IShaderBuffer {
+    public:
+
+        void setInputDescription(const FShaderInputDescription& inputDescription) final;
+        void pushVariableInfo(const FShaderInputVariableInfo& info) final;
+        MAR_NO_DISCARD const FShaderInputDescription& getInputDescription() const final;
+
+    protected:
+
+        FShaderInputDescription p_inputDescription;
 
     };
 
@@ -98,6 +130,43 @@ namespace marengine {
 
 
     class FUniformBuffer : public FShaderBuffer {
+
+    };
+
+
+    class IBufferStorage : public IRenderResourceStorage {
+    public:
+
+        virtual size_t getCountSSBO() const = 0;
+        virtual size_t getCountUBO() const = 0;
+        virtual size_t getCountVBO() const = 0;
+        virtual size_t getCountIBO() const = 0;
+
+        virtual FShaderBuffer* getSSBO(size_t index) const = 0;
+        virtual FShaderBuffer* getUBO(size_t index) const = 0;
+        virtual FVertexBuffer* getVBO(size_t index) const = 0;
+        virtual FIndexBuffer* getIBO(size_t index) const = 0;
+
+    };
+
+
+    class FBufferStorage : public IBufferStorage {
+
+    };
+
+
+    class IBufferFactory : public IRenderResourceFactory {
+    public:
+
+        virtual FShaderBuffer* emplaceSSBO() = 0;
+        virtual FShaderBuffer* emplaceUBO() = 0;
+        virtual FVertexBuffer* emplaceVBO() = 0;
+        virtual FIndexBuffer* emplaceIBO() = 0;
+
+    };
+
+
+    class FBufferFactory : public IBufferFactory {
 
     };
 

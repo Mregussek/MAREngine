@@ -72,7 +72,7 @@ namespace marengine {
     };
 
 
-    class FShaderStorageBufferOpenGL2 : public FShaderStorageBuffer {
+    class FShaderStorageBufferOpenGL : public FShaderStorageBuffer {
     public:
 
         void create() final;
@@ -92,7 +92,7 @@ namespace marengine {
     };
 
 
-    class FUniformBufferOpenGL2 : public FUniformBuffer {
+    class FUniformBufferOpenGL : public FUniformBuffer {
     public:
 
         void create() final;
@@ -108,6 +108,52 @@ namespace marengine {
 
         static constexpr GLenum m_glBufferType{ GL_UNIFORM_BUFFER };
         uint32_t m_id{ 0 };
+
+    };
+
+
+    class FBufferStorageOpenGL : public FBufferStorage {
+
+        friend class FBufferFactoryOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD size_t getCountSSBO() const final;
+        MAR_NO_DISCARD size_t getCountUBO() const final;
+        MAR_NO_DISCARD size_t getCountVBO() const final;
+        MAR_NO_DISCARD size_t getCountIBO() const final;
+
+        MAR_NO_DISCARD FShaderBuffer* getSSBO(size_t index) const final;
+        MAR_NO_DISCARD FShaderBuffer* getUBO(size_t index) const final;
+        MAR_NO_DISCARD FVertexBuffer* getVBO(size_t index) const final;
+        MAR_NO_DISCARD FIndexBuffer* getIBO(size_t index) const final;
+
+        void reset() final;
+
+    private:
+
+        std::vector<FShaderStorageBufferOpenGL> m_ssbos;
+        std::vector<FUniformBufferOpenGL> m_ubos;
+        std::vector<FVertexBufferOpenGL> m_vbos;
+        std::vector<FIndexBufferOpenGL> m_ibos;
+
+    };
+
+
+    class FBufferFactoryOpenGL : public FBufferFactory {
+
+        friend class FRenderContextOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD FShaderBuffer* emplaceSSBO() final;
+        MAR_NO_DISCARD FShaderBuffer* emplaceUBO() final;
+        MAR_NO_DISCARD FVertexBuffer* emplaceVBO() final;
+        MAR_NO_DISCARD FIndexBuffer* emplaceIBO() final;
+
+    private:
+
+        FBufferStorageOpenGL m_storage;
 
     };
 

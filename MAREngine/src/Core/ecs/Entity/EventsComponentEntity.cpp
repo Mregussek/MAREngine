@@ -45,7 +45,7 @@ namespace marengine {
 		const auto& meshBachInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
 		const bool isEntityRendered = [&meshBachInfoComponent]()->bool {
-			const bool hasAssignedBatch{ meshBachInfoComponent.batchType != EMeshBatchType::NONE };
+			const bool hasAssignedBatch{ meshBachInfoComponent.batchType != EBatchType::NONE };
 			const bool indexAtBatchIsCorrect{ meshBachInfoComponent.batchIndex != -1 };
 			return hasAssignedBatch && indexAtBatchIsCorrect;
 		}();

@@ -29,14 +29,13 @@
 
 namespace marengine {
 
-    struct FGraphicsPipelineAtManagerInfo;
+    class FPipelineMesh;
 
 
-    class FRendererOpenGL : public FRenderer {
+    class FRenderCommandOpenGL : public FRenderCommand {
     public:
 
-        void draw(FGraphicsFactory* pFactory,
-                  const FGraphicsPipelineAtManagerInfo* pPipelineInfo);
+        void draw(FPipelineMesh* pPipeline);
 
     };
 

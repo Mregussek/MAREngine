@@ -131,10 +131,6 @@ namespace marengine {
 		p_transformsUniqueID = id;
 	}
 
-	EMeshBatchType FMeshBatchStatic::getBatchType() const {
-		return EMeshBatchType::STATIC;
-	}
-
 
 
 	void FMeshBatchStaticColor::reset() {
@@ -179,8 +175,8 @@ namespace marengine {
 		m_uniqueColorsID = id;
 	}
 
-	EMeshBatchType FMeshBatchStaticColor::getBatchType() const {
-		return EMeshBatchType::STATIC_COLOR;
+	EBatchType FMeshBatchStaticColor::getBatchType() const {
+		return EBatchType::MESH_STATIC_COLOR;
 	}
 
 
@@ -220,8 +216,8 @@ namespace marengine {
 		return m_textures;
 	}
 
-	EMeshBatchType FMeshBatchStaticTexture2D::getBatchType() const {
-		return EMeshBatchType::STATIC_TEXTURE2D;
+	EBatchType FMeshBatchStaticTexture2D::getBatchType() const {
+		return EBatchType::MESH_STATIC_TEX2D;
 	}
 
 

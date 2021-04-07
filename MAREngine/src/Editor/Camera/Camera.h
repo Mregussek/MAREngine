@@ -42,8 +42,6 @@ namespace marengine {
 
     public:
 
-        Camera() = default;
-
         void initialize(float aspectRatio);
         bool update(IWindow* pWindow, float aspectRatio, bool useInput);
 

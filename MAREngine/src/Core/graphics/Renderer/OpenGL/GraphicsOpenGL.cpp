@@ -33,7 +33,7 @@ namespace marengine {
                                            const GLchar* message, const void* userParam);
 
 
-    bool FGraphicsContextOpenGL::create(FWindow* pWindow) {
+    bool FRenderContextOpenGL::create(FWindow* pWindow) {
         m_pWindow = pWindow;
 
         if constexpr (MARENGINE_USE_GLFW_WINDOW) {
@@ -73,27 +73,48 @@ namespace marengine {
         return true;
     }
 
-    void FGraphicsContextOpenGL::close() {
+    void FRenderContextOpenGL::close() {
 
     }
 
-    void FGraphicsContextOpenGL::prepareFrame() {
+    void FRenderContextOpenGL::prepareFrame() {
         const maths::vec3 backgroundColor{ 0.5f, 0.5f, 0.5f };
         PLATFORM_GL_FUNC( glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, 1.0f) );
         PLATFORM_GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) );
     }
 
-    void FGraphicsContextOpenGL::endFrame() {
+    void FRenderContextOpenGL::endFrame() {
 
     }
 
-    EGraphicsContextType FGraphicsContextOpenGL::getType() const {
-        return EGraphicsContextType::OPENGL;
+    ERenderContextType FRenderContextOpenGL::getType() const {
+        return ERenderContextType::OPENGL;
     }
 
-    FGraphicsFactory* FGraphicsContextOpenGL::getFactory() {
-        return (FGraphicsFactory*)&m_factory;
+    FBufferStorage* FRenderContextOpenGL::getBufferStorage() {
+        return &m_bufferFactory.m_storage;
     }
+
+    FShadersStorage* FRenderContextOpenGL::getShadersStorage() {
+        return &m_shadersFactory.m_storage;
+    }
+
+    FPipelineStorage* FRenderContextOpenGL::getPipelineStorage() {
+        return &m_pipelineFactory.m_storage;
+    }
+
+    FBufferFactory* FRenderContextOpenGL::getBufferFactory() {
+        return &m_bufferFactory;
+    }
+
+    FShadersFactory* FRenderContextOpenGL::getShadersFactory() {
+        return &m_shadersFactory;
+    }
+
+    FPipelineFactory* FRenderContextOpenGL::getPipelineFactory() {
+        return &m_pipelineFactory;
+    }
+
 
     static void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id,
                                            GLenum severity, GLsizei length,
@@ -141,110 +162,6 @@ namespace marengine {
         MARLOG_CRIT(ELoggerType::PLATFORMS, "OPENGL type={}, id={}, severity={}, message:\n{}",
                                             errorType, id, severityType, message);
      }
-
-
-    FShaderBuffer* FGraphicsFactoryOpenGL::emplaceSSBO() {
-        return &m_ssbos.emplace_back();
-    }
-    FShaderBuffer* FGraphicsFactoryOpenGL::emplaceUBO() {
-        return &m_ubos.emplace_back();
-    }
-    FVertexBuffer* FGraphicsFactoryOpenGL::emplaceVBO() {
-        return &m_vbos.emplace_back();
-    }
-    FIndexBuffer* FGraphicsFactoryOpenGL::emplaceIBO() {
-        return &m_ibos.emplace_back();
-    }
-    FShaderPipeline* FGraphicsFactoryOpenGL::emplaceShaderPipeline() {
-        return &m_shaderPipelines.emplace_back();
-    }
-    FGraphicsPipelineColorMesh* FGraphicsFactoryOpenGL::emplacePipelineColorMesh() {
-        return &m_pipelinesColorMesh.emplace_back();
-    }
-    FGraphicsPipelineTexture2DMesh* FGraphicsFactoryOpenGL::emplacePipelineTexture2DMesh() {
-        return &m_pipelinesTexture2DMesh.emplace_back();
-    }
-
-    size_t FGraphicsFactoryOpenGL::getCountSSBO() const {
-        return m_ssbos.size();
-    }
-    size_t FGraphicsFactoryOpenGL::getCountUBO() const {
-        return m_ubos.size();
-    }
-    size_t FGraphicsFactoryOpenGL::getCountVBO() const {
-        return m_vbos.size();
-    }
-    size_t FGraphicsFactoryOpenGL::getCountIBO() const {
-        return m_ibos.size();
-    }
-    size_t FGraphicsFactoryOpenGL::getCountShaderPipeline() const {
-        return m_shaderPipelines.size();
-    }
-    size_t FGraphicsFactoryOpenGL::getCountPipelineColorMesh() const {
-        return m_pipelinesColorMesh.size();
-    }
-    size_t FGraphicsFactoryOpenGL::getCountPipelineTexture2DMesh() const {
-        return m_pipelinesTexture2DMesh.size();
-    }
-
-    FShaderBuffer* FGraphicsFactoryOpenGL::getSSBO(size_t index) const {
-        return (FShaderBuffer*)&m_ssbos.at(index);
-    }
-    FShaderBuffer* FGraphicsFactoryOpenGL::getUBO(size_t index) const {
-        return (FShaderBuffer*)&m_ubos.at(index);
-    }
-    FVertexBuffer* FGraphicsFactoryOpenGL::getVBO(size_t index) const {
-        return (FVertexBuffer*)&m_vbos.at(index);
-    }
-    FIndexBuffer* FGraphicsFactoryOpenGL::getIBO(size_t index) const {
-        return (FIndexBuffer*)&m_ibos.at(index);
-    }
-    FShaderPipeline* FGraphicsFactoryOpenGL::getShaderPipeline(size_t index) const {
-        return (FShaderPipeline*)&m_shaderPipelines.at(index);
-    }
-    FGraphicsPipelineColorMesh* FGraphicsFactoryOpenGL::getPipelineColorMesh(size_t index) const {
-        return (FGraphicsPipelineColorMesh*)&m_pipelinesColorMesh.at(index);
-    }
-    FGraphicsPipelineTexture2DMesh* FGraphicsFactoryOpenGL::getPipelineTexture2DMesh(size_t index) const {
-        return (FGraphicsPipelineTexture2DMesh*)&m_pipelinesTexture2DMesh.at(index);
-    }
-    FRenderer* FGraphicsFactoryOpenGL::getRenderer() const {
-        return (FRenderer*)&m_renderer;
-    }
-
-    FGraphicsPipelineMesh* FGraphicsFactoryOpenGL::retrieveCorrectPipeline(EGraphicsPipelineType type,
-                                                                           size_t index) const {
-        if (type == EGraphicsPipelineType::MESH_COLOR) {
-            return getPipelineColorMesh(index);
-        }
-        if (type == EGraphicsPipelineType::MESH_TEXTURE2D) {
-            return getPipelineTexture2DMesh(index);
-        }
-
-        return nullptr;
-    }
-
-    void FGraphicsFactoryOpenGL::reset() {
-        auto clearBuffer = [](FBuffer* pBuffer){
-            pBuffer->free();
-            pBuffer->destroy();
-        };
-        for(auto& buffer : m_ssbos) { clearBuffer(&buffer); }
-        for(auto& buffer : m_ubos) { clearBuffer(&buffer); }
-        for(auto& buffer : m_vbos) { clearBuffer(&buffer); }
-        for(auto& buffer : m_ibos) { clearBuffer(&buffer); }
-        for(auto& type : m_shaderPipelines) { type.close(); }
-        for(auto& type : m_pipelinesColorMesh) { type.close(); }
-        for(auto& type : m_pipelinesTexture2DMesh) { type.close(); }
-
-        m_ssbos.clear();
-        m_ubos.clear();
-        m_vbos.clear();
-        m_ibos.clear();
-        m_shaderPipelines.clear();
-        m_pipelinesColorMesh.clear();
-        m_pipelinesTexture2DMesh.clear();
-    }
 
 
 }
