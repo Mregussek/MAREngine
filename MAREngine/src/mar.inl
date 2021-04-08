@@ -27,6 +27,16 @@
 namespace marengine {
 
 
+    using int8 = int_fast8_t;
+    using uint8 = uint_fast8_t;
+    using int16 = int_fast16_t;
+    using uint16 = uint_fast16_t;
+    using int32 = int_fast32_t;
+    using uint32 = uint_fast32_t;
+    using int64 = int_fast64_t;
+    using uint64 = uint_fast64_t;
+
+
     template<typename TBase, typename TDerived>
     inline TBase* staticCast(TDerived* pDerived) {
         return static_cast<TBase*>(pDerived);
@@ -39,10 +49,10 @@ namespace marengine {
 
     template<typename TBase, typename TDerived>
     inline TBase* dynamicCast(TDerived* pDerived) {
-        if constexpr (std::is_convertible<TDerived*, TBase*>()::value) {
+        if constexpr (std::is_convertible<TDerived*, TBase*>::value) {
             return static_cast<TBase*>(pDerived);
         }
-        else if constexpr (std::is_base_of<TBase, TDerived>()::value) {
+        else if constexpr (std::is_base_of<TBase, TDerived>::value) {
             return static_cast<TBase*>(pDerived);
         }
         
@@ -51,10 +61,10 @@ namespace marengine {
 
     template<typename TBase, typename TDerived>
     inline const TBase* dynamicCast(const TDerived* pDerived) {
-        if constexpr (std::is_convertible<const TDerived*, const TBase*>()::value) {
+        if constexpr (std::is_convertible<const TDerived*, const TBase*>::value) {
             return static_cast<const TBase*>(pDerived);
         }
-        else if constexpr (std::is_base_of<TBase, TDerived>()::value) {
+        else if constexpr (std::is_base_of<TBase, TDerived>::value) {
             return static_cast<const TBase*>(pDerived);
         }
         
