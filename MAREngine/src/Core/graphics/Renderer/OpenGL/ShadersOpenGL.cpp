@@ -147,8 +147,16 @@ namespace marengine {
     }
 
 
+    template<typename TReturnType, typename TShadersArray>
+    static TReturnType* emplaceShaderAtArray(TShadersArray& array) {
+        auto& shaders{ array.emplace_back() };
+        const int8_t currentSize{ (int8_t)array.size() };
+        shaders.setIndex( currentSize - 1);
+        return (TReturnType*)&shaders;
+    }
+
     FShaders* FShadersFactoryOpenGL::emplace() {
-        return (FShaders*)&m_storage.m_shadersArray.emplace_back();
+        return emplaceShaderAtArray<FShaders>(m_storage.m_shadersArray);
     }
 
 

@@ -123,10 +123,10 @@ namespace marengine {
         MAR_NO_DISCARD size_t getCountVBO() const final;
         MAR_NO_DISCARD size_t getCountIBO() const final;
 
-        MAR_NO_DISCARD FShaderBuffer* getSSBO(size_t index) const final;
-        MAR_NO_DISCARD FShaderBuffer* getUBO(size_t index) const final;
-        MAR_NO_DISCARD FVertexBuffer* getVBO(size_t index) const final;
-        MAR_NO_DISCARD FIndexBuffer* getIBO(size_t index) const final;
+        MAR_NO_DISCARD FShaderBuffer* getSSBO(int8_t index) const final;
+        MAR_NO_DISCARD FShaderBuffer* getUBO(int8_t index) const final;
+        MAR_NO_DISCARD FVertexBuffer* getVBO(int8_t index) const final;
+        MAR_NO_DISCARD FIndexBuffer* getIBO(int8_t index) const final;
 
         void reset() final;
 

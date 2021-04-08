@@ -44,7 +44,7 @@ namespace marengine {
     };
 
 
-    class IBuffer : public IRenderResource {
+    class IBuffer : public FRenderResource {
     public:
 
         virtual void free() = 0;
@@ -117,8 +117,6 @@ namespace marengine {
         void pushVariableInfo(const FShaderInputVariableInfo& info) final;
         MAR_NO_DISCARD const FShaderInputDescription& getInputDescription() const final;
 
-    protected:
-
         FShaderInputDescription p_inputDescription;
 
     };
@@ -142,10 +140,10 @@ namespace marengine {
         virtual size_t getCountVBO() const = 0;
         virtual size_t getCountIBO() const = 0;
 
-        virtual FShaderBuffer* getSSBO(size_t index) const = 0;
-        virtual FShaderBuffer* getUBO(size_t index) const = 0;
-        virtual FVertexBuffer* getVBO(size_t index) const = 0;
-        virtual FIndexBuffer* getIBO(size_t index) const = 0;
+        virtual FShaderBuffer* getSSBO(int8_t index) const = 0;
+        virtual FShaderBuffer* getUBO(int8_t index) const = 0;
+        virtual FVertexBuffer* getVBO(int8_t index) const = 0;
+        virtual FIndexBuffer* getIBO(int8_t index) const = 0;
 
     };
 

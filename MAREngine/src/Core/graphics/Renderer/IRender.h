@@ -107,6 +107,22 @@ namespace marengine {
     };
 
     class IRenderResource : public IRender {
+    public:
+
+        virtual void setIndex(int8_t index) = 0;
+        virtual int8_t getIndex() const = 0;
+
+    };
+
+    class FRenderResource : public IRenderResource {
+    public:
+
+        void setIndex(int8_t index) final { p_index = index; }
+        MAR_NO_DISCARD int8_t getIndex() const final { return p_index; }
+
+    protected:
+
+        int8_t p_index{ -1 };
 
     };
 

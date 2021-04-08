@@ -36,15 +36,15 @@ namespace marengine {
     }
 
 
-    void FPipelineMesh::passIndexBuffer(int32_t i) {
+    void FPipelineMesh::passIndexBuffer(int8_t i) {
         p_iboIndex = i;
     }
 
-    void FPipelineMesh::passCameraSSBO(int32_t i) {
+    void FPipelineMesh::passCameraSSBO(int8_t i) {
         p_camIndex = i;
     }
 
-     void FPipelineMesh::passPointLightSSBO(int32_t i) {
+     void FPipelineMesh::passPointLightSSBO(int8_t i) {
          p_pointLightIndex = i;
     }
 
@@ -53,19 +53,19 @@ namespace marengine {
     }
 
 
-    void FPipelineMeshColor::passVertexBuffer(int32_t i) {
+    void FPipelineMeshColor::passVertexBuffer(int8_t i) {
         p_vboIndex = i;
     }
     
-    void FPipelineMeshColor::passTransformSSBO(int32_t i) {
+    void FPipelineMeshColor::passTransformSSBO(int8_t i) {
         p_transformIndex = i;
     }
 
-    void FPipelineMeshColor::passColorSSBO(int32_t i) {
+    void FPipelineMeshColor::passColorSSBO(int8_t i) {
         p_colorIndex = i;
     }
 
-    void FPipelineMeshColor::passShaderPipeline(int32_t i) {
+    void FPipelineMeshColor::passShaderPipeline(int8_t i) {
         p_shaderIndex = i;
     }
 

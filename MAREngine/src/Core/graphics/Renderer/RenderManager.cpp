@@ -199,29 +199,27 @@ namespace marengine {
     static void createPipelineVBO(FRenderContext* pContext,
                                   TPipeline* pPipeline, TMeshBatch& batch) {
         FVertexBuffer* const vertexBuffer{ pContext->getBufferFactory()->emplaceVBO() };
-        const uint32_t vertexID{ pContext->getBufferStorage()->getCountVBO() - 1 };
 
         fillDefaultVertexLayout(vertexBuffer);
 
         vertexBuffer->create(GraphicLimits::sizeOfVertices);
         vertexBuffer->update(batch.getVertices());
 
-        batch.setUniquePipelineID(vertexID);
-        pPipeline->passVertexBuffer(vertexID);
+        batch.setUniquePipelineID(vertexBuffer->getIndex());
+        pPipeline->passVertexBuffer(vertexBuffer->getIndex());
     }
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineIBO(FRenderContext* pContext,
                                   TPipeline* pPipeline, TMeshBatch& batch) {
         FIndexBuffer* const indexBuffer{ pContext->getBufferFactory()->emplaceIBO() };
-        const uint32_t indexID{ pContext->getBufferStorage()->getCountIBO() - 1 };
 
         const FIndicesArray& indices{ batch.getIndices() };
         indexBuffer->create(GraphicLimits::sizeOfIndices);
         indexBuffer->update(indices);
         indexBuffer->passIndicesCount(indices.size());
 
-        pPipeline->passIndexBuffer(indexID);
+        pPipeline->passIndexBuffer(indexBuffer->getIndex());
     }
 
     static void fillDefaultTransformSSBO(FShaderBuffer* pTransformBuffer, uint32_t bindingPoint) {
@@ -245,7 +243,6 @@ namespace marengine {
     static void createPipelineTransforms(FRenderContext* pContext,
                                          TPipeline* pPipeline, TMeshBatch& batch) {
         FShaderBuffer* const transformSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
-        const uint32_t transformID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
 
         fillDefaultTransformSSBO(transformSSBO, 5);
         const FTransformsArray& transforms{ batch.getTransforms() };
@@ -256,8 +253,8 @@ namespace marengine {
             transforms.size() * sizeof(maths::mat4)
         );
 
-        batch.seUniqueTransformsID(transformID);
-        pPipeline->passTransformSSBO(transformID);
+        batch.seUniqueTransformsID(transformSSBO->getIndex());
+        pPipeline->passTransformSSBO(transformSSBO->getIndex());
     }
 
     static void fillDefaultColorSSBO(FShaderBuffer* pColorBuffer, uint32_t bindingPoint) {
@@ -281,7 +278,6 @@ namespace marengine {
     static void createPipelineColor(FRenderContext* pContext, TPipeline* pPipeline,
                                     TMeshBatch& batch) {
         FShaderBuffer* const colorSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
-        const uint32_t colorID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
 
         fillDefaultColorSSBO(colorSSBO, 3);
         const FColorsArray& colors{ batch.getColors() };
@@ -292,8 +288,8 @@ namespace marengine {
             colors.size() * sizeof(maths::vec4)
         );
 
-        batch.setUniqueColorsID(colorID);
-        pPipeline->passColorSSBO(colorID);
+        batch.setUniqueColorsID(colorSSBO->getIndex());
+        pPipeline->passColorSSBO(colorSSBO->getIndex());
     }
 
     template<typename TMeshBatch>
@@ -311,11 +307,10 @@ namespace marengine {
         createPipelineColor(pContext, pPipeline, batch);
         
         FShaders* pShaders{ pContext->getShadersFactory()->emplace() };
-        const uint32_t shadersID{ pContext->getShadersStorage()->getCount() - 1 };
         pShaders->passVertex("resources/shaders/color.vert.glsl");
         pShaders->passFragment("resources/shaders/color.frag.glsl");
         pShaders->compile();
-        pPipeline->passShaderPipeline(shadersID);
+        pPipeline->passShaderPipeline(pShaders->getIndex());
 
         pPipeline->passBufferStorage(pContext->getBufferStorage());
         pPipeline->passShadersStorage(pContext->getShadersStorage());
@@ -331,7 +326,6 @@ namespace marengine {
     static uint32_t createCameraSSBO(FRenderContext* pContext,
                                      const RenderCamera* pRenderCamera) {
         FShaderBuffer* const cameraSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
-        const uint32_t camID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
 
         FShaderInputDescription description;
         description.binding = 0;
@@ -352,13 +346,12 @@ namespace marengine {
         cameraSSBO->create();
         cameraSSBO->update(maths::mat4::value_ptr(mvp), mvpInfo.offset, sizeof(maths::mat4));
 
-        return camID;
+        return cameraSSBO->getIndex();
     }
 
     uint32_t createPointLightSSBO(FRenderContext* pContext,
                                   const FPointLightBatch& pointLightBatch) {
         FShaderBuffer* const lightSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
-        const uint32_t lightID{ pContext->getBufferStorage()->getCountSSBO() - 1 };
 
         FShaderInputDescription description;
         description.binding = 2;
@@ -393,7 +386,7 @@ namespace marengine {
                           sizeInfo.offset,
                           sizeof(int32_t));
 
-        return lightID;
+        return lightSSBO->getIndex();
     }
 
 

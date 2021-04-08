@@ -39,7 +39,7 @@ namespace marengine {
 
     private:
 
-        uint32_t m_vao{ 0 };
+        GLuint m_vao{ 0 };
 
     };
 
@@ -60,8 +60,8 @@ namespace marengine {
 
     public:
 
-        MAR_NO_DISCARD FPipelineMeshColor* getColorMesh(size_t index) const final;
-        MAR_NO_DISCARD FPipelineMeshTex2D* getTex2DMesh(size_t index) const final;
+        MAR_NO_DISCARD FPipelineMeshColor* getColorMesh(int8_t index) const final;
+        MAR_NO_DISCARD FPipelineMeshTex2D* getTex2DMesh(int8_t index) const final;
 
         MAR_NO_DISCARD size_t getCountColorMesh() const final;
         MAR_NO_DISCARD size_t getCountTex2DMesh() const final;

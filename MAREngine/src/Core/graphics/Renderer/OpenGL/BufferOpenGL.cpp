@@ -228,16 +228,16 @@ namespace marengine {
         return m_ibos.size();
     }
 
-    FShaderBuffer* FBufferStorageOpenGL::getSSBO(size_t index) const {
+    FShaderBuffer* FBufferStorageOpenGL::getSSBO(int8_t index) const {
         return (FShaderBuffer*)&m_ssbos.at(index);
     }
-    FShaderBuffer* FBufferStorageOpenGL::getUBO(size_t index) const {
+    FShaderBuffer* FBufferStorageOpenGL::getUBO(int8_t index) const {
         return (FShaderBuffer*)&m_ubos.at(index);
     }
-    FVertexBuffer* FBufferStorageOpenGL::getVBO(size_t index) const {
+    FVertexBuffer* FBufferStorageOpenGL::getVBO(int8_t index) const {
         return (FVertexBuffer*)&m_vbos.at(index);
     }
-    FIndexBuffer* FBufferStorageOpenGL::getIBO(size_t index) const {
+    FIndexBuffer* FBufferStorageOpenGL::getIBO(int8_t index) const {
         return (FIndexBuffer*)&m_ibos.at(index);
     }
 
@@ -258,19 +258,26 @@ namespace marengine {
     }
 
 
-    FShaderBuffer* FBufferFactoryOpenGL::emplaceSSBO() {
-        return &(m_storage.m_ssbos.emplace_back());
-    }
-    FShaderBuffer* FBufferFactoryOpenGL::emplaceUBO() {
-        return &m_storage.m_ubos.emplace_back();
-    }
-    FVertexBuffer* FBufferFactoryOpenGL::emplaceVBO() {
-        return &m_storage.m_vbos.emplace_back();
-    }
-    FIndexBuffer* FBufferFactoryOpenGL::emplaceIBO() {
-        return &m_storage.m_ibos.emplace_back();
+    template<typename TReturnType, typename TBufferArray>
+    static TReturnType* emplaceBufferAtArray(TBufferArray& array) {
+        auto& buffer{ array.emplace_back() };
+        const int8_t currentSize{ (int8_t)array.size() };
+        buffer.setIndex( currentSize - 1);
+        return (TReturnType*)&buffer;
     }
 
+    FShaderBuffer* FBufferFactoryOpenGL::emplaceSSBO() {
+        return emplaceBufferAtArray<FShaderBuffer>(m_storage.m_ssbos);
+    }
+    FShaderBuffer* FBufferFactoryOpenGL::emplaceUBO() {
+        return emplaceBufferAtArray<FShaderBuffer>(m_storage.m_ubos);
+    }
+    FVertexBuffer* FBufferFactoryOpenGL::emplaceVBO() {
+        return emplaceBufferAtArray<FVertexBuffer>(m_storage.m_vbos);
+    }
+    FIndexBuffer* FBufferFactoryOpenGL::emplaceIBO() {
+        return emplaceBufferAtArray<FIndexBuffer>(m_storage.m_ibos);
+    }
 
 
 }

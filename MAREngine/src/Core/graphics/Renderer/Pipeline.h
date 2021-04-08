@@ -33,7 +33,7 @@ namespace marengine {
     class FBufferStorage;
 
 
-    class IPipeline : public IRenderResource {
+    class IPipeline : public FRenderResource {
     public:
 
         virtual void passBufferStorage(FBufferStorage* pBufferStorage) = 0;
@@ -63,16 +63,16 @@ namespace marengine {
     class FPipelineMesh : public FPipeline {
     public:
 
-        virtual void passIndexBuffer(int32_t i) final;
-        virtual void passCameraSSBO(int32_t i) final;
-        virtual void passPointLightSSBO(int32_t i) final;
+        virtual void passIndexBuffer(int8_t i) final;
+        virtual void passCameraSSBO(int8_t i) final;
+        virtual void passPointLightSSBO(int8_t i) final;
         MAR_NO_DISCARD virtual uint32_t getIndicesCount() const final;
 
     protected:
 
-        int32_t p_iboIndex{ -1 };
-        int32_t p_camIndex{ -1 };
-        int32_t p_pointLightIndex{ -1 };
+        int8_t p_iboIndex{ -1 };
+        int8_t p_camIndex{ -1 };
+        int8_t p_pointLightIndex{ -1 };
 
     };
 
@@ -80,17 +80,17 @@ namespace marengine {
     class FPipelineMeshColor : public FPipelineMesh {
     public:
 
-        virtual void passVertexBuffer(int32_t i) final;
-        virtual void passTransformSSBO(int32_t i) final;
-        virtual void passColorSSBO(int32_t i) final;
-        virtual void passShaderPipeline(int32_t i) final;
+        virtual void passVertexBuffer(int8_t i) final;
+        virtual void passTransformSSBO(int8_t i) final;
+        virtual void passColorSSBO(int8_t i) final;
+        virtual void passShaderPipeline(int8_t i) final;
 
     protected:
 
-        int32_t p_vboIndex{ -1 };
-        int32_t p_transformIndex{ -1 };
-        int32_t p_colorIndex{ -1 };
-        int32_t p_shaderIndex{ -1 };
+        int8_t p_vboIndex{ -1 };
+        int8_t p_transformIndex{ -1 };
+        int8_t p_colorIndex{ -1 };
+        int8_t p_shaderIndex{ -1 };
 
     };
 
@@ -103,8 +103,8 @@ namespace marengine {
     class IPipelineStorage : public IRenderResourceStorage {
     public:
 
-        virtual FPipelineMeshColor* getColorMesh(size_t index) const = 0;
-        virtual FPipelineMeshTex2D* getTex2DMesh(size_t index) const = 0;
+        virtual FPipelineMeshColor* getColorMesh(int8_t index) const = 0;
+        virtual FPipelineMeshTex2D* getTex2DMesh(int8_t index) const = 0;
 
         virtual size_t getCountColorMesh() const = 0;
         virtual size_t getCountTex2DMesh() const = 0;

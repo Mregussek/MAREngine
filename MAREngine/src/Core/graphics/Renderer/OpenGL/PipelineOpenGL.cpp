@@ -64,11 +64,11 @@ namespace marengine {
     }
 
 
-    FPipelineMeshColor* FPipelineStorageOpenGL::getColorMesh(size_t index) const {
+    FPipelineMeshColor* FPipelineStorageOpenGL::getColorMesh(int8_t index) const {
         return (FPipelineMeshColor*)&m_colors.at(index);
     }
 
-    FPipelineMeshTex2D* FPipelineStorageOpenGL::getTex2DMesh(size_t index) const {
+    FPipelineMeshTex2D* FPipelineStorageOpenGL::getTex2DMesh(int8_t index) const {
         return (FPipelineMeshTex2D*)&m_texs2D.at(index);
     }
 
@@ -90,11 +90,19 @@ namespace marengine {
     }
 
 
+    template<typename TReturnType, typename TPipelineArray>
+    static TReturnType* emplacePipelineAtArray(TPipelineArray& array) {
+        auto& pip{ array.emplace_back() };
+        const int8_t currentSize{ (int8_t)array.size() };
+        pip.setIndex( currentSize - 1);
+        return (TReturnType*)&pip;
+    }
+
     FPipelineMeshColor* FPipelineFactoryOpenGL::emplaceColorMesh() {
-        return &m_storage.m_colors.emplace_back();
+        return emplacePipelineAtArray<FPipelineMeshColor>(m_storage.m_colors);
     }
     FPipelineMeshTex2D* FPipelineFactoryOpenGL::emplaceTex2DMesh() {
-        return &m_storage.m_texs2D.emplace_back();
+        return emplacePipelineAtArray<FPipelineMeshTex2D>(m_storage.m_texs2D);
     }
 
 

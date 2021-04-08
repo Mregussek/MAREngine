@@ -47,7 +47,7 @@ namespace marengine {
     };
 
 
-    class IShaders : public IRenderResource {
+    class IShaders : public FRenderResource {
     public:
 
         virtual void passVertex(const char* vertexShader) = 0;
