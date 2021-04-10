@@ -22,7 +22,7 @@
 
 #include "RendererOpenGL.h"
 #include "PipelineOpenGL.h"
-#include "../../../../Logging/Logger.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {

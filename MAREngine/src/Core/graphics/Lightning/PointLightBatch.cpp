@@ -21,7 +21,7 @@
 
 
 #include "PointLightBatch.h"
-#include "../GraphicsLimits.h"
+#include "../IRender.h"
 #include "../../ecs/Components/LightComponents.h"
 #include "../../ecs/Entity/Entity.h"
 

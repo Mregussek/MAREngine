@@ -25,10 +25,9 @@
 #include "Shaders.h"
 #include "Pipeline.h"
 #include "RenderCamera.h"
-#include "../GraphicsLimits.h"
-#include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Scene.h"
-#include "../../ecs/Entity/EventsCameraEntity.h"
+#include "../ecs/Entity/Entity.h"
+#include "../ecs/Scene.h"
+#include "../ecs/Entity/EventsCameraEntity.h"
 
 
 namespace marengine {
@@ -137,7 +136,8 @@ namespace marengine {
         m_cameraIndex = createCameraSSBO(m_pContext, m_pRenderCamera);
         m_pointLightIndex = createPointLightSSBO(m_pContext, m_pointLightBatch);
 
-        for (size_t i = 0; i < m_meshesBatchColor.size(); i++) {
+        const int8 batchSize{ (int8)m_meshesBatchColor.size() };
+        for (int8 i = 0; i < batchSize; i++) {
             createPipelineForBatch(m_pContext, m_meshesBatchColor.at(i));
             FPipelineMeshColor* pPipeline{ m_pContext->getPipelineStorage()->getColorMesh(i) };
             pPipeline->passCameraSSBO(m_cameraIndex);

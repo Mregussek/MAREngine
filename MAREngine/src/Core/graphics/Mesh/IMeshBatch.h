@@ -24,7 +24,7 @@
 #define MAR_ENGINE_I_MESH_BATCH_H
 
 
-#include "../Renderer/IRender.h"
+#include "../IRender.h"
 
 
 namespace marengine {

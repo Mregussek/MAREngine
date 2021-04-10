@@ -24,7 +24,7 @@
 #define MAR_ENGINE_GRAPHICS_RENDER_CAMERA_H
 
 
-#include "../../../mar.h"
+#include "../../mar.h"
 
 
 namespace marengine {

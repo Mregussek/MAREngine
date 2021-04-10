@@ -125,7 +125,7 @@
                         }
                     },
                     "RenderableComponent": {
-                        "name": "Wall"
+                        "name": "Cube"
                     },
                     "TagComponent": {
                         "tag": "RedWall"
@@ -246,7 +246,7 @@
                 },
                 {
                     "RenderableComponent": {
-                        "name": "Wall"
+                        "name": "Cube"
                     },
                     "TagComponent": {
                         "tag": "RedBrickWall"

@@ -26,10 +26,10 @@
 
 #include "../../mar.h"
 #include "../ILayer.h"
-#include "../../Core/graphics/Renderer/Renderer.h"
-#include "../../Core/graphics/Renderer/RenderManager.h"
-#include "../../Core/graphics/Renderer/OpenGL/GraphicsOpenGL.h"
-#include "../../Core/graphics/Renderer/OpenGL/RendererOpenGL.h"
+#include "../../Core/graphics/Renderer.h"
+#include "../../Core/graphics/RenderManager.h"
+#include "../../Core/graphics/OpenGL/GraphicsOpenGL.h"
+#include "../../Core/graphics/OpenGL/RendererOpenGL.h"
 
 
 namespace marengine {

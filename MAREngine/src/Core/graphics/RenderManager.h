@@ -25,8 +25,8 @@
 
 
 #include "IRender.h"
-#include "../Mesh/MeshBatchStatic.h"
-#include "../Lightning/PointLightBatch.h"
+#include "Mesh/MeshBatchStatic.h"
+#include "Lightning/PointLightBatch.h"
 
 
 namespace marengine {

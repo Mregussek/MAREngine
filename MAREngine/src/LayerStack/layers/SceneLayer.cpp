@@ -25,7 +25,7 @@
 #include "../../Core/ecs/Entity/EventsCameraEntity.h"
 #include "../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../Core/filesystem/SceneDeserializer.h"
-#include "../../Core/graphics/Renderer/RenderManager.h"
+#include "../../Core/graphics/RenderManager.h"
 
 
 namespace marengine {

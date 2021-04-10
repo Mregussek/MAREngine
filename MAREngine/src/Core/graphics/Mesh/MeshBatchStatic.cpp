@@ -21,7 +21,7 @@
 
 
 #include "MeshBatchStatic.h"
-#include "../GraphicsLimits.h"
+#include "../IRender.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 

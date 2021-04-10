@@ -21,7 +21,7 @@
 
 
 #include "BufferOpenGL.h"
-#include "../../../../Logging/Logger.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {

@@ -24,7 +24,7 @@
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
-#include "../../../../Core/graphics/Renderer/Renderer.h"
+#include "../../../../Core/graphics/Renderer.h"
 
 
 namespace marengine {

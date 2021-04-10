@@ -21,8 +21,8 @@
 
 
 #include "ShadersOpenGL.h"
-#include "../../../filesystem/FileManager.h"
-#include "../../../../Logging/Logger.h"
+#include "../../filesystem/FileManager.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {

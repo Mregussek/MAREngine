@@ -21,14 +21,15 @@
 
 
 #include "Renderer.h"
-#include "../../ecs/SceneManagerEditor.h"
-#include "../../ecs/Scene.h"
+#include "../ecs/SceneManagerEditor.h"
+#include "../ecs/Scene.h"
 
 
 namespace marengine {
 
 
     void FRenderStatistics::update(FSceneManagerEditor* pSceneManagerEditor) {
+        // TODO: implement back FRenderStatistics::update
         //const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
         //std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
         //	verticesCount += batch.getVertices().size();

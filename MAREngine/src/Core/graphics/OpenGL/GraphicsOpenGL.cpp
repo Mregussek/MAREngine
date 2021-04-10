@@ -21,8 +21,8 @@
 
 
 #include "GraphicsOpenGL.h"
-#include "../../../../Logging/Logger.h"
-#include "../../../../Platform/ShellTerminal/TerminalAPI.h"
+#include "../../../Logging/Logger.h"
+#include "../../../Platform/ShellTerminal/TerminalAPI.h"
 
 
 namespace marengine {

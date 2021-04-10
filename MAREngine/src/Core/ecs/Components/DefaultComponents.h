@@ -25,7 +25,7 @@
 
 
 #include "../../../mar.h"
-#include "../../graphics/Renderer/IRender.h"
+#include "../../graphics/IRender.h"
 
 
 namespace marengine {

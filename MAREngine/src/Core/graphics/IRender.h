@@ -24,7 +24,7 @@
 #define MARENGINE_IRENDER_H
 
 
-#include "../../../mar.h"
+#include "../../mar.h"
 
 
 namespace marengine {
@@ -63,6 +63,21 @@ namespace marengine {
         maths::vec3 lightNormal;
         maths::vec2 textureCoordinates;
         float shapeID{ 0.f };
+    };
+
+    constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
+
+    namespace GraphicLimits {
+
+        constexpr uint32_t maxTrianglesCount{ 100000 };
+        constexpr uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
+        constexpr uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
+        constexpr int64_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
+        constexpr int64_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
+
+        constexpr uint32_t maxTransforms{ 32 };
+        constexpr uint32_t maxLights{ 32 };
+
     };
 
     struct FTexturePair {

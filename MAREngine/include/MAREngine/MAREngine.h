@@ -42,7 +42,7 @@
 #include "../../src/Core/ecs/Components/Components.h"
 
 // Rendering
-#include "../../src/Core/graphics/Renderer/Renderer.h"
+#include "../../src/Core/graphics/Renderer.h"
 
 // Scripting
 #include "../../src/Core/scripting/PythonScript.h"

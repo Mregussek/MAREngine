@@ -25,7 +25,7 @@
 
 
 #include "IMeshBatch.h"
-#include "../Renderer/IRender.h"
+#include "../IRender.h"
 
 
 namespace marengine {
