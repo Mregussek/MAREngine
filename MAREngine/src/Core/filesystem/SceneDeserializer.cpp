@@ -21,15 +21,17 @@
 
 
 #include "SceneDeserializer.h"
+#include "../graphics/MeshManager.h"
 #include "../../Logging/Logger.h"
 #include "../../ProjectManager.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
-#include "../graphics/Mesh/MeshCreator.h"
 #include "../ecs/Components/Components.h"
 
 
 namespace marengine {
+
+    FMeshManager* FSceneDeserializer::s_pMeshManager{ nullptr };
 
 
     static bool doesContainExtension(const std::string& path, std::string&& extension) {
@@ -78,30 +80,28 @@ namespace marengine {
 		return scene;
 	}
 
-	static bool fillRenderable(const Entity& entity, RenderableComponent& renderable) {
-		if (renderable.name.find("Cube") != std::string::npos) {
-			renderable.vertices = MeshCreator::Cube::getVertices();
-			renderable.indices = MeshCreator::Cube::getIndices();
+	static bool fillRenderable(FMeshManager* pManager, const std::string& renderableName,
+                               RenderableComponent& renderable) {
+		if (renderableName.find("Cube") != std::string::npos) {
+		    renderable.meshIndex = g_MeshDefaultTypeIndex;
+		    renderable.meshType = EMeshType::CUBE;
 			return true;
 		}
-		else if (renderable.name.find("Surface") != std::string::npos) {
-			renderable.vertices = MeshCreator::Surface::getVertices();
-			renderable.indices = MeshCreator::Surface::getIndices();
+		else if (renderableName.find("Surface") != std::string::npos) {
+            renderable.meshIndex = g_MeshDefaultTypeIndex;
+            renderable.meshType = EMeshType::SURFACE;
             return true;
 		}
-		else if (renderable.name.find("Wall") != std::string::npos) {
-			renderable.vertices = MeshCreator::Wall::getVertices();
-			renderable.indices = MeshCreator::Wall::getIndices();
+		else if (renderableName.find("Pyramid") != std::string::npos) {
+            renderable.meshIndex = g_MeshDefaultTypeIndex;
+            renderable.meshType = EMeshType::PYRAMID;
             return true;
 		}
-		else if (renderable.name.find("Pyramid") != std::string::npos) {
-			renderable.vertices = MeshCreator::Pyramid::getVertices();
-			renderable.indices = MeshCreator::Pyramid::getIndices();
-            return true;
-		}
-		else if(doesContainExtension(renderable.name, "obj")) {
-            const std::string modelPath{ FProjectManager::getAssetsPath() + renderable.name };
-            MeshCreator::loadOBJ(renderable.name, modelPath, entity);
+		else if(doesContainExtension(renderableName, "obj")) {
+            FMeshProxy* pMesh =
+                    pManager->getFactory()->emplaceExternal(FProjectManager::getAssetsPath() + renderableName);
+            renderable.meshIndex = pMesh->getIndex();
+            renderable.meshType = EMeshType::EXTERNAL;
             return true;
         }
 
@@ -133,6 +133,14 @@ namespace marengine {
 				json["Scene"][sceneName]["Entity"][index][componentName][value]["w"].get<float>()
 			};
 		};
+        auto setRenderable = [&sceneName, index, &json](FMeshManager* pManager,
+                                                        RenderableComponent& renderable,
+                                                        const char* componentName,
+                                                        const char* value) {
+            const std::string retrievedRenderableName =
+                    json["Scene"][sceneName]["Entity"][index][componentName][value];
+            fillRenderable(pManager, retrievedRenderableName, renderable);
+        };
 
 		auto& tagComponent{ entity.getComponent<TagComponent>() };
 		setString(tagComponent.tag, "TagComponent", "tag");
@@ -144,23 +152,7 @@ namespace marengine {
 
 		if (jsonContains("RenderableComponent")) {
 			auto& renderableComponent{ entity.addComponent<RenderableComponent>() };
-			setString(renderableComponent.name, "RenderableComponent", "name");
-            fillRenderable(entity, renderableComponent);
-		}
-
-		if (jsonContains("ColorComponent")) {
-			auto& colorComponent{ entity.addComponent<ColorComponent>() };
-			colorComponent.color = loadVec4("ColorComponent", "color");
-		}
-
-		if (jsonContains("Texture2DComponent")) {
-			auto& texture2DComponent{ entity.addComponent<Texture2DComponent>() };
-			setString(texture2DComponent.texturePath, "Texture2DComponent", "texturePath");
-		}
-
-		if (jsonContains("TextureCubemapComponent")) {
-			auto& cubemapComponent{ entity.addComponent<TextureCubemapComponent>() };
-			setString(cubemapComponent.texturePath, "TextureCubemapComponent", "texturePath");
+			setRenderable(s_pMeshManager, renderableComponent, "RenderableComponent", "name");
 		}
 
 		if (jsonContains("PointLightComponent")) {

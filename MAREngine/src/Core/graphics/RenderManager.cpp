@@ -21,31 +21,27 @@
 
 
 #include "RenderManager.h"
+#include "BatchManager.h"
 #include "Buffer.h"
 #include "Shaders.h"
 #include "Pipeline.h"
 #include "RenderCamera.h"
-#include "../ecs/Entity/Entity.h"
-#include "../ecs/Scene.h"
-#include "../ecs/Entity/EventsCameraEntity.h"
+#include "Mesh/MeshBatch.h"
 
 
 namespace marengine {
 
     template<typename TMeshBatch>
-    static uint32_t getAvailableBatch(std::vector<TMeshBatch>& batch, const Entity& entity);
-
-    template<typename TMeshBatch>
     [[maybe_unused]] static void createPipelineForBatch(FRenderContext* pContext,
-                                                        TMeshBatch& batch);
+                                                        TMeshBatch* batch);
     
     template<>
     static void createPipelineForBatch<FMeshBatchStaticColor>(FRenderContext* pContext,
-                                                              FMeshBatchStaticColor& batch);
+                                                              FMeshBatchStaticColor* batch);
     
     template<>
-    static void createPipelineForBatch<FMeshBatchStaticTexture2D>(FRenderContext* pContext,
-                                                                  FMeshBatchStaticTexture2D& batch);
+    static void createPipelineForBatch<FMeshBatchStaticTex2D>(FRenderContext* pContext,
+                                                                  FMeshBatchStaticTex2D* batch);
 
     static uint32_t createCameraSSBO(FRenderContext* pContext, const RenderCamera* pRenderCamera);
 
@@ -65,103 +61,41 @@ namespace marengine {
     }
 
     void FRenderManager::reset() {
-        clearMeshBatch(m_meshesBatchColor);
-        clearMeshBatch(m_meshesBatchTexture2D);
-
-		m_pointLightBatch.reset();
-
 		m_pContext->getBufferStorage()->reset();
 		m_pContext->getPipelineStorage()->reset();
 		m_pContext->getShadersStorage()->reset();
     }
 
-    void FRenderManager::pushSceneToRender(Scene* pScene) {
-        reset();
-        const FEntityArray& entities{ pScene->getEntities() };
-        for(const Entity& entity : entities) {
-            pushEntityToRender(entity);
-        }
-        onBatchesReadyToDraw();
-    }
-
-    void FRenderManager::pushEntityToRender(const Entity& entity) {
-        if (entity.hasComponent<ColorComponent>()) {
-			const uint32_t batchIndex{ getAvailableBatch(m_meshesBatchColor, entity) };
-			auto& availableBatch{ m_meshesBatchColor.at(batchIndex) };
-			availableBatch.submitToBatch(entity);
-
-			auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
-			meshBatchInfoComponent.batchIndex = batchIndex;
-			meshBatchInfoComponent.batchType = availableBatch.getBatchType();
-		}
-		if (entity.hasComponent<Texture2DComponent>()) {
-			const uint32_t batchIndex{ getAvailableBatch(m_meshesBatchTexture2D, entity) };
-			auto& availableBatch{ m_meshesBatchTexture2D.at(batchIndex) };
-			availableBatch.submitToBatch(entity);
-
-			auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
-			meshBatchInfoComponent.batchIndex = batchIndex;
-			meshBatchInfoComponent.batchType = availableBatch.getBatchType();
-		}
-		if (entity.hasComponent<PointLightComponent>()) {
-			if (m_pointLightBatch.canBeBatched(entity)) {
-				m_pointLightBatch.submitEntityWithLightning(entity);
-
-				auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
-				lightBatchInfoComponent.batchType = m_pointLightBatch.getBatchType();
-			}
-		}
-		if (entity.hasComponent<CameraComponent>()) {
-		    auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-			if (m_pRenderCamera && cameraComponent.isMainCamera()) {
-			    FEventsCameraEntity::onMainCameraUpdate(entity);
-			}
-			else if(cameraComponent.isMainCamera()){
-			    const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-			    RenderCamera* renderCamera{ &cameraComponent.renderCamera };
-			    renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
-			    m_pRenderCamera = renderCamera;
-			}
-		}
+    void FRenderManager::setCamera(const RenderCamera* pRenderCamera) {
+        m_pRenderCamera = pRenderCamera;
     }
 
     void FRenderManager::pushCameraToRender(const RenderCamera* pRenderCamera) {
-        m_pRenderCamera = pRenderCamera;
+        setCamera(pRenderCamera);
         const maths::mat4& mvp{ m_pRenderCamera->getMVP() };
         FShaderBuffer* const cameraSSBO{ m_pContext->getBufferStorage()->getSSBO(m_cameraIndex) };
         cameraSSBO->update(maths::mat4::value_ptr(mvp), 0, sizeof(maths::mat4));
     }
 
-    void FRenderManager::onBatchesReadyToDraw() {
-        m_cameraIndex = createCameraSSBO(m_pContext, m_pRenderCamera);
-        m_pointLightIndex = createPointLightSSBO(m_pContext, m_pointLightBatch);
+    bool FRenderManager::isCameraValid() const {
+        return m_pRenderCamera != nullptr;
+    }
 
-        const int8 batchSize{ (int8)m_meshesBatchColor.size() };
-        for (int8 i = 0; i < batchSize; i++) {
-            createPipelineForBatch(m_pContext, m_meshesBatchColor.at(i));
+    void FRenderManager::onBatchesReadyToDraw(FBatchManager* pBatchManager) {
+        m_cameraIndex = createCameraSSBO(m_pContext, m_pRenderCamera);
+        m_pointLightIndex = createPointLightSSBO(m_pContext, *pBatchManager->getPointLightBatch());
+
+        FMeshBatchStorage* pStorage{ pBatchManager->getMeshStorage() };
+        const int8 colorBatchSize{ (int8)pStorage->getCountStaticColor() };
+
+        for (int8 i = 0; i < colorBatchSize; i++) {
+            createPipelineForBatch(m_pContext, pStorage->getStaticColor(i) );
             FPipelineMeshColor* pPipeline{ m_pContext->getPipelineStorage()->getColorMesh(i) };
             pPipeline->passCameraSSBO(m_cameraIndex);
             pPipeline->passPointLightSSBO(m_pointLightIndex);
         }
     }
 
-
-
-    template<typename TMeshBatch>
-    uint32_t getAvailableBatch(std::vector<TMeshBatch>& batches, const Entity& entity) {
-        auto canBatchEntity = [&entity](TMeshBatch& batch)->bool {
-			return batch.canBeBatched(entity);
-		};
-		const auto validBatchIt = std::find_if(batches.begin(), batches.end(), canBatchEntity);
-		if (validBatchIt != batches.end()) {
-			return std::distance(batches.begin(), validBatchIt);
-		}
-
-		// If cannot find valid batch with place for Entity, emplace new one
-		// This will cause a new draw call!
-		batches.emplace_back();
-		return batches.size() - 1;
-    }
 
     static void fillDefaultVertexLayout(FVertexBuffer* const pVertexBuffer) {
         FVertexInputVariableInfo positionInfo;
@@ -197,28 +131,29 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineVBO(FRenderContext* pContext,
-                                  TPipeline* pPipeline, TMeshBatch& batch) {
+                                  TPipeline* pPipeline, TMeshBatch* batch) {
         FVertexBuffer* const vertexBuffer{ pContext->getBufferFactory()->emplaceVBO() };
 
         fillDefaultVertexLayout(vertexBuffer);
 
         vertexBuffer->create(GraphicLimits::sizeOfVertices);
-        vertexBuffer->update(batch.getVertices());
+        vertexBuffer->update( batch->getVertices() );
 
-        batch.setUniquePipelineID(vertexBuffer->getIndex());
+        batch->passVBO(vertexBuffer->getIndex());
         pPipeline->passVertexBuffer(vertexBuffer->getIndex());
     }
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineIBO(FRenderContext* pContext,
-                                  TPipeline* pPipeline, TMeshBatch& batch) {
+                                  TPipeline* pPipeline, TMeshBatch* batch) {
         FIndexBuffer* const indexBuffer{ pContext->getBufferFactory()->emplaceIBO() };
 
-        const FIndicesArray& indices{ batch.getIndices() };
+        const FIndicesArray& indices{ batch->getIndices() };
         indexBuffer->create(GraphicLimits::sizeOfIndices);
         indexBuffer->update(indices);
         indexBuffer->passIndicesCount(indices.size());
 
+        batch->passVBO(indexBuffer->getIndex());
         pPipeline->passIndexBuffer(indexBuffer->getIndex());
     }
 
@@ -241,11 +176,11 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineTransforms(FRenderContext* pContext,
-                                         TPipeline* pPipeline, TMeshBatch& batch) {
+                                         TPipeline* pPipeline, TMeshBatch* batch) {
         FShaderBuffer* const transformSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
 
         fillDefaultTransformSSBO(transformSSBO, 5);
-        const FTransformsArray& transforms{ batch.getTransforms() };
+        const FTransformsArray& transforms{ batch->getTransforms() };
         transformSSBO->create();
         transformSSBO->update(
             maths::mat4::value_ptr(transforms),
@@ -253,7 +188,7 @@ namespace marengine {
             transforms.size() * sizeof(maths::mat4)
         );
 
-        batch.seUniqueTransformsID(transformSSBO->getIndex());
+        batch->passTransformSSBO(transformSSBO->getIndex());
         pPipeline->passTransformSSBO(transformSSBO->getIndex());
     }
 
@@ -276,11 +211,11 @@ namespace marengine {
 
     template<typename TMeshBatch, typename TPipeline>
     static void createPipelineColor(FRenderContext* pContext, TPipeline* pPipeline,
-                                    TMeshBatch& batch) {
+                                    TMeshBatch* batch) {
         FShaderBuffer* const colorSSBO{ pContext->getBufferFactory()->emplaceSSBO() };
 
         fillDefaultColorSSBO(colorSSBO, 3);
-        const FColorsArray& colors{ batch.getColors() };
+        const FColorsArray& colors{ batch->getColors() };
         colorSSBO->create();
         colorSSBO->update(
             maths::vec4::value_ptr(colors),
@@ -288,16 +223,16 @@ namespace marengine {
             colors.size() * sizeof(maths::vec4)
         );
 
-        batch.setUniqueColorsID(colorSSBO->getIndex());
+        batch->setColorSSBO(colorSSBO->getIndex());
         pPipeline->passColorSSBO(colorSSBO->getIndex());
     }
 
     template<typename TMeshBatch>
-    [[maybe_unused]] void createPipelineForBatch(FRenderContext* pContext, TMeshBatch& batch) { }
+    [[maybe_unused]] void createPipelineForBatch(FRenderContext* pContext, TMeshBatch* batch) { }
 
     template<>
     void createPipelineForBatch<FMeshBatchStaticColor>(FRenderContext* pContext,
-                                                       FMeshBatchStaticColor& batch) {
+                                                       FMeshBatchStaticColor* batch) {
         FPipelineMeshColor* const pPipeline =
                 pContext->getPipelineFactory()->emplaceColorMesh();
         
@@ -318,8 +253,8 @@ namespace marengine {
     }
 
     template<>
-    void createPipelineForBatch<FMeshBatchStaticTexture2D>(FRenderContext* pContext,
-                                                           FMeshBatchStaticTexture2D& batch) {
+    void createPipelineForBatch<FMeshBatchStaticTex2D>(FRenderContext* pContext,
+                                                       FMeshBatchStaticTex2D* batch) {
 
     }
 

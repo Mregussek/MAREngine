@@ -21,6 +21,7 @@
 
 
 #include "RenderLayer.h"
+#include "../../Core/filesystem/SceneDeserializer.h"
 
 
 namespace marengine {
@@ -32,8 +33,10 @@ namespace marengine {
 
 
     void FRenderLayerOpenGL::create(FWindow* pWindow) {
+        FSceneDeserializer::passMeshFactory(&m_meshManager);
         m_context.create(pWindow);
-        m_manager.create((FRenderContext*)&m_context);
+        m_batchManager.create(&m_renderManager, &m_meshManager);
+        m_renderManager.create((FRenderContext*)&m_context);
     }
 
     void FRenderLayerOpenGL::begin() {
@@ -58,8 +61,12 @@ namespace marengine {
 
     }
 
-    FRenderManager* FRenderLayerOpenGL::getRenderManager() {
-        return &m_manager;
+    FBatchManager* FRenderLayerOpenGL::getBatchManager() const {
+        return const_cast<FBatchManager*>(&m_batchManager);
+    }
+
+    FRenderManager* FRenderLayerOpenGL::getRenderManager() const {
+        return const_cast<FRenderManager*>(&m_renderManager);
     }
 
 

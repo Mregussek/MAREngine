@@ -33,8 +33,8 @@ namespace marengine {
 		auto& playModeComponent{ entity.addComponent<PlayModeStorageComponent>() };
 
 		playModeComponent.components.insert({ ComType::TRANSFORM, entity.getComponent<TransformComponent>() });
-		if (entity.hasComponent<ColorComponent>()) {
-			playModeComponent.components.insert({ ComType::COLOR, entity.getComponent<ColorComponent>() });
+		if (entity.hasComponent<RenderableComponent>()) {
+			playModeComponent.components.insert({ ComType::RENDERABLE, entity.getComponent<RenderableComponent>() });
 		}
 		if (entity.hasComponent<PointLightComponent>()) {
 			playModeComponent.components.insert({ ComType::POINTLIGHT, entity.getComponent<PointLightComponent>() });
@@ -57,7 +57,7 @@ namespace marengine {
 		typedef PlayModeStorageComponent::ComponentType ComType;
 
 		loadComponent<ComType::TRANSFORM, TransformComponent>(entity);
-		loadComponent<ComType::COLOR, ColorComponent>(entity);
+		loadComponent<ComType::RENDERABLE, RenderableComponent>(entity);
 		loadComponent<ComType::POINTLIGHT, PointLightComponent>(entity);
 
 		entity.removeComponent<PlayModeStorageComponent>();

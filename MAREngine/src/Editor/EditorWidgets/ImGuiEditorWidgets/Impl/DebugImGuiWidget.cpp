@@ -115,31 +115,17 @@ namespace marengine {
                 ImGui::Text("PythonScript.scriptsPath: %s", pythonScriptComponent.scriptsPath.c_str());
             }
 
-            if (entity.hasComponent<RenderableComponent>()) {
-                const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
-                ImGui::Text("Renderable.name: %s", renderableComponent.name.c_str());
-                ImGui::Text("Renderable.vertices.size: %i", renderableComponent.vertices.size());
-                ImGui::Text("Renderable.indices.size: %i", renderableComponent.indices.size());
-            }
+            // TODO: add renderablecomponent to debug widget
+            //if (entity.hasComponent<RenderableComponent>()) {
+            //    const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+            //    ImGui::Text("Renderable.name: %s", renderableComponent.name.c_str());
+            //    ImGui::Text("Renderable.vertices.size: %i", renderableComponent.vertices.size());
+            //    ImGui::Text("Renderable.indices.size: %i", renderableComponent.indices.size());
+            //}
 
             if (entity.hasComponent<CameraComponent>()) {
                 const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-                ImGui::Text("camera.id: %s", cameraComponent.id);
-            }
-
-            if (entity.hasComponent<ColorComponent>()) {
-                const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-                displayVec4("Color.color: <%f , %f , %f , %f>", colorComponent.color);
-            }
-
-            if (entity.hasComponent<Texture2DComponent>()) {
-                const auto& textureComponent{ entity.getComponent<Texture2DComponent>() };
-                ImGui::Text("Texture2D.texturePath: %s", textureComponent.texturePath.c_str());
-            }
-
-            if (entity.hasComponent<TextureCubemapComponent>()) {
-                const auto& textureComponent{ entity.getComponent<TextureCubemapComponent>() };
-                ImGui::Text("TextureCubemap.texturePath: %s", textureComponent.texturePath.c_str());
+                ImGui::Text("camera.id: %s", cameraComponent.id.c_str());
             }
 
             if (entity.hasComponent<PointLightComponent>()) {

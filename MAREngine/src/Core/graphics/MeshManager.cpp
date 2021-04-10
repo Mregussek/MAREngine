@@ -20,17 +20,19 @@
 ************************************************************************/
 
 
-#include "DefaultComponents.h"
+#include "MeshManager.h"
 
 
 namespace marengine {
 
 
-	maths::mat4 TransformComponent::getTransform() const {
-		maths::mat4 tran;
-		tran.recompose(position, maths::quat(rotation), scale);
-		return tran;
-	}
+    FMeshStorage* FMeshManager::getStorage() const {
+        return m_factory.getStorage();
+    }
+
+    FMeshFactory* FMeshManager::getFactory() const {
+        return const_cast<FMeshFactory*>(&m_factory);
+    }
 
 
 }

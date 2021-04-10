@@ -69,7 +69,7 @@ namespace marengine {
         }
 
         renderLayer->create(window);
-        sceneLayer->create(getStartupSceneFilename(), renderLayer->getRenderManager());
+        sceneLayer->create(getStartupSceneFilename(), renderLayer->getRenderManager(), renderLayer->getBatchManager());
         editorLayer->create(window, sceneLayer->getSceneManager(), renderLayer->getRenderStats());
 
         layerStack.pushLayer(renderLayer);

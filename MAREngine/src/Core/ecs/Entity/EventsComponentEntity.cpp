@@ -85,50 +85,6 @@ namespace marengine {
         s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
-	/***************************** COLOR COMPONENT TEMPLATES ***************************************/
-
-	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity) {
-		entity.addComponent<ColorComponent>();
-        // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
-	}
-
-	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity) {
-		FEventsMeshBatchStatic::onColorUpdate(entity);
-	}
-
-	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity) {
-		entity.removeComponent<ColorComponent>();
-        // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
-	}
-
-	/***************************** TEXTURE 2D COMPONENT TEMPLATES **************************************/
-
-	template<> void FEventsComponentEntity::onUpdate<Texture2DComponent>(const Entity& entity) {
-        // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
-	}
-
-	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity) {
-		entity.removeComponent<Texture2DComponent>();
-        // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
-	}
-
-	/***************************** TEXTURE CUBEMAP COMPONENT TEMPLATES *********************************/
-
-	template<> void FEventsComponentEntity::onUpdate<TextureCubemapComponent>(const Entity& entity) {
-        // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
-	}
-
-	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity) {
-		entity.removeComponent<TextureCubemapComponent>();
-        // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
-	}
-
 	/***************************** LIGHT COMPONENT TEMPLATES ***************************************/
 
 	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity) {

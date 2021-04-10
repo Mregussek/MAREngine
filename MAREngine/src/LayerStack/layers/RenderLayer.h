@@ -28,6 +28,8 @@
 #include "../ILayer.h"
 #include "../../Core/graphics/Renderer.h"
 #include "../../Core/graphics/RenderManager.h"
+#include "../../Core/graphics/BatchManager.h"
+#include "../../Core/graphics/MeshManager.h"
 #include "../../Core/graphics/OpenGL/GraphicsOpenGL.h"
 #include "../../Core/graphics/OpenGL/RendererOpenGL.h"
 
@@ -42,8 +44,9 @@ namespace marengine {
 
         virtual void create(FWindow* pWindow) = 0;
 
-        MAR_NO_DISCARD FRenderStatistics* getRenderStats();
-		MAR_NO_DISCARD virtual FRenderManager* getRenderManager() = 0;
+        FRenderStatistics* getRenderStats();
+        virtual FRenderManager* getRenderManager() const = 0;
+		virtual FBatchManager* getBatchManager() const = 0;
 
     protected:
 
@@ -61,12 +64,15 @@ namespace marengine {
         void end() final;
         void close() final;
 
-		MAR_NO_DISCARD FRenderManager* getRenderManager() final;
+        MAR_NO_DISCARD FRenderManager* getRenderManager() const final;
+		MAR_NO_DISCARD FBatchManager* getBatchManager() const final;
 
 	private:
 
 	    FRenderContextOpenGL m_context;
-		FRenderManager m_manager;
+        FBatchManager m_batchManager;
+        FMeshManager m_meshManager;
+		FRenderManager m_renderManager;
 		FRenderCommandOpenGL m_renderCmds;
 
 	};

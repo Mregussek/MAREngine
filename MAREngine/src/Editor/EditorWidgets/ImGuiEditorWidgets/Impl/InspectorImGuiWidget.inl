@@ -52,8 +52,6 @@ namespace marengine {
     template<> void FInspectorImGuiWidget::displayComponentPanel<PythonScriptComponent>();
     template<> void FInspectorImGuiWidget::displayComponentPanel<RenderableComponent>();
     template<> void FInspectorImGuiWidget::displayComponentPanel<CameraComponent>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<ColorComponent>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<Texture2DComponent>();
     template<> void FInspectorImGuiWidget::displayComponentPanel<PointLightComponent>();
 
 

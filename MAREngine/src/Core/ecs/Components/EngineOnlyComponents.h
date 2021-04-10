@@ -25,6 +25,7 @@
 
 
 #include "../../../mar.h"
+#include "../../graphics/Mesh/IMeshBatch.h"
 #include "../../graphics/Lightning/LightDefinitions.h"
 
 
@@ -45,9 +46,9 @@ namespace marengine {
 		int32_t beginIndices{ -1 };
 		int32_t endIndices{ -1 };
 
-		int32_t indexAtBatch{ -1 };
+		int8 indexAtBatch{ -1 };
 
-		int32_t batchIndex{ -1 };
+		int8 batchIndex{ -1 };
 		EBatchType batchType{ EBatchType::NONE };
 
 	};
@@ -69,7 +70,7 @@ namespace marengine {
 
 	// Just declarations for PlayModeStorageComponent ComponentVariant
 	struct TransformComponent;
-	struct ColorComponent;
+	struct RenderableComponent;
 	struct PointLightComponent;
 
 	
@@ -81,15 +82,13 @@ namespace marengine {
 	 */
 	struct PlayModeStorageComponent {
 
-		typedef std::variant<TransformComponent, ColorComponent, PointLightComponent> ComponentVariant;
+		typedef std::variant<TransformComponent,
+		                     RenderableComponent,
+		                     PointLightComponent> ComponentVariant;
 
 		enum class ComponentType {
-			NONE = -1,
-			TRANSFORM = 1,
-			COLOR = 2,
-			POINTLIGHT = 3
+			NONE, TRANSFORM, RENDERABLE, POINTLIGHT
 		};
-
 
 		std::unordered_map<ComponentType, ComponentVariant> components;
 

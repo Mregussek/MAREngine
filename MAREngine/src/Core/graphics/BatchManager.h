@@ -20,38 +20,43 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_RENDERMANAGER_H
-#define MARENGINE_RENDERMANAGER_H
+#ifndef MARENGINE_BATCHMANAGER_H
+#define MARENGINE_BATCHMANAGER_H
 
 
 #include "IRender.h"
+#include "Mesh/Mesh.h"
 #include "Mesh/MeshBatch.h"
+#include "Lightning/PointLightBatch.h"
 
 
 namespace marengine {
 
-    class RenderCamera;
-    class FBatchManager;
+    class Scene;
+    class Entity;
+    class FRenderManager;
+    class FMeshManager;
 
 
-    class FRenderManager : public IRenderManager {
+    class FBatchManager : public IRenderResourceManager {
     public:
 
-        void create(FRenderContext* pContext);
+        void create(FRenderManager* pRenderManager, FMeshManager* pMeshManager);
         void reset();
 
-        void setCamera(const RenderCamera* pRenderCamera);
-        void pushCameraToRender(const RenderCamera* pRenderCamera);
-        MAR_NO_DISCARD bool isCameraValid() const;
-        void onBatchesReadyToDraw(FBatchManager* pBatchManager);
+        void pushSceneToRender(Scene* pScene);
+        void pushEntityToRender(const Entity& entity);
+
+        MAR_NO_DISCARD FMeshBatchStorage* getMeshStorage() const;
+        MAR_NO_DISCARD FMeshBatchFactory* getMeshFactory() const;
+        MAR_NO_DISCARD FPointLightBatch* getPointLightBatch() const;
 
     private:
 
-        const RenderCamera* m_pRenderCamera{ nullptr };
-        FRenderContext* m_pContext{ nullptr };
-
-        int32_t m_cameraIndex{ -1 };
-        int32_t m_pointLightIndex{ -1 };
+        FMeshBatchFactory m_meshBatchFactory;
+        FPointLightBatch m_pointLightBatch;
+        FRenderManager* m_pRenderManager{ nullptr };
+        FMeshManager* m_pMeshManager{ nullptr };
 
     };
 
@@ -59,4 +64,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_RENDERMANAGER_H
+#endif //MARENGINE_BATCHMANAGER_H

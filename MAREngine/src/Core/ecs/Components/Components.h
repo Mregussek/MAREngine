@@ -25,7 +25,6 @@
 
 
 #include "DefaultComponents.h"
-#include "TextureComponents.h"
 #include "ScriptingComponents.h"
 #include "CameraComponents.h"
 #include "EngineOnlyComponents.h"

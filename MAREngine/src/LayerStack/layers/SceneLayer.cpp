@@ -25,19 +25,21 @@
 #include "../../Core/ecs/Entity/EventsCameraEntity.h"
 #include "../../Core/ecs/Entity/EventsComponentEntity.h"
 #include "../../Core/filesystem/SceneDeserializer.h"
+#include "../../Core/graphics/BatchManager.h"
 #include "../../Core/graphics/RenderManager.h"
 
 
 namespace marengine {
 
 
-	void FSceneLayer::create(const std::string& scenePath, FRenderManager* pRenderManager) {
+	void FSceneLayer::create(const std::string& scenePath, FRenderManager* pRenderManager,
+                             FBatchManager* pBatchManager) {
         Scene* pScene = FSceneDeserializer::loadSceneFromFile(scenePath);
 
         FEventsCameraEntity::create(&m_sceneManagerEditor, pRenderManager);
         FEventsComponentEntity::create(&m_sceneManagerEditor);
 
-        m_sceneManagerEditor.initialize(pScene, pRenderManager);
+        m_sceneManagerEditor.initialize(pScene, pBatchManager);
 	}
 
 	void FSceneLayer::begin() {

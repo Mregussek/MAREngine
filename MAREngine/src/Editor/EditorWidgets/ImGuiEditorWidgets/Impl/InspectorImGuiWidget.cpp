@@ -27,7 +27,6 @@
 #include "Window/IWindow.h" // isMousePressed()
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
-#include "../../../../Core/graphics/Mesh/MeshCreator.h" // for correct renderable load
 #include "../../../../Platform/OpenGL/TextureOpenGL.h"
 
 
@@ -82,9 +81,6 @@ namespace marengine {
         handle<PythonScriptComponent>("PythonScriptComponent");
         handle<RenderableComponent>("RenderableComponent");
         handle<CameraComponent>("CameraComponent");
-        handle<ColorComponent>("ColorComponent");
-        handle<Texture2DComponent>("Texture2DComponent");
-        handle<TextureCubemapComponent>("TextureCubemapComponent");
         handle<PointLightComponent>("PointLightComponent");
 
         popUpMenu();
@@ -95,7 +91,6 @@ namespace marengine {
 
         handle<TransformComponent>("TransformComponent");
         handle<CameraComponent>("CameraComponent");
-        handle<ColorComponent>("ColorComponent");
         handle<PointLightComponent>("PointLightComponent");
     }
 
@@ -150,29 +145,28 @@ namespace marengine {
         const bool hasLight{ m_inspectedEntity->hasComponent<PointLightComponent>() };
         const bool hasCamera{ m_inspectedEntity->hasComponent<CameraComponent>() };
         const bool hasScript{ m_inspectedEntity->hasComponent<PythonScriptComponent>() };
-        const bool hasNeitherColorNorTexture{
-                !m_inspectedEntity->hasComponent<ColorComponent>()
-                && !m_inspectedEntity->hasComponent<Texture2DComponent>()
-                && !m_inspectedEntity->hasComponent<TextureCubemapComponent>()
-        };
 
         if (!hasRenderable && ImGui::MenuItem("Add RenderableComponent")) {
             FEventsComponentEntity::onAdd<RenderableComponent>(getInspectedEntity());
         }
 
-        if (hasNeitherColorNorTexture) {
-            if (ImGui::MenuItem("Add ColorComponent")) {
-                FEventsComponentEntity::onAdd<ColorComponent>(getInspectedEntity());
-            }
-
-            if (ImGui::MenuItem("Add Texture2DComponent")) {
-                FEventsComponentEntity::onAdd<Texture2DComponent>(getInspectedEntity());
-            }
-
-            if (ImGui::MenuItem("Add TextureCubemapComponent")) {
-                FEventsComponentEntity::onAdd<TextureCubemapComponent>(getInspectedEntity());
-            }
-        }
+        // TODO: return back material usage
+        //const bool hasNeitherColorNorTexture{
+        //        !m_inspectedEntity->hasComponent<ColorComponent>()
+        //        && !m_inspectedEntity->hasComponent<Texture2DComponent>()
+        //        && !m_inspectedEntity->hasComponent<TextureCubemapComponent>()
+        //};
+        //if (hasNeitherColorNorTexture) {
+        //    if (ImGui::MenuItem("Add ColorComponent")) {
+        //        FEventsComponentEntity::onAdd<ColorComponent>(getInspectedEntity());
+        //    }
+        //    if (ImGui::MenuItem("Add Texture2DComponent")) {
+        //        FEventsComponentEntity::onAdd<Texture2DComponent>(getInspectedEntity());
+        //    }
+        //    if (ImGui::MenuItem("Add TextureCubemapComponent")) {
+        //        FEventsComponentEntity::onAdd<TextureCubemapComponent>(getInspectedEntity());
+        //    }
+        //}
 
         if (!hasLight && ImGui::MenuItem("Add PointLightComponent")) {
             FEventsComponentEntity::onAdd<PointLightComponent>(getInspectedEntity());
@@ -268,24 +262,24 @@ namespace marengine {
             return;
         }
 
-        RenderableComponent& renderable{ m_inspectedEntity->getComponent<RenderableComponent>() };
-        ImGui::Text("Type: %s", renderable.name.c_str());
+        // TODO: return back renderable component on inspector
+        //RenderableComponent& renderable{ m_inspectedEntity->getComponent<RenderableComponent>() };
+        //ImGui::Text("Type: %s", renderable.name.c_str());
 
-        const bool userHasChosenRenderable = [&renderable]()->bool {
-            if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { return true; }
-            ImGui::SameLine();
-            if (Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { return true; }
-            ImGui::SameLine();
-            if (Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { return true; }
-            ImGui::SameLine();
-            if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { return true; }
+        //const bool userHasChosenRenderable = [&renderable]()->bool {
+        //    if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { return true; }
+        //    ImGui::SameLine();
+        //    if (Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { return true; }
+        //    ImGui::SameLine();
+        //    if (Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { return true; }
+        //    ImGui::SameLine();
+        //    if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { return true; }
+        //    return false;
+        //}();
 
-            return false;
-        }();
-
-        if (userHasChosenRenderable) {
-            FEventsComponentEntity::onUpdate<RenderableComponent>(getInspectedEntity());
-        }
+        //if (userHasChosenRenderable) {
+        //    FEventsComponentEntity::onUpdate<RenderableComponent>(getInspectedEntity());
+        //}
     }
 
     template<>
@@ -336,39 +330,6 @@ namespace marengine {
 
         if (updatedCamera) {
             FEventsComponentEntity::onUpdate<CameraComponent>(getInspectedEntity());
-        }
-    }
-
-    template<>
-    void FInspectorImGuiWidget::displayComponentPanel<ColorComponent>() {
-        if (ImGui::MenuItem("Remove Color")) {
-            FEventsComponentEntity::onRemove<ColorComponent>(getInspectedEntity());
-            return;
-        }
-        ColorComponent& color{ m_inspectedEntity->getComponent<ColorComponent>() };
-
-        if (ImGui::ColorEdit4("- color", &color.color.x)) {
-            FEventsComponentEntity::onUpdate<ColorComponent>(getInspectedEntity());
-        }
-    }
-
-    template<>
-    void FInspectorImGuiWidget::displayComponentPanel<Texture2DComponent>() {
-        if (ImGui::MenuItem("Remove Texture")) {
-            FEventsComponentEntity::onRemove<Texture2DComponent>(getInspectedEntity());
-            return;
-        }
-        Texture2DComponent& texture2D{ m_inspectedEntity->getComponent<Texture2DComponent>() };
-
-        ImGui::Text("Current Texture: %s", texture2D.texturePath.c_str());
-
-        if (TextureOpenGL::hasTexture(texture2D.texturePath)) {
-            ImGui::Image((ImTextureID)TextureOpenGL::getTexture(texture2D.texturePath), { 100.f, 100.f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-        }
-
-        const bool changedTexture{ FCommonTypeHandler::drawStringInputPanel<128>(texture2D.texturePath) };
-        if(changedTexture && TextureOpenGL::hasTexture(texture2D.texturePath)) {
-            FEventsComponentEntity::onUpdate<Texture2DComponent>(getInspectedEntity());
         }
     }
 

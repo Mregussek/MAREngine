@@ -24,20 +24,20 @@
 #include "Scene.h"
 #include "Entity/EventsComponentEntity.h"
 #include "Entity/EventsCameraEntity.h"
-#include "../graphics/RenderManager.h"
+#include "../graphics/BatchManager.h"
 
 
 namespace marengine {
 
 
-	void FSceneManagerEditor::initialize(Scene* pScene, FRenderManager* pRenderManager) {
+	void FSceneManagerEditor::initialize(Scene* pScene, FBatchManager* pBatchManager) {
 	    m_pScene = pScene;
-		m_pRenderManager = pRenderManager;
+		m_pBatchManager = pBatchManager;
 		pushSceneToPipeline();
 	}
 
     void FSceneManagerEditor::pushSceneToPipeline() {
-		m_pRenderManager->pushSceneToRender(m_pScene);
+        m_pBatchManager->pushSceneToRender(m_pScene);
         //RenderPipeline::Instance->create(getScene());
 	}
 
@@ -101,8 +101,8 @@ namespace marengine {
 			FEventsComponentEntity::onUpdate<PointLightComponent>(entity);
 		}
 
-		if (entity.hasComponent<ColorComponent>()) {
-			FEventsComponentEntity::onUpdate<ColorComponent>(entity);
+		if (entity.hasComponent<RenderableComponent>()) {
+			FEventsComponentEntity::onUpdate<RenderableComponent>(entity);
 		}
 	}
 

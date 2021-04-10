@@ -25,7 +25,7 @@
 
 
 #include "../../../mar.h"
-#include "../../graphics/IRender.h"
+#include "../../graphics/Mesh/Mesh.h"
 
 
 namespace marengine {
@@ -36,10 +36,6 @@ namespace marengine {
 	 * @brief some unique name for entity, that can be more readable to user.
 	 */
 	struct TagComponent {
-
-		TagComponent() = default;
-		TagComponent(const TagComponent& id) = default;
-		TagComponent(std::string t);
 
 		std::string tag{ "empty" };
 
@@ -55,14 +51,13 @@ namespace marengine {
 	 */
 	struct RenderableComponent {
 
-		RenderableComponent() = default;
-		RenderableComponent(const RenderableComponent& ren) = default;
-		RenderableComponent(std::string i);
-		RenderableComponent(std::string i, const std::vector<Vertex>& ver, const std::vector<uint32_t>& ind);
+		maths::vec4 color{ 0.5f, 0.5f, 0.5f, 1.f };
 
-		std::string name{ "empty" };
-		std::vector<Vertex> vertices;
-		std::vector<uint32_t> indices;
+		EMeshType meshType{ EMeshType::NONE };
+
+        int8 meshIndex{ -1 };
+		int8 materialIndex{ -1 };
+		//EMaterialType materialType{ EMaterialType::NONE };
 
 	};
 
@@ -74,10 +69,6 @@ namespace marengine {
 	 * TransformComponent is used by batches, position member value is also used by LightComponents.
 	 */
 	struct TransformComponent {
-
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent& tc) = default;
-		TransformComponent(maths::vec3 newCenter, maths::vec3 newAngles, maths::vec3 newScale);
 
 		/**
 		 * @brief Calculates transform matrix from position, rotation and scale vec3's and returns it.

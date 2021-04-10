@@ -261,7 +261,7 @@ namespace marengine {
     template<typename TReturnType, typename TBufferArray>
     static TReturnType* emplaceBufferAtArray(TBufferArray& array) {
         auto& buffer{ array.emplace_back() };
-        const int8_t currentSize{ (int8_t)array.size() };
+        const int8 currentSize{ (int8)array.size() };
         buffer.setIndex( currentSize - 1);
         return (TReturnType*)&buffer;
     }

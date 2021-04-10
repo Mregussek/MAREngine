@@ -22,6 +22,7 @@
 
 #include "Mesh.h"
 #include "loader_obj/OBJ_Loader.h"
+#include "../../ecs/Components/Components.h"
 #include "../../../Logging/Logger.h"
 
 
@@ -70,6 +71,10 @@ namespace marengine {
 
 
     const FMeshProxy* FMeshStorage::getExternal(int8 index) const {
+        if(index < 0) {
+            MARLOG_ERR(ELoggerType::GRAPHICS, "Given wrong index -> {}", index);
+            return nullptr;
+        }
         return &m_externalArray.at(index);
     }
 
@@ -89,6 +94,20 @@ namespace marengine {
         return &m_surface;
     }
 
+    const FMeshProxy* FMeshStorage::retrieve(const RenderableComponent& renderable) const {
+        switch(renderable.meshType) {
+            case EMeshType::EXTERNAL: return getExternal(renderable.meshIndex);
+            case EMeshType::CUBE: return getCube();
+            case EMeshType::PYRAMID: return getPyramid();
+            case EMeshType::SURFACE: return getSurface();
+            default: return nullptr;
+        }
+    }
+
+    void FMeshStorage::reset() {
+        m_externalArray.clear();
+    }
+
 
     FMeshProxy* FMeshFactory::emplaceExternal(const std::string& path) {
         const auto fromBegin{ m_storage.m_externalArray.cbegin() };
@@ -102,8 +121,14 @@ namespace marengine {
         }
 
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
+        const int8 currentSize{ (int8)m_storage.getCountExternal() };
+        mesh.setIndex( currentSize - 1);
         mesh.load(path);
         return &mesh;
+    }
+
+    FMeshStorage* FMeshFactory::getStorage() const {
+        return const_cast<FMeshStorage*>(&m_storage);
     }
 
 

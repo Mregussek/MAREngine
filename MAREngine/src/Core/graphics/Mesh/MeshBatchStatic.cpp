@@ -20,7 +20,8 @@
 ************************************************************************/
 
 
-#include "MeshBatchStatic.h"
+#include "MeshBatch.h"
+#include "Mesh.h"
 #include "../IRender.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
@@ -29,197 +30,148 @@
 namespace marengine {
 
 
-	void FMeshBatchStatic::reset() {
-		p_vertices.clear();
-		p_indices.clear();
-		p_transforms.clear();
+    void FMeshBatchStatic::reset() {
+        FMeshBatch::reset();
+        p_shapeID = 0.f;
+        p_indicesMaxValue = 0;
+    }
 
-		p_shapeID = 0.f;
-		p_indicesMaxValue = 0;
-		p_uniquePipelineID = 0;
-	}
+    bool FMeshBatchStatic::shouldBeBatched(const Entity& entity) const {
+        if(!entity.hasComponent<RenderableComponent>() ||
+                !entity.hasComponent<MeshBatchInfoComponent>()) {
+            return false;
+        }
 
-	bool FMeshBatchStatic::canBeBatched(const Entity& entity) const {
-		const bool entityDoesntHaveRenderable{ !entity.hasComponent<RenderableComponent>() };
-		if (entityDoesntHaveRenderable) {
-			return false;
-		}
+        const auto& renderable{ entity.getComponent<RenderableComponent>() };
+        if(renderable.meshIndex == -1 || renderable.meshType == EMeshType::NONE) {
+            return false;
+        }
 
-		const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
-		const size_t verticesToPush{ renderableComponent.vertices.size() };
-		const size_t indicesToPush{ renderableComponent.indices.size() };
+        return true;
+    }
 
-		const size_t currentVerticesSize{ p_vertices.size() };
-		const size_t currentIndicesSize{ p_indices.size() };
-		const size_t currentTransformSize{ p_transforms.size() };
+    bool FMeshBatchStatic::canBeBatched(const Entity& entity) const {
+        const bool entityDoesntHaveRenderable{ !entity.hasComponent<RenderableComponent>() };
+        if (entityDoesntHaveRenderable) {
+            return false;
+        }
 
-		const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
-		const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
-		const bool cannotPushTransform = (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
+        const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+        const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
+        if(pMesh == nullptr) {
+            return false;
+        }
 
-		const bool placeInBatchExist{ !(cannotPushVertices || cannotPushIndices || cannotPushTransform) };
+        const size_t verticesToPush{ pMesh->getVertices().size() };
+        const size_t indicesToPush{ pMesh->getIndices().size() };
 
-		return placeInBatchExist; // true if there is placed
-	}
+        const size_t currentVerticesSize{ p_vertices.size() };
+        const size_t currentIndicesSize{ p_indices.size() };
+        const size_t currentTransformSize{ p_transforms.size() };
 
-	void FMeshBatchStatic::submitToBatch(const Entity& entity) {
-		submitRenderable(entity.getComponent<RenderableComponent>());
-		submitTransform(entity.getComponent<TransformComponent>());
-	}
+        const bool cannotPushVertices =
+                (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
+        const bool cannotPushIndices =
+                (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
+        const bool cannotPushTransform =
+                (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
 
-	void FMeshBatchStatic::submitRenderable(const RenderableComponent& renderableComponent) {
-		submitVertices(renderableComponent.vertices);
-		submitIndices(renderableComponent.indices);
+        const bool placeInBatchExist =
+                !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
 
-		p_indicesMaxValue += (renderableComponent.vertices.size() * sizeof(Vertex) / 4) / g_MeshStride;
-		p_shapeID++;
-	}
+        return placeInBatchExist; // true if there is place
+    }
 
-	void FMeshBatchStatic::submitVertices(const FVertexArray& vertices) {
-		p_vertices.insert(p_vertices.end(), vertices.begin(), vertices.end());
+    void FMeshBatchStatic::submitToBatch(const Entity& entity) {
+        submitRenderable(entity.getComponent<RenderableComponent>());
+        submitTransform(entity.getComponent<TransformComponent>());
 
-		auto fromBeginOfInsertedVertices = p_vertices.end() - vertices.size();
-		auto toItsEnd = p_vertices.end();
-		auto modifyShaderID = [this](Vertex& vertex) {
-			vertex.shapeID = p_shapeID;
-		};
+        auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+        meshBatchInfoComponent.indexAtBatch = (int8)(p_transforms.size() - 1);
+    }
 
-		std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
-	}
+    void FMeshBatchStatic::submitRenderable(const RenderableComponent& renderableComponent) {
+        const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
+        const FVertexArray& vertices{ pMesh->getVertices() };
+        submitVertices(vertices);
+        submitIndices(pMesh->getIndices());
 
-	void FMeshBatchStatic::submitIndices(const FIndicesArray& indices) {
-		p_indices.insert(p_indices.end(), indices.begin(), indices.end());
+        p_indicesMaxValue += (vertices.size() * sizeof(Vertex) / 4) / g_MeshStride;
+        p_shapeID++;
+    }
 
-		auto fromBeginOfInsertedIndices = p_indices.end() - indices.size();
-		auto toItsEnd = p_indices.end();
-		auto extendIndices = [this](uint32_t& indice) {
-			indice += p_indicesMaxValue;
-		};
+    void FMeshBatchStatic::submitVertices(const FVertexArray& vertices) {
+        p_vertices.insert(p_vertices.end(), vertices.begin(), vertices.end());
 
-		std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
-	}
+        auto fromBeginOfInsertedVertices = p_vertices.end() - vertices.size();
+        auto toItsEnd = p_vertices.end();
+        auto modifyShaderID = [this](Vertex& vertex) {
+            vertex.shapeID = p_shapeID;
+        };
 
-	void FMeshBatchStatic::submitTransform(const TransformComponent& transformComponent) {
-		p_transforms.emplace_back(transformComponent.getTransform());
-	}
+        std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
+    }
 
-	const FVertexArray& FMeshBatchStatic::getVertices() const {
-		return p_vertices;
-	}
+    void FMeshBatchStatic::submitIndices(const FIndicesArray& indices) {
+        p_indices.insert(p_indices.end(), indices.begin(), indices.end());
 
-	const FIndicesArray& FMeshBatchStatic::getIndices() const {
-		return p_indices;
-	}
+        auto fromBeginOfInsertedIndices = p_indices.end() - indices.size();
+        auto toItsEnd = p_indices.end();
+        auto extendIndices = [this](uint32_t& indice) {
+            indice += p_indicesMaxValue;
+        };
 
-	const FTransformsArray& FMeshBatchStatic::getTransforms() const {
-		return p_transforms;
-	}
+        std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
+    }
 
-	uint32_t FMeshBatchStatic::getUniquePipelineID() const {
-		return p_uniquePipelineID;
-	}
-
-	void FMeshBatchStatic::setUniquePipelineID(uint32_t id) {
-		p_uniquePipelineID = id;
-	}
-
-	uint32_t FMeshBatchStatic::getUniqueTransformsID() const {
-		return p_transformsUniqueID;
-	}
-
-	void FMeshBatchStatic::seUniqueTransformsID(uint32_t id) {
-		p_transformsUniqueID = id;
-	}
+    void FMeshBatchStatic::submitTransform(const TransformComponent& transformComponent) {
+        p_transforms.emplace_back(transformComponent.getTransform());
+    }
 
 
+    void FMeshBatchStaticColor::reset() {
+        FMeshBatchStatic::reset();
+        m_colors.clear();
+    }
 
-	void FMeshBatchStaticColor::reset() {
-		FMeshBatchStatic::reset();
+    bool FMeshBatchStaticColor::shouldBeBatched(const Entity& entity) const {
+        return FMeshBatchStatic::shouldBeBatched(entity);
+    }
 
-		m_colors.clear();
-	}
+    bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
+        const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
+        if (!baseClassPermission) {
+            return false;
+        }
 
-	bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
-		const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
+        return true;
+    }
 
-		if (baseClassPermission && entity.hasComponent<ColorComponent>()) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+    void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
+        FMeshBatchStatic::submitToBatch(entity);
+        const RenderableComponent& renderable{ entity.getComponent<RenderableComponent>() };
+        submitColor(renderable.color);
 
-	void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
-		FMeshBatchStatic::submitToBatch(entity);
+        auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+        meshBatchInfoComponent.batchIndex = getIndex();
+        meshBatchInfoComponent.batchType = EBatchType::MESH_STATIC_COLOR;
+    }
 
-		submitColor(entity.getComponent<ColorComponent>());
+    void FMeshBatchStaticColor::submitColor(const maths::vec4& color) {
+        m_colors.emplace_back(color);
+    }
 
-		auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
-		meshBatchInfoComponent.indexAtBatch = p_transforms.size() - 1;
-	}
+    const FColorsArray& FMeshBatchStaticColor::getColors() const {
+        return m_colors;
+    }
 
-	void FMeshBatchStaticColor::submitColor(const ColorComponent& colorComponent) {
-		m_colors.emplace_back(colorComponent.color);
-	}
+    int8 FMeshBatchStaticColor::getColorSSBO() const {
+        return m_colorsSSBO;
+    }
 
-	const FColorsArray& FMeshBatchStaticColor::getColors() const {
-		return m_colors;
-	}
-
-	uint32_t FMeshBatchStaticColor::getUniqueColorsID() const {
-		return m_uniqueColorsID;
-	}
-
-	void FMeshBatchStaticColor::setUniqueColorsID(uint32_t id) {
-		m_uniqueColorsID = id;
-	}
-
-	EBatchType FMeshBatchStaticColor::getBatchType() const {
-		return EBatchType::MESH_STATIC_COLOR;
-	}
-
-
-
-	void FMeshBatchStaticTexture2D::reset() {
-		FMeshBatchStatic::reset();
-
-		m_textures.clear();
-	}
-
-	bool FMeshBatchStaticTexture2D::canBeBatched(const Entity& entity) const {
-		const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
-
-		if (baseClassPermission && entity.hasComponent<Texture2DComponent>()) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
-	void FMeshBatchStaticTexture2D::submitToBatch(const Entity& entity) {
-		FMeshBatchStatic::submitToBatch(entity);
-
-		const uint32_t bindingIndex{ ((uint32_t)p_shapeID - 1) };
-		submitTexture(bindingIndex, entity.getComponent<Texture2DComponent>());
-
-		auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
-		meshBatchInfoComponent.indexAtBatch = p_transforms.size() - 1;
-	}
-
-	void FMeshBatchStaticTexture2D::submitTexture(uint32_t bindingIndex, const Texture2DComponent& textureComponent) {
-		m_textures.emplace_back(bindingIndex, textureComponent.texturePath);
-	}
-
-	const FTexturesArray& FMeshBatchStaticTexture2D::getTextures() const {
-		return m_textures;
-	}
-
-	EBatchType FMeshBatchStaticTexture2D::getBatchType() const {
-		return EBatchType::MESH_STATIC_TEX2D;
-	}
-
+    void FMeshBatchStaticColor::setColorSSBO(int8 id) {
+        m_colorsSSBO = id;
+    }
 
 
 }

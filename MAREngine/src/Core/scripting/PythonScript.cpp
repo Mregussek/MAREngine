@@ -60,11 +60,12 @@ namespace marengine {
             const auto& camera = entity.getComponent<CameraComponent>();
             m_module.attr("camera") = camera;
         }
-    
-        if (entity.hasComponent<ColorComponent>()) {
-            const auto& color = entity.getComponent<ColorComponent>();
-            m_module.attr("color") = color;
-        }
+
+        // TODO: fix color component on pythonscript
+        //if (entity.hasComponent<RenderableComponent>()) {
+        //    const auto& renderable = entity.getComponent<RenderableComponent>();
+        //    m_module.attr("color") = renderable;
+        //}
     
         m_module.attr("start")();
     }
@@ -85,11 +86,12 @@ namespace marengine {
             const auto& camera = entity.getComponent<CameraComponent>();
             m_module.attr("camera") = camera;
         }
-    
-        if (entity.hasComponent<ColorComponent>()) {
-            const auto& color = entity.getComponent<ColorComponent>();
-            m_module.attr("color") = color;
-        }
+
+        // TODO: fix color component on pythonscript
+        //if (entity.hasComponent<RenderableComponent>()) {
+        //    const auto& color = entity.getComponent<RenderableComponent>();
+        //    m_module.attr("color") = color;
+        //}
     
         m_module.attr("update")();
     
@@ -104,11 +106,12 @@ namespace marengine {
             auto& camera = entity.getComponent<CameraComponent>();
             camera = m_module.attr("camera").cast<CameraComponent>();
         }
-    
-        if (entity.hasComponent<ColorComponent>()) {
-            auto& color = entity.getComponent<ColorComponent>();
-            color = m_module.attr("color").cast<ColorComponent>();
-        }
+
+        // TODO: fix color component on pythonscript
+        //if (entity.hasComponent<RenderableComponent>()) {
+        //    auto& color = entity.getComponent<RenderableComponent>();
+        //    color = m_module.attr("color").cast<RenderableComponent>();
+        //}
     }
 
 

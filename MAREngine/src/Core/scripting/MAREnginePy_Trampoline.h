@@ -37,7 +37,7 @@ namespace marengine {
 		TransformComponent transform;
 		FPointLight light;
 		CameraComponent camera;
-		ColorComponent color;
+		RenderableComponent renderable;
 
 		virtual void start() { }
 		virtual void update() { }

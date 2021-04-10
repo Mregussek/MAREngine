@@ -21,7 +21,7 @@
 
 
 #include "EventsMeshBatchStatic.h"
-#include "MeshBatchStatic.h"
+#include "MeshBatch.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Components/Components.h"
 

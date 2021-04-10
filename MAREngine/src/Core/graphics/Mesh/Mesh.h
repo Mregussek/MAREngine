@@ -29,6 +29,10 @@
 
 namespace marengine {
 
+    struct RenderableComponent;
+
+
+    static constexpr int8 g_MeshDefaultTypeIndex{ 127 };
 
     enum class EMeshType {
         NONE, CUBE, PYRAMID, SURFACE, EXTERNAL
@@ -107,6 +111,8 @@ namespace marengine {
         virtual const FMeshProxy* getPyramid() const = 0;
         virtual const FMeshProxy* getSurface() const = 0;
 
+        virtual const FMeshProxy* retrieve(const RenderableComponent& renderable) const = 0;
+
     };
 
 
@@ -122,6 +128,8 @@ namespace marengine {
         MAR_NO_DISCARD const FMeshProxy* getCube() const final;
         MAR_NO_DISCARD const FMeshProxy* getPyramid() const final;
         MAR_NO_DISCARD const FMeshProxy* getSurface() const final;
+
+        MAR_NO_DISCARD const FMeshProxy* retrieve(const RenderableComponent& renderable) const final;
 
         void reset() final;
 
@@ -147,6 +155,8 @@ namespace marengine {
     public:
 
         MAR_NO_DISCARD FMeshProxy* emplaceExternal(const std::string& path) final;
+
+        MAR_NO_DISCARD FMeshStorage* getStorage() const;
 
     private:
 

@@ -90,10 +90,6 @@ namespace marengine {
         std::string texturePath{ "" };
     };
 
-    enum class EBatchType {
-        NONE, MESH_STATIC_COLOR, MESH_STATIC_TEX2D
-    };
-
     typedef std::vector<Vertex> FVertexArray;
     typedef std::vector<uint32_t> FIndicesArray;
     typedef std::vector<maths::mat4> FTransformsArray;
@@ -124,20 +120,20 @@ namespace marengine {
     class IRenderResource : public IRender {
     public:
 
-        virtual void setIndex(int8_t index) = 0;
-        virtual int8_t getIndex() const = 0;
+        virtual void setIndex(int8 index) = 0;
+        virtual int8 getIndex() const = 0;
 
     };
 
     class FRenderResource : public IRenderResource {
     public:
 
-        void setIndex(int8_t index) final { p_index = index; }
-        MAR_NO_DISCARD int8_t getIndex() const final { return p_index; }
+        void setIndex(int8 index) final { p_index = index; }
+        MAR_NO_DISCARD int8 getIndex() const final { return p_index; }
 
     protected:
 
-        int8_t p_index{ -1 };
+        int8 p_index{ -1 };
 
     };
 
@@ -149,6 +145,10 @@ namespace marengine {
     public:
 
         virtual void reset() = 0;
+
+    };
+
+    class IRenderResourceManager : public IRenderManager {
 
     };
 

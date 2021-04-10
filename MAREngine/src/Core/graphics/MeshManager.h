@@ -20,23 +20,31 @@
 ************************************************************************/
 
 
-#include "TextureComponents.h"
+#ifndef MARENGINE_MESHMANAGER_H
+#define MARENGINE_MESHMANAGER_H
+
+
+#include "IRender.h"
+#include "Mesh/Mesh.h"
 
 
 namespace marengine {
 
 
-	ColorComponent::ColorComponent(maths::vec4 c)
-		: color(std::move(c))
-	{}
+    class FMeshManager : public IRenderResourceManager {
+    public:
 
-	Texture2DComponent::Texture2DComponent(std::string tex)
-		: texturePath(std::move(tex))
-	{}
+        MAR_NO_DISCARD FMeshStorage* getStorage() const;
+        MAR_NO_DISCARD FMeshFactory* getFactory() const;
 
-	TextureCubemapComponent::TextureCubemapComponent(std::string cub)
-		: texturePath(std::move(cub))
-	{}
+    private:
+
+        FMeshFactory m_factory;
+
+    };
 
 
 }
+
+
+#endif //MARENGINE_MESHMANAGER_H

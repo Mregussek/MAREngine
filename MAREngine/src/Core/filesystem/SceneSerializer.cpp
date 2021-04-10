@@ -92,22 +92,10 @@ namespace marengine {
 
 		if (entity.hasComponent<RenderableComponent>()) {
 			const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
-			saveString("RenderableComponent", "name", renderableComponent.name);
+			// TODO: fix renderable save method
+			saveString("RenderableComponent", "name", "Cube");
 		}
 
-		if (entity.hasComponent<ColorComponent>()) {
-			const auto& colorComponent{ entity.getComponent<ColorComponent>() };
-			saveVec4("ColorComponent", "color", colorComponent.color);
-		}
-		else if (entity.hasComponent<Texture2DComponent>()) {
-			const auto& texture2DComponent{ entity.getComponent<Texture2DComponent>() };
-			saveString("Texture2DComponent", "texturePath", texture2DComponent.texturePath);
-		}
-		else if (entity.hasComponent<TextureCubemapComponent>()) {
-			const auto& cubemapComponent{ entity.getComponent<TextureCubemapComponent>() };
-			saveString("TextureCubemapComponent", "texturePath", cubemapComponent.texturePath);
-		}
-		
 		if (entity.hasComponent<PointLightComponent>()) {
 			const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
 			

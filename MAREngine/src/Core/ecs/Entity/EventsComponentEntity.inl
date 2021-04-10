@@ -57,19 +57,6 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity);
 	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity);
 
-	// ColorComponent
-	template<> void FEventsComponentEntity::onAdd<ColorComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onUpdate<ColorComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onRemove<ColorComponent>(const Entity& entity);
-
-	// Texture2D Component
-	template<> void FEventsComponentEntity::onUpdate<Texture2DComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onRemove<Texture2DComponent>(const Entity& entity);
-
-	// Texture CubemapComponent
-	template<> void FEventsComponentEntity::onUpdate<TextureCubemapComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onRemove<TextureCubemapComponent>(const Entity& entity);
-
 	// Point Light Component
 	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity);
 	template<> void FEventsComponentEntity::onUpdate<PointLightComponent>(const Entity& entity);

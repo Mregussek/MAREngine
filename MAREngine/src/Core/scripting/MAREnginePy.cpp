@@ -29,7 +29,7 @@
 
 namespace py = pybind11;
 
-
+// TODO: fix marenginepy because, I deleted colorcomponent
 PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 
 	using namespace marengine;
@@ -275,9 +275,10 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def_readwrite("center", &TransformComponent::position)
 		.def_readwrite("angles", &TransformComponent::rotation);
 
-	py::class_<ColorComponent>(m, "Color")
+    // TODO: fix renderablecomponnent on marenginepy cpp
+	py::class_<RenderableComponent>(m, "Color")
 		.def(py::init<>())
-		.def_readwrite("texture", &ColorComponent::color);
+		.def_readwrite("texture", &RenderableComponent::color);
 
 	py::class_<CameraComponent>(m, "Camera")
 		.def(py::init<>())
@@ -311,7 +312,7 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 		.def_readwrite("transform", &PyEntity::transform)
 		.def_readwrite("light",		&PyEntity::light)
 		.def_readwrite("camera",	&PyEntity::camera)
-		.def_readwrite("color",		&PyEntity::color);
+		.def_readwrite("color",		&PyEntity::renderable);
 
 	// -----------------------------------------------------------------------------------
 	// Helper methods
