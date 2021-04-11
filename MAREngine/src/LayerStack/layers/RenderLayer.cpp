@@ -27,16 +27,27 @@
 namespace marengine {
 
 
-    FRenderStatistics* FRenderLayer::getRenderStats() {
-        return &p_statistics;
+    FRenderStatistics* FRenderLayer::getRenderStats() const {
+        return const_cast<FRenderStatistics*>(&p_statistics);
+    }
+
+    FBatchManager* FRenderLayer::getBatchManager() const {
+        return const_cast<FBatchManager*>(&p_batchManager);
+    }
+
+    FRenderManager* FRenderLayer::getRenderManager() const {
+        return const_cast<FRenderManager*>(&p_renderManager);
+    }
+
+    FMeshManager* FRenderLayer::getMeshManager() const {
+        return const_cast<FMeshManager*>(&p_meshManager);
     }
 
 
     void FRenderLayerOpenGL::create(FWindow* pWindow) {
-        FSceneDeserializer::passMeshFactory(&m_meshManager);
         m_context.create(pWindow);
-        m_batchManager.create(&m_renderManager, &m_meshManager);
-        m_renderManager.create((FRenderContext*)&m_context);
+        p_batchManager.create(&p_renderManager, &p_meshManager);
+        p_renderManager.create((FRenderContext*)&m_context);
     }
 
     void FRenderLayerOpenGL::begin() {
@@ -59,14 +70,6 @@ namespace marengine {
 
     void FRenderLayerOpenGL::close() {
 
-    }
-
-    FBatchManager* FRenderLayerOpenGL::getBatchManager() const {
-        return const_cast<FBatchManager*>(&m_batchManager);
-    }
-
-    FRenderManager* FRenderLayerOpenGL::getRenderManager() const {
-        return const_cast<FRenderManager*>(&m_renderManager);
     }
 
 

@@ -30,9 +30,15 @@
 
 namespace marengine {
 
+    class Scene;
+    class Entity;
+
 
     class FMeshManager : public IRenderResourceManager {
     public:
+
+        void updateSceneMeshData(Scene* const pScene);
+        void updateEntityMeshData(const Entity& entity) const;
 
         MAR_NO_DISCARD FMeshStorage* getStorage() const;
         MAR_NO_DISCARD FMeshFactory* getFactory() const;

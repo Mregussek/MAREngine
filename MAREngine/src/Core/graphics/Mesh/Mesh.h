@@ -111,7 +111,9 @@ namespace marengine {
         virtual const FMeshProxy* getPyramid() const = 0;
         virtual const FMeshProxy* getSurface() const = 0;
 
-        virtual const FMeshProxy* retrieve(const CRenderable& renderable) const = 0;
+        virtual const FMeshProxy* retrieve(const CRenderable& cRenderable) const = 0;
+
+        virtual const FMeshProxy* isAlreadyLoaded(const CRenderable& cRenderable) const = 0;
 
     };
 
@@ -129,7 +131,9 @@ namespace marengine {
         MAR_NO_DISCARD const FMeshProxy* getPyramid() const final;
         MAR_NO_DISCARD const FMeshProxy* getSurface() const final;
 
-        MAR_NO_DISCARD const FMeshProxy* retrieve(const CRenderable& renderable) const final;
+        MAR_NO_DISCARD const FMeshProxy* retrieve(const CRenderable& cRenderable) const final;
+
+        const FMeshProxy* isAlreadyLoaded(const CRenderable& cRenderable) const final;
 
         void reset() final;
 

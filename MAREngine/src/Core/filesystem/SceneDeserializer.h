@@ -30,8 +30,6 @@
 namespace marengine {
 
 	class Scene;
-	class Entity;
-    class FMeshManager;
 
 
 	/**
@@ -49,16 +47,6 @@ namespace marengine {
 		 * @return Returns loaded scene, if path was correct. Empty scene otherwise.
 		 */
 		static Scene* loadSceneFromFile(const std::string& path);
-
-		static void passMeshFactory(FMeshManager* pManager) { s_pMeshManager = pManager; }
-
-	private:
-
-		static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json,
-                               const std::string& sceneName);
-
-
-		static FMeshManager* s_pMeshManager;
 
 	};
 

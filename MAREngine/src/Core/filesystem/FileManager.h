@@ -52,6 +52,9 @@ namespace marengine {
 		 */
 		static void saveAsFile(const std::string& sourceCode, const char* path);
 
+		// TODO: add docs
+		static bool isContainingExtension(const std::string& path, const std::string& extension);
+
 	};
 
 

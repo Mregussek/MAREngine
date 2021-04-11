@@ -21,10 +21,49 @@
 
 
 #include "MeshManager.h"
+#include "../filesystem/FileManager.h"
+#include "../ecs/Scene.h"
 
 
 namespace marengine {
 
+    static bool isThereSubstring(const std::string& stringToCheck, const char* strToFind) {
+        return stringToCheck.find(strToFind) != std::string::npos;
+    }
+
+
+    void FMeshManager::updateSceneMeshData(Scene* const pScene) {
+        auto view{ pScene->getView<CRenderable>() };
+        view.each([this, pScene](entt::entity entt_entity, const CRenderable& cRenderable) {
+            const Entity entity(entt_entity, pScene->getRegistry());
+            updateEntityMeshData(entity);
+        });
+    }
+
+    void FMeshManager::updateEntityMeshData(const Entity& entity) const {
+        auto& cRenderable{ entity.getComponent<CRenderable>() };
+
+        if (isThereSubstring(cRenderable.mesh.path, "Cube")) {
+            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
+            cRenderable.mesh.type = EMeshType::CUBE;
+        }
+        else if (isThereSubstring(cRenderable.mesh.path, "Surface")) {
+            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
+            cRenderable.mesh.type = EMeshType::SURFACE;
+        }
+        else if (isThereSubstring(cRenderable.mesh.path, "Pyramid")) {
+            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
+            cRenderable.mesh.type = EMeshType::PYRAMID;
+        }
+        else if(FFileManager::isContainingExtension(cRenderable.mesh.path, "obj")) {
+            const FMeshProxy* pMesh{ getStorage()->isAlreadyLoaded(cRenderable) };
+            if(pMesh == nullptr) {
+                pMesh = getFactory()->emplaceExternal(cRenderable.mesh.path);
+            }
+            cRenderable.mesh.index = pMesh->getIndex();
+            cRenderable.mesh.type = EMeshType::EXTERNAL;
+        }
+    }
 
     FMeshStorage* FMeshManager::getStorage() const {
         return m_factory.getStorage();

@@ -33,6 +33,7 @@ namespace marengine {
 	class Scene;
 	class Entity;
 	class FBatchManager;
+	class FMeshManager;
 
 	
 	/**
@@ -46,10 +47,14 @@ namespace marengine {
 
 		/// @brief Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
 		// TODO: add param docs
-		void initialize(Scene* pScene, FBatchManager* pBatchManager);
+		void initialize(Scene* pScene, FBatchManager* pBatchManager, FMeshManager* pMeshManager);
 
 		/// @brief Pushes all Scene's data to RenderPipeline
-		void pushSceneToPipeline();
+		// TODO: update method docs
+		void updateSceneAtBatchManager();
+
+		// TODO: update method docs
+		void updateSceneAtMeshManager();
 
 		/**
 		 * @brief Updates Scene in SceneManager's state. During EditorMode there is no need to update the scene,
@@ -129,6 +134,7 @@ namespace marengine {
 
 		Scene* m_pScene{ nullptr };
 		FBatchManager* m_pBatchManager{ nullptr };
+        FMeshManager* m_pMeshManager{ nullptr };
 		
 		bool m_EditorCamera{ true };
 		bool m_EditorMode{ true };

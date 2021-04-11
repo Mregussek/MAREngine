@@ -21,6 +21,7 @@
 
 
 #include "FileManager.h"
+#include "../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -40,6 +41,17 @@ namespace marengine {
 	void FFileManager::saveAsFile(const std::string& sourceCode, const char* path) {
         // TODO: implement it
 	}
+
+    bool FFileManager::isContainingExtension(const std::string& path, const std::string& extension) {
+        const std::string currentExtension{ path.substr(path.find_last_of('.') + 1) };
+        if(currentExtension == extension) {
+            MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
+            return true;
+        }
+
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
+        return false;
+    }
 
 
 }

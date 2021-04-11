@@ -33,13 +33,14 @@ namespace marengine {
 	class Scene;
     class FRenderManager;
 	class FBatchManager;
+	class FMeshManager;
 
 
 	class FSceneLayer : public ILayer {
 	public:
 
 		void create(const std::string& scenePath, FRenderManager* pRenderManager,
-                    FBatchManager* pBatchManager);
+                    FBatchManager* pBatchManager, FMeshManager* pMeshManager);
 
 		void begin() final;
 		void update() final;

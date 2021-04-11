@@ -44,9 +44,11 @@ namespace marengine {
 
 	struct CRenderable {
 	    struct MeshInfo {
+	        /// @brief path used to retrieve external FMeshProxy from FMeshStorage (can be empty if used default Mesh)
+	        std::string path{};
 	        /// @brief type used to retrieve correct implementation of FMeshProxy from FMeshStorage
             EMeshType type{ EMeshType::NONE };
-            /// @brief index used to retrieve assigned to Entity FMeshProxy from FMeshStorage
+            /// @brief index used to retrieve assigned to Entity FMeshProxy from FMeshStorage (can be -1 if default Mesh used)
 	        int8 index{ -1 };
 	    };
 	    struct MaterialInfo {
@@ -69,8 +71,8 @@ namespace marengine {
 	    /// @brief Default color, so that every entity that contains CRenderable can be rendered
 		maths::vec4 color{ 0.5f, 0.5f, 0.5f, 1.f };
 
+        MeshInfo mesh;
 		BatchInfo batch;
-		MeshInfo mesh;
 		MaterialInfo material;
 
 	};

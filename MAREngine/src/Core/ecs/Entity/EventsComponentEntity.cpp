@@ -67,18 +67,18 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onAdd<CRenderable>(const Entity& entity) {
 		entity.addComponent<CRenderable>();
 		// TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity) {
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CRenderable>(const Entity& entity) {
 		entity.removeComponent<CRenderable>();
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	/***************************** LIGHT COMPONENT TEMPLATES ***************************************/
@@ -86,7 +86,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onAdd<CPointLight>(const Entity& entity) {
 		entity.addComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CPointLight>(const Entity& entity) {
@@ -96,7 +96,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onRemove<CPointLight>(const Entity& entity) {
 		entity.removeComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->pushSceneToPipeline();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	/***************************** CAMERA COMPONENT TEMPLATES ***************************************/

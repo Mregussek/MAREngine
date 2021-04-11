@@ -21,32 +21,18 @@
 
 
 #include "SceneDeserializer.h"
-#include "../graphics/MeshManager.h"
+#include "FileManager.h"
 #include "../../Logging/Logger.h"
 #include "../../ProjectManager.h"
 #include "../ecs/Scene.h"
-#include "../ecs/Entity/Entity.h"
-#include "../ecs/Entity/Components.h"
 
 
 namespace marengine {
 
-    FMeshManager* FSceneDeserializer::s_pMeshManager{ nullptr };
-
-
-    static bool doesContainExtension(const std::string& path, std::string&& extension) {
-        const std::string currentExtension{ path.substr(path.find_last_of('.') + 1) };
-        if(currentExtension == extension) {
-            MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
-            return true;
-        }
-
-        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
-        return false;
-    }
+    static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
 
 	Scene* FSceneDeserializer::loadSceneFromFile(const std::string& path) {
-		if (!doesContainExtension(path, "json")) {
+		if (!FFileManager::isContainingExtension(path, "json")) {
 		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to marscene file!", path);
 			return Scene::createEmptyScene("EmptySceneNotLoaded");
 		}
@@ -80,35 +66,7 @@ namespace marengine {
 		return scene;
 	}
 
-	static bool fillRenderable(FMeshManager* pManager, const std::string& renderableName,
-                               CRenderable& cRenderable) {
-		if (renderableName.find("Cube") != std::string::npos) {
-            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
-            cRenderable.mesh.type = EMeshType::CUBE;
-			return true;
-		}
-		else if (renderableName.find("Surface") != std::string::npos) {
-            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
-            cRenderable.mesh.type = EMeshType::SURFACE;
-            return true;
-		}
-		else if (renderableName.find("Pyramid") != std::string::npos) {
-            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
-            cRenderable.mesh.type = EMeshType::PYRAMID;
-            return true;
-		}
-		else if(doesContainExtension(renderableName, "obj")) {
-            FMeshProxy* pMesh =
-                    pManager->getFactory()->emplaceExternal(FProjectManager::getAssetsPath() + renderableName);
-            cRenderable.mesh.index = pMesh->getIndex();
-            cRenderable.mesh.type = EMeshType::EXTERNAL;
-            return true;
-        }
-
-		return false;
-	}
-
-	void FSceneDeserializer::loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
+	void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
 		auto jsonContains = [&sceneName, index, &json](const char* componentName)->bool {
 			return json["Scene"][sceneName]["Entity"][index].contains(componentName);
 		};
@@ -133,14 +91,6 @@ namespace marengine {
 				json["Scene"][sceneName]["Entity"][index][componentName][value]["w"].get<float>()
 			};
 		};
-        auto setRenderable = [&sceneName, index, &json](FMeshManager* pManager,
-                                                        CRenderable& renderable,
-                                                        const char* componentName,
-                                                        const char* value) {
-            const std::string retrievedRenderableName =
-                    json["Scene"][sceneName]["Entity"][index][componentName][value];
-            fillRenderable(pManager, retrievedRenderableName, renderable);
-        };
 
 		auto& cTag{ entity.getComponent<CTag>() };
 		setString(cTag.tag, "CTag", "tag");
@@ -152,7 +102,7 @@ namespace marengine {
 
 		if (jsonContains("CRenderable")) {
 			auto& cRenderable{ entity.addComponent<CRenderable>() };
-			setRenderable(s_pMeshManager, cRenderable, "CRenderable", "name");
+			setString(cRenderable.mesh.path, "CRenderable", "name");
 		}
 
 		if (jsonContains("CPointLight")) {

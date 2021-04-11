@@ -44,13 +44,17 @@ namespace marengine {
 
         virtual void create(FWindow* pWindow) = 0;
 
-        FRenderStatistics* getRenderStats();
-        virtual FRenderManager* getRenderManager() const = 0;
-		virtual FBatchManager* getBatchManager() const = 0;
+        MAR_NO_DISCARD FRenderStatistics* getRenderStats() const;
+        MAR_NO_DISCARD FRenderManager* getRenderManager() const;
+		MAR_NO_DISCARD FBatchManager* getBatchManager() const;
+		MAR_NO_DISCARD FMeshManager* getMeshManager() const;
 
     protected:
 
         FRenderStatistics p_statistics;
+        FBatchManager p_batchManager;
+        FMeshManager p_meshManager;
+        FRenderManager p_renderManager;
 
     };
 
@@ -64,15 +68,9 @@ namespace marengine {
         void end() final;
         void close() final;
 
-        MAR_NO_DISCARD FRenderManager* getRenderManager() const final;
-		MAR_NO_DISCARD FBatchManager* getBatchManager() const final;
-
 	private:
 
 	    FRenderContextOpenGL m_context;
-        FBatchManager m_batchManager;
-        FMeshManager m_meshManager;
-		FRenderManager m_renderManager;
 		FRenderCommandOpenGL m_renderCmds;
 
 	};

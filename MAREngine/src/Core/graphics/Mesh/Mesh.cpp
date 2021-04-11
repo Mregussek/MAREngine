@@ -21,6 +21,7 @@
 
 
 #include "Mesh.h"
+#include "../../../ProjectManager.h"
 #include "loader_obj/OBJ_Loader.h"
 #include "../../ecs/Entity/Components.h"
 #include "../../../Logging/Logger.h"
@@ -104,15 +105,10 @@ namespace marengine {
         }
     }
 
-    void FMeshStorage::reset() {
-        m_externalArray.clear();
-    }
-
-
-    FMeshProxy* FMeshFactory::emplaceExternal(const std::string& path) {
-        const auto fromBegin{ m_storage.m_externalArray.cbegin() };
-        const auto toEnd{ m_storage.m_externalArray.cend() };
-        auto alreadyLoaded = [&path](const FMeshExternal& mesh)->bool {
+    const FMeshProxy* FMeshStorage::isAlreadyLoaded(const CRenderable& cRenderable) const {
+        const auto fromBegin{ m_externalArray.cbegin() };
+        const auto toEnd{ m_externalArray.cend() };
+        auto alreadyLoaded = [&path = std::as_const(cRenderable.mesh.path)](const FMeshExternal& mesh)->bool {
             return path == mesh.getInfo().path;
         };
         const auto it = std::find_if(fromBegin, toEnd, alreadyLoaded);
@@ -120,10 +116,20 @@ namespace marengine {
             return (FMeshProxy*)&(*it);
         }
 
+        // If no mesh proxy found
+        return nullptr;
+    }
+
+    void FMeshStorage::reset() {
+        m_externalArray.clear();
+    }
+
+
+    FMeshProxy* FMeshFactory::emplaceExternal(const std::string& path) {
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
         mesh.setIndex( currentSize - 1);
-        mesh.load(path);
+        mesh.load(FProjectManager::getAssetsPath() + path);
         return &mesh;
     }
 

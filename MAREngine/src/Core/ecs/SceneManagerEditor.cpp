@@ -25,20 +25,27 @@
 #include "Entity/EventsComponentEntity.h"
 #include "Entity/EventsCameraEntity.h"
 #include "../graphics/BatchManager.h"
+#include "../graphics/MeshManager.h"
 
 
 namespace marengine {
 
 
-	void FSceneManagerEditor::initialize(Scene* pScene, FBatchManager* pBatchManager) {
+	void FSceneManagerEditor::initialize(Scene* pScene, FBatchManager* pBatchManager, FMeshManager* pMeshManager) {
 	    m_pScene = pScene;
 		m_pBatchManager = pBatchManager;
-		pushSceneToPipeline();
+		m_pMeshManager = pMeshManager;
+        updateSceneAtMeshManager();
+        updateSceneAtBatchManager();
 	}
 
-    void FSceneManagerEditor::pushSceneToPipeline() {
+    void FSceneManagerEditor::updateSceneAtBatchManager() {
         m_pBatchManager->pushSceneToRender(m_pScene);
         //RenderPipeline::Instance->create(getScene());
+	}
+
+	void FSceneManagerEditor::updateSceneAtMeshManager() {
+	    m_pMeshManager->updateSceneMeshData(m_pScene);
 	}
 
 	void FSceneManagerEditor::update() {
@@ -113,7 +120,7 @@ namespace marengine {
 			FScenePlayStorage::loadEntityFromStorage(entity);
 		}
 
-        pushSceneToPipeline();
+        updateSceneAtBatchManager();
 	}
 
 	Scene* FSceneManagerEditor::getScene() { 

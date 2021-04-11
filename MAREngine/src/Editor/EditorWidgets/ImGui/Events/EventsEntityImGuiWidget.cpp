@@ -48,7 +48,7 @@ namespace marengine {
         s_pSceneManagerEditor->getScene()->destroyEntity(entity);
         s_pInspectorWidget->resetInspectedEntity();
         // TODO: optimize it, because we don't need to reinitialize the whole render pipeline during entity destruction
-        s_pSceneManagerEditor->pushSceneToPipeline();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	void FEventsEntityImGuiWidgets::onSelectedEntity(const Entity& entity) {
