@@ -20,49 +20,54 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_MAINMENUBARIMGUIWIDGET_H
-#define MARENGINE_MAINMENUBARIMGUIWIDGET_H
+#ifndef MARENGINE_VIEWPORTWIDGETIMGUI_H
+#define MARENGINE_VIEWPORTWIDGETIMGUI_H
 
 
-#include <string>
 #include "../../IEditorWidget.h"
+#include "../../../Camera/Camera.h"
+#include "GuizmoWidgetImGui.h"
+#include "../../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
 namespace marengine {
 
-    class FFilesystemPopUpImGuiWidget;
+    class FSceneManagerEditor;
+    class FInspectorWidgetImGui;
     class FImGuiEditorServiceLocator;
     class FWindow;
 
 
-    class FMainMenuBarWidgetImGui : public FMainMenuBarEditorWidget {
+    class FViewportWidgetImGui : public FViewportEditorWidget {
     public:
 
         void create(FImGuiEditorServiceLocator* serviceLocator);
+        void destroy() override;
+
+        void beginFrame() override;
         void updateFrame() override;
+
+        void bind(maths::vec3 backgroundColor) const;
 
     private:
 
-        void displaySceneManagementTab();
-        void displayEntitiesManagementTab();
-        void displaySettingsTab();
-        void displayAboutTab();
+        void unbind() const;
+
+        void updateAspectRatio();
+
+        void displayViewportControlPanel();
+        void displayActualViewport();
+        void handleGuizmo();
 
 
-        std::string newSceneName{"New Scene Widget" };
-        bool m_newSceneDisplay{ false };
-        std::string openSceneName{ "Open Scene Widget" };
-        bool m_openSceneDisplay{ false };
-        std::string saveSceneName{ "Save Scene Widget" };
-        bool m_saveSceneDisplay{ false };
-        std::string extMarscene{ ".json" };
+        FramebufferOpenGL m_framebuffer;
+        Camera m_camera;
+        float m_aspectRatio{ 1.33f };
+        FGuizmoImGuiWidget m_guizmo;
 
-        FFilesystemPopUpImGuiWidget* m_pFilesystem{ nullptr };
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        FInspectorWidgetImGui* m_pInspectorWidget{ nullptr };
         FWindow* m_pWindow{ nullptr };
-
-        bool m_infoAboutAuthorDisplay{ false };
-        bool m_infoAboutEngineDisplay{ false };
-        bool m_windowSettingsDisplay{ false };
 
     };
 
@@ -71,4 +76,4 @@ namespace marengine {
 
 
 
-#endif //MARENGINE_MAINMENUBARIMGUIWIDGET_H
+#endif //MARENGINE_VIEWPORTWIDGETIMGUI_H

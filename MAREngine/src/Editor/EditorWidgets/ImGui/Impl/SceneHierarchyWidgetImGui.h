@@ -20,53 +20,35 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_VIEWPORTIMGUIWIDGET_H
-#define MARENGINE_VIEWPORTIMGUIWIDGET_H
+#ifndef MARENGINE_SCENEHIERARCHYWIDGETIMGUI_H
+#define MARENGINE_SCENEHIERARCHYWIDGETIMGUI_H
 
 
 #include "../../IEditorWidget.h"
-#include "../../../Camera/Camera.h"
-#include "GuizmoImGuiWidget.h"
-#include "../../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
 namespace marengine {
 
     class FSceneManagerEditor;
-    class FInspectorImGuiWidget;
+    class FInspectorWidgetImGui;
     class FImGuiEditorServiceLocator;
     class FWindow;
 
 
-    class FViewportImGuiWidget : public IViewportEditorWidget {
+    class FSceneHierarchyWidgetImGui : public FSceneHierarchyEditorWidget {
     public:
 
         void create(FImGuiEditorServiceLocator* serviceLocator);
-        void destroy() override;
-
-        void beginFrame() override;
         void updateFrame() override;
-
-        void bind(maths::vec3 backgroundColor) const;
 
     private:
 
-        void unbind() const;
+        void buttonsAtPanel() const;
+        void popUpMenu() const;
 
-        void updateAspectRatio();
-
-        void displayViewportControlPanel();
-        void displayActualViewport();
-        void handleGuizmo();
-
-
-        FramebufferOpenGL m_framebuffer;
-        Camera m_camera;
-        float m_aspectRatio{ 1.33f };
-        FGuizmoImGuiWidget m_guizmo;
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
+        FInspectorWidgetImGui* m_pInspectorWidget{ nullptr };
         FWindow* m_pWindow{ nullptr };
 
     };
@@ -76,4 +58,4 @@ namespace marengine {
 
 
 
-#endif //MARENGINE_VIEWPORTIMGUIWIDGET_H
+#endif //MARENGINE_SCENEHIERARCHYWIDGETIMGUI_H

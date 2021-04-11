@@ -20,35 +20,36 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_FMAINIMGUIEDITORWIDGET_H
-#define MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#ifndef MARENGINE_FILESYSTEMPOPUPWIDGETIMGUI_H
+#define MARENGINE_FILESYSTEMPOPUPWIDGETIMGUI_H
 
 
-#include "../../IEditorWidget.h"
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
-    class FSceneManagerEditor;
-    class FImGuiEditorServiceLocator;
-    class FWindow;
 
+    class FFilesystemPopUpImGuiWidget {
 
-    class FMainImGuiWidget : public IMainEditorWidget {
+        typedef imgui_addons::ImGuiFileBrowser::DialogMode DialogMode;
+        typedef void (*CallbackFunc)(const std::string &path, const std::string &filename);
+
     public:
 
-        void create(FImGuiEditorServiceLocator* serviceLocator);
-        void destroy() override;
+        void openWidget(const std::string& widgetName) const;
 
-        void beginFrame() override;
-        void endFrame() override;
+        void displaySaveWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
+
+        void displayOpenWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
 
     private:
 
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FWindow* m_pWindow{ nullptr };
-        bool m_dockspaceOpen{ true };
-        bool m_fullscreenPersistent{ true };
+        void displayWidget(const std::string& widgetName, const std::string& extensions, DialogMode dialogMode,
+                           CallbackFunc callback);
+
+
+        imgui_addons::ImGuiFileBrowser m_fileDialog;
 
     };
 
@@ -56,4 +57,5 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_FMAINIMGUIEDITORWIDGET_H
+
+#endif //MARENGINE_FILESYSTEMPOPUPWIDGETIMGUI_H

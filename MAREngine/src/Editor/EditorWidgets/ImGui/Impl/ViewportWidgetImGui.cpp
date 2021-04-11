@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#include "ViewportImGuiWidget.h"
-#include "InspectorImGuiWidget.h"
+#include "ViewportWidgetImGui.h"
+#include "InspectorWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Window/IWindow.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
@@ -32,9 +32,9 @@
 namespace marengine {
 
 
-    void FViewportImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+    void FViewportWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
-        m_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
+        m_pInspectorWidget = serviceLocator->retrieve<FInspectorWidgetImGui>();
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
 
         constexpr float xDefault = 800.f;
@@ -49,15 +49,15 @@ namespace marengine {
         }
     }
 
-    void FViewportImGuiWidget::destroy() {
+    void FViewportWidgetImGui::destroy() {
         m_framebuffer.close();
     }
 
-    void FViewportImGuiWidget::beginFrame() {
+    void FViewportWidgetImGui::beginFrame() {
         m_framebuffer.unbind();
     }
 
-    void FViewportImGuiWidget::updateFrame() {
+    void FViewportWidgetImGui::updateFrame() {
         displayViewportControlPanel();
 
         ImGuiStyle& style{ ImGui::GetStyle() };
@@ -74,7 +74,7 @@ namespace marengine {
         style.WindowPadding = rememberDefaultVal;
     }
 
-    void FViewportImGuiWidget::displayViewportControlPanel() {
+    void FViewportWidgetImGui::displayViewportControlPanel() {
         auto displayEditorModeButtons = [this]() {
             if (ImGui::Button("PLAY")) { m_pSceneManagerEditor->setPlayMode(); }
             ImGui::SameLine();
@@ -127,7 +127,7 @@ namespace marengine {
         ImGui::End();
     }
 
-    void FViewportImGuiWidget::displayActualViewport() {
+    void FViewportWidgetImGui::displayActualViewport() {
         const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
         const auto size = m_framebuffer.getSize();
 
@@ -140,7 +140,7 @@ namespace marengine {
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
     }
 
-    void FViewportImGuiWidget::handleGuizmo() {
+    void FViewportWidgetImGui::handleGuizmo() {
         if (m_pSceneManagerEditor->usingEditorCamera()) {
             m_guizmo.selectType(m_pWindow);
 
@@ -157,16 +157,16 @@ namespace marengine {
         }
     }
 
-    void FViewportImGuiWidget::bind(maths::vec3 backgroundColor) const {
+    void FViewportWidgetImGui::bind(maths::vec3 backgroundColor) const {
         m_framebuffer.bind();
         m_framebuffer.clear(backgroundColor);
     }
 
-    void FViewportImGuiWidget::unbind() const {
+    void FViewportWidgetImGui::unbind() const {
         m_framebuffer.unbind();
     }
 
-    void FViewportImGuiWidget::updateAspectRatio() {
+    void FViewportWidgetImGui::updateAspectRatio() {
         const auto size = m_framebuffer.getSize();
         m_aspectRatio = size.x / size.y;
     }

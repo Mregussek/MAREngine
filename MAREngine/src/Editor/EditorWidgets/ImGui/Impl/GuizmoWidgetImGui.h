@@ -20,36 +20,40 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
-#define MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
+#ifndef MARENGINE_GUIZMOWIDGETIMGUI_H
+#define MARENGINE_GUIZMOWIDGETIMGUI_H
 
 
-#include "../../IEditorWidget.h"
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
-    class FSceneManagerEditor;
-    class FInspectorImGuiWidget;
-    class FImGuiEditorServiceLocator;
+    class Camera;
+    class Entity;
+    struct CTransform;
     class FWindow;
 
 
-    class FSceneHierarchyImGuiWidget : public ISceneHierarchyEditorWidget {
+    class FGuizmoImGuiWidget {
     public:
 
-        void create(FImGuiEditorServiceLocator* serviceLocator);
-        void updateFrame() override;
+        void selectType(FWindow* pWindow);
+        void draw(const Camera& editorCamera, const Entity& currentEntity) const;
 
     private:
 
-        void buttonsAtPanel() const;
-        void popUpMenu() const;
+        bool draw(const Camera& editorCamera, CTransform& transform) const;
+
+        void setTranslation();
+        void setRotation();
+        void setScale();
+        void setNoGuizmo();
+
+        bool userDontWantToDrawGuizmo() const;
 
 
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
-        FWindow* m_pWindow{ nullptr };
+        ImGuizmo::OPERATION m_operation{ -1 };
 
     };
 
@@ -58,4 +62,4 @@ namespace marengine {
 
 
 
-#endif //MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
+#endif //MARENGINE_GUIZMOWIDGETIMGUI_H

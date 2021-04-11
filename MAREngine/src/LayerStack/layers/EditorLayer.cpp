@@ -36,14 +36,14 @@ namespace marengine {
         m_serviceLocator.registerServices(pWindow, pSceneManagerEditor, pRenderStatistics);
 
         // In what order should every window be rendered (sometimes it matters, last window will show up first)
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FScriptImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FViewportImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FMainImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FDebugImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FInspectorImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FMainMenuBarImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FSceneHierarchyImGuiWidget>());
-        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FEnvironmentPropertiesImGuiWidget>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FScriptWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FViewportWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FMainWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FDebugWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FInspectorWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FMainMenuBarWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FSceneHierarchyWidgetImGui>());
+        m_editorServiceManager.emplace((IEditorWidget*)m_serviceLocator.retrieve<FEnvironmentPropertiesWidgetImGui>());
 
         FEventsEntityImGuiWidgets::create(&m_serviceLocator);
 
@@ -68,7 +68,7 @@ namespace marengine {
     }
 
     void FEditorLayerImGui::renderToViewport() {
-        m_serviceLocator.retrieve<FViewportImGuiWidget>()->bind(m_pSceneManagerEditor->getScene()->getBackground());
+        m_serviceLocator.retrieve<FViewportWidgetImGui>()->bind(m_pSceneManagerEditor->getScene()->getBackground());
     }
 
 

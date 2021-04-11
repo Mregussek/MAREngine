@@ -20,58 +20,35 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_INSPECTOREDITORWIDGET_H
-#define MARENGINE_INSPECTOREDITORWIDGET_H
+#ifndef MARENGINE_DEBUGWIDGETIMGUI_H
+#define MARENGINE_DEBUGWIDGETIMGUI_H
 
 
-#include "../../../../mar.h"
 #include "../../IEditorWidget.h"
 
 
 namespace marengine {
 
-    class Entity;
     class FSceneManagerEditor;
     class FImGuiEditorServiceLocator;
-    class FWindow;
+    class Scene;
+    class Entity;
+    class FRenderStatistics;
 
 
-    class FInspectorImGuiWidget : public IInspectorEditorWidget {
+    class FDebugWidgetImGui : public FDebugEditorWidget {
     public:
 
         void create(FImGuiEditorServiceLocator* serviceLocator);
-
-        void resetInspectedEntity();
-        void setEntityToInspect(const Entity& entityToInspect);
-        MAR_NO_DISCARD const Entity& getInspectedEntity() const;
-        MAR_NO_DISCARD bool isInspectedEntityValid() const;
-
         void updateFrame() override;
 
     private:
 
-        void displayPlayMode();
-        void displayEditorMode();
+        void displayInfoAbout(Scene* pScene) const;
+        void displayInfoAbout(const Entity& entity) const;
 
-        void popUpMenu() const;
-        void displayChildrenPopMenu() const;
-        void displayComponentPopMenu() const;
-
-        void handleInputs();
-
-        template<typename TComponent>
-        void handle(const char* componentName);
-
-        template<typename TComponent>
-        void displayComponentPanel();
-
-
-        const Entity* m_inspectedEntity{ nullptr };
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FWindow* m_pWindow{ nullptr };
-
-        bool m_newScriptWindow{ false };
-        bool m_assignScriptWindow{ false };
+        FRenderStatistics* m_pRenderStatistics{ nullptr };
 
     };
 
@@ -79,7 +56,4 @@ namespace marengine {
 }
 
 
-#include "InspectorImGuiWidget.inl"
-
-
-#endif //MARENGINE_INSPECTOREDITORWIDGET_H
+#endif //MARENGINE_DEBUGWIDGETIMGUI_H

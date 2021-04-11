@@ -24,7 +24,7 @@
 #include "Window/IWindow.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "MainMenuBarImGuiWidget.h"
-#include "FilesystemPopUpImGuiWidget.h"
+#include "FilesystemPopUpWidgetImGui.h"
 
 
 namespace marengine {
@@ -36,13 +36,13 @@ namespace marengine {
     static bool displayWindowSettings(IWindow* pWindow);
 
 
-    void FMainMenuBarImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+    void FMainMenuBarWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pFilesystem = serviceLocator->retrieve<FFilesystemPopUpImGuiWidget>();
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
         setDefaultMAREngineDarkTheme();
     }
 
-    void FMainMenuBarImGuiWidget::updateFrame() {
+    void FMainMenuBarWidgetImGui::updateFrame() {
         if (ImGui::BeginMainMenuBar()) {
 
             displaySceneManagementTab();
@@ -106,7 +106,7 @@ namespace marengine {
         m_pFilesystem->displaySaveWidget(saveSceneName, extMarscene, saveSceneCallback);
     }
 
-    void FMainMenuBarImGuiWidget::displaySceneManagementTab() {
+    void FMainMenuBarWidgetImGui::displaySceneManagementTab() {
         // TODO: add scene filesystem management options to main menu bar
         if (ImGui::BeginMenu("Scene")) {
             if (ImGui::MenuItem("New Scene")) {
@@ -126,7 +126,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiWidget::displayEntitiesManagementTab() {
+    void FMainMenuBarWidgetImGui::displayEntitiesManagementTab() {
         // TODO: add entities management options to main menu bar
         if (ImGui::BeginMenu("Entities")) {
             if (ImGui::MenuItem("Load external .obj file")) { }
@@ -136,7 +136,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiWidget::displaySettingsTab() {
+    void FMainMenuBarWidgetImGui::displaySettingsTab() {
         // TODO: add settings menu options
         if (ImGui::BeginMenu("Settings")) {
             if (ImGui::MenuItem("Window Settings")) { m_windowSettingsDisplay = true; }
@@ -145,7 +145,7 @@ namespace marengine {
         }
     }
 
-    void FMainMenuBarImGuiWidget::displayAboutTab() {
+    void FMainMenuBarWidgetImGui::displayAboutTab() {
         if (ImGui::BeginMenu("About")) {
             if (ImGui::MenuItem("About Engine")) { m_infoAboutAuthorDisplay = true; }
             if (ImGui::MenuItem("Instruction")) { m_infoAboutEngineDisplay = true; }

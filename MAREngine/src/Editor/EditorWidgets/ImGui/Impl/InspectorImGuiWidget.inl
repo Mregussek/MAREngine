@@ -24,7 +24,7 @@
 #define MARENGINE_INSPECTOREDITORWIDGET_INL
 
 
-#include "InspectorImGuiWidget.h"
+#include "InspectorWidgetImGui.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Entity/Components.h"
 
@@ -33,26 +33,26 @@ namespace marengine {
 
 
     template<typename TComponent>
-    void FInspectorImGuiWidget::handle(const char* componentName) {
+    void FInspectorWidgetImGui::handle(const char* componentName) {
         if (m_inspectedEntity->hasComponent<TComponent>() && ImGui::CollapsingHeader(componentName)) {
             displayComponentPanel<TComponent>();
         }
     }
 
     template<typename TComponent>
-    void FInspectorImGuiWidget::displayComponentPanel() {
+    void FInspectorWidgetImGui::displayComponentPanel() {
         ImGui::Text("This component is not yet supported!");
     }
 
 
     // Here add declarations for specific component event implementations ...
 
-    template<> void FInspectorImGuiWidget::displayComponentPanel<CTag>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<CTransform>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<CPythonScript>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<CRenderable>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<CCamera>();
-    template<> void FInspectorImGuiWidget::displayComponentPanel<CPointLight>();
+    template<> void FInspectorWidgetImGui::displayComponentPanel<CTag>();
+    template<> void FInspectorWidgetImGui::displayComponentPanel<CTransform>();
+    template<> void FInspectorWidgetImGui::displayComponentPanel<CPythonScript>();
+    template<> void FInspectorWidgetImGui::displayComponentPanel<CRenderable>();
+    template<> void FInspectorWidgetImGui::displayComponentPanel<CCamera>();
+    template<> void FInspectorWidgetImGui::displayComponentPanel<CPointLight>();
 
 
 }

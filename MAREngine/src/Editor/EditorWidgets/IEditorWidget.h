@@ -30,23 +30,85 @@
 namespace marengine {
 
 
-    class IEditorWidget : public IWidget { };
+    class IEditorWidget : public IWidget {
 
-    class IDebugEditorWidget : public IEditorWidget { };
+    };
 
-    class IEnvironmentPropertiesEditorWidget : public IEditorWidget { };
+    class FEditorWidget : public IEditorWidget {
 
-    class IInspectorEditorWidget : public IEditorWidget { };
+    };
 
-    class IMainEditorWidget : public IEditorWidget { };
 
-    class IMainMenuBarEditorWidget : public IEditorWidget { };
+    class IDebugEditorWidget : public FEditorWidget {
 
-    class ISceneHierarchyEditorWidget : public IEditorWidget { };
+    };
 
-    class IScriptEditorWidget : IEditorWidget { };
+    class FDebugEditorWidget : public IDebugEditorWidget {
 
-    class IViewportEditorWidget : public IEditorWidget { };
+    };
+
+
+    class IEnvironmentPropertiesEditorWidget : public FEditorWidget {
+
+    };
+
+    class FEnvironmentPropertiesEditorWidget : public IEnvironmentPropertiesEditorWidget {
+
+    };
+
+
+    class IInspectorEditorWidget : public FEditorWidget {
+
+    };
+
+    class FInspectorEditorWidget : public IInspectorEditorWidget {
+
+    };
+
+
+    class IMainEditorWidget : public FEditorWidget {
+
+    };
+
+    class FMainEditorWidget : public IMainEditorWidget {
+
+    };
+
+
+    class IMainMenuBarEditorWidget : public FEditorWidget {
+
+    };
+
+    class FMainMenuBarEditorWidget : public IMainMenuBarEditorWidget {
+
+    };
+
+
+    class ISceneHierarchyEditorWidget : public FEditorWidget {
+
+    };
+
+    class FSceneHierarchyEditorWidget : public ISceneHierarchyEditorWidget {
+
+    };
+
+
+    class IScriptEditorWidget : FEditorWidget {
+
+    };
+
+    class FScriptEditorWidget : public IScriptEditorWidget {
+
+    };
+
+
+    class IViewportEditorWidget : public FEditorWidget {
+
+    };
+
+    class FViewportEditorWidget : public IViewportEditorWidget {
+
+    };
 
 
 }

@@ -27,8 +27,9 @@
 namespace marengine {
 
 
-	void FImGuiEditorServiceLocator::registerServices(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                                                   FRenderStatistics* pRenderStatistics) {
+	void FImGuiEditorServiceLocator::registerServices(FWindow* pWindow,
+                                                      FSceneManagerEditor* pSceneManagerEditor,
+                                                      FRenderStatistics* pRenderStatistics) {
 		// Create registry and entity that will hold everything as components
 	    m_imguiRegistry = entt::registry();
 		m_imguiEntity = m_imguiRegistry.create();
@@ -44,14 +45,14 @@ namespace marengine {
         windowHolder->pInstance = pWindow;
 
         // create instance of every widget
-        emplace<FScriptImGuiWidget>();
-        auto* viewport = emplace<FViewportImGuiWidget>();
-        auto* mainWidget = emplace<FMainImGuiWidget>();
-        auto* debug = emplace<FDebugImGuiWidget>();
-        auto* mainMenuBar = emplace<FMainMenuBarImGuiWidget>();
-        auto* sceneHierarchy = emplace<FSceneHierarchyImGuiWidget>();
-        auto* envProperties = emplace<FEnvironmentPropertiesImGuiWidget>();
-        auto* inspector = emplace<FInspectorImGuiWidget>();
+        emplace<FScriptWidgetImGui>();
+        auto* viewport = emplace<FViewportWidgetImGui>();
+        auto* mainWidget = emplace<FMainWidgetImGui>();
+        auto* debug = emplace<FDebugWidgetImGui>();
+        auto* mainMenuBar = emplace<FMainMenuBarWidgetImGui>();
+        auto* sceneHierarchy = emplace<FSceneHierarchyWidgetImGui>();
+        auto* envProperties = emplace<FEnvironmentPropertiesWidgetImGui>();
+        auto* inspector = emplace<FInspectorWidgetImGui>();
 		emplace<FFilesystemPopUpImGuiWidget>();
 
 		// call create method, so that widgets are ready to use

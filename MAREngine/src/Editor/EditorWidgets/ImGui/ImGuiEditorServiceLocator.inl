@@ -27,15 +27,15 @@
 #include "ImGuiEditorServiceLocator.h"
 
 // Implementations
-#include "Impl/FilesystemPopUpImGuiWidget.h"
-#include "Impl/DebugImGuiWidget.h"
-#include "Impl/EnvironmentPropertiesImGuiWidget.h"
-#include "Impl/InspectorImGuiWidget.h"
-#include "Impl/MainImGuiWidget.h"
+#include "Impl/FilesystemPopUpWidgetImGui.h"
+#include "Impl/DebugWidgetImGui.h"
+#include "Impl/EnvironmentPropertiesWidgetImGui.h"
+#include "Impl/InspectorWidgetImGui.h"
+#include "Impl/MainWidgetImGui.h"
 #include "Impl/MainMenuBarImGuiWidget.h"
-#include "Impl/SceneHierarchyImGuiWidget.h"
-#include "Impl/ScriptImGuiWidget.h"
-#include "Impl/ViewportImGuiWidget.h"
+#include "Impl/SceneHierarchyWidgetImGui.h"
+#include "Impl/ScriptWidgetImGui.h"
+#include "Impl/ViewportWidgetImGui.h"
 
 
 namespace marengine {

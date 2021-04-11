@@ -20,46 +20,27 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_GUIZMOIMGUIWIDGET_H
-#define MARENGINE_GUIZMOIMGUIWIDGET_H
-
-
-#include "../../../../mar.h"
+#include "EnvironmentPropertiesWidgetImGui.h"
+#include "../ImGuiEditorServiceLocator.h"
+#include "../../../../Core/ecs/SceneManagerEditor.h"
+#include "../../../../Core/ecs/Scene.h"
 
 
 namespace marengine {
 
-    class Camera;
-    class Entity;
-    struct CTransform;
-    class FWindow;
 
+    void FEnvironmentPropertiesWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+    }
 
-    class FGuizmoImGuiWidget {
-    public:
+    void FEnvironmentPropertiesWidgetImGui::updateFrame() {
+        ImGui::Begin("Environment Properties");
 
-        void selectType(FWindow* pWindow);
-        void draw(const Camera& editorCamera, const Entity& currentEntity) const;
+        maths::vec3& sceneBackground{ m_pSceneManagerEditor->getScene()->getBackground() };
+        ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
 
-    private:
-
-        bool draw(const Camera& editorCamera, CTransform& transform) const;
-
-        void setTranslation();
-        void setRotation();
-        void setScale();
-        void setNoGuizmo();
-
-        bool userDontWantToDrawGuizmo() const;
-
-
-        ImGuizmo::OPERATION m_operation{ -1 };
-
-    };
+        ImGui::End();
+    }
 
 
 }
-
-
-
-#endif //MARENGINE_GUIZMOIMGUIWIDGET_H

@@ -22,7 +22,7 @@
 
 #include "EventsEntityImGuiWidget.h"
 #include "../ImGuiEditorServiceLocator.h"
-#include "../Impl/InspectorImGuiWidget.h"
+#include "../Impl/InspectorWidgetImGui.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
@@ -31,12 +31,12 @@
 namespace marengine {
 
     FSceneManagerEditor* FEventsEntityImGuiWidgets::s_pSceneManagerEditor{ nullptr };
-    FInspectorImGuiWidget* FEventsEntityImGuiWidgets::s_pInspectorWidget{ nullptr };
+    FInspectorWidgetImGui* FEventsEntityImGuiWidgets::s_pInspectorWidget{ nullptr };
 
 
     void FEventsEntityImGuiWidgets::create(FImGuiEditorServiceLocator* serviceLocator) {
         s_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
-        s_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
+        s_pInspectorWidget = serviceLocator->retrieve<FInspectorWidgetImGui>();
     }
 
 	void FEventsEntityImGuiWidgets::onCreateEntity() {

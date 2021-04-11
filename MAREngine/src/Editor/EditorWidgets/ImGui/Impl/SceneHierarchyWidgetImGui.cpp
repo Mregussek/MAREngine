@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#include "SceneHierarchyImGuiWidget.h"
-#include "InspectorImGuiWidget.h"
+#include "SceneHierarchyWidgetImGui.h"
+#include "InspectorWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
@@ -35,13 +35,13 @@ namespace marengine {
     static void treesFor(const FEntityArray& entities);
 
 
-    void FSceneHierarchyImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+    void FSceneHierarchyWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
-        m_pInspectorWidget = serviceLocator->retrieve<FInspectorImGuiWidget>();
+        m_pInspectorWidget = serviceLocator->retrieve<FInspectorWidgetImGui>();
     }
 
-    void FSceneHierarchyImGuiWidget::updateFrame() {
+    void FSceneHierarchyWidgetImGui::updateFrame() {
         ImGui::Begin("Scene Hierarchy");
 
         buttonsAtPanel();
@@ -87,7 +87,7 @@ namespace marengine {
         std::for_each(entities.cbegin(), entities.cend(), displayTreeOrMenuItemRecursively);
     }
 
-    void FSceneHierarchyImGuiWidget::buttonsAtPanel() const {
+    void FSceneHierarchyWidgetImGui::buttonsAtPanel() const {
         if (ImGui::Button("+ E")) {
             FEventsEntityImGuiWidgets::onCreateEntity();
         }
@@ -109,7 +109,7 @@ namespace marengine {
         }
     }
 
-    void FSceneHierarchyImGuiWidget::popUpMenu() const {
+    void FSceneHierarchyWidgetImGui::popUpMenu() const {
         if (m_pSceneManagerEditor->isEditorMode() && ImGui::IsWindowFocused()) {
             if (m_pWindow->isMousePressed(MAR_MOUSE_BUTTON_2)) {
                 ImGui::OpenPopup("SceneHierarchyPopUp");

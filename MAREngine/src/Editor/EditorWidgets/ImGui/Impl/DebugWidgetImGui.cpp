@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "DebugImGuiWidget.h"
+#include "DebugWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
@@ -30,12 +30,12 @@
 namespace marengine {
 
 
-    void FDebugImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+    void FDebugWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pRenderStatistics = serviceLocator->retrieve<FImGuiTypeHolder<FRenderStatistics*>>()->pInstance;
     }
 
-    void FDebugImGuiWidget::updateFrame() {
+    void FDebugWidgetImGui::updateFrame() {
         Scene* pScene{ m_pSceneManagerEditor->getScene() };
         ImGui::Begin("SceneDebugWidget");
 
@@ -73,14 +73,14 @@ namespace marengine {
         ImGui::End();
     }
 
-    void FDebugImGuiWidget::displayInfoAbout(Scene* pScene) const {
+    void FDebugWidgetImGui::displayInfoAbout(Scene* pScene) const {
         ImGui::Text("SceneName: %s", pScene->getName().c_str());
 
         const maths::vec3& background{ pScene->getBackground() };
         ImGui::Text("SceneBackground: (%f , %f , %f)", background.x, background.y, background.z);
     }
 
-    void FDebugImGuiWidget::displayInfoAbout(const Entity& entity) const {
+    void FDebugWidgetImGui::displayInfoAbout(const Entity& entity) const {
         if (ImGui::TreeNode(entity.getComponent<CTag>().tag.c_str())) {
             const auto displayVec3 = [](const char* label, const maths::vec3& v) {
                 ImGui::Text(label, v.x, v.y, v.z);

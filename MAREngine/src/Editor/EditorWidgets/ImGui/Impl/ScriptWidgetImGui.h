@@ -20,29 +20,49 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
-#define MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
+#ifndef MARENGINE_SCRIPTWIDGETIMGUI_H
+#define MARENGINE_SCRIPTWIDGETIMGUI_H
 
 
 #include "../../IEditorWidget.h"
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
-    class FSceneManagerEditor;
     class FImGuiEditorServiceLocator;
 
 
-    class FEnvironmentPropertiesImGuiWidget : public IEnvironmentPropertiesEditorWidget {
+    class FScriptWidgetImGui : public FScriptEditorWidget {
     public:
 
         void create(FImGuiEditorServiceLocator* serviceLocator);
+        void reset();
 
         void updateFrame() override;
 
+        void setEditorTitle(std::string newTitle);
+        void setEditorCode(std::string sourceCode);
+        void setPathToScript(std::string pathToScript);
+
+        std::string getEditorSourceCode() const;
+        std::string getDefaultEditorSourceCode() const;
+        std::string getDefaultEditorTitle() const;
+
+        bool isEditorCurrentlyUsed() const;
+
     private:
 
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        void displayMainMenuBar();
+        void editorRender();
+        void definePythonLanguage();
+
+
+        TextEditor::LanguageDefinition m_languageDefinition;
+        TextEditor editor;
+
+        std::string m_title;
+        std::string m_pathToScript;
 
     };
 
@@ -50,4 +70,6 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
+
+
+#endif //MARENGINE_SCRIPTWIDGETIMGUI_H

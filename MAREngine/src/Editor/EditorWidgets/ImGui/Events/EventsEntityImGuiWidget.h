@@ -30,7 +30,7 @@
 namespace marengine {
 
     class FSceneManagerEditor;
-    class FInspectorImGuiWidget;
+    class FInspectorWidgetImGui;
     class FImGuiEditorServiceLocator;
 	class Entity;
 
@@ -60,7 +60,7 @@ namespace marengine {
 	private:
 
         static FSceneManagerEditor* s_pSceneManagerEditor;
-        static FInspectorImGuiWidget* s_pInspectorWidget;
+        static FInspectorWidgetImGui* s_pInspectorWidget;
 
 	};
 

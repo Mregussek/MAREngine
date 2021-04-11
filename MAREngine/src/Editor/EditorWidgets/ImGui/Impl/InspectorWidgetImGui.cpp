@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "InspectorImGuiWidget.h"
+#include "InspectorWidgetImGui.h"
 #include "CommonTypeHandler.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
@@ -33,28 +33,28 @@
 namespace marengine {
 
 
-    void FInspectorImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+    void FInspectorWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
     }
 
-    void FInspectorImGuiWidget::resetInspectedEntity() {
+    void FInspectorWidgetImGui::resetInspectedEntity() {
         m_inspectedEntity = nullptr;
     }
 
-    void FInspectorImGuiWidget::setEntityToInspect(const Entity& entityToInspect){
+    void FInspectorWidgetImGui::setEntityToInspect(const Entity& entityToInspect){
         m_inspectedEntity = &entityToInspect;
     }
 
-    const Entity& FInspectorImGuiWidget::getInspectedEntity() const {
+    const Entity& FInspectorWidgetImGui::getInspectedEntity() const {
         return *m_inspectedEntity;
     }
 
-    bool FInspectorImGuiWidget::isInspectedEntityValid() const {
+    bool FInspectorWidgetImGui::isInspectedEntityValid() const {
         return m_inspectedEntity != nullptr;
     }
 
-    void FInspectorImGuiWidget::updateFrame() {
+    void FInspectorWidgetImGui::updateFrame() {
         ImGui::Begin("Inspector Entity");
 
         if(!isInspectedEntityValid()) {
@@ -75,7 +75,7 @@ namespace marengine {
         ImGui::End();
     }
 
-    void FInspectorImGuiWidget::displayEditorMode() {
+    void FInspectorWidgetImGui::displayEditorMode() {
         handle<CTag>("CTag");
         handle<CTransform>("CTransform");
         handle<CPythonScript>("CPythonScript");
@@ -86,7 +86,7 @@ namespace marengine {
         popUpMenu();
     }
 
-    void FInspectorImGuiWidget::displayPlayMode() {
+    void FInspectorWidgetImGui::displayPlayMode() {
         ImGui::Text("Cannot modify entity parameters during play mode other than:\n\tTransform, Camera, Light, Color");
 
         handle<CTransform>("CTransform");
@@ -94,7 +94,7 @@ namespace marengine {
         handle<CPointLight>("CPointLight");
     }
 
-    void FInspectorImGuiWidget::handleInputs() {
+    void FInspectorWidgetImGui::handleInputs() {
         if (m_newScriptWindow) {
             // TODO: add support for create and assign script to entity
             //WEntityFilesystemWidgets::Instance->openCreateAndAssignPythonScriptWidget();
@@ -107,7 +107,7 @@ namespace marengine {
         }
     }
 
-    void FInspectorImGuiWidget::popUpMenu() const {
+    void FInspectorWidgetImGui::popUpMenu() const {
         constexpr char popMenuName[]{ "SceneEntityModifyPopUp" };
 
         if (ImGui::IsWindowFocused() && m_pWindow->isMousePressed(MAR_MOUSE_BUTTON_2)) {
@@ -130,7 +130,7 @@ namespace marengine {
         }
     }
 
-    void FInspectorImGuiWidget::displayChildrenPopMenu() const {
+    void FInspectorWidgetImGui::displayChildrenPopMenu() const {
         if (ImGui::MenuItem("Create and assign child")) {
             FEventsEntityImGuiWidgets::onCreateChild(getInspectedEntity());
         }
@@ -140,7 +140,7 @@ namespace marengine {
         }
     }
 
-    void FInspectorImGuiWidget::displayComponentPopMenu() const {
+    void FInspectorWidgetImGui::displayComponentPopMenu() const {
         const bool hasRenderable{ m_inspectedEntity->hasComponent<CRenderable>() };
         const bool hasLight{ m_inspectedEntity->hasComponent<CPointLight>() };
         const bool hasCamera{ m_inspectedEntity->hasComponent<CCamera>() };
@@ -182,13 +182,13 @@ namespace marengine {
     }
 
     template<>
-    void FInspectorImGuiWidget::displayComponentPanel<CTag>() {
+    void FInspectorWidgetImGui::displayComponentPanel<CTag>() {
         auto& tagComponent{ m_inspectedEntity->getComponent<CTag>() };
         FCommonTypeHandler::drawStringInputPanel<70>(tagComponent.tag);
     }
 
     template<>
-    void FInspectorImGuiWidget::displayComponentPanel<CTransform>() {
+    void FInspectorWidgetImGui::displayComponentPanel<CTransform>() {
         CTransform& tran{ m_inspectedEntity->getComponent<CTransform>() };
 
         const bool updatedTransform = [&tran]()->bool {
@@ -216,7 +216,7 @@ namespace marengine {
     }
 
     template<>
-    void FInspectorImGuiWidget::displayComponentPanel<CPythonScript>() {
+    void FInspectorWidgetImGui::displayComponentPanel<CPythonScript>() {
         if (ImGui::MenuItem("Remove Script")) {
             FEventsComponentEntity::onRemove<CPythonScript>(getInspectedEntity());
             return;
@@ -244,7 +244,7 @@ namespace marengine {
     }
 
     template<>
-    void FInspectorImGuiWidget::displayComponentPanel<CRenderable>() {
+    void FInspectorWidgetImGui::displayComponentPanel<CRenderable>() {
         if (ImGui::MenuItem("Remove Renderable")) {
             FEventsComponentEntity::onRemove<CRenderable>(getInspectedEntity());
             return;
@@ -271,7 +271,7 @@ namespace marengine {
     }
 
     template<>
-    void FInspectorImGuiWidget::displayComponentPanel<CCamera>() {
+    void FInspectorWidgetImGui::displayComponentPanel<CCamera>() {
         if (ImGui::Button("Remove Camera")) {
             FEventsComponentEntity::onRemove<CCamera>(getInspectedEntity());
             return;
@@ -322,7 +322,7 @@ namespace marengine {
     }
 
     template<>
-    void FInspectorImGuiWidget::displayComponentPanel<CPointLight>() {
+    void FInspectorWidgetImGui::displayComponentPanel<CPointLight>() {
         if (ImGui::MenuItem("Remove Light")) {
             FEventsComponentEntity::onRemove<CPointLight>(getInspectedEntity());
             return;
