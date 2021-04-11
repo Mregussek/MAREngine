@@ -39,7 +39,7 @@
 // Entity Component System
 #include "../../src/Core/ecs/Scene.h"
 #include "../../src/Core/ecs/Entity/Entity.h"
-#include "../../src/Core/ecs/Components/Components.h"
+#include "../../src/Core/ecs/Entity/Components.h"
 
 // Rendering
 #include "../../src/Core/graphics/Renderer.h"

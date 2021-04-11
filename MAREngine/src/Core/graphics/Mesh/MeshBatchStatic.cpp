@@ -24,7 +24,7 @@
 #include "Mesh.h"
 #include "../IRender.h"
 #include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
+#include "../../ecs/Entity/Components.h"
 
 
 namespace marengine {
@@ -37,13 +37,12 @@ namespace marengine {
     }
 
     bool FMeshBatchStatic::shouldBeBatched(const Entity& entity) const {
-        if(!entity.hasComponent<RenderableComponent>() ||
-                !entity.hasComponent<MeshBatchInfoComponent>()) {
+        if(!entity.hasComponent<CRenderable>()) {
             return false;
         }
 
-        const auto& renderable{ entity.getComponent<RenderableComponent>() };
-        if(renderable.meshIndex == -1 || renderable.meshType == EMeshType::NONE) {
+        const auto& renderable{ entity.getComponent<CRenderable>() };
+        if(renderable.mesh.index == -1 || renderable.mesh.type == EMeshType::NONE) {
             return false;
         }
 
@@ -51,12 +50,12 @@ namespace marengine {
     }
 
     bool FMeshBatchStatic::canBeBatched(const Entity& entity) const {
-        const bool entityDoesntHaveRenderable{ !entity.hasComponent<RenderableComponent>() };
+        const bool entityDoesntHaveRenderable{ !entity.hasComponent<CRenderable>() };
         if (entityDoesntHaveRenderable) {
             return false;
         }
 
-        const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+        const auto& renderableComponent{ entity.getComponent<CRenderable>() };
         const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
         if(pMesh == nullptr) {
             return false;
@@ -83,14 +82,15 @@ namespace marengine {
     }
 
     void FMeshBatchStatic::submitToBatch(const Entity& entity) {
-        submitRenderable(entity.getComponent<RenderableComponent>());
-        submitTransform(entity.getComponent<TransformComponent>());
+        auto& cRenderable{ entity.getComponent<CRenderable>() };
+        submitRenderable(cRenderable);
+        submitTransform(entity.getComponent<CTransform>());
 
-        auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
-        meshBatchInfoComponent.indexAtBatch = (int8)(p_transforms.size() - 1);
+        cRenderable.batch.index = getIndex();
+        cRenderable.batch.transformIndex = (int8)(p_transforms.size() - 1);
     }
 
-    void FMeshBatchStatic::submitRenderable(const RenderableComponent& renderableComponent) {
+    void FMeshBatchStatic::submitRenderable(const CRenderable& renderableComponent) {
         const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
         const FVertexArray& vertices{ pMesh->getVertices() };
         submitVertices(vertices);
@@ -124,7 +124,7 @@ namespace marengine {
         std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
     }
 
-    void FMeshBatchStatic::submitTransform(const TransformComponent& transformComponent) {
+    void FMeshBatchStatic::submitTransform(const CTransform& transformComponent) {
         p_transforms.emplace_back(transformComponent.getTransform());
     }
 
@@ -149,12 +149,11 @@ namespace marengine {
 
     void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
         FMeshBatchStatic::submitToBatch(entity);
-        const RenderableComponent& renderable{ entity.getComponent<RenderableComponent>() };
-        submitColor(renderable.color);
+        auto& cRenderable{ entity.getComponent<CRenderable>() };
+        submitColor(cRenderable.color);
 
-        auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
-        meshBatchInfoComponent.batchIndex = getIndex();
-        meshBatchInfoComponent.batchType = EBatchType::MESH_STATIC_COLOR;
+        cRenderable.batch.materialIndex = (int8)(m_colors.size() - 1);
+        cRenderable.batch.type = EBatchType::MESH_STATIC_COLOR;
     }
 
     void FMeshBatchStaticColor::submitColor(const maths::vec4& color) {

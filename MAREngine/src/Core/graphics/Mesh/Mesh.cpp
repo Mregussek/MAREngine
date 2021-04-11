@@ -22,7 +22,7 @@
 
 #include "Mesh.h"
 #include "loader_obj/OBJ_Loader.h"
-#include "../../ecs/Components/Components.h"
+#include "../../ecs/Entity/Components.h"
 #include "../../../Logging/Logger.h"
 
 
@@ -94,9 +94,9 @@ namespace marengine {
         return &m_surface;
     }
 
-    const FMeshProxy* FMeshStorage::retrieve(const RenderableComponent& renderable) const {
-        switch(renderable.meshType) {
-            case EMeshType::EXTERNAL: return getExternal(renderable.meshIndex);
+    const FMeshProxy* FMeshStorage::retrieve(const CRenderable& renderable) const {
+        switch(renderable.mesh.type) {
+            case EMeshType::EXTERNAL: return getExternal(renderable.mesh.index);
             case EMeshType::CUBE: return getCube();
             case EMeshType::PYRAMID: return getPyramid();
             case EMeshType::SURFACE: return getSurface();

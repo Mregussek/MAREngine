@@ -20,29 +20,46 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
+#ifndef MARENGINE_GUIZMOIMGUIWIDGET_H
+#define MARENGINE_GUIZMOIMGUIWIDGET_H
 
 
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "../../../../mar.h"
 
 
 namespace marengine {
 
+    class Camera;
+    class Entity;
+    struct CTransform;
+    class FWindow;
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
-	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    class FGuizmoImGuiWidget {
+    public:
+
+        void selectType(FWindow* pWindow);
+        void draw(const Camera& editorCamera, const Entity& currentEntity) const;
+
+    private:
+
+        bool draw(const Camera& editorCamera, CTransform& transform) const;
+
+        void setTranslation();
+        void setRotation();
+        void setScale();
+        void setNoGuizmo();
+
+        bool userDontWantToDrawGuizmo() const;
+
+
+        ImGuizmo::OPERATION m_operation{ -1 };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_SCENE_INL
+
+#endif //MARENGINE_GUIZMOIMGUIWIDGET_H

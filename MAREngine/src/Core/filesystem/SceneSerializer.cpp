@@ -22,8 +22,6 @@
 
 #include "SceneSerializer.h"
 #include "../ecs/Scene.h"
-#include "../ecs/Entity/Entity.h"
-#include "../ecs/Components/Components.h"
 
 
 namespace marengine {
@@ -53,7 +51,7 @@ namespace marengine {
 		const uint32_t entitiesSize{ entities.size() };
 
 		for (uint32_t i = 0; i < entitiesSize; i++) {
-			const auto& tag{ entities[i].getComponent<TagComponent>().tag };
+			const auto& tag{ entities[i].getComponent<CTag>().tag };
 
 			saveEntity(entities[i], i, json, sceneName);
 		}
@@ -82,56 +80,55 @@ namespace marengine {
 			json["Scene"][sceneName]["Entity"][index][componentName][value]["w"] = v.w;
 		};
 
-		const auto& tagComponent{ entity.getComponent<TagComponent>() };
-		saveString("TagComponent", "tag", tagComponent.tag);
+		const auto& cTag{ entity.getComponent<CTag>() };
+		saveString("CTag", "tag", cTag.tag);
 
-		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		saveVec3("TransformComponent", "position", transformComponent.position);
-		saveVec3("TransformComponent", "rotation", transformComponent.rotation);
-		saveVec3("TransformComponent", "scale", transformComponent.scale);
+		const auto& cTransform{ entity.getComponent<CTransform>() };
+		saveVec3("CTransform", "position", cTransform.position);
+		saveVec3("CTransform", "rotation", cTransform.rotation);
+		saveVec3("CTransform", "scale", cTransform.scale);
 
-		if (entity.hasComponent<RenderableComponent>()) {
-			const auto& renderableComponent{ entity.getComponent<RenderableComponent>() };
+		if (entity.hasComponent<CRenderable>()) {
+			const auto& cRenderable{ entity.getComponent<CRenderable>() };
 			// TODO: fix renderable save method
-			saveString("RenderableComponent", "name", "Cube");
+			saveString("CRenderable", "name", "Cube");
 		}
 
-		if (entity.hasComponent<PointLightComponent>()) {
-			const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-			
-			saveVec4("PointLightComponent", "position", pointLightComponent.pointLight.position);
-			saveVec4("PointLightComponent", "ambient", pointLightComponent.pointLight.ambient);
-			saveVec4("PointLightComponent", "diffuse", pointLightComponent.pointLight.diffuse);
-			saveVec4("PointLightComponent", "specular", pointLightComponent.pointLight.specular);
-			saveFloat("PointLightComponent", "constant", pointLightComponent.pointLight.constant);
-			saveFloat("PointLightComponent", "linear", pointLightComponent.pointLight.linear);
-			saveFloat("PointLightComponent", "quadratic", pointLightComponent.pointLight.quadratic);
-			saveFloat("PointLightComponent", "shininess", pointLightComponent.pointLight.shininess);
-		}
+		if (entity.hasComponent<CPointLight>()) {
+			const auto& cPointLight{ entity.getComponent<CPointLight>() };
+            saveVec4("CPointLight", "position", cPointLight.pointLight.position);
+            saveVec4("CPointLight", "ambient", cPointLight.pointLight.ambient);
+            saveVec4("CPointLight", "diffuse", cPointLight.pointLight.diffuse);
+            saveVec4("CPointLight", "specular", cPointLight.pointLight.specular);
+            saveFloat("CPointLight", "constant", cPointLight.pointLight.constant);
+            saveFloat("CPointLight", "linear", cPointLight.pointLight.linear);
+            saveFloat("CPointLight", "quadratic", cPointLight.pointLight.quadratic);
+            saveFloat("CPointLight", "shininess", cPointLight.pointLight.shininess);
+        }
 
-		if (entity.hasComponent<CameraComponent>()) {
-			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-			saveString("CameraComponent", "id", cameraComponent.id);
-			saveFloat("CameraComponent", "Perspective", cameraComponent.Perspective ? 1.f : 0.f);
+		if (entity.hasComponent<CCamera>()) {
+			const auto& cCamera{ entity.getComponent<CCamera>() };
+			saveString("CCamera", "id", cCamera.id);
+			saveFloat("CCamera", "Perspective", cCamera.Perspective ? 1.f : 0.f);
 
 			// Perspective camera save
-			saveFloat("CameraComponent", "p_fov", cameraComponent.p_fov);
-			saveFloat("CameraComponent", "p_aspectRatio", cameraComponent.p_aspectRatio);
-			saveFloat("CameraComponent", "p_near", cameraComponent.p_near);
-			saveFloat("CameraComponent", "p_far", cameraComponent.p_far);
+			saveFloat("CCamera", "p_fov", cCamera.p_fov);
+			saveFloat("CCamera", "p_aspectRatio", cCamera.p_aspectRatio);
+			saveFloat("CCamera", "p_near", cCamera.p_near);
+			saveFloat("CCamera", "p_far", cCamera.p_far);
 
 			// Orthographic camera save
-			saveFloat("CameraComponent", "o_left", cameraComponent.o_left);
-			saveFloat("CameraComponent", "o_right", cameraComponent.o_right);
-			saveFloat("CameraComponent", "o_top", cameraComponent.o_top);
-			saveFloat("CameraComponent", "o_bottom", cameraComponent.o_bottom);
-			saveFloat("CameraComponent", "o_near", cameraComponent.o_near);
-			saveFloat("CameraComponent", "o_far", cameraComponent.o_far);
+			saveFloat("CCamera", "o_left", cCamera.o_left);
+			saveFloat("CCamera", "o_right", cCamera.o_right);
+			saveFloat("CCamera", "o_top", cCamera.o_top);
+			saveFloat("CCamera", "o_bottom", cCamera.o_bottom);
+			saveFloat("CCamera", "o_near", cCamera.o_near);
+			saveFloat("CCamera", "o_far", cCamera.o_far);
 		}
 
-		if (entity.hasComponent<PythonScriptComponent>()) {
-			const auto& pythonScriptComponent{ entity.getComponent<PythonScriptComponent>() };
-			saveString("PythonScriptComponent", "path", pythonScriptComponent.scriptsPath);
+		if (entity.hasComponent<CPythonScript>()) {
+			const auto& cPythonScript{ entity.getComponent<CPythonScript>() };
+			saveString("CPythonScript", "path", cPythonScript.scriptsPath);
 		}
 	}
 

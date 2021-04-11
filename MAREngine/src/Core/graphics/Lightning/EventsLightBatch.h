@@ -41,14 +41,14 @@ namespace marengine {
 		 * @brief Event should be called, when pointLight has updated. This should be called 
 		 * when some FPointLight parameters has changed and everything Render state 
 		 * should be informed. Updates also position.
-		 * @param entity entity with PointLightComponent updated
+		 * @param entity entity with CPointLight updated
 		 */
 		static void onPointLightUpdate(const Entity& entity);
 
 		/**
 		 * @brief Event should be called, only when position of pointLight has updated. That is
-		 * FPointLight parameters are the same, but entity's position in TransformComponent has changed.
-		 * If entity position changes, then PointLightComponent's position will also change.
+		 * FPointLight parameters are the same, but entity's position in CTransform has changed.
+		 * If entity position changes, then CPointLight's position will also change.
 		 * @param entity entity with position updated
 		 */
 		static void onPointLightPositionUpdate(const Entity& entity);

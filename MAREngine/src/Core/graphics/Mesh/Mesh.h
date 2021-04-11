@@ -29,7 +29,7 @@
 
 namespace marengine {
 
-    struct RenderableComponent;
+    struct CRenderable;
 
 
     static constexpr int8 g_MeshDefaultTypeIndex{ 127 };
@@ -111,7 +111,7 @@ namespace marengine {
         virtual const FMeshProxy* getPyramid() const = 0;
         virtual const FMeshProxy* getSurface() const = 0;
 
-        virtual const FMeshProxy* retrieve(const RenderableComponent& renderable) const = 0;
+        virtual const FMeshProxy* retrieve(const CRenderable& renderable) const = 0;
 
     };
 
@@ -129,7 +129,7 @@ namespace marengine {
         MAR_NO_DISCARD const FMeshProxy* getPyramid() const final;
         MAR_NO_DISCARD const FMeshProxy* getSurface() const final;
 
-        MAR_NO_DISCARD const FMeshProxy* retrieve(const RenderableComponent& renderable) const final;
+        MAR_NO_DISCARD const FMeshProxy* retrieve(const CRenderable& renderable) const final;
 
         void reset() final;
 

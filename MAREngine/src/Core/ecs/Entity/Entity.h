@@ -25,11 +25,12 @@
 
 
 #include "../../../mar.h"
-#include "EntityDefinitions.h"
-#include "../Components/Components.h"
 
 
 namespace marengine {
+
+    class Entity;
+    typedef std::vector<Entity> FEntityArray;
 
 
 	/**
@@ -43,7 +44,7 @@ namespace marengine {
 
 		friend class Scene;
 
-		struct ChildComponent {
+		struct CChildren {
 			FEntityArray children;
 		};
 
@@ -77,11 +78,11 @@ namespace marengine {
 
 		/**
 		 * @brief Static method for filling entity with basic components. By default it needs:
-		 * - TagComponent (we want to have human readable tag for every entity)
-		 * - TransformComponent (we want every entity to have its own position, rotation, scale)
+		 * - CTag (we want to have human readable tag for every entity)
+		 * - CTransform (we want every entity to have its own position, rotation, scale)
 		 * - LightBatchInfoComponent (engine-only component, it remembers light batches that other components are stored in, optimization)
 		 * - MeshBatchInfoComponent (engine-only component, it remembers mesh batches that other components are stored in, optimization)
-		 * - ChildComponent (used to store some children, that will be relative to base entity - parent)
+		 * - CChildren (used to store some children, that will be relative to base entity - parent)
 		 * @param entity entity, which will be filled with basic components
 		 */
 		static void fillEntityWithBasicComponents(const Entity& entity);
@@ -96,24 +97,24 @@ namespace marengine {
 		 * @brief Method checks, if entity is valid one and returns result.
 		 * @return returns true if entity is valid (it exists and is fine).
 		 */
-		MAR_NO_DISCARD const bool isValid() const;
+		MAR_NO_DISCARD bool isValid() const;
 
 		/**
-		 * @brief Assigns child to current entity. Places child to array at ChildComponent.
+		 * @brief Assigns child to current entity. Places child to array at CChildren.
 		 * @warning Make sure that child is a valid entity!
 		 * @param child valid entity, which will be assigned as child
 		 */
 		const Entity& assignChild(const Entity& child) const;
 
 		/**
-		 * @brief Removes child from ChildComponent by its index in array.
+		 * @brief Removes child from CChildren by its index in array.
 		 * @warning child is not destroyed, only removed from array!
 		 * @param index index at which child will be removed
 		 */
 		void removeChild(size_t index) const;
 
 		/**
-		 * @brief Removes child from ChildComponent, only if child is assigned to entity.
+		 * @brief Removes child from CChildren, only if child is assigned to entity.
 		 * @warning child is not destroyed, only removed from array!
 		 * @param child child, which we want to be removed from array
 		 */
@@ -144,7 +145,7 @@ namespace marengine {
 		 * @tparam TComponent structure type of component
 		 * @return returns true, if entity contains component
 		 */
-		template<typename TComponent> MAR_NO_DISCARD const bool hasComponent() const;
+		template<typename TComponent> MAR_NO_DISCARD bool hasComponent() const;
 
 		/**
 		 * @brief Method emplaces TComponent object at current entity instance and returns reference

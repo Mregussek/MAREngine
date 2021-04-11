@@ -25,8 +25,6 @@
 
 
 #include "../../mar.h"
-#include "Components/Components.h"
-#include "Entity/EntityDefinitions.h"
 #include "Entity/Entity.h"
 
 
@@ -47,7 +45,7 @@ namespace marengine {
 		Scene() = delete;
 		
 		/// @brief Default Constructor, with which we assign sceneName and create scene registry
-		Scene(std::string name);
+		explicit Scene(std::string name);
 		
 		/**
 		* @brief Creates empty scene with cameraEntity and lightEntity.
@@ -131,7 +129,7 @@ namespace marengine {
 		 * @brief Method checks, if entt::entity is valid one and returns result.
 		 * @return returns true if entt::entity is valid (it exists and is fine).
 		 */
-		MAR_NO_DISCARD const bool isValid(entt::entity enttEntity) const;
+		MAR_NO_DISCARD bool isValid(entt::entity enttEntity) const;
 
 	private:
 

@@ -20,29 +20,54 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
+#ifndef MARENGINE_IMGUIEDITORSERVICELOCATOR_H
+#define MARENGINE_IMGUIEDITORSERVICELOCATOR_H
 
 
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "../../../mar.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class FRenderStatistics;
+    class FWindow;
+    template<typename TTypeToHold> struct FImGuiTypeHolder;
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
-	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    class FImGuiEditorServiceLocator {
+    public:
+
+        void registerServices(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
+                              FRenderStatistics* pRenderStatistics);
+        void close();
+
+        template<typename TImGuiService>
+        MAR_NO_DISCARD TImGuiService* retrieve();
+
+    private:
+
+        template<typename TImGuiService>
+        TImGuiService* emplace();
+
+        entt::registry m_imguiRegistry;
+        entt::entity m_imguiEntity{ entt::null };
+
+    };
+
+
+    template<typename TTypeToHold>
+    struct FImGuiTypeHolder {
+
+        TTypeToHold pInstance;
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_SCENE_INL
+#include "ImGuiEditorServiceLocator.inl"
+
+
+#endif //MARENGINE_IMGUIEDITORSERVICELOCATOR_H

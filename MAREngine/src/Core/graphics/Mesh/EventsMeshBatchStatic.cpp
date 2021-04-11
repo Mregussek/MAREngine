@@ -23,14 +23,14 @@
 #include "EventsMeshBatchStatic.h"
 #include "MeshBatch.h"
 #include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
+#include "../../ecs/Entity/Components.h"
 
 
 namespace marengine {
 
 
 	void FEventsMeshBatchStatic::onTransformUpdate(const Entity& entity) {
-		//const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		//const auto& transformComponent{ entity.getComponent<CTransform>() };
 		//const auto& meshBatchInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
 
 		//FMeshBatchStatic* batch = [&meshBatchInfoComponent]()->FMeshBatchStatic* {

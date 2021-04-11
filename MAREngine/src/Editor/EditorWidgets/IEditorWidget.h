@@ -32,6 +32,22 @@ namespace marengine {
 
     class IEditorWidget : public IWidget { };
 
+    class IDebugEditorWidget : public IEditorWidget { };
+
+    class IEnvironmentPropertiesEditorWidget : public IEditorWidget { };
+
+    class IInspectorEditorWidget : public IEditorWidget { };
+
+    class IMainEditorWidget : public IEditorWidget { };
+
+    class IMainMenuBarEditorWidget : public IEditorWidget { };
+
+    class ISceneHierarchyEditorWidget : public IEditorWidget { };
+
+    class IScriptEditorWidget : IEditorWidget { };
+
+    class IViewportEditorWidget : public IEditorWidget { };
+
 
 }
 

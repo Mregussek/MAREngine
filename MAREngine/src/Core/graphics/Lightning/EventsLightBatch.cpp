@@ -22,16 +22,16 @@
 
 #include "EventsLightBatch.h"
 #include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Components/Components.h"
+#include "../../ecs/Entity/Components.h"
 
 
 namespace marengine {
 
 
 	void FEventsLightBatch::onPointLightUpdate(const Entity& entity) {
-		//const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		//const auto& transformComponent{ entity.getComponent<CTransform>() };
 		//const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
-		//auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+		//auto& pointLightComponent{ entity.getComponent<CPointLight>() };
 
 		//auto& pointLightAtBatch{
 		//	RenderPipeline::Instance->m_pointLightBatch.m_lights[lightBatchInfoComponent.indexAtBatch]
@@ -44,7 +44,7 @@ namespace marengine {
 	}
 
 	void FEventsLightBatch::onPointLightPositionUpdate(const Entity& entity) {
-		//const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+		//const auto& transformComponent{ entity.getComponent<CTransform>() };
 		//const auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
 
 		//auto& pointLightAtBatch{

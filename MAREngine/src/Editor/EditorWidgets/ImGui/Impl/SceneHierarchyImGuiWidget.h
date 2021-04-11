@@ -20,29 +20,42 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
+#ifndef MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
+#define MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H
 
 
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "../../IEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class FInspectorImGuiWidget;
+    class FImGuiEditorServiceLocator;
+    class FWindow;
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
-	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    class FSceneHierarchyImGuiWidget : public ISceneHierarchyEditorWidget {
+    public:
+
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+        void updateFrame() override;
+
+    private:
+
+        void buttonsAtPanel() const;
+        void popUpMenu() const;
+
+
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
+        FWindow* m_pWindow{ nullptr };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_SCENE_INL
+
+#endif //MARENGINE_SCENEHIERARCHYIMGUIWIDGET_H

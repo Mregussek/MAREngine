@@ -14,24 +14,16 @@
             },
             "Entity": [
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.20000000298023224,
-                            "y": 0.5,
-                            "z": 0.20000000298023224
-                        }
-                    },
-                    "PythonScriptComponent": {
+                    "CPythonScript": {
                         "path": "scripts/RotateXY.py"
                     },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "DarkGreenCube"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 14.621967315673828,
                             "y": 10.871379852294922,
@@ -50,21 +42,13 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.5,
-                            "y": 0.8999999761581421,
-                            "z": 0.25
-                        }
-                    },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Pyramid"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "GreenPyramid"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 21.049999237060547,
                             "y": 0.699999988079071,
@@ -83,21 +67,13 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.5,
-                            "y": 0.20000000298023224,
-                            "z": 0.8999999761581421
-                        }
-                    },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Surface"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "SurfacePurple"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 21.299999237060547,
                             "y": -1.850000023841858,
@@ -116,21 +92,13 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.8999999761581421,
-                            "y": 0.20000000298023224,
-                            "z": 0.30000001192092896
-                        }
-                    },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "RedWall"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 21.132192611694336,
                             "y": -2.1500000953674316,
@@ -149,15 +117,7 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    },
-                    "PointLightComponent": {
+                    "CPointLight": {
                         "ambient": {
                             "w": 1.0,
                             "x": 0.5,
@@ -187,13 +147,13 @@
                             "z": 0.5
                         }
                     },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "LightCube"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 23.356468200683594,
                             "y": 9.251102447509766,
@@ -212,21 +172,13 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
-                        }
-                    },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "FlyingGrayRectangle"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 20.93000030517578,
                             "y": 3.2300000190734863,
@@ -245,16 +197,16 @@
                     }
                 },
                 {
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "RedBrickWall"
                     },
                     "Texture2DComponent": {
                         "texturePath": "textures/red-brick.jpg"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 30.760000228881836,
                             "y": -1.7000000476837158,
@@ -273,7 +225,7 @@
                     }
                 },
                 {
-                    "CameraComponent": {
+                    "CCamera": {
                         "Perspective": 1.0,
                         "id": "main",
                         "o_bottom": -20.0,
@@ -287,10 +239,10 @@
                         "p_fov": 45.0,
                         "p_near": 0.10000000149011612
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "CameraSavedFile"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": -60.471405029296875,
                             "y": 10.223848342895508,
@@ -309,16 +261,16 @@
                     }
                 },
                 {
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "MRtextureFirst"
                     },
                     "Texture2DComponent": {
                         "texturePath": "textures/mr.jpg"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 16.649999618530273,
                             "y": -0.4994739294052124,
@@ -337,16 +289,16 @@
                     }
                 },
                 {
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Pyramid"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "WallTexture"
                     },
                     "Texture2DComponent": {
                         "texturePath": "textures/wall.jpg"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 15.350000381469727,
                             "y": -1.850000023841858,
@@ -365,16 +317,16 @@
                     }
                 },
                 {
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Surface"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "GrassSurface"
                     },
                     "Texture2DComponent": {
                         "texturePath": "textures/grass-texture.jpg"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": -8.649999618530273,
                             "y": -1.850000023841858,
@@ -393,7 +345,7 @@
                     }
                 },
                 {
-                    "PointLightComponent": {
+                    "CPointLight": {
                         "ambient": {
                             "w": 1.0,
                             "x": 0.5,
@@ -423,19 +375,19 @@
                             "z": 0.5
                         }
                     },
-                    "PythonScriptComponent": {
+                    "CPythonScript": {
                         "path": "scripts/LightMover.py"
                     },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "YellowTextureLight"
                     },
                     "Texture2DComponent": {
                         "texturePath": "textures/yellow-texture.jpg"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": -2.549999952316284,
                             "y": -1.4500000476837158,
@@ -454,21 +406,13 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
-                        }
-                    },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "GrayWall"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 43.66530990600586,
                             "y": 3.616335868835449,
@@ -487,16 +431,16 @@
                     }
                 },
                 {
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "Cube"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "RedHugeWall"
                     },
                     "Texture2DComponent": {
                         "texturePath": "textures/red-texture.jpg"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 12.511967658996582,
                             "y": 2.4450936317443848,
@@ -515,21 +459,13 @@
                     }
                 },
                 {
-                    "ColorComponent": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.5,
-                            "y": 0.5,
-                            "z": 0.5
-                        }
-                    },
-                    "RenderableComponent": {
+                    "CRenderable": {
                         "name": "objects/monkey.obj"
                     },
-                    "TagComponent": {
+                    "CTag": {
                         "tag": "SuzanneMonkey"
                     },
-                    "TransformComponent": {
+                    "CTransform": {
                         "position": {
                             "x": 11.461607933044434,
                             "y": 0.7525012493133545,

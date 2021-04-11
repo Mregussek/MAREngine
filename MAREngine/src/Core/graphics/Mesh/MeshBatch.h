@@ -31,8 +31,8 @@
 namespace marengine {
 
     class Entity;
-    struct RenderableComponent;
-    struct TransformComponent;
+    struct CRenderable;
+    struct CTransform;
     class FMeshStorage;
     class FMeshBatchStaticColor;
     class FMeshBatchStaticTex2D;
@@ -86,10 +86,10 @@ namespace marengine {
 
     protected:
 
-        void submitRenderable(const RenderableComponent& renderableComponent);
+        void submitRenderable(const CRenderable& renderableComponent);
         void submitVertices(const FVertexArray& vertices);
         void submitIndices(const FIndicesArray& indices);
-        void submitTransform(const TransformComponent& transformComponent);
+        void submitTransform(const CTransform& transformComponent);
 
 
         float p_shapeID{ 0.f };

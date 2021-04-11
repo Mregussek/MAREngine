@@ -39,46 +39,44 @@ namespace marengine {
     }
 
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {
-		auto& cameraComponent{ entity.getComponent<CameraComponent>() };
+		auto& cCamera{ entity.getComponent<CCamera>() };
 
 		const bool userCheckingGameInPlayMode{ s_pSceneManagerEditor->isPlayMode() || s_pSceneManagerEditor->isPauseMode() };
 		const bool userModifyingGameCameraInEditorMode{ s_pSceneManagerEditor->isEditorMode() && s_pSceneManagerEditor->usingGameCamera() };
 
 		if (userCheckingGameInPlayMode || userModifyingGameCameraInEditorMode) {
-			const auto& transform{ entity.getComponent<TransformComponent>() };
-			cameraComponent.renderCamera.calculateCameraTransforms(transform, cameraComponent);
-			s_pRenderManager->pushCameraToRender(&cameraComponent.renderCamera);
-            //RenderPipeline::Instance->pushCameraToPipeline(&cameraComponent.renderCamera);
+			const auto& transform{ entity.getComponent<CTransform>() };
+            cCamera.renderCamera.calculateCameraTransforms(transform, cCamera);
+			s_pRenderManager->pushCameraToRender(&cCamera.renderCamera);
 		}
 	}
 
 	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* pRenderCamera) {
 		s_pRenderManager->pushCameraToRender(pRenderCamera);
-		//RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
 	}
 
 	void FEventsCameraEntity::onGameCameraSet() {
 		Scene* pScene{ s_pSceneManagerEditor->getScene() };
 		entt::entity foundEnttEntity{ entt::null };
 
-		auto entityWithCameraComponentAndLookForMainRenderCamera = [&foundEnttEntity](entt::entity enttEntity, CameraComponent& cameraComponent) {
+		auto CCameraAndCheckWhichIsMainCamera = [&foundEnttEntity](entt::entity enttEntity,
+		                                                           CCamera& cameraComponent) {
 			if (cameraComponent.isMainCamera()) {
 				foundEnttEntity = enttEntity;
 				return;
 			}
 		};
-		auto viewOver{ pScene->getView<CameraComponent>() };
+		auto viewOver{ pScene->getView<CCamera>() };
 
-		viewOver.each(entityWithCameraComponentAndLookForMainRenderCamera);
+		viewOver.each(CCameraAndCheckWhichIsMainCamera);
 
 		if (pScene->isValid(foundEnttEntity)) {
-			auto& cameraComponent{ pScene->getComponent<CameraComponent>(foundEnttEntity) };
-			const auto& transformComponent{ pScene->getComponent<TransformComponent>(foundEnttEntity) };
-			RenderCamera* pRenderCamera{ &cameraComponent.renderCamera };
+			auto& cCamera{ pScene->getComponent<CCamera>(foundEnttEntity) };
+			const auto& transformComponent{ pScene->getComponent<CTransform>(foundEnttEntity) };
+			RenderCamera* pRenderCamera{ &cCamera.renderCamera };
 
-			pRenderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
+			pRenderCamera->calculateCameraTransforms(transformComponent, cCamera);
 			s_pRenderManager->pushCameraToRender(pRenderCamera);
-			//RenderPipeline::Instance->pushCameraToPipeline(pRenderCamera);
 		}
 	}
 

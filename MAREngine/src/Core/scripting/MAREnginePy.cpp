@@ -269,29 +269,29 @@ PYBIND11_EMBEDDED_MODULE(MAREnginePy, m) {
 	// Entity Component System
 	// -----------------------------------------------------------------------------------
 
-	py::class_<TransformComponent>(m, "Transform")
+	py::class_<CTransform>(m, "Transform")
 		.def(py::init<>())
-		.def_readwrite("scale", &TransformComponent::scale)
-		.def_readwrite("center", &TransformComponent::position)
-		.def_readwrite("angles", &TransformComponent::rotation);
+		.def_readwrite("scale", &CTransform::scale)
+		.def_readwrite("center", &CTransform::position)
+		.def_readwrite("angles", &CTransform::rotation);
 
     // TODO: fix renderablecomponnent on marenginepy cpp
-	py::class_<RenderableComponent>(m, "Color")
+	py::class_<CRenderable>(m, "Color")
 		.def(py::init<>())
-		.def_readwrite("texture", &RenderableComponent::color);
+		.def_readwrite("texture", &CRenderable::color);
 
-	py::class_<CameraComponent>(m, "Camera")
+	py::class_<CCamera>(m, "Camera")
 		.def(py::init<>())
-		.def_readwrite("p_fov",				&CameraComponent::p_fov)
-		.def_readwrite("p_aspectRatio",	    &CameraComponent::p_aspectRatio)
-		.def_readwrite("p_near",			&CameraComponent::p_near)
-		.def_readwrite("p_far",				&CameraComponent::p_far)
-		.def_readwrite("o_left",			&CameraComponent::o_left)
-		.def_readwrite("o_right",			&CameraComponent::o_right)
-		.def_readwrite("o_top",				&CameraComponent::o_top)
-		.def_readwrite("o_bottom",			&CameraComponent::o_bottom)
-		.def_readwrite("o_near",			&CameraComponent::o_near)
-		.def_readwrite("o_far",				&CameraComponent::o_far);
+		.def_readwrite("p_fov",				&CCamera::p_fov)
+		.def_readwrite("p_aspectRatio",	    &CCamera::p_aspectRatio)
+		.def_readwrite("p_near",			&CCamera::p_near)
+		.def_readwrite("p_far",				&CCamera::p_far)
+		.def_readwrite("o_left",			&CCamera::o_left)
+		.def_readwrite("o_right",			&CCamera::o_right)
+		.def_readwrite("o_top",				&CCamera::o_top)
+		.def_readwrite("o_bottom",			&CCamera::o_bottom)
+		.def_readwrite("o_near",			&CCamera::o_near)
+		.def_readwrite("o_far",				&CCamera::o_far);
 
 	py::class_<FPointLight>(m, "Light")
 		.def(py::init<>())

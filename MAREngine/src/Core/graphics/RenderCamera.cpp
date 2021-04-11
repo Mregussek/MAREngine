@@ -21,14 +21,13 @@
 
 
 #include "RenderCamera.h"
-#include "Core/ecs/Components/DefaultComponents.h"
-#include "Core/ecs/Components/CameraComponents.h"
+#include "../ecs/Entity/Components.h"
 
 
 namespace marengine {
 
 
-	void RenderCamera::calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera) {
+	void RenderCamera::calculateCameraTransforms(const CTransform& transform, const CCamera& camera) {
 		const float xRad{ trig::toRadians(transform.rotation.x) };
 		const float yRad{ trig::toRadians(transform.rotation.y) };
 		

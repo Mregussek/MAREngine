@@ -38,16 +38,14 @@ namespace marengine {
 	{
 	}
 
-	const bool Entity::isValid() const {
+	bool Entity::isValid() const {
 		return m_pSceneRegistry->valid(m_entityHandle);
 	}
 
 	void Entity::fillEntityWithBasicComponents(const Entity& entity) {
-		entity.addComponent<TagComponent>();
-		entity.addComponent<TransformComponent>();
-		entity.addComponent<ChildComponent>();
-		entity.addComponent<LightBatchInfoComponent>();
-		entity.addComponent<MeshBatchInfoComponent>();
+		entity.addComponent<CTag>();
+		entity.addComponent<CTransform>();
+		entity.addComponent<CChildren>();
 	}
 
 	void Entity::destroyYourself() const {
@@ -55,8 +53,8 @@ namespace marengine {
 	}
 
 	const Entity& Entity::assignChild(const Entity& child) const {
-		auto& childs{ getComponent<ChildComponent>().children };
-		return childs.emplace_back(child);
+		auto& children{ getComponent<CChildren>().children };
+		return children.emplace_back(child);
 	}
 
 	void Entity::removeChild(size_t index) const {
@@ -64,29 +62,29 @@ namespace marengine {
 	}
 
 	void Entity::removeChild(const Entity& child) const {
-		auto& childs{ getComponent<ChildComponent>().children };
+		auto& children{ getComponent<CChildren>().children };
 
-		auto it = std::find_if(childs.begin(), childs.end(), [&child](const Entity& iterator) {
+		auto it = std::find_if(children.begin(), children.end(), [&child](const Entity& iterator) {
 			return 	&iterator == &child;
 		});
 
-		const bool canRemoveChild{ it != childs.end() };
+		const bool canRemoveChild{ it != children.end() };
 
 		if (canRemoveChild) {
-			childs.erase(it);
+            children.erase(it);
 		}
 	}
 
 	bool Entity::hasChildren() const {
-		return !getComponent<ChildComponent>().children.empty();
+		return !getComponent<CChildren>().children.empty();
 	}
 
 	const Entity& Entity::getChild(size_t index) const {
-		return getComponent<ChildComponent>().children[index];
+		return getComponent<CChildren>().children[index];
 	}
 
 	const std::vector<Entity>& Entity::getChildren() const {
-		return getComponent<ChildComponent>().children;
+		return getComponent<CChildren>().children;
 	}
 
 

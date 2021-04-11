@@ -21,6 +21,7 @@
 
 
 #include "ScenePlayStorage.h"
+#include "Entity/Components.h"
 #include "Entity/Entity.h"
 
 
@@ -28,22 +29,26 @@ namespace marengine {
 
 
 	void FScenePlayStorage::pushEntityToStorage(const Entity& entity) {
-		typedef PlayModeStorageComponent::ComponentType ComType;
+		typedef CPlayModeStorage::ComponentType ComType;
 
-		auto& playModeComponent{ entity.addComponent<PlayModeStorageComponent>() };
+		auto& playModeComponent{ entity.addComponent<CPlayModeStorage>() };
 
-		playModeComponent.components.insert({ ComType::TRANSFORM, entity.getComponent<TransformComponent>() });
-		if (entity.hasComponent<RenderableComponent>()) {
-			playModeComponent.components.insert({ ComType::RENDERABLE, entity.getComponent<RenderableComponent>() });
+		playModeComponent.components.insert(
+		        { ComType::TRANSFORM, entity.getComponent<CTransform>() });
+
+		if (entity.hasComponent<CRenderable>()) {
+			playModeComponent.components.insert(
+			        { ComType::RENDERABLE, entity.getComponent<CRenderable>() });
 		}
-		if (entity.hasComponent<PointLightComponent>()) {
-			playModeComponent.components.insert({ ComType::POINTLIGHT, entity.getComponent<PointLightComponent>() });
+		if (entity.hasComponent<CPointLight>()) {
+			playModeComponent.components.insert(
+			        { ComType::POINTLIGHT, entity.getComponent<CPointLight>() });
 		}
 	}
 
-	template<PlayModeStorageComponent::ComponentType componentType, typename TComponent>
+	template<CPlayModeStorage::ComponentType componentType, typename TComponent>
 	static void loadComponent(const Entity& entity) {
-		auto& playModeComponent{ entity.getComponent<PlayModeStorageComponent>() };
+		auto& playModeComponent{ entity.getComponent<CPlayModeStorage>() };
 
 		auto search{ playModeComponent.components.find(componentType) };
 		if (search != playModeComponent.components.cend()) {
@@ -54,13 +59,13 @@ namespace marengine {
 	}
 
 	void FScenePlayStorage::loadEntityFromStorage(const Entity& entity) {
-		typedef PlayModeStorageComponent::ComponentType ComType;
+		typedef CPlayModeStorage::ComponentType ComType;
 
-		loadComponent<ComType::TRANSFORM, TransformComponent>(entity);
-		loadComponent<ComType::RENDERABLE, RenderableComponent>(entity);
-		loadComponent<ComType::POINTLIGHT, PointLightComponent>(entity);
+		loadComponent<ComType::TRANSFORM, CTransform>(entity);
+		loadComponent<ComType::RENDERABLE, CRenderable>(entity);
+		loadComponent<ComType::POINTLIGHT, CPointLight>(entity);
 
-		entity.removeComponent<PlayModeStorageComponent>();
+		entity.removeComponent<CPlayModeStorage>();
 	}
 
 

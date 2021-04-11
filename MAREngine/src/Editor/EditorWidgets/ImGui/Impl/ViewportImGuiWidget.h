@@ -20,55 +20,53 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_EDITORLAYER_H
-#define MARENGINE_EDITORLAYER_H
+#ifndef MARENGINE_VIEWPORTIMGUIWIDGET_H
+#define MARENGINE_VIEWPORTIMGUIWIDGET_H
 
 
-#include "../ILayer.h"
-#include "../../Editor/EditorWidgets/EditorWidgetsServiceManager.h"
-#include "../../Editor/EditorWidgets/ImGui/ImGuiEditorServiceLocator.h"
+#include "../../IEditorWidget.h"
+#include "../../../Camera/Camera.h"
+#include "GuizmoImGuiWidget.h"
+#include "../../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
 namespace marengine {
 
-    class FRenderStatistics;
     class FSceneManagerEditor;
+    class FInspectorImGuiWidget;
+    class FImGuiEditorServiceLocator;
     class FWindow;
 
 
-    class FEditorLayer : public ILayer {
+    class FViewportImGuiWidget : public IViewportEditorWidget {
     public:
 
-        virtual void create(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                            FRenderStatistics* pRenderStatistic) = 0;
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+        void destroy() override;
 
-    protected:
+        void beginFrame() override;
+        void updateFrame() override;
 
-        virtual void renderToViewport() = 0;
-
-    };
-
-
-    class FEditorLayerImGui : public FEditorLayer {
-    public:
-
-        void create(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                    FRenderStatistics* pRenderStatistic) final;
-
-        void begin() final;
-        void update() final;
-        void end() final;
-        void close() final;
+        void bind(maths::vec3 backgroundColor) const;
 
     private:
 
-        void renderToViewport() final;
+        void unbind() const;
+
+        void updateAspectRatio();
+
+        void displayViewportControlPanel();
+        void displayActualViewport();
+        void handleGuizmo();
 
 
-        FEditorWidgetsServiceManager m_editorServiceManager;
-        FImGuiEditorServiceLocator m_serviceLocator;
+        FramebufferOpenGL m_framebuffer;
+        Camera m_camera;
+        float m_aspectRatio{ 1.33f };
+        FGuizmoImGuiWidget m_guizmo;
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        FInspectorImGuiWidget* m_pInspectorWidget{ nullptr };
         FWindow* m_pWindow{ nullptr };
 
     };
@@ -77,4 +75,5 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_EDITORLAYER_H
+
+#endif //MARENGINE_VIEWPORTIMGUIWIDGET_H

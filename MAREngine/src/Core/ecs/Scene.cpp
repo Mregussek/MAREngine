@@ -36,17 +36,17 @@ namespace marengine {
 
 		{ // create Camera entity
 			const Entity& cameraEntity{ pScene->createEntity() };
-			CameraComponent& cameraComponent{ cameraEntity.addComponent<CameraComponent>() };
-			cameraComponent.id = "main";
+			auto& ccamera{ cameraEntity.addComponent<CCamera>() };
+            ccamera.id = "main";
 
-			TagComponent& tag{ cameraEntity.getComponent<TagComponent>() };
+			CTag& tag{ cameraEntity.getComponent<CTag>() };
 			tag.tag = "CameraEntity";
 		}
 		{ // create Light Entity
 			const Entity& pointLightEntity{ pScene->createEntity() };
-			pointLightEntity.addComponent<PointLightComponent>();
+			pointLightEntity.addComponent<CPointLight>();
 
-			TagComponent& tag{ pointLightEntity.getComponent<TagComponent>() };
+			CTag& tag{ pointLightEntity.getComponent<CTag>() };
 			tag.tag = "LightEntity";
 		}
 
@@ -106,7 +106,7 @@ namespace marengine {
 		return m_entities;
 	}
 
-	const bool Scene::isValid(entt::entity enttEntity) const {
+	bool Scene::isValid(entt::entity enttEntity) const {
 		return m_sceneRegistry.valid(enttEntity);
 	}
 

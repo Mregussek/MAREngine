@@ -42,7 +42,7 @@ namespace marengine {
 
 		/**
 		 * @brief Event called everytime, when TComponent is added to entity. Remember, method actually adds component!
-		 * Also specific implementions should inform other instances, that are looking for those events.
+		 * Also specific implementations should inform other instances, that are looking for those events.
 		 * @tparam TComponent structure type of component
 		 * @param entity entity, at which add component event is called
 		 */

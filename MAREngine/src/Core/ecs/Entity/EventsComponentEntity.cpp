@@ -22,10 +22,11 @@
 
 #include "EventsComponentEntity.inl"
 #include "EventsCameraEntity.h"
+#include "Components.h"
 #include "../SceneManagerEditor.h"
-#include "../Components/Components.h"
 #include "../../graphics/Mesh/EventsMeshBatchStatic.h"
 #include "../../graphics/Lightning/EventsLightBatch.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -37,16 +38,14 @@ namespace marengine {
         s_pSceneManagerEditor = pSceneManagerEditor;
     }
 
-
 	/***************************** TRANSFORM COMPONENT TEMPLATES ***************************************/
 
-	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity) {
-		const auto& transform{ entity.getComponent<TransformComponent>() };
-		const auto& meshBachInfoComponent{ entity.getComponent<MeshBatchInfoComponent>() };
+	template<> void FEventsComponentEntity::onUpdate<CTransform>(const Entity& entity) {
+		const auto& cRenderable{ entity.getComponent<CRenderable>() };
 
-		const bool isEntityRendered = [&meshBachInfoComponent]()->bool {
-			const bool hasAssignedBatch{ meshBachInfoComponent.batchType != EBatchType::NONE };
-			const bool indexAtBatchIsCorrect{ meshBachInfoComponent.batchIndex != -1 };
+		const bool isEntityRendered = [&cRenderable]()->bool {
+			const bool hasAssignedBatch{ cRenderable.batch.type != EBatchType::NONE };
+			const bool indexAtBatchIsCorrect{ cRenderable.batch.index != -1 };
 			return hasAssignedBatch && indexAtBatchIsCorrect;
 		}();
 
@@ -54,64 +53,61 @@ namespace marengine {
 			FEventsMeshBatchStatic::onTransformUpdate(entity);
 		}
 
-		if (entity.hasComponent<CameraComponent>()) {
-			const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-			if (cameraComponent.isMainCamera()) {
-				FEventsCameraEntity::onMainCameraUpdate(entity);
-			}
+		if (entity.hasComponent<CCamera>() && entity.getComponent<CCamera>().isMainCamera()) {
+			FEventsCameraEntity::onMainCameraUpdate(entity);
 		}
 
-		if (entity.hasComponent<PointLightComponent>()) {
+		if (entity.hasComponent<CPointLight>()) {
 			FEventsLightBatch::onPointLightPositionUpdate(entity);
 		}
 	}
 
 	/***************************** RENDERABLE COMPONENT TEMPLATES ***************************************/
 
-	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity) {
-		entity.addComponent<RenderableComponent>();
+	template<> void FEventsComponentEntity::onAdd<CRenderable>(const Entity& entity) {
+		entity.addComponent<CRenderable>();
 		// TODO: implement better event that whole scene reinitialization
         s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
-	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity) {
+	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity) {
         // TODO: implement better event that whole scene reinitialization
         s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
-	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity) {
-		entity.removeComponent<RenderableComponent>();
+	template<> void FEventsComponentEntity::onRemove<CRenderable>(const Entity& entity) {
+		entity.removeComponent<CRenderable>();
         // TODO: implement better event that whole scene reinitialization
         s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
 	/***************************** LIGHT COMPONENT TEMPLATES ***************************************/
 
-	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity) {
-		entity.addComponent<PointLightComponent>();
+	template<> void FEventsComponentEntity::onAdd<CPointLight>(const Entity& entity) {
+		entity.addComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
         s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
-	template<> void FEventsComponentEntity::onUpdate<PointLightComponent>(const Entity& entity) {
+	template<> void FEventsComponentEntity::onUpdate<CPointLight>(const Entity& entity) {
 		FEventsLightBatch::onPointLightUpdate(entity);
 	}
 
-	template<> void FEventsComponentEntity::onRemove<PointLightComponent>(const Entity& entity) {
-		entity.removeComponent<PointLightComponent>();
+	template<> void FEventsComponentEntity::onRemove<CPointLight>(const Entity& entity) {
+		entity.removeComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
         s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
 	/***************************** CAMERA COMPONENT TEMPLATES ***************************************/
 
-	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity) {
-		const auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-		if (cameraComponent.isMainCamera()) {
-			// cannot remove main camera!
+	template<> void FEventsComponentEntity::onRemove<CCamera>(const Entity& entity) {
+		const auto& cCamera{ entity.getComponent<CCamera>() };
+		if (cCamera.isMainCamera()) {
+		    MARLOG_WARN(ELoggerType::ECS, "Cannot remove CCamera with MainCamera -> Entity: {}", entity.getComponent<CTag>().tag);
 		}
 		else {
-			entity.removeComponent<CameraComponent>();
+			entity.removeComponent<CCamera>();
 		}
 	}
 

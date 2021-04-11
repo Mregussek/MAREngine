@@ -29,8 +29,8 @@
 
 namespace marengine {
 
-	struct TransformComponent;
-	struct CameraComponent;
+	struct CTransform;
+	struct CCamera;
 
 
 	class RenderCamera {
@@ -50,7 +50,7 @@ namespace marengine {
 		void calculateModel(vec3 arg);
 		void recalculateMVP();
 
-		void calculateCameraTransforms(const TransformComponent& transform, const CameraComponent& camera);
+		void calculateCameraTransforms(const CTransform& transform, const CCamera& camera);
 
 		MAR_NO_DISCARD const mat4& getProjection() const;
 		MAR_NO_DISCARD const mat4& getView() const;

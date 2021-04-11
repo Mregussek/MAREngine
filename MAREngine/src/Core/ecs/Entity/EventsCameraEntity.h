@@ -50,7 +50,7 @@ namespace marengine {
 		/**
 		 * @brief Updates main camera with given entity, only if it can be updated (FSceneManager must allow it).
 		 * @warning Method assumes that entity contains main camera, it does not check if it is main one!
-		 * @param entity entity, which must contain main renderCamera at its CameraComponent
+		 * @param entity entity, which must contain main renderCamera at its CCamera
 		 */
 		static void onMainCameraUpdate(const Entity& entity);
 

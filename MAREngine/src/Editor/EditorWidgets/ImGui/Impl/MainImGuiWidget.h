@@ -20,29 +20,40 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
+#ifndef MARENGINE_FMAINIMGUIEDITORWIDGET_H
+#define MARENGINE_FMAINIMGUIEDITORWIDGET_H
 
 
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "../../IEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
+    class FWindow;
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
-	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    class FMainImGuiWidget : public IMainEditorWidget {
+    public:
+
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+        void destroy() override;
+
+        void beginFrame() override;
+        void endFrame() override;
+
+    private:
+
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        FWindow* m_pWindow{ nullptr };
+        bool m_dockspaceOpen{ true };
+        bool m_fullscreenPersistent{ true };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_SCENE_INL
+#endif //MARENGINE_FMAINIMGUIEDITORWIDGET_H

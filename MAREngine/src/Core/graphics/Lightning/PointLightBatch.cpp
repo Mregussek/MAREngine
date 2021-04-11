@@ -22,7 +22,7 @@
 
 #include "PointLightBatch.h"
 #include "../IRender.h"
-#include "../../ecs/Components/LightComponents.h"
+#include "../../ecs/Entity/Components.h"
 #include "../../ecs/Entity/Entity.h"
 
 
@@ -39,9 +39,9 @@ namespace marengine {
 
 	bool FPointLightBatch::canBeBatched(const Entity& entityWithLight) const {
 		const auto currentLightSize{ m_lights.size() };
-		const bool thereIsPlaceInBatch{ !(currentLightSize + 1 >= GraphicLimits::maxLights) };
+		const bool thereIsPlaceInBatch{ currentLightSize + 1 < GraphicLimits::maxLights };
 
-		if (thereIsPlaceInBatch && entityWithLight.hasComponent<PointLightComponent>()) {
+		if (thereIsPlaceInBatch && entityWithLight.hasComponent<CPointLight>()) {
 			return true;
 		}
 		else {
@@ -50,14 +50,14 @@ namespace marengine {
 	}
 
 	void FPointLightBatch::submitEntityWithLightning(const Entity& entity) {
-		const auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
+		const auto& cTransform{ entity.getComponent<CTransform>() };
+		auto& cPointLight{ entity.getComponent<CPointLight>() };
 
-		FPointLight& pointLightData{ m_lights.emplace_back(pointLightComponent.pointLight) };
-		pointLightData.position = maths::vec4(transformComponent.position, 1.f);
+		FPointLight& pointLightData{ m_lights.emplace_back(cPointLight.pointLight) };
+		pointLightData.position = maths::vec4(cTransform.position, 1.f);
 
-		auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
-		lightBatchInfoComponent.indexAtBatch = m_lights.size() - 1;
+        cPointLight.batch.index = (int8)(m_lights.size() - 1);
+        cPointLight.batch.type = ELightBatchType::POINTLIGHT;
 	}
 
 	const FPointLightsArray& FPointLightBatch::getLights() const {

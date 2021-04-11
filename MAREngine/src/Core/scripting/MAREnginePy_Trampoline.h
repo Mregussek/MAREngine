@@ -25,7 +25,7 @@
 
 
 #include "../../mar.h"
-#include "../ecs/Components/Components.h"
+#include "../ecs/Entity/Components.h"
 #include "../ecs/Entity/Entity.h"
 
 
@@ -34,10 +34,10 @@ namespace marengine {
 
 	class PyEntity {
 	public:
-		TransformComponent transform;
+		CTransform transform;
 		FPointLight light;
-		CameraComponent camera;
-		RenderableComponent renderable;
+		CCamera camera;
+		CRenderable renderable;
 
 		virtual void start() { }
 		virtual void update() { }

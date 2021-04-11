@@ -20,29 +20,34 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
+#ifndef MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
+#define MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H
 
 
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "../../IEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
-	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    class FEnvironmentPropertiesImGuiWidget : public IEnvironmentPropertiesEditorWidget {
+    public:
+
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+
+        void updateFrame() override;
+
+    private:
+
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_SCENE_INL
+#endif //MARENGINE_IMGUIENVIRONMENTPROPERTIESEDITORWIDGETIMPL_H

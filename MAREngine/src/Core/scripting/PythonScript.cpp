@@ -24,7 +24,6 @@
 #include "PythonInterpreter.h"
 #include "../../ProjectManager.h"
 #include "../ecs/Entity/Entity.h"
-#include "../ecs/Components/Components.h"
 #include "MAREnginePy.cpp"
 
 
@@ -48,22 +47,20 @@ namespace marengine {
         if (!m_initialized)
             return;
     
-        const auto& transform = entity.getComponent<TransformComponent>();
+        const auto& transform = entity.getComponent<CTransform>();
         m_module.attr("transform") = transform;
     
-        if (entity.hasComponent<PointLightComponent>()) {
-            const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-            m_module.attr("light") = pointLightComponent.pointLight;
+        if (entity.hasComponent<CPointLight>()) {
+            m_module.attr("light") = entity.getComponent<CPointLight>().pointLight;
         }
     
-        if (entity.hasComponent<CameraComponent>()) {
-            const auto& camera = entity.getComponent<CameraComponent>();
-            m_module.attr("camera") = camera;
+        if (entity.hasComponent<CCamera>()) {
+            m_module.attr("camera") = entity.getComponent<CCamera>();
         }
 
         // TODO: fix color component on pythonscript
-        //if (entity.hasComponent<RenderableComponent>()) {
-        //    const auto& renderable = entity.getComponent<RenderableComponent>();
+        //if (entity.hasComponent<CRenderable>()) {
+        //    const auto& renderable = entity.getComponent<CRenderable>();
         //    m_module.attr("color") = renderable;
         //}
     
@@ -74,43 +71,40 @@ namespace marengine {
         if (!m_initialized)
             return;
         
-        auto& transform = entity.getComponent<TransformComponent>();
+        auto& transform = entity.getComponent<CTransform>();
         m_module.attr("transform") = transform;
     
-        if (entity.hasComponent<PointLightComponent>()) {
-            const auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-            m_module.attr("light") = pointLightComponent.pointLight;
+        if (entity.hasComponent<CPointLight>()) {
+            m_module.attr("light") = entity.getComponent<CPointLight>().pointLight;
         }
     
-        if (entity.hasComponent<CameraComponent>()) {
-            const auto& camera = entity.getComponent<CameraComponent>();
-            m_module.attr("camera") = camera;
+        if (entity.hasComponent<CCamera>()) {
+            m_module.attr("camera") = entity.getComponent<CCamera>();
         }
 
         // TODO: fix color component on pythonscript
-        //if (entity.hasComponent<RenderableComponent>()) {
-        //    const auto& color = entity.getComponent<RenderableComponent>();
+        //if (entity.hasComponent<CRenderable>()) {
+        //    const auto& color = entity.getComponent<CRenderable>();
         //    m_module.attr("color") = color;
         //}
     
         m_module.attr("update")();
     
-        transform = m_module.attr("transform").cast<TransformComponent>();
+        transform = m_module.attr("transform").cast<CTransform>();
 
-        if (entity.hasComponent<PointLightComponent>()) {
-            auto& pointLightComponent{ entity.getComponent<PointLightComponent>() };
-            pointLightComponent.pointLight = m_module.attr("light").cast<FPointLight>();
+        if (entity.hasComponent<CPointLight>()) {
+            entity.getComponent<CPointLight>().pointLight =
+                    m_module.attr("light").cast<FPointLight>();
         }
     
-        if (entity.hasComponent<CameraComponent>()) {
-            auto& camera = entity.getComponent<CameraComponent>();
-            camera = m_module.attr("camera").cast<CameraComponent>();
+        if (entity.hasComponent<CCamera>()) {
+            entity.getComponent<CCamera>() = m_module.attr("camera").cast<CCamera>();
         }
 
         // TODO: fix color component on pythonscript
-        //if (entity.hasComponent<RenderableComponent>()) {
-        //    auto& color = entity.getComponent<RenderableComponent>();
-        //    color = m_module.attr("color").cast<RenderableComponent>();
+        //if (entity.hasComponent<CRenderable>()) {
+        //    auto& color = entity.getComponent<CRenderable>();
+        //    color = m_module.attr("color").cast<CRenderable>();
         //}
     }
 

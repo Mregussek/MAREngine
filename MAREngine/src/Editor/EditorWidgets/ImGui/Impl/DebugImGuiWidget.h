@@ -20,29 +20,40 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
+#ifndef MARENGINE_DEBUGIMGUIWIDGET_H
+#define MARENGINE_DEBUGIMGUIWIDGET_H
 
 
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "../../IEditorWidget.h"
 
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
+    class Scene;
+    class Entity;
+    class FRenderStatistics;
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
-	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    class FDebugImGuiWidget : public IDebugEditorWidget {
+    public:
+
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+        void updateFrame() override;
+
+    private:
+
+        void displayInfoAbout(Scene* pScene) const;
+        void displayInfoAbout(const Entity& entity) const;
+
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        FRenderStatistics* m_pRenderStatistics{ nullptr };
+
+    };
 
 
 }
 
 
-#endif // !MAR_ENGINE_SCENE_INL
+#endif //MARENGINE_DEBUGIMGUIWIDGET_H

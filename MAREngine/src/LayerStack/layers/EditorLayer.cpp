@@ -21,7 +21,7 @@
 
 
 #include "EditorLayer.h"
-#include "../../Editor/EditorWidgets/ImGuiEditorWidgets/Events/EventsEntityImGuiWidget.h"
+#include "../../Editor/EditorWidgets/ImGui/Events/EventsEntityImGuiWidget.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Core/ecs/Scene.h"
 
@@ -29,7 +29,7 @@
 namespace marengine {
 
 
-    void FEditorLayerImGui::create(IWindow* pWindow, FSceneManagerEditor *pSceneManagerEditor,
+    void FEditorLayerImGui::create(FWindow* pWindow, FSceneManagerEditor *pSceneManagerEditor,
                                    FRenderStatistics* pRenderStatistics) {
         m_pSceneManagerEditor = pSceneManagerEditor;
         m_pWindow = pWindow;

@@ -74,7 +74,7 @@ namespace marengine {
 
     void FBatchManager::pushEntityToRender(const Entity& entity) {
         // TODO: does not support more than one batch! Refactor it
-        if(entity.hasComponent<RenderableComponent>()) {
+        if(entity.hasComponent<CRenderable>()) {
             [this](const Entity& entity) -> bool {
                 auto arrayColor{ getMeshStorage()->getArrayStaticColor() };
                 const int8 batchIndex = getAvailableBatch(arrayColor, entity);
@@ -86,21 +86,20 @@ namespace marengine {
             }(entity);
         }
 
-        if (entity.hasComponent<PointLightComponent>()) {
+        if (entity.hasComponent<CPointLight>()) {
             if (m_pointLightBatch.canBeBatched(entity)) {
                 m_pointLightBatch.submitEntityWithLightning(entity);
-                auto& lightBatchInfoComponent{ entity.getComponent<LightBatchInfoComponent>() };
-                lightBatchInfoComponent.batchType = m_pointLightBatch.getBatchType();
             }
         }
 
-        if (entity.hasComponent<CameraComponent>()) {
-            auto& cameraComponent{ entity.getComponent<CameraComponent>() };
-            if (m_pRenderManager->isCameraValid() && cameraComponent.isMainCamera()) {
+        if (entity.hasComponent<CCamera>()) {
+            auto& cameraComponent{ entity.getComponent<CCamera>() };
+            const bool isMain{ cameraComponent.isMainCamera() };
+            if (m_pRenderManager->isCameraValid() &&isMain) {
                 FEventsCameraEntity::onMainCameraUpdate(entity);
             }
-            else if(cameraComponent.isMainCamera()){
-                const auto& transformComponent{ entity.getComponent<TransformComponent>() };
+            else if(isMain){
+                const auto& transformComponent{ entity.getComponent<CTransform>() };
                 RenderCamera* renderCamera{ &cameraComponent.renderCamera };
                 renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
                 m_pRenderManager->setCamera(renderCamera);

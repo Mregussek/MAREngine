@@ -20,29 +20,21 @@
 ************************************************************************/
 
 
-#ifndef MAR_ENGINE_SCENE_INL
-#define MAR_ENGINE_SCENE_INL
-
-
-#include "Scene.h"
-#include "Entity/Components.h"
+#include "Components.h"
 
 
 namespace marengine {
 
 
-	template<typename TComponent>
-	MAR_NO_DISCARD auto Scene::getView() {
-		return m_sceneRegistry.view<TComponent>();
+	maths::mat4 CTransform::getTransform() const {
+		maths::mat4 tran;
+		tran.recompose(position, maths::quat(rotation), scale);
+		return tran;
 	}
 
-	template<typename TComponent>
-	MAR_NO_DISCARD TComponent& Scene::getComponent(entt::entity entt_entity) {
-		return m_sceneRegistry.get<TComponent>(entt_entity);
-	}
+    bool CCamera::isMainCamera() const {
+        return id.find("main") != std::string::npos;
+    }
 
 
 }
-
-
-#endif // !MAR_ENGINE_SCENE_INL

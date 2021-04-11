@@ -63,46 +63,46 @@ namespace marengine {
 			FScenePlayStorage::pushEntityToStorage(entity);
 		}
 
-		auto initializeScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
+		auto initializeScriptModule = [this](entt::entity entt_entity, CPythonScript& script) {
 			const Entity entity(entt_entity, m_pScene->getRegistry());
 			script.pythonScript.loadScript(script.scriptsPath);
 			script.pythonScript.start(entity);
 		};
 
-		const auto view{ m_pScene->getView<PythonScriptComponent>() };
+		const auto view{ m_pScene->getView<CPythonScript>() };
 		view.each(initializeScriptModule);
 
 		FEventsCameraEntity::onGameCameraSet();
 	}
 
 	void FSceneManagerEditor::updatePlayMode() {
-		auto updateScriptModule = [this](entt::entity entt_entity, PythonScriptComponent& script) {
+		auto updateScriptModule = [this](entt::entity entt_entity, CPythonScript& script) {
 			const Entity entity(entt_entity, m_pScene->getRegistry());
 			script.pythonScript.update(entity);
 			updateEntityInPlaymode(entity);
 		};
 
-		const auto view{ m_pScene->getView<PythonScriptComponent>() };
+		const auto view{ m_pScene->getView<CPythonScript>() };
 		view.each(updateScriptModule);
 	}
 
 	void FSceneManagerEditor::updatePauseMode() {
-		const auto view = m_pScene->getView<PythonScriptComponent>();
-		view.each([this](entt::entity entt_entity, const PythonScriptComponent& script) {
+		const auto view = m_pScene->getView<CPythonScript>();
+		view.each([this](entt::entity entt_entity, const CPythonScript& script) {
 			const Entity entity(entt_entity, m_pScene->getRegistry());
 			updateEntityInPlaymode(entity);
 		});
 	}
 
 	void FSceneManagerEditor::updateEntityInPlaymode(const Entity& entity) {
-		FEventsComponentEntity::onUpdate<TransformComponent>(entity);
+		FEventsComponentEntity::onUpdate<CTransform>(entity);
 
-		if (entity.hasComponent<PointLightComponent>()) {
-			FEventsComponentEntity::onUpdate<PointLightComponent>(entity);
+		if (entity.hasComponent<CPointLight>()) {
+			FEventsComponentEntity::onUpdate<CPointLight>(entity);
 		}
 
-		if (entity.hasComponent<RenderableComponent>()) {
-			FEventsComponentEntity::onUpdate<RenderableComponent>(entity);
+		if (entity.hasComponent<CRenderable>()) {
+			FEventsComponentEntity::onUpdate<CRenderable>(entity);
 		}
 	}
 

@@ -26,7 +26,7 @@
 #include "../../ProjectManager.h"
 #include "../ecs/Scene.h"
 #include "../ecs/Entity/Entity.h"
-#include "../ecs/Components/Components.h"
+#include "../ecs/Entity/Components.h"
 
 
 namespace marengine {
@@ -81,27 +81,27 @@ namespace marengine {
 	}
 
 	static bool fillRenderable(FMeshManager* pManager, const std::string& renderableName,
-                               RenderableComponent& renderable) {
+                               CRenderable& cRenderable) {
 		if (renderableName.find("Cube") != std::string::npos) {
-		    renderable.meshIndex = g_MeshDefaultTypeIndex;
-		    renderable.meshType = EMeshType::CUBE;
+            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
+            cRenderable.mesh.type = EMeshType::CUBE;
 			return true;
 		}
 		else if (renderableName.find("Surface") != std::string::npos) {
-            renderable.meshIndex = g_MeshDefaultTypeIndex;
-            renderable.meshType = EMeshType::SURFACE;
+            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
+            cRenderable.mesh.type = EMeshType::SURFACE;
             return true;
 		}
 		else if (renderableName.find("Pyramid") != std::string::npos) {
-            renderable.meshIndex = g_MeshDefaultTypeIndex;
-            renderable.meshType = EMeshType::PYRAMID;
+            cRenderable.mesh.index = g_MeshDefaultTypeIndex;
+            cRenderable.mesh.type = EMeshType::PYRAMID;
             return true;
 		}
 		else if(doesContainExtension(renderableName, "obj")) {
             FMeshProxy* pMesh =
                     pManager->getFactory()->emplaceExternal(FProjectManager::getAssetsPath() + renderableName);
-            renderable.meshIndex = pMesh->getIndex();
-            renderable.meshType = EMeshType::EXTERNAL;
+            cRenderable.mesh.index = pMesh->getIndex();
+            cRenderable.mesh.type = EMeshType::EXTERNAL;
             return true;
         }
 
@@ -134,7 +134,7 @@ namespace marengine {
 			};
 		};
         auto setRenderable = [&sceneName, index, &json](FMeshManager* pManager,
-                                                        RenderableComponent& renderable,
+                                                        CRenderable& renderable,
                                                         const char* componentName,
                                                         const char* value) {
             const std::string retrievedRenderableName =
@@ -142,53 +142,53 @@ namespace marengine {
             fillRenderable(pManager, retrievedRenderableName, renderable);
         };
 
-		auto& tagComponent{ entity.getComponent<TagComponent>() };
-		setString(tagComponent.tag, "TagComponent", "tag");
+		auto& cTag{ entity.getComponent<CTag>() };
+		setString(cTag.tag, "CTag", "tag");
 
-		auto& transformComponent{ entity.getComponent<TransformComponent>() };
-		transformComponent.position = loadVec3("TransformComponent", "position");
-		transformComponent.rotation = loadVec3("TransformComponent", "rotation");
-		transformComponent.scale = loadVec3("TransformComponent", "scale");
+		auto& cTransform{ entity.getComponent<CTransform>() };
+        cTransform.position = loadVec3("CTransform", "position");
+        cTransform.rotation = loadVec3("CTransform", "rotation");
+        cTransform.scale = loadVec3("CTransform", "scale");
 
-		if (jsonContains("RenderableComponent")) {
-			auto& renderableComponent{ entity.addComponent<RenderableComponent>() };
-			setRenderable(s_pMeshManager, renderableComponent, "RenderableComponent", "name");
+		if (jsonContains("CRenderable")) {
+			auto& cRenderable{ entity.addComponent<CRenderable>() };
+			setRenderable(s_pMeshManager, cRenderable, "CRenderable", "name");
 		}
 
-		if (jsonContains("PointLightComponent")) {
-			auto& pointLightComponent{ entity.addComponent<PointLightComponent>() };
-			pointLightComponent.pointLight.ambient = loadVec4("PointLightComponent", "position");
-			pointLightComponent.pointLight.ambient = loadVec4("PointLightComponent", "ambient");
-			pointLightComponent.pointLight.diffuse = loadVec4("PointLightComponent", "diffuse");
-			pointLightComponent.pointLight.specular = loadVec4("PointLightComponent", "specular");
-			pointLightComponent.pointLight.constant = loadFloat("PointLightComponent", "constant");
-			pointLightComponent.pointLight.linear = loadFloat("PointLightComponent", "linear");
-			pointLightComponent.pointLight.quadratic = loadFloat("PointLightComponent", "quadratic");
-			pointLightComponent.pointLight.shininess = loadFloat("PointLightComponent", "shininess");
+		if (jsonContains("CPointLight")) {
+			auto& cPointLight{ entity.addComponent<CPointLight>() };
+			cPointLight.pointLight.ambient = loadVec4("CPointLight", "position");
+			cPointLight.pointLight.ambient = loadVec4("CPointLight", "ambient");
+			cPointLight.pointLight.diffuse = loadVec4("CPointLight", "diffuse");
+			cPointLight.pointLight.specular = loadVec4("CPointLight", "specular");
+			cPointLight.pointLight.constant = loadFloat("CPointLight", "constant");
+			cPointLight.pointLight.linear = loadFloat("CPointLight", "linear");
+			cPointLight.pointLight.quadratic = loadFloat("CPointLight", "quadratic");
+			cPointLight.pointLight.shininess = loadFloat("CPointLight", "shininess");
 		}
 
-		if (jsonContains("CameraComponent")) {
-			auto& cameraComponent{ entity.addComponent<CameraComponent>() };
-			setString(cameraComponent.id, "CameraComponent", "id");
-			cameraComponent.Perspective = loadFloat("CameraComponent", "Perspective") == 1.0f;
+		if (jsonContains("CCamera")) {
+			auto& cCamera{ entity.addComponent<CCamera>() };
+			setString(cCamera.id, "CCamera", "id");
+            cCamera.Perspective = loadFloat("CCamera", "Perspective") == 1.0f;
 
 			// Perspective parameters loading
-			cameraComponent.p_fov = loadFloat("CameraComponent", "p_fov");
-			cameraComponent.p_aspectRatio = loadFloat("CameraComponent", "p_aspectRatio");
-			cameraComponent.p_near = loadFloat("CameraComponent", "p_near");
-			cameraComponent.p_far = loadFloat("CameraComponent", "p_far");
+			cCamera.p_fov = loadFloat("CCamera", "p_fov");
+			cCamera.p_aspectRatio = loadFloat("CCamera", "p_aspectRatio");
+			cCamera.p_near = loadFloat("CCamera", "p_near");
+			cCamera.p_far = loadFloat("CCamera", "p_far");
 
 			// Orthographic parameters loading
-			cameraComponent.o_left = loadFloat("CameraComponent", "o_left");
-			cameraComponent.o_right = loadFloat("CameraComponent", "o_right");
-			cameraComponent.o_bottom = loadFloat("CameraComponent", "o_bottom");
-			cameraComponent.o_near = loadFloat("CameraComponent", "o_near");
-			cameraComponent.o_far = loadFloat("CameraComponent", "o_far");
+			cCamera.o_left = loadFloat("CCamera", "o_left");
+			cCamera.o_right = loadFloat("CCamera", "o_right");
+			cCamera.o_bottom = loadFloat("CCamera", "o_bottom");
+			cCamera.o_near = loadFloat("CCamera", "o_near");
+			cCamera.o_far = loadFloat("CCamera", "o_far");
 		}
 
-		if (jsonContains("PythonScriptComponent")) {
-			auto& pythonScriptComponent{ entity.addComponent<PythonScriptComponent>() };
-			setString(pythonScriptComponent.scriptsPath, "PythonScriptComponent", "path");
+		if (jsonContains("CPythonScript")) {
+			auto& cPythonScript{ entity.addComponent<CPythonScript>() };
+			setString(cPythonScript.scriptsPath, "CPythonScript", "path");
 		}
 	}
 

@@ -26,7 +26,7 @@
 
 #include "EventsComponentEntity.h"
 #include "Entity.h"
-#include "../Components/Components.h"
+#include "Components.h"
 
 
 namespace marengine {
@@ -49,21 +49,21 @@ namespace marengine {
 
 	// Here add declarations for specific component event implementations ...
 
-	// TransformComponent
-	template<> void FEventsComponentEntity::onUpdate<TransformComponent>(const Entity& entity);
+	// CTransform
+	template<> void FEventsComponentEntity::onUpdate<CTransform>(const Entity& entity);
 
-	// RenderableComponent
-	template<> void FEventsComponentEntity::onAdd<RenderableComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onUpdate<RenderableComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onRemove<RenderableComponent>(const Entity& entity);
+	// CRenderable
+	template<> void FEventsComponentEntity::onAdd<CRenderable>(const Entity& entity);
+	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity);
+	template<> void FEventsComponentEntity::onRemove<CRenderable>(const Entity& entity);
 
 	// Point Light Component
-	template<> void FEventsComponentEntity::onAdd<PointLightComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onUpdate<PointLightComponent>(const Entity& entity);
-	template<> void FEventsComponentEntity::onRemove<PointLightComponent>(const Entity& entity);
+	template<> void FEventsComponentEntity::onAdd<CPointLight>(const Entity& entity);
+	template<> void FEventsComponentEntity::onUpdate<CPointLight>(const Entity& entity);
+	template<> void FEventsComponentEntity::onRemove<CPointLight>(const Entity& entity);
 
-	// CameraComponent
-	template<> void FEventsComponentEntity::onRemove<CameraComponent>(const Entity& entity);
+	// CCamera
+	template<> void FEventsComponentEntity::onRemove<CCamera>(const Entity& entity);
 
 
 }

@@ -25,13 +25,14 @@
 
 
 #include "Entity.h"
+#include "Components.h"
 
 
 namespace marengine {
 
 
 	template<typename TComponent>
-	MAR_NO_DISCARD const bool Entity::hasComponent() const {
+	MAR_NO_DISCARD bool Entity::hasComponent() const {
 		const bool hasComp{ m_pSceneRegistry->has<TComponent>(m_entityHandle) };
 		return hasComp;
 	}
