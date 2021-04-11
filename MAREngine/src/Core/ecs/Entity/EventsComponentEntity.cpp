@@ -22,20 +22,32 @@
 
 #include "EventsComponentEntity.inl"
 #include "EventsCameraEntity.h"
-#include "Components.h"
 #include "../SceneManagerEditor.h"
-#include "../../graphics/Mesh/EventsMeshBatchStatic.h"
-#include "../../graphics/Lightning/EventsLightBatch.h"
+#include "../../graphics/MeshManager.h"
+#include "../../graphics/RenderManager.h"
+#include "../../graphics/BatchManager.h"
 #include "../../../Logging/Logger.h"
 
 
 namespace marengine {
 
     FSceneManagerEditor* FEventsComponentEntity::s_pSceneManagerEditor{ nullptr };
+    FRenderManager* FEventsComponentEntity::s_pRenderManager{ nullptr };
+    FBatchManager* FEventsComponentEntity::s_pBatchManager{ nullptr };
+    FMeshManager* FEventsComponentEntity::s_pMeshManager{ nullptr };
 
 
-    void FEventsComponentEntity::create(FSceneManagerEditor* pSceneManagerEditor) {
+    void FEventsComponentEntity::passSceneManager(FSceneManagerEditor* pSceneManagerEditor) {
         s_pSceneManagerEditor = pSceneManagerEditor;
+    }
+    void FEventsComponentEntity::passRenderManager(FRenderManager* pRenderManager) {
+        s_pRenderManager = pRenderManager;
+    }
+    void FEventsComponentEntity::passBatchManager(FBatchManager* pBatchManager) {
+        s_pBatchManager = pBatchManager;
+    }
+    void FEventsComponentEntity::passMeshManager(FMeshManager* pMeshManager) {
+        s_pMeshManager = pMeshManager;
     }
 
 	/***************************** TRANSFORM COMPONENT TEMPLATES ***************************************/
@@ -50,7 +62,7 @@ namespace marengine {
 		}();
 
 		if (isEntityRendered) {
-			FEventsMeshBatchStatic::onTransformUpdate(entity);
+			//FEventsMeshBatchStatic::onTransformUpdate(entity);
 		}
 
 		if (entity.hasComponent<CCamera>() && entity.getComponent<CCamera>().isMainCamera()) {
@@ -58,7 +70,7 @@ namespace marengine {
 		}
 
 		if (entity.hasComponent<CPointLight>()) {
-			FEventsLightBatch::onPointLightPositionUpdate(entity);
+			//FEventsLightBatch::onPointLightPositionUpdate(entity);
 		}
 	}
 
@@ -67,18 +79,18 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onAdd<CRenderable>(const Entity& entity) {
 		entity.addComponent<CRenderable>();
 		// TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->updateSceneAtBatchManager();
+        //s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity) {
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->updateSceneAtBatchManager();
+        //s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CRenderable>(const Entity& entity) {
 		entity.removeComponent<CRenderable>();
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->updateSceneAtBatchManager();
+        //s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	/***************************** LIGHT COMPONENT TEMPLATES ***************************************/
@@ -86,17 +98,17 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onAdd<CPointLight>(const Entity& entity) {
 		entity.addComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->updateSceneAtBatchManager();
+        //s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CPointLight>(const Entity& entity) {
-		FEventsLightBatch::onPointLightUpdate(entity);
+		//FEventsLightBatch::onPointLightUpdate(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CPointLight>(const Entity& entity) {
 		entity.removeComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
-        s_pSceneManagerEditor->updateSceneAtBatchManager();
+        //s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	/***************************** CAMERA COMPONENT TEMPLATES ***************************************/

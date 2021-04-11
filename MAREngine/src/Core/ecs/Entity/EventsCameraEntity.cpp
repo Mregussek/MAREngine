@@ -33,9 +33,12 @@ namespace marengine {
 	FRenderManager* FEventsCameraEntity::s_pRenderManager{ nullptr };
 
 
-    void FEventsCameraEntity::create(FSceneManagerEditor* pSceneManagerEditor, FRenderManager* pRenderManager) {
+    void FEventsCameraEntity::passSceneManager(FSceneManagerEditor* pSceneManagerEditor) {
         s_pSceneManagerEditor = pSceneManagerEditor;
-		s_pRenderManager = pRenderManager;
+    }
+
+    void FEventsCameraEntity::passRenderManager(FRenderManager* pRenderManager) {
+        s_pRenderManager = pRenderManager;
     }
 
 	void FEventsCameraEntity::onMainCameraUpdate(const Entity& entity) {

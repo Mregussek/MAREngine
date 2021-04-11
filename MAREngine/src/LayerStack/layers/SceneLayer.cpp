@@ -37,8 +37,13 @@ namespace marengine {
                              FBatchManager* pBatchManager, FMeshManager* pMeshManager) {
         Scene* pScene = FSceneDeserializer::loadSceneFromFile(scenePath);
 
-        FEventsCameraEntity::create(&m_sceneManagerEditor, pRenderManager);
-        FEventsComponentEntity::create(&m_sceneManagerEditor);
+        FEventsCameraEntity::passSceneManager(&m_sceneManagerEditor);
+        FEventsCameraEntity::passRenderManager(pRenderManager);
+
+        FEventsComponentEntity::passSceneManager(&m_sceneManagerEditor);
+        FEventsComponentEntity::passRenderManager(pRenderManager);
+        FEventsComponentEntity::passBatchManager(pBatchManager);
+        FEventsComponentEntity::passMeshManager(pMeshManager);
 
         m_sceneManagerEditor.initialize(pScene, pBatchManager, pMeshManager);
 	}

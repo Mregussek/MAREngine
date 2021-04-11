@@ -28,6 +28,9 @@ namespace marengine {
 
 	class Entity;
     class FSceneManagerEditor;
+    class FRenderManager;
+    class FBatchManager;
+    class FMeshManager;
 
 	
 	/**
@@ -38,7 +41,10 @@ namespace marengine {
 	class FEventsComponentEntity {
 	public:
 
-	    static void create(FSceneManagerEditor* pSceneManagerEditor);
+	    static void passSceneManager(FSceneManagerEditor* pSceneManagerEditor);
+	    static void passRenderManager(FRenderManager* pRenderManager);
+	    static void passBatchManager(FBatchManager* pBatchManager);
+	    static void passMeshManager(FMeshManager* pMeshManager);
 
 		/**
 		 * @brief Event called everytime, when TComponent is added to entity. Remember, method actually adds component!
@@ -66,6 +72,9 @@ namespace marengine {
 	private:
 
 	    static FSceneManagerEditor* s_pSceneManagerEditor;
+	    static FRenderManager* s_pRenderManager;
+	    static FBatchManager* s_pBatchManager;
+	    static FMeshManager* s_pMeshManager;
 
 	};
 
