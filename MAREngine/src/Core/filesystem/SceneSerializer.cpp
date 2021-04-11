@@ -21,6 +21,8 @@
 
 
 #include "SceneSerializer.h"
+#include "../../Logging/Logger.h"
+#include "MARSceneJsonDefinitions.h"
 #include "../ecs/Scene.h"
 
 
@@ -28,107 +30,120 @@ namespace marengine {
 
 
 	void FSceneSerializer::saveSceneToFile(const char* path, Scene* scene) {
+	    using namespace marscenejson;
+
 		std::ofstream ss(path, std::ios::out | std::ios::trunc);
 		if (!ss.is_open()) {
-			return;
-		}
+            MARLOG_ERR(ELoggerType::FILESYSTEM, "Cannot save scene to -> {}", path);
+            return;
+        }
 
 		nlohmann::json json;
-		json["Documentation"]["Engine"] = "MAREngine";
-		json["Documentation"]["EngineVersion"] = "v0.0.1";
-		json["Documentation"]["App"] = "DefaultApplication";
-		json["Documentation"]["AppVersion"] = "v1.0.0";
+		json[jDocumentation][jEngine] = "MAREngine";
+		json[jDocumentation][jEngineVersion] = "v0.0.1";
+		json[jDocumentation][jApp] = "DefaultApplication";
+		json[jDocumentation][jAppVersion] = "v1.0.0";
 
 		const std::string& sceneName{ scene->getName() };
 		const maths::vec3& background{ scene->getBackground() };
 
-		json["Scene"]["Name"] = sceneName;
-		json["Scene"][sceneName]["Background"]["x"] = background.x;
-		json["Scene"][sceneName]["Background"]["y"] = background.y;
-		json["Scene"][sceneName]["Background"]["z"] = background.z;
+		json[jScene][jSceneName] = sceneName;
+		json[jScene][sceneName][jSceneBackground][jX] = background.x;
+		json[jScene][sceneName][jSceneBackground][jY] = background.y;
+		json[jScene][sceneName][jSceneBackground][jZ] = background.z;
 
 		const std::vector<Entity>& entities{ scene->getEntities() };
 		const uint32_t entitiesSize{ entities.size() };
 
 		for (uint32_t i = 0; i < entitiesSize; i++) {
-			const auto& tag{ entities[i].getComponent<CTag>().tag };
-
 			saveEntity(entities[i], i, json, sceneName);
 		}
 		
 		ss << json.dump(4);
 		ss.close();
+
+		MARLOG_INFO(ELoggerType::FILESYSTEM, "Saved Scene {} to -> {}", sceneName, path);
 	}
 
-	void FSceneSerializer::saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
-		
-		auto saveString = [&json, &sceneName, index](const char* componentName, const char* value, const std::string& str) {
-			json["Scene"][sceneName]["Entity"][index][componentName][value] = str;
+	void FSceneSerializer::saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json,
+                                      const std::string& sceneName) {
+        using namespace marscenejson;
+		auto saveString = [&json, &sceneName, index](const char* componentName, const char* value,
+		                                             const std::string& str) {
+			json[jScene][sceneName][jEntity][index][componentName][value] = str;
 		};
-		auto saveFloat = [&json, &sceneName, index](const char* componentName, const char* value, float f) {
-			json["Scene"][sceneName]["Entity"][index][componentName][value] = f;
+        auto saveInt = [&json, &sceneName, index](const char* componentName, const char* value,
+                                                  int32 i) {
+            json[jScene][sceneName][jEntity][index][componentName][value] = i;
+        };
+		auto saveFloat = [&json, &sceneName, index](const char* componentName, const char* value,
+		                                            float f) {
+			json[jScene][sceneName][jEntity][index][componentName][value] = f;
 		};
-		auto saveVec3 = [&json, &sceneName, index](const char* componentName, const char* value, const maths::vec3& v) {
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["x"] = v.x;
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["y"] = v.y;
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["z"] = v.z;
+		auto saveVec3 = [&json, &sceneName, index](const char* componentName, const char* value,
+		                                           const maths::vec3& v) {
+			json[jScene][sceneName][jEntity][index][componentName][value][jX] = v.x;
+			json[jScene][sceneName][jEntity][index][componentName][value][jY] = v.y;
+			json[jScene][sceneName][jEntity][index][componentName][value][jZ] = v.z;
 		};
-		auto saveVec4 = [&json, &sceneName, index](const char* componentName, const char* value, const maths::vec4& v) {
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["x"] = v.x;
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["y"] = v.y;
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["z"] = v.z;
-			json["Scene"][sceneName]["Entity"][index][componentName][value]["w"] = v.w;
+		auto saveVec4 = [&json, &sceneName, index](const char* componentName, const char* value,
+		                                           const maths::vec4& v) {
+			json[jScene][sceneName][jEntity][index][componentName][value][jX] = v.x;
+			json[jScene][sceneName][jEntity][index][componentName][value][jY] = v.y;
+			json[jScene][sceneName][jEntity][index][componentName][value][jZ] = v.z;
+			json[jScene][sceneName][jEntity][index][componentName][value][jW] = v.w;
 		};
 
 		const auto& cTag{ entity.getComponent<CTag>() };
-		saveString("CTag", "tag", cTag.tag);
+		saveString(jCTag, jCTagTag, cTag.tag);
 
 		const auto& cTransform{ entity.getComponent<CTransform>() };
-		saveVec3("CTransform", "position", cTransform.position);
-		saveVec3("CTransform", "rotation", cTransform.rotation);
-		saveVec3("CTransform", "scale", cTransform.scale);
+		saveVec3(jCTransform, jCTransformPosition, cTransform.position);
+		saveVec3(jCTransform, jCTransformRotation, cTransform.rotation);
+		saveVec3(jCTransform, jCTransformScale, cTransform.scale);
 
 		if (entity.hasComponent<CRenderable>()) {
 			const auto& cRenderable{ entity.getComponent<CRenderable>() };
-			// TODO: fix renderable save method
-			saveString("CRenderable", "name", "Cube");
+			saveString(jCRenderable, jCRenderablePath, cRenderable.mesh.path);
+			saveInt(jCRenderable, jCRenderableMeshType, (int32)cRenderable.mesh.type);
+            saveVec4(jCRenderable, jCRenderableColor, cRenderable.color);
 		}
 
 		if (entity.hasComponent<CPointLight>()) {
 			const auto& cPointLight{ entity.getComponent<CPointLight>() };
-            saveVec4("CPointLight", "position", cPointLight.pointLight.position);
-            saveVec4("CPointLight", "ambient", cPointLight.pointLight.ambient);
-            saveVec4("CPointLight", "diffuse", cPointLight.pointLight.diffuse);
-            saveVec4("CPointLight", "specular", cPointLight.pointLight.specular);
-            saveFloat("CPointLight", "constant", cPointLight.pointLight.constant);
-            saveFloat("CPointLight", "linear", cPointLight.pointLight.linear);
-            saveFloat("CPointLight", "quadratic", cPointLight.pointLight.quadratic);
-            saveFloat("CPointLight", "shininess", cPointLight.pointLight.shininess);
+            saveVec4(jCPointLight, jCPointLightPosition, cPointLight.pointLight.position);
+            saveVec4(jCPointLight, jCPointLightAmbient, cPointLight.pointLight.ambient);
+            saveVec4(jCPointLight, jCPointLightDiffuse, cPointLight.pointLight.diffuse);
+            saveVec4(jCPointLight, jCPointLightSpecular, cPointLight.pointLight.specular);
+            saveFloat(jCPointLight, jCPointLightConstant, cPointLight.pointLight.constant);
+            saveFloat(jCPointLight, jCPointLightLinear, cPointLight.pointLight.linear);
+            saveFloat(jCPointLight, jCPointLightQuadratic, cPointLight.pointLight.quadratic);
+            saveFloat(jCPointLight, jCPointLightShininess, cPointLight.pointLight.shininess);
         }
 
 		if (entity.hasComponent<CCamera>()) {
 			const auto& cCamera{ entity.getComponent<CCamera>() };
-			saveString("CCamera", "id", cCamera.id);
-			saveFloat("CCamera", "Perspective", cCamera.Perspective ? 1.f : 0.f);
+			saveString(jCCamera, jCCameraId, cCamera.id);
+			saveFloat(jCCamera, jCCameraPerspective, cCamera.Perspective ? 1.f : 0.f);
 
 			// Perspective camera save
-			saveFloat("CCamera", "p_fov", cCamera.p_fov);
-			saveFloat("CCamera", "p_aspectRatio", cCamera.p_aspectRatio);
-			saveFloat("CCamera", "p_near", cCamera.p_near);
-			saveFloat("CCamera", "p_far", cCamera.p_far);
+			saveFloat(jCCamera, jCCameraPFov, cCamera.p_fov);
+			saveFloat(jCCamera, jCCameraPAspectRatio, cCamera.p_aspectRatio);
+			saveFloat(jCCamera, jCCameraPNear, cCamera.p_near);
+			saveFloat(jCCamera, jCCameraPFar, cCamera.p_far);
 
 			// Orthographic camera save
-			saveFloat("CCamera", "o_left", cCamera.o_left);
-			saveFloat("CCamera", "o_right", cCamera.o_right);
-			saveFloat("CCamera", "o_top", cCamera.o_top);
-			saveFloat("CCamera", "o_bottom", cCamera.o_bottom);
-			saveFloat("CCamera", "o_near", cCamera.o_near);
-			saveFloat("CCamera", "o_far", cCamera.o_far);
+			saveFloat(jCCamera, jCCameraOLeft, cCamera.o_left);
+			saveFloat(jCCamera, jCCameraORight, cCamera.o_right);
+			saveFloat(jCCamera, jCCameraOTop, cCamera.o_top);
+			saveFloat(jCCamera, jCCameraOBottom, cCamera.o_bottom);
+			saveFloat(jCCamera, jCCameraONear, cCamera.o_near);
+			saveFloat(jCCamera, jCCameraOFar, cCamera.o_far);
 		}
 
 		if (entity.hasComponent<CPythonScript>()) {
 			const auto& cPythonScript{ entity.getComponent<CPythonScript>() };
-			saveString("CPythonScript", "path", cPythonScript.scriptsPath);
+			saveString(jCPythonScript, jCPythonScriptPath, cPythonScript.scriptsPath);
 		}
 	}
 

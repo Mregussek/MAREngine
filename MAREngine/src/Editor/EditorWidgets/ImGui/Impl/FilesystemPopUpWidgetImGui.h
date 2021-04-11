@@ -29,6 +29,9 @@
 
 namespace marengine {
 
+    class FSceneManagerEditor;
+    class FImGuiEditorServiceLocator;
+
 
     class FFilesystemPopUpImGuiWidget {
 
@@ -37,25 +40,29 @@ namespace marengine {
 
     public:
 
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+
         void openWidget(const std::string& widgetName) const;
 
         void displaySaveWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
 
         void displayOpenWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
 
+        void displaySaveSceneWidget(const std::string& widgetName, const std::string& extensions);
+
+
     private:
 
-        void displayWidget(const std::string& widgetName, const std::string& extensions, DialogMode dialogMode,
-                           CallbackFunc callback);
+        bool displayWidget(const std::string& widgetName, const std::string& extensions, DialogMode dialogMode);
 
 
         imgui_addons::ImGuiFileBrowser m_fileDialog;
+        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
 
     };
 
 
 }
-
 
 
 #endif //MARENGINE_FILESYSTEMPOPUPWIDGETIMGUI_H

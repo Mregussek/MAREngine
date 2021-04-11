@@ -21,32 +21,52 @@
 
 
 #include "FilesystemPopUpWidgetImGui.h"
+#include "../ImGuiEditorServiceLocator.h"
+#include "../../../../Core/ecs/SceneManagerEditor.h"
+#include "../../../../Core/filesystem/SceneSerializer.h"
 
 
 namespace marengine {
 
 
+    void FFilesystemPopUpImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+    }
+
     void FFilesystemPopUpImGuiWidget::openWidget(const std::string& widgetName) const {
         ImGui::OpenPopup(widgetName.c_str());
     }
 
-    void FFilesystemPopUpImGuiWidget::displaySaveWidget(const std::string &widgetName, const std::string &extensions,
+    void FFilesystemPopUpImGuiWidget::displaySaveWidget(const std::string &widgetName,
+                                                        const std::string &extensions,
                                                         CallbackFunc callback) {
-        displayWidget(widgetName, extensions, DialogMode::SAVE, callback);
-    }
-
-    void FFilesystemPopUpImGuiWidget::displayOpenWidget(const std::string &widgetName, const std::string &extensions,
-                                                        CallbackFunc callback) {
-        displayWidget(widgetName, extensions, DialogMode::OPEN, callback);
-    }
-
-    void FFilesystemPopUpImGuiWidget::displayWidget(const std::string &widgetName, const std::string &extensions,
-                                                    DialogMode dialogMode, CallbackFunc callback) {
-        const ImVec2 windowSize{ 1200, 800 };
-        const bool userSelectedFile{ m_fileDialog.showFileDialog(widgetName, dialogMode, windowSize, extensions) };
+        const bool userSelectedFile = displayWidget(widgetName, extensions, DialogMode::SAVE);
         if (userSelectedFile) {
             callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
         }
+    }
+
+    void FFilesystemPopUpImGuiWidget::displayOpenWidget(const std::string &widgetName,
+                                                        const std::string &extensions,
+                                                        CallbackFunc callback) {
+        const bool userSelectedFile = displayWidget(widgetName, extensions, DialogMode::OPEN);
+        if (userSelectedFile) {
+            callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
+        }
+    }
+
+    void FFilesystemPopUpImGuiWidget::displaySaveSceneWidget(const std::string& widgetName, const std::string& extensions) {
+        const bool userSelectedFile = displayWidget(widgetName, extensions, DialogMode::OPEN);
+        if (userSelectedFile) {
+            FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(), m_pSceneManagerEditor->getScene());
+        }
+    }
+
+    bool FFilesystemPopUpImGuiWidget::displayWidget(const std::string &widgetName,
+                                                    const std::string &extensions,
+                                                    DialogMode dialogMode) {
+        const ImVec2 windowSize{ 1200, 800 };
+        return m_fileDialog.showFileDialog(widgetName, dialogMode, windowSize, extensions);
     }
 
 

@@ -33,25 +33,25 @@ namespace marengine {
         s_logger = spdlog::stdout_color_mt("MAREngine");
 
         if constexpr(MARENGINE_LOGGING_LEVEL == 0) {
-            s_logger->set_level(spdlog::level::trace);
+            s_logger->set_level(spdlog::level::off);
         }
         else if constexpr(MARENGINE_LOGGING_LEVEL == 1) {
-            s_logger->set_level(spdlog::level::debug);
+            s_logger->set_level(spdlog::level::trace);
         }
         else if constexpr(MARENGINE_LOGGING_LEVEL == 2) {
-            s_logger->set_level(spdlog::level::info);
+            s_logger->set_level(spdlog::level::debug);
         }
         else if constexpr(MARENGINE_LOGGING_LEVEL == 3) {
-            s_logger->set_level(spdlog::level::warn);
+            s_logger->set_level(spdlog::level::info);
         }
         else if constexpr(MARENGINE_LOGGING_LEVEL == 4) {
-            s_logger->set_level(spdlog::level::err);
+            s_logger->set_level(spdlog::level::warn);
         }
         else if constexpr(MARENGINE_LOGGING_LEVEL == 5) {
-            s_logger->set_level(spdlog::level::critical);
+            s_logger->set_level(spdlog::level::err);
         }
         else if constexpr(MARENGINE_LOGGING_LEVEL == 6) {
-            s_logger->set_level(spdlog::level::off);
+            s_logger->set_level(spdlog::level::critical);
         }
     }
 

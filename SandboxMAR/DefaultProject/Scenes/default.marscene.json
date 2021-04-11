@@ -18,7 +18,7 @@
                         "path": "scripts/RotateXY.py"
                     },
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "DarkGreenCube"
@@ -43,7 +43,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Pyramid"
+                        "path": "Pyramid"
                     },
                     "CTag": {
                         "tag": "GreenPyramid"
@@ -68,7 +68,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Surface"
+                        "path": "Surface"
                     },
                     "CTag": {
                         "tag": "SurfacePurple"
@@ -93,7 +93,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "RedWall"
@@ -148,7 +148,7 @@
                         }
                     },
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "LightCube"
@@ -173,7 +173,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "FlyingGrayRectangle"
@@ -198,7 +198,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "RedBrickWall"
@@ -262,7 +262,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "MRtextureFirst"
@@ -290,7 +290,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Pyramid"
+                        "path": "Pyramid"
                     },
                     "CTag": {
                         "tag": "WallTexture"
@@ -318,7 +318,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Surface"
+                        "path": "Surface"
                     },
                     "CTag": {
                         "tag": "GrassSurface"
@@ -379,7 +379,7 @@
                         "path": "scripts/LightMover.py"
                     },
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "YellowTextureLight"
@@ -407,7 +407,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "GrayWall"
@@ -432,7 +432,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "Cube"
+                        "path": "Cube"
                     },
                     "CTag": {
                         "tag": "RedHugeWall"
@@ -460,7 +460,7 @@
                 },
                 {
                     "CRenderable": {
-                        "name": "objects/monkey.obj"
+                        "path": "objects/monkey.obj"
                     },
                     "CTag": {
                         "tag": "SuzanneMonkey"

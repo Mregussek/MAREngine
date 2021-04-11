@@ -53,7 +53,7 @@ namespace marengine {
         auto* sceneHierarchy = emplace<FSceneHierarchyWidgetImGui>();
         auto* envProperties = emplace<FEnvironmentPropertiesWidgetImGui>();
         auto* inspector = emplace<FInspectorWidgetImGui>();
-		emplace<FFilesystemPopUpImGuiWidget>();
+		auto* filesystem = emplace<FFilesystemPopUpImGuiWidget>();
 
 		// call create method, so that widgets are ready to use
         inspector->create(this);
@@ -63,6 +63,7 @@ namespace marengine {
         mainMenuBar->create(this);
         sceneHierarchy->create(this);
         envProperties->create(this);
+        filesystem->create(this);
 	}
 
 	void FImGuiEditorServiceLocator::close() {

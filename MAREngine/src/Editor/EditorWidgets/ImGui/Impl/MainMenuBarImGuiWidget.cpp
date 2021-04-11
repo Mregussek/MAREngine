@@ -33,7 +33,7 @@ namespace marengine {
     static void setDefaultMAREngineDarkTheme();
     static bool displayInfoAboutEngineAuthor();
     static bool displayEngineInstructions();
-    static bool displayWindowSettings(IWindow* pWindow);
+    static bool displayWindowSettings(FWindow* pWindow);
 
 
     void FMainMenuBarWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
@@ -75,7 +75,7 @@ namespace marengine {
             m_saveSceneDisplay = false;
         }
 
-        constexpr auto newSceneCallback = [](const std::string& path, const std::string& filename) {
+        auto newSceneCallback = [](const std::string& path, const std::string& filename) {
             //Scene* newScene = Scene::createEmptyScene(filename);
             //FSceneSerializer::saveSceneToFile(path.c_str(), newScene);
             //delete newScene;
@@ -88,11 +88,7 @@ namespace marengine {
             //MAREngine::Instance->setRestart();
         };
 
-        constexpr auto saveSceneCallback = [](const std::string& path, const std::string& filename) {
-            //FSceneSerializer::saveSceneToFile(path.c_str(), FSceneManagerEditor::Instance->getScene());
-        };
-
-        constexpr auto openSceneCallback = [](const std::string& path, const std::string& filename) {
+        auto openSceneCallback = [](const std::string& path, const std::string& filename) {
             //ProjectManager::Instance->setNewSceneToLoad(filename);
 
             //WEntityWidgetPanel::Instance->reset();
@@ -103,7 +99,7 @@ namespace marengine {
 
         m_pFilesystem->displaySaveWidget(newSceneName, extMarscene, newSceneCallback);
         m_pFilesystem->displayOpenWidget(openSceneName, extMarscene, openSceneCallback);
-        m_pFilesystem->displaySaveWidget(saveSceneName, extMarscene, saveSceneCallback);
+        m_pFilesystem->displaySaveSceneWidget(saveSceneName, extMarscene);
     }
 
     void FMainMenuBarWidgetImGui::displaySceneManagementTab() {
@@ -168,12 +164,12 @@ namespace marengine {
                 "I am delighted that you are using MAREngine! Thank you!";
 
         ImGui::Text("About Engine");
-        ImGui::Text(aboutEngine);
+        ImGui::Text("%s", aboutEngine);
 
         ImGui::Separator();
 
         ImGui::Text("About Author");
-        ImGui::Text(aboutAuthor);
+        ImGui::Text("%s", aboutAuthor);
 
         if (ImGui::Button("Close")) {
             ImGui::End();
@@ -196,7 +192,7 @@ namespace marengine {
         return true;
     }
 
-    static bool displayWindowSettings(IWindow* pWindow) {
+    static bool displayWindowSettings(FWindow* pWindow) {
         ImGui::Begin("Window Settings");
 
         static bool verticalSync{ true };
