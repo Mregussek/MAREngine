@@ -22,6 +22,7 @@
 
 #include "DebugWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
+#include "../../../../ProjectManager.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/graphics/Renderer.h"
@@ -38,6 +39,16 @@ namespace marengine {
     void FDebugWidgetImGui::updateFrame() {
         Scene* pScene{ m_pSceneManagerEditor->getScene() };
         ImGui::Begin("SceneDebugWidget");
+
+        const FProjectInfo& projectInfo{ FProjectManager::getProjectInfo() };
+
+        ImGui::Text("absolutePath: %s", projectInfo.absolutePath.c_str());
+        ImGui::Text("projectName: %s", projectInfo.projectName.c_str());
+        ImGui::Text("projectPath: %s", projectInfo.projectPath.c_str());
+        ImGui::Text("assetsPath: %s", projectInfo.assetsPath.c_str());
+        ImGui::Text("scenesPath: %s", projectInfo.scenesPath.c_str());
+        ImGui::Text("sceneToLoadAtStartup: %s", projectInfo.sceneToLoadAtStartup.c_str());
+        ImGui::Text("windowName: %s", projectInfo.windowName.c_str());
 
         displayInfoAbout(pScene);
 

@@ -37,6 +37,15 @@ namespace marengine::marscenejson {
         const char* const jEngine{ "Engine" };
         const char* const jEngineVersion{ "EngineVersion" };
 
+        const char* const jProject{ "Project" };
+        const char* const jProjectAbsolutePath{ "absolutePath" };
+        const char* const jProjectProjectName{ "projectName" };
+        const char* const jProjectProjectPath{ "projectPath" };
+        const char* const jProjectAssetsPath{ "assetsPath" };
+        const char* const jProjectScenesPath{ "scenesPath" };
+        const char* const jProjectSceneToLoadAtStartup{ "sceneToLoadAtStartup" };
+        const char* const jProjectWindowName{ "windowName" };
+
         const char* const jScene{ "Scene" };
         const char* const jSceneName{ "Name" };
         const char* const jSceneBackground{ "Background" };

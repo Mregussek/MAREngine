@@ -49,10 +49,6 @@ namespace marengine {
 		 */
 		static void saveSceneToFile(const char* path, Scene* scene);
 
-	private:
-
-		static void saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
-
 	};
 
 

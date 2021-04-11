@@ -21,6 +21,7 @@
 
 
 #include "SceneSerializer.h"
+#include "../../ProjectManager.h"
 #include "../../Logging/Logger.h"
 #include "MARSceneJsonDefinitions.h"
 #include "../ecs/Scene.h"
@@ -28,8 +29,11 @@
 
 namespace marengine {
 
+    static void saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json,
+                           const std::string& sceneName);
 
-	void FSceneSerializer::saveSceneToFile(const char* path, Scene* scene) {
+
+    void FSceneSerializer::saveSceneToFile(const char* path, Scene* scene) {
 	    using namespace marscenejson;
 
 		std::ofstream ss(path, std::ios::out | std::ios::trunc);
@@ -43,6 +47,15 @@ namespace marengine {
 		json[jDocumentation][jEngineVersion] = "v0.0.1";
 		json[jDocumentation][jApp] = "DefaultApplication";
 		json[jDocumentation][jAppVersion] = "v1.0.0";
+
+		const FProjectInfo& projectInfo{ FProjectManager::getProjectInfo() };
+		json[jProject][jProjectAbsolutePath] = projectInfo.absolutePath;
+        json[jProject][jProjectProjectName] = projectInfo.projectName;
+        json[jProject][jProjectProjectPath] = projectInfo.projectPath;
+        json[jProject][jProjectAssetsPath] = projectInfo.assetsPath;
+        json[jProject][jProjectScenesPath] = projectInfo.scenesPath;
+        json[jProject][jProjectSceneToLoadAtStartup] = projectInfo.sceneToLoadAtStartup;
+        json[jProject][jProjectWindowName] = projectInfo.windowName;
 
 		const std::string& sceneName{ scene->getName() };
 		const maths::vec3& background{ scene->getBackground() };
@@ -65,8 +78,8 @@ namespace marengine {
 		MARLOG_INFO(ELoggerType::FILESYSTEM, "Saved Scene {} to -> {}", sceneName, path);
 	}
 
-	void FSceneSerializer::saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json,
-                                      const std::string& sceneName) {
+	void saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json,
+                    const std::string& sceneName) {
         using namespace marscenejson;
 		auto saveString = [&json, &sceneName, index](const char* componentName, const char* value,
 		                                             const std::string& str) {

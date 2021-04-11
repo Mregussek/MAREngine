@@ -30,7 +30,6 @@
 namespace marengine {
 
 
-
 	/**
 	 * @struct ProjectInfo ProjectManager.h "ProjectManager.h"
 	 * @brief ProjectInfo is a structure containing all information about currently running project
@@ -38,6 +37,7 @@ namespace marengine {
 	 */
 	struct FProjectInfo {
 
+	    std::string absolutePath;
 		std::string projectName;
 		std::string projectPath;
 		std::string assetsPath;
@@ -71,6 +71,7 @@ namespace marengine {
 
 	    static void setProjectName(std::string newProjectName);
 	    static void setSceneToLoadAtStartup(std::string newSceneToLoad);
+	    static void setAbsolutePath();
         static void setWindowName();
 
 

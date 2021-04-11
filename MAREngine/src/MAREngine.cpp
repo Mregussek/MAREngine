@@ -24,10 +24,6 @@
 #include "Core/scripting/PythonInterpreter.h"
 #include "Logging/Logger.h"
 #include "MAREngineBuilder.h"
-#include "Window/IWindow.h"
-#include "LayerStack/layers/RenderLayer.h"
-#include "LayerStack/layers/SceneLayer.h"
-#include "LayerStack/layers/EditorLayer.h"
 
 
 namespace marengine {

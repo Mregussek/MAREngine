@@ -5,6 +5,15 @@
         "Engine": "MAREngine",
         "EngineVersion": "v0.0.1"
     },
+    "Project": {
+        "absolutePath": "D:/Projects/MAREngine/build/bin/",
+        "assetsPath": "DefaultProject/Assets/",
+        "projectName": "DefaultProject",
+        "projectPath": "DefaultProject/",
+        "sceneToLoadAtStartup": "D:/Projects/MAREngine/build/bin/DefaultProject/Scenes/default.marscene.json",
+        "scenesPath": "DefaultProject/Scenes/",
+        "windowName": "DefaultProject --- DefaultProject/Scenes/default.marscene.json --- MAREngine"
+    },
     "Scene": {
         "DefaultScene": {
             "Background": {
@@ -18,6 +27,13 @@
                         "path": "scripts/RotateXY.py"
                     },
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
@@ -43,6 +59,13 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 2,
                         "path": "Pyramid"
                     },
                     "CTag": {
@@ -68,6 +91,13 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 3,
                         "path": "Surface"
                     },
                     "CTag": {
@@ -93,6 +123,13 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
@@ -148,6 +185,13 @@
                         }
                     },
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
@@ -173,6 +217,13 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
@@ -198,13 +249,17 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
                         "tag": "RedBrickWall"
-                    },
-                    "Texture2DComponent": {
-                        "texturePath": "textures/red-brick.jpg"
                     },
                     "CTransform": {
                         "position": {
@@ -262,13 +317,17 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
                         "tag": "MRtextureFirst"
-                    },
-                    "Texture2DComponent": {
-                        "texturePath": "textures/mr.jpg"
                     },
                     "CTransform": {
                         "position": {
@@ -290,13 +349,17 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 2,
                         "path": "Pyramid"
                     },
                     "CTag": {
                         "tag": "WallTexture"
-                    },
-                    "Texture2DComponent": {
-                        "texturePath": "textures/wall.jpg"
                     },
                     "CTransform": {
                         "position": {
@@ -318,13 +381,17 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 3,
                         "path": "Surface"
                     },
                     "CTag": {
                         "tag": "GrassSurface"
-                    },
-                    "Texture2DComponent": {
-                        "texturePath": "textures/grass-texture.jpg"
                     },
                     "CTransform": {
                         "position": {
@@ -379,13 +446,17 @@
                         "path": "scripts/LightMover.py"
                     },
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
                         "tag": "YellowTextureLight"
-                    },
-                    "Texture2DComponent": {
-                        "texturePath": "textures/yellow-texture.jpg"
                     },
                     "CTransform": {
                         "position": {
@@ -407,6 +478,13 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
@@ -432,13 +510,17 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 1,
                         "path": "Cube"
                     },
                     "CTag": {
                         "tag": "RedHugeWall"
-                    },
-                    "Texture2DComponent": {
-                        "texturePath": "textures/red-texture.jpg"
                     },
                     "CTransform": {
                         "position": {
@@ -460,6 +542,13 @@
                 },
                 {
                     "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 0.5
+                        },
+                        "meshType": 4,
                         "path": "objects/monkey.obj"
                     },
                     "CTag": {
