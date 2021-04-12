@@ -21,10 +21,10 @@
 
 
 #include "Mesh.h"
-#include "../../../ProjectManager.h"
 #include "loader_obj/OBJ_Loader.h"
-#include "../../ecs/Entity/Components.h"
-#include "../../../Logging/Logger.h"
+#include "../ecs/Entity/Components.h"
+#include "../../ProjectManager.h"
+#include "../../Logging/Logger.h"
 
 
 namespace marengine {

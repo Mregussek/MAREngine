@@ -24,22 +24,21 @@
 #define MARENGINE_MESH_H
 
 
-#include "../IRender.h"
+#include "IRender.h"
 
 
 namespace marengine {
 
     struct CRenderable;
 
-
     static constexpr int8 g_MeshDefaultTypeIndex{ 127 };
-
-    enum class EMeshType {
-        NONE, CUBE, PYRAMID, SURFACE, EXTERNAL
-    };
 
     struct FMeshExternalInfo {
         std::string path{};
+    };
+
+    enum class EMeshType {
+        NONE, CUBE, PYRAMID, SURFACE, EXTERNAL
     };
 
 
@@ -133,7 +132,7 @@ namespace marengine {
 
         MAR_NO_DISCARD const FMeshProxy* retrieve(const CRenderable& cRenderable) const final;
 
-        const FMeshProxy* isAlreadyLoaded(const CRenderable& cRenderable) const final;
+        MAR_NO_DISCARD const FMeshProxy* isAlreadyLoaded(const CRenderable& cRenderable) const final;
 
         void reset() final;
 

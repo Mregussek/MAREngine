@@ -26,8 +26,8 @@
 
 #include "../../../mar.h"
 // CRenderable
-#include "../../graphics/Mesh/IMeshBatch.h"
-#include "../../graphics/Mesh/Mesh.h"
+#include "../../graphics/MeshBatch.h"
+#include "../../graphics/Mesh.h"
 // CCamera
 #include "../../graphics/RenderCamera.h"
 // CPointLight

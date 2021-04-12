@@ -22,9 +22,9 @@
 
 #include "MeshBatch.h"
 #include "Mesh.h"
-#include "../IRender.h"
-#include "../../ecs/Entity/Entity.h"
-#include "../../ecs/Entity/Components.h"
+#include "IRender.h"
+#include "../ecs/Entity/Entity.h"
+#include "../ecs/Entity/Components.h"
 
 
 namespace marengine {

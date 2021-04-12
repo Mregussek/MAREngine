@@ -26,7 +26,7 @@
 #include "Shaders.h"
 #include "Pipeline.h"
 #include "RenderCamera.h"
-#include "Mesh/MeshBatch.h"
+#include "MeshBatch.h"
 
 
 namespace marengine {

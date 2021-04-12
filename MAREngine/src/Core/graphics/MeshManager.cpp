@@ -32,7 +32,7 @@ namespace marengine {
     }
 
 
-    void FMeshManager::updateSceneMeshData(Scene* const pScene) {
+    void FMeshManager::updateSceneMeshData(Scene* pScene) {
         auto view{ pScene->getView<CRenderable>() };
         view.each([this, pScene](entt::entity entt_entity, const CRenderable& cRenderable) {
             const Entity entity(entt_entity, pScene->getRegistry());

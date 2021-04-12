@@ -20,48 +20,58 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_BATCHMANAGER_H
-#define MARENGINE_BATCHMANAGER_H
+#ifndef MARENGINE_MATERIAL_H
+#define MARENGINE_MATERIAL_H
 
 
 #include "IRender.h"
-#include "Mesh.h"
-#include "MeshBatch.h"
-#include "Lightning/PointLightBatch.h"
 
 
 namespace marengine {
 
-    class Scene;
-    class Entity;
-    class FRenderManager;
-    class FMeshManager;
 
-
-    class FBatchManager : public IRenderResourceManager {
-    public:
-
-        void create(FRenderManager* pRenderManager, FMeshManager* pMeshManager);
-        void reset();
-
-        void pushSceneToRender(Scene* pScene);
-        void pushEntityToRender(const Entity& entity);
-
-        MAR_NO_DISCARD FMeshBatchStorage* getMeshStorage() const;
-        MAR_NO_DISCARD FMeshBatchFactory* getMeshFactory() const;
-        MAR_NO_DISCARD FPointLightBatch* getPointLightBatch() const;
-
-    private:
-
-        FMeshBatchFactory m_meshBatchFactory;
-        FPointLightBatch m_pointLightBatch;
-        FRenderManager* m_pRenderManager{ nullptr };
-        FMeshManager* m_pMeshManager{ nullptr };
+    class IMaterialProxy : public FRenderResource {
 
     };
 
 
+    class FMaterialProxy : public IMaterialProxy {
+
+    };
+
+
+    class FMaterialColor : public FMaterialProxy {
+
+    };
+
+
+    class FMaterialTex2D : public FMaterialProxy {
+
+    };
+
+
+    class IMaterialStorage : public IRenderResourceStorage {
+
+    };
+
+
+    class FMaterialStorage : public IMaterialStorage {
+
+    };
+
+
+    class IMaterialFactory : public IRenderResourceFactory {
+
+    };
+
+
+    class FMaterialFactory : public IMaterialFactory {
+
+    };
+
+
+
+
 }
 
-
-#endif //MARENGINE_BATCHMANAGER_H
+#endif //MARENGINE_MATERIAL_H

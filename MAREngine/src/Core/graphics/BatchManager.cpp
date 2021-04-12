@@ -23,7 +23,6 @@
 #include "BatchManager.h"
 #include "RenderManager.h"
 #include "MeshManager.h"
-#include "Mesh/MeshBatch.h"
 #include "../ecs/Entity/EventsCameraEntity.h"
 #include "../ecs/Entity/Entity.h"
 #include "../ecs/Scene.h"

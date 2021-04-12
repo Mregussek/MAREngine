@@ -24,8 +24,7 @@
 #define MARENGINE_MESHMANAGER_H
 
 
-#include "IRender.h"
-#include "Mesh/Mesh.h"
+#include "Mesh.h"
 
 
 namespace marengine {
@@ -37,7 +36,7 @@ namespace marengine {
     class FMeshManager : public IRenderResourceManager {
     public:
 
-        void updateSceneMeshData(Scene* const pScene);
+        void updateSceneMeshData(Scene* pScene);
         void updateEntityMeshData(const Entity& entity) const;
 
         MAR_NO_DISCARD FMeshStorage* getStorage() const;

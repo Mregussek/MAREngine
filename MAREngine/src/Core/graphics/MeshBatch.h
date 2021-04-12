@@ -24,8 +24,7 @@
 #define MAR_ENGINE_F_MESH_BATCH_STATIC_H
 
 
-#include "IMeshBatch.h"
-#include "../IRender.h"
+#include "IRender.h"
 
 
 namespace marengine {
@@ -36,6 +35,39 @@ namespace marengine {
     class FMeshStorage;
     class FMeshBatchStaticColor;
     class FMeshBatchStaticTex2D;
+
+
+    enum class EBatchType {
+        NONE, MESH_STATIC_COLOR, MESH_STATIC_TEX2D
+    };
+
+
+    class IMeshBatch : public FRenderResource {
+    public:
+
+        virtual void reset() = 0;
+
+        virtual const FVertexArray& getVertices() const = 0;
+        virtual const FIndicesArray& getIndices() const = 0;
+        virtual const FTransformsArray& getTransforms() const = 0;
+
+        virtual bool shouldBeBatched(const Entity& entity) const = 0;
+        virtual bool canBeBatched(const Entity& entity) const = 0;
+        virtual void submitToBatch(const Entity& entity) = 0;
+
+        virtual void passVBO(int8 index) = 0;
+        virtual void passIBO(int8 index) = 0;
+        virtual void passTransformSSBO(int8 index) = 0;
+
+        virtual int8 getVBO() const = 0;
+        virtual int8 getIBO() const = 0;
+        virtual int8 getTransformSSBO() const = 0;
+
+        virtual void passStorage(FMeshStorage* pMeshStorage) = 0;
+
+        virtual EBatchType getType() const = 0;
+
+    };
 
 
     class FMeshBatch : public IMeshBatch {
@@ -136,6 +168,18 @@ namespace marengine {
     };
 
 
+    class IMeshBatchStorage : public IRenderResourceStorage {
+    public:
+
+        virtual FMeshBatchStaticColor* getStaticColor(int8 index) const = 0;
+        virtual FMeshBatchStaticTex2D* getStaticTex2D(int8 index) const = 0;
+
+        virtual size_t getCountStaticColor() const = 0;
+        virtual size_t getCountStaticTex2D() const = 0;
+
+    };
+
+
     class FMeshBatchStorage : public IMeshBatchStorage {
 
         friend class FMeshBatchFactory;
@@ -161,6 +205,15 @@ namespace marengine {
         MAR_NO_DISCARD auto getArrayStaticColor() ->decltype(&m_staticColors) const;
         MAR_NO_DISCARD auto getArrayStaticTex2D() ->decltype(&m_staticTex2D) const;
 
+
+    };
+
+
+    class IMeshBatchFactory : public IRenderResourceFactory {
+    public:
+
+        virtual FMeshBatchStaticColor* emplaceStaticColor() = 0;
+        virtual FMeshBatchStaticTex2D* emplaceStaticTex2D() = 0;
 
     };
 

@@ -24,8 +24,8 @@
 #define MAR_ENGINE_GRAPHICS_MESH_LOADER_OBJ_H
 
 
-#include "../../../../mar.h"
-#include "../../IRender.h"
+#include "../../../mar.h"
+#include "../IRender.h"
 
 
 namespace marengine::loader_obj {
