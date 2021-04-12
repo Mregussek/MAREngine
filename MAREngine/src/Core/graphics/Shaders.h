@@ -100,7 +100,7 @@ namespace marengine {
     };
 
 
-    class IShadersFactory : public IRenderResourceFactory {
+    class IShadersFactory : public FRenderResourceFactory {
     public:
 
         virtual FShaders* emplace() = 0;

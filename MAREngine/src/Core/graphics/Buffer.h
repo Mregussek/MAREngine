@@ -152,8 +152,10 @@ namespace marengine {
 
     };
 
+    class RenderCamera;
+    class FPointLightBatch;
 
-    class IBufferFactory : public IRenderResourceFactory {
+    class IBufferFactory : public FRenderResourceFactory {
     public:
 
         virtual FShaderBuffer* emplaceSSBO() = 0;
@@ -161,10 +163,21 @@ namespace marengine {
         virtual FVertexBuffer* emplaceVBO() = 0;
         virtual FIndexBuffer* emplaceIBO() = 0;
 
+        virtual uint32 fillCameraSSBO(FShaderBuffer* pShaderBuffer,
+                                      const RenderCamera* const pRenderCamera) const = 0;
+        virtual uint32 fillPointLightSSBO(FShaderBuffer* pShaderBuffer,
+                                          const FPointLightBatch* const pPointLightBatch) const = 0;
+
     };
 
 
     class FBufferFactory : public IBufferFactory {
+    public:
+
+        MAR_NO_DISCARD uint32 fillCameraSSBO(FShaderBuffer* pShaderBuffer,
+                                             const RenderCamera* const pRenderCamera) const final;
+        MAR_NO_DISCARD uint32 fillPointLightSSBO(FShaderBuffer* pShaderBuffer,
+                                                 const FPointLightBatch* const pPointLightBatch) const final;
 
     };
 

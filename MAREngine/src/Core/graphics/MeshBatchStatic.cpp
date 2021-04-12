@@ -168,7 +168,7 @@ namespace marengine {
         return m_colorsSSBO;
     }
 
-    void FMeshBatchStaticColor::setColorSSBO(int8 id) {
+    void FMeshBatchStaticColor::passColorSSBO(int8 id) {
         m_colorsSSBO = id;
     }
 

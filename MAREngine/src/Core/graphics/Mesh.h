@@ -146,7 +146,7 @@ namespace marengine {
     };
 
 
-    class IMeshFactory : public IRenderResourceFactory {
+    class IMeshFactory : public FRenderResourceFactory {
     public:
 
         virtual FMeshProxy* emplaceExternal(const std::string& path) = 0;

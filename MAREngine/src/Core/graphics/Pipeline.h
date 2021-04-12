@@ -116,17 +116,25 @@ namespace marengine {
 
     };
 
+    class FMeshBatchStaticColor;
 
-    class IPipelineFactory : public IRenderResourceFactory {
+    class IPipelineFactory : public FRenderResourceFactory {
     public:
 
         virtual FPipelineMeshColor* emplaceColorMesh() = 0;
         virtual FPipelineMeshTex2D* emplaceTex2DMesh() = 0;
 
+        virtual void fillPipelineFor(FPipelineMeshColor* pPipeline,
+                                     FMeshBatchStaticColor* pBatch) const = 0;
+
     };
 
 
     class FPipelineFactory : public IPipelineFactory {
+    public:
+
+        void fillPipelineFor(FPipelineMeshColor* pPipeline,
+                             FMeshBatchStaticColor* pBatch) const final;
 
     };
 

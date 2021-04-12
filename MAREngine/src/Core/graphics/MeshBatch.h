@@ -145,7 +145,7 @@ namespace marengine {
         MAR_NO_DISCARD const FColorsArray& getColors() const;
 
         MAR_NO_DISCARD int8 getColorSSBO() const;
-        void setColorSSBO(int8 id);
+        void passColorSSBO(int8 id);
 
         MAR_NO_DISCARD EBatchType getType() const final { return EBatchType::MESH_STATIC_COLOR; }
 
@@ -209,7 +209,7 @@ namespace marengine {
     };
 
 
-    class IMeshBatchFactory : public IRenderResourceFactory {
+    class IMeshBatchFactory : public FRenderResourceFactory {
     public:
 
         virtual FMeshBatchStaticColor* emplaceStaticColor() = 0;

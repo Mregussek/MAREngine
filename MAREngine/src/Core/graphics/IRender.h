@@ -137,7 +137,23 @@ namespace marengine {
 
     };
 
+    class FRenderContext;
+
     class IRenderResourceFactory : public IRenderFactory {
+    public:
+
+        virtual void passRenderContext(FRenderContext* pRenderContext) = 0;
+
+    };
+
+    class FRenderResourceFactory : public IRenderResourceFactory {
+    public:
+
+        void passRenderContext(FRenderContext* pRenderContext) final { p_pRenderContext = pRenderContext; }
+
+    protected:
+
+        FRenderContext* p_pRenderContext{ nullptr };
 
     };
 
