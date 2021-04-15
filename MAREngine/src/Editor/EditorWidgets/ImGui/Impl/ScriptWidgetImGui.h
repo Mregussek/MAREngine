@@ -42,12 +42,12 @@ namespace marengine {
         void updateFrame() override;
 
         void setEditorTitle(std::string newTitle);
-        void setEditorCode(std::string sourceCode);
+        void setEditorCode(const std::string& sourceCode);
         void setPathToScript(std::string pathToScript);
 
         std::string getEditorSourceCode() const;
-        std::string getDefaultEditorSourceCode() const;
-        std::string getDefaultEditorTitle() const;
+        static std::string getDefaultEditorSourceCode() ;
+        static std::string getDefaultEditorTitle() ;
 
         bool isEditorCurrentlyUsed() const;
 
@@ -55,7 +55,6 @@ namespace marengine {
 
         void displayMainMenuBar();
         void editorRender();
-        void definePythonLanguage();
 
 
         TextEditor::LanguageDefinition m_languageDefinition;

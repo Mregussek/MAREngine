@@ -30,7 +30,8 @@ namespace marengine {
 
 
     void FFilesystemPopUpImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
-        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pSceneManagerEditor =
+                serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
     }
 
     void FFilesystemPopUpImGuiWidget::openWidget(const std::string& widgetName) const {
@@ -40,7 +41,8 @@ namespace marengine {
     void FFilesystemPopUpImGuiWidget::displaySaveWidget(const std::string &widgetName,
                                                         const std::string &extensions,
                                                         CallbackFunc callback) {
-        const bool userSelectedFile = displayWidget(widgetName, extensions, DialogMode::SAVE);
+        const bool userSelectedFile =
+                displayWidget(widgetName, extensions, DialogMode::SAVE);
         if (userSelectedFile) {
             callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
         }
@@ -49,16 +51,20 @@ namespace marengine {
     void FFilesystemPopUpImGuiWidget::displayOpenWidget(const std::string &widgetName,
                                                         const std::string &extensions,
                                                         CallbackFunc callback) {
-        const bool userSelectedFile = displayWidget(widgetName, extensions, DialogMode::OPEN);
+        const bool userSelectedFile =
+                displayWidget(widgetName, extensions, DialogMode::OPEN);
         if (userSelectedFile) {
             callback(m_fileDialog.selected_path, m_fileDialog.selected_fn);
         }
     }
 
-    void FFilesystemPopUpImGuiWidget::displaySaveSceneWidget(const std::string& widgetName, const std::string& extensions) {
-        const bool userSelectedFile = displayWidget(widgetName, extensions, DialogMode::OPEN);
+    void FFilesystemPopUpImGuiWidget::displaySaveSceneWidget(const std::string& widgetName,
+                                                             const std::string& extensions) {
+        const bool userSelectedFile =
+                displayWidget(widgetName, extensions, DialogMode::SAVE);
         if (userSelectedFile) {
-            FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(), m_pSceneManagerEditor->getScene());
+            FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(),
+                                              m_pSceneManagerEditor->getScene());
         }
     }
 

@@ -25,6 +25,9 @@
 #include "../ImGuiEditorServiceLocator.h"
 #include "MainMenuBarImGuiWidget.h"
 #include "FilesystemPopUpWidgetImGui.h"
+#include "../../../../Core/ecs/Scene.h"
+#include "../../../../ProjectManager.h"
+#include "../../../../MAREngine.h"
 
 
 namespace marengine {
@@ -75,35 +78,29 @@ namespace marengine {
             m_saveSceneDisplay = false;
         }
 
-        auto newSceneCallback = [](const std::string& path, const std::string& filename) {
-            //Scene* newScene = Scene::createEmptyScene(filename);
-            //FSceneSerializer::saveSceneToFile(path.c_str(), newScene);
-            //delete newScene;
-
-            //ProjectManager::Instance->addNewSceneToCurrentProject(filename);
-
-            //WEntityWidgetPanel::Instance->reset();
-            //WScriptIDE::Instance->reset();
-
-            //MAREngine::Instance->setRestart();
-        };
-
         auto openSceneCallback = [](const std::string& path, const std::string& filename) {
-            //ProjectManager::Instance->setNewSceneToLoad(filename);
-
-            //WEntityWidgetPanel::Instance->reset();
-            //WScriptIDE::Instance->reset();
-
-            //MAREngine::Instance->setRestart();
+            // TODO: implement displayOpenSceneWidget(), FProjectManager::retrieveProjectInfo is needed
+            // we don't need special method as it does not operate on any important variable
+            FProjectManager::retrieveProjectInfo(path, filename);
+            FEngineState::setRestart();
         };
 
-        m_pFilesystem->displaySaveWidget(newSceneName, extMarscene, newSceneCallback);
+        auto newSceneCallback = [](const std::string& path, const std::string& filename) {
+            // TODO: implement displayNewSceneWidget(), FProjectManager::fillProjectInfo is needed
+            //Scene* pScene{ Scene::createEmptyScene("NewScene") };
+            //FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(),
+            //                                  pScene);
+            //delete pScene;
+            //FEngineState::setRestart();
+            //FProjectManager::fillProjectInfo(m_fileDialog.selected_path, m_fileDialog.selected_fn);
+        };
+
         m_pFilesystem->displayOpenWidget(openSceneName, extMarscene, openSceneCallback);
+        m_pFilesystem->displaySaveWidget(newSceneName, extMarscene, newSceneCallback);
         m_pFilesystem->displaySaveSceneWidget(saveSceneName, extMarscene);
     }
 
     void FMainMenuBarWidgetImGui::displaySceneManagementTab() {
-        // TODO: add scene filesystem management options to main menu bar
         if (ImGui::BeginMenu("Scene")) {
             if (ImGui::MenuItem("New Scene")) {
                 m_newSceneDisplay = true;
@@ -123,7 +120,7 @@ namespace marengine {
     }
 
     void FMainMenuBarWidgetImGui::displayEntitiesManagementTab() {
-        // TODO: add entities management options to main menu bar
+        // TODO: Add entities management options to main menu bar (like load .obj file / copy entity)
         if (ImGui::BeginMenu("Entities")) {
             if (ImGui::MenuItem("Load external .obj file")) { }
             if (ImGui::MenuItem("Copy selected entity")) { }
@@ -133,7 +130,7 @@ namespace marengine {
     }
 
     void FMainMenuBarWidgetImGui::displaySettingsTab() {
-        // TODO: add settings menu options
+        // TODO: Add more settings to MainMenuBar
         if (ImGui::BeginMenu("Settings")) {
             if (ImGui::MenuItem("Window Settings")) { m_windowSettingsDisplay = true; }
 
@@ -151,14 +148,15 @@ namespace marengine {
     }
 
     static bool displayInfoAboutEngineAuthor() {
+        // TODO: Implement better info about engine and author window
         ImGui::Begin("About");
 
-        const char* aboutEngine =
+        const char* const aboutEngine =
                 "MAREngine is an educational 3D game engine written in modern C++.\n"
                 "It is created with a dream of easy and intuitive interface for everyone.\n"
                 "You can download MAREngine completely freely and release your creativity - create games you imagine.";
 
-        const char* aboutAuthor =
+        const char* const aboutAuthor =
                 "Mateusz Rzeczyca is C++ / Python programmer and enthusiast of Augmented Reality and Machine Learning.\n"
                 "\n"
                 "I am delighted that you are using MAREngine! Thank you!";
@@ -181,6 +179,7 @@ namespace marengine {
     }
 
     static bool displayEngineInstructions() {
+        // TODO: Implement instructions about engine window
         ImGui::Begin("Instructions");
 
         if (ImGui::Button("Close")) {

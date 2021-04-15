@@ -56,7 +56,7 @@ namespace marengine {
         }
 
         const auto& renderableComponent{ entity.getComponent<CRenderable>() };
-        const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
+        const FMeshProxy*  pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
         if(pMesh == nullptr) {
             return false;
         }

@@ -36,14 +36,14 @@ namespace marengine {
 	class MAREngine {
 	public:
 
-		MAR_NO_DISCARD bool shouldEngineRestart() const;
+		MAR_NO_DISCARD bool isGoingToRestart() const;
 		MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
 		MAR_NO_DISCARD const std::string& getWindowName() const;
 
 		void setRestart();
 		void setNoRestart();
 
-		void initAtStartup(std::string projectName, std::string sceneToLoadAtStartup);
+		void initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup);
 
 		void buildAndRun(IMAREngineBuilder* pBuilder);
 
@@ -52,6 +52,22 @@ namespace marengine {
         FProjectManager m_projectManager;
 
 		bool m_shouldRestart{ false };
+
+	};
+
+
+	class FEngineState {
+	public:
+
+	    static void passEngine(MAREngine* pEngine);
+
+	    static void setRestart();
+	    static void setNoRestart();
+	    MAR_NO_DISCARD static bool isGoingToRestart();
+
+	private:
+
+	    static MAREngine* s_pEngine;
 
 	};
 

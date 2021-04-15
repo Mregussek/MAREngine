@@ -29,18 +29,21 @@
 namespace marengine {
 
 
-    void MAREngine::initAtStartup(std::string projectName, std::string sceneToLoadAtStartup) {
+    void MAREngine::initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup) {
         static bool initializedAtStartup{ false };
         if(initializedAtStartup) {
             return;
         }
 
         FLogger::init();
-        FProjectManager::init(&m_projectManager, std::move(projectName), std::move(sceneToLoadAtStartup));
+        FProjectManager::init(&m_projectManager, std::move(projectName),
+                              sceneToLoadAtStartup);
 		FPythonInterpreter::init();
 
         initializedAtStartup = true;
         setRestart();
+
+        FEngineState::passEngine(this);
     }
 
     void MAREngine::buildAndRun(IMAREngineBuilder* pBuilder) {
@@ -73,7 +76,7 @@ namespace marengine {
         layerStack.pushLayer(sceneLayer);
         layerStack.pushLayer(editorLayer);
 
-        while(!window->isGoingToClose() && !shouldEngineRestart()) {
+        while(!window->isGoingToClose() && !isGoingToRestart()) {
             layerStack.begin();
             layerStack.update();
             layerStack.end();
@@ -85,7 +88,7 @@ namespace marengine {
         window->terminateLibrary();
     }
 
-	bool MAREngine::shouldEngineRestart() const {
+	bool MAREngine::isGoingToRestart() const {
 		return m_shouldRestart;
 	}
 
@@ -104,6 +107,31 @@ namespace marengine {
 	void MAREngine::setNoRestart() {
 		m_shouldRestart = false; 
 	}
+
+
+
+	MAREngine* FEngineState::s_pEngine{ nullptr };
+
+    void FEngineState::passEngine(MAREngine* pEngine) {
+        if(s_pEngine == nullptr) {
+            s_pEngine = pEngine;
+        }
+        else {
+            MARLOG_WARN(ELoggerType::NORMAL, "Engine instance has been already set!");
+        }
+    }
+
+    void FEngineState::setRestart() {
+        s_pEngine->setRestart();
+    }
+
+    void FEngineState::setNoRestart() {
+        s_pEngine->setNoRestart();
+    }
+
+    bool FEngineState::isGoingToRestart() {
+        return s_pEngine->isGoingToRestart();
+    }
 
 
 }

@@ -26,9 +26,11 @@
 
 namespace marengine {
 
+    static void definePythonLanguage(TextEditor::LanguageDefinition& langDefinition);
+
 
     void FScriptWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
-        definePythonLanguage();
+        definePythonLanguage(m_languageDefinition);
         editor.SetLanguageDefinition(m_languageDefinition);
 
         reset();
@@ -68,18 +70,18 @@ namespace marengine {
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("New", "Ctrl-N")) {
-                    // TODO: return back create new editor script widget
+                    // TODO: Add "Create New script" option
                     //WScriptIDEFilesystemWidgets::Instance->openCreateNewEditorScriptWidget();
                 }
                 if (ImGui::MenuItem("Open", "Ctrl-O")) {
-                    // TODO: return back open editor script widget
+                    // TODO: Add "Open script" option
                 }
                 if (ImGui::MenuItem("Save", "Ctrl-S")) {
-                    // TODO: return back save editor script widget
+                    // TODO: Add "Save script" option
                     //FFileManager::saveAsFile(editor.GetText(), m_pathToScript.c_str());
                 }
                 if (ImGui::MenuItem("Save as")) {
-                    // TODO: return back save as editor script widget
+                    // TODO: Add "Save as" script option
                     //WScriptIDEFilesystemWidgets::Instance->openSaveAsEditorScriptWidget();
                 }
 
@@ -87,7 +89,7 @@ namespace marengine {
             }
 
             if (ImGui::BeginMenu("Edit")) {
-                const bool ro = editor.IsReadOnly();
+                const bool ro{ editor.IsReadOnly() };
 
                 if (ImGui::MenuItem("Read-only mode", nullptr, ro)) { editor.SetReadOnly(ro); }
 
@@ -128,8 +130,8 @@ namespace marengine {
         m_title = std::move(newTitle);
     }
 
-    void FScriptWidgetImGui::setEditorCode(std::string sourceCode) {
-        editor.SetText(std::move(sourceCode));
+    void FScriptWidgetImGui::setEditorCode(const std::string& sourceCode) {
+        editor.SetText(sourceCode);
     }
 
     void FScriptWidgetImGui::setPathToScript(std::string pathToScript) {
@@ -140,7 +142,7 @@ namespace marengine {
         return editor.GetText();
     }
 
-    std::string FScriptWidgetImGui::getDefaultEditorSourceCode() const {
+    std::string FScriptWidgetImGui::getDefaultEditorSourceCode() {
         static const std::string defaultScript =
                 "import MAREnginePy as mar\n"
                 "\n"
@@ -157,57 +159,63 @@ namespace marengine {
         return defaultScript;
     }
 
-    std::string FScriptWidgetImGui::getDefaultEditorTitle() const {
+    std::string FScriptWidgetImGui::getDefaultEditorTitle() {
         static const std::string defaultTitle{ "EmptyModule" };
         return defaultTitle;
     }
 
     bool FScriptWidgetImGui::isEditorCurrentlyUsed() const {
-        return (m_title == "") && (editor.GetText() == "");
-    };
+        return m_title.empty() && editor.GetText().empty();
+    }
 
-    void FScriptWidgetImGui::definePythonLanguage() {
-        const char* const keywords[] = {
+
+    void definePythonLanguage(TextEditor::LanguageDefinition& langDefinition) {
+        const std::array<std::string, 35> keywords{
                 "False", "None", "True", "and", "as", "assert", "async", "await", "break",
-                "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "or", "global", "if", "import",
-                "in", "is", "lambda", "nonlocal", "not", "pass", "raise", "return", "try", "while", "with", "yield"
+                "class", "continue", "def", "del", "elif", "else", "except", "finally", "for",
+                "from", "or", "global", "if", "import", "in", "is", "lambda", "nonlocal", "not",
+                "pass", "raise", "return", "try", "while", "with", "yield"
+        };
+        const std::array<std::string, 37> identifiers {
+            "transform", "center", "angles", "scale", "general_scale",
+            "light", "camera", "color", "trig", "vec3", "vec4", "mat4",
+            "sine", "cosine", "tangent", "toRadians", "self", "toDegrees", "mar",
+            "p_fov", "p_aspectRatio", "p_near",	"p_far", "o_left", "o_right", "o_top",
+            "o_bottom", "o_near", "o_far", "ambient","diffuse",	"specular",	"constant",
+            "linear","quadratic","shininess","texture"
         };
 
-        for (const auto& k : keywords) { m_languageDefinition.mKeywords.insert(k); }
-
-        const char* const identifiers[] = {
-                "transform", "center", "angles", "scale", "general_scale",
-                "light", "camera", "color", "trig", "vec3", "vec4", "mat4",
-                "sine", "cosine", "tangent", "toRadians", "self", "toDegrees", "mar",
-                "p_fov", "p_aspectRatio", "p_near",	"p_far", "o_left", "o_right", "o_top",
-                "o_bottom", "o_near", "o_far", "ambient","diffuse",	"specular",	"constant",
-                "linear","quadratic","shininess","texture"
-        };
-
-        for (const auto& k : identifiers) {
-            TextEditor::Identifier id;
-            id.mDeclaration = "Built-in function";
-            m_languageDefinition.mIdentifiers.insert(std::make_pair(std::string(k), id));
+        for(const std::string& keyword : keywords) {
+            langDefinition.mKeywords.insert(keyword);
         }
 
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[ \\t]*#[ \\t]*[a-zA-Z_]+", TextEditor::PaletteIndex::Preprocessor));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("L?\\\"(\\\\.|[^\\\"])*\\\"", TextEditor::PaletteIndex::String));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("\\'\\\\?[^\\']\\'", TextEditor::PaletteIndex::CharLiteral));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", TextEditor::PaletteIndex::Number));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", TextEditor::PaletteIndex::Number));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("0[0-7]+[Uu]?[lL]?[lL]?", TextEditor::PaletteIndex::Number));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", TextEditor::PaletteIndex::Number));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", TextEditor::PaletteIndex::Identifier));
-        m_languageDefinition.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[\\[\\]\\{\\}\\!\\%\\^\\&\\*\\(\\)\\-\\+\\=\\~\\|\\<\\>\\?\\/\\;\\,\\.]", TextEditor::PaletteIndex::Punctuation));
+        for (const std::string& identifier : identifiers) {
+            TextEditor::Identifier id;
+            id.mDeclaration = "Built-in function";
+            langDefinition.mIdentifiers.insert(std::make_pair(identifier, id));
+        }
 
-        m_languageDefinition.mCommentStart = "/*";
-        m_languageDefinition.mCommentEnd = "*/";
-        m_languageDefinition.mSingleLineComment = "//";
+        typedef TextEditor::PaletteIndex PalIndex;
+        auto& tokenRegexString{ langDefinition.mTokenRegexStrings };
 
-        m_languageDefinition.mCaseSensitive = true;
-        m_languageDefinition.mAutoIndentation = true;
+        tokenRegexString.emplace_back("[ \\t]*#[ \\t]*[a-zA-Z_]+", PalIndex::Preprocessor);
+        tokenRegexString.emplace_back(R"(L?\"(\\.|[^\"])*\")", PalIndex::String);
+        tokenRegexString.emplace_back(R"(\'\\?[^\']\')", PalIndex::CharLiteral);
+        tokenRegexString.emplace_back("[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)([eE][+-]?[0-9]+)?[fF]?", PalIndex::Number);
+        tokenRegexString.emplace_back("[+-]?[0-9]+[Uu]?[lL]?[lL]?", PalIndex::Number);
+        tokenRegexString.emplace_back("0[0-7]+[Uu]?[lL]?[lL]?", PalIndex::Number);
+        tokenRegexString.emplace_back("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", PalIndex::Number);
+        tokenRegexString.emplace_back("[a-zA-Z_][a-zA-Z0-9_]*", PalIndex::Identifier);
+        tokenRegexString.emplace_back(R"(([\[\]\{\}\!\%\^\&\*\(\)\-\+\=\~\|\<\>\?\/\;\,\.]))", PalIndex::Punctuation);
 
-        m_languageDefinition.mName = "Python";
+        langDefinition.mCommentStart = "/*";
+        langDefinition.mCommentEnd = "*/";
+        langDefinition.mSingleLineComment = "//";
+
+        langDefinition.mCaseSensitive = true;
+        langDefinition.mAutoIndentation = true;
+
+        langDefinition.mName = "Python";
     }
 
 

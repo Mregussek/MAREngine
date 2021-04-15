@@ -44,16 +44,17 @@ namespace marengine {
 
         void openWidget(const std::string& widgetName) const;
 
-        void displaySaveWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
-
-        void displayOpenWidget(const std::string& widgetName, const std::string& extensions, CallbackFunc callback);
+        void displaySaveWidget(const std::string& widgetName, const std::string& extensions,
+                               CallbackFunc callback);
+        void displayOpenWidget(const std::string& widgetName, const std::string& extensions,
+                               CallbackFunc callback);
 
         void displaySaveSceneWidget(const std::string& widgetName, const std::string& extensions);
 
-
     private:
 
-        bool displayWidget(const std::string& widgetName, const std::string& extensions, DialogMode dialogMode);
+        bool displayWidget(const std::string& widgetName, const std::string& extensions,
+                           DialogMode dialogMode);
 
 
         imgui_addons::ImGuiFileBrowser m_fileDialog;

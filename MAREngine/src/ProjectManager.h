@@ -49,14 +49,16 @@ namespace marengine {
 
 	
 	class FProjectManager {
+
+	    friend class MAREngine;
+
 	public:
 
-	    static void init(FProjectManager* pProjectManagerInstance, std::string newProjectName,
-                         std::string newSceneToLoadAtStartup);
+		static void addNewSceneToCurrentProject(const std::string& newSceneFilenameToProject);
+		static void setNewSceneToLoad(const std::string& sceneFilenameToLoad);
 
-		static void addNewSceneToCurrentProject(std::string newSceneFilenameToProject);
-
-		static void setNewSceneToLoad(std::string sceneFilenameToLoad);
+		static void fillProjectInfo(const std::string& scenePath, const std::string& sceneFilename);
+		static void retrieveProjectInfo(const std::string& scenePath, const std::string& sceneFilename);
 
 		MAR_NO_DISCARD static const FProjectInfo& getProjectInfo();
 
@@ -69,8 +71,11 @@ namespace marengine {
 
 	private:
 
+        static void init(FProjectManager* pProjectManagerInstance, std::string newProjectName,
+                         const std::string& newSceneToLoadAtStartup);
+
 	    static void setProjectName(std::string newProjectName);
-	    static void setSceneToLoadAtStartup(std::string newSceneToLoad);
+	    static void setSceneToLoadAtStartup(const std::string& newSceneToLoad);
 	    static void setAbsolutePath();
         static void setWindowName();
 

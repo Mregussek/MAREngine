@@ -28,6 +28,7 @@
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
 #include "../../../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../../../Core/filesystem/FileManager.h"
 
 
 namespace marengine {
@@ -226,9 +227,9 @@ namespace marengine {
         ImGui::Text("Current script: %s", cPythonScript.scriptsPath.c_str());
 
         if (ImGui::Button("*** Open in Script Editor")) {
-            // TODO: add open in script editor option
+            // TODO: Add openPythonScript window to Inspector
             //std::string sourceCode;
-            //FFileManager::loadFile(sourceCode, pythonScriptComponent.scriptsPath.c_str());
+            //FFileManager::loadFile(sourceCode, cPythonScript.scriptsPath.c_str());
             // TODO! restore filename from path
             //const std::string restoredFilename{ pythonScriptComponent.scriptsPath };
             //WScriptIDE::Instance->setEditorTitle(restoredFilename);
