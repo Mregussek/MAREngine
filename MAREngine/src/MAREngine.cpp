@@ -41,14 +41,23 @@ namespace marengine {
 		FPythonInterpreter::init();
 
         initializedAtStartup = true;
-        setRestart();
-
         FEngineState::passEngine(this);
     }
 
-    void MAREngine::buildAndRun(IMAREngineBuilder* pBuilder) {
-        setNoRestart();
+    void MAREngine::buildAndRun() {
+        setRestart();
+        while(isGoingToRestart()) {
+            FMAREngineBuilder<
+                    FWindowGLFWImGui,
+                    FRenderLayerOpenGL,
+                    FEditorLayerImGui
+            > builder;
+            setNoRestart();
+            run(&builder);
+        }
+    }
 
+    void MAREngine::run(IMAREngineBuilder* pBuilder) const {
         FWindow* window = pBuilder->createWindow();
         FRenderLayer* renderLayer = pBuilder->createRenderLayer();
         FSceneLayer* sceneLayer = pBuilder->createSceneLayer();

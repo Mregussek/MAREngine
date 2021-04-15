@@ -39,6 +39,8 @@ namespace marengine {
         void updateSceneMeshData(Scene* pScene);
         void updateEntityMeshData(const Entity& entity) const;
 
+        void reset();
+
         MAR_NO_DISCARD FMeshStorage* getStorage() const;
         MAR_NO_DISCARD FMeshFactory* getFactory() const;
 

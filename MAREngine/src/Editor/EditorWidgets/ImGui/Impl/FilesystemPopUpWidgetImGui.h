@@ -29,9 +29,17 @@
 
 namespace marengine {
 
-    class FSceneManagerEditor;
     class FImGuiEditorServiceLocator;
 
+    struct FFilesystemDialogInfo {
+        const std::string* pPath{ nullptr };
+        const std::string* pFilename{ nullptr };
+        bool userSelectedFile{ false };
+
+        MAR_NO_DISCARD bool isValid() const {
+            return pPath != nullptr || pFilename != nullptr || userSelectedFile != false;
+        }
+    };
 
     class FFilesystemPopUpImGuiWidget {
 
@@ -49,7 +57,11 @@ namespace marengine {
         void displayOpenWidget(const std::string& widgetName, const std::string& extensions,
                                CallbackFunc callback);
 
-        void displaySaveSceneWidget(const std::string& widgetName, const std::string& extensions);
+        MAR_NO_DISCARD FFilesystemDialogInfo displaySaveWidget(const std::string& widgetName,
+                                                               const std::string& extensions);
+
+        MAR_NO_DISCARD FFilesystemDialogInfo displayOpenWidget(const std::string& widgetName,
+                                                               const std::string& extensions);
 
     private:
 
@@ -58,7 +70,6 @@ namespace marengine {
 
 
         imgui_addons::ImGuiFileBrowser m_fileDialog;
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
 
     };
 

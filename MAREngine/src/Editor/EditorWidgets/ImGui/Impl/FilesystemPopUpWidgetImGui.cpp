@@ -22,17 +22,10 @@
 
 #include "FilesystemPopUpWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
-#include "../../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../../Core/filesystem/SceneSerializer.h"
 
 
 namespace marengine {
 
-
-    void FFilesystemPopUpImGuiWidget::create(FImGuiEditorServiceLocator* serviceLocator) {
-        m_pSceneManagerEditor =
-                serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
-    }
 
     void FFilesystemPopUpImGuiWidget::openWidget(const std::string& widgetName) const {
         ImGui::OpenPopup(widgetName.c_str());
@@ -58,14 +51,36 @@ namespace marengine {
         }
     }
 
-    void FFilesystemPopUpImGuiWidget::displaySaveSceneWidget(const std::string& widgetName,
-                                                             const std::string& extensions) {
+    FFilesystemDialogInfo FFilesystemPopUpImGuiWidget::displayOpenWidget(const std::string& widgetName,
+                                                                         const std::string& extensions) {
+        const bool userSelectedFile =
+                displayWidget(widgetName, extensions, DialogMode::OPEN);
+
+        if (userSelectedFile) {
+            FFilesystemDialogInfo dialogInfo;
+            dialogInfo.pFilename = &m_fileDialog.selected_fn;
+            dialogInfo.pPath = &m_fileDialog.selected_path;
+            dialogInfo.userSelectedFile = true;
+            return dialogInfo;
+        }
+
+        return FFilesystemDialogInfo();
+    }
+
+    FFilesystemDialogInfo FFilesystemPopUpImGuiWidget::displaySaveWidget(const std::string& widgetName,
+                                                                         const std::string& extensions) {
         const bool userSelectedFile =
                 displayWidget(widgetName, extensions, DialogMode::SAVE);
+
         if (userSelectedFile) {
-            FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(),
-                                              m_pSceneManagerEditor->getScene());
+            FFilesystemDialogInfo dialogInfo;
+            dialogInfo.pFilename = &m_fileDialog.selected_fn;
+            dialogInfo.pPath = &m_fileDialog.selected_path;
+            dialogInfo.userSelectedFile = true;
+            return dialogInfo;
         }
+
+        return FFilesystemDialogInfo();
     }
 
     bool FFilesystemPopUpImGuiWidget::displayWidget(const std::string &widgetName,

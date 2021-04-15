@@ -63,7 +63,6 @@ namespace marengine {
         mainMenuBar->create(this);
         sceneHierarchy->create(this);
         envProperties->create(this);
-        filesystem->create(this);
 	}
 
 	void FImGuiEditorServiceLocator::close() {

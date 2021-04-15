@@ -69,7 +69,11 @@ namespace marengine {
     }
 
     void FRenderLayerOpenGL::close() {
-
+        p_renderManager.reset();
+        p_statistics.reset();
+        p_batchManager.reset();
+        p_meshManager.reset();
+        m_context.close();
     }
 
 

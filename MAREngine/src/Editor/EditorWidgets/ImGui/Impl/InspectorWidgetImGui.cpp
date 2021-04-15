@@ -22,6 +22,7 @@
 
 #include "InspectorWidgetImGui.h"
 #include "CommonTypeHandler.h"
+#include "ScriptWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
 #include "Window/IWindow.h" // isMousePressed()
@@ -29,12 +30,14 @@
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
 #include "../../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../../Core/filesystem/FileManager.h"
+#include "../../../../ProjectManager.h"
 
 
 namespace marengine {
 
 
     void FInspectorWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pScriptWidget = serviceLocator->retrieve<FScriptWidgetImGui>();
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
     }
@@ -216,6 +219,10 @@ namespace marengine {
         }
     }
 
+    static std::string getFilename(const std::string& path) {
+        return path.substr(path.find_last_of("/\\") + 1);
+    }
+
     template<>
     void FInspectorWidgetImGui::displayComponentPanel<CPythonScript>() {
         if (ImGui::MenuItem("Remove Script")) {
@@ -227,14 +234,14 @@ namespace marengine {
         ImGui::Text("Current script: %s", cPythonScript.scriptsPath.c_str());
 
         if (ImGui::Button("*** Open in Script Editor")) {
-            // TODO: Add openPythonScript window to Inspector
-            //std::string sourceCode;
-            //FFileManager::loadFile(sourceCode, cPythonScript.scriptsPath.c_str());
-            // TODO! restore filename from path
-            //const std::string restoredFilename{ pythonScriptComponent.scriptsPath };
-            //WScriptIDE::Instance->setEditorTitle(restoredFilename);
-            //WScriptIDE::Instance->setEditorCode(sourceCode);
-            //WScriptIDE::Instance->setPathToScript(pythonScriptComponent.scriptsPath);
+            // remember that is gets relative path from .exe file and saves it
+            std::string sourceCode;
+            const std::string scriptRelativePath =
+                    FProjectManager::getAssetsPath() + cPythonScript.scriptsPath;
+            FFileManager::loadFile(sourceCode, scriptRelativePath.c_str());
+            m_pScriptWidget->setEditorTitle(getFilename(cPythonScript.scriptsPath));
+            m_pScriptWidget->setEditorCode(sourceCode);
+            m_pScriptWidget->setPathToScript(scriptRelativePath);
         }
         if (ImGui::Button("*** Create new file and assign it as script")) {
             m_newScriptWindow = true;
@@ -242,6 +249,10 @@ namespace marengine {
         if (ImGui::Button("*** Assign existing script to entity")) {
             m_assignScriptWindow = true;
         }
+
+        auto newScriptCallback = [](const std::string& path, const std::string& filename) {
+
+        };
     }
 
     template<>

@@ -33,13 +33,7 @@ int main() {
 
     MAREngine engine;
     engine.initAtStartup(projectName, sceneName);
-
-    FMAREngineBuilder<
-    FWindowGLFWImGui,
-    FRenderLayerOpenGL,
-    FEditorLayerImGui
-    > builder;
-    engine.buildAndRun((IMAREngineBuilder*)&builder);
+    engine.buildAndRun();
 
     return 0;
 }

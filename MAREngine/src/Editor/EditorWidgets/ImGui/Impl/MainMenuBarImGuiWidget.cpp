@@ -28,6 +28,8 @@
 #include "../../../../Core/ecs/Scene.h"
 #include "../../../../ProjectManager.h"
 #include "../../../../MAREngine.h"
+#include "../../../../Core/ecs/SceneManagerEditor.h"
+#include "../../../../Core/filesystem/SceneSerializer.h"
 
 
 namespace marengine {
@@ -40,6 +42,8 @@ namespace marengine {
 
 
     void FMainMenuBarWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pSceneManagerEditor =
+                serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pFilesystem = serviceLocator->retrieve<FFilesystemPopUpImGuiWidget>();
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
         setDefaultMAREngineDarkTheme();
@@ -87,17 +91,23 @@ namespace marengine {
 
         auto newSceneCallback = [](const std::string& path, const std::string& filename) {
             // TODO: implement displayNewSceneWidget(), FProjectManager::fillProjectInfo is needed
-            //Scene* pScene{ Scene::createEmptyScene("NewScene") };
-            //FSceneSerializer::saveSceneToFile(m_fileDialog.selected_path.c_str(),
-            //                                  pScene);
-            //delete pScene;
-            //FEngineState::setRestart();
-            //FProjectManager::fillProjectInfo(m_fileDialog.selected_path, m_fileDialog.selected_fn);
+            Scene* pScene{ Scene::createEmptyScene("NewScene") };
+            FSceneSerializer::saveSceneToFile(path.c_str(),
+                                              pScene);
+            delete pScene;
+            FEngineState::setRestart();
+            FProjectManager::fillProjectInfo(path, filename);
         };
 
         m_pFilesystem->displayOpenWidget(openSceneName, extMarscene, openSceneCallback);
         m_pFilesystem->displaySaveWidget(newSceneName, extMarscene, newSceneCallback);
-        m_pFilesystem->displaySaveSceneWidget(saveSceneName, extMarscene);
+
+        const FFilesystemDialogInfo dialogInfo =
+                m_pFilesystem->displaySaveWidget(saveSceneName, extMarscene);
+        if(dialogInfo.isValid()) {
+            FSceneSerializer::saveSceneToFile(dialogInfo.pPath->c_str(),
+                                              m_pSceneManagerEditor->getScene());
+        }
     }
 
     void FMainMenuBarWidgetImGui::displaySceneManagementTab() {

@@ -45,9 +45,12 @@ namespace marengine {
 
 		void initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup);
 
-		void buildAndRun(IMAREngineBuilder* pBuilder);
+		void buildAndRun();
 
 	private:
+
+	    void run(IMAREngineBuilder* pBuilder) const;
+
 
         FProjectManager m_projectManager;
 
