@@ -37,7 +37,7 @@ namespace marengine {
 
         static std::string changeSlashesToDots(std::string script);
 
-        static std::string getModuleFromPath(std::string script);
+        static std::string getModuleFromPath(const std::string& script);
 
     };
 

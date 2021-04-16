@@ -21,6 +21,7 @@
 
 
 #include "ProjectManager.h"
+#include "Core/filesystem/FileManager.h"
 
 
 namespace marengine {
@@ -67,17 +68,11 @@ namespace marengine {
         }
     }
 
-    static std::string getAbsolutePath(const std::string& relativePath) {
-        std::string absolute{ std::filesystem::absolute(relativePath).u8string() };
-        std::replace(absolute.begin(), absolute.end(), '\\', '/');
-        return absolute;
-    }
-
     void FProjectManager::setAbsolutePath() {
         auto& absolutePath{ s_pInstance->m_projectInfo.absolutePath };
         auto& sceneToLoadAtStartup{ s_pInstance->m_projectInfo.sceneToLoadAtStartup };
 
-        absolutePath = getAbsolutePath(sceneToLoadAtStartup);
+        absolutePath = FFileManager::getAbsolutePath(sceneToLoadAtStartup);
         const std::string sceneToLoadCopy{ sceneToLoadAtStartup };
         sceneToLoadAtStartup = absolutePath;
         eraseSubstring(absolutePath, sceneToLoadCopy);
@@ -106,6 +101,10 @@ namespace marengine {
 
 	const FProjectInfo& FProjectManager::getProjectInfo() {
 	    return s_pInstance->m_projectInfo;
+	}
+
+	const std::string& FProjectManager::getAbsolutePath() {
+	    return s_pInstance->m_projectInfo.absolutePath;
 	}
 
 	const std::string& FProjectManager::getProjectName() {

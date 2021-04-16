@@ -50,14 +50,6 @@ namespace marengine {
         void displayAboutTab();
 
 
-        std::string newSceneName{"New Scene Widget" };
-        bool m_newSceneDisplay{ false };
-        std::string openSceneName{ "Open Scene Widget" };
-        bool m_openSceneDisplay{ false };
-        std::string saveSceneName{ "Save Scene Widget" };
-        bool m_saveSceneDisplay{ false };
-        std::string extMarscene{ ".json" };
-
         FFilesystemPopUpImGuiWidget* m_pFilesystem{ nullptr };
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
         FWindow* m_pWindow{ nullptr };
@@ -65,6 +57,10 @@ namespace marengine {
         bool m_infoAboutAuthorDisplay{ false };
         bool m_infoAboutEngineDisplay{ false };
         bool m_windowSettingsDisplay{ false };
+
+        bool m_newSceneDisplay{ false };
+        bool m_openSceneDisplay{ false };
+        bool m_saveSceneDisplay{ false };
 
     };
 

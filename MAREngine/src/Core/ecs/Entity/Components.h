@@ -107,7 +107,7 @@ namespace marengine {
 
     struct CPythonScript {
         PythonScript pythonScript;
-        std::string scriptsPath{ "empty" };
+        std::string scriptsPath{};
     };
 
 

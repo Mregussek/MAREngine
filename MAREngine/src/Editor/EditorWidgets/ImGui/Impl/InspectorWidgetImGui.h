@@ -35,6 +35,7 @@ namespace marengine {
     class FImGuiEditorServiceLocator;
     class FWindow;
     class FScriptWidgetImGui;
+    class FFilesystemPopUpImGuiWidget;
 
 
     class FInspectorWidgetImGui : public FInspectorEditorWidget {
@@ -58,8 +59,6 @@ namespace marengine {
         void displayChildrenPopMenu() const;
         void displayComponentPopMenu() const;
 
-        void handleInputs();
-
         template<typename TComponent>
         void handle(const char* componentName);
 
@@ -70,6 +69,7 @@ namespace marengine {
         const Entity* m_inspectedEntity{ nullptr };
         FScriptWidgetImGui* m_pScriptWidget{ nullptr };
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
+        FFilesystemPopUpImGuiWidget* m_pFilesystem{ nullptr };
         FWindow* m_pWindow{ nullptr };
 
         bool m_newScriptWindow{ false };

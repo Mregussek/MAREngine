@@ -50,6 +50,11 @@ namespace marengine {
     }
 
     void FMainMenuBarWidgetImGui::updateFrame() {
+        const std::string newSceneName{"New Scene Widget" };
+        const std::string openSceneName{ "Open Scene Widget" };
+        const std::string saveSceneName{ "Save Scene Widget" };
+        const std::string extMarscene{ ".json" };
+
         if (ImGui::BeginMainMenuBar()) {
 
             displaySceneManagementTab();
@@ -92,8 +97,7 @@ namespace marengine {
         auto newSceneCallback = [](const std::string& path, const std::string& filename) {
             // TODO: implement displayNewSceneWidget(), FProjectManager::fillProjectInfo is needed
             Scene* pScene{ Scene::createEmptyScene("NewScene") };
-            FSceneSerializer::saveSceneToFile(path.c_str(),
-                                              pScene);
+            FSceneSerializer::saveSceneToFile(path.c_str(), pScene);
             delete pScene;
             FEngineState::setRestart();
             FProjectManager::fillProjectInfo(path, filename);
@@ -102,8 +106,8 @@ namespace marengine {
         m_pFilesystem->displayOpenWidget(openSceneName, extMarscene, openSceneCallback);
         m_pFilesystem->displaySaveWidget(newSceneName, extMarscene, newSceneCallback);
 
-        const FFilesystemDialogInfo dialogInfo =
-                m_pFilesystem->displaySaveWidget(saveSceneName, extMarscene);
+        const FFilesystemDialogInfo dialogInfo = m_pFilesystem->displaySaveWidget(saveSceneName,
+                                                                                  extMarscene);
         if(dialogInfo.isValid()) {
             FSceneSerializer::saveSceneToFile(dialogInfo.pPath->c_str(),
                                               m_pSceneManagerEditor->getScene());

@@ -52,8 +52,17 @@ namespace marengine {
 		 */
 		static void saveAsFile(const std::string& sourceCode, const char* path);
 
-		// TODO: add docs
+		// TODO: add docs isContainingExtension
 		static bool isContainingExtension(const std::string& path, const std::string& extension);
+
+		// TODO: add docs getAbsolutePath
+		MAR_NO_DISCARD static std::string getAbsolutePath(const std::string& relativePath);
+
+		// TODO: add docs isValidPath
+		MAR_NO_DISCARD static bool isValidPath(const std::string& path);
+
+		MAR_NO_DISCARD static std::string getRelativePath(const std::string& absolutePath,
+                                                          const std::string& path);
 
 	};
 

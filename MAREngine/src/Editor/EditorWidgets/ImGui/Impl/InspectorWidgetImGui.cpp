@@ -23,6 +23,7 @@
 #include "InspectorWidgetImGui.h"
 #include "CommonTypeHandler.h"
 #include "ScriptWidgetImGui.h"
+#include "FilesystemPopUpWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
 #include "Window/IWindow.h" // isMousePressed()
@@ -31,12 +32,14 @@
 #include "../../../../Platform/OpenGL/TextureOpenGL.h"
 #include "../../../../Core/filesystem/FileManager.h"
 #include "../../../../ProjectManager.h"
+#include "../../../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
     void FInspectorWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
+        m_pFilesystem = serviceLocator->retrieve<FFilesystemPopUpImGuiWidget>();
         m_pScriptWidget = serviceLocator->retrieve<FScriptWidgetImGui>();
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
@@ -74,8 +77,6 @@ namespace marengine {
             ImGui::Text("UnknownOption!");
         }
 
-        handleInputs();
-
         ImGui::End();
     }
 
@@ -96,19 +97,6 @@ namespace marengine {
         handle<CTransform>("CTransform");
         handle<CCamera>("CCamera");
         handle<CPointLight>("CPointLight");
-    }
-
-    void FInspectorWidgetImGui::handleInputs() {
-        if (m_newScriptWindow) {
-            // TODO: add support for create and assign script to entity
-            //WEntityFilesystemWidgets::Instance->openCreateAndAssignPythonScriptWidget();
-            //m_newScriptWindow = false;
-        }
-        if (m_assignScriptWindow) {
-            // TODO: add support for assign script to entity
-            //WEntityFilesystemWidgets::Instance->openAssignPythonScriptWidget();
-            //m_assignScriptWindow = false;
-        }
     }
 
     void FInspectorWidgetImGui::popUpMenu() const {
@@ -197,13 +185,13 @@ namespace marengine {
 
         const bool updatedTransform = [&tran]()->bool {
             const bool updatedPosition{
-                    FCommonTypeHandler::drawVectorInputPanel("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f)
+                FCommonTypeHandler::drawVectorInputPanel("Position", tran.position, 0.f, 100.f, -10000.f, 10000.f)
             };
             const bool updatedRotation{
-                    FCommonTypeHandler::drawVectorInputPanel("Rotation", tran.rotation, 0.f, 100.f, 0.f, 10.f)
+                FCommonTypeHandler::drawVectorInputPanel("Rotation", tran.rotation, 0.f, 100.f, 0.f, 10.f)
             };
             const bool updatedScale{
-                    FCommonTypeHandler::drawVectorInputPanel("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f)
+                FCommonTypeHandler::drawVectorInputPanel("Scale", tran.scale, 0.f, 100.f, 0.1f, 200.f)
             };
 
             if (updatedPosition || updatedRotation || updatedScale) {
@@ -223,36 +211,82 @@ namespace marengine {
         return path.substr(path.find_last_of("/\\") + 1);
     }
 
+    static void openInScriptEditor(FScriptWidgetImGui* pScriptWidget, CPythonScript& cPythonScript) {
+        // remember that is gets relative path from .exe file and saves it
+        std::string sourceCode;
+        if(!FFileManager::isValidPath(cPythonScript.scriptsPath)) {
+            MARLOG_WARN(ELoggerType::EDITOR,
+                        "Path is not pointing to file, so it wont be displayed at editor -> {}",
+                        cPythonScript.scriptsPath);
+            return;
+        }
+        FFileManager::loadFile(sourceCode, cPythonScript.scriptsPath.c_str());
+        pScriptWidget->setEditorTitle(getFilename(cPythonScript.scriptsPath));
+        pScriptWidget->setEditorCode(sourceCode);
+        pScriptWidget->setPathToScript(cPythonScript.scriptsPath);
+    }
+
+    static void assignScriptPathToComponentAndOpenInEditor(FScriptWidgetImGui* pScriptWidget,
+                                                           CPythonScript& cPythonScript,
+                                                           const FFilesystemDialogInfo& dialogInfo) {
+        cPythonScript.scriptsPath = FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
+                                                                  *dialogInfo.pPath);
+        openInScriptEditor(pScriptWidget, cPythonScript);
+    }
+
     template<>
     void FInspectorWidgetImGui::displayComponentPanel<CPythonScript>() {
+        const std::string newScriptWindow{ "Create New Script and assign it" };
+        const std::string assignScriptWindow{ "Assign Script" };
+        const std::string pyExt{ ".py" };
+        constexpr char openScriptButton[]{ "*** Open in Script Editor" };
+        constexpr char createNewButton[]{ "*** Create new file and assign it as script" };
+        constexpr char assignExistButton[]{ "*** Assign existing script to entity" };
+
         if (ImGui::MenuItem("Remove Script")) {
             FEventsComponentEntity::onRemove<CPythonScript>(getInspectedEntity());
             return;
         }
 
         auto& cPythonScript{ m_inspectedEntity->getComponent<CPythonScript>() };
-        ImGui::Text("Current script: %s", cPythonScript.scriptsPath.c_str());
+        const bool isScriptPathValid{ FFileManager::isValidPath(cPythonScript.scriptsPath) };
+        ImGui::Text("Current script: %s\nValid: %d", cPythonScript.scriptsPath.c_str(),
+                    isScriptPathValid);
 
-        if (ImGui::Button("*** Open in Script Editor")) {
-            // remember that is gets relative path from .exe file and saves it
-            std::string sourceCode;
-            const std::string scriptRelativePath =
-                    FProjectManager::getAssetsPath() + cPythonScript.scriptsPath;
-            FFileManager::loadFile(sourceCode, scriptRelativePath.c_str());
-            m_pScriptWidget->setEditorTitle(getFilename(cPythonScript.scriptsPath));
-            m_pScriptWidget->setEditorCode(sourceCode);
-            m_pScriptWidget->setPathToScript(scriptRelativePath);
+        if (isScriptPathValid && ImGui::Button(openScriptButton)) {
+            openInScriptEditor(m_pScriptWidget, cPythonScript);
         }
-        if (ImGui::Button("*** Create new file and assign it as script")) {
+        if (ImGui::Button(createNewButton)) {
             m_newScriptWindow = true;
         }
-        if (ImGui::Button("*** Assign existing script to entity")) {
+        if (ImGui::Button(assignExistButton)) {
             m_assignScriptWindow = true;
         }
 
-        auto newScriptCallback = [](const std::string& path, const std::string& filename) {
+        if(m_newScriptWindow) {
+            m_pFilesystem->openWidget(newScriptWindow);
+            m_newScriptWindow = false;
+        }
+        if(m_assignScriptWindow) {
+            m_pFilesystem->openWidget(assignScriptWindow);
+            m_assignScriptWindow = false;
+        }
 
-        };
+        const FFilesystemDialogInfo newDialogInfo = m_pFilesystem->displaySaveWidget(newScriptWindow,
+                                                                                     pyExt);
+        if(newDialogInfo.isValid()) {
+            FFileManager::saveAsFile(m_pScriptWidget->getDefaultEditorSourceCode(),
+                                     newDialogInfo.pPath->c_str());
+            assignScriptPathToComponentAndOpenInEditor(m_pScriptWidget, cPythonScript,
+                                                       newDialogInfo);
+        }
+
+        const FFilesystemDialogInfo assignDialogInfo =
+                m_pFilesystem->displayOpenWidget(assignScriptWindow, pyExt);
+        if(assignDialogInfo.isValid()) {
+            assignScriptPathToComponentAndOpenInEditor(m_pScriptWidget, cPythonScript,
+                                                       assignDialogInfo);
+        }
     }
 
     template<>

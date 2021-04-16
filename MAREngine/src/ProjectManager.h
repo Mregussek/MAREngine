@@ -62,6 +62,7 @@ namespace marengine {
 
 		MAR_NO_DISCARD static const FProjectInfo& getProjectInfo();
 
+		MAR_NO_DISCARD static const std::string& getAbsolutePath();
 		MAR_NO_DISCARD static const std::string& getProjectName();
 		MAR_NO_DISCARD static const std::string& getProjectPath();
 		MAR_NO_DISCARD static const std::string& getAssetsPath();

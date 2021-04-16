@@ -24,7 +24,7 @@
             "Entity": [
                 {
                     "CPythonScript": {
-                        "path": "scripts/RotateXY.py"
+                        "path": "DefaultProject/Assets/scripts/Checking.py"
                     },
                     "CRenderable": {
                         "color": {
@@ -443,7 +443,7 @@
                         }
                     },
                     "CPythonScript": {
-                        "path": "scripts/LightMover.py"
+                        "path": "DefaultProject/Assets/scripts/Examples.py"
                     },
                     "CRenderable": {
                         "color": {

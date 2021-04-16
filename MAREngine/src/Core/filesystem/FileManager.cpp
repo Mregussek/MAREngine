@@ -53,5 +53,27 @@ namespace marengine {
         return false;
     }
 
+    std::string FFileManager::getAbsolutePath(const std::string& relativePath) {
+        std::string absolute{ std::filesystem::absolute(relativePath).u8string() };
+        std::replace(absolute.begin(), absolute.end(), '\\', '/');
+        return absolute;
+	}
+
+    std::string FFileManager::getRelativePath(const std::string& absolutePath,
+                                              const std::string& path) {
+	    const std::filesystem::path absolute{ absolutePath };
+	    const std::filesystem::path relative{ path };
+        return std::filesystem::relative(relative, absolute).generic_string();
+	}
+
+    bool FFileManager::isValidPath(const std::string& path) {
+        std::ifstream test(path);
+        if(!test.is_open()) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 }

@@ -39,25 +39,20 @@ namespace marengine {
     }
 
     std::string FPythonInterpreter::changeSlashesToDots(std::string script) {
-        const auto& assetsPath = FProjectManager::getAssetsPath();
-        std::string rtn = assetsPath + script;
-
-        size_t pos = rtn.find("/");
+        size_t pos = script.find('/');
 
         while (pos != std::string::npos) {
-            rtn.replace(pos, 1, ".");
-            pos = rtn.find("/", pos + 1);
+            script.replace(pos, 1, ".");
+            pos = script.find('/', pos + 1);
         }
 
-        rtn = rtn.substr(0, rtn.size() - 3);
-
-        return rtn;
+        script = script.substr(0, script.size() - 3);
+        return script;
     }
 
-    std::string FPythonInterpreter::getModuleFromPath(std::string script) {
-        const std::string filename = script.substr(script.find_last_of("/") + 1, script.size());
-        const std::string deletedDotPyFromPath = filename.substr(0, filename.size() - 3);
-
+    std::string FPythonInterpreter::getModuleFromPath(const std::string& script) {
+        const std::string filename = script.substr(script.find_last_of('/') + 1, script.size());
+        std::string deletedDotPyFromPath = filename.substr(0, filename.size() - 3);
         return deletedDotPyFromPath;
     }
 
