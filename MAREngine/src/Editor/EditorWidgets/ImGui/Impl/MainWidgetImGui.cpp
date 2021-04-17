@@ -90,7 +90,7 @@ namespace marengine {
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspaceFlags);
         }
 
-        //ImGui::ShowDemoWindow();
+        ImGui::ShowDemoWindow();
     }
 
     void FMainWidgetImGui::endFrame() {

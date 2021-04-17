@@ -27,9 +27,13 @@
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Entity/EventsCameraEntity.h"
+#include "../../../../Core/ecs/Entity/EventsComponentEntity.h"
 
 
 namespace marengine {
+
+    static void drawGuizmo(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+                           const Entity& currentEntity);
 
 
     void FViewportWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
@@ -58,7 +62,7 @@ namespace marengine {
     }
 
     void FViewportWidgetImGui::updateFrame() {
-        displayViewportControlPanel();
+        const ImGuizmo::OPERATION guizmoOperation{ displayViewportControlPanel() };
 
         ImGuiStyle& style{ ImGui::GetStyle() };
         const ImVec2 rememberDefaultVal{ style.WindowPadding };
@@ -67,14 +71,25 @@ namespace marengine {
         ImGui::Begin("ViewPort", nullptr);
 
         displayActualViewport();
-        handleGuizmo();
+
+        if (m_pSceneManagerEditor->usingEditorCamera() && m_pSceneManagerEditor->isEditorMode()) {
+            if (m_pInspectorWidget->isInspectedEntityValid()) {
+                drawGuizmo(guizmoOperation, m_camera, m_pInspectorWidget->getInspectedEntity());
+            }
+
+            const bool cameraWasRecalculated{
+                    m_camera.update(m_pWindow, m_aspectRatio, ImGui::IsWindowFocused()) };
+            if (cameraWasRecalculated) {
+                FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
+            }
+        }
 
         ImGui::End();
 
         style.WindowPadding = rememberDefaultVal;
     }
 
-    void FViewportWidgetImGui::displayViewportControlPanel() {
+    ImGuizmo::OPERATION FViewportWidgetImGui::displayViewportControlPanel() {
         auto displayEditorModeButtons = [this]() {
             if (ImGui::Button("PLAY")) { m_pSceneManagerEditor->setPlayMode(); }
             ImGui::SameLine();
@@ -104,7 +119,6 @@ namespace marengine {
                 if (ImGui::Button("RESUME")) {
                     m_pSceneManagerEditor->setExitPauseMode();
                 }
-
             }
             else {
                 if (ImGui::Button("PAUSE")) {
@@ -112,6 +126,15 @@ namespace marengine {
                 }
             }
         };
+
+        constexpr uint8 guizmoTypeCount{ 4 };
+        enum GuizmoType { NONE, TRANSLATION, ROTATION, SCALE };
+        static int32 guizmoIndex{ NONE };
+        constexpr std::array<const char*, guizmoTypeCount> guizmoTypes{
+            "None", "Translation", "Rotation", "Scale"
+        };
+        const char* currentGuizmoType =
+                (guizmoIndex >= 0 && guizmoIndex < guizmoTypeCount) ? guizmoTypes[guizmoIndex] : "Unknown";
 
         ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar()) {
@@ -122,9 +145,26 @@ namespace marengine {
                 displayPlayModeButtons();
             }
 
+            ImGui::SliderInt("GuizmoType", &guizmoIndex, 0, guizmoTypeCount - 1, currentGuizmoType);
+
             ImGui::EndMenuBar();
         }
+
         ImGui::End();
+
+        if (m_pWindow->isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
+            if (m_pWindow->isKeyPressed(MAR_KEY_Z)) { guizmoIndex = TRANSLATION; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_X)) { guizmoIndex = ROTATION; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_C)) { guizmoIndex = SCALE; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_V)) { guizmoIndex = NONE; }
+        }
+
+        switch(guizmoIndex) {
+            case TRANSLATION: return ImGuizmo::OPERATION::TRANSLATE;
+            case ROTATION: return ImGuizmo::OPERATION::ROTATE;
+            case SCALE: return ImGuizmo::OPERATION::SCALE;
+            default: return ImGuizmo::OPERATION::NONE;
+        }
     }
 
     void FViewportWidgetImGui::displayActualViewport() {
@@ -141,20 +181,7 @@ namespace marengine {
     }
 
     void FViewportWidgetImGui::handleGuizmo() {
-        if (m_pSceneManagerEditor->usingEditorCamera()) {
-            m_guizmo.selectType(m_pWindow);
 
-            if (m_pSceneManagerEditor->isEditorMode()) {
-                if (m_pInspectorWidget->isInspectedEntityValid()) {
-                    m_guizmo.draw(m_camera, m_pInspectorWidget->getInspectedEntity());
-                }
-
-                const bool cameraWasRecalculated{ m_camera.update(m_pWindow, m_aspectRatio, ImGui::IsWindowFocused()) };
-                if (cameraWasRecalculated) {
-                    FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
-                }
-            }
-        }
     }
 
     void FViewportWidgetImGui::bind(maths::vec3 backgroundColor) const {
@@ -169,6 +196,57 @@ namespace marengine {
     void FViewportWidgetImGui::updateAspectRatio() {
         const auto size = m_framebuffer.getSize();
         m_aspectRatio = size.x / size.y;
+    }
+
+
+    static bool draw(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+                     CTransform& transformComponent);
+
+    void drawGuizmo(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+                    const Entity& currentEntity) {
+        auto& transform = currentEntity.getComponent<CTransform>();
+        if (guizmoOperation == ImGuizmo::OPERATION::NONE) {
+            return;
+        }
+
+        const bool userUsedGuizmo{ draw(guizmoOperation, editorCamera, transform) };
+        if (userUsedGuizmo) {
+            FEventsComponentEntity::onUpdate<CTransform>(currentEntity);
+        }
+    }
+
+    bool draw(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+              CTransform& transformComponent) {
+        using namespace maths;
+
+        mat4 transform{ transformComponent.getTransform() };
+        float* pTransform{ transform.value_ptr_nonconst() };
+
+        ImGuizmo::SetOrthographic(false);
+        ImGuizmo::SetDrawlist();
+
+        const ImVec2 windowPos{ ImGui::GetWindowPos() };
+        const ImVec2 windowSize{ ImGui::GetWindowSize() };
+        ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+
+        const float* pView{ nullptr };
+        const float* pProjection{ nullptr };
+        {
+            const RenderCamera* pRenderCam{ editorCamera.getCameraData() };
+            pView = pRenderCam->getView().value_ptr();
+            pProjection = pRenderCam->getProjection().value_ptr();
+        }
+
+        ImGuizmo::Manipulate(pView, pProjection, guizmoOperation, ImGuizmo::MODE::LOCAL, pTransform);
+
+        if (ImGuizmo::IsUsing()) {
+            vec3 rot;
+            mat4::decompose(transform, transformComponent.position, rot, transformComponent.scale);
+            transformComponent.rotation = transformComponent.rotation + (rot - transformComponent.rotation); // + deltaRotation, fighting with GimbleLock
+            return true;
+        }
+
+        return false;
     }
 
 

@@ -26,7 +26,6 @@
 
 #include "../../IEditorWidget.h"
 #include "../../../Camera/Camera.h"
-#include "GuizmoWidgetImGui.h"
 #include "../../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
@@ -55,7 +54,7 @@ namespace marengine {
 
         void updateAspectRatio();
 
-        void displayViewportControlPanel();
+        MAR_NO_DISCARD ImGuizmo::OPERATION displayViewportControlPanel();
         void displayActualViewport();
         void handleGuizmo();
 
@@ -63,7 +62,6 @@ namespace marengine {
         FramebufferOpenGL m_framebuffer;
         Camera m_camera;
         float m_aspectRatio{ 1.33f };
-        FGuizmoImGuiWidget m_guizmo;
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
         FInspectorWidgetImGui* m_pInspectorWidget{ nullptr };
