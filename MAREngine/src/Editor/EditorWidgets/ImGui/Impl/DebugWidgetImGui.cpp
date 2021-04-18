@@ -132,14 +132,17 @@ namespace marengine {
 
             if (entity.hasComponent<CPointLight>()) {
                 const auto& pointLight{ entity.getComponent<CPointLight>().pointLight };
-                displayVec4("PointLight.position: <%f , %f , %f , %f>", pointLight.position);
-                displayVec4("PointLight.ambient: <%f , %f , %f , %f>", pointLight.ambient);
-                displayVec4("PointLight.diffuse: <%f , %f , %f , %f>", pointLight.diffuse);
-                displayVec4("PointLight.specular: <%f , %f , %f , %f>", pointLight.specular);
-                ImGui::Text("PointLight.constant: %f", pointLight.constant);
-                ImGui::Text("PointLight.linear: %f", pointLight.linear);
-                ImGui::Text("PointLight.quadratic: %f", pointLight.quadratic);
-                ImGui::Text("PointLight.shininess: %f", pointLight.shininess);
+                const auto& batchInfo{ entity.getComponent<CPointLight>().batch };
+                ImGui::Text("CPointLight.batch.index: %i", batchInfo.index);
+                ImGui::Text("CPointLight.batch.type: %i", batchInfo.type);
+                displayVec4("CPointLight.pointLight.position: <%f , %f , %f , %f>", pointLight.position);
+                displayVec4("CPointLight.pointLight.ambient: <%f , %f , %f , %f>", pointLight.ambient);
+                displayVec4("CPointLight.pointLight.diffuse: <%f , %f , %f , %f>", pointLight.diffuse);
+                displayVec4("CPointLight.pointLight.specular: <%f , %f , %f , %f>", pointLight.specular);
+                ImGui::Text("CPointLight.pointLight.constant: %f", pointLight.constant);
+                ImGui::Text("CPointLight.pointLight.linear: %f", pointLight.linear);
+                ImGui::Text("CPointLight.pointLight.quadratic: %f", pointLight.quadratic);
+                ImGui::Text("CPointLight.pointLight.shininess: %f", pointLight.shininess);
             }
 
             ImGui::TreePop();

@@ -291,6 +291,9 @@ namespace marengine {
 
     template<>
     void FInspectorWidgetImGui::displayComponentPanel<CRenderable>() {
+        // During CRenderable onUpdate events, we need to create CEvent component and fill with
+        // actual event.
+
         if (ImGui::MenuItem("Remove Renderable")) {
             FEventsComponentEntity::onRemove<CRenderable>(getInspectedEntity());
             return;

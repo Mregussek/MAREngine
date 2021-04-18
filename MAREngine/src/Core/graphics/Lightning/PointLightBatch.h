@@ -47,6 +47,8 @@ namespace marengine {
 
 		const FPointLightsArray& getLights() const;
 
+		void updateLight(const Entity& entity);
+
 		uint32_t getUniquePointLightID() const;
 		void setUniquePointLightID(uint32_t index);
 

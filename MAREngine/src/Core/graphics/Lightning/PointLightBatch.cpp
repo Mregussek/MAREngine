@@ -64,6 +64,11 @@ namespace marengine {
 		return m_lights;
 	}
 
+	void FPointLightBatch::updateLight(const Entity& entity) {
+	    const auto& cPointLight{ entity.getComponent<CPointLight>() };
+	    m_lights.at(cPointLight.batch.index) = cPointLight.pointLight;
+	}
+
 	uint32_t FPointLightBatch::getUniquePointLightID() const {
 		return m_uniquePointLightID;
 	}

@@ -36,6 +36,7 @@ namespace marengine {
     class Entity;
     class FRenderManager;
     class FMeshManager;
+    struct CPointLight;
 
 
     class FBatchManager : public IRenderResourceManager {
@@ -66,6 +67,7 @@ namespace marengine {
 
 
     template<> void FBatchManager::update<CRenderable>(const Entity& entity) const;
+    template<> void FBatchManager::update<CPointLight>(const Entity& entity) const;
     template<> void FBatchManager::update<CTransform>(const Entity& entity) const;
 
 

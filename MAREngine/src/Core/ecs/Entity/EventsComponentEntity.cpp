@@ -53,9 +53,7 @@ namespace marengine {
 	/***************************** TRANSFORM COMPONENT TEMPLATES ***************************************/
 
 	template<> void FEventsComponentEntity::onUpdate<CTransform>(const Entity& entity) {
-		const auto& cRenderable{ entity.getComponent<CRenderable>() };
-
-		if (cRenderable.isEntityRendered()) {
+		if (entity.getComponent<CRenderable>().isEntityRendered()) {
             s_pBatchManager->update<CTransform>(entity);
 		}
 
@@ -64,7 +62,9 @@ namespace marengine {
 		}
 
 		if (entity.hasComponent<CPointLight>()) {
-			//FEventsLightBatch::onPointLightPositionUpdate(entity);
+		    entity.getComponent<CPointLight>().pointLight.position =
+		            maths::vec4(entity.getComponent<CTransform>().position, 1.f);
+		    s_pBatchManager->update<CPointLight>(entity);
 		}
 	}
 

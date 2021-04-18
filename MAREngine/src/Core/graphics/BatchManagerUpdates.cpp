@@ -44,11 +44,15 @@ namespace marengine {
     }
 
     template<> void FBatchManager::update<CTransform>(const Entity& entity) const {
-        const auto& cTransform{ entity.getComponent<CTransform>() };
-
         FMeshBatch* pMeshBatch{ getMeshBatchStorage()->retrieve(entity.getComponent<CRenderable>()) };
         pMeshBatch->updateTransform(entity);
         m_pRenderManager->update<ERenderBatchUpdateType::TRANSFORM>(pMeshBatch);
+    }
+
+    template<> void FBatchManager::update<CPointLight>(const Entity& entity) const {
+        FPointLightBatch* pLightBatch{ getPointLightBatch() };
+        pLightBatch->updateLight(entity);
+        m_pRenderManager->update<ERenderBatchUpdateType::POINTLIGHT>(pLightBatch);
     }
 
 

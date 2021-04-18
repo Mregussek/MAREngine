@@ -22,6 +22,7 @@
 
 #include "RenderManager.h"
 #include "MeshBatch.h"
+#include "Lightning/PointLightBatch.h"
 #include "OpenGL/GraphicsOpenGL.h"
 
 
@@ -29,11 +30,11 @@ namespace marengine {
 
 
     template<>
-    void FRenderManager::update<ERenderBatchUpdateType::TRANSFORM>(FMeshBatch* pMeshBatch) const {
+    void FRenderManager::update<ERenderBatchUpdateType::TRANSFORM>(FMeshBatch* pBatch) const {
         FShaderBuffer* pShaderBuffer =
-                m_pContext->getBufferStorage()->getSSBO(pMeshBatch->getTransformSSBO());
+                m_pContext->getBufferStorage()->getSSBO(pBatch->getTransformSSBO());
 
-        const FTransformsArray& transforms{ pMeshBatch->getTransforms() };
+        const FTransformsArray& transforms{ pBatch->getTransforms() };
         pShaderBuffer->update(
                 maths::mat4::value_ptr(transforms),
                 0,
@@ -42,13 +43,37 @@ namespace marengine {
     }
 
     template<>
-    void FRenderManager::update<ERenderBatchUpdateType::RENDERABLE_COLOR>(
-            FMeshBatchStaticColor* pMeshBatch) const {
+    void FRenderManager::update<ERenderBatchUpdateType::POINTLIGHT>(
+            FPointLightBatch* pBatch) const {
 
         FShaderBuffer* pShaderBuffer =
-                m_pContext->getBufferStorage()->getSSBO(pMeshBatch->getColorSSBO());
+                m_pContext->getBufferStorage()->getSSBO(pBatch->getUniquePointLightID());
 
-        const FColorsArray& colors{ pMeshBatch->getColors() };
+        const FPointLightsArray& lights{ pBatch->getLights() };
+        const int32 lightSize{ (int32)lights.size() };
+        const FShaderInputDescription& inputDescription{ pShaderBuffer->getInputDescription() };
+        {
+            const FShaderInputVariableInfo& inputInfo{ inputDescription.inputVariables.at(0) };
+            pShaderBuffer->update(&lights.at(0).position.x,
+                                  inputInfo.offset,
+                                  inputInfo.typeSize() * lightSize);
+        }
+        {
+            const FShaderInputVariableInfo& inputInfo{ inputDescription.inputVariables.at(1) };
+            pShaderBuffer->update(&lightSize,
+                                  inputInfo.offset,
+                                  inputInfo.typeSize() * 1);
+        }
+    }
+
+    template<>
+    void FRenderManager::update<ERenderBatchUpdateType::RENDERABLE_COLOR>(
+            FMeshBatchStaticColor* pBatch) const {
+
+        FShaderBuffer* pShaderBuffer =
+                m_pContext->getBufferStorage()->getSSBO(pBatch->getColorSSBO());
+
+        const FColorsArray& colors{ pBatch->getColors() };
         pShaderBuffer->update(
                 maths::vec4::value_ptr(colors),
                 0,

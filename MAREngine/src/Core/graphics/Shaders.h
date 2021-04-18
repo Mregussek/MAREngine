@@ -36,6 +36,9 @@ namespace marengine {
         uint32_t offset{ 0 };
         uint32_t memoryUsed{ 0 };
         uint32_t count{ 0 };
+
+        uint32 typeSize() const { return memoryUsed / count; }
+
     };
 
 
