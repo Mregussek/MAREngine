@@ -164,6 +164,11 @@ namespace marengine {
         return m_colors;
     }
 
+    void FMeshBatchStaticColor::updateColor(const Entity& entity) {
+        const auto& cRenderable{ entity.getComponent<CRenderable>() };
+        m_colors.at(cRenderable.batch.materialIndex) = cRenderable.color;
+    }
+
     int8 FMeshBatchStaticColor::getColorSSBO() const {
         return m_colorsSSBO;
     }

@@ -22,6 +22,7 @@
 
 #include "MeshBatch.h"
 #include "Mesh.h"
+#include "../ecs/Entity/Entity.h"
 
 
 namespace marengine {
@@ -32,6 +33,23 @@ namespace marengine {
 		p_indices.clear();
 		p_transforms.clear();
         p_vbo = p_ibo = p_transformSSBO = -1;
+	}
+
+    void FMeshBatch::updateVertices(const Entity& entity) {
+        // TODO: implement FMeshBatch::updateVertices
+	    const auto& cRenderable{ entity.getComponent<CRenderable>() };
+	}
+
+    void FMeshBatch::updateIndices(const Entity& entity) {
+	    // TODO: implement FMeshBatch::updateIndices
+        const auto& cRenderable{ entity.getComponent<CRenderable>() };
+	}
+
+    void FMeshBatch::updateTransform(const Entity& entity) {
+        const auto& cRenderable{ entity.getComponent<CRenderable>() };
+        const auto& cTransform{ entity.getComponent<CTransform>() };
+
+        p_transforms.at(cRenderable.batch.transformIndex) = cTransform.getTransform();
 	}
 
 
@@ -70,6 +88,14 @@ namespace marengine {
 
     auto FMeshBatchStorage::getArrayStaticTex2D() ->decltype(&m_staticTex2D) const {
 	    return &m_staticTex2D;
+	}
+
+    FMeshBatch* FMeshBatchStorage::retrieve(const CRenderable& cRenderable) const {
+	    switch(cRenderable.batch.type) {
+	        case EBatchType::MESH_STATIC_COLOR: return getStaticColor(cRenderable.batch.index);
+	        case EBatchType::MESH_STATIC_TEX2D: return getStaticTex2D(cRenderable.batch.index);
+	        default: return nullptr;
+	    }
 	}
 
 

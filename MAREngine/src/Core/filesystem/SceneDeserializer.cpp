@@ -111,9 +111,8 @@ namespace marengine {
 		if (jsonContains(jCRenderable)) {
 			auto& cRenderable{ entity.addComponent<CRenderable>() };
 			setString(cRenderable.mesh.path, jCRenderable, jCRenderablePath);
-			// TODO: firstly save file and then enable this
-            //cRenderable.mesh.type = (EMeshType)loadInt(jCRenderable, jCRenderableMeshType);
-            //cRenderable.color = loadVec4(jCRenderable, jCRenderableColor);
+            cRenderable.mesh.type = (EMeshType)loadInt(jCRenderable, jCRenderableMeshType);
+            cRenderable.color = loadVec4(jCRenderable, jCRenderableColor);
 		}
 
 		if (jsonContains(jCPointLight)) {

@@ -51,6 +51,10 @@ namespace marengine {
         virtual const FIndicesArray& getIndices() const = 0;
         virtual const FTransformsArray& getTransforms() const = 0;
 
+        virtual void updateVertices(const Entity& entity) = 0;
+        virtual void updateIndices(const Entity& entity) = 0;
+        virtual void updateTransform(const Entity& entity) = 0;
+
         virtual bool shouldBeBatched(const Entity& entity) const = 0;
         virtual bool canBeBatched(const Entity& entity) const = 0;
         virtual void submitToBatch(const Entity& entity) = 0;
@@ -78,6 +82,10 @@ namespace marengine {
         MAR_NO_DISCARD const FVertexArray& getVertices() const final { return p_vertices; }
         MAR_NO_DISCARD const FIndicesArray& getIndices() const final { return p_indices; }
         MAR_NO_DISCARD const FTransformsArray& getTransforms() const final { return p_transforms; }
+
+        void updateVertices(const Entity& entity) final;
+        void updateIndices(const Entity& entity) final;
+        void updateTransform(const Entity& entity) final;
 
         void passVBO(int8 index) final { p_vbo = index; }
         void passIBO(int8 index) final { p_ibo = index; }
@@ -144,6 +152,8 @@ namespace marengine {
 
         MAR_NO_DISCARD const FColorsArray& getColors() const;
 
+        void updateColor(const Entity& entity);
+
         MAR_NO_DISCARD int8 getColorSSBO() const;
         void passColorSSBO(int8 id);
 
@@ -192,6 +202,8 @@ namespace marengine {
 
         MAR_NO_DISCARD size_t getCountStaticColor() const final;
         MAR_NO_DISCARD size_t getCountStaticTex2D() const final;
+
+        MAR_NO_DISCARD FMeshBatch* retrieve(const CRenderable& cRenderable) const;
 
         void reset() final;
 

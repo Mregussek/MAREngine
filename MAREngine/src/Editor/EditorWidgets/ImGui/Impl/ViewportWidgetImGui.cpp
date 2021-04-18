@@ -77,8 +77,8 @@ namespace marengine {
                 drawGuizmo(guizmoOperation, m_camera, m_pInspectorWidget->getInspectedEntity());
             }
 
-            const bool cameraWasRecalculated{
-                    m_camera.update(m_pWindow, m_aspectRatio, ImGui::IsWindowFocused()) };
+            const bool cameraWasRecalculated =
+                    m_camera.update(m_pWindow, m_aspectRatio, ImGui::IsWindowFocused());
             if (cameraWasRecalculated) {
                 FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
             }
@@ -89,44 +89,50 @@ namespace marengine {
         style.WindowPadding = rememberDefaultVal;
     }
 
+    static void displayEditorModeButtons(FSceneManagerEditor* pSceneManagerEditor,
+                                         const RenderCamera* pRenderCamera) {
+        if (ImGui::Button("PLAY")) {
+            pSceneManagerEditor->setPlayMode();
+        }
+
+        ImGui::SameLine();
+
+        if (pSceneManagerEditor->usingEditorCamera()) {
+            if(ImGui::Button("Use Game Camera")) {
+                pSceneManagerEditor->useGameCamera();
+                FEventsCameraEntity::onGameCameraSet();
+            }
+        }
+        else {
+            if (ImGui::Button("Use Editor Camera")) {
+                pSceneManagerEditor->useEditorCamera();
+                FEventsCameraEntity::onEditorCameraSet(pRenderCamera);
+            }
+        }
+    }
+
+    static void displayPlayModeButtons(FSceneManagerEditor* pSceneManagerEditor,
+                                       const RenderCamera* pRenderCamera) {
+        if (ImGui::Button("STOP")) {
+            pSceneManagerEditor->setExitPlayMode();
+            if (pSceneManagerEditor->usingEditorCamera()) {
+                FEventsCameraEntity::onEditorCameraSet(pRenderCamera);
+            }
+        }
+        ImGui::SameLine();
+        if (pSceneManagerEditor->isPauseMode()) {
+            if (ImGui::Button("RESUME")) {
+                pSceneManagerEditor->setExitPauseMode();
+            }
+        }
+        else {
+            if (ImGui::Button("PAUSE")) {
+                pSceneManagerEditor->setPauseMode();
+            }
+        }
+    }
+
     ImGuizmo::OPERATION FViewportWidgetImGui::displayViewportControlPanel() {
-        auto displayEditorModeButtons = [this]() {
-            if (ImGui::Button("PLAY")) { m_pSceneManagerEditor->setPlayMode(); }
-            ImGui::SameLine();
-            if (m_pSceneManagerEditor->usingEditorCamera()) {
-                if (ImGui::Button("Use Game Camera")) {
-                    m_pSceneManagerEditor->useGameCamera();
-                    FEventsCameraEntity::onGameCameraSet();
-                }
-            }
-            else {
-                if (ImGui::Button("Use Editor Camera")) {
-                    m_pSceneManagerEditor->useEditorCamera();
-                    FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
-                }
-            }
-        };
-
-        auto displayPlayModeButtons = [this]() {
-            if (ImGui::Button("STOP")) {
-                m_pSceneManagerEditor->setExitPlayMode();
-                if (m_pSceneManagerEditor->usingEditorCamera()) {
-                    FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
-                }
-            }
-            ImGui::SameLine();
-            if (m_pSceneManagerEditor->isPauseMode()) {
-                if (ImGui::Button("RESUME")) {
-                    m_pSceneManagerEditor->setExitPauseMode();
-                }
-            }
-            else {
-                if (ImGui::Button("PAUSE")) {
-                    m_pSceneManagerEditor->setPauseMode();
-                }
-            }
-        };
-
         constexpr uint8 guizmoTypeCount{ 4 };
         enum GuizmoType { NONE, TRANSLATION, ROTATION, SCALE };
         static int32 guizmoIndex{ NONE };
@@ -139,10 +145,10 @@ namespace marengine {
         ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar()) {
             if (m_pSceneManagerEditor->isEditorMode()) {
-                displayEditorModeButtons();
+                displayEditorModeButtons(m_pSceneManagerEditor, m_camera.getCameraData());
             }
             else {
-                displayPlayModeButtons();
+                displayPlayModeButtons(m_pSceneManagerEditor, m_camera.getCameraData());
             }
 
             ImGui::SliderInt("GuizmoType", &guizmoIndex, 0, guizmoTypeCount - 1, currentGuizmoType);
@@ -178,10 +184,6 @@ namespace marengine {
 
         const uint32_t id = m_framebuffer.getColorAttach();
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-    }
-
-    void FViewportWidgetImGui::handleGuizmo() {
-
     }
 
     void FViewportWidgetImGui::bind(maths::vec3 backgroundColor) const {

@@ -29,8 +29,15 @@
 
 namespace marengine {
 
+    class FMeshBatch;
+    class FMeshBatchStaticColor;
     class RenderCamera;
     class FBatchManager;
+
+
+    enum class ERenderBatchUpdateType {
+        NONE, TRANSFORM, RENDERABLE_COLOR
+    };
 
 
     class FRenderManager : public IRenderManager {
@@ -44,6 +51,9 @@ namespace marengine {
         MAR_NO_DISCARD bool isCameraValid() const;
         void onBatchesReadyToDraw(FBatchManager* pBatchManager);
 
+        template<ERenderBatchUpdateType TUpdateType, typename TMeshBatch>
+        void update(TMeshBatch* pMeshBatch) const { }
+
     private:
 
         const RenderCamera* m_pRenderCamera{ nullptr };
@@ -53,6 +63,13 @@ namespace marengine {
         int32_t m_pointLightIndex{ -1 };
 
     };
+
+
+    template<>
+    void FRenderManager::update<ERenderBatchUpdateType::TRANSFORM>(FMeshBatch* pMeshBatch) const;
+    template<>
+    void FRenderManager::update<ERenderBatchUpdateType::RENDERABLE_COLOR>(
+            FMeshBatchStaticColor* pMeshBatch) const;
 
 
 }

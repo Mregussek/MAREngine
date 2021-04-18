@@ -55,14 +55,8 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onUpdate<CTransform>(const Entity& entity) {
 		const auto& cRenderable{ entity.getComponent<CRenderable>() };
 
-		const bool isEntityRendered = [&cRenderable]()->bool {
-			const bool hasAssignedBatch{ cRenderable.batch.type != EBatchType::NONE };
-			const bool indexAtBatchIsCorrect{ cRenderable.batch.index != -1 };
-			return hasAssignedBatch && indexAtBatchIsCorrect;
-		}();
-
-		if (isEntityRendered) {
-			//FEventsMeshBatchStatic::onTransformUpdate(entity);
+		if (cRenderable.isEntityRendered()) {
+            s_pBatchManager->update<CTransform>(entity);
 		}
 
 		if (entity.hasComponent<CCamera>() && entity.getComponent<CCamera>().isMainCamera()) {
@@ -83,8 +77,8 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity) {
-        // TODO: implement better event that whole scene reinitialization
-        //s_pSceneManagerEditor->updateSceneAtBatchManager();
+        s_pBatchManager->update<CRenderable>(entity);
+        entity.removeComponent<CEvent>();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CRenderable>(const Entity& entity) {

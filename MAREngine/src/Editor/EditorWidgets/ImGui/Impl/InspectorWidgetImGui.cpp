@@ -296,9 +296,19 @@ namespace marengine {
             return;
         }
 
-        // TODO: return back renderable component on inspector
-        //CRenderable& renderable{ m_inspectedEntity->getComponent<CRenderable>() };
-        //ImGui::Text("Type: %s", renderable.name.c_str());
+        CRenderable& cRenderable{ m_inspectedEntity->getComponent<CRenderable>() };
+        ImGui::Text("Current: %s", cRenderable.mesh.path.c_str());
+
+        if(!cRenderable.material.isValid()) { // we are displaying color then
+            const bool changedColor = ImGui::ColorEdit4("Color", &cRenderable.color.x);
+            if(changedColor) {
+                m_inspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_COLOR);
+                FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
+            }
+        }
+        else { // managing specific material
+
+        }
 
         //const bool userHasChosenRenderable = [&renderable]()->bool {
         //    if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { return true; }

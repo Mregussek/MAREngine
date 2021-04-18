@@ -25,21 +25,17 @@
 
 
 #include "../../../mar.h"
-// CRenderable
-#include "../../graphics/MeshBatch.h"
-#include "../../graphics/Mesh.h"
-// CCamera
-#include "../../graphics/RenderCamera.h"
-// CPointLight
-#include "../../graphics/Lightning/LightDefinitions.h"
-// CPythonScript
-#include "../../scripting/PythonScript.h"
+#include "../../graphics/MeshBatch.h"   // CRenderable
+#include "../../graphics/Mesh.h"    // CRenderable
+#include "../../graphics/RenderCamera.h"    // CCamera
+#include "../../graphics/Lightning/LightDefinitions.h"  // CPointLight
+#include "../../scripting/PythonScript.h"   // CPythonScript
 
 
 namespace marengine {
 
 
-	struct CTag  { std::string tag{ "empty" }; };
+	struct CTag  { std::string tag{ "New Entity" }; };
 
 
 	struct CRenderable {
@@ -56,6 +52,8 @@ namespace marengine {
             //EMaterialType type{ EMaterialType::NONE };
             /// @brief index used to retrieve assigned to Entity FMaterialProxy from FMaterialStorage
             int8 index{ -1 };
+
+            bool isValid() const { return index != -1; }
 	    };
 	    struct BatchInfo {
 	        /// @brief type used to retrieve correct implementation of FMeshBatch from FMeshBatchStorage
@@ -74,6 +72,10 @@ namespace marengine {
         MeshInfo mesh;
 		BatchInfo batch;
 		MaterialInfo material;
+
+		bool isEntityRendered() const {
+            return batch.type != EBatchType::NONE && batch.index != -1;
+		}
 
 	};
 
@@ -150,6 +152,21 @@ namespace marengine {
         };
 
         std::unordered_map<ComponentType, ComponentVariant> components;
+
+    };
+
+
+    enum class EComponentUpdateType {
+        NONE, RENDERABLE_COLOR
+    };
+
+    struct CEvent {
+
+        EComponentUpdateType componentUpdateType{ EComponentUpdateType::NONE };
+
+        CEvent(EComponentUpdateType comUpdateType) :
+                componentUpdateType(comUpdateType)
+        {}
 
     };
 

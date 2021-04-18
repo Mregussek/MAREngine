@@ -56,7 +56,6 @@ namespace marengine {
 
         MAR_NO_DISCARD ImGuizmo::OPERATION displayViewportControlPanel();
         void displayActualViewport();
-        void handleGuizmo();
 
 
         FramebufferOpenGL m_framebuffer;

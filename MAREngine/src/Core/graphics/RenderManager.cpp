@@ -77,7 +77,7 @@ namespace marengine {
         m_pointLightIndex = pBufferFactory->fillPointLightSSBO(pPointLightSSBO,
                                                                pBatchManager->getPointLightBatch());
 
-        FMeshBatchStorage* pStorage{ pBatchManager->getMeshStorage() };
+        FMeshBatchStorage* pStorage{ pBatchManager->getMeshBatchStorage() };
         const int8 colorBatchSize{ (int8)pStorage->getCountStaticColor() };
 
         for (int8 i = 0; i < colorBatchSize; i++) {

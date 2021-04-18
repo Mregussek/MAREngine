@@ -41,15 +41,15 @@ namespace marengine {
     }
 
     void FBatchManager::reset() {
-        getMeshStorage()->reset();
+        getMeshBatchStorage()->reset();
         m_pointLightBatch.reset();
     }
 
-    FMeshBatchStorage* FBatchManager::getMeshStorage() const {
+    FMeshBatchStorage* FBatchManager::getMeshBatchStorage() const {
         return const_cast<FMeshBatchStorage*>(m_meshBatchFactory.getStorage());
     }
 
-    FMeshBatchFactory* FBatchManager::getMeshFactory() const {
+    FMeshBatchFactory* FBatchManager::getMeshBatchFactory() const {
         return const_cast<FMeshBatchFactory*>(&m_meshBatchFactory);
     }
 
@@ -75,10 +75,10 @@ namespace marengine {
         // TODO: does not support more than one batch! Refactor it
         if(entity.hasComponent<CRenderable>()) {
             [this](const Entity& entity) -> bool {
-                auto arrayColor{ getMeshStorage()->getArrayStaticColor() };
+                auto arrayColor{ getMeshBatchStorage()->getArrayStaticColor() };
                 const int8 batchIndex = getAvailableBatch(arrayColor, entity);
                 if (batchIndex != -1) {
-                    getMeshStorage()->getStaticColor(batchIndex)->submitToBatch(entity);
+                    getMeshBatchStorage()->getStaticColor(batchIndex)->submitToBatch(entity);
                     return true;
                 }
                 return false;
