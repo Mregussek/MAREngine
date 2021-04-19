@@ -33,6 +33,7 @@ namespace marengine {
 
     class FRenderStatistics;
     class FSceneManagerEditor;
+    class FMeshManager;
     class FWindow;
 
 
@@ -40,7 +41,7 @@ namespace marengine {
     public:
 
         virtual void create(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                            FRenderStatistics* pRenderStatistic) = 0;
+                            FMeshManager* pMeshManager, FRenderStatistics* pRenderStatistic) = 0;
 
     protected:
 
@@ -53,7 +54,7 @@ namespace marengine {
     public:
 
         void create(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                    FRenderStatistics* pRenderStatistic) final;
+                    FMeshManager* pMeshManager, FRenderStatistics* pRenderStatistic) final;
 
         void begin() final;
         void update() final;

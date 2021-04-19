@@ -65,33 +65,33 @@ namespace marengine {
         float shapeID{ 0.f };
     };
 
-    constexpr uint32_t g_MeshStride{ 3 + 3 + 2 + 1 };
+    constexpr uint32 g_MeshStride{ 3 + 3 + 2 + 1 };
 
     namespace GraphicLimits {
 
-        constexpr uint32_t maxTrianglesCount{ 100000 };
-        constexpr uint32_t maxVerticesCount{ maxTrianglesCount * 3 };
-        constexpr uint32_t maxIndicesCount{ maxTrianglesCount * 3 };
-        constexpr int64_t sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
-        constexpr int64_t sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
+        constexpr uint32 maxTrianglesCount{ 100000 };
+        constexpr uint32 maxVerticesCount{ maxTrianglesCount * 3 };
+        constexpr uint32 maxIndicesCount{ maxTrianglesCount * 3 };
+        constexpr int64 sizeOfVertices{ maxVerticesCount * sizeof(Vertex) };
+        constexpr int64 sizeOfIndices{ maxIndicesCount * sizeof(uint32_t) };
 
-        constexpr uint32_t maxTransforms{ 32 };
-        constexpr uint32_t maxLights{ 32 };
+        constexpr uint32 maxTransforms{ 32 };
+        constexpr uint32 maxLights{ 32 };
 
     };
 
     struct FTexturePair {
-        FTexturePair(uint32_t bd, std::string tp) :
+        FTexturePair(uint32 bd, std::string tp) :
                 bindingIndex(bd),
                 texturePath(std::move(tp))
         {}
 
-        uint32_t bindingIndex{ 0 };
+        uint32 bindingIndex{ 0 };
         std::string texturePath{ "" };
     };
 
     typedef std::vector<Vertex> FVertexArray;
-    typedef std::vector<uint32_t> FIndicesArray;
+    typedef std::vector<uint32> FIndicesArray;
     typedef std::vector<maths::mat4> FTransformsArray;
     typedef std::vector<maths::vec4> FColorsArray;
     typedef std::vector<FTexturePair> FTexturesArray;
@@ -120,20 +120,20 @@ namespace marengine {
     class IRenderResource : public IRender {
     public:
 
-        virtual void setIndex(int8 index) = 0;
-        virtual int8 getIndex() const = 0;
+        virtual void setIndex(int32 index) = 0;
+        virtual int32 getIndex() const = 0;
 
     };
 
     class FRenderResource : public IRenderResource {
     public:
 
-        void setIndex(int8 index) final { p_index = index; }
-        MAR_NO_DISCARD int8 getIndex() const final { return p_index; }
+        void setIndex(int32 index) final { p_index = index; }
+        MAR_NO_DISCARD int32 getIndex() const final { return p_index; }
 
     protected:
 
-        int8 p_index{ -1 };
+        int32 p_index{ -1 };
 
     };
 

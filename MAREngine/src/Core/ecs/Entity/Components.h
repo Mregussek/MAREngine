@@ -59,11 +59,17 @@ namespace marengine {
 	        /// @brief type used to retrieve correct implementation of FMeshBatch from FMeshBatchStorage
             EBatchType type{ EBatchType::NONE };
             /// @brief index used to retrieve FMeshBatch, with which CRenderable is rendered.
-            int8 index{ -1 };
+            int32 index{ -1 };
             /// @brief transform index at batch (with this we can update only one transform at batch)
-            int8 transformIndex{ -1 };
+            int32 transformIndex{ -1 };
             /// @brief material index at batch (with this we can update only one material at batch)
-            int8 materialIndex{ -1 };
+            int32 materialIndex{ -1 };
+
+            int32 startVert{ -1 };
+            int32 endVert{ -1 };
+
+            int32 startInd{ -1 };
+            int32 endInd{ -1 };
 	    };
 
 	    /// @brief Default color, so that every entity that contains CRenderable can be rendered
@@ -75,6 +81,13 @@ namespace marengine {
 
 		bool isEntityRendered() const {
             return batch.type != EBatchType::NONE && batch.index != -1;
+		}
+
+		bool isBatchUpdateValid() const {
+		    return batch.startVert != -1
+		        && batch.endVert != -1
+		        && batch.startInd != -1
+		        && batch.endInd != -1;
 		}
 
 	};
@@ -157,7 +170,7 @@ namespace marengine {
 
 
     enum class EComponentUpdateType {
-        NONE, RENDERABLE_COLOR
+        NONE, RENDERABLE_COLOR, RENDERABLE_MESH
     };
 
     struct CEvent {

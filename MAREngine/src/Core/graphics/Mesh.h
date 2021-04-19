@@ -48,6 +48,7 @@ namespace marengine {
         virtual const FVertexArray& getVertices() const = 0;
         virtual const FIndicesArray& getIndices() const = 0;
         virtual EMeshType getType() const = 0;
+        virtual const char* getName() const = 0;
 
     };
 
@@ -75,6 +76,7 @@ namespace marengine {
         void load(const std::string& path);
 
         MAR_NO_DISCARD const FMeshExternalInfo& getInfo() const;
+        MAR_NO_DISCARD const char* getName() const final { return p_info.path.c_str(); }
 
     protected:
 
@@ -82,21 +84,31 @@ namespace marengine {
 
     };
 
-    typedef std::vector<FMeshExternal> FMeshExternalArray;
-
 
     class FMeshCube : public FMeshProxy {
-    public: FMeshCube();
+    public:
+
+        FMeshCube();
+        MAR_NO_DISCARD const char* getName() const final { return "Cube"; }
+
     };
 
 
     class FMeshPyramid : public FMeshProxy {
-    public: FMeshPyramid();
+    public:
+
+        FMeshPyramid();
+        MAR_NO_DISCARD const char* getName() const final { return "Pyramid"; }
+
     };
 
 
     class FMeshSurface : public FMeshProxy {
-    public: FMeshSurface();
+    public:
+
+        FMeshSurface();
+        MAR_NO_DISCARD const char* getName() const final { return "Surface"; }
+
     };
 
 
@@ -111,6 +123,7 @@ namespace marengine {
         virtual const FMeshProxy* getSurface() const = 0;
 
         virtual const FMeshProxy* retrieve(const CRenderable& cRenderable) const = 0;
+        virtual const FMeshProxy* retrieve(const char* name) const = 0;
 
         virtual const FMeshProxy* isAlreadyLoaded(const CRenderable& cRenderable) const = 0;
 
@@ -131,6 +144,7 @@ namespace marengine {
         MAR_NO_DISCARD const FMeshProxy* getSurface() const final;
 
         MAR_NO_DISCARD const FMeshProxy* retrieve(const CRenderable& cRenderable) const final;
+        MAR_NO_DISCARD const FMeshProxy* retrieve(const char* name) const final;
 
         MAR_NO_DISCARD const FMeshProxy* isAlreadyLoaded(const CRenderable& cRenderable) const final;
 
@@ -138,7 +152,7 @@ namespace marengine {
 
     private:
 
-        FMeshExternalArray m_externalArray;
+        std::vector<FMeshExternal> m_externalArray;
         FMeshCube m_cube;
         FMeshPyramid m_pyramid;
         FMeshSurface m_surface;

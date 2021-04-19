@@ -87,20 +87,20 @@ namespace marengine {
         submitTransform(entity.getComponent<CTransform>());
 
         cRenderable.batch.index = getIndex();
-        cRenderable.batch.transformIndex = (int8)(p_transforms.size() - 1);
+        cRenderable.batch.transformIndex = (int32)(p_transforms.size() - 1);
     }
 
-    void FMeshBatchStatic::submitRenderable(const CRenderable& renderableComponent) {
-        const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(renderableComponent) };
+    void FMeshBatchStatic::submitRenderable(CRenderable& cRenderable) {
+        const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(cRenderable) };
         const FVertexArray& vertices{ pMesh->getVertices() };
-        submitVertices(vertices);
-        submitIndices(pMesh->getIndices());
+        submitVertices(cRenderable, vertices);
+        submitIndices(cRenderable, pMesh->getIndices());
 
         p_indicesMaxValue += (vertices.size() * sizeof(Vertex) / 4) / g_MeshStride;
         p_shapeID++;
     }
 
-    void FMeshBatchStatic::submitVertices(const FVertexArray& vertices) {
+    void FMeshBatchStatic::submitVertices(CRenderable& cRenderable, const FVertexArray& vertices) {
         p_vertices.insert(p_vertices.end(), vertices.begin(), vertices.end());
 
         auto fromBeginOfInsertedVertices = p_vertices.end() - vertices.size();
@@ -110,9 +110,12 @@ namespace marengine {
         };
 
         std::for_each(fromBeginOfInsertedVertices, toItsEnd, modifyShaderID);
+
+        cRenderable.batch.startVert = std::distance(p_vertices.begin(), fromBeginOfInsertedVertices);
+        cRenderable.batch.endVert = std::distance(p_vertices.begin(), toItsEnd);
     }
 
-    void FMeshBatchStatic::submitIndices(const FIndicesArray& indices) {
+    void FMeshBatchStatic::submitIndices(CRenderable& cRenderable, const FIndicesArray& indices) {
         p_indices.insert(p_indices.end(), indices.begin(), indices.end());
 
         auto fromBeginOfInsertedIndices = p_indices.end() - indices.size();
@@ -122,6 +125,9 @@ namespace marengine {
         };
 
         std::for_each(fromBeginOfInsertedIndices, toItsEnd, extendIndices);
+
+        cRenderable.batch.startInd = std::distance(p_indices.begin(), fromBeginOfInsertedIndices);
+        cRenderable.batch.endInd = std::distance(p_indices.begin(), toItsEnd);
     }
 
     void FMeshBatchStatic::submitTransform(const CTransform& transformComponent) {

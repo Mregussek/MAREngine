@@ -77,7 +77,14 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity) {
-        s_pBatchManager->update<CRenderable>(entity);
+	    // TODO: remember about WA with mesh update
+	    if(entity.getComponent<CEvent>().componentUpdateType == EComponentUpdateType::RENDERABLE_MESH) {
+            s_pSceneManagerEditor->updateSceneAtBatchManager();
+	    }
+        else {
+            s_pBatchManager->update<CRenderable>(entity);
+        }
+
         entity.removeComponent<CEvent>();
 	}
 

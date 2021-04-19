@@ -26,13 +26,13 @@
 namespace marengine {
 
 
-    void FEditorWidgetsServiceManager::emplace(IEditorWidget* service) {
-        m_services[m_insertValue] = service;
+    void FEditorWidgetsServiceManager::emplace(FEditorWidget* service) {
+        m_services.at(m_insertValue) = service;
         m_insertValue++;
     }
 
-    void FEditorWidgetsServiceManager::pop(IEditorWidget* service) {
-        auto serviceExists = [service](IEditorWidget* iterService){
+    void FEditorWidgetsServiceManager::pop(FEditorWidget* service) {
+        auto serviceExists = [service](FEditorWidget* iterService){
             return iterService == service;
         };
         auto newEnd = std::remove_if(m_services.begin(), m_services.begin() + m_insertValue, serviceExists);
@@ -40,30 +40,30 @@ namespace marengine {
     }
 
     void FEditorWidgetsServiceManager::onCreate() const {
-        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](IEditorWidget* service) {
+        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](FEditorWidget* service) {
             service->onCreation();
         });
     }
 
     void FEditorWidgetsServiceManager::onUpdate() const {
-        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](IEditorWidget* service) {
+        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](FEditorWidget* service) {
             service->beginFrame();
             service->onBeginFrame();
         });
 
-        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](IEditorWidget* service) {
+        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](FEditorWidget* service) {
             service->updateFrame();
             service->onUpdateFrame();
         });
 
-        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](IEditorWidget* service) {
+        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](FEditorWidget* service) {
             service->endFrame();
             service->onEndFrame();
         });
     }
 
     void FEditorWidgetsServiceManager::onDestroy() const {
-        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](IEditorWidget* service) {
+        std::for_each(m_services.begin(), m_services.begin() + m_insertValue, [](FEditorWidget* service) {
             service->destroy();
             service->onDestruction();
             service = nullptr; // as every type should passed allocated on stack, we can set nullptr

@@ -105,6 +105,26 @@ namespace marengine {
         }
     }
 
+    const FMeshProxy* FMeshStorage::retrieve(const char* name) const {
+        if(std::strcmp(getCube()->getName(), name) == 0) {
+            return getCube();
+        }
+        if(std::strcmp(getPyramid()->getName(), name) == 0) {
+            return getPyramid();
+        }
+        if(std::strcmp(getSurface()->getName(), name) == 0) {
+            return getSurface();
+        }
+
+        for(uint32 i = 0; i < getCountExternal(); i++) {
+            if(std::strcmp(getExternal(i)->getName(), name) == 0) {
+                return getExternal(i);
+            }
+        }
+
+        return nullptr;
+    }
+
     const FMeshProxy* FMeshStorage::isAlreadyLoaded(const CRenderable& cRenderable) const {
         const auto fromBegin{ m_externalArray.cbegin() };
         const auto toEnd{ m_externalArray.cend() };

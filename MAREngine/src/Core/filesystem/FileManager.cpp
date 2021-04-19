@@ -75,5 +75,9 @@ namespace marengine {
         return true;
     }
 
+    std::string FFileManager::getFilenameFromPath(const std::string& path) {
+        return path.substr(path.find_last_of("/\\") + 1);
+	}
+
 
 }

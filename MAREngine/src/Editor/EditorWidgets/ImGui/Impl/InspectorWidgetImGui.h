@@ -36,6 +36,7 @@ namespace marengine {
     class FWindow;
     class FScriptWidgetImGui;
     class FFilesystemPopUpImGuiWidget;
+    class FContentBrowserImGui;
 
 
     class FInspectorWidgetImGui : public FInspectorEditorWidget {
@@ -70,6 +71,7 @@ namespace marengine {
         FScriptWidgetImGui* m_pScriptWidget{ nullptr };
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
         FFilesystemPopUpImGuiWidget* m_pFilesystem{ nullptr };
+        FContentBrowserImGui* m_pContentBrowser{ nullptr };
         FWindow* m_pWindow{ nullptr };
 
         bool m_newScriptWindow{ false };

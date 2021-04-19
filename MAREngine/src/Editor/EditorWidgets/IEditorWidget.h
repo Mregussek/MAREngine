@@ -111,6 +111,16 @@ namespace marengine {
     };
 
 
+    class IContentBrowserEditorWidget : public FEditorWidget {
+
+    };
+
+    class FContentBrowserEditorWidget : public IContentBrowserEditorWidget {
+
+    };
+
+
+
 }
 
 

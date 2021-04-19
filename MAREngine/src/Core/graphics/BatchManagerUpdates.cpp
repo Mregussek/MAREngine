@@ -22,6 +22,7 @@
 
 #include "BatchManager.h"
 #include "MeshBatch.h"
+#include "MeshManager.h"
 #include "RenderManager.h"
 #include "../ecs/Entity/Entity.h"
 
@@ -39,8 +40,9 @@ namespace marengine {
            pMeshBatch->updateColor(entity);
            m_pRenderManager->update<ERenderBatchUpdateType::RENDERABLE_COLOR>(pMeshBatch);
         }
+        else if(cEvent.componentUpdateType == EComponentUpdateType::RENDERABLE_MESH) {
 
-        // TODO: add mesh update in batch
+        }
     }
 
     template<> void FBatchManager::update<CTransform>(const Entity& entity) const {

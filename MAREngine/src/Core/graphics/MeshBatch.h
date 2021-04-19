@@ -126,9 +126,9 @@ namespace marengine {
 
     protected:
 
-        void submitRenderable(const CRenderable& renderableComponent);
-        void submitVertices(const FVertexArray& vertices);
-        void submitIndices(const FIndicesArray& indices);
+        void submitRenderable(CRenderable& cRenderable);
+        void submitVertices(CRenderable& cRenderable, const FVertexArray& vertices);
+        void submitIndices(CRenderable& cRenderable, const FIndicesArray& indices);
         void submitTransform(const CTransform& transformComponent);
 
 

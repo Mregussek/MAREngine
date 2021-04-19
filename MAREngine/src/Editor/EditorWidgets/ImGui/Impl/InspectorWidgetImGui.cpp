@@ -24,6 +24,7 @@
 #include "CommonTypeHandler.h"
 #include "ScriptWidgetImGui.h"
 #include "FilesystemPopUpWidgetImGui.h"
+#include "ContentBrowserImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../Events/EventsEntityImGuiWidget.h"
 #include "Window/IWindow.h" // isMousePressed()
@@ -40,6 +41,7 @@ namespace marengine {
 
     void FInspectorWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
         m_pFilesystem = serviceLocator->retrieve<FFilesystemPopUpImGuiWidget>();
+        m_pContentBrowser = serviceLocator->retrieve<FContentBrowserImGui>();
         m_pScriptWidget = serviceLocator->retrieve<FScriptWidgetImGui>();
         m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
@@ -313,20 +315,11 @@ namespace marengine {
 
         }
 
-        //const bool userHasChosenRenderable = [&renderable]()->bool {
-        //    if (Button_ChooseRenderable<MeshCreator::Cube>(renderable, "Cube")) { return true; }
-        //    ImGui::SameLine();
-        //    if (Button_ChooseRenderable<MeshCreator::Pyramid>(renderable, "Pyramid")) { return true; }
-        //    ImGui::SameLine();
-        //    if (Button_ChooseRenderable<MeshCreator::Wall>(renderable, "Wall")) { return true; }
-        //    ImGui::SameLine();
-        //    if (Button_ChooseRenderable<MeshCreator::Surface>(renderable, "Surface")) { return true; }
-        //    return false;
-        //}();
-
-        //if (userHasChosenRenderable) {
-        //    FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
-        //}
+        const bool selectedMesh{ m_pContentBrowser->drawMeshListBox(cRenderable) };
+        if(selectedMesh) {
+            m_inspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_MESH);
+            FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
+        }
     }
 
     template<>

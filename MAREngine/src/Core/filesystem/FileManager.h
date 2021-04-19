@@ -64,6 +64,8 @@ namespace marengine {
 		MAR_NO_DISCARD static std::string getRelativePath(const std::string& absolutePath,
                                                           const std::string& path);
 
+		MAR_NO_DISCARD static std::string getFilenameFromPath(const std::string& path);
+
 	};
 
 

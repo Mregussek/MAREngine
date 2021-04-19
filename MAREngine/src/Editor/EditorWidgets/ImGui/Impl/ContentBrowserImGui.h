@@ -20,40 +20,40 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
-#define MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
+#ifndef MARENGINE_CONTENTBROWSERIMGUI_H
+#define MARENGINE_CONTENTBROWSERIMGUI_H
 
 
-#include "ImGuiEditorServiceLocator.h"
-
-// Implementations
-#include "Impl/FilesystemPopUpWidgetImGui.h"
-#include "Impl/DebugWidgetImGui.h"
-#include "Impl/EnvironmentPropertiesWidgetImGui.h"
-#include "Impl/InspectorWidgetImGui.h"
-#include "Impl/MainWidgetImGui.h"
-#include "Impl/MainMenuBarImGuiWidget.h"
-#include "Impl/SceneHierarchyWidgetImGui.h"
-#include "Impl/ScriptWidgetImGui.h"
-#include "Impl/ViewportWidgetImGui.h"
-#include "Impl/ContentBrowserImGui.h"
+#include "../../../../mar.h"
+#include "../../IEditorWidget.h"
 
 
 namespace marengine {
 
+    class FMeshManager;
+    class FImGuiEditorServiceLocator;
+    struct CRenderable;
 
-	template<typename TImGuiService>
-    TImGuiService* FImGuiEditorServiceLocator::retrieve() {
-		return &m_imguiRegistry.get<TImGuiService>(m_imguiEntity);
-	}
 
-	template<typename TImGuiService>
-    TImGuiService* FImGuiEditorServiceLocator::emplace() {
-		return &m_imguiRegistry.emplace<TImGuiService>(m_imguiEntity);
-	}
+    class FContentBrowserImGui : public FContentBrowserEditorWidget {
+    public:
+
+        void create(FImGuiEditorServiceLocator* serviceLocator);
+
+        bool drawMeshListBox(CRenderable& cRenderable) const;
+
+    private:
+
+        static constexpr uint16 m_offset{ 3 }; // + 3 because Cube, Pyramid Surface
+        std::array<const char*, 100> m_namesArray;
+        uint16 m_namesSize{ 0 };
+        FMeshManager* m_pMeshManager{ nullptr };
+
+    };
 
 
 }
 
 
-#endif //MARENGINE_IMGUIEDITORSERVICELOCATOR_INL
+
+#endif //MARENGINE_CONTENTBROWSERIMGUI_H

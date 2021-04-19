@@ -32,11 +32,11 @@
 namespace marengine {
 
 
-    class FEditorWidgetsServiceManager : IServiceManager<FEditorWidgetsServiceManager, IEditorWidget> {
+    class FEditorWidgetsServiceManager : IServiceManager<FEditorWidgetsServiceManager, FEditorWidget> {
     public:
 
-        void emplace(IEditorWidget* service);
-        void pop(IEditorWidget* service);
+        void emplace(FEditorWidget* service);
+        void pop(FEditorWidget* service);
 
         void onCreate() const;
         void onUpdate() const;
@@ -44,7 +44,7 @@ namespace marengine {
 
     private:
 
-        std::array<IEditorWidget*, 8> m_services;
+        std::array<FEditorWidget*, 9> m_services;
         size_t m_insertValue{ 0 };
 
     };
