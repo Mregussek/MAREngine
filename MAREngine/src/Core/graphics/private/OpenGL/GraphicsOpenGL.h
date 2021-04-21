@@ -30,6 +30,7 @@
 #include "BufferOpenGL.h"
 #include "PipelineOpenGL.h"
 #include "ShadersOpenGL.h"
+#include "FramebufferOpenGL.h"
 
 
 namespace marengine {
@@ -48,19 +49,22 @@ namespace marengine {
 
         MAR_NO_DISCARD ERenderContextType getType() const final;
 
-        MAR_NO_DISCARD FBufferStorage* getBufferStorage() final;
-        MAR_NO_DISCARD FShadersStorage* getShadersStorage() final;
-        MAR_NO_DISCARD FPipelineStorage* getPipelineStorage() final;
+        MAR_NO_DISCARD FBufferStorage* getBufferStorage() const final;
+        MAR_NO_DISCARD FShadersStorage* getShadersStorage() const final;
+        MAR_NO_DISCARD FPipelineStorage* getPipelineStorage() const final;
+        MAR_NO_DISCARD FFramebufferStorage* getFramebufferStorage() const final;
 
-        MAR_NO_DISCARD FBufferFactory* getBufferFactory() final;
-        MAR_NO_DISCARD FShadersFactory* getShadersFactory() final;
-        MAR_NO_DISCARD FPipelineFactory* getPipelineFactory() final;
+        MAR_NO_DISCARD FBufferFactory* getBufferFactory() const final;
+        MAR_NO_DISCARD FShadersFactory* getShadersFactory() const final;
+        MAR_NO_DISCARD FPipelineFactory* getPipelineFactory() const final;
+        MAR_NO_DISCARD FFramebufferFactory* getFramebufferFactory() const final;
 
     private:
 
         FPipelineFactoryOpenGL m_pipelineFactory;
         FShadersFactoryOpenGL m_shadersFactory;
         FBufferFactoryOpenGL m_bufferFactory;
+        FFramebufferFactoryOpenGL m_framebufferFactory;
 
         FWindow* m_pWindow{ nullptr };
 

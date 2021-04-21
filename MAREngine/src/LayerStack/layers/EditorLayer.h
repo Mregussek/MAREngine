@@ -35,17 +35,17 @@ namespace marengine {
     class FSceneManagerEditor;
     class FMeshManager;
     class FWindow;
+    class FRenderManager;
 
 
     class FEditorLayer : public ILayer {
     public:
 
-        virtual void create(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                            FMeshManager* pMeshManager, FRenderStatistics* pRenderStatistic) = 0;
-
-    protected:
-
-        virtual void renderToViewport() = 0;
+        virtual void create(FWindow* pWindow,
+                            FSceneManagerEditor* pSceneManagerEditor,
+                            FMeshManager* pMeshManager,
+                            FRenderManager* pRenderManager,
+                            FRenderStatistics* pRenderStatistic) = 0;
 
     };
 
@@ -53,8 +53,11 @@ namespace marengine {
     class FEditorLayerImGui : public FEditorLayer {
     public:
 
-        void create(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                    FMeshManager* pMeshManager, FRenderStatistics* pRenderStatistic) final;
+        void create(FWindow* pWindow,
+                    FSceneManagerEditor* pSceneManagerEditor,
+                    FMeshManager* pMeshManager,
+                    FRenderManager* pRenderManager,
+                    FRenderStatistics* pRenderStatistic) final;
 
         void begin() final;
         void update() final;
@@ -62,9 +65,6 @@ namespace marengine {
         void close() final;
 
     private:
-
-        void renderToViewport() final;
-
 
         FEditorWidgetsServiceManager m_editorServiceManager;
         FImGuiEditorServiceLocator m_serviceLocator;

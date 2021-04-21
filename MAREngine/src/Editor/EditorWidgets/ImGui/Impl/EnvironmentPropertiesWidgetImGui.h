@@ -29,6 +29,7 @@
 
 namespace marengine {
 
+    class FRenderManager;
     class FSceneManagerEditor;
     class FImGuiEditorServiceLocator;
 
@@ -42,6 +43,7 @@ namespace marengine {
 
     private:
 
+        FRenderManager* m_pRenderManager{ nullptr };
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
 
     };

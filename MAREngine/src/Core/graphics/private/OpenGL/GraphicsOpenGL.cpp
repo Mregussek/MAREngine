@@ -91,28 +91,36 @@ namespace marengine {
         return ERenderContextType::OPENGL;
     }
 
-    FBufferStorage* FRenderContextOpenGL::getBufferStorage() {
-        return &m_bufferFactory.m_storage;
+    FBufferStorage* FRenderContextOpenGL::getBufferStorage() const {
+        return (FBufferStorage*)&m_bufferFactory.m_storage;
     }
 
-    FShadersStorage* FRenderContextOpenGL::getShadersStorage() {
-        return &m_shadersFactory.m_storage;
+    FShadersStorage* FRenderContextOpenGL::getShadersStorage() const {
+        return (FShadersStorage*)&m_shadersFactory.m_storage;
     }
 
-    FPipelineStorage* FRenderContextOpenGL::getPipelineStorage() {
-        return &m_pipelineFactory.m_storage;
+    FPipelineStorage* FRenderContextOpenGL::getPipelineStorage() const {
+        return (FPipelineStorage*)&m_pipelineFactory.m_storage;
     }
 
-    FBufferFactory* FRenderContextOpenGL::getBufferFactory() {
-        return &m_bufferFactory;
+    FFramebufferStorage* FRenderContextOpenGL::getFramebufferStorage() const {
+        return (FFramebufferStorage*)&m_framebufferFactory.m_storage;
     }
 
-    FShadersFactory* FRenderContextOpenGL::getShadersFactory() {
-        return &m_shadersFactory;
+    FBufferFactory* FRenderContextOpenGL::getBufferFactory() const {
+        return (FBufferFactory*)&m_bufferFactory;
     }
 
-    FPipelineFactory* FRenderContextOpenGL::getPipelineFactory() {
-        return &m_pipelineFactory;
+    FShadersFactory* FRenderContextOpenGL::getShadersFactory() const {
+        return (FShadersFactory*)&m_shadersFactory;
+    }
+
+    FPipelineFactory* FRenderContextOpenGL::getPipelineFactory() const {
+        return (FPipelineFactory*)&m_pipelineFactory;
+    }
+
+    FFramebufferFactory* FRenderContextOpenGL::getFramebufferFactory() const {
+        return (FFramebufferFactory*)&m_framebufferFactory;
     }
 
 

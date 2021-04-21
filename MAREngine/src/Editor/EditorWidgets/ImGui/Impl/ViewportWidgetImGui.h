@@ -34,6 +34,7 @@ namespace marengine {
     class FSceneManagerEditor;
     class FInspectorWidgetImGui;
     class FImGuiEditorServiceLocator;
+    class FRenderManager;
     class FWindow;
 
 
@@ -41,29 +42,21 @@ namespace marengine {
     public:
 
         void create(FImGuiEditorServiceLocator* serviceLocator);
-        void destroy() override;
-
-        void beginFrame() override;
         void updateFrame() override;
 
-        void bind(maths::vec3 backgroundColor) const;
-
     private:
-
-        void unbind() const;
-
-        void updateAspectRatio();
 
         MAR_NO_DISCARD ImGuizmo::OPERATION displayViewportControlPanel();
         void displayActualViewport();
 
 
-        FramebufferOpenGL m_framebuffer;
+        //FramebufferOpenGL m_framebuffer;
         Camera m_camera;
         float m_aspectRatio{ 1.33f };
 
         FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
         FInspectorWidgetImGui* m_pInspectorWidget{ nullptr };
+        FRenderManager* m_pRenderManager{ nullptr };
         FWindow* m_pWindow{ nullptr };
 
     };

@@ -29,12 +29,18 @@
 namespace marengine {
 
 
-    void FEditorLayerImGui::create(FWindow* pWindow, FSceneManagerEditor *pSceneManagerEditor,
-                                   FMeshManager* pMeshManager, FRenderStatistics* pRenderStatistics) {
+    void FEditorLayerImGui::create(FWindow* pWindow,
+                                   FSceneManagerEditor *pSceneManagerEditor,
+                                   FMeshManager* pMeshManager,
+                                   FRenderManager* pRenderManager,
+                                   FRenderStatistics* pRenderStatistics) {
         m_pSceneManagerEditor = pSceneManagerEditor;
         m_pWindow = pWindow;
-        m_serviceLocator.registerServices(pWindow, pSceneManagerEditor, pRenderStatistics,
-                                          pMeshManager);
+        m_serviceLocator.registerServices(pWindow,
+                                          pSceneManagerEditor,
+                                          pRenderStatistics,
+                                          pMeshManager,
+                                          pRenderManager);
 
         // In what order should every window be rendered (sometimes it matters, last window will show up first)
         m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FScriptWidgetImGui>());
@@ -53,7 +59,7 @@ namespace marengine {
     }
 
     void FEditorLayerImGui::begin() {
-        renderToViewport();
+        
     }
 
     void FEditorLayerImGui::update() {
@@ -67,10 +73,6 @@ namespace marengine {
     void FEditorLayerImGui::close() {
         m_editorServiceManager.onDestroy();
         m_serviceLocator.close();
-    }
-
-    void FEditorLayerImGui::renderToViewport() {
-        m_serviceLocator.retrieve<FViewportWidgetImGui>()->bind(m_pSceneManagerEditor->getScene()->getBackground());
     }
 
 

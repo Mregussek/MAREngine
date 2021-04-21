@@ -24,20 +24,29 @@
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Scene.h"
+#include "../../../../Core/graphics/public/RenderManager.h"
+#include "../../../../Core/graphics/public/Framebuffer.h"
 
 
 namespace marengine {
 
 
     void FEnvironmentPropertiesWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
-        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pRenderManager =
+                serviceLocator->retrieve<FImGuiTypeHolder<FRenderManager*>>()->pInstance;
+        m_pSceneManagerEditor =
+                serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
     }
 
     void FEnvironmentPropertiesWidgetImGui::updateFrame() {
         ImGui::Begin("Environment Properties");
 
-        maths::vec3& sceneBackground{ m_pSceneManagerEditor->getScene()->getBackground() };
-        ImGui::ColorEdit3("Scene Background Color", &sceneBackground.x);
+        static maths::vec3 clearColor{ 0.25f, 0.6f, 0.8f };
+        if(ImGui::ColorEdit3("Scene Background Color", &clearColor.x)) {
+            FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
+            pFramebuffer->setClearColor(clearColor);
+            m_pSceneManagerEditor->getScene()->setBackground(clearColor);
+        }
 
         ImGui::End();
     }

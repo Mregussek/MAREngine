@@ -31,6 +31,62 @@ namespace marengine {
 
 
     class FFramebufferOpenGL : public FFramebuffer {
+    public:
+
+        void create(const FFramebufferSpecification& specs) final;
+        void destroy() final;
+
+        void bind() const final;
+        void unbind() const final;
+        void clear() const final;
+
+        void resize(uint32 width, uint32 height) final;
+
+        void setSize(uint32 width, uint32 height) final;
+        void setClearColor(maths::vec3 clearColor) final;
+
+        MAR_NO_DISCARD uint32 getWidth() const final;
+        MAR_NO_DISCARD uint32 getHeight() const final;
+        MAR_NO_DISCARD uint32 getColorAttach() const final;
+
+    private:
+
+        GLuint m_id{ 0 };
+        GLuint m_colorAttachment{ 0 };
+        GLuint m_depthAttachment{ 0 };
+
+    };
+
+
+    class FFramebufferStorageOpenGL : public FFramebufferStorage {
+
+        friend class FFramebufferFactoryOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD FFramebuffer* get(int32 index) const final;
+        MAR_NO_DISCARD uint32 getCount() const final;
+
+        void reset() final;
+
+    private:
+
+        std::vector<FFramebufferOpenGL> m_framebuffers;
+
+    };
+
+
+    class FFramebufferFactoryOpenGL : public FFramebufferFactory {
+
+        friend class FRenderContextOpenGL;
+
+    public:
+
+        MAR_NO_DISCARD FFramebuffer* emplace() final;
+
+    private:
+
+        FFramebufferStorageOpenGL m_storage;
 
     };
 

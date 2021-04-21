@@ -59,8 +59,10 @@ namespace marengine {
 
         const uint32_t colorMeshesCount{ m_context.getPipelineStorage()->getCountColorMesh() };
 
+        FFramebuffer* pFramebuffer{ p_renderManager.getViewportFramebuffer() };
+        pFramebuffer->clear();
         for(uint32_t i = 0; i < colorMeshesCount; i++) {
-            m_renderCmds.draw(m_context.getPipelineStorage()->getColorMesh(i));
+            m_renderCmds.draw(pFramebuffer, m_context.getPipelineStorage()->getColorMesh(i));
         }
     }
 

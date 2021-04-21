@@ -28,6 +28,7 @@
 #include "../../Core/graphics/public/BatchManager.h"
 #include "../../Core/graphics/public/MeshManager.h"
 #include "../../Core/graphics/public/RenderManager.h"
+#include "../../Core/graphics/public/Framebuffer.h"
 
 
 namespace marengine {
@@ -36,6 +37,8 @@ namespace marengine {
 	void FSceneLayer::create(const std::string& scenePath, FRenderManager* pRenderManager,
                              FBatchManager* pBatchManager, FMeshManager* pMeshManager) {
         Scene* pScene = FSceneDeserializer::loadSceneFromFile(scenePath);
+
+        pRenderManager->getViewportFramebuffer()->setClearColor(pScene->getBackground());
 
         FEventsCameraEntity::passSceneManager(&m_sceneManagerEditor);
         FEventsCameraEntity::passRenderManager(pRenderManager);

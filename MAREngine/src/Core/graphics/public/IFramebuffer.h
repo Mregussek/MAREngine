@@ -56,14 +56,17 @@ namespace marengine {
         virtual void destroy() = 0;
 
         virtual void bind() const = 0;
+        virtual void unbind() const = 0;
+        virtual void clear() const = 0;
 
         virtual void resize(uint32 width, uint32 height) = 0;
 
-        virtual uint32 getColorAttach() const = 0;
-
         virtual void setSize(uint32 width, uint32 height) = 0;
+        virtual void setClearColor(maths::vec3 clearColor) = 0;
+
         virtual uint32 getWidth() const = 0;
         virtual uint32 getHeight() const = 0;
+        virtual uint32 getColorAttach() const = 0;
 
     };
 

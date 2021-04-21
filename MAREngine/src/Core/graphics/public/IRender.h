@@ -36,6 +36,8 @@ namespace marengine {
     class FShadersFactory;
     class FPipelineStorage;
     class FPipelineFactory;
+    class FFramebufferFactory;
+    class FFramebufferStorage;
 
 
     enum class ERenderContextType {
@@ -151,13 +153,15 @@ namespace marengine {
         virtual void prepareFrame() = 0;
         virtual void endFrame() = 0;
 
-        virtual FBufferStorage* getBufferStorage() = 0;
-        virtual FShadersStorage* getShadersStorage() = 0;
-        virtual FPipelineStorage* getPipelineStorage() = 0;
+        virtual FBufferStorage* getBufferStorage() const = 0;
+        virtual FShadersStorage* getShadersStorage() const = 0;
+        virtual FPipelineStorage* getPipelineStorage() const = 0;
+        virtual FFramebufferStorage* getFramebufferStorage() const = 0;
 
-        virtual FBufferFactory* getBufferFactory() = 0;
-        virtual FShadersFactory* getShadersFactory() = 0;
-        virtual FPipelineFactory* getPipelineFactory() = 0;
+        virtual FBufferFactory* getBufferFactory() const = 0;
+        virtual FShadersFactory* getShadersFactory() const = 0;
+        virtual FPipelineFactory* getPipelineFactory() const = 0;
+        virtual FFramebufferFactory* getFramebufferFactory() const = 0;
 
         virtual ERenderContextType getType() const = 0;
 

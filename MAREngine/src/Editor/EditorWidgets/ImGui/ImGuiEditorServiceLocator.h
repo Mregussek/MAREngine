@@ -33,14 +33,18 @@ namespace marengine {
     class FRenderStatistics;
     class FMeshManager;
     class FWindow;
+    class FRenderManager;
     template<typename TTypeToHold> struct FImGuiTypeHolder;
 
 
     class FImGuiEditorServiceLocator {
     public:
 
-        void registerServices(FWindow* pWindow, FSceneManagerEditor* pSceneManagerEditor,
-                              FRenderStatistics* pRenderStatistics, FMeshManager* pMeshManager);
+        void registerServices(FWindow* pWindow,
+                              FSceneManagerEditor* pSceneManagerEditor,
+                              FRenderStatistics* pRenderStatistics,
+                              FMeshManager* pMeshManager,
+                              FRenderManager* pRenderManager);
         void close();
 
         template<typename TImGuiService>

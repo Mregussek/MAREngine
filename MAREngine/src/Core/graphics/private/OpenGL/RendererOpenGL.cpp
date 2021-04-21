@@ -22,13 +22,14 @@
 
 #include "RendererOpenGL.h"
 #include "PipelineOpenGL.h"
+#include "FramebufferOpenGL.h"
 #include "../../../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
-    void FRenderCommandOpenGL::draw(FPipelineMesh* pPipeline) {
+    void FRenderCommandOpenGL::draw(FPipelineMesh* pPipeline) const {
         pPipeline->bind();
 
         GL_FUNC( glStencilFunc(GL_ALWAYS, 1, 0xFF) );
@@ -38,6 +39,12 @@ namespace marengine {
                                 pPipeline->getIndicesCount(),
                                 GL_UNSIGNED_INT,
                                 nullptr) );
+    }
+
+    void FRenderCommandOpenGL::draw(FFramebuffer* pFramebuffer, FPipelineMesh* pPipeline) const {
+        pFramebuffer->bind();
+        draw(pPipeline);
+        pFramebuffer->unbind();
     }
 
 

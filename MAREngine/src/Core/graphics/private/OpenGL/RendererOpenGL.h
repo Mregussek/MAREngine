@@ -30,12 +30,14 @@
 namespace marengine {
 
     class FPipelineMesh;
+    class FFramebuffer;
 
 
     class FRenderCommandOpenGL : public FRenderCommand {
     public:
 
-        void draw(FPipelineMesh* pPipeline);
+        void draw(FPipelineMesh* pPipeline) const;
+        void draw(FFramebuffer* pFramebuffer, FPipelineMesh* pPipeline) const;
 
     };
 

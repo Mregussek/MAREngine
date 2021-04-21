@@ -23,6 +23,7 @@
 #include "../public/RenderManager.h"
 #include "../public/BatchManager.h"
 #include "../public/Buffer.h"
+#include "../public/Framebuffer.h"
 #include "../public/Shaders.h"
 #include "../public/Pipeline.h"
 #include "../public/RenderCamera.h"
@@ -38,6 +39,17 @@ namespace marengine {
         m_pContext->getBufferFactory()->passRenderContext(pContext);
         m_pContext->getShadersFactory()->passRenderContext(pContext);
         m_pContext->getPipelineFactory()->passRenderContext(pContext);
+
+        FFramebufferFactory* pFbFactory{ m_pContext->getFramebufferFactory() };
+        pFbFactory->passRenderContext(pContext);
+
+        FFramebufferSpecification framebufferSpecs;
+        framebufferSpecs.width = 800;
+        framebufferSpecs.height = 600;
+
+        FFramebuffer* viewportFramebuffer{ pFbFactory->emplace() };
+        m_viewportFbIndex = viewportFramebuffer->getIndex();
+        viewportFramebuffer->create(framebufferSpecs);
     }
 
     template<typename TMeshBatch>
@@ -65,6 +77,10 @@ namespace marengine {
 
     bool FRenderManager::isCameraValid() const {
         return m_pRenderCamera != nullptr;
+    }
+
+    FFramebuffer* FRenderManager::getViewportFramebuffer() const {
+        return m_pContext->getFramebufferStorage()->get(m_viewportFbIndex);
     }
 
     void FRenderManager::onBatchesReadyToDraw(FBatchManager* pBatchManager) {

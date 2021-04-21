@@ -24,7 +24,10 @@
 #include "InspectorWidgetImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
 #include "../../../../Window/IWindow.h"
+#include "../../../../Core/graphics/public/RenderManager.h"
+#include "../../../../Core/graphics/public/Framebuffer.h"
 #include "../../../../Core/ecs/SceneManagerEditor.h"
+#include "../../../../Core/ecs/Scene.h"
 #include "../../../../Core/ecs/Entity/Entity.h"
 #include "../../../../Core/ecs/Entity/EventsCameraEntity.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h"
@@ -37,28 +40,23 @@ namespace marengine {
 
 
     void FViewportWidgetImGui::create(FImGuiEditorServiceLocator* serviceLocator) {
-        m_pSceneManagerEditor = serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
+        m_pRenderManager =
+                serviceLocator->retrieve<FImGuiTypeHolder<FRenderManager*>>()->pInstance;
+        m_pSceneManagerEditor =
+                serviceLocator->retrieve<FImGuiTypeHolder<FSceneManagerEditor*>>()->pInstance;
         m_pInspectorWidget = serviceLocator->retrieve<FInspectorWidgetImGui>();
         m_pWindow = serviceLocator->retrieve<FImGuiTypeHolder<FWindow*>>()->pInstance;
 
-        constexpr float xDefault = 800.f;
-        constexpr float yDefault = 600.f;
-        m_framebuffer.initialize(xDefault, yDefault);
-        updateAspectRatio();
+        FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
+        const uint32 currentWidth{ pFramebuffer->getWidth() };
+        const uint32 currentHeight{ pFramebuffer->getHeight() };
+        m_aspectRatio = (float)currentWidth / (float)currentHeight;
 
         m_camera.initialize(m_aspectRatio);
 
         if(m_pSceneManagerEditor->usingEditorCamera()) {
             FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
         }
-    }
-
-    void FViewportWidgetImGui::destroy() {
-        m_framebuffer.close();
-    }
-
-    void FViewportWidgetImGui::beginFrame() {
-        m_framebuffer.unbind();
     }
 
     void FViewportWidgetImGui::updateFrame() {
@@ -175,29 +173,21 @@ namespace marengine {
 
     void FViewportWidgetImGui::displayActualViewport() {
         const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-        const auto size = m_framebuffer.getSize();
 
-        if (size.x != viewportSize.x || size.y != viewportSize.y) {
-            m_framebuffer.resize(viewportSize.x, viewportSize.y);
-            updateAspectRatio();
+        FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
+        const uint32 currentWidth{ pFramebuffer->getWidth() };
+        const uint32 currentHeight{ pFramebuffer->getHeight() };
+
+        const bool viewportSizeMatch{
+            currentWidth != (uint32)viewportSize.x || currentHeight != (uint32)viewportSize.y
+        };
+        if (viewportSizeMatch) {
+            pFramebuffer->resize((uint32)viewportSize.x, (uint32)viewportSize.y);
+            m_aspectRatio = (float)currentWidth / (float)currentHeight;
         }
 
-        const uint32_t id = m_framebuffer.getColorAttach();
+        const uint32_t id{ pFramebuffer->getColorAttach() };
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-    }
-
-    void FViewportWidgetImGui::bind(maths::vec3 backgroundColor) const {
-        m_framebuffer.bind();
-        m_framebuffer.clear(backgroundColor);
-    }
-
-    void FViewportWidgetImGui::unbind() const {
-        m_framebuffer.unbind();
-    }
-
-    void FViewportWidgetImGui::updateAspectRatio() {
-        const auto size = m_framebuffer.getSize();
-        m_aspectRatio = size.x / size.y;
     }
 
 

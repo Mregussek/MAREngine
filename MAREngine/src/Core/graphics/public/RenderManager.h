@@ -34,6 +34,7 @@ namespace marengine {
     class FPointLightBatch;
     class RenderCamera;
     class FBatchManager;
+    class FFramebuffer;
 
 
     enum class ERenderBatchUpdateType {
@@ -48,8 +49,10 @@ namespace marengine {
         void reset();
 
         void setCamera(const RenderCamera* pRenderCamera);
-        void pushCameraToRender(const RenderCamera* pRenderCamera);
         MAR_NO_DISCARD bool isCameraValid() const;
+        MAR_NO_DISCARD FFramebuffer* getViewportFramebuffer() const;
+
+        void pushCameraToRender(const RenderCamera* pRenderCamera);
         void onBatchesReadyToDraw(FBatchManager* pBatchManager);
 
         template<ERenderBatchUpdateType TUpdateType, typename TBatch>
@@ -62,6 +65,7 @@ namespace marengine {
 
         int32 m_cameraIndex{ -1 };
         int32 m_pointLightIndex{ -1 };
+        int32 m_viewportFbIndex{ -1 };
 
     };
 
