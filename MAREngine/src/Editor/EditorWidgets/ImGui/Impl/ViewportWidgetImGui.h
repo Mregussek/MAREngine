@@ -26,7 +26,6 @@
 
 #include "../../IEditorWidget.h"
 #include "../../../Camera/Camera.h"
-#include "../../../../Platform/OpenGL/FramebufferOpenGL.h"
 
 
 namespace marengine {
@@ -50,7 +49,6 @@ namespace marengine {
         void displayActualViewport();
 
 
-        //FramebufferOpenGL m_framebuffer;
         Camera m_camera;
         float m_aspectRatio{ 1.33f };
 
