@@ -29,7 +29,6 @@
 
 namespace marengine {
 
-
     class FShadersStorage;
     class FBufferStorage;
     class FPipelineMeshColor;

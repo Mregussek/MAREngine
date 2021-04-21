@@ -130,6 +130,7 @@ namespace marengine {
     }
 
     void FFramebufferOpenGL::resize(uint32 width, uint32 height) {
+        setSize(width, height);
         resizeGL(m_colorAttachment, m_depthAttachment, p_specification);
     }
 
