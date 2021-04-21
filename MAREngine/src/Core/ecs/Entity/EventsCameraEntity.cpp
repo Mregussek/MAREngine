@@ -24,7 +24,7 @@
 #include "Entity.h"
 #include "../Scene.h"
 #include "../SceneManagerEditor.h"
-#include "../../graphics/RenderManager.h"
+#include "../../graphics/public/RenderManager.h"
 
 
 namespace marengine {

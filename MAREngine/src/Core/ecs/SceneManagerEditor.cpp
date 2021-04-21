@@ -24,8 +24,8 @@
 #include "Scene.h"
 #include "Entity/EventsComponentEntity.h"
 #include "Entity/EventsCameraEntity.h"
-#include "../graphics/BatchManager.h"
-#include "../graphics/MeshManager.h"
+#include "../graphics/public/BatchManager.h"
+#include "../graphics/public/MeshManager.h"
 
 
 namespace marengine {

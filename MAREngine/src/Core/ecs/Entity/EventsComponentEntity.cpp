@@ -23,9 +23,9 @@
 #include "EventsComponentEntity.inl"
 #include "EventsCameraEntity.h"
 #include "../SceneManagerEditor.h"
-#include "../../graphics/MeshManager.h"
-#include "../../graphics/RenderManager.h"
-#include "../../graphics/BatchManager.h"
+#include "../../graphics/public/MeshManager.h"
+#include "../../graphics/public/RenderManager.h"
+#include "../../graphics/public/BatchManager.h"
 #include "../../../Logging/Logger.h"
 
 

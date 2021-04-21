@@ -20,38 +20,13 @@
 ************************************************************************/
 
 
-// MAR 
-#include "../../src/mar.h"
+#ifndef MARENGINE_IMATERIAL_H
+#define MARENGINE_IMATERIAL_H
 
-// Log
-#include "../../src/Logging/Logger.h"
 
-// Filesystem
-#include "../../src/Core/filesystem/SceneDeserializer.h"
-#include "../../src/Core/filesystem/SceneSerializer.h"
+namespace marengine {
 
-// Layers	 
-#include "../../src/LayerStack/LayerStack.h"
-#include "../../src/LayerStack/layers/EditorLayer.h"
-#include "../../src/LayerStack/layers/SceneLayer.h"
-#include "../../src/LayerStack/layers/RenderLayer.h"
+}
 
-// Entity Component System
-#include "../../src/Core/ecs/Scene.h"
-#include "../../src/Core/ecs/Entity/Entity.h"
-#include "../../src/Core/ecs/Entity/Components.h"
 
-// Rendering
-#include "../../src/Core/graphics/public/Renderer.h"
-
-// Scripting
-#include "../../src/Core/scripting/PythonScript.h"
-
-// Window && Input
-#include "../../src/Window/GLFW/WindowGLFW.h"
-#include "../../src/Window/SDL/WindowSDL.h"
-#include "../../src/Window/IWindow.h"
-
-// Engine	 
-#include "../../src/MAREngine.h"
-#include "../../src/MAREngineBuilder.h"
+#endif //MARENGINE_IMATERIAL_H

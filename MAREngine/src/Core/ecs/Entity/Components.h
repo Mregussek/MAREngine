@@ -25,10 +25,10 @@
 
 
 #include "../../../mar.h"
-#include "../../graphics/MeshBatch.h"   // CRenderable
-#include "../../graphics/Mesh.h"    // CRenderable
-#include "../../graphics/RenderCamera.h"    // CCamera
-#include "../../graphics/Lightning/LightDefinitions.h"  // CPointLight
+#include "../../graphics/public/MeshBatch.h"   // CRenderable
+#include "../../graphics/public/Mesh.h"    // CRenderable
+#include "../../graphics/public/RenderCamera.h"    // CCamera
+#include "../../graphics/public/IRender.h"  // CPointLight
 #include "../../scripting/PythonScript.h"   // CPythonScript
 
 
@@ -45,13 +45,13 @@ namespace marengine {
 	        /// @brief type used to retrieve correct implementation of FMeshProxy from FMeshStorage
             EMeshType type{ EMeshType::NONE };
             /// @brief index used to retrieve assigned to Entity FMeshProxy from FMeshStorage (can be -1 if default Mesh used)
-	        int8 index{ -1 };
+            int32 index{ -1 };
 	    };
 	    struct MaterialInfo {
             /// @brief type used to retrieve correct implementation of FMaterialProxy from FMaterialStorage
             //EMaterialType type{ EMaterialType::NONE };
             /// @brief index used to retrieve assigned to Entity FMaterialProxy from FMaterialStorage
-            int8 index{ -1 };
+            int32 index{ -1 };
 
             bool isValid() const { return index != -1; }
 	    };

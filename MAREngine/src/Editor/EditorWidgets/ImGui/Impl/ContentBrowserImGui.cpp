@@ -22,7 +22,7 @@
 
 #include "ContentBrowserImGui.h"
 #include "../ImGuiEditorServiceLocator.h"
-#include "../../../../Core/graphics/MeshManager.h"
+#include "../../../../Core/graphics/public/MeshManager.h"
 #include "../../../../Core/ecs/Entity/Components.h"
 
 

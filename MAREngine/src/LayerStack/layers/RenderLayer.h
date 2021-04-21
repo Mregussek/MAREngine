@@ -26,12 +26,12 @@
 
 #include "../../mar.h"
 #include "../ILayer.h"
-#include "../../Core/graphics/Renderer.h"
-#include "../../Core/graphics/RenderManager.h"
-#include "../../Core/graphics/BatchManager.h"
-#include "../../Core/graphics/MeshManager.h"
-#include "../../Core/graphics/OpenGL/GraphicsOpenGL.h"
-#include "../../Core/graphics/OpenGL/RendererOpenGL.h"
+#include "../../Core/graphics/public/Renderer.h"
+#include "../../Core/graphics/public/RenderManager.h"
+#include "../../Core/graphics/public/BatchManager.h"
+#include "../../Core/graphics/public/MeshManager.h"
+#include "../../Core/graphics/private/OpenGL/GraphicsOpenGL.h"
+#include "../../Core/graphics/private/OpenGL/RendererOpenGL.h"
 
 
 namespace marengine {

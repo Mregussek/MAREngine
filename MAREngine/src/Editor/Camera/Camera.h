@@ -27,7 +27,7 @@
 #include "../../mar.h"
 #include "StandardCamera.h"
 #include "SphericalCamera.h"
-#include "../../Core/graphics/RenderCamera.h"
+#include "../../Core/graphics/public/RenderCamera.h"
 
 
 namespace marengine {
