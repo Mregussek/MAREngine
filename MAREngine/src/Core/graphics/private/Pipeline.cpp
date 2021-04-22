@@ -35,6 +35,10 @@ namespace marengine {
         p_pShadersStorage = pStorage;
     }
 
+    void FPipeline::passMaterialStorage(FMaterialStorage* pMaterialStorage) {
+        p_pMaterialStorage = pMaterialStorage;
+    }
+
 
     void FPipelineMesh::passVertexBuffer(int32 i) {
         p_vboIndex = i;
@@ -67,6 +71,12 @@ namespace marengine {
 
     void FPipelineMeshColor::passColorSSBO(int32 i) {
         p_colorIndex = i;
+    }
+
+
+    void FPipelineMeshTex2D::passTexture(int32 i) {
+        m_textures.at(m_texturesIndex) = i;
+        m_texturesIndex++;
     }
 
 

@@ -23,6 +23,7 @@
 #include "PipelineOpenGL.h"
 #include "../../public/Buffer.h"
 #include "../../public/Shaders.h"
+#include "../../public/Material.h"
 #include "../../../../Logging/Logger.h"
 
 
@@ -60,7 +61,16 @@ namespace marengine {
     }
 
     void FPipelineMeshTex2DOpenGL::bind() const {
-
+        GL_FUNC( glBindVertexArray(m_vao) );
+        p_pBufferStorage->getVBO(p_vboIndex)->bind();
+        p_pBufferStorage->getIBO(p_iboIndex)->bind();
+        p_pBufferStorage->getSSBO(p_transformIndex)->bind();
+        p_pBufferStorage->getSSBO(p_camIndex)->bind();
+        p_pBufferStorage->getSSBO(p_pointLightIndex)->bind();
+        p_pShadersStorage->get(p_shaderIndex)->bind();
+        for(uint32 i = 0; i < m_textures.size(); i++) {
+            p_pMaterialStorage->getTex2D(m_textures.at(i))->bind();
+        }
     }
 
 

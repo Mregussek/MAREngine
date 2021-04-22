@@ -23,6 +23,7 @@
 #include "../public/RenderManager.h"
 #include "../public/BatchManager.h"
 #include "../public/Buffer.h"
+#include "../public/Material.h"
 #include "../public/Framebuffer.h"
 #include "../public/Shaders.h"
 #include "../public/Pipeline.h"
@@ -39,6 +40,7 @@ namespace marengine {
         m_pContext->getBufferFactory()->passRenderContext(pContext);
         m_pContext->getShadersFactory()->passRenderContext(pContext);
         m_pContext->getPipelineFactory()->passRenderContext(pContext);
+        m_pContext->getMaterialFactory()->passRenderContext(pContext);
 
         FFramebufferFactory* pFbFactory{ m_pContext->getFramebufferFactory() };
         pFbFactory->passRenderContext(pContext);

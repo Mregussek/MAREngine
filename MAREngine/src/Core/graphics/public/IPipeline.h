@@ -41,6 +41,7 @@ namespace marengine {
 
         virtual void passBufferStorage(FBufferStorage* pBufferStorage) = 0;
         virtual void passShadersStorage(FShadersStorage* pShadersStorage) = 0;
+        virtual void passMaterialStorage(FMaterialStorage* pMaterialStorage) = 0;
 
         virtual void create() = 0;
         virtual void close() = 0;

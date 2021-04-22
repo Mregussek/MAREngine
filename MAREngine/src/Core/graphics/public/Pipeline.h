@@ -31,6 +31,7 @@ namespace marengine {
 
     class FShadersStorage;
     class FBufferStorage;
+    class FMaterialStorage;
     class FMeshBatchStaticColor;
 
 
@@ -39,11 +40,13 @@ namespace marengine {
 
         void passBufferStorage(FBufferStorage* pBufferStorage) final;
         void passShadersStorage(FShadersStorage* pShadersStorage) final;
+        void passMaterialStorage(FMaterialStorage* pMaterialStorage) final;
 
     protected:
 
         FBufferStorage* p_pBufferStorage{ nullptr };
         FShadersStorage* p_pShadersStorage{ nullptr };
+        FMaterialStorage* p_pMaterialStorage{ nullptr };
 
     };
 
@@ -84,6 +87,14 @@ namespace marengine {
 
 
     class FPipelineMeshTex2D : public FPipelineMesh {
+    public:
+
+        virtual void passTexture(int32 i) final;
+
+    protected:
+
+        std::array<int32, 32> m_textures;
+        uint32 m_texturesIndex{ 0 };
 
     };
 

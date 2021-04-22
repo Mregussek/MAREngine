@@ -76,6 +76,7 @@ namespace marengine {
 
         bool m_newScriptWindow{ false };
         bool m_assignScriptWindow{ false };
+        bool m_loadTex2D{ false };
 
     };
 

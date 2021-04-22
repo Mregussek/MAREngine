@@ -295,6 +295,9 @@ namespace marengine {
     void FInspectorWidgetImGui::displayComponentPanel<CRenderable>() {
         // During CRenderable onUpdate events, we need to create CEvent component and fill with
         // actual event.
+        const std::string loadTexture2D{ "Load Texture 2D" };
+        const std::string jpgExt{ ".jpg" };
+        constexpr char loadTexture2DButton[]{ "*** Load Texture 2D" };
 
         if (ImGui::MenuItem("Remove Renderable")) {
             FEventsComponentEntity::onRemove<CRenderable>(getInspectedEntity());
@@ -310,6 +313,10 @@ namespace marengine {
                 m_inspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_COLOR);
                 FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
             }
+
+            if (ImGui::Button(loadTexture2DButton)) {
+                m_loadTex2D = true;
+            }
         }
         else { // managing specific material
 
@@ -319,6 +326,15 @@ namespace marengine {
         if(selectedMesh) {
             m_inspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_MESH);
             FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
+        }
+        if(m_loadTex2D) {
+            m_pFilesystem->openWidget(loadTexture2D);
+            m_loadTex2D = false;
+        }
+        const FFilesystemDialogInfo loadTex2DInfo =
+                m_pFilesystem->displayOpenWidget(loadTexture2D, jpgExt);
+        if(loadTex2DInfo.isValid()) {
+           // TODO: Implement material load in inspector
         }
     }
 
