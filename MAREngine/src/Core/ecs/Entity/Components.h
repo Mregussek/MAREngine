@@ -29,6 +29,7 @@
 #include "../../graphics/public/Mesh.h"    // CRenderable
 #include "../../graphics/public/RenderCamera.h"    // CCamera
 #include "../../graphics/public/IRender.h"  // CPointLight
+#include "../../graphics/public/Material.h"  // CRenderable
 #include "../../scripting/PythonScript.h"   // CPythonScript
 
 
@@ -49,7 +50,7 @@ namespace marengine {
 	    };
 	    struct MaterialInfo {
             /// @brief type used to retrieve correct implementation of FMaterialProxy from FMaterialStorage
-            //EMaterialType type{ EMaterialType::NONE };
+            EMaterialType type{ EMaterialType::NONE };
             /// @brief index used to retrieve assigned to Entity FMaterialProxy from FMaterialStorage
             int32 index{ -1 };
 

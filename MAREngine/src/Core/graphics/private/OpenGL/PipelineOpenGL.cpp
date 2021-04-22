@@ -52,11 +52,11 @@ namespace marengine {
 
 
     void FPipelineMeshTex2DOpenGL::create() {
-
+        createVAO(m_vao, p_pBufferStorage->getVBO(p_vboIndex)->getInputDescription());
     }
 
     void FPipelineMeshTex2DOpenGL::close() {
-
+        GL_FUNC( glDeleteVertexArrays(1, &m_vao) );
     }
 
     void FPipelineMeshTex2DOpenGL::bind() const {
@@ -87,6 +87,8 @@ namespace marengine {
         for(auto& pipeline : m_texs2D) {
             pipeline.close();
         }
+        m_colors.clear();
+        m_texs2D.clear();
     }
 
 

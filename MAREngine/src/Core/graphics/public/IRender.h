@@ -38,6 +38,8 @@ namespace marengine {
     class FPipelineFactory;
     class FFramebufferFactory;
     class FFramebufferStorage;
+    class FMaterialFactory;
+    class FMaterialStorage;
 
 
     enum class ERenderContextType {
@@ -157,11 +159,13 @@ namespace marengine {
         virtual FShadersStorage* getShadersStorage() const = 0;
         virtual FPipelineStorage* getPipelineStorage() const = 0;
         virtual FFramebufferStorage* getFramebufferStorage() const = 0;
+        virtual FMaterialStorage* getMaterialStorage() const = 0;
 
         virtual FBufferFactory* getBufferFactory() const = 0;
         virtual FShadersFactory* getShadersFactory() const = 0;
         virtual FPipelineFactory* getPipelineFactory() const = 0;
         virtual FFramebufferFactory* getFramebufferFactory() const = 0;
+        virtual FMaterialFactory* getMaterialFactory() const = 0;
 
         virtual ERenderContextType getType() const = 0;
 

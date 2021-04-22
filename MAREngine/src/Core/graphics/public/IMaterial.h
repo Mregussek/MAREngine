@@ -24,7 +24,59 @@
 #define MARENGINE_IMATERIAL_H
 
 
+#include "IRenderResource.h"
+
+
 namespace marengine {
+
+    class FMaterial;
+    class FMaterialTex2D;
+    struct CRenderable;
+
+
+    enum class EMaterialType {
+        NONE, TEX2D
+    };
+
+    struct FTex2DInfo {
+        std::string path{};
+        uint32 sampler{ 0 };
+        int32 id{ -1 };
+    };
+
+
+    class IMaterialProxy : public FRenderResource {
+    public:
+
+        virtual void destroy() = 0;
+
+        virtual void bind() const = 0;
+        virtual void load() = 0;
+        virtual EMaterialType getType() const = 0;
+
+    };
+
+
+    class IMaterialStorage : public IRenderResourceStorage {
+    public:
+
+        virtual FMaterialTex2D* getTex2D(int32 index) const = 0;
+        virtual uint32 getCountTex2D() const = 0;
+
+        virtual FMaterial* retrieve(const CRenderable& cRenderable) const = 0;
+
+        virtual bool isAlreadyLoadedTex2D(const std::string& texture) const = 0;
+
+    };
+
+
+    class IMaterialFactory : public FRenderResourceFactory {
+    public:
+
+        virtual FMaterialTex2D* emplaceTex2D() = 0;
+
+    };
+
 
 }
 

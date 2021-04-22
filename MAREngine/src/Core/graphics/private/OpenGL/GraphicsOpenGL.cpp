@@ -107,6 +107,10 @@ namespace marengine {
         return (FFramebufferStorage*)&m_framebufferFactory.m_storage;
     }
 
+    FMaterialStorage* FRenderContextOpenGL::getMaterialStorage() const {
+        return (FMaterialStorage*)&m_materialFactory.m_storage;
+    }
+
     FBufferFactory* FRenderContextOpenGL::getBufferFactory() const {
         return (FBufferFactory*)&m_bufferFactory;
     }
@@ -121,6 +125,10 @@ namespace marengine {
 
     FFramebufferFactory* FRenderContextOpenGL::getFramebufferFactory() const {
         return (FFramebufferFactory*)&m_framebufferFactory;
+    }
+
+    FMaterialFactory* FRenderContextOpenGL::getMaterialFactory() const {
+        return (FMaterialFactory*)&m_materialFactory;
     }
 
 

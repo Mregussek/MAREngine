@@ -51,6 +51,10 @@ namespace marengine {
         void close() final;
         void bind() const final;
 
+    private:
+
+        GLuint m_vao{ 0 };
+
     };
 
 

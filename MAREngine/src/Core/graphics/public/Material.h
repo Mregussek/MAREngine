@@ -24,22 +24,10 @@
 #define MARENGINE_MATERIAL_H
 
 
-#include "IRenderResource.h"
+#include "IMaterial.h"
 
 
 namespace marengine {
-
-    enum class EMaterialType {
-        NONE, TEX2D
-    };
-
-
-    class IMaterialProxy : public FRenderResource {
-    public:
-
-        virtual EMaterialType getType() const = 0;
-
-    };
 
 
     class FMaterialProxy : public IMaterialProxy {
@@ -50,30 +38,19 @@ namespace marengine {
     class FMaterialTex2D : public FMaterialProxy {
     public:
 
+        virtual void passInfo(const FTex2DInfo& info) final { p_info = info; }
+        MAR_NO_DISCARD virtual const FTex2DInfo& getInfo() const final { return p_info; }
+
         MAR_NO_DISCARD EMaterialType getType() const final { return EMaterialType::TEX2D; }
 
-    };
+    protected:
 
-
-    class IMaterialStorage : public IRenderResourceStorage {
-    public:
-
-        virtual FMaterialTex2D* getTex2D(int32 index) const = 0;
-
-        virtual size_t getCountTex2D() const = 0;
+        FTex2DInfo p_info;
 
     };
 
 
     class FMaterialStorage : public IMaterialStorage {
-
-    };
-
-
-    class IMaterialFactory : public IRenderResourceFactory {
-    public:
-
-        virtual FMaterialTex2D* emplaceTex2D() = 0;
 
     };
 

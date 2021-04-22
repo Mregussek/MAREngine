@@ -31,6 +31,7 @@
 #include "PipelineOpenGL.h"
 #include "ShadersOpenGL.h"
 #include "FramebufferOpenGL.h"
+#include "MaterialOpenGL.h"
 
 
 namespace marengine {
@@ -53,11 +54,13 @@ namespace marengine {
         MAR_NO_DISCARD FShadersStorage* getShadersStorage() const final;
         MAR_NO_DISCARD FPipelineStorage* getPipelineStorage() const final;
         MAR_NO_DISCARD FFramebufferStorage* getFramebufferStorage() const final;
+        MAR_NO_DISCARD FMaterialStorage* getMaterialStorage() const final;
 
         MAR_NO_DISCARD FBufferFactory* getBufferFactory() const final;
         MAR_NO_DISCARD FShadersFactory* getShadersFactory() const final;
         MAR_NO_DISCARD FPipelineFactory* getPipelineFactory() const final;
         MAR_NO_DISCARD FFramebufferFactory* getFramebufferFactory() const final;
+        MAR_NO_DISCARD FMaterialFactory* getMaterialFactory() const final;
 
     private:
 
@@ -65,6 +68,7 @@ namespace marengine {
         FShadersFactoryOpenGL m_shadersFactory;
         FBufferFactoryOpenGL m_bufferFactory;
         FFramebufferFactoryOpenGL m_framebufferFactory;
+        FMaterialFactoryOpenGL m_materialFactory;
 
         FWindow* m_pWindow{ nullptr };
 
