@@ -99,6 +99,12 @@ namespace marengine {
 	    // it should retrieve project info from existing filename
 	}
 
+	uint32 FProjectManager::generateUniqueID() {
+	    static uint32 id{ 0 };
+	    id++;
+	    return id;
+	}
+
 	const FProjectInfo& FProjectManager::getProjectInfo() {
 	    return s_pInstance->m_projectInfo;
 	}

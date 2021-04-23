@@ -124,5 +124,9 @@ namespace marengine {
         return emplaceBufferAtArray<FMaterialTex2D>(m_storage.m_textures2D);
     }
 
+    FMaterialStorage* FMaterialFactoryOpenGL::getStorage() const {
+        return (FMaterialStorage*)&m_storage;
+    }
+
 
 }

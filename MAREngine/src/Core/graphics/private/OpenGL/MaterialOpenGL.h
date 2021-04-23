@@ -76,6 +76,7 @@ namespace marengine {
     public:
 
         MAR_NO_DISCARD FMaterialTex2D* emplaceTex2D() final;
+        MAR_NO_DISCARD FMaterialStorage* getStorage() const final;
 
     private:
 

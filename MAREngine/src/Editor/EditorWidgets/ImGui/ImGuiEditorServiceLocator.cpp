@@ -31,7 +31,8 @@ namespace marengine {
                                                       FSceneManagerEditor* pSceneManagerEditor,
                                                       FRenderStatistics* pRenderStatistics,
                                                       FMeshManager* pMeshManager,
-                                                      FRenderManager* pRenderManager) {
+                                                      FRenderManager* pRenderManager,
+                                                      FMaterialManager* pMaterialManager) {
 		// Create registry and entity that will hold everything as components
 	    m_imguiRegistry = entt::registry();
 		m_imguiEntity = m_imguiRegistry.create();
@@ -51,6 +52,9 @@ namespace marengine {
 
         auto* renderManagerHolder = emplace<FImGuiTypeHolder<FRenderManager*>>();
         renderManagerHolder->pInstance = pRenderManager;
+
+        auto* materialManagerHolder = emplace<FImGuiTypeHolder<FMaterialManager*>>();
+        materialManagerHolder->pInstance = pMaterialManager;
 
         // create instance of every widget
         emplace<FScriptWidgetImGui>();

@@ -33,6 +33,7 @@ namespace marengine {
                                    FSceneManagerEditor *pSceneManagerEditor,
                                    FMeshManager* pMeshManager,
                                    FRenderManager* pRenderManager,
+                                   FMaterialManager* pMaterialManager,
                                    FRenderStatistics* pRenderStatistics) {
         m_pSceneManagerEditor = pSceneManagerEditor;
         m_pWindow = pWindow;
@@ -40,7 +41,8 @@ namespace marengine {
                                           pSceneManagerEditor,
                                           pRenderStatistics,
                                           pMeshManager,
-                                          pRenderManager);
+                                          pRenderManager,
+                                          pMaterialManager);
 
         // In what order should every window be rendered (sometimes it matters, last window will show up first)
         m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FScriptWidgetImGui>());

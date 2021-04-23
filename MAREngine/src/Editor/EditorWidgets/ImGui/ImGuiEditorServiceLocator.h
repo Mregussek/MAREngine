@@ -34,6 +34,7 @@ namespace marengine {
     class FMeshManager;
     class FWindow;
     class FRenderManager;
+    class FMaterialManager;
     template<typename TTypeToHold> struct FImGuiTypeHolder;
 
 
@@ -44,7 +45,8 @@ namespace marengine {
                               FSceneManagerEditor* pSceneManagerEditor,
                               FRenderStatistics* pRenderStatistics,
                               FMeshManager* pMeshManager,
-                              FRenderManager* pRenderManager);
+                              FRenderManager* pRenderManager,
+                              FMaterialManager* pMaterialManager);
         void close();
 
         template<typename TImGuiService>

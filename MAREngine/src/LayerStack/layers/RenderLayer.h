@@ -30,6 +30,7 @@
 #include "../../Core/graphics/public/RenderManager.h"
 #include "../../Core/graphics/public/BatchManager.h"
 #include "../../Core/graphics/public/MeshManager.h"
+#include "../../Core/graphics/public/MaterialManager.h"
 #include "../../Core/graphics/private/OpenGL/GraphicsOpenGL.h"
 #include "../../Core/graphics/private/OpenGL/RendererOpenGL.h"
 
@@ -48,6 +49,7 @@ namespace marengine {
         MAR_NO_DISCARD FRenderManager* getRenderManager() const;
 		MAR_NO_DISCARD FBatchManager* getBatchManager() const;
 		MAR_NO_DISCARD FMeshManager* getMeshManager() const;
+		MAR_NO_DISCARD FMaterialManager* getMaterialManager() const;
 
     protected:
 
@@ -55,6 +57,7 @@ namespace marengine {
         FBatchManager p_batchManager;
         FMeshManager p_meshManager;
         FRenderManager p_renderManager;
+        FMaterialManager p_materialManager;
 
     };
 

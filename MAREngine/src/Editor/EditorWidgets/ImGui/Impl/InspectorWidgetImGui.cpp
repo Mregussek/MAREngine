@@ -30,7 +30,7 @@
 #include "Window/IWindow.h" // isMousePressed()
 #include "../../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
-#include "../../../../Platform/OpenGL/TextureOpenGL.h"
+#include "../../../../Core/graphics/public/MaterialManager.h"
 #include "../../../../Core/filesystem/FileManager.h"
 #include "../../../../ProjectManager.h"
 #include "../../../../Logging/Logger.h"
@@ -231,8 +231,9 @@ namespace marengine {
     static void assignScriptPathToComponentAndOpenInEditor(FScriptWidgetImGui* pScriptWidget,
                                                            CPythonScript& cPythonScript,
                                                            const FFilesystemDialogInfo& dialogInfo) {
-        cPythonScript.scriptsPath = FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
-                                                                  *dialogInfo.pPath);
+        cPythonScript.scriptsPath =
+                FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
+                                              *dialogInfo.pPath);
         openInScriptEditor(pScriptWidget, cPythonScript);
     }
 
@@ -314,7 +315,7 @@ namespace marengine {
                 FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
             }
 
-            if (ImGui::Button(loadTexture2DButton)) {
+            if (cRenderable.material.isValid() && ImGui::Button(loadTexture2DButton)) {
                 m_loadTex2D = true;
             }
         }
@@ -335,6 +336,17 @@ namespace marengine {
                 m_pFilesystem->displayOpenWidget(loadTexture2D, jpgExt);
         if(loadTex2DInfo.isValid()) {
            // TODO: Implement material load in inspector
+            const std::string texture2DPath =
+                    FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
+                                                  *loadTex2DInfo.pPath);
+            FMaterialTex2D* pTexture2D{ m_pMaterialManager->getFactory()->emplaceTex2D() };
+            FTex2DInfo info;
+            info.path = texture2DPath;
+            info.id = FProjectManager::generateUniqueID();
+            pTexture2D->passInfo(info);
+            pTexture2D->load();
+            m_inspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_MATERIAL);
+            FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
         }
     }
 

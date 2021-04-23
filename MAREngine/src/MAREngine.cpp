@@ -77,11 +77,17 @@ namespace marengine {
         }
 
         renderLayer->create(window);
-        sceneLayer->create(getStartupSceneFilename(), renderLayer->getRenderManager(),
-                           renderLayer->getBatchManager(), renderLayer->getMeshManager());
+        sceneLayer->create(getStartupSceneFilename(),
+                           renderLayer->getRenderManager(),
+                           renderLayer->getBatchManager(),
+                           renderLayer->getMeshManager());
 
-        editorLayer->create(window, sceneLayer->getSceneManager(), renderLayer->getMeshManager(),
-                            renderLayer->getRenderManager(), renderLayer->getRenderStats());
+        editorLayer->create(window,
+                            sceneLayer->getSceneManager(),
+                            renderLayer->getMeshManager(),
+                            renderLayer->getRenderManager(),
+                            renderLayer->getMaterialManager(),
+                            renderLayer->getRenderStats());
 
         layerStack.pushLayer(renderLayer);
         layerStack.pushLayer(sceneLayer);

@@ -43,15 +43,20 @@ namespace marengine {
         return const_cast<FMeshManager*>(&p_meshManager);
     }
 
+    FMaterialManager* FRenderLayer::getMaterialManager() const {
+        return const_cast<FMaterialManager*>(&p_materialManager);
+    }
+
 
     void FRenderLayerOpenGL::create(FWindow* pWindow) {
         m_context.create(pWindow);
         p_batchManager.create(&p_renderManager, &p_meshManager);
         p_renderManager.create((FRenderContext*)&m_context);
+        p_materialManager.create(m_context.getMaterialFactory(), m_context.getMaterialStorage());
     }
 
     void FRenderLayerOpenGL::begin() {
-        //m_context.prepareFrame();
+
     }
 
     void FRenderLayerOpenGL::update() {

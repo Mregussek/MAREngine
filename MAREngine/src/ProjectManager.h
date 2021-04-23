@@ -60,6 +60,8 @@ namespace marengine {
 		static void fillProjectInfo(const std::string& scenePath, const std::string& sceneFilename);
 		static void retrieveProjectInfo(const std::string& scenePath, const std::string& sceneFilename);
 
+		static uint32 generateUniqueID();
+
 		MAR_NO_DISCARD static const FProjectInfo& getProjectInfo();
 
 		MAR_NO_DISCARD static const std::string& getAbsolutePath();

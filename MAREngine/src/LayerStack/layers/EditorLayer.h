@@ -36,6 +36,7 @@ namespace marengine {
     class FMeshManager;
     class FWindow;
     class FRenderManager;
+    class FMaterialManager;
 
 
     class FEditorLayer : public ILayer {
@@ -45,6 +46,7 @@ namespace marengine {
                             FSceneManagerEditor* pSceneManagerEditor,
                             FMeshManager* pMeshManager,
                             FRenderManager* pRenderManager,
+                            FMaterialManager* pMaterialManager,
                             FRenderStatistics* pRenderStatistic) = 0;
 
     };
@@ -57,6 +59,7 @@ namespace marengine {
                     FSceneManagerEditor* pSceneManagerEditor,
                     FMeshManager* pMeshManager,
                     FRenderManager* pRenderManager,
+                    FMaterialManager* pMaterialManager,
                     FRenderStatistics* pRenderStatistic) final;
 
         void begin() final;

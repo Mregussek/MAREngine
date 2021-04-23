@@ -54,7 +54,7 @@ namespace marengine {
             /// @brief index used to retrieve assigned to Entity FMaterialProxy from FMaterialStorage
             int32 index{ -1 };
 
-            bool isValid() const { return index != -1; }
+            bool isValid() const { return index != -1 && type != EMaterialType::NONE; }
 	    };
 	    struct BatchInfo {
 	        /// @brief type used to retrieve correct implementation of FMeshBatch from FMeshBatchStorage
@@ -171,7 +171,7 @@ namespace marengine {
 
 
     enum class EComponentUpdateType {
-        NONE, RENDERABLE_COLOR, RENDERABLE_MESH
+        NONE, RENDERABLE_COLOR, RENDERABLE_MESH, RENDERABLE_MATERIAL
     };
 
     struct CEvent {

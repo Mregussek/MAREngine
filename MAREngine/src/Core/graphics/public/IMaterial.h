@@ -75,6 +75,8 @@ namespace marengine {
 
         virtual FMaterialTex2D* emplaceTex2D() = 0;
 
+        virtual FMaterialStorage* getStorage() const = 0;
+
     };
 
 
