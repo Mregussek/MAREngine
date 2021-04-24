@@ -40,9 +40,9 @@ namespace marengine {
         m_meshBatchFactory.passMeshStorage(m_pMeshManager->getStorage());
     }
 
-    void FBatchManager::reset() {
+    void FBatchManager::reset() const {
         getMeshBatchStorage()->reset();
-        m_pointLightBatch.reset();
+        getLightBatchStorage()->reset();
     }
 
     FMeshBatchStorage* FBatchManager::getMeshBatchStorage() const {
@@ -53,8 +53,12 @@ namespace marengine {
         return const_cast<FMeshBatchFactory*>(&m_meshBatchFactory);
     }
 
-    FPointLightBatch* FBatchManager::getPointLightBatch() const {
-        return const_cast<FPointLightBatch*>(&m_pointLightBatch);
+    FLightBatchFactory* FBatchManager::getLightBatchFactory() const {
+        return const_cast<FLightBatchFactory*>(&m_lightFactory);
+    }
+
+    FLightBatchStorage* FBatchManager::getLightBatchStorage() const {
+        return const_cast<FLightBatchStorage*>(m_lightFactory.getStorage());
     }
 
     void FBatchManager::pushSceneToRender(Scene* pScene) {
@@ -86,8 +90,9 @@ namespace marengine {
         }
 
         if (entity.hasComponent<CPointLight>()) {
-            if (m_pointLightBatch.canBeBatched(entity)) {
-                m_pointLightBatch.submitEntityWithLightning(entity);
+            FPointLightBatch* pPointLightBatch{ getLightBatchStorage()->getPointLightBatch() };
+            if (pPointLightBatch->canBeBatched(entity)) {
+                pPointLightBatch->submitToBatch(entity);
             }
         }
 

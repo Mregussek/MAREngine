@@ -24,42 +24,80 @@
 #define MARENGINE_FLIGHTBATCH_H
 
 
-#include "IRender.h"
+#include "ILightBatch.h"
+#include "Light.h"
 
 
 namespace marengine {
 
-	class Entity;
+
+    class FLightBatch : public ILightBatch {
+    public:
+
+        MAR_NO_DISCARD int32 getLightSSBO() const final;
+        void passLightSSBO(int32 index) final;
+
+    protected:
+
+        uint32_t p_lightSSBO{ 0 };
+
+    };
 
 
-	class FPointLightBatch {
-
-		friend class FEventsLightBatch;
-
+	class FPointLightBatch : public FLightBatch {
 	public:
 
 		void reset();
 
-		bool hasAnythingToDraw() const;
+        MAR_NO_DISCARD const float* getBatchData() const final;
+        MAR_NO_DISCARD uint32 getCountLight() const final;
 
-		bool canBeBatched(const Entity& entityWithLight) const;
-		void submitEntityWithLightning(const Entity& entity);
-
-		const FPointLightsArray& getLights() const;
+        MAR_NO_DISCARD bool shouldBeBatched(const Entity& entity) const final;
+		MAR_NO_DISCARD bool canBeBatched(const Entity& entityWithLight) const final;
+		void submitToBatch(const Entity& entity) final;
 
 		void updateLight(const Entity& entity);
 
-		uint32_t getUniquePointLightID() const;
-		void setUniquePointLightID(uint32_t index);
-
-		ELightBatchType getBatchType() const;
+		MAR_NO_DISCARD ELightBatchType getType() const final;
 
 	private:
 
-		FPointLightsArray m_lights;
-		uint32_t m_uniquePointLightID{ 0 };
+		std::vector<FPointLight> m_lights;
+
 
 	};
+
+
+	class FLightBatchStorage : public ILightBatchStorage {
+	public:
+
+        void reset() final;
+
+        MAR_NO_DISCARD FPointLightBatch* getPointLightBatch() const final;
+        MAR_NO_DISCARD uint32 getCountPointLightBatch() const final;
+
+	private:
+
+	    FPointLightBatch m_pointLightBatch;
+
+	};
+
+
+	class FLightBatchFactory : public ILightBatchFactory {
+	public:
+
+	    MAR_NO_DISCARD FPointLightBatch* emplacePointLightBatch() final;
+
+	    MAR_NO_DISCARD FLightBatchStorage* getStorage() const;
+
+	private:
+
+        FLightBatchStorage m_storage;
+
+	};
+
+
+
 	
 
 }

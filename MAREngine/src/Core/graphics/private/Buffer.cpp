@@ -114,15 +114,15 @@ namespace marengine {
         pShaderBuffer->pushVariableInfo(materialInfo);
         pShaderBuffer->pushVariableInfo(sizeInfo);
 
-        const auto& pointLights{ pPointLightBatch->getLights() };
-        const int32_t lightSize{ (int32_t)pointLights.size() };
+        const float* pData{ pPointLightBatch->getBatchData() };
+        const uint32 lightSize{ pPointLightBatch->getCountLight() };
         pShaderBuffer->create();
-        pShaderBuffer->update(&pointLights.at(0).position.x,
+        pShaderBuffer->update(pData,
                               materialInfo.offset,
                               lightSize * sizeof(FPointLight));
         pShaderBuffer->update(&lightSize,
                               sizeInfo.offset,
-                              sizeof(int32_t));
+                              sizeof(uint32));
 
         return pShaderBuffer->getIndex();
     }

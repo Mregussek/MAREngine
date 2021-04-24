@@ -104,6 +104,7 @@ namespace marengine {
 
 	template<> void FEventsComponentEntity::onUpdate<CPointLight>(const Entity& entity) {
 		//FEventsLightBatch::onPointLightUpdate(entity);
+		s_pBatchManager->update<CPointLight>(entity);
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CPointLight>(const Entity& entity) {

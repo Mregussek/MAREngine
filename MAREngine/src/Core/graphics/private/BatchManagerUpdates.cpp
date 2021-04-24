@@ -52,7 +52,7 @@ namespace marengine {
     }
 
     template<> void FBatchManager::update<CPointLight>(const Entity& entity) const {
-        FPointLightBatch* pLightBatch{ getPointLightBatch() };
+        FPointLightBatch* pLightBatch{ getLightBatchStorage()->getPointLightBatch() };
         pLightBatch->updateLight(entity);
         m_pRenderManager->update<ERenderBatchUpdateType::POINTLIGHT>(pLightBatch);
     }

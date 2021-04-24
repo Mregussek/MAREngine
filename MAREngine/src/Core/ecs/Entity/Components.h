@@ -28,7 +28,8 @@
 #include "../../graphics/public/MeshBatch.h"   // CRenderable
 #include "../../graphics/public/Mesh.h"    // CRenderable
 #include "../../graphics/public/RenderCamera.h"    // CCamera
-#include "../../graphics/public/IRender.h"  // CPointLight
+#include "../../graphics/public/Light.h"  // CPointLight
+#include "../../graphics/public/LightBatch.h"  // CPointLight
 #include "../../graphics/public/Material.h"  // CRenderable
 #include "../../scripting/PythonScript.h"   // CPythonScript
 

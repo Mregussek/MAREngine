@@ -47,14 +47,13 @@ namespace marengine {
             FPointLightBatch* pBatch) const {
 
         FShaderBuffer* pShaderBuffer =
-                m_pContext->getBufferStorage()->getSSBO(pBatch->getUniquePointLightID());
+                m_pContext->getBufferStorage()->getSSBO(pBatch->getLightSSBO());
 
-        const FPointLightsArray& lights{ pBatch->getLights() };
-        const int32 lightSize{ (int32)lights.size() };
+        const uint32 lightSize{ pBatch->getCountLight() };
         const FShaderInputDescription& inputDescription{ pShaderBuffer->getInputDescription() };
         {
             const FShaderInputVariableInfo& inputInfo{ inputDescription.inputVariables.at(0) };
-            pShaderBuffer->update(&lights.at(0).position.x,
+            pShaderBuffer->update(pBatch->getBatchData(),
                                   inputInfo.offset,
                                   inputInfo.typeSize() * lightSize);
         }

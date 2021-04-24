@@ -29,13 +29,38 @@
 namespace marengine {
 
 
+    int32 FLightBatch::getLightSSBO() const {
+        return p_lightSSBO;
+    }
+
+    void FLightBatch::passLightSSBO(int32 index) {
+        p_lightSSBO = index;
+    }
+
+
 	void FPointLightBatch::reset() {
 		m_lights.clear();
 	}
 
-	bool FPointLightBatch::hasAnythingToDraw() const {
-		return !m_lights.empty();
-	}
+    const float* FPointLightBatch::getBatchData() const {
+        if(!m_lights.empty()) {
+            return &m_lights.at(0).position.x;
+        }
+
+        return nullptr;
+    }
+
+    uint32 FPointLightBatch::getCountLight() const {
+        return m_lights.size();
+    }
+
+    bool FPointLightBatch::shouldBeBatched(const Entity& entity) const {
+        if(entity.hasComponent<CPointLight>()) {
+            return true;
+        }
+
+        return false;
+    }
 
 	bool FPointLightBatch::canBeBatched(const Entity& entityWithLight) const {
 		const auto currentLightSize{ m_lights.size() };
@@ -49,7 +74,7 @@ namespace marengine {
 		}
 	}
 
-	void FPointLightBatch::submitEntityWithLightning(const Entity& entity) {
+	void FPointLightBatch::submitToBatch(const Entity& entity) {
 		const auto& cTransform{ entity.getComponent<CTransform>() };
 		auto& cPointLight{ entity.getComponent<CPointLight>() };
 
@@ -60,26 +85,36 @@ namespace marengine {
         cPointLight.batch.type = ELightBatchType::POINTLIGHT;
 	}
 
-	const FPointLightsArray& FPointLightBatch::getLights() const {
-		return m_lights;
-	}
-
 	void FPointLightBatch::updateLight(const Entity& entity) {
 	    const auto& cPointLight{ entity.getComponent<CPointLight>() };
 	    m_lights.at(cPointLight.batch.index) = cPointLight.pointLight;
 	}
 
-	uint32_t FPointLightBatch::getUniquePointLightID() const {
-		return m_uniquePointLightID;
-	}
-
-	void FPointLightBatch::setUniquePointLightID(uint32_t index) {
-		m_uniquePointLightID = index;
-	}
-
-	ELightBatchType FPointLightBatch::getBatchType() const {
+	ELightBatchType FPointLightBatch::getType() const {
 		return ELightBatchType::POINTLIGHT;
 	}
+
+
+    void FLightBatchStorage::reset() {
+        m_pointLightBatch.reset();
+    }
+
+    FPointLightBatch* FLightBatchStorage::getPointLightBatch() const {
+        return const_cast<FPointLightBatch*>(&m_pointLightBatch);
+    }
+
+    uint32 FLightBatchStorage::getCountPointLightBatch() const {
+        return 1;
+    }
+
+
+    FPointLightBatch* FLightBatchFactory::emplacePointLightBatch() {
+        return m_storage.getPointLightBatch();
+    }
+
+    FLightBatchStorage* FLightBatchFactory::getStorage() const {
+        return const_cast<FLightBatchStorage*>(&m_storage);
+    }
 
 
 }

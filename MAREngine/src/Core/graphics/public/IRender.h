@@ -90,40 +90,10 @@ namespace marengine {
 
     };
 
-    struct FTexturePair {
-        FTexturePair(uint32 bd, std::string tp) :
-                bindingIndex(bd),
-                texturePath(std::move(tp))
-        {}
-
-        uint32 bindingIndex{ 0 };
-        std::string texturePath{ "" };
-    };
-
     typedef std::vector<Vertex> FVertexArray;
     typedef std::vector<uint32> FIndicesArray;
     typedef std::vector<maths::mat4> FTransformsArray;
     typedef std::vector<maths::vec4> FColorsArray;
-    typedef std::vector<FTexturePair> FTexturesArray;
-
-    struct FPointLight {
-        maths::vec4 position{ 0.f, 0.f, 0.f, 1.f };
-        maths::vec4 ambient{ 0.5f, 0.5f, 0.5f, 1.f };
-        maths::vec4 diffuse{ 0.9f, 0.9f, 0.9f, 1.f };
-        maths::vec4 specular{ 0.5f, 0.5f, 0.5f, 1.f };
-        float constant{ 1.0f };
-        float linear{ 0.045f };
-        float quadratic{ 0.0075f };
-        float shininess{ 64.0f };
-    };
-
-    enum class ELightBatchType {
-        NONE = -1,
-        POINTLIGHT = 1,
-        DIRECTIONALLIGHT = 2
-    };
-
-    typedef std::vector<FPointLight> FPointLightsArray;
 
 
     class IRender {

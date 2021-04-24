@@ -93,12 +93,12 @@ namespace marengine {
 
     template<>
     void FEventsComponentEditor::onUpdate<CPointLight>(const Entity& entity) {
-        FEventsComponentEntity::onUpdate<CCamera>(entity);
+        FEventsComponentEntity::onUpdate<CPointLight>(entity);
     }
 
     template<>
     void FEventsComponentEditor::onRemove<CPointLight>(const Entity& entity) {
-        FEventsComponentEntity::onRemove<CCamera>(entity);
+        FEventsComponentEntity::onRemove<CPointLight>(entity);
     }
 
 

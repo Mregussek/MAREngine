@@ -43,7 +43,7 @@ namespace marengine {
     public:
 
         void create(FRenderManager* pRenderManager, FMeshManager* pMeshManager);
-        void reset();
+        void reset() const;
 
         void pushSceneToRender(Scene* pScene);
         void pushEntityToRender(const Entity& entity);
@@ -53,12 +53,13 @@ namespace marengine {
 
         MAR_NO_DISCARD FMeshBatchStorage* getMeshBatchStorage() const;
         MAR_NO_DISCARD FMeshBatchFactory* getMeshBatchFactory() const;
-        MAR_NO_DISCARD FPointLightBatch* getPointLightBatch() const;
+        MAR_NO_DISCARD FLightBatchFactory* getLightBatchFactory() const;
+        MAR_NO_DISCARD FLightBatchStorage* getLightBatchStorage() const;
 
     private:
 
         FMeshBatchFactory m_meshBatchFactory;
-        FPointLightBatch m_pointLightBatch;
+        FLightBatchFactory m_lightFactory;
         FRenderManager* m_pRenderManager{ nullptr };
         FMeshManager* m_pMeshManager{ nullptr };
 
