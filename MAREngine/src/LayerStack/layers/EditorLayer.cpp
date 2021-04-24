@@ -22,6 +22,7 @@
 
 #include "EditorLayer.h"
 #include "../../Editor/public/EventsEntityEditor.h"
+#include "../../Editor/public/EventsComponentEditor.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Core/ecs/Scene.h"
 
@@ -66,7 +67,8 @@ namespace marengine {
         m_serviceManager.emplace(
                 (FEditorWidget*)m_serviceLocator.retrieve<FContentBrowserImGui>());
 
-        FEntityEventsEditor::create(&m_serviceLocator);
+        FEventsEntityEditor::create(&m_serviceLocator);
+        FEventsComponentEditor::create(&m_serviceLocator);
 
         m_serviceManager.onCreate();
     }

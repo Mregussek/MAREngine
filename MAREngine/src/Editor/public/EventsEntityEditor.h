@@ -35,7 +35,7 @@ namespace marengine {
 	class Entity;
 
 
-	class FEntityEventsEditor : public IEntityEvents<FEntityEventsEditor> {
+	class FEventsEntityEditor : public IEntityEvents<FEventsEntityEditor> {
 	public:
 
 	    static void create(FServiceLocatorEditor* pServiceLocator);

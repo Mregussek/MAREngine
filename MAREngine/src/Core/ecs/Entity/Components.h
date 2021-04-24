@@ -170,16 +170,30 @@ namespace marengine {
     };
 
 
-    enum class EComponentUpdateType {
-        NONE, RENDERABLE_COLOR, RENDERABLE_MESH, RENDERABLE_MATERIAL
+    enum class EEventType {
+        NONE,
+        RENDERABLE_COLOR_UPDATE,
+        RENDERABLE_MESH_UPDATE,
+        RENDERABLE_TEX2D_LOAD,
+        PYTHONSCRIPT_OPEN,
+        PYTHONSCRIPT_CREATE_ASSIGN,
+        PYTHONSCRIPT_ASSIGN
     };
+
+    struct FFilesystemDialogInfo;
 
     struct CEvent {
 
-        EComponentUpdateType componentUpdateType{ EComponentUpdateType::NONE };
+        const FFilesystemDialogInfo* pFilesystemDialogInfo{ nullptr };
+        EEventType eventUpdateType{ EEventType::NONE };
 
-        CEvent(EComponentUpdateType comUpdateType) :
-                componentUpdateType(comUpdateType)
+        CEvent(EEventType eUpdateType) :
+                eventUpdateType(eUpdateType)
+        {}
+
+        CEvent(EEventType eUpdateType, const FFilesystemDialogInfo* pFsDialogInfo) :
+                eventUpdateType(eUpdateType),
+                pFilesystemDialogInfo(pFsDialogInfo)
         {}
 
     };

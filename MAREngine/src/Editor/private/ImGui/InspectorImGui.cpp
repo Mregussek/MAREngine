@@ -25,15 +25,12 @@
 #include "ScriptImGui.h"
 #include "FilesystemPopUpImGui.h"
 #include "ContentBrowserImGui.h"
+#include "../../public/EventsComponentEditor.h"
 #include "../../public/ServiceLocatorEditor.h"
 #include "../../public/EventsEntityEditor.h"
-#include "../../../Window/IWindow.h" // isMousePressed()
+#include "../../../Window/IWindow.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
 #include "../../../Core/graphics/public/MaterialManager.h"
-#include "../../../Core/filesystem/FileManager.h"
-#include "../../../ProjectManager.h"
-#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -112,7 +109,7 @@ namespace marengine {
 
     void FInspectorWidgetImGui::displayChildrenPopMenu() const {
         if (ImGui::MenuItem("Create and assign child")) {
-            FEntityEventsEditor::onCreateChild(getInspectedEntity());
+            FEventsEntityEditor::onCreateChild(getInspectedEntity());
         }
 
         if (ImGui::MenuItem("Assign new child")) {
@@ -127,7 +124,7 @@ namespace marengine {
         const bool hasScript{ p_pInspectedEntity->hasComponent<CPythonScript>() };
 
         if (!hasRenderable && ImGui::MenuItem("Add CRenderable")) {
-            FEventsComponentEntity::onAdd<CRenderable>(getInspectedEntity());
+            FEventsComponentEditor::onAdd<CRenderable>(getInspectedEntity());
         }
 
         // TODO: return back material usage
@@ -149,15 +146,15 @@ namespace marengine {
         //}
 
         if (!hasLight && ImGui::MenuItem("Add CPointLight")) {
-            FEventsComponentEntity::onAdd<CPointLight>(getInspectedEntity());
+            FEventsComponentEditor::onAdd<CPointLight>(getInspectedEntity());
         }
 
         if (!hasCamera && ImGui::MenuItem("Add CCamera")) {
-            FEventsComponentEntity::onAdd<CCamera>(getInspectedEntity());
+            FEventsComponentEditor::onAdd<CCamera>(getInspectedEntity());
         }
 
         if (!hasScript && ImGui::MenuItem("Add CPythonScript")) {
-            FEventsComponentEntity::onAdd<CPythonScript>(getInspectedEntity());
+            FEventsComponentEditor::onAdd<CPythonScript>(getInspectedEntity());
         }
     }
 
@@ -191,40 +188,15 @@ namespace marengine {
 
         ImGui::NewLine();
         if (updatedTransform) {
-            FEventsComponentEntity::onUpdate<CTransform>(getInspectedEntity());
+            FEventsComponentEditor::onUpdate<CTransform>(getInspectedEntity());
         }
-    }
-
-    static std::string getFilename(const std::string& path) {
-        return path.substr(path.find_last_of("/\\") + 1);
-    }
-
-    static void openInScriptEditor(FScriptWidgetImGui* pScriptWidget, CPythonScript& cPythonScript) {
-        // remember that is gets relative path from .exe file and saves it
-        std::string sourceCode;
-        if(!FFileManager::isValidPath(cPythonScript.scriptsPath)) {
-            MARLOG_WARN(ELoggerType::EDITOR,
-                        "Path is not pointing to file, so it wont be displayed at editor -> {}",
-                        cPythonScript.scriptsPath);
-            return;
-        }
-        FFileManager::loadFile(sourceCode, cPythonScript.scriptsPath.c_str());
-        pScriptWidget->setEditorTitle(getFilename(cPythonScript.scriptsPath));
-        pScriptWidget->setEditorCode(sourceCode);
-        pScriptWidget->setPathToScript(cPythonScript.scriptsPath);
-    }
-
-    static void assignScriptPathToComponentAndOpenInEditor(FScriptWidgetImGui* pScriptWidget,
-                                                           CPythonScript& cPythonScript,
-                                                           const FFilesystemDialogInfo& dialogInfo) {
-        cPythonScript.scriptsPath =
-                FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
-                                              *dialogInfo.pPath);
-        openInScriptEditor(pScriptWidget, cPythonScript);
     }
 
     template<>
     void FInspectorWidgetImGui::displayComponentPanel<CPythonScript>() {
+        // During CPythonScripts onUpdate events, we need to create CEvent component and fill with
+        // actual event.
+
         const std::string newScriptWindow{ "Create New Script and assign it" };
         const std::string assignScriptWindow{ "Assign Script" };
         const std::string pyExt{ ".py" };
@@ -233,17 +205,18 @@ namespace marengine {
         constexpr char assignExistButton[]{ "*** Assign existing script to entity" };
 
         if (ImGui::MenuItem("Remove Script")) {
-            FEventsComponentEntity::onRemove<CPythonScript>(getInspectedEntity());
+            FEventsComponentEditor::onRemove<CPythonScript>(getInspectedEntity());
             return;
         }
 
         auto& cPythonScript{ p_pInspectedEntity->getComponent<CPythonScript>() };
-        const bool isScriptPathValid{ FFileManager::isValidPath(cPythonScript.scriptsPath) };
-        ImGui::Text("Current script: %s\nValid: %d", cPythonScript.scriptsPath.c_str(),
-                    isScriptPathValid);
+        ImGui::Text("Current script: %s", cPythonScript.scriptsPath.c_str());
 
-        if (isScriptPathValid && ImGui::Button(openScriptButton)) {
-            openInScriptEditor(m_pScriptWidget, cPythonScript);
+        if (ImGui::Button(openScriptButton)) {
+            p_pInspectedEntity->addComponent<CEvent>(EEventType::PYTHONSCRIPT_OPEN);
+            FEventsComponentEditor::onUpdate<CPythonScript>(getInspectedEntity());
+            p_pInspectedEntity->removeComponent<CEvent>();
+
         }
         if (ImGui::Button(createNewButton)) {
             m_newScriptWindow = true;
@@ -261,20 +234,22 @@ namespace marengine {
             m_assignScriptWindow = false;
         }
 
-        const FFilesystemDialogInfo newDialogInfo = m_pFilesystem->displaySaveWidget(newScriptWindow,
-                                                                                     pyExt);
+        const FFilesystemDialogInfo newDialogInfo =
+                m_pFilesystem->displaySaveWidget(newScriptWindow, pyExt);
         if(newDialogInfo.isValid()) {
-            FFileManager::saveAsFile(m_pScriptWidget->getDefaultEditorSourceCode(),
-                                     newDialogInfo.pPath->c_str());
-            assignScriptPathToComponentAndOpenInEditor(m_pScriptWidget, cPythonScript,
-                                                       newDialogInfo);
+            p_pInspectedEntity->addComponent<CEvent>(EEventType::PYTHONSCRIPT_CREATE_ASSIGN,
+                                                     &newDialogInfo);
+            FEventsComponentEditor::onUpdate<CPythonScript>(getInspectedEntity());
+            p_pInspectedEntity->removeComponent<CEvent>();
         }
 
         const FFilesystemDialogInfo assignDialogInfo =
                 m_pFilesystem->displayOpenWidget(assignScriptWindow, pyExt);
         if(assignDialogInfo.isValid()) {
-            assignScriptPathToComponentAndOpenInEditor(m_pScriptWidget, cPythonScript,
-                                                       assignDialogInfo);
+            p_pInspectedEntity->addComponent<CEvent>(EEventType::PYTHONSCRIPT_ASSIGN,
+                                                     &newDialogInfo);
+            FEventsComponentEditor::onUpdate<CPythonScript>(getInspectedEntity());
+            p_pInspectedEntity->removeComponent<CEvent>();
         }
     }
 
@@ -287,7 +262,7 @@ namespace marengine {
         constexpr char loadTexture2DButton[]{ "*** Load Texture 2D" };
 
         if (ImGui::MenuItem("Remove Renderable")) {
-            FEventsComponentEntity::onRemove<CRenderable>(getInspectedEntity());
+            FEventsComponentEditor::onRemove<CRenderable>(getInspectedEntity());
             return;
         }
 
@@ -297,8 +272,9 @@ namespace marengine {
         if(!cRenderable.material.isValid()) { // we are displaying color then
             const bool changedColor = ImGui::ColorEdit4("Color", &cRenderable.color.x);
             if(changedColor) {
-                p_pInspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_COLOR);
-                FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
+                p_pInspectedEntity->addComponent<CEvent>(EEventType::RENDERABLE_COLOR_UPDATE);
+                FEventsComponentEditor::onUpdate<CRenderable>(getInspectedEntity());
+                p_pInspectedEntity->removeComponent<CEvent>();
             }
 
             if (!cRenderable.material.isValid() && ImGui::Button(loadTexture2DButton)) {
@@ -311,8 +287,9 @@ namespace marengine {
 
         const bool selectedMesh{ m_pContentBrowser->drawMeshListBox(cRenderable) };
         if(selectedMesh) {
-            p_pInspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_MESH);
-            FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
+            p_pInspectedEntity->addComponent<CEvent>(EEventType::RENDERABLE_MESH_UPDATE);
+            FEventsComponentEditor::onUpdate<CRenderable>(getInspectedEntity());
+            p_pInspectedEntity->removeComponent<CEvent>();
         }
         if(m_loadTex2D) {
             m_pFilesystem->openWidget(loadTexture2D);
@@ -321,24 +298,17 @@ namespace marengine {
         const FFilesystemDialogInfo loadTex2DInfo =
                 m_pFilesystem->displayOpenWidget(loadTexture2D, jpgExt);
         if(loadTex2DInfo.isValid()) {
-            const std::string texture2DPath =
-                    FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
-                                                  *loadTex2DInfo.pPath);
-            FMaterialTex2D* pTexture2D{ m_pMaterialManager->getFactory()->emplaceTex2D() };
-            FTex2DInfo info;
-            info.path = texture2DPath;
-            info.id = FProjectManager::generateUniqueID();
-            pTexture2D->passInfo(info);
-            pTexture2D->load();
-            p_pInspectedEntity->addComponent<CEvent>(EComponentUpdateType::RENDERABLE_MATERIAL);
-            FEventsComponentEntity::onUpdate<CRenderable>(getInspectedEntity());
+            p_pInspectedEntity->addComponent<CEvent>(EEventType::RENDERABLE_TEX2D_LOAD,
+                                                     &loadTex2DInfo);
+            FEventsComponentEditor::onUpdate<CRenderable>(getInspectedEntity());
+            p_pInspectedEntity->removeComponent<CEvent>();
         }
     }
 
     template<>
     void FInspectorWidgetImGui::displayComponentPanel<CCamera>() {
         if (ImGui::Button("Remove Camera")) {
-            FEventsComponentEntity::onRemove<CCamera>(getInspectedEntity());
+            FEventsComponentEditor::onRemove<CCamera>(getInspectedEntity());
             return;
         }
         CCamera& camera{ p_pInspectedEntity->getComponent<CCamera>() };
@@ -382,14 +352,14 @@ namespace marengine {
         }
 
         if (updatedCamera) {
-            FEventsComponentEntity::onUpdate<CCamera>(getInspectedEntity());
+            FEventsComponentEditor::onUpdate<CCamera>(getInspectedEntity());
         }
     }
 
     template<>
     void FInspectorWidgetImGui::displayComponentPanel<CPointLight>() {
         if (ImGui::MenuItem("Remove Light")) {
-            FEventsComponentEntity::onRemove<CPointLight>(getInspectedEntity());
+            FEventsComponentEditor::onRemove<CPointLight>(getInspectedEntity());
             return;
         }
         FPointLight& pointLight{ p_pInspectedEntity->getComponent<CPointLight>().pointLight };
@@ -407,7 +377,7 @@ namespace marengine {
         if (ImGui::DragFloat("Shininess", &pointLight.shininess, 0.5f, 0.f, 256.f)) { updatedLight = true; }
 
         if (updatedLight) {
-            FEventsComponentEntity::onUpdate<CPointLight>(getInspectedEntity());
+            FEventsComponentEditor::onUpdate<CPointLight>(getInspectedEntity());
         }
     }
 

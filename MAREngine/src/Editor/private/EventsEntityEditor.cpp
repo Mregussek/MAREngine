@@ -30,36 +30,36 @@
 
 namespace marengine {
 
-    FSceneManagerEditor* FEntityEventsEditor::s_pSceneManagerEditor{ nullptr };
-    FInspectorEditorWidget* FEntityEventsEditor::s_pInspectorWidget{ nullptr };
+    FSceneManagerEditor* FEventsEntityEditor::s_pSceneManagerEditor{ nullptr };
+    FInspectorEditorWidget* FEventsEntityEditor::s_pInspectorWidget{ nullptr };
 
 
-    void FEntityEventsEditor::create(FServiceLocatorEditor* pServiceLocator) {
+    void FEventsEntityEditor::create(FServiceLocatorEditor* pServiceLocator) {
         s_pSceneManagerEditor = pServiceLocator->retrieve<FHolderPtr<FSceneManagerEditor*>>()->pInstance;
         s_pInspectorWidget = pServiceLocator->retrieve<FInspectorWidgetImGui>();
     }
 
-	void FEntityEventsEditor::onCreateEntity() {
+	void FEventsEntityEditor::onCreateEntity() {
 		const Entity& createdEntity{ s_pSceneManagerEditor->getScene()->createEntity() };
 		onSelectedEntity(createdEntity);
 	}
 
-	void FEntityEventsEditor::onDestroyEntity(const Entity& entity) {
+	void FEventsEntityEditor::onDestroyEntity(const Entity& entity) {
         s_pSceneManagerEditor->getScene()->destroyEntity(entity);
         s_pInspectorWidget->resetInspectedEntity();
         // TODO: optimize it, because we don't need to reinitialize the whole render pipeline during entity destruction
         s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
-	void FEntityEventsEditor::onSelectedEntity(const Entity& entity) {
+	void FEventsEntityEditor::onSelectedEntity(const Entity& entity) {
         s_pInspectorWidget->setInspectedEntity(entity);
 	}
 
-	void FEntityEventsEditor::onUnselectedEntity(const Entity& entity) {
+	void FEventsEntityEditor::onUnselectedEntity(const Entity& entity) {
 
 	}
 
-	void FEntityEventsEditor::onCopyEntity(const Entity& entity) {
+	void FEventsEntityEditor::onCopyEntity(const Entity& entity) {
 		//onCreateEntity();
 		//// onCreateEntity creates entity, then sets it to EntityWidgetPanel, so it can be got in that way
 		//const Entity& createdEntity{ s_pInspectorWidget->getInspectedEntity() };
@@ -68,30 +68,30 @@ namespace marengine {
         //s_pSceneManagerEditor->pushSceneToPipeline();
 	}
 
-	void FEntityEventsEditor::onSetVisibleEntity(const Entity& entity) {
+	void FEventsEntityEditor::onSetVisibleEntity(const Entity& entity) {
 
 	}
 
-	void FEntityEventsEditor::onSetInvisibleEntity(const Entity& entity) {
+	void FEventsEntityEditor::onSetInvisibleEntity(const Entity& entity) {
 
 	}
 
-	void FEntityEventsEditor::onAssignChild(const Entity& entity, const Entity& child) {
+	void FEventsEntityEditor::onAssignChild(const Entity& entity, const Entity& child) {
 		entity.assignChild(child);
 		onSelectedEntity(child);
 	}
 
-	void FEntityEventsEditor::onRemoveChild(const Entity& entity, const Entity& child) {
+	void FEventsEntityEditor::onRemoveChild(const Entity& entity, const Entity& child) {
 		entity.removeChild(child);
 		onUnselectedEntity(child);
 	}
 
-	void FEntityEventsEditor::onCreateChild(const Entity& entity) {
+	void FEventsEntityEditor::onCreateChild(const Entity& entity) {
 		const Entity& createdChild{ s_pSceneManagerEditor->getScene()->createEntity() };
 		onAssignChild(entity, createdChild);
 	}
 
-	void FEntityEventsEditor::onDestroyChild(const Entity& entity, const Entity& child) {
+	void FEventsEntityEditor::onDestroyChild(const Entity& entity, const Entity& child) {
 
 	}
 

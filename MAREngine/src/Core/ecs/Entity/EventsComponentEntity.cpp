@@ -77,21 +77,21 @@ namespace marengine {
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CRenderable>(const Entity& entity) {
-	    // TODO: remember about WA with mesh update
-	    if(entity.getComponent<CEvent>().componentUpdateType == EComponentUpdateType::RENDERABLE_MESH) {
+	    // TODO: remember about WA with mesh update and texture update
+        const auto& cEvent{ entity.getComponent<CEvent>() };
+	    if(cEvent.eventUpdateType == EEventType::RENDERABLE_MESH_UPDATE
+	            || cEvent.eventUpdateType == EEventType::RENDERABLE_TEX2D_LOAD) {
             s_pSceneManagerEditor->updateSceneAtBatchManager();
 	    }
-        else {
+	    else {
             s_pBatchManager->update<CRenderable>(entity);
         }
-
-        entity.removeComponent<CEvent>();
 	}
 
 	template<> void FEventsComponentEntity::onRemove<CRenderable>(const Entity& entity) {
 		entity.removeComponent<CRenderable>();
         // TODO: implement better event that whole scene reinitialization
-        //s_pSceneManagerEditor->updateSceneAtBatchManager();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	/***************************** LIGHT COMPONENT TEMPLATES ***************************************/
@@ -99,7 +99,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onAdd<CPointLight>(const Entity& entity) {
 		entity.addComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
-        //s_pSceneManagerEditor->updateSceneAtBatchManager();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	template<> void FEventsComponentEntity::onUpdate<CPointLight>(const Entity& entity) {
@@ -109,7 +109,7 @@ namespace marengine {
 	template<> void FEventsComponentEntity::onRemove<CPointLight>(const Entity& entity) {
 		entity.removeComponent<CPointLight>();
         // TODO: implement better event that whole scene reinitialization
-        //s_pSceneManagerEditor->updateSceneAtBatchManager();
+        s_pSceneManagerEditor->updateSceneAtBatchManager();
 	}
 
 	/***************************** CAMERA COMPONENT TEMPLATES ***************************************/
