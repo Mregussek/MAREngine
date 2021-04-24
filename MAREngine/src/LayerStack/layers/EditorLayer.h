@@ -25,8 +25,8 @@
 
 
 #include "../ILayer.h"
-#include "../../Editor/EditorWidgets/EditorWidgetsServiceManager.h"
-#include "../../Editor/EditorWidgets/ImGui/ImGuiEditorServiceLocator.h"
+#include "../../Editor/public/ServiceManagerEditor.h"
+#include "../../Editor/public/ServiceLocatorEditor.h"
 
 
 namespace marengine {
@@ -39,7 +39,7 @@ namespace marengine {
     class FMaterialManager;
 
 
-    class FEditorLayer : public ILayer {
+    class IEditorLayer : public ILayer {
     public:
 
         virtual void create(FWindow* pWindow,
@@ -50,6 +50,9 @@ namespace marengine {
                             FRenderStatistics* pRenderStatistic) = 0;
 
     };
+
+
+    class FEditorLayer : public IEditorLayer { };
 
 
     class FEditorLayerImGui : public FEditorLayer {
@@ -69,11 +72,8 @@ namespace marengine {
 
     private:
 
-        FEditorWidgetsServiceManager m_editorServiceManager;
-        FImGuiEditorServiceLocator m_serviceLocator;
-
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FWindow* m_pWindow{ nullptr };
+        FServiceManagerEditor m_serviceManager;
+        FServiceLocatorEditor m_serviceLocator;
 
     };
 

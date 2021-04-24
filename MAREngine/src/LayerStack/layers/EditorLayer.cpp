@@ -21,7 +21,7 @@
 
 
 #include "EditorLayer.h"
-#include "../../Editor/EditorWidgets/ImGui/Events/EventsEntityImGuiWidget.h"
+#include "../../Editor/public/EventsEntityEditor.h"
 #include "../../Core/ecs/SceneManagerEditor.h"
 #include "../../Core/ecs/Scene.h"
 
@@ -35,8 +35,7 @@ namespace marengine {
                                    FRenderManager* pRenderManager,
                                    FMaterialManager* pMaterialManager,
                                    FRenderStatistics* pRenderStatistics) {
-        m_pSceneManagerEditor = pSceneManagerEditor;
-        m_pWindow = pWindow;
+
         m_serviceLocator.registerServices(pWindow,
                                           pSceneManagerEditor,
                                           pRenderStatistics,
@@ -44,20 +43,32 @@ namespace marengine {
                                           pRenderManager,
                                           pMaterialManager);
 
-        // In what order should every window be rendered (sometimes it matters, last window will show up first)
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FScriptWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FViewportWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FMainWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FDebugWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FInspectorWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FMainMenuBarWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FSceneHierarchyWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FEnvironmentPropertiesWidgetImGui>());
-        m_editorServiceManager.emplace((FEditorWidget*)m_serviceLocator.retrieve<FContentBrowserImGui>());
+        m_serviceLocator.create<EEditorContextType::IMGUI>();
 
-        FEventsEntityImGuiWidgets::create(&m_serviceLocator);
+        // In what order should every window be rendered
+        // (sometimes it matters, last window will show up first)
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FScriptWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FViewportWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FMainWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FDebugWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FInspectorWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FMainMenuBarWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FSceneHierarchyWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FEnvironmentPropertiesWidgetImGui>());
+        m_serviceManager.emplace(
+                (FEditorWidget*)m_serviceLocator.retrieve<FContentBrowserImGui>());
 
-        m_editorServiceManager.onCreate();
+        FEntityEventsEditor::create(&m_serviceLocator);
+
+        m_serviceManager.onCreate();
     }
 
     void FEditorLayerImGui::begin() {
@@ -65,7 +76,7 @@ namespace marengine {
     }
 
     void FEditorLayerImGui::update() {
-        m_editorServiceManager.onUpdate();
+        m_serviceManager.onUpdate();
     }
 
     void FEditorLayerImGui::end() {
@@ -73,7 +84,7 @@ namespace marengine {
     }
 
     void FEditorLayerImGui::close() {
-        m_editorServiceManager.onDestroy();
+        m_serviceManager.onDestroy();
         m_serviceLocator.close();
     }
 
