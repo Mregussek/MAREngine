@@ -51,6 +51,8 @@ namespace marengine {
         void close() final;
         void bind() const final;
 
+        MAR_NO_DISCARD int32 discoverSamplerLocation(const char* samplerName) const final;
+
     private:
 
         GLuint m_vao{ 0 };

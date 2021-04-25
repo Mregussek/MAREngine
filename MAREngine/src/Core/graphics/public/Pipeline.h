@@ -89,12 +89,20 @@ namespace marengine {
     class FPipelineMeshTex2D : public FPipelineMesh {
     public:
 
+        virtual void passSamplerArray(const std::array<const char*, 32>& samplerArray) final;
+        virtual int32 discoverSamplerLocation(const char* samplerName) const = 0;
         virtual void passTexture(int32 i) final;
 
     protected:
 
+        std::unordered_map<const char*, int32> m_samplerLocations;
+        std::array<const char*, 32> m_samplerNames;
         std::array<int32, 32> m_textures;
         uint32 m_texturesIndex{ 0 };
+
+    public:
+
+        MAR_NO_DISCARD auto getSamplerLocations() ->decltype(m_samplerLocations)&;
 
     };
 

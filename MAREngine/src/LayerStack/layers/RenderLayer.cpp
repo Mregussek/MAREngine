@@ -74,8 +74,6 @@ namespace marengine {
         for(uint32_t i = 0; i < countTex2D; i++) {
             m_renderCmds.draw(pFramebuffer, m_context.getPipelineStorage()->getTex2DMesh(i));
         }
-
-        pFramebuffer->unbind();
     }
 
     void FRenderLayerOpenGL::end() {

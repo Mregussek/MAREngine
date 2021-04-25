@@ -130,6 +130,10 @@ namespace marengine {
         GL_FUNC( glUseProgram(m_id) );
     }
 
+    uint32 FShadersOpenGL::getID() const {
+        return m_id;
+    }
+
 
     uint32 FShadersStorageOpenGL::getCount() const {
         return m_shadersArray.size();

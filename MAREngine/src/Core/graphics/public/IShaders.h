@@ -62,6 +62,8 @@ namespace marengine {
         virtual void passCompute(const char* computeShader) = 0;
         virtual void passFragment(const char* fragmentShader) = 0;
 
+        virtual uint32 getID() const = 0;
+
         virtual void compile() = 0;
         virtual void close() = 0;
         virtual void bind() = 0;

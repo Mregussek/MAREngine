@@ -37,6 +37,8 @@ namespace marengine {
         void close() final;
         void bind() final;
 
+        MAR_NO_DISCARD uint32 getID() const final;
+
     private:
 
         GLuint m_id{ GL_FALSE };

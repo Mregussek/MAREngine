@@ -60,6 +60,21 @@ namespace marengine {
         GL_FUNC( glDeleteVertexArrays(1, &m_vao) );
     }
 
+    template<typename TSamplerArray>
+    static int32 getUniformLocation(const TSamplerArray& samplerArray, const char* name) {
+        if (samplerArray.find(name) != samplerArray.end()) {
+            return samplerArray.at(name);
+        }
+
+        MARLOG_ERR(ELoggerType::PLATFORMS, "Could not retrieve correct sampler location -> {}", name);
+        return -1;
+    }
+
+    template<typename TSamplerArray>
+    static void setUniformSamplerGL(const TSamplerArray& samplerArray, const char* name, int32 sampler) {
+        GL_FUNC( glUniform1i(getUniformLocation(samplerArray, name), sampler) );
+    }
+
     void FPipelineMeshTex2DOpenGL::bind() const {
         GL_FUNC( glBindVertexArray(m_vao) );
         p_pBufferStorage->getVBO(p_vboIndex)->bind();
@@ -70,8 +85,14 @@ namespace marengine {
         p_pShadersStorage->get(p_shaderIndex)->bind();
         const uint32 countMaterial{ p_pMaterialStorage->getCountTex2D() };
         for(uint32 i = 0; i < countMaterial; i++) {
-            p_pMaterialStorage->getTex2D(m_textures.at(i))->bind();
+            FMaterialTex2D* pTexture{ p_pMaterialStorage->getTex2D(m_textures.at(i)) };
+            pTexture->bind();
+            setUniformSamplerGL(m_samplerLocations, m_samplerNames[i], pTexture->getInfo().sampler);
         }
+    }
+
+    int32 FPipelineMeshTex2DOpenGL::discoverSamplerLocation(const char* samplerName) const {
+        return glGetUniformLocation(p_pShadersStorage->get(p_shaderIndex)->getID(), samplerName);
     }
 
 

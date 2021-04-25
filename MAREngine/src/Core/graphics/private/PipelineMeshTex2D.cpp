@@ -123,6 +123,53 @@ namespace marengine {
         pPipeline->passTransformSSBO(transformSSBO->getIndex());
     }
 
+    static void createSamplerUniformLocations(FPipelineMeshTex2D* pPipeline) {
+        constexpr std::array<const char*, 32> samplerArray = {
+                "samplerTexture2D[0]",
+                "samplerTexture2D[1]",
+                "samplerTexture2D[2]",
+                "samplerTexture2D[3]",
+                "samplerTexture2D[4]",
+                "samplerTexture2D[5]",
+                "samplerTexture2D[6]",
+                "samplerTexture2D[7]",
+                "samplerTexture2D[8]",
+                "samplerTexture2D[9]",
+                "samplerTexture2D[10]",
+                "samplerTexture2D[11]",
+                "samplerTexture2D[12]",
+                "samplerTexture2D[13]",
+                "samplerTexture2D[14]",
+                "samplerTexture2D[15]",
+                "samplerTexture2D[16]",
+                "samplerTexture2D[17]",
+                "samplerTexture2D[18]",
+                "samplerTexture2D[19]",
+                "samplerTexture2D[20]",
+                "samplerTexture2D[21]",
+                "samplerTexture2D[22]",
+                "samplerTexture2D[23]",
+                "samplerTexture2D[24]",
+                "samplerTexture2D[25]",
+                "samplerTexture2D[26]",
+                "samplerTexture2D[27]",
+                "samplerTexture2D[28]",
+                "samplerTexture2D[29]",
+                "samplerTexture2D[30]",
+                "samplerTexture2D[31]"
+        };
+
+        pPipeline->passSamplerArray(samplerArray);
+        auto& samplerLocations{ pPipeline->getSamplerLocations() };
+
+        auto lookForLocations = [pPipeline, &samplerLocations](const char* uniformName) {
+            const int32 samplerLocation{ pPipeline->discoverSamplerLocation(uniformName) };
+            samplerLocations[uniformName] = samplerLocation;
+        };
+
+        std::for_each(samplerArray.cbegin(), samplerArray.cend(), lookForLocations);
+    }
+
     static void createPipelineShaders(FRenderContext* pContext,
                                       FPipelineMeshTex2D* pPipeline) {
         FShaders* pShaders{ pContext->getShadersFactory()->emplace() };
@@ -135,14 +182,15 @@ namespace marengine {
 
     void FPipelineFactory::fillPipelineFor(FPipelineMeshTex2D* pPipeline,
                                            FMeshBatchStaticTex2D* pBatch) const {
+        pPipeline->passBufferStorage(p_pRenderContext->getBufferStorage());
+        pPipeline->passShadersStorage(p_pRenderContext->getShadersStorage());
+        pPipeline->passMaterialStorage(p_pRenderContext->getMaterialStorage());
+
         createPipelineVBO(p_pRenderContext, pPipeline, pBatch);
         createPipelineIBO(p_pRenderContext, pPipeline, pBatch);
         createPipelineTransformsSSBO(p_pRenderContext, pPipeline, pBatch);
         createPipelineShaders(p_pRenderContext, pPipeline);
-
-        pPipeline->passBufferStorage(p_pRenderContext->getBufferStorage());
-        pPipeline->passShadersStorage(p_pRenderContext->getShadersStorage());
-        pPipeline->passMaterialStorage(p_pRenderContext->getMaterialStorage());
+        createSamplerUniformLocations(pPipeline);
         pPipeline->create();
     }
 

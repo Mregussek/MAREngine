@@ -74,9 +74,17 @@ namespace marengine {
     }
 
 
+    void FPipelineMeshTex2D::passSamplerArray(const std::array<const char*, 32>& samplerArray) {
+        m_samplerNames = samplerArray;
+    }
+
     void FPipelineMeshTex2D::passTexture(int32 i) {
         m_textures.at(m_texturesIndex) = i;
         m_texturesIndex++;
+    }
+
+    auto FPipelineMeshTex2D::getSamplerLocations() ->decltype(m_samplerLocations)& {
+        return m_samplerLocations;
     }
 
 
