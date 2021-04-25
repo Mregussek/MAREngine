@@ -36,7 +36,7 @@ namespace marengine {
 
         if(cEvent.eventUpdateType == EEventType::RENDERABLE_COLOR_UPDATE) {
             FMeshBatchStaticColor* pMeshBatch =
-                    getMeshBatchStorage()->getStaticColor(cRenderable.batch.index);
+                    getMeshBatchStorage()->getStorageStaticColor()->get(cRenderable.batch.index);
            pMeshBatch->updateColor(entity);
            m_pRenderManager->update<ERenderBatchUpdateType::RENDERABLE_COLOR>(pMeshBatch);
         }

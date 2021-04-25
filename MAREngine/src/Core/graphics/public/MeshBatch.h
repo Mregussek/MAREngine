@@ -31,6 +31,8 @@ namespace marengine {
 
     struct CRenderable;
     struct CTransform;
+    class FMaterialStorage;
+    class FMaterialTex2D;
 
 
     class FMeshBatch : public IMeshBatch {
@@ -54,7 +56,8 @@ namespace marengine {
         MAR_NO_DISCARD int32 getIBO() const final;
         MAR_NO_DISCARD int32 getTransformSSBO() const final;
 
-        void passStorage(FMeshStorage* pMeshStorage) final;
+        void passMeshStorage(FMeshStorage* pMeshStorage) final;
+        void passMaterialStorage(FMaterialStorage* pMaterialStorage) final;
 
     protected:
 
@@ -63,6 +66,7 @@ namespace marengine {
         FTransformsArray p_transforms;
 
         FMeshStorage* p_pMeshStorage{ nullptr };
+        FMaterialStorage* p_pMaterialStorage{ nullptr };
 
         int32 p_vbo{ -1 };
         int32 p_ibo{ -1 };
@@ -126,7 +130,55 @@ namespace marengine {
     class FMeshBatchStaticTex2D : public FMeshBatchStatic {
     public:
 
-        MAR_NO_DISCARD EBatchType getType() const final { return EBatchType::MESH_STATIC_TEX2D; }
+        void reset() override;
+
+        MAR_NO_DISCARD bool shouldBeBatched(const Entity& entity) const override;
+        MAR_NO_DISCARD bool canBeBatched(const Entity& entity) const override;
+        void submitToBatch(const Entity& entity) override;
+
+        MAR_NO_DISCARD EBatchType getType() const final;
+
+    private:
+
+        void submitTexture(FMaterialTex2D* pTexture2D);
+
+
+        std::vector<int32> m_textureIndexes;
+
+    };
+
+
+    class FMeshBatchStorageStaticColor {
+    public:
+
+        MAR_NO_DISCARD FMeshBatchStaticColor* get(int32 index) const;
+        MAR_NO_DISCARD uint32 getCount() const;
+        MAR_NO_DISCARD bool isEmpty() const;
+
+    private:
+
+        std::vector<FMeshBatchStaticColor> m_meshBatches;
+
+    public:
+
+        MAR_NO_DISCARD auto getArray() ->decltype(&m_meshBatches) const;
+
+    };
+
+    class FMeshBatchStorageStaticTex2D {
+    public:
+
+        MAR_NO_DISCARD FMeshBatchStaticTex2D* get(int32 index) const;
+        MAR_NO_DISCARD uint32 getCount() const;
+        MAR_NO_DISCARD bool isEmpty() const;
+
+    private:
+
+        std::vector<FMeshBatchStaticTex2D> m_meshBatches;
+
+    public:
+
+        MAR_NO_DISCARD auto getArray() ->decltype(&m_meshBatches) const;
 
     };
 
@@ -137,25 +189,16 @@ namespace marengine {
 
     public:
 
-        MAR_NO_DISCARD FMeshBatchStaticColor* getStaticColor(int32 index) const final;
-        MAR_NO_DISCARD FMeshBatchStaticTex2D* getStaticTex2D(int32 index) const final;
-
-        MAR_NO_DISCARD uint32 getCountStaticColor() const final;
-        MAR_NO_DISCARD uint32 getCountStaticTex2D() const final;
-
+        MAR_NO_DISCARD FMeshBatchStorageStaticColor* getStorageStaticColor() const final;
+        MAR_NO_DISCARD FMeshBatchStorageStaticTex2D* getStorageStaticTex2D() const final;
         MAR_NO_DISCARD FMeshBatch* retrieve(const CRenderable& cRenderable) const;
 
         void reset() final;
 
     private:
 
-        std::vector<FMeshBatchStaticColor> m_staticColors;
-        std::vector<FMeshBatchStaticTex2D> m_staticTex2D;
-
-    public:
-
-        MAR_NO_DISCARD auto getArrayStaticColor() ->decltype(&m_staticColors) const;
-        MAR_NO_DISCARD auto getArrayStaticTex2D() ->decltype(&m_staticTex2D) const;
+        FMeshBatchStorageStaticColor m_storageStaticColor;
+        FMeshBatchStorageStaticTex2D m_storageStaticTex2D;
 
     };
 
@@ -169,11 +212,13 @@ namespace marengine {
         MAR_NO_DISCARD FMeshBatchStorage* getStorage() const;
 
         void passMeshStorage(FMeshStorage* pMeshStorage);
+        void passMaterialStorage(FMaterialStorage* pMaterialStorage);
 
     private:
 
         FMeshBatchStorage m_storage;
         FMeshStorage* m_pMeshStorage{ nullptr };
+        FMaterialStorage* m_pMaterialStorage{ nullptr };
 
     };
 

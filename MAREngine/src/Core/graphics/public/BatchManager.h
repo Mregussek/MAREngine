@@ -36,13 +36,15 @@ namespace marengine {
     class Entity;
     class FRenderManager;
     class FMeshManager;
+    class FMaterialManager;
     struct CPointLight;
 
 
     class FBatchManager : public IRenderResourceManager {
     public:
 
-        void create(FRenderManager* pRenderManager, FMeshManager* pMeshManager);
+        void create(FRenderManager* pRenderManager, FMeshManager* pMeshManager,
+                    FMaterialManager* pMaterialManager);
         void reset() const;
 
         void pushSceneToRender(Scene* pScene);
@@ -62,6 +64,7 @@ namespace marengine {
         FLightBatchFactory m_lightFactory;
         FRenderManager* m_pRenderManager{ nullptr };
         FMeshManager* m_pMeshManager{ nullptr };
+        FMaterialManager* m_pMaterialManager{ nullptr };
 
     };
 

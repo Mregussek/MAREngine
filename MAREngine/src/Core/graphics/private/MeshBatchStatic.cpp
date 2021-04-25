@@ -139,7 +139,19 @@ namespace marengine {
     }
 
     bool FMeshBatchStaticColor::shouldBeBatched(const Entity& entity) const {
-        return FMeshBatchStatic::shouldBeBatched(entity);
+        if(!FMeshBatchStatic::shouldBeBatched(entity)) {
+            return false;
+        }
+
+        const auto currentColorSize{ m_colors.size() };
+        const bool cannotPushColor =
+                (currentColorSize + 1) >= GraphicLimits::maxTransforms;
+
+        if(cannotPushColor) {
+            return false;
+        }
+
+        return true;
     }
 
     bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
@@ -156,7 +168,7 @@ namespace marengine {
         auto& cRenderable{ entity.getComponent<CRenderable>() };
         submitColor(cRenderable.color);
 
-        cRenderable.batch.materialIndex = (int8)(m_colors.size() - 1);
+        cRenderable.batch.materialIndex = (int32)(m_colors.size() - 1);
         cRenderable.batch.type = EBatchType::MESH_STATIC_COLOR;
     }
 
@@ -183,6 +195,61 @@ namespace marengine {
 
     EBatchType FMeshBatchStaticColor::getType() const {
         return EBatchType::MESH_STATIC_COLOR;
+    }
+
+
+    void FMeshBatchStaticTex2D::reset() {
+        m_textureIndexes.clear();
+    }
+
+    bool FMeshBatchStaticTex2D::shouldBeBatched(const Entity& entity) const {
+        if(!FMeshBatchStatic::shouldBeBatched(entity)) {
+            return false;
+        }
+
+        const auto& cRenderable{ entity.getComponent<CRenderable>() };
+        if(!cRenderable.material.isValid()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    bool FMeshBatchStaticTex2D::canBeBatched(const Entity& entity) const {
+        if(!FMeshBatchStatic::canBeBatched(entity)) {
+            return false;
+        }
+
+        const auto& cRenderable{ entity.getComponent<CRenderable>() };
+        if(cRenderable.material.type != EMaterialType::TEX2D) {
+            return false;
+        }
+
+        const auto currentTexturesSize{ m_textureIndexes.size() };
+        const bool cannotPushTexture =
+                (currentTexturesSize + 1) >= GraphicLimits::maxTransforms;
+        if(cannotPushTexture) {
+            return false;
+        }
+        return true;
+    }
+
+    void FMeshBatchStaticTex2D::submitToBatch(const Entity& entity) {
+        FMeshBatchStatic::submitToBatch(entity);
+        auto& cRenderable{ entity.getComponent<CRenderable>() };
+        FMaterialTex2D* pTexture{ p_pMaterialStorage->getTex2D(cRenderable.material.index) };
+        submitTexture(pTexture);
+
+        cRenderable.batch.materialIndex = (int32)(m_textureIndexes.size() - 1);
+        cRenderable.batch.type = EBatchType::MESH_STATIC_TEX2D;
+    }
+
+    void FMeshBatchStaticTex2D::submitTexture(FMaterialTex2D* pTexture2D) {
+        m_textureIndexes.emplace_back(pTexture2D->getIndex());
+    }
+
+    EBatchType FMeshBatchStaticTex2D::getType() const {
+        return EBatchType::MESH_STATIC_TEX2D;
     }
 
 

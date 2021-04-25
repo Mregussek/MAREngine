@@ -99,11 +99,12 @@ namespace marengine {
         pLightBatch->passLightSSBO(m_pointLightIndex);
 
         FMeshBatchStorage* pStorage{ pBatchManager->getMeshBatchStorage() };
-        const int8 colorBatchSize{ (int8)pStorage->getCountStaticColor() };
+        const int8 colorBatchSize{ (int8)pStorage->getStorageStaticColor()->getCount() };
 
         for (int8 i = 0; i < colorBatchSize; i++) {
             FPipelineMeshColor* pPipeline{ pPipelineFactory->emplaceMeshColor() };
-            pPipelineFactory->fillPipelineFor(pPipeline, pStorage->getStaticColor(i));
+            pPipelineFactory->fillPipelineFor(pPipeline,
+                                              pStorage->getStorageStaticColor()->get(i));
             pPipeline->passCameraSSBO(m_cameraIndex);
             pPipeline->passPointLightSSBO(m_pointLightIndex);
         }

@@ -110,6 +110,9 @@ namespace marengine {
         void fillPipelineFor(FPipelineMeshColor* const pPipeline,
                              FMeshBatchStaticColor* const pBatch) const final;
 
+        void fillPipelineFor(FPipelineMeshTex2D* const pPipeline,
+                             FMeshBatchStaticTex2D* const pBatch) const final;
+
     };
 
 

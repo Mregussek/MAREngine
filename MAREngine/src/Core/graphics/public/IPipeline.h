@@ -33,7 +33,8 @@ namespace marengine {
     class FBufferStorage;
     class FPipelineMeshColor;
     class FPipelineMeshTex2D;
-    class FMeshBatchStaticColor;;
+    class FMeshBatchStaticColor;
+    class FMeshBatchStaticTex2D;
 
 
     class IPipeline : public FRenderResource {
@@ -70,6 +71,9 @@ namespace marengine {
 
         virtual void fillPipelineFor(FPipelineMeshColor* const pPipeline,
                                      FMeshBatchStaticColor* const pBatch) const = 0;
+
+        virtual void fillPipelineFor(FPipelineMeshTex2D* const pPipeline,
+                                     FMeshBatchStaticTex2D* const pBatch) const = 0;
 
     };
 

@@ -86,38 +86,68 @@ namespace marengine {
 	    return p_transformSSBO;
 	}
 
-    void FMeshBatch::passStorage(FMeshStorage* pMeshStorage) {
+    void FMeshBatch::passMeshStorage(FMeshStorage* pMeshStorage) {
 	    p_pMeshStorage = pMeshStorage;
 	}
 
-
-    FMeshBatchStaticColor* FMeshBatchStorage::getStaticColor(int32 index) const {
-	    return const_cast<FMeshBatchStaticColor*>(&m_staticColors.at(index));
+	void FMeshBatch::passMaterialStorage(FMaterialStorage* pMaterialStorage) {
+        p_pMaterialStorage = pMaterialStorage;
 	}
 
-    FMeshBatchStaticTex2D* FMeshBatchStorage::getStaticTex2D(int32 index) const {
-        return const_cast<FMeshBatchStaticTex2D*>(&m_staticTex2D.at(index));
+
+    FMeshBatchStaticColor* FMeshBatchStorageStaticColor::get(int32 index) const {
+	    return const_cast<FMeshBatchStaticColor*>(&m_meshBatches.at(index));
+	}
+
+    uint32 FMeshBatchStorageStaticColor::getCount() const {
+        return m_meshBatches.size();
     }
 
-    uint32 FMeshBatchStorage::getCountStaticColor() const {
-	    return m_staticColors.size();
+    bool FMeshBatchStorageStaticColor::isEmpty() const {
+        return m_meshBatches.empty();
+    }
+
+    auto FMeshBatchStorageStaticColor::getArray() ->decltype(&m_meshBatches) const {
+        return &m_meshBatches;
+    }
+
+
+    FMeshBatchStaticTex2D* FMeshBatchStorageStaticTex2D::get(int32 index) const {
+        return const_cast<FMeshBatchStaticTex2D*>(&m_meshBatches.at(index));
+    }
+
+    uint32 FMeshBatchStorageStaticTex2D::getCount() const {
+	    return m_meshBatches.size();
 	}
 
-    uint32 FMeshBatchStorage::getCountStaticTex2D() const {
-	    return m_staticTex2D.size();
+    bool FMeshBatchStorageStaticTex2D::isEmpty() const {
+        return m_meshBatches.empty();
+    }
+
+    auto FMeshBatchStorageStaticTex2D::getArray() ->decltype(&m_meshBatches) const {
+        return &m_meshBatches;
+    }
+
+
+    FMeshBatchStorageStaticColor* FMeshBatchStorage::getStorageStaticColor() const {
+	    return const_cast<FMeshBatchStorageStaticColor*>(&m_storageStaticColor);
+	}
+
+    FMeshBatchStorageStaticTex2D* FMeshBatchStorage::getStorageStaticTex2D() const {
+        return const_cast<FMeshBatchStorageStaticTex2D*>(&m_storageStaticTex2D);
 	}
 
     FMeshBatch* FMeshBatchStorage::retrieve(const CRenderable& cRenderable) const {
         switch(cRenderable.batch.type) {
             case EBatchType::MESH_STATIC_COLOR:
-                return getStaticColor(cRenderable.batch.index);
+                return m_storageStaticColor.get(cRenderable.batch.index);
             case EBatchType::MESH_STATIC_TEX2D:
-                return getStaticTex2D(cRenderable.batch.index);
+                return m_storageStaticTex2D.get(cRenderable.batch.index);
             default: return nullptr;
         }
     }
 
-	template<typename TBatchArray>
+    template<typename TBatchArray>
 	static void clearBatchArray(TBatchArray& array) {
         for(auto& batch : array) {
             batch.reset();
@@ -126,33 +156,32 @@ namespace marengine {
 	}
 
 	void FMeshBatchStorage::reset() {
-        clearBatchArray(m_staticColors);
-        clearBatchArray(m_staticTex2D);
+        clearBatchArray(*m_storageStaticColor.getArray());
+        clearBatchArray(*m_storageStaticTex2D.getArray());
 	}
 
-    auto FMeshBatchStorage::getArrayStaticColor() ->decltype(&m_staticColors) const {
-	    return &m_staticColors;
-	}
 
-    auto FMeshBatchStorage::getArrayStaticTex2D() ->decltype(&m_staticTex2D) const {
-	    return &m_staticTex2D;
+	template<typename TReturnType, typename TStorageType>
+	static TReturnType* emplaceStorageType(TStorageType* pStorage, FMeshStorage* pMeshStorage,
+                                FMaterialStorage* pMaterialStorage) {
+        auto& batch{ pStorage->getArray()->emplace_back() };
+        const auto currentSize{ pStorage->getCount() };
+        batch.setIndex(currentSize - 1);
+        batch.passMeshStorage(pMeshStorage);
+        batch.passMaterialStorage(pMaterialStorage);
+        return &batch;
 	}
-
 
     FMeshBatchStaticColor* FMeshBatchFactory::emplaceStaticColor() {
-        auto& batch{ m_storage.m_staticColors.emplace_back() };
-        const auto currentSize{ m_storage.getCountStaticColor() };
-        batch.setIndex(currentSize - 1);
-        batch.passStorage(m_pMeshStorage);
-        return const_cast<FMeshBatchStaticColor*>(&batch);
+        return emplaceStorageType<FMeshBatchStaticColor>(&m_storage.m_storageStaticColor,
+                                                         m_pMeshStorage,
+                                                         m_pMaterialStorage);
 	}
 
     FMeshBatchStaticTex2D* FMeshBatchFactory::emplaceStaticTex2D() {
-        auto& batch{ m_storage.m_staticTex2D.emplace_back() };
-        const auto currentSize{ m_storage.getCountStaticTex2D() };
-        batch.setIndex(currentSize - 1);
-        batch.passStorage(m_pMeshStorage);
-        return const_cast<FMeshBatchStaticTex2D*>(&batch);
+        return emplaceStorageType<FMeshBatchStaticTex2D>(&m_storage.m_storageStaticTex2D,
+                                                         m_pMeshStorage,
+                                                         m_pMaterialStorage);
 	}
 
 	FMeshBatchStorage* FMeshBatchFactory::getStorage() const {
@@ -161,6 +190,10 @@ namespace marengine {
 
     void FMeshBatchFactory::passMeshStorage(FMeshStorage* pMeshStorage) {
 	    m_pMeshStorage = pMeshStorage;
+	}
+
+	void FMeshBatchFactory::passMaterialStorage(FMaterialStorage* pMaterialStorage) {
+	    m_pMaterialStorage = pMaterialStorage;
 	}
 
 

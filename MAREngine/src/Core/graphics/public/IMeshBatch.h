@@ -31,8 +31,11 @@ namespace marengine {
 
     class Entity;
     class FMeshStorage;
+    class FMaterialStorage;
     class FMeshBatchStaticColor;
     class FMeshBatchStaticTex2D;
+    class FMeshBatchStorageStaticColor;
+    class FMeshBatchStorageStaticTex2D;
 
 
     enum class EBatchType {
@@ -65,7 +68,8 @@ namespace marengine {
         virtual int32 getIBO() const = 0;
         virtual int32 getTransformSSBO() const = 0;
 
-        virtual void passStorage(FMeshStorage* pMeshStorage) = 0;
+        virtual void passMeshStorage(FMeshStorage* pMeshStorage) = 0;
+        virtual void passMaterialStorage(FMaterialStorage* pMaterialStorage) = 0;
 
         virtual EBatchType getType() const = 0;
 
@@ -75,11 +79,8 @@ namespace marengine {
     class IMeshBatchStorage : public IRenderResourceStorage {
     public:
 
-        virtual FMeshBatchStaticColor* getStaticColor(int32 index) const = 0;
-        virtual FMeshBatchStaticTex2D* getStaticTex2D(int32 index) const = 0;
-
-        virtual uint32 getCountStaticColor() const = 0;
-        virtual uint32 getCountStaticTex2D() const = 0;
+        virtual FMeshBatchStorageStaticColor* getStorageStaticColor() const = 0;
+        virtual FMeshBatchStorageStaticTex2D* getStorageStaticTex2D() const = 0;
 
     };
 

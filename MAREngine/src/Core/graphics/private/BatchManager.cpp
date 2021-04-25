@@ -23,6 +23,7 @@
 #include "../public/BatchManager.h"
 #include "../public/RenderManager.h"
 #include "../public/MeshManager.h"
+#include "../public/MaterialManager.h"
 #include "../../ecs/Entity/EventsCameraEntity.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Scene.h"
@@ -30,14 +31,14 @@
 
 namespace marengine {
 
-    template<typename TMeshBatchArray>
-    static int32 getAvailableBatch(TMeshBatchArray* pBatchArray, const Entity& entity);
 
-
-    void FBatchManager::create(FRenderManager* pRenderManager, FMeshManager* pMeshManager) {
+    void FBatchManager::create(FRenderManager* pRenderManager, FMeshManager* pMeshManager,
+                               FMaterialManager* pMaterialManager) {
         m_pRenderManager = pRenderManager;
         m_pMeshManager = pMeshManager;
+        m_pMaterialManager = pMaterialManager;
         m_meshBatchFactory.passMeshStorage(m_pMeshManager->getStorage());
+        m_meshBatchFactory.passMaterialStorage(m_pMaterialManager->getStorage());
     }
 
     void FBatchManager::reset() const {
@@ -65,9 +66,6 @@ namespace marengine {
         m_pRenderManager->reset();
         reset();
 
-        auto inst1 = m_meshBatchFactory.emplaceStaticColor();
-        auto inst2 = m_meshBatchFactory.emplaceStaticTex2D();
-
         const FEntityArray& entities{ pScene->getEntities() };
         for(const Entity& entity : entities) {
             pushEntityToRender(entity);
@@ -75,18 +73,49 @@ namespace marengine {
         m_pRenderManager->onBatchesReadyToDraw(this);
     }
 
+    template<typename TMeshBatchArray>
+    static int32 getAvailableBatch(TMeshBatchArray* pBatchArray, const Entity& entity);
+
     void FBatchManager::pushEntityToRender(const Entity& entity) {
-        // TODO: does not support more than one batch! Refactor it
         if(entity.hasComponent<CRenderable>()) {
-            [this](const Entity& entity) -> bool {
-                auto arrayColor{ getMeshBatchStorage()->getArrayStaticColor() };
-                const int8 batchIndex = getAvailableBatch(arrayColor, entity);
-                if (batchIndex != -1) {
-                    getMeshBatchStorage()->getStaticColor(batchIndex)->submitToBatch(entity);
-                    return true;
+            { // firstly try texture2D
+                FMeshBatchStorageStaticTex2D* pStorageStaticTex2D =
+                        getMeshBatchStorage()->getStorageStaticTex2D();
+                if(pStorageStaticTex2D->isEmpty()) {
+                    FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticTex2D() };
                 }
-                return false;
-            }(entity);
+
+                const int32 index =
+                        getAvailableBatch(pStorageStaticTex2D->getArray(), entity);
+                if (index != -1) {
+                    pStorageStaticTex2D->get(index)->submitToBatch(entity);
+                }
+                else {
+                    if (pStorageStaticTex2D->get(0)->shouldBeBatched(entity)) {
+                        FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticTex2D() };
+                        pBatch->submitToBatch(entity);
+                    }
+                }
+            }
+            { // secondly color
+                FMeshBatchStorageStaticColor* pStorageStaticColor =
+                        getMeshBatchStorage()->getStorageStaticColor();
+                if(pStorageStaticColor->isEmpty()) {
+                    FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticColor() };
+                }
+
+                const int32 index =
+                        getAvailableBatch(pStorageStaticColor->getArray(), entity);
+                if (index != -1) {
+                    pStorageStaticColor->get(index)->submitToBatch(entity);
+                }
+                else {
+                    if (pStorageStaticColor->get(0)->shouldBeBatched(entity)) {
+                        FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticColor() };
+                        pBatch->submitToBatch(entity);
+                    }
+                }
+            }
         }
 
         if (entity.hasComponent<CPointLight>()) {
@@ -117,7 +146,8 @@ namespace marengine {
         auto canBatchEntity = [&entity](const auto& batch)->bool {
             return batch.canBeBatched(entity);
         };
-        const auto validBatchIt = std::find_if(pBatchArray->cbegin(), pBatchArray->cend(), canBatchEntity);
+        const auto validBatchIt = std::find_if(pBatchArray->cbegin(), pBatchArray->cend(),
+                                               canBatchEntity);
         if (validBatchIt != pBatchArray->cend()) {
             return std::distance(pBatchArray->cbegin(), validBatchIt);
         }

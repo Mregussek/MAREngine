@@ -50,7 +50,7 @@ namespace marengine {
 
     void FRenderLayerOpenGL::create(FWindow* pWindow) {
         m_context.create(pWindow);
-        p_batchManager.create(&p_renderManager, &p_meshManager);
+        p_batchManager.create(&p_renderManager, &p_meshManager, &p_materialManager);
         p_renderManager.create((FRenderContext*)&m_context);
         p_materialManager.create(m_context.getMaterialFactory(), m_context.getMaterialStorage());
     }
