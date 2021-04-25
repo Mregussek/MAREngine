@@ -164,12 +164,12 @@ namespace marengine {
 	template<typename TReturnType, typename TStorageType>
 	static TReturnType* emplaceStorageType(TStorageType* pStorage, FMeshStorage* pMeshStorage,
                                 FMaterialStorage* pMaterialStorage) {
-        auto& batch{ pStorage->getArray()->emplace_back() };
+        TReturnType* pBatch{ &pStorage->getArray()->emplace_back() };
         const auto currentSize{ pStorage->getCount() };
-        batch.setIndex(currentSize - 1);
-        batch.passMeshStorage(pMeshStorage);
-        batch.passMaterialStorage(pMaterialStorage);
-        return &batch;
+        pBatch->setIndex(currentSize - 1);
+        pBatch->passMeshStorage(pMeshStorage);
+        pBatch->passMaterialStorage(pMaterialStorage);
+        return pBatch;
 	}
 
     FMeshBatchStaticColor* FMeshBatchFactory::emplaceStaticColor() {

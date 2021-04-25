@@ -68,7 +68,8 @@ namespace marengine {
         p_pBufferStorage->getSSBO(p_camIndex)->bind();
         p_pBufferStorage->getSSBO(p_pointLightIndex)->bind();
         p_pShadersStorage->get(p_shaderIndex)->bind();
-        for(uint32 i = 0; i < m_textures.size(); i++) {
+        const uint32 countMaterial{ p_pMaterialStorage->getCountTex2D() };
+        for(uint32 i = 0; i < countMaterial; i++) {
             p_pMaterialStorage->getTex2D(m_textures.at(i))->bind();
         }
     }

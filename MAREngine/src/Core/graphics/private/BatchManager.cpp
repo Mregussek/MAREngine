@@ -83,10 +83,12 @@ namespace marengine {
 
     void FBatchManager::pushEntityToRender(const Entity& entity) {
         if(entity.hasComponent<CRenderable>()) {
-            pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticTex2D(),
-                                     getMeshBatchFactory(), entity);
-            pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticColor(),
-                                     getMeshBatchFactory(), entity);
+            [&entity, this]() {
+                if(pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticTex2D(),
+                                            getMeshBatchFactory(), entity)) { return; }
+                if(pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticColor(),
+                                            getMeshBatchFactory(), entity)) { return; }
+            }();
         }
 
         if (entity.hasComponent<CPointLight>()) {

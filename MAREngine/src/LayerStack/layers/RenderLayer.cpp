@@ -50,9 +50,9 @@ namespace marengine {
 
     void FRenderLayerOpenGL::create(FWindow* pWindow) {
         m_context.create(pWindow);
-        p_batchManager.create(&p_renderManager, &p_meshManager, &p_materialManager);
         p_renderManager.create((FRenderContext*)&m_context);
         p_materialManager.create(m_context.getMaterialFactory(), m_context.getMaterialStorage());
+        p_batchManager.create(&p_renderManager, &p_meshManager, &p_materialManager);
     }
 
     void FRenderLayerOpenGL::begin() {
@@ -62,13 +62,20 @@ namespace marengine {
     void FRenderLayerOpenGL::update() {
         p_statistics.reset();
 
-        const uint32_t colorMeshesCount{ m_context.getPipelineStorage()->getCountColorMesh() };
-
         FFramebuffer* pFramebuffer{ p_renderManager.getViewportFramebuffer() };
         pFramebuffer->clear();
-        for(uint32_t i = 0; i < colorMeshesCount; i++) {
+
+        const uint32_t countColor{ m_context.getPipelineStorage()->getCountColorMesh() };
+        for(uint32_t i = 0; i < countColor; i++) {
             m_renderCmds.draw(pFramebuffer, m_context.getPipelineStorage()->getColorMesh(i));
         }
+
+        const uint32_t countTex2D{ m_context.getPipelineStorage()->getCountTex2DMesh() };
+        for(uint32_t i = 0; i < countTex2D; i++) {
+            m_renderCmds.draw(pFramebuffer, m_context.getPipelineStorage()->getTex2DMesh(i));
+        }
+
+        pFramebuffer->unbind();
     }
 
     void FRenderLayerOpenGL::end() {

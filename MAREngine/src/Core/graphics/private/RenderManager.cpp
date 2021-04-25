@@ -39,8 +39,8 @@ namespace marengine {
         m_pContext = pContext;
         m_pContext->getBufferFactory()->passRenderContext(pContext);
         m_pContext->getShadersFactory()->passRenderContext(pContext);
-        m_pContext->getPipelineFactory()->passRenderContext(pContext);
         m_pContext->getMaterialFactory()->passRenderContext(pContext);
+        m_pContext->getPipelineFactory()->passRenderContext(pContext);
 
         FFramebufferFactory* pFbFactory{ m_pContext->getFramebufferFactory() };
         pFbFactory->passRenderContext(pContext);
@@ -92,7 +92,11 @@ namespace marengine {
         const uint32 batchSize{ pStorage->getCount() };
 
         for (uint32 i = 0; i < batchSize; i++) {
-            auto* pPipeline{ pPipelineFactory->emplaceMeshAndFill(pStorage->get(i)) };
+            auto* pMeshBatch{ pStorage->get(i) };
+            if(pMeshBatch->getVertices().empty() || pMeshBatch->getIndices().empty()) {
+                continue;
+            }
+            auto* pPipeline{ pPipelineFactory->emplaceMeshAndFill(pMeshBatch) };
             pPipeline->passCameraSSBO(cameraIndex);
             pPipeline->passPointLightSSBO(pointLightIndex);
         }
@@ -114,7 +118,7 @@ namespace marengine {
         FMeshBatchStorage* pMeshBatchStorage{ pBatchManager->getMeshBatchStorage() };
         preparePipelineForOnlyBindState(pMeshBatchStorage->getStorageStaticColor(),
                                         pPipelineFactory, m_cameraIndex, m_pointLightIndex);
-        preparePipelineForOnlyBindState(pMeshBatchStorage->getStorageStaticColor(),
+        preparePipelineForOnlyBindState(pMeshBatchStorage->getStorageStaticTex2D(),
                                         pPipelineFactory, m_cameraIndex, m_pointLightIndex);
     }
 

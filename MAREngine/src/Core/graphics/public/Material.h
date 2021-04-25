@@ -41,6 +41,8 @@ namespace marengine {
         virtual void passInfo(const FTex2DInfo& info) final { p_info = info; }
         MAR_NO_DISCARD virtual const FTex2DInfo& getInfo() const final { return p_info; }
 
+        virtual void setSampler(uint32 sampler) final { p_info.sampler = sampler; }
+
         MAR_NO_DISCARD EMaterialType getType() const final { return EMaterialType::TEX2D; }
 
     protected:

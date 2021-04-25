@@ -142,6 +142,7 @@ namespace marengine {
 
         pPipeline->passBufferStorage(p_pRenderContext->getBufferStorage());
         pPipeline->passShadersStorage(p_pRenderContext->getShadersStorage());
+        pPipeline->passMaterialStorage(p_pRenderContext->getMaterialStorage());
         pPipeline->create();
     }
 

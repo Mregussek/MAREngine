@@ -238,6 +238,7 @@ namespace marengine {
         FMeshBatchStatic::submitToBatch(entity);
         auto& cRenderable{ entity.getComponent<CRenderable>() };
         FMaterialTex2D* pTexture{ p_pMaterialStorage->getTex2D(cRenderable.material.index) };
+        pTexture->setSampler(cRenderable.batch.transformIndex);
         submitTexture(pTexture);
 
         cRenderable.batch.materialIndex = (int32)(m_textureIndexes.size() - 1);

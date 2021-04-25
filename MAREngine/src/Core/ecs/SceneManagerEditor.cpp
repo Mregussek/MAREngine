@@ -41,7 +41,6 @@ namespace marengine {
 
     void FSceneManagerEditor::updateSceneAtBatchManager() {
         m_pBatchManager->pushSceneToRender(m_pScene);
-        //RenderPipeline::Instance->create(getScene());
 	}
 
 	void FSceneManagerEditor::updateSceneAtMeshManager() {
