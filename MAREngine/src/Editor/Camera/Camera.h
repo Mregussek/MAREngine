@@ -45,7 +45,7 @@ namespace marengine {
         void initialize(float aspectRatio);
         bool update(IWindow* pWindow, float aspectRatio, bool useInput);
 
-        MAR_NO_DISCARD const RenderCamera* getCameraData() const;
+        MAR_NO_DISCARD const FRenderCamera* getCameraData() const;
 
     private:
 
@@ -53,7 +53,7 @@ namespace marengine {
         void updateCameraVectors();
 
 
-        RenderCamera m_renderCamera;
+        FRenderCamera m_renderCamera;
 
         maths::vec3 m_position{ -10.0f, 2.0f, 0.0f };
         maths::vec3 m_front{ 0.0f, 0.0f, -1.0f };

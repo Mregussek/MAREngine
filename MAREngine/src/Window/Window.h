@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_IWINDOW_H
-#define MARENGINE_IWINDOW_H
+#ifndef MARENGINE_WINDOW_H
+#define MARENGINE_WINDOW_H
 
 
 #include "../mar.h"
@@ -46,7 +46,7 @@ namespace marengine {
          * @param name name of window, that shall be displayed
          * @return True if window opened correctly, false otherwise
          */
-        virtual bool open(uint32_t width, uint32_t height, const char* name) = 0;
+        virtual bool open(uint32 width, uint32 height, const char* name) = 0;
 
         /// @brief Closes current window instance. Remember, it does not terminate library, closes window!
         virtual void close() = 0;
@@ -85,22 +85,22 @@ namespace marengine {
          * @brief Sets vertical synchronization (decreases FPS if set on!).
          * @param vsSetValue vsSetValue equal to 1 sets VS. 0 disables it.
          */
-        virtual void setVerticalSync(int32_t vsSetValue) = 0;
+        virtual void setVerticalSync(int32 vsSetValue) = 0;
 
         /// @brief Swaps buffers and polls event.
         virtual void swapBuffers() = 0;
 
         /**
-         * @brief Returns window size on x-axis.
+         * @brief Returns window's viewport size on x-axis.
          * @return window size on x-axis.
          */
-        MAR_NO_DISCARD virtual int32_t getSizeX() const = 0;
+        MAR_NO_DISCARD virtual uint32 getWidth() const = 0;
 
         /**
-         * @brief Returns window size on y-axis.
+         * @brief Returns window's viewport size on y-axis.
          * @return window size on y-axis.
          */
-        MAR_NO_DISCARD virtual int32_t getSizeY() const = 0;
+        MAR_NO_DISCARD virtual uint32 getHeight() const = 0;
 
         /**
          * @brief Checks, if given key at keyboard was pressed and returns result. For correct key
@@ -108,7 +108,7 @@ namespace marengine {
          * @param key Keyboard value, to be checked if it was pressed.
          * @return True, if keyboard key was pressed, false otherwise.
          */
-        MAR_NO_DISCARD virtual bool isKeyPressed(int32_t key) const = 0;
+        MAR_NO_DISCARD virtual bool isKeyPressed(int32 key) const = 0;
 
         /**
          * @brief Checks, if given key at mouse was pressed and returns result. For correct key
@@ -116,7 +116,7 @@ namespace marengine {
          * @param key Mouse value, to be checked if it was pressed.
          * @return True, if mouse key was pressed, false otherwise.
          */
-        MAR_NO_DISCARD virtual bool isMousePressed(int32_t key) const = 0;
+        MAR_NO_DISCARD virtual bool isMousePressed(int32 key) const = 0;
 
         /**
          * @brief Returns Mouse position at x-axis.
@@ -152,8 +152,8 @@ namespace marengine {
      */
     struct FWindowCurrentInfo {
 
-        uint32_t width{ 800 };
-        uint32_t height{ 600 };
+        uint32 width{ 800 };
+        uint32 height{ 600 };
         float xScroll{ 0.f };
         float yScroll{ 0.f };
         float xMousePos{ 0.f };
@@ -170,9 +170,9 @@ namespace marengine {
     class FWindow : public IWindow {
     public:
 
-        MAR_NO_DISCARD int32_t getSizeX() const final;
+        MAR_NO_DISCARD uint32 getWidth() const final;
 
-        MAR_NO_DISCARD int32_t getSizeY() const final;
+        MAR_NO_DISCARD uint32 getHeight() const final;
 
         MAR_NO_DISCARD float getMousePositionX() const final;
 
@@ -192,4 +192,4 @@ namespace marengine {
 }
 
 
-#endif //MARENGINE_IWINDOW_H
+#endif //MARENGINE_WINDOW_H

@@ -44,6 +44,7 @@ namespace marengine {
 		virtual void onEndFrame() const { }
 
 		virtual bool isHovered() const { return false; }
+		virtual bool isFocused() const { return false; }
 
 		virtual void onKeyboardButtonPressed() const { }
 		virtual void onMouseButtonPressed() const { }

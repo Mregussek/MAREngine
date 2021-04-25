@@ -20,17 +20,17 @@
 ************************************************************************/
 
 
-#include "IWindow.h"
+#include "Window.h"
 
 
 namespace marengine {
 
 
-    int32_t FWindow::getSizeX() const {
+    uint32 FWindow::getWidth() const {
         return p_currentInfo.width;
     }
 
-    int32_t FWindow::getSizeY() const {
+    uint32 FWindow::getHeight() const {
         return p_currentInfo.height;
     }
 

@@ -66,11 +66,11 @@ namespace marengine {
 		m_pContext->getShadersStorage()->reset();
     }
 
-    void FRenderManager::setCamera(const RenderCamera* pRenderCamera) {
+    void FRenderManager::setCamera(const FRenderCamera* pRenderCamera) {
         m_pRenderCamera = pRenderCamera;
     }
 
-    void FRenderManager::pushCameraToRender(const RenderCamera* pRenderCamera) {
+    void FRenderManager::pushCameraToRender(const FRenderCamera* pRenderCamera) {
         setCamera(pRenderCamera);
         const maths::mat4& mvp{ m_pRenderCamera->getMVP() };
         FShaderBuffer* const cameraSSBO{ m_pContext->getBufferStorage()->getSSBO(m_cameraIndex) };

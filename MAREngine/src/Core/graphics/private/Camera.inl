@@ -20,47 +20,28 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_VIEWPORTIMGUI_H
-#define MARENGINE_VIEWPORTIMGUI_H
-
-
-#include "../../public/EditorWidget.h"
-#include "../../../Core/graphics/public/Camera.h"
+#include "../public/Camera.h"
 
 
 namespace marengine {
 
-    class FSceneManagerEditor;
-    class FInspectorWidgetImGui;
-    class FRenderManager;
-    class FWindow;
+
+    template<typename TCamera> bool FCameraKeyboardDecorator::update(TCamera* pCamera, int32 key) {
+        return false;
+    }
+
+    template<typename TCamera> bool FCameraMouseDecorator::update(TCamera* pCamera, int32 key) {
+        return false;
+    }
+
+    template<typename TCamera> bool FCameraSphericalDecorator::update(TCamera* pCamera, int32 key) {
+        return false;
+    }
 
 
-    class FViewportWidgetImGui : public FViewportEditorWidget {
-    public:
-
-        void create(FServiceLocatorEditor* pServiceLocator) final;
-        void updateFrame() override;
-
-    private:
-
-        MAR_NO_DISCARD ImGuizmo::OPERATION displayViewportControlPanel();
-        void displayActualViewport();
-
-
-        FCamera3D m_camera;
-        float m_aspectRatio{ 1.33f };
-
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FInspectorWidgetImGui* m_pInspectorWidget{ nullptr };
-        FRenderManager* m_pRenderManager{ nullptr };
-        FWindow* m_pWindow{ nullptr };
-
-    };
+    template<> bool FCameraKeyboardDecorator::update<FCamera3D>(FCamera3D* pCamera, int32 key);
+    template<> bool FCameraMouseDecorator::update<FCamera3D>(FCamera3D* pCamera, int32 key);
+    template<> bool FCameraSphericalDecorator::update<FCamera3D>(FCamera3D* pCamera, int32 key);
 
 
 }
-
-
-
-#endif //MARENGINE_VIEWPORTIMGUI_H

@@ -23,7 +23,7 @@
 #include "ViewportImGui.h"
 #include "InspectorImGui.h"
 #include "../../public/ServiceLocatorEditor.h"
-#include "../../../Window/IWindow.h"
+#include "../../../Window/Window.h"
 #include "../../../Core/graphics/public/RenderManager.h"
 #include "../../../Core/graphics/public/Framebuffer.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
@@ -34,7 +34,7 @@
 
 namespace marengine {
 
-    static void drawGuizmo(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+    static void drawGuizmo(ImGuizmo::OPERATION guizmoOperation, const FRenderCamera* pRenderCamera,
                            const Entity& currentEntity);
 
 
@@ -48,15 +48,10 @@ namespace marengine {
         m_pWindow =
                 pServiceLocator->retrieve<FHolderPtr<FWindow*>>()->pInstance;
 
-        FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
-        const uint32 currentWidth{ pFramebuffer->getWidth() };
-        const uint32 currentHeight{ pFramebuffer->getHeight() };
-        m_aspectRatio = (float)currentWidth / (float)currentHeight;
-
-        m_camera.initialize(m_aspectRatio);
+        m_camera.create(m_pWindow, m_pRenderManager->getViewportFramebuffer());
 
         if(m_pSceneManagerEditor->usingEditorCamera()) {
-            FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
+            FEventsCameraEntity::onEditorCameraSet(m_camera.getRenderCamera());
         }
     }
 
@@ -67,19 +62,35 @@ namespace marengine {
         const ImVec2 rememberDefaultVal{ style.WindowPadding };
         style.WindowPadding = ImVec2(1.f, 1.f);
 
-        ImGui::Begin("ViewPort", nullptr);
+        ImGui::Begin("Viewport", nullptr);
 
         displayActualViewport();
 
-        if (m_pSceneManagerEditor->usingEditorCamera() && m_pSceneManagerEditor->isEditorMode()) {
+        const bool userInEditorMode =
+            m_pSceneManagerEditor->usingEditorCamera() && m_pSceneManagerEditor->isEditorMode();
+
+        if (userInEditorMode) {
             if (m_pInspectorWidget->isInspectedEntityValid()) {
-                drawGuizmo(guizmoOperation, m_camera, m_pInspectorWidget->getInspectedEntity());
+                drawGuizmo(guizmoOperation, m_camera.getRenderCamera(),
+                           m_pInspectorWidget->getInspectedEntity());
             }
 
-            const bool cameraWasRecalculated =
-                    m_camera.update(m_pWindow, m_aspectRatio, ImGui::IsWindowFocused());
-            if (cameraWasRecalculated) {
-                FEventsCameraEntity::onEditorCameraSet(m_camera.getCameraData());
+            bool cameraUpdated{ m_camera.update() };
+
+            if(ImGui::IsWindowFocused()) {
+                if(FCameraKeyboardDecorator::update(&m_camera, MAR_MOUSE_BUTTON_RIGHT)) {
+                    cameraUpdated = true;
+                }
+                if(FCameraMouseDecorator::update(&m_camera, MAR_MOUSE_BUTTON_RIGHT)) {
+                    cameraUpdated = true;
+                }
+                if(FCameraSphericalDecorator::update(&m_camera, MAR_MOUSE_BUTTON_MIDDLE)) {
+                    cameraUpdated = true;
+                }
+            }
+
+            if (cameraUpdated) {
+                FEventsCameraEntity::onEditorCameraSet(m_camera.getRenderCamera());
             }
         }
 
@@ -89,7 +100,7 @@ namespace marengine {
     }
 
     static void displayEditorModeButtons(FSceneManagerEditor* pSceneManagerEditor,
-                                         const RenderCamera* pRenderCamera) {
+                                         const FRenderCamera* pRenderCamera) {
         if (ImGui::Button("PLAY")) {
             pSceneManagerEditor->setPlayMode();
         }
@@ -111,7 +122,7 @@ namespace marengine {
     }
 
     static void displayPlayModeButtons(FSceneManagerEditor* pSceneManagerEditor,
-                                       const RenderCamera* pRenderCamera) {
+                                       const FRenderCamera* pRenderCamera) {
         if (ImGui::Button("STOP")) {
             pSceneManagerEditor->setExitPlayMode();
             if (pSceneManagerEditor->usingEditorCamera()) {
@@ -144,10 +155,10 @@ namespace marengine {
         ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar()) {
             if (m_pSceneManagerEditor->isEditorMode()) {
-                displayEditorModeButtons(m_pSceneManagerEditor, m_camera.getCameraData());
+                displayEditorModeButtons(m_pSceneManagerEditor, m_camera.getRenderCamera());
             }
             else {
-                displayPlayModeButtons(m_pSceneManagerEditor, m_camera.getCameraData());
+                displayPlayModeButtons(m_pSceneManagerEditor, m_camera.getRenderCamera());
             }
 
             ImGui::SliderInt("GuizmoType", &guizmoIndex, 0, guizmoTypeCount - 1, currentGuizmoType);
@@ -175,40 +186,28 @@ namespace marengine {
     void FViewportWidgetImGui::displayActualViewport() {
         const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
-        FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
-        const uint32 currentWidth{ pFramebuffer->getWidth() };
-        const uint32 currentHeight{ pFramebuffer->getHeight() };
-
-        const bool viewportSizeMatch{
-            currentWidth != (uint32)viewportSize.x || currentHeight != (uint32)viewportSize.y
-        };
-        if (viewportSizeMatch) {
-            pFramebuffer->resize((uint32)viewportSize.x, (uint32)viewportSize.y);
-            m_aspectRatio = (float)currentWidth / (float)currentHeight;
-        }
-
-        const uint32_t id{ pFramebuffer->getColorAttach() };
+        const uint32_t id{ m_pRenderManager->getViewportFramebuffer()->getColorAttach() };
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
     }
 
 
-    static bool draw(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+    static bool draw(ImGuizmo::OPERATION guizmoOperation, const FRenderCamera* pRenderCamera,
                      CTransform& transformComponent);
 
-    void drawGuizmo(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+    void drawGuizmo(ImGuizmo::OPERATION guizmoOperation, const FRenderCamera* pRenderCamera,
                     const Entity& currentEntity) {
         auto& transform = currentEntity.getComponent<CTransform>();
         if (guizmoOperation == ImGuizmo::OPERATION::NONE) {
             return;
         }
 
-        const bool userUsedGuizmo{ draw(guizmoOperation, editorCamera, transform) };
+        const bool userUsedGuizmo{ draw(guizmoOperation, pRenderCamera, transform) };
         if (userUsedGuizmo) {
             FEventsComponentEntity::onUpdate<CTransform>(currentEntity);
         }
     }
 
-    bool draw(ImGuizmo::OPERATION guizmoOperation, const Camera& editorCamera,
+    bool draw(ImGuizmo::OPERATION guizmoOperation, const FRenderCamera* pRenderCamera,
               CTransform& transformComponent) {
         using namespace maths;
 
@@ -225,9 +224,8 @@ namespace marengine {
         const float* pView{ nullptr };
         const float* pProjection{ nullptr };
         {
-            const RenderCamera* pRenderCam{ editorCamera.getCameraData() };
-            pView = pRenderCam->getView().value_ptr();
-            pProjection = pRenderCam->getProjection().value_ptr();
+            pView = pRenderCamera->getView().value_ptr();
+            pProjection = pRenderCamera->getProjection().value_ptr();
         }
 
         ImGuizmo::Manipulate(pView, pProjection, guizmoOperation, ImGuizmo::MODE::LOCAL, pTransform);

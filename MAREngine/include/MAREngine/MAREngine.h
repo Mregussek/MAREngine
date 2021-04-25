@@ -50,7 +50,7 @@
 // Window && Input
 #include "../../src/Window/GLFW/WindowGLFW.h"
 #include "../../src/Window/SDL/WindowSDL.h"
-#include "../../src/Window/IWindow.h"
+#include "../../src/Window/Window.h"
 
 // Engine	 
 #include "../../src/MAREngine.h"

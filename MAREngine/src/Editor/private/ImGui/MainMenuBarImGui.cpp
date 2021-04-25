@@ -28,7 +28,7 @@
 #include "../../../MAREngine.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/filesystem/SceneSerializer.h"
-#include "../../../Window/IWindow.h"
+#include "../../../Window/Window.h"
 
 
 namespace marengine {

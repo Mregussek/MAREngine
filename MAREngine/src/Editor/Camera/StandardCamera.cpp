@@ -22,7 +22,7 @@
 
 #include "StandardCamera.h"
 #include "Camera.h"
-#include "Window/IWindow.h"
+#include "Window/Window.h"
 
 
 namespace marengine {

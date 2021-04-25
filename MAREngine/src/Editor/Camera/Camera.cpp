@@ -23,7 +23,7 @@
 #include "Camera.h"
 #include "StandardCamera.h"
 #include "SphericalCamera.h"
-#include "Window/IWindow.h"
+#include "Window/Window.h"
 
 
 namespace marengine {
@@ -52,16 +52,12 @@ namespace marengine {
         };
 
         if (useInput) {
-            auto recalculateMatrixAfterUserInput = [this, &perspectiveUpdateWasNeeded]() {
+            const bool userPressedSomeKey{ processInput(pWindow) };
+            if (userPressedSomeKey) {
                 updateCameraVectors();
                 perspectiveUpdateWasNeeded();
                 m_renderCamera.calculateView(m_position, m_position + m_front, m_up);
                 m_renderCamera.recalculateMVP();
-            };
-
-            const bool userPressedSomeKey{ processInput(pWindow) };
-            if (userPressedSomeKey) {
-                recalculateMatrixAfterUserInput(); 
                 return true; 
             }
             else {
@@ -106,9 +102,9 @@ namespace marengine {
         const auto pitchRad{ tri::toRadians(m_pitch) };
 
         const maths::vec3 front{
-            {tri::cosine(yawRad) * tri::cosine(pitchRad)},
-            {tri::sine(pitchRad)},
-            {tri::sine(yawRad) * tri::cosine(pitchRad)}
+            { tri::cosine(yawRad) * tri::cosine(pitchRad) },
+            { tri::sine(pitchRad) },
+            { tri::sine(yawRad) * tri::cosine(pitchRad) }
         };
 
         m_front = vec3::normalize(front);
@@ -116,7 +112,7 @@ namespace marengine {
         m_up = vec3::normalize(vec3::cross(m_right, m_front));
     }
 
-    const RenderCamera* Camera::getCameraData() const { 
+    const FRenderCamera* Camera::getCameraData() const {
         return &m_renderCamera; 
     }
 

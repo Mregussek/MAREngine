@@ -104,7 +104,7 @@ namespace marengine {
             }
             else if(isMain){
                 const auto& transformComponent{ entity.getComponent<CTransform>() };
-                RenderCamera* renderCamera{ &cameraComponent.renderCamera };
+                FRenderCamera* renderCamera{ &cameraComponent.renderCamera };
                 renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
                 m_pRenderManager->setCamera(renderCamera);
             }

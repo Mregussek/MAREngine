@@ -23,7 +23,7 @@
 #include "MainImGui.h"
 #include "../../public/ServiceLocatorEditor.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../Window/IWindow.h"
+#include "../../../Window/Window.h"
 
 
 namespace marengine {

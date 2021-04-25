@@ -26,7 +26,7 @@
 #include "../../public/EventsEntityEditor.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/ecs/Scene.h"
-#include "../../../Window/IWindow.h"
+#include "../../../Window/Window.h"
 
 
 namespace marengine {

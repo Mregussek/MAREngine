@@ -32,7 +32,7 @@ namespace marengine {
     class FMeshBatch;
     class FMeshBatchStaticColor;
     class FPointLightBatch;
-    class RenderCamera;
+    class FRenderCamera;
     class FBatchManager;
     class FFramebuffer;
 
@@ -48,11 +48,11 @@ namespace marengine {
         void create(FRenderContext* pContext);
         void reset();
 
-        void setCamera(const RenderCamera* pRenderCamera);
+        void setCamera(const FRenderCamera* pRenderCamera);
         MAR_NO_DISCARD bool isCameraValid() const;
         MAR_NO_DISCARD FFramebuffer* getViewportFramebuffer() const;
 
-        void pushCameraToRender(const RenderCamera* pRenderCamera);
+        void pushCameraToRender(const FRenderCamera* pRenderCamera);
         void onBatchesReadyToDraw(FBatchManager* pBatchManager);
 
         template<ERenderBatchUpdateType TUpdateType, typename TBatch>
@@ -60,7 +60,7 @@ namespace marengine {
 
     private:
 
-        const RenderCamera* m_pRenderCamera{ nullptr };
+        const FRenderCamera* m_pRenderCamera{ nullptr };
         FRenderContext* m_pContext{ nullptr };
 
         int32 m_cameraIndex{ -1 };

@@ -136,7 +136,7 @@ namespace marengine {
          */
         MAR_NO_DISCARD bool isMainCamera() const;
 
-        RenderCamera renderCamera;
+        FRenderCamera renderCamera;
         std::string id{ "secondary" };   // must contain "main" to be main camera
 
         float p_fov{ 45.f };

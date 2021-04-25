@@ -27,7 +27,7 @@
 namespace marengine {
 
 
-	void RenderCamera::calculateCameraTransforms(const CTransform& transform, const CCamera& camera) {
+	void FRenderCamera::calculateCameraTransforms(const CTransform& transform, const CCamera& camera) {
 		const float xRad{ trig::toRadians(transform.rotation.x) };
 		const float yRad{ trig::toRadians(transform.rotation.y) };
 		
@@ -47,44 +47,44 @@ namespace marengine {
 		recalculateMVP();
 	}
 
-	void RenderCamera::calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane) {
+	void FRenderCamera::calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane) {
 		m_projection = mat4::perspective(trig::toRadians(zoom), aspectRatio, nearPlane, farPlane);
 	}
 
-	void RenderCamera::calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane) {
+	void FRenderCamera::calculateOrthographic(float left, float right, float top, float bottom, float nearPlane, float farPlane) {
 		m_projection = mat4::orthographic(left, right, top, bottom, nearPlane, farPlane);
 	}
 
-	void RenderCamera::calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up) {
+	void FRenderCamera::calculateView(maths::vec3 position, maths::vec3 lookAt, maths::vec3 up) {
 		m_position = position;
 		m_view = mat4::lookAt(position, lookAt, up);
 	}
 
-	void RenderCamera::calculateModel(maths::vec3 arg) {
+	void FRenderCamera::calculateModel(maths::vec3 arg) {
 		m_model = mat4::translation(arg);
 	}
 
-	void RenderCamera::recalculateMVP() {
+	void FRenderCamera::recalculateMVP() {
 		m_mvp = m_projection * m_view;
 	}
 
-	const maths::mat4& RenderCamera::getProjection() const { 
+	const maths::mat4& FRenderCamera::getProjection() const {
 		return m_projection; 
 	}
 
-	const maths::mat4& RenderCamera::getView() const { 
+	const maths::mat4& FRenderCamera::getView() const {
 		return m_view; 
 	}
 
-	const maths::mat4& RenderCamera::getModel() const { 
+	const maths::mat4& FRenderCamera::getModel() const {
 		return m_model; 
 	}
 
-	const maths::mat4& RenderCamera::getMVP() const {
+	const maths::mat4& FRenderCamera::getMVP() const {
 		return m_mvp;
 	}
 
-	const maths::vec3& RenderCamera::getPosition() const { 
+	const maths::vec3& FRenderCamera::getPosition() const {
 		return m_position; 
 	}
 

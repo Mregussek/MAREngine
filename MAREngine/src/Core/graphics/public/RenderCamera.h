@@ -33,7 +33,7 @@ namespace marengine {
 	struct CCamera;
 
 
-	class RenderCamera {
+	class FRenderCamera {
 
 		typedef maths::trig trig;
 		typedef maths::vec3 vec3;
@@ -41,7 +41,7 @@ namespace marengine {
 
 	public:
 		
-		RenderCamera() = default;
+		FRenderCamera() = default;
 
 		void calculatePerspective(float zoom, float aspectRatio, float nearPlane, float farPlane);
 		void calculateOrthographic(float left, float right, float top, float bottom,

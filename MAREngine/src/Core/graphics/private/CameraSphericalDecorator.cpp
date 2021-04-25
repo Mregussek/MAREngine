@@ -20,47 +20,31 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_VIEWPORTIMGUI_H
-#define MARENGINE_VIEWPORTIMGUI_H
-
-
-#include "../../public/EditorWidget.h"
-#include "../../../Core/graphics/public/Camera.h"
+#include "../public/Camera.h"
+#include "../../../Window/Window.h"
 
 
 namespace marengine {
 
-    class FSceneManagerEditor;
-    class FInspectorWidgetImGui;
-    class FRenderManager;
-    class FWindow;
 
+    template<> bool FCameraSphericalDecorator::update<FCamera3D>(FCamera3D* pCamera, int32 key) {
+        const FWindow* pWindow{ pCamera->getWindow() };
+        bool userRotatedCamera = false;
 
-    class FViewportWidgetImGui : public FViewportEditorWidget {
-    public:
+        if (pWindow->isMousePressed(key)) {
+            const float posX = pWindow->getMousePositionX();
+            const float posY = pWindow->getMousePositionY();
 
-        void create(FServiceLocatorEditor* pServiceLocator) final;
-        void updateFrame() override;
+            std::cout << posX << ", " << posY << "\n";
 
-    private:
+            //processPositionWithMouse(posX, posY);
 
-        MAR_NO_DISCARD ImGuizmo::OPERATION displayViewportControlPanel();
-        void displayActualViewport();
+            userRotatedCamera = true;
+        }
 
-
-        FCamera3D m_camera;
-        float m_aspectRatio{ 1.33f };
-
-        FSceneManagerEditor* m_pSceneManagerEditor{ nullptr };
-        FInspectorWidgetImGui* m_pInspectorWidget{ nullptr };
-        FRenderManager* m_pRenderManager{ nullptr };
-        FWindow* m_pWindow{ nullptr };
-
-    };
+        return userRotatedCamera;
+    }
 
 
 }
 
-
-
-#endif //MARENGINE_VIEWPORTIMGUI_H

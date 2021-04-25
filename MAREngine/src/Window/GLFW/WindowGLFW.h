@@ -24,7 +24,7 @@
 #define MARENGINE_FWINDOWGLFW_H
 
 
-#include "../IWindow.h"
+#include "../Window.h"
 
 
 namespace marengine {

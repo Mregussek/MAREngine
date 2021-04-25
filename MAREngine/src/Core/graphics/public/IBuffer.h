@@ -29,7 +29,7 @@
 
 namespace marengine {
 
-    class RenderCamera;
+    class FRenderCamera;
     class FPointLightBatch;
     class FShaderBuffer;
     class FVertexBuffer;
@@ -133,7 +133,7 @@ namespace marengine {
         virtual FIndexBuffer* emplaceIBO() = 0;
 
         virtual uint32 fillCameraSSBO(FShaderBuffer* const pShaderBuffer,
-                                      const RenderCamera* const pRenderCamera) const = 0;
+                                      const FRenderCamera* const pRenderCamera) const = 0;
         virtual uint32 fillPointLightSSBO(FShaderBuffer* const pShaderBuffer,
                                           const FPointLightBatch* const pPointLightBatch) const = 0;
 

@@ -83,7 +83,7 @@ namespace marengine {
     public:
 
         MAR_NO_DISCARD uint32 fillCameraSSBO(FShaderBuffer* const pShaderBuffer,
-                                             const RenderCamera* const pRenderCamera) const final;
+                                             const FRenderCamera* const pRenderCamera) const final;
         MAR_NO_DISCARD uint32 fillPointLightSSBO(FShaderBuffer* const pShaderBuffer,
                                                  const FPointLightBatch* const pPointLightBatch) const final;
 

@@ -28,7 +28,7 @@
 #include "../../public/EventsComponentEditor.h"
 #include "../../public/ServiceLocatorEditor.h"
 #include "../../public/EventsEntityEditor.h"
-#include "../../../Window/IWindow.h"
+#include "../../../Window/Window.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
 #include "../../../Core/graphics/public/MaterialManager.h"
 

@@ -312,7 +312,7 @@
     <ClInclude Include="src\Core\graphics\RenderAPI\RenderPipeline.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\graphics\RenderAPI\RenderCamera.h">
+    <ClInclude Include="src\Core\graphics\RenderAPI\FRenderCamera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\GLSL\ShaderUniforms.h">
@@ -659,7 +659,7 @@
     <ClCompile Include="src\Core\graphics\RenderAPI\RenderPipeline.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\graphics\RenderAPI\RenderCamera.cpp">
+    <ClCompile Include="src\Core\graphics\RenderAPI\FRenderCamera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\EditorManager.cpp">

@@ -64,7 +64,7 @@ namespace marengine {
 
 
     uint32 FBufferFactory::fillCameraSSBO(FShaderBuffer* pShaderBuffer,
-                                          const RenderCamera* const pRenderCamera) const {
+                                          const FRenderCamera* const pRenderCamera) const {
         FShaderInputDescription description;
         description.binding = 0;
         description.shaderStage = EShaderStage::VERTEX;

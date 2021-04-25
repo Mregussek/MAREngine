@@ -54,7 +54,7 @@ namespace marengine {
 		}
 	}
 
-	void FEventsCameraEntity::onEditorCameraSet(const RenderCamera* pRenderCamera) {
+	void FEventsCameraEntity::onEditorCameraSet(const FRenderCamera* pRenderCamera) {
 		s_pRenderManager->pushCameraToRender(pRenderCamera);
 	}
 
@@ -76,7 +76,7 @@ namespace marengine {
 		if (pScene->isValid(foundEnttEntity)) {
 			auto& cCamera{ pScene->getComponent<CCamera>(foundEnttEntity) };
 			const auto& transformComponent{ pScene->getComponent<CTransform>(foundEnttEntity) };
-			RenderCamera* pRenderCamera{ &cCamera.renderCamera };
+			FRenderCamera* pRenderCamera{ &cCamera.renderCamera };
 
 			pRenderCamera->calculateCameraTransforms(transformComponent, cCamera);
 			s_pRenderManager->pushCameraToRender(pRenderCamera);

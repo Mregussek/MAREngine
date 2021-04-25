@@ -26,7 +26,7 @@
 
 namespace marengine {
 
-	class RenderCamera;
+	class FRenderCamera;
 	class Entity;
 	class FSceneManagerEditor;
 	class FRenderManager;
@@ -54,7 +54,7 @@ namespace marengine {
 		 * @brief Method sets editor camera and pushes it to render pipeline.
 		 * @param renderCamera pointer to editor's renderCamera, which will be pushed to pipeline and used.
 		 */
-		static void onEditorCameraSet(const RenderCamera* pRenderCamera);
+		static void onEditorCameraSet(const FRenderCamera* pRenderCamera);
 
 		/**
 		 * @brief Method looks for main game camera (looks for entity with cameraComponent, which is main one)
