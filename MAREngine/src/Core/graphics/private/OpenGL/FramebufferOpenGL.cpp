@@ -134,23 +134,6 @@ namespace marengine {
         resizeGL(m_colorAttachment, m_depthAttachment, p_specification);
     }
 
-    void FFramebufferOpenGL::setSize(uint32 width, uint32 height) {
-        p_specification.width = width;
-        p_specification.height = height;
-    }
-
-    void FFramebufferOpenGL::setClearColor(maths::vec3 clearColor) {
-        p_specification.clearColor = clearColor;
-    }
-
-    uint32 FFramebufferOpenGL::getWidth() const {
-        return p_specification.width;
-    }
-
-    uint32 FFramebufferOpenGL::getHeight() const {
-        return p_specification.height;
-    }
-
     uint32 FFramebufferOpenGL::getColorAttach() const {
         return m_colorAttachment;
     }

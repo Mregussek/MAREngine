@@ -188,7 +188,12 @@ namespace marengine {
         const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
         FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
-        pFramebuffer->setSize((uint32)viewportSize.x, (uint32)viewportSize.y);
+        const bool needToResize =
+                pFramebuffer->getWidth() != (uint32)viewportSize.x
+                || pFramebuffer->getHeight() != (uint32)viewportSize.y;
+        if(needToResize) {
+            pFramebuffer->resize((uint32)viewportSize.x, (uint32)viewportSize.y);
+        }
 
         const uint32_t id{ pFramebuffer->getColorAttach() };
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

@@ -21,3 +21,27 @@
 
 
 #include "../public/Framebuffer.h"
+
+
+namespace marengine {
+
+
+    void FFramebuffer::setSize(uint32 width, uint32 height) {
+        p_specification.width = width;
+        p_specification.height = height;
+    }
+
+    void FFramebuffer::setClearColor(maths::vec3 clearColor) {
+        p_specification.clearColor = clearColor;
+    }
+
+    uint32 FFramebuffer::getWidth() const {
+        return p_specification.width;
+    }
+
+    uint32 FFramebuffer::getHeight() const {
+        return p_specification.height;
+    }
+
+
+}

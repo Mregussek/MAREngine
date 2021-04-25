@@ -31,6 +31,14 @@ namespace marengine {
 
 
     class FFramebuffer : public IFramebuffer {
+    public:
+
+        void setSize(uint32 width, uint32 height) final;
+        void setClearColor(maths::vec3 clearColor) final;
+
+        MAR_NO_DISCARD uint32 getWidth() const final;
+        MAR_NO_DISCARD uint32 getHeight() const final;
+
     protected:
 
         FFramebufferSpecification p_specification;
