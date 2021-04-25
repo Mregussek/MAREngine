@@ -62,6 +62,11 @@ namespace marengine {
     void FCamera3D::create(FWindow* pWindow, FFramebuffer* pFramebuffer) {
         FCamera::create(pWindow, pFramebuffer);
         m_aspectRatio = (float)p_pFramebuffer->getWidth() / (float)p_pFramebuffer->getHeight();
+
+        p_renderCamera.calculatePerspective(m_zoom, m_aspectRatio, m_near, m_far);
+        p_renderCamera.calculateModel({ 0.f, 0.f, 0.f });
+
+        recalculate();
     }
 
     bool FCamera3D::update() {
@@ -97,6 +102,9 @@ namespace marengine {
         m_front = vec3::normalize(front);
         m_right = vec3::normalize(vec3::cross(m_front, worldUp));
         m_up = vec3::normalize(vec3::cross(m_right, m_front));
+
+        p_renderCamera.calculateView(m_position, m_position + m_front, m_up);
+        p_renderCamera.recalculateMVP();
     }
 
 

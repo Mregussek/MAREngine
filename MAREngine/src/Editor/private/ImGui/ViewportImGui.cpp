@@ -90,6 +90,7 @@ namespace marengine {
             }
 
             if (cameraUpdated) {
+                m_camera.recalculate();
                 FEventsCameraEntity::onEditorCameraSet(m_camera.getRenderCamera());
             }
         }
@@ -186,7 +187,10 @@ namespace marengine {
     void FViewportWidgetImGui::displayActualViewport() {
         const ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
-        const uint32_t id{ m_pRenderManager->getViewportFramebuffer()->getColorAttach() };
+        FFramebuffer* pFramebuffer{ m_pRenderManager->getViewportFramebuffer() };
+        pFramebuffer->setSize((uint32)viewportSize.x, (uint32)viewportSize.y);
+
+        const uint32_t id{ pFramebuffer->getColorAttach() };
         ImGui::Image((ImTextureID)id, viewportSize, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
     }
 

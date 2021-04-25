@@ -27,10 +27,8 @@
 namespace marengine {
 
 
-    static std::pair<float, float>  processQuatAngles(const FWindow* pWindow, float yaw,
-                                                      float pitch, bool firstMouse) {
-
-
+    static bool processQuatAngles(const FWindow* pWindow, float& yaw, float& pitch,
+                                  bool firstMouse) {
         static float lastX{ 0.f };
         static float lastY{ 0.f };
 
@@ -38,7 +36,7 @@ namespace marengine {
         const float yoffset = pWindow->getMousePositionY();
 
         if (lastX == xoffset && lastY == yoffset) {
-            return std::make_pair(yaw, pitch);
+            return false;
         }
 
         if (firstMouse) {
@@ -63,10 +61,10 @@ namespace marengine {
             if (pitch < -89.f) { pitch = -89.f; };
         }
 
-        return std::make_pair(yaw, pitch);
+        return true;
     }
 
-    static float processMovementedSpeed(const FWindow* pWindow, float movementSpeed,
+    static float processMovementedSpeed(const FWindow* pWindow, float& movementSpeed,
                                         float deltaTime) {
         movementSpeed += pWindow->getScrollY();
 
@@ -93,28 +91,17 @@ namespace marengine {
                 firstMouse = true;
             }
 
-            auto [yaw, pitch] = processQuatAngles(pWindow, pCamera->m_yaw, pCamera->m_pitch,
-                                                  firstMouse);
-            const bool updatedAngles{ pCamera->m_yaw != yaw || pCamera->m_pitch != pitch };
-            if(updatedAngles) {
-                pCamera->m_yaw = yaw;
-                pCamera->m_pitch = pitch;
-                firstMouse = false;
+            const float velocity{ processMovementedSpeed(pWindow, pCamera->m_movementSpeed,
+                                                         pCamera->getDeltaTime()) };
+            if(velocity != pCamera->m_velocity) {
+                pCamera->m_velocity = velocity;
                 userPressedSth = true;
             }
 
-            const float velocity{ processMovementedSpeed(pWindow, pCamera->m_movementSpeed,
-                                                         pCamera->getDeltaTime()) };
-            pCamera->m_movementSpeed += pWindow->getScrollY();
-
-            pCamera->m_movementSpeed = [movementSpeed = pCamera->m_movementSpeed]()->float {
-                if (movementSpeed < 1.0f) { return 1.0f; }
-                if (movementSpeed > 90.f) { return 90.f; }
-                return movementSpeed;
-            }();
-
-            if(velocity != pCamera->m_velocity) {
-                pCamera->m_velocity = velocity;
+            bool updatedAngles =
+                    processQuatAngles(pWindow, pCamera->m_yaw, pCamera->m_pitch, firstMouse);
+            if(updatedAngles) {
+                firstMouse = false;
                 userPressedSth = true;
             }
         }
