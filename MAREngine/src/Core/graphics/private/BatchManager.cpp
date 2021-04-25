@@ -76,46 +76,17 @@ namespace marengine {
     template<typename TMeshBatchArray>
     static int32 getAvailableBatch(TMeshBatchArray* pBatchArray, const Entity& entity);
 
+    template<typename TMeshBatchStorage>
+    static bool pushEntityToBatchStorage(TMeshBatchStorage* pMeshBatchStorage,
+                                         FMeshBatchFactory* pFactory,
+                                         const Entity& entity);
+
     void FBatchManager::pushEntityToRender(const Entity& entity) {
         if(entity.hasComponent<CRenderable>()) {
-            { // firstly try texture2D
-                FMeshBatchStorageStaticTex2D* pStorageStaticTex2D =
-                        getMeshBatchStorage()->getStorageStaticTex2D();
-                if(pStorageStaticTex2D->isEmpty()) {
-                    FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticTex2D() };
-                }
-
-                const int32 index =
-                        getAvailableBatch(pStorageStaticTex2D->getArray(), entity);
-                if (index != -1) {
-                    pStorageStaticTex2D->get(index)->submitToBatch(entity);
-                }
-                else {
-                    if (pStorageStaticTex2D->get(0)->shouldBeBatched(entity)) {
-                        FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticTex2D() };
-                        pBatch->submitToBatch(entity);
-                    }
-                }
-            }
-            { // secondly color
-                FMeshBatchStorageStaticColor* pStorageStaticColor =
-                        getMeshBatchStorage()->getStorageStaticColor();
-                if(pStorageStaticColor->isEmpty()) {
-                    FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticColor() };
-                }
-
-                const int32 index =
-                        getAvailableBatch(pStorageStaticColor->getArray(), entity);
-                if (index != -1) {
-                    pStorageStaticColor->get(index)->submitToBatch(entity);
-                }
-                else {
-                    if (pStorageStaticColor->get(0)->shouldBeBatched(entity)) {
-                        FMeshBatchStatic* pBatch{ getMeshBatchFactory()->emplaceStaticColor() };
-                        pBatch->submitToBatch(entity);
-                    }
-                }
-            }
+            pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticTex2D(),
+                                     getMeshBatchFactory(), entity);
+            pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticColor(),
+                                     getMeshBatchFactory(), entity);
         }
 
         if (entity.hasComponent<CPointLight>()) {
@@ -153,6 +124,31 @@ namespace marengine {
         }
 
         return -1;
+    }
+
+    template<typename TMeshBatchStorage>
+    static bool pushEntityToBatchStorage(TMeshBatchStorage* pMeshBatchStorage,
+                                         FMeshBatchFactory* pFactory,
+                                         const Entity& entity) {
+        if(pMeshBatchStorage->isEmpty()) {
+            FMeshBatchStatic* pBatch{ pFactory->emplaceStatic(pMeshBatchStorage) };
+        }
+
+        const int32 index =
+                getAvailableBatch(pMeshBatchStorage->getArray(), entity);
+        if (index != -1) {
+            pMeshBatchStorage->get(index)->submitToBatch(entity);
+            return true;
+        }
+        else {
+            if (pMeshBatchStorage->get(0)->shouldBeBatched(entity)) {
+                FMeshBatchStatic* pBatch{ pFactory->emplaceStatic(pMeshBatchStorage) };
+                pBatch->submitToBatch(entity);
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

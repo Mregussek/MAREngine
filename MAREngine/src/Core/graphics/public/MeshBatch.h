@@ -209,6 +209,9 @@ namespace marengine {
         MAR_NO_DISCARD FMeshBatchStaticColor* emplaceStaticColor() final;
         MAR_NO_DISCARD FMeshBatchStaticTex2D* emplaceStaticTex2D() final;
 
+        template<typename TMeshBatchStorage>
+        MAR_NO_DISCARD FMeshBatchStatic* emplaceStatic(TMeshBatchStorage* pMeshBatchStorage);
+
         MAR_NO_DISCARD FMeshBatchStorage* getStorage() const;
 
         void passMeshStorage(FMeshStorage* pMeshStorage);
@@ -224,6 +227,9 @@ namespace marengine {
 
 
 }
+
+
+#include "../private/MeshBatch.inl"
 
 
 #endif // !MAR_ENGINE_F_MESH_BATCH_STATIC_H
