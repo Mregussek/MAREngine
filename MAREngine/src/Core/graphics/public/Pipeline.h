@@ -113,16 +113,16 @@ namespace marengine {
         void fillPipelineFor(FPipelineMeshTex2D* const pPipeline,
                              FMeshBatchStaticTex2D* const pBatch) const final;
 
+        template<typename TMeshBatch>
+        FPipelineMesh* emplaceMeshAndFill(TMeshBatch* pMeshBatch);
+
     };
 
 
-
-
-
-
-
-
 }
+
+
+#include "../private/Pipeline.inl"
 
 
 #endif //MARENGINE_IGRAPHICSPIPELINE_H

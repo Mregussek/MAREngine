@@ -86,8 +86,16 @@ namespace marengine {
     }
 
     template<typename TMeshBatchStorage>
-    static void preparePipelineForOnlyBindState() {
+    static void preparePipelineForOnlyBindState(TMeshBatchStorage* pStorage,
+                                                FPipelineFactory* pPipelineFactory,
+                                                int32 cameraIndex, int32 pointLightIndex) {
+        const uint32 batchSize{ pStorage->getCount() };
 
+        for (uint32 i = 0; i < batchSize; i++) {
+            auto* pPipeline{ pPipelineFactory->emplaceMeshAndFill(pStorage->get(i)) };
+            pPipeline->passCameraSSBO(cameraIndex);
+            pPipeline->passPointLightSSBO(pointLightIndex);
+        }
     }
 
     void FRenderManager::onBatchesReadyToDraw(FBatchManager* pBatchManager) {
@@ -103,15 +111,11 @@ namespace marengine {
                                                                pLightBatch);
         pLightBatch->passLightSSBO(m_pointLightIndex);
 
-        FMeshBatchStorageStaticColor* pStorageStaticColor =
-                pBatchManager->getMeshBatchStorage()->getStorageStaticColor();
-        const uint32 colorBatchSize{ pStorageStaticColor->getCount() };
-        for (uint32 i = 0; i < colorBatchSize; i++) {
-            FPipelineMeshColor* pPipeline{ pPipelineFactory->emplaceMeshColor() };
-            pPipelineFactory->fillPipelineFor(pPipeline, pStorageStaticColor->get(i));
-            pPipeline->passCameraSSBO(m_cameraIndex);
-            pPipeline->passPointLightSSBO(m_pointLightIndex);
-        }
+        FMeshBatchStorage* pMeshBatchStorage{ pBatchManager->getMeshBatchStorage() };
+        preparePipelineForOnlyBindState(pMeshBatchStorage->getStorageStaticColor(),
+                                        pPipelineFactory, m_cameraIndex, m_pointLightIndex);
+        preparePipelineForOnlyBindState(pMeshBatchStorage->getStorageStaticColor(),
+                                        pPipelineFactory, m_cameraIndex, m_pointLightIndex);
     }
 
 
