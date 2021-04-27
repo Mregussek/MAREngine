@@ -59,8 +59,7 @@ namespace marengine {
 	}
 
 	void FSceneManagerEditor::close() {
-		m_pScene->close(); 
-		delete m_pScene;
+		m_pScene->close();
 	}
 
 	void FSceneManagerEditor::initPlayMode() {

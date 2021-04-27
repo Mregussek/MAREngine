@@ -29,6 +29,8 @@
 
 namespace marengine {
 
+    class Scene;
+
 
 	/**
 	 * @struct ProjectInfo ProjectManager.h "ProjectManager.h"
@@ -44,6 +46,38 @@ namespace marengine {
 		std::string scenesPath;
 		std::string sceneToLoadAtStartup;
 		std::string windowName;
+
+	};
+
+
+	struct FMinimalProjectInfo {
+	    std::string projectName;
+	    std::string projectPath;
+	};
+
+
+	class FProject {
+	public:
+
+	    void setProjectName(const std::string& projectName);
+	    const std::string& getProjectName() const;
+
+	    const std::string& getAbsoluteAssetsPath() const;
+	    const std::string& getAbsoluteScenesPath() const;
+
+	    const std::string& getRelativeAssetsPath() const;
+	    const std::string& getRelativeScenesPath() const;
+
+	    Scene* addScene(const std::string& projectName);
+	    void removeScene(Scene* pScene);
+
+	    void useScene(Scene* pScene) const;
+	    void useScene(uint32 index) const;
+
+	private:
+
+	    FProjectInfo m_projectInfo;
+	    std::vector<Scene> m_scenes;
 
 	};
 

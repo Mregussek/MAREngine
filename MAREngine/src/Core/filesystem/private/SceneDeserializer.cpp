@@ -21,28 +21,30 @@
 
 
 #include "../public/FileManager.h"
-#include "MARSceneJsonDefinitions.inl"
-#include "../../ecs/Scene.h"
 #include "../../../Logging/Logger.h"
 #include "../../../ProjectManager.h"
+#include "MARSceneJsonDefinitions.inl"
+#include "../../ecs/Scene.h"
 
 
 namespace marengine {
 
     static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
 
-	Scene* FSceneDeserializer::loadSceneFromFile(const std::string& path) {
+	void FFileDeserializer::loadSceneFromFile(Scene* pScene, const std::string& path) {
 	    using namespace marscenejson;
 
 		if (!FFileManager::isContainingExtension(path, "json")) {
 		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to marscene file!", path);
-			return Scene::createEmptyScene("EmptySceneNotLoaded");
+			*pScene = Scene::createEmptyScene("EmptySceneNotLoaded");
+		    return;
 		}
 		
 		std::ifstream file(path);
 		if (!file.is_open()) {
             MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} cannot be opened!", path);
-			return Scene::createEmptyScene("EmptySceneNotLoaded");
+            *pScene = Scene::createEmptyScene("EmptySceneNotLoaded");
+            return;
 		}
 
 		nlohmann::json json{ nlohmann::json::parse(file) };
@@ -52,20 +54,19 @@ namespace marengine {
 		const float backX{ json[jScene][sceneName][jSceneBackground][jX].get<float>() };
 		const float backY{ json[jScene][sceneName][jSceneBackground][jY].get<float>() };
 		const float backZ{ json[jScene][sceneName][jSceneBackground][jZ].get<float>() };
-		
-		Scene* scene{ new Scene("Default") };
-		scene->setName(sceneName);
-		scene->setBackground({ backX, backY, backZ });
+
+        pScene->setName(sceneName);
+        pScene->setBackground({ backX, backY, backZ });
 
 		uint32_t i = 0;
 		for (nlohmann::json& jsonEntity : json[jScene][sceneName][jEntity]) {
-			const Entity& entity{ scene->createEntity() };
+			const Entity& entity{ pScene->createEntity() };
 			loadEntity(entity, i, json, sceneName);
 			i++;
 		}
 
-		MARLOG_INFO(ELoggerType::FILESYSTEM, "Loaded scene {}\n-Scene {}\n-Entities {}", path, scene->getName(), scene->getEntities().size());
-		return scene;
+		MARLOG_INFO(ELoggerType::FILESYSTEM, "Loaded scene {}\n-Scene {}\n-Entities {}",
+              path, pScene->getName(), pScene->getEntities().size());
 	}
 
 	void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {

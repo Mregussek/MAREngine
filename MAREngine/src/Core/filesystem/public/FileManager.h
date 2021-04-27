@@ -30,6 +30,9 @@
 namespace marengine {
 
     class Scene;
+    class FEngineConfig;
+    struct FMinimalProjectInfo;
+    class FProject;
 
 
 	/**
@@ -63,9 +66,11 @@ namespace marengine {
 		// TODO: add docs isValidPath
 		MAR_NO_DISCARD static bool isValidPath(const std::string& path);
 
+        // TODO: add docs getRelativePath
 		MAR_NO_DISCARD static std::string getRelativePath(const std::string& absolutePath,
                                                           const std::string& path);
 
+        // TODO: add docs getFilenameFromPath
 		MAR_NO_DISCARD static std::string getFilenameFromPath(const std::string& path);
 
 	};
@@ -75,7 +80,7 @@ namespace marengine {
      * @class FSceneDeserializer SceneDeserializer.h "Core/filesystem/SceneDeserializer.h"
      * @brief Class responsible for deserializing and loading whole scene from path.
      */
-    class FSceneDeserializer {
+    class FFileDeserializer {
     public:
 
         /**
@@ -85,26 +90,34 @@ namespace marengine {
          * @param path path, at which .marscene.json file should exist and it should be correct one.
          * @return Returns loaded scene, if path was correct. Empty scene otherwise.
          */
-        static Scene* loadSceneFromFile(const std::string& path);
+        static void loadSceneFromFile(Scene* pScene, const std::string& path);
+
+        static void loadConfigFromFile(FEngineConfig* pEngineConfig, const std::string& path);
+
+        static void loadProjectFromFile(FProject* pProject, const std::string& path);
 
     };
 
 
     /**
 	 * @class FSceneSerializer SceneSerializer.h "Core/filesystem/SceneSerializer.h"
-	 * @brief Class reponsible for serializing scene into small parts and saving theme into file.
+	 * @brief Class responsible for serializing scene into small parts and saving theme into file.
 	 */
-    class FSceneSerializer {
+    class FFileSerializer {
     public:
 
         /**
          * @brief Serializes given scene and then saves it into given path. Make sure that path
          * is ending with .marscene.json extension.
-         * @warning if path is incorrect, it immedietaly returns and displays error.
+         * @warning if path is incorrect, it immediately returns and displays error.
          * @param path path at which scene will be saved
          * @param scene scene, that will be saved
          */
-        static void saveSceneToFile(const char* path, Scene* scene);
+        static void saveSceneToFile(Scene* scene, const std::string& path);
+
+        static void saveConfigToFile(FEngineConfig* pEngineConfig, const std::string& path);
+
+        static void saveProjectToFile(FProject* pProject, const std::string& path);
 
     };
 

@@ -31,26 +31,26 @@ namespace marengine {
 		m_sceneRegistry(entt::registry())
 	{}
 
-	Scene* Scene::createEmptyScene(std::string sceneName) {
-		Scene* pScene{ new Scene(std::move(sceneName)) };
+	Scene Scene::createEmptyScene(std::string sceneName) {
+		Scene scene(std::move(sceneName));
 
 		{ // create Camera entity
-			const Entity& cameraEntity{ pScene->createEntity() };
-			auto& ccamera{ cameraEntity.addComponent<CCamera>() };
-            ccamera.id = "main";
+			const Entity& cameraEntity{ scene.createEntity() };
+			auto& cCamera{ cameraEntity.addComponent<CCamera>() };
+            cCamera.id = "main";
 
 			CTag& tag{ cameraEntity.getComponent<CTag>() };
 			tag.tag = "CameraEntity";
 		}
 		{ // create Light Entity
-			const Entity& pointLightEntity{ pScene->createEntity() };
+			const Entity& pointLightEntity{ scene.createEntity() };
 			pointLightEntity.addComponent<CPointLight>();
 
 			CTag& tag{ pointLightEntity.getComponent<CTag>() };
 			tag.tag = "LightEntity";
 		}
 
-		return pScene;
+		return scene;
 	}
 
 	void Scene::close() {

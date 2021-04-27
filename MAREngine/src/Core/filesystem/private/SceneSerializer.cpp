@@ -33,7 +33,7 @@ namespace marengine {
                            const std::string& sceneName);
 
 
-    void FSceneSerializer::saveSceneToFile(const char* path, Scene* scene) {
+    void FFileSerializer::saveSceneToFile(Scene* scene, const std::string& path) {
 	    using namespace marscenejson;
 
 		std::ofstream ss(path, std::ios::out | std::ios::trunc);

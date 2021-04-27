@@ -22,6 +22,7 @@
 
 #include "ProjectManager.h"
 #include "Core/filesystem/public/FileManager.h"
+#include "Core/ecs/Scene.h"
 
 
 namespace marengine {
@@ -135,6 +136,50 @@ namespace marengine {
 
 	const std::string& FProjectManager::getWindowName() {
 		return getProjectInfo().windowName;
+	}
+
+
+
+
+
+    void FProject::setProjectName(const std::string& projectName) {
+
+	}
+
+    const std::string& FProject::getProjectName() const {
+	    return m_projectInfo.projectName;
+	}
+
+    const std::string& FProject::getAbsoluteAssetsPath() const {
+        return m_projectInfo.projectName;
+	}
+
+    const std::string& FProject::getAbsoluteScenesPath() const {
+        return m_projectInfo.projectName;
+	}
+
+    const std::string& FProject::getRelativeAssetsPath() const {
+        return m_projectInfo.projectName;
+	}
+
+    const std::string& FProject::getRelativeScenesPath() const {
+        return m_projectInfo.projectName;
+	}
+
+    Scene* FProject::addScene(const std::string& projectName) {
+        return &m_scenes.emplace_back(projectName);
+	}
+
+    void FProject::removeScene(Scene* pScene) {
+
+	}
+
+    void FProject::useScene(Scene* pScene) const {
+
+    }
+
+    void FProject::useScene(uint32 index) const {
+
 	}
 
 

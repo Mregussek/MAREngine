@@ -131,11 +131,11 @@ namespace marengine {
         materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
 
-        Scene* pScene =
-                FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
+        Scene scene("DefaultProject");
+        FFileDeserializer::loadSceneFromFile(&scene, FProjectManager::getSceneToLoadAtStartup());
 
         FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
-        pFramebufferViewport->setClearColor(pScene->getBackground());
+        pFramebufferViewport->setClearColor(scene.getBackground());
 
         FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
 
@@ -147,7 +147,7 @@ namespace marengine {
         FEventsComponentEntity::passBatchManager(&batchManager);
         FEventsComponentEntity::passMeshManager(&meshManager);
 
-        sceneManager.initialize(pScene, &batchManager, &meshManager);
+        sceneManager.initialize(&scene, &batchManager, &meshManager);
 
         serviceLocatorEditor.registerServices(&window, &sceneManager, &renderStatistics,
                                               &meshManager, &renderManager, &materialManager);
@@ -300,6 +300,33 @@ namespace marengine {
 	}
 
 
+
+    bool FEngineConfig::exists() const {
+        if(FFileManager::isValidPath(m_configPath)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    void FEngineConfig::load() {
+
+    }
+
+    const FMinimalProjectInfo* FEngineConfig::getProjectInfo(const std::string& projectName) const {
+        auto projectExists = [&projectName](const FMinimalProjectInfo& projectInfo){
+            return projectInfo.projectName == projectName;
+        };
+        const auto it =
+                std::find_if(m_existingProjects.cbegin(), m_existingProjects.cend(), projectExists);
+        if(it != m_existingProjects.cend()) {
+            return &(*it);
+        }
+
+        MARLOG_ERR(ELoggerType::NORMAL, "Could not find project at configuration -> {}", projectName);
+        return nullptr;
+    }
 
 	MAREngine* FEngineState::s_pEngine{ nullptr };
 

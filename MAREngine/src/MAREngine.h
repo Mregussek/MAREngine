@@ -56,6 +56,22 @@ namespace marengine {
 	};
 
 
+	class FEngineConfig {
+	public:
+
+	    bool exists() const;
+	    void load();
+
+	    const FMinimalProjectInfo* getProjectInfo(const std::string& projectName) const;
+
+	private:
+
+	    std::string m_configPath{ "marengine.cfg" };
+	    std::vector<FMinimalProjectInfo> m_existingProjects;
+
+	};
+
+
 	class FEngineState {
 	public:
 

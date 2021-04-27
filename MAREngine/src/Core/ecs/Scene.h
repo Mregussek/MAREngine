@@ -56,7 +56,7 @@ namespace marengine {
 		* @param sceneName name of the new created scene
 		* @return created scene with "new" operator
 		*/
-		MAR_NO_DISCARD static Scene* createEmptyScene(std::string sceneName);
+		MAR_NO_DISCARD static Scene createEmptyScene(std::string sceneName);
 
 		/// @brief Method is responsible for whole cleanup. It destroys all entities and registry itself.
 		void close();
