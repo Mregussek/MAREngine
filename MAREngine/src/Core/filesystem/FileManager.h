@@ -29,6 +29,8 @@
 
 namespace marengine {
 
+    class Scene;
+
 
 	/**
 	 * @class FFileManager FileManager.h "Core/filesystem/FileManager.h"
@@ -67,6 +69,44 @@ namespace marengine {
 		MAR_NO_DISCARD static std::string getFilenameFromPath(const std::string& path);
 
 	};
+
+
+    /**
+     * @class FSceneDeserializer SceneDeserializer.h "Core/filesystem/SceneDeserializer.h"
+     * @brief Class responsible for deserializing and loading whole scene from path.
+     */
+    class FSceneDeserializer {
+    public:
+
+        /**
+         * @brief Method loads scene from given path. Make sure that it is correct path with
+         * .marscene.json extension.
+         * @warning If path is not correct, returns empty scene.
+         * @param path path, at which .marscene.json file should exist and it should be correct one.
+         * @return Returns loaded scene, if path was correct. Empty scene otherwise.
+         */
+        static Scene* loadSceneFromFile(const std::string& path);
+
+    };
+
+
+    /**
+	 * @class FSceneSerializer SceneSerializer.h "Core/filesystem/SceneSerializer.h"
+	 * @brief Class reponsible for serializing scene into small parts and saving theme into file.
+	 */
+    class FSceneSerializer {
+    public:
+
+        /**
+         * @brief Serializes given scene and then saves it into given path. Make sure that path
+         * is ending with .marscene.json extension.
+         * @warning if path is incorrect, it immedietaly returns and displays error.
+         * @param path path at which scene will be saved
+         * @param scene scene, that will be saved
+         */
+        static void saveSceneToFile(const char* path, Scene* scene);
+
+    };
 
 
 }

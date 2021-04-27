@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include <MAREngine/MAREngine.h>
+#include <MAREngine.h>
 
 
 using namespace marengine;

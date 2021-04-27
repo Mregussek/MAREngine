@@ -27,7 +27,7 @@
 #include "../../../ProjectManager.h"
 #include "../../../MAREngine.h"
 #include "../../../Core/ecs/SceneManagerEditor.h"
-#include "../../../Core/filesystem/SceneSerializer.h"
+#include "../../../Core/filesystem/FileManager.h"
 #include "../../../Window/Window.h"
 
 

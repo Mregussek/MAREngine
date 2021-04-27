@@ -20,7 +20,7 @@
 ************************************************************************/
 
 
-#include "SceneSerializer.h"
+#include "FileManager.h"
 #include "../../ProjectManager.h"
 #include "../../Logging/Logger.h"
 #include "MARSceneJsonDefinitions.h"

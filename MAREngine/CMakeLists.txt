@@ -27,9 +27,6 @@ project(${MAREngineLibrary} CXX C)
 
 
 set(MAREngineSourcesPath ${MAREnginePath}/src)
-set_property(GLOBAL PROPERTY MAREngineIncludeDirProperty "${MAREnginePath}/include")
-get_property(MAREngineIncludeDir GLOBAL PROPERTY MAREngineIncludeDirProperty)
-
 
 message(STATUS "Looking for all MAREngine Core files at ${MAREngineSourcesPath} ...")
 file(
@@ -57,7 +54,6 @@ set(
     ${MAREngineAllFiles}
     ${MAREngineSources}
     ${MAREngineHeaders}
-    ${MAREngineIncludeDir}/MAREngine/MAREngine.h
 )
 
 get_property(MAREngineIncludeLibraries GLOBAL PROPERTY MAREngineIncludeLibrariesProperty)
