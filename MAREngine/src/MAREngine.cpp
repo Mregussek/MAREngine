@@ -115,7 +115,6 @@ namespace marengine {
         auto renderCommands{ createRenderCommandsType<TRenderType>() };
         // SCENE
         FSceneManagerEditor sceneManager;
-        Scene* pScene{ nullptr };
         // EDITOR
         FServiceManagerEditor serviceManagerEditor;
         FServiceLocatorEditor serviceLocatorEditor;
@@ -124,15 +123,16 @@ namespace marengine {
         renderManager.create(&renderContext);
         materialManager.create(renderContext.getMaterialFactory(),
                                renderContext.getMaterialStorage());
-        batchManager.create(&renderManager, &meshManager, &materialManager);
+        batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
 
-        pScene = FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
+        Scene* pScene =
+                FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
 
         FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
         pFramebufferViewport->setClearColor(pScene->getBackground());
 
         FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
-        
+
         FEventsCameraEntity::passSceneManager(&sceneManager);
         FEventsCameraEntity::passRenderManager(&renderManager);
 

@@ -70,6 +70,12 @@ namespace marengine {
         TerminalAPI::clearScreen();
         MARLOG_INFO(ELoggerType::PLATFORMS, "\nVendor: {}\nRenderer: {}", vendor, renderer);
 
+        m_framebufferFactory.passRenderContext(this);
+        m_pipelineFactory.passRenderContext(this);
+        m_materialFactory.passRenderContext(this);
+        m_shadersFactory.passRenderContext(this);
+        m_bufferFactory.passRenderContext(this);
+
         return true;
     }
 

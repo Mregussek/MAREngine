@@ -37,19 +37,12 @@ namespace marengine {
 
     void FRenderManager::create(FRenderContext* pContext) {
         m_pContext = pContext;
-        m_pContext->getBufferFactory()->passRenderContext(pContext);
-        m_pContext->getShadersFactory()->passRenderContext(pContext);
-        m_pContext->getMaterialFactory()->passRenderContext(pContext);
-        m_pContext->getPipelineFactory()->passRenderContext(pContext);
-
-        FFramebufferFactory* pFbFactory{ m_pContext->getFramebufferFactory() };
-        pFbFactory->passRenderContext(pContext);
 
         FFramebufferSpecification framebufferSpecs;
         framebufferSpecs.width = 800;
         framebufferSpecs.height = 600;
 
-        FFramebuffer* viewportFramebuffer{ pFbFactory->emplace() };
+        FFramebuffer* viewportFramebuffer{ m_pContext->getFramebufferFactory()->emplace() };
         m_viewportFbIndex = viewportFramebuffer->getIndex();
         viewportFramebuffer->create(framebufferSpecs);
     }

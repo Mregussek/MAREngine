@@ -32,13 +32,11 @@
 namespace marengine {
 
 
-    void FBatchManager::create(FRenderManager* pRenderManager, FMeshManager* pMeshManager,
-                               FMaterialManager* pMaterialManager) {
+    void FBatchManager::create(FRenderManager* pRenderManager, FMeshStorage* pMeshStorage,
+                               FMaterialStorage* pMaterialStorage) {
         m_pRenderManager = pRenderManager;
-        m_pMeshManager = pMeshManager;
-        m_pMaterialManager = pMaterialManager;
-        m_meshBatchFactory.passMeshStorage(m_pMeshManager->getStorage());
-        m_meshBatchFactory.passMaterialStorage(m_pMaterialManager->getStorage());
+        m_meshBatchFactory.passMeshStorage(pMeshStorage);
+        m_meshBatchFactory.passMaterialStorage(pMaterialStorage);
     }
 
     void FBatchManager::reset() const {
