@@ -31,6 +31,11 @@
 namespace marengine {
 
 
+    enum class EWindowContextType {
+        NONE, GLFW
+    };
+
+
     /**
      * @class IWindow IWindow.h "Window/IWindow.h"
      * @brief IWindow is a interface class for Window in MAREngine. Every derived implementation of IWindow should

@@ -49,9 +49,6 @@ namespace marengine {
 
 	private:
 
-	    void run(IMAREngineBuilder* pBuilder) const;
-
-
         FProjectManager m_projectManager;
 
 		bool m_shouldRestart{ false };

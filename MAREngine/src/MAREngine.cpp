@@ -23,7 +23,29 @@
 #include "MAREngine.h"
 #include "Core/scripting/PythonInterpreter.h"
 #include "Logging/Logger.h"
-#include "MAREngineBuilder.h"
+// RENDER API
+#include "Core/graphics/public/Renderer.h"
+#include "Core/graphics/public/RenderManager.h"
+#include "Core/graphics/public/BatchManager.h"
+#include "Core/graphics/public/MeshManager.h"
+#include "Core/graphics/public/MaterialManager.h"
+#include "Core/graphics/private/OpenGL/GraphicsOpenGL.h"
+#include "Core/graphics/private/OpenGL/RendererOpenGL.h"
+// SCENE
+#include "Core/ecs/Scene.h"
+#include "Core/ecs/SceneManagerEditor.h"
+#include "Core/ecs/Entity/EventsCameraEntity.h"
+#include "Core/ecs/Entity/EventsComponentEntity.h"
+// FILESYSTEM
+#include "Core/filesystem/SceneDeserializer.h"
+// EDITOR
+#include "Editor/public/ServiceManagerEditor.h"
+#include "Editor/public/ServiceLocatorEditor.h"
+#include "Editor/public/EventsEntityEditor.h"
+#include "Editor/public/EventsComponentEditor.h"
+// WINDOW
+#include "Window/Window.h"
+#include "Window/GLFW/WindowGLFW.h"
 
 
 namespace marengine {
@@ -44,65 +66,126 @@ namespace marengine {
         FEngineState::passEngine(this);
     }
 
+
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType, EEditorContextType TEditorType>
+    static void run(MAREngine* pEngine);
+
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType, EEditorContextType TEditorType>
+    static auto createWindowType();
+
+    template<ERenderContextType TRenderType>
+    static auto createRenderContextType();
+
+    template<ERenderContextType TRenderType>
+    static auto createRenderCommandsType();
+
+
     void MAREngine::buildAndRun() {
         setRestart();
         while(isGoingToRestart()) {
-            FMAREngineBuilder<
-                    FWindowGLFWImGui,
-                    FRenderLayerOpenGL,
-                    FEditorLayerImGui
-            > builder;
             setNoRestart();
-            run(&builder);
+            run<EWindowContextType::GLFW, ERenderContextType::OPENGL, EEditorContextType::IMGUI>(this);
         }
     }
 
-    void MAREngine::run(IMAREngineBuilder* pBuilder) const {
-        FWindow* window = pBuilder->createWindow();
-        FRenderLayer* renderLayer = pBuilder->createRenderLayer();
-        FSceneLayer* sceneLayer = pBuilder->createSceneLayer();
-        FEditorLayer* editorLayer = pBuilder->createEditorLayer();
-        FLayerStack layerStack = pBuilder->createLayerStack();
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType, EEditorContextType TEditorType>
+    void run(MAREngine* pEngine) {
+        auto window{ createWindowType<TWindowType, TRenderType, TEditorType>() };
 
-        const bool isWindowLibraryInitialized = window->initializeLibrary();
+        const bool isWindowLibraryInitialized = window.initializeLibrary();
         if(!isWindowLibraryInitialized) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window library!");
             return;
         }
 
-        const bool isWindowCreated = window->open(1600, 900, getWindowName().c_str());
+        const bool isWindowCreated = window.open(1600, 900, pEngine->getWindowName().c_str());
         if(!isWindowCreated) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window!");
             return;
         }
 
-        renderLayer->create(window);
-        sceneLayer->create(getStartupSceneFilename(),
-                           renderLayer->getRenderManager(),
-                           renderLayer->getBatchManager(),
-                           renderLayer->getMeshManager());
+        // RENDER API
+        FRenderStatistics renderStatistics;
+        FBatchManager batchManager;
+        FMeshManager meshManager;
+        FRenderManager renderManager;
+        FMaterialManager materialManager;
+        // OPENGL RENDER API
+        auto renderContext{ createRenderContextType<TRenderType>() };
+        auto renderCommands{ createRenderCommandsType<TRenderType>() };
+        // SCENE
+        FSceneManagerEditor sceneManager;
+        Scene* pScene{ nullptr };
+        // EDITOR
+        FServiceManagerEditor serviceManagerEditor;
+        FServiceLocatorEditor serviceLocatorEditor;
 
-        editorLayer->create(window,
-                            sceneLayer->getSceneManager(),
-                            renderLayer->getMeshManager(),
-                            renderLayer->getRenderManager(),
-                            renderLayer->getMaterialManager(),
-                            renderLayer->getRenderStats());
+        renderContext.create(&window);
+        renderManager.create(&renderContext);
+        materialManager.create(renderContext.getMaterialFactory(),
+                               renderContext.getMaterialStorage());
+        batchManager.create(&renderManager, &meshManager, &materialManager);
 
-        layerStack.pushLayer(renderLayer);
-        layerStack.pushLayer(sceneLayer);
-        layerStack.pushLayer(editorLayer);
+        pScene = FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
 
-        while(!window->isGoingToClose() && !isGoingToRestart()) {
-            layerStack.begin();
-            layerStack.update();
-            layerStack.end();
+        renderManager.getViewportFramebuffer()->setClearColor(pScene->getBackground());
 
-            window->swapBuffers();
+        FEventsCameraEntity::passSceneManager(&sceneManager);
+        FEventsCameraEntity::passRenderManager(&renderManager);
+
+        FEventsComponentEntity::passSceneManager(&sceneManager);
+        FEventsComponentEntity::passRenderManager(&renderManager);
+        FEventsComponentEntity::passBatchManager(&batchManager);
+        FEventsComponentEntity::passMeshManager(&meshManager);
+
+        sceneManager.initialize(pScene, &batchManager, &meshManager);
+
+        serviceLocatorEditor.registerServices(&window, &sceneManager, &renderStatistics,
+                                              &meshManager, &renderManager, &materialManager);
+
+        serviceLocatorEditor.create<TEditorType>();
+        serviceManagerEditor.create<TEditorType>(&serviceLocatorEditor);
+
+        FEventsEntityEditor::create(&serviceLocatorEditor);
+        FEventsComponentEditor::create(&serviceLocatorEditor);
+
+        serviceManagerEditor.onCreate();
+
+        while(!window.isGoingToClose() && !pEngine->isGoingToRestart()) {
+            renderStatistics.reset();
+
+            FFramebuffer* pFramebuffer{ renderManager.getViewportFramebuffer() };
+            pFramebuffer->clear();
+
+            FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
+            const uint32_t countColor{ pPipelineStorage->getCountColorMesh() };
+            for(uint32_t i = 0; i < countColor; i++) {
+                renderCommands.draw(pFramebuffer, pPipelineStorage->getColorMesh(i));
+            }
+
+            const uint32_t countTex2D{ pPipelineStorage->getCountTex2DMesh() };
+            for(uint32_t i = 0; i < countTex2D; i++) {
+                renderCommands.draw(pFramebuffer, pPipelineStorage->getTex2DMesh(i));
+            }
+
+            sceneManager.update();
+            serviceManagerEditor.onUpdate();
+
+            window.swapBuffers();
         }
 
-        layerStack.close();
-        window->terminateLibrary();
+        renderManager.reset();
+        renderStatistics.reset();
+        batchManager.reset();
+        meshManager.reset();
+        renderContext.close();
+
+        sceneManager.close();
+
+        serviceManagerEditor.onDestroy();
+        serviceLocatorEditor.close();
+
+        window.terminateLibrary();
     }
 
 	bool MAREngine::isGoingToRestart() const {
@@ -149,6 +232,42 @@ namespace marengine {
     bool FEngineState::isGoingToRestart() {
         return s_pEngine->isGoingToRestart();
     }
+
+
+
+    template<ERenderContextType TRenderType>
+    auto createRenderContextType() {
+        if constexpr (TRenderType == ERenderContextType::OPENGL) {
+            return FRenderContextOpenGL();
+        }
+        else {
+            return int(5);
+        }
+    }
+
+    template<ERenderContextType TRenderType>
+    auto createRenderCommandsType() {
+        if constexpr (TRenderType == ERenderContextType::OPENGL) {
+            return FRenderCommandOpenGL();
+        }
+        else {
+            return int(5);
+        }
+    }
+
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType, EEditorContextType TEditorType>
+    auto createWindowType() {
+        if constexpr (
+                TWindowType == EWindowContextType::GLFW &&
+                TEditorType == EEditorContextType::IMGUI &&
+                TRenderType == ERenderContextType::OPENGL) {
+            return FWindowGLFWImGui();
+        }
+        else {
+            return int(5);
+        }
+    }
+
 
 
 }

@@ -30,12 +30,6 @@
 #include "../../src/Core/filesystem/SceneDeserializer.h"
 #include "../../src/Core/filesystem/SceneSerializer.h"
 
-// Layers	 
-#include "../../src/LayerStack/LayerStack.h"
-#include "../../src/LayerStack/layers/EditorLayer.h"
-#include "../../src/LayerStack/layers/SceneLayer.h"
-#include "../../src/LayerStack/layers/RenderLayer.h"
-
 // Entity Component System
 #include "../../src/Core/ecs/Scene.h"
 #include "../../src/Core/ecs/Entity/Entity.h"
@@ -52,6 +46,5 @@
 #include "../../src/Window/SDL/WindowSDL.h"
 #include "../../src/Window/Window.h"
 
-// Engine	 
+// Engine
 #include "../../src/MAREngine.h"
-#include "../../src/MAREngineBuilder.h"

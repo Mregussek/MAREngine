@@ -31,10 +31,15 @@
 
 namespace marengine {
 
+    class FServiceLocatorEditor;
+
 
     class FServiceManagerEditor :
             public IServiceManager<FServiceManagerEditor, FEditorWidget> {
     public:
+
+        template<EEditorContextType TEditorType>
+        void create(FServiceLocatorEditor* pServiceLocator);
 
         void emplace(FEditorWidget* service);
         void pop(FEditorWidget* service);
@@ -53,6 +58,8 @@ namespace marengine {
 
 }
 
+
+#include "../private/ServiceManagerEditor.inl"
 
 
 #endif //MARENGINE_SERVICEMANAGEREDITOR_H

@@ -21,6 +21,7 @@
 
 
 #include "../public/ServiceManagerEditor.h"
+#include "../public/ServiceLocatorEditor.h"
 
 
 namespace marengine {
@@ -68,6 +69,21 @@ namespace marengine {
             service->onDestruction();
             service = nullptr; // as every type should passed allocated on stack, we can set nullptr
         });
+    }
+
+    template<>
+    void FServiceManagerEditor::create<EEditorContextType::IMGUI>(FServiceLocatorEditor* pServiceLocator) {
+        // In what order should every window be rendered
+        // (sometimes it matters, last window will show up first)
+        emplace(pServiceLocator->retrieve<FScriptWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FViewportWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FMainWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FDebugWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FInspectorWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FMainMenuBarWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FSceneHierarchyWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FEnvironmentPropertiesWidgetImGui>());
+        emplace(pServiceLocator->retrieve<FContentBrowserImGui>());
     }
 
 
