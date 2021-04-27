@@ -128,8 +128,11 @@ namespace marengine {
 
         pScene = FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
 
-        renderManager.getViewportFramebuffer()->setClearColor(pScene->getBackground());
+        FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
+        pFramebufferViewport->setClearColor(pScene->getBackground());
 
+        FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
+        
         FEventsCameraEntity::passSceneManager(&sceneManager);
         FEventsCameraEntity::passRenderManager(&renderManager);
 
@@ -154,18 +157,16 @@ namespace marengine {
         while(!window.isGoingToClose() && !pEngine->isGoingToRestart()) {
             renderStatistics.reset();
 
-            FFramebuffer* pFramebuffer{ renderManager.getViewportFramebuffer() };
-            pFramebuffer->clear();
+            pFramebufferViewport->clear();
 
-            FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
             const uint32_t countColor{ pPipelineStorage->getCountColorMesh() };
             for(uint32_t i = 0; i < countColor; i++) {
-                renderCommands.draw(pFramebuffer, pPipelineStorage->getColorMesh(i));
+                renderCommands.draw(pFramebufferViewport, pPipelineStorage->getColorMesh(i));
             }
 
             const uint32_t countTex2D{ pPipelineStorage->getCountTex2DMesh() };
             for(uint32_t i = 0; i < countTex2D; i++) {
-                renderCommands.draw(pFramebuffer, pPipelineStorage->getTex2DMesh(i));
+                renderCommands.draw(pFramebufferViewport, pPipelineStorage->getTex2DMesh(i));
             }
 
             sceneManager.update();
