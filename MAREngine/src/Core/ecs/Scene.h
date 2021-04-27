@@ -102,7 +102,7 @@ namespace marengine {
 		* Non-const method, because we want to modify it during editor mode / game mode
 		* @return current background color
 		*/
-		MAR_NO_DISCARD maths::vec3& getBackground();
+		MAR_NO_DISCARD maths::vec3 getBackground() const;
 
 		/**
 		* @brief Returns pointer to scene registry.

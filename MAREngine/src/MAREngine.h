@@ -26,50 +26,12 @@
 
 #include "mar.h"
 #include "ProjectManager.h"
+#include "EngineConfig.h"
 
 
 namespace marengine {
 
-    class IMAREngineBuilder;
-
-
-	class MAREngine {
-	public:
-
-		MAR_NO_DISCARD bool isGoingToRestart() const;
-		MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
-		MAR_NO_DISCARD const std::string& getWindowName() const;
-
-		void setRestart();
-		void setNoRestart();
-
-		void initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup);
-
-		void buildAndRun();
-
-	private:
-
-        FProjectManager m_projectManager;
-
-		bool m_shouldRestart{ false };
-
-	};
-
-
-	class FEngineConfig {
-	public:
-
-	    bool exists() const;
-	    void load();
-
-	    const FMinimalProjectInfo* getProjectInfo(const std::string& projectName) const;
-
-	private:
-
-	    std::string m_configPath{ "marengine.cfg" };
-	    std::vector<FMinimalProjectInfo> m_existingProjects;
-
-	};
+    class MAREngine;
 
 
 	class FEngineState {
@@ -86,6 +48,29 @@ namespace marengine {
 	    static MAREngine* s_pEngine;
 
 	};
+
+
+    class MAREngine {
+    public:
+
+        MAR_NO_DISCARD bool isGoingToRestart() const;
+        MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
+        MAR_NO_DISCARD const std::string& getWindowName() const;
+
+        void setRestart();
+        void setNoRestart();
+
+        void initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup);
+
+        void buildAndRun();
+
+    private:
+
+        FProjectManager m_projectManager;
+        FEngineConfig m_engineConfig;
+        bool m_shouldRestart{ false };
+
+    };
 
 
 }

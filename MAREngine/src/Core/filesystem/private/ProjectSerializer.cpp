@@ -28,7 +28,7 @@
 namespace marengine {
 
 
-    void FFileSerializer::saveProjectToFile(FProject* pProject, const std::string& path) {
+    void FFileSerializer::saveProjectToFile(const FProject* pProject, const std::string& path) {
 
     }
 

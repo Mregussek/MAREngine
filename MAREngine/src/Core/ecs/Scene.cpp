@@ -94,7 +94,7 @@ namespace marengine {
 		return m_name; 
 	}
 
-	MAR_NO_DISCARD maths::vec3& Scene::getBackground() { 
+	MAR_NO_DISCARD maths::vec3 Scene::getBackground() const {
 		return m_backgroundColor;
 	}
 

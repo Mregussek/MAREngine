@@ -33,7 +33,7 @@ namespace marengine {
                            const std::string& sceneName);
 
 
-    void FFileSerializer::saveSceneToFile(Scene* scene, const std::string& path) {
+    void FFileSerializer::saveSceneToFile(const Scene* scene, const std::string& path) {
 	    using namespace marscenejson;
 
 		std::ofstream ss(path, std::ios::out | std::ios::trunc);
@@ -58,7 +58,7 @@ namespace marengine {
         json[jProject][jProjectWindowName] = projectInfo.windowName;
 
 		const std::string& sceneName{ scene->getName() };
-		const maths::vec3& background{ scene->getBackground() };
+		maths::vec3 background{ scene->getBackground() };
 
 		json[jScene][jSceneName] = sceneName;
 		json[jScene][sceneName][jSceneBackground][jX] = background.x;

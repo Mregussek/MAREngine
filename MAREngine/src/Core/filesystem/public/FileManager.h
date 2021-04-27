@@ -113,11 +113,11 @@ namespace marengine {
          * @param path path at which scene will be saved
          * @param scene scene, that will be saved
          */
-        static void saveSceneToFile(Scene* scene, const std::string& path);
+        static void saveSceneToFile(const Scene* scene, const std::string& path);
 
-        static void saveConfigToFile(FEngineConfig* pEngineConfig, const std::string& path);
+        static void saveConfigToFile(const FEngineConfig* pEngineConfig, const std::string& path);
 
-        static void saveProjectToFile(FProject* pProject, const std::string& path);
+        static void saveProjectToFile(const FProject* pProject, const std::string& path);
 
     };
 

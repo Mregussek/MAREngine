@@ -62,8 +62,15 @@ namespace marengine {
                               sceneToLoadAtStartup);
 		FPythonInterpreter::init();
 
-        initializedAtStartup = true;
         FEngineState::passEngine(this);
+
+        if(!m_engineConfig.exists()) {
+            m_engineConfig.createDefault();
+        }
+
+        m_engineConfig.load();
+
+        initializedAtStartup = true;
     }
 
 
@@ -299,34 +306,6 @@ namespace marengine {
 		m_shouldRestart = false; 
 	}
 
-
-
-    bool FEngineConfig::exists() const {
-        if(FFileManager::isValidPath(m_configPath)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    void FEngineConfig::load() {
-
-    }
-
-    const FMinimalProjectInfo* FEngineConfig::getProjectInfo(const std::string& projectName) const {
-        auto projectExists = [&projectName](const FMinimalProjectInfo& projectInfo){
-            return projectInfo.projectName == projectName;
-        };
-        const auto it =
-                std::find_if(m_existingProjects.cbegin(), m_existingProjects.cend(), projectExists);
-        if(it != m_existingProjects.cend()) {
-            return &(*it);
-        }
-
-        MARLOG_ERR(ELoggerType::NORMAL, "Could not find project at configuration -> {}", projectName);
-        return nullptr;
-    }
 
 	MAREngine* FEngineState::s_pEngine{ nullptr };
 

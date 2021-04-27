@@ -28,8 +28,15 @@
 namespace marengine {
 
 
-    void FFileSerializer::saveConfigToFile(FEngineConfig* pEngineConfig,
+    void FFileSerializer::saveConfigToFile(const FEngineConfig* pEngineConfig,
                                            const std::string& path) {
+
+        std::ofstream ss(path, std::ios::out | std::ios::trunc);
+        if (!ss.is_open()) {
+            MARLOG_ERR(ELoggerType::FILESYSTEM, "Cannot save EngineConfig to -> {}", path);
+            return;
+        }
+
 
     }
 
