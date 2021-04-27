@@ -31,6 +31,7 @@ namespace marengine {
 
     class Scene;
     class Entity;
+    class FRenderContext;
     class FMaterialStorage;
     class FMaterialFactory;
 
@@ -38,7 +39,7 @@ namespace marengine {
     class FMaterialManager : public IRenderResourceManager {
     public:
 
-        void create(FMaterialFactory* pMaterialFactory, FMaterialStorage* pMaterialStorage);
+        void create(FRenderContext* pRenderContext);
 
         void updateSceneMaterialData(Scene* pScene);
         void updateEntityMaterialData(const Entity& entity) const;

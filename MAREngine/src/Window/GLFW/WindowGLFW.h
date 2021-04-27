@@ -42,6 +42,7 @@ namespace marengine {
 	    MAR_NO_DISCARD bool isGoingToClose() final;
 
 	    void setVerticalSync(int32_t vsSetValue) final;
+	    void clear() const final;
 	    void swapBuffers() final;
 
         MAR_NO_DISCARD bool isKeyPressed(int32_t key) const final;

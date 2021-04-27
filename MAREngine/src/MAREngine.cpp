@@ -70,7 +70,13 @@ namespace marengine {
     template<EWindowContextType TWindowType, ERenderContextType TRenderType, EEditorContextType TEditorType>
     static void run(MAREngine* pEngine);
 
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType>
+    static void run(MAREngine* pEngine);
+
     template<EWindowContextType TWindowType, ERenderContextType TRenderType, EEditorContextType TEditorType>
+    static auto createWindowType();
+
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType>
     static auto createWindowType();
 
     template<ERenderContextType TRenderType>
@@ -85,6 +91,7 @@ namespace marengine {
         while(isGoingToRestart()) {
             setNoRestart();
             run<EWindowContextType::GLFW, ERenderContextType::OPENGL, EEditorContextType::IMGUI>(this);
+            //run<EWindowContextType::GLFW, ERenderContextType::OPENGL>(this);
         }
     }
 
@@ -121,8 +128,7 @@ namespace marengine {
 
         renderContext.create(&window);
         renderManager.create(&renderContext);
-        materialManager.create(renderContext.getMaterialFactory(),
-                               renderContext.getMaterialStorage());
+        materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
 
         Scene* pScene =
@@ -185,6 +191,90 @@ namespace marengine {
 
         serviceManagerEditor.onDestroy();
         serviceLocatorEditor.close();
+
+        window.terminateLibrary();
+    }
+
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType>
+    void run(MAREngine* pEngine) {
+        // TODO: fix only runtime mode // game
+        auto window{ createWindowType<TWindowType, TRenderType>() };
+
+        const bool isWindowLibraryInitialized = window.initializeLibrary();
+        if(!isWindowLibraryInitialized) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window library!");
+            return;
+        }
+
+        const bool isWindowCreated = window.open(1600, 900, pEngine->getWindowName().c_str());
+        if(!isWindowCreated) {
+            MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window!");
+            return;
+        }
+
+        // RENDER API
+        FRenderStatistics renderStatistics;
+        FBatchManager batchManager;
+        FMeshManager meshManager;
+        FRenderManager renderManager;
+        FMaterialManager materialManager;
+        // OPENGL RENDER API
+        auto renderContext{ createRenderContextType<TRenderType>() };
+        auto renderCommands{ createRenderCommandsType<TRenderType>() };
+        // SCENE
+        FSceneManagerEditor sceneManager;
+
+        renderContext.create(&window);
+        renderManager.create(&renderContext);
+        materialManager.create(&renderContext);
+        batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
+
+        Scene* pScene =
+                FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
+
+        FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
+        pFramebufferViewport->setClearColor(pScene->getBackground());
+
+        window.setClearColor(pScene->getBackground());
+
+        FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
+
+        FEventsCameraEntity::passSceneManager(&sceneManager);
+        FEventsCameraEntity::passRenderManager(&renderManager);
+
+        FEventsComponentEntity::passSceneManager(&sceneManager);
+        FEventsComponentEntity::passRenderManager(&renderManager);
+        FEventsComponentEntity::passBatchManager(&batchManager);
+        FEventsComponentEntity::passMeshManager(&meshManager);
+
+        sceneManager.initialize(pScene, &batchManager, &meshManager);
+
+        while(!window.isGoingToClose() && !pEngine->isGoingToRestart()) {
+            renderStatistics.reset();
+            window.clear();
+
+            const uint32_t countColor{ pPipelineStorage->getCountColorMesh() };
+            for(uint32_t i = 0; i < countColor; i++) {
+                renderCommands.draw(pPipelineStorage->getColorMesh(i));
+            }
+
+            const uint32_t countTex2D{ pPipelineStorage->getCountTex2DMesh() };
+            for(uint32_t i = 0; i < countTex2D; i++) {
+                renderCommands.draw(pPipelineStorage->getTex2DMesh(i));
+            }
+
+            sceneManager.update();
+
+            window.swapBuffers();
+        }
+
+        renderManager.reset();
+        renderStatistics.reset();
+        batchManager.reset();
+        meshManager.reset();
+        renderContext.close();
+
+        sceneManager.close();
 
         window.terminateLibrary();
     }
@@ -269,6 +359,17 @@ namespace marengine {
         }
     }
 
+    template<EWindowContextType TWindowType, ERenderContextType TRenderType>
+    auto createWindowType() {
+        if constexpr (
+                TWindowType == EWindowContextType::GLFW &&
+                TRenderType == ERenderContextType::OPENGL) {
+            return FWindowGLFWImGui();
+        }
+        else {
+            return int(5);
+        }
+    }
 
 
 }

@@ -47,7 +47,8 @@ namespace marengine {
         glfwMakeContextCurrent(p_pWindowContext);
         glfwSetInputMode(p_pWindowContext, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
-        glfwSetFramebufferSizeCallback(p_pWindowContext, callbacks::framebufferSizeCallback);
+        glfwSetWindowSizeCallback(p_pWindowContext, callbacks::windowSizeCallback);
+        //glfwSetFramebufferSizeCallback(p_pWindowContext, callbacks::framebufferSizeCallback);
         glfwSetCursorPosCallback(p_pWindowContext, callbacks::cursorPositionCallback);
         glfwSetScrollCallback(p_pWindowContext, callbacks::scrollCallback);
         glfwSetMouseButtonCallback(p_pWindowContext, callbacks::mouseButtonCallback);
@@ -86,6 +87,13 @@ namespace marengine {
     void FWindowGLFW::setVerticalSync(int32_t vsSetValue) {
         glfwSwapInterval(vsSetValue);
 	}
+
+	void FWindowGLFW::clear() const {
+        //GL_FUNC( glViewport(0, 0, p_currentInfo.width, p_currentInfo.height) );
+        GL_FUNC( glClearColor(p_currentInfo.clearColor.x, p_currentInfo.clearColor.y,
+                              p_currentInfo.clearColor.z, 1.0f) );
+        GL_FUNC( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT) );
+    }
 
     void FWindowGLFW::swapBuffers() {
         p_currentInfo.width = callbacks::window_width;

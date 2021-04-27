@@ -28,10 +28,9 @@
 namespace marengine {
 
 
-    void FMaterialManager::create(FMaterialFactory* pMaterialFactory,
-                                  FMaterialStorage* pMaterialStorage) {
-        m_pMaterialFactory = pMaterialFactory;
-        m_pMaterialStorage = pMaterialStorage;
+    void FMaterialManager::create(FRenderContext* pRenderContext) {
+        m_pMaterialFactory = pRenderContext->getMaterialFactory();
+        m_pMaterialStorage = pRenderContext->getMaterialStorage();
     }
 
     void FMaterialManager::updateSceneMaterialData(Scene* pScene) {

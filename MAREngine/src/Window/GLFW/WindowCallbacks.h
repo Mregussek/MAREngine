@@ -47,12 +47,12 @@ namespace marengine::callbacks {
 	static void windowErrorCallback(int32_t error, const char* description) {
 
 	}
-	
-	static void framebufferSizeCallback(GLFWwindow* window, int32_t w, int32_t h) {
-		window_width = w;
-		window_height = h;
-	}
-	
+
+    static void windowSizeCallback(GLFWwindow* window, int32_t width, int32_t height) {
+        window_width = width;
+        window_height = height;
+    }
+
 	static void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
 		mouse_xpos = xpos;
 		mouse_ypos = ypos;

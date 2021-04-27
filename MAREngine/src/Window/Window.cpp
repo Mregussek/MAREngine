@@ -26,6 +26,10 @@
 namespace marengine {
 
 
+    void FWindow::setClearColor(maths::vec3 clearColor) {
+        p_currentInfo.clearColor = clearColor;
+    }
+
     uint32 FWindow::getWidth() const {
         return p_currentInfo.width;
     }

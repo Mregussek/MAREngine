@@ -35,6 +35,23 @@ namespace marengine {
         NONE, GLFW
     };
 
+    /**
+     * @struct FWindowCurrentInfo IWindow.h "Window/IWindow.h"
+     * @brief FWindowCurrentInfo is a structure storage for all current information about window. All implementations
+     * of IWindow should contain this structure and fill it during runtime.
+     */
+    struct FWindowCurrentInfo {
+
+        maths::vec3 clearColor;
+        uint32 width{ 800 };
+        uint32 height{ 600 };
+        float xScroll{ 0.f };
+        float yScroll{ 0.f };
+        float xMousePos{ 0.f };
+        float yMousePos{ 0.f };
+
+    };
+
 
     /**
      * @class IWindow IWindow.h "Window/IWindow.h"
@@ -91,6 +108,15 @@ namespace marengine {
          * @param vsSetValue vsSetValue equal to 1 sets VS. 0 disables it.
          */
         virtual void setVerticalSync(int32 vsSetValue) = 0;
+
+        /*
+         * @brief Sets clear Color
+         * @param clearColor value, with which screen will be cleared.
+         */
+        virtual void setClearColor(maths::vec3 clearColor) = 0;
+
+        /// @brief Clears screen
+        virtual void clear() const = 0;
 
         /// @brief Swaps buffers and polls event.
         virtual void swapBuffers() = 0;
@@ -151,29 +177,14 @@ namespace marengine {
 
 
     /**
-     * @struct FWindowCurrentInfo IWindow.h "Window/IWindow.h"
-     * @brief FWindowCurrentInfo is a structure storage for all current information about window. All implementations
-     * of IWindow should contain this structure and fill it during runtime.
-     */
-    struct FWindowCurrentInfo {
-
-        uint32 width{ 800 };
-        uint32 height{ 600 };
-        float xScroll{ 0.f };
-        float yScroll{ 0.f };
-        float xMousePos{ 0.f };
-        float yMousePos{ 0.f };
-
-    };
-
-
-    /**
      * @class FWindow IWindow.h "Window/IWindow.h"
      * @brief FWindow class is first implementation of IWindow, that other implementations of IWindow
      * should derive from.
      */
     class FWindow : public IWindow {
     public:
+
+        void setClearColor(maths::vec3 clearColor) final;
 
         MAR_NO_DISCARD uint32 getWidth() const final;
 
