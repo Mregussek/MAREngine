@@ -21,7 +21,7 @@
 
 
 #include "ShadersOpenGL.h"
-#include "../../../filesystem/FileManager.h"
+#include "../../../filesystem/public/FileManager.h"
 #include "../../../../Logging/Logger.h"
 
 

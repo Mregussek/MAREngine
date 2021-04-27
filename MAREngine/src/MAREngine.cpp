@@ -37,7 +37,7 @@
 #include "Core/ecs/Entity/EventsCameraEntity.h"
 #include "Core/ecs/Entity/EventsComponentEntity.h"
 // FILESYSTEM
-#include "Core/filesystem/FileManager.h"
+#include "Core/filesystem/public/FileManager.h"
 // EDITOR
 #include "Editor/public/ServiceManagerEditor.h"
 #include "Editor/public/ServiceLocatorEditor.h"

@@ -23,7 +23,7 @@
 #include "../public/EventsComponentEditor.h"
 #include "../public/ServiceLocatorEditor.h"
 #include "../../Core/ecs/Entity/EventsComponentEntity.h" // component add/update/remove events
-#include "../../Core/filesystem/FileManager.h"
+#include "../../Core/filesystem/public/FileManager.h"
 #include "../../Core/graphics/public/MaterialManager.h"
 #include "../../ProjectManager.h"
 #include "../../Logging/Logger.h"

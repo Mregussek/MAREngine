@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#include "FileManager.h"
-#include "../../Logging/Logger.h"
+#include "../public/FileManager.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {

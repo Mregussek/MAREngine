@@ -20,11 +20,11 @@
 ************************************************************************/
 
 
-#include "FileManager.h"
-#include "../../ProjectManager.h"
-#include "../../Logging/Logger.h"
-#include "MARSceneJsonDefinitions.h"
-#include "../ecs/Scene.h"
+#include "../public/FileManager.h"
+#include "MARSceneJsonDefinitions.inl"
+#include "../../ecs/Scene.h"
+#include "../../../ProjectManager.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {

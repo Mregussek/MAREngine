@@ -20,8 +20,8 @@
 ************************************************************************/
 
 
-#ifndef MARENGINE_MARSCENEJSONDEFINITIONS_H
-#define MARENGINE_MARSCENEJSONDEFINITIONS_H
+#ifndef MARENGINE_MARSCENEJSONDEFINITIONS_INL
+#define MARENGINE_MARSCENEJSONDEFINITIONS_INL
 
 
 namespace marengine::marscenejson {
@@ -95,4 +95,4 @@ namespace marengine::marscenejson {
 }
 
 
-#endif //MARENGINE_MARSCENEJSONDEFINITIONS_H
+#endif //MARENGINE_MARSCENEJSONDEFINITIONS_INL

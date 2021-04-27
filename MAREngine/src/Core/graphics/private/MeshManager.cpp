@@ -21,7 +21,7 @@
 
 
 #include "../public/MeshManager.h"
-#include "../../filesystem/FileManager.h"
+#include "../../filesystem/public/FileManager.h"
 #include "../../ecs/Scene.h"
 
 
