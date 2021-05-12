@@ -21,8 +21,10 @@
 
 
 #include "../public/FileManager.h"
+#include "MARJsonDefinitions.inl"
 #include "../../../Logging/Logger.h"
 #include "../../../ProjectManager.h"
+#include "../../../EngineConfig.h"
 
 
 namespace marengine {
@@ -30,7 +32,41 @@ namespace marengine {
 
     void FFileDeserializer::loadConfigFromFile(FEngineConfig* pEngineConfig,
                                                const std::string& path) {
+        using namespace configjson;
+        if (!FFileManager::isContainingExtension(path, "cfg")) {
+		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to EngineConfig file!", path);
+		    return;
+		}
+		
+        std::ifstream file(path);
+		if (!file.is_open()) {
+            MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} cannot be opened!", path);
+            return;
+		}
 
+        nlohmann::json json{ nlohmann::json::parse(file) };
+		file.close();
+
+        FEngineInfo engineInfo;
+        engineInfo.version = json[jEngineInfo][jEngineVersion];
+        engineInfo.name = json[jEngineInfo][jEngineName];
+        engineInfo.authors = json[jEngineInfo][jEngineAuthors];
+
+        FEngineEditorSettings editorSettings;
+        editorSettings.theme = json[jEditorConfig][jEditorTheme];
+
+        FEngineWindowSettings windowSettings;
+        windowSettings.verticalSync = json[jWindowConfig][jWindowVerticalSync];
+        
+        uint32 i = 0;
+        for(nlohmann::json& jsonProject : json[jMinimalProjects]) {
+            FMinimalProjectInfo* pProjectInfo{ pEngineConfig->addProjectInfo() };
+            pProjectInfo->projectName = jsonProject[i][jProjectName];
+            pProjectInfo->projectPath = jsonProject[i][jProjectPath];
+            i++;
+        }
+        
+        MARLOG_INFO(ELoggerType::FILESYSTEM, "Loaded EngineConfig {}", path);
     }
 
 

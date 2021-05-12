@@ -21,7 +21,7 @@
 
 
 #include "../public/FileManager.h"
-#include "MARSceneJsonDefinitions.inl"
+#include "MARJsonDefinitions.inl"
 #include "../../ecs/Scene.h"
 #include "../../../ProjectManager.h"
 #include "../../../Logging/Logger.h"
@@ -34,7 +34,7 @@ namespace marengine {
 
 
     void FFileSerializer::saveSceneToFile(const Scene* scene, const std::string& path) {
-	    using namespace marscenejson;
+	    using namespace scenejson;
 
 		std::ofstream ss(path, std::ios::out | std::ios::trunc);
 		if (!ss.is_open()) {
@@ -80,7 +80,7 @@ namespace marengine {
 
 	void saveEntity(const Entity& entity, uint32_t index, nlohmann::json& json,
                     const std::string& sceneName) {
-        using namespace marscenejson;
+        using namespace scenejson;
 		auto saveString = [&json, &sceneName, index](const char* componentName, const char* value,
 		                                             const std::string& str) {
 			json[jScene][sceneName][jEntity][index][componentName][value] = str;

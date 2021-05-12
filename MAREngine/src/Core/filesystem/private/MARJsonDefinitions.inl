@@ -24,7 +24,8 @@
 #define MARENGINE_MARSCENEJSONDEFINITIONS_INL
 
 
-namespace marengine::marscenejson {
+namespace marengine {
+namespace scenejson {
 
         const char* const jX{ "x" };
         const char* const jY{ "y" };
@@ -92,6 +93,26 @@ namespace marengine::marscenejson {
         const char* const jCPythonScript{ "CPythonScript" };
         const char* const jCPythonScriptPath{ "path" };
 
+}
+
+namespace configjson {
+
+        const char* const jEditorConfig{ "EditorConfiguration" };
+        const char* const jEditorTheme{ "Theme" };
+        
+        const char* const jWindowConfig{ "WindowConfiguration" };
+        const char* const jWindowVerticalSync{ "VirtualSync" };
+
+        const char* const jMinimalProjects{ "MinimalProjectInfo" };
+        const char* const jProjectName{ "Name" };
+        const char* const jProjectPath{ "Path" };
+
+        const char* const jEngineInfo{ "EngineInfo" };
+        const char* const jEngineVersion{ "Version" };
+        const char* const jEngineName{ "MAREngine" };
+        const char* const jEngineAuthors{ "Mateusz Rzeczyca" };
+
+}
 }
 
 

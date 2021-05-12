@@ -32,9 +32,9 @@ namespace marengine {
 
 
     struct FEngineInfo {
-        const std::string version{ "v0.0.1" };
-        const std::string name{ "MAREngine" };
-        const std::string authors{ "Mateusz Rzeczyca" };
+        std::string version{ "v0.0.1" };
+        std::string name{ "MAREngine" };
+        std::string authors{ "Mateusz Rzeczyca" };
     };
 
     enum class EEngineEditorTheme {
@@ -59,9 +59,14 @@ namespace marengine {
         void load();
         void save() const;
 
+        void setEngineInfo(const FEngineInfo& engineInfo);
+        void setEditorSettings(const FEngineEditorSettings& editorSettings);
+        void setWindowSettings(const FEngineWindowSettings& windowSettings);
+
         const FEngineInfo& getEngineInfo() const;
         const FEngineEditorSettings& getEditorSettings() const;
         const FEngineWindowSettings& getWindowSettings() const;
+        const std::vector<FMinimalProjectInfo>& getProjectInfos() const;
         const FMinimalProjectInfo* getProjectInfo(const std::string& projectName) const;
 
         FMinimalProjectInfo* addProjectInfo();

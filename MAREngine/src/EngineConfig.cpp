@@ -80,6 +80,21 @@ namespace marengine {
         return m_windowSettings;
     }
 
+    const std::vector<FMinimalProjectInfo>& FEngineConfig::getProjectInfos() const {
+        return m_existingProjects;
+    }
+
+    void FEngineConfig::setEngineInfo(const FEngineInfo& engineInfo) {
+        m_engineInfo = engineInfo;
+    }
+
+    void FEngineConfig::setEditorSettings(const FEngineEditorSettings& editorSettings) {
+        m_editorSettings = editorSettings;
+    }
+
+    void FEngineConfig::setWindowSettings(const FEngineWindowSettings& windowSettings) {
+        m_windowSettings = windowSettings;
+    }
 
 }
 

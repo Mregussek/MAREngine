@@ -23,7 +23,7 @@
 #include "../public/FileManager.h"
 #include "../../../Logging/Logger.h"
 #include "../../../ProjectManager.h"
-#include "MARSceneJsonDefinitions.inl"
+#include "MARJsonDefinitions.inl"
 #include "../../ecs/Scene.h"
 
 
@@ -32,7 +32,7 @@ namespace marengine {
     static void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName);
 
 	void FFileDeserializer::loadSceneFromFile(Scene* pScene, const std::string& path) {
-	    using namespace marscenejson;
+	    using namespace scenejson;
 
 		if (!FFileManager::isContainingExtension(path, "json")) {
 		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to marscene file!", path);
@@ -70,7 +70,7 @@ namespace marengine {
 	}
 
 	void loadEntity(const Entity& entity, uint32_t index, nlohmann::json& json, const std::string& sceneName) {
-        using namespace marscenejson;
+        using namespace scenejson;
 
 	    auto jsonContains = [&sceneName, index, &json](const char* componentName)->bool {
 			return json[jScene][sceneName][jEntity][index].contains(componentName);
