@@ -51,13 +51,16 @@ namespace marengine {
         engineInfo.version = json[jEngineInfo][jEngineVersion];
         engineInfo.name = json[jEngineInfo][jEngineName];
         engineInfo.authors = json[jEngineInfo][jEngineAuthors];
+        pEngineConfig->setEngineInfo(engineInfo);
 
         FEngineEditorSettings editorSettings;
         editorSettings.theme = json[jEditorConfig][jEditorTheme];
-
+        pEngineConfig->setEditorSettings(editorSettings);
+        
         FEngineWindowSettings windowSettings;
         windowSettings.verticalSync = json[jWindowConfig][jWindowVerticalSync];
-        
+        pEngineConfig->setWindowSettings(windowSettings);
+
         uint32 i = 0;
         for(nlohmann::json& jsonProject : json[jMinimalProjects]) {
             FMinimalProjectInfo* pProjectInfo{ pEngineConfig->addProjectInfo() };
