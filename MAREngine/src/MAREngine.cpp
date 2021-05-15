@@ -51,15 +51,13 @@
 namespace marengine {
 
 
-    void MAREngine::initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup) {
+    void MAREngine::initAtStartup() {
         static bool initializedAtStartup{ false };
         if(initializedAtStartup) {
             return;
         }
 
         FLogger::init();
-        FProjectManager::init(&m_projectManager, std::move(projectName),
-                              sceneToLoadAtStartup);
 		FPythonInterpreter::init();
 
         FEngineState::passEngine(this);
@@ -69,6 +67,9 @@ namespace marengine {
         }
 
         m_engineConfig.load();
+
+        const FMinimalProjectInfo* pProjectInfo{ m_engineConfig.getProjectInfo("DefaultProject") };
+        FProjectManager::init(&m_projectManager, pProjectInfo);
 
         initializedAtStartup = true;
     }
@@ -112,7 +113,9 @@ namespace marengine {
             return;
         }
 
-        const bool isWindowCreated = window.open(1600, 900, pEngine->getWindowName().c_str());
+        const bool isWindowCreated{
+            window.open(1600, 900, FProjectManager::getProject().getWindowName().c_str())
+        };
         if(!isWindowCreated) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window!");
             return;
@@ -138,11 +141,10 @@ namespace marengine {
         materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
 
-        Scene scene("DefaultProject");
-        FFileDeserializer::loadSceneFromFile(&scene, FProjectManager::getSceneToLoadAtStartup());
+        Scene* pScene{ FProjectManager::getProject().getSceneToLoad() };
 
         FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
-        pFramebufferViewport->setClearColor(scene.getBackground());
+        pFramebufferViewport->setClearColor(pScene->getBackground());
 
         FPipelineStorage* pPipelineStorage{ renderContext.getPipelineStorage() };
 
@@ -154,7 +156,7 @@ namespace marengine {
         FEventsComponentEntity::passBatchManager(&batchManager);
         FEventsComponentEntity::passMeshManager(&meshManager);
 
-        sceneManager.initialize(&scene, &batchManager, &meshManager);
+        sceneManager.initialize(pScene, &batchManager, &meshManager);
 
         serviceLocatorEditor.registerServices(&window, &sceneManager, &renderStatistics,
                                               &meshManager, &renderManager, &materialManager);
@@ -288,14 +290,6 @@ namespace marengine {
 
 	bool MAREngine::isGoingToRestart() const {
 		return m_shouldRestart;
-	}
-
-	const std::string& MAREngine::getStartupSceneFilename() const {
-		return FProjectManager::getProjectInfo().sceneToLoadAtStartup;
-	}
-
-	const std::string& MAREngine::getWindowName() const {
-		return FProjectManager::getProjectInfo().windowName;
 	}
 
 	void MAREngine::setRestart() {

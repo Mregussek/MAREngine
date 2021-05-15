@@ -91,16 +91,17 @@ namespace marengine {
 	}
 
 	uint32_t TextureOpenGL::loadTexture(std::string path) {
-		const auto search = s_2d.find(std::move(path));
-
-		if (search != s_2d.cend()) {
-			return search->second;
-		}
-
-		const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
-		const uint32_t id = genNewTexture(assetsTexturePath.c_str());
-		s_2d.insert({ path, id });
-		return id;
+		//const auto search = s_2d.find(std::move(path));
+//
+		//if (search != s_2d.cend()) {
+		//	return search->second;
+		//}
+//
+		//const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
+		//const uint32_t id = genNewTexture(assetsTexturePath.c_str());
+		//s_2d.insert({ path, id });
+		//return id;
+        return 0;
 	}
 
 	uint32_t TextureOpenGL::genNewCubemap(const std::string& path) {
@@ -145,17 +146,18 @@ namespace marengine {
 	}
 
 	uint32_t TextureOpenGL::loadCubemap(std::string path) {
-		const auto search = s_cubemaps.find(std::move(path));
-
-		if (search != s_cubemaps.cend()) {
-			return search->second;
-		}
-
-		const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
-		const uint32_t id = genNewCubemap(assetsTexturePath);
-		s_cubemaps.insert({ path, id });
-
-		return id;
+		//const auto search = s_cubemaps.find(std::move(path));
+//
+		//if (search != s_cubemaps.cend()) {
+		//	return search->second;
+		//}
+//
+		//const std::string assetsTexturePath{ FProjectManager::getAssetsPath() + path };
+		//const uint32_t id = genNewCubemap(assetsTexturePath);
+		//s_cubemaps.insert({ path, id });
+//
+		//return id;
+		return 0;
 	}
 
 	bool TextureOpenGL::hasTexture(std::string key) {

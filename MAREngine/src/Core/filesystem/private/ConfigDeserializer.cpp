@@ -64,8 +64,8 @@ namespace marengine {
         uint32 i = 0;
         for(nlohmann::json& jsonProject : json[jMinimalProjects]) {
             FMinimalProjectInfo* pProjectInfo{ pEngineConfig->addProjectInfo() };
-            pProjectInfo->projectName = jsonProject[i][jProjectName];
-            pProjectInfo->projectPath = jsonProject[i][jProjectPath];
+            pProjectInfo->projectName = json[jMinimalProjects][i][jProjectName];
+            pProjectInfo->projectPath = json[jMinimalProjects][i][jProjectPath];
             i++;
         }
         

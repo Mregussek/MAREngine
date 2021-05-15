@@ -57,7 +57,7 @@ namespace marengine {
                                                   CRenderable& cRenderable,
                                                   const std::string& path) {
         const std::string texture2DPath =
-                FFileManager::getRelativePath(FProjectManager::getAbsolutePath(), path);
+                FFileManager::getRelativePath(FProjectManager::getProject().getAssetsPath(), path);
         FMaterialTex2D* pTexture2D{ pMaterialManager->getFactory()->emplaceTex2D() };
         FTex2DInfo info;
         info.path = texture2DPath;
@@ -141,7 +141,7 @@ namespace marengine {
                                                            CPythonScript& cPythonScript,
                                                            const FFilesystemDialogInfo& dialogInfo) {
         cPythonScript.scriptsPath =
-                FFileManager::getRelativePath(FProjectManager::getAbsolutePath(),
+                FFileManager::getRelativePath(FProjectManager::getProject().getAssetsPath(),
                                               *dialogInfo.pPath);
         openInScriptEditor(pScriptWidget, cPythonScript);
     }

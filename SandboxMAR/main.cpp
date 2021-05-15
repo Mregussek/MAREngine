@@ -28,11 +28,8 @@ using namespace marengine;
 
 int main() {
 
-    const std::string projectName = "DefaultProject";
-    const std::string sceneName = "default.marscene.json";
-
     MAREngine engine;
-    engine.initAtStartup(projectName, sceneName);
+    engine.initAtStartup();
     engine.buildAndRun();
 
     return 0;

@@ -65,6 +65,9 @@ namespace marengine {
 
     void FEngineConfig::createDefault() const {
         FEngineConfig tmp;
+        FMinimalProjectInfo* pProjectInfo{ tmp.addProjectInfo() };
+        pProjectInfo->projectName = "DefaultProject";
+        pProjectInfo->projectPath = "D:/Projects/MAREngine/SandboxMAR/DefaultProject/";
         FFileSerializer::saveConfigToFile(&tmp, m_configPath);
     }
 

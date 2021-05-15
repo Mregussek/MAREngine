@@ -25,6 +25,7 @@
 
 
 #include "mar.h"
+#include "Core/ecs/Scene.h"
 
 
 namespace marengine {
@@ -39,7 +40,8 @@ namespace marengine {
 	 */
 	struct FProjectInfo {
 
-	    std::string absolutePath;
+	    std::string projectVersion;
+        std::string projectCfg;
 		std::string projectName;
 		std::string projectPath;
 		std::string assetsPath;
@@ -62,13 +64,20 @@ namespace marengine {
 	    void setProjectName(const std::string& projectName);
 	    const std::string& getProjectName() const;
 
-	    const std::string& getAbsoluteAssetsPath() const;
-	    const std::string& getAbsoluteScenesPath() const;
+	    void setProjectPath(const std::string& projectPath);
+	    const std::string& getProjectPath() const;
+	    const std::string& getProjectVersion() const;
+	    const std::string& getProjectConfigPath() const;
+	    const std::string& getAssetsPath() const;
+	    const std::string& getScenesPath() const;
+	    const std::string& getWindowName() const;
+        Scene* getSceneToLoad();
 
-	    const std::string& getRelativeAssetsPath() const;
-	    const std::string& getRelativeScenesPath() const;
+	    void setSceneStartup(const std::string& startupScene);
+	    void setProjectVersion(const std::string& version);
+	    void updateWindowName();
 
-	    Scene* addScene(const std::string& projectName);
+	    Scene* addScene(const std::string& sceneName);
 	    void removeScene(Scene* pScene);
 
 	    void useScene(Scene* pScene) const;
@@ -88,37 +97,18 @@ namespace marengine {
 
 	public:
 
-		static void addNewSceneToCurrentProject(const std::string& newSceneFilenameToProject);
-		static void setNewSceneToLoad(const std::string& sceneFilenameToLoad);
-
-		static void fillProjectInfo(const std::string& scenePath, const std::string& sceneFilename);
-		static void retrieveProjectInfo(const std::string& scenePath, const std::string& sceneFilename);
-
 		static uint32 generateUniqueID();
 
-		MAR_NO_DISCARD static const FProjectInfo& getProjectInfo();
-
-		MAR_NO_DISCARD static const std::string& getAbsolutePath();
-		MAR_NO_DISCARD static const std::string& getProjectName();
-		MAR_NO_DISCARD static const std::string& getProjectPath();
-		MAR_NO_DISCARD static const std::string& getAssetsPath();
-		MAR_NO_DISCARD static const std::string& getScenesPath();
-		MAR_NO_DISCARD static const std::string& getSceneToLoadAtStartup();
-		MAR_NO_DISCARD static const std::string& getWindowName();
+		MAR_NO_DISCARD static FProject& getProject();
 
 	private:
 
-        static void init(FProjectManager* pProjectManagerInstance, std::string newProjectName,
-                         const std::string& newSceneToLoadAtStartup);
-
-	    static void setProjectName(std::string newProjectName);
-	    static void setSceneToLoadAtStartup(const std::string& newSceneToLoad);
-	    static void setAbsolutePath();
-        static void setWindowName();
+        static void init(FProjectManager* pProjectManagerInstance,
+                         const FMinimalProjectInfo* pProjectInfo);
 
 
 	    static FProjectManager* s_pInstance;
-        FProjectInfo m_projectInfo;
+        FProject m_project;
 
 	};
 

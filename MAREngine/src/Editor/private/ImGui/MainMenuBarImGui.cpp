@@ -92,18 +92,17 @@ namespace marengine {
         auto openSceneCallback = [](const std::string& path, const std::string& filename) {
             // TODO: implement displayOpenSceneWidget(), FProjectManager::retrieveProjectInfo is needed
             // we don't need special method as it does not operate on any important variable
-            FProjectManager::retrieveProjectInfo(path, filename);
-            FEngineState::setRestart();
+            //FProjectManager::retrieveProjectInfo(path, filename);
+            //FEngineState::setRestart();
         };
 
         auto newSceneCallback = [](const std::string& path, const std::string& filename) {
             // TODO: implement displayNewSceneWidget(), FProjectManager::fillProjectInfo is needed
-            {
-                Scene scene{ Scene::createEmptyScene("NewScene") };
-                FFileSerializer::saveSceneToFile(&scene, path);
-            }
-            FEngineState::setRestart();
-            FProjectManager::fillProjectInfo(path, filename);
+            //{
+            //    Scene* pScene{ FProjectManager::getProject().addScene("NewScene") };
+            //    FFileSerializer::saveSceneToFile(pScene, path);
+            //}
+            //FEngineState::setRestart();
         };
 
         m_pFilesystem->displayOpenWidget(openSceneName, extMarscene, openSceneCallback);

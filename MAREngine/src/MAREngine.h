@@ -54,13 +54,11 @@ namespace marengine {
     public:
 
         MAR_NO_DISCARD bool isGoingToRestart() const;
-        MAR_NO_DISCARD const std::string& getStartupSceneFilename() const;
-        MAR_NO_DISCARD const std::string& getWindowName() const;
 
         void setRestart();
         void setNoRestart();
 
-        void initAtStartup(std::string projectName, const std::string& sceneToLoadAtStartup);
+        void initAtStartup();
 
         void buildAndRun();
 

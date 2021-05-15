@@ -31,36 +31,19 @@ namespace marengine {
     FProjectManager* FProjectManager::s_pInstance{ nullptr };
 
 
-	void FProjectManager::init(FProjectManager* pProjectManagerInstance, std::string newProjectName,
-                            const std::string& newSceneToLoadAtStartup) {
+	void FProjectManager::init(FProjectManager* pProjectManagerInstance,
+                               const FMinimalProjectInfo* pProjectInfo) {
         s_pInstance = pProjectManagerInstance;
 
-		setProjectName(std::move(newProjectName));
-        setSceneToLoadAtStartup(newSceneToLoadAtStartup);
-        setAbsolutePath();
+        getProject().setProjectName(pProjectInfo->projectName);
+        getProject().setProjectPath(pProjectInfo->projectPath);
+        getProject().updateWindowName();
+
+        // should load project.cfg and retrieve info about current scene, all meshes, textures etc.
+        if(FFileManager::isValidPath(getProject().getProjectConfigPath())) {
+            FFileDeserializer::loadProjectFromFile(&getProject(), getProject().getProjectConfigPath());
+        }
 	}
-
-    void FProjectManager::setProjectName(std::string newProjectName) {
-        s_pInstance->m_projectInfo.projectName = std::move(newProjectName);
-        s_pInstance->m_projectInfo.projectPath = getProjectName() + "/";
-        s_pInstance->m_projectInfo.assetsPath =  getProjectPath() + "Assets/";
-        s_pInstance->m_projectInfo.scenesPath =  getProjectPath() + "Scenes/";
-
-        setWindowName();
-    }
-
-    void FProjectManager::setSceneToLoadAtStartup(const std::string& newSceneToLoad) {
-        s_pInstance->m_projectInfo.sceneToLoadAtStartup = getScenesPath() + newSceneToLoad;
-        setWindowName();
-    }
-
-    void FProjectManager::setWindowName() {
-        s_pInstance->m_projectInfo.windowName =
-                getProjectName()
-                + " --- "
-                + getSceneToLoadAtStartup()
-                + " --- MAREngine";
-    }
 
     static void eraseSubstring(std::string& mainStr, const std::string& toErase) {
         auto pos{ mainStr.find(toErase) };
@@ -69,105 +52,42 @@ namespace marengine {
         }
     }
 
-    void FProjectManager::setAbsolutePath() {
-        auto& absolutePath{ s_pInstance->m_projectInfo.absolutePath };
-        auto& sceneToLoadAtStartup{ s_pInstance->m_projectInfo.sceneToLoadAtStartup };
-
-        absolutePath = FFileManager::getAbsolutePath(sceneToLoadAtStartup);
-        const std::string sceneToLoadCopy{ sceneToLoadAtStartup };
-        sceneToLoadAtStartup = absolutePath;
-        eraseSubstring(absolutePath, sceneToLoadCopy);
-    }
-
-	void FProjectManager::addNewSceneToCurrentProject(const std::string& newSceneFilenameToProject) {
-		setNewSceneToLoad(newSceneFilenameToProject);
-	}
-
-	void FProjectManager::setNewSceneToLoad(const std::string& sceneFilenameToLoad) {
-        setSceneToLoadAtStartup(sceneFilenameToLoad);
-	}
-
-	void FProjectManager::fillProjectInfo(const std::string& scenePath, const std::string& sceneFilename) {
-	    // TODO: implement fillProjectInfo
-	    // method should retrieve project info from given scenePath and sceneFilename
-	    // arguments must point to existing filename, create it if it doesnt exist (as we want to create new scenes)
-	}
-
-    void FProjectManager::retrieveProjectInfo(const std::string& scenePath,
-                                              const std::string& sceneFilename) {
-	    // TODO: implement retrieveProjectInfo
-	    // method should retrieve project info from given scenePath and sceneFilename
-	    // it should retrieve project info from existing filename
-	}
-
 	uint32 FProjectManager::generateUniqueID() {
 	    static uint32 id{ 0 };
 	    id++;
 	    return id;
 	}
 
-	const FProjectInfo& FProjectManager::getProjectInfo() {
-	    return s_pInstance->m_projectInfo;
+    FProject& FProjectManager::getProject() {
+	    return s_pInstance->m_project;
 	}
-
-	const std::string& FProjectManager::getAbsolutePath() {
-	    return s_pInstance->m_projectInfo.absolutePath;
-	}
-
-	const std::string& FProjectManager::getProjectName() {
-		return getProjectInfo().projectName;
-	}
-
-	const std::string& FProjectManager::getProjectPath() {
-		return getProjectInfo().projectPath;
-	}
-
-	const std::string& FProjectManager::getAssetsPath() {
-		return getProjectInfo().assetsPath;
-	}
-
-	const std::string& FProjectManager::getScenesPath() {
-		return getProjectInfo().scenesPath;
-	}
-
-	const std::string& FProjectManager::getSceneToLoadAtStartup() {
-		return getProjectInfo().sceneToLoadAtStartup;
-	}
-
-	const std::string& FProjectManager::getWindowName() {
-		return getProjectInfo().windowName;
-	}
-
-
-
 
 
     void FProject::setProjectName(const std::string& projectName) {
-
+        m_projectInfo.projectName = projectName;
 	}
 
-    const std::string& FProject::getProjectName() const {
-	    return m_projectInfo.projectName;
+    void FProject::setProjectPath(const std::string& projectPath) {
+        m_projectInfo.projectPath = projectPath;
+        m_projectInfo.assetsPath =  projectPath + "Assets/";
+        m_projectInfo.scenesPath =  projectPath + "Scenes/";
+        m_projectInfo.projectCfg = projectPath + "project.cfg";
+    }
+
+    void FProject::setSceneStartup(const std::string& startupScene) {
+	    m_projectInfo.sceneToLoadAtStartup = startupScene;
 	}
 
-    const std::string& FProject::getAbsoluteAssetsPath() const {
-        return m_projectInfo.projectName;
+    void FProject::updateWindowName() {
+        m_projectInfo.windowName = getProjectName() + " --- MAREngine";
 	}
 
-    const std::string& FProject::getAbsoluteScenesPath() const {
-        return m_projectInfo.projectName;
+    void FProject::setProjectVersion(const std::string& version) {
+	    m_projectInfo.projectVersion = version;
 	}
 
-    const std::string& FProject::getRelativeAssetsPath() const {
-        return m_projectInfo.projectName;
-	}
-
-    const std::string& FProject::getRelativeScenesPath() const {
-        return m_projectInfo.projectName;
-	}
-
-    Scene* FProject::addScene(const std::string& projectName) {
-        return &m_scenes.emplace_back(projectName);
+    Scene* FProject::addScene(const std::string& sceneName) {
+        return &m_scenes.emplace_back(sceneName);
 	}
 
     void FProject::removeScene(Scene* pScene) {
@@ -181,6 +101,48 @@ namespace marengine {
     void FProject::useScene(uint32 index) const {
 
 	}
+
+    const std::string& FProject::getProjectConfigPath() const {
+        return m_projectInfo.projectCfg;
+    }
+
+    const std::string& FProject::getProjectVersion() const {
+	    return m_projectInfo.projectVersion;
+	}
+
+    const std::string& FProject::getProjectName() const {
+        return m_projectInfo.projectName;
+    }
+
+    const std::string& FProject::getProjectPath() const {
+        return m_projectInfo.projectPath;
+    }
+
+    const std::string& FProject::getAssetsPath() const {
+        return m_projectInfo.assetsPath;
+    }
+
+    const std::string& FProject::getScenesPath() const {
+        return m_projectInfo.scenesPath;
+    }
+
+    Scene* FProject::getSceneToLoad() {
+        auto doesSceneToLoadExists =
+                [&sceneToLoad = std::as_const(m_projectInfo.sceneToLoadAtStartup)]
+                (Scene& scene) {
+            return scene.getName() == sceneToLoad;
+        };
+	    auto it = std::find_if(m_scenes.begin(), m_scenes.end(), doesSceneToLoadExists);
+        if(it != m_scenes.cend()) {
+            return &(*it);
+        }
+
+        return nullptr;
+    }
+
+    const std::string& FProject::getWindowName() const {
+        return m_projectInfo.windowName;
+    }
 
 
 }

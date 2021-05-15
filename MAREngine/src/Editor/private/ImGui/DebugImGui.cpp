@@ -42,15 +42,15 @@ namespace marengine {
         Scene* pScene{ m_pSceneManagerEditor->getScene() };
         ImGui::Begin("SceneDebugWidget");
 
-        const FProjectInfo& projectInfo{ FProjectManager::getProjectInfo() };
+        const FProject& project{ FProjectManager::getProject() };
 
-        ImGui::Text("absolutePath: %s", projectInfo.absolutePath.c_str());
-        ImGui::Text("projectName: %s", projectInfo.projectName.c_str());
-        ImGui::Text("projectPath: %s", projectInfo.projectPath.c_str());
-        ImGui::Text("assetsPath: %s", projectInfo.assetsPath.c_str());
-        ImGui::Text("scenesPath: %s", projectInfo.scenesPath.c_str());
-        ImGui::Text("sceneToLoadAtStartup: %s", projectInfo.sceneToLoadAtStartup.c_str());
-        ImGui::Text("windowName: %s", projectInfo.windowName.c_str());
+        ImGui::Text("projectName: %s", project.getProjectName().c_str());
+        ImGui::Text("projectConfig: %s", project.getProjectConfigPath().c_str());
+        ImGui::Text("projectVersion: %s", project.getProjectVersion().c_str());
+        ImGui::Text("projectPath: %s", project.getProjectPath().c_str());
+        ImGui::Text("assetsPath: %s", project.getAssetsPath().c_str());
+        ImGui::Text("scenesPath: %s", project.getScenesPath().c_str());
+        ImGui::Text("windowName: %s", project.getWindowName().c_str());
 
         displayInfoAbout(pScene);
 

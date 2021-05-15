@@ -21,6 +21,7 @@
 
 
 #include "../public/FileManager.h"
+#include "MARJsonDefinitions.inl"
 #include "../../../Logging/Logger.h"
 #include "../../../ProjectManager.h"
 
@@ -29,7 +30,36 @@ namespace marengine {
 
 
     void FFileDeserializer::loadProjectFromFile(FProject* pProject, const std::string& path) {
+        using namespace projectjson;
+        if (!FFileManager::isContainingExtension(path, "cfg")) {
+            MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to project file!", path);
+            return;
+        }
 
+        std::ifstream file(path);
+        if (!file.is_open()) {
+            MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} cannot be opened!", path);
+            return;
+        }
+
+        nlohmann::json json{ nlohmann::json::parse(file) };
+        file.close();
+
+        pProject->setProjectName(json[jProject][jProjectName]);
+        pProject->setProjectPath(json[jProject][jProjectPath]);
+        pProject->setSceneStartup(json[jProject][jProjectSceneStartup]);
+        pProject->setProjectVersion(json[jProject][jProjectVersion]);
+
+        uint32 i = 0;
+        for(nlohmann::json& jsonScene : json[jScenes]) {
+            Scene* pScene{ pProject->addScene(json[jScenes][i][jScenesName]) };
+            const std::string sceneFilename{ json[jScenes][i][jScenesPath] };
+            const std::string pathToScene{ pProject->getScenesPath() + sceneFilename };
+            loadSceneFromFile(pScene, pathToScene);
+            i++;
+        }
+
+        MARLOG_INFO(ELoggerType::FILESYSTEM, "Loaded Project -> {}", path);
     }
 
 

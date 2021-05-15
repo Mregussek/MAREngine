@@ -149,7 +149,7 @@ namespace marengine {
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
         mesh.setIndex( currentSize - 1);
-        mesh.load(FProjectManager::getAssetsPath() + path);
+        mesh.load(FProjectManager::getProject().getAssetsPath() + path);
         return &mesh;
     }
 

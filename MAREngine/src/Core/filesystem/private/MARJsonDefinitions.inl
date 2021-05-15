@@ -27,90 +27,111 @@
 namespace marengine {
 namespace scenejson {
 
-        const char* const jX{ "x" };
-        const char* const jY{ "y" };
-        const char* const jZ{ "z" };
-        const char* const jW{ "w" };
+    const char* const jX{ "x" };
+    const char* const jY{ "y" };
+    const char* const jZ{ "z" };
+    const char* const jW{ "w" };
 
-        const char* const jDocumentation{ "Documentation" };
-        const char* const jApp{ "App" };
-        const char* const jAppVersion{ "AppVersion" };
-        const char* const jEngine{ "Engine" };
-        const char* const jEngineVersion{ "EngineVersion" };
+    const char* const jDocumentation{ "Documentation" };
+    const char* const jApp{ "App" };
+    const char* const jAppVersion{ "AppVersion" };
+    const char* const jEngine{ "Engine" };
+    const char* const jEngineVersion{ "EngineVersion" };
 
-        const char* const jProject{ "Project" };
-        const char* const jProjectAbsolutePath{ "absolutePath" };
-        const char* const jProjectProjectName{ "projectName" };
-        const char* const jProjectProjectPath{ "projectPath" };
-        const char* const jProjectAssetsPath{ "assetsPath" };
-        const char* const jProjectScenesPath{ "scenesPath" };
-        const char* const jProjectSceneToLoadAtStartup{ "sceneToLoadAtStartup" };
-        const char* const jProjectWindowName{ "windowName" };
+    const char* const jProject{ "Project" };
+    const char* const jProjectAbsolutePath{ "absolutePath" };
+    const char* const jProjectProjectName{ "projectName" };
+    const char* const jProjectProjectPath{ "projectPath" };
+    const char* const jProjectAssetsPath{ "assetsPath" };
+    const char* const jProjectScenesPath{ "scenesPath" };
+    const char* const jProjectSceneToLoadAtStartup{ "sceneToLoadAtStartup" };
+    const char* const jProjectWindowName{ "windowName" };
 
-        const char* const jScene{ "Scene" };
-        const char* const jSceneName{ "Name" };
-        const char* const jSceneBackground{ "Background" };
+    const char* const jScene{ "Scene" };
+    const char* const jSceneName{ "Name" };
+    const char* const jSceneBackground{ "Background" };
 
-        const char* const jEntity{ "Entity" } ;
+    const char* const jEntity{ "Entity" } ;
 
-        const char* const jCTag{ "CTag" };
-        const char* const jCTagTag{ "tag" };
+    const char* const jCTag{ "CTag" };
+    const char* const jCTagTag{ "tag" };
 
-        const char* const jCTransform{ "CTransform" };
-        const char* const jCTransformPosition{ "position" };
-        const char* const jCTransformRotation{ "rotation" };
-        const char* const jCTransformScale{ "scale" };
+    const char* const jCTransform{ "CTransform" };
+    const char* const jCTransformPosition{ "position" };
+    const char* const jCTransformRotation{ "rotation" };
+    const char* const jCTransformScale{ "scale" };
 
-        const char* const jCRenderable{ "CRenderable" };
-        const char* const jCRenderablePath{ "path" };
-        const char* const jCRenderableMeshType{ "meshType" };
-        const char* const jCRenderableColor{ "color" };
+    const char* const jCRenderable{ "CRenderable" };
+    const char* const jCRenderablePath{ "path" };
+    const char* const jCRenderableMeshType{ "meshType" };
+    const char* const jCRenderableColor{ "color" };
 
-        const char* const jCPointLight{ "CPointLight" };
-        const char* const jCPointLightPosition{ "position" };
-        const char* const jCPointLightAmbient{ "ambient" };
-        const char* const jCPointLightDiffuse{ "diffuse" };
-        const char* const jCPointLightSpecular{ "specular" };
-        const char* const jCPointLightConstant{ "constant" };
-        const char* const jCPointLightLinear{ "linear" };
-        const char* const jCPointLightQuadratic{ "quadratic" };
-        const char* const jCPointLightShininess{ "shininess" };
+    const char* const jCPointLight{ "CPointLight" };
+    const char* const jCPointLightPosition{ "position" };
+    const char* const jCPointLightAmbient{ "ambient" };
+    const char* const jCPointLightDiffuse{ "diffuse" };
+    const char* const jCPointLightSpecular{ "specular" };
+    const char* const jCPointLightConstant{ "constant" };
+    const char* const jCPointLightLinear{ "linear" };
+    const char* const jCPointLightQuadratic{ "quadratic" };
+    const char* const jCPointLightShininess{ "shininess" };
 
-        const char* const jCCamera{ "CCamera" };
-        const char* const jCCameraId{ "id" };
-        const char* const jCCameraPerspective{ "Perspective" };
-        const char* const jCCameraPFov{ "p_fov" };
-        const char* const jCCameraPAspectRatio{ "p_aspectRatio" };
-        const char* const jCCameraPNear{ "p_near" };
-        const char* const jCCameraPFar{ "p_far" };
-        const char* const jCCameraOLeft{ "o_left" };
-        const char* const jCCameraORight{ "o_right" };
-        const char* const jCCameraOTop{ "o_top" };
-        const char* const jCCameraOBottom{ "o_bottom" };
-        const char* const jCCameraONear{ "o_near" };
-        const char* const jCCameraOFar{ "o_far" };
+    const char* const jCCamera{ "CCamera" };
+    const char* const jCCameraId{ "id" };
+    const char* const jCCameraPerspective{ "Perspective" };
+    const char* const jCCameraPFov{ "p_fov" };
+    const char* const jCCameraPAspectRatio{ "p_aspectRatio" };
+    const char* const jCCameraPNear{ "p_near" };
+    const char* const jCCameraPFar{ "p_far" };
+    const char* const jCCameraOLeft{ "o_left" };
+    const char* const jCCameraORight{ "o_right" };
+    const char* const jCCameraOTop{ "o_top" };
+    const char* const jCCameraOBottom{ "o_bottom" };
+    const char* const jCCameraONear{ "o_near" };
+    const char* const jCCameraOFar{ "o_far" };
 
-        const char* const jCPythonScript{ "CPythonScript" };
-        const char* const jCPythonScriptPath{ "path" };
+    const char* const jCPythonScript{ "CPythonScript" };
+    const char* const jCPythonScriptPath{ "path" };
 
 }
 
 namespace configjson {
 
-        const char* const jEditorConfig{ "EditorConfiguration" };
-        const char* const jEditorTheme{ "Theme" };
+    const char* const jEditorConfig{ "EditorConfiguration" };
+    const char* const jEditorTheme{ "Theme" };
         
-        const char* const jWindowConfig{ "WindowConfiguration" };
-        const char* const jWindowVerticalSync{ "VirtualSync" };
+    const char* const jWindowConfig{ "WindowConfiguration" };
+    const char* const jWindowVerticalSync{ "VirtualSync" };
 
-        const char* const jMinimalProjects{ "MinimalProjectInfo" };
-        const char* const jProjectName{ "Name" };
-        const char* const jProjectPath{ "Path" };
+    const char* const jMinimalProjects{ "MinimalProjectInfo" };
+    const char* const jProjectName{ "Name" };
+    const char* const jProjectPath{ "Path" };
 
-        const char* const jEngineInfo{ "EngineInfo" };
-        const char* const jEngineVersion{ "Version" };
-        const char* const jEngineName{ "MAREngine" };
-        const char* const jEngineAuthors{ "Mateusz Rzeczyca" };
+    const char* const jEngineInfo{ "EngineInfo" };
+    const char* const jEngineVersion{ "Version" };
+    const char* const jEngineName{ "MAREngine" };
+    const char* const jEngineAuthors{ "Mateusz Rzeczyca" };
+
+}
+
+namespace projectjson {
+
+    const char* const jProject{ "Project" };
+    const char* const jProjectName{ "Name" };
+    const char* const jProjectPath{ "Path" };
+    const char* const jProjectSceneStartup{ "Startup" };
+    const char* const jProjectVersion{ "ProjectVersion" };
+    const char* const jProjectEngineVersion{ "EngineVersion" };
+
+    const char* const jScenes{ "Scenes" };
+    const char* const jScenesName{ "Name" };
+    const char* const jScenesPath{ "Path" };
+
+    const char* const jMeshes{ "Meshes" };
+    const char* const jTextures2D{ "Textures2D" };
+    const char* const jPythonScripts{ "PythonScripts" };
+    const char* const jPath{ "Path" };
+    const char* const jID{ "id" };
 
 }
 }

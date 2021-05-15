@@ -23,7 +23,6 @@
 #include "../public/FileManager.h"
 #include "MARJsonDefinitions.inl"
 #include "../../ecs/Scene.h"
-#include "../../../ProjectManager.h"
 #include "../../../Logging/Logger.h"
 
 
@@ -43,19 +42,6 @@ namespace marengine {
         }
 
 		nlohmann::json json;
-		json[jDocumentation][jEngine] = "MAREngine";
-		json[jDocumentation][jEngineVersion] = "v0.0.1";
-		json[jDocumentation][jApp] = "DefaultApplication";
-		json[jDocumentation][jAppVersion] = "v1.0.0";
-
-		const FProjectInfo& projectInfo{ FProjectManager::getProjectInfo() };
-		json[jProject][jProjectAbsolutePath] = projectInfo.absolutePath;
-        json[jProject][jProjectProjectName] = projectInfo.projectName;
-        json[jProject][jProjectProjectPath] = projectInfo.projectPath;
-        json[jProject][jProjectAssetsPath] = projectInfo.assetsPath;
-        json[jProject][jProjectScenesPath] = projectInfo.scenesPath;
-        json[jProject][jProjectSceneToLoadAtStartup] = projectInfo.sceneToLoadAtStartup;
-        json[jProject][jProjectWindowName] = projectInfo.windowName;
 
 		const std::string& sceneName{ scene->getName() };
 		maths::vec3 background{ scene->getBackground() };
