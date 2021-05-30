@@ -31,10 +31,14 @@ namespace marengine {
     FProjectManager* FProjectManager::s_pInstance{ nullptr };
 
 
-	void FProjectManager::init(FProjectManager* pProjectManagerInstance,
-                               const FMinimalProjectInfo* pProjectInfo) {
+	void FProjectManager::init(FProjectManager* pProjectManagerInstance) {
         s_pInstance = pProjectManagerInstance;
 
+        getProject().setProjectName("NoProject");
+        getProject().setProjectPath("NoPath");
+	}
+
+    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo) {
         getProject().setProjectName(pProjectInfo->projectName);
         getProject().setProjectPath(pProjectInfo->projectPath);
         getProject().updateWindowName();
@@ -43,6 +47,8 @@ namespace marengine {
         if(FFileManager::isValidPath(getProject().getProjectConfigPath())) {
             FFileDeserializer::loadProjectFromFile(&getProject(), getProject().getProjectConfigPath());
         }
+
+        return getProject();
 	}
 
     static void eraseSubstring(std::string& mainStr, const std::string& toErase) {

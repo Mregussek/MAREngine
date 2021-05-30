@@ -68,8 +68,7 @@ namespace marengine {
 
         m_engineConfig.load();
 
-        const FMinimalProjectInfo* pProjectInfo{ m_engineConfig.getProjectInfo("DefaultProject") };
-        FProjectManager::init(&m_projectManager, pProjectInfo);
+        FProjectManager::init(getProjectManager());
 
         initializedAtStartup = true;
     }
@@ -141,7 +140,11 @@ namespace marengine {
         materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
 
-        Scene* pScene{ FProjectManager::getProject().getSceneToLoad() };
+        FEngineConfig* pEngineConfig{ pEngine->getEngineConfig() };
+        const FMinimalProjectInfo* pProjectInfo{ pEngineConfig->getProjectInfo("DefaultProject") };
+        FProject& project{ FProjectManager::loadProject(pProjectInfo) };
+
+        Scene* pScene{ project.getSceneToLoad() };
 
         FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
         pFramebufferViewport->setClearColor(pScene->getBackground());
@@ -291,6 +294,14 @@ namespace marengine {
 	bool MAREngine::isGoingToRestart() const {
 		return m_shouldRestart;
 	}
+
+    FProjectManager* MAREngine::getProjectManager() const {
+        return (FProjectManager*)&m_projectManager;
+    }
+
+    FEngineConfig* MAREngine::getEngineConfig() const {
+        return (FEngineConfig*)&m_engineConfig;
+    }
 
 	void MAREngine::setRestart() {
 		m_shouldRestart = true; 

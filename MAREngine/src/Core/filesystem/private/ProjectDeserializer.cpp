@@ -30,6 +30,8 @@ namespace marengine {
 
 
     void FFileDeserializer::loadProjectFromFile(FProject* pProject, const std::string& path) {
+        MARLOG_INFO(ELoggerType::FILESYSTEM, "Loading project project... -> {}", path);
+
         using namespace projectjson;
         if (!FFileManager::isContainingExtension(path, "cfg")) {
             MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to project file!", path);

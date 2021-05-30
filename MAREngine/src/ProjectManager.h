@@ -101,10 +101,11 @@ namespace marengine {
 
 		MAR_NO_DISCARD static FProject& getProject();
 
+		static FProject& loadProject(const FMinimalProjectInfo* pProjectInfo);
+
 	private:
 
-        static void init(FProjectManager* pProjectManagerInstance,
-                         const FMinimalProjectInfo* pProjectInfo);
+        static void init(FProjectManager* pProjectManagerInstance);
 
 
 	    static FProjectManager* s_pInstance;

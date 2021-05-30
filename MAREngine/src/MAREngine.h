@@ -54,6 +54,8 @@ namespace marengine {
     public:
 
         MAR_NO_DISCARD bool isGoingToRestart() const;
+        MAR_NO_DISCARD FProjectManager* getProjectManager() const;
+        MAR_NO_DISCARD FEngineConfig* getEngineConfig() const;
 
         void setRestart();
         void setNoRestart();
