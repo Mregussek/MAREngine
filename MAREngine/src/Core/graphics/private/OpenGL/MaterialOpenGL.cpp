@@ -68,6 +68,7 @@ namespace marengine {
             GL_FUNC ( glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
 
             stbi_image_free(localBuffer);
+            MARLOG_INFO(ELoggerType::PLATFORMS, "Loaded Texture2D -> {}", path);
             return;
         }
 

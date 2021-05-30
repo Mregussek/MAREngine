@@ -24,12 +24,16 @@
 #include "MARJsonDefinitions.inl"
 #include "../../../Logging/Logger.h"
 #include "../../../ProjectManager.h"
+#include "../../graphics/public/MeshManager.h"
+#include "../../graphics/public/MaterialManager.h"
 
 
 namespace marengine {
 
 
-    void FFileDeserializer::loadProjectFromFile(FProject* pProject, const std::string& path) {
+    void FFileDeserializer::loadProjectFromFile(FProject* pProject, const std::string& path,
+                                                FMeshManager* pMeshManager,
+                                                FMaterialManager* pMaterialManager) {
         MARLOG_INFO(ELoggerType::FILESYSTEM, "Loading project project... -> {}", path);
 
         using namespace projectjson;
@@ -53,6 +57,27 @@ namespace marengine {
         pProject->setProjectVersion(json[jProject][jProjectVersion]);
 
         uint32 i = 0;
+        for(nlohmann::json& jsonMeshes : json[jMeshes]) {
+            const uint32 id{ json[jMeshes][i][jID].get<uint32>() };
+            FMeshProxy* pAsset{ pMeshManager->getFactory()->emplaceExternal(json[jMeshes][i][jPath]) };
+            pAsset->setAssetID(id);
+            i++;
+        }
+
+        i = 0;
+        for(nlohmann::json& jsonTextures2D : json[jTextures2D]) {
+            FTex2DInfo info;
+            info.id = json[jTextures2D][i][jID].get<uint32>();
+            const std::string assetPath{ json[jTextures2D][i][jPath] };
+            info.path = pProject->getAssetsPath() + assetPath;
+            FMaterialTex2D* pAsset{ pMaterialManager->getFactory()->emplaceTex2D() };
+            pAsset->setAssetID(info.id);
+            pAsset->passInfo(info);
+            pAsset->load();
+            i++;
+        }
+
+        i = 0;
         for(nlohmann::json& jsonScene : json[jScenes]) {
             Scene* pScene{ pProject->addScene(json[jScenes][i][jScenesName]) };
             const std::string sceneFilename{ json[jScenes][i][jScenesPath] };

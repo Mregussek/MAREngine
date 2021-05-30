@@ -33,6 +33,8 @@ namespace marengine {
     class FEngineConfig;
     struct FMinimalProjectInfo;
     class FProject;
+    class FMeshManager;
+    class FMaterialManager;
 
 
 	/**
@@ -94,7 +96,8 @@ namespace marengine {
 
         static void loadConfigFromFile(FEngineConfig* pEngineConfig, const std::string& path);
 
-        static void loadProjectFromFile(FProject* pProject, const std::string& path);
+        static void loadProjectFromFile(FProject* pProject, const std::string& path,
+                                        FMeshManager* pMeshManager, FMaterialManager* pMaterialManager);
 
     };
 

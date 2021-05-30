@@ -48,12 +48,16 @@ namespace marengine {
             EMeshType type{ EMeshType::NONE };
             /// @brief index used to retrieve assigned to Entity FMeshProxy from FMeshStorage (can be -1 if default Mesh used)
             int32 index{ -1 };
+            /// @brief asset ID for more convenient way to retrieve already loaded asset
+            uint32 assetID{ 0 };
 	    };
 	    struct MaterialInfo {
             /// @brief type used to retrieve correct implementation of FMaterialProxy from FMaterialStorage
             EMaterialType type{ EMaterialType::NONE };
             /// @brief index used to retrieve assigned to Entity FMaterialProxy from FMaterialStorage
             int32 index{ -1 };
+            /// @brief asset ID for more convenient way to retrieve already loaded asset
+            uint32 assetID{ 0 };
 
             bool isValid() const { return index != -1 && type != EMaterialType::NONE; }
 	    };

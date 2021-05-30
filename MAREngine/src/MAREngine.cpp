@@ -142,7 +142,7 @@ namespace marengine {
 
         FEngineConfig* pEngineConfig{ pEngine->getEngineConfig() };
         const FMinimalProjectInfo* pProjectInfo{ pEngineConfig->getProjectInfo("DefaultProject") };
-        FProject& project{ FProjectManager::loadProject(pProjectInfo) };
+        FProject& project{ FProjectManager::loadProject(pProjectInfo, &meshManager, &materialManager) };
 
         Scene* pScene{ project.getSceneToLoad() };
 

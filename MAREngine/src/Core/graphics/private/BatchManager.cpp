@@ -134,8 +134,7 @@ namespace marengine {
             FMeshBatchStatic* pBatch{ pFactory->emplaceStatic(pMeshBatchStorage) };
         }
 
-        const int32 index =
-                getAvailableBatch(pMeshBatchStorage->getArray(), entity);
+        const int32 index = getAvailableBatch(pMeshBatchStorage->getArray(), entity);
         if (index != -1) {
             pMeshBatchStorage->get(index)->submitToBatch(entity);
             return true;

@@ -62,8 +62,10 @@ namespace marengine {
             p_indices = Loader.LoadedMeshes[0].Indices;
         }
         else {
-            MARLOG_ERR(ELoggerType::GRAPHICS, "Loaded Meshes > 1 are not supported!");
+            MARLOG_ERR(ELoggerType::GRAPHICS, "Loaded Meshes > 1 are not supported! {}", path);
         }
+
+        MARLOG_INFO(ELoggerType::GRAPHICS, "Loaded External Mesh -> {}", path);
     }
 
     const FMeshExternalInfo& FMeshExternal::getInfo() const {
@@ -148,7 +150,7 @@ namespace marengine {
     FMeshProxy* FMeshFactory::emplaceExternal(const std::string& path) {
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
-        mesh.setIndex( currentSize - 1);
+        mesh.setIndex(currentSize - 1);
         mesh.load(FProjectManager::getProject().getAssetsPath() + path);
         return &mesh;
     }

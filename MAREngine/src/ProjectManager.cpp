@@ -38,14 +38,19 @@ namespace marengine {
         getProject().setProjectPath("NoPath");
 	}
 
-    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo) {
+    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo,
+                                           FMeshManager* pMeshManager,
+                                           FMaterialManager* pMaterialManager) {
         getProject().setProjectName(pProjectInfo->projectName);
         getProject().setProjectPath(pProjectInfo->projectPath);
         getProject().updateWindowName();
 
         // should load project.cfg and retrieve info about current scene, all meshes, textures etc.
         if(FFileManager::isValidPath(getProject().getProjectConfigPath())) {
-            FFileDeserializer::loadProjectFromFile(&getProject(), getProject().getProjectConfigPath());
+            FFileDeserializer::loadProjectFromFile(&getProject(),
+                                                   getProject().getProjectConfigPath(),
+                                                   pMeshManager,
+                                                   pMaterialManager);
         }
 
         return getProject();

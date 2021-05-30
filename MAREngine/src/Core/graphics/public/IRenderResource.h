@@ -38,6 +38,9 @@ namespace marengine {
         virtual void setIndex(int32 index) = 0;
         virtual int32 getIndex() const = 0;
 
+        virtual void setAssetID(uint32 id) = 0;
+        virtual uint32 getAssetID() const = 0;
+
     };
 
 
@@ -47,9 +50,13 @@ namespace marengine {
         void setIndex(int32 index) final { p_index = index; }
         MAR_NO_DISCARD int32 getIndex() const final { return p_index; }
 
+        void setAssetID(uint32 id) final { p_id = id; }
+        MAR_NO_DISCARD uint32 getAssetID() const final { return p_id; }
+
     protected:
 
         int32 p_index{ -1 };
+        uint32 p_id{ 0 };
 
     };
 
