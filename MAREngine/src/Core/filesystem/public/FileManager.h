@@ -75,6 +75,15 @@ namespace marengine {
         // TODO: add docs getFilenameFromPath
 		MAR_NO_DISCARD static std::string getFilenameFromPath(const std::string& path);
 
+        // TODO: add docs getCurrentExePath
+        MAR_NO_DISCARD static std::string getCurrentExePath();
+
+        // TODO: add docs deleteFilenameFromPath
+        MAR_NO_DISCARD static std::string deleteFilenameFromPath(std::string path);
+
+        // TODO: add docs joinPaths
+        MAR_NO_DISCARD static std::string joinPaths(const std::string& path1, const std::string& path2);
+
 	};
 
 

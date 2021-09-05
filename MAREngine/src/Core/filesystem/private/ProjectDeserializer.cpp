@@ -57,20 +57,22 @@ namespace marengine {
         pProject->setProjectVersion(json[jProject][jProjectVersion]);
 
         uint32 i = 0;
+        FMeshFactory* pMeshFactory{ pMeshManager->getFactory() };
         for(nlohmann::json& jsonMeshes : json[jMeshes]) {
             const uint32 id{ json[jMeshes][i][jID].get<uint32>() };
-            FMeshProxy* pAsset{ pMeshManager->getFactory()->emplaceExternal(json[jMeshes][i][jPath]) };
+            FMeshProxy* pAsset{ pMeshFactory->emplaceExternal(json[jMeshes][i][jPath]) };
             pAsset->setAssetID(id);
             i++;
         }
 
         i = 0;
+        FMaterialFactory* pMaterialFactory{ pMaterialManager->getFactory() };
+        const auto& projectAssetsPath{ pProject->getAssetsPath() };
         for(nlohmann::json& jsonTextures2D : json[jTextures2D]) {
             FTex2DInfo info;
             info.id = json[jTextures2D][i][jID].get<uint32>();
-            const std::string assetPath{ json[jTextures2D][i][jPath] };
-            info.path = pProject->getAssetsPath() + assetPath;
-            FMaterialTex2D* pAsset{ pMaterialManager->getFactory()->emplaceTex2D() };
+            info.path = FFileManager::joinPaths(projectAssetsPath, json[jTextures2D][i][jPath]);
+            FMaterialTex2D* pAsset{ pMaterialFactory->emplaceTex2D() };
             pAsset->setAssetID(info.id);
             pAsset->passInfo(info);
             pAsset->load();
@@ -78,10 +80,10 @@ namespace marengine {
         }
 
         i = 0;
+        const auto& projectScenesPath{ pProject->getScenesPath() };
         for(nlohmann::json& jsonScene : json[jScenes]) {
             Scene* pScene{ pProject->addScene(json[jScenes][i][jScenesName]) };
-            const std::string sceneFilename{ json[jScenes][i][jScenesPath] };
-            const std::string pathToScene{ pProject->getScenesPath() + sceneFilename };
+            const std::string pathToScene{ FFileManager::joinPaths(projectScenesPath, json[jScenes][i][jScenesPath]) };
             loadSceneFromFile(pScene, pathToScene);
             i++;
         }

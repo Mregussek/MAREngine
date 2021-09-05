@@ -39,6 +39,7 @@ namespace marengine {
 
     void FEngineConfig::load() {
         FFileDeserializer::loadConfigFromFile(this, m_configPath);
+        MARLOG_INFO(ELoggerType::NORMAL, "Loaded {} file", m_configPath);
     }
 
     void FEngineConfig::save() const {
@@ -50,13 +51,18 @@ namespace marengine {
     }
 
     const FMinimalProjectInfo* FEngineConfig::getProjectInfo(const std::string& projectName) const {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Looking for MinimalProjectInfo with ProjectName: {} ...", projectName);
         auto projectExists = [&projectName](const FMinimalProjectInfo& projectInfo){
             return projectInfo.projectName == projectName;
         };
         const auto it =
                 std::find_if(m_existingProjects.cbegin(), m_existingProjects.cend(), projectExists);
+
         if(it != m_existingProjects.cend()) {
-            return &(*it);
+            const FMinimalProjectInfo* pMinimalProjectInfo{ &(*it) };
+            MARLOG_INFO(ELoggerType::NORMAL, "Found MinimalProjectInfo:\nName: {}\nPath: {}",
+                pMinimalProjectInfo->projectName, pMinimalProjectInfo->projectPath);
+            return pMinimalProjectInfo;
         }
 
         MARLOG_ERR(ELoggerType::NORMAL, "Could not find project at configuration -> {}", projectName);
@@ -64,11 +70,14 @@ namespace marengine {
     }
 
     void FEngineConfig::createDefault() const {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Creating default MAREngine .cfg file...")
         FEngineConfig tmp;
         FMinimalProjectInfo* pProjectInfo{ tmp.addProjectInfo() };
         pProjectInfo->projectName = "DefaultProject";
-        pProjectInfo->projectPath = "D:/Projects/MAREngine/SandboxMAR/DefaultProject/";
+        pProjectInfo->projectPath = FFileManager::joinPaths(FFileManager::getCurrentExePath(), pProjectInfo->projectName);
         FFileSerializer::saveConfigToFile(&tmp, m_configPath);
+        MARLOG_INFO(ELoggerType::NORMAL, "Created default MAREngine .cfg file at {} with project:\nName: {}\nPath: {}", 
+            m_configPath, pProjectInfo->projectName, pProjectInfo->projectPath);
     }
 
     const FEngineInfo& FEngineConfig::getEngineInfo() const {

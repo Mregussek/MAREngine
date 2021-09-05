@@ -109,8 +109,8 @@ namespace configjson {
 
     const char* const jEngineInfo{ "EngineInfo" };
     const char* const jEngineVersion{ "Version" };
-    const char* const jEngineName{ "MAREngine" };
-    const char* const jEngineAuthors{ "Mateusz Rzeczyca" };
+    const char* const jEngineName{ "Name" };
+    const char* const jEngineAuthors{ "Authors" };
 
 }
 

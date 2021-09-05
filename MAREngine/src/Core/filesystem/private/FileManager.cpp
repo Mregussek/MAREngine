@@ -27,6 +27,9 @@
 namespace marengine {
 
 
+    static std::string removePatternFromString(std::string s, const std::string& p);
+
+
 	void FFileManager::loadFile(std::string& stringToFill, const char* path) {
         // TODO: implement it
 		FILE* file = fopen(path, "rb");
@@ -78,6 +81,38 @@ namespace marengine {
     std::string FFileManager::getFilenameFromPath(const std::string& path) {
         return path.substr(path.find_last_of("/\\") + 1);
 	}
+
+    std::string FFileManager::getCurrentExePath() {
+       char buffer[MAX_PATH];
+	   GetModuleFileNameA(NULL, buffer, MAX_PATH);
+	   const std::string::size_type pos{ std::string(buffer).find_last_of("\\/") };
+       const std::string currentExePath{ std::string(buffer).substr(0, pos) };
+       MARLOG_INFO(ELoggerType::FILESYSTEM, "Returning current exe path: {}", currentExePath);
+	   return currentExePath;
+    }
+
+    std::string FFileManager::deleteFilenameFromPath(std::string path) {
+       path = removePatternFromString(path, getFilenameFromPath(path));
+       MARLOG_INFO(ELoggerType::FILESYSTEM, "Returning path with deleted filename from it: {}", path);
+       return path;
+    }
+
+    std::string FFileManager::joinPaths(const std::string& path1, const std::string& path2) {
+        const std::filesystem::path joinedPath{
+            std::filesystem::path(path1) / std::filesystem::path(path2)};
+        return joinedPath.generic_string();
+    }     
+
+
+
+    std::string removePatternFromString(std::string s, const std::string& p) {
+        const std::string::size_type n{ p.length() };
+        for (std::string::size_type i = s.find(p); i != std::string::npos; i = s.find(p)) {
+            s.erase(i, n);
+        }
+        return s;
+    }
+
 
 
 }

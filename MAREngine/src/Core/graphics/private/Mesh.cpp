@@ -22,6 +22,7 @@
 
 #include "../public/Mesh.h"
 #include "loader_obj/OBJ_Loader.h"
+#include "../../filesystem/public/FileManager.h"
 #include "../../ecs/Entity/Components.h"
 #include "../../../ProjectManager.h"
 #include "../../../Logging/Logger.h"
@@ -151,7 +152,7 @@ namespace marengine {
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
         mesh.setIndex(currentSize - 1);
-        mesh.load(FProjectManager::getProject().getAssetsPath() + path);
+        mesh.load(FFileManager::joinPaths(FProjectManager::getProject().getAssetsPath(), path));
         return &mesh;
     }
 

@@ -23,6 +23,7 @@
 #include "ProjectManager.h"
 #include "Core/filesystem/public/FileManager.h"
 #include "Core/ecs/Scene.h"
+#include "Logging/Logger.h"
 
 
 namespace marengine {
@@ -41,6 +42,7 @@ namespace marengine {
     FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo,
                                            FMeshManager* pMeshManager,
                                            FMaterialManager* pMaterialManager) {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Loading project: {}", pProjectInfo->projectName);
         getProject().setProjectName(pProjectInfo->projectName);
         getProject().setProjectPath(pProjectInfo->projectPath);
         getProject().updateWindowName();
@@ -80,17 +82,17 @@ namespace marengine {
 
     void FProject::setProjectPath(const std::string& projectPath) {
         m_projectInfo.projectPath = projectPath;
-        m_projectInfo.assetsPath =  projectPath + "Assets/";
-        m_projectInfo.scenesPath =  projectPath + "Scenes/";
-        m_projectInfo.projectCfg = projectPath + "project.cfg";
+        m_projectInfo.assetsPath = FFileManager::joinPaths(projectPath, "Assets");
+        m_projectInfo.scenesPath = FFileManager::joinPaths(projectPath, "Scenes");
+        m_projectInfo.projectCfg = FFileManager::joinPaths(projectPath, "project.cfg");
     }
-
-    void FProject::setSceneStartup(const std::string& startupScene) {
-	    m_projectInfo.sceneToLoadAtStartup = startupScene;
-	}
 
     void FProject::updateWindowName() {
         m_projectInfo.windowName = getProjectName() + " --- MAREngine";
+	}
+
+    void FProject::setSceneStartup(const std::string& startupScene) {
+	    m_projectInfo.sceneToLoadAtStartup = startupScene;
 	}
 
     void FProject::setProjectVersion(const std::string& version) {
