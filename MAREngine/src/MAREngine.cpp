@@ -177,13 +177,13 @@ namespace marengine {
 
             pFramebufferViewport->clear();
 
-            const uint32_t countColor{ pPipelineStorage->getCountColorMesh() };
-            for(uint32_t i = 0; i < countColor; i++) {
+            const int32 countColor{ (int32)pPipelineStorage->getCountColorMesh() };
+            for(int32 i = 0; i < countColor; i++) {
                 renderCommands.draw(pFramebufferViewport, pPipelineStorage->getColorMesh(i));
             }
 
-            const uint32_t countTex2D{ pPipelineStorage->getCountTex2DMesh() };
-            for(uint32_t i = 0; i < countTex2D; i++) {
+            const int32 countTex2D{ (int32)pPipelineStorage->getCountTex2DMesh() };
+            for(int32 i = 0; i < countTex2D; i++) {
                 renderCommands.draw(pFramebufferViewport, pPipelineStorage->getTex2DMesh(i));
             }
 
