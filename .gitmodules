@@ -19,3 +19,6 @@
 [submodule "docs"]
 	path = docs
 	url = https://github.com/Mregussek/MAREngine-docs.git
+[submodule "MAREngine/3rd_party/ImGuizmo"]
+	path = MAREngine/3rd_party/ImGuizmo
+	url = https://github.com/Mregussek/ImGuizmo.git
