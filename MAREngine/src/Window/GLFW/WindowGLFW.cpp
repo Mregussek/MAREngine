@@ -29,6 +29,7 @@ namespace marengine {
 
 
     bool FWindowGLFW::open(uint32_t width, uint32_t height, const char* name) {
+        MARLOG_TRACE(ELoggerType::WINDOW, "Opening GLFW window...");
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -55,6 +56,7 @@ namespace marengine {
 
         setVerticalSync(1);
 
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window has opened successfully!");
         return true;
 	}
 
@@ -63,9 +65,9 @@ namespace marengine {
 	}
 
 	bool FWindowGLFW::initializeLibrary() {
+        MARLOG_TRACE(ELoggerType::WINDOW, "Initializing GLFW library...");
         glfwSetErrorCallback(callbacks::windowErrorCallback);
-
-        const int32_t glfw_init = glfwInit();
+        const int32_t glfw_init{ glfwInit() };
 
         if (glfw_init != GLFW_TRUE) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize GLFW library!");
@@ -73,6 +75,7 @@ namespace marengine {
             return false;
         }
 
+        MARLOG_INFO(ELoggerType::WINDOW, "Initialized GLFW!");
         return true;
     }
 
@@ -85,6 +88,7 @@ namespace marengine {
     }
 
     void FWindowGLFW::setVerticalSync(int32_t vsSetValue) {
+        MARLOG_TRACE(ELoggerType::WINDOW, "Setting Vertical Sync...")
         glfwSwapInterval(vsSetValue);
 	}
 

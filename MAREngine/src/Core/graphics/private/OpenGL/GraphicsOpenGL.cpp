@@ -34,18 +34,19 @@ namespace marengine {
 
 
     bool FRenderContextOpenGL::create(FWindow* pWindow) {
+        MARLOG_TRACE(ELoggerType::PLATFORMS, "Creating OpenGL Context...");
         m_pWindow = pWindow;
 
         if constexpr (MARENGINE_USE_GLFW_WINDOW) {
+            MARLOG_TRACE(ELoggerType::PLATFORMS, "Loading GLFW into OpenGL...");
             const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
             if (!isGLAD_OK) {
                 return false;
             }
         }
         else if constexpr (MARENGINE_USE_SDL_WINDOW) {
+            MARLOG_TRACE(ELoggerType::PLATFORMS, "Loading SDL into OpenGL...");
             const int32_t isGLAD_OK = gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
-
             if (!isGLAD_OK) {
                 return false;
             }
@@ -65,8 +66,8 @@ namespace marengine {
         PLATFORM_GL_FUNC( glEnable(GL_BLEND) );
         PLATFORM_GL_FUNC( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
-        const GLubyte* vendor = glGetString(GL_VENDOR);
-        const GLubyte* renderer = glGetString(GL_RENDERER);
+        const GLubyte* vendor{ glGetString(GL_VENDOR) };
+        const GLubyte* renderer{ glGetString(GL_RENDERER) };
         TerminalAPI::clearScreen();
         MARLOG_INFO(ELoggerType::PLATFORMS, "\nVendor: {}\nRenderer: {}", vendor, renderer);
 
