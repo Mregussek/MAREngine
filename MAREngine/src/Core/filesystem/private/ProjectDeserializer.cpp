@@ -56,18 +56,19 @@ namespace marengine {
         pProject->setSceneStartup(json[jProject][jProjectSceneStartup]);
         pProject->setProjectVersion(json[jProject][jProjectVersion]);
 
-        uint32 i = 0;
+        const auto& projectAssetsPath{ pProject->getAssetsPath() };
+        int32 i = 0;
         FMeshFactory* pMeshFactory{ pMeshManager->getFactory() };
         for(nlohmann::json& jsonMeshes : json[jMeshes]) {
             const uint32 id{ json[jMeshes][i][jID].get<uint32>() };
-            FMeshProxy* pAsset{ pMeshFactory->emplaceExternal(json[jMeshes][i][jPath]) };
+            const std::string meshPath{ FFileManager::joinPaths(projectAssetsPath, json[jMeshes][i][jPath]) };
+            FMeshProxy* pAsset{ pMeshFactory->emplaceExternal(meshPath) };
             pAsset->setAssetID(id);
             i++;
         }
 
         i = 0;
         FMaterialFactory* pMaterialFactory{ pMaterialManager->getFactory() };
-        const auto& projectAssetsPath{ pProject->getAssetsPath() };
         for(nlohmann::json& jsonTextures2D : json[jTextures2D]) {
             FTex2DInfo info;
             info.id = json[jTextures2D][i][jID].get<uint32>();
