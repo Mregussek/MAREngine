@@ -218,7 +218,8 @@ namespace marengine {
             return;
         }
 
-        const bool isWindowCreated = window.open(1600, 900, pEngine->getWindowName().c_str());
+        const bool isWindowCreated =
+                window.open(1600, 900, FProjectManager::getProject().getWindowName().c_str());
         if(!isWindowCreated) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize Window!");
             return;
@@ -241,8 +242,11 @@ namespace marengine {
         materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
 
-        Scene* pScene =
-                FSceneDeserializer::loadSceneFromFile(FProjectManager::getSceneToLoadAtStartup());
+        FEngineConfig* pEngineConfig{ pEngine->getEngineConfig() };
+        const FMinimalProjectInfo* pProjectInfo{ pEngineConfig->getProjectInfo("DefaultProject") };
+        FProject& project{ FProjectManager::loadProject(pProjectInfo, &meshManager, &materialManager) };
+
+        Scene* pScene{ project.getSceneToLoad() };
 
         FFramebuffer* pFramebufferViewport{ renderManager.getViewportFramebuffer() };
         pFramebufferViewport->setClearColor(pScene->getBackground());

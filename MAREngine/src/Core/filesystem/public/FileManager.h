@@ -84,6 +84,9 @@ namespace marengine {
         // TODO: add docs joinPaths
         MAR_NO_DISCARD static std::string joinPaths(const std::string& path1, const std::string& path2);
 
+        // TODO: add docs isPathEndingWithSubstring
+        MAR_NO_DISCARD static bool isPathEndingWithSubstring(const std::string& path, const std::string& substring);
+
 	};
 
 

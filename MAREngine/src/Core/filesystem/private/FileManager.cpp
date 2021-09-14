@@ -101,7 +101,16 @@ namespace marengine {
         const std::filesystem::path joinedPath{
             std::filesystem::path(path1) / std::filesystem::path(path2)};
         return joinedPath.generic_string();
-    }     
+    }
+
+    bool FFileManager::isPathEndingWithSubstring(const std::string& path, const std::string& substring) {
+        const char* pPath{ path.c_str() };
+        const char* pSubstring{ substring.c_str() };
+        const auto pathLength{ path.size() };
+        const auto substringLength{ substring.size() };
+
+        return substringLength <= pathLength && !strcmp(pPath + pathLength - substringLength, pSubstring);
+    }
 
 
 
@@ -112,7 +121,6 @@ namespace marengine {
         }
         return s;
     }
-
 
 
 }

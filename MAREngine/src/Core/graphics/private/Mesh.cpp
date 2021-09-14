@@ -132,7 +132,7 @@ namespace marengine {
         const auto fromBegin{ m_externalArray.cbegin() };
         const auto toEnd{ m_externalArray.cend() };
         auto alreadyLoaded = [&path = std::as_const(cRenderable.mesh.path)](const FMeshExternal& mesh)->bool {
-            return path == mesh.getInfo().path;
+            return FFileManager::isPathEndingWithSubstring(mesh.getInfo().path, path);
         };
         const auto it = std::find_if(fromBegin, toEnd, alreadyLoaded);
         if(it != toEnd) { // found already loaded mesh
@@ -152,7 +152,7 @@ namespace marengine {
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
         mesh.setIndex(currentSize - 1);
-        mesh.load(FFileManager::joinPaths(FProjectManager::getProject().getAssetsPath(), path));
+        mesh.load(path);
         return &mesh;
     }
 
