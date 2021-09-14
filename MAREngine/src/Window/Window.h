@@ -37,8 +37,8 @@ namespace marengine {
 
     /**
      * @struct FWindowCurrentInfo IWindow.h "Window/IWindow.h"
-     * @brief FWindowCurrentInfo is a structure storage for all current information about window. All implementations
-     * of IWindow should contain this structure and fill it during runtime.
+     * @brief FWindowCurrentInfo is a structure storage for all current information about window.
+     * All implementations of IWindow should contain this structure and fill it during runtime.
      */
     struct FWindowCurrentInfo {
 
@@ -55,8 +55,8 @@ namespace marengine {
 
     /**
      * @class IWindow IWindow.h "Window/IWindow.h"
-     * @brief IWindow is a interface class for Window in MAREngine. Every derived implementation of IWindow should
-     * properly implement those methods for proper run.
+     * @brief IWindow is a interface class for Window in MAREngine. Every derived implementation
+     * of IWindow should properly implement those methods for proper run.
      */
     class IWindow {
     public:
@@ -70,11 +70,13 @@ namespace marengine {
          */
         virtual bool open(uint32 width, uint32 height, const char* name) = 0;
 
-        /// @brief Closes current window instance. Remember, it does not terminate library, closes window!
+        /// @brief Closes current window instance. Remember, it does not terminate library,
+        /// closes window!
         virtual void close() = 0;
 
         /**
-         * @brief Initializes implementation library of window instance. It is called during MAREngine's startup.
+         * @brief Initializes implementation library of window instance. It is called during
+         * MAREngine's startup.
          * @return True if window's library initialized correctly, false otherwise
          */
         virtual bool initializeLibrary() = 0;
@@ -83,18 +85,19 @@ namespace marengine {
         virtual void terminateLibrary() = 0;
 
         /**
-         * @brief Initializes GUI Editor Library with window instance, so that it can be used correctly.
-         * It is called during editor gui initialization.
+         * @brief Initializes GUI Editor Library with window instance, so that it can be used
+         * correctly. It is called during editor gui initialization.
          */
         virtual void initEditorGuiLibrary() = 0;
 
         /**
-         * @brief Begins new frame at editor GUI library. Sometimes these methods need to have access to window
-         * instance, so that it should be implemented there. Called during every new frame.
+         * @brief Begins new frame at editor GUI library. Sometimes these methods need to have
+         * access to window instance, so that it should be implemented there.
+         * Called during every new frame.
          */
         virtual void beginNewFrameEditorGuiLibrary() = 0;
 
-         /// @brief Terminates Editor GUI library, so that window afterwards can be closed correctly.
+        /// @brief Terminates EditorGUI library, so that window afterwards can be closed correctly.
         virtual void terminateEditorGuiLibrary() = 0;
 
         /**
@@ -178,24 +181,52 @@ namespace marengine {
 
     /**
      * @class FWindow IWindow.h "Window/IWindow.h"
-     * @brief FWindow class is first implementation of IWindow, that other implementations of IWindow
-     * should derive from.
+     * @brief FWindow class is first implementation of IWindow, that other implementations
+     * of IWindow should derive from.
      */
     class FWindow : public IWindow {
     public:
 
+        /**
+         * @brief Sets clear color.
+         * @param clearColor value, with which screen will be cleared.
+         */
         void setClearColor(maths::vec3 clearColor) final;
 
+        /**
+         * @brief Returns window's viewport size on x-axis.
+         * @return window size on x-axis.
+         */
         MAR_NO_DISCARD uint32 getWidth() const final;
 
+        /**
+         * @brief Returns window's viewport size on y-axis.
+         * @return window size on y-axis.
+         */
         MAR_NO_DISCARD uint32 getHeight() const final;
 
+        /**
+         * @brief Returns Mouse position at x-axis.
+         * @return Mouse position at x-axis.
+         */
         MAR_NO_DISCARD float getMousePositionX() const final;
 
+        /**
+         * @brief Returns Mouse position at y-axis.
+         * @return Mouse position at y-axis.
+         */
         MAR_NO_DISCARD float getMousePositionY() const final;
 
+        /**
+         * @brief Returns scroll value at x-axis.
+         * @return scroll value at x-axis.
+         */
         MAR_NO_DISCARD float getScrollX() const final;
 
+        /**
+         * @brief Returns scroll value at y-axis.
+         * @return scroll value at y-axis.
+         */
         MAR_NO_DISCARD float getScrollY() const final;
 
     protected:
