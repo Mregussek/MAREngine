@@ -175,9 +175,11 @@ namespace marengine {
             return true;
         }
         else {
-            MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at first MeshBatch...", entityTag);
+            MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at first MeshBatch...",
+                         entityTag);
             if (pMeshBatchStorage->get(0)->shouldBeBatched(entity)) {
-                MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched, creating new batch and submitting...", entityTag);
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched, creating new batch and submitting...",
+                             entityTag);
                 FMeshBatchStatic* pBatch{ pFactory->emplaceStatic(pMeshBatchStorage) };
                 pBatch->submitToBatch(entity);
                 return true;

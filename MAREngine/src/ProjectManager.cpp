@@ -41,8 +41,7 @@ namespace marengine {
         MARLOG_INFO(ELoggerType::NORMAL, "Initialized Project Manager!");
 	}
 
-    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo,
-                                           FMeshManager* pMeshManager,
+    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo, FMeshManager* pMeshManager,
                                            FMaterialManager* pMaterialManager) {
         MARLOG_TRACE(ELoggerType::NORMAL, "Loading project: {}", pProjectInfo->projectName);
         getProject().setProjectName(pProjectInfo->projectName);

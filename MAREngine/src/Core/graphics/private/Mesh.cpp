@@ -49,6 +49,7 @@ namespace marengine {
     }
 
     void FMeshExternal::load(const std::string& path) {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Loading mesh at path {} ...", path);
         p_info.path = path;
 
         loader_obj::Loader Loader{};
@@ -119,7 +120,7 @@ namespace marengine {
             return getSurface();
         }
 
-        for(uint32 i = 0; i < getCountExternal(); i++) {
+        for(int32 i = 0; i < (int32)getCountExternal(); i++) {
             if(std::strcmp(getExternal(i)->getName(), name) == 0) {
                 return getExternal(i);
             }
@@ -129,30 +130,35 @@ namespace marengine {
     }
 
     const FMeshProxy* FMeshStorage::isAlreadyLoaded(const CRenderable& cRenderable) const {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if given cRenderable path {} is already loaded...", cRenderable.mesh.path);
         const auto fromBegin{ m_externalArray.cbegin() };
         const auto toEnd{ m_externalArray.cend() };
         auto alreadyLoaded = [&path = std::as_const(cRenderable.mesh.path)](const FMeshExternal& mesh)->bool {
             return FFileManager::isPathEndingWithSubstring(mesh.getInfo().path, path);
         };
         const auto it = std::find_if(fromBegin, toEnd, alreadyLoaded);
-        if(it != toEnd) { // found already loaded mesh
+        if(it != toEnd) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Found loaded cRenderable Path {}!", cRenderable.mesh.path);
             return (FMeshProxy*)&(*it);
         }
 
-        // If no mesh proxy found
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Could not find loaded cRenderable Path {}!", cRenderable.mesh.path);
         return nullptr;
     }
 
     void FMeshStorage::reset() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting MeshStorage...");
         m_externalArray.clear();
     }
 
 
     FMeshProxy* FMeshFactory::emplaceExternal(const std::string& path) {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Adding new external mesh {} ...", path);
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
         mesh.setIndex(currentSize - 1);
         mesh.load(path);
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Added new external mesh {}!", path);
         return &mesh;
     }
 
