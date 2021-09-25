@@ -91,11 +91,11 @@ namespace marengine {
         MARLOG_TRACE(ELoggerType::FILESYSTEM, "Validating, if given string is a path: {} ...", path);
         std::ifstream test(path);
         if(!test.is_open()) {
-            MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Given string is a path: {}", path);
+            MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Given string is NOT a path: {}", path);
             return false;
         }
 
-        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Given string is NOT a path: {}", path);
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Given string is a path: {}", path);
         return true;
     }
 
