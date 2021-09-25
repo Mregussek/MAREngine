@@ -35,14 +35,14 @@ namespace marengine {
 
     void FBatchManager::create(FRenderManager* pRenderManager, FMeshStorage* pMeshStorage,
                                FMaterialStorage* pMaterialStorage) {
-        MARLOG_INFO(ELoggerType::GRAPHICS, "Creating Batch Manager...");
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Creating Batch Manager...");
         m_pRenderManager = pRenderManager;
         m_meshBatchFactory.passMeshStorage(pMeshStorage);
         m_meshBatchFactory.passMaterialStorage(pMaterialStorage);
     }
 
     void FBatchManager::reset() const {
-        MARLOG_TRACE(ELoggerType::GRAPHICS, "Creating Batch Manager...");
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Resetting Batch Manager...");
         getMeshBatchStorage()->reset();
         getLightBatchStorage()->reset();
     }
@@ -64,6 +64,7 @@ namespace marengine {
     }
 
     void FBatchManager::pushSceneToRender(Scene* pScene) {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Pushing scene {} to render...", pScene->getName());
         m_pRenderManager->reset();
         reset();
 
@@ -72,6 +73,7 @@ namespace marengine {
             pushEntityToRender(entity);
         }
         m_pRenderManager->onBatchesReadyToDraw(this);
+        MARLOG_INFO(ELoggerType::GRAPHICS, "Pushed scene {} to render!", pScene->getName());
     }
 
     template<typename TMeshBatchArray>
@@ -83,33 +85,56 @@ namespace marengine {
                                          const Entity& entity);
 
     void FBatchManager::pushEntityToRender(const Entity& entity) {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Push entity {} to render...", entityTag);
         if(entity.hasComponent<CRenderable>()) {
-            [&entity, this]() {
+            MARLOG_TRACE(ELoggerType::GRAPHICS, "Entity {} has CRenderable, trying to push assigned mesh and material...",
+                         entityTag);
+            [&entity, &entityTag, this]() {
+                MARLOG_TRACE(ELoggerType::GRAPHICS, "Validating Tex2D MeshBatchStorage for {} entity...", entityTag);
                 if(pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticTex2D(),
-                                            getMeshBatchFactory(), entity)) { return; }
+                                            getMeshBatchFactory(), entity)) {
+                    MARLOG_DEBUG(ELoggerType::GRAPHICS, "Pushed entity {} to MeshBatch with Tex2D", entityTag);
+                    return;
+                }
+                MARLOG_TRACE(ELoggerType::GRAPHICS, "Validating Color MeshBatchStorage for {} entity...", entityTag);
                 if(pushEntityToBatchStorage(getMeshBatchStorage()->getStorageStaticColor(),
-                                            getMeshBatchFactory(), entity)) { return; }
+                                            getMeshBatchFactory(), entity)) {
+                    MARLOG_DEBUG(ELoggerType::GRAPHICS, "Pushed entity {} to MeshBatch with Color", entityTag);
+                    return;
+                }
             }();
         }
 
         if (entity.hasComponent<CPointLight>()) {
+            MARLOG_TRACE(ELoggerType::GRAPHICS, "Entity {} has CPointLight, trying to push light...", entityTag);
             FPointLightBatch* pPointLightBatch{ getLightBatchStorage()->getPointLightBatch() };
             if (pPointLightBatch->canBeBatched(entity)) {
                 pPointLightBatch->submitToBatch(entity);
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "Pushed PointLight from entity {}!", entityTag);
+            }
+            else {
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "Could not push PointLight from entity {}!", entityTag);
             }
         }
 
         if (entity.hasComponent<CCamera>()) {
+            MARLOG_TRACE(ELoggerType::GRAPHICS, "Entity {} has CCamera, trying to push Camera...", entityTag);
             auto& cameraComponent{ entity.getComponent<CCamera>() };
             const bool isMain{ cameraComponent.isMainCamera() };
-            if (m_pRenderManager->isCameraValid() &&isMain) {
+            if (m_pRenderManager->isCameraValid() && isMain) {
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "{} entity's camera is main one, updating...", entityTag);
                 FEventsCameraEntity::onMainCameraUpdate(entity);
             }
-            else if(isMain){
+            else if (isMain) {
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "{} entity's camera is main one, pushing...", entityTag);
                 const auto& transformComponent{ entity.getComponent<CTransform>() };
                 FRenderCamera* renderCamera{ &cameraComponent.renderCamera };
                 renderCamera->calculateCameraTransforms(transformComponent, cameraComponent);
                 m_pRenderManager->setCamera(renderCamera);
+            }
+            else {
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "{} entity's camera is not main one...", entityTag);
             }
         }
     }
@@ -117,15 +142,18 @@ namespace marengine {
 
     template<typename TMeshBatchArray>
     int32 getAvailableBatch(TMeshBatchArray* pBatchArray, const Entity& entity) {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Looking for available batch for an entity...");
         auto canBatchEntity = [&entity](const auto& batch)->bool {
             return batch.canBeBatched(entity);
         };
         const auto validBatchIt = std::find_if(pBatchArray->cbegin(), pBatchArray->cend(),
                                                canBatchEntity);
         if (validBatchIt != pBatchArray->cend()) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Found available batch, returning...");
             return std::distance(pBatchArray->cbegin(), validBatchIt);
         }
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Could not find available batch, returning...");
         return -1;
     }
 
@@ -133,23 +161,30 @@ namespace marengine {
     static bool pushEntityToBatchStorage(TMeshBatchStorage* pMeshBatchStorage,
                                          FMeshBatchFactory* pFactory,
                                          const Entity& entity) {
+        const std::string& entityTag{ entity.template getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Trying to push entity {} to batch storage", entityTag);
         if(pMeshBatchStorage->isEmpty()) {
+            MARLOG_TRACE(ELoggerType::GRAPHICS, "Adding new MeshBatch to MeshBatchStorage as it is empty...");
             FMeshBatchStatic* pBatch{ pFactory->emplaceStatic(pMeshBatchStorage) };
         }
 
-        const int32 index = getAvailableBatch(pMeshBatchStorage->getArray(), entity);
+        const int32 index{ getAvailableBatch(pMeshBatchStorage->getArray(), entity) };
         if (index != -1) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Found available batch, pushing entity {}", entityTag);
             pMeshBatchStorage->get(index)->submitToBatch(entity);
             return true;
         }
         else {
+            MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at first MeshBatch...", entityTag);
             if (pMeshBatchStorage->get(0)->shouldBeBatched(entity)) {
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched, creating new batch and submitting...", entityTag);
                 FMeshBatchStatic* pBatch{ pFactory->emplaceStatic(pMeshBatchStorage) };
                 pBatch->submitToBatch(entity);
                 return true;
             }
         }
 
+        MARLOG_WARN(ELoggerType::GRAPHICS, "Could not push entity {} to batch storage...", entityTag);
         return false;
     }
 
