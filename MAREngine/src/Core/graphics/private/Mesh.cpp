@@ -63,7 +63,7 @@ namespace marengine {
             p_indices = Loader.LoadedMeshes[0].Indices;
         }
         else {
-            MARLOG_ERR(ELoggerType::GRAPHICS, "Loaded Meshes > 1 are not supported! {}", path);
+            MARLOG_WARN(ELoggerType::GRAPHICS, "Loaded Meshes > 1 are not supported! {}", path);
         }
 
         MARLOG_INFO(ELoggerType::GRAPHICS, "Loaded External Mesh -> {}", path);

@@ -32,7 +32,7 @@ namespace marengine {
 
     enum class ELoggerType {
         EDITOR, GRAPHICS, ECS, SCRIPTS, FILESYSTEM, PLATFORMS,
-        WINDOW, LAYERS, NORMAL
+        WINDOW, NORMAL
     };
 
 

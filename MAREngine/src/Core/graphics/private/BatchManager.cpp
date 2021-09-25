@@ -27,6 +27,7 @@
 #include "../../ecs/Entity/EventsCameraEntity.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Scene.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -34,12 +35,14 @@ namespace marengine {
 
     void FBatchManager::create(FRenderManager* pRenderManager, FMeshStorage* pMeshStorage,
                                FMaterialStorage* pMaterialStorage) {
+        MARLOG_INFO(ELoggerType::GRAPHICS, "Creating Batch Manager...");
         m_pRenderManager = pRenderManager;
         m_meshBatchFactory.passMeshStorage(pMeshStorage);
         m_meshBatchFactory.passMaterialStorage(pMaterialStorage);
     }
 
     void FBatchManager::reset() const {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Creating Batch Manager...");
         getMeshBatchStorage()->reset();
         getLightBatchStorage()->reset();
     }

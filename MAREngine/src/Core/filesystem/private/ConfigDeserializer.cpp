@@ -33,6 +33,7 @@ namespace marengine {
     void FFileDeserializer::loadConfigFromFile(FEngineConfig* pEngineConfig,
                                                const std::string& path) {
         using namespace configjson;
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Loading {} config file...", path);
         if (!FFileManager::isContainingExtension(path, "cfg")) {
 		    MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to EngineConfig file!", path);
 		    return;
