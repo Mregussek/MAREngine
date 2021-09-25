@@ -34,17 +34,17 @@ namespace marengine {
     void FFileDeserializer::loadProjectFromFile(FProject* pProject, const std::string& path,
                                                 FMeshManager* pMeshManager,
                                                 FMaterialManager* pMaterialManager) {
-        MARLOG_INFO(ELoggerType::FILESYSTEM, "Loading project project... -> {}", path);
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Loading project project... -> {}", path);
 
         using namespace projectjson;
         if (!FFileManager::isContainingExtension(path, "cfg")) {
-            MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} does not point to project file!", path);
+            MARLOG_WARN(ELoggerType::FILESYSTEM, "Path {} does not point to project file!", path);
             return;
         }
 
         std::ifstream file(path);
         if (!file.is_open()) {
-            MARLOG_ERR(ELoggerType::FILESYSTEM, "Path {} cannot be opened!", path);
+            MARLOG_WARN(ELoggerType::FILESYSTEM, "Path {} cannot be opened!", path);
             return;
         }
 
@@ -71,7 +71,7 @@ namespace marengine {
         FMaterialFactory* pMaterialFactory{ pMaterialManager->getFactory() };
         for(nlohmann::json& jsonTextures2D : json[jTextures2D]) {
             FTex2DInfo info;
-            info.id = json[jTextures2D][i][jID].get<uint32>();
+            info.id = json[jTextures2D][i][jID].get<int32>();
             info.path = FFileManager::joinPaths(projectAssetsPath, json[jTextures2D][i][jPath]);
             FMaterialTex2D* pAsset{ pMaterialFactory->emplaceTex2D() };
             pAsset->setAssetID(info.id);
