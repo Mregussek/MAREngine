@@ -53,9 +53,6 @@ namespace marengine {
         if constexpr (TLoggerType == ELoggerType::WINDOW && MARENGINE_DISPLAY_WINDOW_LOGS) {
             return true;
         }
-        if constexpr (TLoggerType == ELoggerType::LAYERS && MARENGINE_DISPLAY_LAYERS_LOGS) {
-            return true;
-        }
         if constexpr (TLoggerType == ELoggerType::NORMAL) {
             return true;
         }

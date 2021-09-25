@@ -103,8 +103,8 @@ namespace marengine {
 
 		MAR_NO_DISCARD static FProject& getProject();
 
-		static FProject& loadProject(const FMinimalProjectInfo* pProjectInfo,
-                                     FMeshManager* pMeshManager, FMaterialManager* pMaterialManager);
+		static FProject& loadProject(const FMinimalProjectInfo* pProjectInfo, FMeshManager* pMeshManager,
+                                     FMaterialManager* pMaterialManager);
 
 	private:
 

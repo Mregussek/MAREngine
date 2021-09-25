@@ -23,12 +23,14 @@
 #include "../public/MeshBatch.h"
 #include "../public/Mesh.h"
 #include "../../ecs/Entity/Entity.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
 	void FMeshBatch::reset() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting MeshBatch...");
 		p_vertices.clear();
 		p_indices.clear();
 		p_transforms.clear();
@@ -49,12 +51,12 @@ namespace marengine {
 
     void FMeshBatch::updateVertices(const Entity& entity) {
         // TODO: implement FMeshBatch::updateVertices
-	    const auto& cRenderable{ entity.getComponent<CRenderable>() };
+	    //const auto& cRenderable{ entity.getComponent<CRenderable>() };
 	}
 
     void FMeshBatch::updateIndices(const Entity& entity) {
 	    // TODO: implement FMeshBatch::updateIndices
-        const auto& cRenderable{ entity.getComponent<CRenderable>() };
+        //const auto& cRenderable{ entity.getComponent<CRenderable>() };
 	}
 
     void FMeshBatch::updateTransform(const Entity& entity) {
@@ -156,6 +158,7 @@ namespace marengine {
 	}
 
 	void FMeshBatchStorage::reset() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting MeshBatchStorage...");
         clearBatchArray(*m_storageStaticColor.getArray());
         clearBatchArray(*m_storageStaticTex2D.getArray());
 	}
@@ -173,12 +176,14 @@ namespace marengine {
 	}
 
     FMeshBatchStaticColor* FMeshBatchFactory::emplaceStaticColor() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Adding new MeshBatch Color...");
         return emplaceStorageType<FMeshBatchStaticColor>(&m_storage.m_storageStaticColor,
                                                          m_pMeshStorage,
                                                          m_pMaterialStorage);
 	}
 
     FMeshBatchStaticTex2D* FMeshBatchFactory::emplaceStaticTex2D() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Adding new MeshBatch Tex2D...");
         return emplaceStorageType<FMeshBatchStaticTex2D>(&m_storage.m_storageStaticTex2D,
                                                          m_pMeshStorage,
                                                          m_pMaterialStorage);

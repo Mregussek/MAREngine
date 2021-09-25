@@ -29,24 +29,30 @@ namespace marengine {
 
 
     bool FEngineConfig::exists() const {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Checking, if engine config exists...");
         if(FFileManager::isValidPath(m_configPath)) {
+            MARLOG_DEBUG(ELoggerType::NORMAL, "EngineConfig does exist...");
             return true;
         }
-        else {
-            return false;
-        }
+
+        MARLOG_DEBUG(ELoggerType::NORMAL, "EngineConfig does NOT exist...");
+        return false;
     }
 
     void FEngineConfig::load() {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Loading {} file", m_configPath);
         FFileDeserializer::loadConfigFromFile(this, m_configPath);
-        MARLOG_INFO(ELoggerType::NORMAL, "Loaded {} file", m_configPath);
+        MARLOG_DEBUG(ELoggerType::NORMAL, "Loaded {} file", m_configPath);
     }
 
     void FEngineConfig::save() const {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Saving {} file", m_configPath);
         FFileSerializer::saveConfigToFile(this, m_configPath);
+        MARLOG_DEBUG(ELoggerType::NORMAL, "Saved {} file", m_configPath);
     }
 
     FMinimalProjectInfo* FEngineConfig::addProjectInfo() {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Adding new minimal project info...");
         return &m_existingProjects.emplace_back();
     }
 
@@ -65,7 +71,7 @@ namespace marengine {
             return pMinimalProjectInfo;
         }
 
-        MARLOG_ERR(ELoggerType::NORMAL, "Could not find project at configuration -> {}", projectName);
+        MARLOG_WARN(ELoggerType::NORMAL, "Could not find project at configuration -> {}", projectName);
         return nullptr;
     }
 

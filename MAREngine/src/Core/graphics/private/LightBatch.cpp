@@ -24,6 +24,7 @@
 #include "../public/IRender.h"
 #include "../../ecs/Entity/Components.h"
 #include "../../ecs/Entity/Entity.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
@@ -55,26 +56,38 @@ namespace marengine {
     }
 
     bool FPointLightBatch::shouldBeBatched(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at PointLightBatch", entityTag);
         if(entity.hasComponent<CPointLight>()) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched at PointLightBatch", entityTag);
             return true;
         }
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should not be batched at PointLightBatch", entityTag);
         return false;
     }
 
 	bool FPointLightBatch::canBeBatched(const Entity& entityWithLight) const {
+        const std::string& entityTag{ entityWithLight.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} can be batched in this batch...", entityTag);
+
 		const auto currentLightSize{ m_lights.size() };
 		const bool thereIsPlaceInBatch{ currentLightSize + 1 < GraphicLimits::maxLights };
 
 		if (thereIsPlaceInBatch && entityWithLight.hasComponent<CPointLight>()) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} can be batched...", entityTag);
 			return true;
 		}
 		else {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} cannot be batched...", entityTag);
 			return false;
 		}
 	}
 
 	void FPointLightBatch::submitToBatch(const Entity& entity) {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Submitting entity {} to batch...", entityTag);
+
 		const auto& cTransform{ entity.getComponent<CTransform>() };
 		auto& cPointLight{ entity.getComponent<CPointLight>() };
 
@@ -83,6 +96,8 @@ namespace marengine {
 
         cPointLight.batch.index = (int8)(m_lights.size() - 1);
         cPointLight.batch.type = ELightBatchType::POINTLIGHT;
+
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} submitted to batch!", entityTag);
 	}
 
 	void FPointLightBatch::updateLight(const Entity& entity) {

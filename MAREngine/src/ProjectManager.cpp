@@ -33,26 +33,32 @@ namespace marengine {
 
 
 	void FProjectManager::init(FProjectManager* pProjectManagerInstance) {
+        MARLOG_TRACE(ELoggerType::NORMAL, "Initializing Project Manager...");
         s_pInstance = pProjectManagerInstance;
 
         getProject().setProjectName("NoProject");
         getProject().setProjectPath("NoPath");
+        MARLOG_INFO(ELoggerType::NORMAL, "Initialized Project Manager!");
 	}
 
-    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo,
-                                           FMeshManager* pMeshManager,
+    FProject& FProjectManager::loadProject(const FMinimalProjectInfo* pProjectInfo, FMeshManager* pMeshManager,
                                            FMaterialManager* pMaterialManager) {
         MARLOG_TRACE(ELoggerType::NORMAL, "Loading project: {}", pProjectInfo->projectName);
         getProject().setProjectName(pProjectInfo->projectName);
         getProject().setProjectPath(pProjectInfo->projectPath);
         getProject().updateWindowName();
 
-        // should load project.cfg and retrieve info about current scene, all meshes, textures etc.
-        if(FFileManager::isValidPath(getProject().getProjectConfigPath())) {
+        const std::string& projectCfgPath{ getProject().getProjectConfigPath() };
+        const bool isProjectPathValid{ FFileManager::isValidPath(projectCfgPath) };
+        if(isProjectPathValid) {
+            MARLOG_TRACE(ELoggerType::NORMAL, "Project Path {} is valid, loading...", projectCfgPath);
             FFileDeserializer::loadProjectFromFile(&getProject(),
                                                    getProject().getProjectConfigPath(),
                                                    pMeshManager,
                                                    pMaterialManager);
+        }
+        else {
+            MARLOG_ERR(ELoggerType::NORMAL, "Project Path {} is wrong!", projectCfgPath);
         }
 
         return getProject();

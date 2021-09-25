@@ -33,7 +33,8 @@ namespace marengine {
     void FFileSerializer::saveConfigToFile(const FEngineConfig* pEngineConfig,
                                            const std::string& path) {
         using namespace configjson;
-        
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Saving {} config file...", path);
+
         std::ofstream ss(path, std::ios::out | std::ios::trunc);
         if (!ss.is_open()) {
             MARLOG_ERR(ELoggerType::FILESYSTEM, "Cannot save EngineConfig to -> {}", path);

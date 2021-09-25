@@ -29,6 +29,7 @@ namespace marengine {
 
 
     bool FWindowGLFW::open(uint32_t width, uint32_t height, const char* name) {
+        MARLOG_TRACE(ELoggerType::WINDOW, "Opening GLFW window...");
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
@@ -55,17 +56,19 @@ namespace marengine {
 
         setVerticalSync(1);
 
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window has opened successfully!");
         return true;
 	}
 
     void FWindowGLFW::close() {
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window close call...");
         glfwSetWindowShouldClose(p_pWindowContext, true);
 	}
 
 	bool FWindowGLFW::initializeLibrary() {
+        MARLOG_TRACE(ELoggerType::WINDOW, "Initializing GLFW library...");
         glfwSetErrorCallback(callbacks::windowErrorCallback);
-
-        const int32_t glfw_init = glfwInit();
+        const int32_t glfw_init{ glfwInit() };
 
         if (glfw_init != GLFW_TRUE) {
             MARLOG_CRIT(ELoggerType::NORMAL, "Cannot initialize GLFW library!");
@@ -73,10 +76,12 @@ namespace marengine {
             return false;
         }
 
+        MARLOG_INFO(ELoggerType::WINDOW, "Initialized GLFW!");
         return true;
     }
 
     void FWindowGLFW::terminateLibrary() {
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window terminate call...");
         glfwTerminate();
 	}
 
@@ -85,6 +90,7 @@ namespace marengine {
     }
 
     void FWindowGLFW::setVerticalSync(int32_t vsSetValue) {
+        MARLOG_TRACE(ELoggerType::WINDOW, "Setting Vertical Sync...")
         glfwSwapInterval(vsSetValue);
 	}
 
@@ -108,16 +114,19 @@ namespace marengine {
     }
 
     bool FWindowGLFW::isKeyPressed(int32_t key) const {
-        return glfwGetKey(p_pWindowContext, key) == GLFW_PRESS || glfwGetKey(p_pWindowContext, key) == GLFW_REPEAT;
+        return glfwGetKey(p_pWindowContext, key) == GLFW_PRESS ||
+                glfwGetKey(p_pWindowContext, key) == GLFW_REPEAT;
     }
 
     bool FWindowGLFW::isMousePressed(int32_t key) const {
-        return glfwGetMouseButton(p_pWindowContext, key) == GLFW_PRESS || glfwGetMouseButton(p_pWindowContext, key) == GLFW_REPEAT;
+        return glfwGetMouseButton(p_pWindowContext, key) == GLFW_PRESS ||
+                glfwGetMouseButton(p_pWindowContext, key) == GLFW_REPEAT;
     }
 
 
     void FWindowGLFWImGui::initEditorGuiLibrary() {
         if constexpr (MARENGINE_USE_OPENGL_RENDERAPI) {
+            MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window initializing ImGui Editor Library...");
             ImGui_ImplGlfw_InitForOpenGL(p_pWindowContext, true);
         }
         else {
@@ -131,6 +140,7 @@ namespace marengine {
     }
 
     void FWindowGLFWImGui::terminateEditorGuiLibrary() {
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window terminating ImGui Editor Library...");
         ImGui_ImplGlfw_Shutdown();
     }
 

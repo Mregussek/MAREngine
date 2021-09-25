@@ -32,21 +32,40 @@ namespace marengine {
 
     enum class ELoggerType {
         EDITOR, GRAPHICS, ECS, SCRIPTS, FILESYSTEM, PLATFORMS,
-        WINDOW, LAYERS, NORMAL
+        WINDOW, NORMAL
     };
 
 
+    /**
+     * @class FLogger Logger.h "Logging/Logger.h"
+     * @brief Class used for logging implementation. Shall not be used as logger itself,
+     * check macros.
+     */
     class FLogger {
     public:
 
+        /// @brief Initializes logging library
         static void init();
 
+        /// @brief Clears all existing OpenGL errors
         static void clearErrorOpenGL();
 
+        /**
+         * @brief Checks existing OpenGL errors and returns result.
+         * @return returns true if there is error, false otherwise
+         */
         static bool checkErrorOpenGL();
 
+        /**
+         * @brief Calls debug break if argument passed is true.
+         * @param shouldCallDebugBreak pass true, if debug break must be called
+         */
         static void callDebugBreak(bool shouldCallDebugBreak);
 
+        /**
+         * @brief Returns logger pointer.
+         * @return logger pointer
+         */
         static std::shared_ptr<spdlog::logger>& getLogger();
 
     private:

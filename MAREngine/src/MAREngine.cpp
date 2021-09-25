@@ -237,7 +237,8 @@ namespace marengine {
         // SCENE
         FSceneManagerEditor sceneManager;
 
-        renderContext.create(&window);
+        const bool isRenderContextOK{ renderContext.create(&window) };
+        if (!isRenderContextOK) { return; }
         renderManager.create(&renderContext);
         materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());

@@ -32,84 +32,114 @@ namespace marengine {
 
 	void FFileManager::loadFile(std::string& stringToFill, const char* path) {
         // TODO: implement it
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Loading {} file...", path);
+
 		FILE* file = fopen(path, "rb");
 		fseek(file, 0, SEEK_END);
 		const long length = ftell(file);
 		fseek(file, 0, SEEK_SET);
 		stringToFill.resize(length);
-		size_t rc = fread(stringToFill.data(), 1, length, file);
+		const size_t rc = fread(stringToFill.data(), 1, length, file);
 		fclose(file);
+
+        if (rc == length) {
+            MARLOG_INFO(ELoggerType::FILESYSTEM, "Loaded {} file...", path);
+        }
+        else {
+            MARLOG_WARN(ELoggerType::FILESYSTEM, "During {} loading some issue occured, maybe EOF?", path);
+        }
 	}
 
 	void FFileManager::saveAsFile(const std::string& sourceCode, const char* path) {
         // TODO: implement it
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Saving {} file...", path);
+        MARLOG_WARN(ELoggerType::FILESYSTEM, "Saving is not implement!");
 	}
 
     bool FFileManager::isContainingExtension(const std::string& path, const std::string& extension) {
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Checking, if {} contains extension {}...", path, extension);
+
         const std::string currentExtension{ path.substr(path.find_last_of('.') + 1) };
         if(currentExtension == extension) {
-            MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
+            MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Path {} contains {} extension", path, extension);
             return true;
         }
 
-        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Path {} does not contain {} extension", path, extension);
         return false;
     }
 
     std::string FFileManager::getAbsolutePath(const std::string& relativePath) {
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Retrieving absolute path from {} relative one...", relativePath);
         std::string absolute{ std::filesystem::absolute(relativePath).u8string() };
         std::replace(absolute.begin(), absolute.end(), '\\', '/');
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Returning absolute path {} ...", absolute);
         return absolute;
 	}
 
     std::string FFileManager::getRelativePath(const std::string& absolutePath,
                                               const std::string& path) {
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Retrieving relative path {} from {} absolute one...", path, absolutePath);
 	    const std::filesystem::path absolute{ absolutePath };
 	    const std::filesystem::path relative{ path };
-        return std::filesystem::relative(relative, absolute).generic_string();
+        std::string result{ std::filesystem::relative(relative, absolute).generic_string() };
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Returning relative path {} ... ", result);
+        return result;
 	}
 
     bool FFileManager::isValidPath(const std::string& path) {
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Validating, if given string is a path: {} ...", path);
         std::ifstream test(path);
         if(!test.is_open()) {
+            MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Given string is NOT a path: {}", path);
             return false;
         }
 
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Given string is a path: {}", path);
         return true;
     }
 
     std::string FFileManager::getFilenameFromPath(const std::string& path) {
-        return path.substr(path.find_last_of("/\\") + 1);
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Retrieving filename from path: {} ...", path);
+        std::string filename{ path.substr(path.find_last_of("/\\") + 1) };
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Retrieved filename: {}", filename);
+        return filename;
 	}
 
     std::string FFileManager::getCurrentExePath() {
-       char buffer[MAX_PATH];
-	   GetModuleFileNameA(NULL, buffer, MAX_PATH);
-	   const std::string::size_type pos{ std::string(buffer).find_last_of("\\/") };
-       const std::string currentExePath{ std::string(buffer).substr(0, pos) };
-       MARLOG_INFO(ELoggerType::FILESYSTEM, "Returning current exe path: {}", currentExePath);
-	   return currentExePath;
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Retrieving current executable path...");
+        char buffer[MAX_PATH];
+	    GetModuleFileNameA(nullptr, buffer, MAX_PATH);
+	    const std::string::size_type pos{ std::string(buffer).find_last_of("\\/") };
+        std::string currentExePath{ std::string(buffer).substr(0, pos) };
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Returning current exe path: {}", currentExePath);
+	    return currentExePath;
     }
 
     std::string FFileManager::deleteFilenameFromPath(std::string path) {
-       path = removePatternFromString(path, getFilenameFromPath(path));
-       MARLOG_INFO(ELoggerType::FILESYSTEM, "Returning path with deleted filename from it: {}", path);
-       return path;
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Deleting filename from path: {} ...", path);
+        path = removePatternFromString(path, getFilenameFromPath(path));
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Returning path with deleted filename from it: {}", path);
+        return path;
     }
 
     std::string FFileManager::joinPaths(const std::string& path1, const std::string& path2) {
-        const std::filesystem::path joinedPath{
-            std::filesystem::path(path1) / std::filesystem::path(path2)};
-        return joinedPath.generic_string();
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Going to join paths: {} + {} ...", path1, path2);
+        const std::filesystem::path joinedPath{ std::filesystem::path(path1) / std::filesystem::path(path2)};
+        std::string result{ joinedPath.generic_string() };
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Joined paths: {}", result);
+        return result;
     }
 
     bool FFileManager::isPathEndingWithSubstring(const std::string& path, const std::string& substring) {
+        MARLOG_TRACE(ELoggerType::FILESYSTEM, "Checking if path {} is ending with substring {}", path, substring);
         const char* pPath{ path.c_str() };
         const char* pSubstring{ substring.c_str() };
         const auto pathLength{ path.size() };
         const auto substringLength{ substring.size() };
-
-        return substringLength <= pathLength && !strcmp(pPath + pathLength - substringLength, pSubstring);
+        const bool result{ substringLength <= pathLength && !strcmp(pPath + pathLength - substringLength, pSubstring) };
+        MARLOG_DEBUG(ELoggerType::FILESYSTEM, "Result of substring {} end at path {}: {}", substring, path, result);
+        return result;
     }
 
 

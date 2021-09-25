@@ -24,38 +24,51 @@
 #include "../public/Mesh.h"
 #include "../../ecs/Entity/Entity.h"
 #include "../../ecs/Entity/Components.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
     void FMeshBatchStatic::reset() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting MeshBatchStatic...");
         FMeshBatch::reset();
         p_shapeID = 0.f;
         p_indicesMaxValue = 0;
     }
 
     bool FMeshBatchStatic::shouldBeBatched(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at MeshBatchStatic...", entityTag);
+
         if(!entity.hasComponent<CRenderable>()) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should not be batched at MeshBatchStatic...", entityTag);
             return false;
         }
 
         const auto& cRenderable{ entity.getComponent<CRenderable>() };
         if(cRenderable.mesh.index == -1 || cRenderable.mesh.type == EMeshType::NONE) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should not be batched at MeshBatchStatic...", entityTag);
             return false;
         }
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched at MeshBatchStatic...", entityTag);
         return true;
     }
 
     bool FMeshBatchStatic::canBeBatched(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} can be batched at MeshBatchStatic...", entityTag);
+
         if (!entity.hasComponent<CRenderable>()) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} cannot be batched at MeshBatchStatic!", entityTag);
             return false;
         }
 
         const auto& cRenderable{ entity.getComponent<CRenderable>() };
         const FMeshProxy* pMesh{ p_pMeshStorage->retrieve(cRenderable) };
         if(pMesh == nullptr) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} cannot be batched at MeshBatchStatic!", entityTag);
             return false;
         }
 
@@ -66,26 +79,27 @@ namespace marengine {
         const uint32 currentIndicesSize{ p_indices.size() };
         const uint32 currentTransformSize{ p_transforms.size() };
 
-        const bool cannotPushVertices =
-                (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
-        const bool cannotPushIndices =
-                (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
-        const bool cannotPushTransform =
-                (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
+        const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
+        const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
+        const bool cannotPushTransform = (currentTransformSize + 1) >= GraphicLimits::maxTransforms;
 
-        const bool placeInBatchExist =
-                !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
+        const bool placeInBatchExist = !(cannotPushVertices || cannotPushIndices || cannotPushTransform);
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Checked, if entity {} can be batched at MeshBatchStatic, result: {}",
+                     entityTag, placeInBatchExist);
         return placeInBatchExist; // true if there is place
     }
 
     void FMeshBatchStatic::submitToBatch(const Entity& entity) {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Submitting entity {} to MeshBatchStatic...", entityTag);
         auto& cRenderable{ entity.getComponent<CRenderable>() };
         submitRenderable(cRenderable);
         submitTransform(entity.getComponent<CTransform>());
 
         cRenderable.batch.index = getIndex();
         cRenderable.batch.transformIndex = (int32)(p_transforms.size() - 1);
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Submitted entity {} to MeshBatchStatic!", entityTag);
     }
 
     void FMeshBatchStatic::submitRenderable(CRenderable& cRenderable) {
@@ -134,42 +148,53 @@ namespace marengine {
 
 
     void FMeshBatchStaticColor::reset() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting MeshBatchStaticColor...");
         FMeshBatchStatic::reset();
         m_colors.clear();
     }
 
     bool FMeshBatchStaticColor::shouldBeBatched(const Entity& entity) const {
-        if(!FMeshBatchStatic::shouldBeBatched(entity)) {
-            return false;
-        }
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at MeshBatchStaticColor...",
+                     entityTag);
 
         const auto currentColorSize{ m_colors.size() };
-        const bool cannotPushColor =
-                (currentColorSize + 1) >= GraphicLimits::maxTransforms;
+        const bool cannotPushColor = (currentColorSize + 1) >= GraphicLimits::maxTransforms;
 
-        if(cannotPushColor) {
+        if(!FMeshBatchStatic::shouldBeBatched(entity) || cannotPushColor) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should not be batched at MeshBatchStaticColor...", entityTag);
             return false;
         }
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched at MeshBatchStaticColor...", entityTag);
         return true;
     }
 
     bool FMeshBatchStaticColor::canBeBatched(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} can be batched at MeshBatchStaticColor...", entityTag);
+
         const bool baseClassPermission{ FMeshBatchStatic::canBeBatched(entity) };
         if (!baseClassPermission) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} cannot be batched at MeshBatchStaticColor...", entityTag);
             return false;
         }
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} can be batched at MeshBatchStaticColor...", entityTag);
         return true;
     }
 
     void FMeshBatchStaticColor::submitToBatch(const Entity& entity) {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Submitting entity {} can be batched at MeshBatchStaticColor...", entityTag);
+
         FMeshBatchStatic::submitToBatch(entity);
         auto& cRenderable{ entity.getComponent<CRenderable>() };
         submitColor(cRenderable.color);
 
         cRenderable.batch.materialIndex = (int32)(m_colors.size() - 1);
         cRenderable.batch.type = EBatchType::MESH_STATIC_COLOR;
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Submitted entity {} to MeshBatchStaticColor!", entityTag);
     }
 
     void FMeshBatchStaticColor::submitColor(const maths::vec4& color) {
@@ -203,38 +228,52 @@ namespace marengine {
     }
 
     bool FMeshBatchStaticTex2D::shouldBeBatched(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} should be batched at MeshBatchStaticTex2D...",
+                     entityTag);
+
         if(!FMeshBatchStatic::shouldBeBatched(entity)) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should not be batched at MeshBatchStaticTex2D...", entityTag);
             return false;
         }
 
         const auto& cRenderable{ entity.getComponent<CRenderable>() };
         if(!cRenderable.material.isValid()) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should not be batched at MeshBatchStaticTex2D...", entityTag);
             return false;
         }
 
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} should be batched at MeshBatchStaticTex2D...", entityTag);
         return true;
     }
 
     bool FMeshBatchStaticTex2D::canBeBatched(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} can be batched at MeshBatchStaticTex2D...", entityTag);
+
         if(!FMeshBatchStatic::canBeBatched(entity)) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} cannot be batched at MeshBatchStaticTex2D...", entityTag);
             return false;
         }
 
         const auto& cRenderable{ entity.getComponent<CRenderable>() };
-        if(cRenderable.material.type != EMaterialType::TEX2D) {
+        const auto currentTexturesSize{ m_textureIndexes.size() };
+        const bool cannotPushTexture = cRenderable.material.type != EMaterialType::TEX2D ||
+                (currentTexturesSize + 1) >= GraphicLimits::maxTransforms;
+
+        if(cannotPushTexture) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} cannot be batched at MeshBatchStaticTex2D...", entityTag);
             return false;
         }
 
-        const auto currentTexturesSize{ m_textureIndexes.size() };
-        const bool cannotPushTexture =
-                (currentTexturesSize + 1) >= GraphicLimits::maxTransforms;
-        if(cannotPushTexture) {
-            return false;
-        }
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Entity {} can be batched at MeshBatchStaticTex2D...", entityTag);
         return true;
     }
 
     void FMeshBatchStaticTex2D::submitToBatch(const Entity& entity) {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if entity {} can be batched at MeshBatchStaticTex2D...", entityTag);
+
         FMeshBatchStatic::submitToBatch(entity);
         auto& cRenderable{ entity.getComponent<CRenderable>() };
         FMaterialTex2D* pTexture{ p_pMaterialStorage->getTex2D(cRenderable.material.index) };
@@ -243,6 +282,8 @@ namespace marengine {
 
         cRenderable.batch.materialIndex = (int32)(m_textureIndexes.size() - 1);
         cRenderable.batch.type = EBatchType::MESH_STATIC_TEX2D;
+
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Submitted entity {} to MeshBatchStaticTex2D!", entityTag);
     }
 
     void FMeshBatchStaticTex2D::submitTexture(FMaterialTex2D* pTexture2D) {
