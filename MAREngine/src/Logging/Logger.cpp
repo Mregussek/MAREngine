@@ -70,7 +70,7 @@ namespace marengine {
     }
 
     bool FLogger::checkErrorOpenGL() {
-        while (const GLenum issue = glGetError()) {
+        while (glGetError()) {
             return true;
         }
 

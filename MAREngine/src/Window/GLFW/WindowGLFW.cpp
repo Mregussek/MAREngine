@@ -61,6 +61,7 @@ namespace marengine {
 	}
 
     void FWindowGLFW::close() {
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window close call...");
         glfwSetWindowShouldClose(p_pWindowContext, true);
 	}
 
@@ -80,6 +81,7 @@ namespace marengine {
     }
 
     void FWindowGLFW::terminateLibrary() {
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window terminate call...");
         glfwTerminate();
 	}
 
@@ -112,16 +114,19 @@ namespace marengine {
     }
 
     bool FWindowGLFW::isKeyPressed(int32_t key) const {
-        return glfwGetKey(p_pWindowContext, key) == GLFW_PRESS || glfwGetKey(p_pWindowContext, key) == GLFW_REPEAT;
+        return glfwGetKey(p_pWindowContext, key) == GLFW_PRESS ||
+                glfwGetKey(p_pWindowContext, key) == GLFW_REPEAT;
     }
 
     bool FWindowGLFW::isMousePressed(int32_t key) const {
-        return glfwGetMouseButton(p_pWindowContext, key) == GLFW_PRESS || glfwGetMouseButton(p_pWindowContext, key) == GLFW_REPEAT;
+        return glfwGetMouseButton(p_pWindowContext, key) == GLFW_PRESS ||
+                glfwGetMouseButton(p_pWindowContext, key) == GLFW_REPEAT;
     }
 
 
     void FWindowGLFWImGui::initEditorGuiLibrary() {
         if constexpr (MARENGINE_USE_OPENGL_RENDERAPI) {
+            MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window initializing ImGui Editor Library...");
             ImGui_ImplGlfw_InitForOpenGL(p_pWindowContext, true);
         }
         else {
@@ -135,6 +140,7 @@ namespace marengine {
     }
 
     void FWindowGLFWImGui::terminateEditorGuiLibrary() {
+        MARLOG_INFO(ELoggerType::WINDOW, "GLFW Window terminating ImGui Editor Library...");
         ImGui_ImplGlfw_Shutdown();
     }
 
