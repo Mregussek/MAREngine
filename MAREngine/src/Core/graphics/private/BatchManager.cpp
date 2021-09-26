@@ -42,7 +42,7 @@ namespace marengine {
     }
 
     void FBatchManager::reset() const {
-        MARLOG_TRACE(ELoggerType::GRAPHICS, "Resetting Batch Manager...");
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting Batch Manager...");
         getMeshBatchStorage()->reset();
         getLightBatchStorage()->reset();
     }

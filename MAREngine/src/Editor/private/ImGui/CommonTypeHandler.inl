@@ -33,7 +33,7 @@ namespace marengine {
 
     template<size_t TSize>
     bool FCommonTypeHandler::drawStringInputPanel(std::string& displayStr) {
-        char strRealTimeModify[TSize]{ "" };
+        char strRealTimeModify[TSize];
 
         std::fill(std::begin(strRealTimeModify), std::end(strRealTimeModify), '\0');
         std::copy(displayStr.begin(), displayStr.end(), strRealTimeModify);

@@ -23,6 +23,7 @@
 #include "PythonScript.h"
 #include "PythonInterpreter.h"
 #include "../../ProjectManager.h"
+#include "../filesystem/public/FileManager.h"
 #include "../ecs/Entity/Entity.h"
 #include "MAREnginePy.cpp"
 
@@ -30,12 +31,12 @@
 namespace marengine {
 
     
-    void PythonScript::loadScript(std::string path_to_script) {
-        const std::string from = FPythonInterpreter::changeSlashesToDots(path_to_script);
-        const std::string what = FPythonInterpreter::getModuleFromPath(path_to_script);
-    
+    void PythonScript::loadScript(const std::string& scriptPath) {
+        const std::string from = FPythonInterpreter::changeSlashesToDots(scriptPath);
+        const std::string what = FPythonInterpreter::getModuleFromPath(scriptPath);
+
         if (m_initialized) { m_scriptModule.reload(); }
-        else { 
+        else {
             m_scriptModule = py::module::import(from.c_str()); 
             m_initialized = true;
         }
@@ -44,9 +45,10 @@ namespace marengine {
     }
     
     void PythonScript::start(const Entity& entity) const {
-        if (!m_initialized)
+        if (!m_initialized) {
             return;
-    
+        }
+
         const auto& transform = entity.getComponent<CTransform>();
         m_module.attr("transform") = transform;
     

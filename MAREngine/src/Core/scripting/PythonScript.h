@@ -38,7 +38,7 @@ namespace marengine {
 
         PythonScript() = default;
 
-        void loadScript(std::string path_to_script);
+        void loadScript(const std::string& path_to_script);
 
         void start(const Entity& entity) const;
 

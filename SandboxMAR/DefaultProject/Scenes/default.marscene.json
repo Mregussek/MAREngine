@@ -10,7 +10,7 @@
         "assetsPath": "DefaultProject/Assets/",
         "projectName": "DefaultProject",
         "projectPath": "DefaultProject/",
-        "sceneToLoadAtStartup": "D:/Projects/MAREngine/build/bin/DefaultProject/Scenes/default.marscene.json",
+        "sceneToLoadAtStartup": "default.marscene.json",
         "scenesPath": "DefaultProject/Scenes/",
         "windowName": "DefaultProject --- DefaultProject/Scenes/default.marscene.json --- MAREngine"
     },
@@ -443,7 +443,7 @@
                         }
                     },
                     "CPythonScript": {
-                        "path": "DefaultProject/Assets/scripts/Examples.py"
+                        "path": "DefaultProject/Assets/scripts/RotateXY.py"
                     },
                     "CRenderable": {
                         "color": {

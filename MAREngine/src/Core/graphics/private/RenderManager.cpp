@@ -30,12 +30,14 @@
 #include "../public/RenderCamera.h"
 #include "../public/MeshBatch.h"
 #include "../public/LightBatch.h"
+#include "../../../Logging/Logger.h"
 
 
 namespace marengine {
 
 
     void FRenderManager::create(FRenderContext* pContext) {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Creating RenderManager...");
         m_pContext = pContext;
 
         FFramebufferSpecification framebufferSpecs;
@@ -45,6 +47,7 @@ namespace marengine {
         FFramebuffer* viewportFramebuffer{ m_pContext->getFramebufferFactory()->emplace() };
         m_viewportFbIndex = viewportFramebuffer->getIndex();
         viewportFramebuffer->create(framebufferSpecs);
+        MARLOG_INFO(ELoggerType::GRAPHICS, "Created RenderManager!");
     }
 
     template<typename TMeshBatch>
@@ -54,6 +57,7 @@ namespace marengine {
     }
 
     void FRenderManager::reset() {
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Resetting RenderManager...");
 		m_pContext->getBufferStorage()->reset();
 		m_pContext->getPipelineStorage()->reset();
 		m_pContext->getShadersStorage()->reset();
@@ -64,10 +68,12 @@ namespace marengine {
     }
 
     void FRenderManager::pushCameraToRender(const FRenderCamera* pRenderCamera) {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Pushing given RenderCamera to endering...");
         setCamera(pRenderCamera);
         const maths::mat4& mvp{ m_pRenderCamera->getMVP() };
         FShaderBuffer* const cameraSSBO{ m_pContext->getBufferStorage()->getSSBO(m_cameraIndex) };
         cameraSSBO->update(maths::mat4::value_ptr(mvp), 0, sizeof(maths::mat4));
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Pushed given RenderCamera to rendering!");
     }
 
     bool FRenderManager::isCameraValid() const {
