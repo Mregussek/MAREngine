@@ -68,12 +68,12 @@ namespace marengine {
     }
 
     void FRenderManager::pushCameraToRender(const FRenderCamera* pRenderCamera) {
-        MARLOG_TRACE(ELoggerType::GRAPHICS, "Pushing given RenderCamera to endering...");
+        //MARLOG_TRACE(ELoggerType::GRAPHICS, "Pushing given RenderCamera to rendering...");
         setCamera(pRenderCamera);
         const maths::mat4& mvp{ m_pRenderCamera->getMVP() };
         FShaderBuffer* const cameraSSBO{ m_pContext->getBufferStorage()->getSSBO(m_cameraIndex) };
         cameraSSBO->update(maths::mat4::value_ptr(mvp), 0, sizeof(maths::mat4));
-        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Pushed given RenderCamera to rendering!");
+        //MARLOG_DEBUG(ELoggerType::GRAPHICS, "Pushed given RenderCamera to rendering!");
     }
 
     bool FRenderManager::isCameraValid() const {
