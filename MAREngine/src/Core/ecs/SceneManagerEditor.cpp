@@ -107,7 +107,7 @@ namespace marengine {
 		}
 
 		if (entity.hasComponent<CRenderable>()) {
-            entity.addComponent<CEvent>(EEventType::RENDERABLE_MESH_UPDATE);
+            entity.addComponent<CEvent>(EEventType::RENDERABLE_COLOR_UPDATE);
 			FEventsComponentEntity::onUpdate<CRenderable>(entity);
             entity.removeComponent<CEvent>();
 		}
