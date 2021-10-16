@@ -39,6 +39,7 @@ namespace marengine {
                                 pPipeline->getIndicesCount(),
                                 GL_UNSIGNED_INT,
                                 nullptr) );
+        p_pRenderStatistics->getStorage().drawCallsCount += 1;
     }
 
     void FRenderCommandOpenGL::draw(FFramebuffer* pFramebuffer, FPipelineMesh* pPipeline) const {

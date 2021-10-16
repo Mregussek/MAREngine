@@ -21,6 +21,7 @@
 
 
 #include "../public/Renderer.h"
+#include "../public/BatchManager.h"
 #include "../../ecs/SceneManagerEditor.h"
 #include "../../ecs/Scene.h"
 
@@ -28,25 +29,34 @@
 namespace marengine {
 
 
-    void FRenderStatistics::update(FSceneManagerEditor* pSceneManagerEditor) {
-        // TODO: implement back FRenderStatistics::update
-        //const auto& colorBatches{ RenderPipeline::Instance->getColorBatches() };
-        //std::for_each(colorBatches.cbegin(), colorBatches.cend(), [this](const FMeshBatchStaticColor& batch) {
-        //	verticesCount += batch.getVertices().size();
-        //	indicesCount += batch.getIndices().size();
-        //	trianglesCount += (indicesCount / 3);
-        //	coloredEntitiesCount += batch.getTransforms().size();
-        //	allRendererEntitiesCount += coloredEntitiesCount;
-        //});
+    void FRenderCommand::create(FRenderStatistics* pRenderStatistics) {
+        p_pRenderStatistics = pRenderStatistics;
+    }
 
-        //const auto& texture2DBatches{ RenderPipeline::Instance->getTexture2DBatches() };
-        //std::for_each(texture2DBatches.cbegin(), texture2DBatches.cend(), [this](const FMeshBatchStaticTexture2D& batch) {
-        //	verticesCount += batch.getVertices().size();
-        //	indicesCount += batch.getIndices().size();
-        //	trianglesCount += (indicesCount / 3);
-        //	textured2dEntitiesCount += batch.getTransforms().size();
-        //	allRendererEntitiesCount += textured2dEntitiesCount;
-        //});
+
+    void FRenderStatistics::create(FBatchManager* pBatchManager) {
+        m_pBatchManager = pBatchManager;
+    }
+
+    template<typename TBatchStorageType>
+    void updateStatisticsStoragePerBatch(const TBatchStorageType* pBatchStorage, FRenderStatsStorage& statsStorage,
+                                         uint32& batchEntitiesCount) {
+        const uint32 count{ pBatchStorage->getCount() };
+        for(uint32 i = 0; i < count; i++) {
+            const auto pBatch{ pBatchStorage->get((int32) i) };
+            statsStorage.verticesCount += pBatch->getVertices().size();
+            statsStorage.indicesCount += pBatch->getIndices().size();
+            statsStorage.trianglesCount += (statsStorage.indicesCount / 3);
+            batchEntitiesCount += pBatch->getTransforms().size();
+            statsStorage.allRendererEntitiesCount += statsStorage.coloredEntitiesCount;
+        }
+    }
+
+    void FRenderStatistics::update(FSceneManagerEditor* pSceneManagerEditor) {
+        const FMeshBatchStorage* pBatchStorage{ m_pBatchManager->getMeshBatchStorage() };
+
+        updateStatisticsStoragePerBatch(pBatchStorage->getStorageStaticColor(), m_storage, m_storage.coloredEntitiesCount);
+        updateStatisticsStoragePerBatch(pBatchStorage->getStorageStaticTex2D(), m_storage, m_storage.textured2dEntitiesCount);
 
         m_storage.entitiesCount = pSceneManagerEditor->getScene()->getEntities().size();
     }
@@ -62,7 +72,7 @@ namespace marengine {
         m_storage.allRendererEntitiesCount = 0;
     }
 
-    const FRenderStatsStorage& FRenderStatistics::getStorage() const {
+    FRenderStatsStorage& FRenderStatistics::getStorage() {
         return m_storage;
     }
 

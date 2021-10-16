@@ -139,6 +139,8 @@ namespace marengine {
         renderManager.create(&renderContext);
         materialManager.create(&renderContext);
         batchManager.create(&renderManager, meshManager.getStorage(), materialManager.getStorage());
+        renderStatistics.create(&batchManager);
+        renderCommands.create(&renderStatistics);
 
         FEngineConfig* pEngineConfig{ pEngine->getEngineConfig() };
         const FMinimalProjectInfo* pProjectInfo{ pEngineConfig->getProjectInfo("DefaultProject") };

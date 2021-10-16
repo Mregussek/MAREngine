@@ -30,10 +30,19 @@
 namespace marengine {
 
     class FSceneManagerEditor;
+    class FBatchManager;
+    class FRenderStatistics;
+
 
 
 	class FRenderCommand : public IRenderCommand {
 	public:
+
+        void create(FRenderStatistics* pRenderStatistics);
+
+    protected:
+
+        FRenderStatistics* p_pRenderStatistics{ nullptr };
 
 	};
 
@@ -53,14 +62,16 @@ namespace marengine {
     class FRenderStatistics {
     public:
 
+        void create(FBatchManager* pBatchManager);
         void update(FSceneManagerEditor* pSceneManagerEditor);
         void reset();
 
-        MAR_NO_DISCARD const FRenderStatsStorage& getStorage() const;
+        MAR_NO_DISCARD FRenderStatsStorage& getStorage();
 
     private:
 
         FRenderStatsStorage m_storage;
+        FBatchManager* m_pBatchManager{ nullptr };
 
     };
 
