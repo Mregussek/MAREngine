@@ -55,7 +55,7 @@ namespace marengine {
         json[jWindowConfig][jWindowVerticalSync] = windowSettings.verticalSync;
 
         const auto& existingProjects{ pEngineConfig->getProjectInfos() };
-        const uint32 projectsCount{ existingProjects.size() };
+        const uint32 projectsCount{ (uint32)existingProjects.size() };
         for(uint32 i = 0; i < projectsCount; i++) {
             json[jMinimalProjects][i][jProjectName] = existingProjects.at(i).projectName;
             json[jMinimalProjects][i][jProjectPath] = existingProjects.at(i).projectPath;

@@ -23,6 +23,8 @@
 #include "../public/MaterialManager.h"
 #include "../public/Material.h"
 #include "../../ecs/Scene.h"
+#include "../../../Logging/Logger.h"
+#include "../../filesystem/public/FileManager.h"
 
 
 namespace marengine {
@@ -34,10 +36,38 @@ namespace marengine {
     }
 
     void FMaterialManager::updateSceneMaterialData(Scene* pScene) {
-
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Pushing scene {} to material update...", pScene->getName());
+        reset();
+        const FEntityArray& entities{ pScene->getEntities() };
+        for(const Entity& entity : entities) {
+            updateEntityMaterialData(entity);
+        }
+        MARLOG_INFO(ELoggerType::GRAPHICS, "Pushed scene {} to material update!", pScene->getName());
     }
 
     void FMaterialManager::updateEntityMaterialData(const Entity& entity) const {
+        const std::string& entityTag{ entity.getComponent<CTag>().tag };
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Updating entity {} material data...", entityTag);
+        if (!entity.hasComponent<CRenderable>()) {
+            MARLOG_INFO(ELoggerType::GRAPHICS, "Entity {} has not material data!", entityTag);
+            return;
+        }
+
+        auto& cRenderable{ entity.getComponent<CRenderable>() };
+        if(FFileManager::isContainingExtension(cRenderable.material.path, "jpg")) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Trying to load new .jpg file as entity {} has cRenderable material = ", entityTag, cRenderable.material.path);
+            const FMaterialProxy* pMaterial{ getStorage()->isAlreadyLoadedTex2D(cRenderable.material.path) };
+            if(pMaterial == nullptr) {
+                MARLOG_DEBUG(ELoggerType::GRAPHICS, "Loading texture {} assigned to entity {}...", cRenderable.material.path, entityTag);
+                pMaterial = getFactory()->emplaceTex2D(cRenderable.material.path);
+            }
+            cRenderable.material.index = pMaterial->getIndex();
+            cRenderable.material.type = EMaterialType::TEX2D;
+            MARLOG_INFO(ELoggerType::GRAPHICS, "Updated entity {} texture data! Texture: {}", entityTag, cRenderable.material.path);
+        }
+        else {
+            MARLOG_INFO(ELoggerType::GRAPHICS, "No need to update material as entity {} uses color! Texture: {}", entityTag, cRenderable.material.path);
+        }
 
     }
 

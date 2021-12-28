@@ -113,6 +113,7 @@ namespace marengine {
 			setString(cRenderable.mesh.path, jCRenderable, jCRenderablePath);
             cRenderable.mesh.type = (EMeshType)loadInt(jCRenderable, jCRenderableMeshType);
             cRenderable.color = loadVec4(jCRenderable, jCRenderableColor);
+            setString(cRenderable.material.path, jCRenderable, jCRenderableMaterial);
 		}
 
 		if (jsonContains(jCPointLight)) {

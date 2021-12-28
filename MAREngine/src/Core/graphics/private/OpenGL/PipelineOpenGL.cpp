@@ -83,8 +83,7 @@ namespace marengine {
         p_pBufferStorage->getSSBO(p_camIndex)->bind();
         p_pBufferStorage->getSSBO(p_pointLightIndex)->bind();
         p_pShadersStorage->get(p_shaderIndex)->bind();
-        const uint32 countMaterial{ p_pMaterialStorage->getCountTex2D() };
-        for(uint32 i = 0; i < countMaterial; i++) {
+        for(uint32 i = 0; i < m_textures.size(); i++) {
             FMaterialTex2D* pTexture{ p_pMaterialStorage->getTex2D(m_textures.at(i)) };
             pTexture->bind();
             setUniformSamplerGL(m_samplerLocations, m_samplerNames[i], pTexture->getInfo().sampler);
@@ -172,7 +171,7 @@ namespace marengine {
         GL_FUNC( glGenVertexArrays(1, &vao) );
 		GL_FUNC( glBindVertexArray(vao) );
 
-        const uint32 layoutsSize{ inputDescription.inputVariables.size() };
+        const uint32 layoutsSize{ (uint32)inputDescription.inputVariables.size() };
         for(uint32 i = 0; i < layoutsSize; i++) {
             const auto& inputVariable{ inputDescription.inputVariables.at(i) };
 

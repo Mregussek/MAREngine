@@ -191,6 +191,10 @@ namespace marengine {
         createPipelineTransformsSSBO(p_pRenderContext, pPipeline, pBatch);
         createPipelineShaders(p_pRenderContext, pPipeline);
         createSamplerUniformLocations(pPipeline);
+        const auto& textureIndexes{ pBatch->getTextureIndexes() };
+        for (int32 texInd : textureIndexes) {
+            pPipeline->passTexture(texInd);
+        }
         pPipeline->create();
     }
 

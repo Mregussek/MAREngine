@@ -72,12 +72,12 @@ namespace marengine {
             return false;
         }
 
-        const uint32 verticesToPush{ pMesh->getVertices().size() };
-        const uint32 indicesToPush{ pMesh->getIndices().size() };
+        const uint32 verticesToPush{ (uint32)pMesh->getVertices().size() };
+        const uint32 indicesToPush{ (uint32)pMesh->getIndices().size() };
 
-        const uint32 currentVerticesSize{ p_vertices.size() };
-        const uint32 currentIndicesSize{ p_indices.size() };
-        const uint32 currentTransformSize{ p_transforms.size() };
+        const uint32 currentVerticesSize{ (uint32)p_vertices.size() };
+        const uint32 currentIndicesSize{ (uint32)p_indices.size() };
+        const uint32 currentTransformSize{ (uint32)p_transforms.size() };
 
         const bool cannotPushVertices = (currentVerticesSize + verticesToPush) >= GraphicLimits::maxVerticesCount;
         const bool cannotPushIndices = (currentIndicesSize + indicesToPush) >= GraphicLimits::maxIndicesCount;
@@ -292,6 +292,10 @@ namespace marengine {
 
     EBatchType FMeshBatchStaticTex2D::getType() const {
         return EBatchType::MESH_STATIC_TEX2D;
+    }
+
+    const std::vector<int32>& FMeshBatchStaticTex2D::getTextureIndexes() const {
+        return m_textureIndexes;
     }
 
 

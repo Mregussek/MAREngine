@@ -150,7 +150,7 @@ namespace marengine {
                                                canBatchEntity);
         if (validBatchIt != pBatchArray->cend()) {
             MARLOG_DEBUG(ELoggerType::GRAPHICS, "Found available batch, returning...");
-            return std::distance(pBatchArray->cbegin(), validBatchIt);
+            return (int32)std::distance(pBatchArray->cbegin(), validBatchIt);
         }
 
         MARLOG_DEBUG(ELoggerType::GRAPHICS, "Could not find available batch, returning...");

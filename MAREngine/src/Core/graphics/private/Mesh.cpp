@@ -156,8 +156,9 @@ namespace marengine {
         MARLOG_TRACE(ELoggerType::GRAPHICS, "Adding new external mesh {} ...", path);
         auto& mesh{ m_storage.m_externalArray.emplace_back() };
         const int8 currentSize{ (int8)m_storage.getCountExternal() };
+        const std::string loadPath{ FFileManager::joinPaths(FProjectManager::getProject().getAssetsPath(), path) };
         mesh.setIndex(currentSize - 1);
-        mesh.load(path);
+        mesh.load(loadPath);
         MARLOG_DEBUG(ELoggerType::GRAPHICS, "Added new external mesh {}!", path);
         return &mesh;
     }

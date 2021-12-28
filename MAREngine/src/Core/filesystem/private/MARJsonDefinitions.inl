@@ -65,6 +65,7 @@ namespace scenejson {
     const char* const jCRenderablePath{ "path" };
     const char* const jCRenderableMeshType{ "meshType" };
     const char* const jCRenderableColor{ "color" };
+    const char* const jCRenderableMaterial{ "material" };
 
     const char* const jCPointLight{ "CPointLight" };
     const char* const jCPointLightPosition{ "position" };

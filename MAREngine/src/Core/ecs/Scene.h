@@ -46,7 +46,7 @@ namespace marengine {
 		
 		/// @brief Default Constructor, with which we assign sceneName and create scene registry
 		explicit Scene(std::string name);
-		
+	
 		/**
 		* @brief Creates empty scene with cameraEntity and lightEntity.
 		* Two created entities by default:

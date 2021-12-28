@@ -26,16 +26,19 @@
 #include "Entity/EventsCameraEntity.h"
 #include "../graphics/public/BatchManager.h"
 #include "../graphics/public/MeshManager.h"
+#include "../graphics/public/MaterialManager.h"
 
 
 namespace marengine {
 
 
-	void FSceneManagerEditor::initialize(Scene* pScene, FBatchManager* pBatchManager, FMeshManager* pMeshManager) {
+	void FSceneManagerEditor::initialize(Scene* pScene, FBatchManager* pBatchManager, FMeshManager* pMeshManager, FMaterialManager* pMaterialManager) {
 	    m_pScene = pScene;
 		m_pBatchManager = pBatchManager;
 		m_pMeshManager = pMeshManager;
+        m_pMaterialManager = pMaterialManager;
         updateSceneAtMeshManager();
+        updateSceneAtMaterialManager();
         updateSceneAtBatchManager();
 	}
 
@@ -46,6 +49,10 @@ namespace marengine {
 	void FSceneManagerEditor::updateSceneAtMeshManager() {
 	    m_pMeshManager->updateSceneMeshData(m_pScene);
 	}
+
+    void FSceneManagerEditor::updateSceneAtMaterialManager() {
+        m_pMaterialManager->updateSceneMaterialData(m_pScene);
+    }
 
 	void FSceneManagerEditor::update() {
 		if (isPlayMode()) {
@@ -106,11 +113,11 @@ namespace marengine {
 			FEventsComponentEntity::onUpdate<CPointLight>(entity);
 		}
 
-		if (entity.hasComponent<CRenderable>()) {
-            entity.addComponent<CEvent>(EEventType::RENDERABLE_COLOR_UPDATE);
-			FEventsComponentEntity::onUpdate<CRenderable>(entity);
-            entity.removeComponent<CEvent>();
-		}
+		//if (entity.hasComponent<CRenderable>()) {
+        //    entity.addComponent<CEvent>(EEventType::RENDERABLE_COLOR_UPDATE);
+        //    FEventsComponentEntity::onUpdate<CRenderable>(entity);
+        //    entity.removeComponent<CEvent>();
+		//}
 	}
 
 	void FSceneManagerEditor::exitPlayMode() {

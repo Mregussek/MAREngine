@@ -73,10 +73,9 @@ namespace marengine {
             FTex2DInfo info;
             info.id = json[jTextures2D][i][jID].get<int32>();
             info.path = FFileManager::joinPaths(projectAssetsPath, json[jTextures2D][i][jPath]);
-            FMaterialTex2D* pAsset{ pMaterialFactory->emplaceTex2D() };
+            FMaterialTex2D* pAsset{ pMaterialFactory->emplaceTex2D(info.path) };
             pAsset->setAssetID(info.id);
             pAsset->passInfo(info);
-            pAsset->load();
             i++;
         }
 

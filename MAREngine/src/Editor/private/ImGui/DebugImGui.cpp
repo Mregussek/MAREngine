@@ -123,7 +123,9 @@ namespace marengine {
                 ImGui::Text("cRenderable.batch.transformIndex: %i", cRenderable.batch.transformIndex);
                 ImGui::Text("cRenderable.batch.materialIndex: %i", cRenderable.batch.materialIndex);
                 ImGui::Text("cRenderable.material.index: %i", cRenderable.material.index);
-                // TODO: add material type in debug window
+                ImGui::Text("cRenderable.material.path: %s", cRenderable.material.path.c_str());
+                ImGui::Text("cRenderable.material.assetID: %i", cRenderable.material.assetID);
+                ImGui::Text("cRenderable.material.type: %i", cRenderable.material.type);
                 displayVec4("cRenderable.color: <%f , %f , %f , %f>", cRenderable.color);
             }
 

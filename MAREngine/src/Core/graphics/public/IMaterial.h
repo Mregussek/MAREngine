@@ -29,7 +29,7 @@
 
 namespace marengine {
 
-    class FMaterial;
+    class FMaterialProxy;
     class FMaterialTex2D;
     struct CRenderable;
 
@@ -63,9 +63,9 @@ namespace marengine {
         virtual FMaterialTex2D* getTex2D(int32 index) const = 0;
         virtual uint32 getCountTex2D() const = 0;
 
-        virtual FMaterial* retrieve(const CRenderable& cRenderable) const = 0;
+        virtual const FMaterialProxy* retrieve(const CRenderable& cRenderable) const = 0;
 
-        virtual bool isAlreadyLoadedTex2D(const std::string& texture) const = 0;
+        virtual const FMaterialProxy* isAlreadyLoadedTex2D(const std::string& texture) const = 0;
 
     };
 
@@ -73,7 +73,7 @@ namespace marengine {
     class IMaterialFactory : public FRenderResourceFactory {
     public:
 
-        virtual FMaterialTex2D* emplaceTex2D() = 0;
+        virtual FMaterialTex2D* emplaceTex2D(const std::string& path) = 0;
 
         virtual FMaterialStorage* getStorage() const = 0;
 

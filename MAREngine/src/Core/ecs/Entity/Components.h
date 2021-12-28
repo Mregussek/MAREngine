@@ -59,7 +59,9 @@ namespace marengine {
             /// @brief asset ID for more convenient way to retrieve already loaded asset
             uint32 assetID{ 0 };
 
-            bool isValid() const { return index != -1 && type != EMaterialType::NONE; }
+            std::string path{};
+
+            MAR_NO_DISCARD bool isValid() const;
 	    };
 	    struct BatchInfo {
 	        /// @brief type used to retrieve correct implementation of FMeshBatch from FMeshBatchStorage

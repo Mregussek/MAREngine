@@ -30,9 +30,11 @@
 namespace marengine {
 
     struct CRenderable;
+    class FMaterialFactoryOpenGL;
 
 
     class FMaterialTex2DOpenGL : public FMaterialTex2D {
+        friend class FMaterialFactoryOpenGL;
     public:
 
         void destroy() final;
@@ -56,9 +58,9 @@ namespace marengine {
         MAR_NO_DISCARD FMaterialTex2D* getTex2D(int32 index) const final;
         MAR_NO_DISCARD uint32 getCountTex2D() const final;
 
-        MAR_NO_DISCARD FMaterial* retrieve(const CRenderable& cRenderable) const final;
+        MAR_NO_DISCARD const FMaterialProxy* retrieve(const CRenderable& cRenderable) const final;
 
-        MAR_NO_DISCARD bool isAlreadyLoadedTex2D(const std::string& texture) const final;
+        MAR_NO_DISCARD const FMaterialProxy* isAlreadyLoadedTex2D(const std::string& texture) const final;
 
         void reset() final;
 
@@ -75,7 +77,7 @@ namespace marengine {
 
     public:
 
-        MAR_NO_DISCARD FMaterialTex2D* emplaceTex2D() final;
+        MAR_NO_DISCARD FMaterialTex2D* emplaceTex2D(const std::string& path) final;
         MAR_NO_DISCARD FMaterialStorage* getStorage() const final;
 
     private:

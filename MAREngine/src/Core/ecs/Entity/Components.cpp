@@ -26,6 +26,10 @@
 namespace marengine {
 
 
+    bool CRenderable::MaterialInfo::isValid() const {
+        return index != -1 && type != EMaterialType::NONE && !path.empty() && path != "None";
+    }
+
 	maths::mat4 CTransform::getTransform() const {
 		maths::mat4 tran;
 		tran.recompose(position, maths::quat(rotation), scale);

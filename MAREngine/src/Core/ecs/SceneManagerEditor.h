@@ -34,8 +34,9 @@ namespace marengine {
 	class Entity;
 	class FBatchManager;
 	class FMeshManager;
+    class FMaterialManager;
 
-	
+
 	/**
 	 * @class FSceneManagerEditor SceneManagerEditor.h "Core/ecs/SceneManagerEditor.h"
 	 * @brief Scene Manager for Editor mode. With this manager
@@ -47,7 +48,7 @@ namespace marengine {
 
 		/// @brief Initializes whole scene, pushes every entity for batching and afterwards calls draw ready state.
 		// TODO: add param docs
-		void initialize(Scene* pScene, FBatchManager* pBatchManager, FMeshManager* pMeshManager);
+		void initialize(Scene* pScene, FBatchManager* pBatchManager, FMeshManager* pMeshManager, FMaterialManager* pMaterialManager);
 
 		/// @brief Pushes all Scene's data to RenderPipeline
 		// TODO: update method docs
@@ -55,6 +56,9 @@ namespace marengine {
 
 		// TODO: update method docs
 		void updateSceneAtMeshManager();
+
+        // TODO: update method docs
+        void updateSceneAtMaterialManager();
 
 		/**
 		 * @brief Updates Scene in SceneManager's state. During EditorMode there is no need to update the scene,
@@ -135,6 +139,7 @@ namespace marengine {
 		Scene* m_pScene{ nullptr };
 		FBatchManager* m_pBatchManager{ nullptr };
         FMeshManager* m_pMeshManager{ nullptr };
+        FMaterialManager* m_pMaterialManager{ nullptr };
 		
 		bool m_EditorCamera{ true };
 		bool m_EditorMode{ true };

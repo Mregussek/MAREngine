@@ -137,6 +137,7 @@ namespace marengine {
         void submitToBatch(const Entity& entity) override;
 
         MAR_NO_DISCARD EBatchType getType() const final;
+        MAR_NO_DISCARD const std::vector<int32>& getTextureIndexes() const;
 
     private:
 

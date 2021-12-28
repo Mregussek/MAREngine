@@ -52,7 +52,7 @@ namespace marengine {
     }
 
     uint32 FPointLightBatch::getCountLight() const {
-        return m_lights.size();
+        return (uint32)m_lights.size();
     }
 
     bool FPointLightBatch::shouldBeBatched(const Entity& entity) const {

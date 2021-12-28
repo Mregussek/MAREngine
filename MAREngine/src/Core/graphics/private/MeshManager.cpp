@@ -40,6 +40,7 @@ namespace marengine {
 
     void FMeshManager::updateSceneMeshData(Scene* pScene) {
         MARLOG_TRACE(ELoggerType::GRAPHICS, "Updating scene {} all meshes data...", pScene->getName());
+        reset();
         auto view{ pScene->getView<CRenderable>() };
         view.each([this, pScene](entt::entity entt_entity, const CRenderable& cRenderable) {
             const Entity entity(entt_entity, pScene->getRegistry());

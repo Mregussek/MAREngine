@@ -52,9 +52,9 @@ namespace marengine {
 		json[jScene][sceneName][jSceneBackground][jZ] = background.z;
 
 		const std::vector<Entity>& entities{ scene->getEntities() };
-		const uint32_t entitiesSize{ entities.size() };
+		const auto entitiesSize{ entities.size() };
 
-		for (uint32_t i = 0; i < entitiesSize; i++) {
+		for (auto i = 0; i < entitiesSize; i++) {
 			saveEntity(entities[i], i, json, sceneName);
 		}
 		

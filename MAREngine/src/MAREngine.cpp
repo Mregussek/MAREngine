@@ -161,7 +161,7 @@ namespace marengine {
         FEventsComponentEntity::passBatchManager(&batchManager);
         FEventsComponentEntity::passMeshManager(&meshManager);
 
-        sceneManager.initialize(pScene, &batchManager, &meshManager);
+        sceneManager.initialize(pScene, &batchManager, &meshManager, &materialManager);
 
         serviceLocatorEditor.registerServices(&window, &sceneManager, &renderStatistics,
                                               &meshManager, &renderManager, &materialManager);

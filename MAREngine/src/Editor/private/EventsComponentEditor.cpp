@@ -58,12 +58,11 @@ namespace marengine {
                                                   const std::string& path) {
         const std::string texture2DPath =
                 FFileManager::getRelativePath(FProjectManager::getProject().getAssetsPath(), path);
-        FMaterialTex2D* pTexture2D{ pMaterialManager->getFactory()->emplaceTex2D() };
         FTex2DInfo info;
         info.path = texture2DPath;
         info.id = FProjectManager::generateUniqueID();
+        FMaterialTex2D* pTexture2D{ pMaterialManager->getFactory()->emplaceTex2D(info.path) };
         pTexture2D->passInfo(info);
-        pTexture2D->load();
         cRenderable.material.type = EMaterialType::TEX2D;
         cRenderable.material.index = pTexture2D->getIndex();
     }

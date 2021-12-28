@@ -33,6 +33,7 @@
                             "y": 0.5,
                             "z": 0.5
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -65,6 +66,7 @@
                             "y": 0.7030075192451477,
                             "z": 0.541215181350708
                         },
+						"material": "None",
                         "meshType": 2,
                         "path": "Pyramid"
                     },
@@ -97,6 +99,7 @@
                             "y": 0.7706766724586487,
                             "z": 0.7706689834594727
                         },
+						"material": "None",
                         "meshType": 3,
                         "path": "Surface"
                     },
@@ -129,6 +132,7 @@
                             "y": 0.1715897023677826,
                             "z": 0.8007518649101257
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -191,6 +195,7 @@
                             "y": 0.8492283225059509,
                             "z": 0.8492283225059509
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -223,6 +228,7 @@
                             "y": 0.9172840714454651,
                             "z": 0.9172840714454651
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -255,6 +261,7 @@
                             "y": 0.10074058920145035,
                             "z": 0.44936877489089966
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -323,6 +330,7 @@
                             "y": 0.21223509311676025,
                             "z": 0.7932330965995789
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -355,6 +363,7 @@
                             "y": 0.6702130436897278,
                             "z": 0.7030075192451477
                         },
+						"material": "None",
                         "meshType": 2,
                         "path": "Pyramid"
                     },
@@ -387,6 +396,7 @@
                             "y": 0.5,
                             "z": 0.09774437546730042
                         },
+						"material": "None",
                         "meshType": 3,
                         "path": "Surface"
                     },
@@ -452,6 +462,7 @@
                             "y": 0.7067669034004211,
                             "z": 0.04516930878162384
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -484,6 +495,7 @@
                             "y": 0.28605347871780396,
                             "z": 0.28605347871780396
                         },
+						"material": "None",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -516,6 +528,7 @@
                             "y": 0.25247329473495483,
                             "z": 0.25247329473495483
                         },
+						"material": "textures/red-texture.jpg",
                         "meshType": 1,
                         "path": "Cube"
                     },
@@ -548,6 +561,7 @@
                             "y": 0.6804511547088623,
                             "z": 0.42975860834121704
                         },
+						"material": "textures/red-texture.jpg",
                         "meshType": 4,
                         "path": "objects/monkey.obj"
                     },

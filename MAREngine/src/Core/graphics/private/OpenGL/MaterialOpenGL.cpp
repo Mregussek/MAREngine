@@ -22,6 +22,8 @@
 
 #include "MaterialOpenGL.h"
 #include "../../../../Logging/Logger.h"
+#include "../../../filesystem/public/FileManager.h"
+#include "../../../../ProjectManager.h"
 
 
 namespace marengine {
@@ -98,14 +100,26 @@ namespace marengine {
         return m_textures2D.size();
     }
 
-    FMaterial* FMaterialStorageOpenGL::retrieve(const CRenderable& cRenderable) const {
+    const FMaterialProxy* FMaterialStorageOpenGL::retrieve(const CRenderable& cRenderable) const {
         // TODO: implement FMaterialStorageOpenGL::retrieve
         return nullptr;
     }
 
-    bool FMaterialStorageOpenGL::isAlreadyLoadedTex2D(const std::string& texture) const {
-        // TODO: implement FMaterialStorageOpenGL::isAlreadyLoadedTex2D
-        return false;
+    const FMaterialProxy* FMaterialStorageOpenGL::isAlreadyLoadedTex2D(const std::string& texture) const {
+        MARLOG_TRACE(ELoggerType::GRAPHICS, "Checking, if given texture path {} is already loaded...", texture);
+        const auto fromBegin{ m_textures2D.cbegin() };
+        const auto toEnd{ m_textures2D.cend() };
+        auto alreadyLoaded = [&path = std::as_const(texture)](const FMaterialTex2D& material)->bool {
+            return FFileManager::isPathEndingWithSubstring(material.getInfo().path, path);
+        };
+        const auto it = std::find_if(fromBegin, toEnd, alreadyLoaded);
+        if(it != toEnd) {
+            MARLOG_DEBUG(ELoggerType::GRAPHICS, "Found loaded texture {}!", texture);
+            return (FMaterialProxy*)&(*it);
+        }
+
+        MARLOG_DEBUG(ELoggerType::GRAPHICS, "Could not find loaded texture {}!", texture);
+        return nullptr;
     }
 
     void FMaterialStorageOpenGL::reset() {
@@ -124,8 +138,11 @@ namespace marengine {
         return (TReturnType*)&variable;
     }
 
-    FMaterialTex2D* FMaterialFactoryOpenGL::emplaceTex2D() {
-        return emplaceBufferAtArray<FMaterialTex2D>(m_storage.m_textures2D);
+    FMaterialTex2D* FMaterialFactoryOpenGL::emplaceTex2D(const std::string& path) {
+        auto* variable = emplaceBufferAtArray<FMaterialTex2DOpenGL>(m_storage.m_textures2D);
+        variable->p_info.path = FFileManager::joinPaths(FProjectManager::getProject().getAssetsPath(), path);
+        variable->load();
+        return variable;
     }
 
     FMaterialStorage* FMaterialFactoryOpenGL::getStorage() const {
