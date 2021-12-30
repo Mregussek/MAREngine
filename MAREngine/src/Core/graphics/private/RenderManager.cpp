@@ -36,6 +36,13 @@
 namespace marengine {
 
 
+    uint32 FRenderMode::s_renderMode{ GL_TRIANGLES };
+
+    void FRenderMode::setTriangles() { s_renderMode = GL_TRIANGLES; }
+    void FRenderMode::setLines() { s_renderMode = GL_LINES; }
+    uint32 FRenderMode::getMode() { return s_renderMode; }
+
+
     void FRenderManager::create(FRenderContext* pContext) {
         MARLOG_TRACE(ELoggerType::GRAPHICS, "Creating RenderManager...");
         m_pContext = pContext;

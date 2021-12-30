@@ -119,6 +119,7 @@ namespace marengine {
                 const auto& cRenderable{ entity.getComponent<CRenderable>() };
                 ImGui::Text("cRenderable.mesh.index: %i", cRenderable.mesh.index);
                 ImGui::Text("cRenderable.mesh.type: %i", cRenderable.mesh.type);
+                ImGui::Text("cRenderable.mesh.path: %s", cRenderable.mesh.path.c_str());
                 ImGui::Text("cRenderable.batch.index: %i", cRenderable.batch.index);
                 ImGui::Text("cRenderable.batch.transformIndex: %i", cRenderable.batch.transformIndex);
                 ImGui::Text("cRenderable.batch.materialIndex: %i", cRenderable.batch.materialIndex);

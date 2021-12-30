@@ -22,6 +22,7 @@
 
 #include "ViewportImGui.h"
 #include "InspectorImGui.h"
+#include "../../../Logging/Logger.h"
 #include "../../public/ServiceLocatorEditor.h"
 #include "../../../Window/Window.h"
 #include "../../../Core/graphics/public/RenderManager.h"
@@ -146,15 +147,22 @@ namespace marengine {
     ImGuizmo::OPERATION FViewportWidgetImGui::displayViewportControlPanel() {
         constexpr uint8 guizmoTypeCount{ 4 };
         enum GuizmoType { NONE, TRANSLATION, ROTATION, SCALE };
-        static int32 guizmoIndex{ NONE };
+        static int32 guizmoIndex{ GuizmoType::NONE };
         constexpr std::array<const char*, guizmoTypeCount> guizmoTypes{
             "None", "Translation", "Rotation", "Scale"
         };
-        const char* currentGuizmoType =
-                (guizmoIndex >= 0 && guizmoIndex < guizmoTypeCount) ? guizmoTypes[guizmoIndex] : "Unknown";
+        constexpr uint8 renderingModeCount{ 2 };
+        enum RenderingType { TRIANGLES, LINES };
+        static int32 renderingIndex{ RenderingType::TRIANGLES };
+        constexpr std::array<const char*, renderingModeCount> renderingModes{
+            "Triangles", "Lines"
+        };
 
         ImGui::Begin("Viewport Control Panel", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar()) {
+            ImGui::Columns(4);
+            ImGui::SetColumnWidth(0, 200.f);
+
             if (m_pSceneManagerEditor->isEditorMode()) {
                 displayEditorModeButtons(m_pSceneManagerEditor, m_camera.getRenderCamera());
             }
@@ -162,24 +170,33 @@ namespace marengine {
                 displayPlayModeButtons(m_pSceneManagerEditor, m_camera.getRenderCamera());
             }
 
-            ImGui::SliderInt("GuizmoType", &guizmoIndex, 0, guizmoTypeCount - 1, currentGuizmoType);
-
+            ImGui::NextColumn();
+            ImGui::Combo("RenderMode", &renderingIndex, renderingModes.data(), renderingModeCount);
+            ImGui::NextColumn();
+            ImGui::Combo("GuizmoType", &guizmoIndex, guizmoTypes.data(), guizmoTypeCount);
+            ImGui::NextColumn();
+            ImGui::Columns(1);
             ImGui::EndMenuBar();
         }
 
         ImGui::End();
 
         if (m_pWindow->isKeyPressed(MAR_KEY_LEFT_CONTROL)) {
-            if (m_pWindow->isKeyPressed(MAR_KEY_Z)) { guizmoIndex = TRANSLATION; }
-            if (m_pWindow->isKeyPressed(MAR_KEY_X)) { guizmoIndex = ROTATION; }
-            if (m_pWindow->isKeyPressed(MAR_KEY_C)) { guizmoIndex = SCALE; }
-            if (m_pWindow->isKeyPressed(MAR_KEY_V)) { guizmoIndex = NONE; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_Z)) { guizmoIndex = GuizmoType::TRANSLATION; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_X)) { guizmoIndex = GuizmoType::ROTATION; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_C)) { guizmoIndex = GuizmoType::SCALE; }
+            if (m_pWindow->isKeyPressed(MAR_KEY_V)) { guizmoIndex = GuizmoType::NONE; }
+        }
+
+        switch(renderingIndex) {
+            case RenderingType::LINES: FRenderMode::setLines(); break;
+            default: FRenderMode::setTriangles(); break;
         }
 
         switch(guizmoIndex) {
-            case TRANSLATION: return ImGuizmo::OPERATION::TRANSLATE;
-            case ROTATION: return ImGuizmo::OPERATION::ROTATE;
-            case SCALE: return ImGuizmo::OPERATION::SCALE;
+            case GuizmoType::TRANSLATION: return ImGuizmo::OPERATION::TRANSLATE;
+            case GuizmoType::ROTATION: return ImGuizmo::OPERATION::ROTATE;
+            case GuizmoType::SCALE: return ImGuizmo::OPERATION::SCALE;
             default: return ImGuizmo::OPERATION::NONE;
         }
     }

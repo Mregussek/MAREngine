@@ -269,20 +269,15 @@ namespace marengine {
         CRenderable& cRenderable{ p_pInspectedEntity->getComponent<CRenderable>() };
         ImGui::Text("Current: %s", cRenderable.mesh.path.c_str());
 
-        if(!cRenderable.material.isValid()) { // we are displaying color then
-            const bool changedColor = ImGui::ColorEdit4("Color", &cRenderable.color.x);
-            if(changedColor) {
-                p_pInspectedEntity->addComponent<CEvent>(EEventType::RENDERABLE_COLOR_UPDATE);
-                FEventsComponentEditor::onUpdate<CRenderable>(getInspectedEntity());
-                p_pInspectedEntity->removeComponent<CEvent>();
-            }
-
-            if (!cRenderable.material.isValid() && ImGui::Button(loadTexture2DButton)) {
-                m_loadTex2D = true;
-            }
+        const bool changedColor = ImGui::ColorEdit4("Color", &cRenderable.color.x);
+        if(changedColor) {
+            p_pInspectedEntity->addComponent<CEvent>(EEventType::RENDERABLE_COLOR_UPDATE);
+            FEventsComponentEditor::onUpdate<CRenderable>(getInspectedEntity());
+            p_pInspectedEntity->removeComponent<CEvent>();
         }
-        else { // managing specific material
 
+        if (ImGui::Button(loadTexture2DButton)) {
+            m_loadTex2D = true;
         }
 
         const bool selectedMesh{ m_pContentBrowser->drawMeshListBox(cRenderable) };

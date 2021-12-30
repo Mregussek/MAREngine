@@ -23,6 +23,7 @@
 #include "RendererOpenGL.h"
 #include "PipelineOpenGL.h"
 #include "FramebufferOpenGL.h"
+#include "../../public/RenderManager.h"
 #include "../../../../Logging/Logger.h"
 
 
@@ -35,7 +36,7 @@ namespace marengine {
         GL_FUNC( glStencilFunc(GL_ALWAYS, 1, 0xFF) );
 		GL_FUNC( glStencilMask(0xFF) );
 
-        GL_FUNC( glDrawElements(GL_TRIANGLES,
+        GL_FUNC( glDrawElements(FRenderMode::getMode(),
                                 pPipeline->getIndicesCount(),
                                 GL_UNSIGNED_INT,
                                 nullptr) );

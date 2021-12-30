@@ -65,6 +65,14 @@ namespace marengine {
         }
         else {
             MARLOG_WARN(ELoggerType::GRAPHICS, "Loaded Meshes > 1 are not supported! {}", path);
+            for (const auto& mesh : Loader.LoadedMeshes) {
+                for (const auto& v : mesh.Vertices) {
+                    p_vertices.push_back(v);
+                }
+                for (const auto& v : mesh.Indices) {
+                    p_indices.push_back(v);
+                }
+            }
         }
 
         MARLOG_INFO(ELoggerType::GRAPHICS, "Loaded External Mesh -> {}", path);

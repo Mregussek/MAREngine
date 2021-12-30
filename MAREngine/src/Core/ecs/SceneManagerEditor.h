@@ -41,7 +41,6 @@ namespace marengine {
 	 * @class FSceneManagerEditor SceneManagerEditor.h "Core/ecs/SceneManagerEditor.h"
 	 * @brief Scene Manager for Editor mode. With this manager
 	 * you manage Editor / Game camera display, Editor / Play mode on Viewport.
-	 * In SceneLayer static member Instance is set.
 	 */
 	class FSceneManagerEditor {
 	public:

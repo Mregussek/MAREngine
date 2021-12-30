@@ -42,6 +42,20 @@ namespace marengine {
     };
 
 
+    class FRenderMode {
+    public:
+
+        static void setTriangles();
+        static void setLines();
+        static uint32 getMode();
+
+    private:
+
+        static uint32 s_renderMode;
+
+    };
+
+
     class FRenderManager : public IRenderManager {
     public:
 
