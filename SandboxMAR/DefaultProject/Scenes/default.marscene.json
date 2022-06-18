@@ -95,6 +95,39 @@
                     "CRenderable": {
                         "color": {
                             "w": 1.0,
+                            "x": 0.23737046122550964,
+                            "y": 0.5,
+                            "z": 0.09774437546730042
+                        },
+						"material": "textures/grass-texture.jpg",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "GrassSurface_1"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": -8.649999618530273,
+                            "y": -1.850000023841858,
+                            "z": 0.0
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
                             "x": 0.7706764936447144,
                             "y": 0.7706766724586487,
                             "z": 0.7706689834594727
@@ -104,7 +137,106 @@
                         "path": "Surface"
                     },
                     "CTag": {
-                        "tag": "SurfacePurple"
+                        "tag": "GrassSurface_2"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 21.3,
+                            "y": -1.850000023841858,
+                            "z": 29.97
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.7706764936447144,
+                            "y": 0.7706766724586487,
+                            "z": 0.7706689834594727
+                        },
+						"material": "textures/grass-texture.jpg",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "GrassSurface_4"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": -8.61,
+                            "y": -1.850000023841858,
+                            "z": 29.97
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+				{
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.7706764936447144,
+                            "y": 0.7706766724586487,
+                            "z": 0.7706689834594727
+                        },
+						"material": "None",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "ColorSurface"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": -8.61,
+                            "y": -2.0,
+                            "z": 81.18
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 14.56,
+                            "y": 1.0,
+                            "z": 18.17
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.7706764936447144,
+                            "y": 0.7706766724586487,
+                            "z": 0.7706689834594727
+                        },
+						"material": "textures/grass-texture.jpg",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "GrassSurface_3"
                     },
                     "CTransform": {
                         "position": {
@@ -121,6 +253,105 @@
                             "x": 1.0,
                             "y": 1.0,
                             "z": 1.0
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.7706764936447144,
+                            "y": 0.7706766724586487,
+                            "z": 0.7706689834594727
+                        },
+						"material": "textures/gravel.jpg",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "Gravel"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 7.47,
+                            "y": -1.850000023841858,
+                            "z": 74.86
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 2.0,
+                            "y": 1.0,
+                            "z": 2.0
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.7706764936447144,
+                            "y": 0.7706766724586487,
+                            "z": 0.7706689834594727
+                        },
+						"material": "textures/gravel.jpg",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "Gravel_2"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 7.47,
+                            "y": -1.850000023841858,
+                            "z": 134.86
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 2.0,
+                            "y": 1.0,
+                            "z": 2.0
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.7706764936447144,
+                            "y": 0.7706766724586487,
+                            "z": 0.7706689834594727
+                        },
+						"material": "textures/gravel.jpg",
+                        "meshType": 3,
+                        "path": "Surface"
+                    },
+                    "CTag": {
+                        "tag": "Gravel_3"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 7.47,
+                            "y": -1.850000023841858,
+                            "z": 194.78
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 2.0,
+                            "y": 1.0,
+                            "z": 2.0
                         }
                     }
                 },
@@ -191,9 +422,9 @@
                     "CRenderable": {
                         "color": {
                             "w": 1.0,
-                            "x": 0.8721804618835449,
-                            "y": 0.8492283225059509,
-                            "z": 0.8492283225059509
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
                         },
 						"material": "None",
                         "meshType": 1,
@@ -302,7 +533,7 @@
                         "p_near": 0.10000000149011612
                     },
                     "CTag": {
-                        "tag": "CameraSavedFile"
+                        "tag": "GameCameraEntity"
                     },
                     "CTransform": {
                         "position": {
@@ -389,39 +620,6 @@
                     }
                 },
                 {
-                    "CRenderable": {
-                        "color": {
-                            "w": 1.0,
-                            "x": 0.23737046122550964,
-                            "y": 0.5,
-                            "z": 0.09774437546730042
-                        },
-						"material": "textures/grass-texture.jpg",
-                        "meshType": 3,
-                        "path": "Surface"
-                    },
-                    "CTag": {
-                        "tag": "GrassSurface"
-                    },
-                    "CTransform": {
-                        "position": {
-                            "x": -8.649999618530273,
-                            "y": -1.850000023841858,
-                            "z": 0.0
-                        },
-                        "rotation": {
-                            "x": 0.0,
-                            "y": 0.0,
-                            "z": 0.0
-                        },
-                        "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
-                        }
-                    }
-                },
-                {
                     "CPointLight": {
                         "ambient": {
                             "w": 1.0,
@@ -488,6 +686,139 @@
                     }
                 },
                 {
+                    "CPointLight": {
+                        "ambient": {
+                            "w": 1.0,
+                            "x": 2.7,
+                            "y": 0.6100000143051147,
+                            "z": 0.6800000071525574
+                        },
+                        "constant": 0.794,
+                        "diffuse": {
+                            "w": 1.0,
+                            "x": 4.41,
+                            "y": 0.8999999761581421,
+                            "z": 0.8999999761581421
+                        },
+                        "linear": 0.089,
+                        "position": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "quadratic": 0.015,
+                        "shininess": 31.5,
+                        "specular": {
+                            "w": 1.0,
+                            "x": 24.51,
+                            "y": 0.5,
+                            "z": 0.5
+                        }
+                    },
+                    "CPythonScript": {
+                        "path": "DefaultProject/Assets/scripts/RotateXY.py"
+                    },
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.6831381916999817,
+                            "y": 0.7067669034004211,
+                            "z": 0.04516930878162384
+                        },
+						"material": "textures/red-texture.jpg",
+                        "meshType": 1,
+                        "path": "Cube"
+                    },
+                    "CTag": {
+                        "tag": "RedTextureLight"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 29.5,
+                            "y": 37.1,
+                            "z": 117.15
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+				
+                {
+                    "CPointLight": {
+                        "ambient": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.6100000143051147,
+                            "z": 1.6800000071525574
+                        },
+                        "constant": 0.35600000619888306,
+                        "diffuse": {
+                            "w": 1.0,
+                            "x": 0.6299999952316284,
+                            "y": 0.8999999761581421,
+                            "z": 1.7
+                        },
+                        "linear": 0.014999999664723873,
+                        "position": {
+                            "w": 1.0,
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "quadratic": 0.009999999776482582,
+                        "shininess": 31.5,
+                        "specular": {
+                            "w": 1.0,
+                            "x": 0.5,
+                            "y": 0.5,
+                            "z": 1.1
+                        }
+                    },
+                    "CPythonScript": {
+                        "path": "DefaultProject/Assets/scripts/RotateXY.py"
+                    },
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.6831381916999817,
+                            "y": 0.7067669034004211,
+                            "z": 0.04516930878162384
+                        },
+						"material": "textures/blue-texture.jpg",
+                        "meshType": 1,
+                        "path": "Cube"
+                    },
+                    "CTag": {
+                        "tag": "BlueTextureLight"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": -9.98,
+                            "y": 35.12,
+                            "z": 108.80
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+                {
                     "CRenderable": {
                         "color": {
                             "w": 1.0,
@@ -500,12 +831,45 @@
                         "path": "Cube"
                     },
                     "CTag": {
-                        "tag": "GrayWall"
+                        "tag": "RedHugeWall_2"
                     },
                     "CTransform": {
                         "position": {
                             "x": 37.45,
-                            "y": 3.62,
+                            "y": 3.42,
+                            "z": 35.05
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 1.57,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 20.0,
+                            "y": 7.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+				{
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.3308270573616028,
+                            "y": 0.28605347871780396,
+                            "z": 0.28605347871780396
+                        },
+						"material": "textures/red-brick.jpg",
+                        "meshType": 1,
+                        "path": "Cube"
+                    },
+                    "CTag": {
+                        "tag": "RedHugeWall_1"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 37.45,
+                            "y": 3.42,
                             "z": -4.92
                         },
                         "rotation": {
@@ -533,17 +897,50 @@
                         "path": "Cube"
                     },
                     "CTag": {
-                        "tag": "RedHugeWall"
+                        "tag": "RedHugeWall_3"
                     },
                     "CTransform": {
                         "position": {
                             "x": 16.03,
-                            "y": 3.53,
+                            "y": 3.42,
                             "z": -15.85
                         },
                         "rotation": {
                             "x": 0.0,
                             "y": 0.0,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 20.0,
+                            "y": 7.0,
+                            "z": 1.0
+                        }
+                    }
+                },
+				{
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.3308270573616028,
+                            "y": 0.28605347871780396,
+                            "z": 0.28605347871780396
+                        },
+						"material": "textures/red-brick.jpg",
+                        "meshType": 1,
+                        "path": "Cube"
+                    },
+                    "CTag": {
+                        "tag": "RedHugeWall_4"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 37.45,
+                            "y": 3.42,
+                            "z": 75.12
+                        },
+                        "rotation": {
+                            "x": 0.0,
+                            "y": 1.57,
                             "z": 0.0
                         },
                         "scale": {
@@ -583,6 +980,105 @@
                             "x": 3,
                             "y": 3,
                             "z": 3
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.756,
+                            "y": 0.756,
+                            "z": 0.756
+                        },
+						"material": "None",
+                        "meshType": 4,
+                        "path": "objects/house.obj"
+                    },
+                    "CTag": {
+                        "tag": "House"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": 7.12,
+                            "y": -2.64,
+                            "z": 146.89
+                        },
+                        "rotation": {
+                            "x": -3.14,
+                            "y": 0.01,
+                            "z": 3.14
+                        },
+                        "scale": {
+                            "x": 14.38,
+                            "y": 14.38,
+                            "z": 14.38
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.667,
+                            "y": 0.914,
+                            "z": 0.663
+                        },
+						"material": "None",
+                        "meshType": 4,
+                        "path": "objects/humanoid.obj"
+                    },
+                    "CTag": {
+                        "tag": "HumanoidWithHouse"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": -1.73,
+                            "y": -5.68,
+                            "z": 106.92
+                        },
+                        "rotation": {
+                            "x": -1.57,
+                            "y": -1.10,
+                            "z": 0.0
+                        },
+                        "scale": {
+                            "x": 0.69,
+                            "y": 0.69,
+                            "z": 0.69
+                        }
+                    }
+                },
+                {
+                    "CRenderable": {
+                        "color": {
+                            "w": 1.0,
+                            "x": 0.455,
+                            "y": 0.917,
+                            "z": 0.886
+                        },
+						"material": "None",
+                        "meshType": 4,
+                        "path": "objects/humanoid.obj"
+                    },
+                    "CTag": {
+                        "tag": "HumanoidWithHouse_2"
+                    },
+                    "CTransform": {
+                        "position": {
+                            "x": -19.46,
+                            "y": -5.68,
+                            "z": 108.55
+                        },
+                        "rotation": {
+                            "x": 1.57,
+                            "y": -1.03,
+                            "z": -3.14
+                        },
+                        "scale": {
+                            "x": 0.69,
+                            "y": 0.69,
+                            "z": 0.69
                         }
                     }
                 }

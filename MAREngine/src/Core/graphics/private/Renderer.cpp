@@ -48,7 +48,7 @@ namespace marengine {
             statsStorage.indicesCount += pBatch->getIndices().size();
             statsStorage.trianglesCount += (statsStorage.indicesCount / 3);
             batchEntitiesCount += pBatch->getTransforms().size();
-            statsStorage.allRendererEntitiesCount += statsStorage.coloredEntitiesCount;
+            statsStorage.allRendererEntitiesCount += pBatch->getTransforms().size();
         }
     }
 
